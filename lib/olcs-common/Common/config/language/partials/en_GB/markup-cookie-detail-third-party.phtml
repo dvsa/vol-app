@@ -1,0 +1,67 @@
+<div class="govuk-!-margin-top-7">
+  <h2 class="govuk-heading-m">Third-party cookies</h2>
+
+  <p class="govuk-body">
+    These are cookies set on your computer by external websites whose services are used on the Vehicle Operator Licensing website.
+  </p>
+
+  <h3 class="govuk-heading-s govuk-!-margin-top-6" id="messages-across-govuk">
+    {{SIGNING_SERVICE_NAME}}
+  </h3>
+  <p class="govuk-body">
+    We use {{SIGNING_SERVICE_NAME}} to prevent identity fraud, protect users' privacy and make sure we are giving the right people access to our service.
+    {{SIGNING_SERVICE_NAME}} uses
+    <a class="govuk-link" rel="external noreferrer noopener" href="{{URL_VERIFY_COOKIE}}" target="_blank">
+      extra cookies <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+    </a>
+    to track their website.
+  </p>
+
+  <h3 class="govuk-heading-s govuk-!-margin-top-6">GOV.UK Pay</h3>
+  <p class="govuk-body">
+    If you pay for a government service using a credit or debit card,
+    <a class="govuk-link" rel="external noreferrer noopener" href="{{URL_GOV_PAY}}" target="_blank">
+      GOV.UK Pay <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+    </a> uses cookies to keep your payment session secure.
+  </p>
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Name</th>
+      <th scope="col" class="govuk-table__header">Purpose</th>
+      <th scope="col" class="govuk-table__header">Expires</th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">frontend_session_2</td>
+      <td class="govuk-table__cell">We use this to secure your payment session</td>
+      <td class="govuk-table__cell">3 hours</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">session</td>
+      <td class="govuk-table__cell">We use this to secure your payment session</td>
+      <td class="govuk-table__cell">1 hour</td>
+    </tr>
+    </tbody>
+  </table>
+  <p>
+    More information is available on
+    <a class="govuk-link" rel="external noreferrer noopener" href="{{URL_GOV_PAY_COOKIES}}" target="_blank">
+      Cookies - GOV.UK Pay. <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+    </a>
+  </p>
+
+  <h3 class="govuk-heading-s govuk-!-margin-top-6">Qualtrics</h3>
+  <p class="govuk-body">
+    We use
+    <a class="govuk-link" rel="external noreferrer noopener" href="{{URL_SMART_SURVEY}}" target="_blank">
+      Qualtrics <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+    </a>
+    to get feedback about service satisfaction. If you take part, Qualtrics
+    <a class="govuk-link" rel="external noreferrer noopener" href="{{URL_SMART_SURVEY_COOKIE}}" target="_blank">
+      will save extra cookies <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+    </a>
+    to track your progress on their website.
+  </p>
+</div>

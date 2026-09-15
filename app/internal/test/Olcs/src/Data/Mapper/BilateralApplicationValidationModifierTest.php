@@ -15,7 +15,7 @@ use Laminas\InputFilter\InputFilter;
 /**
  * BilateralApplicationValidationModifier Mapper Test
  */
-class BilateralApplicationValidationModifierTest extends MockeryTestCase
+final class BilateralApplicationValidationModifierTest extends MockeryTestCase
 {
     private $form;
 
@@ -23,6 +23,7 @@ class BilateralApplicationValidationModifierTest extends MockeryTestCase
 
     private $bilateralApplicationValidationModifier;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->form = m::mock(Form::class);

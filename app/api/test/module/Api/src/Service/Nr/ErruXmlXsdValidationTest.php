@@ -20,12 +20,24 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
 use Olcs\XmlTools\Xml\XmlNodeBuilder;
+use Psr\Log\NullLogger;
 
-class ErruXmlXsdValidationTest extends MockeryTestCase
+final class ErruXmlXsdValidationTest extends MockeryTestCase
 {
-    private const XML_NS = 'https://webgate.ec.testa.eu/move-hub/erru/3.5';
-    private const ERRU_VERSION = '3.5';
-    private const XSD_DIR = __DIR__ . '/../../../../../../module/Api/data/nr/xsd/3.5/';
+    private const string XML_NS = 'https://webgate.ec.testa.eu/move-hub/erru/3.5';
+    private const string ERRU_VERSION = '3.5';
+    private const string XSD_DIR = __DIR__ . '/../../../../../../module/Api/data/nr/xsd/3.5/';
+
+    /**
+     * Restores the static Logger facade. Without this, the mock this test installs stays
+     * installed for whatever test runs next, which then fails on log calls it never made.
+     */
+    protected function tearDown(): void
+    {
+        Logger::setLogger(new NullLogger());
+
+        parent::tearDown();
+    }
 
     public function testMsiResponseXmlValidatesAgainstXsd(): void
     {
@@ -40,7 +52,7 @@ class ErruXmlXsdValidationTest extends MockeryTestCase
 
     public function testCheckGoodReputeXmlValidatesAgainstXsd(): void
     {
-        Logger::setLogger(m::mock(\Laminas\Log\Logger::class)->shouldIgnoreMissing());
+        Logger::setLogger(m::mock(\Psr\Log\LoggerInterface::class)->shouldIgnoreMissing());
 
         $xmlBuilder = new XmlNodeBuilder('CheckGoodRepute_Request', self::XML_NS, []);
         $sut = new CheckGoodRepute($xmlBuilder, self::ERRU_VERSION);

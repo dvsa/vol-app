@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Entity\View;
 use Dvsa\Olcs\Api\Entity\View\VehicleHistoryView;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\View\VehicleHistoryView::class)]
-class VehicleHistoryViewTest extends \PHPUnit\Framework\TestCase
+final class VehicleHistoryViewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var VehicleHistoryView */
     protected $sut;
@@ -45,7 +45,7 @@ class VehicleHistoryViewTest extends \PHPUnit\Framework\TestCase
                 $this->sut->{'set' . $methodName}($value);
             }
 
-            static::assertEquals($value, $this->sut->{'get' . $methodName}());
+            $this->assertEquals($value, $this->sut->{'get' . $methodName}());
         }
     }
 }

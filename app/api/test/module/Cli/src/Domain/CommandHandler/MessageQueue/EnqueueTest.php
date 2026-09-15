@@ -15,22 +15,20 @@ use Dvsa\Olcs\Queue\Service\Queue;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use Olcs\Logging\Log\Logger;
+use Psr\Log\NullLogger;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class EnqueueTest extends AbstractCommandHandlerTestCase
+final class EnqueueTest extends AbstractCommandHandlerTestCase
 {
     protected $sut;
-    protected $queueService;
-    protected $messageBuilderService;
-    protected $mockSl;
     protected $logger;
 
     public function setUp(): void
     {
         $this->sut = new Enqueue();
 
-        $this->queueService = m::mock(Queue::class);
-        $this->messageBuilderService = m::mock(MessageBuilder::class);
+        $queueService = m::mock(Queue::class);
+        $messageBuilderService = m::mock(MessageBuilder::class);
 
         $this->mockedSmServices = [
             MessageBuilder::class => m::mock(MessageBuilder::class),
@@ -41,6 +39,17 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         ];
 
         parent::setUp();
+    }
+
+    /**
+     * Restores the static Logger facade. Without this, the mock this test installs stays
+     * installed for whatever test runs next, which then fails on log calls it never made.
+     */
+    protected function tearDown(): void
+    {
+        Logger::setLogger(new NullLogger());
+
+        parent::tearDown();
     }
 
     public function testHandleCommand(): void
@@ -96,10 +105,9 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         ]);
         $this->mockedSmServices[Queue::class]->shouldReceive('sendMessage')->times(1)->andThrow(\Exception::class);
 
-        $logWriter = m::mock(\Laminas\Log\Writer\WriterInterface::class);
-        $logWriter->shouldReceive('write')->once();
-        $this->logger = m::mock(\Dvsa\OlcsTest\SafeLogger::class, [])->makePartial();
-        $this->logger->addWriter($logWriter);
+        $this->logger = m::mock(\Psr\Log\LoggerInterface::class);
+        $this->logger->shouldReceive('notice')->atLeast()->once();
+        $this->logger->shouldIgnoreMissing();
 
         Logger::setLogger($this->logger);
 

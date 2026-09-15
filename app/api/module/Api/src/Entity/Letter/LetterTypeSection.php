@@ -8,10 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LetterTypeSection Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_type_section")
  */
+#[ORM\Table(name: 'letter_type_section')]
+#[ORM\Entity]
 class LetterTypeSection extends AbstractLetterTypeSection
 {
     /**

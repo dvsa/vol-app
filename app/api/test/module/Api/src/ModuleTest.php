@@ -16,19 +16,35 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
+use Olcs\Logging\Log\Processor\UserId;
+use Olcs\Logging\Test\RecordingLogger;
 use phpseclib3\Crypt\AES;
+use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 
 /**
  * Tests the Api Module php
  */
-class ModuleTest extends MockeryTestCase
+final class ModuleTest extends MockeryTestCase
 {
     /** @var  Module */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(Module::class)->makePartial()->shouldAllowMockingProtectedMethods();
+    }
+
+    /**
+     * Restores the static Logger facade. Without this, the mock this test installs stays
+     * installed for whatever test runs next, which then fails on log calls it never made.
+     */
+    protected function tearDown(): void
+    {
+        Logger::setLogger(new NullLogger());
+
+        parent::tearDown();
     }
 
     public function testOnBootstrap(): void
@@ -52,14 +68,13 @@ class ModuleTest extends MockeryTestCase
         $mockAuth = m::mock(AuthorizationService::class);
         $mockAuth->shouldReceive('getIdentity->getUser->getLoginId')->once()->andReturn($loginId);
 
-        $mockLog = m::mock();
-        $mockLog->shouldReceive('get')->with(\Olcs\Logging\Log\Processor\UserId::class)->once()->andReturnSelf();
-        $mockLog->shouldReceive('setUserId')->with($loginId)->once();
+        $mockUserIdProcessor = m::mock(UserId::class);
+        $mockUserIdProcessor->shouldReceive('setUserId')->with($loginId)->once();
 
         $mockSm = m::mock(ServiceManager::class);
         $mockSm->shouldReceive('get')->with('PayloadValidationListener')->andReturn($mockPvl);
         $mockSm->shouldReceive('get')->with(AuthorizationService::class)->andReturn($mockAuth);
-        $mockSm->shouldReceive('get')->with('LogProcessorManager')->andReturn($mockLog);
+        $mockSm->shouldReceive('get')->with(UserId::class)->andReturn($mockUserIdProcessor);
         $mockSm->shouldReceive('get')->with('config')->andReturn([]);
 
         $mockApp = m::mock(Application::class);
@@ -74,7 +89,7 @@ class ModuleTest extends MockeryTestCase
 
     public function testLogResponseHttp(): void
     {
-        $logWriter = $this->setupLogger();
+        $logger = $this->setupLogger();
 
         $mockRespone = m::mock(\Laminas\Http\PhpEnvironment\Response::class);
         $mockRespone->shouldReceive('getContent')->with()->once()->andReturn('CONTENT');
@@ -82,15 +97,15 @@ class ModuleTest extends MockeryTestCase
 
         $this->sut->logResponse($mockRespone);
 
-        $this->assertCount(1, $logWriter->events);
-        $this->assertSame(\Laminas\Log\Logger::DEBUG, $logWriter->events[0]['priority']);
-        $this->assertSame('API Response Sent', $logWriter->events[0]['message']);
-        $this->assertSame(['status' => 200, 'content' => 'CONTENT'], $logWriter->events[0]['extra']);
+        $this->assertCount(1, $logger->records);
+        $this->assertSame(LogLevel::DEBUG, $logger->records[0]['level']);
+        $this->assertSame('API Response Sent', $logger->records[0]['message']);
+        $this->assertSame(['status' => 200, 'content' => 'CONTENT'], $logger->records[0]['context']);
     }
 
     public function testLogResponseHttpEmptyOlcsDownloadHeader(): void
     {
-        $logWriter = $this->setupLogger();
+        $logger = $this->setupLogger();
 
         $mockRespone = m::mock(\Laminas\Http\PhpEnvironment\Response::class);
         $mockRespone->shouldReceive('getContent')->with()->once()->andReturn('');
@@ -98,13 +113,13 @@ class ModuleTest extends MockeryTestCase
 
         $this->sut->logResponse($mockRespone);
 
-        $this->assertCount(1, $logWriter->events);
-        $this->assertNotContains('API Response is empty', current($logWriter->events));
+        $this->assertCount(1, $logger->records);
+        $this->assertNotSame('API Response is empty', $logger->records[0]['message']);
     }
 
     public function testLogResponseContentLong(): void
     {
-        $logWriter = $this->setupLogger();
+        $logger = $this->setupLogger();
 
         $content = str_repeat('X', 1010);
 
@@ -114,10 +129,10 @@ class ModuleTest extends MockeryTestCase
 
         $this->sut->logResponse($mockRespone);
 
-        $this->assertCount(1, $logWriter->events);
-        $this->assertSame(\Laminas\Log\Logger::DEBUG, $logWriter->events[0]['priority']);
-        $this->assertSame('API Response Sent', $logWriter->events[0]['message']);
-        $this->assertSame(str_repeat('X', 1000) . '...', $logWriter->events[0]['extra']['content']);
+        $this->assertCount(1, $logger->records);
+        $this->assertSame(LogLevel::DEBUG, $logger->records[0]['level']);
+        $this->assertSame('API Response Sent', $logger->records[0]['message']);
+        $this->assertSame(str_repeat('X', 1000) . '...', $logger->records[0]['context']['content']);
     }
 
     public function testInitDoctrineEncrypterType(): void
@@ -139,17 +154,13 @@ class ModuleTest extends MockeryTestCase
     }
 
     /**
-     * Setup the logger, return the mock writer
-     *
-     * @return \Laminas\Log\Writer\Mock
+     * Install an in-memory recording logger so callers can assert on captured records.
      */
-    private function setupLogger(): mixed
+    private function setupLogger(): RecordingLogger
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter($logWriter);
+        $logger = new RecordingLogger();
         Logger::setLogger($logger);
 
-        return $logWriter;
+        return $logger;
     }
 }

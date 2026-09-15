@@ -7,16 +7,11 @@ use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 
 /**
  * ApplicationStep Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="application_step",
- *    indexes={
- *        @ORM\Index(name="fk_application_path_steps_application_paths1_idx",
- *        columns={"application_path_id"}),
- *        @ORM\Index(name="fk_application_path_steps_questions1_idx", columns={"question_id"}),
- *    }
- * )
  */
+#[ORM\Table(name: 'application_step')]
+#[ORM\Index(name: 'fk_application_path_steps_application_paths1_idx', columns: ['application_path_id'])]
+#[ORM\Index(name: 'fk_application_path_steps_questions1_idx', columns: ['question_id'])]
+#[ORM\Entity]
 class ApplicationStep extends AbstractApplicationStep
 {
     /**

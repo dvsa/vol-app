@@ -21,21 +21,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irfo_psv_auth",
- *    indexes={
- *        @ORM\Index(name="ix_irfo_psv_auth_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_irfo_psv_auth_type_id", columns={"irfo_psv_auth_type_id"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_journey_frequency", columns={"journey_frequency"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_status", columns={"status"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_withdrawn_reason", columns={"withdrawn_reason"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irfo_psv_auth')]
+#[ORM\Index(name: 'ix_irfo_psv_auth_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_irfo_psv_auth_type_id', columns: ['irfo_psv_auth_type_id'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_journey_frequency', columns: ['journey_frequency'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_withdrawn_reason', columns: ['withdrawn_reason'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,272 +44,239 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * Foreign Key to irfo_psv_auth_type
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_psv_auth_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irfo_psv_auth_type_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType::class, fetch: 'LAZY')]
     protected $irfoPsvAuthType;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * JourneyFrequency
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="journey_frequency", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'journey_frequency', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $journeyFrequency;
 
     /**
      * WithdrawnReason
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="withdrawn_reason", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'withdrawn_reason', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $withdrawnReason;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Exemption details
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="exemption_details", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'exemption_details', length: 255, nullable: true)]
     protected $exemptionDetails;
 
     /**
      * Expiry date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="expiry_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
 
     /**
      * isFeeExemptApplication
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_fee_exempt_application", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_fee_exempt_application', nullable: false, options: ['default' => 0])]
     protected $isFeeExemptApplication = 0;
 
     /**
      * isFeeExemptAnnual
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_fee_exempt_annual", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_fee_exempt_annual', nullable: false, options: ['default' => 0])]
     protected $isFeeExemptAnnual = 0;
 
     /**
      * In force date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="in_force_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'in_force_date', nullable: true)]
     protected $inForceDate;
 
     /**
      * Irfo fee id
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="irfo_fee_id", length=10, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'irfo_fee_id', length: 10, nullable: true)]
     protected $irfoFeeId;
 
     /**
      * Irfo file no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="irfo_file_no", length=10, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'irfo_file_no', length: 10, nullable: false)]
     protected $irfoFileNo = '';
 
     /**
      * Copies issued
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="copies_issued", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'copies_issued', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $copiesIssued = 0;
 
     /**
      * Copies required
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="copies_required", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'copies_required', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $copiesRequired = 0;
 
     /**
      * Copies required total
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="copies_required_total", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'copies_required_total', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $copiesRequiredTotal = 0;
 
     /**
      * Copies issued total
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="copies_issued_total", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'copies_issued_total', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $copiesIssuedTotal = 0;
 
     /**
      * Last date copies req
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="last_date_copies_req", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'last_date_copies_req', nullable: true)]
     protected $lastDateCopiesReq;
 
     /**
      * Renewal date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="renewal_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'renewal_date', nullable: true)]
     protected $renewalDate;
 
     /**
      * Service route from
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="service_route_from", length=30, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'service_route_from', length: 30, nullable: false)]
     protected $serviceRouteFrom = '';
 
     /**
      * Service route to
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="service_route_to", length=30, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'service_route_to', length: 30, nullable: false)]
     protected $serviceRouteTo = '';
 
     /**
      * Years valid for.  Some negative numbers in legacy hence signed.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="validity_period", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'validity_period', nullable: false)]
     protected $validityPeriod = 0;
 
     /**
      * Authorisation must be reviewed within x days of this date for approval.  sla related.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="application_sent_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'application_sent_date', nullable: true)]
     protected $applicationSentDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Countrys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", inversedBy="irfoPsvAuths", fetch="LAZY")
-     * @ORM\JoinTable(name="irfo_psv_auth_country",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irfo_psv_auth_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'irfo_psv_auth_country')]
+    #[ORM\JoinColumn(name: 'irfo_psv_auth_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'country_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, inversedBy: 'irfoPsvAuths', fetch: 'LAZY')]
     protected $countrys;
 
     /**
      * IrfoPsvAuthNumbers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber", mappedBy="irfoPsvAuth", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber::class, mappedBy: 'irfoPsvAuth', cascade: ['persist'])]
     protected $irfoPsvAuthNumbers;
 
     /**
@@ -339,7 +302,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setId($id)
     {
@@ -363,7 +326,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -387,7 +350,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType $irfoPsvAuthType new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIrfoPsvAuthType($irfoPsvAuthType)
     {
@@ -411,7 +374,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setStatus($status)
     {
@@ -435,7 +398,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $journeyFrequency new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setJourneyFrequency($journeyFrequency)
     {
@@ -459,7 +422,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $withdrawnReason new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setWithdrawnReason($withdrawnReason)
     {
@@ -483,7 +446,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -507,7 +470,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -531,7 +494,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $exemptionDetails new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setExemptionDetails($exemptionDetails)
     {
@@ -555,7 +518,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $expiryDate new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setExpiryDate($expiryDate)
     {
@@ -585,7 +548,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $isFeeExemptApplication new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIsFeeExemptApplication($isFeeExemptApplication)
     {
@@ -609,7 +572,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $isFeeExemptAnnual new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIsFeeExemptAnnual($isFeeExemptAnnual)
     {
@@ -633,7 +596,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $inForceDate new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setInForceDate($inForceDate)
     {
@@ -663,7 +626,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $irfoFeeId new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIrfoFeeId($irfoFeeId)
     {
@@ -687,7 +650,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $irfoFileNo new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIrfoFileNo($irfoFileNo)
     {
@@ -711,7 +674,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $copiesIssued new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCopiesIssued($copiesIssued)
     {
@@ -735,7 +698,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $copiesRequired new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCopiesRequired($copiesRequired)
     {
@@ -759,7 +722,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $copiesRequiredTotal new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCopiesRequiredTotal($copiesRequiredTotal)
     {
@@ -783,7 +746,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $copiesIssuedTotal new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCopiesIssuedTotal($copiesIssuedTotal)
     {
@@ -807,7 +770,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $lastDateCopiesReq new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setLastDateCopiesReq($lastDateCopiesReq)
     {
@@ -837,7 +800,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $renewalDate new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setRenewalDate($renewalDate)
     {
@@ -867,7 +830,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $serviceRouteFrom new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setServiceRouteFrom($serviceRouteFrom)
     {
@@ -891,7 +854,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $serviceRouteTo new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setServiceRouteTo($serviceRouteTo)
     {
@@ -915,7 +878,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $validityPeriod new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setValidityPeriod($validityPeriod)
     {
@@ -939,7 +902,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $applicationSentDate new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setApplicationSentDate($applicationSentDate)
     {
@@ -969,7 +932,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setVersion($version)
     {
@@ -993,7 +956,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being set as the value
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCountrys($countrys)
     {
@@ -1017,7 +980,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $countrys collection being added
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function addCountrys($countrys)
     {
@@ -1040,7 +1003,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being removed
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function removeCountrys($countrys)
     {
@@ -1056,7 +1019,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irfoPsvAuthNumbers collection being set as the value
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIrfoPsvAuthNumbers($irfoPsvAuthNumbers)
     {
@@ -1080,7 +1043,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irfoPsvAuthNumbers collection being added
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function addIrfoPsvAuthNumbers($irfoPsvAuthNumbers)
     {
@@ -1103,7 +1066,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irfoPsvAuthNumbers collection being removed
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function removeIrfoPsvAuthNumbers($irfoPsvAuthNumbers)
     {

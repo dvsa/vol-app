@@ -15,11 +15,12 @@ use Mockery as m;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class TxcInboxTest extends RepositoryTestCase
+final class TxcInboxTest extends RepositoryTestCase
 {
     /** @var  Repo */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

@@ -19,25 +19,13 @@ use Laminas\Navigation\Page\Uri;
 use Laminas\Mvc\MvcEvent;
 use Common\Service\Cqrs\Response as CqrsResponse;
 
-class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
+final class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    /**
-     * @var (\Common\Service\Cqrs\Response & \Mockery\MockInterface)
-     */
-    public $mockResponse;
     public $mockAuthService;
     public $dashboardPermitsKey;
     public $dashboardPermitsPage;
     public $dashboardMessagingKey;
     public $dashboardMessagingPage;
-    /**
-     * @var string
-     */
-    public $dashboardMenuKey;
-    /**
-     * @var (\Laminas\Navigation\Page\AbstractPage & \Mockery\MockInterface)
-     */
-    public $mockDashboardMenu;
     public $messagingToggle;
     /** @var NavigationListener */
     protected $sut;
@@ -48,14 +36,12 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     /** @var QuerySender|m\MockInterface */
     private $mockQuerySender;
 
-    /** @var RbacUser|m\MockInterface */
-    private $mockIdentity;
-
+    #[\Override]
     public function setUp(): void
     {
         $this->mockNavigation = m::mock(Navigation::class);
         $this->mockQuerySender = m::mock(QuerySender::class);
-        $this->mockResponse = m::mock(CqrsResponse::class);
+        $mockResponse = m::mock(CqrsResponse::class);
         $this->mockAuthService = m::mock(AuthorizationService::class);
 
         $this->sut = new NavigationListener($this->mockNavigation, $this->mockQuerySender, $this->mockAuthService);
@@ -66,8 +52,8 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->dashboardMessagingKey = 'dashboard-messaging';
         $this->dashboardMessagingPage = new Uri();
 
-        $this->dashboardMenuKey = 'dashboard-licences-applications';
-        $this->mockDashboardMenu = m::mock(AbstractPage::class);
+        $dashboardMenuKey = 'dashboard-licences-applications';
+        $mockDashboardMenu = m::mock(AbstractPage::class);
 
         $this->messagingToggle = 'messaging';
     }
@@ -181,16 +167,14 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public static function dpDispatchNoReferer(): array
+    public static function dpDispatchNoReferer(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testOnDispatchWithGovUkReferalMatch(): void
@@ -277,16 +261,14 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public static function dpDispatchWithoutMatchedReferer(): array
+    public static function dpDispatchWithoutMatchedReferer(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function navigationExpectations(): void

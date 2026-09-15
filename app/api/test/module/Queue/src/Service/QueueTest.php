@@ -12,14 +12,15 @@ use Dvsa\Olcs\Queue\Service\Queue;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
+use Psr\Log\NullLogger;
 
-class QueueTest extends MockeryTestCase
+final class QueueTest extends MockeryTestCase
 {
     protected $sut;
 
     protected $queue;
 
-    /** @var  m\MockInterface|\Laminas\Log\Logger */
+    /** @var  m\MockInterface|\Psr\Log\LoggerInterface */
     protected $logger;
 
     public function setUp(): void
@@ -28,6 +29,17 @@ class QueueTest extends MockeryTestCase
         $this->sut = new Queue($this->queue);
 
         parent::setUp();
+    }
+
+    /**
+     * Restores the static Logger facade. Without this, the mock this test installs stays
+     * installed for whatever test runs next, which then fails on log calls it never made.
+     */
+    protected function tearDown(): void
+    {
+        Logger::setLogger(new NullLogger());
+
+        parent::tearDown();
     }
 
     public function testSendMessage(): void
@@ -46,8 +58,8 @@ class QueueTest extends MockeryTestCase
 
     public function testSendMessageWithExceptionThrown(): void
     {
-        $this->logger = m::mock(\Laminas\Log\Logger::class);
-        $this->logger->shouldReceive('err')
+        $this->logger = m::mock(\Psr\Log\LoggerInterface::class);
+        $this->logger->shouldReceive('error')
             ->with('Failed to send message. Error code: contents error. Error msg: message failed', [])
             ->once();
 
@@ -123,8 +135,8 @@ class QueueTest extends MockeryTestCase
 
     public function testFetchMessagesWithExceptionThrown(): void
     {
-        $this->logger = m::mock(\Laminas\Log\Logger::class);
-        $this->logger->shouldReceive('err')
+        $this->logger = m::mock(\Psr\Log\LoggerInterface::class);
+        $this->logger->shouldReceive('error')
             ->with('Failed to fetch message. Error code: contents error. Error msg: message failed', [])
             ->once();
 
@@ -154,8 +166,8 @@ class QueueTest extends MockeryTestCase
 
     public function testDeleteMessageWithExceptionThrown(): void
     {
-        $this->logger = m::mock(\Laminas\Log\Logger::class);
-        $this->logger->shouldReceive('err')
+        $this->logger = m::mock(\Psr\Log\LoggerInterface::class);
+        $this->logger->shouldReceive('error')
             ->with('Failed to delete message. Error code: contents error. Error msg: message failed', [])
             ->once();
 

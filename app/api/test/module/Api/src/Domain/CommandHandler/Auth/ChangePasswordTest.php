@@ -19,7 +19,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * @see ChangePassword
  */
-class ChangePasswordTest extends AbstractCommandHandlerTestCase
+final class ChangePasswordTest extends AbstractCommandHandlerTestCase
 {
     private m\MockInterface $adapter;
     private string $username = 'username';
@@ -76,21 +76,19 @@ class ChangePasswordTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($changeResult->getMessage(), $result->getFlag('message'));
     }
 
-    public static function dpChangeResult(): array
+    public static function dpChangeResult(): \Iterator
     {
-        return [
-            'Generic failure' => [
-                new ChangePasswordResult(ChangePasswordResult::FAILURE, 'generic failure'),
-            ],
-            'Password invalid' => [
-                new ChangePasswordResult(ChangePasswordResult::FAILURE_NEW_PASSWORD_INVALID, 'invalid password failure'),
-            ],
-            'Client error' => [
-                new ChangePasswordResult(ChangePasswordResult::FAILURE_CLIENT_ERROR, 'client failure')
-            ],
-            'Not authorised' => [
-                new ChangePasswordResult(ChangePasswordResult::FAILURE_NOT_AUTHORIZED, 'not authorised failure')
-            ]
+        yield 'Generic failure' => [
+            new ChangePasswordResult(ChangePasswordResult::FAILURE, 'generic failure'),
+        ];
+        yield 'Password invalid' => [
+            new ChangePasswordResult(ChangePasswordResult::FAILURE_NEW_PASSWORD_INVALID, 'invalid password failure'),
+        ];
+        yield 'Client error' => [
+            new ChangePasswordResult(ChangePasswordResult::FAILURE_CLIENT_ERROR, 'client failure')
+        ];
+        yield 'Not authorised' => [
+            new ChangePasswordResult(ChangePasswordResult::FAILURE_NOT_AUTHORIZED, 'not authorised failure')
         ];
     }
 

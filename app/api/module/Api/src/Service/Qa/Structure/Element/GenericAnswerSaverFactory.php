@@ -18,7 +18,7 @@ class GenericAnswerSaverFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GenericAnswerSaver
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): GenericAnswerSaver
     {
         return new GenericAnswerSaver(
             $container->get('QaBaseAnswerSaver')

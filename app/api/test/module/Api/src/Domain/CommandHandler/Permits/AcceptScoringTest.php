@@ -32,7 +32,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class AcceptScoringTest extends AbstractCommandHandlerTestCase
+final class AcceptScoringTest extends AbstractCommandHandlerTestCase
 {
     private $issueFeeProductReference = 'ISSUE_FEE_PRODUCT_REFERENCE';
 
@@ -432,63 +432,61 @@ class AcceptScoringTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            'unsuccessful email enabled' => [
-                'disableEcmtAllocEmailNone' => 0,
-                'expected' => [
-                    'id' => [],
-                    'messages' => [
-                        '7 under consideration applications found',
-                        'processing application with id 1:',
-                        '- create fee and set application to awaiting fee',
-                        'processing application with id 2:',
-                        '- sending email using command ' . SendEcmtApsgSuccessful::class,
-                        '- create fee and set application to awaiting fee',
-                        'processing application with id 52:',
-                        '- application has been awarded permits and has not been checked, skipping',
-                        'processing application with id 3:',
-                        '- sending email using command ' . SendEcmtApsgPartSuccessful::class,
-                        '- create fee and set application to awaiting fee',
-                        'processing application with id 53:',
-                        '- application has been awarded permits and has not been checked, skipping',
-                        'processing application with id 4:',
-                        '- sending email using command ' . SendEcmtApsgUnsuccessful::class,
-                        '- no fee applicable, set application to unsuccessful',
-                        'processing application with id 54:',
-                        '- sending email using command ' . SendEcmtApsgUnsuccessful::class,
-                        '- no fee applicable, set application to unsuccessful',
-                        'Acceptance process completed successfully.',
-                    ],
+        yield 'unsuccessful email enabled' => [
+            'disableEcmtAllocEmailNone' => 0,
+            'expected' => [
+                'id' => [],
+                'messages' => [
+                    '7 under consideration applications found',
+                    'processing application with id 1:',
+                    '- create fee and set application to awaiting fee',
+                    'processing application with id 2:',
+                    '- sending email using command ' . SendEcmtApsgSuccessful::class,
+                    '- create fee and set application to awaiting fee',
+                    'processing application with id 52:',
+                    '- application has been awarded permits and has not been checked, skipping',
+                    'processing application with id 3:',
+                    '- sending email using command ' . SendEcmtApsgPartSuccessful::class,
+                    '- create fee and set application to awaiting fee',
+                    'processing application with id 53:',
+                    '- application has been awarded permits and has not been checked, skipping',
+                    'processing application with id 4:',
+                    '- sending email using command ' . SendEcmtApsgUnsuccessful::class,
+                    '- no fee applicable, set application to unsuccessful',
+                    'processing application with id 54:',
+                    '- sending email using command ' . SendEcmtApsgUnsuccessful::class,
+                    '- no fee applicable, set application to unsuccessful',
+                    'Acceptance process completed successfully.',
                 ],
             ],
-            'unsuccessful email disabled' => [
-                'disableEcmtAllocEmailNone' => 1,
-                'expected' => [
-                    'id' => [],
-                    'messages' => [
-                        '7 under consideration applications found',
-                        'processing application with id 1:',
-                        '- create fee and set application to awaiting fee',
-                        'processing application with id 2:',
-                        '- sending email using command ' . SendEcmtApsgSuccessful::class,
-                        '- create fee and set application to awaiting fee',
-                        'processing application with id 52:',
-                        '- application has been awarded permits and has not been checked, skipping',
-                        'processing application with id 3:',
-                        '- sending email using command ' . SendEcmtApsgPartSuccessful::class,
-                        '- create fee and set application to awaiting fee',
-                        'processing application with id 53:',
-                        '- application has been awarded permits and has not been checked, skipping',
-                        'processing application with id 4:',
-                        '- email sending disabled for ' . ApplicationAcceptConsts::SUCCESS_LEVEL_NONE,
-                        '- no fee applicable, set application to unsuccessful',
-                        'processing application with id 54:',
-                        '- email sending disabled for ' . ApplicationAcceptConsts::SUCCESS_LEVEL_NONE,
-                        '- no fee applicable, set application to unsuccessful',
-                        'Acceptance process completed successfully.',
-                    ],
+        ];
+        yield 'unsuccessful email disabled' => [
+            'disableEcmtAllocEmailNone' => 1,
+            'expected' => [
+                'id' => [],
+                'messages' => [
+                    '7 under consideration applications found',
+                    'processing application with id 1:',
+                    '- create fee and set application to awaiting fee',
+                    'processing application with id 2:',
+                    '- sending email using command ' . SendEcmtApsgSuccessful::class,
+                    '- create fee and set application to awaiting fee',
+                    'processing application with id 52:',
+                    '- application has been awarded permits and has not been checked, skipping',
+                    'processing application with id 3:',
+                    '- sending email using command ' . SendEcmtApsgPartSuccessful::class,
+                    '- create fee and set application to awaiting fee',
+                    'processing application with id 53:',
+                    '- application has been awarded permits and has not been checked, skipping',
+                    'processing application with id 4:',
+                    '- email sending disabled for ' . ApplicationAcceptConsts::SUCCESS_LEVEL_NONE,
+                    '- no fee applicable, set application to unsuccessful',
+                    'processing application with id 54:',
+                    '- email sending disabled for ' . ApplicationAcceptConsts::SUCCESS_LEVEL_NONE,
+                    '- no fee applicable, set application to unsuccessful',
+                    'Acceptance process completed successfully.',
                 ],
             ],
         ];

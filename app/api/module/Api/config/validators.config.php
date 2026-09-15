@@ -42,6 +42,10 @@ return [
         'canAccessStatement' => Validators\CanAccessStatement::class,
         'canAccessTransaction' => Validators\CanAccessTransaction::class,
         'canAccessFee' => Validators\CanAccessFee::class,
+        'feeBelongsToLicence' => Validators\FeeBelongsToLicence::class,
+        'feeBelongsToApplication' => Validators\FeeBelongsToApplication::class,
+        'feeBelongsToBusReg' => Validators\FeeBelongsToBusReg::class,
+        'seriousInfringementBelongsToCase' => Validators\SeriousInfringementBelongsToCase::class,
         'canAccessEbsrSubmission' => Validators\CanAccessEbsrSubmission::class,
         'canAccessTxcInbox' => Validators\CanAccessTxcInbox::class,
         'canUpdateTxcInbox' => Validators\CanUpdateTxcInbox::class,
@@ -59,5 +63,6 @@ return [
         'canDeleteSurrender' => Validators\CanDeleteSurrender::class,
         'canAccessLicenceForSurrender' => Validators\CanAccessLicenceForSurrender::class,
         'canConfirmSurrender' => Validators\CanConfirmSurrender::class,
+        'isDocumentCreator' => Validators\IsDocumentCreator::class,
     ]
 ];

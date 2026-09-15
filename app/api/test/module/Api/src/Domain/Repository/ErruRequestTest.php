@@ -23,8 +23,9 @@ use Doctrine\ORM\Query\Expr\Comparison;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ErruRequestTest extends RepositoryTestCase
+final class ErruRequestTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(ErruRequestRepo::class, true);
@@ -60,13 +61,11 @@ class ErruRequestTest extends RepositoryTestCase
     /**
      * Data provider for testExistsByLicNo
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function existsByWorkflowIdProvider(): array
+    public static function existsByWorkflowIdProvider(): \Iterator
     {
-        return [
-            [[0 => 'Result'], true],
-            [[], false]
-        ];
+        yield [[0 => 'Result'], true];
+        yield [[], false];
     }
 }

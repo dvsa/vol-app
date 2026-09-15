@@ -23,7 +23,7 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdateCompanySubsidiary as Cmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateTest extends AbstractHandlerTestCase
+final class UpdateTest extends AbstractHandlerTestCase
 {
     /**
      * @var Update

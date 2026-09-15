@@ -16,7 +16,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\BilateralMetadata as BilateralMetad
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class BilateralMetadataTest extends QueryHandlerTestCase
+final class BilateralMetadataTest extends QueryHandlerTestCase
 {
     private $irhpApplicationId;
 

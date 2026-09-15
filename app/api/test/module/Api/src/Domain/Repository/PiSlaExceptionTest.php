@@ -19,13 +19,14 @@ use Dvsa\Olcs\Api\Entity\Pi\PiSlaException as Entity;
  *
  * @author Generated
  */
-class PiSlaExceptionTest extends RepositoryTestCase
+final class PiSlaExceptionTest extends RepositoryTestCase
 {
     /**
      * @var Repo
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);
@@ -144,12 +145,12 @@ class PiSlaExceptionTest extends RepositoryTestCase
         $this->assertEquals(['ACTIVE_DEFAULT_RESULT'], $result);
 
         // Check that query contains today's date and proper structure
-        $today = (new \DateTime())->format('Y-m-d');
-        $this->assertStringContainsString('AND m.pi = [[999]]', $this->query);
-        $this->assertStringContainsString('INNER JOIN m.slaException se', $this->query);
-        $this->assertStringContainsString('se.effectiveFrom <=', $this->query);
-        $this->assertStringContainsString($today, $this->query);
-        $this->assertStringContainsString('ORDER BY se.slaDescription ASC', $this->query);
+        $today = new \DateTime()->format('Y-m-d');
+        $this->assertStringContainsString('AND m.pi = [[999]]', (string) $this->query);
+        $this->assertStringContainsString('INNER JOIN m.slaException se', (string) $this->query);
+        $this->assertStringContainsString('se.effectiveFrom <=', (string) $this->query);
+        $this->assertStringContainsString($today, (string) $this->query);
+        $this->assertStringContainsString('ORDER BY se.slaDescription ASC', (string) $this->query);
     }
 
     public function testFetchByPiWithEmptyResult(): void

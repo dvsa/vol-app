@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * Tests the feature toggle (is enabled) query handler
  */
-class IsEnabledTest extends QueryHandlerTestCase
+final class IsEnabledTest extends QueryHandlerTestCase
 {
     protected $qry;
 

@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Service\File\File;
 use org\bovigo\vfs\vfsStream;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\File\File::class)]
-class FileTest extends \PHPUnit\Framework\TestCase
+final class FileTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  File */
     private $sut;
@@ -21,25 +21,22 @@ class FileTest extends \PHPUnit\Framework\TestCase
     public function testGetSet(): void
     {
         $identifier = 'unit_Identifier';
-        static::assertEquals($this->sut, $this->sut->setIdentifier($identifier));
-        static::assertEquals($identifier, $this->sut->getIdentifier());
+        $this->assertEquals($this->sut, $this->sut->setIdentifier($identifier));
+        $this->assertEquals($identifier, $this->sut->getIdentifier());
 
         $path = 'unit_Path';
-        static::assertEquals($this->sut, $this->sut->setPath($path));
-        static::assertEquals($path, $this->sut->getPath());
+        $this->assertEquals($this->sut, $this->sut->setPath($path));
+        $this->assertEquals($path, $this->sut->getPath());
 
         $name = 'unit_Name.extX';
-        static::assertEquals($this->sut, $this->sut->setName($name));
-        static::assertEquals($name, $this->sut->getName());
+        $this->assertEquals($this->sut, $this->sut->setName($name));
+        $this->assertEquals($name, $this->sut->getName());
 
         $content = '<html></html>';
-        static::assertEquals(
-            $this->sut,
-            $this->sut->setContent($content)
-        );
-        static::assertEquals($content, $this->sut->getContent());
-        static::assertEquals('text/html', $this->sut->getMimeType());
-        static::assertEquals(13, $this->sut->getSize());
+        $this->assertEquals($this->sut, $this->sut->setContent($content));
+        $this->assertEquals($content, $this->sut->getContent());
+        $this->assertEquals('text/html', $this->sut->getMimeType());
+        $this->assertEquals(13, $this->sut->getSize());
     }
 
     public function testSetContentFromFileData(): void
@@ -59,6 +56,6 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals($content, $file->getContent());
+        $this->assertEquals($content, $file->getContent());
     }
 }

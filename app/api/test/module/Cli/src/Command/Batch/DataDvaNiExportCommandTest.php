@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cli\Command\Batch\DataDvaNiExportCommand;
 use Dvsa\Olcs\Cli\Domain\Command\DataDvaNiExport;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class DataDvaNiExportCommandTest extends AbstractBatchCommandCases
+final class DataDvaNiExportCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {
@@ -39,9 +39,11 @@ class DataDvaNiExportCommandTest extends AbstractBatchCommandCases
 
         $this->mockCommandHandlerManager->expects($this->once())
             ->method('handleCommand')
-            ->with($this->callback(fn($command) => $command instanceof DataDvaNiExport
-                && $command->getReportName() === $params['reportName']))
-            ->willReturn(new Result());
+            ->willReturnCallback(function ($command) use ($params): \Dvsa\Olcs\Api\Domain\Command\Result {
+                $this->assertInstanceOf(\Dvsa\Olcs\Cli\Domain\Command\DataDvaNiExport::class, $command);
+                $this->assertSame($params['reportName'], $command->getReportName());
+                return new Result();
+            });
 
         $this->executeCommand([
             '--report-name' => $params['reportName']

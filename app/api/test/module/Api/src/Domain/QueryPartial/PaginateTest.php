@@ -6,10 +6,8 @@ namespace Dvsa\OlcsTest\Api\Domain\QueryPartial;
 
 use Dvsa\Olcs\Api\Domain\QueryPartial\Paginate;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryPartial\Paginate
- */
-class PaginateTest extends QueryPartialTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryPartial\Paginate::class)]
+final class PaginateTest extends QueryPartialTestCase
 {
     public function setUp(): void
     {
@@ -28,40 +26,38 @@ class PaginateTest extends QueryPartialTestCase
         $this->sut->modifyQuery($this->qb, [$page, $limit]);
     }
 
-    public static function dpTestModifyQuery(): array
+    public static function dpTestModifyQuery(): \Iterator
     {
-        return [
-            [
-                'page' => '0',
-                'limit' => '123',
-                'expect' => [
-                    'setFirstResult' => 0,
-                    'setMaxResults' => 123,
-                ],
+        yield [
+            'page' => '0',
+            'limit' => '123',
+            'expect' => [
+                'setFirstResult' => 0,
+                'setMaxResults' => 123,
             ],
-            [
-                'page' => 'a',
-                'limit' => 100,
-                'expect' => [
-                    'setFirstResult' => 0,
-                    'setMaxResults' => 100,
-                ],
+        ];
+        yield [
+            'page' => 'a',
+            'limit' => 100,
+            'expect' => [
+                'setFirstResult' => 0,
+                'setMaxResults' => 100,
             ],
-            [
-                'page' => 3,
-                'limit' => 100,
-                'expect' => [
-                    'setFirstResult' => 200,
-                    'setMaxResults' => 100,
-                ],
+        ];
+        yield [
+            'page' => 3,
+            'limit' => 100,
+            'expect' => [
+                'setFirstResult' => 200,
+                'setMaxResults' => 100,
             ],
-            [
-                'page' => null,
-                'limit' => 33,
-                'expect' => [
-                    'setFirstResult' => 0,
-                    'setMaxResults' => 33,
-                ],
+        ];
+        yield [
+            'page' => null,
+            'limit' => 33,
+            'expect' => [
+                'setFirstResult' => 0,
+                'setMaxResults' => 33,
             ],
         ];
     }
@@ -73,27 +69,25 @@ class PaginateTest extends QueryPartialTestCase
         $this->sut->modifyQuery($this->qb, [$page, $limit]);
     }
 
-    public static function dpTestModifyQueryEmptyExpect(): array
+    public static function dpTestModifyQueryEmptyExpect(): \Iterator
     {
-        return [
-            [
-                'page' => -1,
-                'limit' => 'aaaa',
-                'expect' => [
-                    // 'setFirstResult' not call
-                    //  setMaxResults not call,
-                ],
+        yield [
+            'page' => -1,
+            'limit' => 'aaaa',
+            'expect' => [
+                // 'setFirstResult' not call
+                //  setMaxResults not call,
             ],
-            [
-                'page' => null,
-                'limit' => null,
-                'expect' => [],
-            ],
-            [
-                'page' => 1,
-                'limit' => null,
-                'expect' => [],
-            ],
+        ];
+        yield [
+            'page' => null,
+            'limit' => null,
+            'expect' => [],
+        ];
+        yield [
+            'page' => 1,
+            'limit' => null,
+            'expect' => [],
         ];
     }
 }

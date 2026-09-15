@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\AbstractListQueryHandlerTestCase;
 /**
  * GetList Test
  */
-class GetListTest extends AbstractListQueryHandlerTestCase
+final class GetListTest extends AbstractListQueryHandlerTestCase
 {
     protected $sutClass = ToggleListHandler::class;
     protected $sutRepo = 'FeatureToggle';

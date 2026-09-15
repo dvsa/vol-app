@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class QaEntityProviderTest extends MockeryTestCase
+final class QaEntityProviderTest extends MockeryTestCase
 {
     private $irhpApplicationId = 17;
 
@@ -28,29 +28,26 @@ class QaEntityProviderTest extends MockeryTestCase
 
     private $irhpPermitApplication;
 
-    private $irhpApplicationRepo;
-
-    private $irhpPermitApplicationRepo;
-
     private $qaEntityProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpApplication = m::mock(IrhpApplication::class);
 
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);
 
-        $this->irhpApplicationRepo = m::mock(IrhpApplicationRepository::class);
-        $this->irhpApplicationRepo->shouldReceive('fetchById')
+        $irhpApplicationRepo = m::mock(IrhpApplicationRepository::class);
+        $irhpApplicationRepo->shouldReceive('fetchById')
             ->with($this->irhpApplicationId)
             ->andReturn($this->irhpApplication);
 
-        $this->irhpPermitApplicationRepo = m::mock(IrhpPermitApplicationRepository::class);
-        $this->irhpPermitApplicationRepo->shouldReceive('fetchById')
+        $irhpPermitApplicationRepo = m::mock(IrhpPermitApplicationRepository::class);
+        $irhpPermitApplicationRepo->shouldReceive('fetchById')
             ->with($this->irhpPermitApplicationId)
             ->andReturn($this->irhpPermitApplication);
 
-        $this->qaEntityProvider = new QaEntityProvider($this->irhpApplicationRepo, $this->irhpPermitApplicationRepo);
+        $this->qaEntityProvider = new QaEntityProvider($irhpApplicationRepo, $irhpPermitApplicationRepo);
     }
 
     public function testGetWithIrhpApplication(): void

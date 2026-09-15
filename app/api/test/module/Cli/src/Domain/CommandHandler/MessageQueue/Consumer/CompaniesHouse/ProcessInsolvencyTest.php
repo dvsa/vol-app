@@ -28,7 +28,7 @@ use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Mockery as m;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
+final class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
 {
     protected $config = [
         'message_queue' => [
@@ -73,8 +73,10 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
     }
 
     #[DataProvider('addressData')]
-    public function testHandleCommandCreatesTasks(mixed $licence, mixed $team): void
+    public function testHandleCommandCreatesTasks(\Closure $createLicence, mixed $team): void
     {
+        $licence = $createLicence();
+
         $this->setupStandardService();
         $this->setupMockCHRepo();
 
@@ -113,8 +115,10 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
     }
 
     #[DataProvider('emailTestsDataProvider')]
-    public function testHandleCommandSendsEmails(mixed $licence): void
+    public function testHandleCommandSendsEmails(\Closure $createLicence): void
     {
+        $licence = $createLicence();
+
         $this->setupStandardService();
         $this->setupMockCHRepo();
 
@@ -509,29 +513,25 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
             ->getMock());
     }
 
-    public static function addressData(): array
+    public static function addressData(): \Iterator
     {
-        return [
-            'GBLicence' => [
-                self::getMockLicences()[0],
-                ProcessInsolvency::GB_TEAMLEADER_TASK,
-            ],
-            'NILicence' => [
-                self::getMockLicences()[1],
-                ProcessInsolvency::NI_TEAMLEADER_TASK,
-            ]
+        yield 'GBLicence' => [
+            static fn () => self::getMockLicences()[0],
+            ProcessInsolvency::GB_TEAMLEADER_TASK,
+        ];
+        yield 'NILicence' => [
+            static fn () => self::getMockLicences()[1],
+            ProcessInsolvency::NI_TEAMLEADER_TASK,
         ];
     }
 
-    public static function emailTestsDataProvider(): array
+    public static function emailTestsDataProvider(): \Iterator
     {
-        return [
-            'GBLicence' => [
-                self::getMockLicences()[0],
-            ],
-            'NILicence' => [
-                self::getMockLicences()[1],
-            ]
+        yield 'GBLicence' => [
+            static fn () => self::getMockLicences()[0],
+        ];
+        yield 'NILicence' => [
+            static fn () => self::getMockLicences()[1],
         ];
     }
 

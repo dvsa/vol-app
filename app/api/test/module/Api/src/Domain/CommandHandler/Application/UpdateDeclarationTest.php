@@ -28,7 +28,7 @@ use Dvsa\Olcs\Api\Entity\Fee\FeeType as FeeTypeEntity;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
+final class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

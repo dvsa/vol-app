@@ -22,23 +22,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="tm_case_decision",
- *    indexes={
- *        @ORM\Index(name="ix_tm_case_decision_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_tm_case_decision_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_tm_case_decision_decision", columns={"decision"}),
- *        @ORM\Index(name="ix_tm_case_decision_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_tm_case_decision_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_tm_case_decision_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'tm_case_decision')]
+#[ORM\Index(name: 'ix_tm_case_decision_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_tm_case_decision_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_tm_case_decision_decision', columns: ['decision'])]
+#[ORM\Index(name: 'ix_tm_case_decision_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\UniqueConstraint(name: 'uk_tm_case_decision_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractTmCaseDecision implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -52,169 +45,143 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'tmDecisions', fetch: 'LAZY')]
     protected $case;
 
     /**
      * Decision
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="decision", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'decision', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $decision;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Decision date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="decision_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'decision_date', nullable: true)]
     protected $decisionDate;
 
     /**
      * Notified date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="notified_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'notified_date', nullable: true)]
     protected $notifiedDate;
 
     /**
      * isMsi
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_msi", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_msi', nullable: false, options: ['default' => 0])]
     protected $isMsi = 0;
 
     /**
      * Repute not lost reason
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="repute_not_lost_reason", length=500, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'repute_not_lost_reason', length: 500, nullable: true)]
     protected $reputeNotLostReason;
 
     /**
      * Unfitness start date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="unfitness_start_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'unfitness_start_date', nullable: true)]
     protected $unfitnessStartDate;
 
     /**
      * Unfitness end date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="unfitness_end_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'unfitness_end_date', nullable: true)]
     protected $unfitnessEndDate;
 
     /**
      * No further action reason
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="no_further_action_reason", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'no_further_action_reason', length: 4000, nullable: true)]
     protected $noFurtherActionReason;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
      * RehabMeasures
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="tmCaseDecisions", fetch="LAZY")
-     * @ORM\JoinTable(name="tm_case_decision_rehab",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="tm_case_decision_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="rehab_measure_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'tm_case_decision_rehab')]
+    #[ORM\JoinColumn(name: 'tm_case_decision_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'rehab_measure_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $rehabMeasures;
 
     /**
      * UnfitnessReasons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="tmCaseDecisions", fetch="LAZY")
-     * @ORM\JoinTable(name="tm_case_decision_unfitness",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="tm_case_decision_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="unfitness_reason_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'tm_case_decision_unfitness')]
+    #[ORM\JoinColumn(name: 'tm_case_decision_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'unfitness_reason_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $unfitnessReasons;
 
     /**
@@ -240,7 +207,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setId($id)
     {
@@ -264,7 +231,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setCase($case)
     {
@@ -288,7 +255,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $decision new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setDecision($decision)
     {
@@ -312,7 +279,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -336,7 +303,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -360,7 +327,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \DateTime $decisionDate new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setDecisionDate($decisionDate)
     {
@@ -390,7 +357,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \DateTime $notifiedDate new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setNotifiedDate($notifiedDate)
     {
@@ -420,7 +387,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param string $isMsi new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setIsMsi($isMsi)
     {
@@ -444,7 +411,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param string $reputeNotLostReason new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setReputeNotLostReason($reputeNotLostReason)
     {
@@ -468,7 +435,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \DateTime $unfitnessStartDate new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setUnfitnessStartDate($unfitnessStartDate)
     {
@@ -498,7 +465,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \DateTime $unfitnessEndDate new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setUnfitnessEndDate($unfitnessEndDate)
     {
@@ -528,7 +495,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param string $noFurtherActionReason new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setNoFurtherActionReason($noFurtherActionReason)
     {
@@ -552,7 +519,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setVersion($version)
     {
@@ -576,7 +543,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param int $olbsKey new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -600,7 +567,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $rehabMeasures collection being set as the value
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setRehabMeasures($rehabMeasures)
     {
@@ -624,7 +591,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $rehabMeasures collection being added
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function addRehabMeasures($rehabMeasures)
     {
@@ -647,7 +614,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $rehabMeasures collection being removed
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function removeRehabMeasures($rehabMeasures)
     {
@@ -663,7 +630,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $unfitnessReasons collection being set as the value
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setUnfitnessReasons($unfitnessReasons)
     {
@@ -687,7 +654,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $unfitnessReasons collection being added
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function addUnfitnessReasons($unfitnessReasons)
     {
@@ -710,7 +677,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $unfitnessReasons collection being removed
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function removeUnfitnessReasons($unfitnessReasons)
     {

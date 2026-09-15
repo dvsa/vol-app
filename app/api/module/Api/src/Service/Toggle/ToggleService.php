@@ -21,7 +21,7 @@ class ToggleService
      *
      * @return bool
      */
-    public function isEnabled(string $name, Context $context = null): bool
+    public function isEnabled(string $name, ?Context $context = null): bool
     {
         if (!$context instanceof Context) {
             $context = new Context();
@@ -30,7 +30,7 @@ class ToggleService
         return $this->toggleManager->active($name, $context);
     }
 
-    public function isDisabled(string $name, Context $context = null): bool
+    public function isDisabled(string $name, ?Context $context = null): bool
     {
         return !$this->isEnabled($name, $context);
     }

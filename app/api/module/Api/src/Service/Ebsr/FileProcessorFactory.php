@@ -23,7 +23,7 @@ class FileProcessorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FileProcessor
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FileProcessor
     {
         $config = $container->get('config');
         $tmpDir = ($config['tmpDirectory'] ?? sys_get_temp_dir());

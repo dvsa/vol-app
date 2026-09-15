@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * OperatorAdminEmail test
  */
-class OperatorAdminEmailTest extends TestCase
+final class OperatorAdminEmailTest extends TestCase
 {
     public function testGetQuery(): void
     {

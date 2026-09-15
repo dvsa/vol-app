@@ -18,10 +18,9 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="bus_service_type")
  */
+#[ORM\Table(name: 'bus_service_type')]
+#[ORM\MappedSuperclass]
 abstract class AbstractBusServiceType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -32,37 +31,33 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 70, nullable: true)]
     protected $description;
 
     /**
      * TransXChange name.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="txc_name", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'txc_name', length: 70, nullable: true)]
     protected $txcName;
 
     /**
      * BusRegs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", mappedBy="busServiceTypes", fetch="LAZY")
      */
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, mappedBy: 'busServiceTypes', fetch: 'LAZY')]
     protected $busRegs;
 
     /**
@@ -87,7 +82,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return BusServiceType
+     * @return static
      */
     public function setId($id)
     {
@@ -111,7 +106,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param string $description new value being set
      *
-     * @return BusServiceType
+     * @return static
      */
     public function setDescription($description)
     {
@@ -135,7 +130,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param string $txcName new value being set
      *
-     * @return BusServiceType
+     * @return static
      */
     public function setTxcName($txcName)
     {
@@ -159,7 +154,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being set as the value
      *
-     * @return BusServiceType
+     * @return static
      */
     public function setBusRegs($busRegs)
     {
@@ -183,7 +178,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $busRegs collection being added
      *
-     * @return BusServiceType
+     * @return static
      */
     public function addBusRegs($busRegs)
     {
@@ -206,7 +201,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being removed
      *
-     * @return BusServiceType
+     * @return static
      */
     public function removeBusRegs($busRegs)
     {

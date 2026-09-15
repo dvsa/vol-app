@@ -19,7 +19,7 @@ use Mockery as m;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\TransportManagerLicence\UpdateForResponsibilities::class)]
-class UpdateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
+final class UpdateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandHandler\TransportManagerLicence\UpdateForResponsibilities   */
     protected $sut;

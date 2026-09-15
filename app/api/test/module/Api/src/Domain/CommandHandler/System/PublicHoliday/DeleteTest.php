@@ -11,10 +11,8 @@ use Dvsa\Olcs\Transfer\Command\System\PublicHoliday\Delete as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\System\PublicHoliday\Delete
- */
-class DeleteTest extends AbstractCommandHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\System\PublicHoliday\Delete::class)]
+final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -39,7 +37,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
 
         $actual = $this->sut->handleCommand($command);
 
-        static::assertEquals(['id' . $id => $id], $actual->getIds());
-        static::assertEquals(['Id ' . $id . ' deleted'], $actual->getMessages());
+        $this->assertEquals(['id' . $id => $id], $actual->getIds());
+        $this->assertEquals(['Id ' . $id . ' deleted'], $actual->getMessages());
     }
 }

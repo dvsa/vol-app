@@ -17,7 +17,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class PiHearingEntityTest extends EntityTester
+final class PiHearingEntityTest extends EntityTester
 {
     /**
      * Holds the entity
@@ -33,6 +33,7 @@ class PiHearingEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
+    #[\Override]
     public function setUp(): void
     {
         /** @var \Dvsa\Olcs\Api\Entity\Pi\PiHearing entity */
@@ -314,29 +315,25 @@ class PiHearingEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function adjournedDateProvider(): array
+    public static function adjournedDateProvider(): \Iterator
     {
-        return [
-            [null],
-            ['2015-12-25T12:00:00+01:00']
-        ];
+        yield [null];
+        yield ['2015-12-25T12:00:00+01:00'];
     }
 
-    public static function dataProviderHearingBeforeAgreedDateValidate(): array
+    public static function dataProviderHearingBeforeAgreedDateValidate(): \Iterator
     {
-        return [
-            // $expectException, $hearingDate, $piAgreedDate
-            [true, new \DateTime('2012-10-09'), new \DateTime('2017-10-10')],
-            [true, new \DateTime('2017-10-09 23:45'), new \DateTime('2017-10-10')],
-            [false, new \DateTime('2017-10-10 00:01'), new \DateTime('2017-10-10')],
-            [false, new \DateTime('2017-10-10 23:00 '), new \DateTime('2017-10-10')],
-            [false, new \DateTime('2017-10-10 00:00 +01:00 '), new \DateTime('2017-10-10')],
-            [false, new \DateTime('2017-10-10 01:00 +01:00 '), new \DateTime('2017-10-10')],
-            [false, new \DateTime('2017-10-10 23:45 +01:00 '), new \DateTime('2017-10-10')],
-            [false, new \DateTime('2017-10-11'), new \DateTime('2017-10-10')],
-            [false, new \DateTime('2027-10-10'), new \DateTime('2017-10-10')],
-        ];
+        // $expectException, $hearingDate, $piAgreedDate
+        yield [true, new \DateTime('2012-10-09'), new \DateTime('2017-10-10')];
+        yield [true, new \DateTime('2017-10-09 23:45'), new \DateTime('2017-10-10')];
+        yield [false, new \DateTime('2017-10-10 00:01'), new \DateTime('2017-10-10')];
+        yield [false, new \DateTime('2017-10-10 23:00 '), new \DateTime('2017-10-10')];
+        yield [false, new \DateTime('2017-10-10 00:00 +01:00 '), new \DateTime('2017-10-10')];
+        yield [false, new \DateTime('2017-10-10 01:00 +01:00 '), new \DateTime('2017-10-10')];
+        yield [false, new \DateTime('2017-10-10 23:45 +01:00 '), new \DateTime('2017-10-10')];
+        yield [false, new \DateTime('2017-10-11'), new \DateTime('2017-10-10')];
+        yield [false, new \DateTime('2027-10-10'), new \DateTime('2017-10-10')];
     }
 }

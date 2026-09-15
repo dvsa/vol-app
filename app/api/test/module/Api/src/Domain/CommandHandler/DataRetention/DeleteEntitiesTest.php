@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Domain\Command\DataRetention\DeleteEntities as Cmd;
 /**
  * Class DeleteEntitiesTest
  */
-class DeleteEntitiesTest extends AbstractCommandHandlerTestCase
+final class DeleteEntitiesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

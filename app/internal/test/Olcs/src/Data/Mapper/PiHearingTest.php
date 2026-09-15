@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * Pi Hearing Mapper Test
  */
-class PiHearingTest extends MockeryTestCase
+final class PiHearingTest extends MockeryTestCase
 {
     /**
      *
@@ -28,9 +28,9 @@ class PiHearingTest extends MockeryTestCase
     /**
      * Data provider for mapFromForm
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function mapFromFormDataProvider(): array
+    public static function mapFromFormDataProvider(): \Iterator
     {
         $venueOther = 'pi venue other';
         $adjournedReason = 'cancelled reason';
@@ -38,28 +38,10 @@ class PiHearingTest extends MockeryTestCase
         $cancelledReason = 'cancelled reason';
         $cancelledDate = '2015-12-26';
         $details = 'details';
-
-        return [
+        yield [
             [
-                [
-                    'fields' => [
-                        'venue' => 'other',
-                        'venueOther' => $venueOther,
-                        'isCancelled' => 'Y',
-                        'cancelledReason' => $cancelledReason,
-                        'cancelledDate' => $cancelledDate,
-                        'isAdjourned' => 'Y',
-                        'adjournedReason' => $adjournedReason,
-                        'adjournedDate' => $adjournedDate,
-                        'details' => $details,
-                        'isFullDay' => 'not-set',
-                    ],
-                    'form-actions' => [
-                        'publish' => true
-                    ]
-                ],
-                [
-                    'venue' => null,
+                'fields' => [
+                    'venue' => 'other',
                     'venueOther' => $venueOther,
                     'isCancelled' => 'Y',
                     'cancelledReason' => $cancelledReason,
@@ -68,39 +50,54 @@ class PiHearingTest extends MockeryTestCase
                     'adjournedReason' => $adjournedReason,
                     'adjournedDate' => $adjournedDate,
                     'details' => $details,
-                    'publish' => 'Y',
-                    'text2' => $details,
                     'isFullDay' => 'not-set',
+                ],
+                'form-actions' => [
+                    'publish' => true
                 ]
             ],
             [
-                [
-                    'fields' => [
-                        'venue' => 1,
-                        'venueOther' => $venueOther,
-                        'isCancelled' => 'N',
-                        'cancelledReason' => $cancelledReason,
-                        'cancelledDate' => $cancelledDate,
-                        'isAdjourned' => 'N',
-                        'adjournedReason' => $adjournedReason,
-                        'adjournedDate' => $adjournedDate,
-                        'details' => $details,
-                        'isFullDay' => 'Y',
-                    ],
-                ],
-                [
+                'venue' => null,
+                'venueOther' => $venueOther,
+                'isCancelled' => 'Y',
+                'cancelledReason' => $cancelledReason,
+                'cancelledDate' => $cancelledDate,
+                'isAdjourned' => 'Y',
+                'adjournedReason' => $adjournedReason,
+                'adjournedDate' => $adjournedDate,
+                'details' => $details,
+                'publish' => 'Y',
+                'text2' => $details,
+                'isFullDay' => 'not-set',
+            ]
+        ];
+        yield [
+            [
+                'fields' => [
                     'venue' => 1,
-                    'venueOther' => null,
+                    'venueOther' => $venueOther,
                     'isCancelled' => 'N',
-                    'cancelledReason' => null,
-                    'cancelledDate' => null,
+                    'cancelledReason' => $cancelledReason,
+                    'cancelledDate' => $cancelledDate,
                     'isAdjourned' => 'N',
-                    'adjournedReason' => null,
-                    'adjournedDate' => null,
+                    'adjournedReason' => $adjournedReason,
+                    'adjournedDate' => $adjournedDate,
                     'details' => $details,
-                    'publish' => 'N',
                     'isFullDay' => 'Y',
-                ]
+                ],
+            ],
+            [
+                'venue' => 1,
+                'venueOther' => null,
+                'isCancelled' => 'N',
+                'cancelledReason' => null,
+                'cancelledDate' => null,
+                'isAdjourned' => 'N',
+                'adjournedReason' => null,
+                'adjournedDate' => null,
+                'details' => $details,
+                'publish' => 'N',
+                'isFullDay' => 'Y',
             ]
         ];
     }
@@ -121,68 +118,65 @@ class PiHearingTest extends MockeryTestCase
     /**
      * Data provider for mapFromResult
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
         $venueOther = 'pi venue other';
         $otherFieldId = 99;
         $witnesses = 88;
         $drivers = 10;
-
-        return [
+        yield [
+            [],
             [
-                [],
-                [
-                    'fields' => [
-                        'witnesses' => 0,
-                        'isFullDay' => 'not-set',
-                        'drivers' => 0,
-                    ]
+                'fields' => [
+                    'witnesses' => 0,
+                    'isFullDay' => 'not-set',
+                    'drivers' => 0,
                 ]
+            ]
+        ];
+        yield [
+            [
+                'venue' => 1,
+                'venueOther' => $venueOther,
+                'otherField' => [
+                    'id' => $otherFieldId
+                ],
+                'witnesses' => $witnesses,
+                'isFullDay' => 'Y',
+                'drivers'   => $drivers,
             ],
             [
-                [
-                    'venue' => 1,
+                'fields' => [
+                    'venue' => 'other',
                     'venueOther' => $venueOther,
-                    'otherField' => [
-                        'id' => $otherFieldId
-                    ],
+                    'otherField' => $otherFieldId,
                     'witnesses' => $witnesses,
                     'isFullDay' => 'Y',
                     'drivers'   => $drivers,
-                ],
-                [
-                    'fields' => [
-                        'venue' => 'other',
-                        'venueOther' => $venueOther,
-                        'otherField' => $otherFieldId,
-                        'witnesses' => $witnesses,
-                        'isFullDay' => 'Y',
-                        'drivers'   => $drivers,
-                    ]
                 ]
+            ]
+        ];
+        yield [
+            [
+                'venue' => 1,
+                'venueOther' => $venueOther,
+                'otherField' => [
+                    'id' => $otherFieldId
+                ],
+                'witnesses' => null,
+                'isFullDay' => 'N',
+                'drivers'   => null,
             ],
             [
-                [
-                    'venue' => 1,
+                'fields' => [
+                    'venue' => 'other',
                     'venueOther' => $venueOther,
-                    'otherField' => [
-                        'id' => $otherFieldId
-                    ],
-                    'witnesses' => null,
+                    'otherField' => $otherFieldId,
+                    'witnesses' => 0,
                     'isFullDay' => 'N',
-                    'drivers'   => null,
-                ],
-                [
-                    'fields' => [
-                        'venue' => 'other',
-                        'venueOther' => $venueOther,
-                        'otherField' => $otherFieldId,
-                        'witnesses' => 0,
-                        'isFullDay' => 'N',
-                        'drivers'   => 0,
-                    ]
+                    'drivers'   => 0,
                 ]
             ]
         ];

@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\CommunityLic\Application\CreateOfficeCopy;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateOfficeCopyTest extends \PHPUnit\Framework\TestCase
+final class CreateOfficeCopyTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

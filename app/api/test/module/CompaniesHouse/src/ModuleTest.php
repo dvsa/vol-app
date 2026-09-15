@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\CompaniesHouse;
 use Dvsa\Olcs\CompaniesHouse\Module;
 use PHPUnit\Framework\TestCase;
 
-class ModuleTest extends TestCase
+final class ModuleTest extends TestCase
 {
     public function testGetConfig(): void
     {

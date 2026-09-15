@@ -12,7 +12,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\OlcsTest\MocksServicesTrait;
 
-class CognitoAdapterFactoryTest extends MockeryTestCase
+final class CognitoAdapterFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -21,6 +21,7 @@ class CognitoAdapterFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

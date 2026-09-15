@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Service\FeesHelperService;
 use Dvsa\Olcs\Api\Service\Lva\SectionAccessService;
 use Mockery as m;
 
-class DeclarationTest extends QueryHandlerTestCase
+final class DeclarationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -14,7 +14,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ExpireTest extends AbstractCommandHandlerTestCase
+final class ExpireTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

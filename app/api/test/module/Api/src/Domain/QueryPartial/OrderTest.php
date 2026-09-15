@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\QueryPartial\Order;
 /**
  * OrderTest
  */
-class OrderTest extends QueryPartialTestCase
+final class OrderTest extends QueryPartialTestCase
 {
     /**
      * @var Order
@@ -33,25 +33,23 @@ class OrderTest extends QueryPartialTestCase
         );
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            [
-                'SELECT a FROM foo a ORDER BY a.PROP DESC',
-                ['PROP', 'DESC']
-            ],
-            [
-                'SELECT a FROM foo a ORDER BY ENTITY.PROP ASC',
-                ['ENTITY.PROP', 'ASC']
-            ],
-            [
-                'SELECT a FROM foo a ORDER BY PROP ASC',
-                ['PROP', 'ASC', ['XXXX', 'PROP']]
-            ],
-            [
-                'SELECT a FROM foo a ORDER BY ENTITY.PROP ASC',
-                ['ENTITY.PROP', 'ASC', ['XXXX', 'ENTITY.PROP']]
-            ],
+        yield [
+            'SELECT a FROM foo a ORDER BY a.PROP DESC',
+            ['PROP', 'DESC']
+        ];
+        yield [
+            'SELECT a FROM foo a ORDER BY ENTITY.PROP ASC',
+            ['ENTITY.PROP', 'ASC']
+        ];
+        yield [
+            'SELECT a FROM foo a ORDER BY PROP ASC',
+            ['PROP', 'ASC', ['XXXX', 'PROP']]
+        ];
+        yield [
+            'SELECT a FROM foo a ORDER BY ENTITY.PROP ASC',
+            ['ENTITY.PROP', 'ASC', ['XXXX', 'ENTITY.PROP']]
         ];
     }
 }

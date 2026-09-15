@@ -20,7 +20,7 @@ use Laminas\Form\FormInterface;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PrinterTest extends MockeryTestCase
+final class PrinterTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {

@@ -22,7 +22,7 @@ use Laminas\Form\Factory as FormFactory;
  *
  * @author Jonathan Thomas <jonthan@opalise.co.uk>
  */
-class NoOfPermitsElementGeneratorTest extends TestCase
+final class NoOfPermitsElementGeneratorTest extends TestCase
 {
     public function testGenerate(): void
     {

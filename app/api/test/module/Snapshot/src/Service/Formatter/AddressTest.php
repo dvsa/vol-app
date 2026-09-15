@@ -10,7 +10,7 @@ use Dvsa\Olcs\Snapshot\Service\Formatter\Address;
 /**
  * Address formatter test
  */
-class AddressTest extends \PHPUnit\Framework\TestCase
+final class AddressTest extends \PHPUnit\Framework\TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat(mixed $data, mixed $column, mixed $expected): void

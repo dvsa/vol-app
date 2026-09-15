@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\Permits\PostSubmitTasks as Sut;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 
-class PostSubmitTasksTest extends AbstractConsumerTestCase
+final class PostSubmitTasksTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 

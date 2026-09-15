@@ -14,12 +14,13 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Check whether the current user can update the type of licence for the given licence
  */
-class UpdateLicenceTypeTest extends MockeryTestCase
+final class UpdateLicenceTypeTest extends MockeryTestCase
 {
     protected $sut;
 
     protected $auth;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new UpdateLicenceType();
@@ -45,49 +46,47 @@ class UpdateLicenceTypeTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $licence));
     }
 
-    public static function providerAssert(): array
+    public static function providerAssert(): \Iterator
     {
-        return [
-            [
-                true,
-                'it dont matter',
-                'it dont matter',
-                true
-            ],
-            [
-                false,
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'it dont matter',
-                true
-            ],
-            [
-                false,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                true
-            ],
-            [
-                false,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                true
-            ],
-            [
-                false,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                false
-            ],
-            [
-                false,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                false
-            ]
+        yield [
+            true,
+            'it dont matter',
+            'it dont matter',
+            true
+        ];
+        yield [
+            false,
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'it dont matter',
+            true
+        ];
+        yield [
+            false,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            true
+        ];
+        yield [
+            false,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            true
+        ];
+        yield [
+            false,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            false
+        ];
+        yield [
+            false,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            false
         ];
     }
 
-    public function assert(AuthorizationService $authorizationService, Licence $context = null): bool
+    public function assert(AuthorizationService $authorizationService, ?Licence $context = null): bool
     {
         if ($authorizationService->isGranted(Permission::INTERNAL_USER)) {
             return true;

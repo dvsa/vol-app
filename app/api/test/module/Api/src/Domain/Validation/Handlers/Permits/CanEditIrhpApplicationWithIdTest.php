@@ -9,10 +9,8 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Permits\CanEditIrhpApplicationWithId;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\Permits\CanEditIrhpApplicationWithId
- */
-class CanEditIrhpApplicationWithIdTest extends AbstractHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Permits\CanEditIrhpApplicationWithId::class)]
+final class CanEditIrhpApplicationWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanEditIrhpApplicationWithId
@@ -39,11 +37,9 @@ class CanEditIrhpApplicationWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function dpTestIsValid(): array
+    public static function dpTestIsValid(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

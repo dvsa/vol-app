@@ -25,7 +25,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RestrictedCountriesAnswerSaverTest extends MockeryTestCase
+final class RestrictedCountriesAnswerSaverTest extends MockeryTestCase
 {
     private $applicationStep;
 
@@ -37,10 +37,6 @@ class RestrictedCountriesAnswerSaverTest extends MockeryTestCase
 
     private $irhpApplicationRepo;
 
-    private $countryRepo;
-
-    private $arrayCollectionFactory;
-
     private $namedAnswerFetcher;
 
     private $genericAnswerWriter;
@@ -49,6 +45,7 @@ class RestrictedCountriesAnswerSaverTest extends MockeryTestCase
 
     private $restrictedCountriesAnswerSaver;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->applicationStep = m::mock(ApplicationStepEntity::class);
@@ -67,10 +64,10 @@ class RestrictedCountriesAnswerSaverTest extends MockeryTestCase
 
         $this->irhpApplicationRepo = m::mock(IrhpApplicationRepository::class);
 
-        $this->countryRepo = m::mock(CountryRepository::class);
+        $countryRepo = m::mock(CountryRepository::class);
 
-        $this->arrayCollectionFactory = m::mock(ArrayCollectionFactory::class);
-        $this->arrayCollectionFactory->shouldReceive('create')
+        $arrayCollectionFactory = m::mock(ArrayCollectionFactory::class);
+        $arrayCollectionFactory->shouldReceive('create')
             ->withNoArgs()
             ->andReturn($this->arrayCollection);
 
@@ -82,8 +79,8 @@ class RestrictedCountriesAnswerSaverTest extends MockeryTestCase
 
         $this->restrictedCountriesAnswerSaver = new RestrictedCountriesAnswerSaver(
             $this->irhpApplicationRepo,
-            $this->countryRepo,
-            $this->arrayCollectionFactory,
+            $countryRepo,
+            $arrayCollectionFactory,
             $this->namedAnswerFetcher,
             $this->genericAnswerWriter,
             $this->stockBasedRestrictedCountryIdsProvider

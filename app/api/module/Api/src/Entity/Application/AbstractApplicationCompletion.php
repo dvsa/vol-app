@@ -21,21 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="application_completion",
- *    indexes={
- *        @ORM\Index(name="ix_application_completion_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_application_completion_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_application_completion_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_application_completion_application_id", columns={"application_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_application_completion_application_id", columns={"application_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'application_completion')]
+#[ORM\Index(name: 'ix_application_completion_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_application_completion_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_application_completion_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\UniqueConstraint(name: 'uk_application_completion_application_id', columns: ['application_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractApplicationCompletion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,332 +41,296 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'applicationCompletion', fetch: 'LAZY')]
     protected $application;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Type of licence status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="type_of_licence_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'type_of_licence_status', nullable: true, options: ['unsigned' => true])]
     protected $typeOfLicenceStatus;
 
     /**
      * Business type status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="business_type_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'business_type_status', nullable: true, options: ['unsigned' => true])]
     protected $businessTypeStatus;
 
     /**
      * Business details status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="business_details_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'business_details_status', nullable: true, options: ['unsigned' => true])]
     protected $businessDetailsStatus;
 
     /**
      * Addresses status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="addresses_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'addresses_status', nullable: true, options: ['unsigned' => true])]
     protected $addressesStatus;
 
     /**
      * People status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="people_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'people_status', nullable: true, options: ['unsigned' => true])]
     protected $peopleStatus;
 
     /**
      * Taxi phv status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="taxi_phv_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'taxi_phv_status', nullable: true, options: ['unsigned' => true])]
     protected $taxiPhvStatus;
 
     /**
      * Operating centres status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="operating_centres_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'operating_centres_status', nullable: true, options: ['unsigned' => true])]
     protected $operatingCentresStatus;
 
     /**
      * Financial evidence status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="financial_evidence_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'financial_evidence_status', nullable: true, options: ['unsigned' => true])]
     protected $financialEvidenceStatus;
 
     /**
      * Transport managers status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="transport_managers_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'transport_managers_status', nullable: true, options: ['unsigned' => true])]
     protected $transportManagersStatus;
 
     /**
      * Vehicles status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="vehicles_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'vehicles_status', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesStatus;
 
     /**
      * Vehicles psv status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="vehicles_psv_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'vehicles_psv_status', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesPsvStatus;
 
     /**
      * Vehicles size status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="vehicles_size_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'vehicles_size_status', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesSizeStatus;
 
     /**
      * Psv operate small status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_operate_small_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_operate_small_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateSmallStatus;
 
     /**
      * Psv operate large status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_operate_large_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_operate_large_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateLargeStatus;
 
     /**
      * Psv small conditions status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_small_conditions_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_small_conditions_status', nullable: true, options: ['unsigned' => true])]
     protected $psvSmallConditionsStatus;
 
     /**
      * Psv operate novelty status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_operate_novelty_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_operate_novelty_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateNoveltyStatus;
 
     /**
      * Psv small part written status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_small_part_written_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_small_part_written_status', nullable: true, options: ['unsigned' => true])]
     protected $psvSmallPartWrittenStatus;
 
     /**
      * Psv documentary evidence small status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_documentary_evidence_small_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_small_status', nullable: true, options: ['unsigned' => true])]
     protected $psvDocumentaryEvidenceSmallStatus;
 
     /**
      * Psv documentary evidence large status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_documentary_evidence_large_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_large_status', nullable: true, options: ['unsigned' => true])]
     protected $psvDocumentaryEvidenceLargeStatus;
 
     /**
      * Psv main occupation undertakings status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_main_occupation_undertakings_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_main_occupation_undertakings_status', nullable: true, options: ['unsigned' => true])]
     protected $psvMainOccupationUndertakingsStatus;
 
     /**
      * Vehicles declarations status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="vehicles_declarations_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'vehicles_declarations_status', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesDeclarationsStatus;
 
     /**
      * Discs status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="discs_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'discs_status', nullable: true, options: ['unsigned' => true])]
     protected $discsStatus;
 
     /**
      * Community licences status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="community_licences_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'community_licences_status', nullable: true, options: ['unsigned' => true])]
     protected $communityLicencesStatus;
 
     /**
      * Safety status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="safety_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'safety_status', nullable: true, options: ['unsigned' => true])]
     protected $safetyStatus;
 
     /**
      * Conditions undertakings status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="conditions_undertakings_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'conditions_undertakings_status', nullable: true, options: ['unsigned' => true])]
     protected $conditionsUndertakingsStatus;
 
     /**
      * Financial history status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="financial_history_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'financial_history_status', nullable: true, options: ['unsigned' => true])]
     protected $financialHistoryStatus;
 
     /**
      * Licence history status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="licence_history_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'licence_history_status', nullable: true, options: ['unsigned' => true])]
     protected $licenceHistoryStatus;
 
     /**
      * Convictions penalties status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="convictions_penalties_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'convictions_penalties_status', nullable: true, options: ['unsigned' => true])]
     protected $convictionsPenaltiesStatus;
 
     /**
      * Undertakings status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="undertakings_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'undertakings_status', nullable: true, options: ['unsigned' => true])]
     protected $undertakingsStatus;
 
     /**
      * Declarations internal status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="declarations_internal_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'declarations_internal_status', nullable: true, options: ['unsigned' => true])]
     protected $declarationsInternalStatus;
 
     /**
      * Last section
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="last_section", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'last_section', length: 255, nullable: true)]
     protected $lastSection;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -397,7 +354,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setId($id)
     {
@@ -421,7 +378,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setApplication($application)
     {
@@ -445,7 +402,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -469,7 +426,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -493,7 +450,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $typeOfLicenceStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setTypeOfLicenceStatus($typeOfLicenceStatus)
     {
@@ -517,7 +474,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $businessTypeStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setBusinessTypeStatus($businessTypeStatus)
     {
@@ -541,7 +498,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $businessDetailsStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setBusinessDetailsStatus($businessDetailsStatus)
     {
@@ -565,7 +522,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $addressesStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setAddressesStatus($addressesStatus)
     {
@@ -589,7 +546,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $peopleStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setPeopleStatus($peopleStatus)
     {
@@ -613,7 +570,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $taxiPhvStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setTaxiPhvStatus($taxiPhvStatus)
     {
@@ -637,7 +594,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $operatingCentresStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setOperatingCentresStatus($operatingCentresStatus)
     {
@@ -661,7 +618,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $financialEvidenceStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setFinancialEvidenceStatus($financialEvidenceStatus)
     {
@@ -685,7 +642,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $transportManagersStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setTransportManagersStatus($transportManagersStatus)
     {
@@ -709,7 +666,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $vehiclesStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setVehiclesStatus($vehiclesStatus)
     {
@@ -733,7 +690,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $vehiclesPsvStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setVehiclesPsvStatus($vehiclesPsvStatus)
     {
@@ -757,7 +714,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $vehiclesSizeStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setVehiclesSizeStatus($vehiclesSizeStatus)
     {
@@ -781,7 +738,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $psvOperateSmallStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setPsvOperateSmallStatus($psvOperateSmallStatus)
     {
@@ -805,7 +762,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $psvOperateLargeStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setPsvOperateLargeStatus($psvOperateLargeStatus)
     {
@@ -829,7 +786,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $psvSmallConditionsStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setPsvSmallConditionsStatus($psvSmallConditionsStatus)
     {
@@ -853,7 +810,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $psvOperateNoveltyStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setPsvOperateNoveltyStatus($psvOperateNoveltyStatus)
     {
@@ -877,7 +834,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $psvSmallPartWrittenStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setPsvSmallPartWrittenStatus($psvSmallPartWrittenStatus)
     {
@@ -901,7 +858,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $psvDocumentaryEvidenceSmallStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setPsvDocumentaryEvidenceSmallStatus($psvDocumentaryEvidenceSmallStatus)
     {
@@ -925,7 +882,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $psvDocumentaryEvidenceLargeStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setPsvDocumentaryEvidenceLargeStatus($psvDocumentaryEvidenceLargeStatus)
     {
@@ -949,7 +906,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $psvMainOccupationUndertakingsStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setPsvMainOccupationUndertakingsStatus($psvMainOccupationUndertakingsStatus)
     {
@@ -973,7 +930,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $vehiclesDeclarationsStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setVehiclesDeclarationsStatus($vehiclesDeclarationsStatus)
     {
@@ -997,7 +954,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $discsStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setDiscsStatus($discsStatus)
     {
@@ -1021,7 +978,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $communityLicencesStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setCommunityLicencesStatus($communityLicencesStatus)
     {
@@ -1045,7 +1002,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $safetyStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setSafetyStatus($safetyStatus)
     {
@@ -1069,7 +1026,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $conditionsUndertakingsStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setConditionsUndertakingsStatus($conditionsUndertakingsStatus)
     {
@@ -1093,7 +1050,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $financialHistoryStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setFinancialHistoryStatus($financialHistoryStatus)
     {
@@ -1117,7 +1074,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $licenceHistoryStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setLicenceHistoryStatus($licenceHistoryStatus)
     {
@@ -1141,7 +1098,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $convictionsPenaltiesStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setConvictionsPenaltiesStatus($convictionsPenaltiesStatus)
     {
@@ -1165,7 +1122,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $undertakingsStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setUndertakingsStatus($undertakingsStatus)
     {
@@ -1189,7 +1146,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $declarationsInternalStatus new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setDeclarationsInternalStatus($declarationsInternalStatus)
     {
@@ -1213,7 +1170,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param string $lastSection new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setLastSection($lastSection)
     {
@@ -1237,7 +1194,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return ApplicationCompletion
+     * @return static
      */
     public function setVersion($version)
     {

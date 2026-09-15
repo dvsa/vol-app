@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * Update NoFurtherAction Test
  */
-class UpdateNoFurtherActionTest extends AbstractCommandHandlerTestCase
+final class UpdateNoFurtherActionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

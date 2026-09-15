@@ -38,17 +38,11 @@ use Mockery as m;
 /**
  * @property m\LegacyMockInterface|m\MockInterface|LicenceEnableDisableMessagingController $sut
  */
-class LicenceEnableDisableMessagingControllerTest extends AbstractLvaControllerTestCase
+final class LicenceEnableDisableMessagingControllerTest extends AbstractLvaControllerTestCase
 {
-    protected $mockNavigation;
     protected $mockScriptFactory;
     protected $mockFormHelper;
-    protected $mockTableFactory;
-    protected $mockViewHelperManager;
     protected $mockFlashMessengerHelper;
-    protected $mockDataServiceManager;
-    protected $mockOppositionHelper;
-    protected $mockComplaintsHelper;
 
     public function setUp(): void
     {
@@ -56,25 +50,25 @@ class LicenceEnableDisableMessagingControllerTest extends AbstractLvaControllerT
 
         $this->mockScriptFactory = m::mock(ScriptFactory::class);
         $this->mockFormHelper = m::mock(FormHelperService::class);
-        $this->mockTableFactory = m::mock(TableFactory::class);
-        $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
+        $mockTableFactory = m::mock(TableFactory::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
-        $this->mockDataServiceManager = m::mock(PluginManager::class);
-        $this->mockOppositionHelper = m::mock(OppositionHelperService::class);
-        $this->mockComplaintsHelper = m::mock(ComplaintsHelperService::class);
-        $this->mockNavigation = m::mock(Navigation::class);
+        $mockDataServiceManager = m::mock(PluginManager::class);
+        $mockOppositionHelper = m::mock(OppositionHelperService::class);
+        $mockComplaintsHelper = m::mock(ComplaintsHelperService::class);
+        $mockNavigation = m::mock(Navigation::class);
         $this->mockController(
             LicenceEnableDisableMessagingController::class,
             [
                 $this->mockScriptFactory,
                 $this->mockFormHelper,
-                $this->mockTableFactory,
-                $this->mockViewHelperManager,
-                $this->mockDataServiceManager,
-                $this->mockOppositionHelper,
-                $this->mockComplaintsHelper,
+                $mockTableFactory,
+                $mockViewHelperManager,
+                $mockDataServiceManager,
+                $mockOppositionHelper,
+                $mockComplaintsHelper,
                 $this->mockFlashMessengerHelper,
-                $this->mockNavigation,
+                $mockNavigation,
             ],
         );
     }

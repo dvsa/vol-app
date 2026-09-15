@@ -25,7 +25,7 @@ use Mockery as m;
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class DeleteApplicationOperatingCentreTest extends AbstractCommandHandlerTestCase
+final class DeleteApplicationOperatingCentreTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

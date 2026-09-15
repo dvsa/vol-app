@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\Bus\BusRegReadAudit as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class BusRegReadAuditEntityTest extends EntityTester
+final class BusRegReadAuditEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

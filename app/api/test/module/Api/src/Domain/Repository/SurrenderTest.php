@@ -9,11 +9,12 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\Surrender;
 use Doctrine\ORM\QueryBuilder;
 
-class SurrenderTest extends RepositoryTestCase
+final class SurrenderTest extends RepositoryTestCase
 {
     /** @var Surrender */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Surrender::class);
@@ -36,6 +37,6 @@ class SurrenderTest extends RepositoryTestCase
 
         $expectedQuery = '{QUERY} AND m.licence = ' . $licenceId;
 
-        self::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 }

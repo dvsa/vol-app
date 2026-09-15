@@ -14,10 +14,11 @@ use Permits\Data\Mapper\LicencesAvailable;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Laminas\Form\Fieldset;
 
-class LicencesAvailableTest extends TestCase
+final class LicencesAvailableTest extends TestCase
 {
     private $licencesAvailable;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->licencesAvailable = new LicencesAvailable();
@@ -70,7 +71,7 @@ class LicencesAvailableTest extends TestCase
             ->with(m::type(HtmlTranslated::class))
             ->andReturnUsing(
                 function (HtmlTranslated $htmlTranslated) {
-                    $this->assertEquals('7Content', $htmlTranslated->getName());
+                    $this->assertSame('7Content', $htmlTranslated->getName());
                     $this->assertEquals(
                         LicencesAvailable::ECMT_RESTRICTED_HINT,
                         $htmlTranslated->getValue()

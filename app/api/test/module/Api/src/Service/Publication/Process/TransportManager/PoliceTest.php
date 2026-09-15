@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PoliceTest extends MockeryTestCase
+final class PoliceTest extends MockeryTestCase
 {
     public function testProcess(): void
     {
@@ -37,7 +37,7 @@ class PoliceTest extends MockeryTestCase
         ];
         $sut->process($publicationLink, new ImmutableArrayObject($input));
 
-        $this->assertSame($publicationLink->getPoliceDatas()->count(), 2);
+        $this->assertCount(2, $publicationLink->getPoliceDatas());
         $this->assertSame($publicationLink->getPoliceDatas()[0]->getPerson(), $person2);
         $this->assertSame($publicationLink->getPoliceDatas()[1]->getPerson(), $person3);
     }

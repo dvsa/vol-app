@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintCountry as ReadyToPrintCountryQ
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class ReadyToPrintCountryTest extends QueryHandlerTestCase
+final class ReadyToPrintCountryTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

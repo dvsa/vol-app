@@ -18,16 +18,12 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="ebsr_route_reprint",
- *    indexes={
- *        @ORM\Index(name="ix_ebsr_route_reprint_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="ix_ebsr_route_reprint_olbs_key", columns={"olbs_key"}),
- *        @ORM\Index(name="ix_ebsr_route_reprint_requested_user_id", columns={"requested_user_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'ebsr_route_reprint')]
+#[ORM\Index(name: 'ix_ebsr_route_reprint_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'ix_ebsr_route_reprint_olbs_key', columns: ['olbs_key'])]
+#[ORM\Index(name: 'ix_ebsr_route_reprint_requested_user_id', columns: ['requested_user_id'])]
+#[ORM\MappedSuperclass]
 abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -38,76 +34,68 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * RequestedUser
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="requested_user_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'requested_user_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $requestedUser;
 
     /**
      * Exception name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="exception_name", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'exception_name', length: 45, nullable: true)]
     protected $exceptionName;
 
     /**
      * Scale
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="scale", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'scale', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $scale = 0;
 
     /**
      * Published timestamp
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="published_timestamp", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'published_timestamp', nullable: true)]
     protected $publishedTimestamp;
 
     /**
      * Requested timestamp
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="requested_timestamp", nullable=false)
      */
+    #[ORM\Column(type: 'datetime', name: 'requested_timestamp', nullable: false)]
     protected $requestedTimestamp;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -131,7 +119,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setId($id)
     {
@@ -155,7 +143,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -179,7 +167,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $requestedUser new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setRequestedUser($requestedUser)
     {
@@ -203,7 +191,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param string $exceptionName new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setExceptionName($exceptionName)
     {
@@ -227,7 +215,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param bool $scale new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setScale($scale)
     {
@@ -251,7 +239,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param \DateTime $publishedTimestamp new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setPublishedTimestamp($publishedTimestamp)
     {
@@ -281,7 +269,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param \DateTime $requestedTimestamp new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setRequestedTimestamp($requestedTimestamp)
     {
@@ -311,7 +299,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param int $olbsKey new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessApplicationWithId;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CanAccessApplicationWithIdTest extends AbstractHandlerTestCase
+final class CanAccessApplicationWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessApplicationWithId
@@ -46,11 +46,9 @@ class CanAccessApplicationWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

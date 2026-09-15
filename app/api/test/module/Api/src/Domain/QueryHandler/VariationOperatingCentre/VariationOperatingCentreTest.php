@@ -24,7 +24,7 @@ use Dvsa\OlcsTest\Api\Entity\User as UserEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationOperatingCentreTest extends QueryHandlerTestCase
+final class VariationOperatingCentreTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

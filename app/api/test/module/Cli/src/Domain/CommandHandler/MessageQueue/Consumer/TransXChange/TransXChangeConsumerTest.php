@@ -39,7 +39,7 @@ use RuntimeException;
 #[\PHPUnit\Framework\Attributes\PreserveGlobalState(false)]
 #[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
+final class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
 {
     protected array $config = [
         'message_queue' => [
@@ -86,9 +86,7 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
         $this->sut = new TransXChangeConsumer();
         $this->mockRepo('EbsrSubmission', EbsrSubmission::class);
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
     }
 
     public function testEmptyQueue(): void
@@ -300,6 +298,8 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
             ->andReturn($messages);
 
         $this->repoMap['EbsrSubmission']->expects('fetchById')->andThrow(RuntimeException::class);
+
+        $this->mockedSmServices[Queue::class]->expects('changeMessageVisibility');
 
         $command = TransXChangeConsumerCmd::create([]);
 

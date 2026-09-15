@@ -12,7 +12,7 @@ class LicenceStatusRulesCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:licence-status-rules';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Process licence status change rules');
     }

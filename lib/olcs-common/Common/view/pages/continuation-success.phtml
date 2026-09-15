@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="two-thirds">
+      <h1><?php echo $this->translate('continuations.success.title'); ?></h1>
+      <p><?php echo $this->translate('continuations.success.subtitle'); ?></p>
+      <div class="confirmation">
+          <p><?php echo $this->translate('continuation.success.confirmation.your-licence-number'); ?></p>
+          <h2><?php echo $this->escapeHtml($licNo); ?></h2>
+          <?php if ($paymentRef): ?>
+              <p>
+                  <a
+                      href="<?php echo $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]);?>"
+                      target="blank">
+                      <?php echo $this->translate('continuation.success.confirmation.view-print-receipt'); ?>
+                  </a>
+              </p>
+          <?php endif; ?>
+      </div>
+      <?php if ($isPhysicalSignature || ($isFinancialEvidenceRequired && !$isSpecialRestricted)): ?>
+          <h2><?php echo $this->translate('continuation.success.confirmation.what-you-need-to-do'); ?></h2>
+          <?php if ($isPhysicalSignature): ?>
+              <div class="incomplete-section">
+                  <h3><?php echo $this->translate('print-sign-return-declaration-form'); ?></h3>
+                  <p>
+                      <?php
+                        echo $this->translate('continuation.success.declaration-send-text' . ($isNi ? '-ni' : ''));
+                      ?>
+                  </p>
+                  <p>
+                      <?php
+                        echo $this->linkNewWindow(
+                            $this->url('continuation/declaration/print', [], [], true),
+                            'continuation.success.download-declaration-letter'
+                        );
+                      ?>
+                  </p>
+              </div>
+          <?php endif; ?>
+          <?php if ($isFinancialEvidenceRequired && !$isSpecialRestricted): ?>
+              <div class="incomplete-section">
+                  <h3><?php echo $this->translate('continuation.success.add-supporting-evidence'); ?></h3>
+                  <p>
+                      <?php
+                        echo sprintf(
+                            $this->translate('continuation.success.supporting-evidence-text' . ($isNi ? '-ni' : '')),
+                                $this->url('guides/guide', ['guide' => 'financial-evidence'])
+                        );
+                      ?>
+                  </p>
+              </div>
+          <?php endif; ?>
+      <?php endif; ?>
+      <?php if (!$isSpecialRestricted): ?>
+        <h2><?php echo $this->translate('continuation.success.what-happens-next'); ?></h2>
+        <p><?php echo $this->translate('continuation.success.what-happens-next.detail'); ?></p>
+        <div class="field">
+            <p><?php printf($this->translate($this->licenceDocumentationMessage), $this->numPsvDiscs); ?></p>
+        </div>
+      <?php endif; ?>
+      <a href="<?php echo $this->url('lva-licence', ['licence' => $licenceId]) ?>" class="govuk-button" role="button" draggable="false" data-module="govuk-button">
+          <?php echo $this->translate('continuation.success.finish'); ?>
+      </a>
+  </div>
+
+</div>

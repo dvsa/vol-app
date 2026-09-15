@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\Country as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class CountryEntityTest extends EntityTester
+final class CountryEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -33,12 +33,10 @@ class CountryEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsMorocco(): array
+    public static function dpIsMorocco(): \Iterator
     {
-        return [
-            [Entity::ID_NORWAY, false],
-            [Entity::ID_BELARUS, false],
-            [Entity::ID_MOROCCO, true],
-        ];
+        yield [Entity::ID_NORWAY, false];
+        yield [Entity::ID_BELARUS, false];
+        yield [Entity::ID_MOROCCO, true];
     }
 }

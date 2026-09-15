@@ -12,10 +12,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 use stdClass;
 
-class AddressFormatterInitializerTest extends MockeryTestCase
+final class AddressFormatterInitializerTest extends MockeryTestCase
 {
     private AddressFormatterInitializer $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new AddressFormatterInitializer();

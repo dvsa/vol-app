@@ -13,17 +13,15 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * Class ApplicantsCommentsTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class ApplicantsCommentsTest extends AbstractSubmissionSectionTestCase
+final class ApplicantsCommentsTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = ApplicantsComments::class;
 
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $expectedResult = 'foo';
 
-        return [
-            [null, $expectedResult],
-        ];
+        yield [null, $expectedResult];
     }
 
     #[\Override]
@@ -44,6 +42,6 @@ class ApplicantsCommentsTest extends AbstractSubmissionSectionTestCase
         $result = $sut->generateSection($input);
 
         $this->assertArrayHasKey('text', $result['data']);
-        $this->assertEquals($result['data']['text'], 'foo');
+        $this->assertEquals('foo', $result['data']['text']);
     }
 }

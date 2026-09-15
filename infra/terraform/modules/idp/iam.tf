@@ -1,0 +1,550 @@
+# ============================================================
+# IAM — Lambda execution role (classify-document)
+# ============================================================
+data "aws_iam_policy_document" "lambda_assume_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "classify_document_lambda" {
+  name               = "${local.name_prefix}-classify-document-lambda"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+}
+
+data "aws_iam_policy_document" "classify_document_lambda" {
+  statement {
+    sid = "CloudWatchLogs"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    resources = ["${aws_cloudwatch_log_group.classify_document.arn}:*"]
+  }
+
+  # Read access on the documents bucket — HeadObject for the size pre-flight,
+  # GetObject to stream the PDF bytes for inline base64 encoding.
+  statement {
+    sid = "S3ReadDocuments"
+    actions = [
+      "s3:GetObject",
+    ]
+    resources = [
+      data.aws_s3_bucket.documents.arn,
+      "${data.aws_s3_bucket.documents.arn}/*",
+    ]
+  }
+
+  # Bedrock InvokeModel scoped to '*' to cover the foundation models
+  # a cross-region inference profile (eu.*) fans out to.
+  statement {
+    sid       = "BedrockInvokeClassificationModel"
+    actions   = ["bedrock:InvokeModel"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "classify_document_lambda" {
+  name   = "${local.name_prefix}-classify-document-lambda"
+  role   = aws_iam_role.classify_document_lambda.id
+  policy = data.aws_iam_policy_document.classify_document_lambda.json
+}
+
+# ============================================================
+# IAM — Step Functions execution role (Classification SM)
+# ============================================================
+data "aws_iam_policy_document" "sfn_assume_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["states.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "classification_sm" {
+  name               = "${local.name_prefix}-classification-sm"
+  assume_role_policy = data.aws_iam_policy_document.sfn_assume_role.json
+}
+
+data "aws_iam_policy_document" "classification_sm" {
+  statement {
+    sid     = "InvokeClassifyDocumentLambda"
+    actions = ["lambda:InvokeFunction"]
+    resources = [
+      aws_lambda_function.classify_document.arn,
+      "${aws_lambda_function.classify_document.arn}:*",
+    ]
+  }
+
+  # GetObject (IsSupportedContentType), GetObjectTagging + PutObjectTagging
+  # (BuildUpdatedTagSet / TagWithClassification).
+  statement {
+    sid = "S3DocumentOperations"
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectTagging",
+      "s3:PutObjectTagging",
+      "s3:ListBucket",
+    ]
+    resources = [
+      data.aws_s3_bucket.documents.arn,
+      "${data.aws_s3_bucket.documents.arn}/*",
+    ]
+  }
+
+  # Emit DocumentProcessing-Classified / DocumentProcessing-ClassificationFailed
+  # events to the default EventBridge bus.
+  statement {
+    sid     = "EventBridgePutEvents"
+    actions = ["events:PutEvents"]
+    resources = [
+      "arn:aws:events:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:event-bus/default",
+    ]
+  }
+
+  # Step Functions requires these to create and manage log deliveries.
+  statement {
+    sid = "CloudWatchLogs"
+    actions = [
+      "logs:CreateLogDelivery",
+      "logs:CreateLogStream",
+      "logs:GetLogDelivery",
+      "logs:UpdateLogDelivery",
+      "logs:DeleteLogDelivery",
+      "logs:ListLogDeliveries",
+      "logs:PutLogEvents",
+      "logs:PutResourcePolicy",
+      "logs:DescribeResourcePolicies",
+      "logs:DescribeLogGroups",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "XRayTracing"
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords",
+      "xray:GetSamplingRules",
+      "xray:GetSamplingTargets",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "classification_sm" {
+  name   = "${local.name_prefix}-classification-sm"
+  role   = aws_iam_role.classification_sm.id
+  policy = data.aws_iam_policy_document.classification_sm.json
+}
+
+# ============================================================
+# IAM — EventBridge role (start Classification SM execution)
+# ============================================================
+data "aws_iam_policy_document" "eventbridge_assume_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "eventbridge_invoke_classification" {
+  name               = "${local.name_prefix}-eventbridge-invoke-classification"
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role.json
+}
+
+data "aws_iam_policy_document" "eventbridge_invoke_classification" {
+  statement {
+    sid       = "StartClassificationExecution"
+    actions   = ["states:StartExecution"]
+    resources = [aws_sfn_state_machine.classification.arn]
+  }
+}
+
+resource "aws_iam_role_policy" "eventbridge_invoke_classification" {
+  name   = "${local.name_prefix}-eventbridge-invoke-classification"
+  role   = aws_iam_role.eventbridge_invoke_classification.id
+  policy = data.aws_iam_policy_document.eventbridge_invoke_classification.json
+}
+
+# ============================================================
+# IAM — Step Functions execution role (Extraction SM)
+# ============================================================
+resource "aws_iam_role" "extraction_sm" {
+  name               = "${local.name_prefix}-extraction-sm"
+  assume_role_policy = data.aws_iam_policy_document.sfn_assume_role.json
+}
+
+data "aws_iam_policy_document" "extraction_sm" {
+  # BDA async invocation + status polling.
+  # Scoped to * to cover the cross-region inference profile.
+  statement {
+    sid = "BedrockDataAutomation"
+    actions = [
+      "bedrock:InvokeDataAutomationAsync",
+      "bedrock:GetDataAutomationStatus",
+    ]
+    resources = ["*"]
+  }
+
+  # Read input documents so BDA can be pointed at the S3 URI.
+  statement {
+    sid     = "S3ReadDocuments"
+    actions = ["s3:GetObject"]
+    resources = [
+      data.aws_s3_bucket.documents.arn,
+      "${data.aws_s3_bucket.documents.arn}/*",
+    ]
+  }
+
+  # Read/write access to the BDA output bucket where extraction
+  # results (result.json) are written by the BDA service.
+  statement {
+    sid = "S3OutputBucket"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:ListBucket",
+      "s3:GetBucketLocation",
+    ]
+    resources = [
+      aws_s3_bucket.idp_output.arn,
+      "${aws_s3_bucket.idp_output.arn}/*",
+    ]
+  }
+
+  # Emit DocumentProcessing-Extracted / ExtractionFailed / ExtractionSkipped
+  # events to the default EventBridge bus.
+  statement {
+    sid     = "EventBridgePutEvents"
+    actions = ["events:PutEvents"]
+    resources = [
+      "arn:aws:events:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:event-bus/default",
+    ]
+  }
+
+  statement {
+    sid = "CloudWatchLogs"
+    actions = [
+      "logs:CreateLogDelivery",
+      "logs:CreateLogStream",
+      "logs:GetLogDelivery",
+      "logs:UpdateLogDelivery",
+      "logs:DeleteLogDelivery",
+      "logs:ListLogDeliveries",
+      "logs:PutLogEvents",
+      "logs:PutResourcePolicy",
+      "logs:DescribeResourcePolicies",
+      "logs:DescribeLogGroups",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "XRayTracing"
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords",
+      "xray:GetSamplingRules",
+      "xray:GetSamplingTargets",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "extraction_sm" {
+  name   = "${local.name_prefix}-extraction-sm"
+  role   = aws_iam_role.extraction_sm.id
+  policy = data.aws_iam_policy_document.extraction_sm.json
+}
+
+# ============================================================
+# IAM — Lambda execution role (extract-s3-json-field)
+# ============================================================
+resource "aws_iam_role" "extract_s3_json_field_lambda" {
+  name               = "${local.name_prefix}-extract-s3-json-field-lambda"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+}
+
+data "aws_iam_policy_document" "extract_s3_json_field_lambda" {
+  statement {
+    sid = "CloudWatchLogs"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    resources = ["${aws_cloudwatch_log_group.extract_s3_json_field.arn}:*"]
+  }
+
+  # Read BDA extraction results from the output bucket.
+  statement {
+    sid     = "S3ReadOutputBucket"
+    actions = ["s3:GetObject"]
+    resources = [
+      aws_s3_bucket.idp_output.arn,
+      "${aws_s3_bucket.idp_output.arn}/*",
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "extract_s3_json_field_lambda" {
+  name   = "${local.name_prefix}-extract-s3-json-field-lambda"
+  role   = aws_iam_role.extract_s3_json_field_lambda.id
+  policy = data.aws_iam_policy_document.extract_s3_json_field_lambda.json
+}
+
+# ============================================================
+# IAM — Step Functions execution role (AI Analysis SM)
+# ============================================================
+resource "aws_iam_role" "ai_analysis_sm" {
+  name               = "${local.name_prefix}-ai-analysis-sm"
+  assume_role_policy = data.aws_iam_policy_document.sfn_assume_role.json
+}
+
+data "aws_iam_policy_document" "ai_analysis_sm" {
+  # Invoke the extract-s3-json-field Lambda.
+  statement {
+    sid     = "InvokeExtractS3JsonFieldLambda"
+    actions = ["lambda:InvokeFunction"]
+    resources = [
+      aws_lambda_function.extract_s3_json_field.arn,
+      "${aws_lambda_function.extract_s3_json_field.arn}:*",
+    ]
+  }
+
+  # Read BDA output so the Lambda can fetch individual JSON fields.
+  statement {
+    sid     = "S3ReadOutputBucket"
+    actions = ["s3:GetObject"]
+    resources = [
+      aws_s3_bucket.idp_output.arn,
+      "${aws_s3_bucket.idp_output.arn}/*",
+    ]
+  }
+
+  # Write AI analysis results under {key}/analysis/ in the shared output bucket.
+  statement {
+    sid       = "S3WriteAnalysisOutput"
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.idp_output.arn}/*/analysis/*"]
+  }
+
+  statement {
+    sid       = "S3ListOutputBucket"
+    actions   = ["s3:ListBucket"]
+    resources = [aws_s3_bucket.idp_output.arn]
+  }
+
+  # Bedrock Converse API to invoke the managed prompt.
+  # Scoped to * to cover cross-region inference profile fan-out.
+  statement {
+    sid = "BedrockConverse"
+    actions = [
+      "bedrock:InvokeModel",
+      "bedrock:GetPrompt",
+      "bedrock:RenderPrompt",
+    ]
+    resources = ["*"]
+  }
+
+  # Bedrock automatically initiates an AWS Marketplace subscription the first time a
+  # third-party model is used (Anthropic Claude Opus 4.7 in our case); without these permissions
+  # the subscription fails and subsequent invocations return AccessDeniedException.
+  statement {
+    sid = "BedrockMarketplaceSubscription"
+    actions = [
+      "aws-marketplace:Subscribe",
+      "aws-marketplace:ViewSubscriptions",
+    ]
+    resources = ["*"]
+  }
+
+  # Emit DocumentProcessing-AnalysisCompleted / AnalysisFailed events.
+  statement {
+    sid     = "EventBridgePutEvents"
+    actions = ["events:PutEvents"]
+    resources = [
+      "arn:aws:events:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:event-bus/default",
+    ]
+  }
+
+  statement {
+    sid = "CloudWatchLogs"
+    actions = [
+      "logs:CreateLogDelivery",
+      "logs:CreateLogStream",
+      "logs:GetLogDelivery",
+      "logs:UpdateLogDelivery",
+      "logs:DeleteLogDelivery",
+      "logs:ListLogDeliveries",
+      "logs:PutLogEvents",
+      "logs:PutResourcePolicy",
+      "logs:DescribeResourcePolicies",
+      "logs:DescribeLogGroups",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "XRayTracing"
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords",
+      "xray:GetSamplingRules",
+      "xray:GetSamplingTargets",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "ai_analysis_sm" {
+  name   = "${local.name_prefix}-ai-analysis-sm"
+  role   = aws_iam_role.ai_analysis_sm.id
+  policy = data.aws_iam_policy_document.ai_analysis_sm.json
+}
+
+# ============================================================
+# IAM — Step Functions execution role (AnalyseFinancialDocument orchestrator)
+# ============================================================
+resource "aws_iam_role" "analyse_financial_document_sm" {
+  name               = "${local.name_prefix}-analyse-financial-document-sm"
+  assume_role_policy = data.aws_iam_policy_document.sfn_assume_role.json
+}
+
+data "aws_iam_policy_document" "analyse_financial_document_sm" {
+  # Start sub-SM executions synchronously (.sync:2 requires StartExecution +
+  # DescribeExecution + StopExecution on the sub-SM).
+  statement {
+    sid = "InvokeSubStateMachines"
+    actions = [
+      "states:StartExecution",
+      "states:DescribeExecution",
+      "states:StopExecution",
+    ]
+    resources = [
+      aws_sfn_state_machine.classification.arn,
+      aws_sfn_state_machine.extraction.arn,
+      aws_sfn_state_machine.ai_analysis.arn,
+    ]
+  }
+
+  # .sync:2 requires Step Functions to create a managed EventBridge rule to receive
+  # child execution completion notifications.
+  statement {
+    sid = "SyncExecutionManagedRules"
+    actions = [
+      "events:PutTargets",
+      "events:PutRule",
+      "events:DescribeRule",
+    ]
+    resources = [
+      "arn:aws:events:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:rule/StepFunctionsGetEventsForStepFunctionsExecutionRule",
+    ]
+  }
+
+  # Read S3 object tags to check for pre-existing Classification tag.
+  statement {
+    sid     = "S3ReadDocumentTags"
+    actions = ["s3:GetObjectTagging", "s3:ListBucket"]
+    resources = [
+      "arn:aws:s3:::${var.documents_bucket_name}",
+      "arn:aws:s3:::${var.documents_bucket_name}/*",
+    ]
+  }
+
+  # Emit FinancialDocumentAnalysed / pipeline events.
+  statement {
+    sid     = "EventBridgePutEvents"
+    actions = ["events:PutEvents"]
+    resources = [
+      "arn:aws:events:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:event-bus/default",
+    ]
+  }
+
+  statement {
+    sid = "CloudWatchLogs"
+    actions = [
+      "logs:CreateLogDelivery",
+      "logs:CreateLogStream",
+      "logs:GetLogDelivery",
+      "logs:UpdateLogDelivery",
+      "logs:DeleteLogDelivery",
+      "logs:ListLogDeliveries",
+      "logs:PutLogEvents",
+      "logs:PutResourcePolicy",
+      "logs:DescribeResourcePolicies",
+      "logs:DescribeLogGroups",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "XRayTracing"
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords",
+      "xray:GetSamplingRules",
+      "xray:GetSamplingTargets",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "analyse_financial_document_sm" {
+  name   = "${local.name_prefix}-analyse-financial-document-sm"
+  role   = aws_iam_role.analyse_financial_document_sm.id
+  policy = data.aws_iam_policy_document.analyse_financial_document_sm.json
+}
+
+# ============================================================
+# IAM — EventBridge role (start AnalyseFinancialDocument SM execution)
+# ============================================================
+resource "aws_iam_role" "eventbridge_invoke_analyse_financial_document" {
+  name               = "${local.name_prefix}-eventbridge-invoke-analyse-fd"
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role.json
+}
+
+data "aws_iam_policy_document" "eventbridge_invoke_analyse_financial_document" {
+  statement {
+    sid       = "StartAnalyseFinancialDocumentExecution"
+    actions   = ["states:StartExecution"]
+    resources = [aws_sfn_state_machine.analyse_financial_document.arn]
+  }
+}
+
+resource "aws_iam_role_policy" "eventbridge_invoke_analyse_financial_document" {
+  name   = "${local.name_prefix}-eventbridge-invoke-analyse-fd"
+  role   = aws_iam_role.eventbridge_invoke_analyse_financial_document.id
+  policy = data.aws_iam_policy_document.eventbridge_invoke_analyse_financial_document.json
+}
+
+resource "aws_iam_role" "eventbridge_invoke_store_result" {
+  name               = "${local.name_prefix}-eventbridge-store-result"
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role.json
+}
+
+data "aws_iam_policy_document" "eventbridge_invoke_store_result" {
+  statement {
+    sid     = "BatchSubmitStoreDocumentAnalysisResult"
+    actions = ["batch:SubmitJob"]
+    resources = [
+      local.store_result_batch_queue_arn,
+      local.store_result_batch_job_def_arn,
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "eventbridge_invoke_store_result" {
+  name   = "${local.name_prefix}-eventbridge-store-result"
+  role   = aws_iam_role.eventbridge_invoke_store_result.id
+  policy = data.aws_iam_policy_document.eventbridge_invoke_store_result.json
+}

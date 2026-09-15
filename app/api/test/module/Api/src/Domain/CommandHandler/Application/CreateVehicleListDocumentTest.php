@@ -27,7 +27,7 @@ use Dvsa\Olcs\Transfer\Command\Licence\CreateVehicleListDocument as LicenceCmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateVehicleListDocumentTest extends AbstractCommandHandlerTestCase
+final class CreateVehicleListDocumentTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TmLinkedApplications;
 /**
  * Tm Linked Applications test
  */
-class TmLinkedApplicationsTest extends \PHPUnit\Framework\TestCase
+final class TmLinkedApplicationsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

@@ -75,6 +75,18 @@ abstract class AbstractBookmark
         $fileExt = $this->getParser()->getFileExtension();
         $path = ($this->snippedPath ?: __DIR__ . '/../Snippet/') . $className . '.' . $fileExt;
 
+        // Snippets are presentation fragments in the parser's own format, so there is
+        // one per format and a bookmark is only usable where its snippet exists. Only
+        // .rtf snippets were ever authored, so every snippet-backed bookmark fails on
+        // the EditorJS path. Without this check file_get_contents() returns false, the
+        // bookmark renders as an empty string, and the caller counts that as a success
+        // -- the paragraph silently disappears and nothing is logged.
+        if (!is_readable($path)) {
+            throw new \RuntimeException(
+                sprintf('Snippet not found for bookmark "%s": %s', $className, $path)
+            );
+        }
+
         return file_get_contents($path);
     }
 

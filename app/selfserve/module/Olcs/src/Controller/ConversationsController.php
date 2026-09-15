@@ -102,13 +102,16 @@ class ConversationsController extends AbstractController implements ToggleAwareI
 
         $hasProcessedFiles = false;
         if ($canUploadFiles && $isPost) {
+            // No count selector: attaching a file is optional. Passing one makes the helper write the
+            // uploaded-file count into the hidden fileCount field; when that count is 0 it renders as
+            // value="0", and on the next submit the string "0" is treated as a present value, tripping
+            // the FileUploadCountV2 (min 1) validator with a spurious "Too few files uploaded" error.
             $hasProcessedFiles = $this->processFiles(
                 $form,
                 'form-actions->file',
                 $this->processFileUpload(...),
                 $this->deleteFile(...),
                 $this->getUploadedFiles(...),
-                'form-actions->file->fileCount',
             );
         }
 
@@ -116,6 +119,21 @@ class ConversationsController extends AbstractController implements ToggleAwareI
             return $this->submitConversation($form);
         }
 
+        return $this->addView($form);
+    }
+
+    /**
+     * The "start a new conversation" form.
+     *
+     * Separate from addAction() so that submitConversation() can redisplay the form without
+     * calling addAction() again. It used to do exactly that, and because the request is still
+     * a POST carrying the same still-valid data, addAction() went straight back into
+     * submitConversation() — - mutual recursion with nothing to terminate it. Each cycle
+     * re-ran the uploaded-files query and re-sent the create command, so one failed submit
+     * turned into an open-ended flood of API calls that outlived the gateway timeout.
+     */
+    private function addView(\Laminas\Form\Form $form): ViewModel
+    {
         $view = new ViewModel();
         $view->setVariable('form', $form);
         $view->setVariable('backUrl', $this->url()->fromRoute('conversations'));
@@ -135,7 +153,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
             $this->flashMessengerHelper->addErrorMessage(
                 'There was an server error when submitting your conversation; please try later',
             );
-            return $this->addAction();
+            return $this->addView($form);
         }
 
         $conversationId = $response->getResult()['id']['conversation'] ?? null;
@@ -143,7 +161,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
             $this->flashMessengerHelper->addErrorMessage(
                 'There was an server error when submitting your conversation; please try later',
             );
-            return $this->addAction();
+            return $this->addView($form);
         }
 
         $this->flashMessengerHelper->addSuccessMessage('Conversation was created successfully');
@@ -245,13 +263,14 @@ class ConversationsController extends AbstractController implements ToggleAwareI
 
         $hasProcessedFiles = false;
         if ($this->getCurrentOrganisation()['isMessagingFileUploadEnabled']) {
+            // No count selector: attaching a file is optional. See addAction() for the full explanation -
+            // a baked fileCount="0" would otherwise trip the min-1 validator with "Too few files uploaded".
             $hasProcessedFiles = $this->processFiles(
                 $form,
                 'form-actions->file',
                 $this->processFileUpload(...),
                 $this->deleteFile(...),
                 $this->getUploadedFiles(...),
-                'form-actions->file->fileCount',
             );
 
             $view->setVariable('openReply', $hasProcessedFiles);

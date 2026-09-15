@@ -47,11 +47,7 @@ abstract class AbstractConsumer implements MessageConsumerInterface
         $description = 'Successfully processed message';
         $content = $item->getId() . ' ' . $item->getOptions() . ($message ? ' ' . $message : '');
 
-        Logger::log(
-            \Laminas\Log\Logger::DEBUG,
-            $description,
-            ['errorLevel' => 0, 'content' => $content]
-        );
+        Logger::debug($description, ['errorLevel' => 0, 'content' => $content]);
 
         return $description . ': ' . $content;
     }
@@ -78,11 +74,7 @@ abstract class AbstractConsumer implements MessageConsumerInterface
         $description = 'Failed to process message';
         $content = $item->getId() . ' ' . $item->getOptions() . ' ' .  $reason;
 
-        Logger::log(
-            \Laminas\Log\Logger::ERR,
-            $description,
-            ['errorLevel' => 1, 'content' => $content]
-        );
+        Logger::err($description, ['errorLevel' => 1, 'content' => $content]);
 
         return $description . ': ' . $content;
     }
@@ -104,11 +96,7 @@ abstract class AbstractConsumer implements MessageConsumerInterface
         $description = 'Requeued message';
         $content = $item->getId() . ' ' . $item->getOptions() . ' for retry in ' .  $retryAfter . ' ' .  $reason;
 
-        Logger::log(
-            \Laminas\Log\Logger::WARN,
-            $description,
-            ['errorLevel' => 0, 'content' => $content]
-        );
+        Logger::warn($description, ['errorLevel' => 0, 'content' => $content]);
 
         return $description . ': ' . $content;
     }

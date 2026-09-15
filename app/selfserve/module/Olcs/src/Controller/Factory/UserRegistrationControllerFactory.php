@@ -24,7 +24,7 @@ class UserRegistrationControllerFactory implements FactoryInterface
      * @return UserRegistrationController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UserRegistrationController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): UserRegistrationController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

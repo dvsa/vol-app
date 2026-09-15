@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class WindowAvailabilityCheckerTest extends MockeryTestCase
+final class WindowAvailabilityCheckerTest extends MockeryTestCase
 {
     public $windowAvailabilityChecker;
     private $now;
@@ -30,6 +30,7 @@ class WindowAvailabilityCheckerTest extends MockeryTestCase
 
     private $stockAvailabilityChecker;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->now = m::mock(DateTime::class);

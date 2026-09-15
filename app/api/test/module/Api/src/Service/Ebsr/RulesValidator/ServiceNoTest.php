@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\ServiceNo;
 /**
  * Class ServiceNoTest
  */
-class ServiceNoTest extends \PHPUnit\Framework\TestCase
+final class ServiceNoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * test isValid
@@ -29,19 +29,17 @@ class ServiceNoTest extends \PHPUnit\Framework\TestCase
     /**
      * data provider for testIsValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            ['', false],
-            [null, false],
-            [false, false],
-            [0, true],
-            ['0', true],
-            [111, true],
-            ['111', true],
-            ['service no as name', true],
-        ];
+        yield ['', false];
+        yield [null, false];
+        yield [false, false];
+        yield [0, true];
+        yield ['0', true];
+        yield [111, true];
+        yield ['111', true];
+        yield ['service no as name', true];
     }
 }

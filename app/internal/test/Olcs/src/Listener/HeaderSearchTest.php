@@ -21,7 +21,7 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\View\Helper\Placeholder;
 use LmcRbacMvc\Identity\IdentityProviderInterface;
 
-class HeaderSearchTest extends TestCase
+final class HeaderSearchTest extends TestCase
 {
     protected HeaderSearch $sut;
 
@@ -36,9 +36,8 @@ class HeaderSearchTest extends TestCase
     private $mockViewHlprMngr;
     /** @var  IdentityProviderInterface | m\MockInterface  */
     private $mockAuthService;
-    /** @var  TranslationHelperService | m\MockInterface  */
-    private $mockTransHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockFormHlp = m::mock(\Common\Service\Helper\FormHelperService::class);
@@ -46,7 +45,7 @@ class HeaderSearchTest extends TestCase
         $this->mockFormElmMngr = m::mock(\Laminas\Form\FormElementManager::class);
         $this->mockViewHlprMngr = m::mock(\Laminas\View\HelperPluginManager::class);
         $this->mockAuthService = m::mock(IdentityProviderInterface::class);
-        $this->mockTransHelper = m::mock(TranslationHelperService::class);
+        $mockTransHelper = m::mock(TranslationHelperService::class);
 
         $this->mockSm = m::mock(ContainerInterface::class);
         $this->mockSm
@@ -54,7 +53,7 @@ class HeaderSearchTest extends TestCase
             ->shouldReceive('get')->with(FormHelperService::class)->andReturn($this->mockFormHlp)
             ->shouldReceive('get')->with(\Common\Service\Data\Search\Search::class)->andReturn($this->mockSearchSrv)
             ->shouldReceive('get')->with('FormElementManager')->andReturn($this->mockFormElmMngr)
-            ->shouldReceive('get')->with(TranslationHelperService::class)->andReturn($this->mockTransHelper)
+            ->shouldReceive('get')->with(TranslationHelperService::class)->andReturn($mockTransHelper)
             ->shouldReceive('get')->with(IdentityProviderInterface::class)->andReturn($this->mockAuthService)
             ->shouldReceive('get')->with('ViewHelperManager')->andReturn($this->mockViewHlprMngr);
 
@@ -145,24 +144,22 @@ class HeaderSearchTest extends TestCase
         $this->sut->onDispatch($mockEvent);
     }
 
-    public static function dpOnDispatch(): array
+    public static function dpOnDispatch(): \Iterator
     {
-        return [
-            'loggedin' => [
-                [
-                    'id' => 'usr123',
-                    'dataAccess' => [
-                        'allowedSearchIndexes' => [
-                            'licence' => 'licence'
-                        ]
+        yield 'loggedin' => [
+            [
+                'id' => 'usr123',
+                'dataAccess' => [
+                    'allowedSearchIndexes' => [
+                        'licence' => 'licence'
                     ]
-                ],
-                1
+                ]
             ],
-            'notloggedin' => [
-                [],
-                0
-            ]
+            1
+        ];
+        yield 'notloggedin' => [
+            [],
+            0
         ];
     }
 

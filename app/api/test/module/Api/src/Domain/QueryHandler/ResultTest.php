@@ -9,16 +9,14 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\Result;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\Result
- */
-class ResultTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Result::class)]
+final class ResultTest extends MockeryTestCase
 {
     public function testResultWithoutEntity(): void
     {
         $sut = new Result(null);
 
-        static::assertNull($sut->serialize());
+        $this->assertNull($sut->serialize());
     }
 
     public function testResultWithEntityAndBundle(): void

@@ -22,10 +22,11 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationGoodsOcTotalAuthReviewServiceTest extends MockeryTestCase
+final class ApplicationGoodsOcTotalAuthReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -144,12 +145,10 @@ class ApplicationGoodsOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function dpGetConfigFromDataWithMixedAndNumericLgvAuth(): array
+    public static function dpGetConfigFromDataWithMixedAndNumericLgvAuth(): \Iterator
     {
-        return [
-            [0],
-            [5],
-        ];
+        yield [0];
+        yield [5];
     }
 
     public function testGetConfigFromDataWithLgv(): void

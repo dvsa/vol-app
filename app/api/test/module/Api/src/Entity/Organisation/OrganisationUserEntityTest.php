@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class OrganisationUserEntityTest extends EntityTester
+final class OrganisationUserEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

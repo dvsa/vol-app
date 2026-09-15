@@ -17,17 +17,16 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class VariationTest extends MockeryTestCase
+final class VariationTest extends MockeryTestCase
 {
     protected $sut;
 
-    protected $formHelper;
-
+    #[\Override]
     public function setUp(): void
     {
-        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
+        $formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
 
-        $this->sut = new Variation($this->formHelper, m::mock(AuthorizationService::class));
+        $this->sut = new Variation($formHelper, m::mock(AuthorizationService::class));
     }
 
     public function testAlterForm(): void

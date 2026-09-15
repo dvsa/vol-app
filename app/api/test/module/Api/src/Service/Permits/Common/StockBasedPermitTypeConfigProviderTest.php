@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StockBasedPermitTypeConfigProviderTest extends MockeryTestCase
+final class StockBasedPermitTypeConfigProviderTest extends MockeryTestCase
 {
     public function testGetPermitTypeConfig(): void
     {

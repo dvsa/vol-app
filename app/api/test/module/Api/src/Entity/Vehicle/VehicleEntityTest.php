@@ -9,11 +9,9 @@ use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle;
 use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Vehicle\Vehicle
- * @covers Dvsa\Olcs\Api\Entity\Vehicle\AbstractVehicle
- */
-class VehicleEntityTest extends EntityTester
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Vehicle\Vehicle::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Vehicle\AbstractVehicle::class)]
+final class VehicleEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -26,6 +24,6 @@ class VehicleEntityTest extends EntityTester
     {
         $sut = new Vehicle();
 
-        static::assertInstanceOf(ArrayCollection::class, $sut->getLicenceVehicles());
+        $this->assertInstanceOf(ArrayCollection::class, $sut->getLicenceVehicles());
     }
 }

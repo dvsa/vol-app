@@ -24,7 +24,7 @@ class LicenceHistoryControllerFactory implements FactoryInterface
      * @return LicenceHistoryController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceHistoryController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicenceHistoryController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

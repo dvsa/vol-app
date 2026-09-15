@@ -23,7 +23,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class RetryTest extends AbstractCommandHandlerTestCase
+final class RetryTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

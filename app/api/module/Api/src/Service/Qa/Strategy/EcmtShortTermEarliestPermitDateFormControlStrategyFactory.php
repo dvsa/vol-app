@@ -16,7 +16,7 @@ class EcmtShortTermEarliestPermitDateFormControlStrategyFactory implements Facto
      * @return BaseFormControlStrategy
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BaseFormControlStrategy
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BaseFormControlStrategy
     {
         return new BaseFormControlStrategy(
             'ecmt_st_earliest_permit_date',

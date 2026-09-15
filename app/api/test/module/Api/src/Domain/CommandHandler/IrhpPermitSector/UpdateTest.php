@@ -16,7 +16,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpPermitSector\Update as UpdateCmd;
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

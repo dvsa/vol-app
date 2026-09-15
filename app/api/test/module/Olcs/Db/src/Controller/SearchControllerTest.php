@@ -10,12 +10,13 @@ use Laminas\Mvc\Controller\Plugin\Params;
 use Laminas\Mvc\Controller\PluginManager;
 use Mockery as m;
 
-class SearchControllerTest extends m\Adapter\Phpunit\MockeryTestCase
+final class SearchControllerTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     protected $mockSearchService;
 
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockSearchService = m::mock(Search::class);

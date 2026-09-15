@@ -22,7 +22,7 @@ class IrhpUnderConsiderationControllerFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpUnderConsiderationController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrhpUnderConsiderationController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         $formHelper = $container->get(FormHelperService::class);

@@ -42,6 +42,8 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
             $tableFactory,
             $viewHelperManager
         );
+
+        $this->showTasksFilter = FilterOptions::SHOW_SELF_ONLY;
     }
 
     /**

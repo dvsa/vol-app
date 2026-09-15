@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\ChangeOfEntity as ChangeOfEntityEntity;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class DeleteChangeOfEntityTest extends AbstractCommandHandlerTestCase
+final class DeleteChangeOfEntityTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

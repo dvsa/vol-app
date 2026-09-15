@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * @see Handler
  */
-class CreateNoticePeriodTest extends AbstractCommandHandlerTestCase
+final class CreateNoticePeriodTest extends AbstractCommandHandlerTestCase
 {
     private $repo = 'BusNoticePeriod';
 

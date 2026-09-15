@@ -18,7 +18,7 @@ use Dvsa\Olcs\Transfer\Query\User\Partner as Qry;
 /**
  * Partner Test
  */
-class PartnerTest extends QueryHandlerTestCase
+final class PartnerTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

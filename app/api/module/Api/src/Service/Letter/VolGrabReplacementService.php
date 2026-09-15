@@ -76,12 +76,54 @@ class VolGrabReplacementService
             // Step 4: Render bookmarks to get values
             $populatedData = $this->renderBookmarks($bookmarks, $queryResults);
 
-            // Step 5: Replace in JSON
-            return $parser->replace($editorJsJson, $populatedData);
+            $this->recordOutcomes($context, $tokens, $bookmarks, $populatedData);
+
+            // Step 5: Replace in JSON, then strip anything that couldn't be resolved
+            // (unknown bookmark, or a dynamic bookmark whose query produced nothing)
+            // so literal [[TOKEN]] text never reaches a letter sent to an operator.
+            return $this->stripUnresolvedTokens($parser->replace($editorJsJson, $populatedData));
         } catch (\Exception $e) {
             // Log error but return original content to avoid breaking letters
             Logger::err('VOL Grab replacement failed: ' . $e->getMessage());
             return $editorJsJson;
+        }
+    }
+
+    /**
+     * Tell the collector, when the caller sent one, what became of each token. Anything that is
+     * about to be stripped -- an unknown bookmark, or one whose render came back blank -- would
+     * otherwise vanish without trace, leaving the preview looking cleaner than the real letter.
+     *
+     * @param array<string, mixed> $populatedData rendered values keyed by token
+     */
+    private function recordOutcomes(array $context, array $tokens, array $bookmarks, array $populatedData): void
+    {
+        $collector = $context[GrabOutcomeCollector::CONTEXT_KEY] ?? null;
+
+        if (!$collector instanceof GrabOutcomeCollector) {
+            return;
+        }
+
+        foreach ($tokens as $token) {
+            if (!isset($bookmarks[$token])) {
+                $collector->record($token, GrabOutcomeCollector::UNKNOWN);
+                continue;
+            }
+
+            $value = $populatedData[$token] ?? null;
+
+            // EditorJS renders produce ['content' => ..., 'preformatted' => ...] structures;
+            // the emptiness check must look at the content, not the wrapper
+            if (is_array($value)) {
+                $value = $value['content'] ?? null;
+            }
+
+            $collector->record(
+                $token,
+                ($value === null || trim((string) $value) === '')
+                    ? GrabOutcomeCollector::EMPTY
+                    : GrabOutcomeCollector::RESOLVED
+            );
         }
     }
 
@@ -261,12 +303,30 @@ class VolGrabReplacementService
             $queryResults = $this->executeQueries($bookmarks, $context);
             $populatedData = $this->renderBookmarks($bookmarks, $queryResults, true);
 
-            return $this->replaceTokensInHtml($html, $populatedData);
+            return $this->stripUnresolvedTokens($this->replaceTokensInHtml($html, $populatedData));
         } catch (\Exception $e) {
             // Log error but return original content to avoid breaking letters
             Logger::err('VOL Grab replacement in HTML failed: ' . $e->getMessage());
             return $html;
         }
+    }
+
+    /**
+     * Remove any [[TOKEN]]s left after replacement — an unknown bookmark class or a
+     * dynamic bookmark whose query returned nothing (e.g. CASEWORKER_NAME on a letter
+     * with no creating user) otherwise leaks the literal token into the rendered
+     * letter and the PDF posted to the operator.
+     */
+    private function stripUnresolvedTokens(string $content): string
+    {
+        if (preg_match_all(self::GRAB_PATTERN, $content, $matches) && !empty($matches[1])) {
+            Logger::warn('Unresolved VOL grab tokens stripped from letter content', [
+                'tokens' => array_values(array_unique($matches[1])),
+            ]);
+            $content = (string) preg_replace(self::GRAB_PATTERN, '', $content);
+        }
+
+        return $content;
     }
 
     /**

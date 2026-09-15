@@ -11,7 +11,7 @@ class FlagUrgentTasksCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:flag-urgent-tasks';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Flag tasks as urgent');
     }

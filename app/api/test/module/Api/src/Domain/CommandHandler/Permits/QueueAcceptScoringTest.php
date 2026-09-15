@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class QueueAcceptScoringTest extends AbstractCommandHandlerTestCase
+final class QueueAcceptScoringTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

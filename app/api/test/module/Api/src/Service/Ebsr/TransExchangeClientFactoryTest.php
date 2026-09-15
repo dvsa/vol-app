@@ -18,7 +18,7 @@ use Olcs\XmlTools\Xml\Specification\SpecificationInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class TransExchangeClientFactoryTest extends TestCase
+final class TransExchangeClientFactoryTest extends TestCase
 {
     public function testInvokeNoConfig(): void
     {

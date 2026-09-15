@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
  *
  * Initially auto-generated but won't be overridden
  */
-class TagEntityTest extends EntityTester
+final class TagEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

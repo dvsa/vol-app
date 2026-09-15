@@ -19,7 +19,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class SubmissionSectionsTest extends TestCase
+final class SubmissionSectionsTest extends TestCase
 {
     public function testGetInputSpecification(): void
     {
@@ -166,124 +166,122 @@ class SubmissionSectionsTest extends TestCase
         $this->assertNotEmpty($sut->getSubmissionType());
     }
 
-    public static function getSubmissionSectionsProvider(): array
+    public static function getSubmissionSectionsProvider(): \Iterator
     {
-        return [
+        yield [
+            'sub_type1',
+            null,
             [
-                'sub_type1',
-                null,
-                [
-                    'section 1',
-                    'section 2'
-                ]
-            ],
+                'section 1',
+                'section 2'
+            ]
+        ];
+        yield [
+            'sub_type2',
+            null,
+            []
+        ];
+        yield [
+            'submission_type_o_tm',
+            null,
+            null
+        ];
+        yield [
+            'submission_type_o_bus_reg',
+            'pressed',
             [
-                'sub_type2',
-                null,
-                []
-            ],
+                'operating-centres'
+            ]
+        ];
+        yield [
+            'submission_type_o_clo_fep',
+            'pressed',
             [
-                'submission_type_o_tm',
-                null,
-                null
-            ],
+                'waive-fee-late-fee'
+            ]
+        ];
+        yield [
+            'submission_type_o_clo_g',
+            'pressed',
             [
-                'submission_type_o_bus_reg',
-                'pressed',
-                [
-                    'operating-centres'
-                ]
-            ],
+                'operating-centres'
+            ]
+        ];
+        yield [
+            'submission_type_o_clo_psv',
+            'pressed',
             [
-                'submission_type_o_clo_fep',
-                'pressed',
-                [
-                    'waive-fee-late-fee'
-                ]
-            ],
+                'operating-centres'
+            ]
+        ];
+        yield [
+            'submission_type_o_env',
+            'pressed',
             [
-                'submission_type_o_clo_g',
-                'pressed',
-                [
-                    'operating-centres'
-                ]
-            ],
+                'operating-centres'
+            ]
+        ];
+        yield [
+            'submission_type_o_irfo',
+            'pressed',
             [
-                'submission_type_o_clo_psv',
-                'pressed',
-                [
-                    'operating-centres'
-                ]
-            ],
+                'operating-centres'
+            ]
+        ];
+        yield [
+            'submission_type_o_mlh_clo',
+            'pressed',
             [
-                'submission_type_o_env',
-                'pressed',
-                [
-                    'operating-centres'
-                ]
-            ],
+                'operating-centres'
+            ]
+        ];
+        yield [
+            'submission_type_o_mlh_otc',
+            'pressed',
             [
-                'submission_type_o_irfo',
-                'pressed',
-                [
-                    'operating-centres'
-                ]
-            ],
+                'operating-centres'
+            ]
+        ];
+        yield [
+            'submission_type_o_otc',
+            'pressed',
             [
-                'submission_type_o_mlh_clo',
-                'pressed',
-                [
-                    'operating-centres'
-                ]
-            ],
+                'operating-centres'
+            ]
+        ];
+        yield [
+            'submission_type_o_tm',
+            'pressed',
             [
-                'submission_type_o_mlh_otc',
-                'pressed',
-                [
-                    'operating-centres'
-                ]
-            ],
+                'operating-centres'
+            ]
+        ];
+        yield [
+            'submission_type_o_schedule_41',
+            'pressed',
             [
-                'submission_type_o_otc',
-                'pressed',
-                [
-                    'operating-centres'
-                ]
-            ],
+                'operating-centres'
+            ]
+        ];
+        yield [
+            'submission_type_o_impounding',
+            'pressed',
             [
-                'submission_type_o_tm',
-                'pressed',
-                [
-                    'operating-centres'
-                ]
-            ],
+                'statements'
+            ]
+        ];
+        yield [
+            'submission_type_o_ni_tru',
+            'pressed',
             [
-                'submission_type_o_schedule_41',
-                'pressed',
-                [
-                    'operating-centres'
-                ]
-            ],
+                'statements'
+            ]
+        ];
+        yield [
+            'UNKNOWN_submission_type',
+            'pressed',
             [
-                'submission_type_o_impounding',
-                'pressed',
-                [
-                    'statements'
-                ]
-            ],
-            [
-                'submission_type_o_ni_tru',
-                'pressed',
-                [
-                    'statements'
-                ]
-            ],
-            [
-                'UNKNOWN_submission_type',
-                'pressed',
-                [
-                    'statements'
-                ]
+                'statements'
             ]
         ];
     }

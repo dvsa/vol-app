@@ -44,7 +44,8 @@ abstract class ImageBookmark extends DynamicBookmark implements FileStoreAwareIn
 
         $file = $this->getFileStore()->read($path);
 
-        if ($file === null) {
+        // read() returns File|false (never null); treat a missing file (false) as not found too.
+        if ($file === null || $file === false) {
             throw new RuntimeException('Image path ' . $path . ' does not exist');
         }
 

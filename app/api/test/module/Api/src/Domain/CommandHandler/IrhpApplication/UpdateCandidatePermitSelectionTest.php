@@ -27,9 +27,9 @@ use Mockery as m;
 /**
  * Update candidate permit selection test
  */
-class UpdateCandidatePermitSelectionTest extends AbstractCommandHandlerTestCase
+final class UpdateCandidatePermitSelectionTest extends AbstractCommandHandlerTestCase
 {
-    public const IRHP_APPLICATION_ID = 47;
+    public const int IRHP_APPLICATION_ID = 47;
 
     private $irhpApplication;
 

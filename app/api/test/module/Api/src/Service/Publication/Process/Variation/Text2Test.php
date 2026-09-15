@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class Text2Test extends MockeryTestCase
+final class Text2Test extends MockeryTestCase
 {
     /**
      * @var \Dvsa\Olcs\Api\Service\Publication\Process\Variation\Text2
@@ -91,8 +91,8 @@ class Text2Test extends MockeryTestCase
         $context = new ImmutableArrayObject(
             [
                 'applicationPeople' => [
-                    (new \Dvsa\Olcs\Api\Entity\Person\Person())->setForename('Randy')->setFamilyName('Couture'),
-                    (new \Dvsa\Olcs\Api\Entity\Person\Person())->setForename('Rachel')->setFamilyName('Jones'),
+                    new \Dvsa\Olcs\Api\Entity\Person\Person()->setForename('Randy')->setFamilyName('Couture'),
+                    new \Dvsa\Olcs\Api\Entity\Person\Person()->setForename('Rachel')->setFamilyName('Jones'),
                 ]
             ]
         );
@@ -104,14 +104,12 @@ class Text2Test extends MockeryTestCase
         $this->assertSame($expectedText2, $publicationLink->getText2());
     }
 
-    public static function dataProviderTestPeople(): array
+    public static function dataProviderTestPeople(): \Iterator
     {
-        return [
-            [Organisation::ORG_TYPE_LLP, 'Partner(s): '],
-            [Organisation::ORG_TYPE_OTHER, ''],
-            [Organisation::ORG_TYPE_PARTNERSHIP, 'Partner(s): '],
-            [Organisation::ORG_TYPE_REGISTERED_COMPANY, 'Director(s): '],
-        ];
+        yield [Organisation::ORG_TYPE_LLP, 'Partner(s): '];
+        yield [Organisation::ORG_TYPE_OTHER, ''];
+        yield [Organisation::ORG_TYPE_PARTNERSHIP, 'Partner(s): '];
+        yield [Organisation::ORG_TYPE_REGISTERED_COMPANY, 'Director(s): '];
     }
 
     public function testPeopleMissingContext(): void

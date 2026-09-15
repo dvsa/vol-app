@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateVehiclesPsvStatus;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateVehiclesPsvStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateVehiclesPsvStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

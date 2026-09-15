@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GetListByVariationTest extends QueryHandlerTestCase
+final class GetListByVariationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -81,17 +81,15 @@ class GetListByVariationTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $this->sut->handleQuery($query));
     }
 
-    public static function dpHandleQuery(): array
+    public static function dpHandleQuery(): \Iterator
     {
-        return [
-            [
-                'xxx',
-                ['result' => ['RESULT'], 'count' => 1, 'requiresSiQualification' => false]
-            ],
-            [
-                \Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                ['result' => ['RESULT'], 'count' => 1, 'requiresSiQualification' => true]
-            ],
+        yield [
+            'xxx',
+            ['result' => ['RESULT'], 'count' => 1, 'requiresSiQualification' => false]
+        ];
+        yield [
+            \Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            ['result' => ['RESULT'], 'count' => 1, 'requiresSiQualification' => true]
         ];
     }
 }

@@ -20,7 +20,7 @@ class UploadEvidenceControllerFactory implements FactoryInterface
      * @return UploadEvidenceController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UploadEvidenceController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): UploadEvidenceController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

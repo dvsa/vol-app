@@ -18,7 +18,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Jason de Jonge <jason.de-jonge@capgemini.co.uk>
  */
-class UploadScoringLogTest extends AbstractCommandHandlerTestCase
+final class UploadScoringLogTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

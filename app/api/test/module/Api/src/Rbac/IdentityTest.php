@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * Identity Test
  */
-class IdentityTest extends MockeryTestCase
+final class IdentityTest extends MockeryTestCase
 {
     public function testGetUser(): void
     {

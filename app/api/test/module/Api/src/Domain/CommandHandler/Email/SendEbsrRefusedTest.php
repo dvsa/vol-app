@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrRefused;
  * @author Craig R <uk@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
-class SendEbsrRefusedTest extends SendEbsrEmailTestAbstract
+final class SendEbsrRefusedTest extends SendEbsrEmailTestAbstract
 {
     protected $template = 'ebsr-refused';
     protected $sutClass = \Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendEbsrRefused::class;

@@ -22,10 +22,11 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PeopleReviewServiceTest extends MockeryTestCase
+final class PeopleReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -60,119 +61,115 @@ class PeopleReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->shouldShowPosition($data));
     }
 
-    public static function providerShouldShowPosition(): array
+    public static function providerShouldShowPosition(): \Iterator
     {
-        return [
-            [
-                Organisation::ORG_TYPE_OTHER,
-                true
-            ],
-            [
-                Organisation::ORG_TYPE_SOLE_TRADER,
-                false
-            ],
-            [
-                Organisation::ORG_TYPE_PARTNERSHIP,
-                false
-            ],
-            [
-                Organisation::ORG_TYPE_LLP,
-                false
-            ],
-            [
-                Organisation::ORG_TYPE_REGISTERED_COMPANY,
-                false
-            ]
+        yield [
+            Organisation::ORG_TYPE_OTHER,
+            true
+        ];
+        yield [
+            Organisation::ORG_TYPE_SOLE_TRADER,
+            false
+        ];
+        yield [
+            Organisation::ORG_TYPE_PARTNERSHIP,
+            false
+        ];
+        yield [
+            Organisation::ORG_TYPE_LLP,
+            false
+        ];
+        yield [
+            Organisation::ORG_TYPE_REGISTERED_COMPANY,
+            false
         ];
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'position' => 'The boss',
-                    'person' => [
-                        'forename' => 'Bob',
-                        'familyName' => 'Smith',
-                        'title' => [
-                            'description' => 'Mr'
-                        ],
-                        'otherName' => 'Robert',
-                        'birthDate' => '1989-08-23'
-                    ]
-                ],
-                false,
-                [
-                    'header' => 'Bob Smith',
-                    'multiItems' => [
+                'position' => 'The boss',
+                'person' => [
+                    'forename' => 'Bob',
+                    'familyName' => 'Smith',
+                    'title' => [
+                        'description' => 'Mr'
+                    ],
+                    'otherName' => 'Robert',
+                    'birthDate' => '1989-08-23'
+                ]
+            ],
+            false,
+            [
+                'header' => 'Bob Smith',
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-people-person-title',
-                                'value' => 'Mr'
-                            ],
-                            [
-                                'label' => 'application-review-people-person-firstname',
-                                'value' => 'Bob'
-                            ],
-                            [
-                                'label' => 'application-review-people-person-lastname',
-                                'value' => 'Smith'
-                            ],
-                            [
-                                'label' => 'application-review-people-person-othername',
-                                'value' => 'Robert'
-                            ],
-                            [
-                                'label' => 'application-review-people-person-dob',
-                                'value' => '23 Aug 1989'
-                            ]
+                            'label' => 'application-review-people-person-title',
+                            'value' => 'Mr'
+                        ],
+                        [
+                            'label' => 'application-review-people-person-firstname',
+                            'value' => 'Bob'
+                        ],
+                        [
+                            'label' => 'application-review-people-person-lastname',
+                            'value' => 'Smith'
+                        ],
+                        [
+                            'label' => 'application-review-people-person-othername',
+                            'value' => 'Robert'
+                        ],
+                        [
+                            'label' => 'application-review-people-person-dob',
+                            'value' => '23 Aug 1989'
                         ]
                     ]
                 ]
-            ],
+            ]
+        ];
+        yield [
             [
-                [
-                    'position' => 'The boss',
-                    'person' => [
-                        'forename' => 'Bob',
-                        'familyName' => 'Smith',
-                        'title' => [
-                            'description' => 'Mr'
-                        ],
-                        'otherName' => 'Robert',
-                        'birthDate' => '1989-08-23'
-                    ]
-                ],
-                true,
-                [
-                    'header' => 'Bob Smith',
-                    'multiItems' => [
+                'position' => 'The boss',
+                'person' => [
+                    'forename' => 'Bob',
+                    'familyName' => 'Smith',
+                    'title' => [
+                        'description' => 'Mr'
+                    ],
+                    'otherName' => 'Robert',
+                    'birthDate' => '1989-08-23'
+                ]
+            ],
+            true,
+            [
+                'header' => 'Bob Smith',
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-people-person-title',
-                                'value' => 'Mr'
-                            ],
-                            [
-                                'label' => 'application-review-people-person-firstname',
-                                'value' => 'Bob'
-                            ],
-                            [
-                                'label' => 'application-review-people-person-lastname',
-                                'value' => 'Smith'
-                            ],
-                            [
-                                'label' => 'application-review-people-person-othername',
-                                'value' => 'Robert'
-                            ],
-                            [
-                                'label' => 'application-review-people-person-dob',
-                                'value' => '23 Aug 1989'
-                            ],
-                            [
-                                'label' => 'application-review-people-person-position',
-                                'value' => 'The boss'
-                            ]
+                            'label' => 'application-review-people-person-title',
+                            'value' => 'Mr'
+                        ],
+                        [
+                            'label' => 'application-review-people-person-firstname',
+                            'value' => 'Bob'
+                        ],
+                        [
+                            'label' => 'application-review-people-person-lastname',
+                            'value' => 'Smith'
+                        ],
+                        [
+                            'label' => 'application-review-people-person-othername',
+                            'value' => 'Robert'
+                        ],
+                        [
+                            'label' => 'application-review-people-person-dob',
+                            'value' => '23 Aug 1989'
+                        ],
+                        [
+                            'label' => 'application-review-people-person-position',
+                            'value' => 'The boss'
                         ]
                     ]
                 ]

@@ -8,7 +8,7 @@ use Olcs\Service\EditorJs\HtmlConverter;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\EditorJs\HtmlConverter::class)]
-class HtmlConverterTest extends TestCase
+final class HtmlConverterTest extends TestCase
 {
     private HtmlConverter $sut;
 
@@ -61,24 +61,22 @@ class HtmlConverterTest extends TestCase
         $this->assertEquals($expectedData, $decoded['blocks'][0]['data']);
     }
 
-    public static function htmlElementsProvider(): array
+    public static function htmlElementsProvider(): \Iterator
     {
-        return [
-            'header h2' => [
-                '<h2>Test Header</h2>',
-                'header',
-                ['text' => 'Test Header', 'level' => 2]
-            ],
-            'unordered list' => [
-                '<ul><li>Item 1</li><li>Item 2</li></ul>',
-                'list',
-                ['style' => 'unordered', 'items' => ['Item 1', 'Item 2']]
-            ],
-            'ordered list' => [
-                '<ol><li>First</li><li>Second</li></ol>',
-                'list',
-                ['style' => 'ordered', 'items' => ['First', 'Second']]
-            ],
+        yield 'header h2' => [
+            '<h2>Test Header</h2>',
+            'header',
+            ['text' => 'Test Header', 'level' => 2]
+        ];
+        yield 'unordered list' => [
+            '<ul><li>Item 1</li><li>Item 2</li></ul>',
+            'list',
+            ['style' => 'unordered', 'items' => ['Item 1', 'Item 2']]
+        ];
+        yield 'ordered list' => [
+            '<ol><li>First</li><li>Second</li></ol>',
+            'list',
+            ['style' => 'ordered', 'items' => ['First', 'Second']]
         ];
     }
 
@@ -100,8 +98,8 @@ class HtmlConverterTest extends TestCase
         $result = $this->sut->convertHtmlToJson($html);
         $decoded = json_decode($result, true);
 
-        $this->assertStringContainsString('<b>bold</b>', $decoded['blocks'][0]['data']['text']);
-        $this->assertStringContainsString('<i>italic</i>', $decoded['blocks'][0]['data']['text']);
+        $this->assertStringContainsString('<b>bold</b>', (string) $decoded['blocks'][0]['data']['text']);
+        $this->assertStringContainsString('<i>italic</i>', (string) $decoded['blocks'][0]['data']['text']);
     }
 
     public function testComplexDocument(): void

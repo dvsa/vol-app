@@ -3,11 +3,12 @@
 # Aurora-based database anonymisation script
 # ----------------------------------------------------
 # Flow:
-#   1. Create Aurora cluster snapshot from production read-replica
+#   0. Fetch DB subnet group and security group from source cluster
+#   1. Create Aurora cluster snapshot from production cluster
 #   2. Restore a temporary Aurora cluster + instance
 #   3. Run anonymisation scripts against restored cluster
-#   4. Dump anonymised database and upload to S3
-#   5. Clean up temporary cluster and dump files
+#   5. Dump anonymised database and upload to S3
+#   6. Clean up temporary cluster and dump files
 #
 
 set -euo pipefail
@@ -18,20 +19,25 @@ set -euo pipefail
 
 export http_proxy=http://${PROXY}
 export https_proxy=http://${PROXY}
-export NO_PROXY=169.254.169.254
+
+export AWS_STS_REGIONAL_ENDPOINTS=regional
+export AWS_DEFAULT_REGION="eu-west-1"
+ 
+export NO_PROXY=169.254.169.254,169.254.170.2,localhost,127.0.0.1,.s3.eu-west-1.amazonaws.com,.s3.amazonaws.com,sts.eu-west-1.amazonaws.com,sts.amazonaws.com
 
 nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
-prod_reader_cluster=${READDB_ID}
-domain=${FULL_DOMAIN}
+db_cluster=${DBCLUSTER_ID}
 env=${ENVIRONMENT_NAME}
-pass=${BATCH_DB_PASSWORD}
+pass=${M_DB_PASSWORD}
 DATE=$(date +"%Y-%m-%d")
 TS=$(date +"%Y-%m-%d-%H-%M-%S")
 region="eu-west-1"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 tmp_cluster_id="olcs-anon-${TS}"
 tmp_instance_id="olcs-anon-${TS}-instance"
 snapshot_id="olcs-anon-snap-${TS}"
+anondb_snapshot_id="olcs-db-anon-${env}-${TS}"
 
 anondb_dump_dir="/mnt/data/anondump"
 anondb_tables="template template_test_data translation_key translation_key_text replacement public_holiday fee_type doc_template system_parameter feature_toggle financial_standing_rate"
@@ -47,6 +53,9 @@ log_error(){ echo "$(date '+%Y-%m-%d %H:%M:%S') ERROR: $*" >&2; }
 # CLEANUP HANDLER
 ###############################################
 cleanup() {
+    # Capture the true exit code of the failing command before set +e runs
+    local exit_code=$? 
+    log "Script exited with code: $exit_code"
     log "Cleaning up temporary Aurora resources and dump files"
 
     set +e
@@ -62,78 +71,182 @@ cleanup() {
 }
 trap cleanup EXIT
 
+###############################################
+# 0. FETCH SUBNET GROUP FROM SOURCE CLUSTER
+###############################################
+log "Fetching DB subnet group from cluster: $db_cluster"
+
+db_subnet_group=$(
+  aws rds describe-db-clusters \
+    --db-cluster-identifier "$db_cluster" \
+    --region "$region" \
+    --query "DBClusters[0].DBSubnetGroup" \
+    --output text
+)
+
+if [[ -z "$db_subnet_group" || "$db_subnet_group" == "None" ]]; then
+  echo "ERROR: Failed to determine DB subnet group for cluster $db_cluster"
+  exit 1
+fi
+
+log "Using DB subnet group: $db_subnet_group"
+
 
 ###############################################
-# 1. CREATE SNAPSHOT FROM AURORA PROD READER
+# 0b. FETCH SECURITY GROUPS FROM SOURCE CLUSTER
+###############################################
+log "Fetching VPC security groups from cluster: $db_cluster"
+
+db_security_groups=$(
+  aws rds describe-db-clusters \
+    --db-cluster-identifier "$db_cluster" \
+    --region "$region" \
+    --query "DBClusters[0].VpcSecurityGroups[].VpcSecurityGroupId" \
+    --output text
+)
+
+if [[ -z "$db_security_groups" ]]; then
+  echo "ERROR: Failed to determine security groups for cluster $db_cluster"
+  exit 1
+fi
+
+log "Using security groups: $db_security_groups"
+
+
+###############################################
+# 1. CREATE SNAPSHOT FROM AURORA PROD CLUSTER
 ###############################################
 log "Creating Aurora cluster snapshot: $snapshot_id"
+
 aws rds create-db-cluster-snapshot \
   --db-cluster-snapshot-identifier "$snapshot_id" \
-  --db-cluster-identifier "$prod_reader_cluster" \
-  --region $region >/dev/null
+  --db-cluster-identifier "$db_cluster" \
+  --region "$region" \
+  >/dev/null
 
 log "Waiting for snapshot to complete..."
 aws rds wait db-cluster-snapshot-available \
   --db-cluster-snapshot-identifier "$snapshot_id" \
-  --region $region
+  --region "$region"
 
 
 ###############################################
-# 2. RESTORE TEMPORARY AURORA CLUSTER + INSTANCE
+# 2. RESTORE TEMPORARY AURORA CLUSTER
 ###############################################
 log "Restoring temporary Aurora cluster: $tmp_cluster_id"
 
-aws rds restore-db-cluster-from-snapshot \
-  --db-cluster-identifier "$tmp_cluster_id" \
-  --snapshot-identifier "$snapshot_id" \
-  --engine aurora-mysql \
-  --region $region >/dev/null
+  aws rds restore-db-cluster-from-snapshot \
+    --db-cluster-identifier "$tmp_cluster_id" \
+    --snapshot-identifier "$snapshot_id" \
+    --engine aurora-mysql \
+    --db-subnet-group-name "$db_subnet_group" \
+    --vpc-security-group-ids $db_security_groups \
+    --region "$region" \
+    >/dev/null
 
+log "Waiting for cluster to become available..."
+aws rds wait db-cluster-available \
+  --db-cluster-identifier "$tmp_cluster_id" \
+  --region "$region"
+
+
+###############################################
+# 2b. CREATE TEMPORARY AURORA INSTANCE
+###############################################
 log "Creating temporary Aurora instance: $tmp_instance_id"
+
 aws rds create-db-instance \
   --db-instance-identifier "$tmp_instance_id" \
   --db-cluster-identifier "$tmp_cluster_id" \
   --db-instance-class db.r6g.large \
   --engine aurora-mysql \
-  --region $region >/dev/null
+  --region "$region" \
+  >/dev/null
 
-log "Waiting for cluster to become available..."
-aws rds wait db-cluster-available \
-  --db-cluster-identifier "$tmp_cluster_id" \
-  --region $region
+log "Waiting for instance to become available..."
+aws rds wait db-instance-available \
+  --db-instance-identifier "$tmp_instance_id" \
+  --region "$region"
 
-endpoint=$(aws rds describe-db-clusters --db-cluster-identifier "$tmp_cluster_id" --region $region \
-           | jq -r '.DBClusters[0].Endpoint')
 
-log "Temporary Aurora is ready at: $endpoint"
+###############################################
+# 2c. FETCH CLUSTER ENDPOINT
+###############################################
+endpoint=$(
+  aws rds describe-db-clusters \
+    --db-cluster-identifier "$tmp_cluster_id" \
+    --region "$region" \
+    --query "DBClusters[0].Endpoint" \
+    --output text
+)
+
+if [[ -z "$endpoint" || "$endpoint" == "None" ]]; then
+  echo "ERROR: Failed to resolve endpoint for temporary cluster"
+  exit 1
+fi
+
+log "Temporary Aurora cluster is ready at: $endpoint"
 
 
 ###############################################
 # 3. RUN ANONYMISATION AGAINST TEMP CLUSTER
 ###############################################
-mkdir -p $anondb_dump_dir/temp
-cd niextract/anonymisation_scripts/anon
+mkdir -p "$anondb_dump_dir/temp"
+cd /mnt/data/scripts/niextract/anonymisation_scripts/anon
 
 log "Running anonymisation against restored Aurora cluster"
+
 ./run_anonymisation.sh \
-   -c "-umaster -h${endpoint} -p${pass}" \
-   -d OLCS_RDS_OLCSDB \
-   -f ${anondb_dump_dir}/temp \
-   -F
+  -c "-umaster -h${endpoint} -p${pass}" \
+  -d OLCS_RDS_OLCSDB \
+  -f "${anondb_dump_dir}/temp" \
+  -F
 
 
 ###############################################
-# 4. DUMP DATA + UPLOAD TO S3
+# 4a. CREATE SNAPSHOT OF ANONYMISED CLUSTER
+###############################################
+log "Creating snapshot of anonymised cluster: $anondb_snapshot_id"
+
+aws rds create-db-cluster-snapshot \
+  --db-cluster-snapshot-identifier "$anondb_snapshot_id" \
+  --db-cluster-identifier "$tmp_cluster_id" \
+  --region "$region" \
+  >/dev/null
+
+log "Waiting for anonymised snapshot to complete..."
+aws rds wait db-cluster-snapshot-available \
+  --db-cluster-snapshot-identifier "$anondb_snapshot_id" \
+  --region "$region"
+
+###############################################
+# 4b. SHARE SNAPSHOT WITH DEV ACCOUNT (PROD ONLY)
+###############################################
+if [[ "$env" == "prod" ]]; then
+  log "Sharing anonymised snapshot with dev account"
+
+  aws rds modify-db-cluster-snapshot-attribute \
+    --db-cluster-snapshot-identifier "$anondb_snapshot_id" \
+    --attribute-name restore \
+    --values-to-add "054614622558" \
+    --region "$region"
+
+  log "Snapshot shared successfully"
+fi
+
+
+###############################################
+# 5. DUMP DATA + UPLOAD TO S3
 ###############################################
 log "Dumping anonymised database"
 mysqldump -h $endpoint -u master -p${pass} \
-  --routines --triggers --set-gtid-purged=OFF \
+  --routines --triggers \
   --add-drop-database --databases OLCS_RDS_OLCSDB \
   | gzip > $anondb_dump_dir/olcs-db-anon-$env-$DATE.sql.gz
 
 log "Dumping localdev tables"
 mysqldump -h $endpoint -u master -p${pass} \
-  --skip-triggers --skip-routines --set-gtid-purged=OFF \
+  --skip-triggers --skip-routines \
   OLCS_RDS_OLCSDB $anondb_tables \
   | sed 's/`OLCS_RDS_OLCSDB`[.]//g' \
   > $anondb_dump_dir/olcs-db-localdev-anon-$env-$DATE.sql
@@ -146,7 +259,15 @@ mysql -h $endpoint -u master -p${pass} \
   > $anondb_dump_dir/olcs-dbtables-anon-$env-$DATE.txt
 
 log "Assuming role for S3 upload"
-source ./s3assume.sh "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "$nonprod_assume_external_id"
+saved_http_proxy="${http_proxy-}"
+saved_https_proxy="${https_proxy-}"
+saved_no_proxy="${NO_PROXY-}"
+
+source "$SCRIPT_DIR/s3assume.sh" "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "$nonprod_assume_external_id"
+
+export http_proxy="$saved_http_proxy"
+export https_proxy="$saved_https_proxy"
+export NO_PROXY="$saved_no_proxy"
 
 log "Uploading anonymised dumps to S3"
 aws s3 cp $anondb_dump_dir s3://devapp-olcs-pri-olcs-deploy-s3/anondata/ \

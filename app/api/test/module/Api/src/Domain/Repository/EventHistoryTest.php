@@ -17,8 +17,9 @@ use Doctrine\ORM\Query;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class EventHistoryTest extends RepositoryTestCase
+final class EventHistoryTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);
@@ -399,24 +400,22 @@ class EventHistoryTest extends RepositoryTestCase
         $result = $this->sut->fetchPreviousLicenceStatus(1);
         $expectedResult = ['status' => $expectedStatus];
 
-        self::assertEquals($expectedResult, $result);
+        $this->assertEquals($expectedResult, $result);
     }
 
-    public static function fetchPreviousLicenceStatusDataProvider(): array
+    public static function fetchPreviousLicenceStatusDataProvider(): \Iterator
     {
-        return [
-            'case_curtailed' => [
-                'eventTypeId' => 7,
-                'expectedStatus' => Licence::LICENCE_STATUS_CURTAILED
-            ],
-            'case_suspended' => [
-                'eventTypeId' => 31,
-                'expectedStatus' => Licence::LICENCE_STATUS_SUSPENDED
-            ],
-            'case_valid' => [
-                'eventTypeId' => 75,
-                'expectedStatus' => Licence::LICENCE_STATUS_VALID
-            ]
+        yield 'case_curtailed' => [
+            'eventTypeId' => 7,
+            'expectedStatus' => Licence::LICENCE_STATUS_CURTAILED
+        ];
+        yield 'case_suspended' => [
+            'eventTypeId' => 31,
+            'expectedStatus' => Licence::LICENCE_STATUS_SUSPENDED
+        ];
+        yield 'case_valid' => [
+            'eventTypeId' => 75,
+            'expectedStatus' => Licence::LICENCE_STATUS_VALID
         ];
     }
 

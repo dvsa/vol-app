@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrRegistered;
  * @author Craig R <uk@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
-class SendEbsrRegisteredTest extends SendEbsrRegCancelEmailTestAbstract
+final class SendEbsrRegisteredTest extends SendEbsrRegCancelEmailTestAbstract
 {
     protected $template = 'ebsr-registered';
     protected $sutClass = \Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendEbsrRegistered::class;

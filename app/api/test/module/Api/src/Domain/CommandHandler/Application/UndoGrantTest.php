@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\UndoCancelAllInterimFees as UndoCmd
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UndoGrantTest extends AbstractCommandHandlerTestCase
+final class UndoGrantTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

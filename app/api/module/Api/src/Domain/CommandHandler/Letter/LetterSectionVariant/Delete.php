@@ -24,9 +24,11 @@ final class Delete extends AbstractCommandHandler
         /** @var VariantEntity $variant */
         $variant = $this->getRepo()->fetchById($command->getId());
 
-        // Prevent deleting the default variant
-        if ($variant->isDefault()) {
-            throw new \Dvsa\Olcs\Api\Domain\Exception\BadRequestException('Cannot delete the default variant');
+        // Prevent deleting the last default variant. Duplicate defaults can exist -- the unique key
+        // on the condition columns cannot catch them because MySQL treats NULLs as distinct -- and
+        // blocking every default left those duplicates permanently unremovable through the UI.
+        if ($variant->isDefault() && !$this->hasAnotherDefault($variant)) {
+            throw new \Dvsa\Olcs\Api\Domain\Exception\BadRequestException('Cannot delete the only default variant');
         }
 
         // Soft delete via SoftDeletableTrait
@@ -35,5 +37,32 @@ final class Delete extends AbstractCommandHandler
         $this->result->addMessage('Variant deleted');
 
         return $this->result;
+    }
+
+    /**
+     * Whether the variant's section still has another live default variant besides this one.
+     *
+     * @param VariantEntity $variant
+     * @return bool
+     */
+    private function hasAnotherDefault(VariantEntity $variant): bool
+    {
+        $section = $variant->getLetterSection();
+
+        if ($section === null) {
+            return false;
+        }
+
+        foreach ($section->getVariants() as $sibling) {
+            if ($sibling->getId() === $variant->getId() || $sibling->isDeleted()) {
+                continue;
+            }
+
+            if ($sibling->isDefault()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -13,7 +13,7 @@ use Laminas\I18n\Translator\TranslatorInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class SignatureReviewServiceTest extends MockeryTestCase
+final class SignatureReviewServiceTest extends MockeryTestCase
 {
     /**
      * @var SignatureReviewService
@@ -23,6 +23,7 @@ class SignatureReviewServiceTest extends MockeryTestCase
     /** @var TranslatorInterface */
     protected $translator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->translator = m::mock(TranslatorInterface::class);
@@ -95,89 +96,87 @@ class SignatureReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $markup);
     }
 
-    public static function physicalSignatureDataProvider(): array
+    public static function physicalSignatureDataProvider(): \Iterator
     {
-        return [
-            'is_not_ni' => [
-                'data' => [
-                    'is_ni' => false,
-                    'org_type' => Organisation::ORG_TYPE_REGISTERED_COMPANY
-                ],
-                'expected' => [
-                    'signature_address' => 'markup-application_undertakings_signature_address_gb',
-                    'markup' => 'undertakings_directors_signature'
-                ]
+        yield 'is_not_ni' => [
+            'data' => [
+                'is_ni' => false,
+                'org_type' => Organisation::ORG_TYPE_REGISTERED_COMPANY
             ],
-            'is_ni' => [
-                'data' => [
-                    'is_ni' => true,
-                    'org_type' => Organisation::ORG_TYPE_REGISTERED_COMPANY
-                ],
-                'expected' => [
-                    'signature_address' => 'markup-application_undertakings_signature_address_ni',
-                    'markup' => 'undertakings_directors_signature'
-                ]
+            'expected' => [
+                'signature_address' => 'markup-application_undertakings_signature_address_gb',
+                'markup' => 'undertakings_directors_signature'
+            ]
+        ];
+        yield 'is_ni' => [
+            'data' => [
+                'is_ni' => true,
+                'org_type' => Organisation::ORG_TYPE_REGISTERED_COMPANY
             ],
-            'registered_company' => [
-                'data' => [
-                    'is_ni' => false,
-                    'org_type' => Organisation::ORG_TYPE_REGISTERED_COMPANY
-                ],
-                'expected' => [
-                    'signature_address' => 'markup-application_undertakings_signature_address_gb',
-                    'markup' => 'undertakings_directors_signature'
-                ]
+            'expected' => [
+                'signature_address' => 'markup-application_undertakings_signature_address_ni',
+                'markup' => 'undertakings_directors_signature'
+            ]
+        ];
+        yield 'registered_company' => [
+            'data' => [
+                'is_ni' => false,
+                'org_type' => Organisation::ORG_TYPE_REGISTERED_COMPANY
             ],
-            'llp' => [
-                'data' => [
-                    'is_ni' => false,
-                    'org_type' => Organisation::ORG_TYPE_LLP
-                ],
-                'expected' => [
-                    'signature_address' => 'markup-application_undertakings_signature_address_gb',
-                    'markup' => 'undertakings_directors_signature'
-                ]
+            'expected' => [
+                'signature_address' => 'markup-application_undertakings_signature_address_gb',
+                'markup' => 'undertakings_directors_signature'
+            ]
+        ];
+        yield 'llp' => [
+            'data' => [
+                'is_ni' => false,
+                'org_type' => Organisation::ORG_TYPE_LLP
             ],
-            'partnership' => [
-                'data' => [
-                    'is_ni' => false,
-                    'org_type' => Organisation::ORG_TYPE_PARTNERSHIP
-                ],
-                'expected' => [
-                    'signature_address' => 'markup-application_undertakings_signature_address_gb',
-                    'markup' => 'undertakings_partners_signature'
-                ]
+            'expected' => [
+                'signature_address' => 'markup-application_undertakings_signature_address_gb',
+                'markup' => 'undertakings_directors_signature'
+            ]
+        ];
+        yield 'partnership' => [
+            'data' => [
+                'is_ni' => false,
+                'org_type' => Organisation::ORG_TYPE_PARTNERSHIP
             ],
-            'sole_trader' => [
-                'data' => [
-                    'is_ni' => false,
-                    'org_type' => Organisation::ORG_TYPE_SOLE_TRADER
-                ],
-                'expected' => [
-                    'signature_address' => 'markup-application_undertakings_signature_address_gb',
-                    'markup' => 'undertakings_owners_signature'
-                ]
+            'expected' => [
+                'signature_address' => 'markup-application_undertakings_signature_address_gb',
+                'markup' => 'undertakings_partners_signature'
+            ]
+        ];
+        yield 'sole_trader' => [
+            'data' => [
+                'is_ni' => false,
+                'org_type' => Organisation::ORG_TYPE_SOLE_TRADER
             ],
-            'other' => [
-                'data' => [
-                    'is_ni' => false,
-                    'org_type' => Organisation::ORG_TYPE_OTHER
-                ],
-                'expected' => [
-                    'signature_address' => 'markup-application_undertakings_signature_address_gb',
-                    'markup' => 'undertakings_responsiblepersons_signature'
-                ]
+            'expected' => [
+                'signature_address' => 'markup-application_undertakings_signature_address_gb',
+                'markup' => 'undertakings_owners_signature'
+            ]
+        ];
+        yield 'other' => [
+            'data' => [
+                'is_ni' => false,
+                'org_type' => Organisation::ORG_TYPE_OTHER
             ],
-            'irfo' => [
-                'data' => [
-                    'is_ni' => false,
-                    'org_type' => Organisation::ORG_TYPE_IRFO
-                ],
-                'expected' => [
-                    'signature_address' => 'markup-application_undertakings_signature_address_gb',
-                    'markup' => 'undertakings_responsiblepersons_signature'
-                ]
+            'expected' => [
+                'signature_address' => 'markup-application_undertakings_signature_address_gb',
+                'markup' => 'undertakings_responsiblepersons_signature'
+            ]
+        ];
+        yield 'irfo' => [
+            'data' => [
+                'is_ni' => false,
+                'org_type' => Organisation::ORG_TYPE_IRFO
             ],
+            'expected' => [
+                'signature_address' => 'markup-application_undertakings_signature_address_gb',
+                'markup' => 'undertakings_responsiblepersons_signature'
+            ]
         ];
     }
 }

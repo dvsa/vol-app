@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * Case decisions controller tests
  */
-class DecisionsControllerTest extends MockeryTestCase
+final class DecisionsControllerTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -69,28 +69,26 @@ class DecisionsControllerTest extends MockeryTestCase
         $this->assertEquals('redirectResponse', $this->sut->indexAction());
     }
 
-    public static function indexActionDataProvider(): array
+    public static function indexActionDataProvider(): \Iterator
     {
-        return [
-            // non-TM
+        // non-TM
+        yield [
+            100,
             [
-                100,
-                [
-                    'id' => 100,
-                ],
-                'processing_in_office_revocation',
+                'id' => 100,
             ],
-            // TM
+            'processing_in_office_revocation',
+        ];
+        // TM
+        yield [
+            100,
             [
-                100,
-                [
-                    'id' => 100,
-                    'transportManager' => [
-                        'id' => 111,
-                    ],
+                'id' => 100,
+                'transportManager' => [
+                    'id' => 111,
                 ],
-                'processing_decisions',
             ],
+            'processing_decisions',
         ];
     }
 }

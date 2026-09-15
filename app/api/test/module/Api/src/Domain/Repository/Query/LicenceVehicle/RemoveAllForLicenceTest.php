@@ -20,7 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class RemoveAllForLicenceTest extends AbstractDbQueryTestCase
+final class RemoveAllForLicenceTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         LicenceVehicle::class => 'licence_vehicle'
@@ -44,19 +44,17 @@ class RemoveAllForLicenceTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
         $today = new DateTime();
 
-        return [
+        yield [
+            [],
+            [],
             [
-                [],
-                [],
-                [
-                    'removalDate' => $today->format('Y-m-d H:i:s')
-                ],
-                []
-            ]
+                'removalDate' => $today->format('Y-m-d H:i:s')
+            ],
+            []
         ];
     }
 

@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CanAccessTransportManagerApplicationTest extends AbstractValidatorsTestCase
+final class CanAccessTransportManagerApplicationTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanAccessApplication

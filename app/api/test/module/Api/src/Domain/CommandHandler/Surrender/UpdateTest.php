@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Surrender as SurrenderEntity;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     /** @var Sut */
     protected $sut;

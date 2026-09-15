@@ -16,15 +16,15 @@ use Mockery as m;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\OrganisationPerson\DeleteList::class)]
-class DeleteListTest extends AbstractCommandHandlerTestCase
+final class DeleteListTest extends AbstractCommandHandlerTestCase
 {
-    public const ORG_ID = 6001;
+    public const int ORG_ID = 6001;
 
-    public const ORG_PERSON_ID = 9001;
-    public const ORG_PERSON_2_ID = 9002;
+    public const int ORG_PERSON_ID = 9001;
+    public const int ORG_PERSON_2_ID = 9002;
 
-    public const PERSON_ID = 7001;
-    public const PERSON_2_ID = 7002;
+    public const int PERSON_ID = 7001;
+    public const int PERSON_2_ID = 7002;
 
     /** @var CommandHandler\OrganisationPerson\DeleteList  */
     protected $sut;
@@ -63,12 +63,12 @@ class DeleteListTest extends AbstractCommandHandlerTestCase
     }
     public function testHandleCommand(): void
     {
-        $person1 = (new Entity\Person\Person())->setId(self::PERSON_ID);
+        $person1 = new Entity\Person\Person()->setId(self::PERSON_ID);
         $op1 = m::mock();
         $op1->shouldReceive('getPerson')->with()->atLeast(1)->andReturn($person1)
             ->shouldReceive('getOrganisation')->with()->atLeast(1)->andReturn($this->mockOrg);
 
-        $person2 = (new Entity\Person\Person())->setId(self::PERSON_2_ID);
+        $person2 = new Entity\Person\Person()->setId(self::PERSON_2_ID);
         $op2 = m::mock();
         $op2->shouldReceive('getPerson')->with()->atLeast(1)->andReturn($person2)
             ->shouldReceive('getOrganisation')->with()->atLeast(1)->andReturn($this->mockOrg);

@@ -1,0 +1,33 @@
+<?php
+echo $this->partial(
+    'partials/page-header-continuation',
+    [
+        'pageTitle' => $this->pageTitle(),
+        'pageSubTitle' => $this->translate('Continue licence') .' '. $this->licNo,
+        'stepHeader' => $this->stepHeader,
+        'backUrl' => [
+            'url' => $this->url(
+                'continuation', ['continuationDetailId' => $this->data['continuationDetailId']], [], true
+            )
+        ],
+    ]
+);
+?>
+
+<div class="row">
+
+  <div class="dashboard full-width js-body">
+      <?php echo $this->translate('continuations.checklist.guidance'); ?>
+      <?php
+      echo $this->flashMessengerAll();
+
+      echo $this->partial('partials/guidance');
+
+      if (isset($this->form)):
+          echo $this->formErrors($this->form);
+          echo $this->form($this->form);
+      endif;
+      ?>
+  </div>
+
+</div>

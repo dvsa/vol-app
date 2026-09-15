@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class RemoveReadAuditTest extends AbstractCommandHandlerTestCase
+final class RemoveReadAuditTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

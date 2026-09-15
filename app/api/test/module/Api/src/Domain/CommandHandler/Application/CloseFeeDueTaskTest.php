@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Application\CloseFeeDueTask;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CloseFeeDueTaskTest extends AbstractCommandHandlerTestCase
+final class CloseFeeDueTaskTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -82,7 +82,7 @@ class CloseFeeDueTaskTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Transfer\Command\Task\CloseTasks::class,
             ['ids' => [1, 5]],
-            (new Result())->addMessage('RESULT')
+            new Result()->addMessage('RESULT')
         );
 
         $result = $this->sut->handleCommand($command);

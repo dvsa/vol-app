@@ -14,8 +14,9 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IrhpPermitJurisdictionQuotaTest extends RepositoryTestCase
+final class IrhpPermitJurisdictionQuotaTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(IrhpPermitJurisdictionQuota::class);

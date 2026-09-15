@@ -20,7 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ExpireAllForLicenceTest extends AbstractDbQueryTestCase
+final class ExpireAllForLicenceTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         CommunityLic::class => 'com_lic'
@@ -48,20 +48,18 @@ class ExpireAllForLicenceTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
         $today = new DateTime();
 
-        return [
+        yield [
+            [],
+            [],
             [
-                [],
-                [],
-                [
-                    'status' => CommunityLic::STATUS_EXPIRED,
-                    'expiredDate' => $today->format('Y-m-d H:i:s')
-                ],
-                []
-            ]
+                'status' => CommunityLic::STATUS_EXPIRED,
+                'expiredDate' => $today->format('Y-m-d H:i:s')
+            ],
+            []
         ];
     }
 

@@ -18,7 +18,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Laminas\I18n\Translator\LoaderPluginManager;
 use Mockery as m;
 
-class SendForgotPasswordTest extends AbstractCommandHandlerTestCase
+final class SendForgotPasswordTest extends AbstractCommandHandlerTestCase
 {
     public $translationLoader;
     public function setUp(): void

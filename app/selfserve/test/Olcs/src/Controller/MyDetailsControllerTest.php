@@ -20,31 +20,29 @@ use Olcs\Controller\MyDetailsController as Sut;
 use ReflectionClass;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class MyDetailsControllerTest extends TestCase
+final class MyDetailsControllerTest extends TestCase
 {
-    public $mockniTextTranslationUtil;
-    public $mockauthService;
     public $mockflashMessengerHelper;
     public $mockscriptFactory;
     public $mockformHelper;
     protected $sut;
-    protected $sm;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(Sut::class)
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->mockniTextTranslationUtil = m::mock(NiTextTranslation::class)->makePartial();
-        $this->mockauthService = m::mock(AuthorizationService::class)->makePartial();
+        $mockniTextTranslationUtil = m::mock(NiTextTranslation::class)->makePartial();
+        $mockauthService = m::mock(AuthorizationService::class)->makePartial();
         $this->mockflashMessengerHelper = m::mock(FlashMessengerHelperService::class)->makePartial();
         $this->mockscriptFactory = m::mock(ScriptFactory::class)->makePartial();
         $this->mockformHelper = m::mock(FormHelperService::class)->makePartial();
 
         $reflectionClass = new ReflectionClass(Sut::class);
-        $this->setMockedProperties($reflectionClass, 'niTextTranslationUtil', $this->mockniTextTranslationUtil);
-        $this->setMockedProperties($reflectionClass, 'authService', $this->mockauthService);
+        $this->setMockedProperties($reflectionClass, 'niTextTranslationUtil', $mockniTextTranslationUtil);
+        $this->setMockedProperties($reflectionClass, 'authService', $mockauthService);
         $this->setMockedProperties($reflectionClass, 'flashMessengerHelper', $this->mockflashMessengerHelper);
         $this->setMockedProperties($reflectionClass, 'scriptFactory', $this->mockscriptFactory);
         $this->setMockedProperties($reflectionClass, 'formHelper', $this->mockformHelper);

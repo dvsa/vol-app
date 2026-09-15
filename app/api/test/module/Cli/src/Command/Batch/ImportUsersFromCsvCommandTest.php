@@ -12,7 +12,7 @@ use Laminas\Mvc\Application;
 use Symfony\Component\Console\Command\Command;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ImportUsersFromCsvCommandTest extends AbstractBatchCommandCases
+final class ImportUsersFromCsvCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

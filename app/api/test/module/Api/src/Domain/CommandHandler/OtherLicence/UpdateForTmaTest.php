@@ -23,7 +23,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdateForTmaTest extends AbstractCommandHandlerTestCase
+final class UpdateForTmaTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

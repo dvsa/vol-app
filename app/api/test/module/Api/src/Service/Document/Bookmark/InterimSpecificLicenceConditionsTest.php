@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\InterimSpecificLicenceConditions;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class InterimSpecificLicenceConditionsTest extends \PHPUnit\Framework\TestCase
+final class InterimSpecificLicenceConditionsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

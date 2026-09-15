@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CabotageOnlyTest extends MockeryTestCase
+final class CabotageOnlyTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetRepresentation')]
     public function testGetRepresentation(mixed $yesNo): void
@@ -32,11 +32,9 @@ class CabotageOnlyTest extends MockeryTestCase
         );
     }
 
-    public static function dpGetRepresentation(): array
+    public static function dpGetRepresentation(): \Iterator
     {
-        return [
-            ['Y'],
-            [null]
-        ];
+        yield ['Y'];
+        yield [null];
     }
 }

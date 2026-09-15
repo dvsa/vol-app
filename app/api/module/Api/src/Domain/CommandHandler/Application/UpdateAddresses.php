@@ -98,7 +98,7 @@ final class UpdateAddresses extends AbstractCommandHandler implements Transactio
             || !empty($address['addressLine2']) || !empty($address['addressLine3']) || !empty($address['addressLine4']);
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

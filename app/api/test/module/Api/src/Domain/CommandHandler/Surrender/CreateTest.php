@@ -15,9 +15,9 @@ use Dvsa\Olcs\Api\Entity\Surrender as SurrenderEntity;
 use Dvsa\Olcs\Transfer\Command\Surrender\Create as Cmd;
 use Mockery as m;
 
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
-    public const LIC_ID = 111;
+    public const int LIC_ID = 111;
 
     /** @var Sut */
     protected $sut;

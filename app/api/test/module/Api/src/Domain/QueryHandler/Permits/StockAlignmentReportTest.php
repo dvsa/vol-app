@@ -22,7 +22,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\StockAlignmentReport as StockAlignmentRepor
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class StockAlignmentReportTest extends QueryHandlerTestCase
+final class StockAlignmentReportTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -36,8 +36,10 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
-    public function testHandleQuery(mixed $ranges, mixed $candidatePermits, mixed $expected): void
+    public function testHandleQuery(mixed $ranges, \Closure $createCandidatePermits, mixed $expected): void
     {
+        // Built here rather than in the provider because the candidate permits embed Mockery mocks.
+        $candidatePermits = $createCandidatePermits();
         $stockId = 99;
 
         $stock = m::mock(IrhpPermitStock::class);
@@ -122,7 +124,7 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
                     IrhpPermitRange::create(null, $euro5, null, 1, 100, true, false, new ArrayCollection([$greece, $hungary, $italy, $russia]), null, null),
                     IrhpPermitRange::create(null, $euro6, null, 1, 100, false, true, new ArrayCollection([$austria, $greece, $hungary, $italy, $russia]), null, null),
                 ],
-                'candidatePermits' => [
+                'createCandidatePermits' => static fn () => [
                     IrhpCandidatePermit::createNew(
                         IrhpPermitApplication::createNewForIrhpApplication(
                             m::mock(IrhpApplication::class)->shouldReceive('getCountrys')->andReturn(new ArrayCollection([$austria, $greece, $hungary, $italy, $russia]))->getMock(),
@@ -148,7 +150,7 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
                     IrhpPermitRange::create(null, $euro5, null, 1, 100, false, false, new ArrayCollection([$greece, $hungary, $italy, $russia]), null, null),
                     IrhpPermitRange::create(null, $euro6, null, 1, 100, false, false, new ArrayCollection([$austria, $greece, $hungary, $italy, $russia]), null, null),
                 ],
-                'candidatePermits' => [
+                'createCandidatePermits' => static fn () => [
                     IrhpCandidatePermit::createNew(
                         IrhpPermitApplication::createNewForIrhpApplication(
                             m::mock(IrhpApplication::class)->shouldReceive('getCountrys')->andReturn(new ArrayCollection([$greece, $hungary, $italy, $russia]))->getMock(),
@@ -188,7 +190,7 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
                     IrhpPermitRange::create(null, $euro5, null, 1, 100, false, false, new ArrayCollection([$greece, $hungary, $italy, $russia]), null, null),
                     IrhpPermitRange::create(null, $euro6, null, 1, 100, false, false, new ArrayCollection([$austria, $greece, $hungary, $italy, $russia]), null, null),
                 ],
-                'candidatePermits' => [
+                'createCandidatePermits' => static fn () => [
                     IrhpCandidatePermit::createNew(
                         IrhpPermitApplication::createNewForIrhpApplication(
                             m::mock(IrhpApplication::class)->shouldReceive('getCountrys')->andReturn(new ArrayCollection([$austria]))->getMock(),
@@ -281,7 +283,7 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
                     IrhpPermitRange::create(null, $euro6, null, 2, 2, false, false, new ArrayCollection([$greece, $italy, $russia, $austria, $hungary]), null, null),
                     IrhpPermitRange::create(null, $euro6, null, 3, 3, false, false, new ArrayCollection([$russia, $italy, $austria, $greece, $hungary]), null, null),
                 ],
-                'candidatePermits' => [
+                'createCandidatePermits' => static fn () => [
                     IrhpCandidatePermit::createNew(
                         IrhpPermitApplication::createNewForIrhpApplication(
                             m::mock(IrhpApplication::class)->shouldReceive('getCountrys')->andReturn(new ArrayCollection([$austria, $greece, $hungary, $italy, $russia]))->getMock(),
@@ -335,7 +337,7 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
                     IrhpPermitRange::create(null, $euro5, null, 1, 100, false, false, new ArrayCollection([$greece, $hungary, $italy, $russia]), null, null),
                     IrhpPermitRange::create(null, $euro6, null, 1, 100, false, false, new ArrayCollection([$austria, $hungary]), null, null),
                 ],
-                'candidatePermits' => [
+                'createCandidatePermits' => static fn () => [
                     IrhpCandidatePermit::createNew(
                         IrhpPermitApplication::createNewForIrhpApplication(
                             m::mock(IrhpApplication::class)->shouldReceive('getCountrys')->andReturn(new ArrayCollection([$austria, $greece, $hungary, $italy, $russia]))->getMock(),
@@ -378,7 +380,7 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
                     IrhpPermitRange::create(null, $euro5, null, 2, 2, false, false, new ArrayCollection([$italy]), null, null),
                     IrhpPermitRange::create(null, $euro6, null, 1, 1, false, false, new ArrayCollection([$austria, $hungary]), null, null),
                 ],
-                'candidatePermits' => [
+                'createCandidatePermits' => static fn () => [
                     IrhpCandidatePermit::createNew(
                         IrhpPermitApplication::createNewForIrhpApplication(
                             m::mock(IrhpApplication::class)->shouldReceive('getCountrys')->andReturn(new ArrayCollection([$austria, $greece, $hungary, $italy, $russia]))->getMock(),
@@ -420,7 +422,7 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
                     IrhpPermitRange::create(null, $euro5, null, 1, 100, false, false, new ArrayCollection([$greece, $hungary, $italy, $russia]), null, null),
                     IrhpPermitRange::create(null, $euro6, null, 1, 100, false, false, new ArrayCollection([$austria, $greece, $hungary, $italy, $russia]), null, null),
                 ],
-                'candidatePermits' => [
+                'createCandidatePermits' => static fn () => [
                     IrhpCandidatePermit::createNew(
                         IrhpPermitApplication::createNewForIrhpApplication(
                             m::mock(IrhpApplication::class)->shouldReceive('getCountrys')->andReturn(new ArrayCollection([$austria, $greece, $hungary, $italy, $russia]))->getMock(),
@@ -484,7 +486,7 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
                     IrhpPermitRange::create(null, $euro5, null, 1, 100, false, false, new ArrayCollection([$greece, $hungary, $italy, $russia]), null, null),
                     IrhpPermitRange::create(null, $euro6, null, 1, 100, false, false, new ArrayCollection([$austria, $greece, $hungary, $italy, $russia]), null, null),
                 ],
-                'candidatePermits' => [
+                'createCandidatePermits' => static fn () => [
                     IrhpCandidatePermit::createNew(
                         IrhpPermitApplication::createNewForIrhpApplication(
                             m::mock(IrhpApplication::class)->shouldReceive('getCountrys')->andReturn(new ArrayCollection([]))->getMock(),

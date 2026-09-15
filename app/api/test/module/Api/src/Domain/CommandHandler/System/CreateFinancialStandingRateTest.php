@@ -18,7 +18,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class CreateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
+final class CreateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -68,47 +68,45 @@ class CreateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('1000.01', $savedRate->getFirstVehicleRate());
         $this->assertEquals('100.01', $savedRate->getAdditionalVehicleRate());
         $this->assertInstanceOf(\DateTime::class, $savedRate->getEffectiveFrom());
-        $this->assertEquals('2015-09-10', $savedRate->getEffectiveFrom()->format('Y-m-d'));
+        $this->assertSame('2015-09-10', $savedRate->getEffectiveFrom()->format('Y-m-d'));
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                Entity::VEHICLE_TYPE_HGV,
-            ],
-            [
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                Entity::VEHICLE_TYPE_LGV,
-            ],
-            [
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                Entity::VEHICLE_TYPE_NOT_APPLICABLE,
-            ],
-            [
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                Entity::VEHICLE_TYPE_NOT_APPLICABLE,
-            ],
-            [
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                Entity::VEHICLE_TYPE_NOT_APPLICABLE,
-            ],
-            [
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                Entity::VEHICLE_TYPE_NOT_APPLICABLE,
-            ],
-            [
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                Entity::VEHICLE_TYPE_NOT_APPLICABLE,
-            ],
+        yield [
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            Entity::VEHICLE_TYPE_HGV,
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            Entity::VEHICLE_TYPE_LGV,
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            Entity::VEHICLE_TYPE_NOT_APPLICABLE,
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            Entity::VEHICLE_TYPE_NOT_APPLICABLE,
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            Entity::VEHICLE_TYPE_NOT_APPLICABLE,
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            Entity::VEHICLE_TYPE_NOT_APPLICABLE,
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            Entity::VEHICLE_TYPE_NOT_APPLICABLE,
         ];
     }
 
@@ -171,75 +169,73 @@ class CreateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpHandleCommandInputRulesViolation(): array
+    public static function dpHandleCommandInputRulesViolation(): \Iterator
     {
-        return [
-            [
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                Entity::VEHICLE_TYPE_NOT_APPLICABLE,
-                'Vehicle type must be HGV or LGV for standard international goods licence',
-            ],
-            [
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                Entity::VEHICLE_TYPE_HGV,
-                'Vehicle type must be Not Applicable for licences other than standard international/goods',
-            ],
-            [
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                Entity::VEHICLE_TYPE_LGV,
-                'Vehicle type must be Not Applicable for licences other than standard international/goods',
-            ],
-            [
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                Entity::VEHICLE_TYPE_HGV,
-                'Vehicle type must be Not Applicable for licences other than standard international/goods',
-            ],
-            [
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                Entity::VEHICLE_TYPE_LGV,
-                'Vehicle type must be Not Applicable for licences other than standard international/goods',
-            ],
-            [
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                Entity::VEHICLE_TYPE_HGV,
-                'Vehicle type must be Not Applicable for licences other than standard international/goods',
-            ],
-            [
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                Entity::VEHICLE_TYPE_LGV,
-                'Vehicle type must be Not Applicable for licences other than standard international/goods',
-            ],
-            [
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                Entity::VEHICLE_TYPE_HGV,
-                'Vehicle type must be Not Applicable for licences other than standard international/goods',
-            ],
-            [
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                Entity::VEHICLE_TYPE_LGV,
-                'Vehicle type must be Not Applicable for licences other than standard international/goods',
-            ],
-            [
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                Entity::VEHICLE_TYPE_HGV,
-                'Vehicle type must be Not Applicable for licences other than standard international/goods',
-            ],
-            [
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                Entity::VEHICLE_TYPE_LGV,
-                'Vehicle type must be Not Applicable for licences other than standard international/goods',
-            ],
+        yield [
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            Entity::VEHICLE_TYPE_NOT_APPLICABLE,
+            'Vehicle type must be HGV or LGV for standard international goods licence',
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            Entity::VEHICLE_TYPE_HGV,
+            'Vehicle type must be Not Applicable for licences other than standard international/goods',
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            Entity::VEHICLE_TYPE_LGV,
+            'Vehicle type must be Not Applicable for licences other than standard international/goods',
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            Entity::VEHICLE_TYPE_HGV,
+            'Vehicle type must be Not Applicable for licences other than standard international/goods',
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            Entity::VEHICLE_TYPE_LGV,
+            'Vehicle type must be Not Applicable for licences other than standard international/goods',
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            Entity::VEHICLE_TYPE_HGV,
+            'Vehicle type must be Not Applicable for licences other than standard international/goods',
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            Entity::VEHICLE_TYPE_LGV,
+            'Vehicle type must be Not Applicable for licences other than standard international/goods',
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            Entity::VEHICLE_TYPE_HGV,
+            'Vehicle type must be Not Applicable for licences other than standard international/goods',
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            Entity::VEHICLE_TYPE_LGV,
+            'Vehicle type must be Not Applicable for licences other than standard international/goods',
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            Entity::VEHICLE_TYPE_HGV,
+            'Vehicle type must be Not Applicable for licences other than standard international/goods',
+        ];
+        yield [
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            Entity::VEHICLE_TYPE_LGV,
+            'Vehicle type must be Not Applicable for licences other than standard international/goods',
         ];
     }
 }

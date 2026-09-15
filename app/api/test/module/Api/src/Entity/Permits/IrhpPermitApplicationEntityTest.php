@@ -34,7 +34,7 @@ use RuntimeException;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpPermitApplicationEntityTest extends EntityTester
+final class IrhpPermitApplicationEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -591,7 +591,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
         $dateTime = new DateTime('2029-04-21 13:40:15');
 
         return [
-            [null, (new DateTime())->format('Y-m-d')],
+            [null, new DateTime()->format('Y-m-d')],
             [$dateTime, $dateTime->format('Y-m-d')]
         ];
     }
@@ -801,7 +801,7 @@ class IrhpPermitApplicationEntityTest extends EntityTester
 
     public function testGenerateIssueDateForOther(): void
     {
-        $currentDateAsString = (new DateTime())->format('Y-m-d');
+        $currentDateAsString = new DateTime()->format('Y-m-d');
 
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('getIrhpPermitType->isEcmtRemoval')

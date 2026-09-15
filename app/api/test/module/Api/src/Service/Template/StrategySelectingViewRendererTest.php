@@ -17,7 +17,7 @@ use Twig\Loader\LoaderInterface as TwigLoader;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StrategySelectingViewRendererTest extends MockeryTestCase
+final class StrategySelectingViewRendererTest extends MockeryTestCase
 {
     public function testUseTwigRendererWhenTemplateIsEditable(): void
     {

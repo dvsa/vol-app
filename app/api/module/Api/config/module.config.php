@@ -18,6 +18,21 @@ return [
     'router' => [
         'routes' => include(__DIR__ . '/../../../vendor/olcs/olcs-transfer/config/backend-routes.config.php')
     ],
+    // Retrieve-via-Link: per-flow delivery policy + post-OTP session-grant secret.
+    'retrieval' => [
+        // gate: none | otp. expiry: ISO-8601 duration or integer seconds. An unconfigured flow
+        // fails secure (OTP + short window) in RetrievalPolicyResolver.
+        'policies' => [
+            'publication' => ['gate' => 'none', 'expiry' => 'P42D'],
+            // Police copies are sensitive: OTP-gated, one link per recipient (tune the window as needed).
+            'publication-police' => ['gate' => 'otp', 'expiry' => 'P42D'],
+        ],
+        // HMAC secret (>=32 chars) for post-OTP session grants, per env.
+        'session_secret' => '%olcs_retrieval_session_secret%',
+        // Seconds a presigned download URL is valid (S3 document store only). Kept short —
+        // selfserve fetches it server-side immediately, it never reaches the browser.
+        'presigned_ttl' => 300,
+    ],
     'service_manager' => [
         'alias' => [
             'PublicationContextPlugin' => \Dvsa\Olcs\Api\Service\Publication\Context\PluginManager::class,
@@ -147,10 +162,13 @@ return [
             'PermitsBilateralMetadataCurrentFieldValuesGenerator'
                 => ApiSrv\Permits\Bilateral\Metadata\CurrentFieldValuesGenerator::class,
         ],
-        'abstract_factories' => [
-            \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,
-        ],
         'factories' => [
+            // Retrieve-via-Link services
+            \Dvsa\Olcs\Api\Service\Retrieval\TokenGenerator::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+            \Dvsa\Olcs\Api\Service\Retrieval\OtpService::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+            \Dvsa\Olcs\Api\Service\Retrieval\RetrievalPolicyResolver::class => \Dvsa\Olcs\Api\Service\Retrieval\RetrievalPolicyResolverFactory::class,
+            \Dvsa\Olcs\Api\Service\Retrieval\SessionGrantService::class => \Dvsa\Olcs\Api\Service\Retrieval\SessionGrantServiceFactory::class,
+            \Dvsa\Olcs\Api\Service\Retrieval\RetrievalLinkCreator::class => \Dvsa\Olcs\Api\Service\Retrieval\RetrievalLinkCreatorFactory::class,
             \Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class => \Dvsa\Olcs\Api\Service\EditorJs\ConverterServiceFactory::class,
             \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger::class => \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLoggerFactory::class,
             'ConvertToPdf' => \Dvsa\Olcs\Api\Service\ConvertToPdf\ConvertToPdfFactory::class,
@@ -165,7 +183,7 @@ return [
             'SectionAccessService' => \Dvsa\Olcs\Api\Service\Lva\SectionAccessService::class,
             'ApplicationGrantValidationService' => \Dvsa\Olcs\Api\Service\Lva\Application\GrantValidationService::class,
             'ApplicationPublishValidationService' => \Dvsa\Olcs\Api\Service\Lva\Application\PublishValidationService::class,
-            'ContentStore' => \Dvsa\Olcs\DocumentShare\Service\ClientFactory::class,
+            'ContentStore' => \Dvsa\Olcs\DocumentShare\Service\DocumentStoreFactory::class,
             'PayloadValidationListener' => \Dvsa\Olcs\Api\Mvc\PayloadValidationListenerFactory::class,
             'CommandHandlerManager' => \Dvsa\Olcs\Api\Domain\CommandHandlerManagerFactory::class,
             'QueryHandlerManager' => \Dvsa\Olcs\Api\Domain\QueryHandlerManagerFactory::class,
@@ -184,6 +202,9 @@ return [
             'FeesHelperService' => \Dvsa\Olcs\Api\Service\FeesHelperService::class,
             'FinancialStandingHelperService' => \Dvsa\Olcs\Api\Service\FinancialStandingHelperService::class,
             DvlaSearchService::class => DvlaSearchServiceFactory::class,
+            ApiSrv\EventBridge\EventBridge::class => ApiSrv\EventBridge\EventBridgeFactory::class,
+            ApiSrv\Idp\AnalysisTokenGenerator::class => Laminas\ServiceManager\Factory\InvokableFactory::class,
+            ApiSrv\Idp\ApplicantProfileBuilder::class => ApiSrv\Idp\ApplicantProfileBuilderFactory::class,
 
             PublicationGenerator::class =>
                 \Dvsa\Olcs\Api\Service\Publication\PublicationGeneratorFactory::class,
@@ -207,6 +228,24 @@ return [
             // Letter Preview Service
             \Dvsa\Olcs\Api\Service\Letter\LetterPreviewService::class =>
                 \Dvsa\Olcs\Api\Service\Letter\LetterPreviewServiceFactory::class,
+
+            // Master Template Resolver (VOL-7305)
+            \Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver::class =>
+                \Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolverFactory::class,
+
+            // Section variant resolution shared by letter generation and builder preview
+            \Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver::class =>
+                \Dvsa\Olcs\Api\Service\Letter\SectionVariantResolverFactory::class,
+
+            // Letter instance assembly shared by letter generation and builder preview
+            \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer::class =>
+                \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposerFactory::class,
+
+            // Explains a proposed composition for the letter type builder
+            \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnostics::class =>
+                \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnosticsFactory::class,
+            \Dvsa\Olcs\Api\Service\Letter\PreviewRecordSuggester::class =>
+                \Dvsa\Olcs\Api\Service\Letter\PreviewRecordSuggesterFactory::class,
 
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,
@@ -537,6 +576,12 @@ return [
             ApiSrv\AddressHelper\AddressHelperService::class => ApiSrv\AddressHelper\AddressHelperServiceFactory::class,
 
             Aws\S3\S3Client::class => Dvsa\Olcs\Api\Service\S3\S3ClientFactory::class,
+            Aws\EventBridge\EventBridgeClient::class => Dvsa\Olcs\AwsSdk\Factories\EventBridgeClientFactory::class,
+            'default-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
+            'doctrine-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
+            'jwks-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
+            'cache.redis.connection'
+                =>  \Dvsa\Olcs\Api\Service\Cache\RedisConnectionFactory::class,
         ],
     ],
     'view_manager' => [
@@ -663,6 +708,7 @@ return [
             'PhoneContact' => RepositoryFactory::class,
             'OtherLicence' => RepositoryFactory::class,
             Repository\Document::class => RepositoryFactory::class,
+            Repository\DocumentAnalysis::class => RepositoryFactory::class,
             Repository\Correspondence::class => RepositoryFactory::class,
             Repository\SystemParameter::class => RepositoryFactory::class,
             'FeatureToggle' => RepositoryFactory::class,
@@ -827,13 +873,17 @@ return [
             Repository\LetterIssueType::class => RepositoryFactory::class,
             Repository\LetterTypeSection::class => RepositoryFactory::class,
             Repository\LetterTypeIssue::class => RepositoryFactory::class,
-            Repository\LetterTypeTodo::class => RepositoryFactory::class,
             Repository\LetterTypeAppendix::class => RepositoryFactory::class,
             Repository\LetterInstanceSection::class => RepositoryFactory::class,
             Repository\LetterInstanceIssue::class => RepositoryFactory::class,
             Repository\LetterInstanceTodo::class => RepositoryFactory::class,
             Repository\LetterInstanceAppendix::class => RepositoryFactory::class,
             Repository\LetterChoice::class => RepositoryFactory::class,
+            // Retrieve-via-Link repositories
+            'RetrievalLink' => RepositoryFactory::class,
+            'RetrievalLinkDocument' => RepositoryFactory::class,
+            'RetrievalOtp' => RepositoryFactory::class,
+            'RetrievalLinkEvent' => RepositoryFactory::class,
             Repository\LetterSectionVariant::class => RepositoryFactory::class
         ],
         'aliases' => [
@@ -871,7 +921,6 @@ return [
             'LetterIssueType' => Repository\LetterIssueType::class,
             'LetterTypeSection' => Repository\LetterTypeSection::class,
             'LetterTypeIssue' => Repository\LetterTypeIssue::class,
-            'LetterTypeTodo' => Repository\LetterTypeTodo::class,
             'LetterTypeAppendix' => Repository\LetterTypeAppendix::class,
             'LetterInstanceSection' => Repository\LetterInstanceSection::class,
             'LetterInstanceIssue' => Repository\LetterInstanceIssue::class,
@@ -932,29 +981,35 @@ return [
     ],
     'entity_namespaces' => include(__DIR__ . '/namespace.config.php'),
     'doctrine' => [
+        'types' => [
+            'yesno' => \Dvsa\Olcs\Api\Entity\Types\YesNoType::class,
+            'yesnonull' => \Dvsa\Olcs\Api\Entity\Types\YesNoNullType::class,
+            'date' => \Dvsa\Olcs\Api\Entity\Types\DateType::class,
+            'datetime' => \Dvsa\Olcs\Api\Entity\Types\DateTimeType::class,
+            'encrypted_string' => \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType::class,
+        ],
         'driver' => [
             'EntityDriver' => [
-                'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
-                'cache' => 'array',
+                'class' => \Doctrine\ORM\Mapping\Driver\AttributeDriver::class,
                 'paths' => [
                     __DIR__ . '/../src/Entity'
                 ]
             ],
             'translatable_metadata_driver' => [
-                'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
-                'cache' => 'array',
+                'class' => \Doctrine\ORM\Mapping\Driver\AttributeDriver::class,
                 'paths' => [
                     'vendor/gedmo/doctrine-extensions/src/Translatable/Entity'
                 ],
             ],
             'orm_default' => [
+                'class' => \Doctrine\Persistence\Mapping\Driver\MappingDriverChain::class,
                 'drivers' => [
                     'Dvsa\Olcs\Api\Entity' => 'EntityDriver',
                     'Gedmo\Translatable\Entity' => 'translatable_metadata_driver'
                 ]
             ]
         ],
-        'eventmanager' => [
+        'event_manager' => [
             'orm_default' => [
                 'subscribers' => [
                     \Dvsa\Olcs\Api\Listener\OlcsEntityListener::class,
@@ -969,13 +1024,6 @@ return [
                 'filters' => [
                     'soft-deleteable' => \Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter::class,
                 ],
-                'types' => [
-                    'yesno' => \Dvsa\Olcs\Api\Entity\Types\YesNoType::class,
-                    'yesnonull' => \Dvsa\Olcs\Api\Entity\Types\YesNoNullType::class,
-                    'date' => \Dvsa\Olcs\Api\Entity\Types\DateType::class,
-                    'datetime' => \Dvsa\Olcs\Api\Entity\Types\DateTimeType::class,
-                    'encrypted_string' => \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType::class
-                ]
             ]
         ]
     ],
@@ -1195,6 +1243,36 @@ return [
             'process' => [
                 Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text1::class,
                 Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text2::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Application\Police::class
+            ],
+        ],
+        'ImpoundingLicenceDecisionPublication' => [
+            'context' => [
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\Venue::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\HearingDate::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceNo::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\People::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceAddress::class,
+            ],
+            'process' => [
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text1::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text2::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text3::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Licence\Police::class
+            ],
+        ],
+        'ImpoundingApplicationDecisionPublication' => [
+            'context' => [
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\Venue::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\PiHearing\HearingDate::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceNo::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Application\People::class,
+                Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceAddress::class,
+            ],
+            'process' => [
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text1::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text2::class,
+                Dvsa\Olcs\Api\Service\Publication\Process\Impounding\Text3::class,
                 Dvsa\Olcs\Api\Service\Publication\Process\Application\Police::class
             ],
         ],

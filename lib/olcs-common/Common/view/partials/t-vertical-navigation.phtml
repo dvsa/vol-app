@@ -1,0 +1,12 @@
+
+	<h4>Content</h4>
+	<ol class="vertical-navigation" role="navigation">
+	<?php
+	//$verticalNavigationItems = array('Postal address', 'Personal information', 'About you');
+	foreach($this->navItems as $item) { ?>
+		<li class="vertical-navigation__item">
+			<a href="#<?php echo strtolower(str_replace(' ', '-', $item)); ?>"><?php echo $item; ?></a>
+		</li>
+	<?php } ?>
+	</ol><!-- end .vertical-navigation -->
+

@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\Exception\RestResponseException;
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
-use Laminas\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterface
 {
@@ -141,6 +141,15 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
         $this->httpClient->setMethod(Request::METHOD_POST);
         $this->httpClient->setFileUpload('index.html', 'files', $htmlContent, 'text/html');
 
+        // VOL-7288: Chromium defaults to US Letter and ignores CSS @page size, which
+        // made letter bodies a different page width from merged A4 appendix PDFs.
+        // Honour the document's @page rule when present, A4 otherwise.
+        $this->httpClient->setParameterPost([
+            'preferCssPageSize' => 'true',
+            'paperWidth' => '8.27',
+            'paperHeight' => '11.7',
+        ]);
+
         $response = $this->httpClient->send();
 
         if (!$response->isOk()) {
@@ -249,7 +258,7 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
             // Log the error but don't fail the conversion
             // The PDF is already saved locally, S3 is just for audit/backup
             if ($this->logger) {
-                $this->logger->err('Failed to upload PDF to S3: ' . $e->getAwsErrorMessage(), [
+                $this->logger->error('Failed to upload PDF to S3: ' . $e->getAwsErrorMessage(), [
                     'bucket' => $this->s3Bucket,
                     'original_file' => basename($originalFileName)
                 ]);

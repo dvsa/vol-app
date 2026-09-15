@@ -21,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtApplicationFeeCommandCreatorTest extends MockeryTestCase
+final class EcmtApplicationFeeCommandCreatorTest extends MockeryTestCase
 {
     public function testCreate(): void
     {

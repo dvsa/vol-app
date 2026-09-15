@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\CommunityLic\ValidatingReprintCaller;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ValidatingReprintCallerTest extends \PHPUnit\Framework\TestCase
+final class ValidatingReprintCallerTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

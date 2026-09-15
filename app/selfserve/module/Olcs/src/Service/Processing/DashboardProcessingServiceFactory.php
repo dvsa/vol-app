@@ -16,7 +16,7 @@ class DashboardProcessingServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DashboardProcessingService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DashboardProcessingService
     {
         return new DashboardProcessingService(
             $container->get('Table')

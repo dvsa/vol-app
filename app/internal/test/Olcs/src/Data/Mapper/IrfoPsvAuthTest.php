@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * IrfoPsvAuth Mapper Test
  */
-class IrfoPsvAuthTest extends MockeryTestCase
+final class IrfoPsvAuthTest extends MockeryTestCase
 {
     /**
      *
@@ -25,65 +25,63 @@ class IrfoPsvAuthTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
             [
-                [
-                    'isGrantable' => false,
-                    'isRefusable' => false,
-                    'isWithdrawable' => false,
-                ],
-                [
-                    'fields' => [
-                        'copiesIssued' => 0,
-                        'copiesIssuedHtml' => 0,
-                        'copiesIssuedTotal' => 0,
-                        'copiesIssuedTotalHtml' => 0,
-                        'copiesRequired' => 0,
-                        'copiesRequiredTotal' => 0,
-                        'copiesRequiredNonChargeable' => 0,
-                        'isGrantable' => false,
-                        'isRefusable' => false,
-                        'isWithdrawable' => false
-                    ],
-                ]
+                'isGrantable' => false,
+                'isRefusable' => false,
+                'isWithdrawable' => false,
             ],
-            // edit
             [
-                [
-                    'id' => 987,
-                    'organisation' => ['id' => 100],
-                    'createdOn' => '2015-05-05',
-                    'status' => 'other_status',
-                    'copiesIssued' => 1,
-                    'copiesIssuedTotal' => 11,
-                    'copiesRequired' => 3,
-                    'copiesRequiredTotal' => 33,
+                'fields' => [
+                    'copiesIssued' => 0,
+                    'copiesIssuedHtml' => 0,
+                    'copiesIssuedTotal' => 0,
+                    'copiesIssuedTotalHtml' => 0,
+                    'copiesRequired' => 0,
+                    'copiesRequiredTotal' => 0,
+                    'copiesRequiredNonChargeable' => 0,
                     'isGrantable' => false,
                     'isRefusable' => false,
                     'isWithdrawable' => false
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'organisation' => 100,
-                        'status' => 'other_status',
-                        'createdOn' => '2015-05-05',
-                        'createdOnHtml' => '05/05/2015',
-                        'copiesIssued' => 1,
-                        'copiesIssuedHtml' => 1,
-                        'copiesIssuedTotal' => 11,
-                        'copiesIssuedTotalHtml' => 11,
-                        'copiesRequired' => 3,
-                        'copiesRequiredTotal' => 33,
-                        'copiesRequiredNonChargeable' => 30,
-                        'isGrantable' => false,
-                        'isRefusable' => false,
-                        'isWithdrawable' => false
-                    ],
-                ]
+            ]
+        ];
+        // edit
+        yield [
+            [
+                'id' => 987,
+                'organisation' => ['id' => 100],
+                'createdOn' => '2015-05-05',
+                'status' => 'other_status',
+                'copiesIssued' => 1,
+                'copiesIssuedTotal' => 11,
+                'copiesRequired' => 3,
+                'copiesRequiredTotal' => 33,
+                'isGrantable' => false,
+                'isRefusable' => false,
+                'isWithdrawable' => false
+            ],
+            [
+                'fields' => [
+                    'id' => 987,
+                    'organisation' => 100,
+                    'status' => 'other_status',
+                    'createdOn' => '2015-05-05',
+                    'createdOnHtml' => '05/05/2015',
+                    'copiesIssued' => 1,
+                    'copiesIssuedHtml' => 1,
+                    'copiesIssuedTotal' => 11,
+                    'copiesIssuedTotalHtml' => 11,
+                    'copiesRequired' => 3,
+                    'copiesRequiredTotal' => 33,
+                    'copiesRequiredNonChargeable' => 30,
+                    'isGrantable' => false,
+                    'isRefusable' => false,
+                    'isWithdrawable' => false
+                ],
             ]
         ];
     }

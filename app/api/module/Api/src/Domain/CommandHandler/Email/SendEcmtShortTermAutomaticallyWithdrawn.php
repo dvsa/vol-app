@@ -39,7 +39,7 @@ class SendEcmtShortTermAutomaticallyWithdrawn extends AbstractEmailHandler
         ];
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->daysToPayIssueFeeProvider = $container->get('PermitsFeesDaysToPayIssueFeeProvider');
         return parent::__invoke($container, $requestedName, $options);

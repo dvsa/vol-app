@@ -22,10 +22,11 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationPsvOcTotalAuthReviewServiceTest extends MockeryTestCase
+final class VariationPsvOcTotalAuthReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -50,136 +51,134 @@ class VariationPsvOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function dpGetConfigFromData(): array
+    public static function dpGetConfigFromData(): \Iterator
     {
-        return [
-            'without changes' => [
-                'data' => [
-                    'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
+        yield 'without changes' => [
+            'data' => [
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
+                'totAuthVehicles' => 10,
+                'licence' => [
                     'totAuthVehicles' => 10,
-                    'licence' => [
-                        'totAuthVehicles' => 10,
-                    ]
-                ],
-                'expected' => null,
+                ]
             ],
-            'with changes' => [
-                'data' => [
-                    'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
-                    'totAuthVehicles' => 10,
-                    'licence' => [
-                        'totAuthVehicles' => 20,
-                    ]
-                ],
-                'expected' => [
-                    'header' => 'review-operating-centres-authorisation-title',
-                    'multiItems' => [
-                        [
-                            [
-                                'label' => 'review-operating-centres-authorisation-vehicles',
-                                'value' => 'decreased from 20 to 10'
-                            ]
-                        ]
-                    ]
-                ],
+            'expected' => null,
+        ];
+        yield 'with changes' => [
+            'data' => [
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
+                'totAuthVehicles' => 10,
+                'licence' => [
+                    'totAuthVehicles' => 20,
+                ]
             ],
-            'with changes - standard international' => [
-                'data' => [
-                    'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-                    'totAuthVehicles' => 10,
-                    'totCommunityLicences' => 5,
-                    'licence' => [
-                        'totAuthVehicles' => 20,
-                        'totCommunityLicences' => 1,
-                        ]
-                ],
-                'expected' => [
-                    'header' => 'review-operating-centres-authorisation-title',
-                    'multiItems' => [
+            'expected' => [
+                'header' => 'review-operating-centres-authorisation-title',
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'review-operating-centres-authorisation-vehicles',
-                                'value' => 'decreased from 20 to 10'
-                            ],
-                            [
-                                'label' => 'review-operating-centres-authorisation-community-licences',
-                                'value' => 'increased from 1 to 5'
-                            ]
+                            'label' => 'review-operating-centres-authorisation-vehicles',
+                            'value' => 'decreased from 20 to 10'
                         ]
                     ]
-                ],
+                ]
             ],
-            'with changes - restricted' => [
-                'data' => [
-                    'licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED],
-                    'totAuthVehicles' => 10,
-                    'totCommunityLicences' => 5,
-                    'licence' => [
-                        'totAuthVehicles' => 20,
-                        'totCommunityLicences' => 1,
-                        ]
-                ],
-                'expected' => [
-                    'header' => 'review-operating-centres-authorisation-title',
-                    'multiItems' => [
-                        [
-                            [
-                                'label' => 'review-operating-centres-authorisation-vehicles',
-                                'value' => 'decreased from 20 to 10'
-                            ],
-                            [
-                                'label' => 'review-operating-centres-authorisation-community-licences',
-                                'value' => 'increased from 1 to 5'
-                            ]
-                        ]
+        ];
+        yield 'with changes - standard international' => [
+            'data' => [
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+                'totAuthVehicles' => 10,
+                'totCommunityLicences' => 5,
+                'licence' => [
+                    'totAuthVehicles' => 20,
+                    'totCommunityLicences' => 1,
                     ]
-                ],
             ],
-            'with changes to zero' => [
-                'data' => [
-                    'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
-                    'totAuthVehicles' => 0,
-                    'licence' => [
-                        'totAuthVehicles' => 20,
-                    ]
-                ],
-                'expected' => [
-                    'header' => 'review-operating-centres-authorisation-title',
-                    'multiItems' => [
+            'expected' => [
+                'header' => 'review-operating-centres-authorisation-title',
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'review-operating-centres-authorisation-vehicles',
-                                'value' => 'decreased from 20 to 0'
-                            ]
+                            'label' => 'review-operating-centres-authorisation-vehicles',
+                            'value' => 'decreased from 20 to 10'
+                        ],
+                        [
+                            'label' => 'review-operating-centres-authorisation-community-licences',
+                            'value' => 'increased from 1 to 5'
                         ]
                     ]
-                ],
+                ]
             ],
-            'with changes to zero - standard international' => [
-                'data' => [
-                    'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-                    'totAuthVehicles' => 0,
-                    'totCommunityLicences' => 0,
-                    'licence' => [
-                        'totAuthVehicles' => 20,
-                        'totCommunityLicences' => 1,
-                        ]
-                ],
-                'expected' => [
-                    'header' => 'review-operating-centres-authorisation-title',
-                    'multiItems' => [
+        ];
+        yield 'with changes - restricted' => [
+            'data' => [
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED],
+                'totAuthVehicles' => 10,
+                'totCommunityLicences' => 5,
+                'licence' => [
+                    'totAuthVehicles' => 20,
+                    'totCommunityLicences' => 1,
+                    ]
+            ],
+            'expected' => [
+                'header' => 'review-operating-centres-authorisation-title',
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'review-operating-centres-authorisation-vehicles',
-                                'value' => 'decreased from 20 to 0'
-                            ],
-                            [
-                                'label' => 'review-operating-centres-authorisation-community-licences',
-                                'value' => 'decreased from 1 to 0'
-                            ]
+                            'label' => 'review-operating-centres-authorisation-vehicles',
+                            'value' => 'decreased from 20 to 10'
+                        ],
+                        [
+                            'label' => 'review-operating-centres-authorisation-community-licences',
+                            'value' => 'increased from 1 to 5'
                         ]
                     ]
-                ],
+                ]
+            ],
+        ];
+        yield 'with changes to zero' => [
+            'data' => [
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
+                'totAuthVehicles' => 0,
+                'licence' => [
+                    'totAuthVehicles' => 20,
+                ]
+            ],
+            'expected' => [
+                'header' => 'review-operating-centres-authorisation-title',
+                'multiItems' => [
+                    [
+                        [
+                            'label' => 'review-operating-centres-authorisation-vehicles',
+                            'value' => 'decreased from 20 to 0'
+                        ]
+                    ]
+                ]
+            ],
+        ];
+        yield 'with changes to zero - standard international' => [
+            'data' => [
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+                'totAuthVehicles' => 0,
+                'totCommunityLicences' => 0,
+                'licence' => [
+                    'totAuthVehicles' => 20,
+                    'totCommunityLicences' => 1,
+                    ]
+            ],
+            'expected' => [
+                'header' => 'review-operating-centres-authorisation-title',
+                'multiItems' => [
+                    [
+                        [
+                            'label' => 'review-operating-centres-authorisation-vehicles',
+                            'value' => 'decreased from 20 to 0'
+                        ],
+                        [
+                            'label' => 'review-operating-centres-authorisation-community-licences',
+                            'value' => 'decreased from 1 to 0'
+                        ]
+                    ]
+                ]
             ],
         ];
     }

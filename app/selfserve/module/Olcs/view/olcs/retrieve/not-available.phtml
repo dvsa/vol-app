@@ -1,0 +1,23 @@
+<?php
+/**
+ * Retrieve a document - neutral "link no longer available" page.
+ *
+ * Deliberately non-committal: this same page is shown for unknown, expired, revoked or otherwise
+ * invalid links so that it cannot be used to probe which links exist.
+ */
+$title = $this->translate('retrieve-document.not-available.title');
+$this->placeholder('pageTitle')->set($title);
+
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $title,
+    ]
+);
+?>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <p class="govuk-body"><?php echo $this->translate('retrieve-document.not-available.body'); ?></p>
+    </div>
+</div>

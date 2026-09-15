@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
+use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
+use Dvsa\Olcs\Api\Domain\Repository\SystemParameter as SystemParameterRepo;
+use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\DiscList;
 use Dvsa\Olcs\Api\Service\Document\Parser\RtfParser;
 use Mockery as m;
@@ -13,7 +16,7 @@ use Mockery as m;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
+final class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testGetQuery(): void
     {
@@ -213,5 +216,143 @@ class DiscListTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $result = $bookmark->render();
         $this->assertEquals('foobarbaz', $result);
+    }
+
+    public function testRenderWithPinnedLayoutToggleOnIncludesAlignmentTokens(): void
+    {
+        $data = [[
+            'isCopy' => 'N',
+            'discNo' => 1,
+            'licenceVehicle' => [
+                'licence' => [
+                    'organisation' => ['name' => 'Org'],
+                    'tradingNames' => [],
+                    'licNo' => 'L1',
+                    'expiryDate' => '2027-01-01',
+                ],
+                'vehicle' => ['vrm' => 'VRM1'],
+                'interimApplication' => null,
+            ],
+        ]];
+
+        $sysParamRepo = m::mock(SystemParameterRepo::class);
+        $sysParamRepo->shouldReceive('fetchIsEnabled')
+            ->with(SystemParameter::GOODS_DISC_PINNED_LAYOUT)->andReturn(true);
+        $values = [
+            SystemParameter::GOODS_DISC_LINE_SPACING => 260,
+            SystemParameter::GOODS_DISC_LAST_ROW_HEIGHT => 400,
+            SystemParameter::GOODS_DISC_ROW_HEIGHT => 2600,
+        ];
+        $sysParamRepo->shouldReceive('fetchNumericValue')
+            ->andReturnUsing(static fn (string $key, int $default): int => $values[$key] ?? $default);
+
+        $repoManager = m::mock(RepositoryServiceManager::class);
+        $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
+
+        $parser = m::mock(RtfParser::class);
+        $parser->shouldReceive('replace')
+            ->with('snippet', m::on(static fn(array $tokens): bool => ($tokens['LINE_SPACING'] ?? null) === '260'
+                && in_array($tokens['ROW_HEIGHT'] ?? null, [2600, 400], true)))
+            ->times(3)
+            ->andReturn('chunk');
+
+        $bookmark = $this->createPartialMock(DiscList::class, ['getSnippet']);
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
+        $bookmark->setRepoManager($repoManager);
+        $bookmark->setData($data);
+        $bookmark->setParser($parser);
+
+        $this->assertSame('chunkchunkchunk', $bookmark->render());
+    }
+
+    public function testRenderWithPinnedLayoutEmitsPageBreakBetweenPages(): void
+    {
+        // 12 discs = 6 row chunks = 2 pages of 3 chunks; pinned layout must
+        // emit exactly one hard page break between the two page groups
+        $disc = [
+            'isCopy' => 'N',
+            'discNo' => 1,
+            'licenceVehicle' => [
+                'licence' => [
+                    'organisation' => ['name' => 'Org'],
+                    'tradingNames' => [],
+                    'licNo' => 'L1',
+                    'expiryDate' => '2027-01-01',
+                ],
+                'vehicle' => ['vrm' => 'VRM1'],
+                'interimApplication' => null,
+            ],
+        ];
+        $data = array_fill(0, 12, $disc);
+
+        $sysParamRepo = m::mock(SystemParameterRepo::class);
+        $sysParamRepo->shouldReceive('fetchIsEnabled')->andReturn(true);
+        $sysParamRepo->shouldReceive('fetchNumericValue')
+            ->andReturnUsing(static fn (string $key, int $default): int => $default);
+
+        $repoManager = m::mock(RepositoryServiceManager::class);
+        $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
+
+        $parser = m::mock(RtfParser::class);
+        $parser->shouldReceive('replace')->times(6)->andReturn('[ROW]');
+
+        $bookmark = $this->createPartialMock(DiscList::class, ['getSnippet']);
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
+        $bookmark->setRepoManager($repoManager);
+        $bookmark->setData($data);
+        $bookmark->setParser($parser);
+
+        $this->assertSame(
+            str_repeat('[ROW]', 3) . '\pard\plain\sl-1\slmult0\fs1\pagebb\par ' . str_repeat('[ROW]', 3),
+            $bookmark->render()
+        );
+    }
+
+    public function testRenderWithPinnedLayoutToggleOffOmitsAlignmentTokens(): void
+    {
+        $data = [[
+            'isCopy' => 'N',
+            'discNo' => 1,
+            'licenceVehicle' => [
+                'licence' => [
+                    'organisation' => ['name' => 'Org'],
+                    'tradingNames' => [],
+                    'licNo' => 'L1',
+                    'expiryDate' => '2027-01-01',
+                ],
+                'vehicle' => ['vrm' => 'VRM1'],
+                'interimApplication' => null,
+            ],
+        ]];
+
+        $sysParamRepo = m::mock(SystemParameterRepo::class);
+        $sysParamRepo->shouldReceive('fetchIsEnabled')
+            ->with(SystemParameter::GOODS_DISC_PINNED_LAYOUT)->andReturn(false);
+
+        $repoManager = m::mock(RepositoryServiceManager::class);
+        $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
+
+        // Render with 1 real disc gets padded to 6 placeholders, so the
+        // parser is invoked once per (PER_ROW = 2) chunk i.e. 3 times. Each
+        // chunk should carry ROW_HEIGHT (legacy constant) and no
+        // LINE_SPACING when the toggle is off.
+        $parser = m::mock(RtfParser::class);
+        $parser->shouldReceive('replace')
+            ->with('snippet', m::on(static function (array $tokens): bool {
+                if (array_key_exists('LINE_SPACING', $tokens)) {
+                    return false;
+                }
+                return in_array($tokens['ROW_HEIGHT'] ?? null, [DiscList::ROW_HEIGHT, DiscList::LAST_ROW_HEIGHT], true);
+            }))
+            ->times(3)
+            ->andReturn('chunk');
+
+        $bookmark = $this->createPartialMock(DiscList::class, ['getSnippet']);
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
+        $bookmark->setRepoManager($repoManager);
+        $bookmark->setData($data);
+        $bookmark->setParser($parser);
+
+        $this->assertSame('chunkchunkchunk', $bookmark->render());
     }
 }

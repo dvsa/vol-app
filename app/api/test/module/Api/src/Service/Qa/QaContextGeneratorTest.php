@@ -21,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class QaContextGeneratorTest extends MockeryTestCase
+final class QaContextGeneratorTest extends MockeryTestCase
 {
     private $slug = 'removals-eligibility';
 
@@ -33,20 +33,19 @@ class QaContextGeneratorTest extends MockeryTestCase
 
     private $applicationStepRepo;
 
-    private $qaEntityProvider;
-
     private $qaContextFactory;
 
     private $qaContextGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->qaEntity = m::mock(QaEntityInterface::class);
 
         $this->applicationStepRepo = m::mock(ApplicationStepRepo::class);
 
-        $this->qaEntityProvider = m::mock(QaEntityProvider::class);
-        $this->qaEntityProvider->shouldReceive('get')
+        $qaEntityProvider = m::mock(QaEntityProvider::class);
+        $qaEntityProvider->shouldReceive('get')
             ->with($this->irhpApplicationId, $this->irhpPermitApplicationId)
             ->andReturn($this->qaEntity);
 
@@ -54,14 +53,16 @@ class QaContextGeneratorTest extends MockeryTestCase
 
         $this->qaContextGenerator = new QaContextGenerator(
             $this->applicationStepRepo,
-            $this->qaEntityProvider,
+            $qaEntityProvider,
             $this->qaContextFactory
         );
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
-    public function testGenerate(mixed $previousApplicationStep, mixed $qaEntityAnswer): void
+    public function testGenerate(bool $hasPreviousApplicationStep, mixed $qaEntityAnswer): void
     {
+        $previousApplicationStep = $hasPreviousApplicationStep ? m::mock(ApplicationStep::class) : null;
+
         $applicationPathId = 44;
 
         $applicationPath = m::mock(ApplicationPath::class);
@@ -105,12 +106,10 @@ class QaContextGeneratorTest extends MockeryTestCase
         $this->assertSame($qaContext, $returnedQaContext);
     }
 
-    public static function dpTestGenerate(): array
+    public static function dpTestGenerate(): \Iterator
     {
-        return [
-            [null, null],
-            [m::mock(ApplicationStep::class), '128']
-        ];
+        yield [false, null];
+        yield [true, '128'];
     }
 
     public function testExceptionOnApplicationPathNotEnabled(): void

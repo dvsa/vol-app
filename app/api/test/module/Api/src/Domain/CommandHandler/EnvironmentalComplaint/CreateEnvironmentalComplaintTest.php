@@ -35,7 +35,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class CreateEnvironmentalComplaintTest extends AbstractCommandHandlerTestCase
+final class CreateEnvironmentalComplaintTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

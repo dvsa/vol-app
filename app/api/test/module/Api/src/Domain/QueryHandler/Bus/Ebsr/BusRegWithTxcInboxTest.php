@@ -27,7 +27,7 @@ use Mockery as m;
  * Tests include for LA, operator and anonymous users querying bus regs that exist and dont exist
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class BusRegWithTxcInboxTest extends QueryHandlerTestCase
+final class BusRegWithTxcInboxTest extends QueryHandlerTestCase
 {
     /**
      * Set up repos and services

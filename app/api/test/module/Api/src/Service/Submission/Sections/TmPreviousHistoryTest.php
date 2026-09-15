@@ -8,18 +8,18 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
  * Class TmPreviousHistoryTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class TmPreviousHistoryTest extends AbstractSubmissionSectionTestCase
+final class TmPreviousHistoryTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\TmPreviousHistory::class;
 
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
         $expectedResult = [
             'data' => [
@@ -46,8 +46,6 @@ class TmPreviousHistoryTest extends AbstractSubmissionSectionTestCase
             ]
         ];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
  *
  * Initially auto-generated but won't be overridden
  */
-class LetterTypeEntityTest extends EntityTester
+final class LetterTypeEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

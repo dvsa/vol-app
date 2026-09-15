@@ -44,10 +44,40 @@ class LetterTypeController extends AbstractInternalController implements LeftVie
     protected $editSuccessMessage = 'Letter type updated successfully';
 
     protected $inlineScripts = [
-        'indexAction' => ['table-actions'],
+        'indexAction' => ['table-actions', 'forms/letter-type-index'],
         'addAction' => ['forms/letter-type'],
         'editAction' => ['forms/letter-type'],
     ];
+
+    protected $crudConfig = [
+        'builder' => ['requireRows' => true],
+    ];
+
+    /**
+     * Open the selected letter type in the builder.
+     *
+     * The builder is reached from a row rather than the side menu because it has nothing to show
+     * without a letter type -- a menu entry could only ever land on an empty screen. The table
+     * marks this action js-require--one, so exactly one row is selected by the time we get here.
+     */
+    public function builderAction()
+    {
+        $ids = explode(',', (string) $this->params()->fromRoute('id'));
+        $letterTypeId = (int) reset($ids);
+
+        if ($letterTypeId === 0) {
+            $this->flashMessengerHelperService->addErrorMessage('Select a letter type to open in the builder');
+
+            return $this->redirect()->toRoute('admin-dashboard/admin-letter-type', ['action' => 'index'], [], false);
+        }
+
+        return $this->redirect()->toRoute(
+            'admin-dashboard/admin-letter-type-builder',
+            ['action' => 'index', 'id' => $letterTypeId],
+            [],
+            false
+        );
+    }
 
     #[\Override]
     public function getLeftView(): ViewModel

@@ -18,7 +18,7 @@ class UpdateDetailsFactory implements FactoryInterface
      * @return UpdateDetails
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $acquiredServiceService = $container->get(AcquiredRightsService::class);
         $instance = new UpdateDetails($acquiredServiceService);

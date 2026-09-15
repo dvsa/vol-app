@@ -287,7 +287,7 @@ class FeesHelperService implements FactoryInterface
         ];
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $repoManager = $container->get('RepositoryServiceManager');
         // inject required repos

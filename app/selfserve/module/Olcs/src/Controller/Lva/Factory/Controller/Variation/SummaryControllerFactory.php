@@ -17,7 +17,7 @@ class SummaryControllerFactory implements FactoryInterface
      * @return SummaryController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SummaryController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SummaryController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

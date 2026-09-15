@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SendContinuationNotSoughtTest extends AbstractConsumerTestCase
+final class SendContinuationNotSoughtTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 

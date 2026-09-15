@@ -23,8 +23,9 @@ use Doctrine\DBAL\LockMode;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class LicenceStatusRuleTest extends RepositoryTestCase
+final class LicenceStatusRuleTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

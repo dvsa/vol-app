@@ -132,7 +132,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusRegId
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BusRegId
     {
         $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));
         $this->setQueryService($container->get('QueryService'));

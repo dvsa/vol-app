@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "DVSA bank statement extraction for VOL operator licensing analysis. Output is consumed by the bank-statement-quality-check Bedrock Prompt. Balances and transaction amounts are emitted as SIGNED numbers - negative values indicate debit/overdrawn - so overdraft state flows through as data rather than being reconstructed by the analysis prompt.",
+  "class": "Bank-Statement",
+  "type": "object",
+  "definitions": {
+    "transactions": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "inferenceType": "inferred",
+          "instruction": "Transaction date in ISO 8601 format (YYYY-MM-DD). If only day/month is shown on the statement, infer the year from the statement period."
+        },
+        "description": {
+          "type": "string",
+          "inferenceType": "explicit",
+          "instruction": "Full transaction description / reference line as shown on the statement."
+        },
+        "amount": {
+          "type": "number",
+          "inferenceType": "explicit",
+          "instruction": "Signed transaction amount. POSITIVE for money in (credits, deposits, transfers in, interest received). NEGATIVE for money out (debits, payments, withdrawals, transfers out, fees). Determine direction from the column the amount appears in, any '+'/'-' sign, or by comparing running balances before and after."
+        },
+        "running_balance": {
+          "type": "number",
+          "inferenceType": "explicit",
+          "instruction": "Signed running balance after this transaction is applied. POSITIVE when the account is in credit. NEGATIVE when the account is overdrawn (indicated by 'D', 'DR', 'OD' suffix, a minus sign, parentheses around the amount, or wording such as 'overdrawn')."
+        }
+      }
+    }
+  },
+  "properties": {
+    "bank_name": {
+      "type": "string",
+      "inferenceType": "explicit",
+      "instruction": "The bank or building society name as shown on the letterhead or bank logo area (e.g. 'Lloyds Bank', 'HSBC UK', 'Nationwide Building Society')."
+    },
+    "currency": {
+      "type": "string",
+      "inferenceType": "inferred",
+      "instruction": "ISO 4217 currency code. Output 'GBP' for pound sterling, 'USD' for US dollar, 'EUR' for euro, etc. Detect from balance/transaction symbols or explicit currency declarations on the statement."
+    },
+    "account_holder_name": {
+      "type": "string",
+      "inferenceType": "explicit",
+      "instruction": "Full account holder name as shown on the statement. Search order: (1) any explicit 'Account Name' or 'Account Holder' field; (2) the correspondence/address block, SKIPPING any 'FAO' (For the Attention Of) line - the FAO line is the recipient of the post, not the account holder. Preserve title (Mr/Mrs/Ms/Dr) and full forenames if shown."
+    },
+    "account_holder_address": {
+      "type": "string",
+      "inferenceType": "explicit",
+      "instruction": "Full mailing address block for the account holder, multi-line, with line breaks preserved."
+    },
+    "trading_name": {
+      "type": "string",
+      "inferenceType": "explicit",
+      "instruction": "Trading name if shown separately from the account holder name. Typically appears as 'T/A <name>' or 'Trading as <name>'. Leave empty if not present."
+    },
+    "account_number": {
+      "type": "string",
+      "inferenceType": "explicit",
+      "instruction": "Account number, digits only, no spaces or punctuation. For UK accounts this is typically 8 digits."
+    },
+    "sort_code": {
+      "type": "string",
+      "inferenceType": "explicit",
+      "instruction": "UK sort code in the form 'XX-XX-XX'. If shown without hyphens, insert them to normalise."
+    },
+    "iban": {
+      "type": "string",
+      "inferenceType": "explicit",
+      "instruction": "International Bank Account Number if shown on the statement. Strip all spaces. Uppercase the country code. Leave empty if not present."
+    },
+    "swift_bic": {
+      "type": "string",
+      "inferenceType": "explicit",
+      "instruction": "SWIFT / BIC code if shown on the statement. Leave empty if not present."
+    },
+    "statement_period_start": {
+      "type": "string",
+      "inferenceType": "inferred",
+      "instruction": "Statement period start date in ISO 8601 format (YYYY-MM-DD). Convert from any display format on the statement."
+    },
+    "statement_period_end": {
+      "type": "string",
+      "inferenceType": "inferred",
+      "instruction": "Statement period end date in ISO 8601 format (YYYY-MM-DD). Convert from any display format on the statement."
+    },
+    "opening_balance": {
+      "type": "number",
+      "inferenceType": "explicit",
+      "instruction": "Signed opening balance for the statement period. POSITIVE when in credit. NEGATIVE when overdrawn - indicated on the statement by markers 'D', 'DR', 'OD', a minus sign, parentheses around the amount, or wording such as 'overdrawn'. Always include the sign in the output."
+    },
+    "closing_balance": {
+      "type": "number",
+      "inferenceType": "explicit",
+      "instruction": "Signed closing balance at the end of the statement period. POSITIVE when in credit. NEGATIVE when overdrawn - indicated by markers 'D', 'DR', 'OD', a minus sign, parentheses, or wording such as 'overdrawn'. Always include the sign in the output."
+    },
+    "arranged_overdraft_limit": {
+      "type": "number",
+      "inferenceType": "explicit",
+      "instruction": "The agreed/arranged overdraft facility limit, as a positive number. Look for 'Arranged Overdraft', 'Agreed Overdraft', 'Overdraft Limit', 'Authorised Overdraft'. Output 0 if no overdraft facility is shown on the statement."
+    },
+    "total_money_in": {
+      "type": "number",
+      "inferenceType": "explicit",
+      "instruction": "Sum of all credits/money-in during the statement period, as shown in the statement summary. Positive number. Leave as 0 if not stated."
+    },
+    "total_money_out": {
+      "type": "number",
+      "inferenceType": "explicit",
+      "instruction": "Sum of all debits/money-out during the statement period, as shown in the statement summary. Positive number. Leave as 0 if not stated."
+    },
+    "transactions": {
+      "type": "array",
+      "instruction": "-",
+      "items": { "$ref": "#/definitions/transactions" }
+    }
+  }
+}

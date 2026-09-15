@@ -22,7 +22,7 @@ use Dvsa\Olcs\Transfer\Query\Document\Document as Qry;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DocumentTest extends QueryHandlerTestCase
+final class DocumentTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

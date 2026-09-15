@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Service\DvlaSearch\Exception\BadResponseException;
 use Dvsa\Olcs\Api\Service\DvlaSearch\Mapper\DvlaVehicleResponseToModelMapper;
 use PHPUnit\Framework\TestCase;
 
-class DvlaVehicleResponseToModelMapperTest extends TestCase
+final class DvlaVehicleResponseToModelMapperTest extends TestCase
 {
     /**
      * @var DvlaVehicleResponseToModelMapper
@@ -92,7 +92,7 @@ class DvlaVehicleResponseToModelMapperTest extends TestCase
         $this->assertSame('12', $result->getTaxDueDate()->format('m'));
         $this->assertSame('25', $result->getTaxDueDate()->format('d'));
 
-        $this->assertNull($result->getArtEndDate());
+        $this->assertNotInstanceOf(\DateTime::class, $result->getArtEndDate());
 
         $this->assertInstanceOf(\DateTime::class, $result->getMonthOfFirstDvlaRegistration());
         $this->assertSame('2011', $result->getMonthOfFirstDvlaRegistration()->format('Y'));

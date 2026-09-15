@@ -16,7 +16,7 @@ class QuestionArrayProviderFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): QuestionArrayProvider
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): QuestionArrayProvider
     {
         return new QuestionArrayProvider(
             $container->get('QaFormattedTranslateableTextParametersGenerator')

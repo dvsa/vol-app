@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Undertakings;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class UndertakingsTest extends \PHPUnit\Framework\TestCase
+final class UndertakingsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

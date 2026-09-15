@@ -10,6 +10,7 @@
  * @var array $groupedIssues Issues grouped by type: [typeId => ['typeName' => ..., 'issues' => [...]]]
  * @var array $groupedAppendices Editable appendices to render
  * @var array $groupedSections Editable letter instance sections to render
+ * @var array $groupedTodos Editable to-dos to render
  */
 ?>
 
@@ -78,6 +79,49 @@
                         class="govuk-button save-section-btn"
                         data-section-id="<?= $this->escapeHtmlAttr($section['id']) ?>"
                         data-version="<?= $this->escapeHtmlAttr($section['version']) ?>">
+                    Save changes
+                </button>
+                <span class="save-indicator govuk-tag govuk-tag--green" style="display: none; margin-left: 10px;">
+                    Saved
+                </span>
+            </div>
+        </div>
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <?php endforeach; ?>
+<?php endif; ?>
+
+<?php if (!empty($groupedTodos)): ?>
+    <?php // The heading the rendered letter uses for these, so the editor matches the output. ?>
+    <h2 class="govuk-heading-m">What you need to do</h2>
+
+    <?php foreach ($groupedTodos as $todo): ?>
+        <div class="govuk-form-group todo-editor-group"
+             data-todo-id="<?= $this->escapeHtmlAttr($todo['id']) ?>"
+             data-version="<?= $this->escapeHtmlAttr($todo['version']) ?>">
+            <h3 class="govuk-heading-s"><?= $this->escapeHtml($todo['name']) ?></h3>
+
+            <?php // A to-do is deduplicated, so one shared by several issues appears once, under
+                  // whichever issue came first. Say so, or an edit here looks narrower than it is. ?>
+            <?php if (($todo['requiringIssueCount'] ?? 1) > 1): ?>
+                <p class="govuk-inset-text govuk-!-margin-top-0">
+                    This to-do is required by <?= $this->escapeHtml($todo['requiringIssueCount']) ?>
+                    issues in this letter. Editing it here changes it once, wherever it appears.
+                </p>
+            <?php endif; ?>
+
+            <div class="editorjs-container" data-element-name="todo_<?= $this->escapeHtmlAttr($todo['id']) ?>">
+                <div id="editor-todo-<?= $this->escapeHtmlAttr($todo['id']) ?>" class="editorjs-editor"></div>
+                <input type="hidden"
+                       name="todo_<?= $this->escapeHtmlAttr($todo['id']) ?>"
+                       value="<?= $this->escapeHtmlAttr($todo['content']) ?>">
+            </div>
+
+            <div style="margin-top: 10px;">
+                <button type="button"
+                        class="govuk-button save-todo-btn"
+                        data-todo-id="<?= $this->escapeHtmlAttr($todo['id']) ?>"
+                        data-version="<?= $this->escapeHtmlAttr($todo['version']) ?>">
                     Save changes
                 </button>
                 <span class="save-indicator govuk-tag govuk-tag--green" style="display: none; margin-left: 10px;">

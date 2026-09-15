@@ -17,9 +17,9 @@ use Dvsa\Olcs\Transfer\Command\Variation\GrantDirectorChange as Command;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class GrantDirectorChangeTest extends AbstractCommandHandlerTestCase
+final class GrantDirectorChangeTest extends AbstractCommandHandlerTestCase
 {
-    public const TEST_VARIATION_ID = 'TEST_VARIATION_ID';
+    public const string TEST_VARIATION_ID = 'TEST_VARIATION_ID';
 
     public function setUp(): void
     {

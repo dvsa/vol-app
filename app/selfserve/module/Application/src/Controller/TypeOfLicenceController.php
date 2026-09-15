@@ -74,7 +74,7 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
      * @param string $titleSuffix
      * @return \Common\View\Model\Section
      */
-    protected function renderCreateApplication($titleSuffix, Form $form = null)
+    protected function renderCreateApplication($titleSuffix, ?Form $form = null)
     {
         return new Section(
             [

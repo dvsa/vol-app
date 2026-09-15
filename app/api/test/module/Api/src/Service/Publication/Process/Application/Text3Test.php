@@ -22,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class Text3Test
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class Text3Test extends MockeryTestCase
+final class Text3Test extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProcessSection')]
     public function testProcessSection(mixed $expectTextSet, mixed $sectionId): void
@@ -54,15 +54,13 @@ class Text3Test extends MockeryTestCase
         }
     }
 
-    public static function dataProviderTestProcessSection(): array
+    public static function dataProviderTestProcessSection(): \Iterator
     {
-        return [
-            [true, PublicationSection::APP_NEW_SECTION],
-            [true, PublicationSection::APP_GRANTED_SECTION],
-            [false, PublicationSection::APP_GRANT_NOT_TAKEN_SECTION],
-            [false, PublicationSection::APP_REFUSED_SECTION],
-            [false, PublicationSection::APP_WITHDRAWN_SECTION],
-        ];
+        yield [true, PublicationSection::APP_NEW_SECTION];
+        yield [true, PublicationSection::APP_GRANTED_SECTION];
+        yield [false, PublicationSection::APP_GRANT_NOT_TAKEN_SECTION];
+        yield [false, PublicationSection::APP_REFUSED_SECTION];
+        yield [false, PublicationSection::APP_WITHDRAWN_SECTION];
     }
 
     public function testProcessOc(): void

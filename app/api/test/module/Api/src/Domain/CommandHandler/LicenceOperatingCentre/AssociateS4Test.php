@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
 /**
  * Class AssociateS4Test
  */
-class AssociateS4Test extends AbstractCommandHandlerTestCase
+final class AssociateS4Test extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

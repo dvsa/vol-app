@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class S43RequestorNameBodyAddressTest extends TestCase
+final class S43RequestorNameBodyAddressTest extends TestCase
 {
     public function testAlias(): void
     {

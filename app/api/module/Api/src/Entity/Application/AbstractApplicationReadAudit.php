@@ -19,21 +19,14 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="application_read_audit",
- *    indexes={
- *        @ORM\Index(name="ix_application_read_audit_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_application_read_audit_created_on", columns={"created_on"}),
- *        @ORM\Index(name="ix_application_read_audit_user_id", columns={"user_id"}),
- *        @ORM\Index(name="uk_application_read_audit_application_id_user_id_created_on", columns={"application_id", "user_id", "created_on"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_application_read_audit_application_id_user_id_created_on", columns={"application_id", "user_id", "created_on"})
- *    }
- * )
  */
+#[ORM\Table(name: 'application_read_audit')]
+#[ORM\Index(name: 'ix_application_read_audit_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_application_read_audit_created_on', columns: ['created_on'])]
+#[ORM\Index(name: 'ix_application_read_audit_user_id', columns: ['user_id'])]
+#[ORM\UniqueConstraint(name: 'uk_application_read_audit_application_id_user_id_created_on', columns: ['application_id', 'user_id', 'created_on'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractApplicationReadAudit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,31 +38,28 @@ abstract class AbstractApplicationReadAudit implements BundleSerializableInterfa
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'readAudits', fetch: 'LAZY')]
     protected $application;
 
     /**
      * Foreign Key to user
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
     /**
@@ -93,7 +83,7 @@ abstract class AbstractApplicationReadAudit implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return ApplicationReadAudit
+     * @return static
      */
     public function setId($id)
     {
@@ -117,7 +107,7 @@ abstract class AbstractApplicationReadAudit implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return ApplicationReadAudit
+     * @return static
      */
     public function setApplication($application)
     {
@@ -141,7 +131,7 @@ abstract class AbstractApplicationReadAudit implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return ApplicationReadAudit
+     * @return static
      */
     public function setUser($user)
     {

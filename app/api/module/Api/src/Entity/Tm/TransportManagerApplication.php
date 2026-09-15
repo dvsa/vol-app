@@ -10,22 +10,16 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 
 /**
  * TransportManagerApplication Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="transport_manager_application",
- *    indexes={
- *        @ORM\Index(name="ix_transport_manager_application_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="ix_transport_manager_application_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_transport_manager_application_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_transport_manager_application_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_transport_manager_application_tm_type", columns={"tm_type"}),
- *        @ORM\Index(name="ix_transport_manager_application_tm_application_status", columns={"tm_application_status"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_transport_manager_application_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'transport_manager_application')]
+#[ORM\Index(name: 'ix_transport_manager_application_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\Index(name: 'ix_transport_manager_application_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_transport_manager_application_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_transport_manager_application_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_transport_manager_application_tm_type', columns: ['tm_type'])]
+#[ORM\Index(name: 'ix_transport_manager_application_tm_application_status', columns: ['tm_application_status'])]
+#[ORM\UniqueConstraint(name: 'uk_transport_manager_application_olbs_key', columns: ['olbs_key'])]
+#[ORM\Entity]
 class TransportManagerApplication extends AbstractTransportManagerApplication implements OrganisationProviderInterface
 {
     public const ACTION_ADD    = 'A';

@@ -5,6 +5,19 @@ locals {
 
   supporting_service_names = ["liquibase"]
 
+  task_exec_iam_role_statements = [
+    {
+      effect = "Allow"
+      actions = [
+        "secretsmanager:GetSecretValue"
+      ]
+      resources = [
+        data.aws_secretsmanager_secret.this["api"].arn,
+        data.aws_secretsmanager_secret.infra.arn
+      ]
+    },
+  ]
+
   task_iam_role_statements = [
     {
       effect = "Allow"
@@ -27,10 +40,28 @@ locals {
     {
       effect = "Allow"
       actions = [
+        "events:PutEvents"
+      ]
+      resources = [
+        "arn:aws:events:eu-west-1:054614622558:event-bus/default"
+      ]
+      conditions = [
+        {
+          test     = "StringEquals"
+          variable = "events:source"
+          values   = ["vol.api"]
+        }
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::000081644369:role/txc-int-consumer-role"
+        "arn:aws:iam::000081644369:role/txc-int-consumer-role",
+        "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole",
+        "arn:aws:iam::054614622558:role/OLCS-DEVAPPCI-DEVCI-Cognito_Pool_Admin",
       ]
     },
     {
@@ -81,63 +112,116 @@ locals {
     {
       effect = "Allow"
       actions = [
-        "rds:CreateDBClusterSnapshot",
-        "rds:DescribeDBClusterSnapshots",
-        "rds:DeleteDBClusterSnapshot",
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3/*"
       ]
     },
     {
       effect = "Allow"
       actions = [
-        "rds:DescribeDBClusters",
+        "rds:CreateDBClusterSnapshot",
+        "rds:DescribeDBClusterSnapshots",
+        "rds:DeleteDBClusterSnapshot",
+        "rds:ModifyDBClusterSnapshotAttribute"
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-*"
+        "arn:aws:rds:eu-west-1:054614622558:cluster:dev-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-db-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:ni-extract-*",
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBClusters"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:dev-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*"
       ]
     },
     {
       effect = "Allow"
       actions = [
         "rds:RestoreDBClusterFromSnapshot",
+        "rds:AddTagsToResource"
       ]
       resources = [
         "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:ni-extract-*",
         "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:054614622558:subgrp:devappdev-olcs-rds-*"
       ]
     },
     {
       effect = "Allow"
       actions = [
-        "rds:CreateDBInstance",
-        "rds:DescribeDBInstances",
+        "rds:CreateDBInstance"
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*"
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:db:ni-extract-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBInstances"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:db:*",
       ]
     },
     {
       effect = "Allow"
       actions = [
         "rds:DeleteDBInstance",
-        "rds:DeleteDBCluster",
+        "rds:DeleteDBCluster"
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
         "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:db:ni-extract-*"
+      ]
+    },
+    # idp-store-document-analysis-result Batch job needs to retrieve the
+    # analysis result S3 location from the AnalyseFinancialDocument SM execution output,
+    # and fetch the result JSON from the IDP output bucket.
+    {
+      effect  = "Allow"
+      actions = ["states:DescribeExecution"]
+      resources = [
+        "arn:aws:states:eu-west-1:054614622558:execution:vol-idp-dev-analyse-financial-document:*"
       ]
     },
     {
       effect = "Allow"
       actions = [
-        "rds:ModifyDBClusterSnapshotAttribute"
+        "s3:ListBucket",
+        "s3:GetObject",
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
+        "arn:aws:s3:::vol-idp-dev-output",
+        "arn:aws:s3:::vol-idp-dev-output/*"
       ]
     }
+
   ]
 }
 
@@ -182,6 +266,10 @@ data "aws_secretsmanager_secret" "this" {
   name = "DEVAPPDEV-BASE-SM-APPLICATION-${upper(each.key)}"
 }
 
+data "aws_secretsmanager_secret" "infra" {
+  name = "DEVAPPDEV-BASE-SM-INFRA"
+}
+
 data "aws_cognito_user_pools" "this" {
   name = "DVSA-DEVAPPDEV-COGNITO-USERS"
 }
@@ -221,6 +309,8 @@ module "service" {
 
   legacy_environment = "DEV"
 
+  dva_ni_export_s3uri = module.parameters.dva_ni_export_s3uri
+
   domain_env = "dev"
 
   domain_name    = "dev-dvsacloud.uk"
@@ -240,6 +330,8 @@ module "service" {
       repository = data.aws_ecr_repository.this["api"].repository_url
 
       task_iam_role_statements = local.task_iam_role_statements
+
+      task_exec_iam_role_statements = local.task_exec_iam_role_statements
 
       subnet_ids = data.aws_subnets.this["API"].ids
 
@@ -381,6 +473,12 @@ module "service" {
     ]
 
     jobs = [
+      {
+        name     = "retrieval-link-purge",
+        commands = ["batch:retrieval-link-purge"],
+        timeout  = 3600,
+        schedule = ["cron(30 03 * * ? *)"],
+      },
       {
         name     = "cache-clear",
         commands = ["batch:cache-clear", "--flush-all", "--force"],
@@ -542,6 +640,21 @@ module "service" {
         commands = ["batch:system-parameter"],
       },
       {
+        name     = "idp-sweep-stale-document-analysis",
+        commands = ["idp:sweep-stale-document-analysis"],
+        timeout  = 300,
+        schedule = ["cron(15 * * * ? *)"],
+      },
+      {
+        name = "idp-store-document-analysis-result",
+        commands = [
+          "idp:store-document-analysis-result",
+          "--analysis-token", "Ref::analysis_token",
+          "--execution-arn", "Ref::execution_arn",
+        ],
+        timeout = 300,
+      },
+      {
         name     = "cancel-unsubmitted-bilateral",
         commands = ["permits:cancel-unsubmitted-bilateral"],
       },
@@ -652,14 +765,11 @@ module "service" {
         type     = "scripts"
       },
       {
-        name     = "import-anondb",
-        commands = ["/mnt/data/scripts/import_anondb.sh"],
-        type     = "scripts"
-      },
-      {
         name     = "populate-anondb",
         commands = ["/mnt/data/scripts/populate_anondb.sh"],
         type     = "scripts"
+        cpu      = 2,
+        memory   = 8192,
       },
       {
         name     = "ni-compliance",
@@ -676,9 +786,18 @@ module "service" {
         name     = "data-refresh",
         commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "dev", "eu-west-1"],
         type     = "scripts"
-      },
+        cpu      = 2,
+        memory   = 8192,
+      }
     ]
   }
+}
+
+module "idp" {
+  source = "../../modules/idp"
+
+  environment           = "dev"
+  documents_bucket_name = "olcs-devappdev-base-sabredav"
 }
 
 resource "null_resource" "deployed_versions" {

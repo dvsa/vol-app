@@ -35,7 +35,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\EndInterim as EndInterimCmd;
  * @package Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class NotTakenUpApplicationTest extends AbstractCommandHandlerTestCase
+final class NotTakenUpApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -289,12 +289,12 @@ class NotTakenUpApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseTexTask::class,
             ['id' => 1],
-            (new Result())->addMessage('CLOSE_TEX_TASK')
+            new Result()->addMessage('CLOSE_TEX_TASK')
         );
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseFeeDueTask::class,
             ['id' => 1],
-            (new Result())->addMessage('CLOSE_FEEDUE_TASK')
+            new Result()->addMessage('CLOSE_FEEDUE_TASK')
         );
         $this->expectedSideEffect(
             \Dvsa\Olcs\Transfer\Command\Application\Schedule41Cancel::class,

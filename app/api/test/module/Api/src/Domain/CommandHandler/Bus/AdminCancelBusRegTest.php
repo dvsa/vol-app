@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Admin Cancel BusReg Test
  */
-class AdminCancelBusRegTest extends AbstractCommandHandlerTestCase
+final class AdminCancelBusRegTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

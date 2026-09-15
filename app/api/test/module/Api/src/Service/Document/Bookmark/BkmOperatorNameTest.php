@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BkmOperatorName as Sut;
 /**
  * BkmOperatorName Test
  */
-class BkmOperatorNameTest extends \PHPUnit\Framework\TestCase
+final class BkmOperatorNameTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -31,21 +31,19 @@ class BkmOperatorNameTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'organisation' => [
-                        'name' => 'org name'
-                    ]
-                ],
-                'org name'
+                'organisation' => [
+                    'name' => 'org name'
+                ]
             ],
-            [
-                [],
-                ''
-            ],
+            'org name'
+        ];
+        yield [
+            [],
+            ''
         ];
     }
 }

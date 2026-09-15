@@ -185,11 +185,9 @@ abstract class SendEbsrEmailTestAbstract extends AbstractCommandHandlerTestCase
         $this->assertSame('email.' . $this->template . '.subject', $message->getSubject());
     }
 
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            ['test@test.com', 'foo@bar.com', 'test@test.com', ['foo@bar.com'], static::CMD_CLASS],
-            ['',  'foo@bar.com', 'foo@bar.com', [], static::CMD_CLASS]
-        ];
+        yield ['test@test.com', 'foo@bar.com', 'test@test.com', ['foo@bar.com'], static::CMD_CLASS];
+        yield ['',  'foo@bar.com', 'foo@bar.com', [], static::CMD_CLASS];
     }
 }

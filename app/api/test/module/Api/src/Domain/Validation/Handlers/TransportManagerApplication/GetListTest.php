@@ -10,7 +10,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\TransportManagerApplication\GetList;
 
-class GetListTest extends AbstractHandlerTestCase
+final class GetListTest extends AbstractHandlerTestCase
 {
     /**
      * @var Delete
@@ -35,7 +35,7 @@ class GetListTest extends AbstractHandlerTestCase
 
         $mockApplicationValidator->shouldReceive('isValid')->with(24)->andReturn(true);
 
-        $this->assertSame(true, $this->sut->isValid($dto));
+        $this->assertTrue($this->sut->isValid($dto));
     }
 
     public function testIsValidApplicationFailed(): void
@@ -49,7 +49,7 @@ class GetListTest extends AbstractHandlerTestCase
 
         $mockApplicationValidator->shouldReceive('isValid')->with(24)->andReturn(false);
 
-        $this->assertSame(false, $this->sut->isValid($dto));
+        $this->assertFalse($this->sut->isValid($dto));
     }
 
     public function testIsValidUser(): void
@@ -62,7 +62,7 @@ class GetListTest extends AbstractHandlerTestCase
         $user = $this->mockUser();
         $user->shouldReceive('getId')->with()->once()->andReturn(11);
 
-        $this->assertSame(true, $this->sut->isValid($dto));
+        $this->assertTrue($this->sut->isValid($dto));
     }
 
     public function testIsValidUserFalse(): void
@@ -75,7 +75,7 @@ class GetListTest extends AbstractHandlerTestCase
         $user = $this->mockUser();
         $user->shouldReceive('getId')->with()->once()->andReturn(12);
 
-        $this->assertSame(false, $this->sut->isValid($dto));
+        $this->assertFalse($this->sut->isValid($dto));
     }
 
     public function testIsValidInternalUser(): void
@@ -87,7 +87,7 @@ class GetListTest extends AbstractHandlerTestCase
 
         $this->auth->shouldReceive('isGranted')->andReturn(true);
 
-        $this->assertSame(true, $this->sut->isValid($dto));
+        $this->assertTrue($this->sut->isValid($dto));
     }
 
     public function testIsValidInternalUserFalse(): void
@@ -99,6 +99,6 @@ class GetListTest extends AbstractHandlerTestCase
 
         $this->auth->shouldReceive('isGranted')->andReturn(false);
 
-        $this->assertSame(false, $this->sut->isValid($dto));
+        $this->assertFalse($this->sut->isValid($dto));
     }
 }

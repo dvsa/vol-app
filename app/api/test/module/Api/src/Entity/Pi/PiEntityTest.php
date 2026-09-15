@@ -21,8 +21,9 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class PiEntityTest extends EntityTester
+final class PiEntityTest extends EntityTester
 {
+    #[\Override]
     public function setUp(): void
     {
         /** @var \Dvsa\Olcs\Api\Entity\Pi\Pi entity */
@@ -319,19 +320,17 @@ class PiEntityTest extends EntityTester
         }
     }
 
-    public static function dataProviderTestUpdatePiWithDecisionDecisionBeforeHearing(): array
+    public static function dataProviderTestUpdatePiWithDecisionDecisionBeforeHearing(): \Iterator
     {
-        return [
-            [false, null, null],
-            [false, '2010-10-10', null],
-            [false, null, '2010-10-10'],
-            [false, '2010-10-10', new \DateTime('2010-10-10')],
-            [false, '2017-02-20', new \DateTime('2010-10-10')],
-            'Same date, but hearing time 00:30' => [false, '2010-10-10', new \DateTime('2010-10-10 00:30')],
-            'Same date, but hearing time 23:30' => [false, '2010-10-10', new \DateTime('2010-10-10 23:30')],
-            'Decision date before hearing date' => [true, '2010-02-09', new \DateTime('2010-02-10')],
-            'Decision date before hearing date by years' => [true, '2010-02-10', new \DateTime('2017-10-10')],
-        ];
+        yield [false, null, null];
+        yield [false, '2010-10-10', null];
+        yield [false, null, '2010-10-10'];
+        yield [false, '2010-10-10', new \DateTime('2010-10-10')];
+        yield [false, '2017-02-20', new \DateTime('2010-10-10')];
+        yield 'Same date, but hearing time 00:30' => [false, '2010-10-10', new \DateTime('2010-10-10 00:30')];
+        yield 'Same date, but hearing time 23:30' => [false, '2010-10-10', new \DateTime('2010-10-10 23:30')];
+        yield 'Decision date before hearing date' => [true, '2010-02-09', new \DateTime('2010-02-10')];
+        yield 'Decision date before hearing date by years' => [true, '2010-02-10', new \DateTime('2017-10-10')];
     }
 
     public function testUpdatePiWithDecisionClosedException(): void
@@ -536,15 +535,12 @@ class PiEntityTest extends EntityTester
         $this->assertEquals($returnValue, $this->entity->canClose());
     }
 
-    public static function canCloseWithHearingProvider(): array
+    public static function canCloseWithHearingProvider(): \Iterator
     {
         $date = '2015-12-25';
-
-        return [
-            ['Y', null, true],
-            ['Y', $date, false],
-            ['N', $date, false]
-        ];
+        yield ['Y', null, true];
+        yield ['Y', $date, false];
+        yield ['N', $date, false];
     }
 
     public function testCanCloseNoHearingNoOutcome(): void
@@ -583,25 +579,22 @@ class PiEntityTest extends EntityTester
         $this->assertEquals($returnValue, $this->entity->canClose());
     }
 
-    public static function canCloseWithOutcomeProvider(): array
+    public static function canCloseWithOutcomeProvider(): \Iterator
     {
         $date = '2015-12-25';
-
-        return [
-            [SlaEntity::VERBAL_DECISION_ONLY, null, null, null, null, null, null, false],
-            [SlaEntity::VERBAL_DECISION_ONLY, null, null, null, null, $date, null, true],
-            [SlaEntity::VERBAL_DECISION_ONLY, null, null, null, null, $date, $date, false],
-            [SlaEntity::WRITTEN_OUTCOME_DECISION, null, null, null, null, null, null, false],
-            [SlaEntity::WRITTEN_OUTCOME_DECISION, null, null, $date, $date, null, null, true],
-            [SlaEntity::WRITTEN_OUTCOME_DECISION, null, null, $date, $date, null, $date, false],
-            [SlaEntity::WRITTEN_OUTCOME_DECISION, null, null, $date, null, null, null, false],
-            [SlaEntity::WRITTEN_OUTCOME_DECISION, null, null, null, $date, null, null, false],
-            [SlaEntity::WRITTEN_OUTCOME_REASON, null, null, null, null, null, null, false],
-            [SlaEntity::WRITTEN_OUTCOME_REASON, $date, $date, null, null, null, null, true],
-            [SlaEntity::WRITTEN_OUTCOME_REASON, $date, $date, null, null, null, $date, false],
-            [SlaEntity::WRITTEN_OUTCOME_REASON, $date, null, null, null, null, null, false],
-            [SlaEntity::WRITTEN_OUTCOME_REASON, null, $date, null, null, null, null, false]
-        ];
+        yield [SlaEntity::VERBAL_DECISION_ONLY, null, null, null, null, null, null, false];
+        yield [SlaEntity::VERBAL_DECISION_ONLY, null, null, null, null, $date, null, true];
+        yield [SlaEntity::VERBAL_DECISION_ONLY, null, null, null, null, $date, $date, false];
+        yield [SlaEntity::WRITTEN_OUTCOME_DECISION, null, null, null, null, null, null, false];
+        yield [SlaEntity::WRITTEN_OUTCOME_DECISION, null, null, $date, $date, null, null, true];
+        yield [SlaEntity::WRITTEN_OUTCOME_DECISION, null, null, $date, $date, null, $date, false];
+        yield [SlaEntity::WRITTEN_OUTCOME_DECISION, null, null, $date, null, null, null, false];
+        yield [SlaEntity::WRITTEN_OUTCOME_DECISION, null, null, null, $date, null, null, false];
+        yield [SlaEntity::WRITTEN_OUTCOME_REASON, null, null, null, null, null, null, false];
+        yield [SlaEntity::WRITTEN_OUTCOME_REASON, $date, $date, null, null, null, null, true];
+        yield [SlaEntity::WRITTEN_OUTCOME_REASON, $date, $date, null, null, null, $date, false];
+        yield [SlaEntity::WRITTEN_OUTCOME_REASON, $date, null, null, null, null, null, false];
+        yield [SlaEntity::WRITTEN_OUTCOME_REASON, null, $date, null, null, null, null, false];
     }
 
     /**
@@ -619,14 +612,11 @@ class PiEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->canClose());
     }
 
-    public static function canCloseWithMissingGeneralSlaProvider(): array
+    public static function canCloseWithMissingGeneralSlaProvider(): \Iterator
     {
         $date = '2015-12-25';
-
-        return [
-            [null, $date],
-            [$date, null],
-        ];
+        yield [null, $date];
+        yield [$date, null];
     }
 
     /**
@@ -696,18 +686,15 @@ class PiEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpGetHearingDateProvider(): array
+    public static function dpGetHearingDateProvider(): \Iterator
     {
         $date = '2015-12-25';
-
-        return [
-            [$date, 'Y', 'Y', null],
-            [$date, 'N', 'Y', null],
-            [$date, 'Y', 'N', null],
-            [$date, 'N', 'N', $date],
-        ];
+        yield [$date, 'Y', 'Y', null];
+        yield [$date, 'N', 'Y', null];
+        yield [$date, 'Y', 'N', null];
+        yield [$date, 'N', 'N', $date];
     }
 
     /**
@@ -748,27 +735,22 @@ class PiEntityTest extends EntityTester
         $this->assertEquals($isTm, $this->entity->isTm());
     }
 
-    public static function isTmProvider(): array
+    public static function isTmProvider(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 
     /**
      * provider to check dates are processed properly
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dateProvider(): array
+    public static function dateProvider(): \Iterator
     {
         $date = '2015-12-25';
-
-        return [
-            ['invalid date', null],
-            [$date, \DateTime::createFromFormat('Y-m-d', $date)->setTime(0, 0, 0)]
-        ];
+        yield ['invalid date', null];
+        yield [$date, \DateTime::createFromFormat('Y-m-d', $date)->setTime(0, 0, 0)];
     }
 
     /**

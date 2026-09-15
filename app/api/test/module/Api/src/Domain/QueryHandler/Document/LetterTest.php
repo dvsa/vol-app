@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LetterTest extends QueryHandlerTestCase
+final class LetterTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

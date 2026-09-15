@@ -22,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class FeeCreatorTest extends MockeryTestCase
+final class FeeCreatorTest extends MockeryTestCase
 {
     public function testCreate(): void
     {

@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\Cases\Stay as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class StayEntityTest extends EntityTester
+final class StayEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -83,86 +83,84 @@ class StayEntityTest extends EntityTester
     /**
      * Add in Values to pass into the Entity values() method
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function stayValuesDataProvided(): array
+    public static function stayValuesDataProvided(): \Iterator
     {
-        return [
-            'all values null to return null' => [
-                [
-                    'requestDate'    => null,
-                    'decisionDate'   => null,
-                    'outcome'        => null,
-                    'notes'          => null,
-                    'isWithdrawn'    => null,
-                    'withdrawnDate'  => null,
-                    'isDvsaNotified' => null,
-                ],
-                [
-                    'requestDate'    => null,
-                    'decisionDate'   => null,
-                    'outcome'        => null,
-                    'notes'          => null,
-                    'withdrawnDate'  => null,
-                    'isDvsaNotified' => null,
-                ],
+        yield 'all values null to return null' => [
+            [
+                'requestDate'    => null,
+                'decisionDate'   => null,
+                'outcome'        => null,
+                'notes'          => null,
+                'isWithdrawn'    => null,
+                'withdrawnDate'  => null,
+                'isDvsaNotified' => null,
             ],
-            'set all values with but not withdrawn' => [
-                [
-                    'requestDate'    => new \DateTime('2017-01-01'),
-                    'decisionDate'   => '2017-01-02',
-                    'outcome'        => new RefData(1),
-                    'notes'          => '123456',
-                    'isWithdrawn'    => null,
-                    'withdrawnDate'  => null,
-                    'isDvsaNotified' => 'N',
-                ],
-                [
-                    'requestDate'    => new \DateTime('2017-01-01'),
-                    'decisionDate'   => new \DateTime('2017-01-02'),
-                    'outcome'        => new RefData(1),
-                    'notes'          => '123456',
-                    'withdrawnDate'  => null,
-                    'isDvsaNotified' => 'N',
-                ],
+            [
+                'requestDate'    => null,
+                'decisionDate'   => null,
+                'outcome'        => null,
+                'notes'          => null,
+                'withdrawnDate'  => null,
+                'isDvsaNotified' => null,
             ],
-            'set all values with with withdrawn date but is not withdrawn' => [
-                [
-                    'requestDate'    => new \DateTime('2017-01-01'),
-                    'decisionDate'   => '2017-01-02',
-                    'outcome'        => new RefData(1),
-                    'notes'          => '123456',
-                    'isWithdrawn'    => 'N',
-                    'withdrawnDate'  => '2017-01-03',
-                    'isDvsaNotified' => 'N',
-                ],
-                [
-                    'requestDate'    => new \DateTime('2017-01-01'),
-                    'decisionDate'   => new \DateTime('2017-01-02'),
-                    'outcome'        => new RefData(1),
-                    'notes'          => '123456',
-                    'withdrawnDate'  => null,
-                    'isDvsaNotified' => 'N',
-                ],
+        ];
+        yield 'set all values with but not withdrawn' => [
+            [
+                'requestDate'    => new \DateTime('2017-01-01'),
+                'decisionDate'   => '2017-01-02',
+                'outcome'        => new RefData(1),
+                'notes'          => '123456',
+                'isWithdrawn'    => null,
+                'withdrawnDate'  => null,
+                'isDvsaNotified' => 'N',
             ],
-            'set all values with withdrawn date and is withdrawn' => [
-                [
-                    'requestDate'    => new \DateTime('2017-01-01'),
-                    'decisionDate'   => '2017-01-02',
-                    'outcome'        => new RefData(1),
-                    'notes'          => '123456',
-                    'isWithdrawn'    => 'Y',
-                    'withdrawnDate'  => '2017-01-03',
-                    'isDvsaNotified' => 'N',
-                ],
-                [
-                    'requestDate'    => new \DateTime('2017-01-01'),
-                    'decisionDate'   => new \DateTime('2017-01-02'),
-                    'outcome'        => new RefData(1),
-                    'notes'          => '123456',
-                    'withdrawnDate'  => new \DateTime('2017-01-03'),
-                    'isDvsaNotified' => 'N',
-                ],
+            [
+                'requestDate'    => new \DateTime('2017-01-01'),
+                'decisionDate'   => new \DateTime('2017-01-02'),
+                'outcome'        => new RefData(1),
+                'notes'          => '123456',
+                'withdrawnDate'  => null,
+                'isDvsaNotified' => 'N',
+            ],
+        ];
+        yield 'set all values with with withdrawn date but is not withdrawn' => [
+            [
+                'requestDate'    => new \DateTime('2017-01-01'),
+                'decisionDate'   => '2017-01-02',
+                'outcome'        => new RefData(1),
+                'notes'          => '123456',
+                'isWithdrawn'    => 'N',
+                'withdrawnDate'  => '2017-01-03',
+                'isDvsaNotified' => 'N',
+            ],
+            [
+                'requestDate'    => new \DateTime('2017-01-01'),
+                'decisionDate'   => new \DateTime('2017-01-02'),
+                'outcome'        => new RefData(1),
+                'notes'          => '123456',
+                'withdrawnDate'  => null,
+                'isDvsaNotified' => 'N',
+            ],
+        ];
+        yield 'set all values with withdrawn date and is withdrawn' => [
+            [
+                'requestDate'    => new \DateTime('2017-01-01'),
+                'decisionDate'   => '2017-01-02',
+                'outcome'        => new RefData(1),
+                'notes'          => '123456',
+                'isWithdrawn'    => 'Y',
+                'withdrawnDate'  => '2017-01-03',
+                'isDvsaNotified' => 'N',
+            ],
+            [
+                'requestDate'    => new \DateTime('2017-01-01'),
+                'decisionDate'   => new \DateTime('2017-01-02'),
+                'outcome'        => new RefData(1),
+                'notes'          => '123456',
+                'withdrawnDate'  => new \DateTime('2017-01-03'),
+                'isDvsaNotified' => 'N',
             ],
         ];
     }

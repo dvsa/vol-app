@@ -38,7 +38,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\GenerateLicenceNumber;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateApplicationTest extends AbstractCommandHandlerTestCase
+final class CreateApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -249,8 +249,8 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->refData[$appliedVia], $app->getAppliedVia());
 
         $this->assertInstanceOf('\DateTime', $app->getReceivedDate());
-        $this->assertEquals('2015-01-01', $app->getReceivedDate()->format('Y-m-d'));
-        $this->assertEquals('2015-02-26', $app->getTargetCompletionDate()->format('Y-m-d')); // +8 weeks
+        $this->assertSame('2015-01-01', $app->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2015-02-26', $app->getTargetCompletionDate()->format('Y-m-d')); // +8 weeks
         $this->assertEquals('Y', $app->getNiFlag());
         $this->assertSame($this->refData[Licence::LICENCE_TYPE_STANDARD_NATIONAL], $app->getLicenceType());
         $this->assertSame($this->refData[Licence::LICENCE_CATEGORY_GOODS_VEHICLE], $app->getGoodsOrPsv());
@@ -369,8 +369,8 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->refData[$appliedVia], $app->getAppliedVia());
 
         $this->assertInstanceOf('\DateTime', $app->getReceivedDate());
-        $this->assertEquals('2015-01-01', $app->getReceivedDate()->format('Y-m-d'));
-        $this->assertEquals('2015-02-26', $app->getTargetCompletionDate()->format('Y-m-d')); // +8 weeks
+        $this->assertSame('2015-01-01', $app->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2015-02-26', $app->getTargetCompletionDate()->format('Y-m-d')); // +8 weeks
         $this->assertEquals('N', $app->getNiFlag());
         $this->assertSame($this->refData[Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL], $app->getLicenceType());
         $this->assertSame($this->refData[Licence::LICENCE_CATEGORY_GOODS_VEHICLE], $app->getGoodsOrPsv());
@@ -382,11 +382,9 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(1, $app->getLgvDeclarationConfirmation());
     }
 
-    public static function environmentProvider(): array
+    public static function environmentProvider(): \Iterator
     {
-        return [
-            [true, false, Licence::LICENCE_STATUS_UNDER_CONSIDERATION, ApplicationEntity::APPLIED_VIA_PHONE],
-            [false, true, Licence::LICENCE_STATUS_NOT_SUBMITTED, ApplicationEntity::APPLIED_VIA_SELFSERVE]
-        ];
+        yield [true, false, Licence::LICENCE_STATUS_UNDER_CONSIDERATION, ApplicationEntity::APPLIED_VIA_PHONE];
+        yield [false, true, Licence::LICENCE_STATUS_NOT_SUBMITTED, ApplicationEntity::APPLIED_VIA_SELFSERVE];
     }
 }

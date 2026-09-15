@@ -152,7 +152,7 @@ final class RemoveDeletedDocuments extends AbstractCommandHandler implements Tra
         $this->handleSideEffect($command);
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

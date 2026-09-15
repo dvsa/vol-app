@@ -32,7 +32,7 @@ use ReflectionClass;
 /**
  * Update MyAccount Test
  */
-class UpdateMyAccountCognitoTest extends AbstractCommandHandlerTestCase
+final class UpdateMyAccountCognitoTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

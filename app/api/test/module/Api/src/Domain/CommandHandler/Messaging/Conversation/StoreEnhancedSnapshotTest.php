@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Entity\System\SubCategory;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\Messaging\EnhancedGenerator;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCreateSnapshotHandlerTestCase;
 
-class StoreEnhancedSnapshotTest extends AbstractCreateSnapshotHandlerTestCase
+final class StoreEnhancedSnapshotTest extends AbstractCreateSnapshotHandlerTestCase
 {
     protected $cmdClass = Cmd::class;
     protected $sutClass = Sut::class;

@@ -5,6 +5,18 @@ locals {
 
   supporting_service_names = ["liquibase"]
 
+  task_exec_iam_role_statements = [
+    {
+      effect = "Allow"
+      actions = [
+        "secretsmanager:GetSecretValue"
+      ]
+      resources = [
+        data.aws_secretsmanager_secret.this["api"].arn,
+        data.aws_secretsmanager_secret.infra.arn
+      ]
+    },
+  ]
   task_iam_role_statements = [
     {
       effect = "Allow"
@@ -27,10 +39,28 @@ locals {
     {
       effect = "Allow"
       actions = [
+        "events:PutEvents"
+      ]
+      resources = [
+        "arn:aws:events:eu-west-1:054614622558:event-bus/default"
+      ]
+      conditions = [
+        {
+          test     = "StringEquals"
+          variable = "events:source"
+          values   = ["vol.api"]
+        }
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::000081644369:role/txc-int-consumer-role"
+        "arn:aws:iam::000081644369:role/txc-int-consumer-role",
+        "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole",
+        "arn:aws:iam::054614622558:role/OLCS-DEVAPPCI-DEVCI-Cognito_Pool_Admin"
       ]
     },
     {
@@ -78,6 +108,98 @@ locals {
         "arn:aws:s3:::devapp-vol-content/*"
       ]
     },
+    {
+      effect = "Allow"
+      actions = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ]
+      resources = [
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3/*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBClusterSnapshot",
+        "rds:DescribeDBClusterSnapshots",
+        "rds:DeleteDBClusterSnapshot",
+        "rds:ModifyDBClusterSnapshotAttribute"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:int-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-db-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:ni-extract-*",
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBClusters"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:int-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:RestoreDBClusterFromSnapshot",
+        "rds:AddTagsToResource"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:ni-extract-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:054614622558:subgrp:devappqa-olcs-rds-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBInstance"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:db:ni-extract-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBInstances"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:db:*",
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DeleteDBInstance",
+        "rds:DeleteDBCluster"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:054614622558:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:054614622558:db:ni-extract-*"
+      ]
+    }
+
   ]
 }
 
@@ -122,6 +244,10 @@ data "aws_secretsmanager_secret" "this" {
   name = "DEVAPPQA-BASE-SM-APPLICATION-${upper(each.key)}"
 }
 
+data "aws_secretsmanager_secret" "infra" {
+  name = "DEVAPPQA-BASE-SM-INFRA"
+}
+
 data "aws_cognito_user_pools" "this" {
   name = "DVSA-DEVAPPQA-COGNITO-USERS"
 }
@@ -161,6 +287,8 @@ module "service" {
 
   legacy_environment = "QA"
 
+  dva_ni_export_s3uri = module.parameters.dva_ni_export_s3uri
+
   domain_env = "qa"
 
   domain_name    = "dev-dvsacloud.uk"
@@ -180,6 +308,8 @@ module "service" {
       repository = data.aws_ecr_repository.this["api"].repository_url
 
       task_iam_role_statements = local.task_iam_role_statements
+
+      task_exec_iam_role_statements = local.task_exec_iam_role_statements
 
       subnet_ids = data.aws_subnets.this["API"].ids
 
@@ -319,6 +449,12 @@ module "service" {
     ]
 
     jobs = [
+      {
+        name     = "retrieval-link-purge",
+        commands = ["batch:retrieval-link-purge"],
+        timeout  = 3600,
+        schedule = ["cron(30 03 * * ? *)"],
+      },
       {
         name     = "cache-clear",
         commands = ["batch:cache-clear", "--flush-all", "--force"],
@@ -497,6 +633,7 @@ module "service" {
       {
         name     = "permits-reset-test-data",
         commands = ["permits:reset-test-data"],
+        type     = "default",
         timeout  = 1800
       },
       {
@@ -605,7 +742,7 @@ module "service" {
       },
       {
         name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/ni_dvacompliance.sh"],
+        commands = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
         type     = "scripts"
       },
       {
@@ -613,6 +750,13 @@ module "service" {
         commands = ["batch:first-tm-letter", "-v"],
         timeout  = 43200,
         schedule = ["cron(30 13 * * ? *)"],
+      },
+      {
+        name     = "data-refresh",
+        commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "qa", "eu-west-1"],
+        type     = "scripts"
+        cpu      = 2,
+        memory   = 8192,
       },
     ]
   }

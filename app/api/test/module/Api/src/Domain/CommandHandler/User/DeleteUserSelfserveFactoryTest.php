@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see DeleteUserSelfserveFactory
  */
-class DeleteUserSelfserveFactoryTest extends MockeryTestCase
+final class DeleteUserSelfserveFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
@@ -25,6 +25,7 @@ class DeleteUserSelfserveFactoryTest extends MockeryTestCase
 
     protected DeleteUserSelfserveFactory $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

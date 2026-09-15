@@ -8,10 +8,9 @@ use Dvsa\Olcs\Api\Entity\User\User;
 
 /**
  * PresidingTc Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="presiding_tc")
  */
+#[ORM\Table(name: 'presiding_tc')]
+#[ORM\Entity]
 class PresidingTc extends AbstractPresidingTc implements DeletableInterface
 {
     /**

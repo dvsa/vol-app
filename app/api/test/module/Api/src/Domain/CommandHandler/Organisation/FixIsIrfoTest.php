@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Organisation as OrganisationRepo;
 /**
  * Class FixIsIrfoTest
  */
-class FixIsIrfoTest extends AbstractCommandHandlerTestCase
+final class FixIsIrfoTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

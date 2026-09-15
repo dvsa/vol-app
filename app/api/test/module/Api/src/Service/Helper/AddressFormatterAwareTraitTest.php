@@ -9,10 +9,8 @@ use Dvsa\OlcsTest\Api\Service\Helper\Stub\AddressFormatterAwareTraitStub;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Helper\AddressFormatterAwareTrait
- */
-class AddressFormatterAwareTraitTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Dvsa\Olcs\Api\Service\Helper\AddressFormatterAwareTrait::class)]
+final class AddressFormatterAwareTraitTest extends MockeryTestCase
 {
     public function testGetSet(): void
     {
@@ -22,6 +20,6 @@ class AddressFormatterAwareTraitTest extends MockeryTestCase
         $sut = new AddressFormatterAwareTraitStub();
         $sut->setAddressFormatter($mockFormatter);
 
-        static::assertSame($mockFormatter, $sut->getAddressFormatter());
+        $this->assertSame($mockFormatter, $sut->getAddressFormatter());
     }
 }

@@ -16,7 +16,7 @@ class ComplianceEpisodeXml
     /**
      * ComplianceEpisodeXml constructor.
      *
-     * @param MapXmlFile $mapXmlFile olcs-xmltools xml mapper
+     * @param MapXmlFile $mapXmlFile XmlTools xml mapper
      * @param string     $xmlNs      address of xml namespace
      */
     public function __construct(MapXmlFile $mapXmlFile, protected $xmlNs)

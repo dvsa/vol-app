@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * Clean up abandoned variations
  */
-class CleanUpAbandonedVariationsTest extends AbstractCommandHandlerTestCase
+final class CleanUpAbandonedVariationsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

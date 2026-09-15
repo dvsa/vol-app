@@ -14,7 +14,7 @@ use Olcs\InputFilter\EbsrPackFactory;
  * Class EbsrPackFactoryTest
  * @package OlcsTest\InputFilter
  */
-class EbsrPackFactoryTest extends MockeryTestCase
+final class EbsrPackFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

@@ -21,7 +21,7 @@ class OlcsBlameableListenerFactory implements FactoryInterface
      * @return OlcsBlameableListener
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OlcsBlameableListener
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): OlcsBlameableListener
     {
         return new OlcsBlameableListener($container);
     }

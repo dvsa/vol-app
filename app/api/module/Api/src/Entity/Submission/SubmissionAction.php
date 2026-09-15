@@ -7,16 +7,12 @@ use Dvsa\Olcs\Api\Entity\Submission\Submission;
 
 /**
  * SubmissionAction Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="submission_action",
- *    indexes={
- *        @ORM\Index(name="ix_submission_action_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_submission_action_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_submission_action_submission_id", columns={"submission_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'submission_action')]
+#[ORM\Index(name: 'ix_submission_action_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_submission_action_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_submission_action_submission_id', columns: ['submission_id'])]
+#[ORM\Entity]
 class SubmissionAction extends AbstractSubmissionAction
 {
     public const ACTION_TYPE_PUBLIC_INQUIRY = 'sub_st_rec_pi';

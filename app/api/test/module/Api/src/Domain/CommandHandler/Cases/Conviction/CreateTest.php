@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * Create Conviction Test
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var CreateCommandHandler
@@ -114,9 +114,9 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->references[Entity\Cases\Cases::class][50], $conv->getCase());
         $this->assertEquals($data['personFirstName'], $conv->getPersonFirstname());
         $this->assertEquals($data['personLastName'], $conv->getPersonLastName());
-        $this->assertEquals($data['birthDate'], $conv->getBirthDate()->format('Y-m-d'));
-        $this->assertEquals($data['offenceDate'], $conv->getOffenceDate()->format('Y-m-d'));
-        $this->assertEquals($data['convictionDate'], $conv->getConvictionDate()->format('Y-m-d'));
+        $this->assertSame($data['birthDate'], $conv->getBirthDate()->format('Y-m-d'));
+        $this->assertSame($data['offenceDate'], $conv->getOffenceDate()->format('Y-m-d'));
+        $this->assertSame($data['convictionDate'], $conv->getConvictionDate()->format('Y-m-d'));
         $this->assertEquals($data['msi'], $conv->getMsi());
         $this->assertEquals($data['court'], $conv->getCourt());
         $this->assertEquals($data['penalty'], $conv->getPenalty());
@@ -178,8 +178,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertNull($conv->getPersonFirstname());
         $this->assertNull($conv->getPersonLastName());
         $this->assertNull($conv->getBirthDate());
-        $this->assertEquals($data['offenceDate'], $conv->getOffenceDate()->format('Y-m-d'));
-        $this->assertEquals($data['convictionDate'], $conv->getConvictionDate()->format('Y-m-d'));
+        $this->assertSame($data['offenceDate'], $conv->getOffenceDate()->format('Y-m-d'));
+        $this->assertSame($data['convictionDate'], $conv->getConvictionDate()->format('Y-m-d'));
         $this->assertEquals($data['msi'], $conv->getMsi());
         $this->assertNull($conv->getCourt());
         $this->assertNull($conv->getPenalty());

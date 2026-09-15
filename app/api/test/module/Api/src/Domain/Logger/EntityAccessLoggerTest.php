@@ -29,20 +29,20 @@ use RuntimeException;
 /**
  * @see EntityAccessLogger
  */
-class EntityAccessLoggerTest extends MockeryTestCase
+final class EntityAccessLoggerTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
-    protected const USER_TYPE = 'USER TYPE';
-    protected const USER_PID = 'USER PID';
-    protected const ANONYMOUS_USER_PID = '';
-    protected const IS_GRANTED = true;
-    protected const NO_APPLICATION = null;
-    protected const ECMS_NUMBER = 'ECMS NUMBER';
-    protected const CASE_DESCRIPTION = 'CASE DESCRIPTION';
-    protected const ENTITY_ID = 'ENTITY ID';
-    protected const IS_NOT_VARIATION = false;
-    protected const ENTITY_NOT_ENABLED_FOR_LOGGING_EXCEPTION_MESSAGE = 'Cannot create audit read for entity, no DTO is defined';
+    protected const string USER_TYPE = 'USER TYPE';
+    protected const string USER_PID = 'USER PID';
+    protected const string ANONYMOUS_USER_PID = '';
+    protected const bool IS_GRANTED = true;
+    protected const null NO_APPLICATION = null;
+    protected const string ECMS_NUMBER = 'ECMS NUMBER';
+    protected const string CASE_DESCRIPTION = 'CASE DESCRIPTION';
+    protected const string ENTITY_ID = 'ENTITY ID';
+    protected const bool IS_NOT_VARIATION = false;
+    protected const string ENTITY_NOT_ENABLED_FOR_LOGGING_EXCEPTION_MESSAGE = 'Cannot create audit read for entity, no DTO is defined';
 
     /**
      * @var EntityAccessLogger
@@ -162,13 +162,11 @@ class EntityAccessLoggerTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function entitiesThatAreLoggedForUsersWithThePartnerUserPermissionDataProvider(): array
+    public static function entitiesThatAreLoggedForUsersWithThePartnerUserPermissionDataProvider(): \Iterator
     {
-        return [
-            'licence entity' => [self::licence()],
-        ];
+        yield 'licence entity' => [self::licence()];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('entitiesThatAreLoggedForUsersWithThePartnerUserPermissionDataProvider')]
@@ -189,18 +187,16 @@ class EntityAccessLoggerTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerUserPermissionDataProvider(): array
+    public static function entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerUserPermissionDataProvider(): \Iterator
     {
-        return [
-            'organisation entity' => [self::organisation()],
-            'case entity' => [self::case()],
-            'application entity' => [self::application()],
-            'bus reg entity' => [self::busRegistration()],
-            'transport manager entity' => [self::transportManager()],
-            'irhp application entity' => [self::irhpApplication()],
-        ];
+        yield 'organisation entity' => [self::organisation()];
+        yield 'case entity' => [self::case()];
+        yield 'application entity' => [self::application()];
+        yield 'bus reg entity' => [self::busRegistration()];
+        yield 'transport manager entity' => [self::transportManager()];
+        yield 'irhp application entity' => [self::irhpApplication()];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerUserPermissionDataProvider')]
@@ -221,13 +217,11 @@ class EntityAccessLoggerTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function entitiesThatAreLoggedForUsersWithThePartnerAdminPermissionDataProvider(): array
+    public static function entitiesThatAreLoggedForUsersWithThePartnerAdminPermissionDataProvider(): \Iterator
     {
-        return [
-            'licence entity' => [self::licence()],
-        ];
+        yield 'licence entity' => [self::licence()];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('entitiesThatAreLoggedForUsersWithThePartnerAdminPermissionDataProvider')]
@@ -248,18 +242,16 @@ class EntityAccessLoggerTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerAdminPermissionDataProvider(): array
+    public static function entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerAdminPermissionDataProvider(): \Iterator
     {
-        return [
-            'organisation entity' => [self::organisation()],
-            'case entity' => [self::case()],
-            'application entity' => [self::application()],
-            'bus reg entity' => [self::busRegistration()],
-            'transport manager entity' => [self::transportManager()],
-            'irhp application entity' => [self::irhpApplication()],
-        ];
+        yield 'organisation entity' => [self::organisation()];
+        yield 'case entity' => [self::case()];
+        yield 'application entity' => [self::application()];
+        yield 'bus reg entity' => [self::busRegistration()];
+        yield 'transport manager entity' => [self::transportManager()];
+        yield 'irhp application entity' => [self::irhpApplication()];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('entitiesThatHaveNotBeenEnabledForUsersThatHavePartnerAdminPermissionDataProvider')]
@@ -279,6 +271,7 @@ class EntityAccessLoggerTest extends MockeryTestCase
         $this->sut->logAccessToEntity($entity);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->setUpServiceManager();
@@ -416,7 +409,7 @@ class EntityAccessLoggerTest extends MockeryTestCase
     /**
      * @param User|null $user
      */
-    protected function setUserContext(User $user = null): void
+    protected function setUserContext(?User $user = null): void
     {
         $identity = null === $user ? null : new Identity($user);
         $this->authorizationService()->allows('getIdentity')->andReturn($identity)->byDefault();

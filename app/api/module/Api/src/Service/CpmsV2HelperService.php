@@ -688,8 +688,8 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
     /**
      * Format a date as required by CPMS payment reference fields
      *
-     * @param string|DateTime $date
-     * @return string
+     * @param string|DateTime|null $date
+     * @return string|null
      */
     protected function formatDate($date)
     {
@@ -699,6 +699,8 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
             }
             return $date->format(self::DATE_FORMAT);
         }
+
+        return null;
     }
 
     /**
@@ -1059,9 +1061,9 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
         return $response;
     }
 
-    protected function debug($message, $data)
+    protected function debug($message, $data): void
     {
-        return Logger::debug(
+        Logger::debug(
             $message,
             [
                 'data' => array_merge(
@@ -1178,7 +1180,7 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
         $identity->setClientSecret($clientSecret);
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         if (isset($config['cpms']['invoice_prefix'])) {

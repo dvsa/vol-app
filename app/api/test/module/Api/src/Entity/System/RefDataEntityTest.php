@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class RefDataEntityTest extends EntityTester
+final class RefDataEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -20,4 +20,19 @@ class RefDataEntityTest extends EntityTester
      * @var string
      */
     protected $entityClass = Entity::class;
+
+    /**
+     * Welsh ref-data descriptions are served from ext_translations by the Gedmo
+     * TranslatableListener; this mapping was silently lost once before when the
+     * entity was regenerated without it.
+     */
+    public function testDescriptionIsGedmoTranslatable(): void
+    {
+        $property = new \ReflectionProperty(Entity::class, 'description');
+
+        $this->assertNotEmpty(
+            $property->getAttributes(\Gedmo\Mapping\Annotation\Translatable::class),
+            'RefData::$description must carry #[Gedmo\Translatable]'
+        );
+    }
 }

@@ -21,19 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_appendix_version",
- *    indexes={
- *        @ORM\Index(name="ix_letter_appendix_version_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_appendix_version_document_id", columns={"document_id"}),
- *        @ORM\Index(name="ix_letter_appendix_version_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_appendix_version_letter_appendix_id", columns={"letter_appendix_id"}),
- *        @ORM\Index(name="ix_letter_appendix_version_publish_from", columns={"publish_from"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_appendix_version')]
+#[ORM\Index(name: 'ix_letter_appendix_version_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_appendix_version_document_id', columns: ['document_id'])]
+#[ORM\Index(name: 'ix_letter_appendix_version_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_appendix_version_letter_appendix_id', columns: ['letter_appendix_id'])]
+#[ORM\Index(name: 'ix_letter_appendix_version_publish_from', columns: ['publish_from'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterAppendixVersion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -46,126 +42,113 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterAppendix
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterAppendix", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_appendix_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_appendix_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix::class, inversedBy: 'versions', fetch: 'LAZY')]
     protected $letterAppendix;
 
     /**
      * FK to document table for PDF
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $document;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Display name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: false)]
     protected $name = '';
 
     /**
      * What this appendix contains
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="description", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'description', nullable: true)]
     protected $description;
 
     /**
      * pdf or editable
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="appendix_type", length=20, nullable=false, options={"default": "pdf"})
      */
+    #[ORM\Column(type: 'string', name: 'appendix_type', length: 20, nullable: false, options: ['default' => 'pdf'])]
     protected $appendixType = 'pdf';
 
     /**
      * EditorJS format for editable type
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="default_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'default_content', nullable: true)]
     protected $defaultContent;
 
     /**
      * Prevent selection
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_locked", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_locked', nullable: false, options: ['default' => 0])]
     protected $isLocked = 0;
 
     /**
      * Embargo until this date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="publish_from", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'publish_from', nullable: true)]
     protected $publishFrom;
 
     /**
      * Version number
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="version_number", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false, options: ['unsigned' => true])]
     protected $versionNumber = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -189,7 +172,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setId($id)
     {
@@ -213,7 +196,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix $letterAppendix new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setLetterAppendix($letterAppendix)
     {
@@ -237,7 +220,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setDocument($document)
     {
@@ -261,7 +244,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -285,7 +268,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -309,7 +292,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param string $name new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setName($name)
     {
@@ -333,7 +316,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param string $description new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setDescription($description)
     {
@@ -357,7 +340,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param string $appendixType new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setAppendixType($appendixType)
     {
@@ -381,7 +364,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param array $defaultContent new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setDefaultContent($defaultContent)
     {
@@ -405,7 +388,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param bool $isLocked new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setIsLocked($isLocked)
     {
@@ -429,7 +412,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param \DateTime $publishFrom new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setPublishFrom($publishFrom)
     {
@@ -459,7 +442,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param int $versionNumber new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setVersionNumber($versionNumber)
     {
@@ -483,7 +466,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setVersion($version)
     {

@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_enforcement_area;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_enforcement_area()
@@ -28,22 +27,31 @@ BEGIN
 
     SELECT CONCAT(@total,' enforcement_area rows to delete.') AS '' ;
 
+    SET @total_deleted := 0;
+    SET @rowcount := 10000;
 
-    
-    DELETE FROM enforcement_area
-    WHERE id <> 'EA-N';
+    START TRANSACTION;
 
-    SET @rowcount := row_count();
+    WHILE(@rowcount = 10000) DO
     
+        DELETE FROM enforcement_area
+        WHERE id <> 'EA-N'
+        LIMIT 10000;
 
+        SET @rowcount := row_count();
+        SET @total_deleted := @total_deleted + @rowcount;
     
-    SELECT CONCAT(@rowcount,' enforcement_area rows deleted.') AS '';
+        SELECT CONCAT(@total_deleted,' enforcement_area rows deleted.') AS '';
+
+        COMMIT;
+        START TRANSACTION;
+
+    END WHILE;
+    
+    COMMIT;
     
     SELECT CONCAT('delete enforcement_area finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

@@ -7,20 +7,14 @@ use Doctrine\Common\Collections\Criteria;
 
 /**
  * CommunityLic Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="community_lic",
- *    indexes={
- *        @ORM\Index(name="ix_community_lic_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_community_lic_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_community_lic_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_community_lic_com_lic_status", columns={"status"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_community_lic_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'community_lic')]
+#[ORM\Index(name: 'ix_community_lic_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_community_lic_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_community_lic_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_community_lic_com_lic_status', columns: ['status'])]
+#[ORM\UniqueConstraint(name: 'uk_community_lic_olbs_key', columns: ['olbs_key'])]
+#[ORM\Entity]
 class CommunityLic extends AbstractCommunityLic
 {
     public const STATUS_PENDING = 'cl_sts_pending';

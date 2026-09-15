@@ -28,7 +28,7 @@ class SwitchBoardControllerFactory implements FactoryInterface
      * @return Dispatcher
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Dispatcher
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Dispatcher
     {
         $controllerPluginManager = $container->get('ControllerPluginManager');
 

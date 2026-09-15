@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 /**
  * ByDocumentStoreId Test
  */
-class ByDocumentStoreIdTest extends QueryHandlerTestCase
+final class ByDocumentStoreIdTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -43,6 +43,6 @@ class ByDocumentStoreIdTest extends QueryHandlerTestCase
             ->once()
             ->andReturn($results);
 
-        self::assertEquals($results, $this->sut->handleQuery($query));
+        $this->assertEquals($results, $this->sut->handleQuery($query));
     }
 }

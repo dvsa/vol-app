@@ -23,7 +23,7 @@ use Doctrine\ORM\Query;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class EditSuspensionTest extends AbstractCommandHandlerTestCase
+final class EditSuspensionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -60,7 +60,7 @@ class EditSuspensionTest extends AbstractCommandHandlerTestCase
 
     public function testHandleCommandActiveToday(): void
     {
-        $startDate = (new \DateTime())->format('Y-m-d');
+        $startDate = new \DateTime()->format('Y-m-d');
         $data = [
             'startDate' => $startDate,
             'endDate' => '3016-01-01',
@@ -194,7 +194,7 @@ class EditSuspensionTest extends AbstractCommandHandlerTestCase
 
     public function testHandleCommandSuspendedToday(): void
     {
-        $endDate = (new \DateTime())->format('Y-m-d');
+        $endDate = new \DateTime()->format('Y-m-d');
         $data = [
             'startDate' => '2000-01-01',
             'endDate' => $endDate,

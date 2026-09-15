@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\ResetApplication;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ResetApplicationTest extends \PHPUnit\Framework\TestCase
+final class ResetApplicationTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

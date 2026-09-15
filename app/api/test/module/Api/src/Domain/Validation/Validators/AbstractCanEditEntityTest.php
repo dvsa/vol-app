@@ -9,16 +9,15 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanEditEntity
- */
-class AbstractCanEditEntityTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanEditEntity::class)]
+final class AbstractCanEditEntityTest extends MockeryTestCase
 {
     /**
      * @var AbstractCanEditEntity|m\Mock
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(AbstractCanEditEntity::class)->makePartial()->shouldAllowMockingProtectedMethods();

@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\UpdateVariationCompletion;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdateVariationCompletionTest extends \PHPUnit\Framework\TestCase
+final class UpdateVariationCompletionTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

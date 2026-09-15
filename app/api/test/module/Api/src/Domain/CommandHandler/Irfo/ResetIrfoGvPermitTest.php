@@ -20,7 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Reset Irfo Gv Permit Test
  */
-class ResetIrfoGvPermitTest extends AbstractCommandHandlerTestCase
+final class ResetIrfoGvPermitTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

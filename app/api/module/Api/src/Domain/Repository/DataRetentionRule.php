@@ -22,7 +22,7 @@ class DataRetentionRule extends AbstractRepository
      *
      * @return array
      */
-    public function fetchEnabledRules(QueryInterface $query = null, $isReview = false)
+    public function fetchEnabledRules(?QueryInterface $query = null, $isReview = false)
     {
         $qb = $this->createQueryBuilder();
 
@@ -53,7 +53,7 @@ class DataRetentionRule extends AbstractRepository
      *
      * @return array
      */
-    public function fetchAllRules(QueryInterface $query = null)
+    public function fetchAllRules(?QueryInterface $query = null)
     {
         /** @var \Doctrine\ORM\QueryBuilder $qb */
         $qb = $this->createQueryBuilder();

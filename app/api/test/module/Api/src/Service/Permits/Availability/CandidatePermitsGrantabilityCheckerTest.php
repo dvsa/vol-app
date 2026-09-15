@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CandidatePermitsGrantabilityCheckerTest extends MockeryTestCase
+final class CandidatePermitsGrantabilityCheckerTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsGrantable')]
     public function testIsGrantable(mixed $range1Count, mixed $range2Count, mixed $range3Count, mixed $expectedResult): void
@@ -77,11 +77,9 @@ class CandidatePermitsGrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public static function dpIsGrantable(): array
+    public static function dpIsGrantable(): \Iterator
     {
-        return [
-            [3, 5, 0, true],
-            [10, -1, 9, false]
-        ];
+        yield [3, 5, 0, true];
+        yield [10, -1, 9, false];
     }
 }

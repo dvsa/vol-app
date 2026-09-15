@@ -8,18 +8,18 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
  * Class TmOtherEmploymentTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class TmOtherEmploymentTest extends AbstractSubmissionSectionTestCase
+final class TmOtherEmploymentTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\TmOtherEmployment::class;
 
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
         $expectedResult = [
             'data' => [
@@ -46,8 +46,6 @@ class TmOtherEmploymentTest extends AbstractSubmissionSectionTestCase
             ]
         ];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

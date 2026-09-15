@@ -18,8 +18,9 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class PreviousConvictionTest extends RepositoryTestCase
+final class PreviousConvictionTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

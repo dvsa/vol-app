@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\MocksServicesTrait;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Auth\ForgotPasswordFactory::class)]
-class ForgotPasswordFactoryTest extends MockeryTestCase
+final class ForgotPasswordFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
@@ -49,6 +49,7 @@ class ForgotPasswordFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(ForgotPassword::class, $result);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

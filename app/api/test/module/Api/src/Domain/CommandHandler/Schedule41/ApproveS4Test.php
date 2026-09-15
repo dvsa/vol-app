@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  * Create SubmissionAction Test
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ApproveS4Test extends AbstractCommandHandlerTestCase
+final class ApproveS4Test extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

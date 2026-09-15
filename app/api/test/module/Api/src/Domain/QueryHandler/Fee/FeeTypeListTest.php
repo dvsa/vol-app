@@ -24,16 +24,16 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class FeeTypeListTest extends QueryHandlerTestCase
+final class FeeTypeListTest extends QueryHandlerTestCase
 {
-    public const IRFO_FEE_REF_ID = 'IRFO0001';
+    public const string IRFO_FEE_REF_ID = 'IRFO0001';
 
-    public const FEE_REF_1_ID = 'APP';
-    public const FEE_REF_2_ID = 'GRANT';
+    public const string FEE_REF_1_ID = 'APP';
+    public const string FEE_REF_2_ID = 'GRANT';
 
-    public const FEE_DESC = 'fee type ';
+    public const string FEE_DESC = 'fee type ';
 
-    public const ORG_ID = 9999;
+    public const int ORG_ID = 9999;
 
     public function setUp(): void
     {
@@ -86,7 +86,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
             'showVatRate' => false
         ];
 
-        static::assertEquals($expected, $result);
+        $this->assertEquals($expected, $result);
     }
 
     public function testIrfo(): void
@@ -175,12 +175,17 @@ class FeeTypeListTest extends QueryHandlerTestCase
             'showVatRate' => true
         ];
 
-        static::assertEquals($expected, $result);
+        $this->assertEquals($expected, $result);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestFilter')]
-    public function testFilter(array $fees, mixed $mockTrafficArea, mixed $expect): void
+    public function testFilter(array $fees, ?string $trafficAreaKey, mixed $expect): void
     {
+        // The provider refers to traffic areas by key; they are built here so the fees and the query
+        // share the same mock instance.
+        $trafficAreas = ['A' => m::mock(TrafficArea::class)];
+        $mockTrafficArea = $trafficAreaKey === null ? null : $trafficAreas[$trafficAreaKey];
+
         $query = Qry::create([]);
 
         $mockList = new \ArrayObject();
@@ -189,7 +194,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
                 $this->getMockFeeType(
                     $fee['id'],
                     $fee['effectiveFrom'],
-                    $fee['trafficArea'],
+                    $fee['trafficArea'] === null ? null : $trafficAreas[$fee['trafficArea']],
                     $fee['irfoFeeTypeRefId'],
                     $fee['feeTypeRefId']
                 )
@@ -223,123 +228,119 @@ class FeeTypeListTest extends QueryHandlerTestCase
             'showVatRate'  => false
         ];
 
-        static::assertEquals($expected, $result);
+        $this->assertEquals($expected, $result);
     }
 
-    public static function dataProviderTestFilter(): array
+    public static function dataProviderTestFilter(): \Iterator
     {
-        $mockTrafficAreaA = m::mock(TrafficArea::class);
-
-        return [
-            //  test effective data and few diff Fee ref types
-            [
-                'fees' => [
-                    [
-                        'id' => 24,
-                        'trafficArea' => null,
-                        'irfoFeeTypeRefId' => null,
-                        'feeTypeRefId' => self::FEE_REF_1_ID,
-                        'effectiveFrom' => '2015-01-01',
-                    ],
-                    [
-                        'id' => 25,
-                        'trafficArea' => null,
-                        'irfoFeeTypeRefId' => null,
-                        'feeTypeRefId' => self::FEE_REF_1_ID,
-                        'effectiveFrom' => '2014-01-01',
-                    ],
-                    [
-                        'id' => 34,
-                        'trafficArea' => null,
-                        'irfoFeeTypeRefId' => null,
-                        'feeTypeRefId' => self::FEE_REF_2_ID,
-                        'effectiveFrom' => '2015-01-01',
-                    ],
+        //  test effective data and few diff Fee ref types
+        yield [
+            'fees' => [
+                [
+                    'id' => 24,
+                    'trafficArea' => null,
+                    'irfoFeeTypeRefId' => null,
+                    'feeTypeRefId' => self::FEE_REF_1_ID,
+                    'effectiveFrom' => '2015-01-01',
                 ],
-                'mockTrafficArea' => null,
-                'expect' => [
-                    'result' => [
-                        ['id' => 24],
-                        ['id' => 34],
-                    ],
-                    'feeType' => [
-                        24 => self::FEE_DESC . '24',
-                        34 => self::FEE_DESC . '34',
-                    ],
+                [
+                    'id' => 25,
+                    'trafficArea' => null,
+                    'irfoFeeTypeRefId' => null,
+                    'feeTypeRefId' => self::FEE_REF_1_ID,
+                    'effectiveFrom' => '2014-01-01',
+                ],
+                [
+                    'id' => 34,
+                    'trafficArea' => null,
+                    'irfoFeeTypeRefId' => null,
+                    'feeTypeRefId' => self::FEE_REF_2_ID,
+                    'effectiveFrom' => '2015-01-01',
                 ],
             ],
-            //  test take only for specified traffic area
-            [
-                'fees' => [
-                    [
-                        'id' => 24,
-                        'trafficArea' => null,
-                        'irfoFeeTypeRefId' => null,
-                        'feeTypeRefId' => self::FEE_REF_1_ID,
-                        'effectiveFrom' => '2015-01-01',
-                    ],
-                    [
-                        'id' => 25,
-                        'trafficArea' => $mockTrafficAreaA,
-                        'irfoFeeTypeRefId' => null,
-                        'feeTypeRefId' => self::FEE_REF_1_ID,
-                        'effectiveFrom' => '2015-01-01',
-                    ],
-                    [
-                        'id' => 34,
-                        'trafficArea' => null,
-                        'irfoFeeTypeRefId' => null,
-                        'feeTypeRefId' => self::FEE_REF_2_ID,
-                        'effectiveFrom' => '2015-01-01',
-                    ],
+            'trafficAreaKey' => null,
+            'expect' => [
+                'result' => [
+                    ['id' => 24],
+                    ['id' => 34],
                 ],
-                'mockTrafficArea' => $mockTrafficAreaA,
-                'expect' => [
-                    'result' => [
-                        ['id' => 25],
-                        ['id' => 34],
-                    ],
-                    'feeType' => [
-                        25 => self::FEE_DESC . '25',
-                        34 => self::FEE_DESC . '34',
-                    ],
+                'feeType' => [
+                    24 => self::FEE_DESC . '24',
+                    34 => self::FEE_DESC . '34',
                 ],
             ],
-            //  test group by IfroFeeTypeRefId and FeeTypeRefId
-            [
-                'fees' => [
-                    [
-                        'id' => 24,
-                        'trafficArea' => null,
-                        'irfoFeeTypeRefId' => self::IRFO_FEE_REF_ID,
-                        'feeTypeRefId' => self::FEE_REF_1_ID,
-                        'effectiveFrom' => '2015-01-01',
-                    ],
-                    [
-                        'id' => 25,
-                        'trafficArea' => null,
-                        'irfoFeeTypeRefId' => self::IRFO_FEE_REF_ID,
-                        'feeTypeRefId' => self::FEE_REF_1_ID,
-                        'effectiveFrom' => '2016-01-01',
-                    ],
-                    [
-                        'id' => 26,
-                        'trafficArea' => null,
-                        'irfoFeeTypeRefId' => self::IRFO_FEE_REF_ID,
-                        'feeTypeRefId' => self::FEE_REF_2_ID,
-                        'effectiveFrom' => '2015-01-01',
-                    ],
+        ];
+        //  test take only for specified traffic area
+        yield [
+            'fees' => [
+                [
+                    'id' => 24,
+                    'trafficArea' => null,
+                    'irfoFeeTypeRefId' => null,
+                    'feeTypeRefId' => self::FEE_REF_1_ID,
+                    'effectiveFrom' => '2015-01-01',
                 ],
-                'mockTrafficArea' => $mockTrafficAreaA,
-                'expect' => [
-                    'result' => [
-                        ['id' => 25],
-                        ['id' => 26],
-                    ],
-                    'feeType' => [
-                        25 => self::FEE_DESC . '25',
-                        26 => self::FEE_DESC . '26',
-                    ],
+                [
+                    'id' => 25,
+                    'trafficArea' => 'A',
+                    'irfoFeeTypeRefId' => null,
+                    'feeTypeRefId' => self::FEE_REF_1_ID,
+                    'effectiveFrom' => '2015-01-01',
+                ],
+                [
+                    'id' => 34,
+                    'trafficArea' => null,
+                    'irfoFeeTypeRefId' => null,
+                    'feeTypeRefId' => self::FEE_REF_2_ID,
+                    'effectiveFrom' => '2015-01-01',
+                ],
+            ],
+            'trafficAreaKey' => 'A',
+            'expect' => [
+                'result' => [
+                    ['id' => 25],
+                    ['id' => 34],
+                ],
+                'feeType' => [
+                    25 => self::FEE_DESC . '25',
+                    34 => self::FEE_DESC . '34',
+                ],
+            ],
+        ];
+        //  test group by IfroFeeTypeRefId and FeeTypeRefId
+        yield [
+            'fees' => [
+                [
+                    'id' => 24,
+                    'trafficArea' => null,
+                    'irfoFeeTypeRefId' => self::IRFO_FEE_REF_ID,
+                    'feeTypeRefId' => self::FEE_REF_1_ID,
+                    'effectiveFrom' => '2015-01-01',
+                ],
+                [
+                    'id' => 25,
+                    'trafficArea' => null,
+                    'irfoFeeTypeRefId' => self::IRFO_FEE_REF_ID,
+                    'feeTypeRefId' => self::FEE_REF_1_ID,
+                    'effectiveFrom' => '2016-01-01',
+                ],
+                [
+                    'id' => 26,
+                    'trafficArea' => null,
+                    'irfoFeeTypeRefId' => self::IRFO_FEE_REF_ID,
+                    'feeTypeRefId' => self::FEE_REF_2_ID,
+                    'effectiveFrom' => '2015-01-01',
+                ],
+            ],
+            'trafficAreaKey' => 'A',
+            'expect' => [
+                'result' => [
+                    ['id' => 25],
+                    ['id' => 26],
+                ],
+                'feeType' => [
+                    25 => self::FEE_DESC . '25',
+                    26 => self::FEE_DESC . '26',
                 ],
             ],
         ];

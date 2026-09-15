@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Generic\QuestionText as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class QuestionTextEntityTest extends EntityTester
+final class QuestionTextEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

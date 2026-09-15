@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
+final class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var UpdateInspectionRequest
@@ -115,21 +115,19 @@ class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $response->toArray());
     }
 
-    public static function successProvider(): array
+    public static function successProvider(): \Iterator
     {
-        return [
-            'satisfactory' => [
-                123,
-                'S',
-                InspectionRequest::RESULT_TYPE_SATISFACTORY,
-                'Satisfactory inspection request: ID 123',
-            ],
-            'unsatisfactory' => [
-                123,
-                'U',
-                InspectionRequest::RESULT_TYPE_UNSATISFACTORY,
-                'Unsatisfactory inspection request: ID 123',
-            ],
+        yield 'satisfactory' => [
+            123,
+            'S',
+            InspectionRequest::RESULT_TYPE_SATISFACTORY,
+            'Satisfactory inspection request: ID 123',
+        ];
+        yield 'unsatisfactory' => [
+            123,
+            'U',
+            InspectionRequest::RESULT_TYPE_UNSATISFACTORY,
+            'Unsatisfactory inspection request: ID 123',
         ];
     }
 

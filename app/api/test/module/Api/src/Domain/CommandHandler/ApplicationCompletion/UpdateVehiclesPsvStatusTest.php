@@ -25,7 +25,7 @@ use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateVehiclesPsvStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateVehiclesPsvStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'VehiclesPsv';
 

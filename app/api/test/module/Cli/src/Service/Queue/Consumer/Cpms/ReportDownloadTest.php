@@ -15,7 +15,7 @@ use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\Cpms\ReportDownload::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
-class ReportDownloadTest extends AbstractConsumerTestCase
+final class ReportDownloadTest extends AbstractConsumerTestCase
 {
     /** @var ReportDownload */
     protected $sut;

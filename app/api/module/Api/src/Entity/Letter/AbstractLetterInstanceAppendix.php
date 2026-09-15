@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_instance_appendix",
- *    indexes={
- *        @ORM\Index(name="ix_letter_instance_appendix_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_instance_appendix_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_instance_appendix_letter_appendix_version_id", columns={"letter_appendix_version_id"}),
- *        @ORM\Index(name="ix_letter_instance_appendix_letter_instance_id", columns={"letter_instance_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_instance_appendix')]
+#[ORM\Index(name: 'ix_letter_instance_appendix_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_instance_appendix_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_instance_appendix_letter_appendix_version_id', columns: ['letter_appendix_version_id'])]
+#[ORM\Index(name: 'ix_letter_instance_appendix_letter_instance_id', columns: ['letter_instance_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterInstanceAppendix implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,81 +41,73 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterInstance
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstance
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstance", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_instance_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_instance_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class, inversedBy: 'letterInstanceAppendices', fetch: 'LAZY')]
     protected $letterInstance;
 
     /**
      * LetterAppendixVersion
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_appendix_version_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_appendix_version_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion::class, fetch: 'LAZY')]
     protected $letterAppendixVersion;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['unsigned' => true])]
     protected $displayOrder = 0;
 
     /**
      * Caseworker edited EditorJS content
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="edited_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'edited_content', nullable: true)]
     protected $editedContent;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -143,7 +131,7 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
      *
      * @param int $id new value being set
      *
-     * @return LetterInstanceAppendix
+     * @return static
      */
     public function setId($id)
     {
@@ -167,7 +155,7 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterInstance $letterInstance new value being set
      *
-     * @return LetterInstanceAppendix
+     * @return static
      */
     public function setLetterInstance($letterInstance)
     {
@@ -191,7 +179,7 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion $letterAppendixVersion new value being set
      *
-     * @return LetterInstanceAppendix
+     * @return static
      */
     public function setLetterAppendixVersion($letterAppendixVersion)
     {
@@ -215,7 +203,7 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterInstanceAppendix
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -239,7 +227,7 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterInstanceAppendix
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -263,7 +251,7 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterInstanceAppendix
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -287,7 +275,7 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
      *
      * @param array $editedContent new value being set
      *
-     * @return LetterInstanceAppendix
+     * @return static
      */
     public function setEditedContent($editedContent)
     {
@@ -311,7 +299,7 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
      *
      * @param int $version new value being set
      *
-     * @return LetterInstanceAppendix
+     * @return static
      */
     public function setVersion($version)
     {

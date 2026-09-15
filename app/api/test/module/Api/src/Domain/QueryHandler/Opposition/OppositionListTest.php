@@ -14,7 +14,7 @@ use Mockery as m;
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Opposition\OppositionList::class)]
-class OppositionListTest extends QueryHandlerTestCase
+final class OppositionListTest extends QueryHandlerTestCase
 {
     /** @var  OppositionList */
     protected $sut;
@@ -39,7 +39,7 @@ class OppositionListTest extends QueryHandlerTestCase
             ->andReturn([$mockResult, clone $mockResult]);
 
         $result = $this->sut->handleQuery($query);
-        $this->assertEquals($result['count'], 2);
+        $this->assertEquals(2, $result['count']);
         $this->assertEquals($result['result'], ['foo', 'foo']);
     }
 }

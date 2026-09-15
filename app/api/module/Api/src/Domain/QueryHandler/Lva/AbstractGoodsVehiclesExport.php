@@ -28,9 +28,7 @@ abstract class AbstractGoodsVehiclesExport extends AbstractQueryHandler
         $iterableResult = $repo->fetchForExport($qb);
 
         $result = [];
-        while (false !== ($row = $iterableResult->next())) {
-            $row = current($row);
-
+        foreach ($iterableResult as $row) {
             $resultRow = [
                 'vehicle' => [
                     'vrm' => $row['vrm'],

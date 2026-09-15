@@ -22,7 +22,7 @@ class RefuseControllerFactory implements FactoryInterface
      * @return RefuseController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RefuseController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RefuseController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

@@ -15,7 +15,7 @@ use Mockery as m;
 /**
  * Class ReportLetterTemplateTest Test
  */
-class ReportLetterTemplateTest extends AbstractDataServiceTestCase
+final class ReportLetterTemplateTest extends AbstractDataServiceTestCase
 {
     /** @var ReportLetterTemplate */
     private $sut;
@@ -57,31 +57,29 @@ class ReportLetterTemplateTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $this->sut->fetchListOptions());
     }
 
-    public static function dpTestFetchListOptions(): array
+    public static function dpTestFetchListOptions(): \Iterator
     {
-        return [
-            'with data' => [
+        yield 'with data' => [
+            'results' => [
                 'results' => [
-                    'results' => [
-                        [
-                            'id' => 3,
-                            'templateSlug' => 'sometemplateSlug',
-                        ],
-                        [
-                            'id' => 43,
-                            'templateSlug' => 'someothertemplateSlug',
-                        ]
+                    [
+                        'id' => 3,
+                        'templateSlug' => 'sometemplateSlug',
+                    ],
+                    [
+                        'id' => 43,
+                        'templateSlug' => 'someothertemplateSlug',
                     ]
-                ],
-                'expected' => [
-                    'sometemplateSlug' => 'sometemplateSlug',
-                    'someothertemplateSlug' => 'someothertemplateSlug',
                 ]
             ],
-            'no data' => [
-                'results' => ['results' => []],
-                'expected' => []
+            'expected' => [
+                'sometemplateSlug' => 'sometemplateSlug',
+                'someothertemplateSlug' => 'someothertemplateSlug',
             ]
+        ];
+        yield 'no data' => [
+            'results' => ['results' => []],
+            'expected' => []
         ];
     }
 

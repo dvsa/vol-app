@@ -6,6 +6,19 @@ locals {
 
   supporting_service_names = ["liquibase"]
 
+  task_exec_iam_role_statements = [
+    {
+      effect = "Allow"
+      actions = [
+        "secretsmanager:GetSecretValue"
+      ]
+      resources = [
+        data.aws_secretsmanager_secret.this["api"].arn,
+        data.aws_secretsmanager_secret.infra.arn
+      ]
+    },
+  ]
+
   task_iam_role_statements = [
     {
       effect = "Allow"
@@ -28,10 +41,27 @@ locals {
     {
       effect = "Allow"
       actions = [
+        "events:PutEvents"
+      ]
+      resources = [
+        "arn:aws:events:eu-west-1:146997448015:event-bus/default"
+      ]
+      conditions = [
+        {
+          test     = "StringEquals"
+          variable = "events:source"
+          values   = ["vol.api"]
+        }
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::259405524870:role/txc-prod-consumer-role"
+        "arn:aws:iam::259405524870:role/txc-prod-consumer-role",
+        "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole"
       ]
     },
     {
@@ -79,6 +109,111 @@ locals {
         "arn:aws:s3:::app-vol-content/*"
       ]
     },
+    {
+      effect = "Allow"
+      actions = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ]
+      resources = [
+        "arn:aws:s3:::app-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::app-shd-pri-olcsci-build-s3/*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBClusterSnapshot",
+        "rds:DescribeDBClusterSnapshots",
+        "rds:DeleteDBClusterSnapshot",
+        "rds:ModifyDBClusterSnapshotAttribute"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-db-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*",
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBClusters"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:RestoreDBClusterFromSnapshot",
+        "rds:AddTagsToResource"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:subgrp:app-olcs-rds-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:CreateDBInstance"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBInstances"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:db:*",
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DeleteDBInstance",
+        "rds:DeleteDBCluster"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket"
+      ]
+      resources = [
+        "arn:aws:s3:::app-olcs-pri-integration-dva-s3",
+        "arn:aws:s3:::app-olcs-pri-integration-dva-s3/*",
+        "arn:aws:s3:::app-olcs-pri-integration-reporting-s3",
+        "arn:aws:s3:::app-olcs-pri-integration-reporting-s3/*",
+        "arn:aws:s3:::app-mc-pri-integration-data-s3",
+        "arn:aws:s3:::app-mc-pri-integration-data-s3/*"
+      ]
+    }
   ]
 }
 
@@ -121,6 +256,10 @@ data "aws_secretsmanager_secret" "this" {
   for_each = toset(setsubtract(local.service_names, ["cli"]))
 
   name = "APP-BASE-SM-APPLICATION-${upper(each.key)}"
+}
+
+data "aws_secretsmanager_secret" "infra" {
+  name = "APP-BASE-SM-INFRA"
 }
 
 data "aws_cognito_user_pools" "this" {
@@ -170,6 +309,8 @@ module "service" {
 
   legacy_environment = "APP"
 
+  dva_ni_export_s3uri = module.parameters.dva_ni_export_s3uri
+
   domain_env = "app"
 
   domain_name    = "dvsacloud.uk"
@@ -191,6 +332,8 @@ module "service" {
       repository = data.aws_ecr_repository.this["api"].repository_url
 
       task_iam_role_statements = local.task_iam_role_statements
+
+      task_exec_iam_role_statements = local.task_exec_iam_role_statements
 
       subnet_ids = data.aws_subnets.this["API"].ids
 
@@ -337,6 +480,12 @@ module "service" {
     ]
 
     jobs = [
+      {
+        name     = "retrieval-link-purge",
+        commands = ["batch:retrieval-link-purge"],
+        timeout  = 3600,
+        schedule = ["cron(30 03 * * ? *)"],
+      },
       {
         name     = "cache-clear",
         commands = ["batch:cache-clear", "--flush-all", "--force"],
@@ -491,7 +640,7 @@ module "service" {
         name     = "process-inbox",
         commands = ["batch:process-inbox"],
         timeout  = 43200,
-        schedule = ["cron(45 01 * * ? *)"],
+        schedule = ["cron(0 07 * * ? *)"],
       },
       {
         name     = "process-ntu",
@@ -621,15 +770,18 @@ module "service" {
         queue = "liquibase"
       },
       {
-        name     = "sas-mi-extract",
-        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
-        type     = "scripts",
-        schedule = ["cron(00 01 * * ? *)"],
+        name              = "sas-mi-extract",
+        commands          = ["/mnt/data/scripts/sas_mi_extract.sh"],
+        type              = "scripts",
+        ephemeral_storage = 50,
+        schedule          = ["cron(00 01 * * ? *)"],
       },
       {
         name     = "import-anondb",
         commands = ["/mnt/data/scripts/import_anondb.sh"],
         type     = "scripts"
+        cpu      = 2,
+        memory   = 8192,
       },
       {
         name     = "populate-anondb",
@@ -638,7 +790,8 @@ module "service" {
       },
       {
         name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/ni_dvacomplaince.sh"],
+        commands = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
+        ephemeral_storage = 50,
         type     = "scripts"
       },
       {
@@ -646,7 +799,7 @@ module "service" {
         commands = ["batch:first-tm-letter", "-v"],
         timeout  = 43200,
         schedule = ["cron(30 6 ? * 2-7 *)"],
-      },
+      }
     ]
   }
 }

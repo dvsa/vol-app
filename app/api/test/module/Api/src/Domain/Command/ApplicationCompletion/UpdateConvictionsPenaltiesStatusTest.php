@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateConvictionsPenaltie
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateConvictionsPenaltiesStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateConvictionsPenaltiesStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

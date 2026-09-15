@@ -121,7 +121,7 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke($container, $requestedName, array $options = null)
+    public function __invoke($container, $requestedName, ?array $options = null)
     {
         /** @var FormServiceManager $formServiceLocator */
         /** @var FormHelperService $formHelper */

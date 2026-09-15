@@ -22,7 +22,7 @@ use Dvsa\Olcs\Transfer\Command\Variation\DeleteVariation;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class DeleteVariationTest extends AbstractCommandHandlerTestCase
+final class DeleteVariationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

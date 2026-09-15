@@ -20,7 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Update Publication Link Test
  */
-class UpdatePublicationLinkTest extends AbstractCommandHandlerTestCase
+final class UpdatePublicationLinkTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

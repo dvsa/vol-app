@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class SuccessfulCandidatePermitsFacadeTest extends MockeryTestCase
+final class SuccessfulCandidatePermitsFacadeTest extends MockeryTestCase
 {
     private $candidatePermits;
 
@@ -30,6 +30,7 @@ class SuccessfulCandidatePermitsFacadeTest extends MockeryTestCase
 
     private $successfulCandidatePermitsFacade;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->candidatePermits = [

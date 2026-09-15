@@ -18,7 +18,7 @@ class StockLicenceMaxPermittedCounterFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): StockLicenceMaxPermittedCounter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): StockLicenceMaxPermittedCounter
     {
         return new StockLicenceMaxPermittedCounter(
             $container->get('RepositoryServiceManager')->get('IrhpPermit')

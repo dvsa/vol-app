@@ -17,7 +17,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class PostScoringEmailTest extends AbstractCommandHandlerTestCase
+final class PostScoringEmailTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

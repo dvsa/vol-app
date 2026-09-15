@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType;
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

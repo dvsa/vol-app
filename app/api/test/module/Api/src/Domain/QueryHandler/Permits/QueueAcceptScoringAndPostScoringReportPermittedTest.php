@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class QueueAcceptScoringAndPostScoringReportPermittedTest extends QueryHandlerTestCase
+final class QueueAcceptScoringAndPostScoringReportPermittedTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -96,11 +96,9 @@ class QueueAcceptScoringAndPostScoringReportPermittedTest extends QueryHandlerTe
         );
     }
 
-    public static function permittedScenariosProvider(): array
+    public static function permittedScenariosProvider(): \Iterator
     {
-        return [
-            [true, 'Prerequisites ok'],
-            [false, 'Prerequisites fail']
-        ];
+        yield [true, 'Prerequisites ok'];
+        yield [false, 'Prerequisites fail'];
     }
 }

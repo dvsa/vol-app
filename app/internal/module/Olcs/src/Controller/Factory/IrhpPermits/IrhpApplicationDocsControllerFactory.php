@@ -23,7 +23,7 @@ class IrhpApplicationDocsControllerFactory implements FactoryInterface
      * @return IrhpApplicationDocsController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationDocsController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrhpApplicationDocsController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

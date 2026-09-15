@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Publication\PublicationSection as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class PublicationSectionEntityTest extends EntityTester
+final class PublicationSectionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

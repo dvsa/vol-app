@@ -7,10 +7,9 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
 /**
  * DocumentToDelete Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="document_to_delete")
  */
+#[ORM\Table(name: 'document_to_delete')]
+#[ORM\Entity]
 class DocumentToDelete extends AbstractDocumentToDelete
 {
     public const MAX_ATTEMPTS = 3;

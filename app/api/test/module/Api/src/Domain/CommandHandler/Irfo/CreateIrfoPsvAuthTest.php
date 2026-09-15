@@ -28,7 +28,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Create IrfoPsvAuth Test
  */
-class CreateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
+final class CreateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -193,9 +193,9 @@ class CreateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('SC/111', $savedIrfoPsvAuth->getIrfoFileNo());
 
         $this->assertEquals($data['validityPeriod'], $savedIrfoPsvAuth->getValidityPeriod());
-        $this->assertEquals($data['inForceDate'], $savedIrfoPsvAuth->getInForceDate()->format('Y-m-d'));
-        $this->assertEquals($data['expiryDate'], $savedIrfoPsvAuth->getExpiryDate()->format('Y-m-d'));
-        $this->assertEquals($data['applicationSentDate'], $savedIrfoPsvAuth->getApplicationSentDate()->format('Y-m-d'));
+        $this->assertSame($data['inForceDate'], $savedIrfoPsvAuth->getInForceDate()->format('Y-m-d'));
+        $this->assertSame($data['expiryDate'], $savedIrfoPsvAuth->getExpiryDate()->format('Y-m-d'));
+        $this->assertSame($data['applicationSentDate'], $savedIrfoPsvAuth->getApplicationSentDate()->format('Y-m-d'));
         $this->assertEquals($data['serviceRouteFrom'], $savedIrfoPsvAuth->getServiceRouteFrom());
         $this->assertEquals($data['serviceRouteTo'], $savedIrfoPsvAuth->getServiceRouteTo());
         $this->assertEquals($data['isFeeExemptApplication'], $savedIrfoPsvAuth->getIsFeeExemptApplication());
@@ -332,9 +332,9 @@ class CreateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('SC/111', $savedIrfoPsvAuth->getIrfoFileNo());
 
         $this->assertEquals($data['validityPeriod'], $savedIrfoPsvAuth->getValidityPeriod());
-        $this->assertEquals($data['inForceDate'], $savedIrfoPsvAuth->getInForceDate()->format('Y-m-d'));
-        $this->assertEquals($data['expiryDate'], $savedIrfoPsvAuth->getExpiryDate()->format('Y-m-d'));
-        $this->assertEquals($data['applicationSentDate'], $savedIrfoPsvAuth->getApplicationSentDate()->format('Y-m-d'));
+        $this->assertSame($data['inForceDate'], $savedIrfoPsvAuth->getInForceDate()->format('Y-m-d'));
+        $this->assertSame($data['expiryDate'], $savedIrfoPsvAuth->getExpiryDate()->format('Y-m-d'));
+        $this->assertSame($data['applicationSentDate'], $savedIrfoPsvAuth->getApplicationSentDate()->format('Y-m-d'));
         $this->assertEquals($data['serviceRouteFrom'], $savedIrfoPsvAuth->getServiceRouteFrom());
         $this->assertEquals($data['serviceRouteTo'], $savedIrfoPsvAuth->getServiceRouteTo());
         $this->assertEquals($data['isFeeExemptApplication'], $savedIrfoPsvAuth->getIsFeeExemptApplication());

@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
 /**
  * Class DigitalSendRemindersTest
  */
-class DigitalSendRemindersTest extends AbstractCommandHandlerTestCase
+final class DigitalSendRemindersTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -35,7 +35,7 @@ class DigitalSendRemindersTest extends AbstractCommandHandlerTestCase
         $this->repoMap['ContinuationDetail']
             ->shouldReceive('fetchListForDigitalReminders')->with(34)->once()->andReturn(
                 [
-                    (new ContinuationDetail())->setId(45),
+                    new ContinuationDetail()->setId(45),
                 ]
             );
 

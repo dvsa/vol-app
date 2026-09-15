@@ -482,7 +482,7 @@ class LicenceVehicle extends AbstractRepository
      *
      * @param QueryBuilder $qb Prepared Query Builder
      *
-     * @return \Doctrine\ORM\Internal\Hydration\IterableResult
+     * @return iterable<array<string, mixed>>
      */
     public function fetchForExport(QueryBuilder $qb)
     {
@@ -508,7 +508,7 @@ class LicenceVehicle extends AbstractRepository
                 $qb->expr()->eq('gd2.id', '(' . $qbs->getDQL() . ')')
             );
 
-        return $qb->getQuery()->iterate();
+        return $qb->getQuery()->toIterable();
     }
 
     /**

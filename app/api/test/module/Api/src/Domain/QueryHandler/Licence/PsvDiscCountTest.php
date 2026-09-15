@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Repository\PsvDisc;
 use Dvsa\Olcs\Transfer\Query\Licence\PsvDiscCount;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 
-class PsvDiscCountTest extends QueryHandlerTestCase
+final class PsvDiscCountTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

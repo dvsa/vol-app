@@ -1,0 +1,6 @@
+<?php assert($this->object instanceof Common\Service\Table\TableBuilder); ?>
+<?php if (!$this->object->shouldHideTitle()): ?>
+  <?php echo $this->object->renderLayout('default-header'); ?>
+<?php endif; ?>
+<?php echo $this->object->renderLayout('table'); ?>
+<?php echo $this->object->renderFooter();

@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 class RouteParamsFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         return new RouteParams();
     }

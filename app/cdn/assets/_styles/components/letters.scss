@@ -1,0 +1,329 @@
+// Letters
+//
+// Long issue labels dropped onto the line below their checkbox in the Create
+// Letter modal, leaving a stranded tick box with its text underneath.
+//
+// govuk-frontend lays each checkbox row out as `display: flex; flex-wrap: wrap`
+// and keeps the label on the same line by capping it at
+// `max-width: calc(100% - 50px)` (the --small variant). That calc assumes the
+// label is border-box, so its own padding counts inside the cap. This
+// application has no global `box-sizing: border-box` reset, so the label is
+// content-box and its 1px + 15px of horizontal padding is added on top:
+//
+//   checkbox advance   44px - 10px margin-left + 9px  =  43px
+//   label              (570 - 50) + 16px padding      = 536px
+//                                                       -----
+//                                                       579px  in a 570px row
+//
+// Nine pixels over, so flex-wrap pushes the label down. It only shows on labels
+// long enough to actually reach the cap, which is why most rows look fine and a
+// handful do not.
+//
+// Scoped to the letters modal rather than fixed globally: the same arithmetic
+// applies to every `govuk-checkboxes--small` list in the application, but
+// correcting it site-wide would change wrapping on screens well outside this
+// work. Worth doing separately.
+// Letter type builder
+//
+// Composition on the left, preview on the right, context across the top -- the context governs
+// both panes so it belongs above them rather than inside either.
+//
+// The preview is capped at A4 by the letter's own stylesheet, so the pane only needs to be wide
+// enough to hold it: 300px for the composition list matches Preview and edit letter, and leaves
+// the letter its full width at the laptop sizes this is used at.
+.letter-builder {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+
+  &__composition {
+    flex: 0 0 300px;
+    min-width: 0;
+  }
+
+  &__preview {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  // Collapsed, the context is one line stating what is being previewed. Expanded, it is the full
+  // set of controls. Six controls and a checkbox list came to 416px -- half a laptop viewport --
+  // for something set once and then watched, which pushed the letter itself below the fold.
+  &__context-summary {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid $grey-2;
+    margin-bottom: 15px;
+  }
+
+  &__context-label {
+    font-weight: bold;
+  }
+
+  &__context-value {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: $grey-1;
+  }
+
+  &__context-toggle {
+    flex: 0 0 auto;
+    padding: 0;
+    background: none;
+    border: 0;
+    color: $link-colour;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  &__context-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    // An empty list would otherwise collapse to nothing, leaving no hint that anything belongs here
+    &:empty::after {
+      content: attr(data-empty);
+      display: block;
+      padding: 10px 0;
+      color: $grey-1;
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    margin-bottom: 4px;
+    background: $grey-4;
+    border-left: 4px solid $grey-2;
+
+    &-name {
+      flex: 1 1 auto;
+      min-width: 0;
+      word-break: break-word;
+    }
+
+    // Reorder and remove are icon-sized targets, so they need to stay legible without
+    // dominating the row
+    button {
+      flex: 0 0 auto;
+      padding: 2px 8px;
+      background: none;
+      border: 1px solid $grey-2;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+    }
+  }
+
+  // Sits above the preview so the state of the composition is next to the thing it produces,
+  // rather than at the bottom of a column the reader has already scrolled past.
+  &__actions {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+
+    .govuk-button {
+      margin-bottom: 0;
+    }
+  }
+
+  &__dirty {
+    color: $grey-1;
+    font-style: italic;
+  }
+
+  &__save-status {
+    color: $grey-1;
+  }
+
+  &__frame-container {
+    position: relative;
+    border: 1px solid $grey-2;
+    background: $grey-3;
+    padding: 10px;
+
+    iframe {
+      width: 100%;
+      height: 70vh;
+      border: none;
+      background: $white;
+    }
+  }
+
+  // Sits over the preview rather than beside it: always visible, never squeezing the letter
+  &__preview-status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.9);
+    color: $grey-1;
+  }
+
+  &__diagnostics {
+    margin-bottom: 10px;
+    border-left: 5px solid $govuk-blue;
+    background: $grey-4;
+
+    &--blocking {
+      border-left-color: $error-colour;
+    }
+
+    &-toggle {
+      width: 100%;
+      padding: 10px;
+      text-align: left;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    &-list {
+      margin: 0;
+      padding: 0 10px 10px 10px;
+
+      li {
+        padding: 4px 0;
+      }
+    }
+  }
+
+  // A diagnostic that can point at its paragraph invites the click
+  &__diagnostic--locatable {
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // The "Apply this context" affordance inside a diagnostic: reads as a link, works as a button
+  &__apply-context {
+    padding: 0;
+    background: none;
+    border: 0;
+    color: $link-colour;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+// Preview and edit letter
+//
+// The section list down the left is the working control of this page -- it is how
+// a caseworker picks what to edit -- but it inherited the standard 200px left
+// sidebar, which is sized for short link lists. Section names are full sentences
+// ("The bank statements you provided are not in the required name"), so they were
+// breaking over five or six lines each and the list stopped being scannable.
+//
+// The space comes from the letter's own gutters rather than from anywhere useful.
+// The preview is capped at A4 (210mm) and centred, so on a 1536px-wide laptop
+// roughly 200px of empty grey sat either side of it. Widening the sidebar takes
+// 100px of that back; the letter is unaffected, since it was never using it.
+body[id="pg:letter/preview:preview"] {
+  .sidebar--left {
+    width: 300px;
+  }
+}
+
+// Radios carry the identical rule and so the identical bug. Nothing trips it
+// today because the only choices are "First request" and "Final request", but
+// those labels are admin-editable, so a longer one would.
+//
+// Applies to both places letters list sections against a control: the Create
+// Letter modal, and the sidebar on Preview and edit letter. The sidebar shows it
+// worst -- the column is narrow, so almost every label is long enough to trip it.
+#letter-create-form,
+body[id="pg:letter/preview:preview"] .sidebar--left {
+  .govuk-checkboxes__label,
+  .govuk-radios__label {
+    // Count the padding inside the cap, as govuk-frontend intends.
+    box-sizing: border-box;
+
+    // Then let the label simply take the space the control leaves, instead of
+    // relying on a fixed-pixel cap that has to be kept in step with it. In a
+    // narrow column the label still wraps -- it just wraps in its own column,
+    // beside the box, instead of dropping underneath it.
+    flex: 1 1 0%;
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+// Create Letter modal: one visual rhythm for every group of choices.
+//
+// Issue groups were built as an accordion with their rules, spacing and pointer
+// affordance written inline, so nothing was available to the appendix and letter-choice
+// groups that follow them. Those rendered as bare headings, reading as an afterthought
+// hanging below a structured list rather than part of the same form.
+//
+// The letter choices deliberately do NOT get the accordion behaviour: picking First or
+// Final is mandatory, and a required choice must not be hidden behind a Show/Hide.
+#letter-create-form {
+  .letter-section__header,
+  .letter-group__header {
+    border-bottom: 1px solid $govuk-border-colour;
+    padding: 10px 0;
+    margin: 0;
+  }
+
+  // Only the accordion headers are clickable; the static ones must not pretend to be.
+  .letter-section__header {
+    cursor: pointer;
+  }
+
+  .letter-section__title,
+  .letter-group__title {
+    display: inline-block;
+    margin: 0;
+  }
+
+  .letter-section__toggle {
+    float: right;
+    font-size: 14px;
+  }
+
+  .letter-section__icon {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid $govuk-link-colour;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+
+  .letter-section__content,
+  .letter-group__content {
+    padding: 15px 0;
+    border-bottom: 1px solid $govuk-border-colour;
+  }
+
+  // The groups sit in one continuous list, so the gap belongs between them rather
+  // than only above the first non-accordion group.
+  .letter-group {
+    margin-top: 0;
+  }
+}

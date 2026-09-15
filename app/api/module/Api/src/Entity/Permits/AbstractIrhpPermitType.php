@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irhp_permit_type",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_permit_type_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_type_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="irhp_permit_type_ref_data_id_fk", columns={"name"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit_type')]
+#[ORM\Index(name: 'fk_irhp_permit_type_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_type_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'irhp_permit_type_ref_data_id_fk', columns: ['name'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrhpPermitType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,80 +40,72 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Name
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="name", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'name', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $name;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="description", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'description', nullable: true)]
     protected $description;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * ApplicationPaths
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationPath", mappedBy="irhpPermitType")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath::class, mappedBy: 'irhpPermitType')]
     protected $applicationPaths;
 
     /**
      * IrhpPermitStocks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock", mappedBy="irhpPermitType")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, mappedBy: 'irhpPermitType')]
     protected $irhpPermitStocks;
 
     /**
@@ -143,7 +131,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setId($id)
     {
@@ -167,7 +155,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $name new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setName($name)
     {
@@ -191,7 +179,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -215,7 +203,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -239,7 +227,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param string $description new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setDescription($description)
     {
@@ -263,7 +251,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setVersion($version)
     {
@@ -287,7 +275,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationPaths collection being set as the value
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setApplicationPaths($applicationPaths)
     {
@@ -311,7 +299,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applicationPaths collection being added
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function addApplicationPaths($applicationPaths)
     {
@@ -334,7 +322,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationPaths collection being removed
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function removeApplicationPaths($applicationPaths)
     {
@@ -350,7 +338,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitStocks collection being set as the value
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setIrhpPermitStocks($irhpPermitStocks)
     {
@@ -374,7 +362,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitStocks collection being added
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function addIrhpPermitStocks($irhpPermitStocks)
     {
@@ -397,7 +385,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitStocks collection being removed
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function removeIrhpPermitStocks($irhpPermitStocks)
     {

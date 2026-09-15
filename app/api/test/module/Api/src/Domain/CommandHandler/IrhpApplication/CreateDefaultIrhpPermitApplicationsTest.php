@@ -15,7 +15,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTestCase
+final class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -243,18 +243,14 @@ class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTest
         );
     }
 
-    public static function dpTestHandleCommandQandAYear(): array
+    public static function dpTestHandleCommandQandAYear(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM];
     }
 
-    public static function dpTestHandleCommandQandANoYear(): array
+    public static function dpTestHandleCommandQandANoYear(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL]
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL];
     }
 }

@@ -18,7 +18,7 @@ class NoOfPermitsUpdaterFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NoOfPermitsUpdater
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): NoOfPermitsUpdater
     {
         $repoServiceManager = $container->get('RepositoryServiceManager');
         return new NoOfPermitsUpdater(

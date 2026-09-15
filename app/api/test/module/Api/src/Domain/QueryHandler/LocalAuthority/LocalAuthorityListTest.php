@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LocalAuthorityListTest extends QueryHandlerTestCase
+final class LocalAuthorityListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

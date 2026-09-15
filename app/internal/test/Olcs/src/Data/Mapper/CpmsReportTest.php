@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * CpmsReport Mapper Test
  */
-class CpmsReportTest extends MockeryTestCase
+final class CpmsReportTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {
@@ -32,23 +32,21 @@ class CpmsReportTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public static function mapFromFormDataProvider(): array
+    public static function mapFromFormDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'reportOptions' => [
-                        'reportCode' => 'FOO',
-                        'startDate' => '2015-10-07',
-                        'endDate' => '2015-10-08',
-                    ]
-                ],
-                [
+                'reportOptions' => [
                     'reportCode' => 'FOO',
-                    'start' => '2015-10-07',
-                    'end' => '2015-10-08',
+                    'startDate' => '2015-10-07',
+                    'endDate' => '2015-10-08',
                 ]
             ],
+            [
+                'reportCode' => 'FOO',
+                'start' => '2015-10-07',
+                'end' => '2015-10-08',
+            ]
         ];
     }
 

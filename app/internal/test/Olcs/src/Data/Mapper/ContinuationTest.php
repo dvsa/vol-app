@@ -12,7 +12,7 @@ use Laminas\Form\Form;
 /**
  * Continuation Mapper Test
  */
-class ContinuationTest extends MockeryTestCase
+final class ContinuationTest extends MockeryTestCase
 {
     public function testMapFromErrors(): void
     {

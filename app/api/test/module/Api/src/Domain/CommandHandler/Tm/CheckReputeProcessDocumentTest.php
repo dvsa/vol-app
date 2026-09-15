@@ -21,7 +21,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManager as TransportManagerEntity;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 
-class CheckReputeProcessDocumentTest extends AbstractCommandHandlerTestCase
+final class CheckReputeProcessDocumentTest extends AbstractCommandHandlerTestCase
 {
     protected $sut;
     private m\mockInterface $fileUploader;

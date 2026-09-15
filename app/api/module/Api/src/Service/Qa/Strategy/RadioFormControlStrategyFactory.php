@@ -16,7 +16,7 @@ class RadioFormControlStrategyFactory implements FactoryInterface
      * @return BaseFormControlStrategy
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BaseFormControlStrategy
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BaseFormControlStrategy
     {
         return new BaseFormControlStrategy(
             'radio',

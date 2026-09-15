@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\OperatingCentre\CanAccessXocWithRef
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CanAccessXocWithReferenceTest extends AbstractHandlerTestCase
+final class CanAccessXocWithReferenceTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessXocWithReference
@@ -64,14 +64,12 @@ class CanAccessXocWithReferenceTest extends AbstractHandlerTestCase
         $dto = m::mock(CommandInterface::class);
         $dto->shouldReceive('getId')->andReturn('S111');
 
-        $this->assertSame(false, $this->sut->isValid($dto));
+        $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

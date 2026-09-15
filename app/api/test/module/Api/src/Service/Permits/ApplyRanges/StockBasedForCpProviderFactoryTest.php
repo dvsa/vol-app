@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StockBasedForCpProviderFactoryTest extends MockeryTestCase
+final class StockBasedForCpProviderFactoryTest extends MockeryTestCase
 {
     public function testCreate(): void
     {

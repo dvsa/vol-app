@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class MessagingConversationEntityTest extends EntityTester
+final class MessagingConversationEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

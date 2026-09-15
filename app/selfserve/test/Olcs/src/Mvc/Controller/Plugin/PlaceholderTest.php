@@ -15,7 +15,7 @@ use Laminas\View\Helper\Placeholder as ViewPlaceholder;
 /**
  * Placeholder Test
  */
-class PlaceholderTest extends MockeryTestCase
+final class PlaceholderTest extends MockeryTestCase
 {
     /**
      * @var Placeholder
@@ -27,6 +27,7 @@ class PlaceholderTest extends MockeryTestCase
      */
     private $viewPlaceholder;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->viewPlaceholder = new ViewPlaceholder();
@@ -36,7 +37,7 @@ class PlaceholderTest extends MockeryTestCase
 
     public function testSetPlaceholder(): void
     {
-        $this->assertEquals('', (string)$this->viewPlaceholder->getContainer('key'));
+        $this->assertSame('', (string)$this->viewPlaceholder->getContainer('key'));
 
         $this->sut->__invoke()->setPlaceholder('key', 'value');
 

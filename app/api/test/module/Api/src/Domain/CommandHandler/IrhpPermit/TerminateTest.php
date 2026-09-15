@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  *
  * @author Tonci Vidovic <Tonci.vidovic@capgemini.com>
  */
-class TerminateTest extends AbstractCommandHandlerTestCase
+final class TerminateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

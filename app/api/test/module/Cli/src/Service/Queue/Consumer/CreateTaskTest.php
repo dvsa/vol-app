@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\CreateTask as Sut;
 use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
 
-class CreateTaskTest extends AbstractConsumerTestCase
+final class CreateTaskTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 

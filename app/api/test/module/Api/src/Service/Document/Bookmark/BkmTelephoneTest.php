@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BkmTelephone as Sut;
 /**
  * BkmTelephone bookmark test
  */
-class BkmTelephoneTest extends \PHPUnit\Framework\TestCase
+final class BkmTelephoneTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -29,58 +29,56 @@ class BkmTelephoneTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'irfoContactDetails' => [
-                        'phoneContacts' => [
-                            [
-                                'phoneContactType' => [
-                                    'id' => PhoneContactEntity::TYPE_PRIMARY
-                                ],
-                                'phoneNumber' => '1111'
+                'irfoContactDetails' => [
+                    'phoneContacts' => [
+                        [
+                            'phoneContactType' => [
+                                'id' => PhoneContactEntity::TYPE_PRIMARY
                             ],
-                            [
-                                'phoneContactType' => [
-                                    'id' => PhoneContactEntity::TYPE_SECONDARY
-                                ],
-                                'phoneNumber' => '2222'
+                            'phoneNumber' => '1111'
+                        ],
+                        [
+                            'phoneContactType' => [
+                                'id' => PhoneContactEntity::TYPE_SECONDARY
                             ],
-                        ]
+                            'phoneNumber' => '2222'
+                        ],
                     ]
-                ],
-                '1111'
+                ]
             ],
+            '1111'
+        ];
+        yield [
             [
-                [
-                    'irfoContactDetails' => [
-                        'phoneContacts' => [
-                            [
-                                'phoneContactType' => [
-                                    'id' => PhoneContactEntity::TYPE_SECONDARY
-                                ],
-                                'phoneNumber' => '2222'
+                'irfoContactDetails' => [
+                    'phoneContacts' => [
+                        [
+                            'phoneContactType' => [
+                                'id' => PhoneContactEntity::TYPE_SECONDARY
                             ],
-                        ]
+                            'phoneNumber' => '2222'
+                        ],
                     ]
-                ],
-                '2222'
+                ]
             ],
+            '2222'
+        ];
+        yield [
             [
-                [
-                    'irfoContactDetails' => [
-                        'phoneContacts' => [
-                        ]
+                'irfoContactDetails' => [
+                    'phoneContacts' => [
                     ]
-                ],
-                ''
+                ]
             ],
-            [
-                [],
-                ''
-            ],
+            ''
+        ];
+        yield [
+            [],
+            ''
         ];
     }
 }

@@ -17,7 +17,7 @@ class NoOfPermitsFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NoOfPermits
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): NoOfPermits
     {
         $mapperManager = $container->get(MapperManager::class);
         return new NoOfPermits(

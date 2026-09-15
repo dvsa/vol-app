@@ -17,7 +17,7 @@ use Laminas\Http\Response as HttpResponse;
 use Laminas\View\Model\JsonModel;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Mvc\Controller\Plugin\Response::class)]
-class ResponseTest extends MockeryTestCase
+final class ResponseTest extends MockeryTestCase
 {
     /** @var  Plugin\Response */
     protected $sut;
@@ -31,9 +31,7 @@ class ResponseTest extends MockeryTestCase
         $this->sut = m::mock(Plugin\Response::class)->makePartial();
         $this->sut->shouldReceive('getController->getResponse')->andReturn($this->response);
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         parent::setUp();
     }
@@ -86,8 +84,10 @@ class ResponseTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getSingleResultDataProvider')]
-    public function testSingleResult(mixed $data): void
+    public function testSingleResult(\Closure $createData): void
     {
+        $data = $createData();
+
         $result = $this->sut->singleResult($data);
 
         $this->assertInstanceOf(JsonModel::class, $result);
@@ -95,21 +95,19 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_200, $this->response->getStatusCode());
     }
 
-    public static function getSingleResultDataProvider(): array
+    public static function getSingleResultDataProvider(): \Iterator
     {
-        return [
-            // array
-            [
-                ['item']
-            ],
-            // QueryResult
-            [
-                m::mock(QueryResult::class)->shouldReceive('serialize')->andReturn(['item'])->getMock()
-            ],
-            // Entity
-            [
-                m::mock(VenueEntity::class)->shouldReceive('jsonSerialize')->andReturn(['item'])->getMock()
-            ],
+        // array
+        yield [
+            static fn () => ['item']
+        ];
+        // QueryResult
+        yield [
+            static fn () => m::mock(QueryResult::class)->shouldReceive('serialize')->andReturn(['item'])->getMock()
+        ];
+        // Entity
+        yield [
+            static fn () => m::mock(VenueEntity::class)->shouldReceive('jsonSerialize')->andReturn(['item'])->getMock()
         ];
     }
 
@@ -154,9 +152,9 @@ class ResponseTest extends MockeryTestCase
         $output = ob_get_contents();
         ob_end_clean();
 
-        static::assertEquals(false, $actual);
+        $this->assertEquals(false, $actual);
 
-        static::assertEquals($streanContent, $output);
+        $this->assertSame($streanContent, $output);
     }
 
     public function testSuccessfulUpdate(): void

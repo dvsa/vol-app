@@ -21,11 +21,11 @@ use Psr\Container\ContainerInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ImplementationTest extends MockeryTestCase
+final class ImplementationTest extends MockeryTestCase
 {
-    public const COMMAND_KEY = \Dvsa\Olcs\Api\Domain\CommandHandlerManagerFactory::CONFIG_KEY;
-    public const QUERY_KEY = \Dvsa\Olcs\Api\Domain\QueryHandlerManagerFactory::CONFIG_KEY;
-    public const VALIDATION_KEY = \Dvsa\Olcs\Api\Domain\ValidationHandlerManagerFactory::CONFIG_KEY;
+    public const string COMMAND_KEY = \Dvsa\Olcs\Api\Domain\CommandHandlerManagerFactory::CONFIG_KEY;
+    public const string QUERY_KEY = \Dvsa\Olcs\Api\Domain\QueryHandlerManagerFactory::CONFIG_KEY;
+    public const string VALIDATION_KEY = \Dvsa\Olcs\Api\Domain\ValidationHandlerManagerFactory::CONFIG_KEY;
 
     private $handlers = [];
 
@@ -34,6 +34,7 @@ class ImplementationTest extends MockeryTestCase
      */
     private $validationManager;
 
+    #[\Override]
     public function setUp(): void
     {
         $moduleDir = __DIR__ . '/../../../../../../module';

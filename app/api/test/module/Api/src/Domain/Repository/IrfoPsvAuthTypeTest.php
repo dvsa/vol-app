@@ -21,8 +21,9 @@ use Dvsa\Olcs\Api\Domain\Repository\IrfoPsvAuthType as Repo;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class IrfoPsvAuthTypeTest extends RepositoryTestCase
+final class IrfoPsvAuthTypeTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

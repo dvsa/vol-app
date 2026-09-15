@@ -18,7 +18,7 @@ class CabotageGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CabotageGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CabotageGenerator
     {
         return new CabotageGenerator(
             $container->get('QaQuestionTextGenerator')

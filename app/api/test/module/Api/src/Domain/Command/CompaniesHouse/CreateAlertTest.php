@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\CompaniesHouse\CreateAlert;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class CreateAlertTest extends \PHPUnit\Framework\TestCase
+final class CreateAlertTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

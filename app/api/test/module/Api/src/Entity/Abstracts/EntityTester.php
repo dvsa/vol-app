@@ -135,23 +135,23 @@ abstract class EntityTester extends MockeryTestCase
             $classToTestName = $this->getClassToTestName();
             $entity = $this->instantiate($classToTestName);
 
-            $this->assertEquals(0, count($entity->{'get' . $methodName}()));
+            $this->assertCount(0, $entity->{'get' . $methodName}());
 
             $entity->{'add' . $methodName}('foo');
             $entity->{'add' . $methodName}('bar');
             $entity->{'add' . $methodName}('cake');
 
-            $this->assertEquals(3, count($entity->{'get' . $methodName}()));
+            $this->assertCount(3, $entity->{'get' . $methodName}());
 
             $entity->{'remove' . $methodName}('bar');
 
-            $this->assertEquals(2, count($entity->{'get' . $methodName}()));
+            $this->assertCount(2, $entity->{'get' . $methodName}());
 
             $collection = new ArrayCollection(['bish', 'bash', 'bosh']);
 
             $entity->{'add' . $methodName}($collection);
 
-            $this->assertEquals(5, count($entity->{'get' . $methodName}()));
+            $this->assertCount(5, $entity->{'get' . $methodName}());
         }
     }
 

@@ -32,7 +32,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class FinancialEvidenceTest extends QueryHandlerTestCase
+final class FinancialEvidenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

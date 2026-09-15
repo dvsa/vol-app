@@ -22,31 +22,23 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="pi",
- *    indexes={
- *        @ORM\Index(name="ix_pi_agreed_by_tc_id", columns={"agreed_by_tc_id"}),
- *        @ORM\Index(name="ix_pi_agreed_by_tc_role", columns={"agreed_by_tc_role"}),
- *        @ORM\Index(name="ix_pi_assigned_caseworker", columns={"assigned_caseworker"}),
- *        @ORM\Index(name="ix_pi_assigned_to", columns={"assigned_to"}),
- *        @ORM\Index(name="ix_pi_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_pi_decided_by_tc_id", columns={"decided_by_tc_id"}),
- *        @ORM\Index(name="ix_pi_decided_by_tc_role", columns={"decided_by_tc_role"}),
- *        @ORM\Index(name="ix_pi_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_pi_pi_status", columns={"pi_status"}),
- *        @ORM\Index(name="ix_pi_written_outcome", columns={"written_outcome"}),
- *        @ORM\Index(name="uk_pi_case_id", columns={"case_id"}),
- *        @ORM\Index(name="uk_pi_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_pi_case_id", columns={"case_id"}),
- *        @ORM\UniqueConstraint(name="uk_pi_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'pi')]
+#[ORM\Index(name: 'ix_pi_agreed_by_tc_id', columns: ['agreed_by_tc_id'])]
+#[ORM\Index(name: 'ix_pi_agreed_by_tc_role', columns: ['agreed_by_tc_role'])]
+#[ORM\Index(name: 'ix_pi_assigned_caseworker', columns: ['assigned_caseworker'])]
+#[ORM\Index(name: 'ix_pi_assigned_to', columns: ['assigned_to'])]
+#[ORM\Index(name: 'ix_pi_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_pi_decided_by_tc_id', columns: ['decided_by_tc_id'])]
+#[ORM\Index(name: 'ix_pi_decided_by_tc_role', columns: ['decided_by_tc_role'])]
+#[ORM\Index(name: 'ix_pi_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_pi_pi_status', columns: ['pi_status'])]
+#[ORM\Index(name: 'ix_pi_written_outcome', columns: ['written_outcome'])]
+#[ORM\UniqueConstraint(name: 'uk_pi_case_id', columns: ['case_id'])]
+#[ORM\UniqueConstraint(name: 'uk_pi_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractPi implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -60,453 +52,388 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'publicInquiry', fetch: 'LAZY')]
     protected $case;
 
     /**
      * AssignedCaseworker
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="assigned_caseworker", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'assigned_caseworker', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $assignedCaseworker;
 
     /**
      * User PI is assigned to.
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="assigned_to", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'assigned_to', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $assignedTo;
 
     /**
      * TC who agreed the PI
      *
      * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
-     * @ORM\JoinColumn(name="agreed_by_tc_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'agreed_by_tc_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
     protected $agreedByTc;
 
     /**
      * TC who presided over PI decision
      *
      * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
-     * @ORM\JoinColumn(name="decided_by_tc_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'decided_by_tc_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
     protected $decidedByTc;
 
     /**
      * e.g. Traffic Commissioner or Deputy Traffic Commissioner
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="agreed_by_tc_role", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'agreed_by_tc_role', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $agreedByTcRole;
 
     /**
      * e.g. Traffic Commissioner or Deputy Traffic Commissioner
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="decided_by_tc_role", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'decided_by_tc_role', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $decidedByTcRole;
 
     /**
      * PiStatus
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="pi_status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'pi_status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $piStatus;
 
     /**
      * WrittenOutcome
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="written_outcome", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'written_outcome', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $writtenOutcome;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Is ecms case
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_ecms_case", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_ecms_case', nullable: true, options: ['default' => 0])]
     protected $isEcmsCase = 0;
 
     /**
      * Ecms first received date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="ecms_first_received_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'ecms_first_received_date', nullable: true)]
     protected $ecmsFirstReceivedDate;
 
     /**
      * Agreed date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="agreed_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'agreed_date', nullable: true)]
     protected $agreedDate;
 
     /**
      * TM called with Operator
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="tm_called_with_operator", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'tm_called_with_operator', nullable: false, options: ['default' => 0])]
     protected $tmCalledWithOperator = 0;
 
     /**
      * Witnesses for the PI decision
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="witnesses", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'witnesses', nullable: true, options: ['unsigned' => true])]
     protected $witnesses;
 
     /**
      * PI is cancelled
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_cancelled", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_cancelled', nullable: false, options: ['default' => 0])]
     protected $isCancelled = 0;
 
     /**
      * Decision date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="decision_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'decision_date', nullable: true)]
     protected $decisionDate;
 
     /**
      * The licence was revoked
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="licence_revoked_at_pi", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'licence_revoked_at_pi', nullable: false, options: ['default' => 0])]
     protected $licenceRevokedAtPi = 0;
 
     /**
      * The licence was curtailed. e.g. No of vehicles decreased.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="licence_curtailed_at_pi", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'licence_curtailed_at_pi', nullable: false, options: ['default' => 0])]
     protected $licenceCurtailedAtPi = 0;
 
     /**
      * Licence suspended
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="licence_suspended_at_pi", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'licence_suspended_at_pi', nullable: false, options: ['default' => 0])]
     protected $licenceSuspendedAtPi = 0;
 
     /**
      * Notification date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="notification_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'notification_date', nullable: true)]
     protected $notificationDate;
 
     /**
      * Decision notes
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="decision_notes", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'decision_notes', nullable: true)]
     protected $decisionNotes;
 
     /**
      * Comment
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="comment", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'comment', length: 4000, nullable: true)]
     protected $comment;
 
     /**
      * Call up letter date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="call_up_letter_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'call_up_letter_date', nullable: true)]
     protected $callUpLetterDate;
 
     /**
      * Brief to tc date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="brief_to_tc_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'brief_to_tc_date', nullable: true)]
     protected $briefToTcDate;
 
     /**
      * Written reason date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="written_reason_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'written_reason_date', nullable: true)]
     protected $writtenReasonDate;
 
     /**
      * Decision letter sent date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="decision_letter_sent_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'decision_letter_sent_date', nullable: true)]
     protected $decisionLetterSentDate;
 
     /**
      * Tc written reason date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="tc_written_reason_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'tc_written_reason_date', nullable: true)]
     protected $tcWrittenReasonDate;
 
     /**
      * Tc written decision date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="tc_written_decision_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'tc_written_decision_date', nullable: true)]
     protected $tcWrittenDecisionDate;
 
     /**
      * Written reason letter date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="written_reason_letter_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'written_reason_letter_date', nullable: true)]
     protected $writtenReasonLetterDate;
 
     /**
      * Written decision letter date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="written_decision_letter_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'written_decision_letter_date', nullable: true)]
     protected $writtenDecisionLetterDate;
 
     /**
      * Date pi closed.For showing important, open records to user.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="closed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'closed_date', nullable: true)]
     protected $closedDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**
      * Decisions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Decision", inversedBy="pis", fetch="LAZY")
-     * @ORM\JoinTable(name="pi_decision",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="pi_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="decision_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'pi_decision')]
+    #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'decision_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Decision::class, inversedBy: 'pis', fetch: 'LAZY')]
     protected $decisions;
 
     /**
      * Reasons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Reason", inversedBy="pis", fetch="LAZY")
-     * @ORM\JoinTable(name="pi_reason",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="pi_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="reason_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'pi_reason')]
+    #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'reason_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Reason::class, inversedBy: 'pis', fetch: 'LAZY')]
     protected $reasons;
 
     /**
      * TmDecisions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="pis", fetch="LAZY")
-     * @ORM\JoinTable(name="pi_tm_decision",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="pi_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="tm_decision_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'pi_tm_decision')]
+    #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'tm_decision_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmDecisions;
 
     /**
      * PiTypes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="pis", fetch="LAZY")
-     * @ORM\JoinTable(name="pi_type",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="pi_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="pi_type_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'pi_type')]
+    #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'pi_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $piTypes;
 
     /**
      * PiHearings
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PiHearing", mappedBy="pi")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PiHearing::class, mappedBy: 'pi')]
     protected $piHearings;
 
     /**
      * PiSlaExceptions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PiSlaException", mappedBy="pi")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PiSlaException::class, mappedBy: 'pi')]
     protected $piSlaExceptions;
 
     /**
      * PublicationLinks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationLink", mappedBy="pi")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, mappedBy: 'pi')]
     protected $publicationLinks;
 
     /**
      * SlaTargetDates
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate", mappedBy="pi", cascade={"persist"}, indexBy="sla_id", orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\SlaTargetDate::class, mappedBy: 'pi', cascade: ['persist'], indexBy: 'sla_id', orphanRemoval: true)]
     protected $slaTargetDates;
 
     /**
@@ -538,7 +465,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param int $id new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setId($id)
     {
@@ -562,7 +489,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setCase($case)
     {
@@ -586,7 +513,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $assignedCaseworker new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setAssignedCaseworker($assignedCaseworker)
     {
@@ -610,7 +537,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $assignedTo new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setAssignedTo($assignedTo)
     {
@@ -634,7 +561,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $agreedByTc new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setAgreedByTc($agreedByTc)
     {
@@ -658,7 +585,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $decidedByTc new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setDecidedByTc($decidedByTc)
     {
@@ -682,7 +609,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $agreedByTcRole new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setAgreedByTcRole($agreedByTcRole)
     {
@@ -706,7 +633,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $decidedByTcRole new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setDecidedByTcRole($decidedByTcRole)
     {
@@ -730,7 +657,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $piStatus new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setPiStatus($piStatus)
     {
@@ -754,7 +681,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $writtenOutcome new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setWrittenOutcome($writtenOutcome)
     {
@@ -778,7 +705,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -802,7 +729,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -826,7 +753,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $isEcmsCase new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setIsEcmsCase($isEcmsCase)
     {
@@ -850,7 +777,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $ecmsFirstReceivedDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setEcmsFirstReceivedDate($ecmsFirstReceivedDate)
     {
@@ -880,7 +807,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $agreedDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setAgreedDate($agreedDate)
     {
@@ -910,7 +837,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param string $tmCalledWithOperator new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setTmCalledWithOperator($tmCalledWithOperator)
     {
@@ -934,7 +861,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param int $witnesses new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setWitnesses($witnesses)
     {
@@ -958,7 +885,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param string $isCancelled new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setIsCancelled($isCancelled)
     {
@@ -982,7 +909,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $decisionDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setDecisionDate($decisionDate)
     {
@@ -1012,7 +939,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param string $licenceRevokedAtPi new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setLicenceRevokedAtPi($licenceRevokedAtPi)
     {
@@ -1036,7 +963,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param string $licenceCurtailedAtPi new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setLicenceCurtailedAtPi($licenceCurtailedAtPi)
     {
@@ -1060,7 +987,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param string $licenceSuspendedAtPi new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setLicenceSuspendedAtPi($licenceSuspendedAtPi)
     {
@@ -1084,7 +1011,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $notificationDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setNotificationDate($notificationDate)
     {
@@ -1114,7 +1041,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param string $decisionNotes new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setDecisionNotes($decisionNotes)
     {
@@ -1138,7 +1065,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param string $comment new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setComment($comment)
     {
@@ -1162,7 +1089,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $callUpLetterDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setCallUpLetterDate($callUpLetterDate)
     {
@@ -1192,7 +1119,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $briefToTcDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setBriefToTcDate($briefToTcDate)
     {
@@ -1222,7 +1149,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $writtenReasonDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setWrittenReasonDate($writtenReasonDate)
     {
@@ -1252,7 +1179,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $decisionLetterSentDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setDecisionLetterSentDate($decisionLetterSentDate)
     {
@@ -1282,7 +1209,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $tcWrittenReasonDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setTcWrittenReasonDate($tcWrittenReasonDate)
     {
@@ -1312,7 +1239,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $tcWrittenDecisionDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setTcWrittenDecisionDate($tcWrittenDecisionDate)
     {
@@ -1342,7 +1269,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $writtenReasonLetterDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setWrittenReasonLetterDate($writtenReasonLetterDate)
     {
@@ -1372,7 +1299,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $writtenDecisionLetterDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setWrittenDecisionLetterDate($writtenDecisionLetterDate)
     {
@@ -1402,7 +1329,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $closedDate new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setClosedDate($closedDate)
     {
@@ -1432,7 +1359,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param int $version new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setVersion($version)
     {
@@ -1456,7 +1383,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param int $olbsKey new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -1480,7 +1407,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param string $olbsType new value being set
      *
-     * @return Pi
+     * @return static
      */
     public function setOlbsType($olbsType)
     {
@@ -1504,7 +1431,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $decisions collection being set as the value
      *
-     * @return Pi
+     * @return static
      */
     public function setDecisions($decisions)
     {
@@ -1528,7 +1455,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $decisions collection being added
      *
-     * @return Pi
+     * @return static
      */
     public function addDecisions($decisions)
     {
@@ -1551,7 +1478,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $decisions collection being removed
      *
-     * @return Pi
+     * @return static
      */
     public function removeDecisions($decisions)
     {
@@ -1567,7 +1494,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being set as the value
      *
-     * @return Pi
+     * @return static
      */
     public function setReasons($reasons)
     {
@@ -1591,7 +1518,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reasons collection being added
      *
-     * @return Pi
+     * @return static
      */
     public function addReasons($reasons)
     {
@@ -1614,7 +1541,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being removed
      *
-     * @return Pi
+     * @return static
      */
     public function removeReasons($reasons)
     {
@@ -1630,7 +1557,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tmDecisions collection being set as the value
      *
-     * @return Pi
+     * @return static
      */
     public function setTmDecisions($tmDecisions)
     {
@@ -1654,7 +1581,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tmDecisions collection being added
      *
-     * @return Pi
+     * @return static
      */
     public function addTmDecisions($tmDecisions)
     {
@@ -1677,7 +1604,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tmDecisions collection being removed
      *
-     * @return Pi
+     * @return static
      */
     public function removeTmDecisions($tmDecisions)
     {
@@ -1693,7 +1620,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $piTypes collection being set as the value
      *
-     * @return Pi
+     * @return static
      */
     public function setPiTypes($piTypes)
     {
@@ -1717,7 +1644,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $piTypes collection being added
      *
-     * @return Pi
+     * @return static
      */
     public function addPiTypes($piTypes)
     {
@@ -1740,7 +1667,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $piTypes collection being removed
      *
-     * @return Pi
+     * @return static
      */
     public function removePiTypes($piTypes)
     {
@@ -1756,7 +1683,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $piHearings collection being set as the value
      *
-     * @return Pi
+     * @return static
      */
     public function setPiHearings($piHearings)
     {
@@ -1780,7 +1707,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $piHearings collection being added
      *
-     * @return Pi
+     * @return static
      */
     public function addPiHearings($piHearings)
     {
@@ -1803,7 +1730,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $piHearings collection being removed
      *
-     * @return Pi
+     * @return static
      */
     public function removePiHearings($piHearings)
     {
@@ -1819,7 +1746,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $piSlaExceptions collection being set as the value
      *
-     * @return Pi
+     * @return static
      */
     public function setPiSlaExceptions($piSlaExceptions)
     {
@@ -1843,7 +1770,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $piSlaExceptions collection being added
      *
-     * @return Pi
+     * @return static
      */
     public function addPiSlaExceptions($piSlaExceptions)
     {
@@ -1866,7 +1793,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $piSlaExceptions collection being removed
      *
-     * @return Pi
+     * @return static
      */
     public function removePiSlaExceptions($piSlaExceptions)
     {
@@ -1882,7 +1809,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $publicationLinks collection being set as the value
      *
-     * @return Pi
+     * @return static
      */
     public function setPublicationLinks($publicationLinks)
     {
@@ -1906,7 +1833,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $publicationLinks collection being added
      *
-     * @return Pi
+     * @return static
      */
     public function addPublicationLinks($publicationLinks)
     {
@@ -1929,7 +1856,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $publicationLinks collection being removed
      *
-     * @return Pi
+     * @return static
      */
     public function removePublicationLinks($publicationLinks)
     {
@@ -1945,7 +1872,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $slaTargetDates collection being set as the value
      *
-     * @return Pi
+     * @return static
      */
     public function setSlaTargetDates($slaTargetDates)
     {
@@ -1969,7 +1896,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $slaTargetDates collection being added
      *
-     * @return Pi
+     * @return static
      */
     public function addSlaTargetDates($slaTargetDates)
     {
@@ -1992,7 +1919,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $slaTargetDates collection being removed
      *
-     * @return Pi
+     * @return static
      */
     public function removeSlaTargetDates($slaTargetDates)
     {

@@ -15,7 +15,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByCountry as ListQuery;
 /**
  * GetList Test
  */
-class OpenByCountryTest extends QueryHandlerTestCase
+final class OpenByCountryTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

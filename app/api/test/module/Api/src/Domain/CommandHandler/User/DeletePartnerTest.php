@@ -18,7 +18,7 @@ use Mockery as m;
 /**
  * Class DeletePartnerTest
  */
-class DeletePartnerTest extends AbstractCommandHandlerTestCase
+final class DeletePartnerTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

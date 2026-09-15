@@ -20,13 +20,12 @@ use Olcs\XmlTools\Validator\Xsd;
  * Class TransExchangeClientTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr
  */
-class TransExchangeClientTest extends TestCase
+final class TransExchangeClientTest extends TestCase
 {
+    #[\Override]
     public function setUp(): void
     {
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
     }
 
     /**

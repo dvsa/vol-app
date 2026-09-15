@@ -14,11 +14,12 @@ use Mockery as m;
 use RuntimeException;
 use Laminas\Form\Element\Hidden;
 
-class AvailableYearsTest extends TestCase
+final class AvailableYearsTest extends TestCase
 {
     private $availableYears;
     private $translationHelperService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->translationHelperService = m::mock(TranslationHelperService::class);
@@ -42,17 +43,15 @@ class AvailableYearsTest extends TestCase
     }
 
     /**
-     * @return int[][]
+     * @return \Iterator<(int | string), array<int>>
      *
      * @psalm-return list{list{3}, list{4}, list{5}}
      */
-    public static function dpTestExceptionNotSupported(): array
+    public static function dpTestExceptionNotSupported(): \Iterator
     {
-        return [
-            [RefData::ECMT_REMOVAL_PERMIT_TYPE_ID],
-            [RefData::IRHP_BILATERAL_PERMIT_TYPE_ID],
-            [RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID],
-        ];
+        yield [RefData::ECMT_REMOVAL_PERMIT_TYPE_ID];
+        yield [RefData::IRHP_BILATERAL_PERMIT_TYPE_ID];
+        yield [RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID];
     }
 
     public function testEcmtShortTermSingleOption(): void
@@ -267,69 +266,67 @@ class AvailableYearsTest extends TestCase
     }
 
     /**
-     * @return (((int|string)[]|bool|int|string)[]|int|string)[][][]
+     * @return \Iterator<(int | string), array<array<(array<(array<(int | string)> | bool | int | string)> | int | string)>>>
      *
      * @psalm-return array{'empty list': array{data: array{type: 1, years: array{years: array<never, never>, selectedYear: ''}}, expected: array{type: 1, years: array{years: array<never, never>, selectedYear: ''}, browserTitle: 'permits.page.year.ecmt-annual.question.multiple-years-available', question: 'permits.page.year.ecmt-annual.question.multiple-years-available', hint: 'permits.page.year.ecmt-annual.hint.multiple-years-available'}, expectedValueOptions: array<never, never>}, 'list with data': array{data: array{type: 1, years: array{years: list{3030, 3031}, selectedYear: 3031}}, expected: array{type: 1, years: array{years: list{3030, 3031}, selectedYear: 3031}, browserTitle: 'permits.page.year.ecmt-annual.question.multiple-years-available', question: 'permits.page.year.ecmt-annual.question.multiple-years-available', hint: 'permits.page.year.ecmt-annual.hint.multiple-years-available'}, expectedValueOptions: list{array{value: 3030, label: 3030, attributes: array{id: 'year'}, selected: false}, array{value: 3031, label: 3031, selected: true}}}}
      */
-    public static function dpTestEcmtAnnualMultipleOptions(): array
+    public static function dpTestEcmtAnnualMultipleOptions(): \Iterator
     {
-        return [
-            'empty list' => [
-                'data' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [],
-                        'selectedYear' => ''
-                    ]
-                ],
-                'expected' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [],
-                        'selectedYear' => ''
-                    ],
-                    'browserTitle' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
-                    'question' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
-                    'hint' => 'permits.page.year.ecmt-annual.hint.multiple-years-available',
-                ],
-                'expectedValueOptions' => [],
+        yield 'empty list' => [
+            'data' => [
+                'type' => RefData::ECMT_PERMIT_TYPE_ID,
+                'years' => [
+                    'years' => [],
+                    'selectedYear' => ''
+                ]
             ],
-            'list with data' => [
-                'data' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [
-                            3030, 3031
-                        ],
-                        'selectedYear' => 3031
-                    ]
+            'expected' => [
+                'type' => RefData::ECMT_PERMIT_TYPE_ID,
+                'years' => [
+                    'years' => [],
+                    'selectedYear' => ''
                 ],
-                'expected' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
+                'browserTitle' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
+                'question' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
+                'hint' => 'permits.page.year.ecmt-annual.hint.multiple-years-available',
+            ],
+            'expectedValueOptions' => [],
+        ];
+        yield 'list with data' => [
+            'data' => [
+                'type' => RefData::ECMT_PERMIT_TYPE_ID,
+                'years' => [
                     'years' => [
-                        'years' => [
-                            3030, 3031
-                        ],
-                        'selectedYear' => 3031
+                        3030, 3031
                     ],
-                    'browserTitle' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
-                    'question' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
-                    'hint' => 'permits.page.year.ecmt-annual.hint.multiple-years-available',
+                    'selectedYear' => 3031
+                ]
+            ],
+            'expected' => [
+                'type' => RefData::ECMT_PERMIT_TYPE_ID,
+                'years' => [
+                    'years' => [
+                        3030, 3031
+                    ],
+                    'selectedYear' => 3031
                 ],
-                'expectedValueOptions' => [
-                    [
-                        'value' => 3030,
-                        'label' => 3030,
-                        'attributes' => [
-                            'id' => 'year'
-                        ],
-                        'selected' => false
+                'browserTitle' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
+                'question' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
+                'hint' => 'permits.page.year.ecmt-annual.hint.multiple-years-available',
+            ],
+            'expectedValueOptions' => [
+                [
+                    'value' => 3030,
+                    'label' => 3030,
+                    'attributes' => [
+                        'id' => 'year'
                     ],
-                    [
-                        'value' => 3031,
-                        'label' => 3031,
-                        'selected' => true
-                    ],
+                    'selected' => false
+                ],
+                [
+                    'value' => 3031,
+                    'label' => 3031,
+                    'selected' => true
                 ],
             ],
         ];

@@ -22,18 +22,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="si_category_type",
- *    indexes={
- *        @ORM\Index(name="ix_si_category_type_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_si_category_type_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_si_category_type_si_category_id", columns={"si_category_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'si_category_type')]
+#[ORM\Index(name: 'ix_si_category_type_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_si_category_type_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_si_category_type_si_category_id', columns: ['si_category_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractSiCategoryType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,61 +43,55 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="smallint", name="id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'smallint', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**
      * Foreign Key to si_category
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SiCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="si_category_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'si_category_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiCategory::class, fetch: 'LAZY')]
     protected $siCategory;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=500, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 500, nullable: true)]
     protected $description;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -125,7 +115,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setId($id)
     {
@@ -149,7 +139,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\SiCategory $siCategory new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setSiCategory($siCategory)
     {
@@ -173,7 +163,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -197,7 +187,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -221,7 +211,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param string $description new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setDescription($description)
     {
@@ -245,7 +235,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setVersion($version)
     {

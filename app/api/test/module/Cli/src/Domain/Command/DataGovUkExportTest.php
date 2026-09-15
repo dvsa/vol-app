@@ -8,10 +8,8 @@ use Dvsa\Olcs\Cli\Domain\Command\DataGovUkExport;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Cli\Domain\Command\DataGovUkExport
- */
-class DataGovUkExportTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Domain\Command\DataGovUkExport::class)]
+final class DataGovUkExportTest extends MockeryTestCase
 {
     public function test(): void
     {
@@ -22,6 +20,6 @@ class DataGovUkExportTest extends MockeryTestCase
 
         $sut = DataGovUkExport::create($params);
 
-        static::assertEquals('unit_ReportName', $sut->getReportName());
+        $this->assertEquals('unit_ReportName', $sut->getReportName());
     }
 }

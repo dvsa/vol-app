@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\NoValidationRequired;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class NoValidationRequiredTest extends AbstractHandlerTestCase
+final class NoValidationRequiredTest extends AbstractHandlerTestCase
 {
     /**
      * @var NoValidationRequired

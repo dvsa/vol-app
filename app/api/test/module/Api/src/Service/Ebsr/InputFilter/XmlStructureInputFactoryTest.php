@@ -16,7 +16,7 @@ use Olcs\XmlTools\Filter\ParseXml;
 use Olcs\XmlTools\Validator\Xsd;
 use Psr\Container\ContainerInterface;
 
-class XmlStructureInputFactoryTest extends TestCase
+final class XmlStructureInputFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

@@ -17,7 +17,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Class PopulateTest
  */
-class PopulateTest extends AbstractCommandHandlerTestCase
+final class PopulateTest extends AbstractCommandHandlerTestCase
 {
     private $mockedConnection;
 
@@ -38,8 +38,8 @@ class PopulateTest extends AbstractCommandHandlerTestCase
     public function testHandleCommand(): void
     {
         $dataRetentionRules = [
-            (new \Dvsa\Olcs\Api\Entity\DataRetentionRule())->setId(2)->setPopulateProcedure('proc2'),
-            (new \Dvsa\Olcs\Api\Entity\DataRetentionRule())->setId(9)->setPopulateProcedure('proc9'),
+            new \Dvsa\Olcs\Api\Entity\DataRetentionRule()->setId(2)->setPopulateProcedure('proc2'),
+            new \Dvsa\Olcs\Api\Entity\DataRetentionRule()->setId(9)->setPopulateProcedure('proc9'),
         ];
 
         $command = Cmd::create([]);
@@ -75,8 +75,8 @@ class PopulateTest extends AbstractCommandHandlerTestCase
     public function testHandleCommandWhenProcedureReturnsFalse(): void
     {
         $dataRetentionRules = [
-            (new \Dvsa\Olcs\Api\Entity\DataRetentionRule())->setId(2)->setPopulateProcedure('proc2'),
-            (new \Dvsa\Olcs\Api\Entity\DataRetentionRule())->setId(9)->setPopulateProcedure('proc9'),
+            new \Dvsa\Olcs\Api\Entity\DataRetentionRule()->setId(2)->setPopulateProcedure('proc2'),
+            new \Dvsa\Olcs\Api\Entity\DataRetentionRule()->setId(9)->setPopulateProcedure('proc9'),
         ];
 
         $command = Cmd::create([]);
@@ -113,8 +113,8 @@ class PopulateTest extends AbstractCommandHandlerTestCase
     public function testHandleCommandWhenProcedureThrowsException(): void
     {
         $dataRetentionRules = [
-            (new \Dvsa\Olcs\Api\Entity\DataRetentionRule())->setId(2)->setPopulateProcedure('proc2'),
-            (new \Dvsa\Olcs\Api\Entity\DataRetentionRule())->setId(9)->setPopulateProcedure('proc9'),
+            new \Dvsa\Olcs\Api\Entity\DataRetentionRule()->setId(2)->setPopulateProcedure('proc2'),
+            new \Dvsa\Olcs\Api\Entity\DataRetentionRule()->setId(9)->setPopulateProcedure('proc9'),
         ];
 
         $command = Cmd::create([]);

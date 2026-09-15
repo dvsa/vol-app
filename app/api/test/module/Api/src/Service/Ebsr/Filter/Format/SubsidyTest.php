@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  * Class SubsidyTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\Filter\Format
  */
-class SubsidyTest extends TestCase
+final class SubsidyTest extends TestCase
 {
     /**
      * @param $expected
@@ -26,13 +26,11 @@ class SubsidyTest extends TestCase
         $this->assertEquals($expected, $result['subsidised']);
     }
 
-    public static function provideFilter(): array
+    public static function provideFilter(): \Iterator
     {
-        return [
-            ['bs_no', 'none'],
-            ['bs_yes', 'full'],
-            ['bs_in_part', 'partial'],
-            ['bs_no', null]
-        ];
+        yield ['bs_no', 'none'];
+        yield ['bs_yes', 'full'];
+        yield ['bs_in_part', 'partial'];
+        yield ['bs_no', null];
     }
 }

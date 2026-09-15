@@ -10,9 +10,9 @@ use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\DocumentSubCategory::class)]
-class DocumentSubCategoryTest extends AbstractListDataServiceTestCase
+final class DocumentSubCategoryTest extends AbstractListDataServiceTestCase
 {
-    public const CAT_ID = 8001;
+    public const int CAT_ID = 8001;
 
     /** @var DocumentSubCategory */
     private $sut;

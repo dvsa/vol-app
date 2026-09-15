@@ -16,10 +16,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * NoOfPermitsAnswerSummaryProviderTest
  */
-class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
+final class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
 {
     private $noOfPermitsAnswerSummaryProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->noOfPermitsAnswerSummaryProvider = new NoOfPermitsAnswerSummaryProvider();
@@ -71,103 +72,100 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         $this->assertEquals($expectedTemplateVariables, $templateVariables);
     }
 
-    public static function dpGetTemplateVariables(): array
+    public static function dpGetTemplateVariables(): \Iterator
     {
         $requiredStandard = 5;
         $requiredCabotage = 7;
-
-        return [
+        yield [
+            RefData::JOURNEY_MULTIPLE,
             [
-                RefData::JOURNEY_MULTIPLE,
-                [
-                    IrhpPermitApplicationEntity::BILATERAL_STANDARD_REQUIRED => $requiredStandard,
-                    IrhpPermitApplicationEntity::BILATERAL_CABOTAGE_REQUIRED => $requiredCabotage,
-                ],
-                [
-                    'rows' => [
-                        [
-                            'key' => 'qanda.bilateral.no-of-permits.journey_multiple.standard',
-                            'count' => $requiredStandard,
-                        ],
-                        [
-                            'key' => 'qanda.bilateral.no-of-permits.journey_multiple.cabotage',
-                            'count' => $requiredCabotage,
-                        ],
+                IrhpPermitApplicationEntity::BILATERAL_STANDARD_REQUIRED => $requiredStandard,
+                IrhpPermitApplicationEntity::BILATERAL_CABOTAGE_REQUIRED => $requiredCabotage,
+            ],
+            [
+                'rows' => [
+                    [
+                        'key' => 'qanda.bilateral.no-of-permits.journey_multiple.standard',
+                        'count' => $requiredStandard,
+                    ],
+                    [
+                        'key' => 'qanda.bilateral.no-of-permits.journey_multiple.cabotage',
+                        'count' => $requiredCabotage,
                     ],
                 ],
             ],
+        ];
+        yield [
+            RefData::JOURNEY_MULTIPLE,
             [
-                RefData::JOURNEY_MULTIPLE,
-                [
-                    IrhpPermitApplicationEntity::BILATERAL_CABOTAGE_REQUIRED => $requiredCabotage,
-                ],
-                [
-                    'rows' => [
-                        [
-                            'key' => 'qanda.bilateral.no-of-permits.journey_multiple.cabotage',
-                            'count' => $requiredCabotage,
-                        ],
+                IrhpPermitApplicationEntity::BILATERAL_CABOTAGE_REQUIRED => $requiredCabotage,
+            ],
+            [
+                'rows' => [
+                    [
+                        'key' => 'qanda.bilateral.no-of-permits.journey_multiple.cabotage',
+                        'count' => $requiredCabotage,
                     ],
                 ],
             ],
+        ];
+        yield [
+            RefData::JOURNEY_MULTIPLE,
             [
-                RefData::JOURNEY_MULTIPLE,
-                [
-                    IrhpPermitApplicationEntity::BILATERAL_STANDARD_REQUIRED => $requiredStandard,
-                ],
-                [
-                    'rows' => [
-                        [
-                            'key' => 'qanda.bilateral.no-of-permits.journey_multiple.standard',
-                            'count' => $requiredStandard,
-                        ],
+                IrhpPermitApplicationEntity::BILATERAL_STANDARD_REQUIRED => $requiredStandard,
+            ],
+            [
+                'rows' => [
+                    [
+                        'key' => 'qanda.bilateral.no-of-permits.journey_multiple.standard',
+                        'count' => $requiredStandard,
                     ],
                 ],
             ],
+        ];
+        yield [
+            RefData::JOURNEY_SINGLE,
             [
-                RefData::JOURNEY_SINGLE,
-                [
-                    IrhpPermitApplicationEntity::BILATERAL_STANDARD_REQUIRED => $requiredStandard,
-                    IrhpPermitApplicationEntity::BILATERAL_CABOTAGE_REQUIRED => $requiredCabotage,
-                ],
-                [
-                    'rows' => [
-                        [
-                            'key' => 'qanda.bilateral.no-of-permits.journey_single.standard',
-                            'count' => $requiredStandard,
-                        ],
-                        [
-                            'key' => 'qanda.bilateral.no-of-permits.journey_single.cabotage',
-                            'count' => $requiredCabotage,
-                        ],
+                IrhpPermitApplicationEntity::BILATERAL_STANDARD_REQUIRED => $requiredStandard,
+                IrhpPermitApplicationEntity::BILATERAL_CABOTAGE_REQUIRED => $requiredCabotage,
+            ],
+            [
+                'rows' => [
+                    [
+                        'key' => 'qanda.bilateral.no-of-permits.journey_single.standard',
+                        'count' => $requiredStandard,
+                    ],
+                    [
+                        'key' => 'qanda.bilateral.no-of-permits.journey_single.cabotage',
+                        'count' => $requiredCabotage,
                     ],
                 ],
             ],
+        ];
+        yield [
+            RefData::JOURNEY_SINGLE,
             [
-                RefData::JOURNEY_SINGLE,
-                [
-                    IrhpPermitApplicationEntity::BILATERAL_CABOTAGE_REQUIRED => $requiredCabotage,
-                ],
-                [
-                    'rows' => [
-                        [
-                            'key' => 'qanda.bilateral.no-of-permits.journey_single.cabotage',
-                            'count' => $requiredCabotage,
-                        ],
+                IrhpPermitApplicationEntity::BILATERAL_CABOTAGE_REQUIRED => $requiredCabotage,
+            ],
+            [
+                'rows' => [
+                    [
+                        'key' => 'qanda.bilateral.no-of-permits.journey_single.cabotage',
+                        'count' => $requiredCabotage,
                     ],
                 ],
             ],
+        ];
+        yield [
+            RefData::JOURNEY_SINGLE,
             [
-                RefData::JOURNEY_SINGLE,
-                [
-                    IrhpPermitApplicationEntity::BILATERAL_STANDARD_REQUIRED => $requiredStandard,
-                ],
-                [
-                    'rows' => [
-                        [
-                            'key' => 'qanda.bilateral.no-of-permits.journey_single.standard',
-                            'count' => $requiredStandard,
-                        ],
+                IrhpPermitApplicationEntity::BILATERAL_STANDARD_REQUIRED => $requiredStandard,
+            ],
+            [
+                'rows' => [
+                    [
+                        'key' => 'qanda.bilateral.no-of-permits.journey_single.standard',
+                        'count' => $requiredStandard,
                     ],
                 ],
             ],

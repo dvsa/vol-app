@@ -12,7 +12,7 @@ use Laminas\Form\Form;
 /**
  * Transport Manager Mapper Test
  */
-class TmQualificationTest extends MockeryTestCase
+final class TmQualificationTest extends MockeryTestCase
 {
     public function testMapFromErrors(): void
     {
@@ -51,45 +51,43 @@ class TmQualificationTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public static function mapFromResultProvider(): array
+    public static function mapFromResultProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
+                'id'                => 1,
+                'version'           => 2,
+                'issuedDate'        => '2015-01-01',
+                'serialNo'          => 123,
+                'qualificationType' => [
+                    'id' => 3,
+                ],
+                'countryCode'       => [
+                    'id' => 'GB',
+                ],
+                'transportManager'  => 1,
+            ],
+            [
+                'qualification-details' => [
                     'id'                => 1,
                     'version'           => 2,
                     'issuedDate'        => '2015-01-01',
                     'serialNo'          => 123,
-                    'qualificationType' => [
-                        'id' => 3,
-                    ],
-                    'countryCode'       => [
-                        'id' => 'GB',
-                    ],
-                    'transportManager'  => 1,
+                    'qualificationType' => 3,
+                    'countryCode'       => 'GB',
                 ],
-                [
-                    'qualification-details' => [
-                        'id'                => 1,
-                        'version'           => 2,
-                        'issuedDate'        => '2015-01-01',
-                        'serialNo'          => 123,
-                        'qualificationType' => 3,
-                        'countryCode'       => 'GB',
-                    ],
-                    'transportManager'      => 1,
-                ],
+                'transportManager'      => 1,
+            ],
+        ];
+        yield [
+            [
+                'transportManager' => 1,
             ],
             [
-                [
-                    'transportManager' => 1,
+                'qualification-details' => [
+                    'countryCode' => 'GB',
                 ],
-                [
-                    'qualification-details' => [
-                        'countryCode' => 'GB',
-                    ],
-                    'transportManager'      => 1,
-                ],
+                'transportManager'      => 1,
             ],
         ];
     }

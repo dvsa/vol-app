@@ -138,7 +138,7 @@ abstract class AbstractCommandHandler extends DomainAbstractCommandHandler imple
         return $officers;
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

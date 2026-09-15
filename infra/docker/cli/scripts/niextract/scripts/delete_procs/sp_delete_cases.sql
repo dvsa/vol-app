@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_cases;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_cases()
@@ -33,6 +32,8 @@ BEGIN
     SET @total:=0;
     SET @rowcount:=10000;
 
+    START TRANSACTION;
+
     WHILE(@rowcount = 10000) DO
 
 
@@ -50,7 +51,12 @@ BEGIN
     
         SELECT CONCAT(@total,' case rows deleted') AS '';
 
+        COMMIT;
+        START TRANSACTION;
+
     END WHILE;
+
+    COMMIT;
 
     set autocommit=1;
 
@@ -58,7 +64,4 @@ BEGIN
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

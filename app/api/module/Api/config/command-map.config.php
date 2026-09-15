@@ -385,6 +385,8 @@ return [
     TransferCommand\User\UpdateUser::class => CommandHandler\User\UpdateUser::class,
     TransferCommand\User\DeleteUser::class => CommandHandler\User\DeleteUserFactory::class,
     TransferCommand\User\RegisterUserSelfserve::class => CommandHandler\User\RegisterUserSelfserveFactory::class,
+    // Internal, routeless command for the consultant journey (VOL-7370); reuses the same handler.
+    Command\User\RegisterUserSelfserveByOrganisation::class => CommandHandler\User\RegisterUserSelfserveFactory::class,
     TransferCommand\User\RemindUsernameSelfserve::class => CommandHandler\User\RemindUsernameSelfserve::class,
     TransferCommand\User\CreateUserSelfserve::class => CommandHandler\User\CreateUserSelfServeFactory::class,
     TransferCommand\User\UpdateUserSelfserve::class => CommandHandler\User\UpdateUserSelfserveFactory::class,
@@ -491,6 +493,13 @@ return [
     TransferCommand\Document\PrintLetter::class => CommandHandler\Document\PrintLetter::class,
     TransferCommand\Document\PrintLetters::class => CommandHandler\Document\PrintLetters::class,
     Command\Document\RemoveDeletedDocuments::class => CommandHandler\Document\RemoveDeletedDocuments::class,
+    TransferCommand\Document\OverwriteContent::class => CommandHandler\Document\OverwriteContent::class,
+    Command\Document\AnalyseFinancialEvidence::class
+        => CommandHandler\Document\AnalyseDocument\FinancialEvidenceFactory::class,
+    Command\Document\SweepStaleDocumentAnalysis::class
+        => CommandHandler\Document\SweepStaleDocumentAnalysis::class,
+    Command\Document\StoreDocumentAnalysisResult::class
+        => CommandHandler\Document\StoreDocumentAnalysisResultFactory::class,
 
     // Transfer - DocumentTemplate
     TransferCommand\DocTemplate\Create::class => CommandHandler\DocTemplate\Create::class,
@@ -772,6 +781,7 @@ return [
     Command\Document\UploadCsv::class => CommandHandler\Document\UploadCsv::class,
     TransferCommand\Document\GenerateAndStore::class => CommandHandler\Document\GenerateAndStore::class,
     TransferCommand\Document\Upload::class => CommandHandler\Document\Upload::class,
+    TransferCommand\Document\BucketBrowserOverwrite::class => CommandHandler\Document\BucketBrowserOverwrite::class,
 
     // Domain - Report
     TransferCommand\Report\Upload::class => CommandHandler\Report\Upload::class,
@@ -1080,6 +1090,13 @@ return [
     // Transfer - FeatureToggle
     TransferCommand\FeatureToggle\Create::class =>
         CommandHandler\FeatureToggle\Create::class,
+    // Retrieve-via-Link
+    TransferCommand\RetrievalLink\RequestOtp::class =>
+        CommandHandler\RetrievalLink\RequestOtp::class,
+    TransferCommand\RetrievalLink\VerifyOtp::class =>
+        CommandHandler\RetrievalLink\VerifyOtp::class,
+    Command\RetrievalLink\PurgeExpired::class =>
+        CommandHandler\RetrievalLink\PurgeExpired::class,
     TransferCommand\FeatureToggle\Update::class =>
         CommandHandler\FeatureToggle\Update::class,
     TransferCommand\FeatureToggle\Delete::class                =>
@@ -1303,6 +1320,7 @@ return [
 
     // Templates
     TransferCommand\Template\UpdateTemplateSource::class => CommandHandler\Template\UpdateTemplateSource::class,
+    TransferCommand\Template\SendTestEmail::class => CommandHandler\Template\SendTestEmail::class,
 
     //FeeType
     TransferCommand\FeeType\Update::class => CommandHandler\FeeType\Update::class,
@@ -1344,6 +1362,8 @@ return [
     TransferCommand\Letter\LetterType\Create::class => CommandHandler\Letter\LetterType\Create::class,
     TransferCommand\Letter\LetterType\Update::class => CommandHandler\Letter\LetterType\Update::class,
     TransferCommand\Letter\LetterType\Delete::class => CommandHandler\Letter\LetterType\Delete::class,
+    TransferCommand\Letter\LetterType\PreviewComposition::class => CommandHandler\Letter\LetterType\PreviewComposition::class,
+    TransferCommand\Letter\LetterType\SuggestPreviewRecords::class => CommandHandler\Letter\LetterType\SuggestPreviewRecords::class,
     TransferCommand\Letter\LetterSection\Create::class => CommandHandler\Letter\LetterSection\Create::class,
     TransferCommand\Letter\LetterSection\Update::class => CommandHandler\Letter\LetterSection\Update::class,
     TransferCommand\Letter\LetterSection\Delete::class => CommandHandler\Letter\LetterSection\Delete::class,
@@ -1365,6 +1385,7 @@ return [
     TransferCommand\Letter\LetterInstance\PrepareToSend::class => CommandHandler\Letter\LetterInstance\PrepareToSend::class,
     TransferCommand\Letter\LetterInstanceIssue\UpdateContent::class => CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceSection\UpdateContent::class => CommandHandler\Letter\LetterInstanceSection\UpdateContent::class,
+    TransferCommand\Letter\LetterInstanceTodo\UpdateContent::class => CommandHandler\Letter\LetterInstanceTodo\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceAppendix\UpdateContent::class => CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class,
     TransferCommand\Letter\MasterTemplate\Create::class => CommandHandler\Letter\MasterTemplate\Create::class,
     TransferCommand\Letter\MasterTemplate\Update::class => CommandHandler\Letter\MasterTemplate\Update::class,

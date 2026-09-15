@@ -23,7 +23,7 @@ use Mockery as m;
 /**
  * Reset to Not Yet Submitted from Cancelled test
  */
-class ResetToNotYetSubmittedFromCancelledTest extends AbstractCommandHandlerTestCase
+final class ResetToNotYetSubmittedFromCancelledTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

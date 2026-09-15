@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -83,7 +83,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals(['Queue created'], $result->getMessages());
         $this->assertEquals(1, $result->getId('queue'));
-        $this->assertEquals($savedQueue->getId(), 1);
+        $this->assertEquals(1, $savedQueue->getId());
         $this->assertEquals(
             $savedQueue->getType(),
             $this->refData[QueueEntity::TYPE_CONT_CHECKLIST]
@@ -93,8 +93,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
             $this->refData[QueueEntity::STATUS_QUEUED]
         );
         $this->assertEquals(
-            $savedQueue->getOptions(),
-            '{"foo":"bar"}'
+            '{"foo":"bar"}',
+            $savedQueue->getOptions()
         );
         $this->assertEquals(
             $savedQueue->getProcessAfterDate(),

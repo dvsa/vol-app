@@ -11,7 +11,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\TmEmployment\ModifyList;
 
-class ModifyListTest extends AbstractHandlerTestCase
+final class ModifyListTest extends AbstractHandlerTestCase
 {
     /**
      * @var ModifyList
@@ -34,7 +34,7 @@ class ModifyListTest extends AbstractHandlerTestCase
             ->with(Permission::INTERNAL_USER, null)->once()
             ->andReturn(true);
 
-        $this->assertSame(true, $this->sut->isValid($dto));
+        $this->assertTrue($this->sut->isValid($dto));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
@@ -57,13 +57,11 @@ class ModifyListTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

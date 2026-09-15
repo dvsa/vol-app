@@ -30,7 +30,7 @@ use LmcRbacMvc\Identity\IdentityInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
+final class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -79,7 +79,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
             'category' => Category::CATEGORY_COMPLIANCE,
             'subCategory' => SubCategory::DOC_SUB_CATEGORY_IN_OFFICE_REVOCATION,
             'description' => 'Check response to PTR',
-            'actionDate' => (new DateTime('now'))->add(new \DateInterval('P21D'))->format('Y-m-d'),
+            'actionDate' => new DateTime('now')->add(new \DateInterval('P21D'))->format('Y-m-d'),
             'assignedToUser' => 291,
             'assignedToTeam' => 123,
             'licence' => 7,
@@ -205,7 +205,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
             'category' => Category::CATEGORY_COMPLIANCE,
             'subCategory' => SubCategory::DOC_SUB_CATEGORY_IN_OFFICE_REVOCATION,
             'description' => 'Check response to PTR',
-            'actionDate' => (new DateTime('now'))->add(new \DateInterval('P21D'))->format('Y-m-d'),
+            'actionDate' => new DateTime('now')->add(new \DateInterval('P21D'))->format('Y-m-d'),
             'assignedToUser' => 291,
             'assignedToTeam' => 123,
             'licence' => 7,
@@ -308,7 +308,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
             'category' => Category::CATEGORY_COMPLIANCE,
             'subCategory' => SubCategory::DOC_SUB_CATEGORY_IN_OFFICE_REVOCATION,
             'description' => 'Check response to PTR',
-            'actionDate' => (new DateTime('now'))->add(new \DateInterval('P21D'))->format('Y-m-d'),
+            'actionDate' => new DateTime('now')->add(new \DateInterval('P21D'))->format('Y-m-d'),
             'assignedToUser' => 291,
             'assignedToTeam' => 123,
             'licence' => 7,
@@ -409,7 +409,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
             'category' => Category::CATEGORY_COMPLIANCE,
             'subCategory' => SubCategory::DOC_SUB_CATEGORY_IN_OFFICE_REVOCATION,
             'description' => 'Check response to PTR',
-            'actionDate' => (new DateTime('now'))->add(new \DateInterval('P21D'))->format('Y-m-d'),
+            'actionDate' => new DateTime('now')->add(new \DateInterval('P21D'))->format('Y-m-d'),
             'assignedToUser' => 291,
             'assignedToTeam' => 123,
             'licence' => 7,

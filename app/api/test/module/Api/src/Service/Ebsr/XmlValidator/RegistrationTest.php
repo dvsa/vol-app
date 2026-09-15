@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  * Class RegistrationTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\XmlValidator
  */
-class RegistrationTest extends TestCase
+final class RegistrationTest extends TestCase
 {
     /**
      * @param $xml
@@ -28,15 +28,13 @@ class RegistrationTest extends TestCase
         $this->assertEquals($valid, $sut->isValid($dom));
     }
 
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            ['<Registrations></Registrations>', false],
-            [
-                '<Registrations><Registration></Registration><Registration></Registration></Registrations>',
-                false
-            ],
-            ['<Registrations><Registration></Registration></Registrations>', true]
+        yield ['<Registrations></Registrations>', false];
+        yield [
+            '<Registrations><Registration></Registration><Registration></Registration></Registrations>',
+            false
         ];
+        yield ['<Registrations><Registration></Registration></Registrations>', true];
     }
 }

@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SafetyTest extends QueryHandlerTestCase
+final class SafetyTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -97,11 +97,9 @@ class SafetyTest extends QueryHandlerTestCase
         );
     }
 
-    public static function trailersProvider(): array
+    public static function trailersProvider(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 }

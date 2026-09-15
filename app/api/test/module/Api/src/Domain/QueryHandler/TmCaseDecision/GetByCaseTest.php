@@ -18,7 +18,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 /**
  * GetByCase Test
  */
-class GetByCaseTest extends QueryHandlerTestCase
+final class GetByCaseTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

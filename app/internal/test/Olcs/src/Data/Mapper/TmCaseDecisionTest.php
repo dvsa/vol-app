@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * TmCaseDecision Mapper Test
  */
-class TmCaseDecisionTest extends MockeryTestCase
+final class TmCaseDecisionTest extends MockeryTestCase
 {
     /**
      *
@@ -25,26 +25,24 @@ class TmCaseDecisionTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
+            [],
+            ['fields' => []]
+        ];
+        // edit
+        yield [
             [
-                [],
-                ['fields' => []]
+                'id' => 987,
+                'case' => ['id' => 100],
             ],
-            // edit
             [
-                [
+                'fields' => [
                     'id' => 987,
-                    'case' => ['id' => 100],
+                    'case' => 100,
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'case' => 100,
-                    ],
-                ]
             ]
         ];
     }

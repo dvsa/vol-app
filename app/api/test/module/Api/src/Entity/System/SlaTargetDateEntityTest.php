@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
  *
  * Initially auto-generated but won't be overridden
  */
-class SlaTargetDateEntityTest extends EntityTester
+final class SlaTargetDateEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -25,8 +25,9 @@ class SlaTargetDateEntityTest extends EntityTester
     protected $entityClass = Entity::class;
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestConstruct')]
-    public function testConstruct(mixed $entity, mixed $expect): void
+    public function testConstruct(\Closure $createEntity, mixed $expect): void
     {
+        $entity = $createEntity();
         $agreedDate = new \DateTime('2011-10-09');
         $underDelegation = 'unit_UnderDeleg';
 
@@ -41,26 +42,24 @@ class SlaTargetDateEntityTest extends EntityTester
             $actual = $sut->getSubmission();
         }
 
-        static::assertSame($entity, $actual);
-        static::assertEquals($agreedDate, $sut->getAgreedDate());
-        static::assertEquals($underDelegation, $sut->getUnderDelegation());
+        $this->assertSame($entity, $actual);
+        $this->assertEquals($agreedDate, $sut->getAgreedDate());
+        $this->assertEquals($underDelegation, $sut->getUnderDelegation());
     }
 
-    public static function dpTestConstruct(): array
+    public static function dpTestConstruct(): \Iterator
     {
-        return [
-            [
-                'entity' => m::mock(\Dvsa\Olcs\Api\Entity\Doc\Document::class),
-                'expect' => 'DOC',
-            ],
-            [
-                'entity' => m::mock(\Dvsa\Olcs\Api\Entity\Pi\Pi::class),
-                'expect' => 'PI',
-            ],
-            [
-                'entity' => m::mock(\Dvsa\Olcs\Api\Entity\Submission\Submission::class),
-                'expect' => 'SUBMISSION',
-            ],
+        yield [
+            'createEntity' => static fn () => m::mock(\Dvsa\Olcs\Api\Entity\Doc\Document::class),
+            'expect' => 'DOC',
+        ];
+        yield [
+            'createEntity' => static fn () => m::mock(\Dvsa\Olcs\Api\Entity\Pi\Pi::class),
+            'expect' => 'PI',
+        ];
+        yield [
+            'createEntity' => static fn () => m::mock(\Dvsa\Olcs\Api\Entity\Submission\Submission::class),
+            'expect' => 'SUBMISSION',
         ];
     }
 

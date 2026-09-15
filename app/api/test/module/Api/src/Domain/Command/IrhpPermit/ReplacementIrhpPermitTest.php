@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\IrhpPermit\ReplacementIrhpPermit;
 /**
  * Close IRHP Permit Window Test
  */
-class ReplacementIrhpPermitTest extends \PHPUnit\Framework\TestCase
+final class ReplacementIrhpPermitTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

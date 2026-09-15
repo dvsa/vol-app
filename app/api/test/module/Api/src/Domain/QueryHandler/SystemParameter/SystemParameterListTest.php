@@ -22,7 +22,7 @@ use Doctrine\ORM\Query as DoctrineQuery;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SystemParameterListTest extends QueryHandlerTestCase
+final class SystemParameterListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -18,11 +18,11 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class PeriodGeneratorTest extends MockeryTestCase
+final class PeriodGeneratorTest extends MockeryTestCase
 {
-    public const BEHAVIOUR_NAME = 'behaviourName';
+    public const string BEHAVIOUR_NAME = 'behaviourName';
 
-    public const STOCK_ID = 99;
+    public const int STOCK_ID = 99;
 
     private $irhpPermitStockRepo;
 
@@ -30,6 +30,7 @@ class PeriodGeneratorTest extends MockeryTestCase
 
     private $fieldsGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitStockRepo = m::mock(IrhpPermitStockRepository::class);
@@ -54,8 +55,10 @@ class PeriodGeneratorTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
-    public function testGenerate(mixed $irhpPermitApplication): void
+    public function testGenerate(bool $hasIrhpPermitApplication): void
     {
+        $irhpPermitApplication = $hasIrhpPermitApplication ? m::mock(IrhpPermitApplication::class) : null;
+
         $fieldsResponse = [
             'fieldsResponseKey1' => 'fieldsResponseValue1',
             'fieldsResponseKey2' => 'fieldsResponseValue2'
@@ -87,12 +90,10 @@ class PeriodGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
-            [m::mock(IrhpPermitApplication::class)],
-            [null]
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testGenerateException(): void

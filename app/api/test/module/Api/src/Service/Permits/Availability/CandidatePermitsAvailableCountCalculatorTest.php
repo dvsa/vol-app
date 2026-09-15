@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CandidatePermitsAvailableCountCalculatorTest extends MockeryTestCase
+final class CandidatePermitsAvailableCountCalculatorTest extends MockeryTestCase
 {
     public function testGetCount(): void
     {

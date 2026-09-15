@@ -11,6 +11,9 @@ return [
         ]
     ],
     'service_manager' => [
-
+        'factories' => [
+            \Dvsa\Olcs\DocumentShare\Service\S3BucketBrowser::class
+                => \Dvsa\Olcs\DocumentShare\Service\S3BucketBrowserFactory::class,
+        ],
     ]
 ];

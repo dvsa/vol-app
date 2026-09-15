@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Application\Summary::class)]
-class SummaryTest extends QueryHandlerTestCase
+final class SummaryTest extends QueryHandlerTestCase
 {
     public $mockCaseRepo;
     /** @var  Summary */

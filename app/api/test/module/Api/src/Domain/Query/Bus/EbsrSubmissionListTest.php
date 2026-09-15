@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bus\EbsrSubmissionList;
 /**
  * EbsrSubmissionList test
  */
-class EbsrSubmissionListTest extends \PHPUnit\Framework\TestCase
+final class EbsrSubmissionListTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

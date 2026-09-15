@@ -25,13 +25,11 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class NextItemTest extends QueryHandlerTestCase
+final class NextItemTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         $this->sut = new NextItem();
         $this->mockRepo('Queue', QueueRepo::class);
@@ -58,7 +56,7 @@ class NextItemTest extends QueryHandlerTestCase
      * @param $exception
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('exceptionProvider')]
-    public function testHandleQueryNoItem(mixed $exception): void
+    public function testHandleQueryNoItem(string $exceptionClass): void
     {
         $query = Qry::create(['includeTypes' => ['foo'], 'excludeTypes' => ['bar']]);
 
@@ -66,19 +64,17 @@ class NextItemTest extends QueryHandlerTestCase
             ->shouldReceive('getNextItem')
             ->with(['foo'], ['bar'])
             ->once()
-            ->andThrow($exception);
+            ->andThrow(m::mock($exceptionClass));
 
         $this->assertNull($this->sut->handleQuery($query));
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function exceptionProvider(): array
+    public static function exceptionProvider(): \Iterator
     {
-        return [
-            [m::mock(NotFoundException::class)],
-            [m::mock(OptimisticLockException::class)]
-        ];
+        yield [NotFoundException::class];
+        yield [OptimisticLockException::class];
     }
 }

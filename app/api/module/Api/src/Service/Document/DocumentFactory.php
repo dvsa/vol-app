@@ -8,12 +8,13 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class DocumentFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         return new Document(
             $container->get('DateService'),
             $container->get('ContentStore'),
-            $container->get('translator')
+            $container->get('translator'),
+            $container->get('RepositoryServiceManager'),
         );
     }
 }

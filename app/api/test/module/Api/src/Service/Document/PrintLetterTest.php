@@ -12,9 +12,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\PrintLetter::class)]
-class PrintLetterTest extends MockeryTestCase
+final class PrintLetterTest extends MockeryTestCase
 {
-    public const TEMPLATE_ID = 7777;
+    public const int TEMPLATE_ID = 7777;
 
     /** @var  PrintLetter */
     private $sut;
@@ -29,6 +29,7 @@ class PrintLetterTest extends MockeryTestCase
     /** @var  m\MockInterface */
     private $mockRepoSm;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new PrintLetter();
@@ -53,14 +54,14 @@ class PrintLetterTest extends MockeryTestCase
         $mockDocE = m::mock(Entity\Doc\Document::class);
         $mockDocE->shouldReceive('getRelatedLicence')->once()->andReturn(null);
 
-        static::assertFalse($this->sut->canEmail($mockDocE));
+        $this->assertFalse($this->sut->canEmail($mockDocE));
     }
 
     public function testCanEmailFalseNotAllowEmail(): void
     {
         $this->mockOrgE->shouldReceive('getAllowEmail')->once()->andReturn(false);
 
-        static::assertFalse($this->sut->canEmail($this->mockDocE));
+        $this->assertFalse($this->sut->canEmail($this->mockDocE));
     }
 
     public function testCanEmailFalseHasntEmails(): void
@@ -69,7 +70,7 @@ class PrintLetterTest extends MockeryTestCase
             ->shouldReceive('getAllowEmail')->once()->andReturn(true)
             ->shouldReceive('hasAdminEmailAddresses')->once()->andReturn(false);
 
-        static::assertFalse($this->sut->canEmail($this->mockDocE));
+        $this->assertFalse($this->sut->canEmail($this->mockDocE));
     }
 
     public function testCanEmailFalseMetadataInvalid(): void
@@ -80,7 +81,7 @@ class PrintLetterTest extends MockeryTestCase
 
         $this->mockDocE->shouldReceive('getMetadata')->once()->andReturn('{}');
 
-        static::assertFalse($this->sut->canEmail($this->mockDocE));
+        $this->assertFalse($this->sut->canEmail($this->mockDocE));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanEmailTrue')]
@@ -108,21 +109,19 @@ class PrintLetterTest extends MockeryTestCase
 
         $this->sut->__invoke($this->mockSm, PrintLetter::class);
 
-        static::assertTrue($this->sut->canEmail($this->mockDocE, $forceEmailCorrespondence));
+        $this->assertTrue($this->sut->canEmail($this->mockDocE, $forceEmailCorrespondence));
     }
 
-    public static function dpTestCanEmailTrue(): array
+    public static function dpTestCanEmailTrue(): \Iterator
     {
-        return [
-            'email correspondence preference true, force false' => [true, false],
-            'email correspondence preference false, force true' => [false, true]
-        ];
+        yield 'email correspondence preference true, force false' => [true, false];
+        yield 'email correspondence preference false, force true' => [false, true];
     }
 
     public function testCanPrintTrue(): void
     {
         $this->mockLicE->shouldReceive('getTranslateToWelsh')->once()->andReturn(false);
 
-        static::assertTrue($this->sut->canPrint($this->mockDocE));
+        $this->assertTrue($this->sut->canPrint($this->mockDocE));
     }
 }

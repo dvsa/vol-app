@@ -18,7 +18,7 @@ class SupplementedApplicationStepsProviderFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SupplementedApplicationStepsProvider
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SupplementedApplicationStepsProvider
     {
         return new SupplementedApplicationStepsProvider(
             $container->get('FormControlServiceManager'),

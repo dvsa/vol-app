@@ -17,7 +17,7 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationFinancialEvidenceReviewServiceTest extends MockeryTestCase
+final class ApplicationFinancialEvidenceReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -27,6 +27,7 @@ class ApplicationFinancialEvidenceReviewServiceTest extends MockeryTestCase
     /** @var QueryHandlerManager */
     protected $qhManager;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -92,17 +93,15 @@ class ApplicationFinancialEvidenceReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function uploadProvider(): array
+    public static function uploadProvider(): \Iterator
     {
-        return [
-            [
-                Application::FINANCIAL_EVIDENCE_SEND_IN_POST,
-                'application-review-financial-evidence-evidence-post-translated'
-            ],
-            [
-                Application::FINANCIAL_EVIDENCE_UPLOAD_LATER,
-                'application-review-financial-evidence-evidence-later-translated'
-            ]
+        yield [
+            Application::FINANCIAL_EVIDENCE_SEND_IN_POST,
+            'application-review-financial-evidence-evidence-post-translated'
+        ];
+        yield [
+            Application::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            'application-review-financial-evidence-evidence-later-translated'
         ];
     }
 

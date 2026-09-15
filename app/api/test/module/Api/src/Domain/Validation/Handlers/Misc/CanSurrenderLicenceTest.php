@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanSurrenderLicence;
 
-class CanSurrenderLicenceTest extends AbstractHandlerTestCase
+final class CanSurrenderLicenceTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanSurrenderLicence
@@ -43,29 +43,27 @@ class CanSurrenderLicenceTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            'case_01' => [
-                'canAccess' => true,
-                'isSurrenderable' => true,
-                'expected' => true
-            ],
-            'case_02' => [
-                'canAccess' => false,
-                'isSurrenderable' => true,
-                'expected' => false
-            ],
-            'case_03' => [
-                'canAccess' => true,
-                'isSurrenderable' => false,
-                'expected' => false
-            ],
-            'case_04' => [
-                'canAccess' => false,
-                'isSurrenderable' => false,
-                'expected' => false
-            ]
+        yield 'case_01' => [
+            'canAccess' => true,
+            'isSurrenderable' => true,
+            'expected' => true
+        ];
+        yield 'case_02' => [
+            'canAccess' => false,
+            'isSurrenderable' => true,
+            'expected' => false
+        ];
+        yield 'case_03' => [
+            'canAccess' => true,
+            'isSurrenderable' => false,
+            'expected' => false
+        ];
+        yield 'case_04' => [
+            'canAccess' => false,
+            'isSurrenderable' => false,
+            'expected' => false
         ];
     }
 }

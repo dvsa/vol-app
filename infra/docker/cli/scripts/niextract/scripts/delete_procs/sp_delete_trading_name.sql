@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_trading_name;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_trading_name()
@@ -31,6 +30,8 @@ BEGIN
     SET @total:=0;
     SET @rowcount:=10000;
     
+    START TRANSACTION;
+
     WHILE(@rowcount = 10000) DO
 
 
@@ -47,9 +48,12 @@ BEGIN
     
         SELECT CONCAT(@total,' trading_name rows deleted.') AS '';
 
+        COMMIT;
+        START TRANSACTION;
+
     END WHILE;
     
-    SELECT CONCAT(@rowcount,' trading_name rows deleted.') AS '';
+    COMMIT;
   
     set autocommit=1;
 
@@ -57,7 +61,4 @@ BEGIN
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\FStandingProvedDate;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class FStandingProvedDateTest extends \PHPUnit\Framework\TestCase
+final class FStandingProvedDateTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -29,13 +29,11 @@ class FStandingProvedDateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function expiryDateProvider(): array
+    public static function expiryDateProvider(): \Iterator
     {
-        return [
-            ['2016-03-31', '29/02/2016'],
-            ['2016-02-29', '31/01/2016'],
-            ['2016-01-31', '31/12/2015'],
-            [null, '']
-        ];
+        yield ['2016-03-31', '29/02/2016'];
+        yield ['2016-02-29', '31/01/2016'];
+        yield ['2016-01-31', '31/12/2015'];
+        yield [null, ''];
     }
 }

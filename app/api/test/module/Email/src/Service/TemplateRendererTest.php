@@ -14,7 +14,7 @@ use Dvsa\Olcs\Email\Service\TemplateRenderer;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TemplateRendererTest extends MockeryTestCase
+final class TemplateRendererTest extends MockeryTestCase
 {
     /**
      *
@@ -62,13 +62,11 @@ class TemplateRendererTest extends MockeryTestCase
     /**
      * Data provider for testRenderBody
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function renderBodyProvider(): array
+    public static function renderBodyProvider(): \Iterator
     {
-        return [
-            [true, 1, 'RENDER_HTML_LAYOUT'],
-            [false, 0, null]
-        ];
+        yield [true, 1, 'RENDER_HTML_LAYOUT'];
+        yield [false, 0, null];
     }
 }

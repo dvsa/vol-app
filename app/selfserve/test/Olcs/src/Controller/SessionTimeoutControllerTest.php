@@ -22,9 +22,9 @@ use PHPUnit\Framework\Attributes\Test;
 /**
  * @see SessionTimeoutController
  */
-class SessionTimeoutControllerTest extends MockeryTestCase
+final class SessionTimeoutControllerTest extends MockeryTestCase
 {
-    protected const COOKIE_NAME = 'cookie';
+    protected const string COOKIE_NAME = 'cookie';
     private IdentityProviderInterface $identityProviderMock;
     protected Redirect $redirectHelperMock;
     protected SessionTimeoutController $sut;
@@ -111,6 +111,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $this->assertSame($expectedResponse, $response);
     }
 
+    #[\Override]
     protected function setup(): void
     {
         $this->identityProviderMock = m::mock(IdentityProviderInterface::class);
@@ -125,7 +126,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         );
     }
 
-    protected function setUpRequest(?string $url = null, array $input = null): Request
+    protected function setUpRequest(?string $url = null, ?array $input = null): Request
     {
         $uri = m::mock(Http::class);
         $uri->shouldIgnoreMissing($uri);

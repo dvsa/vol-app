@@ -18,7 +18,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 class LetterChoiceController extends AbstractInternalController implements LeftViewProvider
 {
     protected $tableName = 'admin-letter-choice';
-    protected $defaultTableSortField = 'choiceKey';
+    protected $defaultTableSortField = 'groupLabel';
     protected $defaultTableOrderField = 'ASC';
 
     protected $listDto = ListDTO::class;

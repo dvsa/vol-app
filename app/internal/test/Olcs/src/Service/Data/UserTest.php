@@ -23,7 +23,7 @@ use Mockery as m;
  * @author someone <someone@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class UserTest extends AbstractDataServiceTestCase
+final class UserTest extends AbstractDataServiceTestCase
 {
     private $users = [
         ['id' => 1, 'loginId' => 'Logged in user'],

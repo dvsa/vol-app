@@ -14,7 +14,7 @@ use Olcs\Controller\Bus\Service\BusServiceController as Sut;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class BusServiceControllerTest extends MockeryTestCase
+final class BusServiceControllerTest extends MockeryTestCase
 {
     protected $sut;
     protected $translationHelper;
@@ -23,6 +23,7 @@ class BusServiceControllerTest extends MockeryTestCase
     protected $navigation;
     protected $tableFactory;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->translationHelper = m::mock(TranslationHelperService::class);
@@ -184,111 +185,109 @@ class BusServiceControllerTest extends MockeryTestCase
         $this->assertSame($mockForm, $result);
     }
 
-    public static function alterFormForEditDataProvider(): array
+    public static function alterFormForEditDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'isReadOnly' => true,
-                    'isScottishRules' => true,
-                    'isShortNotice' => 'Y',
-                    'isCancelled' => 1,
-                    'isCancellation' => 0,
-                ],
-                // $readonly
-                true,
-                // $timetableRemoved
-                true,
-                // $opNotifiedLaPteRemoved
-                false,
-                // $laShortNoteRemoved
-                false
+                'isReadOnly' => true,
+                'isScottishRules' => true,
+                'isShortNotice' => 'Y',
+                'isCancelled' => 1,
+                'isCancellation' => 0,
             ],
+            // $readonly
+            true,
+            // $timetableRemoved
+            true,
+            // $opNotifiedLaPteRemoved
+            false,
+            // $laShortNoteRemoved
+            false
+        ];
+        yield [
             [
-                [
-                    'isReadOnly' => true,
-                    'isScottishRules' => true,
-                    'isShortNotice' => 'Y',
-                    'isCancelled' => 0,
-                    'isCancellation' => 1,
-                ],
-                // $readonly
-                true,
-                // $timetableRemoved
-                true,
-                // $opNotifiedLaPteRemoved
-                false,
-                // $laShortNoteRemoved
-                false
+                'isReadOnly' => true,
+                'isScottishRules' => true,
+                'isShortNotice' => 'Y',
+                'isCancelled' => 0,
+                'isCancellation' => 1,
             ],
+            // $readonly
+            true,
+            // $timetableRemoved
+            true,
+            // $opNotifiedLaPteRemoved
+            false,
+            // $laShortNoteRemoved
+            false
+        ];
+        yield [
             [
-                [
-                    'isReadOnly' => true,
-                    'isScottishRules' => true,
-                    'isShortNotice' => 'Y',
-                    'isCancelled' => 0,
-                    'isCancellation' => 0,
-                ],
-                // $readonly
-                true,
-                // $timetableRemoved
-                false,
-                // $opNotifiedLaPteRemoved
-                false,
-                // $laShortNoteRemoved
-                false
+                'isReadOnly' => true,
+                'isScottishRules' => true,
+                'isShortNotice' => 'Y',
+                'isCancelled' => 0,
+                'isCancellation' => 0,
             ],
+            // $readonly
+            true,
+            // $timetableRemoved
+            false,
+            // $opNotifiedLaPteRemoved
+            false,
+            // $laShortNoteRemoved
+            false
+        ];
+        yield [
             [
-                [
-                    'isReadOnly' => false,
-                    'isScottishRules' => false,
-                    'isShortNotice' => 'Y',
-                    'isCancelled' => 0,
-                    'isCancellation' => 0,
-                ],
-                // $readonly
-                false,
-                // $timetableRemoved
-                false,
-                // $opNotifiedLaPteRemoved
-                true,
-                // $laShortNoteRemoved
-                false
+                'isReadOnly' => false,
+                'isScottishRules' => false,
+                'isShortNotice' => 'Y',
+                'isCancelled' => 0,
+                'isCancellation' => 0,
             ],
+            // $readonly
+            false,
+            // $timetableRemoved
+            false,
+            // $opNotifiedLaPteRemoved
+            true,
+            // $laShortNoteRemoved
+            false
+        ];
+        yield [
             [
-                [
-                    'isReadOnly' => false,
-                    'isScottishRules' => true,
-                    'isShortNotice' => 'N',
-                    'isCancelled' => 0,
-                    'isCancellation' => 0,
-                ],
-                // $readonly
-                false,
-                // $timetableRemoved
-                false,
-                // $opNotifiedLaPteRemoved
-                false,
-                // $laShortNoteRemoved
-                true
+                'isReadOnly' => false,
+                'isScottishRules' => true,
+                'isShortNotice' => 'N',
+                'isCancelled' => 0,
+                'isCancellation' => 0,
             ],
+            // $readonly
+            false,
+            // $timetableRemoved
+            false,
+            // $opNotifiedLaPteRemoved
+            false,
+            // $laShortNoteRemoved
+            true
+        ];
+        yield [
             [
-                [
-                    'isReadOnly' => false,
-                    'isScottishRules' => false,
-                    'isShortNotice' => 'N',
-                    'isCancelled' => 0,
-                    'isCancellation' => 0,
-                ],
-                // $readonly
-                false,
-                // $timetableRemoved
-                false,
-                // $opNotifiedLaPteRemoved
-                true,
-                // $laShortNoteRemoved
-                true
+                'isReadOnly' => false,
+                'isScottishRules' => false,
+                'isShortNotice' => 'N',
+                'isCancelled' => 0,
+                'isCancellation' => 0,
             ],
+            // $readonly
+            false,
+            // $timetableRemoved
+            false,
+            // $opNotifiedLaPteRemoved
+            true,
+            // $laShortNoteRemoved
+            true
         ];
     }
 }

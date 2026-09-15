@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * @see GenerateReportHandler
  */
-class GenerateReportTest extends AbstractCommandHandlerTestCase
+final class GenerateReportTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

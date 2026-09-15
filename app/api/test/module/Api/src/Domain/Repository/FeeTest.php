@@ -17,13 +17,15 @@ use Dvsa\Olcs\Api\Entity\System\RefData as RefDataEntity;
 use Dvsa\Olcs\Api\Entity\Fee\FeeType as FeeTypeEntity;
 use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
 use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Fee::class)]
-class FeeTest extends RepositoryTestCase
+final class FeeTest extends RepositoryTestCase
 {
     /** @var   FeeRepo */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(FeeRepo::class, true);
@@ -188,6 +190,42 @@ class FeeTest extends RepositoryTestCase
             LicenceEntity::LICENCE_STATUS_SURRENDERED,
             LicenceEntity::LICENCE_STATUS_TERMINATED
         ];
+
+        $excludedApplicationStatuses = [
+            ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED,
+            ApplicationEntity::APPLICATION_STATUS_CANCELLED,
+            ApplicationEntity::APPLICATION_STATUS_WITHDRAWN,
+        ];
+
+        $mockQb->shouldReceive('leftJoin')
+            ->with('f.application', 'app')
+            ->once()
+            ->andReturnSelf();
+
+        $mockQb->shouldReceive('expr->isNull')
+            ->with('f.application')
+            ->once()
+            ->andReturn('condition3');
+
+        $mockQb->shouldReceive('expr->notIn')
+            ->with('app.status', ':excludedApplicationStatuses')
+            ->once()
+            ->andReturn('condition4');
+
+        $mockQb->shouldReceive('expr->orX')
+            ->withAnyArgs()
+            ->once()
+            ->andReturn('condition5');
+
+        $mockQb->shouldReceive('andWhere')
+            ->with('condition5')
+            ->once()
+            ->andReturnSelf();
+
+        $mockQb->shouldReceive('setParameter')
+            ->with('excludedApplicationStatuses', $excludedApplicationStatuses)
+            ->once()
+            ->andReturnSelf();
 
         $mockQb->shouldReceive('expr->notIn')->with('l.status', ':ceasedStatuses')->once()->andReturn('condition1');
         $mockQb->shouldReceive('expr->neq')->with('ftype.feeType', ':feeType')->once()->andReturn('condition2');
@@ -413,13 +451,11 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public static function statusProvider(): array
+    public static function statusProvider(): \Iterator
     {
-        return [
-            ['all'],
-            ['current'],
-            ['historical'],
-        ];
+        yield ['all'];
+        yield ['current'];
+        yield ['historical'];
     }
 
     public function testFetchLatestFeeByTypeStatusesAndApplicationId(): void
@@ -503,9 +539,7 @@ class FeeTest extends RepositoryTestCase
             ->shouldReceive('withRefdata')->once()->andReturnSelf()
             ->shouldReceive('order')->once()->andReturnSelf();
 
-        static::assertNull(
-            $this->sut->fetchLatestFeeByTypeStatusesAndApplicationId($feeType, $feeStatuses, $appId)
-        );
+        $this->assertNull($this->sut->fetchLatestFeeByTypeStatusesAndApplicationId($feeType, $feeStatuses, $appId));
     }
 
     public function testFetchOutstandingFeesByApplicationId(): void
@@ -763,7 +797,7 @@ class FeeTest extends RepositoryTestCase
 
         $this->assertStringContainsString(
             'foo',
-            $this->sut->fetchApplicationFeeByPsvAuthId($irfoPsvAuthId)
+            (string) $this->sut->fetchApplicationFeeByPsvAuthId($irfoPsvAuthId)
         );
     }
 
@@ -1013,5 +1047,107 @@ class FeeTest extends RepositoryTestCase
         $mockQb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_OBJECT)->once()->andReturn(['foo']);
 
         $this->assertSame('foo', $this->sut->fetchLatestPaidContinuationFee($licenceId));
+    }
+
+    public function testFetchListByLicenceHidesFeesForExcludedApplicationStatuses(): void
+    {
+        $query = FeeListQry::create(
+            [
+                'licence' => 12,
+                'page' => 1,
+                'limit' => 10,
+                'sort' => 'id',
+                'order' => 'ASC',
+            ]
+        );
+
+        /** @var QueryBuilder $qb */
+        $mockQb = m::mock(QueryBuilder::class);
+
+        $this->em
+            ->shouldReceive('getRepository->createQueryBuilder')
+            ->with('f')
+            ->once()
+            ->andReturn($mockQb);
+
+        $this->queryBuilder->shouldReceive('modifyQuery')
+            ->with($mockQb)
+            ->andReturnSelf()
+            ->shouldReceive('withRefdata')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('paginate')
+            ->once()
+            ->with(1, 10)
+            ->andReturnSelf()
+            ->shouldReceive('order')
+            ->once()
+            ->with('id', 'ASC', [])
+            ->andReturnSelf()
+            ->shouldReceive('withCreatedBy')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('filterByLicence')
+            ->once()
+            ->with(12)
+            ->andReturnSelf()
+            ->shouldReceive('filterByApplication')
+            ->once()
+            ->with(null)
+            ->andReturnSelf()
+            ->shouldReceive('filterByIds')
+            ->once()
+            ->with(null)
+            ->andReturnSelf();
+
+        $excludedApplicationStatuses = [
+            ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED,
+            ApplicationEntity::APPLICATION_STATUS_CANCELLED,
+            ApplicationEntity::APPLICATION_STATUS_WITHDRAWN,
+        ];
+
+        $mockQb->shouldReceive('leftJoin')
+            ->with('f.application', 'app')
+            ->once()
+            ->andReturnSelf();
+
+        $mockQb->shouldReceive('expr->isNull')
+            ->with('f.application')
+            ->once()
+            ->andReturn('condition1');
+
+        $mockQb->shouldReceive('expr->notIn')
+            ->with('app.status', ':excludedApplicationStatuses')
+            ->once()
+            ->andReturn('condition2');
+
+        $mockQb->shouldReceive('expr->orX')
+            ->withAnyArgs()
+            ->once()
+            ->andReturn('condition3');
+
+        $mockQb->shouldReceive('andWhere')
+            ->with('condition3')
+            ->once()
+            ->andReturnSelf();
+
+        $mockQb->shouldReceive('setParameter')
+            ->with('excludedApplicationStatuses', $excludedApplicationStatuses)
+            ->once()
+            ->andReturnSelf();
+
+        // mock pagination
+        $mockQuery = m::mock();
+        $mockQb->shouldReceive('getQuery')->andReturn($mockQuery);
+        $mockQuery->shouldReceive('setHydrationMode');
+
+        $paginator = m::mock();
+        $this->sut->shouldReceive('getPaginator')->andReturn($paginator);
+        $paginator->shouldReceive('getIterator')->andReturn('result');
+
+        $this->assertSame(
+            'result',
+            $this->sut->fetchList($query)
+        );
     }
 }

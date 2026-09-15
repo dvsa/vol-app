@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class ComplaintTest extends QueryHandlerTestCase
+final class ComplaintTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

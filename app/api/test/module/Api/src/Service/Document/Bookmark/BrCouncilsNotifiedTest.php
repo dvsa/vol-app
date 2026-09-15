@@ -15,9 +15,9 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class BrCouncilsNotifiedTest extends \PHPUnit\Framework\TestCase
+final class BrCouncilsNotifiedTest extends \PHPUnit\Framework\TestCase
 {
-    public const SUT_CLASS_NAME = \Dvsa\Olcs\Api\Service\Document\Bookmark\BrCouncilsNotified::class;
+    public const string SUT_CLASS_NAME = \Dvsa\Olcs\Api\Service\Document\Bookmark\BrCouncilsNotified::class;
 
     public function testGetQuery(): void
     {
@@ -27,7 +27,7 @@ class BrCouncilsNotifiedTest extends \PHPUnit\Framework\TestCase
 
         $bookmark = new $sutClassName();
 
-        $this->assertTrue(is_null($bookmark->getQuery([])));
+        $this->assertNull($bookmark->getQuery([]));
 
         $query = $bookmark->getQuery(['busRegId' => $busRegId]);
 

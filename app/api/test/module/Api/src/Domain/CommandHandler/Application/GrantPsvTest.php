@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\Command\ConditionUndertaking\CreateSmallVehicleConditio
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GrantPsvTest extends AbstractCommandHandlerTestCase
+final class GrantPsvTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -187,12 +187,12 @@ class GrantPsvTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffectAsSystemUser(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseTexTask::class,
             ['id' => 111],
-            (new Result())->addMessage('CLOSE_TEX_TASK')
+            new Result()->addMessage('CLOSE_TEX_TASK')
         );
         $this->expectedSideEffectAsSystemUser(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseFeeDueTask::class,
             ['id' => 111],
-            (new Result())->addMessage('CLOSE_FEEDUE_TASK')
+            new Result()->addMessage('CLOSE_FEEDUE_TASK')
         );
 
         $this->expectedSideEffectAsSystemUser(

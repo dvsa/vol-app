@@ -14,7 +14,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\AbstractQueryByIdHandlerTestCase;
  * ById Test
  *
  */
-class ByIdTest extends AbstractQueryByIdHandlerTestCase
+final class ByIdTest extends AbstractQueryByIdHandlerTestCase
 {
     protected $sutClass = PresidingTcByIdHandler::class;
     protected $sutRepo = 'PresidingTc';

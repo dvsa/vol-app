@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Pi\Decision as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class DecisionEntityTest extends EntityTester
+final class DecisionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

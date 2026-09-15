@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class IrhpPermitControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpPermitController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrhpPermitController
     {
         $formHelper = $container->get(FormHelperService::class);
         assert($formHelper instanceof FormHelperService);

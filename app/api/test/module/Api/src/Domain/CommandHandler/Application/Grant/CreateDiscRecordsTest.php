@@ -27,7 +27,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateDiscRecordsTest extends AbstractCommandHandlerTestCase
+final class CreateDiscRecordsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -151,8 +151,8 @@ class CreateDiscRecordsTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals('2015-01-01', $licenceVehicle1->getSpecifiedDate()->format('Y-m-d'));
-        $this->assertEquals(date('Y-m-d'), $licenceVehicle2->getSpecifiedDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $licenceVehicle1->getSpecifiedDate()->format('Y-m-d'));
+        $this->assertSame(date('Y-m-d'), $licenceVehicle2->getSpecifiedDate()->format('Y-m-d'));
         $this->assertEquals(null, $licenceVehicle1->getInterimApplication());
         $this->assertEquals(null, $licenceVehicle2->getInterimApplication());
     }

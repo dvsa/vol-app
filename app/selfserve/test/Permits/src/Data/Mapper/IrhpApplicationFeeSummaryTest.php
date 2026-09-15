@@ -13,15 +13,15 @@ use Mockery as m;
 use Permits\Data\Mapper\EcmtNoOfPermits;
 use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\View\Helper\IrhpApplicationSection;
-use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * IrhpApplicationFeeSummaryTest
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class IrhpApplicationFeeSummaryTest extends TestCase
+final class IrhpApplicationFeeSummaryTest extends MockeryTestCase
 {
     private $translationHelperService;
 
@@ -706,16 +706,14 @@ class IrhpApplicationFeeSummaryTest extends TestCase
     }
 
     /**
-     * @return int[][]
+     * @return \Iterator<(int | string), array<int>>
      *
      * @psalm-return list{list{1}, list{2}}
      */
-    public static function dpTestMapForDisplayEcmtAnnualAndShortTerm(): array
+    public static function dpTestMapForDisplayEcmtAnnualAndShortTerm(): \Iterator
     {
-        return [
-            [RefData::ECMT_PERMIT_TYPE_ID],
-            [RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID],
-        ];
+        yield [RefData::ECMT_PERMIT_TYPE_ID];
+        yield [RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID];
     }
 
     public function testMapForDisplayEcmtShortTermUnderConsideration(): void

@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DataGovUk::class)]
-class DataGovUkTest extends MockeryTestCase
+final class DataGovUkTest extends MockeryTestCase
 {
     public $mockResult;
     /** @var  m\MockInterface */
@@ -23,6 +23,7 @@ class DataGovUkTest extends MockeryTestCase
     /** @var DataGovUk */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockResult = m::mock(Result::class);
@@ -44,10 +45,7 @@ class DataGovUkTest extends MockeryTestCase
             ->with(m::pattern('/data_gov_uk_psv_operator_list$/'))
             ->andReturn($this->mockStmt);
 
-        static::assertEquals(
-            $this->mockResult,
-            $this->sut->fetchPsvOperatorList()
-        );
+        $this->assertEquals($this->mockResult, $this->sut->fetchPsvOperatorList());
     }
 
     public function testFetchOperatorLicences(): void
@@ -65,10 +63,7 @@ class DataGovUkTest extends MockeryTestCase
             ->with(m::pattern('/data_gov_uk_operator_licence_view (.*)IN \(\?, \?, \?\)$/'))
             ->andReturn($this->mockStmt);
 
-        static::assertEquals(
-            $this->mockResult,
-            $this->sut->fetchOperatorLicences($areas)
-        );
+        $this->assertEquals($this->mockResult, $this->sut->fetchOperatorLicences($areas));
     }
 
     public function testBusRegisteredOnly(): void
@@ -86,10 +81,7 @@ class DataGovUkTest extends MockeryTestCase
             ->with(m::pattern('/data_gov_uk_bus_registered_only_view (.*)IN \(\?, \?, \?\)$/'))
             ->andReturn($this->mockStmt);
 
-        static::assertEquals(
-            $this->mockResult,
-            $this->sut->fetchBusRegisteredOnly($areas)
-        );
+        $this->assertEquals($this->mockResult, $this->sut->fetchBusRegisteredOnly($areas));
     }
 
     public function testBusVariation(): void
@@ -108,9 +100,6 @@ class DataGovUkTest extends MockeryTestCase
             ->with(m::pattern('/data_gov_uk_bus_variation_view (.*)IN \(\?\)$/'))
             ->andReturn($this->mockStmt);
 
-        static::assertEquals(
-            $this->mockResult,
-            $this->sut->fetchBusVariation($areas)
-        );
+        $this->assertEquals($this->mockResult, $this->sut->fetchBusVariation($areas));
     }
 }

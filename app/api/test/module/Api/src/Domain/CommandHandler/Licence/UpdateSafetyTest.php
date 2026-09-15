@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateSafetyTest extends AbstractCommandHandlerTestCase
+final class UpdateSafetyTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -45,29 +45,27 @@ class UpdateSafetyTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [
-                'canHaveTrailer' => true,
-                'totAuthTrailers' => 12,
-                'expectedSafetyInsTrailers' => 3,
-            ],
-            [
-                'canHaveTrailer' => true,
-                'totAuthTrailers' => 0,
-                'expectedSafetyInsTrailers' => 0,
-            ],
-            [
-                'canHaveTrailer' => false,
-                'totAuthTrailers' => 12,
-                'expectedSafetyInsTrailers' => null,
-            ],
-            [
-                'canHaveTrailer' => false,
-                'totAuthTrailers' => 0,
-                'expectedSafetyInsTrailers' => null,
-            ],
+        yield [
+            'canHaveTrailer' => true,
+            'totAuthTrailers' => 12,
+            'expectedSafetyInsTrailers' => 3,
+        ];
+        yield [
+            'canHaveTrailer' => true,
+            'totAuthTrailers' => 0,
+            'expectedSafetyInsTrailers' => 0,
+        ];
+        yield [
+            'canHaveTrailer' => false,
+            'totAuthTrailers' => 12,
+            'expectedSafetyInsTrailers' => null,
+        ];
+        yield [
+            'canHaveTrailer' => false,
+            'totAuthTrailers' => 0,
+            'expectedSafetyInsTrailers' => null,
         ];
     }
 

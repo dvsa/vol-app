@@ -14,8 +14,9 @@ use Dvsa\Olcs\Api\Domain\Repository\IrfoGvPermit as Repo;
 /**
  * IrfoGvPermit Repo test
  */
-class IrfoGvPermitTest extends RepositoryTestCase
+final class IrfoGvPermitTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

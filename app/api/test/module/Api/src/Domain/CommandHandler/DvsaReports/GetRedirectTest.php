@@ -23,7 +23,7 @@ use ReflectionClass;
 /**
  * Get DVSA Reports Redirect Test
  */
-class GetRedirectTest extends AbstractCommandHandlerTestCase
+final class GetRedirectTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var Client|(Client&LegacyMockInterface)|(Client&MockInterface)|LegacyMockInterface|MockInterface

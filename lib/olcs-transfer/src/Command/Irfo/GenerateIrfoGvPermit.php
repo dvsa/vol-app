@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * Generate IRFO GV Permit
+ */
+
+namespace Dvsa\Olcs\Transfer\Command\Irfo;
+
+use Dvsa\Olcs\Transfer\Command\AbstractCommand;
+use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
+use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+
+/**
+ * @Transfer\RouteName("backend/irfo/gv-permit/single/generate")
+ * @Transfer\Method("PUT")
+ */
+final class GenerateIrfoGvPermit extends AbstractCommand
+{
+    use Identity;
+}

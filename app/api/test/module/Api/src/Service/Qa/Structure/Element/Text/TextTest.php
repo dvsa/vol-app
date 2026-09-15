@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class TextTest extends MockeryTestCase
+final class TextTest extends MockeryTestCase
 {
     private $hintTranslateableTextRepresentation;
 
@@ -26,6 +26,7 @@ class TextTest extends MockeryTestCase
 
     private $labelTranslateableText;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->hintTranslateableTextRepresentation = ['hintTranslateableTextRepresentation'];

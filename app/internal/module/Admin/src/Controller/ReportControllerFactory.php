@@ -12,7 +12,7 @@ use Laminas\View\Helper\Placeholder;
 class ReportControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ReportController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ReportController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $tableFactory = $container->get(TableFactory::class);

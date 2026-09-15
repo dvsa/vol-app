@@ -23,7 +23,24 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
 
     public function __construct(private readonly Connection $connection, private array $config = [])
     {
+        $this->registerUnmappedPlatformTypes();
+
         $this->schemaManager = $this->connection->createSchemaManager();
+    }
+
+    /**
+     * DBAL has no mapping for MySQL's ENUM, and introspecting a column it cannot type throws
+     * `Unknown database type enum requested`, which aborts the entire generation run rather
+     * than just the table that owns the column. Mapping it to `string` matches how these
+     * columns are already modelled in the entities (a string property with class constants).
+     */
+    private function registerUnmappedPlatformTypes(): void
+    {
+        $platform = $this->connection->getDatabasePlatform();
+
+        if (!$platform->hasDoctrineTypeMappingFor('enum')) {
+            $platform->registerDoctrineTypeMapping('enum', 'string');
+        }
     }
 
     #[\Override]
@@ -203,6 +220,16 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
      */
     private function convertColumn(Column $column): ColumnMetadata
     {
+        // unsigned/fixed are first-class DBAL column properties; surface them as
+        // options so handlers can emit them for schema fidelity
+        $options = $column->getCustomSchemaOptions();
+        if ($column->getUnsigned()) {
+            $options['unsigned'] = true;
+        }
+        if ($column->getFixed()) {
+            $options['fixed'] = true;
+        }
+
         return new ColumnMetadata(
             name: $column->getName(),
             type: $column->getType()->getName(),
@@ -212,7 +239,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
             autoIncrement: $column->getAutoincrement(),
             default: $column->getDefault(),
             comment: $column->getComment(),
-            options: $column->getCustomSchemaOptions()
+            options: $options
         );
     }
 
@@ -226,6 +253,10 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
         foreach ($table->getIndexes() as $index) {
             if ($index->isPrimary()) {
                 continue; // Skip primary key index
+            }
+
+            if ($index->isUnique()) {
+                continue; // Unique keys are emitted as #[ORM\UniqueConstraint] by extractUniqueConstraints()
             }
 
             $indexes[] = [

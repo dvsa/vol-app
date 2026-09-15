@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EmissionsCategoryTest extends MockeryTestCase
+final class EmissionsCategoryTest extends MockeryTestCase
 {
     public function testGetRepresentation(): void
     {

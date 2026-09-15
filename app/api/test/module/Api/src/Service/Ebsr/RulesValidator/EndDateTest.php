@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\EndDate;
  * Class EndDateTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator
  */
-class EndDateTest extends \PHPUnit\Framework\TestCase
+final class EndDateTest extends \PHPUnit\Framework\TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
     public function testIsValid(mixed $txcApp, mixed $endDate, mixed $isValid): void
@@ -26,21 +26,18 @@ class EndDateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpIsValid(): array
+    public static function dpIsValid(): \Iterator
     {
         $date = '2017-12-25';
-
-        return [
-            [BusRegEntity::TXC_APP_NEW, null, true],
-            [BusRegEntity::TXC_APP_NEW, $date, true],
-            [BusRegEntity::TXC_APP_CHARGEABLE, null, true],
-            [BusRegEntity::TXC_APP_CHARGEABLE, $date, true],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, null, true],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, $date, true],
-            [BusRegEntity::TXC_APP_CANCEL, null, true],
-            [BusRegEntity::TXC_APP_CANCEL, $date, false],
-        ];
+        yield [BusRegEntity::TXC_APP_NEW, null, true];
+        yield [BusRegEntity::TXC_APP_NEW, $date, true];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, null, true];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, $date, true];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, null, true];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, $date, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, null, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, $date, false];
     }
 }

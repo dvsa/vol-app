@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Domain\Repository\IrhpPermit as IrhpPermitRepo;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Mockery as m;
 
-class AllocateCandidatePermitsTest extends AbstractCommandHandlerTestCase
+final class AllocateCandidatePermitsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -125,7 +125,7 @@ class AllocateCandidatePermitsTest extends AbstractCommandHandlerTestCase
 
         $result = $this->sut->handleCommand($command);
 
-        $this->assertEquals(6, $permitSaveCount);
+        $this->assertSame(6, $permitSaveCount);
         foreach ($permitSaveExpectations as $expectation) {
             $this->assertTrue($expectation[4]);
         }

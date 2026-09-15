@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-class ByLicenceTest extends QueryHandlerTestCase
+final class ByLicenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

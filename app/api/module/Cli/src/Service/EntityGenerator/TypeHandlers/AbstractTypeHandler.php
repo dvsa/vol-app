@@ -53,6 +53,27 @@ abstract class AbstractTypeHandler implements TypeHandlerInterface
     }
 
     /**
+     * Column options mirroring the introspected schema (unsigned/fixed), as
+     * pre-rendered `'key' => value` PHP source fragments for the Column
+     * attribute's options array. Appended after handler-specific entries
+     * (e.g. default) so emission order is stable.
+     */
+    protected function schemaFidelityOptions(ColumnMetadata $column): array
+    {
+        $entries = [];
+
+        if ($column->getOption('unsigned') === true) {
+            $entries[] = "'unsigned' => true";
+        }
+
+        if ($column->getOption('fixed') === true) {
+            $entries[] = "'fixed' => true";
+        }
+
+        return $entries;
+    }
+
+    /**
      * Escape string for PHP code generation
      */
     protected function escapeString(?string $value): string

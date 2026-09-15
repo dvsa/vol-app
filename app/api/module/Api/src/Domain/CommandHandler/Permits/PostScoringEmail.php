@@ -55,7 +55,7 @@ final class PostScoringEmail extends AbstractCommandHandler implements UploaderA
     {
         rewind($fp);
         $line = 1;
-        while (($row = fgetcsv($fp)) !== false) {
+        while (($row = fgetcsv($fp, null, ',', '"', '\\')) !== false) {
             $message = $this->processRow($row);
 
             $this->result->addMessage(

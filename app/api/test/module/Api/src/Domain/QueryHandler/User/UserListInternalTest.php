@@ -18,7 +18,7 @@ use ReflectionClass;
 /**
  * @see QueryHandler
  */
-class UserListInternalTest extends QueryHandlerTestCase
+final class UserListInternalTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\Messaging\Conversations\ByLicence;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class ByApplicationToLicenceTest extends QueryHandlerTestCase
+final class ByApplicationToLicenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

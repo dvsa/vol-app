@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Entity\User\Permission;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ReviewTest extends QueryHandlerTestCase
+final class ReviewTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

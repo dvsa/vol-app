@@ -1,0 +1,17 @@
+<head>
+    <meta charset="utf-8">
+    <?php
+        $pageTitle = $this->pageTitle();
+        if ($pageTitle !== null) {
+            echo $this->headTitle($this->translate($pageTitle));
+        }
+        echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge');
+        echo $this->headLink()
+            ->appendStylesheet(
+                $this->assetPath('/styles/print.css'), ['media' => 'screen, print']
+            );
+        echo $this->headScript();
+    ?>
+</head>

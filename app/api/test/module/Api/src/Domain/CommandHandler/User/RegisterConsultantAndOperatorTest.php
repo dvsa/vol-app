@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\User;
 
+use Dvsa\Olcs\Api\Domain\Command\User\RegisterUserSelfserveByOrganisation as RegisterUserSelfServeByOrganisationCommand;
 use Dvsa\Olcs\Api\Domain\CommandHandler\User\RegisterConsultantAndOperator;
 use Dvsa\Olcs\Api\Domain\Repository\User as UserRepo;
 use Dvsa\Olcs\Api\Entity\User\Role;
@@ -14,7 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Mockery as m;
 
-class RegisterConsultantAndOperatorTest extends AbstractCommandHandlerTestCase
+final class RegisterConsultantAndOperatorTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -61,6 +62,8 @@ class RegisterConsultantAndOperatorTest extends AbstractCommandHandlerTestCase
 
         $this->repoMap['User']->shouldReceive('fetchById')->with(100)->andReturn($user);
 
+        // The consultant is linked to the operator's just-created organisation via the internal,
+        // routeless RegisterUserSelfserveByOrganisation command (VOL-7370), not the public command.
         $consultantDetails['organisation'] = $organisationId;
 
         $consultantResult = new Result();
@@ -82,7 +85,7 @@ class RegisterConsultantAndOperatorTest extends AbstractCommandHandlerTestCase
         $this->repoMap['Role']->shouldReceive('fetchByRole')->with(Role::ROLE_OPERATOR_TC)->andReturn($mockRole);
 
         $this->expectedSideEffect(
-            RegisterUserSelfServeCommand::class,
+            RegisterUserSelfServeByOrganisationCommand::class,
             $consultantDetails,
             $consultantResult
         );

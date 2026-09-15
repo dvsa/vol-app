@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSideEffect;
 /**
  * IsSideEffect Test
  */
-class IsSideEffectTest extends AbstractHandlerTestCase
+final class IsSideEffectTest extends AbstractHandlerTestCase
 {
     /**
      * @var NoValidationRequired

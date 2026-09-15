@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\MarkExpiredPermits;
 use Dvsa\OlcsTest\Cli\Command\Batch\AbstractBatchCommandCases;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class MarkExpiredPermitsCommandTest extends AbstractBatchCommandCases
+final class MarkExpiredPermitsCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

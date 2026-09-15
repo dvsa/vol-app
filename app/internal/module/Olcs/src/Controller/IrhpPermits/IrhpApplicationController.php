@@ -180,11 +180,19 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Get left view
      *
-     * @return \Laminas\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel|null
      */
     #[\Override]
     public function getLeftView()
     {
+        // The left-nav partial renders the `licence_irhp_permits-application-details` tree,
+        // whose children all route to `licence/irhp-application/application` (`:action/:irhpAppId[/]`).
+        // For parameterless actions on this controller (selectType, add, available*), no
+        // `irhpAppId` is in the route match, so URL assembly throws.
+        if ($this->params()->fromRoute('irhpAppId') === null) {
+            return null;
+        }
+
         $view = new ViewModel();
 
         $view->setTemplate('sections/irhp-application/partials/left');

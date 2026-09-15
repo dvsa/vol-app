@@ -1,0 +1,25 @@
+<h1 class="govuk-heading-xl govuk-!-margin-top-7 govuk-!-margin-bottom-7">What service do you need?</h1>
+<p class="govuk-body-l">Our services are currently in high demand. To ensure everyone can use it, we will redirect you to the right section.</p>
+
+<h2 class="govuk-heading-m">Permits</h2>
+<p class="govuk-body">From 1 January 2021, the rules for international road haulage will change.</p>
+<p class="govuk-body">UK international operators will need a permit to travel to, through or from:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>EU countries</li>
+    <li>Iceland</li>
+    <li>Liechtenstein</li>
+    <li>Norway</li>
+    <li>Switzerland</li>
+</ul>
+
+<p class="govuk-body">This includes cross-trade jobs and transit journeys.</p>
+<p class="govuk-body">Check the
+    <?php echo $this->linkNewWindowExternal(
+        'https://www.gov.uk/guidance/carry-out-international-road-haulage-from-1-january-2021',
+        'new rules and what documents UK operators need to carry out international road haulage'
+    ); ?>
+.</p>
+<a href="<?php echo $this->url('permits'); ?>" role="button" class="govuk-button">Apply for a permit or view existing permits</a>
+
+<h2 class="govuk-heading-m govuk-!-margin-top-4">Licences</h2>
+<a href="<?php echo $this->url('dashboard'); ?>" role="button" class="govuk-button">Manage or apply for a licence</a>

@@ -21,21 +21,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_issue_version",
- *    indexes={
- *        @ORM\Index(name="ix_letter_issue_version_category_id", columns={"category_id"}),
- *        @ORM\Index(name="ix_letter_issue_version_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_issue_version_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_letter_issue_version_issue_type_id", columns={"letter_issue_type_id"}),
- *        @ORM\Index(name="ix_letter_issue_version_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_issue_version_letter_issue_id", columns={"letter_issue_id"}),
- *        @ORM\Index(name="ix_letter_issue_version_sub_category_id", columns={"sub_category_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_issue_version')]
+#[ORM\Index(name: 'ix_letter_issue_version_category_id', columns: ['category_id'])]
+#[ORM\Index(name: 'ix_letter_issue_version_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_issue_version_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_letter_issue_version_issue_type_id', columns: ['letter_issue_type_id'])]
+#[ORM\Index(name: 'ix_letter_issue_version_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_issue_version_letter_issue_id', columns: ['letter_issue_id'])]
+#[ORM\Index(name: 'ix_letter_issue_version_sub_category_id', columns: ['sub_category_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterIssueVersion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,192 +44,172 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterIssue
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssue
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterIssue", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_issue_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_issue_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssue::class, inversedBy: 'versions', fetch: 'LAZY')]
     protected $letterIssue;
 
     /**
      * LetterIssueType
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterIssueType", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_issue_type_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'letter_issue_type_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType::class, fetch: 'LAZY')]
     protected $letterIssueType;
 
     /**
      * Category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
     /**
      * SubCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
     protected $subCategory;
 
     /**
      * FK to ref_data lcat_gv or lcat_psv
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Heading
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="heading", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'heading', length: 255, nullable: false)]
     protected $heading = '';
 
     /**
      * Short label for issue picker modal
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="modal_label", length=200, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'modal_label', length: 200, nullable: true)]
     protected $modalLabel;
 
     /**
      * Editor.js format
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="default_body_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'default_body_content', nullable: true)]
     protected $defaultBodyContent;
 
     /**
      * Help text for users
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="help_text", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'help_text', nullable: true)]
     protected $helpText;
 
     /**
      * Minimum content length
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="min_length", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'min_length', nullable: true, options: ['unsigned' => true])]
     protected $minLength;
 
     /**
      * Maximum content length
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="max_length", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'max_length', nullable: true, options: ['unsigned' => true])]
     protected $maxLength;
 
     /**
      * Is locked
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_locked", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_locked', nullable: false, options: ['default' => 0])]
     protected $isLocked = 0;
 
     /**
      * Issue has placeholders that must be edited
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="requires_input", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'requires_input', nullable: false, options: ['default' => 0])]
     protected $requiresInput = 0;
 
     /**
      * Applicable in NI
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_ni", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_ni', nullable: false, options: ['default' => 0])]
     protected $isNi = 0;
 
     /**
      * Embargo until this date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="publish_from", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'publish_from', nullable: true)]
     protected $publishFrom;
 
     /**
      * Version number
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="version_number", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false, options: ['unsigned' => true])]
     protected $versionNumber = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -257,7 +233,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setId($id)
     {
@@ -281,7 +257,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterIssue $letterIssue new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setLetterIssue($letterIssue)
     {
@@ -305,7 +281,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType $letterIssueType new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setLetterIssueType($letterIssueType)
     {
@@ -329,7 +305,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setCategory($category)
     {
@@ -353,7 +329,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setSubCategory($subCategory)
     {
@@ -377,7 +353,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -401,7 +377,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -425,7 +401,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -449,7 +425,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param string $heading new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setHeading($heading)
     {
@@ -473,7 +449,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param string $modalLabel new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setModalLabel($modalLabel)
     {
@@ -497,7 +473,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param array $defaultBodyContent new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setDefaultBodyContent($defaultBodyContent)
     {
@@ -521,7 +497,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param string $helpText new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setHelpText($helpText)
     {
@@ -545,7 +521,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param int $minLength new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setMinLength($minLength)
     {
@@ -569,7 +545,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param int $maxLength new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setMaxLength($maxLength)
     {
@@ -593,7 +569,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param bool $isLocked new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setIsLocked($isLocked)
     {
@@ -617,7 +593,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param bool $requiresInput new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setRequiresInput($requiresInput)
     {
@@ -641,7 +617,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param bool $isNi new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -665,7 +641,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \DateTime $publishFrom new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setPublishFrom($publishFrom)
     {
@@ -695,7 +671,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param int $versionNumber new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setVersionNumber($versionNumber)
     {
@@ -719,7 +695,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setVersion($version)
     {

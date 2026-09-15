@@ -7,16 +7,11 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 
 /**
  * CompaniesHouseAlertReason Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="companies_house_alert_reason",
- *    indexes={
- *        @ORM\Index(name="ix_companies_house_alert_reason_companies_house_alert_id",
- *         columns={"companies_house_alert_id"}),
- *        @ORM\Index(name="ix_companies_house_alert_reason_reason_type", columns={"reason_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'companies_house_alert_reason')]
+#[ORM\Index(name: 'ix_companies_house_alert_reason_companies_house_alert_id', columns: ['companies_house_alert_id'])]
+#[ORM\Index(name: 'ix_companies_house_alert_reason_reason_type', columns: ['reason_type'])]
+#[ORM\Entity]
 class CompaniesHouseAlertReason extends AbstractCompaniesHouseAlertReason
 {
     public function __construct(RefData $reasonType)

@@ -18,7 +18,7 @@ class DatabaseTemplateFetcherFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DatabaseTemplateFetcher
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DatabaseTemplateFetcher
     {
         return new DatabaseTemplateFetcher(
             $container->get('RepositoryServiceManager')->get('Template')

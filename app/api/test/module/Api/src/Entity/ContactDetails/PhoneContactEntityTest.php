@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class PhoneContactEntityTest extends EntityTester
+final class PhoneContactEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -27,7 +27,7 @@ class PhoneContactEntityTest extends EntityTester
     {
         $mockType = new RefData();
 
-        $actual = (new Entity($mockType))->jsonSerialize();
-        static::assertNull($actual['contactDetails']);
+        $actual = new Entity($mockType)->jsonSerialize();
+        $this->assertNull($actual['contactDetails']);
     }
 }

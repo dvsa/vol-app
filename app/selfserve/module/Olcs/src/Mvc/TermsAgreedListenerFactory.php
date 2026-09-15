@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 class TermsAgreedListenerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TermsAgreedListener
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TermsAgreedListener
     {
         return new TermsAgreedListener(
             $container->get(JWTIdentityProvider::class),

@@ -3,10 +3,8 @@
 $config = [
     'modules' => [
         'Dvsa\LaminasConfigCloudParameters',
-        'Laminas\Cache\Module',
-        'Laminas\Cache\Storage\Adapter\Redis',
-        'Laminas\Log',
         'Olcs\Logging',
+        'Olcs\Logging\Mvc',
         'Laminas\I18n',
         'Laminas\Mvc\Plugin\FlashMessenger',
         'Laminas\Filter',
@@ -17,8 +15,6 @@ $config = [
         'Laminas\Router',
         'Dvsa\Olcs\Utils',
         'Dvsa\Olcs\Transfer',
-        // Required for annotation parsing
-        'DoctrineModule',
         'Common',
         'Application',
         'Olcs',

@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessTransportManagerLicence;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class DeleteTest extends AbstractHandlerTestCase
+final class DeleteTest extends AbstractHandlerTestCase
 {
     /**
      * @var Delete
@@ -63,14 +63,12 @@ class DeleteTest extends AbstractHandlerTestCase
     /**
      * data provider for testIsValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpIsValid(): array
+    public static function dpIsValid(): \Iterator
     {
-        return [
-            [true, true, 10],
-            [false, false, 10],
-            [false, true, IdentityProviderInterface::SYSTEM_USER]
-        ];
+        yield [true, true, 10];
+        yield [false, false, 10];
+        yield [false, true, IdentityProviderInterface::SYSTEM_USER];
     }
 }

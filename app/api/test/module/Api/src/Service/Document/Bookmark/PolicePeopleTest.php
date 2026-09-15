@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PolicePeopleTest extends MockeryTestCase
+final class PolicePeopleTest extends MockeryTestCase
 {
     /**
      * Tests getQuery
@@ -145,23 +145,20 @@ class PolicePeopleTest extends MockeryTestCase
         );
     }
 
-    public static function renderWithDataProvider(): array
+    public static function renderWithDataProvider(): \Iterator
     {
         $licNo = 'OB1234567';
-
-        return [
-            [
-                ['licNo' => $licNo],
-                $licNo,
-                'A&D',
-                '2.1'
-            ],
-            [
-                [],
-                null,
-                'N&P',
-                '3.2'
-            ]
+        yield [
+            ['licNo' => $licNo],
+            $licNo,
+            'A&D',
+            '2.1'
+        ];
+        yield [
+            [],
+            null,
+            'N&P',
+            '3.2'
         ];
     }
 }

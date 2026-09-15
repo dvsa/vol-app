@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class ClearTest extends AbstractCommandHandlerTestCase
+final class ClearTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var WithdrawHandler

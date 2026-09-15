@@ -31,7 +31,7 @@ use ReflectionClass;
 /**
  * Update MyAccount Test
  */
-class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
+final class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -346,67 +346,65 @@ class UpdateMyAccountTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dpTestHandleCommandWithUpdatedContactDetails(): array
+    public static function dpTestHandleCommandWithUpdatedContactDetails(): \Iterator
     {
-        return [
-            [
-                'data' => [
-                    'id' => 111,
-                    'version' => 1,
-                    'team' => 1,
-                    'contactDetails' => [
-                        'emailAddress' => 'test1@test.me',
-                        'address' => [
-                            'addressLine1' => 'a12',
-                            'addressLine2' => 'a23',
-                            'addressLine3' => 'a34',
-                            'addressLine4' => 'a45',
-                            'town' => 'town',
-                            'postcode' => 'LS1 2AB',
-                            'countryCode' => 'GB',
-                        ],
-                        'phoneContacts' => [
-                            [
-                                'phoneContactType' => PhoneContactEntity::TYPE_PRIMARY,
-                                'phoneNumber' => '111',
-                            ],
+        yield [
+            'data' => [
+                'id' => 111,
+                'version' => 1,
+                'team' => 1,
+                'contactDetails' => [
+                    'emailAddress' => 'test1@test.me',
+                    'address' => [
+                        'addressLine1' => 'a12',
+                        'addressLine2' => 'a23',
+                        'addressLine3' => 'a34',
+                        'addressLine4' => 'a45',
+                        'town' => 'town',
+                        'postcode' => 'LS1 2AB',
+                        'countryCode' => 'GB',
+                    ],
+                    'phoneContacts' => [
+                        [
+                            'phoneContactType' => PhoneContactEntity::TYPE_PRIMARY,
+                            'phoneNumber' => '111',
                         ],
                     ],
                 ],
-                "isInternal" => 0
             ],
-            [
-                'data' => [
-                    'id' => 111,
-                    'version' => 1,
-                    'team' => 1,
-                    'contactDetails' => [
-                        'emailAddress' => 'test1@test.me',
-                        'person' => [
-                            'title' => 'title_mr',
-                            'forename' => 'updated forename',
-                            'familyName' => 'updated familyName',
-                            'birthDate' => '1975-12-12',
-                        ],
-                        'address' => [
-                            'addressLine1' => 'a12',
-                            'addressLine2' => 'a23',
-                            'addressLine3' => 'a34',
-                            'addressLine4' => 'a45',
-                            'town' => 'town',
-                            'postcode' => 'LS1 2AB',
-                            'countryCode' => 'GB',
-                        ],
-                        'phoneContacts' => [
-                            [
-                                'phoneContactType' => PhoneContactEntity::TYPE_PRIMARY,
-                                'phoneNumber' => '111',
-                            ],
+            "isInternal" => 0
+        ];
+        yield [
+            'data' => [
+                'id' => 111,
+                'version' => 1,
+                'team' => 1,
+                'contactDetails' => [
+                    'emailAddress' => 'test1@test.me',
+                    'person' => [
+                        'title' => 'title_mr',
+                        'forename' => 'updated forename',
+                        'familyName' => 'updated familyName',
+                        'birthDate' => '1975-12-12',
+                    ],
+                    'address' => [
+                        'addressLine1' => 'a12',
+                        'addressLine2' => 'a23',
+                        'addressLine3' => 'a34',
+                        'addressLine4' => 'a45',
+                        'town' => 'town',
+                        'postcode' => 'LS1 2AB',
+                        'countryCode' => 'GB',
+                    ],
+                    'phoneContacts' => [
+                        [
+                            'phoneContactType' => PhoneContactEntity::TYPE_PRIMARY,
+                            'phoneNumber' => '111',
                         ],
                     ],
                 ],
-                "isInternal" => 1
-            ]
+            ],
+            "isInternal" => 1
         ];
     }
 

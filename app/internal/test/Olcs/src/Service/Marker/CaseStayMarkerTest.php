@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CaseStayMarkerTest extends TestCase
+final class CaseStayMarkerTest extends TestCase
 {
     /**
      *
@@ -20,6 +20,7 @@ class CaseStayMarkerTest extends TestCase
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new \Olcs\Service\Marker\CaseStayMarker();

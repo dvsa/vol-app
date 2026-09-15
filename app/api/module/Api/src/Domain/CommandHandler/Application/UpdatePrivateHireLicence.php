@@ -93,7 +93,7 @@ final class UpdatePrivateHireLicence extends AbstractCommandHandler implements T
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

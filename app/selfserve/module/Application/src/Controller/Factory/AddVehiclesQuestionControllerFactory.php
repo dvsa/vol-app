@@ -50,7 +50,7 @@ class AddVehiclesQuestionControllerFactory extends BinaryFeatureToggleAwareContr
      * @return Dispatcher
      */
     #[\Override]
-    protected function createServiceWhenEnabled(ContainerInterface $container, $requestedName, array $options = null): Dispatcher
+    protected function createServiceWhenEnabled(ContainerInterface $container, $requestedName, ?array $options = null): Dispatcher
     {
         $controllerPluginManager = $container->get('ControllerPluginManager');
 
@@ -81,7 +81,7 @@ class AddVehiclesQuestionControllerFactory extends BinaryFeatureToggleAwareContr
      * @return LvaVehicleController
      */
     #[\Override]
-    protected function createServiceWhenDisabled(ContainerInterface $container, $requestedName, array $options = null): LvaVehicleController
+    protected function createServiceWhenDisabled(ContainerInterface $container, $requestedName, ?array $options = null): LvaVehicleController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

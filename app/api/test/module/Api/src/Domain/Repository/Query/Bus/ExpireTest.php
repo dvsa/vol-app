@@ -14,7 +14,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ExpireTest extends AbstractDbQueryTestCase
+final class ExpireTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         BusRegEntity::class => 'br_table'
@@ -45,21 +45,19 @@ class ExpireTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
         $today = new DateTime();
 
-        return [
+        yield [
+            [],
+            [],
             [
-                [],
-                [],
-                [
-                    'expiredStatus' => BusRegEntity::STATUS_EXPIRED,
-                    'registeredStatus' => BusRegEntity::STATUS_REGISTERED,
-                    'endDate' => $today->format('Y-m-d')
-                ],
-                []
-            ]
+                'expiredStatus' => BusRegEntity::STATUS_EXPIRED,
+                'registeredStatus' => BusRegEntity::STATUS_REGISTERED,
+                'endDate' => $today->format('Y-m-d')
+            ],
+            []
         ];
     }
 

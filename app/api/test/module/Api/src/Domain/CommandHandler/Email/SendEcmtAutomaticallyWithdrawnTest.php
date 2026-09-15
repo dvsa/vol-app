@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 /**
  * Test the permit app successful email
  */
-class SendEcmtAutomaticallyWithdrawnTest extends AbstractEcmtAnnualPermitTestCase
+final class SendEcmtAutomaticallyWithdrawnTest extends AbstractEcmtAnnualPermitTestCase
 {
     protected $commandClass = SendEcmtAutomaticallyWithdrawnCmd::class;
     protected $commandHandlerClass = SendEcmtAutomaticallyWithdrawnHandler::class;

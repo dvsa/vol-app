@@ -12,7 +12,7 @@ use Laminas\Form\Form;
 /**
  * Operator Business Details Mapper Test
  */
-class OperatorBusinessDetailsTest extends MockeryTestCase
+final class OperatorBusinessDetailsTest extends MockeryTestCase
 {
     public function testMapFromErrors(): void
     {

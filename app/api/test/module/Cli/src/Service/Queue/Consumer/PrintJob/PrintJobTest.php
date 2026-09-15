@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Entity\User\User;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PrintJobTest extends AbstractConsumerTestCase
+final class PrintJobTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = \Dvsa\Olcs\Cli\Service\Queue\Consumer\PrintJob\PrintJob::class;
 
@@ -35,44 +35,42 @@ class PrintJobTest extends AbstractConsumerTestCase
         $this->assertEquals($expected, $this->sut->getCommandData($item));
     }
 
-    public static function dpGetCommandData(): array
+    public static function dpGetCommandData(): \Iterator
     {
-        return [
-            'with list of documents' => [
-                'itemId' => 1,
-                'entityId' => null,
-                'options' => ['jobName' => 'JOB_NAME', 'documents' => [101, 102], 'userId' => 200, 'copies' => 5],
-                'expected' => [
-                    'id' => 1,
-                    'title' => 'JOB_NAME',
-                    'documents' => [101, 102],
-                    'user' => 200,
-                    'copies' => 5,
-                ],
+        yield 'with list of documents' => [
+            'itemId' => 1,
+            'entityId' => null,
+            'options' => ['jobName' => 'JOB_NAME', 'documents' => [101, 102], 'userId' => 200, 'copies' => 5],
+            'expected' => [
+                'id' => 1,
+                'title' => 'JOB_NAME',
+                'documents' => [101, 102],
+                'user' => 200,
+                'copies' => 5,
             ],
-            'with one document' => [
-                'itemId' => 1,
-                'entityId' => null,
-                'options' => ['jobName' => 'JOB_NAME', 'documents' => [101]],
-                'expected' => [
-                    'id' => 1,
-                    'title' => 'JOB_NAME',
-                    'documents' => [101],
-                    'user' => null,
-                    'copies' => null,
-                ],
+        ];
+        yield 'with one document' => [
+            'itemId' => 1,
+            'entityId' => null,
+            'options' => ['jobName' => 'JOB_NAME', 'documents' => [101]],
+            'expected' => [
+                'id' => 1,
+                'title' => 'JOB_NAME',
+                'documents' => [101],
+                'user' => null,
+                'copies' => null,
             ],
-            'with one document - backward compatibility' => [
-                'itemId' => 1,
-                'entityId' => 101,
-                'options' => ['jobName' => 'JOB_NAME'],
-                'expected' => [
-                    'id' => 1,
-                    'title' => 'JOB_NAME',
-                    'documents' => [101],
-                    'user' => null,
-                    'copies' => null,
-                ],
+        ];
+        yield 'with one document - backward compatibility' => [
+            'itemId' => 1,
+            'entityId' => 101,
+            'options' => ['jobName' => 'JOB_NAME'],
+            'expected' => [
+                'id' => 1,
+                'title' => 'JOB_NAME',
+                'documents' => [101],
+                'user' => null,
+                'copies' => null,
             ],
         ];
     }

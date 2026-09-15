@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use Olcs\Logging\Log\Logger;
 
-class InterimEndDateEnforcementTest extends AbstractCommandHandlerTestCase
+final class InterimEndDateEnforcementTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -24,9 +24,7 @@ class InterimEndDateEnforcementTest extends AbstractCommandHandlerTestCase
             Creator::class => m::mock(Creator::class)
         ];
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         parent::setUp();
     }

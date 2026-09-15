@@ -146,7 +146,11 @@ class ApiService
 
             if ($token instanceof AccessToken) {
                 $headers = $this->getOptions()->getHeaders();
-                $headers['Authorization'] = $token->getAuthorisationHeader();
+                if ($this->getHttpClient()->hasGatewayTokenProvider()) {
+                    $headers['X-Authorization'] = $token->getAuthorisationHeader();
+                } else {
+                    $headers['Authorization'] = $token->getAuthorisationHeader();
+                }
                 $this->getOptions()->setHeaders($headers);
                 $response = $this->getHttpClient()->$method($endPoint, $params);
 
@@ -193,6 +197,13 @@ class ApiService
         }
 
         $client = $this->getHttpClient();
+
+        if ($client->hasGatewayTokenProvider()) {
+            // /api/token must only carry the gateway JWT; drop the CPMS token persisted from a previous request
+            $headers = $this->getOptions()->getHeaders();
+            unset($headers['X-Authorization']);
+            $this->getOptions()->setHeaders($headers);
+        }
 
         $response = $client->post('/api/token', $payload);
 

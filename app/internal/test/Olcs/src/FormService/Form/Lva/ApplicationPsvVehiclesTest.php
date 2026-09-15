@@ -13,7 +13,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationPsvVehiclesTest extends AbstractLvaFormServiceTestCase
+final class ApplicationPsvVehiclesTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = ApplicationPsvVehicles::class;
 

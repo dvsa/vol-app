@@ -23,7 +23,7 @@ use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\RefData;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class ApplicationOperatingCentresTest extends MockeryTestCase
+final class ApplicationOperatingCentresTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -38,8 +38,7 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
 
     protected $tableBuilder;
 
-    private $authService;
-
+    #[\Override]
     public function setUp(): void
     {
 
@@ -62,10 +61,10 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
             ->with('Lva\OperatingCentres')
             ->andReturn($this->form);
 
-        $this->authService = m::mock(AuthorizationService::class);
+        $authService = m::mock(AuthorizationService::class);
         $this->tableBuilder = m::mock(TableFactory::class);
 
-        $this->sut = new ApplicationOperatingCentres($this->mockFormHelper, $this->authService, $this->tableBuilder, $fsm);
+        $this->sut = new ApplicationOperatingCentres($this->mockFormHelper, $authService, $this->tableBuilder, $fsm);
     }
 
     public function testGetForm(): void

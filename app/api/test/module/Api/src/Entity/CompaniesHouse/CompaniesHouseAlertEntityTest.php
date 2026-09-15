@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  *
  * Initially auto-generated but won't be overridden
  */
-class CompaniesHouseAlertEntityTest extends EntityTester
+final class CompaniesHouseAlertEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

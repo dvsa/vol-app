@@ -22,7 +22,7 @@ class IrhpApplicationCountryControllerFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationCountryController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrhpApplicationCountryController
     {
 
         $translationHelper = $container->get(TranslationHelperService::class);

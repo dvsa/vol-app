@@ -21,10 +21,11 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationVehiclesReviewServiceTest extends MockeryTestCase
+final class VariationVehiclesReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -43,52 +44,50 @@ class VariationVehiclesReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function providerGetConfigFromData(): array
+    public static function providerGetConfigFromData(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'hasEnteredReg' => 'Y',
-                    'licenceVehicles' => [
-                        [
-                            'vehicle' => [
-                                'vrm' => 'AB12QWE',
-                                'platedWeight' => '1000'
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'AB13QWE',
-                                'platedWeight' => '10000'
-                            ]
+                'hasEnteredReg' => 'Y',
+                'licenceVehicles' => [
+                    [
+                        'vehicle' => [
+                            'vrm' => 'AB12QWE',
+                            'platedWeight' => '1000'
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'AB13QWE',
+                            'platedWeight' => '10000'
                         ]
                     ]
-                ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => [
-                                [
-                                    'multiItems' => [
+                ]
+            ],
+            [
+                'subSections' => [
+                    [
+                        'mainItems' => [
+                            [
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-vehicles-vrm',
-                                                'value' => 'AB12QWE'
-                                            ],
-                                            [
-                                                'label' => 'application-review-vehicles-weight',
-                                                'value' => '1,000 kg'
-                                            ]
+                                            'label' => 'application-review-vehicles-vrm',
+                                            'value' => 'AB12QWE'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-vehicles-vrm',
-                                                'value' => 'AB13QWE'
-                                            ],
-                                            [
-                                                'label' => 'application-review-vehicles-weight',
-                                                'value' => '10,000 kg'
-                                            ]
+                                            'label' => 'application-review-vehicles-weight',
+                                            'value' => '1,000 kg'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-vehicles-vrm',
+                                            'value' => 'AB13QWE'
+                                        ],
+                                        [
+                                            'label' => 'application-review-vehicles-weight',
+                                            'value' => '10,000 kg'
                                         ]
                                     ]
                                 ]

@@ -12,8 +12,9 @@ use Dvsa\Olcs\Api\Entity\View\DocumentSearchView as DocumentSearchViewEntity;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DocumentSearchView::class)]
-class DocumentSearchViewTest extends RepositoryTestCase
+final class DocumentSearchViewTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(DocumentSearchViewRepo::class, true);

@@ -14,7 +14,7 @@ use Olcs\Service\Cookie\SetCookieArrayGenerator;
 use Laminas\Http\Header\Cookie;
 use Laminas\Http\Header\SetCookie;
 
-class SetCookieArrayGeneratorTest extends MockeryTestCase
+final class SetCookieArrayGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

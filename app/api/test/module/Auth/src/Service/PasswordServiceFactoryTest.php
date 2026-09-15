@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\OlcsTest\MocksServicesTrait;
 use Mockery as m;
 
-class PasswordServiceFactoryTest extends MockeryTestCase
+final class PasswordServiceFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 

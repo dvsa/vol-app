@@ -12,20 +12,16 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 
 /**
  * IrfoPsvAuth Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="irfo_psv_auth",
- *    indexes={
- *        @ORM\Index(name="ix_irfo_psv_auth_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_journey_frequency", columns={"journey_frequency"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_irfo_psv_auth_type_id", columns={"irfo_psv_auth_type_id"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_status", columns={"status"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_withdrawn_reason", columns={"withdrawn_reason"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irfo_psv_auth')]
+#[ORM\Index(name: 'ix_irfo_psv_auth_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_journey_frequency', columns: ['journey_frequency'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_irfo_psv_auth_type_id', columns: ['irfo_psv_auth_type_id'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_withdrawn_reason', columns: ['withdrawn_reason'])]
+#[ORM\Entity]
 class IrfoPsvAuth extends AbstractIrfoPsvAuth implements OrganisationProviderInterface
 {
     public const STATUS_APPROVED = 'irfo_auth_s_approved';

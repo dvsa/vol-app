@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Service\Ebsr\FileProcessor;
 use Dvsa\Olcs\Api\Service\File\File;
 use Dvsa\Olcs\Api\Service\File\FileUploaderInterface;
 use Laminas\Filter\Decompress;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Laminas\Filter\Exception\RuntimeException as LaminasFilterRuntimeException;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -18,7 +19,7 @@ use org\bovigo\vfs\vfsStream;
  * Class FileProcessorTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr
  */
-class FileProcessorTest extends TestCase
+final class FileProcessorTest extends TestCase
 {
     public function testFetchXmlFileNameFromDocumentStore(): void
     {
@@ -177,7 +178,9 @@ class FileProcessorTest extends TestCase
         $mockFileUploader = m::mock(FileUploaderInterface::class);
 
         $mockFileSystem = m::mock(Filesystem::class);
-        $mockFileSystem->shouldReceive('exists')->with($tmpDir)->andReturn(false);
+        $mockFileSystem->expects('exists')->with($tmpDir)->andReturn(false);
+        $mockFileSystem->expects('mkdir')->with($tmpDir)
+            ->andThrow(new IOException('Permission denied'));
 
         $mockFilter = m::mock(Decompress::class);
 

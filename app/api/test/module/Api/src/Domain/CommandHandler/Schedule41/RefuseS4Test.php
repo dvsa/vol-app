@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  * Class RefuseS4Test
  * @package Dvsa\OlcsTest\Api\Domain\CommandHandler\Schedule41
  */
-class RefuseS4Test extends AbstractCommandHandlerTestCase
+final class RefuseS4Test extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

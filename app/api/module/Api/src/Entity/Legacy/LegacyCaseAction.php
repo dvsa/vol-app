@@ -6,10 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LegacyCaseAction Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="legacy_case_action")
  */
+#[ORM\Table(name: 'legacy_case_action')]
+#[ORM\Entity]
 class LegacyCaseAction extends AbstractLegacyCaseAction
 {
 }

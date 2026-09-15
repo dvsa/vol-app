@@ -7,7 +7,6 @@ namespace Dvsa\Olcs\Api\Service\DvlaSearch;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\HandlerStack;
 use GuzzleRetry\GuzzleRetryMiddleware;
-use Olcs\Logging\Log\LaminasLogPsr3Adapter;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
@@ -19,9 +18,9 @@ class DvlaSearchServiceFactory implements FactoryInterface
     protected $options;
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DvlaSearchService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DvlaSearchService
     {
-        $logger = new LaminasLogPsr3Adapter($container->get('Logger'));
+        $logger = $container->get('Logger');
         $config = $container->get('config');
         $this->options = $config['dvla_search'];
         $stack = HandlerStack::create();

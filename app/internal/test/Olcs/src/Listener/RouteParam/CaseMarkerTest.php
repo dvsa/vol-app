@@ -14,12 +14,13 @@ use Mockery as m;
 use Olcs\Listener\RouteParams;
 use Olcs\Service\Marker\MarkerService;
 
-class CaseMarkerTest extends TestCase
+final class CaseMarkerTest extends TestCase
 {
     protected $sut;
     protected $mockQueryService;
     protected $mockAnnotationBuilderService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new CaseMarker();

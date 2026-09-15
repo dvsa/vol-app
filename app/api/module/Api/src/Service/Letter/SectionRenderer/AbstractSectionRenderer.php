@@ -33,6 +33,14 @@ abstract class AbstractSectionRenderer implements SectionRendererInterface
             return '';
         }
 
+        // Fill in the EditorJS envelope before converting. The parser treats top-level 'time' and
+        // per-block 'id' as required and throws without them, which takes the whole letter down
+        // rather than one section. Content saved through the editor already conforms and passes
+        // through untouched; hand-authored content -- DB seeds, imports, and anything previewed in
+        // the letter type builder before it has been through the editor -- does not.
+        // LetterPreviewService::renderSlot() already normalises for the same reason.
+        $content = $this->converterService->normalize($content);
+
         $jsonString = json_encode($content);
         if ($jsonString === false) {
             return '';

@@ -11,11 +11,12 @@ use Olcs\Data\Mapper;
 use Laminas\Form\FormInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Data\Mapper\Task::class)]
-class TaskTest extends MockeryTestCase
+final class TaskTest extends MockeryTestCase
 {
     /** @var  m\MockInterface | FlashMessengerHelperService */
     private $mockFlashMsg;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockFlashMsg = m::mock(FlashMessengerHelperService::class);
@@ -23,7 +24,7 @@ class TaskTest extends MockeryTestCase
 
     public function testMapFromResult(): void
     {
-        static::assertNull(Mapper\Task::mapFromResult([]));
+        $this->assertNull(Mapper\Task::mapFromResult([]));
     }
 
     public function testMapFromErrors(): void
@@ -45,8 +46,6 @@ class TaskTest extends MockeryTestCase
 
     public function testMapApiErrorsEmpty(): void
     {
-        static::assertNull(
-            Mapper\Task::mapApiErrors([], $this->mockFlashMsg)
-        );
+        $this->assertNull(Mapper\Task::mapApiErrors([], $this->mockFlashMsg));
     }
 }

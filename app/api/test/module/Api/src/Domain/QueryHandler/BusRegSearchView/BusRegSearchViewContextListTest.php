@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser as OrganisationUserEntity;
 
-class BusRegSearchViewContextListTest extends QueryHandlerTestCase
+final class BusRegSearchViewContextListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

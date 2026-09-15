@@ -21,16 +21,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="publication_section",
- *    indexes={
- *        @ORM\Index(name="ix_publication_section_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_publication_section_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'publication_section')]
+#[ORM\Index(name: 'ix_publication_section_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_publication_section_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractPublicationSection implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -43,70 +39,63 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 70, nullable: true)]
     protected $description;
 
     /**
      * A&D section, expects something like 2.1 but allows for strings in future
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="ad_section", length=10, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'ad_section', length: 10, nullable: true)]
     protected $adSection;
 
     /**
      * N&P section, expects something like 2.1 but allows for strings in future
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="np_section", length=10, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'np_section', length: 10, nullable: true)]
     protected $npSection;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -130,7 +119,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setId($id)
     {
@@ -154,7 +143,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -178,7 +167,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -202,7 +191,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param string $description new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setDescription($description)
     {
@@ -226,7 +215,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param string $adSection new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setAdSection($adSection)
     {
@@ -250,7 +239,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param string $npSection new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setNpSection($npSection)
     {
@@ -274,7 +263,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setVersion($version)
     {

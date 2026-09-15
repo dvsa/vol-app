@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Vehicle\CanTransfer;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CanTransferTest extends AbstractHandlerTestCase
+final class CanTransferTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanTransfer
@@ -51,14 +51,12 @@ class CanTransferTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true, true, true, true],
-            [true, true, true, false, false],
-            [true, true, false, true, false],
-            [true, false, true, true, false],
-            [false, true, true, true, false],
-        ];
+        yield [true, true, true, true, true];
+        yield [true, true, true, false, false];
+        yield [true, true, false, true, false];
+        yield [true, false, true, true, false];
+        yield [false, true, true, true, false];
     }
 }

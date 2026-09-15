@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Class PublishTest
  */
-class PublishTest extends AbstractCommandHandlerTestCase
+final class PublishTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

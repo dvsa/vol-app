@@ -23,18 +23,18 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonthan@opalise.co.uk>
  */
-class PeriodFieldsetGeneratorTest extends TestCase
+final class PeriodFieldsetGeneratorTest extends TestCase
 {
-    public const FIELDSET_POPULATOR_TYPE_2_NAME = 'populatorType2';
+    public const string FIELDSET_POPULATOR_TYPE_2_NAME = 'populatorType2';
 
-    public const PERIOD_ID = 45;
+    public const int PERIOD_ID = 45;
 
-    public const PERIOD_FIELDS = [
+    public const array PERIOD_FIELDS = [
         'fieldData1',
         'fieldData2'
     ];
 
-    public const PERIOD_DATA = [
+    public const array PERIOD_DATA = [
         'id' => self::PERIOD_ID,
         'fields' => self::PERIOD_FIELDS,
     ];
@@ -45,6 +45,7 @@ class PeriodFieldsetGeneratorTest extends TestCase
 
     private $fieldsetPopulatorType2;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formFactory = m::mock(FormFactory::class);

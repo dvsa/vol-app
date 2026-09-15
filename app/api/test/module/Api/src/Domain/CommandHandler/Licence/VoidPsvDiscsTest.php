@@ -25,7 +25,7 @@ use Dvsa\Olcs\Api\Entity\Licence\PsvDisc as PsvDiscEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VoidPsvDiscsTest extends AbstractCommandHandlerTestCase
+final class VoidPsvDiscsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -35,14 +35,14 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\MocksAbstractCommandHandlerServicesT
 /**
  * @see \Dvsa\Olcs\Api\Domain\CommandHandler\Licence\ContinueLicence
  */
-class ContinueLicenceTest extends AbstractCommandHandlerTestCase
+final class ContinueLicenceTest extends AbstractCommandHandlerTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
 
-    protected const LICENCE_ID = 1;
-    protected const LICENCE_ID_COMMAND_PROPERTY = 'id';
-    protected const A_NUMBER_OF_VEHICLES = 2;
+    protected const int LICENCE_ID = 1;
+    protected const string LICENCE_ID_COMMAND_PROPERTY = 'id';
+    protected const int A_NUMBER_OF_VEHICLES = 2;
 
     #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandIsCallable(): void
@@ -475,19 +475,17 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Licence 717 continued'], $result->getMessages());
     }
 
-    public static function signatureProvider(): array
+    public static function signatureProvider(): \Iterator
     {
-        return [
-            [
-                RefData::SIG_DIGITAL_SIGNATURE,
-                Task::TASK_DESCRIPTION_CHECK_DIGITAL_SIGNATURE,
-                new \DateTime('now'),
-            ],
-            [
-                RefData::SIG_PHYSICAL_SIGNATURE,
-                Task::TASK_DESCRIPTION_CHECK_WET_SIGNATURE,
-                new \DateTime('+14 days'),
-            ]
+        yield [
+            RefData::SIG_DIGITAL_SIGNATURE,
+            Task::TASK_DESCRIPTION_CHECK_DIGITAL_SIGNATURE,
+            new \DateTime('now'),
+        ];
+        yield [
+            RefData::SIG_PHYSICAL_SIGNATURE,
+            Task::TASK_DESCRIPTION_CHECK_WET_SIGNATURE,
+            new \DateTime('+14 days'),
         ];
     }
 
@@ -554,7 +552,7 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
                 'category' => Category::CATEGORY_LICENSING,
                 'subCategory' => Category::TASK_SUB_CATEGORY_CONTINUATIONS_AND_RENEWALS,
                 'description' => 'Insufficient finances at continuation',
-                'actionDate' => (new DateTime())->format('Y-m-d'),
+                'actionDate' => new DateTime()->format('Y-m-d'),
                 'licence' => 717
             ],
             new Result()
@@ -673,7 +671,7 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
                 'category' => Category::CATEGORY_LICENSING,
                 'subCategory' => Category::TASK_SUB_CATEGORY_CONTINUATIONS_AND_RENEWALS,
                 'description' => 'Other finances entered at continuation',
-                'actionDate' => (new DateTime())->format('Y-m-d'),
+                'actionDate' => new DateTime()->format('Y-m-d'),
                 'licence' => 717
             ],
             new Result()

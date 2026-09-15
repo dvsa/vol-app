@@ -16,12 +16,12 @@ use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Document\PrintLetter::class)]
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class PrintLetterTest extends AbstractCommandHandlerTestCase
+final class PrintLetterTest extends AbstractCommandHandlerTestCase
 {
-    public const LIC_ID = 8001;
+    public const int LIC_ID = 8001;
 
-    public const DOC_ID = 7001;
-    public const DOC_DESC = 'unit test doc description';
+    public const int DOC_ID = 7001;
+    public const string DOC_DESC = 'unit test doc description';
 
     /** @var  PrintLetter */
     protected $sut;
@@ -88,77 +88,75 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
 
         $actual = $this->sut->handleCommand($command);
 
-        static::assertEquals($expect['result'], $actual->getMessages());
+        $this->assertEquals($expect['result'], $actual->getMessages());
     }
 
-    public static function dpTestHandleCommand(): array
+    public static function dpTestHandleCommand(): \Iterator
     {
-        return [
-            'method:Email;canEmail&Print;' => [
-                'method' => TransferCmd\Document\PrintLetter::METHOD_EMAIL,
-                'canDo' => [
-                    'email' => true,
-                    'print' => true,
-                ],
-                'expect' => [
-                    'result' => ['SendEmail'],
-                    'assert' => [
-                        'sendEmail',
-                    ],
+        yield 'method:Email;canEmail&Print;' => [
+            'method' => TransferCmd\Document\PrintLetter::METHOD_EMAIL,
+            'canDo' => [
+                'email' => true,
+                'print' => true,
+            ],
+            'expect' => [
+                'result' => ['SendEmail'],
+                'assert' => [
+                    'sendEmail',
                 ],
             ],
-            'method:Print;canEmail&Print;' => [
-                'method' => TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST,
-                'canDo' => [
-                    'email' => true,
-                    'print' => true,
-                ],
-                'expect' => [
-                    'result' => ['AttemptPrint'],
-                    'assert' => [
-                        'attemptPrint',
-                    ],
+        ];
+        yield 'method:Print;canEmail&Print;' => [
+            'method' => TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST,
+            'canDo' => [
+                'email' => true,
+                'print' => true,
+            ],
+            'expect' => [
+                'result' => ['AttemptPrint'],
+                'assert' => [
+                    'attemptPrint',
                 ],
             ],
-            'method:Email;canNotEmail&Print;' => [
-                'method' => TransferCmd\Document\PrintLetter::METHOD_EMAIL,
-                'canDo' => [
-                    'email' => false,
-                    'print' => true,
-                ],
-                'expect' => [
-                    'result' => [],
-                    'assert' => [],
+        ];
+        yield 'method:Email;canNotEmail&Print;' => [
+            'method' => TransferCmd\Document\PrintLetter::METHOD_EMAIL,
+            'canDo' => [
+                'email' => false,
+                'print' => true,
+            ],
+            'expect' => [
+                'result' => [],
+                'assert' => [],
+            ],
+        ];
+        yield 'method:Print;canEmail&NotPrint;addTranslation' => [
+            'method' => TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST,
+            'canDo' => [
+                'email' => true,
+                'print' => false,
+            ],
+            'expect' => [
+                'result' => ['CreateTranslationTask'],
+                'assert' => [
+                    'createTranslationTask',
                 ],
             ],
-            'method:Print;canEmail&NotPrint;addTranslation' => [
-                'method' => TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST,
-                'canDo' => [
-                    'email' => true,
-                    'print' => false,
-                ],
-                'expect' => [
-                    'result' => ['CreateTranslationTask'],
-                    'assert' => [
-                        'createTranslationTask',
-                    ],
-                ],
+        ];
+        yield 'method:Email;canEmail&NotPrint;addTranslation' => [
+            'method' => TransferCmd\Document\PrintLetter::METHOD_EMAIL,
+            'canDo' => [
+                'email' => true,
+                'print' => false,
             ],
-            'method:Email;canEmail&NotPrint;addTranslation' => [
-                'method' => TransferCmd\Document\PrintLetter::METHOD_EMAIL,
-                'canDo' => [
-                    'email' => true,
-                    'print' => false,
+            'expect' => [
+                'result' => [
+                    'CreateTranslationTask',
+                    'SendEmail',
                 ],
-                'expect' => [
-                    'result' => [
-                        'CreateTranslationTask',
-                        'SendEmail',
-                    ],
-                    'assert' => [
-                        'createTranslationTask',
-                        'sendEmail',
-                    ],
+                'assert' => [
+                    'createTranslationTask',
+                    'sendEmail',
                 ],
             ],
         ];

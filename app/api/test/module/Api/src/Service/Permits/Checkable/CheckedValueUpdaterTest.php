@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class CheckedValueUpdaterTest extends MockeryTestCase
+final class CheckedValueUpdaterTest extends MockeryTestCase
 {
     private $checkableApplication;
 
@@ -25,6 +25,7 @@ class CheckedValueUpdaterTest extends MockeryTestCase
 
     private $checkedValueUpdater;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->checkableApplication = m::mock(CheckableApplicationInterface::class);
@@ -45,12 +46,10 @@ class CheckedValueUpdaterTest extends MockeryTestCase
         $this->checkedValueUpdater->updateIfRequired($this->checkableApplication, $checked);
     }
 
-    public static function dpCheckNotRequired(): array
+    public static function dpCheckNotRequired(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testCheckRequiredNotChecked(): void

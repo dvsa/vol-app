@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Bus\BusServiceType as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class BusServiceTypeEntityTest extends EntityTester
+final class BusServiceTypeEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

@@ -21,7 +21,7 @@ use Olcs\Logging\Log\Logger;
 /**
  * @see MyAccount
  */
-class MyAccountTest extends QueryHandlerTestCase
+final class MyAccountTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -34,9 +34,7 @@ class MyAccountTest extends QueryHandlerTestCase
 
         $this->mockRepo('SystemParameter', SysParamRepo::class);
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         parent::setUp();
     }
@@ -69,12 +67,10 @@ class MyAccountTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpUserIdProvider(): array
+    public static function dpUserIdProvider(): \Iterator
     {
-        return [
-            [999, 999],
-            [null, 'anon'],
-        ];
+        yield [999, 999];
+        yield [null, 'anon'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
@@ -215,27 +211,25 @@ class MyAccountTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpHandleQuery(): array
+    public static function dpHandleQuery(): \Iterator
     {
-        return [
-            [
-                'isSelfservePromptEnabled' => false,
-                'isEligibleForPermits' => true,
-                'expectedEligibleForPrompt' => false,
-                'canDeleteAdmin' => false,
-            ],
-            [
-                'isSelfservePromptEnabled' => true,
-                'isEligibleForPermits' => false,
-                'expectedEligibleForPrompt' => false,
-                'canDeleteAdmin' => false,
-            ],
-            [
-                'isSelfservePromptEnabled' => true,
-                'isEligibleForPermits' => true,
-                'expectedEligibleForPrompt' => true,
-                'canDeleteAdmin' => true,
-            ],
+        yield [
+            'isSelfservePromptEnabled' => false,
+            'isEligibleForPermits' => true,
+            'expectedEligibleForPrompt' => false,
+            'canDeleteAdmin' => false,
+        ];
+        yield [
+            'isSelfservePromptEnabled' => true,
+            'isEligibleForPermits' => false,
+            'expectedEligibleForPrompt' => false,
+            'canDeleteAdmin' => false,
+        ];
+        yield [
+            'isSelfservePromptEnabled' => true,
+            'isEligibleForPermits' => true,
+            'expectedEligibleForPrompt' => true,
+            'canDeleteAdmin' => true,
         ];
     }
 

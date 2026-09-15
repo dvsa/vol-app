@@ -1,0 +1,122 @@
+<div class="article">
+    <div class="govuk-inset-text">
+    <p>Er mwyn derbyn trwydded mae angen ichi brofi bod gennych ddigon o arian i gadw’ch cerbydau a rhedeg eich busnes.</p>
+
+    <p>Darllen rhagor am <?php echo $this->linkNewWindowExternal($this->url('guides/guide', ['guide' => 'financial-evidence']), 'sut i ddarparu tystiolaeth ariannol'); ?>.</p>
+    </div>
+
+    <div class="info-box info-box--grey info-box--large-padding">
+        <h3>Faint fydd arnoch ei angen?</h3>
+
+        <h2 style="margin-top: 0;">&pound; <?php echo number_format($requiredFinance); ?></h2>
+
+        <p>Seilir y ffigur hwn ar:</p>
+        <ul>
+            <li>Y cais hwn ar gyfer <?php echo $applicationVehicles; ?> cerbyd<?php echo $applicationVehicles != 1 ? 'au' : ''; ?></li>
+            <?php if ((int) $otherLicenceVehicles > 0): ?>
+                <li>maintenance of <?php echo $otherLicenceVehicles; ?> vehicle<?php echo $otherLicenceVehicles != 1 ? 's' : ''; ?> on your other licence(s)</li>
+            <?php endif; ?>
+            <?php if ((int) $otherApplicationVehicles > 0): ?>
+                <li>your other application(s) for <?php echo $otherApplicationVehicles; ?> vehicle<?php echo $otherApplicationVehicles != 1 ? 's' : ''; ?></li>
+            <?php endif; ?>
+        </ul>
+
+        <p>
+            <details class="govuk-details" data-module="govuk-details">
+                <summary class="govuk-details__summary" aria-controls="details-content-how-calculated">
+                    <span class="govuk-details__summary-text">
+                        Sut gwnaethon ni cyfrif hyn?
+                    </span>
+                </summary>
+                <div class="govuk-details__text" id="details-content-how-calculated">
+                    <p>Mae’r ffigur wedi ei gyfrif gan ddefnyddio’r gwerthoedd canlynol:</p>
+
+                    <table class="govuk-table">
+                      <caption class="govuk-table__caption govuk-table__caption--s">Trwydded Gyfyngedig</caption>
+                      <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                          <th scope="col" class="govuk-table__header app-custom-class">Math o Gerbyd</th>
+                          <th scope="col" class="govuk-table__header app-custom-class">Cerbyd Cyntaf</th>
+                          <th scope="col" class="govuk-table__header app-custom-class">Pob Cerbyd Canlynol</th>
+                        </tr>
+                      </thead>
+                      <tbody class="govuk-table__body">
+
+                        <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header">Nwyddau trwm</th>
+                          <td class="govuk-table__cell">£<?php echo number_format($restrictedHeavyGoodsFirst); ?></td>
+                          <td class="govuk-table__cell">£<?php echo number_format($restrictedHeavyGoodsAdditional); ?></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header">Gwasanaeth Teithwyr</th>
+                          <td class="govuk-table__cell">£<?php echo number_format($restrictedPassengerServiceFirst); ?></td>
+                          <td class="govuk-table__cell">£<?php echo number_format($restrictedPassengerServiceAdditional); ?></td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+                    <table class="govuk-table">
+                      <caption class="govuk-table__caption govuk-table__caption--s">Trwydded Safonol Wladol</caption>
+                      <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                          <th scope="col" class="govuk-table__header app-custom-class">Math o Gerbyd</th>
+                          <th scope="col" class="govuk-table__header app-custom-class">Cerbyd Cyntaf</th>
+                          <th scope="col" class="govuk-table__header app-custom-class">Pob Cerbyd Canlynol</th>
+                        </tr>
+                      </thead>
+                      <tbody class="govuk-table__body">
+
+                        <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header">Nwyddau trwm</th>
+                          <td class="govuk-table__cell">£<?php echo number_format($standardNationalHeavyGoodsFirst); ?></td>
+                          <td class="govuk-table__cell">£<?php echo number_format($standardNationalHeavyGoodsAdditional); ?></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header">Gwasanaeth Teithwyr</th>
+                          <td class="govuk-table__cell">£<?php echo number_format($standardNationalPassengerServiceFirst); ?></td>
+                          <td class="govuk-table__cell">£<?php echo number_format($standardNationalPassengerServiceAdditional); ?></td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+                    <table class="govuk-table">
+                      <caption class="govuk-table__caption govuk-table__caption--s">Trwydded Safonol Ryngwladol</caption>
+                      <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                          <th scope="col" class="govuk-table__header app-custom-class">Math o Gerbyd</th>
+                          <th scope="col" class="govuk-table__header app-custom-class">Cerbyd Cyntaf</th>
+                          <th scope="col" class="govuk-table__header app-custom-class">Pob Cerbyd Canlynol</th>
+                        </tr>
+                      </thead>
+                      <tbody class="govuk-table__body">
+
+                        <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header">Nwyddau trwm</th>
+                          <td class="govuk-table__cell">£<?php echo number_format($standardInternationalHeavyGoodsFirst); ?></td>
+                          <td class="govuk-table__cell">£<?php echo number_format($standardInternationalHeavyGoodsAdditional); ?></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header">Nwyddau ysgafn</th>
+                          <td class="govuk-table__cell">£<?php echo number_format($standardInternationalLightGoodsFirst); ?></td>
+                          <td class="govuk-table__cell">£<?php echo number_format($standardInternationalLightGoodsAdditional); ?></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                          <th scope="row" class="govuk-table__header">Gwasanaeth Teithwyr</th>
+                          <td class="govuk-table__cell">£<?php echo number_format($standardInternationalPassengerServiceFirst); ?></td>
+                          <td class="govuk-table__cell">£<?php echo number_format($standardInternationalPassengerServiceAdditional); ?></td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+                </div>
+            </details>
+        </p>
+    </div>
+</div>

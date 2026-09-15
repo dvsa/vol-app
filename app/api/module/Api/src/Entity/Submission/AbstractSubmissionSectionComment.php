@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="submission_section_comment",
- *    indexes={
- *        @ORM\Index(name="ix_submission_section_comment_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_submission_section_comment_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_submission_section_comment_submission_id", columns={"submission_id"}),
- *        @ORM\Index(name="ix_submission_section_comment_submission_section", columns={"submission_section"})
- *    }
- * )
  */
+#[ORM\Table(name: 'submission_section_comment')]
+#[ORM\Index(name: 'ix_submission_section_comment_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_submission_section_comment_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_submission_section_comment_submission_id', columns: ['submission_id'])]
+#[ORM\Index(name: 'ix_submission_section_comment_submission_section', columns: ['submission_section'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractSubmissionSectionComment implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,72 +41,65 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to submission
      *
      * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Submission\Submission", fetch="LAZY")
-     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, inversedBy: 'submissionSectionComments', fetch: 'LAZY')]
     protected $submission;
 
     /**
      * SubmissionSection
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="submission_section", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'submission_section', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $submissionSection;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Comment
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="comment", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'comment', nullable: true)]
     protected $comment;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -134,7 +123,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param int $id new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setId($id)
     {
@@ -158,7 +147,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setSubmission($submission)
     {
@@ -182,7 +171,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $submissionSection new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setSubmissionSection($submissionSection)
     {
@@ -206,7 +195,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -230,7 +219,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -254,7 +243,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param string $comment new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setComment($comment)
     {
@@ -278,7 +267,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param int $version new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setVersion($version)
     {

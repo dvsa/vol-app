@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrRequestMap;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
-class SendEbsrRequestMapTest extends SendEbsrEmailTestAbstract
+final class SendEbsrRequestMapTest extends SendEbsrEmailTestAbstract
 {
     protected $template = 'ebsr-request-map';
     protected $sutClass = \Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendEbsrRequestMap::class;

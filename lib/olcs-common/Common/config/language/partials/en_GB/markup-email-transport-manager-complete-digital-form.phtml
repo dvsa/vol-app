@@ -1,0 +1,25 @@
+<p>Hi %s,</p>
+
+<p>
+    <strong>%s</strong> have named you as a Transport Manager on the Vehicle Operator Licence
+    <strong>%s/%s</strong>.
+</p>
+
+<p>
+    <a href="%s" class="govuk-link">Sign in to your account</a>
+</p>
+
+<p>
+    Experiencing problems?<br>
+    If you are unable to access the form online using the link above, this help guide provides answers to
+    frequently asked questions. You can also contact us at <?php echo $this->partial('en_GB/markup-contact-email-link'); ?>
+    If for whatever reason you are unable to complete the Transport Manager form online, you can download a
+    paper copy of the
+    <?php
+        $this->linkNewWindowExternal(
+            'https://www.gov.uk/government/publications/application-to-add-a-transport-manager-to-a-licence-tm1',
+            'TM1 form here'
+        );
+    ?>
+    . You will need to complete the TM1 form and mail it to us.
+</p>

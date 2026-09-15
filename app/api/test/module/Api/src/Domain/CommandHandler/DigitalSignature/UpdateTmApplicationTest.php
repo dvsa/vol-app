@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\Submit as SubmitAppli
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class UpdateTmApplicationTest extends AbstractCommandHandlerTestCase
+final class UpdateTmApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -92,13 +92,11 @@ class UpdateTmApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($this->expectedResultMessages(), $result->getMessages());
     }
 
-    public static function dpRoleProvider(): array
+    public static function dpRoleProvider(): \Iterator
     {
-        return [
-            [RefData::TMA_SIGN_AS_TM, TmApplicationEntity::STATUS_TM_SIGNED, ['updateTmDigitalSignature']],
-            [RefData::TMA_SIGN_AS_OP, TmApplicationEntity::STATUS_RECEIVED, ['updateOperatorDigitalSignature']],
-            [RefData::TMA_SIGN_AS_TM_OP, TmApplicationEntity::STATUS_RECEIVED, ['updateTmDigitalSignature', 'updateOperatorDigitalSignature']],
-        ];
+        yield [RefData::TMA_SIGN_AS_TM, TmApplicationEntity::STATUS_TM_SIGNED, ['updateTmDigitalSignature']];
+        yield [RefData::TMA_SIGN_AS_OP, TmApplicationEntity::STATUS_RECEIVED, ['updateOperatorDigitalSignature']];
+        yield [RefData::TMA_SIGN_AS_TM_OP, TmApplicationEntity::STATUS_RECEIVED, ['updateTmDigitalSignature', 'updateOperatorDigitalSignature']];
     }
 
     private function expectedResultMessages(): array

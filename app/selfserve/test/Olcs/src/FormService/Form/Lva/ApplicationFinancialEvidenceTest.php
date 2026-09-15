@@ -20,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationFinancialEvidence;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
-class ApplicationFinancialEvidenceTest extends MockeryTestCase
+final class ApplicationFinancialEvidenceTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -28,9 +28,6 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
      * @var ApplicationFinancialEvidence
      */
     protected $sut;
-
-    /** @var  \Common\FormService\FormServiceManager */
-    protected $fsm;
     /** @var  FormHelperService */
     protected $fh;
     /** @var  m\MockInterface */
@@ -40,10 +37,11 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
 
     private $vpm;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
+        $fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->urlHelper = m::mock(UrlHelperService::class);
         $this->translator = m::mock(TranslationHelperService::class);
         $this->vpm = m::mock(ValidatorPluginManager::class);

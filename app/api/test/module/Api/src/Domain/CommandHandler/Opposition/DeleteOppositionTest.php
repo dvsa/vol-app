@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Delete Opposition Test
  */
-class DeleteOppositionTest extends AbstractCommandHandlerTestCase
+final class DeleteOppositionTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var DeleteCommandHandler

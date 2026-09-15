@@ -102,7 +102,7 @@ class TransportManagerLicence extends AbstractRepository
      *
      * @return array
      */
-    public function fetchForTransportManager($tmId, array $licenceStatuses = null)
+    public function fetchForTransportManager($tmId, ?array $licenceStatuses = null)
     {
         $qb = $this->createQueryBuilder();
 

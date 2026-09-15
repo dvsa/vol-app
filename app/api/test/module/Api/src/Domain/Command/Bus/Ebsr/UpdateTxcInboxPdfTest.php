@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\Bus\Ebsr\UpdateTxcInboxPdf;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class UpdateTxcInboxPdfTest extends \PHPUnit\Framework\TestCase
+final class UpdateTxcInboxPdfTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

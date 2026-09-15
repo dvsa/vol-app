@@ -17,13 +17,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Laminas\View\Helper\Url;
 
-class SubmissionFurnitureTest extends MockeryTestCase
+final class SubmissionFurnitureTest extends MockeryTestCase
 {
     /**
      * @var SubmissionsFurniture
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new SubmissionsFurniture();
@@ -186,28 +187,26 @@ class SubmissionFurnitureTest extends MockeryTestCase
         $this->assertEquals($expected, $method->invoke($this->sut, $case));
     }
 
-    public static function getStatusArrayProvider(): array
+    public static function getStatusArrayProvider(): \Iterator
     {
-        return [
-            // open
+        // open
+        yield [
             [
-                [
-                    'closedDate' => null
-                ],
-                [
-                    'colour' => 'orange',
-                    'value' => 'Open',
-                ],
+                'closedDate' => null
             ],
-            // closed
             [
-                [
-                    'closedDate' => '2015-01-02'
-                ],
-                [
-                    'colour' => 'grey',
-                    'value' => 'Closed',
-                ],
+                'colour' => 'orange',
+                'value' => 'Open',
+            ],
+        ];
+        // closed
+        yield [
+            [
+                'closedDate' => '2015-01-02'
+            ],
+            [
+                'colour' => 'grey',
+                'value' => 'Closed',
             ],
         ];
     }

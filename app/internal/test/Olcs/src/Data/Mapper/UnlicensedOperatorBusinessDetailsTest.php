@@ -19,7 +19,7 @@ use Olcs\Data\Mapper\UnlicensedOperatorBusinessDetails as Sut;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UnlicensedOperatorBusinessDetailsTest extends TestCase
+final class UnlicensedOperatorBusinessDetailsTest extends TestCase
 {
     public function testMapFromResult(): void
     {

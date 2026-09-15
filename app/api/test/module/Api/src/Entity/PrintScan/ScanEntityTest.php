@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class ScanEntityTest extends EntityTester
+final class ScanEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -35,11 +35,9 @@ class ScanEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsBackScan(): array
+    public static function dpIsBackScan(): \Iterator
     {
-        return [
-            [null, false],
-            [new DateTime(), true],
-        ];
+        yield [null, false];
+        yield [new DateTime(), true];
     }
 }

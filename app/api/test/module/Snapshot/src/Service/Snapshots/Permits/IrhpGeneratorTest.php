@@ -20,7 +20,7 @@ use Laminas\View\Renderer\PhpRenderer;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class IrhpGeneratorTest extends MockeryTestCase
+final class IrhpGeneratorTest extends MockeryTestCase
 {
     /**
      * @var IrhpGenerator
@@ -37,6 +37,7 @@ class IrhpGeneratorTest extends MockeryTestCase
      */
     protected $answersSummaryGenerator;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->answersSummaryGenerator = m::mock(AnswersSummaryGenerator::class);
@@ -147,11 +148,9 @@ class IrhpGeneratorTest extends MockeryTestCase
         $this->sut->generate();
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
-            [false, 'permits.snapshot.declaration.title'],
-            [true, 'permits.snapshot.declaration.title.certificate'],
-        ];
+        yield [false, 'permits.snapshot.declaration.title'];
+        yield [true, 'permits.snapshot.declaration.title.certificate'];
     }
 }

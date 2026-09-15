@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class Schedule41ApproveTest extends QueryHandlerTestCase
+final class Schedule41ApproveTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

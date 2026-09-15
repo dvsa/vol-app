@@ -26,7 +26,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ReprintDiscTest extends AbstractCommandHandlerTestCase
+final class ReprintDiscTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

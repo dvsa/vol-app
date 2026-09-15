@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StandardAndCabotageQuestionHandlerTest extends MockeryTestCase
+final class StandardAndCabotageQuestionHandlerTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHandle')]
     public function testHandle(mixed $bilateralRequired, mixed $expectedAnswer): void
@@ -58,30 +58,28 @@ class StandardAndCabotageQuestionHandlerTest extends MockeryTestCase
         $standardAndCabotageQuestionHandler->handle($qaContext, $requiredPermits);
     }
 
-    public static function dpHandle(): array
+    public static function dpHandle(): \Iterator
     {
-        return [
-            'standard only' => [
-                [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 3,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => null
-                ],
-                Answer::BILATERAL_STANDARD_ONLY
+        yield 'standard only' => [
+            [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 3,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => null
             ],
-            'cabotage only' => [
-                [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 7
-                ],
-                Answer::BILATERAL_CABOTAGE_ONLY
+            Answer::BILATERAL_STANDARD_ONLY
+        ];
+        yield 'cabotage only' => [
+            [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 7
             ],
-            'standard and cabotage' => [
-                [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 4,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 7
-                ],
-                Answer::BILATERAL_STANDARD_AND_CABOTAGE
-            ]
+            Answer::BILATERAL_CABOTAGE_ONLY
+        ];
+        yield 'standard and cabotage' => [
+            [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 4,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 7
+            ],
+            Answer::BILATERAL_STANDARD_AND_CABOTAGE
         ];
     }
 }

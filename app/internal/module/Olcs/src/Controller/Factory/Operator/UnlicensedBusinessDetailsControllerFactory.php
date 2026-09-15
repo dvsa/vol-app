@@ -28,7 +28,7 @@ class UnlicensedBusinessDetailsControllerFactory implements FactoryInterface
      * @return OperatorController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UnlicensedBusinessDetailsController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): UnlicensedBusinessDetailsController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

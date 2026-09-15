@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Cpms\Client;
 
+use Dvsa\Olcs\Cpms\Authenticate\GatewayTokenProviderInterface;
 use Dvsa\Olcs\Cpms\Client\HttpClient;
 use GuzzleHttp\Client;
-use Monolog\Handler\TestHandler;
-use Monolog\Logger;
-use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use GuzzleHttp\Psr7\Response;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Olcs\Logging\Test\RecordingLogger;
+use Psr\Log\LogLevel;
 
-class HttpClientTest extends TestCase
+final class HttpClientTest extends TestCase
 {
     use GuzzleTestTrait;
     use ClientOptionsTestTrait;
@@ -24,15 +25,15 @@ class HttpClientTest extends TestCase
 
 
     /**
-     * @var Logger
+     * @var RecordingLogger
      */
     private $logger;
 
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->logger = new Logger('cpms_client_logger');
-        $this->logger->pushHandler(new TestHandler());
+        $this->logger = new RecordingLogger();
 
         $this->sut = new HttpClient(
             $this->setUpMockClient(),
@@ -74,7 +75,7 @@ class HttpClientTest extends TestCase
 
     public function testPost(): void
     {
-        $requestBody = ['postRequestBodyKeyExample' => 'postRequestBodyValueExample’'];
+        $requestBody = ['postRequestBodyKeyExample' => "postRequestBodyValueExample\u{2019}"];
         $encodedResponseBody = json_encode(['examplePostReponseKey' => 'examplePostResponseValue']);
 
         $this->appendToHandler(200, [], $encodedResponseBody);
@@ -90,12 +91,12 @@ class HttpClientTest extends TestCase
         $this->assertEquals(['application/json'], $this->getLastRequest()->getHeader('Accept'));
         $this->assertEquals(['examplePostReponseKey' => 'examplePostResponseValue'], $response);
         // Check unsupported unicode chrs are sanitized from the payload
-        $this->assertEquals($this->getLastRequest()->getBody()->getContents(), '{"postRequestBodyKeyExample":"postRequestBodyValueExample"}');
+        $this->assertEquals('{"postRequestBodyKeyExample":"postRequestBodyValueExample"}', $this->getLastRequest()->getBody()->getContents());
     }
 
     public function testPut(): void
     {
-        $requestBody = ['putRequestBodyKeyExample' => 'putRequestBodyValueExample’'];
+        $requestBody = ['putRequestBodyKeyExample' => "putRequestBodyValueExample\u{2019}"];
         $encodedResponseBody = json_encode(['examplePutReponseKey' => 'examplePutResponseValue']);
 
         $this->appendToHandler(200, [], $encodedResponseBody);
@@ -111,18 +112,61 @@ class HttpClientTest extends TestCase
         $this->assertEquals(['application/json'], $this->getLastRequest()->getHeader('Accept'));
         $this->assertEquals(['examplePutReponseKey' => 'examplePutResponseValue'], $response);
         // Check unsupported unicode chrs are sanitized from the payload
-        $this->assertEquals($this->getLastRequest()->getBody()->getContents(), '{"putRequestBodyKeyExample":"putRequestBodyValueExample"}');
+        $this->assertEquals('{"putRequestBodyKeyExample":"putRequestBodyValueExample"}', $this->getLastRequest()->getBody()->getContents());
     }
 
-    public function testResetHeaders(): void
+    public function testGatewayTokenProviderOverlaysAuthorizationHeader(): void
     {
-        $this->setUp();
-        $clientOptions = $this->sut->getClientOptions();
-        $clientOptions->setHeaders(['Authorization' => 'Bearer AKSNKDJNAJNBQJ121321NMM']);
+        $tokenProvider = m::mock(GatewayTokenProviderInterface::class);
+        $tokenProvider->shouldReceive('getToken')->andReturn('an-entra-jwt');
 
-        $this->sut->resetHeaders();
+        $this->sut = new HttpClient(
+            $this->setUpMockClient(),
+            $this->getClientOptions(),
+            $this->logger,
+            $tokenProvider
+        );
 
-        $this->assertEquals([], $clientOptions->getHeaders());
+        // a stale Authorization header persisted in ClientOptions must lose to the JWT overlay
+        $options = $this->sut->getClientOptions();
+        $options->setHeaders(array_merge($options->getHeaders(), ['Authorization' => 'Bearer stale-cpms-token']));
+
+        $this->appendToHandler(200, [], '{}');
+        $this->sut->post('/api/token', ['client_id' => 'olcs']);
+
+        $this->assertEquals(['Bearer an-entra-jwt'], $this->getLastRequest()->getHeader('Authorization'));
+        $this->assertTrue($this->sut->hasGatewayTokenProvider());
+    }
+
+    public function testGatewayTokenProviderConsultedPerRequest(): void
+    {
+        $tokenProvider = m::mock(GatewayTokenProviderInterface::class);
+        $tokenProvider->shouldReceive('getToken')->andReturn('jwt-1', 'jwt-2');
+
+        $this->sut = new HttpClient(
+            $this->setUpMockClient(),
+            $this->getClientOptions(),
+            $this->logger,
+            $tokenProvider
+        );
+
+        $this->appendToHandler(200, [], '{}');
+        $this->appendToHandler(200, [], '{}');
+
+        $this->sut->get('/endpoint', []);
+        $this->assertEquals(['Bearer jwt-1'], $this->getLastRequest()->getHeader('Authorization'));
+
+        $this->sut->get('/endpoint', []);
+        $this->assertEquals(['Bearer jwt-2'], $this->getLastRequest()->getHeader('Authorization'));
+    }
+
+    public function testNoAuthorizationHeaderWithoutGatewayTokenProvider(): void
+    {
+        $this->appendToHandler(200, [], '{}');
+        $this->sut->get('/endpoint', []);
+
+        $this->assertSame([], $this->getLastRequest()->getHeader('Authorization'));
+        $this->assertFalse($this->sut->hasGatewayTokenProvider());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestLogResponseOnSuccess')]
@@ -138,22 +182,20 @@ class HttpClientTest extends TestCase
         $expectedDebugLogMessage = "Request URI: api.cpms.domain/post-endpoint\n Response code: $statusCode\n Response body: {\"access_token\":\"****\"}";
         $expectedInfoLogMessage = "Request URI: api.cpms.domain/post-endpoint\n Response code: $statusCode";
 
-        $this->assertEquals(true, $this->logger->getHandlers()[0]->hasDebugRecords());
-        $this->assertEquals(true, $this->logger->getHandlers()[0]->hasInfoRecords());
-        $this->assertEquals(false, $this->logger->getHandlers()[0]->hasErrorRecords());
-        $this->assertEquals($expectedInfoLogMessage, $this->logger->getHandlers()[0]->getRecords()[0]['message']);
-        $this->assertEquals($expectedDebugLogMessage, $this->logger->getHandlers()[0]->getRecords()[1]['message']);
+        $this->assertTrue($this->logger->hasRecordsAtLevel(LogLevel::DEBUG));
+        $this->assertTrue($this->logger->hasRecordsAtLevel(LogLevel::INFO));
+        $this->assertFalse($this->logger->hasRecordsAtLevel(LogLevel::ERROR));
+        $this->assertSame($expectedInfoLogMessage, $this->logger->records[0]['message']);
+        $this->assertSame($expectedDebugLogMessage, $this->logger->records[1]['message']);
     }
 
-    public static function dpTestLogResponseOnSuccess(): array
+    public static function dpTestLogResponseOnSuccess(): \Iterator
     {
-        return [
-            [
-                'statusCode' => 200
-            ],
-            [
-                'statusCode' => 300
-            ]
+        yield [
+            'statusCode' => 200
+        ];
+        yield [
+            'statusCode' => 300
         ];
     }
 
@@ -182,8 +224,7 @@ class HttpClientTest extends TestCase
         $statusCode = $dpData['statusCode'];
         $encodedResponseBody = $dpData['responseBody'];
 
-        $this->logger = new Logger('cpms_client_logger');
-        $this->logger->pushHandler(new TestHandler());
+        $this->logger = new RecordingLogger();
 
         $mockClient = m::mock(Client::class);
 
@@ -207,36 +248,34 @@ class HttpClientTest extends TestCase
         $result = $this->sut->post('/post-fail-endpoint', $requestBody);
 
         $expectedErrorLogMessage = "Request URI: api.cpms.domain/post-fail-endpoint\n Response code: $statusCode";
-        $this->assertEquals($expectedErrorLogMessage, $this->logger->getHandlers()[0]->getRecords()[0]['message']);
-        $this->assertEquals(false, $this->logger->getHandlers()[0]->hasDebugRecords());
-        $this->assertEquals(false, $this->logger->getHandlers()[0]->hasInfoRecords());
-        $this->assertEquals(true, $this->logger->getHandlers()[0]->hasErrorRecords());
+        $this->assertSame($expectedErrorLogMessage, $this->logger->records[0]['message']);
+        $this->assertFalse($this->logger->hasRecordsAtLevel(LogLevel::DEBUG));
+        $this->assertFalse($this->logger->hasRecordsAtLevel(LogLevel::INFO));
+        $this->assertTrue($this->logger->hasRecordsAtLevel(LogLevel::ERROR));
         $this->assertEquals($dpData['expectedResponse'], $result);
     }
 
-    public static function dpTestLogResponseOnFailure(): array
+    public static function dpTestLogResponseOnFailure(): \Iterator
     {
-        return [
-            'client_error' => [
-                [
-                    'statusCode' => 400,
-                    'responseBody' => json_encode(['error' => 'client error']),
-                    'expectedResponse' => ['error' => 'client error']
-                ]
-            ],
-            'server_error' => [
-                [
-                    'statusCode' => 500,
-                    'responseBody' => json_encode(['error' => 'server error']),
-                    'expectedResponse' => ['error' => 'server error']
-                ]
-            ],
-            'server_error_empty_response' => [
-                [
-                    'statusCode' => 500,
-                    'responseBody' => '',
-                    'expectedResponse' => ''
-                ]
+        yield 'client_error' => [
+            [
+                'statusCode' => 400,
+                'responseBody' => json_encode(['error' => 'client error']),
+                'expectedResponse' => ['error' => 'client error']
+            ]
+        ];
+        yield 'server_error' => [
+            [
+                'statusCode' => 500,
+                'responseBody' => json_encode(['error' => 'server error']),
+                'expectedResponse' => ['error' => 'server error']
+            ]
+        ];
+        yield 'server_error_empty_response' => [
+            [
+                'statusCode' => 500,
+                'responseBody' => '',
+                'expectedResponse' => ''
             ]
         ];
     }

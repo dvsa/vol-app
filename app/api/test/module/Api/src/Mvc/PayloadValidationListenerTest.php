@@ -18,7 +18,7 @@ use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Router\RouteMatch;
 
-class PayloadValidationListenerTest extends MockeryTestCase
+final class PayloadValidationListenerTest extends MockeryTestCase
 {
     public $annotationBuilder;
     public $sut;

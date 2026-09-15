@@ -2,13 +2,17 @@
 
 namespace Dvsa\Olcs\Api\Service\Document;
 
+use Dvsa\Olcs\Api\Domain\RepositoryManagerAwareInterface;
+use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
 use Dvsa\Olcs\Api\Domain\TranslatorAwareInterface;
 use Dvsa\Olcs\Api\Service\Date as DateService;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Interfaces\DateHelperAwareInterface;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Interfaces\FileStoreAwareInterface;
+use Dvsa\Olcs\Api\Service\Document\Rtf\RtfEncoder;
 use Dvsa\Olcs\DocumentShare\Data\Object\File as ContentStoreFile;
 use Dvsa\Olcs\DocumentShare\Service\DocumentStoreInterface;
 use Laminas\I18n\Translator\TranslatorInterface;
+use Olcs\Logging\Log\Logger;
 
 /**
  * Document generation service
@@ -25,8 +29,12 @@ class Document
      *
      * @return Document
      */
-    public function __construct(private readonly DateService $dateSrvHlpr, private readonly DocumentStoreInterface $documentStore, private readonly TranslatorInterface $translator)
-    {
+    public function __construct(
+        private readonly DateService $dateSrvHlpr,
+        private readonly DocumentStoreInterface $documentStore,
+        private readonly TranslatorInterface $translator,
+        private readonly ?RepositoryServiceManager $repoManager = null,
+    ) {
     }
 
     /**
@@ -97,13 +105,27 @@ class Document
              */
             $bookmark->setParser($parser);
 
-            if ($bookmark->isStatic()) {
-                $result = $bookmark->render();
-            } elseif (isset($data[$token])) {
-                $bookmark->setData($data[$token]);
-                $result = $bookmark->render();
-            } else {
-                // no data to fulfil this dynamic bookmark, but that's okay
+            try {
+                if ($bookmark->isStatic()) {
+                    $result = $bookmark->render();
+                } elseif (isset($data[$token])) {
+                    $bookmark->setData($data[$token]);
+                    $result = $bookmark->render();
+                } else {
+                    // no data to fulfil this dynamic bookmark, but that's okay
+                    $result = null;
+                }
+            } catch (\Exception $e) {
+                // A bookmark that cannot render must not take the whole document with
+                // it -- generateFromTemplate() has no handling of its own, so an
+                // exception here would fail the caseworker's action outright. Treat it
+                // as unfulfilled, which leaves the token in place exactly as the
+                // no-data case below does, and record why.
+                Logger::warn(sprintf(
+                    'Render failed for bookmark token "%s": %s',
+                    $token,
+                    $e->getMessage()
+                ));
                 $result = null;
             }
             // this check means bookmarks we did find but couldn't replace with
@@ -112,7 +134,7 @@ class Document
             // it's a fallback TextBlock. Could modify the below to check the bookmark type...
             if ($result !== null) {
                 // convert any extended chars to RTF versions
-                $result = \PHPRtfLite_Utf8::getUnicodeEntities((string)$result, 'UTF-8');
+                $result = RtfEncoder::getUnicodeEntities((string)$result);
 
                 $populatedData[$token] = [
                     'content' => $result,
@@ -162,6 +184,10 @@ class Document
 
             if ($bookmark instanceof TranslatorAwareInterface) {
                 $bookmark->setTranslator($this->translator);
+            }
+
+            if ($this->repoManager !== null && $bookmark instanceof RepositoryManagerAwareInterface) {
+                $bookmark->setRepoManager($this->repoManager);
             }
 
             $bookmarks[$token] = $bookmark;

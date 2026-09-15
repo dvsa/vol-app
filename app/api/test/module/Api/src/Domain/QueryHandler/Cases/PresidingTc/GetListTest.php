@@ -11,10 +11,8 @@ use Dvsa\Olcs\Transfer\Query\Cases\PresidingTc\GetList as Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\Cases\PresidingTc\GetList
- */
-class GetListTest extends QueryHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Cases\PresidingTc\GetList::class)]
+final class GetListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

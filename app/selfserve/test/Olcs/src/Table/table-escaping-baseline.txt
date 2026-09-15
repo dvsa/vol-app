@@ -1,0 +1,33 @@
+# Tables not yet covered by the table escaping contract.
+#
+# TableEscapingInvariantTest renders every *.table.php in this app and asserts that row
+# values reach the output escaped. Tables listed under [leaking] are known exceptions and
+# are exempt from that assertion.
+#
+# The list should only ever shrink. A table that is not listed and fails the assertion is a
+# regression; a listed table that passes is a stale entry and also fails, so the list cannot
+# silently rot.
+#
+# 0 leaking, 40 covered, 0 could not be rendered by the probe.
+#
+# There is no second list. A row value is either safe or it is not, and every value in every
+# one of these tables has been shown to be safe — most because the output escapes them, and a
+# few because their own type rejects the payload before a byte is written (a number_format()
+# argument, a date that has to parse). Those two are equally conclusive, so neither is
+# recorded here.
+#
+# The second one is worth understanding rather than taking on trust, because it looks like a
+# let-off. The type partitions every possible value: one that satisfies it is a number or a
+# strict date, neither of which can contain "<", ">", "&" or a quote, and the rendered output
+# is derived from the parsed value rather than copied from the input. One that does not
+# satisfy it never renders — in production that input is a 500, not a payload on a page.
+# There is no third case, so there is nothing left to test and nothing to keep a list of.
+#
+# That is established by rendering, not by argument. Each such value is put back on its own,
+# with the payload restored at exactly that path and the rest of the row left alone, and the
+# result is checked — including whatever was written before any exception, since a value
+# echoed by one column and rejected later by another is already on the page. If that ever
+# comes back neither escaped nor type-rejected, the test fails and names it; there is no
+# baseline section to absorb it.
+#
+[leaking]

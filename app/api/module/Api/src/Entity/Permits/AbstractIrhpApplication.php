@@ -21,25 +21,21 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irhp_application",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_application_international_journeys", columns={"international_journeys"}),
- *        @ORM\Index(name="fk_irhp_application_sectors_id", columns={"sectors_id"}),
- *        @ORM\Index(name="ix_irhp_application_cancellation_date", columns={"cancellation_date"}),
- *        @ORM\Index(name="ix_irhp_application_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irhp_application_irhp_permit_type_id", columns={"irhp_permit_type_id"}),
- *        @ORM\Index(name="ix_irhp_application_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_irhp_application_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_irhp_application_source", columns={"source"}),
- *        @ORM\Index(name="ix_irhp_application_status", columns={"status"}),
- *        @ORM\Index(name="ix_irhp_application_withdraw_reason", columns={"withdraw_reason"}),
- *        @ORM\Index(name="ix_irhp_application_withdrawn_date", columns={"withdrawn_date"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_application')]
+#[ORM\Index(name: 'fk_irhp_application_international_journeys', columns: ['international_journeys'])]
+#[ORM\Index(name: 'fk_irhp_application_sectors_id', columns: ['sectors_id'])]
+#[ORM\Index(name: 'ix_irhp_application_cancellation_date', columns: ['cancellation_date'])]
+#[ORM\Index(name: 'ix_irhp_application_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irhp_application_irhp_permit_type_id', columns: ['irhp_permit_type_id'])]
+#[ORM\Index(name: 'ix_irhp_application_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_irhp_application_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_irhp_application_source', columns: ['source'])]
+#[ORM\Index(name: 'ix_irhp_application_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_irhp_application_withdraw_reason', columns: ['withdraw_reason'])]
+#[ORM\Index(name: 'ix_irhp_application_withdrawn_date', columns: ['withdrawn_date'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrhpApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -52,274 +48,241 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'irhpApplications', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * InternationalJourneys
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="international_journeys", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'international_journeys', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $internationalJourneys;
 
     /**
      * Source
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="source", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'source', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $source;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * Sectors
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\Sectors
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\Sectors", fetch="LAZY")
-     * @ORM\JoinColumn(name="sectors_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sectors_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\Sectors::class, fetch: 'LAZY')]
     protected $sectors;
 
     /**
      * IrhpPermitType
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_type_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType::class, fetch: 'LAZY')]
     protected $irhpPermitType;
 
     /**
      * WithdrawReason
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="withdraw_reason", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'withdraw_reason', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $withdrawReason;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * In scope
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="in_scope", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'in_scope', nullable: true, options: ['default' => 0])]
     protected $inScope = 0;
 
     /**
      * Checked answers
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="checked_answers", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'checked_answers', nullable: false, options: ['default' => 0])]
     protected $checkedAnswers = 0;
 
     /**
      * Declaration
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="declaration", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'declaration', nullable: false, options: ['default' => 0])]
     protected $declaration = 0;
 
     /**
      * Date received
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="date_received", nullable=false)
      */
+    #[ORM\Column(type: 'date', name: 'date_received', nullable: false)]
     protected $dateReceived;
 
     /**
      * Cancellation date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="cancellation_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'cancellation_date', nullable: true)]
     protected $cancellationDate;
 
     /**
      * Withdrawn date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="withdrawn_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'withdrawn_date', nullable: true)]
     protected $withdrawnDate;
 
     /**
      * Expiry date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="expiry_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
 
     /**
      * Checked
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="checked", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'checked', nullable: true)]
     protected $checked;
 
     /**
      * Cor certificate number
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="cor_certificate_number", length=12, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'cor_certificate_number', length: 12, nullable: true)]
     protected $corCertificateNumber;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Countrys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", inversedBy="irhpApplications", fetch="LAZY")
-     * @ORM\JoinTable(name="irhp_application_country_link",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'irhp_application_country_link')]
+    #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'country_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, inversedBy: 'irhpApplications', fetch: 'LAZY')]
     protected $countrys;
 
     /**
      * Answers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\Answer", mappedBy="irhpApplication", indexBy="question_text_id")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Answer::class, mappedBy: 'irhpApplication', indexBy: 'question_text_id')]
     protected $answers;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", mappedBy="irhpApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'irhpApplication')]
     protected $documents;
 
     /**
      * Fees
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", mappedBy="irhpApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'irhpApplication')]
     protected $fees;
 
     /**
      * IrhpPermitApplications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication", mappedBy="irhpApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, mappedBy: 'irhpApplication')]
     protected $irhpPermitApplications;
 
     /**
      * IrhpPermitRequests
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest", mappedBy="irhpApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest::class, mappedBy: 'irhpApplication')]
     protected $irhpPermitRequests;
 
     /**
      * Notes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Note\Note", mappedBy="irhpApplication", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Note\Note::class, mappedBy: 'irhpApplication', cascade: ['persist'])]
     protected $notes;
 
     /**
      * Tasks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", mappedBy="irhpApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, mappedBy: 'irhpApplication')]
     protected $tasks;
 
     /**
@@ -351,7 +314,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setId($id)
     {
@@ -375,7 +338,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -399,7 +362,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $internationalJourneys new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setInternationalJourneys($internationalJourneys)
     {
@@ -423,7 +386,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $source new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setSource($source)
     {
@@ -447,7 +410,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setStatus($status)
     {
@@ -471,7 +434,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\Sectors $sectors new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setSectors($sectors)
     {
@@ -495,7 +458,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType $irhpPermitType new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setIrhpPermitType($irhpPermitType)
     {
@@ -519,7 +482,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $withdrawReason new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setWithdrawReason($withdrawReason)
     {
@@ -543,7 +506,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -567,7 +530,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -591,7 +554,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $inScope new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setInScope($inScope)
     {
@@ -615,7 +578,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $checkedAnswers new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setCheckedAnswers($checkedAnswers)
     {
@@ -639,7 +602,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $declaration new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setDeclaration($declaration)
     {
@@ -663,7 +626,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \DateTime $dateReceived new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setDateReceived($dateReceived)
     {
@@ -693,7 +656,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \DateTime $cancellationDate new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setCancellationDate($cancellationDate)
     {
@@ -723,7 +686,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \DateTime $withdrawnDate new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setWithdrawnDate($withdrawnDate)
     {
@@ -753,7 +716,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \DateTime $expiryDate new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setExpiryDate($expiryDate)
     {
@@ -783,7 +746,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $checked new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setChecked($checked)
     {
@@ -807,7 +770,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param string $corCertificateNumber new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setCorCertificateNumber($corCertificateNumber)
     {
@@ -831,7 +794,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setVersion($version)
     {
@@ -855,7 +818,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setCountrys($countrys)
     {
@@ -879,7 +842,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $countrys collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addCountrys($countrys)
     {
@@ -902,7 +865,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeCountrys($countrys)
     {
@@ -918,7 +881,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $answers collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setAnswers($answers)
     {
@@ -942,7 +905,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $answers collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addAnswers($answers)
     {
@@ -965,7 +928,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $answers collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeAnswers($answers)
     {
@@ -981,7 +944,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setDocuments($documents)
     {
@@ -1005,7 +968,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addDocuments($documents)
     {
@@ -1028,7 +991,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeDocuments($documents)
     {
@@ -1044,7 +1007,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setFees($fees)
     {
@@ -1068,7 +1031,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $fees collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addFees($fees)
     {
@@ -1091,7 +1054,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeFees($fees)
     {
@@ -1107,7 +1070,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitApplications collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setIrhpPermitApplications($irhpPermitApplications)
     {
@@ -1131,7 +1094,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitApplications collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addIrhpPermitApplications($irhpPermitApplications)
     {
@@ -1154,7 +1117,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitApplications collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeIrhpPermitApplications($irhpPermitApplications)
     {
@@ -1170,7 +1133,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequests collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setIrhpPermitRequests($irhpPermitRequests)
     {
@@ -1194,7 +1157,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRequests collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addIrhpPermitRequests($irhpPermitRequests)
     {
@@ -1217,7 +1180,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequests collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeIrhpPermitRequests($irhpPermitRequests)
     {
@@ -1233,7 +1196,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $notes collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -1257,7 +1220,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $notes collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addNotes($notes)
     {
@@ -1280,7 +1243,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $notes collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeNotes($notes)
     {
@@ -1296,7 +1259,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tasks collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setTasks($tasks)
     {
@@ -1320,7 +1283,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tasks collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addTasks($tasks)
     {
@@ -1343,7 +1306,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tasks collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeTasks($tasks)
     {

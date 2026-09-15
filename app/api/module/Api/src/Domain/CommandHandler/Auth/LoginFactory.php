@@ -30,7 +30,7 @@ class LoginFactory implements FactoryInterface
      * @return Login
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Login
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Login
     {
         $pluginManager = $container;
 

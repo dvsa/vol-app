@@ -16,7 +16,7 @@ use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 use LmcRbacMvc\Identity\IdentityInterface;
 
-class AvailableLicencesTest extends QueryHandlerTestCase
+final class AvailableLicencesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -96,11 +96,9 @@ class AvailableLicencesTest extends QueryHandlerTestCase
         $this->assertEquals($expectedReturnValues, $this->sut->handleQuery($originalQuery));
     }
 
-    public static function dpHandleQueryProvider(): array
+    public static function dpHandleQueryProvider(): \Iterator
     {
-        return [
-            [true, null],
-            [false, 111]
-        ];
+        yield [true, null];
+        yield [false, 111];
     }
 }

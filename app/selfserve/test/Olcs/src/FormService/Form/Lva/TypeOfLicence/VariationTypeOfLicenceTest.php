@@ -17,7 +17,7 @@ use Common\RefData;
 use Common\Form\Elements\InputFilters\Lva\BackToVariationActionLink;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class VariationTypeOfLicenceTest extends MockeryTestCase
+final class VariationTypeOfLicenceTest extends MockeryTestCase
 {
     /**
      * @var VariationTypeOfLicence
@@ -28,6 +28,7 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
 
     protected $fsm;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
@@ -68,43 +69,41 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
     }
 
     /**
-     * @return ((bool|string)[]|int|string)[][]
+     * @return \Iterator<(int | string), array<(array<(bool | string)> | int | string)>>
      *
      * @psalm-return list{list{array{canUpdateLicenceType: true, canBecomeSpecialRestricted: true, currentLicenceType: 'foo', currentVehicleType: 'bar'}, 'form-actions->cancel', 2}, list{array{canUpdateLicenceType: true, canBecomeSpecialRestricted: false, currentLicenceType: 'foo', currentVehicleType: 'bar'}, 'form-actions->cancel', 3}, list{array{canUpdateLicenceType: false, canBecomeSpecialRestricted: true, currentLicenceType: 'foo', currentVehicleType: 'bar'}, 'form-actions', 3}}
      */
-    public static function paramsProvider(): array
+    public static function paramsProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'canUpdateLicenceType' => true,
-                    'canBecomeSpecialRestricted' => true,
-                    'currentLicenceType' => 'foo',
-                    'currentVehicleType' => 'bar'
-                ],
-                'form-actions->cancel',
-                2
+                'canUpdateLicenceType' => true,
+                'canBecomeSpecialRestricted' => true,
+                'currentLicenceType' => 'foo',
+                'currentVehicleType' => 'bar'
             ],
+            'form-actions->cancel',
+            2
+        ];
+        yield [
             [
-                [
-                    'canUpdateLicenceType' => true,
-                    'canBecomeSpecialRestricted' => false,
-                    'currentLicenceType' => 'foo',
-                    'currentVehicleType' => 'bar'
-                ],
-                'form-actions->cancel',
-                3
+                'canUpdateLicenceType' => true,
+                'canBecomeSpecialRestricted' => false,
+                'currentLicenceType' => 'foo',
+                'currentVehicleType' => 'bar'
             ],
+            'form-actions->cancel',
+            3
+        ];
+        yield [
             [
-                [
-                    'canUpdateLicenceType' => false,
-                    'canBecomeSpecialRestricted' => true,
-                    'currentLicenceType' => 'foo',
-                    'currentVehicleType' => 'bar'
-                ],
-                'form-actions',
-                3
+                'canUpdateLicenceType' => false,
+                'canBecomeSpecialRestricted' => true,
+                'currentLicenceType' => 'foo',
+                'currentVehicleType' => 'bar'
             ],
+            'form-actions',
+            3
         ];
     }
 

@@ -20,7 +20,7 @@ use Dvsa\Olcs\Transfer\Query\Application\TaxiPhv as Query;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TaxiPhvTest extends QueryHandlerTestCase
+final class TaxiPhvTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

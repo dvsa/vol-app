@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 /**
  * Generate Permits Test
  */
-class GeneratePermitsTest extends AbstractConsumerTestCase
+final class GeneratePermitsTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 

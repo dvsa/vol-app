@@ -9,14 +9,15 @@ use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionSectionComment as Cmd;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\SubmissionSectionComment::class)]
-class SubmissionSectionCommentTest extends RepositoryTestCase
+final class SubmissionSectionCommentTest extends RepositoryTestCase
 {
-    public const SUBMISSION_ID = 8888;
-    public const SUBMISSION_SECTION = 'submission_section';
+    public const int SUBMISSION_ID = 8888;
+    public const string SUBMISSION_SECTION = 'submission_section';
 
     /** @var SubmissionSectionComment  */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(SubmissionSectionComment::class);
@@ -36,7 +37,7 @@ class SubmissionSectionCommentTest extends RepositoryTestCase
             'submissionSection' => self::SUBMISSION_SECTION,
         ];
 
-        static::assertEquals($exists, $this->sut->isExist(Cmd::create($data)));
+        $this->assertEquals($exists, $this->sut->isExist(Cmd::create($data)));
 
         //  check query
         $expect = 'QUERY ' .
@@ -44,15 +45,13 @@ class SubmissionSectionCommentTest extends RepositoryTestCase
             'AND m.submissionSection = [[' . self::SUBMISSION_SECTION . ']] ' .
             'LIMIT 1';
 
-        static::assertEquals($expect, $this->query);
+        $this->assertEquals($expect, $this->query);
     }
 
-    public static function dpTestIsExistsProvider(): array
+    public static function dpTestIsExistsProvider(): \Iterator
     {
-        return [
-            [['data'], true],
-            [[], false],
-            [null, false],
-        ];
+        yield [['data'], true];
+        yield [[], false];
+        yield [null, false];
     }
 }

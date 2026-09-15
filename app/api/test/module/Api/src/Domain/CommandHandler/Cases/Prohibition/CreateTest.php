@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * Create Prohibition Test
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var CreateCommandHandler

@@ -18,7 +18,7 @@ class MultilateralAnswersSummaryRowsAdderFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): MultilateralAnswersSummaryRowsAdder
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): MultilateralAnswersSummaryRowsAdder
     {
         return new MultilateralAnswersSummaryRowsAdder(
             $container->get('PermitsAnswersSummaryRowFactory'),

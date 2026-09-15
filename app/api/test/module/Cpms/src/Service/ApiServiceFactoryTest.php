@@ -5,17 +5,61 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Cpms\Service;
 
 use Dvsa\Olcs\Cpms\Authenticate\CpmsIdentityProvider;
+use Dvsa\Olcs\Cpms\Authenticate\GatewayTokenProviderInterface;
 use Dvsa\Olcs\Cpms\Client\ClientOptions;
 use Dvsa\Olcs\Cpms\Client\HttpClient;
 use Dvsa\Olcs\Cpms\Service\ApiService;
 use Dvsa\Olcs\Cpms\Service\ApiServiceFactory;
-use PHPUnit\Framework\TestCase;
+use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Psr\Log\NullLogger;
 
-class ApiServiceFactoryTest extends TestCase
+final class ApiServiceFactoryTest extends TestCase
 {
     public function testCreateApiService(): void
     {
-        $config = [
+        $config = self::legacyConfig();
+        $userId = '123';
+
+        $sut = new ApiServiceFactory($config, $userId, new NullLogger());
+        $apiService = $sut->createApiService();
+
+        $this->assertInstanceOf(ApiService::class, $apiService);
+        $this->assertSame(2, $apiService->getOptions()->getVersion());
+        $this->assertInstanceOf(ClientOptions::class, $apiService->getOptions());
+        $this->assertInstanceOf(HttpClient::class, $apiService->getHttpClient());
+        $this->assertInstanceOf(CpmsIdentityProvider::class, $apiService->getIdentity());
+    }
+
+    public function testCreateApiServiceWithGatewayTokenProviderAndProxy(): void
+    {
+        $config = self::legacyConfig();
+        $config['cpms_api']['rest_client']['options']['domain'] = 'gw.cpms.domain';
+        $config['cpms_api']['rest_client']['options']['proxy'] = 'http://proxy.local:3128';
+
+        $tokenProvider = m::mock(GatewayTokenProviderInterface::class);
+
+        $sut = new ApiServiceFactory($config, '123', new NullLogger(), $tokenProvider);
+        $apiService = $sut->createApiService();
+
+        $this->assertTrue($apiService->getHttpClient()->hasGatewayTokenProvider());
+        $this->assertSame('http://proxy.local:3128', $apiService->getOptions()->getProxy());
+        $this->assertSame('gw.cpms.domain', $apiService->getOptions()->getDomain());
+    }
+
+    public function testCreateApiServiceWithoutGatewayDefaultsToLegacy(): void
+    {
+        // reuse the existing happy-path $config shape from testCreateApiService
+        $sut = new ApiServiceFactory(self::legacyConfig(), '123', new NullLogger());
+        $apiService = $sut->createApiService();
+
+        $this->assertFalse($apiService->getHttpClient()->hasGatewayTokenProvider());
+        $this->assertNull($apiService->getOptions()->getProxy());
+    }
+
+    private static function legacyConfig(): array
+    {
+        return [
             'cpms_api' => [
                 'rest_client' => [
                     'options' => [
@@ -57,17 +101,6 @@ class ApiServiceFactoryTest extends TestCase
                 'client_secret' => 'a-client-secret',
             ],
         ];
-
-        $userId = '123';
-
-        $sut = new ApiServiceFactory($config, $userId);
-        $apiService = $sut->createApiService();
-
-        $this->assertInstanceOf(ApiService::class, $apiService);
-        $this->assertEquals(2, $apiService->getOptions()->getVersion());
-        $this->assertInstanceOf(ClientOptions::class, $apiService->getOptions());
-        $this->assertInstanceOf(HttpClient::class, $apiService->getHttpClient());
-        $this->assertInstanceOf(CpmsIdentityProvider::class, $apiService->getIdentity());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCreateApiServiceExceptionsThrown')]
@@ -103,94 +136,92 @@ class ApiServiceFactoryTest extends TestCase
 
         $this->expectException(\RuntimeException::class);
 
-        $sut = new ApiServiceFactory($config, $userId);
+        $sut = new ApiServiceFactory($config, $userId, new NullLogger());
         $sut->createApiService();
     }
 
-    public static function dpTestCreateApiServiceExceptionsThrown(): array
+    public static function dpTestCreateApiServiceExceptionsThrown(): \Iterator
     {
-        return [
-            'no-credentials' => [
-                [
-                    'credentials' => null,
-                    'clientOptions' => [
-                        'options' => [
-                            'version' => 2,
-                            'domain' => 'api.cpms.domain',
-                            'client_id' => 'some-client-id',
-                            'client_secret' => 'some-secret',
-                            'customer_reference' => 'some-customer-ref',
-                            'grant_type' => 'client_credentials',
-                            'timeout' => 15.0,
-                            'headers' => [
-                                'Accept' => 'application/json',
-                            ],
-
+        yield 'no-credentials' => [
+            [
+                'credentials' => null,
+                'clientOptions' => [
+                    'options' => [
+                        'version' => 2,
+                        'domain' => 'api.cpms.domain',
+                        'client_id' => 'some-client-id',
+                        'client_secret' => 'some-secret',
+                        'customer_reference' => 'some-customer-ref',
+                        'grant_type' => 'client_credentials',
+                        'timeout' => 15.0,
+                        'headers' => [
+                            'Accept' => 'application/json',
                         ],
-                    ]
-                ],
 
-            ],
-            'no-client_id' => [
-                [
-                    'credentials' => [
-                        'client_id' => null,
-                        'client_secret' => 'a-client-secret',
                     ],
-                    'clientOptions' => [
-                        'options' => [
-                            'version' => 2,
-                            'domain' => 'api.cpms.domain',
-                            'client_id' => 'some-client-id',
-                            'client_secret' => 'some-secret',
-                            'customer_reference' => 'some-customer-ref',
-                            'grant_type' => 'client_credentials',
-                            'timeout' => 15.0,
-                            'headers' => [
-                                'Accept' => 'application/json',
-                            ],
+                ]
+            ],
 
+        ];
+        yield 'no-client_id' => [
+            [
+                'credentials' => [
+                    'client_id' => null,
+                    'client_secret' => 'a-client-secret',
+                ],
+                'clientOptions' => [
+                    'options' => [
+                        'version' => 2,
+                        'domain' => 'api.cpms.domain',
+                        'client_id' => 'some-client-id',
+                        'client_secret' => 'some-secret',
+                        'customer_reference' => 'some-customer-ref',
+                        'grant_type' => 'client_credentials',
+                        'timeout' => 15.0,
+                        'headers' => [
+                            'Accept' => 'application/json',
                         ],
-                    ]
-                ],
 
-            ],
-            'no-client_secret' => [
-                [
-                    'credentials' => [
-                        'client_id' => 'a-client-id',
-                        'client_secret' => null,
                     ],
-                    'clientOptions' => [
-                        'options' => [
-                            'version' => 2,
-                            'domain' => 'api.cpms.domain',
-                            'client_id' => 'some-client-id',
-                            'client_secret' => 'some-secret',
-                            'customer_reference' => 'some-customer-ref',
-                            'grant_type' => 'client_credentials',
-                            'timeout' => 15.0,
-                            'headers' => [
-                                'Accept' => 'application/json',
-                            ],
+                ]
+            ],
 
+        ];
+        yield 'no-client_secret' => [
+            [
+                'credentials' => [
+                    'client_id' => 'a-client-id',
+                    'client_secret' => null,
+                ],
+                'clientOptions' => [
+                    'options' => [
+                        'version' => 2,
+                        'domain' => 'api.cpms.domain',
+                        'client_id' => 'some-client-id',
+                        'client_secret' => 'some-secret',
+                        'customer_reference' => 'some-customer-ref',
+                        'grant_type' => 'client_credentials',
+                        'timeout' => 15.0,
+                        'headers' => [
+                            'Accept' => 'application/json',
                         ],
-                    ]
-                ],
 
-            ],
-            'no-options' => [
-                [
-                    'credentials' => [
-                        'client_id' => 'a-client-id',
-                        'client_secret' => null,
                     ],
-                    'clientOptions' => [
-                        'options' => null
-                    ]
-                ],
-
+                ]
             ],
+
+        ];
+        yield 'no-options' => [
+            [
+                'credentials' => [
+                    'client_id' => 'a-client-id',
+                    'client_secret' => null,
+                ],
+                'clientOptions' => [
+                    'options' => null
+                ]
+            ],
+
         ];
     }
 }

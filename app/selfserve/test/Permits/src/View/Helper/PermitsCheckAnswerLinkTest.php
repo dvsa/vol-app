@@ -8,7 +8,7 @@ use Mockery as m;
 use Laminas\View\Renderer\RendererInterface;
 use Permits\View\Helper\PermitsCheckAnswerLink;
 
-class PermitsCheckAnswerLinkTest extends m\Adapter\Phpunit\MockeryTestCase
+final class PermitsCheckAnswerLinkTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -67,6 +67,6 @@ class PermitsCheckAnswerLinkTest extends m\Adapter\Phpunit\MockeryTestCase
             $linkClass
         );
 
-        self::assertEquals($output, $actual);
+        $this->assertSame($output, $actual);
     }
 }

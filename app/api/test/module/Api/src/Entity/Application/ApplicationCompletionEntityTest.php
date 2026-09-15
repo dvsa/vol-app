@@ -11,7 +11,7 @@ use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractApplicationCompletion::class)]
-class ApplicationCompletionEntityTest extends EntityTester
+final class ApplicationCompletionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -41,13 +41,11 @@ class ApplicationCompletionEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->variationSectionUpdated('typeOfLicence'));
     }
 
-    public static function dpVariationSectionUpdated(): array
+    public static function dpVariationSectionUpdated(): \Iterator
     {
-        return [
-            [Entity::STATUS_NOT_STARTED, false],
-            [Entity::STATUS_VARIATION_REQUIRES_ATTENTION, false],
-            [Entity::STATUS_VARIATION_UPDATED, true]
-        ];
+        yield [Entity::STATUS_NOT_STARTED, false];
+        yield [Entity::STATUS_VARIATION_REQUIRES_ATTENTION, false];
+        yield [Entity::STATUS_VARIATION_UPDATED, true];
     }
 
     public function testGetCalculatedValues(): void
@@ -55,8 +53,8 @@ class ApplicationCompletionEntityTest extends EntityTester
         /** @var Application $mockApp */
         $mockApp = m::mock(Application::class);
 
-        $actual = (new Entity($mockApp))->jsonSerialize();
-        static::assertEquals(null, $actual['application']);
+        $actual = new Entity($mockApp)->jsonSerialize();
+        $this->assertEquals(null, $actual['application']);
     }
 
     public function testIsCompleteEmpty(): void

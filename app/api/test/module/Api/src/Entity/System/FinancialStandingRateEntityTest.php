@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\System\FinancialStandingRate as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class FinancialStandingRateEntityTest extends EntityTester
+final class FinancialStandingRateEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpPermitRequestEntityTest extends EntityTester
+final class IrhpPermitRequestEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

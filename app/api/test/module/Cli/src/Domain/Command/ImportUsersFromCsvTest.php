@@ -8,7 +8,7 @@ use Dvsa\Olcs\Cli\Domain\Command\ImportUsersFromCsv;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Domain\Command\ImportUsersFromCsv::class)]
-class ImportUsersFromCsvTest extends MockeryTestCase
+final class ImportUsersFromCsvTest extends MockeryTestCase
 {
     public function testStructure(): void
     {
@@ -19,7 +19,7 @@ class ImportUsersFromCsvTest extends MockeryTestCase
             ]
         );
 
-        static::assertEquals('unit_sourceCsv', $sut->getCsvPath());
-        static::assertEquals('unit_resultCsv', $sut->getResultCsvPath());
+        $this->assertEquals('unit_sourceCsv', $sut->getCsvPath());
+        $this->assertEquals('unit_resultCsv', $sut->getResultCsvPath());
     }
 }

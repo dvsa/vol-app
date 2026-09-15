@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\Address as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class AddressEntityTest extends EntityTester
+final class AddressEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -75,23 +75,20 @@ class AddressEntityTest extends EntityTester
         // check with country code
         $sut->updateAddress('address 1', 'address 2', 'address 3', 'address 4', 'unit_town', 'unit_postCode', $country);
 
-        static::assertEquals(
-            [
-                'addressLine1' => 'address 1',
-                'addressLine2' => 'address 2',
-                'addressLine3' => 'address 3',
-                'addressLine4' => 'address 4',
-                'town' => 'unit_town',
-                'postcode' => 'unit_postCode',
-                'countryCode' => 9999,
-            ],
-            $sut->toArray()
-        );
+        $this->assertEquals([
+            'addressLine1' => 'address 1',
+            'addressLine2' => 'address 2',
+            'addressLine3' => 'address 3',
+            'addressLine4' => 'address 4',
+            'town' => 'unit_town',
+            'postcode' => 'unit_postCode',
+            'countryCode' => 9999,
+        ], $sut->toArray());
 
         // check with country code is null
         $sut->updateAddress('address 1', 'address 2', 'address 3', 'address 4', 'unit_town', 'unit_postcode', null);
 
-        static::assertNull($sut->toArray()['countryCode']);
+        $this->assertNull($sut->toArray()['countryCode']);
     }
 
     public function testIsEmpty(): void

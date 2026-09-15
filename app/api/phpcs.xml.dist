@@ -22,6 +22,5 @@
   <!-- Auto-generated Doctrine entity methods use snake_case FK column names -->
   <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
     <exclude-pattern>module/Api/src/Entity/Letter/*</exclude-pattern>
-    <exclude-pattern>module/Api/src/Entity/AbstractOperatingCentreOpposition.php</exclude-pattern>
   </rule>
 </ruleset>

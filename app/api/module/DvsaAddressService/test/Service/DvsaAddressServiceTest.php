@@ -8,7 +8,7 @@ class DvsaAddressServiceTest extends \PHPUnit\Framework\TestCase
 {
     public function testLookupAddress()
     {
-        $logger = $this->createStub(\Laminas\Log\LoggerInterface::class);
+        $logger = $this->createStub(\Psr\Log\LoggerInterface::class);
         $dvsaAddressServiceClient = $this->createMock(DvsaAddressServiceClient::class);
         $dvsaAddressService = new DvsaAddressService($logger, $dvsaAddressServiceClient);
 
@@ -24,7 +24,7 @@ class DvsaAddressServiceTest extends \PHPUnit\Framework\TestCase
 
     public function testLookupAddressReturnsEmptyArrayWhenValidationExceptionIsThrown()
     {
-        $logger = $this->createMock(\Laminas\Log\LoggerInterface::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $dvsaAddressServiceClient = $this->createMock(DvsaAddressServiceClient::class);
         $dvsaAddressService = new DvsaAddressService($logger, $dvsaAddressServiceClient);
 
@@ -47,7 +47,7 @@ class DvsaAddressServiceTest extends \PHPUnit\Framework\TestCase
 
     public function testLookupAddressThrowsServiceExceptionWhenServiceExceptionIsThrown()
     {
-        $logger = $this->createMock(\Laminas\Log\LoggerInterface::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $dvsaAddressServiceClient = $this->createMock(DvsaAddressServiceClient::class);
         $dvsaAddressService = new DvsaAddressService($logger, $dvsaAddressServiceClient);
 
@@ -59,7 +59,7 @@ class DvsaAddressServiceTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Dvsa\Olcs\DvsaAddressService\Exception\ServiceException('Service exception'));
 
         $logger->expects($this->once())
-            ->method('err')
+            ->method('error')
             ->with('DVSA Address Service: Error looking up address by query: Service exception', [
                 'query' => $query,
                 'exception' => new \Dvsa\Olcs\DvsaAddressService\Exception\ServiceException('Service exception'),

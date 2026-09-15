@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\IrhpVrm;
 /**
  * Class IrhpVrmTest
  */
-class IrhpVrmTest extends AbstractQuestionAnswerData
+final class IrhpVrmTest extends AbstractQuestionAnswerData
 {
     public const SUT_CLASS_NAME = IrhpVrm::class;
 }

@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractUpdateDefinedValueTestCase;
 
-class ReviveFromWithdrawnTest extends AbstractUpdateDefinedValueTestCase
+final class ReviveFromWithdrawnTest extends AbstractUpdateDefinedValueTestCase
 {
     protected $repoServiceName = 'IrhpApplication';
     protected $entityMethodName = 'reviveFromWithdrawn';

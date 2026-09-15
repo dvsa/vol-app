@@ -25,7 +25,7 @@ use Mockery as m;
 /**
  * Send User Created Email Test
  */
-class SendUserCreatedTest extends AbstractCommandHandlerTestCase
+final class SendUserCreatedTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

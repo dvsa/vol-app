@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CountryGeneratorTest extends MockeryTestCase
+final class CountryGeneratorTest extends MockeryTestCase
 {
     private $countryId;
 
@@ -36,6 +36,7 @@ class CountryGeneratorTest extends MockeryTestCase
 
     private $countryGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->countryId = 47;
@@ -136,11 +137,9 @@ class CountryGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
-            [false, Behaviour::STANDARD, 'Select period'],
-            [true, Behaviour::MOROCCO, 'Select stock'],
-        ];
+        yield [false, Behaviour::STANDARD, 'Select period'];
+        yield [true, Behaviour::MOROCCO, 'Select stock'];
     }
 }

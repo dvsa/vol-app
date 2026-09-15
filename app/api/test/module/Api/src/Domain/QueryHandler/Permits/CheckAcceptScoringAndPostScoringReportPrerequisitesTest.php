@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class CheckAcceptScoringAndPostScoringReportPrerequisitesTest extends QueryHandlerTestCase
+final class CheckAcceptScoringAndPostScoringReportPrerequisitesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -81,21 +81,19 @@ class CheckAcceptScoringAndPostScoringReportPrerequisitesTest extends QueryHandl
         );
     }
 
-    public static function scenariosProvider(): array
+    public static function scenariosProvider(): \Iterator
     {
-        return [
-            [null, 0, 5, 20, 10, 5, false, '5 Euro 5 permits required but no Euro 5 ranges available'],
-            [10, 7, 5, 20, 10, 5, false, 'Insufficient Euro 5 permits available - 3 available, 5 required'],
-            [10, 5, 3, null, 0, 4, false, '4 Euro 6 permits required but no Euro 6 ranges available'],
-            [10, 5, 3, 15, 11, 6, false, 'Insufficient Euro 6 permits available - 4 available, 6 required'],
-            [10, 5, 3, 15, 8, 6, true, 'Prerequisites passed'],
-            [null, 0, 3, 15, 8, 0, false, '3 Euro 5 permits required but no Euro 5 ranges available'],
-            [20, 12, 10, 15, 8, 0, false, 'Insufficient Euro 5 permits available - 8 available, 10 required'],
-            [20, 7, 10, 15, 8, 0, true, 'Prerequisites passed'],
-            [20, 7, 0, null, 0, 11, false, '11 Euro 6 permits required but no Euro 6 ranges available'],
-            [20, 7, 0, 15, 8, 9, false, 'Insufficient Euro 6 permits available - 7 available, 9 required'],
-            [20, 7, 0, 15, 4, 9, true, 'Prerequisites passed'],
-        ];
+        yield [null, 0, 5, 20, 10, 5, false, '5 Euro 5 permits required but no Euro 5 ranges available'];
+        yield [10, 7, 5, 20, 10, 5, false, 'Insufficient Euro 5 permits available - 3 available, 5 required'];
+        yield [10, 5, 3, null, 0, 4, false, '4 Euro 6 permits required but no Euro 6 ranges available'];
+        yield [10, 5, 3, 15, 11, 6, false, 'Insufficient Euro 6 permits available - 4 available, 6 required'];
+        yield [10, 5, 3, 15, 8, 6, true, 'Prerequisites passed'];
+        yield [null, 0, 3, 15, 8, 0, false, '3 Euro 5 permits required but no Euro 5 ranges available'];
+        yield [20, 12, 10, 15, 8, 0, false, 'Insufficient Euro 5 permits available - 8 available, 10 required'];
+        yield [20, 7, 10, 15, 8, 0, true, 'Prerequisites passed'];
+        yield [20, 7, 0, null, 0, 11, false, '11 Euro 6 permits required but no Euro 6 ranges available'];
+        yield [20, 7, 0, 15, 8, 9, false, 'Insufficient Euro 6 permits available - 7 available, 9 required'];
+        yield [20, 7, 0, 15, 4, 9, true, 'Prerequisites passed'];
     }
 
     public function testHandleQueryNoInScopeUnderConsiderationApplications(): void

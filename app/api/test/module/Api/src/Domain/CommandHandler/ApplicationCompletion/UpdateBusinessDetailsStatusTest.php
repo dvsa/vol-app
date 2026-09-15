@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
 {
     /**
      * @var Organisation

@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Queue\Service\Message;
 use Dvsa\Olcs\Queue\Service\Message\AbstractMessage;
 use PHPUnit\Framework\TestCase;
 
-class AbstractMessageTest extends TestCase
+final class AbstractMessageTest extends TestCase
 {
     public function testAbstractMessage(): void
     {

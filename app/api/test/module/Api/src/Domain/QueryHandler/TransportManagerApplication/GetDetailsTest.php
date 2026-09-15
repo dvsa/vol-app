@@ -18,7 +18,7 @@ use Mockery as m;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\TransportManagerApplication\GetDetails::class)]
-class GetDetailsTest extends QueryHandlerTestCase
+final class GetDetailsTest extends QueryHandlerTestCase
 {
     /** @var  QueryHandler\TransportManagerApplication\GetDetails  */
     protected $sut;
@@ -44,26 +44,34 @@ class GetDetailsTest extends QueryHandlerTestCase
 
     public static function dpHandleQuery(): array
     {
-        $lgvArQualification = m::mock(TmQualification::class);
-        $lgvArQualification->shouldReceive('getSerialNo')
-            ->withNoArgs()
-            ->andReturn('ABC1234');
+        $lgvArQualification = static function () {
+            $lgvArQualification = m::mock(TmQualification::class);
+            $lgvArQualification->shouldReceive('getSerialNo')
+                ->withNoArgs()
+                ->andReturn('ABC1234');
+
+            return $lgvArQualification;
+        };
 
         return [
             'with LGV AR qualification' => [
-                'lgvArQualification' => $lgvArQualification,
+                'createLgvArQualification' => $lgvArQualification,
                 'expectedLgvAcquiredRightsReferenceNumber' => 'ABC1234',
             ],
             'without LGV AR qualification' => [
-                'lgvArQualification' => null,
+                'createLgvArQualification' => static fn () => null,
                 'expectedLgvAcquiredRightsReferenceNumber' => '',
             ],
         ];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
-    public function testHandleQuery(mixed $lgvArQualification, mixed $expectedLgvAcquiredRightsReferenceNumber): void
-    {
+    public function testHandleQuery(
+        \Closure $createLgvArQualification,
+        mixed $expectedLgvAcquiredRightsReferenceNumber
+    ): void {
+        $lgvArQualification = $createLgvArQualification();
+
         $query = Query::create(['id' => 32]);
 
         $licence = new \Dvsa\Olcs\Api\Entity\Licence\Licence(

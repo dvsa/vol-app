@@ -6,16 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SubCategory Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="sub_category",
- *    indexes={
- *        @ORM\Index(name="ix_sub_category_category_id", columns={"category_id"}),
- *        @ORM\Index(name="ix_sub_category_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_sub_category_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'sub_category')]
+#[ORM\Index(name: 'ix_sub_category_category_id', columns: ['category_id'])]
+#[ORM\Index(name: 'ix_sub_category_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_sub_category_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class SubCategory extends AbstractSubCategory
 {
     // copy constants from old Common\Service\Data\CategoryDataService as required

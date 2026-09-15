@@ -11,11 +11,12 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Renderer\PhpRenderer;
 
-class GeneratorTest extends MockeryTestCase
+final class GeneratorTest extends MockeryTestCase
 {
     private Generator $sut;
     private m\MockInterface|PhpRenderer $viewRenderer;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->viewRenderer = m::mock(PhpRenderer::class);
@@ -52,11 +53,9 @@ class GeneratorTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $this->sut->generate($input));
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
-            [self::getExpectedInput(), self::getExpectedConfig(), self::getExpectedOutput()],
-        ];
+        yield [self::getExpectedInput(), self::getExpectedConfig(), self::getExpectedOutput()];
     }
 
     private static function getExpectedInput(): array

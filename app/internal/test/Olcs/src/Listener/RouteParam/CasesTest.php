@@ -16,7 +16,7 @@ use Olcs\Listener\RouteParam\Cases;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class CasesTest extends MockeryTestCase
+final class CasesTest extends MockeryTestCase
 {
     protected $sut;
 

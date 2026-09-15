@@ -11,7 +11,7 @@ class ProcessCompanyProfileSQSQueueCommand extends AbstractSQSCommand
     protected static $defaultName = 'queue:process-company-profile';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Processes the Company Profile queue items.')
             ->setHelp('This command allows you to process items in the Company Profile queue...');

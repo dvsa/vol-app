@@ -318,7 +318,7 @@ class User extends AbstractRepository
      *
      * @return null|string
      */
-    public function findUserNameAvailable($base, callable $fncSfx = null, $tryCnt = self::USERNAME_GEN_TRY_COUNT)
+    public function findUserNameAvailable($base, ?callable $fncSfx = null, $tryCnt = self::USERNAME_GEN_TRY_COUNT)
     {
         if ($fncSfx === null) {
             $fncSfx = fn($base, $idx) => $base . ($idx > 0 ? (string)$idx : '');
@@ -416,7 +416,7 @@ class User extends AbstractRepository
         $qb->andWhere($qb->expr()->isNull($this->alias . '.deletedDate'));
         $qb->andWhere($qb->expr()->isNull($this->alias . '.lastLoginAt'));
 
-        return $qb->getQuery()->iterate();
+        return $qb->getQuery()->toIterable();
     }
 
     public function updateLastLogin(Entity $user, DateTime $lastLoginAt, Entity $lastModifiedBy): void

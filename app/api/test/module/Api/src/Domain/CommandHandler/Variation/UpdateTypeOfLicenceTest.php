@@ -41,7 +41,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
+final class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -143,21 +143,19 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpHandleCommandWithChangeWhenNotAllowed(): array
+    public static function dpHandleCommandWithChangeWhenNotAllowed(): \Iterator
     {
-        return [
-            'standard national to standard international' => [
-                LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-            ],
-            'standard international lgv to standard international mixed' => [
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-            ],
+        yield 'standard national to standard international' => [
+            LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+        ];
+        yield 'standard international lgv to standard international mixed' => [
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
         ];
     }
 
@@ -232,90 +230,88 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame($resetResult, $result);
     }
 
-    public static function dpHandleCommandWithReset(): array
+    public static function dpHandleCommandWithReset(): \Iterator
     {
-        return [
-            'change from mixed fleet to lgv, then to goods sn, not confirmed' => [
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-                [
-                    'id' => 111,
-                    'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                    'version' => 1,
-                ],
-                [
-                    'id' => 111,
-                    'confirm' => false
-                ]
+        yield 'change from mixed fleet to lgv, then to goods sn, not confirmed' => [
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+            [
+                'id' => 111,
+                'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+                'version' => 1,
             ],
-            'change from mixed fleet to lgv, then to goods sn, confirmed' => [
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-                [
-                    'id' => 111,
-                    'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                    'version' => 1,
-                    'confirm' => true
-                ],
-                [
-                    'id' => 111,
-                    'confirm' => true
-                ]
+            [
+                'id' => 111,
+                'confirm' => false
+            ]
+        ];
+        yield 'change from mixed fleet to lgv, then to goods sn, confirmed' => [
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+            [
+                'id' => 111,
+                'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+                'version' => 1,
+                'confirm' => true
             ],
-            'change from goods sn to mixed fleet, then to lgv, not confirmed' => [
-                LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                [
-                    'id' => 111,
-                    'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                    'version' => 1,
-                ],
-                [
-                    'id' => 111,
-                    'confirm' => false
-                ]
+            [
+                'id' => 111,
+                'confirm' => true
+            ]
+        ];
+        yield 'change from goods sn to mixed fleet, then to lgv, not confirmed' => [
+            LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            [
+                'id' => 111,
+                'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+                'version' => 1,
             ],
-            'change from goods restricted to goods sn, then to mixed fleet' => [
-                LicenceEntity::LICENCE_TYPE_RESTRICTED,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                [
-                    'id' => 111,
-                    'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    'version' => 1,
-                ],
-                [
-                    'id' => 111,
-                    'confirm' => false
-                ]
+            [
+                'id' => 111,
+                'confirm' => false
+            ]
+        ];
+        yield 'change from goods restricted to goods sn, then to mixed fleet' => [
+            LicenceEntity::LICENCE_TYPE_RESTRICTED,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            [
+                'id' => 111,
+                'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+                'version' => 1,
             ],
-            'change from lgv to mixed fleet, then back again, not confirmed' => [
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                [
-                    'id' => 111,
-                    'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                    'version' => 1,
-                ],
-                [
-                    'id' => 111,
-                    'confirm' => false
-                ]
+            [
+                'id' => 111,
+                'confirm' => false
+            ]
+        ];
+        yield 'change from lgv to mixed fleet, then back again, not confirmed' => [
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            [
+                'id' => 111,
+                'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+                'version' => 1,
             ],
+            [
+                'id' => 111,
+                'confirm' => false
+            ]
         ];
     }
 
@@ -413,54 +409,52 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            'change from standard national goods to mixed fleet' => [
-                LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
-                LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
-                [
-                    'id' => 111,
-                    'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    'version' => 1
-                ],
-                false
+        yield 'change from standard national goods to mixed fleet' => [
+            LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+            LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+            [
+                'id' => 111,
+                'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+                'version' => 1
             ],
-            'change from mixed fleet to lgv, then to goods sn, internal' => [
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
-                LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-                LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
-                [
-                    'id' => 111,
-                    'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                    'version' => 1,
-                ],
-                true
+            false
+        ];
+        yield 'change from mixed fleet to lgv, then to goods sn, internal' => [
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+            LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+            LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+            [
+                'id' => 111,
+                'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+                'version' => 1,
             ],
-            'change from restricted, then to sn, then to si, psv' => [
-                LicenceEntity::LICENCE_TYPE_RESTRICTED,
-                RefData::APP_VEHICLE_TYPE_PSV,
-                LicenceEntity::LICENCE_CATEGORY_PSV,
-                LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_PSV,
-                LicenceEntity::LICENCE_CATEGORY_PSV,
-                [
-                    'id' => 111,
-                    'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                    'version' => 1,
-                ],
-                false
+            true
+        ];
+        yield 'change from restricted, then to sn, then to si, psv' => [
+            LicenceEntity::LICENCE_TYPE_RESTRICTED,
+            RefData::APP_VEHICLE_TYPE_PSV,
+            LicenceEntity::LICENCE_CATEGORY_PSV,
+            LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_PSV,
+            LicenceEntity::LICENCE_CATEGORY_PSV,
+            [
+                'id' => 111,
+                'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+                'version' => 1,
             ],
+            false
         ];
     }
 
@@ -507,13 +501,13 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             UpdateApplicationCompletion::class,
             ['id' => 111, 'section' => 'typeOfLicence'],
-            (new Result())->addMessage('typeOfLicence section updated')
+            new Result()->addMessage('typeOfLicence section updated')
         );
 
         $this->expectedSideEffect(
             UpdateApplicationCompletion::class,
             ['id' => 111, 'section' => 'operatingCentres'],
-            (new Result())->addMessage('operatingCentres section updated')
+            new Result()->addMessage('operatingCentres section updated')
         );
 
         $this->repoMap['Application']
@@ -625,7 +619,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             UpdateApplicationCompletion::class,
             ['id' => 111, 'section' => 'typeOfLicence'],
-            (new Result())->addMessage('typeOfLicence section updated')
+            new Result()->addMessage('typeOfLicence section updated')
         );
 
         $this->repoMap['Application']
@@ -654,13 +648,13 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             UpdateApplicationCompletion::class,
             ['id' => 111, 'section' => 'operatingCentres'],
-            (new Result())->addMessage('operatingCentres section updated')
+            new Result()->addMessage('operatingCentres section updated')
         );
 
         $this->expectedSideEffect(
             CancelFeeCmd::class,
             ['id' => 222],
-            (new Result())->addMessage('fee 222 cancelled')
+            new Result()->addMessage('fee 222 cancelled')
         );
 
         $this->expectedSideEffect(
@@ -669,7 +663,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 'id' => 111,
                 'feeTypeFeeType' => FeeType::FEE_TYPE_VAR,
             ],
-            (new Result())->addMessage('fee 333 created')
+            new Result()->addMessage('fee 333 created')
         );
 
         $this->setupIsInternalUser();

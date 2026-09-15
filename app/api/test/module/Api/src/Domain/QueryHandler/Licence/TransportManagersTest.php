@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TransportManagersTest extends QueryHandlerTestCase
+final class TransportManagersTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

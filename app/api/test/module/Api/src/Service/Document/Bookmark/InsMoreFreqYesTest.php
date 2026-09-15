@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\InsMoreFreqYes;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class InsMoreFreqYesTest extends \PHPUnit\Framework\TestCase
+final class InsMoreFreqYesTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -37,11 +37,9 @@ class InsMoreFreqYesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function safetyInsProvider(): array
+    public static function safetyInsProvider(): \Iterator
     {
-        return [
-            [1, 'X'],
-            [0, '']
-        ];
+        yield [1, 'X'];
+        yield [0, ''];
     }
 }

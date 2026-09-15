@@ -18,7 +18,7 @@ class CandidatePermitsCreatorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CandidatePermitsCreator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CandidatePermitsCreator
     {
         $repoServiceManager = $container->get('RepositoryServiceManager');
         return new CandidatePermitsCreator(

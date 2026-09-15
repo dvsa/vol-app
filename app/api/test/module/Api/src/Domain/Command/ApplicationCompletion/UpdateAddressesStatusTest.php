@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateAddressesStatus;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateAddressesStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateAddressesStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

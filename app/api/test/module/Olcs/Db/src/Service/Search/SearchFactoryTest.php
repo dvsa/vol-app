@@ -15,7 +15,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-class SearchFactoryTest extends MockeryTestCase
+final class SearchFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

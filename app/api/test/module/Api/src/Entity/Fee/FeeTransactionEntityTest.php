@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class FeeTransactionEntityTest extends EntityTester
+final class FeeTransactionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -36,26 +36,24 @@ class FeeTransactionEntityTest extends EntityTester
      * @param boolean $expected
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('isRefundedProvider')]
-    public function testIsRefundedOrReversed(array $feeTransactions, mixed $expected): void
+    public function testIsRefundedOrReversed(\Closure $createFeeTransactions, mixed $expected): void
     {
-        $this->sut->setReversingFeeTransactions(new ArrayCollection($feeTransactions));
+        $this->sut->setReversingFeeTransactions(new ArrayCollection($createFeeTransactions()));
 
         $this->assertSame($expected, $this->sut->isRefundedOrReversed());
     }
 
-    public static function isRefundedProvider(): array
+    public static function isRefundedProvider(): \Iterator
     {
-        return [
-            [
-                [],
-                false,
+        yield [
+            static fn () => [],
+            false,
+        ];
+        yield [
+            static fn () => [
+                m::mock(Entity::class),
             ],
-            [
-                [
-                    m::mock(Entity::class),
-                ],
-                true,
-            ]
+            true,
         ];
     }
 }

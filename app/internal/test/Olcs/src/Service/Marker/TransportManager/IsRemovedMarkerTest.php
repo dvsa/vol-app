@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @author Josh Curtis <josh@josh-curtis.co.uk>
  */
-class IsRemovedMarkerTest extends TestCase
+final class IsRemovedMarkerTest extends TestCase
 {
     /**
      *
@@ -20,6 +20,7 @@ class IsRemovedMarkerTest extends TestCase
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new \Olcs\Service\Marker\TransportManager\IsRemovedMarker();

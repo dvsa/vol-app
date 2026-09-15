@@ -28,7 +28,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class OverviewTest extends AbstractCommandHandlerTestCase
+final class OverviewTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -119,8 +119,8 @@ class OverviewTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals('2015-06-10', $application->getReceivedDate()->format('Y-m-d'));
-        $this->assertEquals('2016-01-02', $application->getTargetCompletionDate()->format('Y-m-d'));
+        $this->assertSame('2015-06-10', $application->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2016-01-02', $application->getTargetCompletionDate()->format('Y-m-d'));
         $this->assertEquals(2, $application->getApplicationTracking()->getAddressesStatus());
         $this->assertEquals(
             $this->mapReference(TrafficAreaEntity::class, 'B'),
@@ -187,8 +187,8 @@ class OverviewTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals('2015-06-10', $application->getReceivedDate()->format('Y-m-d'));
-        $this->assertEquals('2016-01-02', $application->getTargetCompletionDate()->format('Y-m-d'));
+        $this->assertSame('2015-06-10', $application->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2016-01-02', $application->getTargetCompletionDate()->format('Y-m-d'));
         $this->assertEquals(2, $application->getApplicationTracking()->getAddressesStatus());
         $this->assertEquals(
             $this->mapReference(TrafficAreaEntity::class, 'B'),

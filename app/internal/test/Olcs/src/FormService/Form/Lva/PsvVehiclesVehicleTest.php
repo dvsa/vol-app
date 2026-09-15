@@ -19,10 +19,11 @@ use Olcs\FormService\Form\Lva\PsvVehiclesVehicle;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PsvVehiclesVehicleTest extends MockeryTestCase
+final class PsvVehiclesVehicleTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new PsvVehiclesVehicle();

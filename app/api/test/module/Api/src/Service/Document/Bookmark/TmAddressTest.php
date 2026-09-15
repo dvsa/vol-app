@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TmAddress;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TmAddressTest extends \PHPUnit\Framework\TestCase
+final class TmAddressTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

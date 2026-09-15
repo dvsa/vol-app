@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * SlaTargetDate Mapper Test
  */
-class SlaTargetDateTest extends MockeryTestCase
+final class SlaTargetDateTest extends MockeryTestCase
 {
     /**
      *
@@ -25,49 +25,47 @@ class SlaTargetDateTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
             [
-                [
-                    'details' => 'details',
-                    'document' => [
-                        'id' => 88,
-                        'description' => 'foobar'
-                    ]
-                ],
-                [
-                    'fields' => [
-                        'details' => 'details',
-                        'document' => 88,
-                        'entityType' => 'document',
-                        'entityId' => 88,
-                        'entityTypeHtml' => 'foobar'
-                    ]
+                'details' => 'details',
+                'document' => [
+                    'id' => 88,
+                    'description' => 'foobar'
                 ]
             ],
-            // edit
             [
-                [
+                'fields' => [
+                    'details' => 'details',
+                    'document' => 88,
+                    'entityType' => 'document',
+                    'entityId' => 88,
+                    'entityTypeHtml' => 'foobar'
+                ]
+            ]
+        ];
+        // edit
+        yield [
+            [
+                'id' => 33,
+                'version' => 2,
+                'details' => 'details',
+                'document' => [
+                    'id' => 88,
+                    'description' => 'foobar'
+                ]
+            ],
+            [
+                'fields' => [
                     'id' => 33,
                     'version' => 2,
                     'details' => 'details',
-                    'document' => [
-                        'id' => 88,
-                        'description' => 'foobar'
-                    ]
-                ],
-                [
-                    'fields' => [
-                        'id' => 33,
-                        'version' => 2,
-                        'details' => 'details',
-                        'document' => 88,
-                        'entityType' => 'document',
-                        'entityId' => 88,
-                        'entityTypeHtml' => 'foobar'
-                    ]
+                    'document' => 88,
+                    'entityType' => 'document',
+                    'entityId' => 88,
+                    'entityTypeHtml' => 'foobar'
                 ]
             ]
         ];

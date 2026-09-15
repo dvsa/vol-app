@@ -28,7 +28,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\InForceInterim as Cmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class InForceInterimTest extends AbstractCommandHandlerTestCase
+final class InForceInterimTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -109,7 +109,7 @@ class InForceInterimTest extends AbstractCommandHandlerTestCase
             ->andReturnUsing(
                 function (CommunityLic $newCl) use ($cl) {
                     $this->assertSame($cl, $newCl);
-                    $this->assertEquals(date('Y-m-d'), $newCl->getSpecifiedDate()->format('Y-m-d'));
+                    $this->assertSame(date('Y-m-d'), $newCl->getSpecifiedDate()->format('Y-m-d'));
                     $this->assertSame($this->refData[CommunityLic::STATUS_ACTIVE], $newCl->getStatus());
                     $cl->setId(123);
                 }

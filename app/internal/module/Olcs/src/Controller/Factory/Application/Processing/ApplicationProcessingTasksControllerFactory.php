@@ -24,7 +24,7 @@ class ApplicationProcessingTasksControllerFactory implements FactoryInterface
      * @return ApplicationProcessingTasksController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationProcessingTasksController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationProcessingTasksController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

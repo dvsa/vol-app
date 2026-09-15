@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateLicenceHistoryStatu
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateLicenceHistoryStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateLicenceHistoryStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as Licence;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TaxiPhvTest extends QueryHandlerTestCase
+final class TaxiPhvTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

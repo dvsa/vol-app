@@ -11,7 +11,7 @@ use Twig\Environment;
 use Twig\Template;
 use Twig\TemplateWrapper;
 
-class TwigRendererTest extends MockeryTestCase
+final class TwigRendererTest extends MockeryTestCase
 {
     public function testRender(): void
     {
@@ -30,7 +30,7 @@ class TwigRendererTest extends MockeryTestCase
 
         $twigRenderer = new TwigRenderer($environment);
 
-        $this->assertEquals(
+        $this->assertSame(
             $renderedTemplate,
             $twigRenderer->render($databaseTemplatePath, $variables)
         );
@@ -58,7 +58,7 @@ class TwigRendererTest extends MockeryTestCase
 
         $twigRenderer = new TwigRenderer($environment);
 
-        $this->assertEquals(
+        $this->assertSame(
             $renderedTemplate,
             $twigRenderer->renderString($templateString, $variables)
         );

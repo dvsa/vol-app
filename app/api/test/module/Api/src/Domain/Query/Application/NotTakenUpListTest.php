@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Query\Application\NotTakenUpList;
 /**
  * NotTakenUpList test
  */
-class NotTakenUpListTest extends \PHPUnit\Framework\TestCase
+final class NotTakenUpListTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

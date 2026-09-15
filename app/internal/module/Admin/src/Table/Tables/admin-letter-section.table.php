@@ -48,6 +48,7 @@ return [
                 $key = Escape::html($row['sectionKey'] ?? '');
                 $id = $row['id'] ?? null;
                 if ($id) {
+                    // $key is escaped where it is assigned above.
                     return '<a href="/admin/letter-section/details/' . (int) $id . '/" class="govuk-link">' . $key . '</a>';
                 }
                 return $key;

@@ -13,7 +13,7 @@ use Laminas\Mvc\Controller\Plugin\Params;
  * Class PreviousPiHearingDataTest
  * @package OlcsTest\Mvc\Controller\ParameterProvider
  */
-class PreviousPiHearingDataTest extends TestCase
+final class PreviousPiHearingDataTest extends TestCase
 {
     /**
      *
@@ -68,13 +68,11 @@ class PreviousPiHearingDataTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provideParametersProvider(): array
+    public static function provideParametersProvider(): \Iterator
     {
-        return [
-            ['other venue', 11, 'other'],
-            ['', 11, 11]
-        ];
+        yield ['other venue', 11, 'other'];
+        yield ['', 11, 11];
     }
 }

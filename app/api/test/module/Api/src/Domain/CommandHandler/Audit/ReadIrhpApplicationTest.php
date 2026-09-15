@@ -18,9 +18,9 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Read Irhp Application Test
  */
-class ReadIrhpApplicationTest extends AbstractCommandHandlerTestCase
+final class ReadIrhpApplicationTest extends AbstractCommandHandlerTestCase
 {
-    public const USER_ID = 9999;
+    public const int USER_ID = 9999;
 
     /** @var m\MockInterface|User */
     private $mockUser;
@@ -66,7 +66,7 @@ class ReadIrhpApplicationTest extends AbstractCommandHandlerTestCase
             ]
         ];
 
-        static::assertEquals($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
     }
 
     public function testHandleCommand(): void
@@ -81,8 +81,8 @@ class ReadIrhpApplicationTest extends AbstractCommandHandlerTestCase
             ->with(m::type(IrhpApplicationReadAudit::class))
             ->andReturnUsing(
                 function (IrhpApplicationReadAudit $record) use ($entity) {
-                    static::assertSame($this->mockUser, $record->getUser());
-                    static::assertSame($entity, $record->getIrhpApplication());
+                    $this->assertSame($this->mockUser, $record->getUser());
+                    $this->assertSame($entity, $record->getIrhpApplication());
                 }
             );
 
@@ -99,6 +99,6 @@ class ReadIrhpApplicationTest extends AbstractCommandHandlerTestCase
             ]
         ];
 
-        static::assertEquals($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
     }
 }

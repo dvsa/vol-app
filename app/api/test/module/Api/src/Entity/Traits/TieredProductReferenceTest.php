@@ -12,9 +12,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * TieredProductReferenceTraitTest
  */
-class TieredProductReferenceTest extends MockeryTestCase
+final class TieredProductReferenceTest extends MockeryTestCase
 {
-    public const PROD_REFS = [
+    public const array PROD_REFS = [
         'Jan' => FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
         'Feb' => FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
         'Mar' => FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
@@ -74,96 +74,93 @@ class TieredProductReferenceTest extends MockeryTestCase
         );
     }
 
-    public static function productRefMonthProvider(): array
+    public static function productRefMonthProvider(): \Iterator
     {
         $validFrom = new DateTime('first day of January next year');
         $validTo = new DateTime('last day of December next year');
-
-        return [
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of January next year'),
-                self::PROD_REFS
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of February next year'),
-                self::PROD_REFS
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of March next year'),
-                self::PROD_REFS
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of April next year'),
-                self::PROD_REFS
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of May next year'),
-                self::PROD_REFS
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of June next year'),
-                self::PROD_REFS
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of July next year'),
-                self::PROD_REFS
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of August next year'),
-                self::PROD_REFS
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of September next year'),
-                self::PROD_REFS
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of October next year'),
-                self::PROD_REFS
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of November next year'),
-                self::PROD_REFS
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of December next year'),
-                self::PROD_REFS
-            ],
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of January next year'),
+            self::PROD_REFS
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of February next year'),
+            self::PROD_REFS
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of March next year'),
+            self::PROD_REFS
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of April next year'),
+            self::PROD_REFS
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of May next year'),
+            self::PROD_REFS
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of June next year'),
+            self::PROD_REFS
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of July next year'),
+            self::PROD_REFS
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of August next year'),
+            self::PROD_REFS
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of September next year'),
+            self::PROD_REFS
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of October next year'),
+            self::PROD_REFS
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of November next year'),
+            self::PROD_REFS
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of December next year'),
+            self::PROD_REFS
         ];
     }
 }

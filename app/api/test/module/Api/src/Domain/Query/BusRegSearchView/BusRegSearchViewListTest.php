@@ -9,7 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Query\BusRegSearchView\BusRegSearchViewList::class)]
-class BusRegSearchViewListTest extends MockeryTestCase
+final class BusRegSearchViewListTest extends MockeryTestCase
 {
     public function testGetSet(): void
     {
@@ -19,9 +19,9 @@ class BusRegSearchViewListTest extends MockeryTestCase
             ]
         );
 
-        static::assertEquals(7777, $sut->getLocalAuthorityId());
+        $this->assertEquals(7777, $sut->getLocalAuthorityId());
 
         $sut->setLocalAuthorityId(7779);
-        static::assertEquals(7779, $sut->getLocalAuthorityId());
+        $this->assertEquals(7779, $sut->getLocalAuthorityId());
     }
 }

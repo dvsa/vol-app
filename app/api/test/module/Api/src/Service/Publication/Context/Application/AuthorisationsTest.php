@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class AuthorisationsTest extends MockeryTestCase
+final class AuthorisationsTest extends MockeryTestCase
 {
     /**
      * @var Authorisations
@@ -63,13 +63,11 @@ class AuthorisationsTest extends MockeryTestCase
         );
     }
 
-    public static function dpSetContextWhenTotAuthLgvVehiclesNumeric(): array
+    public static function dpSetContextWhenTotAuthLgvVehiclesNumeric(): \Iterator
     {
-        return [
-            [0, 'Authorisation: 0 Light goods vehicle(s).'],
-            [1, 'Authorisation: 1 Light goods vehicle(s).'],
-            [2, 'Authorisation: 2 Light goods vehicle(s).'],
-        ];
+        yield [0, 'Authorisation: 0 Light goods vehicle(s).'];
+        yield [1, 'Authorisation: 1 Light goods vehicle(s).'];
+        yield [2, 'Authorisation: 2 Light goods vehicle(s).'];
     }
 
     public function testDoNothingWhenTotAuthLgvVehiclesNull(): void

@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class TransportManagerDetailsDetailControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerDetailsDetailController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TransportManagerDetailsDetailController
     {
         $translationHelperService = $container->get(TranslationHelperService::class);
         assert($translationHelperService instanceof TranslationHelperService);

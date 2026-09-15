@@ -350,7 +350,7 @@ class TransXChangeConsumer extends AbstractConsumer
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): self
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): self
     {
         parent::__invoke($container, $requestedName, $options);
 

@@ -31,7 +31,7 @@ return [
                     return 'N/A';
                 }
 
-                return $data['convictionDate'];
+                return \Common\Util\Escape::html($data['convictionDate']);
             },
             'name' => 'convictionDate'
         ],
@@ -41,7 +41,8 @@ return [
         ],
         [
             'title' => 'Name / defendant type',
-            'formatter' => fn($data) => $data['name'] . '<br />' . $data['defendantType'],
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['name'])
+                . '<br />' . \Common\Util\Escape::html($data['defendantType']),
             'name' => 'name'
         ],
         [

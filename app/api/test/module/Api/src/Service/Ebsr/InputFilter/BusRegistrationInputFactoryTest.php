@@ -25,7 +25,7 @@ use Olcs\XmlTools\Filter\MapXmlFile;
 use Olcs\XmlTools\Xml\Specification\SpecificationInterface;
 use Psr\Container\ContainerInterface;
 
-class BusRegistrationInputFactoryTest extends TestCase
+final class BusRegistrationInputFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

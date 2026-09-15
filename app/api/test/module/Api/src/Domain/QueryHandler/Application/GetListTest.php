@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class GetListTest extends QueryHandlerTestCase
+final class GetListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

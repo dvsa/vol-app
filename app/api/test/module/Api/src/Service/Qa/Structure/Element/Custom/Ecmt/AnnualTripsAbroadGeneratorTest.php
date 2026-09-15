@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class AnnualTripsAbroadGeneratorTest extends MockeryTestCase
+final class AnnualTripsAbroadGeneratorTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
     public function testGenerate(mixed $isNi): void
@@ -60,11 +60,9 @@ class AnnualTripsAbroadGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpTrueFalse(): array
+    public static function dpTrueFalse(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

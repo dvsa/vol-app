@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="pi_definition",
- *    indexes={
- *        @ORM\Index(name="ix_pi_definition_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_pi_definition_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_pi_definition_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'pi_definition')]
+#[ORM\Index(name: 'ix_pi_definition_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_pi_definition_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_pi_definition_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractPiDefinition implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,98 +40,88 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * GoodsOrPsv
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Eamples, Good Repute, Withdrawn, Formal Warning
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="pi_definition_category", length=32, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'pi_definition_category', length: 32, nullable: false)]
     protected $piDefinitionCategory = '';
 
     /**
      * Section of related legislation
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="section_code", length=20, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'section_code', length: 20, nullable: false)]
     protected $sectionCode = '';
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: false)]
     protected $description = '';
 
     /**
      * isNi
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_ni", nullable=false)
      */
+    #[ORM\Column(type: 'yesno', name: 'is_ni', nullable: false)]
     protected $isNi = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Is visible in internal
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_visible_in_internal", nullable=false, options={"default": 1})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_visible_in_internal', nullable: false, options: ['default' => 1])]
     protected $isVisibleInInternal = 1;
 
     /**
@@ -159,7 +145,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setId($id)
     {
@@ -183,7 +169,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -207,7 +193,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -231,7 +217,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -255,7 +241,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param string $piDefinitionCategory new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setPiDefinitionCategory($piDefinitionCategory)
     {
@@ -279,7 +265,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param string $sectionCode new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setSectionCode($sectionCode)
     {
@@ -303,7 +289,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param string $description new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setDescription($description)
     {
@@ -327,7 +313,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param string $isNi new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -351,7 +337,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setVersion($version)
     {
@@ -375,7 +361,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param bool $isVisibleInInternal new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setIsVisibleInInternal($isVisibleInInternal)
     {

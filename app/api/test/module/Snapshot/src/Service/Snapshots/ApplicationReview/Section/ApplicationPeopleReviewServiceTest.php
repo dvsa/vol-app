@@ -22,24 +22,22 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationPeopleReviewServiceTest extends MockeryTestCase
+final class ApplicationPeopleReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
-
-    /** @var TranslatorInterface */
-    protected $mockTranslator;
 
     /** @var PeopleReviewService */
     private $mockPeopleReview;
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->mockTranslator = m::mock(TranslatorInterface::class);
+        $mockTranslator = m::mock(TranslatorInterface::class);
 
         $abstractReviewServiceServices = m::mock(AbstractReviewServiceServices::class);
         $abstractReviewServiceServices->shouldReceive('getTranslator')
             ->withNoArgs()
-            ->andReturn($this->mockTranslator);
+            ->andReturn($mockTranslator);
 
         $this->mockPeopleReview = m::mock(PeopleReviewService::class);
 

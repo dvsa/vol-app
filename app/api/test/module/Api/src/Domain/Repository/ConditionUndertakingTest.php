@@ -13,11 +13,12 @@ use Doctrine\ORM\QueryBuilder;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking::class)]
-class ConditionUndertakingTest extends RepositoryTestCase
+final class ConditionUndertakingTest extends RepositoryTestCase
 {
     /** @var Repository\ConditionUndertaking | m\MockInterface */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\ConditionUndertaking::class, true);
@@ -291,13 +292,11 @@ class ConditionUndertakingTest extends RepositoryTestCase
         );
     }
 
-    public static function dpHasLightGoodsVehicleUndertakings(): array
+    public static function dpHasLightGoodsVehicleUndertakings(): \Iterator
     {
-        return [
-            [0, false],
-            [1, true],
-            [2, true],
-        ];
+        yield [0, false];
+        yield [1, true];
+        yield [2, true];
     }
 
     public function testDeleteFromVariations(): void
@@ -317,12 +316,9 @@ class ConditionUndertakingTest extends RepositoryTestCase
             ->with(m::any())
             ->times(3);
 
-        static::assertEquals(3, $this->sut->deleteFromVariations($ids));
+        $this->assertEquals(3, $this->sut->deleteFromVariations($ids));
 
-        static::assertEquals(
-            '[[QUERY]]' .
-            ' AND m.licConditionVariation IN [[[9001,9002,9003]]]',
-            $this->query
-        );
+        $this->assertEquals('[[QUERY]]' .
+        ' AND m.licConditionVariation IN [[[9001,9002,9003]]]', $this->query);
     }
 }

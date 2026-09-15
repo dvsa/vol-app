@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Application\DeleteOperatingCentres::class)]
-class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
+final class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandHandler\Application\DeleteOperatingCentres  */
     protected $sut;
@@ -89,7 +89,7 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
                 'id' => 111,
                 'section' => 'operatingCentres'
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('UPDATE_APPLICATION_COMPLETION')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('UPDATE_APPLICATION_COMPLETION')
         );
 
         $this->expectedSideEffect(
@@ -98,13 +98,13 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
                 'operatingCentre' => $this->mapReference(OperatingCentre::class, 1),
                 'application' => $application,
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('DELETE_CONDITIONS_UNDERTAKINGS')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('DELETE_CONDITIONS_UNDERTAKINGS')
         );
 
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\OperatingCentre\DeleteApplicationLinks::class,
             ['operatingCentre' => $this->mapReference(OperatingCentre::class, 1)],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('DELETE_OTHER_APPLICATIONS')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('DELETE_OTHER_APPLICATIONS')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -209,7 +209,7 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
                 'id' => 111,
                 'section' => 'operatingCentres'
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('UPDATE_APPLICATION_COMPLETION')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('UPDATE_APPLICATION_COMPLETION')
         );
 
         $this->expectedSideEffect(
@@ -218,13 +218,13 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
                 'operatingCentre' => $this->mapReference(OperatingCentre::class, 1),
                 'application' => $application,
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('DELETE_CONDITIONS_UNDERTAKINGS')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('DELETE_CONDITIONS_UNDERTAKINGS')
         );
 
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\OperatingCentre\DeleteApplicationLinks::class,
             ['operatingCentre' => $this->mapReference(OperatingCentre::class, 1)],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('DELETE_OTHER_APPLICATIONS')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('DELETE_OTHER_APPLICATIONS')
         );
 
         $result = $this->sut->handleCommand($command);

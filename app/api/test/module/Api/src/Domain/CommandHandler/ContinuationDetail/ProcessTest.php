@@ -29,7 +29,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ProcessTest extends AbstractCommandHandlerTestCase
+final class ProcessTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

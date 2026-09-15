@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateUndertakingsStatus;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateUndertakingsStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateUndertakingsStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\StandardConditions;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class StandardConditionsTest extends \PHPUnit\Framework\TestCase
+final class StandardConditionsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -28,7 +28,8 @@ class StandardConditionsTest extends \PHPUnit\Framework\TestCase
     {
         $bookmark = $this->createPartialMock(StandardConditions::class, ['getSnippet']);
 
-        $bookmark->expects($this->any())
+        $bookmark
+            ->expects($this->once())
             ->method('getSnippet')
             ->with($path)
             ->willReturn('snippet');
@@ -48,57 +49,55 @@ class StandardConditionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('snippet', $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
-            [
-                'N',
-                Licence::LICENCE_TYPE_RESTRICTED,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                'GB_RESTRICTED_LICENCE_CONDITIONS'
-            ],
-            [
-                'N',
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                'GB_STANDARD_LICENCE_CONDITIONS'
-            ],
-            [
-                'N',
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                'GB_STANDARD_INT_LICENCE_CONDITIONS'
-            ],
-            [
-                'N',
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-                'GB_STANDARD_INT_LGV_LICENCE_CONDITIONS'
-            ],
-            [
-                'Y',
-                Licence::LICENCE_TYPE_RESTRICTED,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                'NI_RESTRICTED_LICENCE_CONDITIONS'
-            ],
-            [
-                'Y',
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                'NI_STANDARD_LICENCE_CONDITIONS'
-            ],
-            [
-                'Y',
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                'NI_STANDARD_INT_LICENCE_CONDITIONS'
-            ],
-            [
-                'Y',
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-                'NI_STANDARD_INT_LGV_LICENCE_CONDITIONS'
-            ],
+        yield [
+            'N',
+            Licence::LICENCE_TYPE_RESTRICTED,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            'GB_RESTRICTED_LICENCE_CONDITIONS'
+        ];
+        yield [
+            'N',
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            'GB_STANDARD_LICENCE_CONDITIONS'
+        ];
+        yield [
+            'N',
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            'GB_STANDARD_INT_LICENCE_CONDITIONS'
+        ];
+        yield [
+            'N',
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+            'GB_STANDARD_INT_LGV_LICENCE_CONDITIONS'
+        ];
+        yield [
+            'Y',
+            Licence::LICENCE_TYPE_RESTRICTED,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            'NI_RESTRICTED_LICENCE_CONDITIONS'
+        ];
+        yield [
+            'Y',
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            'NI_STANDARD_LICENCE_CONDITIONS'
+        ];
+        yield [
+            'Y',
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            'NI_STANDARD_INT_LICENCE_CONDITIONS'
+        ];
+        yield [
+            'Y',
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+            'NI_STANDARD_INT_LGV_LICENCE_CONDITIONS'
         ];
     }
 }

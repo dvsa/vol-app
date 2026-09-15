@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\InterimUnlinkedTm;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class InterimUnlinkedTmTest extends \PHPUnit\Framework\TestCase
+final class InterimUnlinkedTmTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

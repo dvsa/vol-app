@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class AdminAreaTrafficAreaEntityTest extends EntityTester
+final class AdminAreaTrafficAreaEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

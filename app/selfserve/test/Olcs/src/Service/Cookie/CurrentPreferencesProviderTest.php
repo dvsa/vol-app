@@ -13,7 +13,7 @@ use Olcs\Service\Cookie\Preferences;
 use Olcs\Service\Cookie\PreferencesFactory;
 use Laminas\Http\Header\Cookie;
 
-class CurrentPreferencesProviderTest extends MockeryTestCase
+final class CurrentPreferencesProviderTest extends MockeryTestCase
 {
     private $cookieReader;
 
@@ -25,6 +25,7 @@ class CurrentPreferencesProviderTest extends MockeryTestCase
 
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->cookieReader = m::mock(CookieReader::class);

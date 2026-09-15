@@ -50,12 +50,10 @@ abstract class AbstractBatchCommandCases extends TestCase
         $this->sut = new $commandClass($this->mockCommandHandlerManager, $this->mockQueryHandlerManager);
         $this->sut->setName($this->getCommandName());
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         $application = new Application();
-        $application->add($this->sut);
+        $application->addCommand($this->sut);
 
         $this->commandTester = new CommandTester($application->find($this->getCommandName()));
     }
@@ -78,14 +76,7 @@ abstract class AbstractBatchCommandCases extends TestCase
 
         $this->mockCommandHandlerManager->expects($this->exactly($dtoCount))
             ->method('handleCommand')
-            ->with($this->callback(function ($commandInstance) use ($dtos) {
-                foreach ($dtos as $dto) {
-                    if ($commandInstance == $dto) {
-                        return true;
-                    }
-                }
-                return false;
-            }))
+            ->with($this->callback(fn($commandInstance) => array_any($dtos, fn($dto) => $commandInstance == $dto)))
             ->willReturnCallback(fn($command) => new Result());
 
         $this->executeCommand();
@@ -95,7 +86,7 @@ abstract class AbstractBatchCommandCases extends TestCase
     public function testExecuteHandlesGenericException(): void
     {
         $this->mockCommandHandlerManager->method('handleCommand')
-            ->will($this->throwException(new \Exception('Test exception')));
+            ->willThrowException(new \Exception('Test exception'));
 
         $this->executeCommand();
 
@@ -105,7 +96,7 @@ abstract class AbstractBatchCommandCases extends TestCase
     public function testExecuteHandlesNotFoundException(): void
     {
         $this->mockCommandHandlerManager->method('handleCommand')
-            ->will($this->throwException(new \Dvsa\Olcs\Api\Domain\Exception\NotFoundException('Test not found exception')));
+            ->willThrowException(new \Dvsa\Olcs\Api\Domain\Exception\NotFoundException('Test not found exception'));
 
         $this->executeCommand();
 

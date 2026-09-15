@@ -24,7 +24,7 @@ class SafetyControllerFactory implements FactoryInterface
      * @return SafetyController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SafetyController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SafetyController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

@@ -18,7 +18,7 @@ use Laminas\Http\Client\Adapter\Exception\RuntimeException as AdapterRuntimeExce
 use Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader;
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
 
-class SendResponseTest extends AbstractCommandHandlerTestCase
+final class SendResponseTest extends AbstractCommandHandlerTestCase
 {
     private readonly m\MockInterface $inrService;
 

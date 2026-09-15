@@ -19,7 +19,7 @@ use Dvsa\Olcs\Transfer\Command\ContinuationDetail\Update;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklist::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
-class ContinuationChecklistTest extends AbstractConsumerTestCase
+final class ContinuationChecklistTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = ContinuationChecklist::class;
 

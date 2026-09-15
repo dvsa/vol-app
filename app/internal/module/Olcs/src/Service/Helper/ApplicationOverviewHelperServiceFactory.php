@@ -16,7 +16,7 @@ class ApplicationOverviewHelperServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationOverviewHelperService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationOverviewHelperService
     {
         return new ApplicationOverviewHelperService(
             $container->get('Helper\LicenceOverview'),

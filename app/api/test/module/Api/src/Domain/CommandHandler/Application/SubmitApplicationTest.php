@@ -8,6 +8,7 @@ use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\ConditionUndertaking\CreateLightGoodsVehicleCondition
     as CreateLightGoodsVehicleConditionCmd;
+use Dvsa\Olcs\Api\Domain\Command\Document\AnalyseFinancialEvidence as AnalyseFinancialEvidenceCmd;
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask as CreateTaskCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Application\SubmitApplication;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -35,16 +36,16 @@ use Dvsa\OlcsTest\MocksServicesTrait;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Application\SubmitApplication::class)]
-class SubmitApplicationTest extends AbstractCommandHandlerTestCase
+final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
 
-    public const APP_ID = 9001;
-    public const LIC_ID = 8001;
-    public const TASK_ID = 6001;
-    public const VERSION = 10;
-    public const TRAFFIC_AREA = 'TA';
+    public const int APP_ID = 9001;
+    public const int LIC_ID = 8001;
+    public const int TASK_ID = 6001;
+    public const int VERSION = 10;
+    public const string TRAFFIC_AREA = 'TA';
 
     /** @var SubmitApplication */
     protected $sut;
@@ -123,6 +124,19 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         ];
 
         parent::initReferences();
+    }
+
+    /**
+     * An empty Result is returned so the merge leaves the assertions on the submission
+     * result untouched.
+     */
+    private function expectedAnalyseFinancialEvidenceSideEffect(): void
+    {
+        $this->expectedSideEffect(
+            AnalyseFinancialEvidenceCmd::class,
+            ['application' => self::APP_ID],
+            new Result()
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
@@ -219,7 +233,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffectAsSystemUser(
             CreateLightGoodsVehicleConditionCmd::class,
             ['applicationId' => self::APP_ID],
-            (new Result())->addMessage('unit LightGoodsVehicleCondition created')
+            new Result()->addMessage('unit LightGoodsVehicleCondition created')
         );
 
         $result1 = new Result();
@@ -244,17 +258,19 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
                     'id' => self::APP_ID,
                     'trafficArea' => self::TRAFFIC_AREA,
                 ],
-                (new Result())->addMessage('unit Publication created')
+                new Result()->addMessage('unit Publication created')
             );
 
             $this->expectedSideEffect(
                 \Dvsa\Olcs\Api\Domain\Command\Application\CreateTexTask::class,
                 ['id' => self::APP_ID],
-                (new Result())->addMessage('unit TexTask created')
+                new Result()->addMessage('unit TexTask created')
             );
         }
 
         $this->expectedLicenceCacheClear($this->mockLic);
+
+        $this->expectedAnalyseFinancialEvidenceSideEffect();
 
         $result = $this->sut->handleCommand($command);
 
@@ -264,109 +280,107 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpTestHandleCommand(): array
+    public static function dpTestHandleCommand(): \Iterator
     {
-        return [
-            'new app' => [
-                'isVariation' => false,
-                'expected' => [
-                    'id' => [
-                        'application' => self::APP_ID,
-                        'licence' => self::LIC_ID,
-                        'task' => self::TASK_ID,
-                    ],
-                    'messages' => [
-                        'Snapshot created',
-                        'Application updated',
-                        'Licence updated',
-                        'task created',
-                        'unit LightGoodsVehicleCondition created',
-                        'unit Publication created',
-                        'unit TexTask created',
-                    ],
+        yield 'new app' => [
+            'isVariation' => false,
+            'expected' => [
+                'id' => [
+                    'application' => self::APP_ID,
+                    'licence' => self::LIC_ID,
+                    'task' => self::TASK_ID,
                 ],
-                'isInternalUser' => false,
-                'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_PSV,
-                'hasS4' => false,
+                'messages' => [
+                    'Snapshot created',
+                    'Application updated',
+                    'Licence updated',
+                    'task created',
+                    'unit LightGoodsVehicleCondition created',
+                    'unit Publication created',
+                    'unit TexTask created',
+                ],
             ],
-            'new app S4' => [
-                'isVariation' => false,
-                'expected' => [
-                    'id' => [
-                        'application' => self::APP_ID,
-                        'licence' => self::LIC_ID,
-                        'task' => self::TASK_ID,
-                    ],
-                    'messages' => [
-                        'Snapshot created',
-                        'Application updated',
-                        'Licence updated',
-                        'task created',
-                        'unit LightGoodsVehicleCondition created',
-                    ],
+            'isInternalUser' => false,
+            'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_PSV,
+            'hasS4' => false,
+        ];
+        yield 'new app S4' => [
+            'isVariation' => false,
+            'expected' => [
+                'id' => [
+                    'application' => self::APP_ID,
+                    'licence' => self::LIC_ID,
+                    'task' => self::TASK_ID,
                 ],
-                'isInternalUser' => false,
-                'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_PSV,
-                'hasS4' => true,
+                'messages' => [
+                    'Snapshot created',
+                    'Application updated',
+                    'Licence updated',
+                    'task created',
+                    'unit LightGoodsVehicleCondition created',
+                ],
             ],
-            'variation' => [
-                'isVariation' => true,
-                'expected' => [
-                    'id' => [
-                        'application' => self::APP_ID,
-                        'task' => self::TASK_ID,
-                    ],
-                    'messages' => [
-                        'Snapshot created',
-                        'Application updated',
-                        'task created',
-                        'unit LightGoodsVehicleCondition created',
-                        'unit Publication created',
-                        'unit TexTask created',
-                    ],
+            'isInternalUser' => false,
+            'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_PSV,
+            'hasS4' => true,
+        ];
+        yield 'variation' => [
+            'isVariation' => true,
+            'expected' => [
+                'id' => [
+                    'application' => self::APP_ID,
+                    'task' => self::TASK_ID,
                 ],
-                'isInternalUser' => false,
-                'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'hasS4' => false,
+                'messages' => [
+                    'Snapshot created',
+                    'Application updated',
+                    'task created',
+                    'unit LightGoodsVehicleCondition created',
+                    'unit Publication created',
+                    'unit TexTask created',
+                ],
             ],
-            'variation S4' => [
-                'isVariation' => true,
-                'expected' => [
-                    'id' => [
-                        'application' => self::APP_ID,
-                        'task' => self::TASK_ID,
-                    ],
-                    'messages' => [
-                        'Snapshot created',
-                        'Application updated',
-                        'task created',
-                        'unit LightGoodsVehicleCondition created',
-                    ],
+            'isInternalUser' => false,
+            'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'hasS4' => false,
+        ];
+        yield 'variation S4' => [
+            'isVariation' => true,
+            'expected' => [
+                'id' => [
+                    'application' => self::APP_ID,
+                    'task' => self::TASK_ID,
                 ],
-                'isInternalUser' => false,
-                'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'hasS4' => true,
+                'messages' => [
+                    'Snapshot created',
+                    'Application updated',
+                    'task created',
+                    'unit LightGoodsVehicleCondition created',
+                ],
             ],
-            'new app internal' => [
-                "isVariation" => false,
-                "expected" => [
-                    'id' => [
-                        'application' => self::APP_ID,
-                        'licence' => self::LIC_ID,
-                        'task' => self::TASK_ID,
-                    ],
-                    'messages' => [
-                        'Snapshot created',
-                        'Application updated',
-                        'Licence updated',
-                        'task created',
-                        'unit LightGoodsVehicleCondition created',
-                    ],
+            'isInternalUser' => false,
+            'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'hasS4' => true,
+        ];
+        yield 'new app internal' => [
+            "isVariation" => false,
+            "expected" => [
+                'id' => [
+                    'application' => self::APP_ID,
+                    'licence' => self::LIC_ID,
+                    'task' => self::TASK_ID,
                 ],
-                "isInternalUser" => true,
-                'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'hasS4' => true,
-            ]
+                'messages' => [
+                    'Snapshot created',
+                    'Application updated',
+                    'Licence updated',
+                    'task created',
+                    'unit LightGoodsVehicleCondition created',
+                ],
+            ],
+            "isInternalUser" => true,
+            'goodOrPsv' => LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'hasS4' => true,
         ];
     }
 
@@ -450,7 +464,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffectAsSystemUser(
             CreateLightGoodsVehicleConditionCmd::class,
             ['applicationId' => self::APP_ID],
-            (new Result())->addMessage('unit LightGoodsVehicleCondition created')
+            new Result()->addMessage('unit LightGoodsVehicleCondition created')
         );
 
         $result1 = new Result();
@@ -460,6 +474,8 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             ['id' => self::APP_ID, 'event' => CreateSnapshot::ON_SUBMIT],
             $result1
         );
+
+        $this->expectedAnalyseFinancialEvidenceSideEffect();
 
         $result = $this->sut->handleCommand($command);
 
@@ -579,7 +595,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffectAsSystemUser(
             CreateLightGoodsVehicleConditionCmd::class,
             ['applicationId' => self::APP_ID],
-            (new Result())->addMessage('unit LightGoodsVehicleCondition created')
+            new Result()->addMessage('unit LightGoodsVehicleCondition created')
         );
 
         $result1 = new Result();
@@ -589,6 +605,8 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             ['id' => self::APP_ID, 'event' => CreateSnapshot::ON_SUBMIT],
             $result1
         );
+
+        $this->expectedAnalyseFinancialEvidenceSideEffect();
 
         $result = $this->sut->handleCommand($command);
 
@@ -681,7 +699,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffectAsSystemUser(
             CreateLightGoodsVehicleConditionCmd::class,
             ['applicationId' => self::APP_ID],
-            (new Result())->addMessage('unit LightGoodsVehicleCondition created')
+            new Result()->addMessage('unit LightGoodsVehicleCondition created')
         );
 
         $result1 = new Result();
@@ -692,13 +710,15 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             $result1
         );
 
+        $this->expectedAnalyseFinancialEvidenceSideEffect();
+
         $this->sut->handleCommand($command);
 
         $this->assertEquals($expectedTargetCompletionDate, $application->getTargetCompletionDate());
         $this->assertEquals($now, $application->getReceivedDate());
     }
 
-    public static function dataProviderApplicationCompletion(): array
+    public static function dataProviderApplicationCompletion(): \Iterator
     {
         $expectedTaskData = [
             'category' => CategoryEntity::CATEGORY_APPLICATION,
@@ -713,132 +733,129 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             'transportManager' => null,
             'irfoOrganisation' => null,
         ];
-
-        return [
-            'peopleOnlyLtd' => [
-                [
-                    ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_NOT_STARTED,
-                    ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
-                ],
-                true,
-                [],
-                'Director change application',
-                \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_DIRECTOR_CHANGE_DIGITAL,
-                $expectedTaskData,
-                'TEST CODE'
+        yield 'peopleOnlyLtd' => [
+            [
+                ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_NOT_STARTED,
+                ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
             ],
-            'peopleOnlyLtdFail' => [
-                [
-                    ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
-                ],
-                true,
-                [],
-                'TEST CODE Application',
-                \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-                $expectedTaskData,
-                'TEST CODE'
+            true,
+            [],
+            'Director change application',
+            \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_DIRECTOR_CHANGE_DIGITAL,
+            $expectedTaskData,
+            'TEST CODE'
+        ];
+        yield 'peopleOnlyLtdFail' => [
+            [
+                ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
             ],
-            'peopleOnlyOther' => [
-                [
-                    ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_NOT_STARTED,
-                    ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_DECLARATION_INTERNAL => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_DECLARATION => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_CONVICTIONS_AND_PENALTIES => ApplicationCompletion::STATUS_COMPLETE,
-                ],
-                false,
-                [],
-                'Partner change application',
-                \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_PARTNER_CHANGE_DIGITAL,
-                $expectedTaskData,
-                'TEST CODE'
+            true,
+            [],
+            'TEST CODE Application',
+            \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+            $expectedTaskData,
+            'TEST CODE'
+        ];
+        yield 'peopleOnlyOther' => [
+            [
+                ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_NOT_STARTED,
+                ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_DECLARATION_INTERNAL => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_DECLARATION => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_CONVICTIONS_AND_PENALTIES => ApplicationCompletion::STATUS_COMPLETE,
             ],
-            'peopleOnlyOtherFail' => [
-                [
-                    ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_DECLARATION_INTERNAL => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_DECLARATION => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_CONVICTIONS_AND_PENALTIES => ApplicationCompletion::STATUS_COMPLETE,
-                ],
-                true,
-                [],
-                'TEST CODE Application',
-                \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-                $expectedTaskData,
-                'TEST CODE'
+            false,
+            [],
+            'Partner change application',
+            \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_PARTNER_CHANGE_DIGITAL,
+            $expectedTaskData,
+            'TEST CODE'
+        ];
+        yield 'peopleOnlyOtherFail' => [
+            [
+                ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_DECLARATION_INTERNAL => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_DECLARATION => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_CONVICTIONS_AND_PENALTIES => ApplicationCompletion::STATUS_COMPLETE,
             ],
-            'tmOnly' => [
-                "applicationCompletion" => [
-                    ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
-                ],
-                "isLtd" => true,
-                'tmaStat' => [
-                    'action' => [
-                        Entity\Tm\TransportManagerApplication::ACTION_ADD => 1,
-                        Entity\Tm\TransportManagerApplication::ACTION_DELETE => 0,
-                    ]
-                ],
-                "expectedDescription" => 'TM change variation',
-                "expectedSubCategory" => \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_TM1_DIGITAL,
-                "expectedTaskData" => $expectedTaskData,
-                "code" => 'TEST CODE'
+            true,
+            [],
+            'TEST CODE Application',
+            \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+            $expectedTaskData,
+            'TEST CODE'
+        ];
+        yield 'tmOnly' => [
+            "applicationCompletion" => [
+                ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
             ],
-            'tmOnlyDeleteOnly' => [
-                "applicationCompletion" => [
-                    ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
-                ],
-                "isLtd" => true,
-                'tmaStat' => [
-                    'action' => [
-                        Entity\Tm\TransportManagerApplication::ACTION_ADD => '0',
-                        Entity\Tm\TransportManagerApplication::ACTION_DELETE => '1',
-                    ]
-                ],
-                "expectedDescription" => 'TM1 (Removal only)',
-                "expectedSubCategory" => \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_TM1_REMOVAL_VARIATION,
-                "expectedTaskData" => $expectedTaskData,
-                "code" => 'TEST CODE'
+            "isLtd" => true,
+            'tmaStat' => [
+                'action' => [
+                    Entity\Tm\TransportManagerApplication::ACTION_ADD => 1,
+                    Entity\Tm\TransportManagerApplication::ACTION_DELETE => 0,
+                ]
             ],
-            'tmOnlyFail' => [
-                "applicationCompletion" => [
-                    ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_DECLARATION_INTERNAL => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_DECLARATION => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_CONVICTIONS_AND_PENALTIES => ApplicationCompletion::STATUS_COMPLETE,
-                ],
-                "isLtd" => true,
-                'tmaStat' => [],
-                "expectedDescription" => 'TEST CODE Application',
-                "expectedSubCategory" => \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-                "expectedTaskData" => $expectedTaskData,
-                "code" => 'TEST CODE'
+            "expectedDescription" => 'TM change variation',
+            "expectedSubCategory" => \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_TM1_DIGITAL,
+            "expectedTaskData" => $expectedTaskData,
+            "code" => 'TEST CODE'
+        ];
+        yield 'tmOnlyDeleteOnly' => [
+            "applicationCompletion" => [
+                ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
             ],
-            'GV80A' => [
-                [
-                    ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_DECLARATION_INTERNAL => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_DECLARATION => ApplicationCompletion::STATUS_COMPLETE,
-                    ApplicationCompletion::SECTION_CONVICTIONS_AND_PENALTIES => ApplicationCompletion::STATUS_COMPLETE,
-                ],
-                true,
-                [],
-                'GV80A Application',
-                \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
-                array_merge($expectedTaskData, ['urgent' => 'Y']),
-                'GV80A'
-            ]
+            "isLtd" => true,
+            'tmaStat' => [
+                'action' => [
+                    Entity\Tm\TransportManagerApplication::ACTION_ADD => '0',
+                    Entity\Tm\TransportManagerApplication::ACTION_DELETE => '1',
+                ]
+            ],
+            "expectedDescription" => 'TM1 (Removal only)',
+            "expectedSubCategory" => \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_TM1_REMOVAL_VARIATION,
+            "expectedTaskData" => $expectedTaskData,
+            "code" => 'TEST CODE'
+        ];
+        yield 'tmOnlyFail' => [
+            "applicationCompletion" => [
+                ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_DECLARATION_INTERNAL => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_DECLARATION => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_CONVICTIONS_AND_PENALTIES => ApplicationCompletion::STATUS_COMPLETE,
+            ],
+            "isLtd" => true,
+            'tmaStat' => [],
+            "expectedDescription" => 'TEST CODE Application',
+            "expectedSubCategory" => \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+            "expectedTaskData" => $expectedTaskData,
+            "code" => 'TEST CODE'
+        ];
+        yield 'GV80A' => [
+            [
+                ApplicationCompletion::SECTION_PEOPLE => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_TRANSPORT_MANAGER => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_FINANCIAL_HISTORY => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_DECLARATION_INTERNAL => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_DECLARATION => ApplicationCompletion::STATUS_COMPLETE,
+                ApplicationCompletion::SECTION_CONVICTIONS_AND_PENALTIES => ApplicationCompletion::STATUS_COMPLETE,
+            ],
+            true,
+            [],
+            'GV80A Application',
+            \Dvsa\Olcs\Api\Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+            array_merge($expectedTaskData, ['urgent' => 'Y']),
+            'GV80A'
         ];
     }
 
@@ -897,9 +914,6 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('canAutoGrant')
             ->once()
             ->andReturn(true)
-            ->shouldReceive('getCode')
-            ->times(2)
-            ->andReturn('GV79')
             ->shouldReceive('setStatus')
             ->with($this->mapRefdata(ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION))
             ->once()
@@ -962,10 +976,6 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             'transportManager' => null,
             'irfoOrganisation' => null,
         ];
-        $taskResult = new Result();
-        $taskResult->addId('task', self::TASK_ID);
-        $taskResult->addMessage('task created');
-        $this->expectedSideEffect(CreateTaskCmd::class, $expectedTaskData, $taskResult);
 
         // Expect light goods vehicle condition check
         $lgvResult = new Result();
@@ -976,6 +986,8 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         );
 
         $this->expectedLicenceCacheClear($this->mockLic);
+
+        $this->expectedAnalyseFinancialEvidenceSideEffect();
 
         $result = $this->sut->handleCommand($command);
 

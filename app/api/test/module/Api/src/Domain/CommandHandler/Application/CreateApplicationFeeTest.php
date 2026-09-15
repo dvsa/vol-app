@@ -30,7 +30,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateApplicationFeeTest extends AbstractCommandHandlerTestCase
+final class CreateApplicationFeeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -168,19 +168,17 @@ class CreateApplicationFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function feeTypeProvider(): array
+    public static function feeTypeProvider(): \Iterator
     {
-        return [
-            [
-                FeeTypeEntity::FEE_TYPE_APP,
-                'Application Fee Due',
-                (new DateTime('now'))->format(CreateApplicationFee::DUE_DATE_FORMAT)
-            ],
-            [
-                FeeTypeEntity::FEE_TYPE_GRANT,
-                'Grant fee due',
-                ((new DateTime('now'))->add(new \DateInterval('P14D'))->format(CreateApplicationFee::DUE_DATE_FORMAT))
-            ]
+        yield [
+            FeeTypeEntity::FEE_TYPE_APP,
+            'Application Fee Due',
+            new DateTime('now')->format(CreateApplicationFee::DUE_DATE_FORMAT)
+        ];
+        yield [
+            FeeTypeEntity::FEE_TYPE_GRANT,
+            'Grant fee due',
+            (new DateTime('now')->add(new \DateInterval('P14D'))->format(CreateApplicationFee::DUE_DATE_FORMAT))
         ];
     }
 }

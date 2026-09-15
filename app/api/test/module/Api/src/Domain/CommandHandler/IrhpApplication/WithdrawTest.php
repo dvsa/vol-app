@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractWithdrawApplicationHandlerTe
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class WithdrawTest extends AbstractWithdrawApplicationHandlerTestCase
+final class WithdrawTest extends AbstractWithdrawApplicationHandlerTestCase
 {
     protected $repoServiceName = 'IrhpApplication';
     protected $entityClass = IrhpApplication::class;

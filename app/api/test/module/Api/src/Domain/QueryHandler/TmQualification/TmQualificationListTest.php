@@ -25,7 +25,7 @@ use Doctrine\ORM\Query as OrmQuery;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TmQualificationListTest extends QueryHandlerTestCase
+final class TmQualificationListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

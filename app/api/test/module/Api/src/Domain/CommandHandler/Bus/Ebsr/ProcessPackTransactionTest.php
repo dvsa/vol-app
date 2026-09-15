@@ -41,7 +41,7 @@ use org\bovigo\vfs\vfsStream;
 /**
  * @see ProcessPackTransaction
  */
-class ProcessPackTransactionTest extends ProcessPackTestCase
+final class ProcessPackTransactionTest extends ProcessPackTestCase
 {
     public function setUp(): void
     {
@@ -299,14 +299,12 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleDataRefreshProvider(): array
+    public static function handleDataRefreshProvider(): \Iterator
     {
-        return [
-            [['short notice section'], 1],
-            [[], 0]
-        ];
+        yield [['short notice section'], 1];
+        yield [[], 0];
     }
 
 
@@ -552,12 +550,10 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function handleVariationProvider(): array
+    public static function handleVariationProvider(): \Iterator
     {
-        return [
-            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CANCEL, AbstractProcessPack::TASK_DESC_CANCEL, false],
-            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_VAR, AbstractProcessPack::TASK_DESC_VAR, true],
-        ];
+        yield [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CANCEL, AbstractProcessPack::TASK_DESC_CANCEL, false];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_VAR, AbstractProcessPack::TASK_DESC_VAR, true];
     }
 
     /**

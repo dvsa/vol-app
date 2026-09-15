@@ -10,10 +10,11 @@ use Permits\Data\Mapper\PermitTypeTitle;
 /**
  * PermitTypeTitleTest
  */
-class PermitTypeTitleTest extends TestCase
+final class PermitTypeTitleTest extends TestCase
 {
     private $pageTypeTitle;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->pageTypeTitle = new PermitTypeTitle();

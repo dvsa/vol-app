@@ -13,7 +13,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class LicenceStatusRuleEntityTest extends EntityTester
+final class LicenceStatusRuleEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -36,14 +36,12 @@ class LicenceStatusRuleEntityTest extends EntityTester
         $this->assertSame($expected, $sut->isQueued());
     }
 
-    public static function dataProviderTestIsQueued(): array
+    public static function dataProviderTestIsQueued(): \Iterator
     {
-        return [
-            // startDate, startProcessingDate, expected
-            [null, null, false],
-            [null, new \DateTime(), false],
-            [new \DateTime(), null, true],
-            [new \DateTime(), new \DateTime(), false],
-        ];
+        // startDate, startProcessingDate, expected
+        yield [null, null, false];
+        yield [null, new \DateTime(), false];
+        yield [new \DateTime(), null, true];
+        yield [new \DateTime(), new \DateTime(), false];
     }
 }

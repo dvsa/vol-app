@@ -19,7 +19,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationTaxiPhvTest extends MockeryTestCase
+final class ApplicationTaxiPhvTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -33,6 +33,7 @@ class ApplicationTaxiPhvTest extends MockeryTestCase
      */
     private $formHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(FormHelperService::class);

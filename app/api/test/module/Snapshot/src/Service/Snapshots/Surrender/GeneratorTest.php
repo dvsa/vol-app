@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Renderer\PhpRenderer;
 
-class GeneratorTest extends MockeryTestCase
+final class GeneratorTest extends MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface|PhpRenderer
@@ -61,11 +61,7 @@ class GeneratorTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @var array
-     */
-    protected $services;
-
+    #[\Override]
     protected function setUp(): void
     {
         $this->viewRenderer = m::mock(PhpRenderer::class);
@@ -144,74 +140,72 @@ class GeneratorTest extends MockeryTestCase
             ->once()->with($surrender)->andReturn('signature');
     }
 
-    public static function dbLicenceType(): array
+    public static function dbLicenceType(): \Iterator
     {
-        return [
+        yield [
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
             [
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                [
-                    'reviewTitle' => 'surrender-review-title',
-                    'subTitle' => 'AB1234567',
-                    'settings' => [
-                        'hide-count' => true
-                    ],
-                    'sections' => [
-                        [
-                            'header' => 'surrender-review-licence',
-                            'config' => 'licenceDetails'
-                        ],
-                        [
-                            'header' => 'surrender-review-current-discs',
-                            'config' => 'currentDiscs'
-                        ],
-                        [
-                            'header' => 'surrender-review-operator-licence',
-                            'config' => 'Operator licence'
-                        ],
-                        [
-                            'header' => 'surrender-review-community-licence',
-                            'config' => 'Community licence'
-                        ],
-                        [
-                            'header' => 'surrender-review-declaration',
-                            'config' => 'declaration'
-                        ],
-                        [
-                            'config' => 'signature'
-                        ]
-                    ]
+                'reviewTitle' => 'surrender-review-title',
+                'subTitle' => 'AB1234567',
+                'settings' => [
+                    'hide-count' => true
                 ],
+                'sections' => [
+                    [
+                        'header' => 'surrender-review-licence',
+                        'config' => 'licenceDetails'
+                    ],
+                    [
+                        'header' => 'surrender-review-current-discs',
+                        'config' => 'currentDiscs'
+                    ],
+                    [
+                        'header' => 'surrender-review-operator-licence',
+                        'config' => 'Operator licence'
+                    ],
+                    [
+                        'header' => 'surrender-review-community-licence',
+                        'config' => 'Community licence'
+                    ],
+                    [
+                        'header' => 'surrender-review-declaration',
+                        'config' => 'declaration'
+                    ],
+                    [
+                        'config' => 'signature'
+                    ]
+                ]
             ],
+        ];
+        yield [
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
             [
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                [
-                    'reviewTitle' => 'surrender-review-title',
-                    'subTitle' => 'AB1234567',
-                    'settings' => [
-                        'hide-count' => true
-                    ],
-                    'sections' => [
-                        [
-                            'header' => 'surrender-review-licence',
-                            'config' => 'licenceDetails'
-                        ],
-                        [
-                            'header' => 'surrender-review-current-discs',
-                            'config' => 'currentDiscs'
-                        ],
-                        [
-                            'header' => 'surrender-review-operator-licence',
-                            'config' => 'Operator licence'
-                        ],
-                        [
-                            'header' => 'surrender-review-declaration',
-                            'config' => 'declaration'
-                        ],
-                        [
-                            'config' => 'signature'
-                        ]
-                    ]
+                'reviewTitle' => 'surrender-review-title',
+                'subTitle' => 'AB1234567',
+                'settings' => [
+                    'hide-count' => true
                 ],
+                'sections' => [
+                    [
+                        'header' => 'surrender-review-licence',
+                        'config' => 'licenceDetails'
+                    ],
+                    [
+                        'header' => 'surrender-review-current-discs',
+                        'config' => 'currentDiscs'
+                    ],
+                    [
+                        'header' => 'surrender-review-operator-licence',
+                        'config' => 'Operator licence'
+                    ],
+                    [
+                        'header' => 'surrender-review-declaration',
+                        'config' => 'declaration'
+                    ],
+                    [
+                        'config' => 'signature'
+                    ]
+                ]
             ],
         ];
     }

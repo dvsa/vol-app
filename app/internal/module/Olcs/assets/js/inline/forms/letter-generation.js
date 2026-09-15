@@ -6,7 +6,9 @@ OLCS.ready(function () {
     e.preventDefault();
     var $section = $(this).closest(".letter-section");
     var $content = $section.find(".letter-section__content");
-    var $button = $(this).find(".letter-section__toggle");
+    // Only the words change: writing to the whole toggle would replace the arrow
+    // beside them, which never came back.
+    var $button = $(this).find(".letter-section__show-hide");
 
     if ($content.is(":visible")) {
       $content.hide();
@@ -29,12 +31,12 @@ OLCS.ready(function () {
 
     if (allVisible) {
       $allContent.hide();
-      $(".letter-section__toggle").text("Show");
+      $(".letter-section__show-hide").text("Show");
       $allSections.removeClass("letter-section--expanded");
       $(this).text("Show All Sections");
     } else {
       $allContent.show();
-      $(".letter-section__toggle").text("Hide");
+      $(".letter-section__show-hide").text("Hide");
       $allSections.addClass("letter-section--expanded");
       $(this).text("Hide All Sections");
     }
@@ -52,6 +54,18 @@ OLCS.ready(function () {
       $createBtn.prop("disabled", true).addClass("govuk-button--disabled");
     }
   }
+
+  // Clear a radio group's error once the caseworker picks an option
+  $("body").on(
+    "change",
+    '[data-required-radio-group] input[type="radio"]',
+    function () {
+      $(this)
+        .closest("[data-required-radio-group]")
+        .find(".letter-choice-group-error")
+        .hide();
+    },
+  );
 
   // Create letter button click - submit form via AJAX
   $("body").on("click", "#create-letter-btn", function (e) {
@@ -73,6 +87,25 @@ OLCS.ready(function () {
 
     // Hide error
     $errorDiv.hide();
+
+    // Validate every radio "pick one" group has exactly one selection (no default, must pick one)
+    var radioGroupsValid = true;
+    $("[data-required-radio-group]").each(function () {
+      var $group = $(this);
+      var $groupError = $group.find(".letter-choice-group-error");
+      if ($group.find('input[type="radio"]:checked').length === 0) {
+        $groupError.show();
+        if (radioGroupsValid) {
+          this.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+        radioGroupsValid = false;
+      } else {
+        $groupError.hide();
+      }
+    });
+    if (!radioGroupsValid) {
+      return false;
+    }
 
     // Disable button and show loading state
     $button.prop("disabled", true).text("Creating letter...");
@@ -219,6 +252,7 @@ OLCS.ready(function () {
   $("body").on("click", "#prepare-to-send-btn", function (e) {
     e.preventDefault();
     var $btn = $(this);
+    $("#prepare-to-send-error").hide().text("");
     $btn.prop("disabled", true).text("Preparing...");
 
     // Get letterInstanceId from the preview link (set during generateAction success)
@@ -266,7 +300,14 @@ OLCS.ready(function () {
           $btn.prop("disabled", false).text("Prepare to send");
         }
       },
-      error: function () {
+      error: function (xhr) {
+        // Surface the server's reason (e.g. VOL-7402 "requires input" block)
+        // instead of silently resetting the button.
+        var message = "Something went wrong preparing the letter. Try again.";
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          message = xhr.responseJSON.message;
+        }
+        $("#prepare-to-send-error").text(message).show();
         $btn.prop("disabled", false).text("Prepare to send");
       },
     });

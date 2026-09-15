@@ -28,7 +28,7 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class QueueProcessorTest extends MockeryTestCase
+final class QueueProcessorTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -36,11 +36,10 @@ class QueueProcessorTest extends MockeryTestCase
 
     private $mockMsm;
 
+    #[\Override]
     public function setUp(): void
     {
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         $this->mockQueryHandlerManager = m::mock(QueryHandlerManager::class);
 

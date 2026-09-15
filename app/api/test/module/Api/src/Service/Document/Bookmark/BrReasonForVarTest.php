@@ -15,9 +15,9 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class BrReasonForVarTest extends \PHPUnit\Framework\TestCase
+final class BrReasonForVarTest extends \PHPUnit\Framework\TestCase
 {
-    public const SUT_CLASS_NAME = \Dvsa\Olcs\Api\Service\Document\Bookmark\BrReasonForVar::class;
+    public const string SUT_CLASS_NAME = \Dvsa\Olcs\Api\Service\Document\Bookmark\BrReasonForVar::class;
 
     public function testGetQuery(): void
     {

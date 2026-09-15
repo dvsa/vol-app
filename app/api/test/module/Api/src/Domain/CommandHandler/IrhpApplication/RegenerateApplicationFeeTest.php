@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Mockery as m;
 
-class RegenerateApplicationFeeTest extends AbstractCommandHandlerTestCase
+final class RegenerateApplicationFeeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -22,13 +22,14 @@ use Laminas\ServiceManager\Exception\InvalidServiceException;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ValidationHandlerManagerTest extends MockeryTestCase
+final class ValidationHandlerManagerTest extends MockeryTestCase
 {
     /**
      * @var ValidationHandlerManager
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $container = m::mock(ContainerInterface::class);

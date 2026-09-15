@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ContinuationSnapshotTest extends AbstractConsumerTestCase
+final class ContinuationSnapshotTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 

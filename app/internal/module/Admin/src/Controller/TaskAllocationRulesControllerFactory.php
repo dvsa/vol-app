@@ -16,7 +16,7 @@ use Olcs\Service\Data\UserListInternal;
 class TaskAllocationRulesControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TaskAllocationRulesController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TaskAllocationRulesController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

@@ -17,7 +17,7 @@ use Mockery as m;
 /**
  * ByTransportManager Test
  */
-class ByTransportManagerTest extends QueryHandlerTestCase
+final class ByTransportManagerTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -43,7 +43,7 @@ class ByTransportManagerTest extends QueryHandlerTestCase
             ->andReturn(2);
 
         $result = $this->sut->handleQuery($query);
-        $this->assertEquals($result['count'], 2);
+        $this->assertEquals(2, $result['count']);
         $this->assertEquals($result['result'], ['foo']);
     }
 }

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\SetDefaultTrafficAreaAndEnforcement
 /**
  * SetDefaultTrafficAreaAndEnforcementArea Test
  */
-class SetDefaultTrafficAreaAndEnforcementAreaTest extends \PHPUnit\Framework\TestCase
+final class SetDefaultTrafficAreaAndEnforcementAreaTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

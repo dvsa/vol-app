@@ -8,10 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LetterChoice Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_choice")
  */
+#[ORM\Table(name: 'letter_choice')]
+#[ORM\Entity]
 class LetterChoice extends AbstractLetterChoice
 {
 }

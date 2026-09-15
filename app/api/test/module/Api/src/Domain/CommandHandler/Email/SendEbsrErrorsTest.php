@@ -30,7 +30,7 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrErrors as Cmd;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
-class SendEbsrErrorsTest extends AbstractCommandHandlerTestCase
+final class SendEbsrErrorsTest extends AbstractCommandHandlerTestCase
 {
     protected $template = ['ebsr-data-error-start', 'ebsr-data-error-list', 'ebsr-data-error-end'];
 
@@ -118,9 +118,9 @@ class SendEbsrErrorsTest extends AbstractCommandHandlerTestCase
     /**
      * Data provider for handleCommand
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
         $templateData = [
             'registrationNumber' => SendEbsrErrors::UNKNOWN_REG_NO
@@ -132,12 +132,9 @@ class SendEbsrErrorsTest extends AbstractCommandHandlerTestCase
 
         $subjectBus = 'email.ebsr-failed.subject';
         $subjectNoBus = 'email.ebsr-failed-no-bus-reg.subject';
-
-        return [
-            ['test@test.com', 'foo@bar.com', 'test@test.com', $templateData, $subjectNoBus],
-            ['',  'foo@bar.com', 'foo@bar.com', $templateData, $subjectNoBus],
-            ['test@test.com', 'foo@bar.com', 'test@test.com', $templateDataRegNo, $subjectBus],
-            ['',  'foo@bar.com', 'foo@bar.com', $templateDataRegNo, $subjectBus]
-        ];
+        yield ['test@test.com', 'foo@bar.com', 'test@test.com', $templateData, $subjectNoBus];
+        yield ['',  'foo@bar.com', 'foo@bar.com', $templateData, $subjectNoBus];
+        yield ['test@test.com', 'foo@bar.com', 'test@test.com', $templateDataRegNo, $subjectBus];
+        yield ['',  'foo@bar.com', 'foo@bar.com', $templateDataRegNo, $subjectBus];
     }
 }

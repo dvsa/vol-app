@@ -25,7 +25,7 @@ use Dvsa\OlcsTest\Api\Entity\User as UserEntity;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransportManagerTest extends QueryHandlerTestCase
+final class TransportManagerTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

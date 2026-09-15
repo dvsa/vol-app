@@ -214,11 +214,11 @@ abstract class AbstractController extends AbstractRestfulController
      * @param string $message Message to debug
      * @param array  $data    Query to add to log
      *
-     * @return \Laminas\Log\LoggerInterface
+     * @return void
      */
-    protected function debug($message, $data = [])
+    protected function debug($message, $data = []): void
     {
-        return Logger::debug($message, ['data' => $data]);
+        Logger::debug($message, ['data' => $data]);
     }
 
     /**
@@ -226,14 +226,9 @@ abstract class AbstractController extends AbstractRestfulController
      *
      * @param string $message Message to log
      * @param array  $data    Additional data
-     *
-     * @return Logger
      */
-    protected function logError($message, $data = [])
+    protected function logError($message, $data = []): void
     {
-        return Logger::err(
-            $message,
-            $data
-        );
+        Logger::err($message, $data);
     }
 }

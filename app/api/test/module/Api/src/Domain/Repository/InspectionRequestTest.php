@@ -24,8 +24,9 @@ use Doctrine\ORM\Query;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class InspectionRequestTest extends RepositoryTestCase
+final class InspectionRequestTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(InspectionRequestRepo::class, true);
@@ -122,7 +123,7 @@ class InspectionRequestTest extends RepositoryTestCase
         //  check query
         $expect = 'QUERY AND l_ea.id != [[EA-N]]';
 
-        static::assertEquals($expect, $this->query);
+        $this->assertEquals($expect, $this->query);
     }
 
     public function testFetchLicenceOperatingCentreCount(): void

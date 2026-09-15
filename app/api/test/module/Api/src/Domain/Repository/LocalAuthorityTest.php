@@ -23,8 +23,9 @@ use Doctrine\ORM\EntityRepository;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class LocalAuthorityTest extends RepositoryTestCase
+final class LocalAuthorityTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(LocalAuthorityRepo::class, true);

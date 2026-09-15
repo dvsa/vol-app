@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion as Upda
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationTest extends QueryHandlerTestCase
+final class ApplicationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -88,7 +88,7 @@ class ApplicationTest extends QueryHandlerTestCase
             ->andReturn(false)
             ->once()
             ->shouldReceive('serialize')->andReturn(['foo' => 'bar']);
-        $application->setStatus((new \Dvsa\Olcs\Api\Entity\System\RefData())->setId('apsts_not_submitted'));
+        $application->setStatus(new \Dvsa\Olcs\Api\Entity\System\RefData()->setId('apsts_not_submitted'));
         $application->setIsVariation(true);
 
         $this->repoMap['SystemParameter']->shouldReceive('getDisableSelfServeCardPayments')->with()->once()

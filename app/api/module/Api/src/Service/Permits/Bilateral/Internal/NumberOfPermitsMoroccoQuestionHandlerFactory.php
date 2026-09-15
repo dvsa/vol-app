@@ -18,7 +18,7 @@ class NumberOfPermitsMoroccoQuestionHandlerFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NumberOfPermitsMoroccoQuestionHandler
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): NumberOfPermitsMoroccoQuestionHandler
     {
         return new NumberOfPermitsMoroccoQuestionHandler(
             $container->get('PermitsBilateralCommonNoOfPermitsConditionalUpdater')

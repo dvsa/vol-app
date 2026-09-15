@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class DigitalSignatureEntityTest extends EntityTester
+final class DigitalSignatureEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -68,48 +68,46 @@ class DigitalSignatureEntityTest extends EntityTester
         $this->assertSame($expected, $sut->getSignatureName());
     }
 
-    public static function dpTestGetSignatureName(): array
+    public static function dpTestGetSignatureName(): \Iterator
     {
-        return [
+        yield [
+            'Bob Smith',
             [
-                'Bob Smith',
-                [
-                    Attributes::FIRST_NAME => 'BOB',
-                    Attributes::SURNAME => 'SMITH',
-                ],
+                Attributes::FIRST_NAME => 'BOB',
+                Attributes::SURNAME => 'SMITH',
             ],
+        ];
+        yield [
+            'Bob Smith',
             [
-                'Bob Smith',
-                [
-                    Attributes::FIRST_NAME => 'bob',
-                    Attributes::SURNAME => 'smith',
-                ],
+                Attributes::FIRST_NAME => 'bob',
+                Attributes::SURNAME => 'smith',
             ],
+        ];
+        yield [
+            'Bob Smith',
             [
-                'Bob Smith',
-                [
-                    Attributes::FIRST_NAME => 'bob',
-                    Attributes::SURNAME => 'smith',
-                ],
+                Attributes::FIRST_NAME => 'bob',
+                Attributes::SURNAME => 'smith',
             ],
+        ];
+        yield [
+            'Smith',
             [
-                'Smith',
-                [
-                    Attributes::FIRST_NAME => '',
-                    Attributes::SURNAME => 'smith',
-                ],
+                Attributes::FIRST_NAME => '',
+                Attributes::SURNAME => 'smith',
             ],
+        ];
+        yield [
+            'Bob',
             [
-                'Bob',
-                [
-                    Attributes::FIRST_NAME => 'bob',
-                    Attributes::SURNAME => '',
-                ],
+                Attributes::FIRST_NAME => 'bob',
+                Attributes::SURNAME => '',
             ],
-            [
-                '',
-                [],
-            ],
+        ];
+        yield [
+            '',
+            [],
         ];
     }
 
@@ -121,11 +119,9 @@ class DigitalSignatureEntityTest extends EntityTester
         $this->assertSame($expected, $sut->getDateOfBirth());
     }
 
-    public static function dpTestGetDateOfBirth(): array
+    public static function dpTestGetDateOfBirth(): \Iterator
     {
-        return [
-            [null, []],
-            ['1942-12-12', [Attributes::DATE_OF_BIRTH => '1942-12-12']],
-        ];
+        yield [null, []];
+        yield ['1942-12-12', [Attributes::DATE_OF_BIRTH => '1942-12-12']];
     }
 }

@@ -20,7 +20,7 @@ class QueueFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Queue
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Queue
     {
         /**
          * @var $sqsClient SqsClient

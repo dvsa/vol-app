@@ -26,7 +26,7 @@ class GenerateEntities extends AbstractCommandHandler
     private EntityGenerator $entityGenerator;
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->schemaIntrospector = $container->get(Doctrine3SchemaIntrospector::class);
         $this->entityGenerator = $container->get(EntityGenerator::class);

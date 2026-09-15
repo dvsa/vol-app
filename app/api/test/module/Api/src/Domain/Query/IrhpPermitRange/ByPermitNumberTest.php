@@ -10,7 +10,7 @@ namespace Dvsa\OlcsTest\Api\Domain\Query\IrhpPermitRange;
 
 use Dvsa\Olcs\Api\Domain\Query\IrhpPermitRange\ByPermitNumber;
 
-class ByPermitNumberTest extends \PHPUnit\Framework\TestCase
+final class ByPermitNumberTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

@@ -84,7 +84,7 @@ class LicenceFurniture implements
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceFurniture
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicenceFurniture
     {
         // Set dependencies
         $this->setViewHelperManager($container->get('ViewHelperManager'));

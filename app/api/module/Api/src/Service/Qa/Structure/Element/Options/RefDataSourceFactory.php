@@ -18,7 +18,7 @@ class RefDataSourceFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RefDataSource
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RefDataSource
     {
         return new RefDataSource(
             $container->get('RepositoryServiceManager')->get('RefData')

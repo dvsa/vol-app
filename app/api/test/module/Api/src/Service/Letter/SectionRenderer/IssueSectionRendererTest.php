@@ -13,15 +13,19 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Letter\SectionRenderer\IssueSectionRenderer::class)]
-class IssueSectionRendererTest extends MockeryTestCase
+final class IssueSectionRendererTest extends MockeryTestCase
 {
     private IssueSectionRenderer $sut;
     private m\MockInterface|ConverterService $mockConverterService;
     private m\MockInterface|VolGrabReplacementService $mockVolGrabService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockConverterService = m::mock(ConverterService::class);
+        // normalize() fills in the EditorJS envelope and returns conforming content
+        // untouched, so the tests below assert against exactly what they pass in.
+        $this->mockConverterService->shouldReceive('normalize')->andReturnUsing(fn(array $d): array => $d);
         $this->mockVolGrabService = m::mock(VolGrabReplacementService::class);
         $this->sut = new IssueSectionRenderer($this->mockConverterService, $this->mockVolGrabService);
     }
@@ -57,7 +61,7 @@ class IssueSectionRendererTest extends MockeryTestCase
             '<div class="issue-body"><p>Issue content here</p></div>' .
             '</div>';
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testRenderWithHeadingOnly(): void
@@ -76,7 +80,7 @@ class IssueSectionRendererTest extends MockeryTestCase
             '<h4 class="issue-heading">' . htmlspecialchars($heading) . '</h4>' .
             '</div>';
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testRenderWithContentOnly(): void
@@ -108,7 +112,7 @@ class IssueSectionRendererTest extends MockeryTestCase
             '<div class="issue-body"><p>Issue content here</p></div>' .
             '</div>';
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testRenderWithEmptyHeadingAndContent(): void
@@ -123,7 +127,7 @@ class IssueSectionRendererTest extends MockeryTestCase
 
         $expected = '<div class="issue"></div>';
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     public function testRenderThrowsExceptionForUnsupportedEntity(): void
@@ -222,6 +226,6 @@ class IssueSectionRendererTest extends MockeryTestCase
             '<div class="issue-body"><p>Issue for Test Company</p></div>' .
             '</div>';
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 }

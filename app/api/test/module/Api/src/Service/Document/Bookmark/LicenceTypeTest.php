@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\LicenceType;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class LicenceTypeTest extends \PHPUnit\Framework\TestCase
+final class LicenceTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

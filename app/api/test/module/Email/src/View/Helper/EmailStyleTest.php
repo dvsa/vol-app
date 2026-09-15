@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * Class EmailStyleTest
  */
-class EmailStyleTest extends MockeryTestCase
+final class EmailStyleTest extends MockeryTestCase
 {
     public function testSendSuccess(): void
     {

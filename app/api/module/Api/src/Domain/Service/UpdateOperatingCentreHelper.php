@@ -153,7 +153,7 @@ class UpdateOperatingCentreHelper implements FactoryInterface
         $this->messages[$field][] = [$messageCode => $message];
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->authService = $container->get(AuthorizationService::class);
         return $this;

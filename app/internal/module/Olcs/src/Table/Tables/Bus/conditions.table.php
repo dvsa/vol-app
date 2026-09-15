@@ -24,7 +24,9 @@ return [
                  * @var TableBuilder $this
                  * @psalm-scope-this TableBuilder
                  */
-                $this->translator->translate($data['addedVia']['description']),
+                // translate() returns its argument unchanged when the catalogue has no entry, so
+                // the row value can pass straight through it.
+                \Common\Util\Escape::html($this->translator->translate($data['addedVia']['description'])),
         ],
         [
             'title' => 'Fulfilled',
@@ -41,7 +43,7 @@ return [
                  * @var TableBuilder $this
                  * @psalm-scope-this TableBuilder
                  */
-                $this->translator->translate($data['attachedTo']['description']),
+                \Common\Util\Escape::html($this->translator->translate($data['attachedTo']['description'])),
         ],
         [
             'title' => 'OC address',

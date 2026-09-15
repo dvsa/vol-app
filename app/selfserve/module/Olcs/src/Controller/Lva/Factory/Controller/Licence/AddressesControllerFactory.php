@@ -22,7 +22,7 @@ class AddressesControllerFactory implements FactoryInterface
      * @return AddressesController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AddressesController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AddressesController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

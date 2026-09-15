@@ -15,20 +15,34 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "3.9.0",
-    "@docusaurus/preset-classic": "3.9.0",
-    "@docusaurus/theme-mermaid": "3.9.0",
+    "@docusaurus/core": "^3.10.2",
+    "@docusaurus/preset-classic": "^3.10.2",
+    "@docusaurus/theme-mermaid": "^3.10.2",
     "@mdx-js/react": "^3.0.0",
     "prism-react-renderer": "^2.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.6.3",
-    "@docusaurus/tsconfig": "3.6.3",
-    "@docusaurus/types": "3.6.3",
+    "@docusaurus/module-type-aliases": "^3.10.2",
+    "@docusaurus/tsconfig": "^3.10.2",
+    "@docusaurus/types": "^3.10.2",
     "@types/react": "^18.2.29",
     "typescript": "~5.7.2"
+  },
+  "//overrides": [
+    "Build-time advisories that Docusaurus pins below their fixed release: serialize-javascript",
+    "(RCE/DoS, held at 6.x by copy-webpack-plugin and css-minimizer-webpack-plugin) and uuid",
+    "(bounds check, held at 8.x by sockjs under webpack-dev-server). Forcing the fixed version",
+    "is cheaper than carrying a scan exception. Drop an entry once Docusaurus resolves it itself.",
+    "image-size has no entry because no released version fixes it - overriding cannot help, so",
+    "it is excluded in .snyk instead, which is reserved for exactly that case."
+  ],
+  "overrides": {
+    "serialize-javascript": "^7.1.0",
+    "sockjs": {
+      "uuid": "^11.1.1"
+    }
   },
   "browserslist": {
     "production": [

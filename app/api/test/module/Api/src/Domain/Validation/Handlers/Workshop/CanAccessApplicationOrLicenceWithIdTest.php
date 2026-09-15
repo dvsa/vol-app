@@ -21,7 +21,7 @@ use Dvsa\Olcs\Transfer\Query\Workshop\Workshop as Qry;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CanAccessApplicationOrLicenceWithIdTest extends AbstractHandlerTestCase
+final class CanAccessApplicationOrLicenceWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessApplicationOrLicenceWithId

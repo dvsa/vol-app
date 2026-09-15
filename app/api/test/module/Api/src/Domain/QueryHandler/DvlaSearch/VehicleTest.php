@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\DvlaSearch\Exception\VehicleUnavailableException;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class VehicleTest extends QueryHandlerTestCase
+final class VehicleTest extends QueryHandlerTestCase
 {
     protected $sut;
 
@@ -42,7 +42,7 @@ class VehicleTest extends QueryHandlerTestCase
             ->once()
             ->andReturn($vehicle);
 
-        $query = (new \Dvsa\Olcs\Transfer\Query\DvlaSearch\Vehicle())->create($queryData);
+        $query = new \Dvsa\Olcs\Transfer\Query\DvlaSearch\Vehicle()->create($queryData);
         $actual = $this->sut->handleQuery($query);
 
         $expected = [
@@ -64,7 +64,7 @@ class VehicleTest extends QueryHandlerTestCase
             ->once()
             ->andThrow(new VehicleUnavailableException());
 
-        $query = (new \Dvsa\Olcs\Transfer\Query\DvlaSearch\Vehicle())->create($queryData);
+        $query = new \Dvsa\Olcs\Transfer\Query\DvlaSearch\Vehicle()->create($queryData);
         $actual = $this->sut->handleQuery($query);
 
         $expected = [

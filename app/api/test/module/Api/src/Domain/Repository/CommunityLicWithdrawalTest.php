@@ -18,8 +18,9 @@ use Dvsa\Olcs\Api\Domain\Repository\CommunityLicWithdrawal as CommunityLicWithdr
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CommunityLicWithdrawalTest extends RepositoryTestCase
+final class CommunityLicWithdrawalTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(CommunityLicWithdrawalRepo::class);

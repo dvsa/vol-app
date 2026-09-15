@@ -24,7 +24,7 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonthan@opalise.co.uk>
  */
-class CountryFieldsetGeneratorTest extends TestCase
+final class CountryFieldsetGeneratorTest extends TestCase
 {
     public function testGenerate(): void
     {

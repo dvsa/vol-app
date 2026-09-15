@@ -16,7 +16,7 @@ class LdapClientFactory implements FactoryInterface
     public const CONFIG_ADAPTER = 'ldap';
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Client
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Client
     {
         $config = $container->get('Config')[self::CONFIG_NAMESPACE][static::CONFIG_ADAPTERS][static::CONFIG_ADAPTER];
 

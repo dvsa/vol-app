@@ -55,15 +55,16 @@ return [
 
         [
             'title' => 'Name',
-            'formatter' => fn($data, $column) => $data['opposer']['contactDetails']['person']['forename'] . ' ' .
-            $data['opposer']['contactDetails']['person']['familyName']
+            'formatter' => fn($data, $column) =>
+                \Common\Util\Escape::html($data['opposer']['contactDetails']['person']['forename']) . ' ' .
+                \Common\Util\Escape::html($data['opposer']['contactDetails']['person']['familyName'])
         ],
         [
             'title' => 'Grounds',
             'formatter' => function ($data, $column) {
                 $grounds = [];
                 foreach ($data['grounds'] as $ground) {
-                    $grounds[] = $ground['description'];
+                    $grounds[] = \Common\Util\Escape::html($ground['description']);
                 }
 
                 return implode(', ', $grounds);

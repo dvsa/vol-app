@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateTaskTest extends \PHPUnit\Framework\TestCase
+final class CreateTaskTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

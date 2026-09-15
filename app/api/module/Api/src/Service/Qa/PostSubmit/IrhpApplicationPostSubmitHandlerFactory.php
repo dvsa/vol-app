@@ -18,7 +18,7 @@ class IrhpApplicationPostSubmitHandlerFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationPostSubmitHandler
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrhpApplicationPostSubmitHandler
     {
         return new IrhpApplicationPostSubmitHandler(
             $container->get('RepositoryServiceManager')->get('IrhpPermit')

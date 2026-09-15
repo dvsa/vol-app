@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrFixed;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BrFixedTest extends SingleValueTestAbstract
+final class BrFixedTest extends SingleValueTestAbstract
 {
     public const SUT_CLASS_NAME = BrFixed::class;
 }

@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking;
  * Class ConditionsAndUndertakingsTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class ConditionsAndUndertakingsTest extends AbstractSubmissionSectionTestCase
+final class ConditionsAndUndertakingsTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\ConditionsAndUndertakings::class;
 
@@ -21,28 +21,32 @@ class ConditionsAndUndertakingsTest extends AbstractSubmissionSectionTestCase
      */
     public static function sectionTestProvider(): array
     {
-        $case = static::getCase();
-        $case->getLicence()->addConditionUndertakings(
-            static::generateConditionsUndertakings(
-                $case->getLicence(),
-                ConditionUndertaking::TYPE_CONDITION,
-                999,
-                ConditionUndertaking::ADDED_VIA_APPLICATION,
-                ConditionUndertaking::ATTACHED_TO_OPERATING_CENTRE,
-                new \DateTime('2016-12-20')
-            )
-        );
+        $case = static function () {
+            $case = static::getCase();
+            $case->getLicence()->addConditionUndertakings(
+                static::generateConditionsUndertakings(
+                    $case->getLicence(),
+                    ConditionUndertaking::TYPE_CONDITION,
+                    999,
+                    ConditionUndertaking::ADDED_VIA_APPLICATION,
+                    ConditionUndertaking::ATTACHED_TO_OPERATING_CENTRE,
+                    new \DateTime('2016-12-20')
+                )
+            );
 
-        $case->getLicence()->addConditionUndertakings(
-            static::generateConditionsUndertakings(
-                $case->getLicence(),
-                ConditionUndertaking::TYPE_UNDERTAKING,
-                35,
-                ConditionUndertaking::ADDED_VIA_APPLICATION,
-                ConditionUndertaking::ATTACHED_TO_OPERATING_CENTRE,
-                new \DateTime('2016-12-21')
-            )
-        );
+            $case->getLicence()->addConditionUndertakings(
+                static::generateConditionsUndertakings(
+                    $case->getLicence(),
+                    ConditionUndertaking::TYPE_UNDERTAKING,
+                    35,
+                    ConditionUndertaking::ADDED_VIA_APPLICATION,
+                    ConditionUndertaking::ATTACHED_TO_OPERATING_CENTRE,
+                    new \DateTime('2016-12-21')
+                )
+            );
+
+            return $case;
+        };
 
         $expectedResult = [
             'data' => [

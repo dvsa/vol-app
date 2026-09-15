@@ -18,9 +18,9 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatingCentresTest extends QueryHandlerTestCase
+final class OperatingCentresTest extends QueryHandlerTestCase
 {
-    public const ID = 9999;
+    public const int ID = 9999;
 
     public function setUp(): void
     {
@@ -56,13 +56,10 @@ class OperatingCentresTest extends QueryHandlerTestCase
             ->andReturn($mockLicence)
             ->getMock();
 
-        static::assertEquals(
-            [
-                'result' => ['SERIALIZED', 'SERIALIZED', 'SERIALIZED'],
-                'count' => 3,
-            ],
-            $this->sut->handleQuery($query)
-        );
+        $this->assertEquals([
+            'result' => ['SERIALIZED', 'SERIALIZED', 'SERIALIZED'],
+            'count' => 3,
+        ], $this->sut->handleQuery($query));
     }
 
     public function testHandleQueryForApplication(): void
@@ -88,12 +85,9 @@ class OperatingCentresTest extends QueryHandlerTestCase
             ->once()
             ->getMock();
 
-        static::assertEquals(
-            [
-                'result' => ['SERIALIZED', 'SERIALIZED'],
-                'count' => 2,
-            ],
-            $this->sut->handleQuery($query)
-        );
+        $this->assertEquals([
+            'result' => ['SERIALIZED', 'SERIALIZED'],
+            'count' => 2,
+        ], $this->sut->handleQuery($query));
     }
 }

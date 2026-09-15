@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class AnswerWriterTest extends MockeryTestCase
+final class AnswerWriterTest extends MockeryTestCase
 {
     public function testWrite(): void
     {

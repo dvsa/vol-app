@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * Test the short term permit app successful email
  */
-class SendEcmtShortTermSuccessfulTest extends AbstractPermitTestCase
+final class SendEcmtShortTermSuccessfulTest extends AbstractPermitTestCase
 {
     public $orgEmails;
     public $contactDetails;
@@ -45,8 +45,6 @@ class SendEcmtShortTermSuccessfulTest extends AbstractPermitTestCase
     private $issueFeeAmountFormatted = '10';
     private $issueFeeTotal = '110.00';
     private $issueFeeTotalFormatted = '110';
-
-    private $irhpPermitStock;
     private $irhpPermitApplication;
 
     public function setUp(): void
@@ -87,13 +85,13 @@ class SendEcmtShortTermSuccessfulTest extends AbstractPermitTestCase
             'default'
         );
 
-        $this->irhpPermitStock = m::mock(IrhpPermitStock::class);
-        $this->irhpPermitStock->shouldReceive('getPeriodNameKey')
+        $irhpPermitStock = m::mock(IrhpPermitStock::class);
+        $irhpPermitStock->shouldReceive('getPeriodNameKey')
             ->andReturn($this->periodNameKey);
 
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);
         $this->irhpPermitApplication->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock')
-            ->andReturn($this->irhpPermitStock);
+            ->andReturn($irhpPermitStock);
 
         $this->repoMap['IrhpApplication']->shouldReceive('refresh')
             ->with($this->applicationEntity)
@@ -233,11 +231,9 @@ class SendEcmtShortTermSuccessfulTest extends AbstractPermitTestCase
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    public static function dpTranslateToWelshLocaleMappings(): array
+    public static function dpTranslateToWelshLocaleMappings(): \Iterator
     {
-        return [
-            ['Y', 'cy_GB'],
-            ['N', 'en_GB'],
-        ];
+        yield ['Y', 'cy_GB'];
+        yield ['N', 'en_GB'];
     }
 }

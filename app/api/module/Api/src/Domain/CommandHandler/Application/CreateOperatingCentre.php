@@ -97,7 +97,7 @@ final class CreateOperatingCentre extends AbstractCommandHandler implements Tran
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

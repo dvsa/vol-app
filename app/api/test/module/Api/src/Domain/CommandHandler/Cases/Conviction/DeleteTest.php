@@ -18,7 +18,7 @@ use Mockery as m;
 /**
  * Create Conviction Test
  */
-class DeleteTest extends AbstractCommandHandlerTestCase
+final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var DeleteCommandHandler

@@ -35,7 +35,7 @@ return [
                     ['action' => 'edit', 'id' => $data['id']],
                     'case_conditions_undertakings',
                     true
-                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>',
+                ) . '" class="govuk-link js-modal-ajax">' . \Common\Util\Escape::html($data['id']) . '</a>',
             'isNumeric' => true,
             'name' => 'id'
         ],

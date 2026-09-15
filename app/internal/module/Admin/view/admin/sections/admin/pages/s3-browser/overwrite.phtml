@@ -1,0 +1,35 @@
+<?php
+/**
+ * @var \Common\Form\Form $form
+ * @var string            $key
+ */
+
+// POST back to this action preserving the target key in the query string.
+$form->setAttribute('action', $this->url('admin-dashboard/admin-s3-browser/overwrite') . '?key=' . rawurlencode($key));
+?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">Overwrite object</h1>
+
+        <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+                <span class="govuk-visually-hidden">Warning</span>
+                This permanently replaces the stored object and cannot be undone. The document record's
+                metadata (filename, size) is not updated &ndash; this is a raw bucket operation.
+            </strong>
+        </div>
+
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Target key</dt>
+                <dd class="govuk-summary-list__value"><code><?= $this->escapeHtml($key) ?></code></dd>
+            </div>
+        </dl>
+
+        <?php
+        echo $this->formErrors($form);
+        echo $this->form($form);
+        ?>
+    </div>
+</div>

@@ -48,51 +48,49 @@ class AbstractBrRegVarOrCanc extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
+            [],
+            false
+        ];
+        yield [
             [
-                [],
-                false
+                'status' => ''
             ],
+            false
+        ];
+        yield [
             [
-                [
-                    'status' => ''
-                ],
-                false
+                'status' => ['id' => 'foo'],
             ],
+            false
+        ];
+        yield [
             [
-                [
-                    'status' => ['id' => 'foo'],
-                ],
-                false
+                'status' => ['id' => BusReg::STATUS_NEW],
             ],
+            static::NEW_TEXT
+        ];
+        yield [
             [
-                [
-                    'status' => ['id' => BusReg::STATUS_NEW],
-                ],
-                static::NEW_TEXT
+                'status' => ['id' => BusReg::STATUS_CANCEL],
             ],
+            static::CANCEL_TEXT
+        ];
+        yield [
             [
-                [
-                    'status' => ['id' => BusReg::STATUS_CANCEL],
-                ],
-                static::CANCEL_TEXT
+                'status' => ['id' => BusReg::STATUS_VAR],
             ],
+            static::VARY_TEXT
+        ];
+        yield [
             [
-                [
-                    'status' => ['id' => BusReg::STATUS_VAR],
-                ],
-                static::VARY_TEXT
+                'status' => ['id' => BusReg::STATUS_EXPIRED],
             ],
-            [
-                [
-                    'status' => ['id' => BusReg::STATUS_EXPIRED],
-                ],
-                false
-            ],
+            false
         ];
     }
 

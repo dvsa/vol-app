@@ -20,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class FeeUpdaterTest extends MockeryTestCase
+final class FeeUpdaterTest extends MockeryTestCase
 {
     public function testUpdateFees(): void
     {

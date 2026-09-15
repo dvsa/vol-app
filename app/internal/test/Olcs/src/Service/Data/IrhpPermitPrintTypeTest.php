@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * Class IrhpPermitPrintType Test
  */
-class IrhpPermitPrintTypeTest extends AbstractDataServiceTestCase
+final class IrhpPermitPrintTypeTest extends AbstractDataServiceTestCase
 {
     /** @var IrhpPermitPrintType */
     private $sut;
@@ -48,42 +48,40 @@ class IrhpPermitPrintTypeTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $this->sut->fetchListOptions(null));
     }
 
-    public static function dpTestFetchListOptions(): array
+    public static function dpTestFetchListOptions(): \Iterator
     {
-        return [
-            'with data' => [
+        yield 'with data' => [
+            'results' => [
                 'results' => [
-                    'results' => [
-                        [
-                            'id' => 1,
-                            'name' => [
-                                'description' => 'name 1'
-                            ],
+                    [
+                        'id' => 1,
+                        'name' => [
+                            'description' => 'name 1'
                         ],
-                        [
-                            'id' => 2,
-                            'name' => [
-                                'description' => 'name 2'
-                            ],
+                    ],
+                    [
+                        'id' => 2,
+                        'name' => [
+                            'description' => 'name 2'
                         ],
-                        [
-                            'id' => 3,
-                            'name' => [
-                                'description' => 'name 3'
-                            ],
+                    ],
+                    [
+                        'id' => 3,
+                        'name' => [
+                            'description' => 'name 3'
                         ],
-                    ]
-                ],
-                'expected' => [
-                    1 => 'name 1',
-                    2 => 'name 2',
-                    3 => 'name 3',
+                    ],
                 ]
             ],
-            'no data' => [
-                'results' => null,
-                'expected' => []
+            'expected' => [
+                1 => 'name 1',
+                2 => 'name 2',
+                3 => 'name 3',
             ]
+        ];
+        yield 'no data' => [
+            'results' => null,
+            'expected' => []
         ];
     }
 

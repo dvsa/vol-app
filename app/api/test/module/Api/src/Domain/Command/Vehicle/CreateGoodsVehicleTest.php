@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\Vehicle\CreateGoodsVehicle;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateGoodsVehicleTest extends \PHPUnit\Framework\TestCase
+final class CreateGoodsVehicleTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

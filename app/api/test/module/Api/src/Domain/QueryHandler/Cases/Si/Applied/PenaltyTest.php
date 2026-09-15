@@ -18,7 +18,7 @@ use Mockery as m;
 /**
  * Penalty Test
  */
-class PenaltyTest extends QueryHandlerTestCase
+final class PenaltyTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

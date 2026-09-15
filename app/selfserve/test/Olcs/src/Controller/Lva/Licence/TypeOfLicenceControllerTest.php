@@ -21,7 +21,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Test Licence Type Of Licence Controller
  */
-class TypeOfLicenceControllerTest extends m\Adapter\Phpunit\MockeryTestCase
+final class TypeOfLicenceControllerTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * Tests index details action for licence entity Non Partner

@@ -35,6 +35,8 @@ class ApplicationUndertakingsReviewService extends AbstractReviewService
 
     public const PSV421 = 'markup-application_undertakings_PSV421';
     public const PSV421_STANDARD = 'markup-application_undertakings_PSV421-Standard';
+
+    public const PSV421_RESTRICTED = 'markup-application_undertakings_PSV421-Restricted';
     public const PSV421_DECLARE = 'markup-application_undertakings_PSV421-declare';
 
     public const PSV356 = 'markup-application_undertakings_PSV356';
@@ -159,11 +161,14 @@ class ApplicationUndertakingsReviewService extends AbstractReviewService
         $isInternal = $this->isInternal($data);
 
         $additionalParts = [
-            $isStandard ? $this->translate(self::PSV421_STANDARD) : '',
             $isInternal ? $this->translate(self::PSV421_DECLARE) : ''
         ];
 
-        return $this->translateReplace(self::PSV421, $additionalParts);
+        if ($isStandard) {
+            return $this->translateReplace(self::PSV421, $additionalParts);
+        } else {
+            return $this->translateReplace(self::PSV421_RESTRICTED, $additionalParts);
+        }
     }
 
     private function getPsv356()

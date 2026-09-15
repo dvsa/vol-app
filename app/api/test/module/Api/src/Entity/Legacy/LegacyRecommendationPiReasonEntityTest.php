@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Legacy\LegacyRecommendationPiReason as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class LegacyRecommendationPiReasonEntityTest extends EntityTester
+final class LegacyRecommendationPiReasonEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

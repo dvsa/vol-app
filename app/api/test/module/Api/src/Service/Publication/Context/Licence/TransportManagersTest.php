@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class TransportManagersTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class TransportManagersTest extends MockeryTestCase
+final class TransportManagersTest extends MockeryTestCase
 {
     public function testProvideEmpty(): void
     {
@@ -27,7 +27,7 @@ class TransportManagersTest extends MockeryTestCase
         $context = new \ArrayObject();
         $sut->provide($publicationLink, $context);
 
-        $this->assertEquals([], $context->getArrayCopy());
+        $this->assertSame([], $context->getArrayCopy());
     }
 
     #[\PHPUnit\Framework\Attributes\Group('publicationFilter

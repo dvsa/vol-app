@@ -12,23 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Scan
-        uses: aquasecurity/trivy-action@v0.33.1
+      
+      - name: Scan Configs with Grype
+        uses: anchore/scan-action@v6
+        id: scan
         with:
-          exit-code: 1
-          scan-ref: "infra/docker"
-          scan-type: "config"
-          format: "sarif"
-          output: "trivy-results.sarif"
-          severity: "MEDIUM,HIGH,CRITICAL"
+          path: "infra/docker"
+          severity-cutoff: medium
+          fail-build: true
+          output-format: sarif
           skip-dirs: "infra/docker/printpit,infra/docker/mock-govuk-signin"
-          limit-severities-for-sarif: true
-          version: "v0.54.1"
-        env:
-          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
-          TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
+          # Note: Grype will scan the files in the directory for package vulnerabilities.
+          # To exclude specific sub-directories, use a .grypeignore file or adjust the scan path accordingly.
+
       - name: Upload Results to GitHub Code Scanning
-        if: ${{ always() }}
-        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: "trivy-results.sarif"
+          sarif_file: ${{ steps.scan.outputs.sarif }}

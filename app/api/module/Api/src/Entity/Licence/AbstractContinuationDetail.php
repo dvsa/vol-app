@@ -21,26 +21,19 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="continuation_detail",
- *    indexes={
- *        @ORM\Index(name="fk_continuation_detail_digital_signature_id_digital_signature_id", columns={"digital_signature_id"}),
- *        @ORM\Index(name="fk_continuation_detail_signature_type_ref_data_id", columns={"signature_type"}),
- *        @ORM\Index(name="ix_continuation_detail_checklist_document_id", columns={"checklist_document_id"}),
- *        @ORM\Index(name="ix_continuation_detail_continuation_id", columns={"continuation_id"}),
- *        @ORM\Index(name="ix_continuation_detail_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_continuation_detail_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_continuation_detail_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_continuation_detail_status", columns={"status"}),
- *        @ORM\Index(name="uk_continuation_detail_licence_id_continuation_id", columns={"licence_id", "continuation_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_continuation_detail_licence_id_continuation_id", columns={"licence_id", "continuation_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'continuation_detail')]
+#[ORM\Index(name: 'fk_continuation_detail_digital_signature_id_digital_signature_id', columns: ['digital_signature_id'])]
+#[ORM\Index(name: 'fk_continuation_detail_signature_type_ref_data_id', columns: ['signature_type'])]
+#[ORM\Index(name: 'ix_continuation_detail_checklist_document_id', columns: ['checklist_document_id'])]
+#[ORM\Index(name: 'ix_continuation_detail_continuation_id', columns: ['continuation_id'])]
+#[ORM\Index(name: 'ix_continuation_detail_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_continuation_detail_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_continuation_detail_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_continuation_detail_status', columns: ['status'])]
+#[ORM\UniqueConstraint(name: 'uk_continuation_detail_licence_id_continuation_id', columns: ['licence_id', 'continuation_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractContinuationDetail implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -53,247 +46,221 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to continuation
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Continuation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Continuation", fetch="LAZY")
-     * @ORM\JoinColumn(name="continuation_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'continuation_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Continuation::class, fetch: 'LAZY')]
     protected $continuation;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'continuationDetails', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * ChecklistDocument
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="checklist_document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'checklist_document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'continuationDetails', fetch: 'LAZY')]
     protected $checklistDocument;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * SignatureType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="signature_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'signature_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $signatureType;
 
     /**
      * DigitalSignature
      *
      * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\DigitalSignature", fetch="LAZY")
-     * @ORM\JoinColumn(name="digital_signature_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'digital_signature_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DigitalSignature::class, fetch: 'LAZY')]
     protected $digitalSignature;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * received
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="received", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'received', nullable: false, options: ['default' => 0])]
     protected $received = 0;
 
     /**
      * Tot auth vehicles
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="tot_auth_vehicles", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'tot_auth_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthVehicles;
 
     /**
      * Tot psv discs
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="tot_psv_discs", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'tot_psv_discs', nullable: true, options: ['unsigned' => true])]
     protected $totPsvDiscs;
 
     /**
      * Tot community licences
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="tot_community_licences", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'tot_community_licences', nullable: true, options: ['unsigned' => true])]
     protected $totCommunityLicences;
 
     /**
      * Average balance amount
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="average_balance_amount", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'average_balance_amount', nullable: true)]
     protected $averageBalanceAmount;
 
     /**
      * hasOverdraft
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="has_overdraft", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'has_overdraft', nullable: true)]
     protected $hasOverdraft;
 
     /**
      * Overdraft amount
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="overdraft_amount", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'overdraft_amount', nullable: true)]
     protected $overdraftAmount;
 
     /**
      * hasFactoring
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="has_factoring", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'has_factoring', nullable: true)]
     protected $hasFactoring;
 
     /**
      * Factoring amount
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="factoring_amount", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'factoring_amount', nullable: true)]
     protected $factoringAmount;
 
     /**
      * hasOtherFinances
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="has_other_finances", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'has_other_finances', nullable: true)]
     protected $hasOtherFinances;
 
     /**
      * Other finances amount
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="other_finances_amount", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'other_finances_amount', nullable: true)]
     protected $otherFinancesAmount;
 
     /**
      * Other finances details
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="other_finances_details", length=200, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'other_finances_details', length: 200, nullable: true)]
     protected $otherFinancesDetails;
 
     /**
      * Financial evidence uploaded
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="financial_evidence_uploaded", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'financial_evidence_uploaded', nullable: true)]
     protected $financialEvidenceUploaded;
 
     /**
      * Is digital
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_digital", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_digital', nullable: false, options: ['default' => 0])]
     protected $isDigital = 0;
 
     /**
      * Digital notification sent
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="digital_notification_sent", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'digital_notification_sent', nullable: true)]
     protected $digitalNotificationSent;
 
     /**
      * Digital reminder sent
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="digital_reminder_sent", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'digital_reminder_sent', nullable: false, options: ['default' => 0])]
     protected $digitalReminderSent = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -317,7 +284,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setId($id)
     {
@@ -341,7 +308,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Continuation $continuation new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setContinuation($continuation)
     {
@@ -365,7 +332,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -389,7 +356,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $checklistDocument new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setChecklistDocument($checklistDocument)
     {
@@ -413,7 +380,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setStatus($status)
     {
@@ -437,7 +404,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $signatureType new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setSignatureType($signatureType)
     {
@@ -461,7 +428,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\DigitalSignature $digitalSignature new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setDigitalSignature($digitalSignature)
     {
@@ -485,7 +452,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -509,7 +476,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -533,7 +500,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $received new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setReceived($received)
     {
@@ -557,7 +524,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param int $totAuthVehicles new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setTotAuthVehicles($totAuthVehicles)
     {
@@ -581,7 +548,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param int $totPsvDiscs new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setTotPsvDiscs($totPsvDiscs)
     {
@@ -605,7 +572,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param int $totCommunityLicences new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setTotCommunityLicences($totCommunityLicences)
     {
@@ -629,7 +596,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $averageBalanceAmount new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setAverageBalanceAmount($averageBalanceAmount)
     {
@@ -653,7 +620,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $hasOverdraft new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setHasOverdraft($hasOverdraft)
     {
@@ -677,7 +644,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $overdraftAmount new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setOverdraftAmount($overdraftAmount)
     {
@@ -701,7 +668,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $hasFactoring new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setHasFactoring($hasFactoring)
     {
@@ -725,7 +692,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $factoringAmount new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setFactoringAmount($factoringAmount)
     {
@@ -749,7 +716,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $hasOtherFinances new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setHasOtherFinances($hasOtherFinances)
     {
@@ -773,7 +740,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $otherFinancesAmount new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setOtherFinancesAmount($otherFinancesAmount)
     {
@@ -797,7 +764,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $otherFinancesDetails new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setOtherFinancesDetails($otherFinancesDetails)
     {
@@ -821,7 +788,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param bool $financialEvidenceUploaded new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setFinancialEvidenceUploaded($financialEvidenceUploaded)
     {
@@ -845,7 +812,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param bool $isDigital new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setIsDigital($isDigital)
     {
@@ -869,7 +836,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param bool $digitalNotificationSent new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setDigitalNotificationSent($digitalNotificationSent)
     {
@@ -893,7 +860,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param bool $digitalReminderSent new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setDigitalReminderSent($digitalReminderSent)
     {
@@ -917,7 +884,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setVersion($version)
     {

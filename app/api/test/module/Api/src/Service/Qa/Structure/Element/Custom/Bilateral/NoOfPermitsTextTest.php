@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsTextTest extends MockeryTestCase
+final class NoOfPermitsTextTest extends MockeryTestCase
 {
     public function testGetRepresentation(): void
     {

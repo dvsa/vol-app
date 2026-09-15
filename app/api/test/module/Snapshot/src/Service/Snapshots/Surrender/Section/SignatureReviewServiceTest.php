@@ -13,7 +13,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\I18n\Translator\TranslatorInterface;
 
-class SignatureReviewServiceTest extends MockeryTestCase
+final class SignatureReviewServiceTest extends MockeryTestCase
 {
     /**
      * @var SignatureReviewService
@@ -25,6 +25,7 @@ class SignatureReviewServiceTest extends MockeryTestCase
      */
     protected $translator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->translator = m::mock(TranslatorInterface::class);

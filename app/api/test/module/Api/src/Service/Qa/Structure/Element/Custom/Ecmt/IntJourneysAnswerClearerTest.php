@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IntJourneysAnswerClearerTest extends MockeryTestCase
+final class IntJourneysAnswerClearerTest extends MockeryTestCase
 {
     public function testSave(): void
     {

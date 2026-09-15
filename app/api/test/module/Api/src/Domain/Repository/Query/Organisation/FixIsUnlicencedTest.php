@@ -11,7 +11,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
 /**
  * Class FixIsUnlicencedTest
  */
-class FixIsUnlicencedTest extends AbstractDbQueryTestCase
+final class FixIsUnlicencedTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         Entity\Organisation\Organisation::class => 'organisation',
@@ -43,15 +43,13 @@ class FixIsUnlicencedTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
-        return [
-            [
-                [],
-                [],
-                [],
-                []
-            ]
+        yield [
+            [],
+            [],
+            [],
+            []
         ];
     }
 

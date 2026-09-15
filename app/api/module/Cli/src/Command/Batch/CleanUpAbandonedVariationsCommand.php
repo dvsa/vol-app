@@ -12,7 +12,7 @@ class CleanUpAbandonedVariationsCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:clean-up-variations';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Clean up abandoned variations.');
     }

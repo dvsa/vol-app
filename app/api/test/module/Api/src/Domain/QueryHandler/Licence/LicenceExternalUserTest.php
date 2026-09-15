@@ -18,7 +18,7 @@ use Dvsa\OlcsTest\Api\Entity\User as UserEntity;
 /**
  * Test Dvsa\Olcs\Api\Domain\QueryHandler\Licence\Licence mocking an External User
  */
-class LicenceExternalUserTest extends QueryHandlerTestCase
+final class LicenceExternalUserTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

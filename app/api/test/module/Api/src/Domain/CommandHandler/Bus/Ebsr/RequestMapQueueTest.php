@@ -16,7 +16,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use LmcRbacMvc\Identity\IdentityInterface;
 use Mockery as m;
 
-class RequestMapQueueTest extends AbstractCommandHandlerTestCase
+final class RequestMapQueueTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -83,7 +83,7 @@ class RequestMapQueueTest extends AbstractCommandHandlerTestCase
         $result = $this->sut->handleCommand($cmd);
 
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals($result->getMessages()[0], RequestMapQueue::CONFIRM_MESSAGE);
+        $this->assertEquals(RequestMapQueue::CONFIRM_MESSAGE, $result->getMessages()[0]);
     }
 
     /**

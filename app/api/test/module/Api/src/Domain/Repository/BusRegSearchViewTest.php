@@ -20,8 +20,9 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class BusRegSearchViewTest extends RepositoryTestCase
+final class BusRegSearchViewTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);
@@ -184,20 +185,18 @@ class BusRegSearchViewTest extends RepositoryTestCase
     /**
      * Data provider maps the relevant group by clauses that should be applied to the query given a certain context
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provideContextGroupBys(): array
+    public static function provideContextGroupBys(): \Iterator
     {
-        return [
-            [
-                'licence', ['m.licId', 'm.licNo'],
-            ],
-            [
-                'organisation', ['m.organisationId', 'm.organisationName']
-            ],
-            [
-                'busRegStatus', ['m.busRegStatus', 'm.busRegStatusDesc']
-            ],
+        yield [
+            'licence', ['m.licId', 'm.licNo'],
+        ];
+        yield [
+            'organisation', ['m.organisationId', 'm.organisationName']
+        ];
+        yield [
+            'busRegStatus', ['m.busRegStatus', 'm.busRegStatusDesc']
         ];
     }
 

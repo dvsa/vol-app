@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GrantTest extends QueryHandlerTestCase
+final class GrantTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

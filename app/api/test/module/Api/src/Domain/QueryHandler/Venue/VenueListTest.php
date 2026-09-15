@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class VenueListTest extends QueryHandlerTestCase
+final class VenueListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

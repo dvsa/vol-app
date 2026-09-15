@@ -6,15 +6,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TemplateTestData Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="template_test_data",
- *    indexes={
- *        @ORM\Index(name="ix_template_test_data_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_template_test_data_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'template_test_data')]
+#[ORM\Index(name: 'ix_template_test_data_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_template_test_data_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class TemplateTestData extends AbstractTemplateTestData
 {
     /**

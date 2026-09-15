@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * Pi Test
  */
-class PiTest extends MockeryTestCase
+final class PiTest extends MockeryTestCase
 {
     public function testMapFromErrors(): void
     {

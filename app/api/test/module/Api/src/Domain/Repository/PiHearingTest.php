@@ -16,8 +16,9 @@ use Dvsa\Olcs\Transfer\Query\Cases\Pi\ReportList as ReportListQry;
 /**
  * PiHearing Repo test
  */
-class PiHearingTest extends RepositoryTestCase
+final class PiHearingTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

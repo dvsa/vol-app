@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Vehicle;
 
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore;
-use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue;
+use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
@@ -23,13 +23,15 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Vehicle\ProcessDuplicateVehicleWarning;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Command\Vehicle\ProcessDuplicateVehicleWarning as Cmd;
+use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
+use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 
 /**
  * Process Duplicate Vehicle Warning Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ProcessDuplicateVehicleWarningTest extends AbstractCommandHandlerTestCase
+final class ProcessDuplicateVehicleWarningTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -47,6 +49,7 @@ class ProcessDuplicateVehicleWarningTest extends AbstractCommandHandlerTestCase
         /** @var Licence $licence */
         $licence = m::mock(Licence::class)->makePartial();
         $licence->setId(222);
+        $licence->shouldReceive('getNiFlag')->andReturn(false);
 
         /** @var Vehicle $vehicle */
         $vehicle = m::mock(Vehicle::class)->makePartial();
@@ -57,6 +60,16 @@ class ProcessDuplicateVehicleWarningTest extends AbstractCommandHandlerTestCase
         $licenceVehicle->setLicence($licence);
         $licenceVehicle->setVehicle($vehicle);
         $licenceVehicle->setId(111);
+
+        /** @var Organisation $organisation */
+        $organisation = m::mock(Organisation::class)->makePartial();
+        $organisation->shouldReceive('getAllowEmail')->andReturn(true);
+        $licence->setOrganisation($organisation);
+
+        /** @var ContactDetails $contactDetails */
+        $contactDetails = m::mock(ContactDetails::class)->makePartial();
+        $contactDetails->shouldReceive('getEmailAddress')->andReturn(null);
+        $licence->setCorrespondenceCd($contactDetails);
 
         $this->repoMap['LicenceVehicle']->shouldReceive('fetchUsingId')
             ->with($command)
@@ -75,17 +88,25 @@ class ProcessDuplicateVehicleWarningTest extends AbstractCommandHandlerTestCase
             'licence'     => 222,
             'category'    => Category::CATEGORY_LICENSING,
             'subCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
-            'isExternal'  => false
+            'isExternal'  => false,
+            'dispatch' => true,
+            'metadata' => json_encode([
+                'details' => [
+                    'category'            => Category::CATEGORY_LICENSING,
+                    'documentSubCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
+                    'documentTemplate'    => ProcessDuplicateVehicleWarning::TEMPLATE_ID_GB, // adjust based on niFlag, or mock getNiFlag()
+                    'allowEmail'          => true,
+                ]]),
         ];
         $this->expectedSideEffect(GenerateAndStore::class, $data, $result1);
 
         $result2 = new Result();
-        $result2->addMessage('Enqueue');
+        $result2->addMessage('PrintLetter');
         $data = [
-            'documentId' => 12345,
-            'jobName' => 'Duplicate vehicle letter'
+            'id' => 12345,
+            'method' => PrintLetter::METHOD_PRINT_AND_POST,
         ];
-        $this->expectedSideEffect(Enqueue::class, $data, $result2);
+        $this->expectedSideEffect(PrintLetter::class, $data, $result2);
 
         $result = $this->sut->handleCommand($command);
 
@@ -95,7 +116,7 @@ class ProcessDuplicateVehicleWarningTest extends AbstractCommandHandlerTestCase
             ],
             'messages' => [
                 'GenerateAndStore',
-                'Enqueue',
+                'PrintLetter',
                 'Licence vehicle ID: 111 duplication letter sent'
             ]
         ];

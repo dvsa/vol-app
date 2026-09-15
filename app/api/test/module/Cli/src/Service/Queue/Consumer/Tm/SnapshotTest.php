@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Entity\User\User;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SnapshotTest extends AbstractConsumerTestCase
+final class SnapshotTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 

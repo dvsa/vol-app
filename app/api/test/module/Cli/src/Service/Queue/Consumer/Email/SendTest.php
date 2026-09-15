@@ -17,7 +17,7 @@ use Laminas\ServiceManager\Exception\InvalidServiceException;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\Email\Send::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
-class SendTest extends AbstractConsumerTestCase
+final class SendTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Send::class;
 

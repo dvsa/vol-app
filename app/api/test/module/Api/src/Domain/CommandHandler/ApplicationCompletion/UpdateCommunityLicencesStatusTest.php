@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as ApplicationComplet
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateCommunityLicencesStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateCommunityLicencesStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'CommunityLicences';
 

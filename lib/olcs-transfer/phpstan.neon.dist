@@ -1,0 +1,22 @@
+parameters:
+  level: 4
+  paths:
+    - test
+    - src
+  ignoreErrors:
+  - # Laminas have added annotations to say classes we extend will be final in subsequent versions - we can't easily fix this
+      identifier: class.extendsFinalByPhpDoc
+      paths:
+        - 'src/Validators'
+        - 'src/Util/ArrayInput.php'
+        - 'src/Router/Query.php'
+  - # Laminas have added annotations to say classes we extend will be final in subsequent versions - we can't easily fix this
+      identifier: property.parentPropertyFinalByPhpDoc
+      paths:
+        - 'src/Validators'
+  - # There are 24 traits which are unused, however, they may be used by commands running on API nodes - see VOL-6570
+      identifier: trait.unused
+      paths:
+        - 'src/FieldType/Traits'
+includes:
+  - vendor/phpstan/phpstan-mockery/extension.neon

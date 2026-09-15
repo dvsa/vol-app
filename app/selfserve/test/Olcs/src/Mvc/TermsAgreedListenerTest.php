@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Mvc\TermsAgreedListener;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class TermsAgreedListenerTest extends MockeryTestCase
+final class TermsAgreedListenerTest extends MockeryTestCase
 {
     private $sut;
 
@@ -25,6 +25,7 @@ class TermsAgreedListenerTest extends MockeryTestCase
 
     private $urlHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->identityProvider = m::mock(JWTIdentityProvider::class);
@@ -67,13 +68,11 @@ class TermsAgreedListenerTest extends MockeryTestCase
         );
     }
 
-    public static function dpExcludedRoute(): array
+    public static function dpExcludedRoute(): \Iterator
     {
-        return [
-            [TermsAgreedListener::ROUTE_WELCOME],
-            ['auth/logout'],
-            ['terms-and-conditions']
-        ];
+        yield [TermsAgreedListener::ROUTE_WELCOME];
+        yield ['auth/logout'];
+        yield ['terms-and-conditions'];
     }
 
     public function testOnDispatchAnonymousUser(): void

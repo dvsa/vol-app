@@ -23,7 +23,7 @@ use Mockery as m;
 /**
  * EbsrSubmissionListTest
  */
-class EbsrSubmissionListTest extends QueryHandlerTestCase
+final class EbsrSubmissionListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -117,27 +117,25 @@ class EbsrSubmissionListTest extends QueryHandlerTestCase
     /**
      * Data provider for testHandleQuery
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function queryStatusProvider(): array
+    public static function queryStatusProvider(): \Iterator
     {
-        return [
-            [
-                EbsrSubmissionEntity::FAILED_DISPLAY_TYPE,
-                EbsrSubmissionEntity::$displayStatus[EbsrSubmissionEntity::FAILED_DISPLAY_TYPE]
-            ],
-            [
-                EbsrSubmissionEntity::PROCESSING_DISPLAY_TYPE,
-                EbsrSubmissionEntity::$displayStatus[EbsrSubmissionEntity::PROCESSING_DISPLAY_TYPE]
-            ],
-            [
-                EbsrSubmissionEntity::PROCESSED_DISPLAY_TYPE,
-                EbsrSubmissionEntity::$displayStatus[EbsrSubmissionEntity::PROCESSED_DISPLAY_TYPE]
-            ],
-            [
-                null,
-                EbsrSubmissionEntity::$displayStatus['all_valid']
-            ]
+        yield [
+            EbsrSubmissionEntity::FAILED_DISPLAY_TYPE,
+            EbsrSubmissionEntity::$displayStatus[EbsrSubmissionEntity::FAILED_DISPLAY_TYPE]
+        ];
+        yield [
+            EbsrSubmissionEntity::PROCESSING_DISPLAY_TYPE,
+            EbsrSubmissionEntity::$displayStatus[EbsrSubmissionEntity::PROCESSING_DISPLAY_TYPE]
+        ];
+        yield [
+            EbsrSubmissionEntity::PROCESSED_DISPLAY_TYPE,
+            EbsrSubmissionEntity::$displayStatus[EbsrSubmissionEntity::PROCESSED_DISPLAY_TYPE]
+        ];
+        yield [
+            null,
+            EbsrSubmissionEntity::$displayStatus['all_valid']
         ];
     }
 }

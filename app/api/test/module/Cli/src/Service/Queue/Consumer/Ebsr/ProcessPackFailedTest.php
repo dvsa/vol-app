@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ProcessPackFailedTest extends AbstractConsumerTestCase
+final class ProcessPackFailedTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 

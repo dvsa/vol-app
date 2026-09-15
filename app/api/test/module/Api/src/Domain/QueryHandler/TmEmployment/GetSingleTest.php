@@ -20,7 +20,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class GetSingleTest extends QueryHandlerTestCase
+final class GetSingleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

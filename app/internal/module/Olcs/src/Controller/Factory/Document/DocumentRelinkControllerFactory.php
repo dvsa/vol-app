@@ -22,7 +22,7 @@ class DocumentRelinkControllerFactory implements FactoryInterface
      * @return DocumentGenerationController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DocumentRelinkController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DocumentRelinkController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

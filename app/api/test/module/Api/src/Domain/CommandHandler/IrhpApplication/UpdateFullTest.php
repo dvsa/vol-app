@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Update Irhp Application test
  */
-class UpdateFullTest extends AbstractCommandHandlerTestCase
+final class UpdateFullTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -419,12 +419,10 @@ class UpdateFullTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpTestHandleCommandQandA(): array
+    public static function dpTestHandleCommandQandA(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL]
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL];
     }
 
     public function testHandleCommandUnsupportedNoneQandAPermitType(): void

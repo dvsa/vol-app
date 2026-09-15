@@ -27,10 +27,9 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * @see LicenceQueryHandler
  */
-class LicenceTest extends QueryHandlerTestCase
+final class LicenceTest extends QueryHandlerTestCase
 {
     public $entityAccessLogger;
-    public $authorizationService;
     /**
      * @var LicenceQueryHandler
      */
@@ -227,11 +226,11 @@ class LicenceTest extends QueryHandlerTestCase
         $this->sut = new LicenceQueryHandler();
         $this->mockRepo('Licence', LicenceRepo::class);
 
-        $this->authorizationService = m::mock(AuthorizationService::class);
-        $this->authorizationService->shouldReceive('getIdentity->getUser->isAnonymous')->withNoArgs()->andReturn(true);
+        $authorizationService = m::mock(AuthorizationService::class);
+        $authorizationService->shouldReceive('getIdentity->getUser->isAnonymous')->withNoArgs()->andReturn(true);
 
         $this->mockedSmServices = [
-            AuthorizationService::class => $this->authorizationService,
+            AuthorizationService::class => $authorizationService,
         ];
 
         parent::setUp();

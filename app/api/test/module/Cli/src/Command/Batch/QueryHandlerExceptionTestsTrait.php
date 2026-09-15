@@ -14,8 +14,7 @@ trait QueryHandlerExceptionTestsTrait
      */
     public function testQueryHandlingGenericException(): void
     {
-        $this->mockQueryHandlerManager->expects($this->any())
-            ->method('handleQuery')
+        $this->mockQueryHandlerManager->method('handleQuery')
             ->willThrowException(new \Exception('Generic exception'));
 
         $this->executeCommand();
@@ -27,8 +26,7 @@ trait QueryHandlerExceptionTestsTrait
      */
     public function testQueryHandlingNotFoundException(): void
     {
-        $this->mockQueryHandlerManager->expects($this->any())
-            ->method('handleQuery')
+        $this->mockQueryHandlerManager->method('handleQuery')
             ->willThrowException(new NotFoundException('Not found exception'));
 
         $this->executeCommand();

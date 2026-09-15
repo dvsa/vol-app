@@ -15,7 +15,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\Documents as DocumentsQry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class DocumentsTest extends QueryHandlerTestCase
+final class DocumentsTest extends QueryHandlerTestCase
 {
     #[\Override]
     protected function initReferences(): void

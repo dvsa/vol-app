@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  * Class InjectNaptanCodesTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\Filter
  */
-class InjectNaptanCodesTest extends TestCase
+final class InjectNaptanCodesTest extends TestCase
 {
     public function testFilter(): void
     {

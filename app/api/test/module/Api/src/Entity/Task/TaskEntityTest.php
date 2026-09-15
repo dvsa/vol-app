@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\System\SubCategory;
  *
  * Initially auto-generated but won't be overridden
  */
-class TaskEntityTest extends EntityTester
+final class TaskEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

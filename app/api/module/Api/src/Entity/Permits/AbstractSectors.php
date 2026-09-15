@@ -22,17 +22,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="sectors",
- *    indexes={
- *        @ORM\Index(name="ix_permit_sectors_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_permit_sectors_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'sectors')]
+#[ORM\Index(name: 'ix_permit_sectors_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_permit_sectors_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractSectors implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -46,97 +42,87 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: false)]
     protected $name = '';
 
     /**
      * Name key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name_key", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name_key', length: 255, nullable: false)]
     protected $nameKey = '';
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: false)]
     protected $description = '';
 
     /**
      * Description key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description_key", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description_key', length: 255, nullable: true)]
     protected $descriptionKey;
 
     /**
      * Sifting percentage
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="sifting_percentage", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'sifting_percentage', nullable: true)]
     protected $siftingPercentage;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=true)
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: true)]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: true)]
     protected $displayOrder;
 
     /**
@@ -160,7 +146,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setId($id)
     {
@@ -184,7 +170,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -208,7 +194,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -232,7 +218,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param string $name new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setName($name)
     {
@@ -256,7 +242,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param string $nameKey new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setNameKey($nameKey)
     {
@@ -280,7 +266,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param string $description new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setDescription($description)
     {
@@ -304,7 +290,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param string $descriptionKey new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setDescriptionKey($descriptionKey)
     {
@@ -328,7 +314,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param string $siftingPercentage new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setSiftingPercentage($siftingPercentage)
     {
@@ -352,7 +338,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setVersion($version)
     {
@@ -376,7 +362,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param int $displayOrder new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {

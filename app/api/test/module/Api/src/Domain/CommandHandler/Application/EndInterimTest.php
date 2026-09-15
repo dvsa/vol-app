@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class EndInterimTest extends AbstractCommandHandlerTestCase
+final class EndInterimTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

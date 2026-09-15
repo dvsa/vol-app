@@ -1,0 +1,219 @@
+ALTER TABLE address CHANGE country_code country_code VARCHAR(2) DEFAULT NULL
+ALTER TABLE admin_area_traffic_area CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
+ALTER TABLE answer CHANGE ans_decimal ans_decimal NUMERIC(10, 0) DEFAULT NULL
+ALTER TABLE application CHANGE financial_evidence_uploaded financial_evidence_uploaded SMALLINT DEFAULT NULL, CHANGE small_vehicle_evidence_uploaded small_vehicle_evidence_uploaded SMALLINT UNSIGNED DEFAULT NULL, CHANGE occupation_evidence_uploaded occupation_evidence_uploaded SMALLINT UNSIGNED DEFAULT NULL, CHANGE psv_total_vehicle_small psv_total_vehicle_small SMALLINT UNSIGNED DEFAULT NULL, CHANGE psv_total_vehicle_large psv_total_vehicle_large SMALLINT UNSIGNED DEFAULT NULL
+ALTER TABLE application_operating_centre CHANGE ad_placed ad_placed SMALLINT NOT NULL
+ALTER TABLE application_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE application_step CHANGE weight weight NUMERIC(10, 0) DEFAULT NULL
+ALTER TABLE application_validation CHANGE weight weight NUMERIC(10, 0) DEFAULT NULL
+ALTER TABLE bus_reg_bus_service_type DROP olbs_key
+ALTER TABLE bus_reg_bus_service_type RENAME INDEX fk_bus_reg_bus_serv_type_bus_service_type_id_bus_service_type_id TO IDX_CE30F69C4424474C
+ALTER TABLE bus_reg_bus_service_type RENAME INDEX ix_bus_reg_bus_service_type_bus_reg_id TO IDX_CE30F69C5327B2E3
+ALTER TABLE bus_reg_local_auth DROP olbs_key
+ALTER TABLE bus_reg_local_auth RENAME INDEX ix_bus_reg_local_auth_local_authority_id TO IDX_B1BB6E19B0E901C6
+ALTER TABLE bus_reg_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE bus_reg_traffic_area DROP olbs_key, CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
+ALTER TABLE bus_reg_traffic_area RENAME INDEX ix_bus_reg_traffic_area_bus_reg_id TO IDX_B7B2BC105327B2E3
+ALTER TABLE bus_reg_traffic_area RENAME INDEX ix_bus_reg_traffic_area_traffic_area_id TO IDX_B7B2BC1018E0B1DB
+ALTER TABLE bus_reg_variation_reason DROP olbs_key, DROP olbs_key2
+ALTER TABLE bus_reg_variation_reason RENAME INDEX ix_bus_reg_variation_reason_bus_reg_id TO IDX_F841EA265327B2E3
+ALTER TABLE bus_reg_variation_reason RENAME INDEX ix_bus_reg_variation_reason_variation_reason_id TO IDX_F841EA264D98204B
+ALTER TABLE case_category RENAME INDEX ix_case_category_case_id TO IDX_913163BCCF10D4F5
+ALTER TABLE case_category RENAME INDEX ix_case_category_category_id TO IDX_913163BC12469DE2
+ALTER TABLE case_outcome RENAME INDEX ix_case_outcome_cases_id TO IDX_9F1F98C92A69AB62
+ALTER TABLE case_outcome RENAME INDEX ix_case_outcome_outcome_id TO IDX_9F1F98C9E6EE6D63
+ALTER TABLE cases_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE condition_undertaking CHANGE olbs_type olbs_type VARCHAR(32) DEFAULT NULL
+ALTER TABLE continuation_detail CHANGE average_balance_amount average_balance_amount NUMERIC(10, 0) DEFAULT NULL, CHANGE overdraft_amount overdraft_amount NUMERIC(10, 0) DEFAULT NULL, CHANGE factoring_amount factoring_amount NUMERIC(10, 0) DEFAULT NULL, CHANGE other_finances_amount other_finances_amount NUMERIC(10, 0) DEFAULT NULL
+ALTER TABLE data_retention DROP INDEX ix_entity_name_entity_pk, ADD UNIQUE INDEX uk_entity_name_entity_pk (entity_name, entity_pk)
+ALTER TABLE digital_signature CHANGE attributes attributes VARCHAR(65535) DEFAULT NULL, CHANGE saml_response saml_response LONGTEXT DEFAULT NULL
+ALTER TABLE document CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
+ALTER TABLE document_to_delete CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE erru_request_failure CHANGE input input LONGTEXT DEFAULT NULL, CHANGE errors errors LONGTEXT DEFAULT NULL
+ALTER TABLE fee CHANGE net_amount net_amount NUMERIC(10, 0) NOT NULL, CHANGE gross_amount gross_amount NUMERIC(10, 0) NOT NULL, CHANGE vat_amount vat_amount NUMERIC(10, 0) DEFAULT '0.00' NOT NULL
+ALTER TABLE fee_txn CHANGE amount amount NUMERIC(10, 0) DEFAULT NULL
+ALTER TABLE fee_type CHANGE fixed_value fixed_value NUMERIC(10, 0) DEFAULT NULL, CHANGE annual_value annual_value NUMERIC(10, 0) DEFAULT NULL, CHANGE five_year_value five_year_value NUMERIC(10, 0) DEFAULT NULL, CHANGE vat_rate vat_rate NUMERIC(10, 0) UNSIGNED DEFAULT '0.00' NOT NULL
+ALTER TABLE impounding_legislation_type RENAME INDEX ix_impounding_legislation_type_impounding_id TO IDX_56C373FED885EE1F
+ALTER TABLE impounding_legislation_type RENAME INDEX ix_impounding_legislation_type_impounding_legislation_type_id TO IDX_56C373FEDF642283
+ALTER TABLE inspection_email CHANGE message_body message_body LONGTEXT DEFAULT NULL
+ALTER TABLE inspection_request CHANGE requestor_notes requestor_notes LONGTEXT DEFAULT NULL, CHANGE inspector_notes inspector_notes LONGTEXT DEFAULT NULL
+ALTER TABLE irfo_psv_auth_country RENAME INDEX ix_irfo_psv_auth_country_country_id TO IDX_64EA0E34F92F3E70
+ALTER TABLE irfo_psv_auth_country RENAME INDEX ix_irfo_psv_auth_country_irfo_psv_auth_id TO IDX_64EA0E344425C407
+ALTER TABLE irhp_application_country_link RENAME INDEX ix_irhp_application_country_link_country_id TO IDX_A895530DF92F3E70
+ALTER TABLE irhp_application_country_link RENAME INDEX ix_irhp_application_country_link_irhp_application_id TO IDX_A895530DDC41CE69
+ALTER TABLE irhp_application_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE irhp_candidate_permit CHANGE application_score application_score NUMERIC(10, 0) DEFAULT NULL, CHANGE intensity_of_use intensity_of_use NUMERIC(10, 0) DEFAULT NULL, CHANGE random_factor random_factor NUMERIC(10, 0) DEFAULT NULL, CHANGE randomized_score randomized_score NUMERIC(10, 0) DEFAULT NULL
+ALTER TABLE irhp_permit_range_attribute RENAME INDEX ix_irhp_permit_range_att_irhp_permit_range_attribute_id TO IDX_DE803396860CE7BC
+ALTER TABLE irhp_permit_range_attribute RENAME INDEX ix_irhp_permit_range_att_irhp_permit_range_id TO IDX_DE803396528DB533
+ALTER TABLE irhp_permit_range_country RENAME INDEX fk_irhp_permit_range_restricted_countries_restricted_coun_idx TO IDX_283B6E84F92F3E70
+ALTER TABLE irhp_permit_range_country RENAME INDEX fk_irhp_restricted_countries_irhp_permit_stock_ranges1_idx TO IDX_283B6E84656FE0A3
+ALTER TABLE irhp_permit_request_attribute RENAME INDEX ix_irhp_permit_request_att_irhp_permit_request_attribute_id TO IDX_701A670FBAC38667
+ALTER TABLE irhp_permit_request_attribute RENAME INDEX ix_irhp_permit_request_att_irhp_permit_request_id TO IDX_701A670F7613AFB4
+ALTER TABLE irhp_permit_type CHANGE description description LONGTEXT DEFAULT NULL
+ALTER TABLE legacy_recommendation CHANGE notes notes LONGTEXT DEFAULT NULL
+ALTER TABLE letter_appendix_version CHANGE description description LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE letter_issue_type ADD CONSTRAINT fk_struct_created_by_user_id FOREIGN KEY (created_by) REFERENCES user (id)
+ALTER TABLE letter_issue_type ADD CONSTRAINT fk_struct_last_modified_by_user_id FOREIGN KEY (last_modified_by) REFERENCES user (id)
+ALTER TABLE letter_issue_version CHANGE help_text help_text LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE letter_section_version CHANGE help_text help_text LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE letter_todo_version CHANGE help_text help_text LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE licence CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
+ALTER TABLE licence_operating_centre CHANGE ad_placed ad_placed SMALLINT NOT NULL
+ALTER TABLE licence_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE licence_status_decision RENAME INDEX ix_licence_status_decision_licence_id TO IDX_78887D6626EF07C9
+ALTER TABLE licence_status_decision RENAME INDEX ix_licence_status_decision_reason_id TO IDX_78887D66BDEE7539
+ALTER TABLE local_authority CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
+ALTER TABLE master_template CHANGE template_content template_content LONGTEXT NOT NULL
+ALTER TABLE messaging_content CHANGE text text LONGTEXT NOT NULL
+ALTER TABLE messaging_subject CHANGE is_active is_active SMALLINT DEFAULT 1
+ALTER TABLE note CHANGE comment comment LONGTEXT DEFAULT NULL
+ALTER TABLE oc_complaint DROP olbs_key
+ALTER TABLE oc_complaint RENAME INDEX ix_oc_complaint_complaint_id TO IDX_19143EF1EDAE188E
+ALTER TABLE oc_complaint RENAME INDEX ix_oc_complaint_operating_centre_id TO IDX_19143EF135382CCB
+ALTER TABLE operating_centre_opposition DROP olbs_oc_id, DROP olbs_opp_id, DROP olbs_type
+ALTER TABLE operating_centre_opposition RENAME INDEX ix_operating_centre_opposition_operating_centre_id TO IDX_14273D7035382CCB
+ALTER TABLE operating_centre_opposition RENAME INDEX ix_operating_centre_opposition_opposition_id TO IDX_14273D70B4BE57B7
+ALTER TABLE opposition_grounds DROP olbs_key
+ALTER TABLE opposition_grounds RENAME INDEX ix_opposition_grounds_ground_id TO IDX_3591EE421D297B0A
+ALTER TABLE opposition_grounds RENAME INDEX ix_opposition_grounds_opposition_id TO IDX_3591EE42B4BE57B7
+ALTER TABLE organisation_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE other_licence CHANGE hours_per_week hours_per_week NUMERIC(10, 0) UNSIGNED DEFAULT NULL
+ALTER TABLE pi CHANGE decision_notes decision_notes LONGTEXT DEFAULT NULL
+ALTER TABLE pi_decision RENAME INDEX ix_pi_decision_decision_id TO IDX_F4322323BDEE7539
+ALTER TABLE pi_decision RENAME INDEX ix_pi_decision_pi_id TO IDX_F4322323E0DEB379
+ALTER TABLE pi_reason RENAME INDEX ix_pi_reason_pi_id TO IDX_86E9DC1AE0DEB379
+ALTER TABLE pi_reason RENAME INDEX ix_pi_reason_reason_id TO IDX_86E9DC1A59BB1592
+ALTER TABLE pi_sla_exception CHANGE created_by created_by INT UNSIGNED DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE pi_tm_decision RENAME INDEX ix_pi_tm_decision_pi_id TO IDX_DADA9E7EE0DEB379
+ALTER TABLE pi_tm_decision RENAME INDEX ix_pi_tm_decision_tm_decision_id TO IDX_DADA9E7EF321FE11
+ALTER TABLE pi_type RENAME INDEX ix_pi_type_pi_id TO IDX_492681E8E0DEB379
+ALTER TABLE pi_type RENAME INDEX ix_pi_type_pi_type_id TO IDX_492681E831256896
+ALTER TABLE prohibition CHANGE is_trailer is_trailer TINYINT(1) DEFAULT 0
+ALTER TABLE psv_disc CHANGE is_copy is_copy TINYINT(1) DEFAULT 0, CHANGE reprint_required reprint_required TINYINT(1) DEFAULT 0
+ALTER TABLE ptr_reason RENAME INDEX ix_ptr_reason_propose_to_revoke_id TO IDX_91E592BD842D9BC
+ALTER TABLE ptr_reason RENAME INDEX ix_ptr_reason_reason_id TO IDX_91E592B59BB1592
+ALTER TABLE publication CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
+ALTER TABLE publication_link CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL, CHANGE text1 text1 LONGTEXT DEFAULT NULL, CHANGE text2 text2 LONGTEXT DEFAULT NULL, CHANGE text3 text3 LONGTEXT DEFAULT NULL
+ALTER TABLE queue CHANGE last_error last_error LONGTEXT DEFAULT NULL
+ALTER TABLE recipient_traffic_area CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
+ALTER TABLE recipient_traffic_area RENAME INDEX ix_recipient_traffic_area_recipient_id TO IDX_667E3D0E92F8F78
+ALTER TABLE recipient_traffic_area RENAME INDEX ix_recipient_traffic_area_traffic_area_id TO IDX_667E3D018E0B1DB
+ALTER TABLE ref_data CHANGE olbs_key olbs_key VARCHAR(20) DEFAULT NULL
+ALTER TABLE sectors CHANGE sifting_percentage sifting_percentage NUMERIC(10, 0) DEFAULT NULL, CHANGE version version SMALLINT DEFAULT 1
+ALTER TABLE si_penalty_imposed_type CHANGE deleted_date deleted_date DATETIME DEFAULT NULL
+ALTER TABLE sla_exception CHANGE created_by created_by INT UNSIGNED DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE submission CHANGE data_snapshot data_snapshot LONGTEXT DEFAULT NULL
+ALTER TABLE submission_action CHANGE comment comment LONGTEXT DEFAULT NULL
+ALTER TABLE submission_action_reason RENAME INDEX ix_submission_action_reason_reason_id TO IDX_C4ADC98D59BB1592
+ALTER TABLE submission_action_reason RENAME INDEX ix_submission_action_reason_submission_action_id TO IDX_C4ADC98D2D8DF481
+ALTER TABLE submission_action_type RENAME INDEX ix_submission_action_type_action_type TO IDX_7DFBF33DFA3FEC27
+ALTER TABLE submission_action_type RENAME INDEX ix_submission_action_type_submission_action_id TO IDX_7DFBF33D2D8DF481
+ALTER TABLE submission_section_comment CHANGE comment comment LONGTEXT DEFAULT NULL
+ALTER TABLE surrender CHANGE disc_lost_info disc_lost_info LONGTEXT DEFAULT NULL, CHANGE disc_stolen_info disc_stolen_info LONGTEXT DEFAULT NULL, CHANGE licence_document_info licence_document_info LONGTEXT DEFAULT NULL, CHANGE community_licence_document_info community_licence_document_info LONGTEXT DEFAULT NULL
+ALTER TABLE team CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
+ALTER TABLE template CHANGE source source LONGTEXT NOT NULL
+ALTER TABLE tm_case_decision_rehab DROP olbs_key
+ALTER TABLE tm_case_decision_rehab RENAME INDEX ix_tm_case_decision_rehab_rehab_measure_id TO IDX_353BF96738237A80
+ALTER TABLE tm_case_decision_rehab RENAME INDEX ix_tm_case_decision_rehab_tm_case_decision_id TO IDX_353BF9672543F459
+ALTER TABLE tm_case_decision_unfitness DROP olbs_key
+ALTER TABLE tm_case_decision_unfitness RENAME INDEX ix_tm_case_decision_unfitness_tm_case_decision_id TO IDX_659D1A272543F459
+ALTER TABLE tm_case_decision_unfitness RENAME INDEX ix_tm_case_decision_unfitness_unfitness_reason_id TO IDX_659D1A274942EB41
+ALTER TABLE tm_qualification CHANGE country_code country_code VARCHAR(2) NOT NULL
+ALTER TABLE traffic_area_enforcement_area CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
+ALTER TABLE translation_key CHANGE translation_key translation_key VARCHAR(512) NOT NULL
+ALTER TABLE translation_key_text CHANGE translated_text translated_text LONGTEXT DEFAULT NULL
+ALTER TABLE transport_manager CHANGE merge_details merge_details JSON DEFAULT NULL
+ALTER TABLE transport_manager_application CHANGE hours_mon hours_mon NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_tue hours_tue NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_wed hours_wed NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_thu hours_thu NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_fri hours_fri NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_sat hours_sat NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_sun hours_sun NUMERIC(10, 0) UNSIGNED DEFAULT NULL
+ALTER TABLE transport_manager_licence CHANGE hours_mon hours_mon NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_tue hours_tue NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_wed hours_wed NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_thu hours_thu NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_fri hours_fri NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_sat hours_sat NUMERIC(10, 0) UNSIGNED DEFAULT NULL, CHANGE hours_sun hours_sun NUMERIC(10, 0) UNSIGNED DEFAULT NULL
+ALTER TABLE transport_manager_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE txc_inbox CHANGE file_read file_read TINYINT(1) DEFAULT 0
+ALTER TABLE user_role RENAME INDEX ix_user_role_role_id TO IDX_2DE8C6A3D60322AC
+ALTER TABLE user_role RENAME INDEX ix_user_role_user_id TO IDX_2DE8C6A3A76ED395
+ALTER TABLE venue CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
+CREATE INDEX IDX_14B1B5B565CF370E ON letter_issue_type (last_modified_by)
+CREATE INDEX IDX_14B1B5B5DE12AB56 ON letter_issue_type (created_by)
+CREATE INDEX fk_answers_question_text1_idx ON answer (question_text_id)
+CREATE INDEX fk_application_organisation_person_person1_idx ON application_organisation_person (original_person_id)
+CREATE INDEX fk_application_path_irhp_permit_application_id ON answer (irhp_permit_application_id)
+CREATE INDEX fk_application_path_irhp_permit_type_id ON application_path (irhp_permit_type_id)
+CREATE INDEX fk_application_path_steps_application_paths1_idx ON application_step (application_path_id)
+CREATE INDEX fk_application_path_steps_questions1_idx ON application_step (question_id)
+CREATE INDEX fk_application_tracking_user1_idx ON application_tracking (created_by)
+CREATE INDEX fk_application_tracking_user2_idx ON application_tracking (last_modified_by)
+CREATE INDEX fk_application_validation_application_step1_idx ON application_validation (application_step_id)
+CREATE INDEX fk_application_validation_question1_idx ON application_validation (question_id)
+CREATE INDEX fk_bus_reg_parent_id_bus_reg_id ON bus_reg (parent_id)
+CREATE INDEX fk_community_lic_suspension_reason_ref_data1_idx ON community_lic_suspension_reason (type_id)
+CREATE INDEX fk_community_lic_withdrawal_reason_ref_data1_idx ON community_lic_withdrawal_reason (type_id)
+CREATE INDEX fk_company_subsidiary_licence1_idx ON company_subsidiary (licence_id)
+CREATE INDEX fk_continuation_detail_continuation1_idx ON continuation_detail (continuation_id)
+CREATE INDEX fk_continuation_detail_licence1_idx ON continuation_detail (licence_id)
+CREATE INDEX fk_continuation_detail_ref_data1_idx ON continuation_detail (status)
+CREATE INDEX fk_continuation_detail_user1_idx ON continuation_detail (created_by)
+CREATE INDEX fk_continuation_detail_user2_idx ON continuation_detail (last_modified_by)
+CREATE INDEX fk_event_history_bus_reg1_idx ON event_history (bus_reg_id)
+CREATE INDEX fk_event_history_cases1_idx ON event_history (case_id)
+CREATE INDEX fk_event_history_event_history_type1_idx ON event_history (event_history_type_id)
+CREATE INDEX fk_event_history_organisation1_idx ON event_history (organisation_id)
+CREATE INDEX fk_fee_txn_fee_txn1_idx ON fee_txn (reversed_fee_txn_id)
+CREATE INDEX fk_legacy_offence_cases1_idx ON legacy_offence (case_id)
+CREATE INDEX fk_licence_vehicle_licence_id_licence_id ON licence_vehicle (licence_id)
+CREATE INDEX fk_messaging_message_messaging_content_id ON messaging_message (messaging_content_id)
+CREATE INDEX fk_messaging_subject_category_id_category_id ON messaging_subject (category_id)
+CREATE INDEX fk_messaging_subject_sub_category_id_sub_category_id ON messaging_subject (sub_category_id)
+CREATE INDEX fk_note_transport_manager1_idx ON note (transport_manager_id)
+CREATE INDEX fk_other_licence_ref_data1_idx ON other_licence (role)
+CREATE INDEX fk_other_licence_transport_manager_licence1_idx ON other_licence (transport_manager_licence_id)
+CREATE INDEX fk_publication_doc_template1_idx ON publication (doc_template_id)
+CREATE INDEX fk_publication_document1_idx ON publication (document_id)
+CREATE INDEX fk_publication_link_transport_manager1_idx ON publication_link (transport_manager_id)
+CREATE INDEX fk_question_text_questions_idx ON question_text (question_id)
+CREATE INDEX fk_statement_contact_details1_idx ON statement (requestors_contact_details_id)
+CREATE INDEX fk_tm_employment_user1_idx ON tm_employment (created_by)
+CREATE INDEX fk_tm_employment_user2_idx ON tm_employment (last_modified_by)
+CREATE INDEX fk_translation_key_text_keys1_idx ON translation_key_text (translation_key_id)
+CREATE INDEX ix_appeal_case_id ON appeal (case_id)
+CREATE INDEX ix_audit_read_application_application_id ON application_read_audit (application_id)
+CREATE INDEX ix_audit_read_application_created_on ON application_read_audit (created_on)
+CREATE INDEX ix_audit_read_application_user_id ON application_read_audit (user_id)
+CREATE INDEX ix_audit_read_bus_reg_bus_reg_id ON bus_reg_read_audit (bus_reg_id)
+CREATE INDEX ix_audit_read_bus_reg_created_on ON bus_reg_read_audit (created_on)
+CREATE INDEX ix_audit_read_bus_reg_user_id ON bus_reg_read_audit (user_id)
+CREATE INDEX ix_audit_read_cases_cases_id ON cases_read_audit (case_id)
+CREATE INDEX ix_audit_read_cases_created_on ON cases_read_audit (created_on)
+CREATE INDEX ix_audit_read_cases_user_id ON cases_read_audit (user_id)
+CREATE INDEX ix_audit_read_licence_created_on ON licence_read_audit (created_on)
+CREATE INDEX ix_audit_read_licence_licence_id ON licence_read_audit (licence_id)
+CREATE INDEX ix_audit_read_licence_user_id ON licence_read_audit (user_id)
+CREATE INDEX ix_audit_read_organisation_created_on ON organisation_read_audit (created_on)
+CREATE INDEX ix_audit_read_organisation_organisation_id ON organisation_read_audit (organisation_id)
+CREATE INDEX ix_audit_read_organisation_user_id ON organisation_read_audit (user_id)
+CREATE INDEX ix_audit_read_transport_manager_created_on ON transport_manager_read_audit (created_on)
+CREATE INDEX ix_audit_read_transport_manager_transport_manager_id ON transport_manager_read_audit (transport_manager_id)
+CREATE INDEX ix_audit_read_transport_manager_user_id ON transport_manager_read_audit (user_id)
+CREATE INDEX ix_bus_reg_reg_no ON bus_reg (reg_no)
+CREATE INDEX ix_community_lic_com_lic_status ON community_lic (status)
+CREATE INDEX ix_continuation_detail_received ON continuation_detail (received)
+CREATE INDEX ix_continuation_month ON continuation (month)
+CREATE INDEX ix_continuation_year ON continuation (year)
+CREATE INDEX ix_disqualification_person_idx ON disqualification (person_id)
+CREATE INDEX ix_erru_request_case_id ON erru_request (case_id)
+CREATE INDEX ix_erru_request_created_by ON erru_request_failure (created_by)
+CREATE INDEX ix_erru_request_last_modified_by ON erru_request_failure (last_modified_by)
+CREATE INDEX ix_fee_type_is_miscellaneous ON fee_type (is_miscellaneous)
+CREATE INDEX ix_sla_target_date_document_id ON sla_target_date (document_id)
+CREATE INDEX ix_task_etl ON task (description, category_id, sub_category_id)
+CREATE UNIQUE INDEX application_id_UNIQUE ON application_tracking (application_id)
+CREATE UNIQUE INDEX uk_fee_txn_fee_id_txn_id ON fee_txn (fee_id, txn_id)
+DROP INDEX ix_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area
+DROP INDEX ix_bus_reg_variation_reason_olbs_key_olbs_key2 ON bus_reg_variation_reason
+DROP INDEX uk_bus_reg_bus_service_type_olbs_key_bus_service_type_id ON bus_reg_bus_service_type
+DROP INDEX uk_bus_reg_local_auth_olbs_key_local_authority_id ON bus_reg_local_auth
+DROP INDEX uk_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area
+DROP INDEX uk_oc_complaint_olbs_key ON oc_complaint
+DROP INDEX uk_oc_complaint_operating_centre_id_complaint_id ON oc_complaint
+DROP INDEX uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type ON operating_centre_opposition
+DROP INDEX uk_opposition_grounds_olbs_key ON opposition_grounds
+DROP INDEX uk_pi_type_pi_id_pi_type_id ON pi_type
+DROP INDEX uk_tm_case_decision_rehab_olbs_key ON tm_case_decision_rehab
+DROP INDEX uk_tm_case_decision_unfitness_olbs_key ON tm_case_decision_unfitness

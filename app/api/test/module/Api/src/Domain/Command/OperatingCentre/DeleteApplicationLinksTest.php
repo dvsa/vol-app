@@ -20,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
   * @author Dan Eggleston <dan@stolenegg.com>
  */
-class DeleteApplicationLinksTest extends MockeryTestCase
+final class DeleteApplicationLinksTest extends MockeryTestCase
 {
     public function testStructure(): void
     {

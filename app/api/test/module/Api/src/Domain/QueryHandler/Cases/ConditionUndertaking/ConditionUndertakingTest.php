@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class ConditionUndertakingTest extends QueryHandlerTestCase
+final class ConditionUndertakingTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

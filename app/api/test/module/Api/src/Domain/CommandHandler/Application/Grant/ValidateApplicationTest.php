@@ -29,7 +29,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ValidateApplicationTest extends AbstractCommandHandlerTestCase
+final class ValidateApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

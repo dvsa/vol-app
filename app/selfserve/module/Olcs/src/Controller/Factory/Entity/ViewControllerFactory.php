@@ -19,7 +19,7 @@ class ViewControllerFactory implements FactoryInterface
      * @return ViewController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ViewController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ViewController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

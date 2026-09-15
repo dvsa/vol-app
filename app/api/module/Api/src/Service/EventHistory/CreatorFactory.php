@@ -19,7 +19,7 @@ class CreatorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Creator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Creator
     {
         $repoServiceManager = $container->get('RepositoryServiceManager');
         return new Creator(

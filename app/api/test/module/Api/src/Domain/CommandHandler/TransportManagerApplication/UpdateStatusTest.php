@@ -23,10 +23,8 @@ use Mockery as m;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class UpdateStatusTest extends AbstractCommandHandlerTestCase
+final class UpdateStatusTest extends AbstractCommandHandlerTestCase
 {
-    protected $loggedInUser;
-
     public function setUp(): void
     {
         $this->sut = new CommandHandler();

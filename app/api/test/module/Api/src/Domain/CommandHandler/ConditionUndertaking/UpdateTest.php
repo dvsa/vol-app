@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -89,7 +89,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
                 $this->assertSame($this->refData[$data['attachedTo']], $cu->getAttachedTo());
                 $this->assertSame($data['fulfilled'], $cu->getIsFulfilled());
                 $this->assertSame($data['notes'], $cu->getNotes());
-                $this->assertSame(null, $cu->getOperatingCentre());
+                $this->assertNull($cu->getOperatingCentre());
             }
         );
 

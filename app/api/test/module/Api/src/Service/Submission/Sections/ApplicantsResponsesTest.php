@@ -9,19 +9,17 @@ use Laminas\View\Renderer\PhpRenderer;
 use Mockery as m;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class ApplicantsResponsesTest extends AbstractSubmissionSectionTestCase
+final class ApplicantsResponsesTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = ApplicantsResponses::class;
 
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
         $expectedResult = 'foo';
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 
     /**
@@ -33,6 +31,10 @@ class ApplicantsResponsesTest extends AbstractSubmissionSectionTestCase
     #[\Override]
     public function testGenerateSection(mixed $input = null, mixed $expectedResult = null): void
     {
+        if ($input instanceof \Closure) {
+            $input = $input();
+        }
+
         $mockQueryHandler = m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class);
         $mockViewRenderer = m::mock(PhpRenderer::class);
 
@@ -46,6 +48,6 @@ class ApplicantsResponsesTest extends AbstractSubmissionSectionTestCase
         $result = $sut->generateSection($input);
 
         $this->assertArrayHasKey('text', $result['data']);
-        $this->assertEquals($result['data']['text'], 'foo');
+        $this->assertEquals('foo', $result['data']['text']);
     }
 }

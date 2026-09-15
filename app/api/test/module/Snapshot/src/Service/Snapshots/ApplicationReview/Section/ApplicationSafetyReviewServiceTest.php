@@ -24,13 +24,14 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationSafetyReviewServiceTest extends MockeryTestCase
+final class ApplicationSafetyReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -54,114 +55,112 @@ class ApplicationSafetyReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function providerGetConfigFromData(): array
+    public static function providerGetConfigFromData(): \Iterator
     {
-        return [
-            'PSV' => [
-                [
-                    'safetyConfirmation' => 'Y',
-                    'isGoods' => false,
-                    'goodsOrPsv' => [
-                        'id' => Licence::LICENCE_CATEGORY_PSV
+        yield 'PSV' => [
+            [
+                'safetyConfirmation' => 'Y',
+                'isGoods' => false,
+                'goodsOrPsv' => [
+                    'id' => Licence::LICENCE_CATEGORY_PSV
+                ],
+                'licence' => [
+                    'safetyInsVehicles' => 1,
+                    'safetyInsTrailers' => null,
+                    'safetyInsVaries' => 'Y',
+                    'tachographIns' => [
+                        'id' => 'tach_external'
                     ],
-                    'licence' => [
-                        'safetyInsVehicles' => 1,
-                        'safetyInsTrailers' => null,
-                        'safetyInsVaries' => 'Y',
-                        'tachographIns' => [
-                            'id' => 'tach_external'
-                        ],
-                        'tachographInsName' => 'Bob',
-                        'workshops' => [
-                            [
-                                'isExternal' => 'Y',
-                                'contactDetails' => [
-                                    'fao' => 'Bob Smith',
-                                    'address' => [
-                                        'addressLine1' => '123',
-                                        'addressLine2' => 'Foo street',
-                                        'town' => 'Footown'
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ],
-                    'documents' => [
+                    'tachographInsName' => 'Bob',
+                    'workshops' => [
                         [
-                            'description' => 'file',
-                            'category' => [
-                                'id' => Category::CATEGORY_APPLICATION,
-                            ],
-                            'subCategory' => [
-                                'id' => SubCategory::DOC_SUB_CATEGORY_MAINT_OTHER_DIGITAL
+                            'isExternal' => 'Y',
+                            'contactDetails' => [
+                                'fao' => 'Bob Smith',
+                                'address' => [
+                                    'addressLine1' => '123',
+                                    'addressLine2' => 'Foo street',
+                                    'town' => 'Footown'
+                                ]
                             ]
                         ]
                     ]
                 ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => [
-                                [
-                                    'multiItems' => [
-                                        'safetyIns' => [
-                                            [
-                                                'label' => 'application-review-safety-safetyInsVehicles',
-                                                'value' => '1 Week-translated'
-                                            ]
-                                        ],
-                                        'safetyInsVaries' => [
-                                            [
-                                                'label' => 'application-review-safety-safetyInsVaries-psv',
-                                                'value' => 'Yes'
-                                            ]
+                'documents' => [
+                    [
+                        'description' => 'file',
+                        'category' => [
+                            'id' => Category::CATEGORY_APPLICATION,
+                        ],
+                        'subCategory' => [
+                            'id' => SubCategory::DOC_SUB_CATEGORY_MAINT_OTHER_DIGITAL
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'subSections' => [
+                    [
+                        'mainItems' => [
+                            [
+                                'multiItems' => [
+                                    'safetyIns' => [
+                                        [
+                                            'label' => 'application-review-safety-safetyInsVehicles',
+                                            'value' => '1 Week-translated'
+                                        ]
+                                    ],
+                                    'safetyInsVaries' => [
+                                        [
+                                            'label' => 'application-review-safety-safetyInsVaries-psv',
+                                            'value' => 'Yes'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-safety-tachographIns',
+                                            'value' => 'tachograph_analyser.tach_external-translated'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-safety-tachographIns',
-                                                'value' => 'tachograph_analyser.tach_external-translated'
-                                            ],
-                                            [
-                                                'label' => 'application-review-safety-tachographInsName-snapshot',
-                                                'value' => 'Bob'
-                                            ]
-                                        ],
+                                            'label' => 'application-review-safety-tachographInsName-snapshot',
+                                            'value' => 'Bob'
+                                        ]
+                                    ],
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-safety-additional-information',
-                                                'noEscape' => true,
-                                                'value' => 'file'
-                                            ]
-                                        ],
+                                            'label' => 'application-review-safety-additional-information',
+                                            'noEscape' => true,
+                                            'value' => 'file'
+                                        ]
+                                    ],
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-safety-safetyConfirmation',
-                                                'value' => 'Confirmed'
-                                            ]
+                                            'label' => 'application-review-safety-safetyConfirmation',
+                                            'value' => 'Confirmed'
                                         ]
                                     ]
                                 ]
                             ]
-                        ],
-                        [
-                            'title' => 'application-review-safety-workshop-title',
-                            'mainItems' => [
-                                [
-                                    'header' => '123, Footown',
-                                    'multiItems' => [
+                        ]
+                    ],
+                    [
+                        'title' => 'application-review-safety-workshop-title',
+                        'mainItems' => [
+                            [
+                                'header' => '123, Footown',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-safety-workshop-isExternal',
-                                                'value' => 'application-review-safety-workshop-isExternal-Y-translated'
-                                            ],
-                                            [
-                                                'label' => 'application-review-safety-workshop-name',
-                                                'value' => 'Bob Smith'
-                                            ],
-                                            [
-                                                'label' => 'application-review-safety-workshop-address',
-                                                'value' => '123, Foo street, Footown'
-                                            ]
+                                            'label' => 'application-review-safety-workshop-isExternal',
+                                            'value' => 'application-review-safety-workshop-isExternal-Y-translated'
+                                        ],
+                                        [
+                                            'label' => 'application-review-safety-workshop-name',
+                                            'value' => 'Bob Smith'
+                                        ],
+                                        [
+                                            'label' => 'application-review-safety-workshop-address',
+                                            'value' => '123, Foo street, Footown'
                                         ]
                                     ]
                                 ]
@@ -169,117 +168,117 @@ class ApplicationSafetyReviewServiceTest extends MockeryTestCase
                         ]
                     ]
                 ]
-            ],
-            'Goods' => [
-                [
-                    'safetyConfirmation' => 'Y',
-                    'isGoods' => true,
-                    'goodsOrPsv' => [
-                        'id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE
+            ]
+        ];
+        yield 'Goods' => [
+            [
+                'safetyConfirmation' => 'Y',
+                'isGoods' => true,
+                'goodsOrPsv' => [
+                    'id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE
+                ],
+                'totAuthTrailers' => 1,
+                'licence' => [
+                    'safetyInsVehicles' => 2,
+                    'safetyInsTrailers' => 0,
+                    'safetyInsVaries' => 'Y',
+                    'tachographIns' => [
+                        'id' => 'tach_external'
                     ],
-                    'totAuthTrailers' => 1,
-                    'licence' => [
-                        'safetyInsVehicles' => 2,
-                        'safetyInsTrailers' => 0,
-                        'safetyInsVaries' => 'Y',
-                        'tachographIns' => [
-                            'id' => 'tach_external'
-                        ],
-                        'tachographInsName' => 'Bob',
-                        'workshops' => [
-                            [
-                                'isExternal' => 'Y',
-                                'contactDetails' => [
-                                    'fao' => 'Bob Smith',
-                                    'address' => [
-                                        'addressLine1' => '123',
-                                        'addressLine2' => 'Foo street',
-                                        'town' => 'Footown'
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ],
-                    'documents' => [
+                    'tachographInsName' => 'Bob',
+                    'workshops' => [
                         [
-                            'description' => 'file',
-                            'category' => [
-                                'id' => Category::CATEGORY_APPLICATION,
-                            ],
-                            'subCategory' => [
-                                'id' => SubCategory::DOC_SUB_CATEGORY_MAINT_OTHER_DIGITAL
+                            'isExternal' => 'Y',
+                            'contactDetails' => [
+                                'fao' => 'Bob Smith',
+                                'address' => [
+                                    'addressLine1' => '123',
+                                    'addressLine2' => 'Foo street',
+                                    'town' => 'Footown'
+                                ]
                             ]
                         ]
                     ]
                 ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => [
-                                [
-                                    'multiItems' => [
-                                        'safetyIns' => [
-                                            [
-                                                'label' => 'application-review-safety-safetyInsVehicles',
-                                                'value' => 'no.of.weeks-translated'
-                                            ],
-                                            [
-                                                'label' => 'application-review-safety-safetyInsTrailers',
-                                                'value' => 'N/A-translated'
-                                            ]
-                                        ],
-                                        'safetyInsVaries' => [
-                                            [
-                                                'label' => 'application-review-safety-safetyInsVaries',
-                                                'value' => 'Yes'
-                                            ]
+                'documents' => [
+                    [
+                        'description' => 'file',
+                        'category' => [
+                            'id' => Category::CATEGORY_APPLICATION,
+                        ],
+                        'subCategory' => [
+                            'id' => SubCategory::DOC_SUB_CATEGORY_MAINT_OTHER_DIGITAL
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'subSections' => [
+                    [
+                        'mainItems' => [
+                            [
+                                'multiItems' => [
+                                    'safetyIns' => [
+                                        [
+                                            'label' => 'application-review-safety-safetyInsVehicles',
+                                            'value' => 'no.of.weeks-translated'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-safety-tachographIns',
-                                                'value' => 'tachograph_analyser.tach_external-translated'
-                                            ],
-                                            [
-                                                'label' => 'application-review-safety-tachographInsName-snapshot',
-                                                'value' => 'Bob'
-                                            ]
+                                            'label' => 'application-review-safety-safetyInsTrailers',
+                                            'value' => 'N/A-translated'
+                                        ]
+                                    ],
+                                    'safetyInsVaries' => [
+                                        [
+                                            'label' => 'application-review-safety-safetyInsVaries',
+                                            'value' => 'Yes'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-safety-tachographIns',
+                                            'value' => 'tachograph_analyser.tach_external-translated'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-safety-additional-information',
-                                                'noEscape' => true,
-                                                'value' => 'file'
-                                            ]
-                                        ],
+                                            'label' => 'application-review-safety-tachographInsName-snapshot',
+                                            'value' => 'Bob'
+                                        ]
+                                    ],
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-safety-safetyConfirmation',
-                                                'value' => 'Confirmed'
-                                            ]
+                                            'label' => 'application-review-safety-additional-information',
+                                            'noEscape' => true,
+                                            'value' => 'file'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-safety-safetyConfirmation',
+                                            'value' => 'Confirmed'
                                         ]
                                     ]
                                 ]
                             ]
-                        ],
-                        [
-                            'title' => 'application-review-safety-workshop-title',
-                            'mainItems' => [
-                                [
-                                    'header' => '123, Footown',
-                                    'multiItems' => [
+                        ]
+                    ],
+                    [
+                        'title' => 'application-review-safety-workshop-title',
+                        'mainItems' => [
+                            [
+                                'header' => '123, Footown',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-safety-workshop-isExternal',
-                                                'value' => 'application-review-safety-workshop-isExternal-Y-translated'
-                                            ],
-                                            [
-                                                'label' => 'application-review-safety-workshop-name',
-                                                'value' => 'Bob Smith'
-                                            ],
-                                            [
-                                                'label' => 'application-review-safety-workshop-address',
-                                                'value' => '123, Foo street, Footown'
-                                            ]
+                                            'label' => 'application-review-safety-workshop-isExternal',
+                                            'value' => 'application-review-safety-workshop-isExternal-Y-translated'
+                                        ],
+                                        [
+                                            'label' => 'application-review-safety-workshop-name',
+                                            'value' => 'Bob Smith'
+                                        ],
+                                        [
+                                            'label' => 'application-review-safety-workshop-address',
+                                            'value' => '123, Foo street, Footown'
                                         ]
                                     ]
                                 ]
@@ -287,113 +286,113 @@ class ApplicationSafetyReviewServiceTest extends MockeryTestCase
                         ]
                     ]
                 ]
-            ],
-            'Goods which cannot have trailers' => [
-                [
-                    'safetyConfirmation' => 'Y',
-                    'isGoods' => true,
-                    'goodsOrPsv' => [
-                        'id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE
+            ]
+        ];
+        yield 'Goods which cannot have trailers' => [
+            [
+                'safetyConfirmation' => 'Y',
+                'isGoods' => true,
+                'goodsOrPsv' => [
+                    'id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE
+                ],
+                'totAuthTrailers' => null,
+                'licence' => [
+                    'safetyInsVehicles' => 2,
+                    'safetyInsTrailers' => null,
+                    'safetyInsVaries' => 'Y',
+                    'tachographIns' => [
+                        'id' => 'tach_external'
                     ],
-                    'totAuthTrailers' => null,
-                    'licence' => [
-                        'safetyInsVehicles' => 2,
-                        'safetyInsTrailers' => null,
-                        'safetyInsVaries' => 'Y',
-                        'tachographIns' => [
-                            'id' => 'tach_external'
-                        ],
-                        'tachographInsName' => 'Bob',
-                        'workshops' => [
-                            [
-                                'isExternal' => 'Y',
-                                'contactDetails' => [
-                                    'fao' => 'Bob Smith',
-                                    'address' => [
-                                        'addressLine1' => '123',
-                                        'addressLine2' => 'Foo street',
-                                        'town' => 'Footown'
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ],
-                    'documents' => [
+                    'tachographInsName' => 'Bob',
+                    'workshops' => [
                         [
-                            'description' => 'file',
-                            'category' => [
-                                'id' => Category::CATEGORY_APPLICATION,
-                            ],
-                            'subCategory' => [
-                                'id' => SubCategory::DOC_SUB_CATEGORY_MAINT_OTHER_DIGITAL
+                            'isExternal' => 'Y',
+                            'contactDetails' => [
+                                'fao' => 'Bob Smith',
+                                'address' => [
+                                    'addressLine1' => '123',
+                                    'addressLine2' => 'Foo street',
+                                    'town' => 'Footown'
+                                ]
                             ]
                         ]
                     ]
                 ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => [
-                                [
-                                    'multiItems' => [
-                                        'safetyIns' => [
-                                            [
-                                                'label' => 'application-review-safety-safetyInsVehicles',
-                                                'value' => 'no.of.weeks-translated'
-                                            ],
+                'documents' => [
+                    [
+                        'description' => 'file',
+                        'category' => [
+                            'id' => Category::CATEGORY_APPLICATION,
+                        ],
+                        'subCategory' => [
+                            'id' => SubCategory::DOC_SUB_CATEGORY_MAINT_OTHER_DIGITAL
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'subSections' => [
+                    [
+                        'mainItems' => [
+                            [
+                                'multiItems' => [
+                                    'safetyIns' => [
+                                        [
+                                            'label' => 'application-review-safety-safetyInsVehicles',
+                                            'value' => 'no.of.weeks-translated'
                                         ],
-                                        'safetyInsVaries' => [
-                                            [
-                                                'label' => 'application-review-safety-safetyInsVaries',
-                                                'value' => 'Yes'
-                                            ]
+                                    ],
+                                    'safetyInsVaries' => [
+                                        [
+                                            'label' => 'application-review-safety-safetyInsVaries',
+                                            'value' => 'Yes'
+                                        ]
+                                    ],
+                                    [
+                                        [
+                                            'label' => 'application-review-safety-tachographIns',
+                                            'value' => 'tachograph_analyser.tach_external-translated'
                                         ],
                                         [
-                                            [
-                                                'label' => 'application-review-safety-tachographIns',
-                                                'value' => 'tachograph_analyser.tach_external-translated'
-                                            ],
-                                            [
-                                                'label' => 'application-review-safety-tachographInsName-snapshot',
-                                                'value' => 'Bob'
-                                            ]
-                                        ],
+                                            'label' => 'application-review-safety-tachographInsName-snapshot',
+                                            'value' => 'Bob'
+                                        ]
+                                    ],
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-safety-additional-information',
-                                                'noEscape' => true,
-                                                'value' => 'file'
-                                            ]
-                                        ],
+                                            'label' => 'application-review-safety-additional-information',
+                                            'noEscape' => true,
+                                            'value' => 'file'
+                                        ]
+                                    ],
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-safety-safetyConfirmation',
-                                                'value' => 'Confirmed'
-                                            ]
+                                            'label' => 'application-review-safety-safetyConfirmation',
+                                            'value' => 'Confirmed'
                                         ]
                                     ]
                                 ]
                             ]
-                        ],
-                        [
-                            'title' => 'application-review-safety-workshop-title',
-                            'mainItems' => [
-                                [
-                                    'header' => '123, Footown',
-                                    'multiItems' => [
+                        ]
+                    ],
+                    [
+                        'title' => 'application-review-safety-workshop-title',
+                        'mainItems' => [
+                            [
+                                'header' => '123, Footown',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-safety-workshop-isExternal',
-                                                'value' => 'application-review-safety-workshop-isExternal-Y-translated'
-                                            ],
-                                            [
-                                                'label' => 'application-review-safety-workshop-name',
-                                                'value' => 'Bob Smith'
-                                            ],
-                                            [
-                                                'label' => 'application-review-safety-workshop-address',
-                                                'value' => '123, Foo street, Footown'
-                                            ]
+                                            'label' => 'application-review-safety-workshop-isExternal',
+                                            'value' => 'application-review-safety-workshop-isExternal-Y-translated'
+                                        ],
+                                        [
+                                            'label' => 'application-review-safety-workshop-name',
+                                            'value' => 'Bob Smith'
+                                        ],
+                                        [
+                                            'label' => 'application-review-safety-workshop-address',
+                                            'value' => '123, Foo street, Footown'
                                         ]
                                     ]
                                 ]

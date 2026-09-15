@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * Stay Mapper Test
  */
-class StayTest extends MockeryTestCase
+final class StayTest extends MockeryTestCase
 {
     /**
      *
@@ -25,53 +25,51 @@ class StayTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
             [
-                [
+                'case' => 24,
+                'withdrawnDate' => 'foo',
+                'someEntity' => [
+                    'id' => 44
+                ],
+                'dvsaNotified' => 'Y'
+            ],
+            [
+                'fields' => [
                     'case' => 24,
                     'withdrawnDate' => 'foo',
-                    'someEntity' => [
-                        'id' => 44
-                    ],
+                    'isWithdrawn' => 'Y',
+                    'someEntity' => 44,
                     'dvsaNotified' => 'Y'
-                ],
-                [
-                    'fields' => [
-                        'case' => 24,
-                        'withdrawnDate' => 'foo',
-                        'isWithdrawn' => 'Y',
-                        'someEntity' => 44,
-                        'dvsaNotified' => 'Y'
-                    ]
                 ]
-            ],
-            // edit
+            ]
+        ];
+        // edit
+        yield [
             [
-                [
+                'id' => 99,
+                'version' => 3,
+                'case' => 24,
+                'withdrawnDate' => 'foo',
+                'someEntity' => [
+                    'id' => 44
+                ],
+                'dvsaNotified' => 'Y'
+            ],
+            [
+                'fields' => [
                     'id' => 99,
                     'version' => 3,
                     'case' => 24,
                     'withdrawnDate' => 'foo',
-                    'someEntity' => [
-                        'id' => 44
-                    ],
+                    'isWithdrawn' => 'Y',
+                    'someEntity' => 44,
                     'dvsaNotified' => 'Y'
-                ],
-                [
-                    'fields' => [
-                        'id' => 99,
-                        'version' => 3,
-                        'case' => 24,
-                        'withdrawnDate' => 'foo',
-                        'isWithdrawn' => 'Y',
-                        'someEntity' => 44,
-                        'dvsaNotified' => 'Y'
-                    ]
                 ]
-            ],
+            ]
         ];
     }
 

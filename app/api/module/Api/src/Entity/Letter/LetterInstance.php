@@ -9,10 +9,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * LetterInstance Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_instance")
  */
+#[ORM\Table(name: 'letter_instance')]
+#[ORM\Entity]
 class LetterInstance extends AbstractLetterInstance
 {
     public const STATUS_DRAFT = 'ltr_sts_draft';
@@ -22,77 +21,54 @@ class LetterInstance extends AbstractLetterInstance
     public const STATUS_CANCELLED = 'ltr_sts_cancelled';
 
     /**
+     * Memoised result of getTodoRequiringIssueCounts(). Not mapped -- derived from the issues.
+     *
+     * @var array<int, int>|null
+     */
+    private ?array $todoRequiringIssueCounts = null;
+
+    /**
      * Letter instance sections
      *
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection",
-     *     mappedBy="letterInstance",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"displayOrder" = "ASC"})
+     * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceSection>
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
     protected $letterInstanceSections;
 
     /**
      * Letter instance issues
      *
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue",
-     *     mappedBy="letterInstance",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"displayOrder" = "ASC"})
+     * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceIssue>
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
     protected $letterInstanceIssues;
 
     /**
      * Letter instance todos
      *
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo",
-     *     mappedBy="letterInstance",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"displayOrder" = "ASC"})
+     * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceTodo>
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
     protected $letterInstanceTodos;
 
     /**
      * Letter instance appendices
      *
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix",
-     *     mappedBy="letterInstance",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"displayOrder" = "ASC"})
+     * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceAppendix>
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
     protected $letterInstanceAppendices;
 
     /**
      * Letter instance choices (selected by caseworker)
      *
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceChoice",
-     *     mappedBy="letterInstance",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
+     * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceChoice>
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceChoice::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected $letterInstanceChoices;
 
     /**
@@ -180,6 +156,51 @@ class LetterInstance extends AbstractLetterInstance
             $this->letterInstanceTodos->add($todo);
         }
         return $this;
+    }
+
+    /**
+     * How many of this letter's issues require each to-do, keyed by letter_todo_version id.
+     *
+     * A to-do is deduplicated when it is composed, so it appears once no matter how many of the
+     * selected issues call for it -- and it is attached to whichever issue happened to come first.
+     * A caseworker editing it therefore has no way to see that it is standing in for several
+     * issues. This supplies that count.
+     *
+     * Built in ONE pass over the issues and memoised, deliberately. Asking each to-do to work its
+     * own count out would walk every issue again per to-do, and letterIssueTodos is a LAZY
+     * association, so that shape is an N+1. This way the lazy load happens once per issue for the
+     * whole letter.
+     *
+     * @return array<int, int>
+     */
+    public function getTodoRequiringIssueCounts(): array
+    {
+        if ($this->todoRequiringIssueCounts !== null) {
+            return $this->todoRequiringIssueCounts;
+        }
+
+        $counts = [];
+
+        foreach ($this->getLetterInstanceIssues() as $instanceIssue) {
+            $issueVersion = $instanceIssue->getLetterIssueVersion();
+            if ($issueVersion === null) {
+                continue;
+            }
+
+            foreach ($issueVersion->getLetterIssueTodos() ?? [] as $issueTodo) {
+                $todoVersion = $issueTodo->getLetterTodoVersion();
+                if ($todoVersion === null) {
+                    continue;
+                }
+
+                $id = $todoVersion->getId();
+                $counts[$id] = ($counts[$id] ?? 0) + 1;
+            }
+        }
+
+        $this->todoRequiringIssueCounts = $counts;
+
+        return $counts;
     }
 
     /**

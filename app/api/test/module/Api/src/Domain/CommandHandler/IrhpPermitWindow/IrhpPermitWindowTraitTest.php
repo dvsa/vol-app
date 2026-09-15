@@ -11,7 +11,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class IrhpPermitWindowTraitTest extends AbstractCommandHandlerTestCase
+final class IrhpPermitWindowTraitTest extends AbstractCommandHandlerTestCase
 {
     /** @var IrhpPermitWindowTraitStub $sut */
     protected $sut;
@@ -75,117 +75,114 @@ class IrhpPermitWindowTraitTest extends AbstractCommandHandlerTestCase
         $this->sut->validateStockRanges($irhpPermitStock);
     }
 
-    public static function dpValidateStockRangesBilateral(): array
+    public static function dpValidateStockRangesBilateral(): \Iterator
     {
-        return
-            [
-                [
-                    'isBilateralCabotageOnly' => false,
-                    'isBilateralStandardOnly' => false,
-                    'isBilateralStandardAndCabotage' => false,
-                    'hasCabotageRange' => false,
-                    'hasStandardRange' => false,
-                    'expectedErr' => null,
-                ],
-                // isBilateralCabotageOnly
-                [
-                    'isBilateralCabotageOnly' => true,
-                    'isBilateralStandardOnly' => false,
-                    'isBilateralStandardAndCabotage' => false,
-                    'hasCabotageRange' => false,
-                    'hasStandardRange' => false,
-                    'expectedErr' => 'ERR_IRHP_BIL_CAB_ONLY_STOCK_WITHOUT_CAB_RANGE',
-                ],
-                [
-                    'isBilateralCabotageOnly' => true,
-                    'isBilateralStandardOnly' => false,
-                    'isBilateralStandardAndCabotage' => false,
-                    'hasCabotageRange' => true,
-                    'hasStandardRange' => false,
-                    'expectedErr' => null,
-                ],
-                [
-                    'isBilateralCabotageOnly' => true,
-                    'isBilateralStandardOnly' => false,
-                    'isBilateralStandardAndCabotage' => false,
-                    'hasCabotageRange' => true,
-                    'hasStandardRange' => true,
-                    'expectedErr' => 'ERR_IRHP_BIL_CAB_ONLY_STOCK_WITH_STD_RANGE',
-                ],
-                [
-                    'isBilateralCabotageOnly' => true,
-                    'isBilateralStandardOnly' => false,
-                    'isBilateralStandardAndCabotage' => false,
-                    'hasCabotageRange' => false,
-                    'hasStandardRange' => true,
-                    'expectedErr' => 'ERR_IRHP_BIL_CAB_ONLY_STOCK_WITHOUT_CAB_RANGE_WITH_STD_RANGE',
-                ],
-                // isBilateralStandardOnly
-                [
-                    'isBilateralCabotageOnly' => false,
-                    'isBilateralStandardOnly' => true,
-                    'isBilateralStandardAndCabotage' => false,
-                    'hasCabotageRange' => false,
-                    'hasStandardRange' => false,
-                    'expectedErr' => 'ERR_IRHP_BIL_STD_ONLY_STOCK_WITHOUT_STD_RANGE',
-                ],
-                [
-                    'isBilateralCabotageOnly' => false,
-                    'isBilateralStandardOnly' => true,
-                    'isBilateralStandardAndCabotage' => false,
-                    'hasCabotageRange' => true,
-                    'hasStandardRange' => false,
-                    'expectedErr' => 'ERR_IRHP_BIL_STD_ONLY_STOCK_WITHOUT_STD_RANGE_WITH_CAB_RANGE',
-                ],
-                [
-                    'isBilateralCabotageOnly' => false,
-                    'isBilateralStandardOnly' => true,
-                    'isBilateralStandardAndCabotage' => false,
-                    'hasCabotageRange' => true,
-                    'hasStandardRange' => true,
-                    'expectedErr' => 'ERR_IRHP_BIL_STD_ONLY_STOCK_WITH_CAB_RANGE',
-                ],
-                [
-                    'isBilateralCabotageOnly' => false,
-                    'isBilateralStandardOnly' => true,
-                    'isBilateralStandardAndCabotage' => false,
-                    'hasCabotageRange' => false,
-                    'hasStandardRange' => true,
-                    'expectedErr' => null,
-                ],
-                // isBilateralStandardAndCabotage
-                [
-                    'isBilateralCabotageOnly' => false,
-                    'isBilateralStandardOnly' => false,
-                    'isBilateralStandardAndCabotage' => true,
-                    'hasCabotageRange' => false,
-                    'hasStandardRange' => false,
-                    'expectedErr' => 'ERR_IRHP_BIL_STD_AND_CAB_STOCK_WITHOUT_STD_RANGE_WITHOUT_CAB_RANGE',
-                ],
-                [
-                    'isBilateralCabotageOnly' => false,
-                    'isBilateralStandardOnly' => false,
-                    'isBilateralStandardAndCabotage' => true,
-                    'hasCabotageRange' => true,
-                    'hasStandardRange' => false,
-                    'expectedErr' => 'ERR_IRHP_BIL_STD_AND_CAB_STOCK_WITHOUT_STD_RANGE',
-                ],
-                [
-                    'isBilateralCabotageOnly' => false,
-                    'isBilateralStandardOnly' => false,
-                    'isBilateralStandardAndCabotage' => true,
-                    'hasCabotageRange' => true,
-                    'hasStandardRange' => true,
-                    'expectedErr' => null,
-                ],
-                [
-                    'isBilateralCabotageOnly' => false,
-                    'isBilateralStandardOnly' => false,
-                    'isBilateralStandardAndCabotage' => true,
-                    'hasCabotageRange' => false,
-                    'hasStandardRange' => true,
-                    'expectedErr' => 'ERR_IRHP_BIL_STD_AND_CAB_STOCK_WITH_CAB_RANGE',
-                ],
-            ];
+        yield [
+            'isBilateralCabotageOnly' => false,
+            'isBilateralStandardOnly' => false,
+            'isBilateralStandardAndCabotage' => false,
+            'hasCabotageRange' => false,
+            'hasStandardRange' => false,
+            'expectedErr' => null,
+        ];
+        // isBilateralCabotageOnly
+        yield [
+            'isBilateralCabotageOnly' => true,
+            'isBilateralStandardOnly' => false,
+            'isBilateralStandardAndCabotage' => false,
+            'hasCabotageRange' => false,
+            'hasStandardRange' => false,
+            'expectedErr' => 'ERR_IRHP_BIL_CAB_ONLY_STOCK_WITHOUT_CAB_RANGE',
+        ];
+        yield [
+            'isBilateralCabotageOnly' => true,
+            'isBilateralStandardOnly' => false,
+            'isBilateralStandardAndCabotage' => false,
+            'hasCabotageRange' => true,
+            'hasStandardRange' => false,
+            'expectedErr' => null,
+        ];
+        yield [
+            'isBilateralCabotageOnly' => true,
+            'isBilateralStandardOnly' => false,
+            'isBilateralStandardAndCabotage' => false,
+            'hasCabotageRange' => true,
+            'hasStandardRange' => true,
+            'expectedErr' => 'ERR_IRHP_BIL_CAB_ONLY_STOCK_WITH_STD_RANGE',
+        ];
+        yield [
+            'isBilateralCabotageOnly' => true,
+            'isBilateralStandardOnly' => false,
+            'isBilateralStandardAndCabotage' => false,
+            'hasCabotageRange' => false,
+            'hasStandardRange' => true,
+            'expectedErr' => 'ERR_IRHP_BIL_CAB_ONLY_STOCK_WITHOUT_CAB_RANGE_WITH_STD_RANGE',
+        ];
+        // isBilateralStandardOnly
+        yield [
+            'isBilateralCabotageOnly' => false,
+            'isBilateralStandardOnly' => true,
+            'isBilateralStandardAndCabotage' => false,
+            'hasCabotageRange' => false,
+            'hasStandardRange' => false,
+            'expectedErr' => 'ERR_IRHP_BIL_STD_ONLY_STOCK_WITHOUT_STD_RANGE',
+        ];
+        yield [
+            'isBilateralCabotageOnly' => false,
+            'isBilateralStandardOnly' => true,
+            'isBilateralStandardAndCabotage' => false,
+            'hasCabotageRange' => true,
+            'hasStandardRange' => false,
+            'expectedErr' => 'ERR_IRHP_BIL_STD_ONLY_STOCK_WITHOUT_STD_RANGE_WITH_CAB_RANGE',
+        ];
+        yield [
+            'isBilateralCabotageOnly' => false,
+            'isBilateralStandardOnly' => true,
+            'isBilateralStandardAndCabotage' => false,
+            'hasCabotageRange' => true,
+            'hasStandardRange' => true,
+            'expectedErr' => 'ERR_IRHP_BIL_STD_ONLY_STOCK_WITH_CAB_RANGE',
+        ];
+        yield [
+            'isBilateralCabotageOnly' => false,
+            'isBilateralStandardOnly' => true,
+            'isBilateralStandardAndCabotage' => false,
+            'hasCabotageRange' => false,
+            'hasStandardRange' => true,
+            'expectedErr' => null,
+        ];
+        // isBilateralStandardAndCabotage
+        yield [
+            'isBilateralCabotageOnly' => false,
+            'isBilateralStandardOnly' => false,
+            'isBilateralStandardAndCabotage' => true,
+            'hasCabotageRange' => false,
+            'hasStandardRange' => false,
+            'expectedErr' => 'ERR_IRHP_BIL_STD_AND_CAB_STOCK_WITHOUT_STD_RANGE_WITHOUT_CAB_RANGE',
+        ];
+        yield [
+            'isBilateralCabotageOnly' => false,
+            'isBilateralStandardOnly' => false,
+            'isBilateralStandardAndCabotage' => true,
+            'hasCabotageRange' => true,
+            'hasStandardRange' => false,
+            'expectedErr' => 'ERR_IRHP_BIL_STD_AND_CAB_STOCK_WITHOUT_STD_RANGE',
+        ];
+        yield [
+            'isBilateralCabotageOnly' => false,
+            'isBilateralStandardOnly' => false,
+            'isBilateralStandardAndCabotage' => true,
+            'hasCabotageRange' => true,
+            'hasStandardRange' => true,
+            'expectedErr' => null,
+        ];
+        yield [
+            'isBilateralCabotageOnly' => false,
+            'isBilateralStandardOnly' => false,
+            'isBilateralStandardAndCabotage' => true,
+            'hasCabotageRange' => false,
+            'hasStandardRange' => true,
+            'expectedErr' => 'ERR_IRHP_BIL_STD_AND_CAB_STOCK_WITH_CAB_RANGE',
+        ];
     }
 }

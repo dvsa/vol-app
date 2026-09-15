@@ -13,12 +13,13 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Ebsr List Test
  */
-class EbsrListTest extends MockeryTestCase
+final class EbsrListTest extends MockeryTestCase
 {
     protected $sut;
 
     protected $auth;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new Sut();
@@ -41,21 +42,19 @@ class EbsrListTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|bool[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<bool> | bool | string)>>
      *
      * @psalm-return list{list{'local-authority', array<never, never>, true}, list{'operator', array{hasActivePsvLicence: true}, true}, list{'operator', array{hasActivePsvLicence: false}, false}, list{'partner', array<never, never>, false}}
      */
-    public static function getAssertDataProvider(): array
+    public static function getAssertDataProvider(): \Iterator
     {
-        return [
-            // local authority
-            [User::USER_TYPE_LOCAL_AUTHORITY, [], true],
-            // operator with active PSV licence
-            [User::USER_TYPE_OPERATOR, ['hasActivePsvLicence' => true], true],
-            // operator without active PSV licence
-            [User::USER_TYPE_OPERATOR, ['hasActivePsvLicence' => false], false],
-            // partner
-            [User::USER_TYPE_PARTNER, [], false],
-        ];
+        // local authority
+        yield [User::USER_TYPE_LOCAL_AUTHORITY, [], true];
+        // operator with active PSV licence
+        yield [User::USER_TYPE_OPERATOR, ['hasActivePsvLicence' => true], true];
+        // operator without active PSV licence
+        yield [User::USER_TYPE_OPERATOR, ['hasActivePsvLicence' => false], false];
+        // partner
+        yield [User::USER_TYPE_PARTNER, [], false];
     }
 }

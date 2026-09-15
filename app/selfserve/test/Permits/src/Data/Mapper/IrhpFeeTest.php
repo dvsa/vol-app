@@ -14,12 +14,13 @@ use Laminas\Form\Form;
 /**
  * IrhpFeeTest
  */
-class IrhpFeeTest extends TestCase
+final class IrhpFeeTest extends TestCase
 {
     private $irhpFee;
 
     private $form;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpFee = new IrhpFee();
@@ -70,16 +71,14 @@ class IrhpFeeTest extends TestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{false, false}, list{false, true}, list{true, true}}
      */
-    public static function dpMapForFormOptionsOther(): array
+    public static function dpMapForFormOptionsOther(): \Iterator
     {
-        return [
-            [false, false],
-            [false, true],
-            [true, true],
-        ];
+        yield [false, false];
+        yield [false, true];
+        yield [true, true];
     }
 }

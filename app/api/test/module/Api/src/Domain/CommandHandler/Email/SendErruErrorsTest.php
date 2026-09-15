@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class SendErruErrorsTest extends AbstractCommandHandlerTestCase
+final class SendErruErrorsTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var SendErruErrors

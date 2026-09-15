@@ -75,7 +75,7 @@ final class ResetApplication extends AbstractCommandHandler implements Transacti
         Cmd $command,
         Organisation $organisation,
         mixed $receivedDate = null,
-        RefData $appliedVia = null
+        ?RefData $appliedVia = null
     ): Result {
         $data = $command->getArrayCopy();
         $data['organisation'] = $organisation->getId();
@@ -113,7 +113,7 @@ final class ResetApplication extends AbstractCommandHandler implements Transacti
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

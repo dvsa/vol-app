@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
+final class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
 {
     private $irhpApplicationEntity;
 
@@ -28,6 +28,7 @@ class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
 
     private $restrictedCountriesAnswerSummaryProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpApplicationEntity = m::mock(IrhpApplicationEntity::class);
@@ -125,11 +126,9 @@ class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
         $this->assertEquals($expectedTemplateVariables, $templateVariables);
     }
 
-    public static function dpSnapshot(): array
+    public static function dpSnapshot(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

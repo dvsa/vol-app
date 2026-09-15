@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\Command\CommunityLic\BulkReprint as BulkReprintCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class ReportingBulkReprintTest extends AbstractCommandHandlerTestCase
+final class ReportingBulkReprintTest extends AbstractCommandHandlerTestCase
 {
     public $mockFileUploader;
     public function setUp(): void

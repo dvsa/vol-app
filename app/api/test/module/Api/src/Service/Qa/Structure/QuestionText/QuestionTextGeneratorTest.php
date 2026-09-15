@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class QuestionTextGeneratorTest extends MockeryTestCase
+final class QuestionTextGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

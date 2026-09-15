@@ -79,7 +79,7 @@ class SendEcmtShortTermApsgPartSuccessful extends AbstractEcmtShortTermEmailHand
         ];
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->translator = $container->get('translator');
         $this->daysToPayIssueFeeProvider = $container->get('PermitsFeesDaysToPayIssueFeeProvider');

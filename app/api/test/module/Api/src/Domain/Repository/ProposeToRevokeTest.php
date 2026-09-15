@@ -9,11 +9,12 @@ use Dvsa\Olcs\Api\Domain\Repository;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\ProposeToRevoke::class)]
-class ProposeToRevokeTest extends RepositoryTestCase
+final class ProposeToRevokeTest extends RepositoryTestCase
 {
     /** @var  Repository\ProposeToRevoke */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\ProposeToRevoke::class);
@@ -39,11 +40,11 @@ class ProposeToRevokeTest extends RepositoryTestCase
 
         $actual = $this->sut->fetchProposeToRevokeUsingCase($command, Query::HYDRATE_OBJECT);
 
-        static::assertEquals('EXPECT', $actual);
+        $this->assertEquals('EXPECT', $actual);
 
         $expected = '{{QUERY}} ' .
             'AND m.case = [[' . $caseId . ']]';
 
-        static::assertEquals($expected, $this->query);
+        $this->assertEquals($expected, $this->query);
     }
 }

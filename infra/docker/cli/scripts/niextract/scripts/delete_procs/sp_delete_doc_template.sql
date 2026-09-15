@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_doc_template;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_doc_template()
@@ -28,22 +27,31 @@ BEGIN
 
     SELECT CONCAT(@total,' doc_template rows to delete.') AS '' ;
 
+    SET @total_deleted := 0;
+    SET @rowcount := 10000;
 
-    
-    DELETE FROM doc_template
-    WHERE is_ni = 0;
+    START TRANSACTION;
 
-    SET @rowcount := row_count();
+    WHILE(@rowcount = 10000) DO
     
+        DELETE FROM doc_template
+        WHERE is_ni = 0
+        LIMIT 10000;
 
+        SET @rowcount := row_count();
+        SET @total_deleted := @total_deleted + @rowcount;
     
-    SELECT CONCAT(@rowcount,' doc_template rows deleted.') AS '';
+        SELECT CONCAT(@total_deleted,' doc_template rows deleted.') AS '';
+
+        COMMIT;
+        START TRANSACTION;
+
+    END WHILE;
+    
+    COMMIT;
     
     SELECT CONCAT('delete doc_template finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

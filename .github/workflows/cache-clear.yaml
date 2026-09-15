@@ -16,6 +16,7 @@ on:
         description: "Environment to target"
         type: choice
         options:
+          - reg
           - dev
           - int
           - prep

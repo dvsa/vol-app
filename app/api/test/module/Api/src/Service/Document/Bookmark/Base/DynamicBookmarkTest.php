@@ -9,7 +9,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DynamicBookmark::class)]
-class DynamicBookmarkTest extends MockeryTestCase
+final class DynamicBookmarkTest extends MockeryTestCase
 {
     public function testValidateDataAndGetQuery(): void
     {

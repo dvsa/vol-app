@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateCommunityLicencesSt
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateCommunityLicencesStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateCommunityLicencesStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

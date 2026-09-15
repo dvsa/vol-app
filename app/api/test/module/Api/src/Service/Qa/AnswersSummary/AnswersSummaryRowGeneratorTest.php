@@ -30,7 +30,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class AnswersSummaryRowGeneratorTest extends MockeryTestCase
+final class AnswersSummaryRowGeneratorTest extends MockeryTestCase
 {
     private $formControlStrategy;
 
@@ -50,6 +50,7 @@ class AnswersSummaryRowGeneratorTest extends MockeryTestCase
 
     private $answersSummaryRowGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formControlStrategy = m::mock(FormControlStrategyInterface::class);
@@ -105,12 +106,10 @@ class AnswersSummaryRowGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpSnapshot(): array
+    public static function dpSnapshot(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
@@ -203,13 +202,11 @@ class AnswersSummaryRowGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
-            [false, 'no-of-permits', true, 'no-of-permits'],
-            [false, 'no-of-permits', false, null],
-            [true, 'no-of-permits', true, null],
-            [true, 'no-of-permits', false, null],
-        ];
+        yield [false, 'no-of-permits', true, 'no-of-permits'];
+        yield [false, 'no-of-permits', false, null];
+        yield [true, 'no-of-permits', true, null];
+        yield [true, 'no-of-permits', false, null];
     }
 }

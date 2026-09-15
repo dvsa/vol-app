@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TmLinkedLicences;
 /**
  * Tm Linked Licences test
  */
-class TmLinkedLicencesTest extends \PHPUnit\Framework\TestCase
+final class TmLinkedLicencesTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

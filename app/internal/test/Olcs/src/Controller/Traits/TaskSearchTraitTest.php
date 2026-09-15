@@ -11,17 +11,17 @@ use Mockery as m;
 use Olcs\Service\Data\SubCategory as SubCategoryDS;
 
 #[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\TaskSearchTrait::class)]
-class TaskSearchTraitTest extends MockeryTestCase
+final class TaskSearchTraitTest extends MockeryTestCase
 {
-    public const ID = 99999;
-    public const TEAM_ID = 8888;
+    public const int ID = 99999;
+    public const int TEAM_ID = 8888;
 
     /** @var \OlcsTest\Controller\Traits\Stub\StubTaskSearchTrait */
     private $sut;
     protected $mockFormHelper;
     protected $mockSubCategoryDataService;
-    protected $mockForm;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockFormHelper = m::mock(FormHelperService::class);
@@ -54,15 +54,12 @@ class TaskSearchTraitTest extends MockeryTestCase
             ->once()
             ->andReturnUsing(
                 function ($arg) {
-                    static::assertEquals(
-                        [
-                            'exists2' => 'exists2_NewVal',
-                            'exists3' => 'exists3_Val',
-                            'new1' => 'new Val',
-                            'new2' => '',
-                        ],
-                        $arg
-                    );
+                    $this->assertEquals([
+                        'exists2' => 'exists2_NewVal',
+                        'exists3' => 'exists3_Val',
+                        'new1' => 'new Val',
+                        'new2' => '',
+                    ], $arg);
 
                     return $this;
                 }
@@ -92,36 +89,31 @@ class TaskSearchTraitTest extends MockeryTestCase
             ->shouldReceive('getRequest')->once()->andReturn($mockRequest)
             ->shouldReceive('currentUser')->once()->andReturn($mockUser);
 
-        static::assertEquals(
-            $expect,
-            $this->sut->traitMapTaskFilters($extra)
-        );
+        $this->assertEquals($expect, $this->sut->traitMapTaskFilters($extra));
     }
 
-    public static function dpTestMapTaskFilters(): array
+    public static function dpTestMapTaskFilters(): \Iterator
     {
-        return [
-            [
-                'extra' => [
-                    'assignedToUser' => null,
-                    'assignedToTeam' => null,
+        yield [
+            'extra' => [
+                'assignedToUser' => null,
+                'assignedToTeam' => null,
+                'date' => 'unit_Date',
+                'status' => 'unit_Status',
+                'sort' => null,
+                'order' => '',
+                'page' => 0,
+                'showTasks' => '0',
+                'newKey' => 'unit_NewKey',
+            ],
+            'expect' =>
+                [
                     'date' => 'unit_Date',
                     'status' => 'unit_Status',
-                    'sort' => null,
-                    'order' => '',
-                    'page' => 0,
-                    'showTasks' => '0',
+                    'limit' => 10,
                     'newKey' => 'unit_NewKey',
+                    'query' => 'unit_Query',
                 ],
-                'expect' =>
-                    [
-                        'date' => 'unit_Date',
-                        'status' => 'unit_Status',
-                        'limit' => 10,
-                        'newKey' => 'unit_NewKey',
-                        'query' => 'unit_Query',
-                    ],
-            ],
         ];
     }
 
@@ -202,86 +194,84 @@ class TaskSearchTraitTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestProcessTasksActions(): array
+    public static function dpTestProcessTasksActions(): \Iterator
     {
-        return [
-            [
-                'type' => '',
-                'action' => 'create task',
-                'id' => null,
-                'paramName' => '',
-                'expected' => ['action' => 'add']
-            ],
-            [
-                'type' => '',
-                'action' => 'edit',
-                'id' => [100],
-                'paramName' => '',
-                'expected' => ['action' => 'edit', 'task' => 100]
-            ],
-            [
-                'type' => '',
-                'action' => 're-assign task',
-                'id' => [100, 101],
-                'paramName' => '',
-                'expected' => ['action' => 'reassign', 'task' => '100-101']
-            ],
-            [
-                'type' => '',
-                'action' => 'close task',
-                'id' => [100, 101],
-                'paramName' => '',
-                'expected' => ['action' => 'close', 'task' => '100-101']
-            ],
-            [
-                'type' => 'organisation',
-                'action' => 'add',
-                'id' => null,
-                'paramName' => 'organisation',
-                'expected' => ['type' => 'organisation', 'typeId' => 200, 'action' => 'add']
-            ],
-            [
-                'type' => 'licence',
-                'action' => 'add',
-                'id' => null,
-                'paramName' => 'licence',
-                'expected' => ['type' => 'licence', 'typeId' => 200, 'action' => 'add']
-            ],
-            [
-                'type' => 'application',
-                'action' => 'add',
-                'id' => null,
-                'paramName' => 'application',
-                'expected' => ['type' => 'application', 'typeId' => 200, 'action' => 'add']
-            ],
-            [
-                'type' => 'transportManager',
-                'action' => 'add',
-                'id' => null,
-                'paramName' => 'transportManager',
-                'expected' => ['type' => 'tm', 'typeId' => 200, 'action' => 'add']
-            ],
-            [
-                'type' => 'busReg',
-                'action' => 'add',
-                'id' => null,
-                'paramName' => 'busRegId',
-                'expected' => ['type' => 'busreg', 'typeId' => 200, 'action' => 'add']
-            ],
-            [
-                'type' => 'case',
-                'action' => 'add',
-                'id' => null,
-                'paramName' => 'case',
-                'expected' => ['type' => 'case', 'typeId' => 200, 'action' => 'add']
-            ],
-            [
-                'type' => 'irhpapplication',
-                'action' => 'add',
-                'id' => null,
-                'paramName' => 'irhpAppId',
-                'expected' => ['type' => 'irhpapplication', 'typeId' => 200, 'action' => 'add']
-            ],
+        yield [
+            'type' => '',
+            'action' => 'create task',
+            'id' => null,
+            'paramName' => '',
+            'expected' => ['action' => 'add']
+        ];
+        yield [
+            'type' => '',
+            'action' => 'edit',
+            'id' => [100],
+            'paramName' => '',
+            'expected' => ['action' => 'edit', 'task' => 100]
+        ];
+        yield [
+            'type' => '',
+            'action' => 're-assign task',
+            'id' => [100, 101],
+            'paramName' => '',
+            'expected' => ['action' => 'reassign', 'task' => '100-101']
+        ];
+        yield [
+            'type' => '',
+            'action' => 'close task',
+            'id' => [100, 101],
+            'paramName' => '',
+            'expected' => ['action' => 'close', 'task' => '100-101']
+        ];
+        yield [
+            'type' => 'organisation',
+            'action' => 'add',
+            'id' => null,
+            'paramName' => 'organisation',
+            'expected' => ['type' => 'organisation', 'typeId' => 200, 'action' => 'add']
+        ];
+        yield [
+            'type' => 'licence',
+            'action' => 'add',
+            'id' => null,
+            'paramName' => 'licence',
+            'expected' => ['type' => 'licence', 'typeId' => 200, 'action' => 'add']
+        ];
+        yield [
+            'type' => 'application',
+            'action' => 'add',
+            'id' => null,
+            'paramName' => 'application',
+            'expected' => ['type' => 'application', 'typeId' => 200, 'action' => 'add']
+        ];
+        yield [
+            'type' => 'transportManager',
+            'action' => 'add',
+            'id' => null,
+            'paramName' => 'transportManager',
+            'expected' => ['type' => 'tm', 'typeId' => 200, 'action' => 'add']
+        ];
+        yield [
+            'type' => 'busReg',
+            'action' => 'add',
+            'id' => null,
+            'paramName' => 'busRegId',
+            'expected' => ['type' => 'busreg', 'typeId' => 200, 'action' => 'add']
+        ];
+        yield [
+            'type' => 'case',
+            'action' => 'add',
+            'id' => null,
+            'paramName' => 'case',
+            'expected' => ['type' => 'case', 'typeId' => 200, 'action' => 'add']
+        ];
+        yield [
+            'type' => 'irhpapplication',
+            'action' => 'add',
+            'id' => null,
+            'paramName' => 'irhpAppId',
+            'expected' => ['type' => 'irhpapplication', 'typeId' => 200, 'action' => 'add']
         ];
     }
 }

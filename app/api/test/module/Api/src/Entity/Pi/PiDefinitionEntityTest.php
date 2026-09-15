@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Pi\PiDefinition as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class PiDefinitionEntityTest extends EntityTester
+final class PiDefinitionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

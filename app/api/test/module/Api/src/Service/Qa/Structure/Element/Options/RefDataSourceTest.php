@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RefDataSourceTest extends MockeryTestCase
+final class RefDataSourceTest extends MockeryTestCase
 {
     public function testPopulateOptionList(): void
     {

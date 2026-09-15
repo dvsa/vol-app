@@ -30,7 +30,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\Address as AddressEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
+final class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

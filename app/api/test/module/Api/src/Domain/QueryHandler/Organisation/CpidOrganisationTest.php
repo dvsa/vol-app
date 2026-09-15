@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class CpidOrganisationTest extends QueryHandlerTestCase
+final class CpidOrganisationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

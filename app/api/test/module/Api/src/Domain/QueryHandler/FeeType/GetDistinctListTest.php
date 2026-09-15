@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Query\FeeType\GetDistinctList as ListQuery;
 /**
  * GetDistinctList Test
  */
-class GetDistinctListTest extends QueryHandlerTestCase
+final class GetDistinctListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

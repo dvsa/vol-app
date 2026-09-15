@@ -16,7 +16,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Update Fee Status Test
  */
-class UpdateFeeStatusTest extends AbstractCommandHandlerTestCase
+final class UpdateFeeStatusTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

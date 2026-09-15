@@ -22,7 +22,7 @@ class OverviewControllerFactory implements FactoryInterface
      * @return OverviewController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OverviewController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): OverviewController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

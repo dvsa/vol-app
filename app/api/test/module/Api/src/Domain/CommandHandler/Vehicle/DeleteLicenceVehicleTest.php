@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle as LicenceVehicleEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DeleteLicenceVehicleTest extends AbstractCommandHandlerTestCase
+final class DeleteLicenceVehicleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -75,7 +75,7 @@ class DeleteLicenceVehicleTest extends AbstractCommandHandlerTestCase
 
         $result = $this->sut->handleCommand($command);
 
-        $this->assertEquals(date('Y-m-d'), $licenceVehicle2->getRemovalDate()->format('Y-m-d'));
+        $this->assertSame(date('Y-m-d'), $licenceVehicle2->getRemovalDate()->format('Y-m-d'));
 
         $expected = [
             'id' => [],

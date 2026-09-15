@@ -24,7 +24,7 @@ use Mockery as m;
 /**
  * @see RoadworthinessReportHandler
  */
-class RoadworthinessReportTest extends AbstractCommandHandlerTestCase
+final class RoadworthinessReportTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

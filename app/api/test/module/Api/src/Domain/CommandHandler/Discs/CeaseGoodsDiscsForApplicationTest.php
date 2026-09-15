@@ -11,10 +11,8 @@ use Dvsa\Olcs\Api\Domain\Repository\GoodsDisc as DiscRepo;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Discs\CeaseGoodsDiscsForApplication;
 use Dvsa\Olcs\Api\Domain\Command\Discs\CeaseGoodsDiscsForApplication as Cmd;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Discs\CeaseGoodsDiscsForApplication
- */
-class CeaseGoodsDiscsForApplicationTest extends AbstractCommandHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Discs\CeaseGoodsDiscsForApplication::class)]
+final class CeaseGoodsDiscsForApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

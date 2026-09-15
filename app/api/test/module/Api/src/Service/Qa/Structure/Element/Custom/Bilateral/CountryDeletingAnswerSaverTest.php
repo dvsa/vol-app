@@ -18,11 +18,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CountryDeletingAnswerSaverTest extends MockeryTestCase
+final class CountryDeletingAnswerSaverTest extends MockeryTestCase
 {
-    public const YES_VALUE = 'yes_value';
+    public const string YES_VALUE = 'yes_value';
 
-    public const POST_DATA = [
+    public const array POST_DATA = [
         'key1' => 'value1',
         'key2' => 'value2',
     ];
@@ -39,6 +39,7 @@ class CountryDeletingAnswerSaverTest extends MockeryTestCase
 
     private $countryDeletingAnswerSaver;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->applicationStep = m::mock(ApplicationStep::class);

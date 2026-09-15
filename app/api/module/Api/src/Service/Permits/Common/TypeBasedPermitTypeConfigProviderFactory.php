@@ -18,7 +18,7 @@ class TypeBasedPermitTypeConfigProviderFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TypeBasedPermitTypeConfigProvider
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TypeBasedPermitTypeConfigProvider
     {
         return new TypeBasedPermitTypeConfigProvider(
             $container->get('config')

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrRegOrVary as BookmarkClass;
 /**
  * BrRegOrVary test
  */
-class BrRegOrVaryTest extends AbstractBrRegOrVary
+final class BrRegOrVaryTest extends AbstractBrRegOrVary
 {
     protected const RENDER_REG = 'register';
     protected const RENDER_VARY = 'vary';

@@ -265,7 +265,11 @@ class DocumentGenerationController extends AbstractDocumentController
         $docTemplates = ['' => self::EMPTY_LABEL];
         if (isset($details['documentSubCategory'])) {
             $subCategoryId = (int) $details['documentSubCategory'];
-            $docTemplates = $this->getListDataDocTemplates(null, $subCategoryId);
+            // The template the form already carries (a re-generated document's stored template,
+            // or the user's POSTed choice) must stay selectable even when the letter-type
+            // consolidation would collapse it away, or the value silently falls back to a
+            // different template after the original document has been deleted.
+            $docTemplates = $this->getListDataDocTemplates(null, $subCategoryId, null, $details['documentTemplate'] ?? null);
         }
 
         $form->get('details')->get('documentTemplate')->setValueOptions($docTemplates);

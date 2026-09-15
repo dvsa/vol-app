@@ -16,10 +16,9 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="legacy_case_action")
  */
+#[ORM\Table(name: 'legacy_case_action')]
+#[ORM\MappedSuperclass]
 abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -30,28 +29,25 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**
      * Examples, No Action, Warning, Interview
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 45, nullable: true)]
     protected $description;
 
     /**
      * isDriver
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_driver", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_driver', nullable: false, options: ['default' => 0])]
     protected $isDriver = 0;
 
 
@@ -60,7 +56,7 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return LegacyCaseAction
+     * @return static
      */
     public function setId($id)
     {
@@ -84,7 +80,7 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
      *
      * @param string $description new value being set
      *
-     * @return LegacyCaseAction
+     * @return static
      */
     public function setDescription($description)
     {
@@ -108,7 +104,7 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
      *
      * @param string $isDriver new value being set
      *
-     * @return LegacyCaseAction
+     * @return static
      */
     public function setIsDriver($isDriver)
     {

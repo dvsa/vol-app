@@ -305,12 +305,10 @@ abstract class AbstractEcmtAnnualPermitTestCase extends AbstractPermitTestCase
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    public static function dpLocaleMappings(): array
+    public static function dpLocaleMappings(): \Iterator
     {
-        return [
-            ['N', 'en_GB'],
-            ['Y', 'cy_GB']
-        ];
+        yield ['N', 'en_GB'];
+        yield ['Y', 'cy_GB'];
     }
 
     /**
@@ -329,7 +327,7 @@ abstract class AbstractEcmtAnnualPermitTestCase extends AbstractPermitTestCase
             'category' => Category::CATEGORY_PERMITS,
             'subCategory' => Category::TASK_SUB_CATEGORY_PERMITS_GENERAL_TASK,
             'description' => 'Unable to send email - no organisation recipients found for Org: SOME ORG - Please update the organisation admin user contacts to ensure at least one has a valid email address.',
-            'actionDate' => (new DateTime())->format('Y-m-d'),
+            'actionDate' => new DateTime()->format('Y-m-d'),
         ];
 
         $this->expectedSideEffect(CreateTask::class, $expectedData, new Result());

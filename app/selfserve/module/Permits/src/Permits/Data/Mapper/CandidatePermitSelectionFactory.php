@@ -18,7 +18,7 @@ class CandidatePermitSelectionFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CandidatePermitSelection
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CandidatePermitSelection
     {
         return new CandidatePermitSelection(
             $container->get(HtmlAdder::class),

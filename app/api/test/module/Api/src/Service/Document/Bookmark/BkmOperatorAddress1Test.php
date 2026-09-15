@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BkmOperatorAddress1 as Sut;
 /**
  * BkmOperatorAddress1 Test
  */
-class BkmOperatorAddress1Test extends \PHPUnit\Framework\TestCase
+final class BkmOperatorAddress1Test extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -31,33 +31,31 @@ class BkmOperatorAddress1Test extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'organisation' => [
-                        'irfoContactDetails' => [
-                            'address' => [
-                                'addressLine1' => 'Line 1',
-                                'addressLine2' => 'Line 2',
-                                'addressLine3' => 'Line 3',
-                                'addressLine4' => 'Line 4',
-                                'town' => 'Leeds',
-                                'postcode' => 'LS9 6NF',
-                                'countryCode' => [
-                                    'countryDesc' => 'United Kingdom'
-                                ]
+                'organisation' => [
+                    'irfoContactDetails' => [
+                        'address' => [
+                            'addressLine1' => 'Line 1',
+                            'addressLine2' => 'Line 2',
+                            'addressLine3' => 'Line 3',
+                            'addressLine4' => 'Line 4',
+                            'town' => 'Leeds',
+                            'postcode' => 'LS9 6NF',
+                            'countryCode' => [
+                                'countryDesc' => 'United Kingdom'
                             ]
                         ]
                     ]
-                ],
-                "Line 1\nLine 2\nLine 3\nLine 4\nLeeds\nLS9 6NF\nUnited Kingdom"
+                ]
             ],
-            [
-                [],
-                ''
-            ],
+            "Line 1\nLine 2\nLine 3\nLine 4\nLeeds\nLS9 6NF\nUnited Kingdom"
+        ];
+        yield [
+            [],
+            ''
         ];
     }
 }

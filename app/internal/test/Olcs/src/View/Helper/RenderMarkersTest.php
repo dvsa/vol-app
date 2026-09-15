@@ -12,13 +12,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class RenderMarkersTest extends TestCase
+final class RenderMarkersTest extends TestCase
 {
     /**
      * @var \Olcs\View\Helper\RenderMarkers
      */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new \Olcs\View\Helper\RenderMarkers();

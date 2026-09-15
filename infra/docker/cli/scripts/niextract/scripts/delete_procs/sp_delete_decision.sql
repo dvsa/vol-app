@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_decision;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_decision()
@@ -28,16 +27,28 @@ BEGIN
 
     SELECT CONCAT(@total,' decision rows to delete.') AS '' ;
 
+    SET @total_deleted := 0;
+    SET @rowcount := 10000;
 
-    
-    DELETE FROM decision
-    WHERE is_ni = 0;
+    START TRANSACTION;
 
-    SET @rowcount := row_count();
+    WHILE(@rowcount = 10000) DO
     
+        DELETE FROM decision
+        WHERE is_ni = 0
+        LIMIT 10000;
 
+        SET @rowcount := row_count();
+        SET @total_deleted := @total_deleted + @rowcount;
     
-    SELECT CONCAT(@rowcount,' decision rows deleted.') AS '';  
+        SELECT CONCAT(@total_deleted,' decision rows deleted.') AS '';  
+
+        COMMIT;
+        START TRANSACTION;
+
+    END WHILE;
+    
+    COMMIT;
     
     set autocommit=1;
 
@@ -45,7 +56,4 @@ BEGIN
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

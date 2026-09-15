@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpPermitWindowEntityTest extends EntityTester
+final class IrhpPermitWindowEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -35,13 +35,13 @@ class IrhpPermitWindowEntityTest extends EntityTester
         $entity = Entity::create($irhpPermitStock, $startDate, $endDate);
 
         $this->assertEquals($irhpPermitStock, $entity->getIrhpPermitStock());
-        $this->assertEquals($startDate, $entity->getStartDate()->format('Y-m-d'));
-        $this->assertEquals($endDate, $entity->getEndDate()->format('Y-m-d'));
+        $this->assertSame($startDate, $entity->getStartDate()->format('Y-m-d'));
+        $this->assertSame($endDate, $entity->getEndDate()->format('Y-m-d'));
 
         $entity->update($irhpPermitStock, $updatedStartDate, $updatedEndDate);
 
         $this->assertEquals($irhpPermitStock, $entity->getIrhpPermitStock());
-        $this->assertEquals($updatedStartDate, $entity->getStartDate()->format('Y-m-d'));
-        $this->assertEquals($updatedEndDate, $entity->getEndDate()->format('Y-m-d'));
+        $this->assertSame($updatedStartDate, $entity->getStartDate()->format('Y-m-d'));
+        $this->assertSame($updatedEndDate, $entity->getEndDate()->format('Y-m-d'));
     }
 }

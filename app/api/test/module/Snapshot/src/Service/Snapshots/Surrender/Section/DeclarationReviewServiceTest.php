@@ -11,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Laminas\I18n\Translator\TranslatorInterface;
 
-class DeclarationReviewServiceTest extends MockeryTestCase
+final class DeclarationReviewServiceTest extends MockeryTestCase
 {
     use \Dvsa\Olcs\Snapshot\Service\Snapshots\FormatReviewDataTrait;
 
@@ -21,6 +21,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);

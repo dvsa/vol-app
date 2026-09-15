@@ -11,16 +11,13 @@ use Mockery as m;
 /**
  * WithBusRegTest
  */
-class WithBusRegTest extends QueryPartialTestCase
+final class WithBusRegTest extends QueryPartialTestCase
 {
-    /** @var m\Mock */
-    private $with;
-
     public function setUp(): void
     {
         // Cannot mock With as it is Final
-        $this->with = new With();
-        $this->sut = new WithBusReg($this->with);
+        $with = new With();
+        $this->sut = new WithBusReg($with);
 
         parent::setUp();
     }
@@ -35,12 +32,10 @@ class WithBusRegTest extends QueryPartialTestCase
         );
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            ['SELECT a, br FROM foo a LEFT JOIN a.busReg br', []],
-            ['SELECT a, br FROM foo a LEFT JOIN a.busReg br', ['ENTITY']],
-            ['SELECT a, br FROM foo a LEFT JOIN ALIAS.busReg br', ['ENTITY', 'ALIAS']],
-        ];
+        yield ['SELECT a, br FROM foo a LEFT JOIN a.busReg br', []];
+        yield ['SELECT a, br FROM foo a LEFT JOIN a.busReg br', ['ENTITY']];
+        yield ['SELECT a, br FROM foo a LEFT JOIN ALIAS.busReg br', ['ENTITY', 'ALIAS']];
     }
 }

@@ -17,7 +17,7 @@ use Olcs\Listener\RouteParams;
 use Olcs\Service\Marker\MarkerService;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
-class TransportManagerMarkerTest extends MockeryTestCase
+final class TransportManagerMarkerTest extends MockeryTestCase
 {
     /** @var  TransportManagerMarker */
     protected $sut;
@@ -29,6 +29,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
     /** @var m\MockInterface|MarkerService  */
     private $mockMarkerService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new TransportManagerMarker();

@@ -21,7 +21,7 @@ class RegisterUserSelfserveFactory implements FactoryInterface
      * @return TransactioningCommandHandler
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransactioningCommandHandler
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TransactioningCommandHandler
     {
         $adapter = $container->get(ValidatableAdapterInterface::class);
 

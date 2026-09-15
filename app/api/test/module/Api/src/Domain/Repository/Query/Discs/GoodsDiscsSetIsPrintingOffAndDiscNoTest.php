@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GoodsDiscsSetIsPrintingOffAndDiscNoTest extends AbstractDbQueryTestCase
+final class GoodsDiscsSetIsPrintingOffAndDiscNoTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         GoodsDisc::class => 'goods_disc'
@@ -50,23 +50,21 @@ class GoodsDiscsSetIsPrintingOffAndDiscNoTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
         $today = new DateTime();
-        return [
+        yield [
+            ['ids' => [1,2], 'startNumber' => 1],
+            ['ids' => Connection::PARAM_INT_ARRAY, 'startNumber' => \PDO::PARAM_INT],
             [
-                ['ids' => [1,2], 'startNumber' => 1],
-                ['ids' => Connection::PARAM_INT_ARRAY, 'startNumber' => \PDO::PARAM_INT],
-                [
-                    'issuedDate' => $today->format('Y-m-d H:i:s'),
-                    'ids' => [1,2],
-                    'startNumber' => 1
-                ],
-                [
-                    'issuedDate' => \PDO::PARAM_STR,
-                    'ids' => Connection::PARAM_INT_ARRAY,
-                    'startNumber' => \PDO::PARAM_INT]
-            ]
+                'issuedDate' => $today->format('Y-m-d H:i:s'),
+                'ids' => [1,2],
+                'startNumber' => 1
+            ],
+            [
+                'issuedDate' => \PDO::PARAM_STR,
+                'ids' => Connection::PARAM_INT_ARRAY,
+                'startNumber' => \PDO::PARAM_INT]
         ];
     }
 

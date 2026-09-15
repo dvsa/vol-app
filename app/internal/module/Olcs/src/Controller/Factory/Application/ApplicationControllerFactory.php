@@ -23,7 +23,7 @@ class ApplicationControllerFactory implements FactoryInterface
      * @return ApplicationController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

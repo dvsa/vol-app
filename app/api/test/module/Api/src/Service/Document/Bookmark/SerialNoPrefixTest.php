@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\SerialNoPrefix;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class SerialNoPrefixTest extends \PHPUnit\Framework\TestCase
+final class SerialNoPrefixTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

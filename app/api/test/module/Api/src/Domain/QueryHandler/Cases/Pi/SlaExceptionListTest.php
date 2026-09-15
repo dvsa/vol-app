@@ -15,7 +15,7 @@ use Mockery as m;
  * SLA Exception List Query Handler Test
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Pi\SlaExceptionList::class)]
-class SlaExceptionListTest extends QueryHandlerTestCase
+final class SlaExceptionListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

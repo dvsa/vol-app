@@ -36,7 +36,8 @@ return [
                 '<a class="govuk-link" href="' . $this->generateUrl(
                     ['licence' => $row['licenceId']],
                     'licence'
-                ) . '">' . $row['licNo'] . '</a><br/>' . $row['status'],
+                ) . '">' . \Common\Util\Escape::html($row['licNo']) . '</a><br/>'
+                    . \Common\Util\Escape::html($row['status']),
         ],
         [
             'title' => 'App ID/status',
@@ -54,7 +55,8 @@ return [
                 '<a class="govuk-link" href="' . $this->generateUrl(
                     ['operator' => $data['organisation_id']],
                     'operator/business-details'
-                ) . '">' . $data['name'] . '</a><br/>' . $data['status'],
+                ) . '">' . \Common\Util\Escape::html($data['name']) . '</a><br/>'
+                    . \Common\Util\Escape::html($data['status']),
             'sort' => 'operatorName'
         ],
         [
@@ -73,7 +75,7 @@ return [
                 $parts = [];
                 foreach (['address_line1', 'address_line2', 'address_line3', 'postcode'] as $item) {
                     if (!empty($data[$item])) {
-                        $parts[] = $data[$item];
+                        $parts[] = \Common\Util\Escape::html($data[$item]);
                     }
                 }
 
@@ -93,7 +95,7 @@ return [
                         ['licence' => $data['licenceId']],
                         'licence/cases',
                         false
-                    ) . '">' . $data['caseCount'] . '</a>';
+                    ) . '">' . \Common\Util\Escape::html($data['caseCount']) . '</a>';
                 } else {
                     return '<a class="govuk-link" href="' . $this->generateUrl(
                         ['licence' => $data['licenceId'], 'action' => 'add'],
@@ -116,16 +118,16 @@ return [
                 $string = '<span class="tooltip">';
                 $string .= !empty($data['startDate']) ?
                         ucfirst((string) $this->translator->translate('start')) . ': ' .
-                        $data['startDate'] . '<br />' : '';
+                        \Common\Util\Escape::html($data['startDate']) . '<br />' : '';
                 $string .= !empty($data['reviewDate']) ?
                         ucfirst((string) $this->translator->translate('review')) . ': ' .
-                        $data['reviewDate'] . '<br />' : '';
+                        \Common\Util\Escape::html($data['reviewDate']) . '<br />' : '';
                 $string .= !empty($data['endDate']) ?
                         ucfirst((string) $this->translator->translate('end')) . ': ' .
-                        $data['endDate'] . '<br />' : '';
+                        \Common\Util\Escape::html($data['endDate']) . '<br />' : '';
                 $string .= !empty($data['fabsReference']) ?
                         ucfirst((string) $this->translator->translate('fabs-reference')) . ': ' .
-                        $data['fabsReference'] . '<br />' : '';
+                        \Common\Util\Escape::html($data['fabsReference']) . '<br />' : '';
                 $string .= '</span>';
 
                 if ($string == '<span class="tooltip"></span>') {

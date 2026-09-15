@@ -280,6 +280,17 @@ $routes = [
                 ],
                 'may_terminate' => true,
             ],
+            'save-todo-content' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/save-todo-content',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'saveTodoContent',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
     'template_lists' => [

@@ -18,7 +18,7 @@ class VariationTransportManagerAdapterFactory implements FactoryInterface
      * @throws ContainerExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VariationTransportManagerAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): VariationTransportManagerAdapter
     {
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);
         assert($transferAnnotationBuilder instanceof AnnotationBuilder);

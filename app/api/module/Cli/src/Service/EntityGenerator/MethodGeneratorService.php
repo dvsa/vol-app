@@ -89,6 +89,9 @@ final readonly class MethodGeneratorService
             'datetime', 'date', 'time', 'timestamp' => '\\DateTime',
             'decimal', 'float', 'double' => 'float',
             'array' => 'array',
+            // DBAL hydrates binary/blob columns into a stream, so accessors have to
+            // accept and return both forms
+            'binary', 'blob', 'string|resource' => 'string|resource',
             default => 'mixed'
         };
     }
@@ -152,10 +155,10 @@ final readonly class MethodGeneratorService
      */
     public function getTargetEntity(array $field): string
     {
-        // Extract from annotation like @ORM\ManyToOne(targetEntity="\Dvsa\Olcs\Api\Entity\User\User")
+        // Extract from attribute like #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class)]
         $annotation = $field['annotation'] ?? '';
-        if (preg_match('/targetEntity="([^"]+)"/', $annotation, $matches)) {
-            return $matches[1];
+        if (preg_match('/targetEntity:\s*\\\\?([\w\\\\]+)::class/', $annotation, $matches)) {
+            return ltrim($matches[1], '\\');
         }
 
         // Fallback - extract from type hint in property
@@ -197,12 +200,14 @@ final readonly class MethodGeneratorService
     }
 
     /**
-     * Get the return type for fluent interface (usually the entity class name)
+     * Get the return type for fluent interface
+     *
+     * 'static' rather than the concrete class name: fluent methods return $this,
+     * which in the abstract class is not provably the concrete type (PHPStan return.type).
      */
-    public function getFluidReturnType(string $className): string
+    public function getFluidReturnType(): string
     {
-        // Remove "Abstract" prefix if present
-        return str_replace('Abstract', '', $className);
+        return 'static';
     }
 
     /**

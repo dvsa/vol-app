@@ -49,7 +49,7 @@ final class RemoveReadAudit extends AbstractCommandHandler
         return $this->result;
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         if (isset($config['batch_config']['remove-read-audit']['max-age'])) {

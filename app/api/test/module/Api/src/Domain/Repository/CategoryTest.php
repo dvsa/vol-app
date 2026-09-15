@@ -9,8 +9,9 @@ use Dvsa\Olcs\Api\Entity;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Category::class)]
-class CategoryTest extends RepositoryTestCase
+final class CategoryTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(\Dvsa\Olcs\Api\Domain\Repository\Category::class, true);
@@ -31,8 +32,8 @@ class CategoryTest extends RepositoryTestCase
 
         $dto = TransferQry\Category\GetList::create([]);
 
-        static::assertEquals('RESULTS', $this->sut->fetchList($dto));
-        static::assertEquals('QUERY', $this->query);
+        $this->assertEquals('RESULTS', $this->sut->fetchList($dto));
+        $this->assertEquals('QUERY', $this->query);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestApplyListX')]
@@ -57,44 +58,42 @@ class CategoryTest extends RepositoryTestCase
         $this->assertEquals($expect, $this->query);
     }
 
-    public static function dpTestApplyListX(): array
+    public static function dpTestApplyListX(): \Iterator
     {
-        return [
-            [
-                'query' => [
-                    'isTaskCategory' => 'Y',
-                    'isDocCategory' => 'N',
-                    'isScanCategory' => 'Y',
-                    'isOnlyWithItems' => 'Y',
-                ],
-                'expect' => 'QUERY ' .
-                    'AND m.isTaskCategory = [[true]] ' .
-                    'AND m.isDocCategory = [[false]] ' .
-                    'AND m.isScanCategory = [[true]]',
+        yield [
+            'query' => [
+                'isTaskCategory' => 'Y',
+                'isDocCategory' => 'N',
+                'isScanCategory' => 'Y',
+                'isOnlyWithItems' => 'Y',
             ],
-            [
-                'query' => [
-                    'isDocCategory' => 'Y',
-                    'isOnlyWithItems' => 'N',
-                ],
-                'expect' => 'QUERY ' .
-                    'AND m.isDocCategory = [[true]]',
+            'expect' => 'QUERY ' .
+                'AND m.isTaskCategory = [[true]] ' .
+                'AND m.isDocCategory = [[false]] ' .
+                'AND m.isScanCategory = [[true]]',
+        ];
+        yield [
+            'query' => [
+                'isDocCategory' => 'Y',
+                'isOnlyWithItems' => 'N',
             ],
-            [
-                'query' => [
-                    'isTaskCategory' => 'N',
-                    'isDocCategory' => 'Y',
-                    'isScanCategory' => 'N',
-                    'isOnlyWithItems' => 'Y',
-                ],
-                'expect' => $expectedQuery = 'QUERY ' .
-                    'SELECT DISTINCT m ' .
-                    'INNER JOIN ' . Entity\Doc\DocTemplate::class . ' dct WITH dct.category = m.id ' .
-                    'INNER JOIN ' . Entity\Doc\Document::class . ' dc WITH dc.id = dct.document ' .
-                    'AND m.isTaskCategory = [[false]] ' .
-                    'AND m.isDocCategory = [[true]] ' .
-                    'AND m.isScanCategory = [[false]]',
+            'expect' => 'QUERY ' .
+                'AND m.isDocCategory = [[true]]',
+        ];
+        yield [
+            'query' => [
+                'isTaskCategory' => 'N',
+                'isDocCategory' => 'Y',
+                'isScanCategory' => 'N',
+                'isOnlyWithItems' => 'Y',
             ],
+            'expect' => $expectedQuery = 'QUERY ' .
+                'SELECT DISTINCT m ' .
+                'INNER JOIN ' . Entity\Doc\DocTemplate::class . ' dct WITH dct.category = m.id ' .
+                'INNER JOIN ' . Entity\Doc\Document::class . ' dc WITH dc.id = dct.document ' .
+                'AND m.isTaskCategory = [[false]] ' .
+                'AND m.isDocCategory = [[true]] ' .
+                'AND m.isScanCategory = [[false]]',
         ];
     }
 }

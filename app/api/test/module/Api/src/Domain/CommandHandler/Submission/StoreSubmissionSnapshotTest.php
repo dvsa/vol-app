@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class StoreSubmissionSnapshotTest extends AbstractCommandHandlerTestCase
+final class StoreSubmissionSnapshotTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -95,11 +95,9 @@ class StoreSubmissionSnapshotTest extends AbstractCommandHandlerTestCase
         return $licence;
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [true, 'AB123456'],
-            [false, 'No attached licence'],
-        ];
+        yield [true, 'AB123456'];
+        yield [false, 'No attached licence'];
     }
 }

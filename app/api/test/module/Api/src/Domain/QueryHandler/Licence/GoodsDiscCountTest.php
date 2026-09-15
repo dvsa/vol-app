@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Repository\GoodsDisc;
 use Dvsa\Olcs\Transfer\Query\Licence\GoodsDiscCount;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 
-class GoodsDiscCountTest extends QueryHandlerTestCase
+final class GoodsDiscCountTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

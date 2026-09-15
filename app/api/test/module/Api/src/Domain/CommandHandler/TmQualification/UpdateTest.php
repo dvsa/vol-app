@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\Country as CountryEntity;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

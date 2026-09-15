@@ -48,7 +48,7 @@ return [
                     ['submission' => $row['id'], 'action' => 'details'],
                     'submission',
                     true
-                ) . '">' . $row['id'] . '</a>',
+                ) . '">' . \Common\Util\Escape::html($row['id']) . '</a>',
             'sort' => 'id'
         ],
         [

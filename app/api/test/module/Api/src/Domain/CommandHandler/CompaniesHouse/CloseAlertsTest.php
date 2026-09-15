@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class CloseAlertsTest extends AbstractCommandHandlerTestCase
+final class CloseAlertsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

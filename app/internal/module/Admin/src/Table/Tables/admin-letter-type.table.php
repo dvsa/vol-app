@@ -25,6 +25,12 @@ return [
                     'requireRows' => false,
                     'class' => 'govuk-button govuk-button--warning js-require--one',
                 ],
+                // The builder needs a letter type to work on, so it is reached from a selected
+                // row rather than the side menu.
+                'builder' => [
+                    'requireRows' => false,
+                    'class' => 'govuk-button govuk-button--secondary js-require--one',
+                ],
             ],
         ],
         'paginate' => [

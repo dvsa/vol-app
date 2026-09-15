@@ -150,7 +150,7 @@ class Search implements AuthAwareInterface
         }
 
         if (!$this->isAnonymousUser() && $this->isInternalUser() && $indexes[0] !== 'irfo') {
-            $exemptTeams = str_getcsv((string) $this->sysParamRepo->fetchValue(SysParamEntity::DATA_SEPARATION_TEAMS_EXEMPT));
+            $exemptTeams = str_getcsv((string) $this->sysParamRepo->fetchValue(SysParamEntity::DATA_SEPARATION_TEAMS_EXEMPT), ',', '"', '\\');
             if (!in_array($this->getCurrentUser()->getTeam()->getId(), $exemptTeams)) {
                 $elasticaQuery->setPostFilter($this->getInternalUserTAPostFilter($indexes[0]));
             }
@@ -178,7 +178,7 @@ class Search implements AuthAwareInterface
         $es = new \Elastica\Search($this->getClient());
 
         // Add indices, otherwise search is executed against all indices
-        $es->addIndices($indexes);
+        $es->addIndicesByName($indexes);
 
         $response = [];
         $resultSet = $es->search($elasticaQuery);

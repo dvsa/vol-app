@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="task_alpha_split",
- *    indexes={
- *        @ORM\Index(name="ix_task_alpha_split_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_task_alpha_split_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_task_alpha_split_task_allocation_rule_id", columns={"task_allocation_rule_id"}),
- *        @ORM\Index(name="ix_task_alpha_split_user_id", columns={"user_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'task_alpha_split')]
+#[ORM\Index(name: 'ix_task_alpha_split_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_task_alpha_split_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_task_alpha_split_task_allocation_rule_id', columns: ['task_allocation_rule_id'])]
+#[ORM\Index(name: 'ix_task_alpha_split_user_id', columns: ['user_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,72 +41,65 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * TaskAllocationRule
      *
      * @var \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule", fetch="LAZY")
-     * @ORM\JoinColumn(name="task_allocation_rule_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'task_allocation_rule_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule::class, inversedBy: 'taskAlphaSplits', fetch: 'LAZY')]
     protected $taskAllocationRule;
 
     /**
      * Foreign Key to user
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Letters
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="letters", length=50, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'letters', length: 50, nullable: false)]
     protected $letters = '';
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -134,7 +123,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setId($id)
     {
@@ -158,7 +147,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule $taskAllocationRule new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setTaskAllocationRule($taskAllocationRule)
     {
@@ -182,7 +171,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setUser($user)
     {
@@ -206,7 +195,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -230,7 +219,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -254,7 +243,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param string $letters new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setLetters($letters)
     {
@@ -278,7 +267,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setVersion($version)
     {

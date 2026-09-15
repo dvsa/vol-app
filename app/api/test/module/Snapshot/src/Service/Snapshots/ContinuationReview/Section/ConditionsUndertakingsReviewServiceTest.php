@@ -17,11 +17,12 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
+final class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
 {
     /** @var VehiclesReviewService review service */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -66,42 +67,39 @@ class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
     }
 
-    public static function licenceProvider(): array
+    public static function licenceProvider(): \Iterator
     {
-        return [
-            'isPsvRestricted' => [
-                'isPsv' => true,
-                'isRestricted' => true,
-                'variables' => [
-                    'isPsvRestricted' => true,
-                    'conditionsUndertakings' => ['foo']
-                ]
-            ],
-            'isPsvNotRestricted' => [
-                'isPsv' => true,
-                'isRestricted' => false,
-                'variables' => [
-                    'isPsvRestricted' => false,
-                    'conditionsUndertakings' => ['foo']
-                ]
-            ],
-            'isNotPsvIsRestricted' => [
-                'isPsv' => true,
-                'isRestricted' => false,
-                'variables' => [
-                    'isPsvRestricted' => false,
-                    'conditionsUndertakings' => ['foo']
-                ]
-            ],
-            'isNotPsvIsNotRestricted' => [
-                'isPsv' => true,
-                'isRestricted' => false,
-                'variables' => [
-                    'isPsvRestricted' => false,
-                    'conditionsUndertakings' => ['foo']
-                ]
+        yield 'isPsvRestricted' => [
+            'isPsv' => true,
+            'isRestricted' => true,
+            'variables' => [
+                'isPsvRestricted' => true,
+                'conditionsUndertakings' => ['foo']
             ]
-
+        ];
+        yield 'isPsvNotRestricted' => [
+            'isPsv' => true,
+            'isRestricted' => false,
+            'variables' => [
+                'isPsvRestricted' => false,
+                'conditionsUndertakings' => ['foo']
+            ]
+        ];
+        yield 'isNotPsvIsRestricted' => [
+            'isPsv' => true,
+            'isRestricted' => false,
+            'variables' => [
+                'isPsvRestricted' => false,
+                'conditionsUndertakings' => ['foo']
+            ]
+        ];
+        yield 'isNotPsvIsNotRestricted' => [
+            'isPsv' => true,
+            'isRestricted' => false,
+            'variables' => [
+                'isPsvRestricted' => false,
+                'conditionsUndertakings' => ['foo']
+            ]
         ];
     }
 }

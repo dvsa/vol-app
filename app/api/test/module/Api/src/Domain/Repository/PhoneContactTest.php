@@ -10,16 +10,15 @@ use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Repository\PhoneContact
- */
-class PhoneContactTest extends RepositoryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\PhoneContact::class)]
+final class PhoneContactTest extends RepositoryTestCase
 {
-    public const CONTACT_DETAILS_ID = 9999;
+    public const int CONTACT_DETAILS_ID = 9999;
 
     /** @var  m\MockInterface */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\PhoneContact::class, true);

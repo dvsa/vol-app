@@ -19,21 +19,14 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="transport_manager_read_audit",
- *    indexes={
- *        @ORM\Index(name="ix_transport_manager_read_audit_created_on", columns={"created_on"}),
- *        @ORM\Index(name="ix_transport_manager_read_audit_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="ix_transport_manager_read_audit_user_id", columns={"user_id"}),
- *        @ORM\Index(name="uk_tm_read_audit_tm_id_user_id_created_on", columns={"transport_manager_id", "user_id", "created_on"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_tm_read_audit_tm_id_user_id_created_on", columns={"transport_manager_id", "user_id", "created_on"})
- *    }
- * )
  */
+#[ORM\Table(name: 'transport_manager_read_audit')]
+#[ORM\Index(name: 'ix_transport_manager_read_audit_created_on', columns: ['created_on'])]
+#[ORM\Index(name: 'ix_transport_manager_read_audit_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\Index(name: 'ix_transport_manager_read_audit_user_id', columns: ['user_id'])]
+#[ORM\UniqueConstraint(name: 'uk_tm_read_audit_tm_id_user_id_created_on', columns: ['transport_manager_id', 'user_id', 'created_on'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTransportManagerReadAudit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,31 +38,28 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'readAudits', fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Foreign Key to user
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
     /**
@@ -93,7 +83,7 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      *
      * @param int $id new value being set
      *
-     * @return TransportManagerReadAudit
+     * @return static
      */
     public function setId($id)
     {
@@ -117,7 +107,7 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return TransportManagerReadAudit
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -141,7 +131,7 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return TransportManagerReadAudit
+     * @return static
      */
     public function setUser($user)
     {

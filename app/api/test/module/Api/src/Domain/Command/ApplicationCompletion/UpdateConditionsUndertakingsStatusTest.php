@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateConditionsUndertaki
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateConditionsUndertakingsStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateConditionsUndertakingsStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

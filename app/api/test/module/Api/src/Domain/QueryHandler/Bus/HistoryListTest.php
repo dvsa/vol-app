@@ -18,7 +18,7 @@ use Mockery as m;
 /**
  * History List Test
  */
-class HistoryListTest extends QueryHandlerTestCase
+final class HistoryListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

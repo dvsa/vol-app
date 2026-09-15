@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DeleteTaxiPhvTest extends AbstractCommandHandlerTestCase
+final class DeleteTaxiPhvTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -59,7 +59,7 @@ class DeleteTaxiPhvTest extends AbstractCommandHandlerTestCase
                 'licence' => 1,
                 'lva' => 'application'
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('DELETE')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('DELETE')
         );
 
         $this->repoMap['Licence']->shouldReceive('save')->once()->andReturnUsing(
@@ -74,7 +74,7 @@ class DeleteTaxiPhvTest extends AbstractCommandHandlerTestCase
                 'id' => 323,
                 'section' => 'taxiPhv',
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('UPDATE_COMPLETION')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('UPDATE_COMPLETION')
         );
 
         $response = $this->sut->handleCommand($command);

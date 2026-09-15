@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  * Class InjectReceivedDateTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\Filter
  */
-class InjectReceivedDateTest extends TestCase
+final class InjectReceivedDateTest extends TestCase
 {
     public function testFilter(): void
     {

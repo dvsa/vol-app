@@ -15,9 +15,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsConditionalUpdaterTest extends MockeryTestCase
+final class NoOfPermitsConditionalUpdaterTest extends MockeryTestCase
 {
-    public const EXISTING_BILATERAL_REQUIRED = [
+    public const array EXISTING_BILATERAL_REQUIRED = [
         IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 5,
         IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 7,
         IrhpPermitApplication::BILATERAL_MOROCCO_REQUIRED => null,
@@ -29,6 +29,7 @@ class NoOfPermitsConditionalUpdaterTest extends MockeryTestCase
 
     private $noOfPermitsConditionalUpdater;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);
@@ -51,30 +52,28 @@ class NoOfPermitsConditionalUpdaterTest extends MockeryTestCase
         $this->noOfPermitsConditionalUpdater->update($this->irhpPermitApplication, $updatedAnswers);
     }
 
-    public static function dpUpdateValueChanged(): array
+    public static function dpUpdateValueChanged(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 10,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 7,
-                    IrhpPermitApplication::BILATERAL_MOROCCO_REQUIRED => null,
-                ]
-            ],
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 10,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 7,
+                IrhpPermitApplication::BILATERAL_MOROCCO_REQUIRED => null,
+            ]
+        ];
+        yield [
             [
-                [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 5,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 11,
-                    IrhpPermitApplication::BILATERAL_MOROCCO_REQUIRED => null,
-                ]
-            ],
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 5,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 11,
+                IrhpPermitApplication::BILATERAL_MOROCCO_REQUIRED => null,
+            ]
+        ];
+        yield [
             [
-                [
-                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 3,
-                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 4,
-                    IrhpPermitApplication::BILATERAL_MOROCCO_REQUIRED => null,
-                ]
-            ],
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 3,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 4,
+                IrhpPermitApplication::BILATERAL_MOROCCO_REQUIRED => null,
+            ]
         ];
     }
 

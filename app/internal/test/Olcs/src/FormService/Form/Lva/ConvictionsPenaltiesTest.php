@@ -17,12 +17,11 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
+final class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = ConvictionsPenalties::class;
     protected $translator;
     protected $urlHelper;
-    protected $classArgs;
 
 
     public function setUp(): void

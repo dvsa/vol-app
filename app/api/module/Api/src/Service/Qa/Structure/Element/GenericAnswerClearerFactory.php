@@ -18,7 +18,7 @@ class GenericAnswerClearerFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GenericAnswerClearer
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): GenericAnswerClearer
     {
         return new GenericAnswerClearer(
             $container->get('QaGenericAnswerProvider'),

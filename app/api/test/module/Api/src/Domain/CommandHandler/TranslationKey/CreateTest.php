@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Entity\System\TranslationKey as TranslationKeyEntity;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

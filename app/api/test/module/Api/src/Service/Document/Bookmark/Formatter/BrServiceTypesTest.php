@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\BrServiceTypes;
 /**
  * BrServiceTypes Test
  */
-class BrServiceTypesTest extends AbstractArrayList
+final class BrServiceTypesTest extends AbstractArrayList
 {
     public const SUT_CLASS_NAME = BrServiceTypes::class;
     public const ARRAY_FIELD = 'description';

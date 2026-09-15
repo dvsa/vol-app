@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 class LdapAdapterFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LdapAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LdapAdapter
     {
         /**
          * @var Client $client

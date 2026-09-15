@@ -42,7 +42,7 @@ use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader;
 use Dvsa\Olcs\Api\Service\Nr\Mapping\ComplianceEpisodeXml as ComplianceEpisodeXmlMapping;
 
-class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
+final class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

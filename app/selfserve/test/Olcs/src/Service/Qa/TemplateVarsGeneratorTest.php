@@ -10,7 +10,7 @@ use Olcs\Service\Qa\GuidanceTemplateVarsAdder;
 use Olcs\Service\Qa\QuestionArrayProvider;
 use Olcs\Service\Qa\TemplateVarsGenerator;
 
-class TemplateVarsGeneratorTest extends MockeryTestCase
+final class TemplateVarsGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

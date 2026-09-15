@@ -12,7 +12,7 @@ use Dvsa\Olcs\AcquiredRights\Exception\DateOfBirthMismatchException;
 use Dvsa\Olcs\AcquiredRights\Exception\Mapper\AcquiredRightsExceptionToValidationExceptionMapper;
 use Dvsa\Olcs\AcquiredRights\Exception\SoftExceptionInterface;
 use Dvsa\Olcs\AcquiredRights\Model\ApplicationReference;
-use Laminas\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class AcquiredRightsService
 {
@@ -40,7 +40,7 @@ class AcquiredRightsService
      * @throws \Dvsa\Olcs\AcquiredRights\Exception\ServiceException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\ValidationException
      */
-    public function verifyAcquiredRightsByReference(string $reference, DateTimeImmutable $dateOfBirth, string $inputFieldName = null): ApplicationReference
+    public function verifyAcquiredRightsByReference(string $reference, DateTimeImmutable $dateOfBirth, ?string $inputFieldName = null): ApplicationReference
     {
         try {
             $this->checkAcquiredRightsExpiry();
@@ -58,7 +58,7 @@ class AcquiredRightsService
                     [$exception]
                 );
             } else {
-                $this->logger->err(
+                $this->logger->error(
                     sprintf(
                         'Acquired Rights Service: There was an error when fetching the acquired rights record (%s)',
                         $reference

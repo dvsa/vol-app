@@ -24,7 +24,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CopyApplicationDataToLicenceTest extends AbstractCommandHandlerTestCase
+final class CopyApplicationDataToLicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

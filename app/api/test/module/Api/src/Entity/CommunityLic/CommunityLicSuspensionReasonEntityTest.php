@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class CommunityLicSuspensionReasonEntityTest extends EntityTester
+final class CommunityLicSuspensionReasonEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

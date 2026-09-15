@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class OperatorProcessingNoteControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorProcessingNoteController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): OperatorProcessingNoteController
     {
         $translationHelperService = $container->get(TranslationHelperService::class);
         assert($translationHelperService instanceof TranslationHelperService);

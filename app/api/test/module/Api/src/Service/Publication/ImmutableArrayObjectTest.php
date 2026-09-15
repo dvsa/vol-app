@@ -7,10 +7,8 @@ namespace Dvsa\OlcsTest\Api\Service\Publication;
 use Dvsa\Olcs\Api\Service\Publication\ImmutableArrayObject;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Publication\ImmutableArrayObject
- */
-class ImmutableArrayObjectTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Publication\ImmutableArrayObject::class)]
+final class ImmutableArrayObjectTest extends MockeryTestCase
 {
     public function testOffset(): void
     {
@@ -22,12 +20,12 @@ class ImmutableArrayObjectTest extends MockeryTestCase
         $sut = new ImmutableArrayObject($data);
 
         $sut->offsetSet(888, 999);
-        static::assertEquals('0', $sut->offsetGet(888));
+        $this->assertEquals('0', $sut->offsetGet(888));
 
         $sut->offsetUnset(777);
-        static::assertEquals('1', $sut->offsetGet(777));
+        $this->assertEquals('1', $sut->offsetGet(777));
 
         $sut->exchangeArray([666 => 'NEW VAL']);
-        static::assertEquals($data, $sut->getArrayCopy());
+        $this->assertEquals($data, $sut->getArrayCopy());
     }
 }

@@ -17,36 +17,29 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\FinancialEvidence;
 
-/**
- * @covers Olcs\FormService\Form\Lva\FinancialEvidence
- */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class FinancialEvidenceTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\FormService\Form\Lva\FinancialEvidence::class)]
+final class FinancialEvidenceTest extends MockeryTestCase
 {
     /** @var  FinancialEvidence */
     protected $sut;
 
     /** @var  m\MockInterface|\Common\Service\Helper\FormHelperService */
     protected $formHelper;
-    /** @var  \Common\FormService\FormServiceManager */
-    protected $fsm;
     /** @var  m\MockInterface */
     protected $urlHelper;
     /** @var  m\MockInterface */
     protected $translator;
-    /** @var  m\MockInterface */
-    protected $validatorPluginManager;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
+        $fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->urlHelper = m::mock(UrlHelperService::class);
         $this->translator = m::mock(TranslationHelperService::class);
-        $this->validatorPluginManager = m::mock(ValidatorPluginManager::class);
-
-        $validateIf = $this->createMock(ValidateIf::class);
-        $this->validatorPluginManager->shouldReceive('get')->with(ValidateIf::class)->andReturn($validateIf);
+        $validatorPluginManager = m::mock(ValidatorPluginManager::class);
+        $validatorPluginManager->shouldReceive('get')->with(ValidateIf::class)->andReturn($this->createMock(ValidateIf::class));
 
         $serviceManager = $this->createMock(ServiceLocatorInterface::class);
         $serviceManager->method('get')->willReturnMap([
@@ -59,7 +52,7 @@ class FinancialEvidenceTest extends MockeryTestCase
             m::mock(\LmcRbacMvc\Service\AuthorizationService::class),
             $this->translator,
             $this->urlHelper,
-            $this->validatorPluginManager
+            $validatorPluginManager
         );
     }
 

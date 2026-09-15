@@ -23,7 +23,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GetLatestFeeTypeTest extends QueryHandlerTestCase
+final class GetLatestFeeTypeTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Reason\ReasonList as Qry;
 use Mockery as m;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
+final class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
 {
     private $reasons = [
         ['id' => 12, 'sectionCode' => 'Section A', 'description' => 'Description 1'],
@@ -122,13 +122,11 @@ class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
         $this->assertEquals(self::SINGLE_EXPECTED, $this->sut->fetchListOptions($params));
     }
 
-    public static function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            ['Y', 'lcat_psv'],
-            ['N', 'lcat_psv'],
-            ['Y', 'lcat_gv'],
-            ['N', 'lcat_gv']
-        ];
+        yield ['Y', 'lcat_psv'];
+        yield ['N', 'lcat_psv'];
+        yield ['Y', 'lcat_gv'];
+        yield ['N', 'lcat_gv'];
     }
 }

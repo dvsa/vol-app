@@ -16,7 +16,7 @@ use Mockery as m;
 /**
  * Close expired windows Test
  */
-class CloseExpiredWindowsTest extends AbstractCommandHandlerTestCase
+final class CloseExpiredWindowsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -52,14 +52,14 @@ class CloseExpiredWindowsTest extends AbstractCommandHandlerTestCase
             [
                 'id' => $w1Id,
             ],
-            (new Result())->addMessage('Window 1 has been cancelled')
+            new Result()->addMessage('Window 1 has been cancelled')
         );
         $this->expectedSideEffect(
             CloseWindowCmd::class,
             [
                 'id' => $w2Id,
             ],
-            (new Result())->addMessage('Window 2 has been cancelled')
+            new Result()->addMessage('Window 2 has been cancelled')
         );
 
         $result = $this->sut->handleCommand($command);

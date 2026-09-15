@@ -19,10 +19,10 @@ return [
             'name' => 'vrm',
             'formatter' => function ($data) {
                 if (!is_null($data['interimApplication'])) {
-                    return $data['vehicle']['vrm'] . ' (interim)';
+                    return \Common\Util\Escape::html($data['vehicle']['vrm']) . ' (interim)';
                 }
 
-                return $data['vehicle']['vrm'];
+                return \Common\Util\Escape::html($data['vehicle']['vrm']);
             }
         ],
         [

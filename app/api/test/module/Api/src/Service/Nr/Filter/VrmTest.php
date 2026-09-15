@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class VrmTest
  * @package Dvsa\OlcsTest\Api\Service\Nr\Filter
  */
-class VrmTest extends MockeryTestCase
+final class VrmTest extends MockeryTestCase
 {
     /**
      * test filter()
@@ -39,14 +39,12 @@ class VrmTest extends MockeryTestCase
     /**
      * Data provider for testFilter
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpFilterProvider(): array
+    public static function dpFilterProvider(): \Iterator
     {
-        return [
-            ['icZs', '1CZS'],
-            ['ic Z s', '1CZS'],
-            ['icZsab cd efgh ijk lmno p qrs t u ', 'ICZSABCDEFGHIJK']
-        ];
+        yield ['icZs', '1CZS'];
+        yield ['ic Z s', '1CZS'];
+        yield ['icZsab cd efgh ijk lmno p qrs t u ', 'ICZSABCDEFGHIJK'];
     }
 }

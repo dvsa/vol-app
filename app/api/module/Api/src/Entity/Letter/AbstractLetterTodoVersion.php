@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_todo_version",
- *    indexes={
- *        @ORM\Index(name="ix_letter_todo_version_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_todo_version_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_todo_version_letter_todo_id", columns={"letter_todo_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_todo_version')]
+#[ORM\Index(name: 'ix_letter_todo_version_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_todo_version_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_todo_version_letter_todo_id', columns: ['letter_todo_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterTodoVersion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,98 +40,96 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterTodo
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodo
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterTodo", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_todo_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_todo_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTodo::class, inversedBy: 'versions', fetch: 'LAZY')]
     protected $letterTodo;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
+
+    /**
+     * Display name
+     *
+     * @var string
+     */
+    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: true)]
+    protected $name;
 
     /**
      * EditorJS format
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="description", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'description', nullable: true)]
     protected $description;
 
     /**
      * Help text for users
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="help_text", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'help_text', nullable: true)]
     protected $helpText;
 
     /**
      * Is locked
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_locked", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_locked', nullable: false, options: ['default' => 0])]
     protected $isLocked = 0;
 
     /**
      * Embargo until this date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="publish_from", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'publish_from', nullable: true)]
     protected $publishFrom;
 
     /**
      * Version number
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="version_number", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false, options: ['unsigned' => true])]
     protected $versionNumber = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -159,7 +153,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setId($id)
     {
@@ -183,7 +177,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterTodo $letterTodo new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setLetterTodo($letterTodo)
     {
@@ -207,7 +201,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -231,7 +225,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -251,11 +245,35 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     }
 
     /**
+     * Set the name
+     *
+     * @param string $name new value being set
+     *
+     * @return static
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get the name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * Set the description
      *
      * @param array $description new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setDescription($description)
     {
@@ -279,7 +297,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param string $helpText new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setHelpText($helpText)
     {
@@ -303,7 +321,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param bool $isLocked new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setIsLocked($isLocked)
     {
@@ -327,7 +345,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param \DateTime $publishFrom new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setPublishFrom($publishFrom)
     {
@@ -357,7 +375,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param int $versionNumber new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setVersionNumber($versionNumber)
     {
@@ -381,7 +399,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setVersion($version)
     {

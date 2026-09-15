@@ -21,7 +21,7 @@ use Mockery as m;
 /**
  * Refuse Irfo Gv Permit Test
  */
-class RefuseIrfoGvPermitTest extends AbstractCommandHandlerTestCase
+final class RefuseIrfoGvPermitTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

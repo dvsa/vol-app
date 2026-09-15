@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\User\Role as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class RoleEntityTest extends EntityTester
+final class RoleEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -40,14 +40,14 @@ class RoleEntityTest extends EntityTester
         $roleEntity->setRolePermissions(
             new ArrayCollection(
                 [
-                    (new RolePermission())
+                    new RolePermission()
                         ->setPermission(
-                            (new Permission())
+                            new Permission()
                                 ->setName('permissionOne')
                         ),
-                    (new RolePermission())
+                    new RolePermission()
                         ->setPermission(
-                            (new Permission())
+                            new Permission()
                                 ->setName('permissionTwo')
                         ),
                 ]
@@ -65,14 +65,14 @@ class RoleEntityTest extends EntityTester
         $roleEntity->setRolePermissions(
             new ArrayCollection(
                 [
-                    (new RolePermission())
+                    new RolePermission()
                         ->setPermission(
-                            (new Permission())
+                            new Permission()
                                 ->setName('permissionOne')
                         ),
-                    (new RolePermission())
+                    new RolePermission()
                         ->setPermission(
-                            (new Permission())
+                            new Permission()
                                 ->setName('permissionTwo')
                         ),
                 ]
@@ -86,8 +86,8 @@ class RoleEntityTest extends EntityTester
     {
         $role = new Entity();
         $anon = $role->anon();
-        $this->assertEquals($anon->getId(), Entity::ROLE_ANON);
-        $this->assertEquals($anon->getRole(), Entity::ROLE_ANON);
+        $this->assertEquals(Entity::ROLE_ANON, $anon->getId());
+        $this->assertEquals(Entity::ROLE_ANON, $anon->getRole());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAllowedRoles')]
@@ -102,15 +102,13 @@ class RoleEntityTest extends EntityTester
         $emptyExpected ? $this->assertEmpty($result) : $this->assertNotEmpty($result);
     }
 
-    public static function dpGetAllowedRoles(): array
+    public static function dpGetAllowedRoles(): \Iterator
     {
-        return [
-            [Entity::ROLE_SYSTEM_ADMIN, false],
-            [Entity::ROLE_INTERNAL_ADMIN, false],
-            [Entity::ROLE_INTERNAL_IRHP_ADMIN, false],
-            [Entity::ROLE_INTERNAL_CASE_WORKER, false],
-            [Entity::ROLE_INTERNAL_READ_ONLY, true],
-            [Entity::ROLE_INTERNAL_LIMITED_READ_ONLY, true],
-        ];
+        yield [Entity::ROLE_SYSTEM_ADMIN, false];
+        yield [Entity::ROLE_INTERNAL_ADMIN, false];
+        yield [Entity::ROLE_INTERNAL_IRHP_ADMIN, false];
+        yield [Entity::ROLE_INTERNAL_CASE_WORKER, false];
+        yield [Entity::ROLE_INTERNAL_READ_ONLY, true];
+        yield [Entity::ROLE_INTERNAL_LIMITED_READ_ONLY, true];
     }
 }

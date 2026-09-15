@@ -20,15 +20,11 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="companies_house_insolvency_practitioner",
- *    indexes={
- *        @ORM\Index(name="ix_ch_ip_companies_house_company_id", columns={"companies_house_company_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'companies_house_insolvency_practitioner')]
+#[ORM\Index(name: 'ix_ch_ip_companies_house_company_id', columns: ['companies_house_company_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -41,103 +37,92 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to companies_house_company
      *
      * @var \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany", fetch="LAZY")
-     * @ORM\JoinColumn(name="companies_house_company_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'companies_house_company_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany::class, inversedBy: 'insolvencyPractitioners', fetch: 'LAZY')]
     protected $companiesHouseCompany;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 100, nullable: true)]
     protected $name;
 
     /**
      * Address line 1
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="address_line_1", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'address_line_1', length: 100, nullable: true)]
     protected $addressLine1;
 
     /**
      * Address line 2
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="address_line_2", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'address_line_2', length: 100, nullable: true)]
     protected $addressLine2;
 
     /**
      * Country
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="country", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'country', length: 32, nullable: true)]
     protected $country;
 
     /**
      * Locality
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="locality", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'locality', length: 100, nullable: true)]
     protected $locality;
 
     /**
      * Postal code
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="postal_code", length=10, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'postal_code', length: 10, nullable: true)]
     protected $postalCode;
 
     /**
      * Region
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="region", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'region', length: 100, nullable: true)]
     protected $region;
 
     /**
      * Appointed on
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="appointed_on", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'appointed_on', nullable: true)]
     protected $appointedOn;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -161,7 +146,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param int $id new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setId($id)
     {
@@ -185,7 +170,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany $companiesHouseCompany new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setCompaniesHouseCompany($companiesHouseCompany)
     {
@@ -209,7 +194,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $name new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setName($name)
     {
@@ -233,7 +218,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $addressLine1 new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setAddressLine1($addressLine1)
     {
@@ -257,7 +242,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $addressLine2 new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setAddressLine2($addressLine2)
     {
@@ -281,7 +266,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $country new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setCountry($country)
     {
@@ -305,7 +290,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $locality new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setLocality($locality)
     {
@@ -329,7 +314,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $postalCode new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setPostalCode($postalCode)
     {
@@ -353,7 +338,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $region new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setRegion($region)
     {
@@ -377,7 +362,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param \DateTime $appointedOn new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setAppointedOn($appointedOn)
     {
@@ -407,7 +392,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param int $version new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setVersion($version)
     {

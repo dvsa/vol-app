@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdatePeopleStatus;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdatePeopleStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdatePeopleStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

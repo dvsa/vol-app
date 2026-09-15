@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class Text2Test
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class Text2Test extends MockeryTestCase
+final class Text2Test extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Group('publicationFilter
 Test the bus reg text 2 filter')]

@@ -21,11 +21,11 @@ use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Vehicle\CreateGoodsVehicle::class)]
-class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
+final class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 {
-    public const LIC_ID = 9001;
-    public const APP_ID = 8001;
-    public const VRM = 'UNIT VRM';
+    public const int LIC_ID = 9001;
+    public const int APP_ID = 8001;
+    public const string VRM = 'UNIT VRM';
 
     /** @var CreateGoodsVehicle  */
     protected $sut;
@@ -398,11 +398,11 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertSame($vehicle, $savedLicenceVehicle->getVehicle());
 
         $this->assertSame($licence, $savedLicenceVehicle->getLicence());
-        $this->assertEquals(
+        $this->assertSame(
             '2015-01-01 12:00:00',
             $savedLicenceVehicle->getSpecifiedDate()->format('Y-m-d H:i:s')
         );
-        $this->assertEquals('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
         $this->assertEquals(100, $vehicle->getPlatedWeight());
     }
 
@@ -483,11 +483,11 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(100, $savedVehicle->getPlatedWeight());
 
         $this->assertSame($licence, $savedLicenceVehicle->getLicence());
-        $this->assertEquals(
+        $this->assertSame(
             '2015-01-01 12:00:00',
             $savedLicenceVehicle->getSpecifiedDate()->format('Y-m-d H:i:s')
         );
-        $this->assertEquals('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
     }
 
     public function testHandleCommandAlternative(): void
@@ -568,11 +568,11 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(100, $savedVehicle->getPlatedWeight());
 
         $this->assertSame($licence, $savedLicenceVehicle->getLicence());
-        $this->assertEquals(
+        $this->assertSame(
             '2015-01-01 12:00:00',
             $savedLicenceVehicle->getSpecifiedDate()->format('Y-m-d H:i:s')
         );
-        $this->assertEquals('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
     }
 
     public function testHandleCommandIdentifyDuplicatesAlternative(): void
@@ -661,11 +661,11 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(100, $savedVehicle->getPlatedWeight());
 
         $this->assertSame($licence, $savedLicenceVehicle->getLicence());
-        $this->assertEquals(
+        $this->assertSame(
             '2015-01-01 12:00:00',
             $savedLicenceVehicle->getSpecifiedDate()->format('Y-m-d H:i:s')
         );
-        $this->assertEquals('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
     }
 
     public function testHandleCommandForApplication(): void
@@ -749,11 +749,11 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 
         $this->assertSame($this->mockLic, $savedLicenceVehicle->getLicence());
         $this->assertSame($this->mockApp, $savedLicenceVehicle->getApplication());
-        $this->assertEquals(
+        $this->assertSame(
             '2015-01-01 12:00:00',
             $savedLicenceVehicle->getSpecifiedDate()->format('Y-m-d H:i:s')
         );
-        $this->assertEquals('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
         $this->assertEquals(100, $vehicle->getPlatedWeight());
     }
 
@@ -827,11 +827,11 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 
         $this->assertSame($licence, $savedLicenceVehicle->getLicence());
         $this->assertSame($this->mockApp, $savedLicenceVehicle->getApplication());
-        $this->assertEquals(
+        $this->assertSame(
             '2015-01-01 12:00:00',
             $savedLicenceVehicle->getSpecifiedDate()->format('Y-m-d H:i:s')
         );
-        $this->assertEquals('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
         $this->assertEquals(100, $vehicle->getPlatedWeight());
     }
 

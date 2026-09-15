@@ -14,15 +14,14 @@ use OlcsTest\Bootstrap;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class AbstractSummaryControllerTest extends MockeryTestCase
+final class AbstractSummaryControllerTest extends MockeryTestCase
 {
     /**
      * @var \Mockery\Mock
      */
     protected $sut;
 
-    protected $sm;
-
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(\Olcs\Controller\Lva\AbstractSummaryController::class)
@@ -100,17 +99,15 @@ class AbstractSummaryControllerTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|null|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string | null)>>
      *
      * @psalm-return list{list{'Y', true}, list{'N', false}, list{null, false}}
      */
-    public static function indexActionProvider(): array
+    public static function indexActionProvider(): \Iterator
     {
-        return [
-            ['Y', true],
-            ['N', false],
-            [null, false]
-        ];
+        yield ['Y', true];
+        yield ['N', false];
+        yield [null, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderImportantText')]
@@ -148,24 +145,22 @@ class AbstractSummaryControllerTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return list{list{true, 'lcat_gv', 'XX', 'application-summary-important-goods-var'}, list{false, 'lcat_gv', 'XX', 'application-summary-important-goods-app'}, list{true, 'lcat_psv', 'XX', 'application-summary-important-psv-var'}, list{false, 'lcat_psv', 'XX', 'application-summary-important-psv-app'}, list{false, 'lcat_psv', 'ltyp_sr', 'application-summary-important-psv-app-sr'}}
      */
-    public static function dataProviderImportantText(): array
+    public static function dataProviderImportantText(): \Iterator
     {
-        return [
-            // isVariation, goodsOrPsv, licence type, expected
-            [true, \Common\RefData::LICENCE_CATEGORY_GOODS_VEHICLE, 'XX', 'application-summary-important-goods-var'],
-            [false, \Common\RefData::LICENCE_CATEGORY_GOODS_VEHICLE, 'XX', 'application-summary-important-goods-app'],
-            [true, \Common\RefData::LICENCE_CATEGORY_PSV, 'XX', 'application-summary-important-psv-var'],
-            [false, \Common\RefData::LICENCE_CATEGORY_PSV, 'XX', 'application-summary-important-psv-app'],
-            [
-                false,
-                \Common\RefData::LICENCE_CATEGORY_PSV,
-                \Common\RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                'application-summary-important-psv-app-sr'
-            ],
+        // isVariation, goodsOrPsv, licence type, expected
+        yield [true, \Common\RefData::LICENCE_CATEGORY_GOODS_VEHICLE, 'XX', 'application-summary-important-goods-var'];
+        yield [false, \Common\RefData::LICENCE_CATEGORY_GOODS_VEHICLE, 'XX', 'application-summary-important-goods-app'];
+        yield [true, \Common\RefData::LICENCE_CATEGORY_PSV, 'XX', 'application-summary-important-psv-var'];
+        yield [false, \Common\RefData::LICENCE_CATEGORY_PSV, 'XX', 'application-summary-important-psv-app'];
+        yield [
+            false,
+            \Common\RefData::LICENCE_CATEGORY_PSV,
+            \Common\RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            'application-summary-important-psv-app-sr'
         ];
     }
 

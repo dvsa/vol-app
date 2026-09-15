@@ -13,7 +13,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class CommunityLicSuspensionEntityTest extends EntityTester
+final class CommunityLicSuspensionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -34,11 +34,9 @@ class CommunityLicSuspensionEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->getEndDate());
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            ['2016-01-01', new \DateTime('2016-01-01')],
-            [null, null]
-        ];
+        yield ['2016-01-01', new \DateTime('2016-01-01')];
+        yield [null, null];
     }
 }

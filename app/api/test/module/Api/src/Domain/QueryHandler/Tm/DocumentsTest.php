@@ -25,7 +25,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DocumentsTest extends QueryHandlerTestCase
+final class DocumentsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

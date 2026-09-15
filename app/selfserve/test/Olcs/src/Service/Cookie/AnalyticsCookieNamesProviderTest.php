@@ -9,15 +9,15 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Cookie\AnalyticsCookieNamesProvider;
 use Laminas\Http\Header\Cookie;
 
-class AnalyticsCookieNamesProviderTest extends MockeryTestCase
+final class AnalyticsCookieNamesProviderTest extends MockeryTestCase
 {
-    public const HOSTNAME = 'host.name';
+    public const string HOSTNAME = 'host.name';
 
-    public const GID_KEY = '_gid';
-    public const GAT_KEY = '_gat';
-    public const GA_KEY = '_ga';
-    public const GAT_1_KEY = '_gat_xyz';
-    public const GAT_2_KEY = '_gat_boo';
+    public const string GID_KEY = '_gid';
+    public const string GAT_KEY = '_gat';
+    public const string GA_KEY = '_ga';
+    public const string GAT_1_KEY = '_gat_xyz';
+    public const string GAT_2_KEY = '_gat_boo';
 
     private $cookieContents = [
         self::GID_KEY => 'abcd1234',
@@ -31,6 +31,7 @@ class AnalyticsCookieNamesProviderTest extends MockeryTestCase
 
     private $cookie;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->cookie = m::mock(Cookie::class);
@@ -67,7 +68,7 @@ class AnalyticsCookieNamesProviderTest extends MockeryTestCase
 
         $sut = new AnalyticsCookieNamesProvider('host.name');
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $sut->getNames($this->cookie)
         );
@@ -121,22 +122,20 @@ class AnalyticsCookieNamesProviderTest extends MockeryTestCase
 
         $sut = new AnalyticsCookieNamesProvider($domain);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $sut->getNames($this->cookie)
         );
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'.www.preview.vehicle-operator-licensing.service.gov.uk'}, list{'.www.vehicle-operator-licensing.service.gov.uk'}}
      */
-    public static function dpGetNamesForProd(): array
+    public static function dpGetNamesForProd(): \Iterator
     {
-        return [
-            ['.www.preview.vehicle-operator-licensing.service.gov.uk'],
-            ['.www.vehicle-operator-licensing.service.gov.uk'],
-        ];
+        yield ['.www.preview.vehicle-operator-licensing.service.gov.uk'];
+        yield ['.www.vehicle-operator-licensing.service.gov.uk'];
     }
 }

@@ -19,7 +19,7 @@ use Doctrine\ORM\Query;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\TransportManagerApplication\UpdateForResponsibilities::class)]
-class UpdateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
+final class UpdateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandHandler\TransportManagerApplication\UpdateForResponsibilities */
     protected $sut;

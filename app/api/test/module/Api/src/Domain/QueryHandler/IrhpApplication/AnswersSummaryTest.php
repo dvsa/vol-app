@@ -18,7 +18,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 use Laminas\I18n\Translator\Translator;
 
-class AnswersSummaryTest extends QueryHandlerTestCase
+final class AnswersSummaryTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -103,12 +103,10 @@ class AnswersSummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpHandleQuery(): array
+    public static function dpHandleQuery(): \Iterator
     {
-        return [
-            ['Y', 'cy_GB'],
-            ['N', 'en_GB']
-        ];
+        yield ['Y', 'cy_GB'];
+        yield ['N', 'en_GB'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]

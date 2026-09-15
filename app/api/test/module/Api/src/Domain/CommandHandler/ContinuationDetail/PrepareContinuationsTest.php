@@ -20,7 +20,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PrepareContinuationsTest extends AbstractCommandHandlerTestCase
+final class PrepareContinuationsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

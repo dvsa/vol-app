@@ -23,6 +23,11 @@ on:
       version:
         type: string
         required: false
+      skip-checks:
+        description: "Skip the test and static-analysis jobs and package straight from the ref. Intended for branch stand-ups where CI has already run on the PR."
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   warm-cache:
@@ -35,14 +40,16 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
-          sparse-checkout: app/${{ inputs.project }}
+          sparse-checkout: |
+            app/${{ inputs.project }}
+            lib
           fetch-depth: ${{ !inputs.ref && 1 || 0 }}
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.4"
           coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring
+          extensions: intl, pdo_mysql, redis, mbstring, igbinary
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
@@ -57,6 +64,7 @@ jobs:
 
   test:
     name: Test
+    if: ${{ !inputs.skip-checks }}
     needs:
       - warm-cache
     runs-on: ubuntu-latest
@@ -67,13 +75,15 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
-          sparse-checkout: app/${{ inputs.project }}
+          sparse-checkout: |
+            app/${{ inputs.project }}
+            lib
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.4"
           coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring
+          extensions: intl, pdo_mysql, redis, mbstring, igbinary
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
@@ -90,6 +100,7 @@ jobs:
 
   static-analysis:
     name: Static analysis
+    if: ${{ !inputs.skip-checks }}
     needs:
       - warm-cache
     runs-on: ubuntu-latest
@@ -100,13 +111,15 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
-          sparse-checkout: app/${{ inputs.project }}
+          sparse-checkout: |
+            app/${{ inputs.project }}
+            lib
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.4"
           coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring
+          extensions: intl, pdo_mysql, redis, mbstring, igbinary
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
@@ -127,6 +140,9 @@ jobs:
 
   package:
     name: Package
+    # `needs` cannot be made conditional, so depend on both jobs unconditionally and gate here
+    # instead. With skip-checks they report `skipped`, which `always()` lets through.
+    if: ${{ always() && !cancelled() && (inputs.skip-checks || (needs.test.result == 'success' && needs.static-analysis.result == 'success')) }}
     needs:
       - test
       - static-analysis
@@ -138,13 +154,15 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
-          sparse-checkout: app/${{ inputs.project }}
+          sparse-checkout: |
+            app/${{ inputs.project }}
+            lib
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.4"
           coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring
+          extensions: intl, pdo_mysql, redis, mbstring, igbinary
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
@@ -156,6 +174,19 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --no-dev --optimize-autoloader
+      - name: Materialise in-tree libs into vendor
+        # composer symlinks path-repo libs (lib/<name>) into vendor/olcs/*. Those
+        # relative symlinks resolve on the runner but dangle once the tarball is
+        # ADDed into the container image (only the app dir is shipped, not lib/).
+        # Replace each with a real copy so the packaged artefact is self-contained.
+        run: |
+          for link in vendor/olcs/*; do
+            if [ -L "$link" ]; then
+              target=$(cd "$link" && pwd -P)
+              rm "$link"
+              cp -a "$target" "$link"
+            fi
+          done
       - name: Write version file
         if: ${{ inputs.version }}
         run: echo "${{ inputs.version }}" > config/version

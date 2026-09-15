@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\OpNameOnly;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OpNameOnlyTest extends \PHPUnit\Framework\TestCase
+final class OpNameOnlyTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

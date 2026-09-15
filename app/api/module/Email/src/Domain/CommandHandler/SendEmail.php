@@ -180,8 +180,10 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
     #[\Override]
     public function handleCommand(CommandInterface $command)
     {
-        //make sure we have at least a plain text version
-        if (empty($command->getPlainBody())) {
+        $hasMarkdownBody = $command instanceof SendEmailCmd && $command->getMarkdownBody() !== null;
+
+        //make sure we have at least a plain text version (or a Notify Markdown body)
+        if (empty($command->getPlainBody()) && !$hasMarkdownBody) {
             throw new \RuntimeException('No message body has been set (plain text)');
         }
 
@@ -203,8 +205,12 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
         $bcc = $command->getBcc();
         $docs = $command->getDocs();
 
-        if ($this->getSendAllMailTo()) {
-            $to = $this->getSendAllMailTo();
+        // Treat a blank/whitespace-only value or the literal "null" sentinel as "disabled": SSM String
+        // params cannot be empty, so non-prod envs opt out with " " or "null" rather than an empty
+        // string — without trimming, those truthy values would become the redirect recipient (VOL-7240).
+        $sendAllMailTo = trim((string)$this->getSendAllMailTo());
+        if ($sendAllMailTo !== '' && strcasecmp($sendAllMailTo, 'null') !== 0) {
+            $to = $sendAllMailTo;
             /**
              * IMPORTANT CC gets emptied when we have configured emails to be sent to 1 email address
              */
@@ -222,7 +228,9 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
 
         $subject = vsprintf($subject, $command->getSubjectVariables());
 
-        $plainBody = $this->replaceUris($command->getPlainBody());
+        $plainBody = $command->getPlainBody() !== null
+            ? $this->replaceUris($command->getPlainBody())
+            : ($hasMarkdownBody ? $this->replaceUris((string) $command->getMarkdownBody()) : '');
         $htmlBody = $command->getHtmlBody();
 
         if ($htmlBody !== null) {
@@ -249,10 +257,48 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
             ];
         }
 
-        $this->send($to, $subject, $plainBody, $htmlBody, $fromEmail, $fromName, $cc, $bcc, $downloadedDocs, $command->isHighPriority());
+        $notifyPayload = $this->buildNotifyPayload($command, $downloadedDocs);
+
+        $this->send(
+            $to,
+            $subject,
+            $plainBody,
+            $htmlBody,
+            $fromEmail,
+            $fromName,
+            $cc,
+            $bcc,
+            $downloadedDocs,
+            $command->isHighPriority(),
+            $notifyPayload,
+        );
 
         $this->result->addMessage('Email sent');
         return $this->result;
+    }
+
+    /**
+     * Builds the Notify-transport payload when the command carries a templateKey. Returns null
+     * otherwise so the legacy SMTP path is unchanged for un-migrated handlers.
+     *
+     * @param array<int, array{fileName: string, content: string}> $attachments
+     * @return array<string, mixed>|null
+     */
+    protected function buildNotifyPayload(CommandInterface $command, array $attachments): ?array
+    {
+        if (!$command instanceof SendEmailCmd || $command->getTemplateKey() === null) {
+            return null;
+        }
+
+        return [
+            'templateKey' => $command->getTemplateKey(),
+            'locale' => $command->getLocale(),
+            'personalisation' => $command->getPersonalisation(),
+            'markdownBody' => $command->getMarkdownBody() !== null
+                ? $this->replaceUris($command->getMarkdownBody())
+                : null,
+            'attachments' => $attachments,
+        ];
     }
 
     /**
@@ -268,9 +314,9 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
      * @return void
      * @throws EmailNotSentException
      */
-    protected function send($to, $subject, $plain, $html, $fromEmail, $fromName, array $cc, array $bcc, array $docs, bool $highPriority = false)
+    protected function send($to, $subject, $plain, $html, $fromEmail, $fromName, array $cc, array $bcc, array $docs, bool $highPriority = false, ?array $notifyPayload = null)
     {
-        $this->getEmailService()->send($fromEmail, $fromName, $to, $subject, $plain, $html, $cc, $bcc, $docs, $highPriority);
+        $this->getEmailService()->send($fromEmail, $fromName, $to, $subject, $plain, $html, $cc, $bcc, $docs, $highPriority, $notifyPayload);
     }
 
     /**
@@ -304,7 +350,7 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         if (isset($config['email']['from_name'])) {

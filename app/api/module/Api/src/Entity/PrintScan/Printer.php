@@ -6,10 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Printer Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="printer")
  */
+#[ORM\Table(name: 'printer')]
+#[ORM\Entity]
 class Printer extends AbstractPrinter
 {
     public const ERROR_TEAMS_EXISTS = 'err_teams_exist';

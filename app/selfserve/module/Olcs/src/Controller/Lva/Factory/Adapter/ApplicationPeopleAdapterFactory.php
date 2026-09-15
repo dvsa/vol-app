@@ -12,7 +12,7 @@ use Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter;
 class ApplicationPeopleAdapterFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationPeopleAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationPeopleAdapter
     {
         $peopleLvaService = $container->get(PeopleLvaService::class);
         return new ApplicationPeopleAdapter($container, $peopleLvaService);

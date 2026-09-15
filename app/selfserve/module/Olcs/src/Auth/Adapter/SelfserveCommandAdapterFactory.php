@@ -18,7 +18,7 @@ class SelfserveCommandAdapterFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SelfserveCommandAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SelfserveCommandAdapter
     {
         $commandSender = $container->get('CommandSender');
         return new SelfserveCommandAdapter($commandSender);

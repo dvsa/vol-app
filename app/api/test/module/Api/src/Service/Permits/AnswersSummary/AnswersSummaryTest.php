@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class AnswersSummaryTest extends MockeryTestCase
+final class AnswersSummaryTest extends MockeryTestCase
 {
     public function testGetRepresentation(): void
     {

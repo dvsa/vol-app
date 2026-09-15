@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Section Config Test
  * @package CommonTest\Service\Data
  */
-class SectionConfigTest extends MockeryTestCase
+final class SectionConfigTest extends MockeryTestCase
 {
     public function testGetAll(): void
     {
@@ -25,9 +25,9 @@ class SectionConfigTest extends MockeryTestCase
         $totalSections = count($all);
 
         // undertakings sections should have all sections bar itself as a prerequisite
-        $this->assertEquals(
+        $this->assertCount(
             ($totalSections - 1),
-            count($all['undertakings']['prerequisite'][0])
+            $all['undertakings']['prerequisite'][0]
         );
     }
 

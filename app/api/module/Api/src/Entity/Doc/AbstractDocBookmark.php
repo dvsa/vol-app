@@ -21,16 +21,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="doc_bookmark",
- *    indexes={
- *        @ORM\Index(name="ix_doc_bookmark_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_doc_bookmark_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'doc_bookmark')]
+#[ORM\Index(name: 'ix_doc_bookmark_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_doc_bookmark_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -43,70 +39,63 @@ abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Name of bookmark in any template
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=50, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 50, nullable: false)]
     protected $name = '';
 
     /**
      * Description displayed to user when bookmark has a fixed list of replacement values.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * DocParagraphBookmarks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\DocParagraphBookmark", mappedBy="docBookmark")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocParagraphBookmark::class, mappedBy: 'docBookmark')]
     protected $docParagraphBookmarks;
 
     /**
@@ -131,7 +120,7 @@ abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return DocBookmark
+     * @return static
      */
     public function setId($id)
     {
@@ -155,7 +144,7 @@ abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return DocBookmark
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -179,7 +168,7 @@ abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return DocBookmark
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -203,7 +192,7 @@ abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonS
      *
      * @param string $name new value being set
      *
-     * @return DocBookmark
+     * @return static
      */
     public function setName($name)
     {
@@ -227,7 +216,7 @@ abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonS
      *
      * @param string $description new value being set
      *
-     * @return DocBookmark
+     * @return static
      */
     public function setDescription($description)
     {
@@ -251,7 +240,7 @@ abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return DocBookmark
+     * @return static
      */
     public function setVersion($version)
     {
@@ -275,7 +264,7 @@ abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $docParagraphBookmarks collection being set as the value
      *
-     * @return DocBookmark
+     * @return static
      */
     public function setDocParagraphBookmarks($docParagraphBookmarks)
     {
@@ -299,7 +288,7 @@ abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $docParagraphBookmarks collection being added
      *
-     * @return DocBookmark
+     * @return static
      */
     public function addDocParagraphBookmarks($docParagraphBookmarks)
     {
@@ -322,7 +311,7 @@ abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $docParagraphBookmarks collection being removed
      *
-     * @return DocBookmark
+     * @return static
      */
     public function removeDocParagraphBookmarks($docParagraphBookmarks)
     {

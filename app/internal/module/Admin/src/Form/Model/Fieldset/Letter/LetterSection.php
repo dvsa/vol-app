@@ -35,25 +35,6 @@ class LetterSection
 
     /**
      * @Form\Options({
-     *     "label": "Section Type",
-     *     "disable_inarray_validator": false,
-     *     "empty_option": "Please Select"
-     * })
-     * @Form\Type("Select")
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"sectionType","class":"medium"})
-     * @Form\Options({
-     *     "value_options": {
-     *         "letter_section_type_header": "Header",
-     *         "letter_section_type_body": "Body",
-     *         "letter_section_type_footer": "Footer"
-     *     }
-     * })
-     */
-    public $sectionType = null;
-
-    /**
-     * @Form\Options({
      *     "label": "Default Content",
      *     "label_attributes": {
      *         "class": ""
@@ -65,35 +46,6 @@ class LetterSection
      * @Form\Filter("Laminas\Filter\StringTrim")
      */
     public $defaultContent = null;
-
-    /**
-     * @Form\Options({
-     *     "label": "Goods or PSV",
-     *     "disable_inarray_validator": false,
-     *     "empty_option": "Both"
-     * })
-     * @Form\Type("Select")
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"goodsOrPsv","class":"medium"})
-     * @Form\Options({
-     *     "value_options": {
-     *         "lcat_gv": "Goods",
-     *         "lcat_psv": "PSV"
-     *     }
-     * })
-     */
-    public $goodsOrPsv = null;
-
-    /**
-     * @Form\Options({
-     *     "label": "Northern Ireland Only",
-     *     "checked_value": "1",
-     *     "unchecked_value": "0"
-     * })
-     * @Form\Type("OlcsCheckbox")
-     * @Form\Attributes({"class":"", "id":"isNi"})
-     */
-    public $isNi = null;
 
     /**
      * @Form\Options({

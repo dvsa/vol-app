@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bus\ByLicenceRoute;
 /**
  * ByLicenceRoute test
  */
-class ByLicenceRouteTest extends \PHPUnit\Framework\TestCase
+final class ByLicenceRouteTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

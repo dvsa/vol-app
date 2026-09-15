@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange as PermitRangeEntity;
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class ByIdTest extends AbstractQueryByIdHandlerTestCase
+final class ByIdTest extends AbstractQueryByIdHandlerTestCase
 {
     protected $sutClass = RangeByIdHandler::class;
     protected $sutRepo = 'IrhpPermitRange';

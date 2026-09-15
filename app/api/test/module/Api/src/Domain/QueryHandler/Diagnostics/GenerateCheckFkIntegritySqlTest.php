@@ -13,7 +13,7 @@ use PDO;
 use PDOStatement;
 use RuntimeException;
 
-class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
+final class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
 {
     /** @var PDO|m\MockInterface */
     private $mockPdo;
@@ -171,7 +171,7 @@ class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
 
     private function assertSameQueries(mixed $expectedQueries, mixed $actualQueries): void
     {
-        $this->assertSame(count($expectedQueries), count($actualQueries), "Incorrect number of queries");
+        $this->assertCount(count($expectedQueries), $actualQueries, "Incorrect number of queries");
         foreach (array_map(null, $expectedQueries, $actualQueries) as [$expectedQuery, $actualQuery]) {
             $this->assertSameQuery($expectedQuery, $actualQuery);
         }

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\PrintJob;
 /**
  * PrintJob Test
  */
-class PrintJobTest extends \PHPUnit\Framework\TestCase
+final class PrintJobTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

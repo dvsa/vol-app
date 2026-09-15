@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpApplicationReadAuditEntityTest extends EntityTester
+final class IrhpApplicationReadAuditEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -34,7 +34,7 @@ class IrhpApplicationReadAuditEntityTest extends EntityTester
 
         $sut = new Entity($mockUser, $mockIrhpAppEntity);
 
-        static::assertSame($mockUser, $sut->getUser());
-        static::assertSame($mockIrhpAppEntity, $sut->getIrhpApplication());
+        $this->assertSame($mockUser, $sut->getUser());
+        $this->assertSame($mockIrhpAppEntity, $sut->getIrhpApplication());
     }
 }

@@ -14,7 +14,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Document\Download::class)]
-class DownloadTest extends QueryHandlerTestCase
+final class DownloadTest extends QueryHandlerTestCase
 {
     /** @var  m\MockInterface */
     protected $sut;
@@ -68,15 +68,13 @@ class DownloadTest extends QueryHandlerTestCase
 
         $actual = $this->sut->handleQuery($query);
 
-        static::assertEquals($download, $actual);
+        $this->assertEquals($download, $actual);
     }
 
-    public static function dpTestHandleQuery(): array
+    public static function dpTestHandleQuery(): \Iterator
     {
-        return [
-            [false, 'description', null],
-            [true, 'description', 'description'],
-            [true, '', null],
-        ];
+        yield [false, 'description', null];
+        yield [true, 'description', 'description'];
+        yield [true, '', null];
     }
 }

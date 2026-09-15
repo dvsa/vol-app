@@ -21,20 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="legacy_recommendation",
- *    indexes={
- *        @ORM\Index(name="ix_legacy_recommendation_action_id", columns={"action_id"}),
- *        @ORM\Index(name="ix_legacy_recommendation_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_legacy_recommendation_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_legacy_recommendation_from_user_id", columns={"from_user_id"}),
- *        @ORM\Index(name="ix_legacy_recommendation_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_legacy_recommendation_to_user_id", columns={"to_user_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'legacy_recommendation')]
+#[ORM\Index(name: 'ix_legacy_recommendation_action_id', columns: ['action_id'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_from_user_id', columns: ['from_user_id'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_to_user_id', columns: ['to_user_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLegacyRecommendation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,173 +43,155 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * Action
      *
      * @var \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction", fetch="LAZY")
-     * @ORM\JoinColumn(name="action_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'action_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction::class, fetch: 'LAZY')]
     protected $action;
 
     /**
      * FromUser
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'from_user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $fromUser;
 
     /**
      * ToUser
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'to_user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $toUser;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Rec date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="rec_date", nullable=false)
      */
+    #[ORM\Column(type: 'datetime', name: 'rec_date', nullable: false)]
     protected $recDate;
 
     /**
      * Pi reason
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="pi_reason", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'pi_reason', length: 255, nullable: true)]
     protected $piReason;
 
     /**
      * Comment
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="comment", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'comment', length: 4000, nullable: true)]
     protected $comment;
 
     /**
      * Effective date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="effective_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'effective_date', nullable: true)]
     protected $effectiveDate;
 
     /**
      * Notes
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="notes", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'notes', nullable: true)]
     protected $notes;
 
     /**
      * Pi decision
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="pi_decision", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'pi_decision', length: 255, nullable: true)]
     protected $piDecision;
 
     /**
      * Request
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="request", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'request', length: 20, nullable: true)]
     protected $request;
 
     /**
      * revokeLic
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="revoke_lic", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'revoke_lic', nullable: true)]
     protected $revokeLic;
 
     /**
      * status
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="status", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'status', nullable: true)]
     protected $status;
 
     /**
      * Total points
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="total_points", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'total_points', nullable: true, options: ['unsigned' => true])]
     protected $totalPoints;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -237,7 +215,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setId($id)
     {
@@ -261,7 +239,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setCase($case)
     {
@@ -285,7 +263,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction $action new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setAction($action)
     {
@@ -309,7 +287,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $fromUser new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setFromUser($fromUser)
     {
@@ -333,7 +311,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $toUser new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setToUser($toUser)
     {
@@ -357,7 +335,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -381,7 +359,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -405,7 +383,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \DateTime $recDate new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setRecDate($recDate)
     {
@@ -435,7 +413,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $piReason new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setPiReason($piReason)
     {
@@ -459,7 +437,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $comment new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setComment($comment)
     {
@@ -483,7 +461,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \DateTime $effectiveDate new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setEffectiveDate($effectiveDate)
     {
@@ -513,7 +491,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $notes new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -537,7 +515,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $piDecision new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setPiDecision($piDecision)
     {
@@ -561,7 +539,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $request new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setRequest($request)
     {
@@ -585,7 +563,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $revokeLic new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setRevokeLic($revokeLic)
     {
@@ -609,7 +587,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $status new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setStatus($status)
     {
@@ -633,7 +611,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param int $totalPoints new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setTotalPoints($totalPoints)
     {
@@ -657,7 +635,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setVersion($version)
     {

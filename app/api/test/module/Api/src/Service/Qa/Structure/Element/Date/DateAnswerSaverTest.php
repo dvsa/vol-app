@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DateAnswerSaverTest extends MockeryTestCase
+final class DateAnswerSaverTest extends MockeryTestCase
 {
     public function testSave(): void
     {

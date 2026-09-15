@@ -296,6 +296,16 @@ class UndertakingsController extends AbstractUndertakingsController
             $formHelper->remove($form, 'declarationsAndUndertakings->disabledReview');
             $data = (array) $this->getRequest()->getPost();
 
+            $hasGovUkAccountError = $this->getFlashMessenger()->getContainer()->offsetExists('govUkAccountError');
+
+            if ($this->lva === 'application') {
+                if ($hasGovUkAccountError) {
+                    $formHelper->remove($form, 'declarationsAndUndertakings->signatureVerifyMandate');
+                } else {
+                    $formHelper->remove($form, 'declarationsAndUndertakings->signatureOptions');
+                }
+            }
+
             if (
                 isset($data['declarationsAndUndertakings']['signatureOptions'])
                 && $data['declarationsAndUndertakings']['signatureOptions'] === 'N'

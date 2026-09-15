@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateBusinessTypeStatus;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateBusinessTypeStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateBusinessTypeStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

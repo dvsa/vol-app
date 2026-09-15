@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class PreviousHearingDataTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PreviousHearingDataTest extends MockeryTestCase
+final class PreviousHearingDataTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Group('publicationFilter
 Test the previous hearing date filter')]

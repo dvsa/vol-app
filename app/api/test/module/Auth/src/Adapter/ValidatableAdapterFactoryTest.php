@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Auth\Adapter;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Auth\LoginFactory;
 use Dvsa\Olcs\Auth\Adapter\ValidatableAdapterFactory;
+use Dvsa\OlcsTest\Auth\Adapter\Stub\ValidatableAdapterStub;
 use InvalidArgumentException;
 use Laminas\Authentication\Adapter\ValidatableAdapterInterface;
 use Laminas\ServiceManager\ServiceManager;
@@ -17,21 +18,21 @@ use stdClass;
 /**
  * @see \Dvsa\Olcs\Auth\Adapter\ValidatableAdapterFactory
  */
-class ValidatableAdapterFactoryTest extends MockeryTestCase
+final class ValidatableAdapterFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
-    public const CONFIG_WITHOUT_NAMESPACE = [];
-    public const CONFIG_WITHOUT_DEFAULT_ADAPTER_DEFINED = [
+    public const array CONFIG_WITHOUT_NAMESPACE = [];
+    public const array CONFIG_WITHOUT_DEFAULT_ADAPTER_DEFINED = [
         LoginFactory::CONFIG_NAMESPACE => [],
     ];
-    public const CONFIG_WITH_ADAPTER_NOT_DEFINED = [
+    public const array CONFIG_WITH_ADAPTER_NOT_DEFINED = [
         LoginFactory::CONFIG_NAMESPACE => [
             LoginFactory::AUTH_CONFIG_DEFAULT_ADAPTER => 'some_adapter',
             LoginFactory::AUTH_CONFIG_ADAPTERS => []
         ]
     ];
-    public const CONFIG_WITH_ADAPTER_DEFINED_AND_ADAPTER_CONFIG_ADAPTER_NOT_DEFINED = [
+    public const array CONFIG_WITH_ADAPTER_DEFINED_AND_ADAPTER_CONFIG_ADAPTER_NOT_DEFINED = [
         LoginFactory::CONFIG_NAMESPACE => [
             LoginFactory::AUTH_CONFIG_DEFAULT_ADAPTER => 'some_adapter',
             LoginFactory::AUTH_CONFIG_ADAPTERS => [
@@ -39,7 +40,7 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
             ]
         ]
     ];
-    public const CONFIG_WITH_ADAPTER_DEFINED = [
+    public const array CONFIG_WITH_ADAPTER_DEFINED = [
         LoginFactory::CONFIG_NAMESPACE => [
             LoginFactory::AUTH_CONFIG_DEFAULT_ADAPTER => 'some_adapter',
             LoginFactory::AUTH_CONFIG_ADAPTERS => [
@@ -102,13 +103,13 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $this->configureAdapter(ValidatableAdapterInterface::class);
+        $this->configureAdapter(ValidatableAdapterStub::class);
 
         // Execute
         $result = $this->sut->__invoke($this->serviceManager(), null);
 
         // Assert
-        $this->assertInstanceOf(ValidatableAdapterInterface::class, $result);
+        $this->assertInstanceOf(ValidatableAdapterStub::class, $result);
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
@@ -191,6 +192,7 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->serviceManager(), null);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();
@@ -238,6 +240,6 @@ class ValidatableAdapterFactoryTest extends MockeryTestCase
      */
     protected function getValidatableAdapterMock(): ValidatableAdapterInterface
     {
-        return $this->createMock(ValidatableAdapterInterface::class);
+        return $this->createStub(ValidatableAdapterInterface::class);
     }
 }

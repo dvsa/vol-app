@@ -12,7 +12,7 @@ use Olcs\XmlTools\Filter\ParseXmlString;
 use Olcs\XmlTools\Validator\Xsd;
 use Psr\Container\ContainerInterface;
 
-class XmlStructureInputFactoryTest extends TestCase
+final class XmlStructureInputFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {
@@ -76,43 +76,41 @@ class XmlStructureInputFactoryTest extends TestCase
     /**
      * Data provider for testInvokeMissingConfig
      */
-    public static function invokeErrorProvider(): array
+    public static function invokeErrorProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'nr' => [
-                        'compliance_episode' => [
-                            'xmlNs' => 'xml ns info'
-                        ]
-                    ],
-                    'xml_valid_message_exclude' => ['strings']
-                ],
-                \RuntimeException::class,
-                XmlStructureInputFactory::MAX_SCHEMA_MSG
-            ],
-            [
-                [
-                    'nr' => [
-                        'compliance_episode' => [
-                            'xmlNs' => 'xml ns info'
-                        ],
-                        'max_schema_errors' => 10
+                'nr' => [
+                    'compliance_episode' => [
+                        'xmlNs' => 'xml ns info'
                     ]
                 ],
-                \RuntimeException::class,
-                XmlStructureInputFactory::XML_VALID_EXCLUDE_MSG
+                'xml_valid_message_exclude' => ['strings']
             ],
+            \RuntimeException::class,
+            XmlStructureInputFactory::MAX_SCHEMA_MSG
+        ];
+        yield [
             [
-                [
-                    'nr' => [
-                        'max_schema_errors' => 10
+                'nr' => [
+                    'compliance_episode' => [
+                        'xmlNs' => 'xml ns info'
                     ],
-                    'xml_valid_message_exclude' => ['strings']
-                ],
-                \RuntimeException::class,
-                XmlStructureInputFactory::XML_NS_MSG
+                    'max_schema_errors' => 10
+                ]
             ],
+            \RuntimeException::class,
+            XmlStructureInputFactory::XML_VALID_EXCLUDE_MSG
+        ];
+        yield [
+            [
+                'nr' => [
+                    'max_schema_errors' => 10
+                ],
+                'xml_valid_message_exclude' => ['strings']
+            ],
+            \RuntimeException::class,
+            XmlStructureInputFactory::XML_NS_MSG
         ];
     }
 }

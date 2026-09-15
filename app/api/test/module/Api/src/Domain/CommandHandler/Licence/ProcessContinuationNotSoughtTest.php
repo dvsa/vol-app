@@ -31,7 +31,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ProcessContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
+final class ProcessContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -91,25 +91,25 @@ class ProcessContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CeaseGoodsDiscs::class,
             ['licence' => 69],
-            (new Result())->addMessage('Goods discs ceased')
+            new Result()->addMessage('Goods discs ceased')
         );
 
         $this->expectedSideEffect(
             ExpireAllCommunityLicences::class,
             ['id' => $licenceId],
-            (new Result())->addMessage('Community licences expired')
+            new Result()->addMessage('Community licences expired')
         );
 
         $this->expectedSideEffect(
             RemoveLicenceVehicle::class,
             ['licence' => 69],
-            (new Result())->addMessage('Licence vehicles removed')
+            new Result()->addMessage('Licence vehicles removed')
         );
 
         $this->expectedSideEffect(
             DeleteTransportManagerLicence::class,
             ['licence' => $licenceId],
-            (new Result())->addMessage('Removed transport managers for licence')
+            new Result()->addMessage('Removed transport managers for licence')
         );
 
         $this->expectedSideEffect(
@@ -214,25 +214,25 @@ class ProcessContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CeasePsvDiscs::class,
             ['licence' => $licenceId],
-            (new Result())->addMessage('PSV discs ceased')
+            new Result()->addMessage('PSV discs ceased')
         );
 
         $this->expectedSideEffect(
             ExpireAllCommunityLicences::class,
             ['id' => $licenceId],
-            (new Result())->addMessage('Community licences expired')
+            new Result()->addMessage('Community licences expired')
         );
 
         $this->expectedSideEffect(
             RemoveLicenceVehicle::class,
             ['licence' => 69],
-            (new Result())->addMessage('Licence vehicles removed')
+            new Result()->addMessage('Licence vehicles removed')
         );
 
         $this->expectedSideEffect(
             DeleteTransportManagerLicence::class,
             ['licence' => $licenceId],
-            (new Result())->addMessage('Removed transport managers for licence')
+            new Result()->addMessage('Removed transport managers for licence')
         );
 
         $this->expectedSideEffect(

@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ValidatorListGeneratorTest extends MockeryTestCase
+final class ValidatorListGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

@@ -14,7 +14,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ClearVehicleSection26Test extends AbstractDbQueryTestCase
+final class ClearVehicleSection26Test extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         Vehicle::class => 'vehicle',
@@ -51,19 +51,17 @@ class ClearVehicleSection26Test extends AbstractDbQueryTestCase
         ]
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'licence' => 1702,
-                ],
-                [],
-                [
-                    'licence' => 1702,
-                ],
-                []
-            ]
+                'licence' => 1702,
+            ],
+            [],
+            [
+                'licence' => 1702,
+            ],
+            []
         ];
     }
 

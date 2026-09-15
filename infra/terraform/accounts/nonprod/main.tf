@@ -1,5 +1,5 @@
 locals {
-  environments = ["dev", "int"]
+  environments = ["dev", "int", "reg"]
 }
 
 # Imported as this provider has been created by the `vol-terraform` repository.
@@ -48,6 +48,7 @@ module "account" {
       "dvsa/vol-app:environment:account-nonprod",
       "dvsa/vol-app:environment:dev",
       "dvsa/vol-app:environment:int",
+      "dvsa/vol-app:environment:reg",
     ]
   )
 

@@ -11,7 +11,7 @@ use Olcs\Service\Cookie\DeleteCookieNamesProvider;
 use Olcs\Service\Cookie\Preferences;
 use Laminas\Http\Header\Cookie;
 
-class DeleteCookieNamesProviderTest extends MockeryTestCase
+final class DeleteCookieNamesProviderTest extends MockeryTestCase
 {
     public function testGetNames(): void
     {

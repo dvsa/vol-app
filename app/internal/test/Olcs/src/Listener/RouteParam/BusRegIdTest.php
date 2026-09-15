@@ -15,7 +15,7 @@ use Olcs\Listener\RouteParam\BusRegId;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class BusRegIdTest extends MockeryTestCase
+final class BusRegIdTest extends MockeryTestCase
 {
     /**
      * @var BusRegId

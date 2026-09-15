@@ -6,6 +6,8 @@ namespace Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers;
 
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig;
 
 /**
  * Type handler for relationship columns (foreign keys)
@@ -13,6 +15,13 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
 class RelationshipTypeHandler extends AbstractTypeHandler
 {
     private ?TableMetadata $currentTable = null;
+
+    private readonly PropertyNameResolver $propertyNameResolver;
+
+    public function __construct()
+    {
+        $this->propertyNameResolver = new PropertyNameResolver();
+    }
 
     /**
      * Set the current table being processed
@@ -54,51 +63,69 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         $relationType = $isOneToOne ? 'OneToOne' : 'ManyToOne';
 
         $options = [
-            'targetEntity="' . $targetEntity . '"',
-            'fetch="LAZY"'
+            'targetEntity: \\' . ltrim($targetEntity, '\\') . '::class',
         ];
+
+        // When EntityConfig declares an inversedBy for this column the
+        // InverseRelationshipProcessor generates the inverse side with mappedBy,
+        // so the owning side must name it - resolved with the same pluralization
+        // rules so the pair always matches.
+        $inversedBy = $this->getInversedByProperty($config, !$isOneToOne);
+        if ($inversedBy !== null) {
+            $options[] = "inversedBy: '" . $inversedBy . "'";
+        }
+
+        $options[] = "fetch: 'LAZY'";
 
         $joinOptions = [
-            'name="' . $column->getName() . '"',
-            'referencedColumnName="' . $referencedColumn . '"'
+            "name: '" . $column->getName() . "'",
+            "referencedColumnName: '" . $referencedColumn . "'"
         ];
 
-        if ($column->isNullable()) {
-            $joinOptions[] = 'nullable=true';
+        // JoinColumn's default is nullable: true (the opposite of Column's), so
+        // NOT NULL foreign keys must say so explicitly or the metadata misreports
+        // the real constraint
+        $joinOptions[] = $column->isNullable() ? 'nullable: true' : 'nullable: false';
+
+        // Mirror the database's referential action (DDL-level only; app-level
+        // cascades are configured separately via EntityConfig cascade options)
+        $onDelete = $this->getOnDeleteAction($column);
+        if ($onDelete !== null) {
+            $joinOptions[] = "onDelete: '" . $onDelete . "'";
         }
 
         // Check for cascade options in config
         $cascadeOptions = $this->getCascadeOptions($column, $config);
         if (!empty($cascadeOptions)) {
-            $options[] = 'cascade={' . implode(', ', array_map(fn($c) => '"' . $c . '"', $cascadeOptions)) . '}';
+            $options[] = 'cascade: [' . implode(', ', array_map(fn($c) => "'" . $c . "'", $cascadeOptions)) . ']';
         }
 
         // Check for orphanRemoval
         $orphanRemoval = $this->getOrphanRemoval($column, $config);
         if ($orphanRemoval) {
-            $options[] = 'orphanRemoval=true';
+            $options[] = 'orphanRemoval: true';
         }
 
         // Check for indexBy
         $indexBy = $this->getIndexBy($column, $config);
         if ($indexBy !== null) {
-            $options[] = 'indexBy="' . $indexBy . '"';
+            $options[] = "indexBy: '$indexBy'";
         }
 
         $annotations = [];
 
-        // Add @ORM\Id if this column is part of the primary key (composite key with FK)
+        // Add #[ORM\Id] if this column is part of the primary key (composite key with FK)
         if ($column->isPrimary()) {
-            $annotations[] = '@ORM\Id';
+            $annotations[] = '#[ORM\Id]';
         }
 
+        $annotations[] = sprintf("#[ORM\JoinColumn(%s)]", implode(', ', $joinOptions));
+
         $annotations[] = sprintf(
-            "@ORM\%s(%s)",
+            "#[ORM\%s(%s)]",
             $relationType,
             implode(', ', $options)
         );
-
-        $annotations[] = sprintf("@ORM\JoinColumn(%s)", implode(', ', $joinOptions));
 
         // Add OrderBy annotation if specified (only for collections)
         if ($relationType === 'OneToMany' || $relationType === 'ManyToMany') {
@@ -106,13 +133,57 @@ class RelationshipTypeHandler extends AbstractTypeHandler
             if (!empty($orderBy)) {
                 $orderByPairs = [];
                 foreach ($orderBy as $field => $direction) {
-                    $orderByPairs[] = sprintf('"%s" = "%s"', $field, strtoupper((string) $direction));
+                    $orderByPairs[] = sprintf("'%s' => '%s'", $field, strtoupper((string) $direction));
                 }
-                $annotations[] = sprintf('@ORM\OrderBy({%s})', implode(', ', $orderByPairs));
+                $annotations[] = sprintf('#[ORM\OrderBy([%s])]', implode(', ', $orderByPairs));
             }
         }
 
-        return implode("\n     * ", $annotations);
+        return implode("\n    ", $annotations);
+    }
+
+    /**
+     * Get the FK's ON DELETE action where it differs from the default
+     * (CASCADE / SET NULL); RESTRICT and NO ACTION are MySQL defaults and
+     * are left implicit.
+     */
+    private function getOnDeleteAction(ColumnMetadata $column): ?string
+    {
+        if ($this->currentTable === null) {
+            return null;
+        }
+
+        foreach ($this->currentTable->getForeignKeys() as $foreignKey) {
+            $localColumns = is_array($foreignKey) ? ($foreignKey['local_columns'] ?? []) : $foreignKey->getLocalColumns();
+            if (!in_array($column->getName(), $localColumns)) {
+                continue;
+            }
+
+            $onDelete = is_array($foreignKey) ? ($foreignKey['on_delete'] ?? null) : $foreignKey->onDelete();
+            $onDelete = $onDelete !== null ? strtoupper($onDelete) : null;
+
+            return in_array($onDelete, ['CASCADE', 'SET NULL'], true) ? $onDelete : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Resolve the inverse-side property name for this owning side, if and only
+     * if EntityConfig declares an inversedBy for the column - the same condition
+     * under which InverseRelationshipProcessor generates that inverse side.
+     */
+    private function getInversedByProperty(array $config, bool $isCollection): ?string
+    {
+        $fieldConfig = $config['fieldConfig'] ?? null;
+
+        if (!$fieldConfig instanceof FieldConfig || $fieldConfig->inversedBy === null) {
+            return null;
+        }
+
+        $property = $fieldConfig->inversedBy->property;
+
+        return $this->propertyNameResolver->resolvePropertyName($property, $isCollection, $property);
     }
 
     /**

@@ -23,7 +23,7 @@ use Olcs\Controller\Auth\LoginController;
 use Olcs\Controller\Auth\LoginControllerFactory;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class LoginControllerFactoryTest extends MockeryTestCase
+final class LoginControllerFactoryTest extends MockeryTestCase
 {
     /**
      * @var LoginControllerFactory
@@ -48,7 +48,7 @@ class LoginControllerFactoryTest extends MockeryTestCase
         $this->setUpSut();
 
         $sm = $this->createMock(ContainerInterface::class);
-        $sm->method('get')->willReturnMap([
+        $sm->expects($this->exactly(9))->method('get')->willReturnMap([
             [InternalCommandAdapter::class, $this->createStub(InternalCommandAdapter::class)],
             [AuthenticationServiceInterface::class, $this->createStub(AuthenticationServiceInterface::class)],
             [CurrentUser::class, $this->createStub(CurrentUser::class)],

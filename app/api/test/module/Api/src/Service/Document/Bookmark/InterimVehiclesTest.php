@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class InterimVehiclesTest extends MockeryTestCase
+final class InterimVehiclesTest extends MockeryTestCase
 {
     public function testGetQuery(): void
     {
@@ -38,108 +38,106 @@ class InterimVehiclesTest extends MockeryTestCase
         );
     }
 
-    public static function dpRender(): array
+    public static function dpRender(): \Iterator
     {
-        return [
-            'mixed' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    ],
-                    'interimAuthVehicles' => 10,
-                    'interimAuthHgvVehicles' => 7,
-                    'interimAuthLgvVehicles' => 3,
+        yield 'mixed' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED,
                 ],
-                'expected' => "7 Heavy goods vehicles\n\n3 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'interimAuthVehicles' => 10,
+                'interimAuthHgvVehicles' => 7,
+                'interimAuthLgvVehicles' => 3,
             ],
-            'mixed - one vehicle each' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    ],
-                    'interimAuthVehicles' => 2,
-                    'interimAuthHgvVehicles' => 1,
-                    'interimAuthLgvVehicles' => 1,
+            'expected' => "7 Heavy goods vehicles\n\n3 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'mixed - one vehicle each' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED,
                 ],
-                'expected' => "1 Heavy goods vehicles\n\n1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'interimAuthVehicles' => 2,
+                'interimAuthHgvVehicles' => 1,
+                'interimAuthLgvVehicles' => 1,
             ],
-            'mixed - hgv vehicle only' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    ],
-                    'interimAuthVehicles' => 1,
-                    'interimAuthHgvVehicles' => 1,
-                    'interimAuthLgvVehicles' => 0,
+            'expected' => "1 Heavy goods vehicles\n\n1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'mixed - hgv vehicle only' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED,
                 ],
-                'expected' => "1 Heavy goods vehicles\n\n0 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'interimAuthVehicles' => 1,
+                'interimAuthHgvVehicles' => 1,
+                'interimAuthLgvVehicles' => 0,
             ],
-            'mixed - lgv vehicle only' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    ],
-                    'interimAuthVehicles' => 1,
-                    'interimAuthHgvVehicles' => 0,
-                    'interimAuthLgvVehicles' => 1,
+            'expected' => "1 Heavy goods vehicles\n\n0 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'mixed - lgv vehicle only' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED,
                 ],
-                'expected' => "0 Heavy goods vehicles\n\n1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'interimAuthVehicles' => 1,
+                'interimAuthHgvVehicles' => 0,
+                'interimAuthLgvVehicles' => 1,
             ],
-            'mixed - lgv not set' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    ],
-                    'interimAuthVehicles' => 1,
-                    'interimAuthHgvVehicles' => 1,
-                    'interimAuthLgvVehicles' => null,
+            'expected' => "0 Heavy goods vehicles\n\n1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'mixed - lgv not set' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED,
                 ],
-                'expected' => 1,
+                'interimAuthVehicles' => 1,
+                'interimAuthHgvVehicles' => 1,
+                'interimAuthLgvVehicles' => null,
             ],
-            'lgv' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_LGV,
-                    ],
-                    'interimAuthVehicles' => 10,
-                    'interimAuthHgvVehicles' => null,
-                    'interimAuthLgvVehicles' => 10,
+            'expected' => 1,
+        ];
+        yield 'lgv' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_LGV,
                 ],
-                'expected' => "10 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'interimAuthVehicles' => 10,
+                'interimAuthHgvVehicles' => null,
+                'interimAuthLgvVehicles' => 10,
             ],
-            'lgv - one vehicle' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_LGV,
-                    ],
-                    'interimAuthVehicles' => 1,
-                    'interimAuthHgvVehicles' => null,
-                    'interimAuthLgvVehicles' => 1,
+            'expected' => "10 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'lgv - one vehicle' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_LGV,
                 ],
-                'expected' => "1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'interimAuthVehicles' => 1,
+                'interimAuthHgvVehicles' => null,
+                'interimAuthLgvVehicles' => 1,
             ],
-            'hgv' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV,
-                    ],
-                    'interimAuthVehicles' => 10,
-                    'interimAuthHgvVehicles' => 10,
-                    'interimAuthLgvVehicles' => null,
+            'expected' => "1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'hgv' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV,
                 ],
-                'expected' => 10,
+                'interimAuthVehicles' => 10,
+                'interimAuthHgvVehicles' => 10,
+                'interimAuthLgvVehicles' => null,
             ],
-            'psv' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_PSV,
-                    ],
-                    'interimAuthVehicles' => 10,
-                    'interimAuthHgvVehicles' => 10,
-                    'interimAuthLgvVehicles' => null,
+            'expected' => 10,
+        ];
+        yield 'psv' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_PSV,
                 ],
-                'expected' => 10,
+                'interimAuthVehicles' => 10,
+                'interimAuthHgvVehicles' => 10,
+                'interimAuthLgvVehicles' => null,
             ],
+            'expected' => 10,
         ];
     }
 }

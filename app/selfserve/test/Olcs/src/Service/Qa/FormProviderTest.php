@@ -18,17 +18,17 @@ use Olcs\Service\Qa\FormFactory;
 use Olcs\Service\Qa\FormProvider;
 use RuntimeException;
 
-class FormProviderTest extends MockeryTestCase
+final class FormProviderTest extends MockeryTestCase
 {
-    public const OPTIONS = [
+    public const array OPTIONS = [
         'option1Key' => 'option1Value',
         'option2Key' => 'option2Value'
     ];
 
-    public const SUBMIT_OPTIONS_NAME = 'submit_options_type_1';
-    public const SUBMIT_OPTIONS_FQCN = '\Fqcn\For\SubmitOptionsType1';
+    public const string SUBMIT_OPTIONS_NAME = 'submit_options_type_1';
+    public const string SUBMIT_OPTIONS_FQCN = '\Fqcn\For\SubmitOptionsType1';
 
-    public const SUBMIT_OPTIONS_MAPPINGS = [
+    public const array SUBMIT_OPTIONS_MAPPINGS = [
         self::SUBMIT_OPTIONS_NAME => self::SUBMIT_OPTIONS_FQCN
     ];
 
@@ -42,6 +42,7 @@ class FormProviderTest extends MockeryTestCase
 
     private $formProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formFactory = m::mock(FormFactory::class);

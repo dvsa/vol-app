@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * UniqueCountriesByLicence Test
  */
-class UniqueCountriesByLicenceTest extends QueryHandlerTestCase
+final class UniqueCountriesByLicenceTest extends QueryHandlerTestCase
 {
     private $query;
 
@@ -142,15 +142,13 @@ class UniqueCountriesByLicenceTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpHandleQueryNonBilateral(): array
+    public static function dpHandleQueryNonBilateral(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER];
     }
 }

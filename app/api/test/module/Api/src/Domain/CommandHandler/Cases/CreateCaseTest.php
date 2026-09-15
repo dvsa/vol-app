@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\Tm\TransportManager as TransportManagerEntity;
 /**
  * Create Case Test
  */
-class CreateCaseTest extends AbstractCommandHandlerTestCase
+final class CreateCaseTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

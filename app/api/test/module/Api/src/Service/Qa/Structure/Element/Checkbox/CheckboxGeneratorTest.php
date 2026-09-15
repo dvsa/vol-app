@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CheckboxGeneratorTest extends MockeryTestCase
+final class CheckboxGeneratorTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate(mixed $answerValue, mixed $expectedChecked): void
@@ -83,12 +83,10 @@ class CheckboxGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestGenerate(): array
+    public static function dpTestGenerate(): \Iterator
     {
-        return [
-            [null, false],
-            [false, false],
-            [true, true],
-        ];
+        yield [null, false];
+        yield [false, false];
+        yield [true, true];
     }
 }

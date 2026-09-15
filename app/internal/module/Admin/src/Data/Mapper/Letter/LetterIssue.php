@@ -22,6 +22,15 @@ class LetterIssue implements MapperInterface
         // Get data from the current version if it exists
         $currentVersion = $data['currentVersion'] ?? [];
 
+        // Extract IDs of underlying LetterTodos linked to this issue version (VOL-7280)
+        $letterTodoIds = [];
+        foreach ($currentVersion['letterIssueTodos'] ?? [] as $junction) {
+            $todoId = $junction['letterTodoVersion']['letterTodo']['id'] ?? null;
+            if ($todoId !== null) {
+                $letterTodoIds[] = $todoId;
+            }
+        }
+
         $formData = [
             'letterIssue' => [
                 'id' => $data['id'] ?? null,
@@ -32,6 +41,7 @@ class LetterIssue implements MapperInterface
                 'subCategory' => $currentVersion['subCategory']['id'] ?? $data['subCategory']['id'] ?? null,
                 'goodsOrPsv' => $currentVersion['goodsOrPsv']['id'] ?? $data['goodsOrPsv']['id'] ?? null,
                 'letterIssueType' => $currentVersion['letterIssueType']['id'] ?? $data['letterIssueType']['id'] ?? null,
+                'letterTodos' => $letterTodoIds,
                 'defaultBodyContent' => $currentVersion['defaultBodyContent'] ?? $data['defaultBodyContent'] ?? null,
                 'isNi' => $currentVersion['isNi'] ?? $data['isNi'] ?? false,
                 'requiresInput' => $currentVersion['requiresInput'] ?? $data['requiresInput'] ?? false,
@@ -97,6 +107,11 @@ class LetterIssue implements MapperInterface
             $commandData['letterIssueTypeId'] = $commandData['letterIssueType'];
             unset($commandData['letterIssueType']);
         }
+
+        // Normalise letterTodos to an array of ids so the command always reconciles the
+        // junction (empty array = clear all linked to-dos). Filters out empty/zero entries
+        // that some form serialisers emit for an empty multi-select.
+        $commandData['letterTodos'] = array_values(array_filter((array)($commandData['letterTodos'] ?? [])));
 
         // publishFrom field removed from form - unset if present
         if (isset($commandData['publishFrom'])) {

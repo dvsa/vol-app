@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/null"
       version = "~> 3.2"
     }
+    awscc = {
+      source  = "hashicorp/awscc"
+      version = ">= 1.32.0"
+    }
   }
 
   required_version = ">= 1.0"
@@ -24,4 +28,8 @@ provider "aws" {
       Repository  = "https://github.com/dvsa/vol-app"
     }
   }
+}
+
+provider "awscc" {
+  region = "eu-west-1"
 }

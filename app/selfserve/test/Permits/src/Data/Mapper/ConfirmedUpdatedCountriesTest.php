@@ -10,7 +10,7 @@ use Permits\Data\Mapper\ConfirmedUpdatedCountries;
 /**
  * ConfirmedUpdatedCountriesTest
  */
-class ConfirmedUpdatedCountriesTest extends TestCase
+final class ConfirmedUpdatedCountriesTest extends TestCase
 {
     public function testMapFromForm(): void
     {

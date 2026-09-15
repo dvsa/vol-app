@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * FinancialStandingRate Mapper Test
  */
-class FinancialStandingRateTest extends MockeryTestCase
+final class FinancialStandingRateTest extends MockeryTestCase
 {
     /**
      *
@@ -25,35 +25,33 @@ class FinancialStandingRateTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
             [
-                [
+                'foo' => 'bar',
+            ],
+            [
+                'details' => [
                     'foo' => 'bar',
                 ],
-                [
-                    'details' => [
-                        'foo' => 'bar',
-                    ],
-                ]
-            ],
-            // edit
+            ]
+        ];
+        // edit
+        yield [
             [
-                [
+                'id' => 99,
+                'version' => 3,
+                'foo' => 'bar',
+            ],
+            [
+                'details' => [
                     'id' => 99,
                     'version' => 3,
                     'foo' => 'bar',
                 ],
-                [
-                    'details' => [
-                        'id' => 99,
-                        'version' => 3,
-                        'foo' => 'bar',
-                    ],
-                ]
-            ],
+            ]
         ];
     }
 

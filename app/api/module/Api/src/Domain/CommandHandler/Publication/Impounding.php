@@ -60,24 +60,34 @@ class Impounding extends AbstractCommandHandler implements TransactionedInterfac
     ) {
         $result = new Result();
 
+        $isDecision = $impounding->getOutcome() !== null;
+
         /**
          * @var PublicationSectionEntity $publicationSection
          * @var TrafficAreaEntity $trafficArea
          * @var ImpoundingPublicationCmd $command
          */
-        $pubSection = PublicationSectionEntity::HEARING_SECTION;
+        $pubSection = $isDecision
+            ? PublicationSectionEntity::DECISION_SECTION
+            : PublicationSectionEntity::HEARING_SECTION;
 
         if ($case->getCaseType() == CasesEntity::APP_CASE_TYPE) {
-            $handler = 'ImpoundingApplicationPublication';
+            $handler = $isDecision
+                ? 'ImpoundingApplicationDecisionPublication'
+                : 'ImpoundingApplicationPublication';
+
             $application = $this->getRepo()->getReference(ApplicationEntity::class, $command->getApplication());
             $licence = $application->getLicence();
         } else {
-            $handler = 'ImpoundingLicencePublication';
+            $handler = $isDecision
+                ? 'ImpoundingLicenceDecisionPublication'
+                : 'ImpoundingLicencePublication';
+
             $licence = $this->getRepo()->getReference(LicenceEntity::class, $command->getLicence());
             $application = null;
         }
 
-        $publicationSection = $this->getPublicationSection(PublicationSectionEntity::HEARING_SECTION);
+        $publicationSection = $this->getPublicationSection($pubSection);
         $trafficArea = $this->getRepo()->getReference(TrafficAreaEntity::class, $command->getTrafficArea());
 
         $pubType = $command->getPubType();
@@ -93,8 +103,10 @@ class Impounding extends AbstractCommandHandler implements TransactionedInterfac
 
         //no N&P for Northern Ireland, this is already defaulted to published, no need to record it twice below
         if (
-            ($trafficArea->getId() !== TrafficAreaEntity::NORTHERN_IRELAND_TRAFFIC_AREA_CODE) &&
-            ($pubType !== 'N&P')
+            !(
+                $trafficArea->getId() === TrafficAreaEntity::NORTHERN_IRELAND_TRAFFIC_AREA_CODE &&
+                $pubType === 'N&P'
+            )
         ) {
             //record that we've dealt with this traffic area and pub type combination
             $publishedAreas[$trafficArea->getId()][$pubType] = true;
@@ -185,6 +197,8 @@ class Impounding extends AbstractCommandHandler implements TransactionedInterfac
     {
         $venue = $impounding->getVenue();
 
+        $outcome = $impounding->getOutcome();
+
         $hearingDate = $impounding->getHearingDate();
 
         //sometimes we have a datetime, and sometimes a string
@@ -196,7 +210,8 @@ class Impounding extends AbstractCommandHandler implements TransactionedInterfac
             'venue' => ($venue === null ? $venue : $venue->getId()),
             'venueOther' => $impounding->getVenueOther(),
             'hearingDate' => $hearingDate,
-            'id' => $impounding->getId()
+            'id' => $impounding->getId(),
+            'outcome' => ($outcome === null ? null : $outcome->getDescription())
         ];
     }
 }

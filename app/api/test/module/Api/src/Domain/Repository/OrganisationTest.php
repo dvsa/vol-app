@@ -20,13 +20,14 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Organisation::class)]
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class OrganisationTest extends RepositoryTestCase
+final class OrganisationTest extends RepositoryTestCase
 {
     /**
      * @var Repo
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class, true);
@@ -439,7 +440,7 @@ class OrganisationTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')
             ->once()
-            ->andReturn(m::mock()->shouldReceive('iterate')->getMock());
+            ->andReturn(m::mock()->shouldReceive('toIterable')->getMock());
 
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')
@@ -470,7 +471,7 @@ class OrganisationTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')
             ->once()
-            ->andReturn(m::mock()->shouldReceive('iterate')->getMock());
+            ->andReturn(m::mock()->shouldReceive('toIterable')->getMock());
 
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')

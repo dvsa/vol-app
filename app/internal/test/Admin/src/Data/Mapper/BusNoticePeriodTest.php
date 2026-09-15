@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see BusNoticePeriod
  */
-class BusNoticePeriodTest extends MockeryTestCase
+final class BusNoticePeriodTest extends MockeryTestCase
 {
     public function testMapFromForm(): void
     {
@@ -31,14 +31,14 @@ class BusNoticePeriodTest extends MockeryTestCase
             'standardPeriod' => $standardPeriod,
         ];
 
-        $this->assertEquals($expected, BusNoticePeriod::mapFromForm($input));
+        $this->assertSame($expected, BusNoticePeriod::mapFromForm($input));
     }
 
     public function testMapFromResult(): void
     {
         $inputData = ['data'];
         $expected = ['busNoticePeriod' => $inputData];
-        $this->assertEquals($expected, BusNoticePeriod::mapFromResult($inputData));
+        $this->assertSame($expected, BusNoticePeriod::mapFromResult($inputData));
     }
 
     public function testMapFromErrors(): void
@@ -46,6 +46,6 @@ class BusNoticePeriodTest extends MockeryTestCase
         $mockForm = m::mock(FormInterface::class);
         $errors = ['field' => 'data'];
 
-        $this->assertEquals($errors, BusNoticePeriod::mapFromErrors($mockForm, $errors));
+        $this->assertSame($errors, BusNoticePeriod::mapFromErrors($mockForm, $errors));
     }
 }

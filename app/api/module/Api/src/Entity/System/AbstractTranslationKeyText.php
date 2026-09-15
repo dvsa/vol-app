@@ -21,22 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="translation_key_text",
- *    indexes={
- *        @ORM\Index(name="fk_translation_key_text_languages1_idx", columns={"language_id"}),
- *        @ORM\Index(name="fk_translation_key_text_users_created_by", columns={"created_by"}),
- *        @ORM\Index(name="fk_translation_key_text_users_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="one_transText_per_lang", columns={"language_id", "translation_key_id"}),
- *        @ORM\Index(name="translation_key_text_translation_key_id_fk", columns={"translation_key_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="one_transText_per_lang", columns={"language_id", "translation_key_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'translation_key_text')]
+#[ORM\Index(name: 'fk_translation_key_text_languages1_idx', columns: ['language_id'])]
+#[ORM\Index(name: 'fk_translation_key_text_users_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_translation_key_text_users_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'translation_key_text_translation_key_id_fk', columns: ['translation_key_id'])]
+#[ORM\UniqueConstraint(name: 'one_transText_per_lang', columns: ['language_id', 'translation_key_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTranslationKeyText implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,72 +42,65 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Language
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Language
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Language", fetch="LAZY")
-     * @ORM\JoinColumn(name="language_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'language_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Language::class, fetch: 'LAZY')]
     protected $language;
 
     /**
      * TranslationKey
      *
      * @var \Dvsa\Olcs\Api\Entity\System\TranslationKey
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\TranslationKey", fetch="LAZY")
-     * @ORM\JoinColumn(name="translation_key_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'translation_key_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\TranslationKey::class, inversedBy: 'translationKeyTexts', fetch: 'LAZY')]
     protected $translationKey;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Translated text
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="translated_text", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'translated_text', nullable: true)]
     protected $translatedText;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=true, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -138,7 +124,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setId($id)
     {
@@ -162,7 +148,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Language $language new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setLanguage($language)
     {
@@ -186,7 +172,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\TranslationKey $translationKey new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setTranslationKey($translationKey)
     {
@@ -210,7 +196,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -234,7 +220,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -258,7 +244,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param string $translatedText new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setTranslatedText($translatedText)
     {
@@ -282,7 +268,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setVersion($version)
     {

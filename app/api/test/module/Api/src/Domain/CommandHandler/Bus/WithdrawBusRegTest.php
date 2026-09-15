@@ -25,7 +25,7 @@ use Dvsa\Olcs\Api\Domain\Command\Fee\CancelFee as CancelFeeCmd;
  * Withdraw BusReg Test
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class WithdrawBusRegTest extends AbstractCommandHandlerTestCase
+final class WithdrawBusRegTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -133,15 +133,13 @@ class WithdrawBusRegTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, true],
-            [true, false],
-            [false, false]
-        ];
+        yield [true, true];
+        yield [false, true];
+        yield [true, false];
+        yield [false, false];
     }
 }

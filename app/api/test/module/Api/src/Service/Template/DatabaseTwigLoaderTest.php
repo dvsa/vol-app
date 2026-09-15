@@ -18,7 +18,7 @@ use Twig\Source;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DatabaseTwigLoaderTest extends MockeryTestCase
+final class DatabaseTwigLoaderTest extends MockeryTestCase
 {
     /** @var DatabaseTwigLoader */
     private $sut;
@@ -26,6 +26,7 @@ class DatabaseTwigLoaderTest extends MockeryTestCase
     /** @var DatabaseTemplateFetcher */
     private $databaseTemplateFetcher;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->databaseTemplateFetcher = m::mock(DatabaseTemplateFetcher::class);
@@ -47,8 +48,8 @@ class DatabaseTwigLoaderTest extends MockeryTestCase
 
         $source = $this->sut->getSourceContext($name);
         $this->assertInstanceOf(Source::class, $source);
-        $this->assertEquals($code, $source->getCode());
-        $this->assertEquals($name, $source->getName());
+        $this->assertSame($code, $source->getCode());
+        $this->assertSame($name, $source->getName());
     }
 
     public function testGetSourceContextLoaderError(): void

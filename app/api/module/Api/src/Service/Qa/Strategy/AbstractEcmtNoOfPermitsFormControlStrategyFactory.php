@@ -18,7 +18,7 @@ class AbstractEcmtNoOfPermitsFormControlStrategyFactory implements FactoryInterf
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BaseFormControlStrategy
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BaseFormControlStrategy
     {
         return new BaseFormControlStrategy(
             $this->frontendComponent,

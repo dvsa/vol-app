@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\CreateApplicationFee as CreateAppli
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GrantInterimTest extends AbstractCommandHandlerTestCase
+final class GrantInterimTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

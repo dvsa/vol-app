@@ -21,21 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irfo_vehicle",
- *    indexes={
- *        @ORM\Index(name="ix_irfo_vehicle_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irfo_vehicle_irfo_gv_permit_id", columns={"irfo_gv_permit_id"}),
- *        @ORM\Index(name="ix_irfo_vehicle_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_irfo_vehicle_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_irfo_vehicle_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irfo_vehicle')]
+#[ORM\Index(name: 'ix_irfo_vehicle_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irfo_vehicle_irfo_gv_permit_id', columns: ['irfo_gv_permit_id'])]
+#[ORM\Index(name: 'ix_irfo_vehicle_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\UniqueConstraint(name: 'uk_irfo_vehicle_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,116 +41,104 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to irfo_gv_permit
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_gv_permit_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_gv_permit_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit::class, fetch: 'LAZY')]
     protected $irfoGvPermit;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * cocA
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="coc_a", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'coc_a', nullable: false, options: ['default' => 0])]
     protected $cocA = 0;
 
     /**
      * cocB
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="coc_b", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'coc_b', nullable: false, options: ['default' => 0])]
     protected $cocB = 0;
 
     /**
      * cocC
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="coc_c", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'coc_c', nullable: false, options: ['default' => 0])]
     protected $cocC = 0;
 
     /**
      * cocD
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="coc_d", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'coc_d', nullable: false, options: ['default' => 0])]
     protected $cocD = 0;
 
     /**
      * cocT
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="coc_t", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'coc_t', nullable: false, options: ['default' => 0])]
     protected $cocT = 0;
 
     /**
      * Vrm
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vrm", length=20, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: false)]
     protected $vrm = '';
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=true, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -181,7 +162,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setId($id)
     {
@@ -205,7 +186,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit $irfoGvPermit new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setIrfoGvPermit($irfoGvPermit)
     {
@@ -229,7 +210,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -253,7 +234,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -277,7 +258,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $cocA new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCocA($cocA)
     {
@@ -301,7 +282,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $cocB new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCocB($cocB)
     {
@@ -325,7 +306,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $cocC new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCocC($cocC)
     {
@@ -349,7 +330,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $cocD new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCocD($cocD)
     {
@@ -373,7 +354,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $cocT new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCocT($cocT)
     {
@@ -397,7 +378,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $vrm new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setVrm($vrm)
     {
@@ -421,7 +402,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setVersion($version)
     {
@@ -445,7 +426,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param int $olbsKey new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

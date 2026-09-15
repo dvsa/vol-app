@@ -24,7 +24,7 @@ class SearchFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Search
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Search
     {
         return new Search(
             $container->get(Client::class),

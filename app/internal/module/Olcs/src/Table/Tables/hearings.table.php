@@ -42,7 +42,7 @@ return [
                 $url = $this->generateUrl(['action' => 'edit', 'id' => $data['id']], 'case_pi', true);
 
                 $column['formatter'] = Date::class;
-                return '<a class="govuk-link" href="' . $url . '">' . date(Module::$dateFormat, strtotime((string) $data['hearingDate'])) . '</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . \Common\Util\Escape::html(date(Module::$dateFormat, strtotime((string) $data['hearingDate']))) . '</a>';
             },
             'name' => 'id'
         ],

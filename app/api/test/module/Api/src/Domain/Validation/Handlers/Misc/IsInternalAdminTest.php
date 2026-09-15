@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalAdmin;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class IsInternalAdminTest extends AbstractHandlerTestCase
+final class IsInternalAdminTest extends AbstractHandlerTestCase
 {
     /**
      * @var IsInternalAdmin

@@ -30,7 +30,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class ReplaceTest extends AbstractCommandHandlerTestCase
+final class ReplaceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

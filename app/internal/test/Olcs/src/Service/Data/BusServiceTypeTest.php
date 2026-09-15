@@ -11,7 +11,7 @@ use Mockery as m;
 use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class BusServiceTypeTest extends AbstractDataServiceTestCase
+final class BusServiceTypeTest extends AbstractDataServiceTestCase
 {
     /** @var BusServiceType */
     private $sut;
@@ -87,11 +87,9 @@ class BusServiceTypeTest extends AbstractDataServiceTestCase
         $this->sut->fetchListData();
     }
 
-    public static function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            [self::SINGLE_SOURCE, self::SINGLE_EXPECTED],
-            [false, []]
-        ];
+        yield [self::SINGLE_SOURCE, self::SINGLE_EXPECTED];
+        yield [false, []];
     }
 }

@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * BusRegUpdateStatus Mapper Test
  */
-class BusRegUpdateStatusTest extends MockeryTestCase
+final class BusRegUpdateStatusTest extends MockeryTestCase
 {
     /**
      *
@@ -25,26 +25,24 @@ class BusRegUpdateStatusTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
+            [],
+            ['fields' => []]
+        ];
+        // edit
+        yield [
             [
-                [],
-                ['fields' => []]
+                'id' => 987,
+                'status' => ['id' => 100],
             ],
-            // edit
             [
-                [
+                'fields' => [
                     'id' => 987,
-                    'status' => ['id' => 100],
+                    'status' => 100,
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'status' => 100,
-                    ],
-                ]
             ]
         ];
     }

@@ -15,7 +15,7 @@ use Mockery as m;
 /**
  * Class AssignItemsTest
  */
-class AssignItemsTest extends AbstractCommandHandlerTestCase
+final class AssignItemsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

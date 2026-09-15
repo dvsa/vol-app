@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class SendLiquidatedCompanyForUnregisteredUserTest extends AbstractCommandHandlerTestCase
+final class SendLiquidatedCompanyForUnregisteredUserTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandInterface|SendLiquidatedCompanyForUnregisteredUser */
     protected $sut;

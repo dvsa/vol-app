@@ -12,7 +12,7 @@ class DataDvaNiExportCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:data-dva-ni-export';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Export to csv for Northern Ireland')

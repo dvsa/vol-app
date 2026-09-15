@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Repository\IrhpApplication as IrhpApplicationRepo;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\SelfserveIssuedPermitsSummary as SelfserveIssuedPermitsSummaryQry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 
-class SelfserveIssuedPermitsSummaryTest extends QueryHandlerTestCase
+final class SelfserveIssuedPermitsSummaryTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

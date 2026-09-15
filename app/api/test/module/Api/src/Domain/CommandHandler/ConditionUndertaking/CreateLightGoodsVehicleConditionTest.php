@@ -22,7 +22,7 @@ use Mockery as m;
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class CreateLightGoodsVehicleConditionTest extends AbstractCommandHandlerTestCase
+final class CreateLightGoodsVehicleConditionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -98,16 +98,14 @@ class CreateLightGoodsVehicleConditionTest extends AbstractCommandHandlerTestCas
         $this->sut->handleCommand($command);
     }
 
-    public static function dpHandleCommandNoUndertakingRequired(): array
+    public static function dpHandleCommandNoUndertakingRequired(): \Iterator
     {
-        return [
-            [RefData::APP_VEHICLE_TYPE_PSV, true],
-            [RefData::APP_VEHICLE_TYPE_HGV, true],
-            [RefData::APP_VEHICLE_TYPE_MIXED, true],
-            [RefData::APP_VEHICLE_TYPE_LGV, true],
-            [RefData::APP_VEHICLE_TYPE_PSV, false],
-            [RefData::APP_VEHICLE_TYPE_HGV, false],
-            [RefData::APP_VEHICLE_TYPE_MIXED, false],
-        ];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, true];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, true];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, true];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, true];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, false];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, false];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, false];
     }
 }

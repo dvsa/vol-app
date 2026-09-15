@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanEditApplicationWithId;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CanEditApplicationWithIdTest extends AbstractHandlerTestCase
+final class CanEditApplicationWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessApplicationWithId
@@ -40,11 +40,9 @@ class CanEditApplicationWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

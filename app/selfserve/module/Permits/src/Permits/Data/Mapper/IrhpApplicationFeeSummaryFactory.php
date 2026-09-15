@@ -18,7 +18,7 @@ class IrhpApplicationFeeSummaryFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationFeeSummary
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrhpApplicationFeeSummary
     {
         $viewHelperManager = $container->get('ViewHelperManager');
         $mapperManager = $container->get(MapperManager::class);

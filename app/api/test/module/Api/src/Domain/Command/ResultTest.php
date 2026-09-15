@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ResultTest extends \PHPUnit\Framework\TestCase
+final class ResultTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 

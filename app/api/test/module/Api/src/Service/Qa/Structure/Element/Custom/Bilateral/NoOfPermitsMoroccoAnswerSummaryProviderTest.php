@@ -14,10 +14,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * NoOfPermitsMoroccoAnswerSummaryProviderTest
  */
-class NoOfPermitsMoroccoAnswerSummaryProviderTest extends MockeryTestCase
+final class NoOfPermitsMoroccoAnswerSummaryProviderTest extends MockeryTestCase
 {
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new NoOfPermitsMoroccoAnswerSummaryProvider();
@@ -60,11 +61,9 @@ class NoOfPermitsMoroccoAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public static function dpGetTemplateVariables(): array
+    public static function dpGetTemplateVariables(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 }

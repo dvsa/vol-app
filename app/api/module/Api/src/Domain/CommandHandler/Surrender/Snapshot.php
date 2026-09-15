@@ -49,7 +49,7 @@ class Snapshot extends AbstractSurrenderCommandHandler implements TransactionedI
         return $this->handleSideEffect(Upload::create($data));
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

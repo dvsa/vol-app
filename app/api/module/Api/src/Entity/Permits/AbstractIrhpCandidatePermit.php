@@ -21,20 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irhp_candidate_permit",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_candidate_permit_assigned_emissions_cat_ref_data_id", columns={"assigned_emissions_category"}),
- *        @ORM\Index(name="fk_irhp_candidate_permit_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_candidate_permit_irhp_permit_range", columns={"irhp_permit_range_id"}),
- *        @ORM\Index(name="fk_irhp_candidate_permit_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_irhp_candidate_permit_requested_emissions_cat_ref_data_id", columns={"requested_emissions_category"}),
- *        @ORM\Index(name="fk_irhp_candidate_permits_irhp_permit_applications1_idx", columns={"irhp_permit_application_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_candidate_permit')]
+#[ORM\Index(name: 'fk_irhp_candidate_permit_assigned_emissions_cat_ref_data_id', columns: ['assigned_emissions_category'])]
+#[ORM\Index(name: 'fk_irhp_candidate_permit_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_candidate_permit_irhp_permit_range', columns: ['irhp_permit_range_id'])]
+#[ORM\Index(name: 'fk_irhp_candidate_permit_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'fk_irhp_candidate_permit_requested_emissions_cat_ref_data_id', columns: ['requested_emissions_category'])]
+#[ORM\Index(name: 'fk_irhp_candidate_permits_irhp_permit_applications1_idx', columns: ['irhp_permit_application_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,146 +43,131 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * IrhpPermitApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_application_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'irhpCandidatePermits', fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
     /**
      * IrhpPermitRange
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_range_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_range_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange::class, inversedBy: 'irhpCandidatePermits', fetch: 'LAZY')]
     protected $irhpPermitRange;
 
     /**
      * RequestedEmissionsCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="requested_emissions_category", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'requested_emissions_category', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $requestedEmissionsCategory;
 
     /**
      * AssignedEmissionsCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="assigned_emissions_category", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'assigned_emissions_category', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $assignedEmissionsCategory;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Application score
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="application_score", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'application_score', nullable: true)]
     protected $applicationScore;
 
     /**
      * Intensity of use
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="intensity_of_use", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'intensity_of_use', nullable: true)]
     protected $intensityOfUse;
 
     /**
      * Random factor
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="random_factor", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'random_factor', nullable: true)]
     protected $randomFactor;
 
     /**
      * Randomized score
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="randomized_score", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'randomized_score', nullable: true)]
     protected $randomizedScore;
 
     /**
      * Successful
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="successful", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'successful', nullable: true, options: ['default' => 0])]
     protected $successful = 0;
 
     /**
      * Wanted
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="wanted", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'wanted', nullable: true, options: ['default' => 0, 'unsigned' => true])]
     protected $wanted = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * IrhpPermits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermit", mappedBy="irhpCandidatePermit")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit::class, mappedBy: 'irhpCandidatePermit')]
     protected $irhpPermits;
 
     /**
@@ -211,7 +192,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param int $id new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setId($id)
     {
@@ -235,7 +216,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication $irhpPermitApplication new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setIrhpPermitApplication($irhpPermitApplication)
     {
@@ -259,7 +240,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange $irhpPermitRange new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setIrhpPermitRange($irhpPermitRange)
     {
@@ -283,7 +264,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $requestedEmissionsCategory new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setRequestedEmissionsCategory($requestedEmissionsCategory)
     {
@@ -307,7 +288,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $assignedEmissionsCategory new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setAssignedEmissionsCategory($assignedEmissionsCategory)
     {
@@ -331,7 +312,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -355,7 +336,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -379,7 +360,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param string $applicationScore new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setApplicationScore($applicationScore)
     {
@@ -403,7 +384,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param string $intensityOfUse new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setIntensityOfUse($intensityOfUse)
     {
@@ -427,7 +408,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param string $randomFactor new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setRandomFactor($randomFactor)
     {
@@ -451,7 +432,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param string $randomizedScore new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setRandomizedScore($randomizedScore)
     {
@@ -475,7 +456,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param bool $successful new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setSuccessful($successful)
     {
@@ -499,7 +480,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param bool $wanted new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setWanted($wanted)
     {
@@ -523,7 +504,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param int $version new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setVersion($version)
     {
@@ -547,7 +528,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being set as the value
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setIrhpPermits($irhpPermits)
     {
@@ -571,7 +552,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermits collection being added
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function addIrhpPermits($irhpPermits)
     {
@@ -594,7 +575,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being removed
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function removeIrhpPermits($irhpPermits)
     {

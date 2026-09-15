@@ -17,7 +17,7 @@ class SubmissionFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Submission
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Submission
     {
         return new Submission(
             $container->get(RefData::class)

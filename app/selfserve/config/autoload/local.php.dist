@@ -59,17 +59,23 @@ return [
      * Configure the location of the application log
      */
     'log' => [
-        'allowPasswordLogging' => true,
+        // 'allowPasswordLogging' => true,
+        //
+        // Uncomment only while actively debugging an authentication problem with a password
+        // you typed yourself, and comment it out again afterwards. Setting it does not relax
+        // redaction — it removes the HidePassword processor from the logger entirely, so every
+        // password flowing through the app is written in clear. It has no effect on the
+        // HideCredentials processor, which is always attached.
         'Logger' => [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => 'php://stdout',
+                        'stream' => 'php://stderr',
                         'filters' => [
                             'priority' => [
                                 'name' => 'priority',
                                 'options' => [
-                                    'priority' => \Laminas\Log\Logger::WARN,
+                                    'priority' => \Psr\Log\LogLevel::DEBUG,
                                 ],
                             ],
                         ],
@@ -86,7 +92,7 @@ return [
                             'priority' => [
                                 'name' => 'priority',
                                 'options' => [
-                                    'priority' => \Laminas\Log\Logger::WARN,
+                                    'priority' => \Psr\Log\LogLevel::DEBUG,
                                 ],
                             ],
                         ],
@@ -113,7 +119,6 @@ return [
 
     'caches' => [
         'default-cache' => [
-            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
             'options' => [
                 'server' => [
                     'host' => 'redis',
@@ -147,14 +152,14 @@ return [
         'user_unique_id_salt' => '1234',
     ],
 
-    // To run the GOV.UK Sign In journey against the local mock-govuk-signin
-    // compose service, allow its hostname through the referrer check below.
-    // The default keeps real .gov.uk callers working; uncomment to permit the
-    // mock as well. See docs/infrastructure/docker/mock-govuk-signin.md.
-    // 'govukaccount-redirect' => [
-    //     'referrer_ends_with' => [
-    //         '.gov.uk',
-    //         'mocksignin.local.olcs.dev-dvsacloud.uk',
-    //     ],
-    // ],
+    // No outbound egress proxy locally: the S3 presigned-download fetch is not exercised on the
+    // WebDAV store, and there is no shared proxy in front of local dev. Empty => connect directly
+    // (RetrieveController::presignedFetchProxyOptions treats '' as "no proxy"). Deployed
+    // environments resolve %shd_proxy% from Parameter Store instead.
+    'retrieve_document' => [
+        'presigned_fetch_proxy' => '',
+        // Local dev is plain HTTP, so a Secure grant cookie would never be stored/returned by the
+        // browser and the otp-gated download could not be tested. Real environments keep it true.
+        'grant_cookie_secure' => false,
+    ],
 ];

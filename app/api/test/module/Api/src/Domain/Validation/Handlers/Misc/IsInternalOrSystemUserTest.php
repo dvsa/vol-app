@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalOrSystemUser;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class IsInternalOrSystemUserTest extends AbstractHandlerTestCase
+final class IsInternalOrSystemUserTest extends AbstractHandlerTestCase
 {
     /**
      * @var IsInternalOrSystemUser

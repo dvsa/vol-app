@@ -14,7 +14,7 @@ interface DocumentStoreInterface
      * @param string $path File Path on storage
      * @param File   $file File
      *
-     * @return mixed
+     * @return Response
      * @throws Exception
      */
     public function write($path, File $file);
@@ -26,7 +26,7 @@ interface DocumentStoreInterface
      *
      * @param bool   $hard
      *
-     * @return mixed
+     * @return Response
      */
     public function remove($path, $hard = false);
 
@@ -35,7 +35,18 @@ interface DocumentStoreInterface
      *
      * @param string $path Path
      *
-     * @return mixed
+     * @return File|false
      */
     public function read($path);
+
+    /**
+     * Update (overwrite) an existing file on remote storage
+     *
+     * @param string $path File Path on storage
+     * @param File   $file File
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function update($path, File $file);
 }

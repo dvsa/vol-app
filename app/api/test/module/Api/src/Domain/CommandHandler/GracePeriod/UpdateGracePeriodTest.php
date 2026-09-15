@@ -25,7 +25,7 @@ use Dvsa\Olcs\Transfer\Command\GracePeriod\UpdateGracePeriod as Cmd;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class UpdateGracePeriodTest extends AbstractCommandHandlerTestCase
+final class UpdateGracePeriodTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

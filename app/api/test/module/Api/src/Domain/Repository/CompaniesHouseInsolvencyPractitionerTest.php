@@ -7,8 +7,9 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseInsolvencyPractitioner as InsolvencyPractitionerRepository;
 
-class CompaniesHouseInsolvencyPractitionerTest extends RepositoryTestCase
+final class CompaniesHouseInsolvencyPractitionerTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(InsolvencyPractitionerRepository::class);
@@ -31,6 +32,6 @@ class CompaniesHouseInsolvencyPractitionerTest extends RepositoryTestCase
 
         $expectedQuery = '{QUERY} AND m.companiesHouseCompany = [[' . $companyNumber . ']]';
 
-        self::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 }

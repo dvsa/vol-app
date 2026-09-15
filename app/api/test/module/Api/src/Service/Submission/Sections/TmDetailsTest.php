@@ -6,11 +6,11 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Service\Submission\Sections\TmDetails;
 
-class TmDetailsTest extends AbstractSubmissionSectionTestCase
+final class TmDetailsTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = TmDetails::class;
 
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $expectedResult = [
             'data' => [
@@ -45,10 +45,8 @@ class TmDetailsTest extends AbstractSubmissionSectionTestCase
             ]
         ];
 
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

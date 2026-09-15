@@ -149,7 +149,7 @@ abstract class AbstractCompanySubsidiary extends AbstractCommandHandler implemen
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->extraRepos = array_merge(['CompanySubsidiary', 'Licence', 'Application'], $this->extraRepos);
         $instance = parent::__invoke($container, $requestedName, $options);

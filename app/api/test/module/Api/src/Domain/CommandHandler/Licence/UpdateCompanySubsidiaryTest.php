@@ -16,14 +16,12 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Licence\UpdateCompanySubsidiary
- */
-class UpdateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\UpdateCompanySubsidiary::class)]
+final class UpdateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
 {
-    public const LICENCE_ID = 1111;
-    public const TASK_ID = 877;
-    public const VERSION = 99;
+    public const int LICENCE_ID = 1111;
+    public const int TASK_ID = 877;
+    public const int VERSION = 99;
 
     /** @var  UpdateCompanySubsidiary|m\MockInterface */
     protected $sut;
@@ -63,7 +61,7 @@ class UpdateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
             ->once()
             ->with($command)
             ->andReturn(
-                (new Result())
+                new Result()
                     ->setFlag('hasChanged', $hasChanged)
                     ->addMessage('Unit Company Subsidiary Updated')
             );
@@ -74,7 +72,7 @@ class UpdateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
                 ->once()
                 ->with(self::LICENCE_ID, 'Subsidiary company updated - unit_Name')
                 ->andReturn(
-                    (new Result())
+                    new Result()
                         ->addId('task', self::TASK_ID)
                         ->addMessage('Task created')
                 );
@@ -85,8 +83,8 @@ class UpdateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         //  call
         $actual = $this->sut->handleCommand($command);
 
-        static::assertInstanceOf(Result::class, $actual);
-        static::assertEquals($hasChanged, $actual->getFlag('hasChanged'));
+        $this->assertInstanceOf(Result::class, $actual);
+        $this->assertEquals($hasChanged, $actual->getFlag('hasChanged'));
 
         if ($expectTask === true) {
             $expected = [
@@ -99,28 +97,26 @@ class UpdateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
                 ],
                 'flags' => ['hasChanged' => 1]
             ];
-            static::assertEquals($expected, $actual->toArray());
+            $this->assertEquals($expected, $actual->toArray());
         }
     }
 
-    public static function dpTestHandleCommand(): array
+    public static function dpTestHandleCommand(): \Iterator
     {
-        return [
-            [
-                'hasChanged' => false,
-                'isGranted' => true,
-                'expectTask' => false,
-            ],
-            [
-                'hasChanged' => true,
-                'isGranted' => false,
-                'expectTask' => false,
-            ],
-            [
-                'hasChanged' => true,
-                'isGranted' => true,
-                'expectTask' => true,
-            ],
+        yield [
+            'hasChanged' => false,
+            'isGranted' => true,
+            'expectTask' => false,
+        ];
+        yield [
+            'hasChanged' => true,
+            'isGranted' => false,
+            'expectTask' => false,
+        ];
+        yield [
+            'hasChanged' => true,
+            'isGranted' => true,
+            'expectTask' => true,
         ];
     }
 

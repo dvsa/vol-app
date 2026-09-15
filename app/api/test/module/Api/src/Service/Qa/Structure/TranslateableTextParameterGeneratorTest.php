@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class TranslateableTextParameterGeneratorTest extends MockeryTestCase
+final class TranslateableTextParameterGeneratorTest extends MockeryTestCase
 {
     private $optionsValue;
 
@@ -27,6 +27,7 @@ class TranslateableTextParameterGeneratorTest extends MockeryTestCase
 
     private $translateableTextParameterGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->optionsValue = 'optionsValue';

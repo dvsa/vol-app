@@ -7,21 +7,15 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 
 /**
  * Appeal Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="appeal",
- *    indexes={
- *        @ORM\Index(name="ix_appeal_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_appeal_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_appeal_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_appeal_reason", columns={"reason"}),
- *        @ORM\Index(name="ix_appeal_outcome", columns={"outcome"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_appeal_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'appeal')]
+#[ORM\Index(name: 'ix_appeal_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_appeal_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_appeal_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_appeal_reason', columns: ['reason'])]
+#[ORM\Index(name: 'ix_appeal_outcome', columns: ['outcome'])]
+#[ORM\UniqueConstraint(name: 'uk_appeal_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\Entity]
 class Appeal extends AbstractAppeal
 {
     /**

@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Queue\Service\Message\CompaniesHouse;
 use Dvsa\Olcs\Queue\Service\Message\CompaniesHouse\CompanyProfile;
 use PHPUnit\Framework\TestCase;
 
-class CompanyProfileTest extends TestCase
+final class CompanyProfileTest extends TestCase
 {
     protected $sut;
 
@@ -25,7 +25,7 @@ class CompanyProfileTest extends TestCase
             'DelaySeconds' => 1
         ];
 
-        $this->assertEquals($expected, $this->sut->toArray());
+        $this->assertSame($expected, $this->sut->toArray());
     }
 
     public function testProcessMessageException(): void

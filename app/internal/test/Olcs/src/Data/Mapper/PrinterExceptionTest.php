@@ -20,7 +20,7 @@ use Laminas\Form\FormInterface;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PrinterExceptionTest extends MockeryTestCase
+final class PrinterExceptionTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('fromResultProvider')]
     public function testMapFromResult(mixed $data, mixed $expected): void
@@ -28,52 +28,50 @@ class PrinterExceptionTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public static function fromResultProvider(): array
+    public static function fromResultProvider(): \Iterator
     {
-        return [
-            'data' => [
-                [
-                    'id' => 1,
-                    'version' => 2,
-                    'user' => ['id' => 3],
-                    'team' => ['id' => 4],
-                    'printer' => ['id' => 5],
-                    'subCategory' => [
-                        'id' => 6,
-                        'category' => [
-                            'id' => 7
-                        ]
-                    ]
-                ],
-                [
-                    'exception-details' => [
-                        'id' => 1,
-                        'version' => 2,
-                        'teamOrUser' => 'user',
-                        'team' => 4
-                    ],
-                    'team-printer' => [
-                        'printer' => 5,
-                        'subCategoryTeam' => 6,
-                        'categoryTeam' => 7
-                    ],
-                    'user-printer' => [
-                        'user' => 3,
-                        'printer' => 5,
-                        'subCategoryUser' => 6,
-                        'categoryUser' => 7
+        yield 'data' => [
+            [
+                'id' => 1,
+                'version' => 2,
+                'user' => ['id' => 3],
+                'team' => ['id' => 4],
+                'printer' => ['id' => 5],
+                'subCategory' => [
+                    'id' => 6,
+                    'category' => [
+                        'id' => 7
                     ]
                 ]
             ],
-            'no data' => [
-                [
+            [
+                'exception-details' => [
+                    'id' => 1,
+                    'version' => 2,
+                    'teamOrUser' => 'user',
+                    'team' => 4
+                ],
+                'team-printer' => [
+                    'printer' => 5,
+                    'subCategoryTeam' => 6,
+                    'categoryTeam' => 7
+                ],
+                'user-printer' => [
+                    'user' => 3,
+                    'printer' => 5,
+                    'subCategoryUser' => 6,
+                    'categoryUser' => 7
+                ]
+            ]
+        ];
+        yield 'no data' => [
+            [
+                'team' => 1
+            ],
+            [
+                'exception-details' => [
                     'team' => 1
                 ],
-                [
-                    'exception-details' => [
-                        'team' => 1
-                    ],
-                ]
             ]
         ];
     }
@@ -84,52 +82,50 @@ class PrinterExceptionTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public static function fromFormProvider(): array
+    public static function fromFormProvider(): \Iterator
     {
-        return [
-            'user' => [
-                [
-                    'exception-details' => [
-                        'teamOrUser' => 'user',
-                        'id' => 1,
-                        'version' => 2,
-                        'team' => 3
-                    ],
-                    'user-printer' => [
-                        'user' => 'foo',
-                        'subCategoryUser' => 'bar',
-                        'printer' => 'cake'
-                    ]
-                ],
-                [
+        yield 'user' => [
+            [
+                'exception-details' => [
+                    'teamOrUser' => 'user',
                     'id' => 1,
                     'version' => 2,
-                    'team' => 3,
+                    'team' => 3
+                ],
+                'user-printer' => [
                     'user' => 'foo',
-                    'subCategory' => 'bar',
+                    'subCategoryUser' => 'bar',
                     'printer' => 'cake'
                 ]
             ],
-            'team' => [
-                [
-                    'exception-details' => [
-                        'teamOrUser' => 'team',
-                        'id' => 1,
-                        'version' => 2,
-                        'team' => 3
-                    ],
-                    'team-printer' => [
-                        'subCategoryTeam' => 'bar',
-                        'printer' => 'cake'
-                    ]
-                ],
-                [
+            [
+                'id' => 1,
+                'version' => 2,
+                'team' => 3,
+                'user' => 'foo',
+                'subCategory' => 'bar',
+                'printer' => 'cake'
+            ]
+        ];
+        yield 'team' => [
+            [
+                'exception-details' => [
+                    'teamOrUser' => 'team',
                     'id' => 1,
                     'version' => 2,
-                    'team' => 3,
-                    'subCategory' => 'bar',
+                    'team' => 3
+                ],
+                'team-printer' => [
+                    'subCategoryTeam' => 'bar',
                     'printer' => 'cake'
                 ]
+            ],
+            [
+                'id' => 1,
+                'version' => 2,
+                'team' => 3,
+                'subCategory' => 'bar',
+                'printer' => 'cake'
             ]
         ];
     }

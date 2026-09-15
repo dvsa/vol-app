@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * IrfoGvPermitList Test
  */
-class IrfoGvPermitListTest extends QueryHandlerTestCase
+final class IrfoGvPermitListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -50,7 +50,7 @@ class IrfoGvPermitListTest extends QueryHandlerTestCase
 
         $actual = $this->sut->handleQuery($query);
 
-        static::assertEquals(2, $actual['count']);
-        static::assertEquals(['SERIALIZED'], $actual['result']);
+        $this->assertEquals(2, $actual['count']);
+        $this->assertEquals(['SERIALIZED'], $actual['result']);
     }
 }

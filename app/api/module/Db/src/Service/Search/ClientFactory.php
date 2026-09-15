@@ -4,7 +4,6 @@ namespace Dvsa\Olcs\Db\Service\Search;
 
 use Elastica\Client;
 use Olcs\Logging\Log\Logger;
-use Olcs\Logging\Log\LaminasLogPsr3Adapter;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\Exception;
 use Psr\Container\ContainerInterface;
@@ -27,7 +26,7 @@ class ClientFactory implements FactoryInterface
      * @throws Exception\InvalidServiceException
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Client
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Client
     {
         $config = $container->get('config');
         if (!isset($config['elastic_search'])) {
@@ -35,8 +34,7 @@ class ClientFactory implements FactoryInterface
         }
         $service = new Client($config['elastic_search']);
         if (isset($config['elastic_search']['log'])) {
-            $log = new LaminasLogPsr3Adapter(Logger::getLogger());
-            $service->setLogger($log);
+            $service->setLogger(Logger::getLogger());
         }
         return $service;
     }

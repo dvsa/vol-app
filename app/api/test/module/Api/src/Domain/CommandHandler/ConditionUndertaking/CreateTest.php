@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -110,10 +110,10 @@ class CreateTest extends AbstractCommandHandlerTestCase
                 $this->assertSame($this->refData[$params['conditionCategory']], $cu->getConditionCategory());
                 $this->assertSame($params['fulfilled'], $cu->getIsFulfilled());
                 $this->assertSame('N', $cu->getIsDraft());
-                $this->assertSame(null, $cu->getOperatingCentre());
+                $this->assertNull($cu->getOperatingCentre());
                 $this->assertSame($this->refData['cav_case'], $cu->getAddedVia());
                 $this->assertSame($case, $cu->getCase());
-                $this->assertSame(null, $cu->getAction());
+                $this->assertNull($cu->getAction());
                 $this->assertSame($case->getLicence(), $cu->getLicence());
                 $this->assertSame($case->getApplication(), $cu->getApplication());
                 $cu->setId(76);
@@ -150,7 +150,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
                 $this->assertSame($this->references[OperatingCentre::class][34], $cu->getOperatingCentre());
                 $this->assertSame($this->refData['cav_lic'], $cu->getAddedVia());
                 $this->assertSame($this->references[Licence::class][124], $cu->getLicence());
-                $this->assertSame(null, $cu->getAction());
+                $this->assertNull($cu->getAction());
                 $cu->setId(76);
             }
         );
@@ -184,7 +184,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
                 $this->assertSame('Y', $cu->getIsDraft());
                 $this->assertSame($this->references[OperatingCentre::class][34], $cu->getOperatingCentre());
                 $this->assertSame($this->refData['cav_app'], $cu->getAddedVia());
-                $this->assertSame(null, $cu->getLicence());
+                $this->assertNull($cu->getLicence());
                 $this->assertSame($this->references[Application::class][224], $cu->getApplication());
                 $this->assertSame('A', $cu->getAction());
                 $cu->setId(76);

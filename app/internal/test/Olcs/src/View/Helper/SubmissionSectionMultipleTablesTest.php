@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * Class SubmissionSectionMultipleTables
  * @package OlcsTest\View\Helper
  */
-class SubmissionSectionMultipleTablesTest extends TestCase
+final class SubmissionSectionMultipleTablesTest extends TestCase
 {
     /**
      * @param $input
@@ -54,32 +54,30 @@ class SubmissionSectionMultipleTablesTest extends TestCase
         );
     }
 
-    public static function provideInvoke(): array
+    public static function provideInvoke(): \Iterator
     {
-        return [
+        yield [
+            ['submissionSection' => 'introduction', 'data' => ['data' => []]], null
+        ];
+        yield [
+            ['submissionSection' => '', 'data' => ['data' => []]], ''
+        ];
+        yield [
             [
-                ['submissionSection' => 'introduction', 'data' => ['data' => []]], null
-            ],
-            [
-                ['submissionSection' => '', 'data' => ['data' => []]], ''
-            ],
-            [
-                [
-                    'submissionSection' => 'condition-and-undertakings',
+                'submissionSection' => 'condition-and-undertakings',
+                'data' => [
+                    'sectionId' => 'conditions-and-undertakings',
                     'data' => [
-                        'sectionId' => 'conditions-and-undertakings',
-                        'data' => [
-                            'tables' => [
-                                'conditions' => [
-                                    0 => ['id' => 1],
-                                    1 => ['id' => 2]
-                                ]
+                        'tables' => [
+                            'conditions' => [
+                                0 => ['id' => 1],
+                                1 => ['id' => 2]
                             ]
                         ]
                     ]
-                ],
-                null
+                ]
             ],
+            null
         ];
     }
 }

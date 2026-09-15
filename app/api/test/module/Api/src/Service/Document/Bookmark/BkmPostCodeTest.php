@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BkmPostCode as Sut;
 /**
  * BkmPostCode bookmark test
  */
-class BkmPostCodeTest extends \PHPUnit\Framework\TestCase
+final class BkmPostCodeTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -28,28 +28,26 @@ class BkmPostCodeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'irfoContactDetails' => [
-                        'address' => [
-                            'addressLine1' => 'Line 1',
-                            'addressLine2' => 'Line 2',
-                            'addressLine3' => 'Line 3',
-                            'addressLine4' => 'Line 4',
-                            'town' => 'Leeds',
-                            'postcode' => 'LS9 6NF',
-                        ]
+                'irfoContactDetails' => [
+                    'address' => [
+                        'addressLine1' => 'Line 1',
+                        'addressLine2' => 'Line 2',
+                        'addressLine3' => 'Line 3',
+                        'addressLine4' => 'Line 4',
+                        'town' => 'Leeds',
+                        'postcode' => 'LS9 6NF',
                     ]
-                ],
-                'LS9 6NF'
+                ]
             ],
-            [
-                [],
-                ''
-            ],
+            'LS9 6NF'
+        ];
+        yield [
+            [],
+            ''
         ];
     }
 }

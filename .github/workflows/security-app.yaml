@@ -11,38 +11,69 @@ on:
 
 jobs:
   app-scan:
-    name: App - ${{ matrix.project }}
+    name: ${{ matrix.label }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        project: [api, internal, selfserve, cdn]
-    defaults:
-      run:
-        working-directory: app
+        # label is the check name branch protection sees - keep the existing four byte-identical.
+        # gates-release decides whether a finding here can block a release: true for anything that
+        # ends up in a deployed artefact, false for tooling that only ever runs on a build machine.
+        # It has to be read as matrix['gates-release']: in a GitHub expression the dot form parses
+        # the hyphen as subtraction and quietly evaluates to 0.
+        include:
+          - label: App - api
+            name: api
+            path: app/api
+            gates-release: true
+          - label: App - internal
+            name: internal
+            path: app/internal
+            gates-release: true
+          - label: App - selfserve
+            name: selfserve
+            path: app/selfserve
+            gates-release: true
+          - label: App - cdn
+            name: cdn
+            path: app/cdn
+            gates-release: true
+          # The docs site (https://dvsa.github.io/vol-app). Its whole tree is Docusaurus build
+          # tooling - webpack, loaders, the dev server - and none of it reaches a reader of the
+          # published site or any deployed application. Reported exactly like the app legs, so a
+          # finding here shows up red and lands in code scanning; it just cannot hold up an
+          # application release. Advisories with no fixed release anywhere are excluded in
+          # website/.snyk with a reason and an expiry, so red here always means something new
+          # and actionable rather than a known dead end.
+          - label: Website
+            name: website
+            path: website
+            gates-release: false
     steps:
       - uses: actions/checkout@v6
       - name: Setup Snyk
         uses: snyk/actions/setup@master
-      - name: Scan ${{ matrix.project }}
-        run: snyk test ${{ matrix.project }} --sarif-file-output=${{ matrix.project }}-snyk-results.sarif
+      - name: Scan ${{ matrix.name }}
+        continue-on-error: ${{ !matrix['gates-release'] }}
+        run: snyk test ${{ matrix.path }} --sarif-file-output=${{ matrix.name }}-snyk-results.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Fix SARIF security-severity values
         if: ${{ always() }}
         run: |
-          if [ -f "${{ matrix.project }}-snyk-results.sarif" ]; then
+          if [ -f "${{ matrix.name }}-snyk-results.sarif" ]; then
             jq '(.runs[].tool.driver.rules // [])[] |= (
               if .properties["security-severity"] == null or .properties["security-severity"] == "undefined" then
                 .properties["security-severity"] = "5.0"
               else
                 .
               end
-            )' "${{ matrix.project }}-snyk-results.sarif" > "${{ matrix.project }}-snyk-results-fixed.sarif"
-            mv "${{ matrix.project }}-snyk-results-fixed.sarif" "${{ matrix.project }}-snyk-results.sarif"
+            )' "${{ matrix.name }}-snyk-results.sarif" > "${{ matrix.name }}-snyk-results-fixed.sarif"
+            mv "${{ matrix.name }}-snyk-results-fixed.sarif" "${{ matrix.name }}-snyk-results.sarif"
           fi
       - name: Upload Results to GitHub Code Scanning
         if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: app/${{ matrix.project }}-snyk-results.sarif
-          category: snyk-${{ matrix.project }}
+          sarif_file: ${{ matrix.name }}-snyk-results.sarif
+          category: snyk-${{ matrix.name }}

@@ -1,0 +1,43 @@
+<?php echo $this->doctype(); ?>
+<html lang="en" class="review">
+<?php echo $this->partial('partials/review-header'); ?>
+<body>
+<div class="review-header">
+    <p><?php echo $this->translate($reviewTitle); ?></p>
+    <h1><?php echo $subTitle; ?></h1>
+</div>
+<?php
+$count = 0;
+foreach ($sections as $section):
+    $count++;
+    ?>
+    <div class="review-section">
+        <h2>
+            <?php
+
+            if (!isset($settings['hide-count'])) {
+                echo $count . '. ';
+            }
+
+            echo $this->translate($section['header']);
+            ?>
+        </h2>
+        <?php
+
+        if (isset($section['config']['subSections'])) {
+            echo $this->render('partials/read-only/subSections', $section['config']);
+        } else {
+
+            if (isset($section['config']['mainItems'])) {
+                foreach ($section['config']['mainItems'] as $mainItem) {
+                    echo $this->render('partials/read-only/main', $mainItem);
+                }
+            } else {
+                echo $this->render('partials/read-only/main', $section['config']);
+            }
+        }
+        ?>
+    </div>
+<?php endforeach; ?>
+</body>
+</html>

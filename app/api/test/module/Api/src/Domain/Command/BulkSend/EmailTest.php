@@ -12,7 +12,7 @@ namespace Dvsa\OlcsTest\Api\Domain\Command\BulkSend;
 
 use Dvsa\Olcs\Api\Domain\Command\BulkSend\Email;
 
-class EmailTest extends \PHPUnit\Framework\TestCase
+final class EmailTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

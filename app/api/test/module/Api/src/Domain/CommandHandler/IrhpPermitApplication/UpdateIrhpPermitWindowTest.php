@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class UpdateIrhpPermitWindowTest extends AbstractCommandHandlerTestCase
+final class UpdateIrhpPermitWindowTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

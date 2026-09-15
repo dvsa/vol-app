@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\Organisation\FixIsUnlicenced;
 use Dvsa\Olcs\Cli\Command\Batch\DatabaseMaintenanceCommand;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class DatabaseMaintenanceCommandTest extends AbstractBatchCommandCases
+final class DatabaseMaintenanceCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

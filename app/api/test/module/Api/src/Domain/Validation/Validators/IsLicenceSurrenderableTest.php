@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Entity\Surrender;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class IsLicenceSurrenderableTest extends AbstractValidatorsTestCase
+final class IsLicenceSurrenderableTest extends AbstractValidatorsTestCase
 {
     /**
      * @var IsLicenceSurrenderable

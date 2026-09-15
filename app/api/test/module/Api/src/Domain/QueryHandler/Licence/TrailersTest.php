@@ -22,7 +22,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\Trailers as Qry;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TrailersTest extends QueryHandlerTestCase
+final class TrailersTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

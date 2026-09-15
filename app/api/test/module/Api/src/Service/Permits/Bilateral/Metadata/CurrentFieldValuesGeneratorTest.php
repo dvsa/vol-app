@@ -16,9 +16,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CurrentFieldValuesGeneratorTest extends MockeryTestCase
+final class CurrentFieldValuesGeneratorTest extends MockeryTestCase
 {
-    public const PERIOD_NAME_KEY = 'period.name.key';
+    public const string PERIOD_NAME_KEY = 'period.name.key';
 
     private $irhpPermitApplication;
 
@@ -26,6 +26,7 @@ class CurrentFieldValuesGeneratorTest extends MockeryTestCase
 
     private $currentFieldValuesGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);
@@ -57,41 +58,39 @@ class CurrentFieldValuesGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
+        yield [
             [
-                [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 10,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 15
+            ],
+            RefData::JOURNEY_SINGLE,
+            [
+                RefData::JOURNEY_SINGLE => [
                     IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 10,
                     IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 15
                 ],
-                RefData::JOURNEY_SINGLE,
-                [
-                    RefData::JOURNEY_SINGLE => [
-                        IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 10,
-                        IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 15
-                    ],
-                    RefData::JOURNEY_MULTIPLE => [
-                        IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
-                        IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => null
-                    ]
+                RefData::JOURNEY_MULTIPLE => [
+                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
+                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => null
                 ]
-            ],
+            ]
+        ];
+        yield [
             [
-                [
+                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 20,
+                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 25
+            ],
+            RefData::JOURNEY_MULTIPLE,
+            [
+                RefData::JOURNEY_SINGLE => [
+                    IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
+                    IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => null
+                ],
+                RefData::JOURNEY_MULTIPLE => [
                     IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 20,
                     IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 25
-                ],
-                RefData::JOURNEY_MULTIPLE,
-                [
-                    RefData::JOURNEY_SINGLE => [
-                        IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => null,
-                        IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => null
-                    ],
-                    RefData::JOURNEY_MULTIPLE => [
-                        IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 20,
-                        IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 25
-                    ]
                 ]
             ]
         ];

@@ -21,27 +21,23 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="fee",
- *    indexes={
- *        @ORM\Index(name="ix_fee_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_fee_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="ix_fee_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_fee_fee_status", columns={"fee_status"}),
- *        @ORM\Index(name="ix_fee_fee_type_id", columns={"fee_type_id"}),
- *        @ORM\Index(name="ix_fee_irfo_gv_permit_id", columns={"irfo_gv_permit_id"}),
- *        @ORM\Index(name="ix_fee_irfo_psv_auth_id", columns={"irfo_psv_auth_id"}),
- *        @ORM\Index(name="ix_fee_irhp_application_id", columns={"irhp_application_id"}),
- *        @ORM\Index(name="ix_fee_irhp_permit_application_id", columns={"irhp_permit_application_id"}),
- *        @ORM\Index(name="ix_fee_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_fee_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_fee_parent_fee_id", columns={"parent_fee_id"}),
- *        @ORM\Index(name="ix_fee_task_id", columns={"task_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'fee')]
+#[ORM\Index(name: 'ix_fee_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_fee_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'ix_fee_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_fee_fee_status', columns: ['fee_status'])]
+#[ORM\Index(name: 'ix_fee_fee_type_id', columns: ['fee_type_id'])]
+#[ORM\Index(name: 'ix_fee_irfo_gv_permit_id', columns: ['irfo_gv_permit_id'])]
+#[ORM\Index(name: 'ix_fee_irfo_psv_auth_id', columns: ['irfo_psv_auth_id'])]
+#[ORM\Index(name: 'ix_fee_irhp_application_id', columns: ['irhp_application_id'])]
+#[ORM\Index(name: 'ix_fee_irhp_permit_application_id', columns: ['irhp_permit_application_id'])]
+#[ORM\Index(name: 'ix_fee_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_fee_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_fee_parent_fee_id', columns: ['parent_fee_id'])]
+#[ORM\Index(name: 'ix_fee_task_id', columns: ['task_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractFee implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -54,225 +50,202 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to fee_type
      *
      * @var \Dvsa\Olcs\Api\Entity\Fee\FeeType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeType", fetch="LAZY")
-     * @ORM\JoinColumn(name="fee_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'fee_type_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeType::class, fetch: 'LAZY')]
     protected $feeType;
 
     /**
      * FeeStatus
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="fee_status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'fee_status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $feeStatus;
 
     /**
      * ParentFee
      *
      * @var \Dvsa\Olcs\Api\Entity\Fee\Fee
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", fetch="LAZY")
-     * @ORM\JoinColumn(name="parent_fee_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'parent_fee_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, fetch: 'LAZY')]
     protected $parentFee;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'fees', fetch: 'LAZY')]
     protected $application;
 
     /**
      * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'fees', fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'fees', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Foreign Key to task
      *
      * @var \Dvsa\Olcs\Api\Entity\Task\Task
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", fetch="LAZY")
-     * @ORM\JoinColumn(name="task_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, fetch: 'LAZY')]
     protected $task;
 
     /**
      * IrhpApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'fees', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
      * IrhpPermitApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'fees', fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
     /**
      * Foreign Key to irfo_gv_permit
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_gv_permit_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_gv_permit_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit::class, fetch: 'LAZY')]
     protected $irfoGvPermit;
 
     /**
      * Foreign Key to irfo_psv_auth
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_psv_auth_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_psv_auth_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth::class, fetch: 'LAZY')]
     protected $irfoPsvAuth;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Net amount
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="net_amount", nullable=false)
      */
+    #[ORM\Column(type: 'decimal', name: 'net_amount', nullable: false)]
     protected $netAmount = '';
 
     /**
      * Gross amount
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="gross_amount", nullable=false)
      */
+    #[ORM\Column(type: 'decimal', name: 'gross_amount', nullable: false)]
     protected $grossAmount = '';
 
     /**
      * Vat amount
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="vat_amount", nullable=false, options={"default": 0.00})
      */
+    #[ORM\Column(type: 'decimal', name: 'vat_amount', nullable: false, options: ['default' => '0.00'])]
     protected $vatAmount = 0.00;
 
     /**
      * Invoice line no
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="invoice_line_no", nullable=false, options={"default": 1})
      */
+    #[ORM\Column(type: 'smallint', name: 'invoice_line_no', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     protected $invoiceLineNo = 1;
 
     /**
      * Invoiced date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="invoiced_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'invoiced_date', nullable: true)]
     protected $invoicedDate;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * irfoFeeExempt
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="irfo_fee_exempt", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'irfo_fee_exempt', nullable: true)]
     protected $irfoFeeExempt;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * FeeTransactions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction", mappedBy="fee", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction::class, mappedBy: 'fee', cascade: ['persist'])]
     protected $feeTransactions;
 
     /**
@@ -297,7 +270,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param int $id new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setId($id)
     {
@@ -321,7 +294,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\Fee\FeeType $feeType new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setFeeType($feeType)
     {
@@ -345,7 +318,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $feeStatus new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setFeeStatus($feeStatus)
     {
@@ -369,7 +342,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\Fee\Fee $parentFee new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setParentFee($parentFee)
     {
@@ -393,7 +366,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setApplication($application)
     {
@@ -417,7 +390,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -441,7 +414,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -465,7 +438,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\Task\Task $task new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setTask($task)
     {
@@ -489,7 +462,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setIrhpApplication($irhpApplication)
     {
@@ -513,7 +486,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication $irhpPermitApplication new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setIrhpPermitApplication($irhpPermitApplication)
     {
@@ -537,7 +510,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit $irfoGvPermit new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setIrfoGvPermit($irfoGvPermit)
     {
@@ -561,7 +534,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth $irfoPsvAuth new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setIrfoPsvAuth($irfoPsvAuth)
     {
@@ -585,7 +558,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -609,7 +582,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -633,7 +606,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param string $netAmount new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setNetAmount($netAmount)
     {
@@ -657,7 +630,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param string $grossAmount new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setGrossAmount($grossAmount)
     {
@@ -681,7 +654,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param string $vatAmount new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setVatAmount($vatAmount)
     {
@@ -705,7 +678,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param int $invoiceLineNo new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setInvoiceLineNo($invoiceLineNo)
     {
@@ -729,7 +702,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \DateTime $invoicedDate new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setInvoicedDate($invoicedDate)
     {
@@ -759,7 +732,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param string $description new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setDescription($description)
     {
@@ -783,7 +756,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param string $irfoFeeExempt new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setIrfoFeeExempt($irfoFeeExempt)
     {
@@ -807,7 +780,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param int $version new value being set
      *
-     * @return Fee
+     * @return static
      */
     public function setVersion($version)
     {
@@ -831,7 +804,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $feeTransactions collection being set as the value
      *
-     * @return Fee
+     * @return static
      */
     public function setFeeTransactions($feeTransactions)
     {
@@ -855,7 +828,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $feeTransactions collection being added
      *
-     * @return Fee
+     * @return static
      */
     public function addFeeTransactions($feeTransactions)
     {
@@ -878,7 +851,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $feeTransactions collection being removed
      *
-     * @return Fee
+     * @return static
      */
     public function removeFeeTransactions($feeTransactions)
     {

@@ -20,7 +20,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ApplicationGoodsVehiclesTest extends MockeryTestCase
+final class ApplicationGoodsVehiclesTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -33,6 +33,7 @@ class ApplicationGoodsVehiclesTest extends MockeryTestCase
 
     protected $fsm;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();

@@ -23,13 +23,14 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationUndertakingsReviewServiceTest extends MockeryTestCase
+final class VariationUndertakingsReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -128,703 +129,701 @@ class VariationUndertakingsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function providerGetConfigFromData(): array
+    public static function providerGetConfigFromData(): \Iterator
     {
-        return [
-            'psv, special restricted, not internal' => [
-                [
-                    'isGoods' => false,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED
-                    ],
-                    'isInternal' => false,
+        yield 'psv, special restricted, not internal' => [
+            [
+                'isGoods' => false,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED
                 ],
-                [
-                    'markup' => 'PSV430-translated [] [] []'
-                ]
+                'isInternal' => false,
             ],
-            'psv, restricted, not internal' => [
-                [
-                    'isGoods' => false,
+            [
+                'markup' => 'PSV430-translated [] [] []'
+            ]
+        ];
+        yield 'psv, restricted, not internal' => [
+            [
+                'isGoods' => false,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_RESTRICTED
+                ],
+                'isInternal' => false,
+            ],
+            [
+                'markup' => 'PSV430-translated [] [] []'
+            ]
+        ];
+        yield 'psv, standard national, not internal' => [
+            [
+                'isGoods' => false,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
+                ],
+                'isInternal' => false,
+            ],
+            [
+                'markup' => 'PSV430-translated [] [] [PSV430-standard-translated]'
+            ]
+        ];
+        yield 'psv, standard international, not internal' => [
+            [
+                'isGoods' => false,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                ],
+                'isInternal' => false,
+            ],
+            [
+                'markup' => 'PSV430-translated [] [] [PSV430-standard-translated]'
+            ]
+        ];
+        yield 'psv, special restricted, internal' => [
+            [
+                'isGoods' => false,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED
+                ],
+                'isInternal' => true,
+                'licence' => [
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
+                        ]
+                    ]
+                ],
+                'niFlag' => 'N'
+            ],
+            [
+                'markup' => 'PSV430-translated [PSV430-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-gb-translated]] []'
+            ]
+        ];
+        yield 'psv, restricted, internal' => [
+            [
+                'isGoods' => false,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_RESTRICTED
+                ],
+                'isInternal' => true,
+                'licence' => [
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
+                        ]
+                    ]
+                ],
+                'niFlag' => 'N'
+            ],
+            [
+                'markup' => 'PSV430-translated [PSV430-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-gb-translated]] []'
+            ]
+        ];
+        yield 'psv, standard national, internal' => [
+            [
+                'isGoods' => false,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
+                ],
+                'isInternal' => true,
+                'licence' => [
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
+                        ]
+                    ]
+                ],
+                'niFlag' => 'N'
+            ],
+            [
+                'markup' => 'PSV430-translated [PSV430-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
+                    ' [PSV430-standard-translated]'
+            ]
+        ];
+        yield 'psv, standard international, internal' => [
+            [
+                'isGoods' => false,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                ],
+                'isInternal' => true,
+                'licence' => [
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
+                        ]
+                    ]
+                ],
+                'niFlag' => 'N'
+            ],
+            [
+                'markup' => 'PSV430-translated [PSV430-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
+                    ' [PSV430-standard-translated]'
+            ]
+        ];
+        yield 'upgrade from restricted to standard national, not internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
+                ],
+                'isInternal' => false,
+                'licence' => [
                     'licenceType' => [
                         'id' => Licence::LICENCE_TYPE_RESTRICTED
                     ],
-                    'isInternal' => false,
                 ],
-                [
-                    'markup' => 'PSV430-translated [] [] []'
-                ]
+                'niFlag' => 'N'
             ],
-            'psv, standard national, not internal' => [
-                [
-                    'isGoods' => false,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                    ],
-                    'isInternal' => false,
+            [
+                'markup' => 'GV80A-translated [] []',
+            ]
+        ];
+        yield 'upgrade from restricted to standard international, not internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
                 ],
-                [
-                    'markup' => 'PSV430-translated [] [] [PSV430-standard-translated]'
-                ]
-            ],
-            'psv, standard international, not internal' => [
-                [
-                    'isGoods' => false,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'isInternal' => false,
-                ],
-                [
-                    'markup' => 'PSV430-translated [] [] [PSV430-standard-translated]'
-                ]
-            ],
-            'psv, special restricted, internal' => [
-                [
-                    'isGoods' => false,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'N'
-                ],
-                [
-                    'markup' => 'PSV430-translated [PSV430-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-gb-translated]] []'
-                ]
-            ],
-            'psv, restricted, internal' => [
-                [
-                    'isGoods' => false,
+                'isInternal' => false,
+                'licence' => [
                     'licenceType' => [
                         'id' => Licence::LICENCE_TYPE_RESTRICTED
                     ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'N'
                 ],
-                [
-                    'markup' => 'PSV430-translated [PSV430-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-gb-translated]] []'
-                ]
+                'niFlag' => 'N'
             ],
-            'psv, standard national, internal' => [
-                [
-                    'isGoods' => false,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'N'
+            [
+                'markup' => 'GV80A-translated [] []',
+            ]
+        ];
+        yield 'upgrade from restricted to standard national, not internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
                 ],
-                [
-                    'markup' => 'PSV430-translated [PSV430-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
-                        ' [PSV430-standard-translated]'
-                ]
-            ],
-            'psv, standard international, internal' => [
-                [
-                    'isGoods' => false,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'N'
-                ],
-                [
-                    'markup' => 'PSV430-translated [PSV430-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
-                        ' [PSV430-standard-translated]'
-                ]
-            ],
-            'upgrade from restricted to standard national, not internal, not ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
-                        ],
-                    ],
-                    'niFlag' => 'N'
-                ],
-                [
-                    'markup' => 'GV80A-translated [] []',
-                ]
-            ],
-            'upgrade from restricted to standard international, not internal, not ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
-                        ],
-                    ],
-                    'niFlag' => 'N'
-                ],
-                [
-                    'markup' => 'GV80A-translated [] []',
-                ]
-            ],
-            'upgrade from restricted to standard national, not internal, ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
-                        ],
-                    ],
-                    'niFlag' => 'Y'
-                ],
-                [
-                    'markup' => 'GV80A-NI-translated [] []',
-                ]
-            ],
-            'upgrade from restricted to standard international, not internal, ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
-                        ],
-                    ],
-                    'niFlag' => 'Y'
-                ],
-                [
-                    'markup' => 'GV80A-NI-translated [] []',
-                ]
-            ],
-            'upgrade from restricted to standard national, internal, not ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'N'
-                ],
-                [
-                    'markup' => 'GV80A-translated [GV80A-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]',
-                ]
-            ],
-            'upgrade from restricted to standard international, internal, not ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'N'
-                ],
-                [
-                    'markup' => 'GV80A-translated [GV80A-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]',
-                ]
-            ],
-            'upgrade from restricted to standard national, internal, ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'Y'
-                ],
-                [
-                    'markup' => 'GV80A-NI-translated [GV80A-NI-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]',
-                ]
-            ],
-            'upgrade from restricted to standard international, internal, ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'Y'
-                ],
-                [
-                    'markup' => 'GV80A-NI-translated [GV80A-NI-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]',
-                ]
-            ],
-            'goods, restricted, hgv, not internal, not ni' => [
-                [
-                    'isGoods' => true,
+                'isInternal' => false,
+                'licence' => [
                     'licenceType' => [
                         'id' => Licence::LICENCE_TYPE_RESTRICTED
                     ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
-                        ]
-                    ],
-                    'niFlag' => 'N'
                 ],
-                [
-                    'markup' => 'GV81-translated [] [] [GV81-auth-other-translated] []'
-                ]
+                'niFlag' => 'Y'
             ],
-            'goods, standard national, hgv, not internal, not ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                        ]
-                    ],
-                    'niFlag' => 'N'
+            [
+                'markup' => 'GV80A-NI-translated [] []',
+            ]
+        ];
+        yield 'upgrade from restricted to standard international, not internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
                 ],
-                [
-                    'markup' => 'GV81-translated [] [] [GV81-auth-other-translated] [GV81-standard-translated]'
-                ]
-            ],
-            'goods, standard international, mixed, not internal, not ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                        ]
-                    ],
-                    'niFlag' => 'N'
-                ],
-                [
-                    'markup' => 'GV81-translated [] [] [GV81-auth-other-translated] [GV81-standard-translated]'
-                ]
-            ],
-            'goods, standard international, lgv, not internal, not ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_LGV
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                        ]
-                    ],
-                    'niFlag' => 'N'
-                ],
-                [
-                    'markup' => 'GV81-translated [] [] [GV81-auth-lgv-translated] [GV81-standard-translated]'
-                ]
-            ],
-            'goods, restricted, hgv, internal, not ni' => [
-                [
-                    'isGoods' => true,
+                'isInternal' => false,
+                'licence' => [
                     'licenceType' => [
                         'id' => Licence::LICENCE_TYPE_RESTRICTED
                     ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'N'
                 ],
-                [
-                    'markup' => 'GV81-translated [GV81-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
-                        ' [GV81-auth-other-translated] []'
-                ]
+                'niFlag' => 'Y'
             ],
-            'goods, standard national, hgv, internal, not ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'N'
+            [
+                'markup' => 'GV80A-NI-translated [] []',
+            ]
+        ];
+        yield 'upgrade from restricted to standard national, internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
                 ],
-                [
-                    'markup' => 'GV81-translated [GV81-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
-                        ' [GV81-auth-other-translated] [GV81-standard-translated]'
-                ]
-            ],
-            'goods, standard international, mixed, internal, not ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'N'
-                ],
-                [
-                    'markup' => 'GV81-translated [GV81-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
-                        ' [GV81-auth-other-translated] [GV81-standard-translated]'
-                ]
-            ],
-            'goods, standard international, lgv, internal, not ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_LGV
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
-                        ]
-                    ],
-                    'niFlag' => 'N'
-                ],
-                [
-                    'markup' => 'GV81-translated [GV81-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
-                        ' [GV81-auth-lgv-translated] [GV81-standard-translated]'
-                ]
-            ],
-            'goods, restricted, hgv, not internal, ni' => [
-                [
-                    'isGoods' => true,
+                'isInternal' => true,
+                'licence' => [
                     'licenceType' => [
                         'id' => Licence::LICENCE_TYPE_RESTRICTED
                     ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
                         ]
-                    ],
-                    'niFlag' => 'Y'
+                    ]
                 ],
-                [
-                    'markup' => 'GV81-NI-translated [] [] [GV81-NI-auth-other-translated] []'
-                ]
+                'niFlag' => 'N'
             ],
-            'goods, standard national, hgv, not internal, ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                        ]
-                    ],
-                    'niFlag' => 'Y'
+            [
+                'markup' => 'GV80A-translated [GV80A-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]',
+            ]
+        ];
+        yield 'upgrade from restricted to standard international, internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
                 ],
-                [
-                    'markup' => 'GV81-NI-translated [] [] [GV81-NI-auth-other-translated] [GV81-NI-standard-translated]'
-                ]
-            ],
-            'goods, standard international, mixed, not internal, ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                        ]
-                    ],
-                    'niFlag' => 'Y'
-                ],
-                [
-                    'markup' => 'GV81-NI-translated [] [] [GV81-NI-auth-other-translated] [GV81-NI-standard-translated]'
-                ]
-            ],
-            'goods, standard international, lgv, not internal, ni' => [
-                [
-                    'isGoods' => true,
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_LGV
-                    ],
-                    'isInternal' => false,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                        ]
-                    ],
-                    'niFlag' => 'Y'
-                ],
-                [
-                    'markup' => 'GV81-NI-translated [] [] [GV81-auth-lgv-translated] [GV81-NI-standard-translated]'
-                ]
-            ],
-            'goods, restricted, hgv, internal, ni' => [
-                [
-                    'isGoods' => true,
+                'isInternal' => true,
+                'licence' => [
                     'licenceType' => [
                         'id' => Licence::LICENCE_TYPE_RESTRICTED
                     ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_RESTRICTED
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
                         ]
-                    ],
-                    'niFlag' => 'Y'
+                    ]
                 ],
-                [
-                    'markup' => 'GV81-NI-translated [GV81-NI-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]' .
-                        ' [GV81-NI-auth-other-translated] []'
-                ]
+                'niFlag' => 'N'
             ],
-            'goods, standard national, hgv, internal, ni' => [
-                [
-                    'isGoods' => true,
+            [
+                'markup' => 'GV80A-translated [GV80A-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]',
+            ]
+        ];
+        yield 'upgrade from restricted to standard national, internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
+                ],
+                'isInternal' => true,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_RESTRICTED
+                    ],
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
+                        ]
+                    ]
+                ],
+                'niFlag' => 'Y'
+            ],
+            [
+                'markup' => 'GV80A-NI-translated [GV80A-NI-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]',
+            ]
+        ];
+        yield 'upgrade from restricted to standard international, internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                ],
+                'isInternal' => true,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_RESTRICTED
+                    ],
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
+                        ]
+                    ]
+                ],
+                'niFlag' => 'Y'
+            ],
+            [
+                'markup' => 'GV80A-NI-translated [GV80A-NI-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]',
+            ]
+        ];
+        yield 'goods, restricted, hgv, not internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_RESTRICTED
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV
+                ],
+                'isInternal' => false,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_RESTRICTED
+                    ]
+                ],
+                'niFlag' => 'N'
+            ],
+            [
+                'markup' => 'GV81-translated [] [] [GV81-auth-other-translated] []'
+            ]
+        ];
+        yield 'goods, standard national, hgv, not internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV
+                ],
+                'isInternal' => false,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
+                    ]
+                ],
+                'niFlag' => 'N'
+            ],
+            [
+                'markup' => 'GV81-translated [] [] [GV81-auth-other-translated] [GV81-standard-translated]'
+            ]
+        ];
+        yield 'goods, standard international, mixed, not internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED
+                ],
+                'isInternal' => false,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    ]
+                ],
+                'niFlag' => 'N'
+            ],
+            [
+                'markup' => 'GV81-translated [] [] [GV81-auth-other-translated] [GV81-standard-translated]'
+            ]
+        ];
+        yield 'goods, standard international, lgv, not internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_LGV
+                ],
+                'isInternal' => false,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    ]
+                ],
+                'niFlag' => 'N'
+            ],
+            [
+                'markup' => 'GV81-translated [] [] [GV81-auth-lgv-translated] [GV81-standard-translated]'
+            ]
+        ];
+        yield 'goods, restricted, hgv, internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_RESTRICTED
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV
+                ],
+                'isInternal' => true,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_RESTRICTED
+                    ],
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
+                        ]
+                    ]
+                ],
+                'niFlag' => 'N'
+            ],
+            [
+                'markup' => 'GV81-translated [GV81-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
+                    ' [GV81-auth-other-translated] []'
+            ]
+        ];
+        yield 'goods, standard national, hgv, internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV
+                ],
+                'isInternal' => true,
+                'licence' => [
                     'licenceType' => [
                         'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
                     ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
                         ]
-                    ],
-                    'niFlag' => 'Y'
+                    ]
                 ],
-                [
-                    'markup' => 'GV81-NI-translated [GV81-NI-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]' .
-                        ' [GV81-NI-auth-other-translated] [GV81-NI-standard-translated]'
-                ]
+                'niFlag' => 'N'
             ],
-            'goods, standard international, mixed, internal, ni' => [
-                [
-                    'isGoods' => true,
+            [
+                'markup' => 'GV81-translated [GV81-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
+                    ' [GV81-auth-other-translated] [GV81-standard-translated]'
+            ]
+        ];
+        yield 'goods, standard international, mixed, internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED
+                ],
+                'isInternal' => true,
+                'licence' => [
                     'licenceType' => [
                         'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
                     ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
                         ]
-                    ],
-                    'niFlag' => 'Y'
+                    ]
                 ],
-                [
-                    'markup' => 'GV81-NI-translated [GV81-NI-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]' .
-                        ' [GV81-NI-auth-other-translated] [GV81-NI-standard-translated]'
-                ]
+                'niFlag' => 'N'
             ],
-            'goods, standard international, lgv, internal, ni' => [
-                [
-                    'isGoods' => true,
+            [
+                'markup' => 'GV81-translated [GV81-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
+                    ' [GV81-auth-other-translated] [GV81-standard-translated]'
+            ]
+        ];
+        yield 'goods, standard international, lgv, internal, not ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_LGV
+                ],
+                'isInternal' => true,
+                'licence' => [
                     'licenceType' => [
                         'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
                     ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_LGV
-                    ],
-                    'isInternal' => true,
-                    'licence' => [
-                        'licenceType' => [
-                            'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                        ],
-                        'organisation' => [
-                            'type' => [
-                                'id' => 'org_t_rc'
-                            ]
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
                         ]
-                    ],
-                    'niFlag' => 'Y'
+                    ]
                 ],
-                [
-                    'markup' => 'GV81-NI-translated [GV81-NI-declare-translated] [signature-translated' .
-                        ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]' .
-                        ' [GV81-auth-lgv-translated] [GV81-NI-standard-translated]'
-                ]
+                'niFlag' => 'N'
             ],
+            [
+                'markup' => 'GV81-translated [GV81-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-gb-translated]]' .
+                    ' [GV81-auth-lgv-translated] [GV81-standard-translated]'
+            ]
+        ];
+        yield 'goods, restricted, hgv, not internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_RESTRICTED
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV
+                ],
+                'isInternal' => false,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_RESTRICTED
+                    ]
+                ],
+                'niFlag' => 'Y'
+            ],
+            [
+                'markup' => 'GV81-NI-translated [] [] [GV81-NI-auth-other-translated] []'
+            ]
+        ];
+        yield 'goods, standard national, hgv, not internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV
+                ],
+                'isInternal' => false,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
+                    ]
+                ],
+                'niFlag' => 'Y'
+            ],
+            [
+                'markup' => 'GV81-NI-translated [] [] [GV81-NI-auth-other-translated] [GV81-NI-standard-translated]'
+            ]
+        ];
+        yield 'goods, standard international, mixed, not internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED
+                ],
+                'isInternal' => false,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    ]
+                ],
+                'niFlag' => 'Y'
+            ],
+            [
+                'markup' => 'GV81-NI-translated [] [] [GV81-NI-auth-other-translated] [GV81-NI-standard-translated]'
+            ]
+        ];
+        yield 'goods, standard international, lgv, not internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_LGV
+                ],
+                'isInternal' => false,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    ]
+                ],
+                'niFlag' => 'Y'
+            ],
+            [
+                'markup' => 'GV81-NI-translated [] [] [GV81-auth-lgv-translated] [GV81-NI-standard-translated]'
+            ]
+        ];
+        yield 'goods, restricted, hgv, internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_RESTRICTED
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV
+                ],
+                'isInternal' => true,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_RESTRICTED
+                    ],
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
+                        ]
+                    ]
+                ],
+                'niFlag' => 'Y'
+            ],
+            [
+                'markup' => 'GV81-NI-translated [GV81-NI-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]' .
+                    ' [GV81-NI-auth-other-translated] []'
+            ]
+        ];
+        yield 'goods, standard national, hgv, internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV
+                ],
+                'isInternal' => true,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL
+                    ],
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
+                        ]
+                    ]
+                ],
+                'niFlag' => 'Y'
+            ],
+            [
+                'markup' => 'GV81-NI-translated [GV81-NI-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]' .
+                    ' [GV81-NI-auth-other-translated] [GV81-NI-standard-translated]'
+            ]
+        ];
+        yield 'goods, standard international, mixed, internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED
+                ],
+                'isInternal' => true,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    ],
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
+                        ]
+                    ]
+                ],
+                'niFlag' => 'Y'
+            ],
+            [
+                'markup' => 'GV81-NI-translated [GV81-NI-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]' .
+                    ' [GV81-NI-auth-other-translated] [GV81-NI-standard-translated]'
+            ]
+        ];
+        yield 'goods, standard international, lgv, internal, ni' => [
+            [
+                'isGoods' => true,
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_LGV
+                ],
+                'isInternal' => true,
+                'licence' => [
+                    'licenceType' => [
+                        'id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    ],
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_rc'
+                        ]
+                    ]
+                ],
+                'niFlag' => 'Y'
+            ],
+            [
+                'markup' => 'GV81-NI-translated [GV81-NI-declare-translated] [signature-translated' .
+                    ' [undertakings-directors-signature-translated] [signature-address-ni-translated]]' .
+                    ' [GV81-auth-lgv-translated] [GV81-NI-standard-translated]'
+            ]
         ];
     }
 }

@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class TranslationKeyEntityTest extends EntityTester
+final class TranslationKeyEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -25,24 +25,20 @@ class TranslationKeyEntityTest extends EntityTester
     protected $entityClass = Entity::class;
 
     #[\PHPUnit\Framework\Attributes\DataProvider('canDeleteProvider')]
-    public function testCanDelete(mixed $transKeyTexts, mixed $expected): void
+    public function testCanDelete(\Closure $createTransKeyTexts, mixed $expected): void
     {
         $entity = Entity::create(
             'id',
             'description'
         );
-        $entity->addTranslationKeyTexts($transKeyTexts);
+        $entity->addTranslationKeyTexts($createTransKeyTexts());
         $this->assertEquals($expected, $entity->canDelete());
     }
 
-    public static function canDeleteProvider(): array
+    public static function canDeleteProvider(): \Iterator
     {
-        $noTexts = new ArrayCollection();
-        $texts = new ArrayCollection([m::mock(TranslationKeyText::class)]);
-        return [
-            [$noTexts, true],
-            [$texts, false]
-        ];
+        yield [static fn () => new ArrayCollection(), true];
+        yield [static fn () => new ArrayCollection([m::mock(TranslationKeyText::class)]), false];
     }
 
     /**

@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * Delete Statement Test
  */
-class DeleteStatementTest extends AbstractCommandHandlerTestCase
+final class DeleteStatementTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var DeleteCommandHandler

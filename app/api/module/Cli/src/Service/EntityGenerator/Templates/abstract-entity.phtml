@@ -41,37 +41,21 @@ use <?php echo $import; ?>;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
+ */
+#[ORM\Table(name: '<?php echo $tableName; ?>')]
+<?php foreach ($indexes as $index): ?>
+#[ORM\Index(<?php echo $this->generateOptionsFromAttributes($index, 'indexes'); ?>)]
+<?php endforeach; ?>
+<?php foreach ($uniqueConstraints as $constraint): ?>
+#[ORM\UniqueConstraint(<?php echo $this->generateOptionsFromAttributes($constraint, 'unique-constraints'); ?>)]
+<?php endforeach; ?>
+#[ORM\MappedSuperclass]
 <?php if ($hasCreatedOn || $hasModifiedOn): ?>
- * @ORM\HasLifecycleCallbacks
+#[ORM\HasLifecycleCallbacks]
 <?php endif; ?>
 <?php if ($softDeletable): ?>
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 <?php endif; ?>
- * @ORM\Table(name="<?php echo $tableName; ?>"<?php
-if (!empty($indexes) || !empty($uniqueConstraints)): ?>,
-<?php if (!empty($indexes)): ?>
- *    indexes={
-<?php foreach ($indexes as $key => $index): ?>
- *        @ORM\Index(<?php echo $this->generateOptionsFromAttributes($index, 'indexes'); ?>)<?php echo ($key < (count($indexes) - 1) ? ',' : ''); ?>
-
-<?php endforeach; ?>
- *    }<?php if (!empty($uniqueConstraints)): ?>,<?php endif; ?>
-
-<?php endif; ?>
-<?php if (!empty($uniqueConstraints)): ?>
- *    uniqueConstraints={
-<?php foreach ($uniqueConstraints as $key => $constraint): ?>
- *        @ORM\UniqueConstraint(<?php echo $this->generateOptionsFromAttributes($constraint, 'unique-constraints'); ?>)<?php echo ($key < (count($uniqueConstraints) - 1) ? ',' : ''); ?>
-
-<?php endforeach; ?>
- *    }
-<?php endif; ?>
- * )
-<?php else: ?>)
-<?php endif; ?>
- */
 abstract class <?php echo $className; ?> implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -99,10 +83,8 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
      *
      * @var <?php echo $field['property']['type']; ?>
 
-     *
-     * <?php echo $field['annotation']; ?>
-
      */
+    <?php echo $field['annotation'] . "\n"; ?>
     protected $<?php echo $field['property']['name']; ?><?php if ($field['property']['defaultValue'] !== 'null'): ?> = <?php echo $field['property']['defaultValue']; ?><?php endif; ?>;
 
 <?php endif; ?>
@@ -144,7 +126,7 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
      * @param <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?> $<?php echo $methodGenerator->formatParamName($field); ?> new value being set
 <?php endif; ?>
      *
-     * @return <?php echo $methodGenerator->getFluidReturnType($className); ?>
+     * @return <?php echo $methodGenerator->getFluidReturnType(); ?>
 
      */
     public function set<?php echo $methodGenerator->getMethodNameForField($field); ?>($<?php echo $methodGenerator->formatParamName($field); ?>)
@@ -196,7 +178,7 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?> collection being added
      *
-     * @return <?php echo $methodGenerator->getFluidReturnType($className); ?>
+     * @return <?php echo $methodGenerator->getFluidReturnType(); ?>
 
      */
     public function add<?php echo $methodGenerator->getMethodNameForField($field); ?>($<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>)
@@ -221,7 +203,7 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?> collection being removed
      *
-     * @return <?php echo $methodGenerator->getFluidReturnType($className); ?>
+     * @return <?php echo $methodGenerator->getFluidReturnType(); ?>
 
      */
     public function remove<?php echo $methodGenerator->getMethodNameForField($field); ?>($<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>)
@@ -242,6 +224,10 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
     #[\Override]
     public function __toString(): string
     {
+<?php if (count($idProperties ?? []) > 1): ?>
+        return implode('-', [<?php echo implode(', ', array_map(static fn ($property) => '(string) $this->' . $property, $idProperties)); ?>]);
+<?php else: ?>
         return (string) $this->getId();
+<?php endif; ?>
     }
 }

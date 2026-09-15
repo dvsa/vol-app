@@ -41,16 +41,19 @@ return [
                     ],
                     'case_penalty_applied',
                     true
-                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>',
+                ) . '" class="govuk-link js-modal-ajax">' . \Common\Util\Escape::html($data['id']) . '</a>',
             'hideWhenDisabled' => true
         ],
         [
             'title' => 'Penalty type',
-            'formatter' => fn($data) => $data['siPenaltyType']['id'] . ' - ' . $data['siPenaltyType']['description'],
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['siPenaltyType']['id'])
+                . ' - ' . \Common\Util\Escape::html($data['siPenaltyType']['description']),
         ],
         [
             'title' => 'Requested Identifier',
-            'formatter' => fn($data) => $data['erruPenaltyRequested']['penaltyRequestedIdentifier'],
+            'formatter' => fn($data) => \Common\Util\Escape::html(
+                $data['erruPenaltyRequested']['penaltyRequestedIdentifier']
+            ),
         ],
         [
             'title' => 'Start date',

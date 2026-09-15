@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BkmExpiry as Sut;
 /**
  * BkmExpiry Test
  */
-class BkmExpiryTest extends \PHPUnit\Framework\TestCase
+final class BkmExpiryTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -31,25 +31,23 @@ class BkmExpiryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'expiryDate' => new \DateTime('2015-12-30')
-                ],
-                '30 December 2015'
+                'expiryDate' => new \DateTime('2015-12-30')
             ],
+            '30 December 2015'
+        ];
+        yield [
             [
-                [
-                    'expiryDate' => '2015-12-30'
-                ],
-                '30 December 2015'
+                'expiryDate' => '2015-12-30'
             ],
-            [
-                [],
-                ''
-            ],
+            '30 December 2015'
+        ];
+        yield [
+            [],
+            ''
         ];
     }
 }

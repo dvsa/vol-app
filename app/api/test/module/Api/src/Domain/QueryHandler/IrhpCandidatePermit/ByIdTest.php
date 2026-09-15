@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit as IrhpCandidatePermitEntit
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class ByIdTest extends AbstractQueryByIdHandlerTestCase
+final class ByIdTest extends AbstractQueryByIdHandlerTestCase
 {
     protected $sutClass = IrhpCandidatePermitByIdHandler::class;
     protected $sutRepo = 'IrhpCandidatePermit';

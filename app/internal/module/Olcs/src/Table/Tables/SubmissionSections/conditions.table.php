@@ -40,8 +40,10 @@ return [
                  * @var TableBuilder $this
                  * @psalm-scope-this TableBuilder
                  */
-                $string = $this->translator->translate($data['addedVia']) . ' '
-                    . $data['parentId'];
+                // translate() returns its argument unchanged when the catalogue has no entry, so
+                // the row value can pass straight through it.
+                $string = \Common\Util\Escape::html($this->translator->translate($data['addedVia'])) . ' '
+                    . \Common\Util\Escape::html($data['parentId']);
                 return $string;
             },
         ],
@@ -64,7 +66,7 @@ return [
                  * @psalm-scope-this TableBuilder
                  */
                 $attachedTo = $data['attachedTo'] == 'Operating Centre' ? 'OC' : $data['attachedTo'];
-                return $this->translator->translate($attachedTo);
+                return \Common\Util\Escape::html($this->translator->translate($attachedTo));
             }
         ],
         [

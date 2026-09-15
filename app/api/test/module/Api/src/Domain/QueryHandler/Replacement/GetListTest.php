@@ -14,7 +14,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\AbstractListQueryHandlerTestCase;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class GetListTest extends AbstractListQueryHandlerTestCase
+final class GetListTest extends AbstractListQueryHandlerTestCase
 {
     protected $sutClass = Handler::class;
     protected $sutRepo = 'Replacement';

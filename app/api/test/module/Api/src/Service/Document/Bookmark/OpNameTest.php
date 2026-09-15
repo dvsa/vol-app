@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\OpName;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class OpNameTest extends \PHPUnit\Framework\TestCase
+final class OpNameTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -21,29 +21,27 @@ class OpNameTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public static function dpRenderValidDataProvider(): array
+    public static function dpRenderValidDataProvider(): \Iterator
     {
-        return [
+        yield [
+            "Testing Test Limited\nT/A: Trading Test Limited",
             [
-                "Testing Test Limited\nT/A: Trading Test Limited",
-                [
-                    'organisation' => [
-                        'name' => 'Testing Test Limited',
-                        'tradingNames' => [
-                            [
-                                'name' => 'Trading Test Limited'
-                            ]
-                        ],
-                    ]
+                'organisation' => [
+                    'name' => 'Testing Test Limited',
+                    'tradingNames' => [
+                        [
+                            'name' => 'Trading Test Limited'
+                        ]
+                    ],
                 ]
-            ],
+            ]
+        ];
+        yield [
+            "Testing Test Limited",
             [
-                "Testing Test Limited",
-                [
-                    'organisation' => [
-                        'name' => 'Testing Test Limited',
-                        'tradingNames' => [],
-                    ]
+                'organisation' => [
+                    'name' => 'Testing Test Limited',
+                    'tradingNames' => [],
                 ]
             ]
         ];

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Cli\Service\EntityGenerator;
 
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Exceptions\EntityConfigException;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\EntityData;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\EntityGeneratorInterface;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\GenerationResult;
@@ -293,7 +294,7 @@ class EntityGenerator implements EntityGeneratorInterface
                 'column' => null, // No direct column for inverse relationships
                 'handler' => null,
                 'fieldConfig' => null,
-                'annotation' => implode("\n     * ", $annotations),
+                'annotation' => implode("\n    ", $annotations),
                 'property' => [
                     'name' => $relationship['property'],
                     'type' => $propertyType,
@@ -368,9 +369,26 @@ class EntityGenerator implements EntityGeneratorInterface
             'softDeletable' => $this->hasSoftDeletable($table, $config),
             'imports' => $this->gatherImports($fields),
             'repositoryClass' => $this->getRepositoryClass($table),
+            'idProperties' => $this->getIdPropertyNames($fields),
         ];
 
         return $this->templateRenderer->render('abstract-entity', $templateData);
+    }
+
+    /**
+     * Property names of the primary key fields (composite keys yield several)
+     */
+    private function getIdPropertyNames(array $fields): array
+    {
+        $names = [];
+        foreach ($fields as $field) {
+            $column = $field['column'] ?? null;
+            if ($column instanceof ColumnMetadata && $column->isPrimary()) {
+                $names[] = $field['property']['name'];
+            }
+        }
+
+        return $names;
     }
 
     /**
@@ -582,6 +600,13 @@ class EntityGenerator implements EntityGeneratorInterface
             }
         }
 
+        // RefData never declares inverse collections (its side of every ManyToMany
+        // is deliberately not generated), so an inversedBy would point at a property
+        // that does not exist. Emit a unidirectional owning side instead.
+        if ($isOwning && $entityName === 'RefData') {
+            $inversePropertyName = null;
+        }
+
         // Build annotation based on ownership
         $annotation = $isOwning
             ? $this->buildOwningManyToManyAnnotation($targetEntity, $inversePropertyName, $relationship)
@@ -623,25 +648,23 @@ class EntityGenerator implements EntityGeneratorInterface
     /**
      * Build owning side ManyToMany annotation
      */
-    private function buildOwningManyToManyAnnotation(string $targetEntity, string $inversePropertyName, array $relationship): string
+    private function buildOwningManyToManyAnnotation(string $targetEntity, ?string $inversePropertyName, array $relationship): string
     {
+        $manyToManyArguments = $inversePropertyName === null
+            ? sprintf("targetEntity: \\%s::class, fetch: 'LAZY'", ltrim($targetEntity, '\\'))
+            : sprintf("targetEntity: \\%s::class, inversedBy: '%s', fetch: 'LAZY'", ltrim($targetEntity, '\\'), $inversePropertyName);
+
         return sprintf(
-            '@ORM\ManyToMany(targetEntity="%s", inversedBy="%s", fetch="LAZY")' . "\n" .
-            '     * @ORM\JoinTable(name="%s",' . "\n" .
-            '     *     joinColumns={' . "\n" .
-            '     *         @ORM\JoinColumn(name="%s", referencedColumnName="%s")' . "\n" .
-            '     *     },' . "\n" .
-            '     *     inverseJoinColumns={' . "\n" .
-            '     *         @ORM\JoinColumn(name="%s", referencedColumnName="%s")' . "\n" .
-            '     *     }' . "\n" .
-            '     * )',
-            $targetEntity,
-            $inversePropertyName,
+            "#[ORM\\JoinTable(name: '%s')]\n    " .
+            "#[ORM\\JoinColumn(name: '%s', referencedColumnName: '%s')]\n    " .
+            "#[ORM\\InverseJoinColumn(name: '%s', referencedColumnName: '%s')]\n    " .
+            "#[ORM\\ManyToMany(%s)]",
             $relationship['join_table'],
             $relationship['join_columns'][0],
             $relationship['local_columns'][0],
             $relationship['inverse_join_columns'][0],
-            $relationship['foreign_columns'][0]
+            $relationship['foreign_columns'][0],
+            $manyToManyArguments
         );
     }
 
@@ -651,8 +674,8 @@ class EntityGenerator implements EntityGeneratorInterface
     private function buildInverseManyToManyAnnotation(string $targetEntity, string $propertyName): string
     {
         return sprintf(
-            '@ORM\ManyToMany(targetEntity="%s", mappedBy="%s", fetch="LAZY")',
-            $targetEntity,
+            "#[ORM\\ManyToMany(targetEntity: \\%s::class, mappedBy: '%s', fetch: 'LAZY')]",
+            ltrim($targetEntity, '\\'),
             $propertyName
         );
     }

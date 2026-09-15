@@ -34,7 +34,7 @@ class XmlStructureInputFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Input
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Input
     {
         $inputName = 'xml_structure';
         $service = new Input($inputName);

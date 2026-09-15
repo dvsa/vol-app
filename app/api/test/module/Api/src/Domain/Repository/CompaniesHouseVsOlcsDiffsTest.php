@@ -11,7 +11,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseVsOlcsDiffs::class)]
-class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
+final class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
 {
     /** @var  m\MockInterface */
     private $mockStmt;
@@ -21,6 +21,7 @@ class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
     /** @var CompaniesHouseVsOlcsDiffs */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockStmt = m::mock(Result::class);
@@ -41,7 +42,7 @@ class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
 
             ->andReturn($this->mockStmt);
 
-        static::assertSame($this->mockStmt, $this->sut->fetchOfficerDiffs());
+        $this->assertSame($this->mockStmt, $this->sut->fetchOfficerDiffs());
     }
 
     public function testFetchAddressDiffs(): void
@@ -52,7 +53,7 @@ class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
             ->with(m::pattern('/^CALL sp_ch_vs_olcs_diff_/'))
             ->andReturn($this->mockStmt);
 
-        static::assertSame($this->mockStmt, $this->sut->fetchAddressDiffs());
+        $this->assertSame($this->mockStmt, $this->sut->fetchAddressDiffs());
     }
 
     public function testFetchNameDiffs(): void
@@ -63,7 +64,7 @@ class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
             ->with(m::pattern('/^CALL sp_ch_vs_olcs_diff_/'))
             ->andReturn($this->mockStmt);
 
-        static::assertSame($this->mockStmt, $this->sut->fetchNameDiffs());
+        $this->assertSame($this->mockStmt, $this->sut->fetchNameDiffs());
     }
 
     public function testFetchWithNotActiveStatus(): void
@@ -74,6 +75,6 @@ class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
             ->with(m::pattern('/^CALL sp_ch_vs_olcs_diff/'))
             ->andReturn($this->mockStmt);
 
-        static::assertSame($this->mockStmt, $this->sut->fetchWithNotActiveStatus());
+        $this->assertSame($this->mockStmt, $this->sut->fetchWithNotActiveStatus());
     }
 }

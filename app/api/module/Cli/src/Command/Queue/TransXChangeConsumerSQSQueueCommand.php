@@ -11,7 +11,7 @@ class TransXChangeConsumerSQSQueueCommand extends AbstractSQSCommand
     protected static $defaultName = 'queue:transxchange-consumer';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Processes TransXChange queue items.')
             ->setHelp('This command allows you to process items in the TransXChange queue.');

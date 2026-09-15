@@ -20,14 +20,14 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class ContactDetailsEntityTest extends EntityTester
+final class ContactDetailsEntityTest extends EntityTester
 {
-    public const DEF_ADDRESS_ID = 8888;
-    public const DEF_PHONE_ID = 9999;
-    public const DEF_PHONE_NR = 'unit_PhoneNr';
-    public const DEF_PHONE_TYPE = PhoneContact::TYPE_PRIMARY;
-    public const DEF_COUNTRY_CODE = 'unit_CountryCode';
-    public const DEF_PERSON_ID = 77777;
+    public const int DEF_ADDRESS_ID = 8888;
+    public const int DEF_PHONE_ID = 9999;
+    public const string DEF_PHONE_NR = 'unit_PhoneNr';
+    public const string DEF_PHONE_TYPE = PhoneContact::TYPE_PRIMARY;
+    public const string DEF_COUNTRY_CODE = 'unit_CountryCode';
+    public const int DEF_PERSON_ID = 77777;
 
     /**
      * Define the entity to test
@@ -59,129 +59,127 @@ class ContactDetailsEntityTest extends EntityTester
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCreate')]
     public function testCreate(mixed $contactType, array $data = [], array $expect = []): void
     {
-        $cdTypeEntity = (new RefData())->setId($contactType);
+        $cdTypeEntity = new RefData()->setId($contactType);
 
         //  call
         $sut = ContactDetails::create($cdTypeEntity, $data);
 
         //  check
-        static::assertSame($cdTypeEntity, $sut->getContactType());
+        $this->assertSame($cdTypeEntity, $sut->getContactType());
 
         if (isset($expect['address'])) {
-            static::assertEquals($expect['address'], $sut->getAddress());
+            $this->assertEquals($expect['address'], $sut->getAddress());
         } else {
-            static::assertNull($sut->getAddress());
+            $this->assertNull($sut->getAddress());
         }
 
-        static::assertEquals($expect['email'] ?? null, $sut->getEmailAddress());
-        static::assertEquals($expect['desc'] ?? null, $sut->getDescription());
+        $this->assertEquals($expect['email'] ?? null, $sut->getEmailAddress());
+        $this->assertEquals($expect['desc'] ?? null, $sut->getDescription());
 
         if (isset($expect['person'])) {
-            static::assertEquals($expect['person'], $sut->getPerson());
+            $this->assertEquals($expect['person'], $sut->getPerson());
         } else {
-            static::assertNull($sut->getPerson());
+            $this->assertNull($sut->getPerson());
         }
 
         $phoneContacts = $sut->getPhoneContacts();
-        static::assertInstanceOf(ArrayCollection::class, $phoneContacts);
-        static::assertEmpty($phoneContacts);
+        $this->assertInstanceOf(ArrayCollection::class, $phoneContacts);
+        $this->assertEmpty($phoneContacts);
     }
 
-    public static function dpTestCreate(): array
+    public static function dpTestCreate(): \Iterator
     {
-        return [
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_IRFO_OPERATOR,
-            ],
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_PARTNER,
-                'data' => [
-                    'description' => null,
-                    'address' => [
-                        'addressLine1' => null,
-                        'addressLine2' => null,
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => null,
-                        'postcode' => null,
-                        'countryCode' => null,
-                    ],
-                ],
-                'expect' => [
-                    'desc' => null,
-                    'address' => new Address(),
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_IRFO_OPERATOR,
+        ];
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_PARTNER,
+            'data' => [
+                'description' => null,
+                'address' => [
+                    'addressLine1' => null,
+                    'addressLine2' => null,
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => null,
+                    'postcode' => null,
+                    'countryCode' => null,
                 ],
             ],
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_OBJECTOR,
+            'expect' => [
+                'desc' => null,
+                'address' => new Address(),
             ],
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_STATEMENT_REQUESTOR,
-                'data' => [
-                    'person' => [
-                        'title' => null,
-                        'forename' => null,
-                        'familyName' => null,
-                        'birthDate' => null,
-                    ],
-                    'address' => [
-                        'addressLine1' => null,
-                        'addressLine2' => null,
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => null,
-                        'postcode' => null,
-                        'countryCode' => null,
-                    ],
+        ];
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_OBJECTOR,
+        ];
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_STATEMENT_REQUESTOR,
+            'data' => [
+                'person' => [
+                    'title' => null,
+                    'forename' => null,
+                    'familyName' => null,
+                    'birthDate' => null,
                 ],
-                'expect' => [
-                    'person' => new Person(),
-                    'address' => new Address(),
-                ],
-            ],
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_USER,
-                'data' => [
-                    'emailAddress' => null,
-                    'person' => [
-                        'title' => null,
-                        'forename' => null,
-                        'familyName' => null,
-                        'birthDate' => null,
-                    ],
-                ],
-                'expect' => [
-                    'email' => null,
-                    'person' => new Person(),
+                'address' => [
+                    'addressLine1' => null,
+                    'addressLine2' => null,
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => null,
+                    'postcode' => null,
+                    'countryCode' => null,
                 ],
             ],
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_COMPLAINANT,
-                'data' => [
-                    'person' => [
-                        'title' => null,
-                        'forename' => null,
-                        'familyName' => null,
-                        'birthDate' => null,
-                    ],
-                    'address' => [
-                        'addressLine1' => null,
-                        'addressLine2' => null,
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => null,
-                        'postcode' => null,
-                        'countryCode' => null,
-                    ],
-                ],
-                'expect' => [
-                    'person' => new Person(),
-                    'address' => new Address(),
+            'expect' => [
+                'person' => new Person(),
+                'address' => new Address(),
+            ],
+        ];
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_USER,
+            'data' => [
+                'emailAddress' => null,
+                'person' => [
+                    'title' => null,
+                    'forename' => null,
+                    'familyName' => null,
+                    'birthDate' => null,
                 ],
             ],
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_CORRESPONDENCE_ADDRESS,
+            'expect' => [
+                'email' => null,
+                'person' => new Person(),
             ],
+        ];
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_COMPLAINANT,
+            'data' => [
+                'person' => [
+                    'title' => null,
+                    'forename' => null,
+                    'familyName' => null,
+                    'birthDate' => null,
+                ],
+                'address' => [
+                    'addressLine1' => null,
+                    'addressLine2' => null,
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => null,
+                    'postcode' => null,
+                    'countryCode' => null,
+                ],
+            ],
+            'expect' => [
+                'person' => new Person(),
+                'address' => new Address(),
+            ],
+        ];
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_CORRESPONDENCE_ADDRESS,
         ];
     }
 
@@ -211,25 +209,25 @@ class ContactDetailsEntityTest extends EntityTester
 
         $sut->update($contactParams, false);
 
-        static::assertEquals($emailAddress, $sut->getEmailAddress());
-        static::assertEquals($address, $sut->getAddress());
-        static::assertEquals($person, $sut->getPerson());
-        static::assertEquals($phoneContacts, $sut->getPhoneContacts());
+        $this->assertEquals($emailAddress, $sut->getEmailAddress());
+        $this->assertEquals($address, $sut->getAddress());
+        $this->assertEquals($person, $sut->getPerson());
+        $this->assertEquals($phoneContacts, $sut->getPhoneContacts());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestUpdate')]
     public function testUpdate(mixed $contactType, mixed $data, mixed $expect, mixed $fromInternal): void
     {
-        $cdTypeEntity = (new RefData())->setId($contactType);
+        $cdTypeEntity = new RefData()->setId($contactType);
 
         $sut = new ContactDetails($cdTypeEntity);
-        $sut->setAddress((new Address())->setId(self::DEF_ADDRESS_ID));
-        $sut->setPerson((new Person())->setId(self::DEF_PERSON_ID));
+        $sut->setAddress(new Address()->setId(self::DEF_ADDRESS_ID));
+        $sut->setPerson(new Person()->setId(self::DEF_PERSON_ID));
 
         $mockPhoneCollection = new ArrayCollection();
         $mockPhoneCollection->offsetSet(
             self::DEF_PHONE_ID,
-            (new PhoneContact(new RefData(self::DEF_PHONE_TYPE)))
+            new PhoneContact(new RefData(self::DEF_PHONE_TYPE))
                 ->setId(self::DEF_PHONE_ID)
                 ->setPhoneNumber(self::DEF_PHONE_NR)
         );
@@ -240,7 +238,7 @@ class ContactDetailsEntityTest extends EntityTester
         $sut->update($data, $fromInternal);
 
         //  check
-        static::assertSame($cdTypeEntity, $sut->getContactType());
+        $this->assertSame($cdTypeEntity, $sut->getContactType());
 
         $checkPhones = [];
         /** @var PhoneContact $phone */
@@ -254,465 +252,460 @@ class ContactDetailsEntityTest extends EntityTester
 
         $person = $sut->getPerson();
 
-        static::assertEquals(self::DEF_ADDRESS_ID, $sut->getAddress()->getId());
-        static::assertEquals(self::DEF_PERSON_ID, $person->getId());
+        $this->assertEquals(self::DEF_ADDRESS_ID, $sut->getAddress()->getId());
+        $this->assertEquals(self::DEF_PERSON_ID, $person->getId());
 
-        static::assertEquals(
-            $expect,
-            array_filter(
-                [
-                    'desc' => $sut->getDescription(),
-                    'email' => $sut->getEmailAddress(),
-                    'address' => $sut->getAddress()->toArray(),
-                    'person' => array_filter(
-                        [
-                            'title' => $person->getTitle(),
-                            'fullName' => $person->getFullName(),
-                            'dob' => ($person->getBirthDate() ? $person->getBirthDate()->format('Y-m-d') : null),
-                        ]
-                    ),
-                    'phones' => $checkPhones,
-                ]
-            )
-        );
+        $this->assertEquals($expect, array_filter(
+            [
+                'desc' => $sut->getDescription(),
+                'email' => $sut->getEmailAddress(),
+                'address' => $sut->getAddress()->toArray(),
+                'person' => array_filter(
+                    [
+                        'title' => $person->getTitle(),
+                        'fullName' => $person->getFullName(),
+                        'dob' => ($person->getBirthDate() ? $person->getBirthDate()->format('Y-m-d') : null),
+                    ]
+                ),
+                'phones' => $checkPhones,
+            ]
+        ));
     }
 
-    public static function dpTestUpdate(): array
+    public static function dpTestUpdate(): \Iterator
     {
-        return [
-            //  test CONTACT_TYPE_IRFO_OPERATOR
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_IRFO_OPERATOR,
-                'data' => [
-                    'emailAddress' => 'unit_Email',
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => 'unit_Addr3',
-                        'addressLine4' => 'unit_Addr4',
-                        'town' => 'unit_Town',
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => (new Country())->setId('Unit_Other_CountryCode'),
+        //  test CONTACT_TYPE_IRFO_OPERATOR
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_IRFO_OPERATOR,
+            'data' => [
+                'emailAddress' => 'unit_Email',
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => 'unit_Addr3',
+                    'addressLine4' => 'unit_Addr4',
+                    'town' => 'unit_Town',
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => new Country()->setId('Unit_Other_CountryCode'),
+                ],
+                'phoneContacts' => [
+                    [
+                        'id' => null,
+                        'phoneContactType' => new RefData('unit_PhoneContactType1'),
+                        'phoneNumber' => 'unit_Phone1',
                     ],
-                    'phoneContacts' => [
-                        [
-                            'id' => null,
-                            'phoneContactType' => new RefData('unit_PhoneContactType1'),
-                            'phoneNumber' => 'unit_Phone1',
-                        ],
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'phoneContactType' => new RefData('unit_Other_PhoneContactType'),
-                            'phoneNumber' => 'unit_Phone2',
-                        ],
-                        [
-                            'phoneContactType' => new RefData('unit_PhoneContactType2'),
-                            'phoneNumber' => '',
-                        ],
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'phoneContactType' => new RefData('unit_Other_PhoneContactType'),
+                        'phoneNumber' => 'unit_Phone2',
+                    ],
+                    [
+                        'phoneContactType' => new RefData('unit_PhoneContactType2'),
+                        'phoneNumber' => '',
                     ],
                 ],
-                'expect' => [
-                    'email' => 'unit_Email',
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => 'unit_Addr3',
-                        'addressLine4' => 'unit_Addr4',
-                        'town' => 'unit_Town',
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => 'Unit_Other_CountryCode',
-                    ],
-                    'phones' => [
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'type' => self::DEF_PHONE_TYPE,
-                            'number' => 'unit_Phone2',
-                        ],
-                        [
-                            'id' => null,
-                            'type' => 'unit_PhoneContactType1',
-                            'number' => 'unit_Phone1',
-                        ],
-                    ],
-                ],
-                "fromInternal" => false
             ],
-            //  test update of CONTACT_TYPE_PARTNER
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_PARTNER,
-                'data' => [
-                    'description' => 'unit_Desc',
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => 'unit_Addr3',
-                        'addressLine4' => 'unit_Addr4',
-                        'town' => 'unit_Town',
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => null,
+            'expect' => [
+                'email' => 'unit_Email',
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => 'unit_Addr3',
+                    'addressLine4' => 'unit_Addr4',
+                    'town' => 'unit_Town',
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => 'Unit_Other_CountryCode',
+                ],
+                'phones' => [
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'type' => self::DEF_PHONE_TYPE,
+                        'number' => 'unit_Phone2',
+                    ],
+                    [
+                        'id' => null,
+                        'type' => 'unit_PhoneContactType1',
+                        'number' => 'unit_Phone1',
                     ],
                 ],
-                'expect' => [
-                    'desc' => 'unit_Desc',
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => 'unit_Addr3',
-                        'addressLine4' => 'unit_Addr4',
-                        'town' => 'unit_Town',
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => null,
-                    ],
-                    'phones' => [
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'type' => self::DEF_PHONE_TYPE,
-                            'number' => self::DEF_PHONE_NR,
-                        ],
-                    ],
-                ],
-                "fromInternal" => false
             ],
-            //  test update of CONTACT_TYPE_OBJECTOR
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_OBJECTOR,
-                'data' => [
-                    'emailAddress' => 'unit_Email',
-                    'description' => 'unit_Desc',
-                    'person' => [
-                        'title' => null,
-                        'forename' => 'unit_ForeName',
-                        'familyName' => 'unit_FamilyName',
-                        'birthDate' => '1976-05-04',
-                    ],
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => null,
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => 'unit_Town',
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => (new Country())->setId(self::DEF_COUNTRY_CODE),
-                    ],
-                    'phoneContacts' => [
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'phoneContactType' => new RefData('unit_Other_PhoneContactType'),
-                            'phoneNumber' => 'unit_PhoneNumber',
-                        ],
-                    ],
+            "fromInternal" => false
+        ];
+        //  test update of CONTACT_TYPE_PARTNER
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_PARTNER,
+            'data' => [
+                'description' => 'unit_Desc',
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => 'unit_Addr3',
+                    'addressLine4' => 'unit_Addr4',
+                    'town' => 'unit_Town',
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => null,
                 ],
-                'expect' => [
-                    'email' => 'unit_Email',
-                    'desc' => 'unit_Desc',
-                    'person' => [
-                        'fullName' => 'unit_ForeName unit_FamilyName',
-                        'dob' => '1976-05-04',
-                    ],
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => null,
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => 'unit_Town',
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => self::DEF_COUNTRY_CODE,
-                    ],
-                    'phones' => [
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'type' => self::DEF_PHONE_TYPE,
-                            'number' => 'unit_PhoneNumber',
-                        ],
-                    ],
-                ],
-                "fromInternal" => false
             ],
-            //  test update of CONTACT_TYPE_STATEMENT_REQUESTOR
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_STATEMENT_REQUESTOR,
-                'data' => [
-                    'person' => [
-                        'title' => new RefData('unit_Title'),
-                        'forename' => null,
-                        'familyName' => 'unit_FamilyName',
-                        'birthDate' => '1977-06-05',
-                    ],
-                    'address' => [
-                        'addressLine1' => null,
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => null,
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => null,
+            'expect' => [
+                'desc' => 'unit_Desc',
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => 'unit_Addr3',
+                    'addressLine4' => 'unit_Addr4',
+                    'town' => 'unit_Town',
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => null,
+                ],
+                'phones' => [
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'type' => self::DEF_PHONE_TYPE,
+                        'number' => self::DEF_PHONE_NR,
                     ],
                 ],
-                'expect' => [
-                    'person' => [
-                        'title' => 'unit_Title',
-                        'fullName' => 'unit_FamilyName',
-                        'dob' => '1977-06-05',
-                    ],
-                    'address' => [
-                        'addressLine1' => null,
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => null,
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => null,
-                    ],
-                    'phones' => [
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'type' => self::DEF_PHONE_TYPE,
-                            'number' => self::DEF_PHONE_NR,
-                        ],
-                    ],
-                ],
-                "fromInternal" => false
             ],
-            //  test update of CONTACT_TYPE_USER FROM SelfServe
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_USER,
-                'data' => [
-                    'emailAddress' => 'unit_Email',
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => null,
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => (new Country())->setId('unit_CountryCodeUser'),
-                    ],
-                    'phoneContacts' => [
-                        [
-                            'id' => null,
-                            'phoneContactType' => new RefData('unit_PhoneContactType1'),
-                            'phoneNumber' => 'unit_Phone1',
-                        ],
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'phoneContactType' => new RefData('unit_Other_PhoneContactType'),
-                            'phoneNumber' => '',
-                        ],
+            "fromInternal" => false
+        ];
+        //  test update of CONTACT_TYPE_OBJECTOR
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_OBJECTOR,
+            'data' => [
+                'emailAddress' => 'unit_Email',
+                'description' => 'unit_Desc',
+                'person' => [
+                    'title' => null,
+                    'forename' => 'unit_ForeName',
+                    'familyName' => 'unit_FamilyName',
+                    'birthDate' => '1976-05-04',
+                ],
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => null,
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => 'unit_Town',
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => new Country()->setId(self::DEF_COUNTRY_CODE),
+                ],
+                'phoneContacts' => [
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'phoneContactType' => new RefData('unit_Other_PhoneContactType'),
+                        'phoneNumber' => 'unit_PhoneNumber',
                     ],
                 ],
-                'expect' => [
-                    'email' => 'unit_Email',
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => null,
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => 'unit_CountryCodeUser',
-                    ],
-                    'phones' => [
-                        [
-                            'id' => null,
-                            'type' => 'unit_PhoneContactType1',
-                            'number' => 'unit_Phone1',
-                        ],
-                    ],
-                ],
-                "fromInternal" => false
             ],
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_USER,
-                'data' => [
-                    'emailAddress' => 'unit_Email',
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => null,
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => (new Country())->setId('unit_CountryCodeUser'),
-                    ],
-                    'phoneContacts' => [
-                        [
-                            'id' => null,
-                            'phoneContactType' => new RefData('unit_PhoneContactType1'),
-                            'phoneNumber' => 'unit_Phone1',
-                        ],
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'phoneContactType' => new RefData('unit_Other_PhoneContactType'),
-                            'phoneNumber' => '',
-                        ],
+            'expect' => [
+                'email' => 'unit_Email',
+                'desc' => 'unit_Desc',
+                'person' => [
+                    'fullName' => 'unit_ForeName unit_FamilyName',
+                    'dob' => '1976-05-04',
+                ],
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => null,
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => 'unit_Town',
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => self::DEF_COUNTRY_CODE,
+                ],
+                'phones' => [
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'type' => self::DEF_PHONE_TYPE,
+                        'number' => 'unit_PhoneNumber',
                     ],
                 ],
-                'expect' => [
-                    'email' => 'unit_Email',
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => null,
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => 'unit_CountryCodeUser',
-                    ],
-                    'phones' => [
-                        [
-                            'id' => null,
-                            'type' => 'unit_PhoneContactType1',
-                            'number' => 'unit_Phone1',
-                        ],
-                    ],
-                ],
-                "fromInternal" => true
             ],
-            'TM from internal' => [
-                'contactType' => ContactDetails::CONTACT_TYPE_TRANSPORT_MANAGER,
-                'data' => [
-                    'emailAddress' => 'unit_Email',
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => null,
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => (new Country())->setId('unit_CountryCodeUser'),
-                    ],
-                    'phoneContacts' => [
-                        [
-                            'id' => null,
-                            'phoneContactType' => new RefData('unit_PhoneContactType1'),
-                            'phoneNumber' => 'unit_Phone1',
-                        ],
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'phoneContactType' => new RefData('unit_Other_PhoneContactType'),
-                            'phoneNumber' => '',
-                        ],
-                    ],
+            "fromInternal" => false
+        ];
+        //  test update of CONTACT_TYPE_STATEMENT_REQUESTOR
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_STATEMENT_REQUESTOR,
+            'data' => [
+                'person' => [
+                    'title' => new RefData('unit_Title'),
+                    'forename' => null,
+                    'familyName' => 'unit_FamilyName',
+                    'birthDate' => '1977-06-05',
                 ],
-                'expect' => [
-                    'email' => 'unit_Email',
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => null,
-                        'addressLine4' => null,
-                        'town' => null,
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => 'unit_CountryCodeUser',
-                    ],
-                    'phones' => [
-                        [
-                            'id' => null,
-                            'type' => 'unit_PhoneContactType1',
-                            'number' => 'unit_Phone1',
-                        ],
-                    ],
+                'address' => [
+                    'addressLine1' => null,
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => null,
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => null,
                 ],
-                "fromInternal" => true
             ],
-            //  test update of CONTACT_TYPE_COMPLAINANT
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_COMPLAINANT,
-                'data' => [
-                    'person' => [
-                        'title' => new RefData('unit_PersonTitle'),
-                        'forename' => 'unit_ForeName',
-                        'familyName' => 'unit_FamilyName',
-                        'birthDate' => '1978-07-06',
-                    ],
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => 'unit_Addr3',
-                        'addressLine4' => 'unit_Addr4',
-                        'town' => 'unit_Town',
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => (new Country())->setId(self::DEF_COUNTRY_CODE),
+            'expect' => [
+                'person' => [
+                    'title' => 'unit_Title',
+                    'fullName' => 'unit_FamilyName',
+                    'dob' => '1977-06-05',
+                ],
+                'address' => [
+                    'addressLine1' => null,
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => null,
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => null,
+                ],
+                'phones' => [
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'type' => self::DEF_PHONE_TYPE,
+                        'number' => self::DEF_PHONE_NR,
                     ],
                 ],
-                'expect' => [
-                    'person' => [
-                        'title' => 'unit_PersonTitle',
-                        'fullName' => 'unit_ForeName unit_FamilyName',
-                        'dob' => '1978-07-06',
-                    ],
-                    'address' => [
-                        'addressLine1' => 'unit_Addr1',
-                        'addressLine2' => 'unit_Addr2',
-                        'addressLine3' => 'unit_Addr3',
-                        'addressLine4' => 'unit_Addr4',
-                        'town' => 'unit_Town',
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => self::DEF_COUNTRY_CODE,
-                    ],
-                    'phones' => [
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'type' => self::DEF_PHONE_TYPE,
-                            'number' => self::DEF_PHONE_NR,
-                        ],
-                    ],
-                ],
-                "fromInternal" => false
             ],
-            //  test update of CONTACT_TYPE_
-            [
-                'contactType' => ContactDetails::CONTACT_TYPE_CORRESPONDENCE_ADDRESS,
-                'data' => [
-                    'emailAddress' => 'unit_Email',
-                    'address' => [
-                        'addressLine1' => null,
-                        'addressLine2' => null,
-                        'addressLine3' => null,
-                        'addressLine4' => 'unit_Addr4',
-                        'town' => null,
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => (new Country())->setId(self::DEF_COUNTRY_CODE),
+            "fromInternal" => false
+        ];
+        //  test update of CONTACT_TYPE_USER FROM SelfServe
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_USER,
+            'data' => [
+                'emailAddress' => 'unit_Email',
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => null,
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => new Country()->setId('unit_CountryCodeUser'),
+                ],
+                'phoneContacts' => [
+                    [
+                        'id' => null,
+                        'phoneContactType' => new RefData('unit_PhoneContactType1'),
+                        'phoneNumber' => 'unit_Phone1',
                     ],
-                    'phoneContacts' => [
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'phoneContactType' => new RefData('unit_PhoneContactType1'),
-                            'phoneNumber' => 'unit_Phone1',
-                        ],
-                        [
-                            'id' => null,
-                            'phoneContactType' => new RefData('unit_PhoneContactType2'),
-                            'phoneNumber' => 'unit_Phone2',
-                        ],
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'phoneContactType' => new RefData('unit_Other_PhoneContactType'),
+                        'phoneNumber' => '',
                     ],
                 ],
-                'expect' => [
-                    'email' => 'unit_Email',
-                    'address' => [
-                        'addressLine1' => null,
-                        'addressLine2' => null,
-                        'addressLine3' => null,
-                        'addressLine4' => 'unit_Addr4',
-                        'town' => null,
-                        'postcode' => 'unit_PostCode',
-                        'countryCode' => self::DEF_COUNTRY_CODE,
-                    ],
-                    'phones' => [
-                        [
-                            'id' => self::DEF_PHONE_ID,
-                            'type' => self::DEF_PHONE_TYPE,
-                            'number' => 'unit_Phone1',
-                        ],
-                        [
-                            'id' => null,
-                            'type' => 'unit_PhoneContactType2',
-                            'number' => 'unit_Phone2',
-                        ],
-                    ],
-                ],
-                "fromInternal" => false
             ],
+            'expect' => [
+                'email' => 'unit_Email',
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => null,
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => 'unit_CountryCodeUser',
+                ],
+                'phones' => [
+                    [
+                        'id' => null,
+                        'type' => 'unit_PhoneContactType1',
+                        'number' => 'unit_Phone1',
+                    ],
+                ],
+            ],
+            "fromInternal" => false
+        ];
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_USER,
+            'data' => [
+                'emailAddress' => 'unit_Email',
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => null,
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => new Country()->setId('unit_CountryCodeUser'),
+                ],
+                'phoneContacts' => [
+                    [
+                        'id' => null,
+                        'phoneContactType' => new RefData('unit_PhoneContactType1'),
+                        'phoneNumber' => 'unit_Phone1',
+                    ],
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'phoneContactType' => new RefData('unit_Other_PhoneContactType'),
+                        'phoneNumber' => '',
+                    ],
+                ],
+            ],
+            'expect' => [
+                'email' => 'unit_Email',
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => null,
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => 'unit_CountryCodeUser',
+                ],
+                'phones' => [
+                    [
+                        'id' => null,
+                        'type' => 'unit_PhoneContactType1',
+                        'number' => 'unit_Phone1',
+                    ],
+                ],
+            ],
+            "fromInternal" => true
+        ];
+        yield 'TM from internal' => [
+            'contactType' => ContactDetails::CONTACT_TYPE_TRANSPORT_MANAGER,
+            'data' => [
+                'emailAddress' => 'unit_Email',
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => null,
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => new Country()->setId('unit_CountryCodeUser'),
+                ],
+                'phoneContacts' => [
+                    [
+                        'id' => null,
+                        'phoneContactType' => new RefData('unit_PhoneContactType1'),
+                        'phoneNumber' => 'unit_Phone1',
+                    ],
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'phoneContactType' => new RefData('unit_Other_PhoneContactType'),
+                        'phoneNumber' => '',
+                    ],
+                ],
+            ],
+            'expect' => [
+                'email' => 'unit_Email',
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => null,
+                    'addressLine4' => null,
+                    'town' => null,
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => 'unit_CountryCodeUser',
+                ],
+                'phones' => [
+                    [
+                        'id' => null,
+                        'type' => 'unit_PhoneContactType1',
+                        'number' => 'unit_Phone1',
+                    ],
+                ],
+            ],
+            "fromInternal" => true
+        ];
+        //  test update of CONTACT_TYPE_COMPLAINANT
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_COMPLAINANT,
+            'data' => [
+                'person' => [
+                    'title' => new RefData('unit_PersonTitle'),
+                    'forename' => 'unit_ForeName',
+                    'familyName' => 'unit_FamilyName',
+                    'birthDate' => '1978-07-06',
+                ],
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => 'unit_Addr3',
+                    'addressLine4' => 'unit_Addr4',
+                    'town' => 'unit_Town',
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => new Country()->setId(self::DEF_COUNTRY_CODE),
+                ],
+            ],
+            'expect' => [
+                'person' => [
+                    'title' => 'unit_PersonTitle',
+                    'fullName' => 'unit_ForeName unit_FamilyName',
+                    'dob' => '1978-07-06',
+                ],
+                'address' => [
+                    'addressLine1' => 'unit_Addr1',
+                    'addressLine2' => 'unit_Addr2',
+                    'addressLine3' => 'unit_Addr3',
+                    'addressLine4' => 'unit_Addr4',
+                    'town' => 'unit_Town',
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => self::DEF_COUNTRY_CODE,
+                ],
+                'phones' => [
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'type' => self::DEF_PHONE_TYPE,
+                        'number' => self::DEF_PHONE_NR,
+                    ],
+                ],
+            ],
+            "fromInternal" => false
+        ];
+        //  test update of CONTACT_TYPE_
+        yield [
+            'contactType' => ContactDetails::CONTACT_TYPE_CORRESPONDENCE_ADDRESS,
+            'data' => [
+                'emailAddress' => 'unit_Email',
+                'address' => [
+                    'addressLine1' => null,
+                    'addressLine2' => null,
+                    'addressLine3' => null,
+                    'addressLine4' => 'unit_Addr4',
+                    'town' => null,
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => new Country()->setId(self::DEF_COUNTRY_CODE),
+                ],
+                'phoneContacts' => [
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'phoneContactType' => new RefData('unit_PhoneContactType1'),
+                        'phoneNumber' => 'unit_Phone1',
+                    ],
+                    [
+                        'id' => null,
+                        'phoneContactType' => new RefData('unit_PhoneContactType2'),
+                        'phoneNumber' => 'unit_Phone2',
+                    ],
+                ],
+            ],
+            'expect' => [
+                'email' => 'unit_Email',
+                'address' => [
+                    'addressLine1' => null,
+                    'addressLine2' => null,
+                    'addressLine3' => null,
+                    'addressLine4' => 'unit_Addr4',
+                    'town' => null,
+                    'postcode' => 'unit_PostCode',
+                    'countryCode' => self::DEF_COUNTRY_CODE,
+                ],
+                'phones' => [
+                    [
+                        'id' => self::DEF_PHONE_ID,
+                        'type' => self::DEF_PHONE_TYPE,
+                        'number' => 'unit_Phone1',
+                    ],
+                    [
+                        'id' => null,
+                        'type' => 'unit_PhoneContactType2',
+                        'number' => 'unit_Phone2',
+                    ],
+                ],
+            ],
+            "fromInternal" => false
         ];
     }
 
@@ -723,7 +716,7 @@ class ContactDetailsEntityTest extends EntityTester
         $mockPhoneCollection = new ArrayCollection();
         $mockPhoneCollection->offsetSet(
             self::DEF_PHONE_ID,
-            (new PhoneContact(new RefData(self::DEF_PHONE_TYPE)))
+            new PhoneContact(new RefData(self::DEF_PHONE_TYPE))
                 ->setId(self::DEF_PHONE_ID)
                 ->setPhoneNumber(self::DEF_PHONE_NR)
         );

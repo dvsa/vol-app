@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_opposer;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_opposer()
@@ -23,25 +22,29 @@ BEGIN
 
     SELECT COUNT(*)
     INTO @total
-    FROM opposer
-    WHERE id NOT IN (
-        SELECT opposer_id
-        FROM opposition);
+    FROM opposer o
+    LEFT JOIN opposition op ON o.id = op.opposer_id
+    WHERE op.opposer_id IS NULL;
 
     SELECT CONCAT(@total,' opposer rows to delete.') AS ''; 
     
     SET @total:=0;
     SET @rowcount:=10000;
     
+    START TRANSACTION;
+
     WHILE(@rowcount = 10000) DO
 
-
-
         DELETE FROM opposer
-        WHERE id NOT IN (
-        SELECT opposer_id
-        FROM opposition)
-        LIMIT 10000;
+        WHERE id IN (
+            SELECT id FROM (
+                SELECT o.id
+                FROM opposer o
+                LEFT JOIN opposition op ON o.id = op.opposer_id
+                WHERE op.opposer_id IS NULL
+                LIMIT 10000
+            ) AS batch
+        );
     
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;
@@ -50,13 +53,15 @@ BEGIN
     
         SELECT CONCAT(@total,' opposer rows deleted.') AS '';
 
+        COMMIT;
+        START TRANSACTION;
+
     END WHILE;
+
+    COMMIT;
 
     SELECT CONCAT('delete opposer finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

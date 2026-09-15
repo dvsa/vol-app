@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Note\Note as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class NoteEntityTest extends EntityTester
+final class NoteEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

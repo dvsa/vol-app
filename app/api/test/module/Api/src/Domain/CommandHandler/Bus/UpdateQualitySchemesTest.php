@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Update Quality Schemes Test
  */
-class UpdateQualitySchemesTest extends AbstractCommandHandlerTestCase
+final class UpdateQualitySchemesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

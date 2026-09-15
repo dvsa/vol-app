@@ -24,7 +24,7 @@ use Common\RefData;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationOperatingCentresTest extends MockeryTestCase
+final class ApplicationOperatingCentresTest extends MockeryTestCase
 {
     protected $form;
 
@@ -37,15 +37,15 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
 
     protected $tableBuilder;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->tableBuilder = m::mock(TableBuilder::class);
 
-        $serviceManager = $this->createMock(ServiceLocatorInterface::class);
+        $serviceManager = $this->createStub(ServiceLocatorInterface::class);
         $serviceManager
             ->method('get')
-            ->with('Table')
-            ->willReturn($this->tableBuilder);
+            ->willReturnMap([['Table', $this->tableBuilder]]);
 
         $fsm = m::mock(FormServiceManager::class)->makePartial();
         $fsm->shouldReceive('getServiceLocator')

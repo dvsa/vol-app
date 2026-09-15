@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * Close IRHP Permit Window Test
  */
-class CloseTest extends AbstractCommandHandlerTestCase
+final class CloseTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -71,7 +71,7 @@ class CloseTest extends AbstractCommandHandlerTestCase
             [
                 'id' => $irhpApp1Id,
             ],
-            (new Result())->addMessage('IRHP App1 has been cancelled')
+            new Result()->addMessage('IRHP App1 has been cancelled')
         );
 
         $this->expectedSideEffect(
@@ -79,7 +79,7 @@ class CloseTest extends AbstractCommandHandlerTestCase
             [
                 'id' => $irhpApp2Id,
             ],
-            (new Result())->addMessage('IRHP App2 has been cancelled')
+            new Result()->addMessage('IRHP App2 has been cancelled')
         );
 
         $result = $this->sut->handleCommand($command);

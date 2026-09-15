@@ -32,7 +32,7 @@ class IndexControllerFactory implements FactoryInterface
      * @return IndexController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IndexController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IndexController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Parser\ParserFactory;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class ParserFactoryTest extends \PHPUnit\Framework\TestCase
+final class ParserFactoryTest extends \PHPUnit\Framework\TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('typeProvider')]
     public function testGetParser(mixed $type, mixed $class): void
@@ -29,18 +29,16 @@ class ParserFactoryTest extends \PHPUnit\Framework\TestCase
         try {
             $parser = $factory->getParser('unknown');
         } catch (\RuntimeException $e) {
-            $this->assertEquals('No parser found for mime type: unknown', $e->getMessage());
+            $this->assertSame('No parser found for mime type: unknown', $e->getMessage());
             return;
         }
 
         $this->fail('Expected exception not found');
     }
 
-    public static function typeProvider(): array
+    public static function typeProvider(): \Iterator
     {
-        return [
-            ['application/rtf', \Dvsa\Olcs\Api\Service\Document\Parser\RtfParser::class],
-            ['application/x-rtf', \Dvsa\Olcs\Api\Service\Document\Parser\RtfParser::class]
-        ];
+        yield ['application/rtf', \Dvsa\Olcs\Api\Service\Document\Parser\RtfParser::class];
+        yield ['application/x-rtf', \Dvsa\Olcs\Api\Service\Document\Parser\RtfParser::class];
     }
 }

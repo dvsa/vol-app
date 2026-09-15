@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Domain\Command\Discs\CeasePsvDiscs as Cmd;
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CeasePsvDiscsTest extends AbstractCommandHandlerTestCase
+final class CeasePsvDiscsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

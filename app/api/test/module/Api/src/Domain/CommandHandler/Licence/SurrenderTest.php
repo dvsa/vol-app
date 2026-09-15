@@ -37,7 +37,7 @@ use Mockery as m;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class SurrenderTest extends AbstractCommandHandlerTestCase
+final class SurrenderTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -86,7 +86,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
                 $this->assertSame($this->refData[$status]->getId(), $saveLicence->getStatus()->getId());
                 $this->assertInstanceOf(\DateTime::class, $saveLicence->getSurrenderedDate());
                 $this->assertSame(
-                    (new \DateTime())->format('Y-m-d'),
+                    new \DateTime()->format('Y-m-d'),
                     $saveLicence->getSurrenderedDate()->format('Y-m-d')
                 );
             }
@@ -178,7 +178,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
                 $this->assertSame($this->refData[$status]->getId(), $saveLicence->getStatus()->getId());
                 $this->assertInstanceOf(\DateTime::class, $saveLicence->getSurrenderedDate());
                 $this->assertSame(
-                    (new \DateTime())->format('Y-m-d'),
+                    new \DateTime()->format('Y-m-d'),
                     $saveLicence->getSurrenderedDate()->format('Y-m-d')
                 );
             }
@@ -270,7 +270,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
                 $this->assertSame($this->refData[$status]->getId(), $saveLicence->getStatus()->getId());
                 $this->assertInstanceOf(\DateTime::class, $saveLicence->getSurrenderedDate());
                 $this->assertSame(
-                    (new \DateTime())->format('Y-m-d'),
+                    new \DateTime()->format('Y-m-d'),
                     $saveLicence->getSurrenderedDate()->format('Y-m-d')
                 );
             }
@@ -326,17 +326,15 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Licence ID 532 surrendered"], $result->getMessages());
     }
 
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            [
-                'lsts_terminated',
-                true,
-            ],
-            [
-                'lsts_surrendered',
-                false
-            ]
+        yield [
+            'lsts_terminated',
+            true,
+        ];
+        yield [
+            'lsts_surrendered',
+            false
         ];
     }
 
@@ -392,12 +390,12 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\DeleteApplication::class,
             ['id' => 345],
-            (new Result())->addMessage('NOT_SUBMITTED')
+            new Result()->addMessage('NOT_SUBMITTED')
         );
         $this->expectedSideEffect(
             \Dvsa\Olcs\Transfer\Command\Application\RefuseApplication::class,
             ['id' => 567],
-            (new Result())->addMessage('UNDER_CONSIDERATION')
+            new Result()->addMessage('UNDER_CONSIDERATION')
         );
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Publication\Licence::class,
@@ -444,7 +442,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
      */
     private function stubApplication(mixed $licence, mixed $id, mixed $status, bool $isVariation = false): mixed
     {
-        $application = new Application($licence, (new RefData())->setId($status), $isVariation);
+        $application = new Application($licence, new RefData()->setId($status), $isVariation);
         $application->setId($id);
         $licence->addApplications($application);
 

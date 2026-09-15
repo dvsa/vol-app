@@ -21,19 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_instance_todo",
- *    indexes={
- *        @ORM\Index(name="ix_letter_instance_todo_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_instance_todo_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_instance_todo_letter_instance_id", columns={"letter_instance_id"}),
- *        @ORM\Index(name="ix_letter_instance_todo_letter_instance_issue_id", columns={"letter_instance_issue_id"}),
- *        @ORM\Index(name="ix_letter_instance_todo_letter_todo_version_id", columns={"letter_todo_version_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_instance_todo')]
+#[ORM\Index(name: 'ix_letter_instance_todo_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_instance_todo_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_instance_todo_letter_instance_id', columns: ['letter_instance_id'])]
+#[ORM\Index(name: 'ix_letter_instance_todo_letter_instance_issue_id', columns: ['letter_instance_issue_id'])]
+#[ORM\Index(name: 'ix_letter_instance_todo_letter_todo_version_id', columns: ['letter_todo_version_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -46,91 +42,90 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterInstance
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstance
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstance", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_instance_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_instance_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class, inversedBy: 'letterInstanceTodos', fetch: 'LAZY')]
     protected $letterInstance;
 
     /**
      * Which issue brought this to-do
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_instance_issue_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_instance_issue_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue::class, inversedBy: 'letterInstanceTodos', fetch: 'LAZY')]
     protected $letterInstanceIssue;
 
     /**
      * LetterTodoVersion
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_todo_version_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_todo_version_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion::class, fetch: 'LAZY')]
     protected $letterTodoVersion;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
+
+    /**
+     * User edits to the to-do wording, this letter only
+     *
+     * @var array
+     */
+    #[ORM\Column(type: 'json', name: 'edited_description', nullable: true)]
+    protected $editedDescription;
 
     /**
      * False if duplicate
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_rendered", nullable=false, options={"default": 1})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_rendered', nullable: false, options: ['default' => 1])]
     protected $isRendered = 1;
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['unsigned' => true])]
     protected $displayOrder = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -154,7 +149,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setId($id)
     {
@@ -178,7 +173,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterInstance $letterInstance new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setLetterInstance($letterInstance)
     {
@@ -202,7 +197,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue $letterInstanceIssue new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setLetterInstanceIssue($letterInstanceIssue)
     {
@@ -226,7 +221,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion $letterTodoVersion new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setLetterTodoVersion($letterTodoVersion)
     {
@@ -250,7 +245,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -274,7 +269,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -294,11 +289,35 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     }
 
     /**
+     * Set the edited description
+     *
+     * @param array $editedDescription new value being set
+     *
+     * @return static
+     */
+    public function setEditedDescription($editedDescription)
+    {
+        $this->editedDescription = $editedDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get the edited description
+     *
+     * @return array
+     */
+    public function getEditedDescription()
+    {
+        return $this->editedDescription;
+    }
+
+    /**
      * Set the is rendered
      *
      * @param bool $isRendered new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setIsRendered($isRendered)
     {
@@ -322,7 +341,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -346,7 +365,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setVersion($version)
     {

@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\QueryPartial\ById;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ByIdTest extends QueryPartialTestCase
+final class ByIdTest extends QueryPartialTestCase
 {
     public function setUp(): void
     {

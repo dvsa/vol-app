@@ -23,7 +23,7 @@ use Mockery as m;
 /**
  * TxcInboxListTest
  */
-class TxcInboxListTest extends QueryHandlerTestCase
+final class TxcInboxListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

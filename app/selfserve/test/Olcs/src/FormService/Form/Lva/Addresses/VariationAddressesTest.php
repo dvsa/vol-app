@@ -16,7 +16,7 @@ use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class VariationAddressesTest extends MockeryTestCase
+final class VariationAddressesTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -27,6 +27,7 @@ class VariationAddressesTest extends MockeryTestCase
 
     protected $fh;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();

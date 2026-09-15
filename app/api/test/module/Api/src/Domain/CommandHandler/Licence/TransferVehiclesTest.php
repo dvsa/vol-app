@@ -30,7 +30,7 @@ use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle as LicenceVehicleEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TransferVehiclesTest extends AbstractCommandHandlerTestCase
+final class TransferVehiclesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -286,7 +286,7 @@ class TransferVehiclesTest extends AbstractCommandHandlerTestCase
         $this->assertCount(2, $savedLicenceVehicles);
 
         foreach ($savedLicenceVehicles as $savedLicenceVehicle) {
-            $this->assertEquals(date('Y-m-d'), $savedLicenceVehicle->getSpecifiedDate()->format('Y-m-d'));
+            $this->assertSame(date('Y-m-d'), $savedLicenceVehicle->getSpecifiedDate()->format('Y-m-d'));
             $this->assertSame($targetLicence, $savedLicenceVehicle->getLicence());
         }
     }

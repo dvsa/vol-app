@@ -9,13 +9,13 @@ use Olcs\View\Helper\Factory\VersionFactory;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\OLCS\View\Helper\Factory\VersionFactory::class)]
-class VersionFactoryTest extends TestCase
+final class VersionFactoryTest extends TestCase
 {
     public function testFactoryWithNoVersionWillReturnNotSpecified(): void
     {
         $config = ['application_version' => ''];
-        $serviceManager = $this->createMock(ContainerInterface::class);
-        $serviceManager->method('get')->with($this->equalToIgnoringCase('Config'))->willReturn($config);
+        $serviceManager = $this->createStub(ContainerInterface::class);
+        $serviceManager->method('get')->willReturnMap([['config', $config]]);
 
         $versionFactory = new VersionFactory();
         $version = ($versionFactory)($serviceManager, VersionFactory::class);
@@ -26,8 +26,8 @@ class VersionFactoryTest extends TestCase
     public function testFactoryWithInvalidVersionWillReturnNotSpecified(): void
     {
         $config = ['application_version' => ['number' => '1']];
-        $serviceManager = $this->createMock(ContainerInterface::class);
-        $serviceManager->method('get')->with($this->equalToIgnoringCase('Config'))->willReturn($config);
+        $serviceManager = $this->createStub(ContainerInterface::class);
+        $serviceManager->method('get')->willReturnMap([['config', $config]]);
 
         $versionFactory = new VersionFactory();
         $version = ($versionFactory)($serviceManager, VersionFactory::class);
@@ -39,8 +39,8 @@ class VersionFactoryTest extends TestCase
     {
         $config['application_version'] = '1.123.111';
         $config = ['application_version' => '1.123.111'];
-        $serviceManager = $this->createMock(ContainerInterface::class);
-        $serviceManager->method('get')->with($this->equalToIgnoringCase('Config'))->willReturn($config);
+        $serviceManager = $this->createStub(ContainerInterface::class);
+        $serviceManager->method('get')->willReturnMap([['config', $config]]);
 
         $versionFactory = new VersionFactory();
         $version = ($versionFactory)($serviceManager, VersionFactory::class);

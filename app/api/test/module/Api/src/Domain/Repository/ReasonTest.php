@@ -23,8 +23,9 @@ use Dvsa\Olcs\Api\Domain\Repository\Reason as Repo;
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ReasonTest extends RepositoryTestCase
+final class ReasonTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

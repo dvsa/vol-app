@@ -15,7 +15,7 @@ use Olcs\FormService\Form\Lva\PsvVehiclesVehicle;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PsvVehiclesVehicleTest extends MockeryTestCase
+final class PsvVehiclesVehicleTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -23,6 +23,7 @@ class PsvVehiclesVehicleTest extends MockeryTestCase
 
     protected $formHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);

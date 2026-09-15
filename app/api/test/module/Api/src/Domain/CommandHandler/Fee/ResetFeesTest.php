@@ -25,15 +25,11 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ResetFeesTest extends AbstractCommandHandlerTestCase
+final class ResetFeesTest extends AbstractCommandHandlerTestCase
 {
-    /**
-     * @var (\Dvsa\OlcsTest\Api\Domain\CommandHandler\Trailer\FeesHelper & \Mockery\MockInterface)
-     */
-    public $mockFeesHelperService;
     public function setUp(): void
     {
-        $this->mockFeesHelperService = m::mock(FeesHelper::class);
+        $mockFeesHelperService = m::mock(FeesHelper::class);
         $this->mockedSmServices = [
             AuthorizationService::class => m::mock(AuthorizationService::class)->makePartial(),
         ];

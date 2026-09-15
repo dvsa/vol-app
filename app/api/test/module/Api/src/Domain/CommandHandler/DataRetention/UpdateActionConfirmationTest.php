@@ -15,7 +15,7 @@ use Mockery as m;
 /**
  * Class UpdateActionConfirmationTest
  */
-class UpdateActionConfirmationTest extends AbstractCommandHandlerTestCase
+final class UpdateActionConfirmationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

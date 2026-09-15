@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\ShortNotice\MissingReason;
  * Class MissingReasonTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator\ShortNotice
  */
-class MissingReasonTest extends \PHPUnit\Framework\TestCase
+final class MissingReasonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * tests whether the short notice section exists correctly
@@ -38,9 +38,9 @@ class MissingReasonTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for testIsValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
         $invalidSn = [
             'bankHolidayChange' => 'N',
@@ -66,20 +66,18 @@ class MissingReasonTest extends \PHPUnit\Framework\TestCase
         $validSn8 = array_merge($invalidSn, ['specialOccasionChange' => 'Y']);
         $validSn9 = array_merge($invalidSn, ['connectionChange' => 'Y']);
         $validSn10 = array_merge($invalidSn, ['notAvailableChange' => 'Y']);
-
-        return [
-            ['Y', $validSn1, true],
-            ['Y', $validSn2, true],
-            ['Y', $validSn3, true],
-            ['Y', $validSn4, true],
-            ['Y', $validSn5, true],
-            ['Y', $validSn6, true],
-            ['Y', $validSn7, true],
-            ['Y', $validSn8, true],
-            ['Y', $validSn9, true],
-            ['Y', $validSn10, true],
-            ['N', $invalidSn, true], //record not short notice
-            ['Y', $invalidSn, false]
-        ];
+        yield ['Y', $validSn1, true];
+        yield ['Y', $validSn2, true];
+        yield ['Y', $validSn3, true];
+        yield ['Y', $validSn4, true];
+        yield ['Y', $validSn5, true];
+        yield ['Y', $validSn6, true];
+        yield ['Y', $validSn7, true];
+        yield ['Y', $validSn8, true];
+        yield ['Y', $validSn9, true];
+        yield ['Y', $validSn10, true];
+        yield ['N', $invalidSn, true];
+        //record not short notice
+        yield ['Y', $invalidSn, false];
     }
 }

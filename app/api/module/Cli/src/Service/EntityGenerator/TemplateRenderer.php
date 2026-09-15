@@ -88,18 +88,18 @@ class TemplateRenderer
                         // Skip nested arrays
                         return null;
                     }
-                    return '"' . $v . '"';
+                    return "'" . $v . "'";
                 }, $value));
 
                 if (!empty($cleanValues)) {
-                    $options[] = $key . '={' . implode(', ', $cleanValues) . '}';
+                    $options[] = $key . ': [' . implode(', ', $cleanValues) . ']';
                 }
             } elseif ($value !== null && $value !== '') {
                 // Skip empty string values
                 if ($value === '') {
                     continue;
                 }
-                $options[] = $key . '="' . $value . '"';
+                $options[] = $key . ": '" . $value . "'";
             }
         }
 

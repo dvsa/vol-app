@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\Bus\Ebsr\ProcessPackTransaction;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ProcessPackTransactionTest extends \PHPUnit\Framework\TestCase
+final class ProcessPackTransactionTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

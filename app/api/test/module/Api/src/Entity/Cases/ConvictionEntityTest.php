@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class ConvictionEntityTest extends EntityTester
+final class ConvictionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

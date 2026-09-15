@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -58,7 +58,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             function (\Dvsa\Olcs\Api\Entity\Task\TaskAlphaSplit $tas) {
                 $this->assertSame($this->references[UserEntity::class][1], $tas->getUser());
                 $this->assertSame('abc', $tas->getLetters());
-                $this->assertSame(null, $tas->getTaskAllocationRule());
+                $this->assertNull($tas->getTaskAllocationRule());
             }
         );
 

@@ -21,7 +21,7 @@ class VariationSchedule41ControllerFactory implements FactoryInterface
      * @return VariationSchedule41Controller
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VariationSchedule41Controller
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): VariationSchedule41Controller
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

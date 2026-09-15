@@ -11,7 +11,7 @@ use Mockery as m;
 use Olcs\Service\Data\SiPenaltyType;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class SiPenaltyTypeTest extends AbstractDataServiceTestCase
+final class SiPenaltyTypeTest extends AbstractDataServiceTestCase
 {
     /** @var SiPenaltyType */
     private $sut;
@@ -36,12 +36,10 @@ class SiPenaltyTypeTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
-    public static function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            [self::SINGLE_SOURCE, self::SINGLE_EXPECTED_WITH_ID],
-            [false, []]
-        ];
+        yield [self::SINGLE_SOURCE, self::SINGLE_EXPECTED_WITH_ID];
+        yield [false, []];
     }
 
     public function testFetchListData(): void

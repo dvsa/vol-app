@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
+use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
+use Dvsa\Olcs\Api\Domain\Repository\SystemParameter as SystemParameterRepo;
+use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\PsvDiscPage;
 use Dvsa\Olcs\Api\Service\Document\Parser\RtfParser;
 use Mockery as m;
@@ -13,7 +16,7 @@ use Mockery as m;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
+final class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testGetQuery(): void
     {
@@ -143,5 +146,128 @@ class PsvDiscPageTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $result = $bookmark->render();
         $this->assertEquals('foo', $result);
+    }
+
+    public function testRenderWithPinnedLayoutToggleOnIncludesAlignmentTokens(): void
+    {
+        $data = [[
+            'isCopy' => 'N',
+            'discNo' => 1,
+            'licence' => [
+                'organisation' => ['name' => 'Org'],
+                'licNo' => 'L1',
+                'inForceDate' => '2026-01-01',
+                'expiryDate' => '2027-01-01',
+            ],
+        ]];
+
+        $sysParamRepo = m::mock(SystemParameterRepo::class);
+        $sysParamRepo->shouldReceive('fetchIsEnabled')
+            ->with(SystemParameter::PSV_DISC_PINNED_LAYOUT)->andReturn(true);
+        $values = [
+            SystemParameter::PSV_DISC_ROW_HEIGHT_1 => 5040,
+            SystemParameter::PSV_DISC_ROW_HEIGHT_2 => 5040,
+            SystemParameter::PSV_DISC_ROW_HEIGHT_3 => 5040,
+            SystemParameter::PSV_DISC_LINE_SPACING => 240,
+        ];
+        $sysParamRepo->shouldReceive('fetchNumericValue')
+            ->andReturnUsing(static fn (string $key, int $default): int => $values[$key] ?? $default);
+
+        $repoManager = m::mock(RepositoryServiceManager::class);
+        $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
+
+        $parser = m::mock(RtfParser::class)->makePartial();
+        $parser->shouldReceive('replace')
+            ->with('snippet', m::on(static fn(array $tokens): bool => isset(
+                $tokens['PSV_DISC_ROW_HEIGHT_1'],
+                $tokens['PSV_DISC_ROW_HEIGHT_2'],
+                $tokens['PSV_DISC_ROW_HEIGHT_3'],
+                $tokens['PSV_DISC_LINE_SPACING'],
+            ) && $tokens['PSV_DISC_ROW_HEIGHT_1'] === '5040'))
+            ->andReturn('rendered');
+
+        $bookmark = $this->createPartialMock(PsvDiscPage::class, ['getSnippet']);
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
+        $bookmark->setRepoManager($repoManager);
+        $bookmark->setData($data);
+        $bookmark->setParser($parser);
+
+        $this->assertSame('rendered', $bookmark->render());
+    }
+
+    public function testRenderWithPinnedLayoutEmitsPageBreakBetweenPages(): void
+    {
+        // 12 discs = 2 pages of 6; pinned layout must emit exactly one hard
+        // page break between the two page snippets (and none after the last)
+        $disc = [
+            'isCopy' => 'N',
+            'discNo' => 1,
+            'licence' => [
+                'organisation' => ['name' => 'Org'],
+                'licNo' => 'L1',
+                'inForceDate' => '2026-01-01',
+                'expiryDate' => '2027-01-01',
+            ],
+        ];
+        $data = array_fill(0, 12, $disc);
+
+        $sysParamRepo = m::mock(SystemParameterRepo::class);
+        $sysParamRepo->shouldReceive('fetchIsEnabled')->andReturn(true);
+        $sysParamRepo->shouldReceive('fetchNumericValue')
+            ->andReturnUsing(static fn (string $key, int $default): int => $default);
+
+        $repoManager = m::mock(RepositoryServiceManager::class);
+        $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
+
+        $parser = m::mock(RtfParser::class)->makePartial();
+        $parser->shouldReceive('replace')->twice()->andReturn('[PAGE]');
+
+        $bookmark = $this->createPartialMock(PsvDiscPage::class, ['getSnippet']);
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
+        $bookmark->setRepoManager($repoManager);
+        $bookmark->setData($data);
+        $bookmark->setParser($parser);
+
+        $this->assertSame(
+            '[PAGE]' . '\pard\plain\sl-1\slmult0\fs1\pagebb\par ' . '[PAGE]',
+            $bookmark->render()
+        );
+    }
+
+    public function testRenderWithPinnedLayoutToggleOffOmitsAlignmentTokens(): void
+    {
+        $data = [[
+            'isCopy' => 'N',
+            'discNo' => 1,
+            'licence' => [
+                'organisation' => ['name' => 'Org'],
+                'licNo' => 'L1',
+                'inForceDate' => '2026-01-01',
+                'expiryDate' => '2027-01-01',
+            ],
+        ]];
+
+        $sysParamRepo = m::mock(SystemParameterRepo::class);
+        $sysParamRepo->shouldReceive('fetchIsEnabled')
+            ->with(SystemParameter::PSV_DISC_PINNED_LAYOUT)->andReturn(false);
+
+        $repoManager = m::mock(RepositoryServiceManager::class);
+        $repoManager->shouldReceive('get')->with('SystemParameter')->andReturn($sysParamRepo);
+
+        $parser = m::mock(RtfParser::class)->makePartial();
+        $parser->shouldReceive('replace')
+            ->with('snippet', m::on(static fn(array $tokens): bool => !array_key_exists(
+                'PSV_DISC_ROW_HEIGHT_1',
+                $tokens,
+            )))
+            ->andReturn('rendered');
+
+        $bookmark = $this->createPartialMock(PsvDiscPage::class, ['getSnippet']);
+        $bookmark->expects($this->atLeastOnce())->method('getSnippet')->willReturn('snippet');
+        $bookmark->setRepoManager($repoManager);
+        $bookmark->setData($data);
+        $bookmark->setParser($parser);
+
+        $this->assertSame('rendered', $bookmark->render());
     }
 }

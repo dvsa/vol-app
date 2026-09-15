@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     use ProcessDateTrait;
 
@@ -281,11 +281,9 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpShortTermAnnualTypeCombinations(): array
+    public static function dpShortTermAnnualTypeCombinations(): \Iterator
     {
-        return [
-            [true, false, false],
-            [false, true, false],
-        ];
+        yield [true, false, false];
+        yield [false, true, false];
     }
 }

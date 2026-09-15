@@ -22,9 +22,9 @@ use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReachedByTypeAndOrganisation
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
+final class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
 {
-    public const ORGANISATION_ID = 5;
+    public const int ORGANISATION_ID = 5;
 
     public function setUp(): void
     {
@@ -120,13 +120,11 @@ class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public static function dpHandleQueryEcmtAnnual(): array
+    public static function dpHandleQueryEcmtAnnual(): \Iterator
     {
-        return [
-            'nothing available across all windows and licences' => [0, 0, 0, 0, true],
-            'allowance remaining on some windows and licences' => [5, 0, 3, 0, false],
-            'allowance remaining on all windows and licences' => [12, 8, 10, 2, false],
-        ];
+        yield 'nothing available across all windows and licences' => [0, 0, 0, 0, true];
+        yield 'allowance remaining on some windows and licences' => [5, 0, 3, 0, false];
+        yield 'allowance remaining on all windows and licences' => [12, 8, 10, 2, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryNotEcmtAnnual')]
@@ -148,15 +146,13 @@ class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public static function dpHandleQueryNotEcmtAnnual(): array
+    public static function dpHandleQueryNotEcmtAnnual(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER];
     }
 }

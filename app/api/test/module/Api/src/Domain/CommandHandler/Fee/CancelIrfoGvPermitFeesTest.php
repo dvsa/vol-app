@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * CancelIrfoGvPermitFeesTest
  */
-class CancelIrfoGvPermitFeesTest extends AbstractCommandHandlerTestCase
+final class CancelIrfoGvPermitFeesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

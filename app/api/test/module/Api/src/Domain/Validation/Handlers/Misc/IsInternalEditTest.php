@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalEdit;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class IsInternalEditTest extends AbstractHandlerTestCase
+final class IsInternalEditTest extends AbstractHandlerTestCase
 {
     /**
      * @var IsInternalEdit

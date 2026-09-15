@@ -27,13 +27,11 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ResolveOutstandingPaymentsTest extends AbstractCommandHandlerTestCase
+final class ResolveOutstandingPaymentsTest extends AbstractCommandHandlerTestCase
 {
-    protected $mockCpmsService;
-
     public function setUp(): void
     {
-        $this->mockCpmsService = m::mock(CpmsHelper::class);
+        $mockCpmsService = m::mock(CpmsHelper::class);
         $this->mockedSmServices = [
             AuthorizationService::class => m::mock(AuthorizationService::class)->makePartial(),
         ];
@@ -87,12 +85,12 @@ class ResolveOutstandingPaymentsTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             ResolvePaymentCmd::class,
             ['id' => 99],
-            (new Result())->addMessage('Transaction 99 resolved as Failed')
+            new Result()->addMessage('Transaction 99 resolved as Failed')
         );
         $this->expectedSideEffect(
             ResolvePaymentCmd::class,
             ['id' => 100],
-            (new Result())->addMessage('Transaction 100 resolved as Failed')
+            new Result()->addMessage('Transaction 100 resolved as Failed')
         );
 
         $command = Cmd::create([]);
@@ -113,9 +111,7 @@ class ResolveOutstandingPaymentsTest extends AbstractCommandHandlerTestCase
 
     public function testHandleCommandWithException(): void
     {
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         // expectations
         $this->repoMap['SystemParameter']
@@ -146,7 +142,7 @@ class ResolveOutstandingPaymentsTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             ResolvePaymentCmd::class,
             ['id' => 100],
-            (new Result())->addMessage('Transaction 100 resolved as Failed')
+            new Result()->addMessage('Transaction 100 resolved as Failed')
         );
 
         $result = $this->sut->handleCommand(Cmd::create([]));

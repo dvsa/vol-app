@@ -17,7 +17,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\PrintLicence::class)]
-class PrintLicenceTest extends AbstractCommandHandlerTestCase
+final class PrintLicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -33,7 +33,7 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
 
         $this->repoMap['Licence']->shouldReceive('fetchUsingId')->with($command)->andReturnNull();
 
-        static::assertNull($this->sut->handleCommand($command));
+        $this->assertNull($this->sut->handleCommand($command));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
@@ -88,98 +88,95 @@ class PrintLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
         $command = Cmd::create(['id' => 111]);
-
-        return [
-            'GB goods mixed fleet' => [
-                'command' => $command,
-                'isGoods' => true,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'isSpecialRestricted' => false,
-                'niFlag' => 'N',
-                'expect' => [
-                    'docId' => Document::GV_LICENCE_GB,
-                    'desc' => 'GV Licence',
-                ],
+        yield 'GB goods mixed fleet' => [
+            'command' => $command,
+            'isGoods' => true,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'isSpecialRestricted' => false,
+            'niFlag' => 'N',
+            'expect' => [
+                'docId' => Document::GV_LICENCE_GB,
+                'desc' => 'GV Licence',
             ],
-            'GB goods lgv' => [
-                'command' => $command,
-                'isGoods' => true,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'isSpecialRestricted' => false,
-                'niFlag' => 'N',
-                'expect' => [
-                    'docId' => Document::GV_LGV_LICENCE_GB,
-                    'desc' => 'GV Licence LGV Only',
-                ],
+        ];
+        yield 'GB goods lgv' => [
+            'command' => $command,
+            'isGoods' => true,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'isSpecialRestricted' => false,
+            'niFlag' => 'N',
+            'expect' => [
+                'docId' => Document::GV_LGV_LICENCE_GB,
+                'desc' => 'GV Licence LGV Only',
             ],
-            'GB psv' => [
-                'command' => $command,
-                'isGoods' => false,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'isSpecialRestricted' => false,
-                'niFlag' => 'N',
-                'expect' => [
-                    'docId' => Document::PSV_LICENCE_GB,
-                    'desc' => 'PSV Licence',
-                ],
+        ];
+        yield 'GB psv' => [
+            'command' => $command,
+            'isGoods' => false,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'isSpecialRestricted' => false,
+            'niFlag' => 'N',
+            'expect' => [
+                'docId' => Document::PSV_LICENCE_GB,
+                'desc' => 'PSV Licence',
             ],
-            'GB psv special restricted' => [
-                'command' => $command,
-                'isGoods' => false,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'isSpecialRestricted' => true,
-                'niFlag' => 'N',
-                'expect' => [
-                    'docId' => Document::PSR_SR_LICENCE_GB,
-                    'desc' => 'PSV-SR Licence',
-                ],
+        ];
+        yield 'GB psv special restricted' => [
+            'command' => $command,
+            'isGoods' => false,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'isSpecialRestricted' => true,
+            'niFlag' => 'N',
+            'expect' => [
+                'docId' => Document::PSR_SR_LICENCE_GB,
+                'desc' => 'PSV-SR Licence',
             ],
-            'NI goods mixed fleet' => [
-                'command' => $command,
-                'isGoods' => true,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'isSpecialRestricted' => false,
-                'niFlag' => 'Y',
-                'expect' => [
-                    'docId' => Document::GV_LICENCE_NI,
-                    'desc' => 'GV Licence',
-                ],
+        ];
+        yield 'NI goods mixed fleet' => [
+            'command' => $command,
+            'isGoods' => true,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'isSpecialRestricted' => false,
+            'niFlag' => 'Y',
+            'expect' => [
+                'docId' => Document::GV_LICENCE_NI,
+                'desc' => 'GV Licence',
             ],
-            'NI goods lgv' => [
-                'command' => $command,
-                'isGoods' => true,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'isSpecialRestricted' => false,
-                'niFlag' => 'Y',
-                'expect' => [
-                    'docId' => Document::GV_LGV_LICENCE_GB,
-                    'desc' => 'GV Licence LGV Only',
-                ],
+        ];
+        yield 'NI goods lgv' => [
+            'command' => $command,
+            'isGoods' => true,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'isSpecialRestricted' => false,
+            'niFlag' => 'Y',
+            'expect' => [
+                'docId' => Document::GV_LGV_LICENCE_GB,
+                'desc' => 'GV Licence LGV Only',
             ],
-            'NI psv' => [
-                'command' => $command,
-                'isGoods' => false,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'isSpecialRestricted' => false,
-                'niFlag' => 'Y',
-                'expect' => [
-                    'docId' => Document::PSV_LICENCE_NI,
-                    'desc' => 'PSV Licence',
-                ],
+        ];
+        yield 'NI psv' => [
+            'command' => $command,
+            'isGoods' => false,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'isSpecialRestricted' => false,
+            'niFlag' => 'Y',
+            'expect' => [
+                'docId' => Document::PSV_LICENCE_NI,
+                'desc' => 'PSV Licence',
             ],
-            'NI psv special restricted' => [
-                'command' => $command,
-                'isGoods' => false,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'isSpecialRestricted' => true,
-                'niFlag' => 'Y',
-                'expect' => [
-                    'docId' => Document::PSR_SR_LICENCE_NI,
-                    'desc' => 'PSV-SR Licence',
-                ],
+        ];
+        yield 'NI psv special restricted' => [
+            'command' => $command,
+            'isGoods' => false,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'isSpecialRestricted' => true,
+            'niFlag' => 'Y',
+            'expect' => [
+                'docId' => Document::PSR_SR_LICENCE_NI,
+                'desc' => 'PSV-SR Licence',
             ],
         ];
     }

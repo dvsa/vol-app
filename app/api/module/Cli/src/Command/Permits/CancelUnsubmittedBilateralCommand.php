@@ -12,7 +12,7 @@ class CancelUnsubmittedBilateralCommand extends AbstractOlcsCommand
     protected static $defaultName = 'batch:permits:cancel-unsubmitted-bilateral';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Cancel unsubmitted bilateral applications.');
     }

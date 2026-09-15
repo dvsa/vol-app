@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\PrintScan\Printer as PrinterEntity;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreatePrinterTest extends AbstractCommandHandlerTestCase
+final class CreatePrinterTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

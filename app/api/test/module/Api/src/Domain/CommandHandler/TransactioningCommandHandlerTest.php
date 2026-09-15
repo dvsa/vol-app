@@ -23,7 +23,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TransactioningCommandHandlerTest extends MockeryTestCase
+final class TransactioningCommandHandlerTest extends MockeryTestCase
 {
     private $wrapped;
 
@@ -34,6 +34,7 @@ class TransactioningCommandHandlerTest extends MockeryTestCase
      */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->wrapped = m::mock(CommandHandlerInterface::class);
@@ -73,6 +74,25 @@ class TransactioningCommandHandlerTest extends MockeryTestCase
         $this->repo->shouldReceive('commit')->once()->andThrow(new \Exception());
 
         $this->repo->shouldReceive('rollback')->once();
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testHandleCommandErrorRollsBackAndRethrows(): void
+    {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to a member function getId() on null');
+
+        $command = m::mock(CommandInterface::class);
+
+        $this->repo->expects('beginTransaction')->withNoArgs();
+
+        $this->wrapped->expects('handleCommand')
+            ->with($command)
+            ->andThrow(new \Error('Call to a member function getId() on null'));
+
+        $this->repo->expects('rollback')->withNoArgs();
+        $this->repo->shouldReceive('commit')->never();
 
         $this->sut->handleCommand($command);
     }

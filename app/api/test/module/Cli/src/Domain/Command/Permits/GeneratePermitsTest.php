@@ -10,7 +10,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\GeneratePermits;
  * Generate permits test
  *
  */
-class GeneratePermitsTest extends \PHPUnit\Framework\TestCase
+final class GeneratePermitsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -21,14 +21,11 @@ class GeneratePermitsTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals([1, 2, 3], $sut->getIds());
-        static::assertEquals(456, $sut->getUser());
-        static::assertEquals(
-            [
-                'ids' => [1, 2, 3],
-                'user' => 456,
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals([1, 2, 3], $sut->getIds());
+        $this->assertEquals(456, $sut->getUser());
+        $this->assertEquals([
+            'ids' => [1, 2, 3],
+            'user' => 456,
+        ], $sut->getArrayCopy());
     }
 }

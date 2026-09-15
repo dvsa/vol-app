@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * AutoGrant commandhandler Test
  */
-class AutoGrantTest extends AbstractCommandHandlerTestCase
+final class AutoGrantTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -29,6 +29,7 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences(): void
     {
         $this->refData = [

@@ -20,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ResetFeesTest extends MockeryTestCase
+final class ResetFeesTest extends MockeryTestCase
 {
     public function testStructure(): void
     {

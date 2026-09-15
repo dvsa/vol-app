@@ -15,7 +15,7 @@ use Mockery as m;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ImpoundingLegislationTest extends RefDataTestCase
+final class ImpoundingLegislationTest extends RefDataTestCase
 {
     /** @var ImpoundingLegislation */
     private $sut;
@@ -98,15 +98,13 @@ class ImpoundingLegislationTest extends RefDataTestCase
     /**
      * Data provider for testFetchListOptions
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            ['Y', 'lcat_psv', 'impound_legislation_psv_gb'],
-            ['Y', 'lcat_gv', 'impound_legislation_goods_ni'],
-            ['N', 'lcat_gv', 'impound_legislation_goods_gb']
-        ];
+        yield ['Y', 'lcat_psv', 'impound_legislation_psv_gb'];
+        yield ['Y', 'lcat_gv', 'impound_legislation_goods_ni'];
+        yield ['N', 'lcat_gv', 'impound_legislation_goods_gb'];
     }
 
     /**

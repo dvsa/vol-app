@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdateSection26Test extends AbstractCommandHandlerTestCase
+final class UpdateSection26Test extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

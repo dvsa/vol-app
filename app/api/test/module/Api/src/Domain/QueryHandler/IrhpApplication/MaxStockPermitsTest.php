@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\MaxStockPermits as MaxStockPermitsQ
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class MaxStockPermitsTest extends QueryHandlerTestCase
+final class MaxStockPermitsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

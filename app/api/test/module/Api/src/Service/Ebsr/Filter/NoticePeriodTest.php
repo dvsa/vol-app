@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  * Class NoticePeriodTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\Filter
  */
-class NoticePeriodTest extends TestCase
+final class NoticePeriodTest extends TestCase
 {
     /**
      * @param $data
@@ -26,18 +26,16 @@ class NoticePeriodTest extends TestCase
         $this->assertEquals($expected, $result['busNoticePeriod']);
     }
 
-    public static function provideFilter(): array
+    public static function provideFilter(): \Iterator
     {
-        return [
-            [['trafficAreas' => ['English']], 2],
-            [['trafficAreas' => ['Scottish']], 1],
-            [['trafficAreas' => ['Welsh']], 3],
-            [['trafficAreas' => ['English', 'Welsh']], 3],
-            [['trafficAreas' => ['Welsh', 'English']], 3],
-            [['trafficAreas' => ['English', 'Scottish']], 1],
-            [['trafficAreas' => ['Scottish', 'English']], 1],
-            [['trafficAreas' => ['Welsh', 'Scottish']], 1],
-            [['trafficAreas' => ['Scottish', 'Welsh']], 1],
-        ];
+        yield [['trafficAreas' => ['English']], 2];
+        yield [['trafficAreas' => ['Scottish']], 1];
+        yield [['trafficAreas' => ['Welsh']], 3];
+        yield [['trafficAreas' => ['English', 'Welsh']], 3];
+        yield [['trafficAreas' => ['Welsh', 'English']], 3];
+        yield [['trafficAreas' => ['English', 'Scottish']], 1];
+        yield [['trafficAreas' => ['Scottish', 'English']], 1];
+        yield [['trafficAreas' => ['Welsh', 'Scottish']], 1];
+        yield [['trafficAreas' => ['Scottish', 'Welsh']], 1];
     }
 }

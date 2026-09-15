@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Queue\Failed::class)]
-class FailedTest extends AbstractCommandHandlerTestCase
+final class FailedTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -51,9 +51,9 @@ class FailedTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturnUsing(
                 function (QueueEntity $entity) use ($id, $expectedLastErr) {
-                    static::assertEquals($id, $entity->getId());
-                    static::assertEquals($expectedLastErr, $entity->getLastError());
-                    static::assertEquals(QueueEntity::STATUS_FAILED, $entity->getStatus()->getId());
+                    $this->assertEquals($id, $entity->getId());
+                    $this->assertEquals($expectedLastErr, $entity->getLastError());
+                    $this->assertEquals(QueueEntity::STATUS_FAILED, $entity->getStatus()->getId());
                 }
             );
 

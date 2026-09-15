@@ -6,7 +6,7 @@ namespace Dvsa\OlcsTest\Api\Domain\Query\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark;
 
-class IdentityBundleBookmarkTest extends \PHPUnit\Framework\TestCase
+final class IdentityBundleBookmarkTest extends \PHPUnit\Framework\TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testStructure(mixed $bookmarkClass): void
@@ -25,34 +25,32 @@ class IdentityBundleBookmarkTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($bundle, $query->getBundle());
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            [Bookmark\BusFeeTypeBundle::class],
-            [Bookmark\BusRegBundle::class],
-            [Bookmark\CaseBundle::class],
-            [Bookmark\CommunityLicBundle::class],
-            [Bookmark\DocParagraphBundle::class],
-            [Bookmark\FeeBundle::class],
-            [Bookmark\GoodsDiscBundle::class],
-            [Bookmark\ImpoundingBundle::class],
-            [Bookmark\IrfoGvPermitBundle::class],
-            [Bookmark\IrhpApplicationBundle::class],
-            [Bookmark\IrhpPermitBundle::class],
-            [Bookmark\IrhpPermitStockBundle::class],
-            [Bookmark\IrfoPsvAuthBundle::class],
-            [Bookmark\LicenceBundle::class],
-            [Bookmark\OppositionBundle::class],
-            [Bookmark\OrganisationBundle::class],
-            [Bookmark\PiHearingBundle::class],
-            [Bookmark\PolicePeopleBundle::class],
-            [Bookmark\PsvDiscBundle::class],
-            [Bookmark\PublicationBundle::class],
-            [Bookmark\StatementBundle::class],
-            [Bookmark\TransportManagerBundle::class],
-            [Bookmark\UserBundle::class],
-            [Bookmark\VehicleBundle::class],
-            [Bookmark\VenueBundle::class],
-        ];
+        yield [Bookmark\BusFeeTypeBundle::class];
+        yield [Bookmark\BusRegBundle::class];
+        yield [Bookmark\CaseBundle::class];
+        yield [Bookmark\CommunityLicBundle::class];
+        yield [Bookmark\DocParagraphBundle::class];
+        yield [Bookmark\FeeBundle::class];
+        yield [Bookmark\GoodsDiscBundle::class];
+        yield [Bookmark\ImpoundingBundle::class];
+        yield [Bookmark\IrfoGvPermitBundle::class];
+        yield [Bookmark\IrhpApplicationBundle::class];
+        yield [Bookmark\IrhpPermitBundle::class];
+        yield [Bookmark\IrhpPermitStockBundle::class];
+        yield [Bookmark\IrfoPsvAuthBundle::class];
+        yield [Bookmark\LicenceBundle::class];
+        yield [Bookmark\OppositionBundle::class];
+        yield [Bookmark\OrganisationBundle::class];
+        yield [Bookmark\PiHearingBundle::class];
+        yield [Bookmark\PolicePeopleBundle::class];
+        yield [Bookmark\PsvDiscBundle::class];
+        yield [Bookmark\PublicationBundle::class];
+        yield [Bookmark\StatementBundle::class];
+        yield [Bookmark\TransportManagerBundle::class];
+        yield [Bookmark\UserBundle::class];
+        yield [Bookmark\VehicleBundle::class];
+        yield [Bookmark\VenueBundle::class];
     }
 }

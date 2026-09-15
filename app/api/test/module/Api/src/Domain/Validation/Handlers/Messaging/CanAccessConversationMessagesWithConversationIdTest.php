@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 
-class CanAccessConversationMessagesWithConversationIdTest extends AbstractHandlerTestCase
+final class CanAccessConversationMessagesWithConversationIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessConversationMessagesWithConversationId
@@ -43,13 +43,11 @@ class CanAccessConversationMessagesWithConversationIdTest extends AbstractHandle
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function dpTestIsValid(): array
+    public static function dpTestIsValid(): \Iterator
     {
-        return [
-            [true, true, true],
-            [true, false, false],
-            [false, true, false],
-            [false, true, false],
-        ];
+        yield [true, true, true];
+        yield [true, false, false];
+        yield [false, true, false];
+        yield [false, true, false];
     }
 }

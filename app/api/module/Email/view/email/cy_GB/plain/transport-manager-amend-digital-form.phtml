@@ -1,0 +1,17 @@
+Helô,
+
+Mae <?php echo $this->organisation ?> wedi'ch enwi fel Rheolwr Trafnidiaeth ar Drwydded Gweithredwr Cerbydau <?php echo $this->reference ?>.
+
+Maent wedi adolygu'ch cais ac mae angen ichi ddiwygio neu wirio'ch manylion. Bydd angen ichi lofnodi'r datganiad eto ar ôl ichi adolygu neu ddiwygio'ch cais.
+
+I adolygu'r cais, mewngofnodwch ar-lein <?php echo $this->signInLink ?> gyda'ch enw defnyddiwr (<?php echo $this->username ?>) a'ch cyfrinair.
+
+Profi problemau?
+
+<?php
+$url = ($this->isNi) ?
+    'http://www.doeni.gov.uk/index/information/foi/recent-releases/publications-details.htm?docid=9994' :
+    'https://www.gov.uk/government/publications/application-to-add-a-transport-manager-to-a-licence-tm1';
+?>
+
+Am gyngor gwelwch y Canllaw cymorth ar gyfer Rheolwyr Trafnidiaeth <?php echo $url ?> neu e-bostiwch ni notifications@vehicle-operator-licensing.service.gov.uk.

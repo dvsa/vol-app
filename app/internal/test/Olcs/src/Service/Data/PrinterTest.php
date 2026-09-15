@@ -21,7 +21,7 @@ use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PrinterTest extends AbstractDataServiceTestCase
+final class PrinterTest extends AbstractDataServiceTestCase
 {
     /** @var Printer */
     private $sut;

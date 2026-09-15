@@ -16,7 +16,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath as ApplicationPathQ
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class ApplicationPathTest extends QueryHandlerTestCase
+final class ApplicationPathTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

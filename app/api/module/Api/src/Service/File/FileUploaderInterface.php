@@ -26,7 +26,7 @@ interface FileUploaderInterface
      *
      * @param string $identifier File identifier
      *
-     * @return ContentStoreFile
+     * @return ContentStoreFile|false|null
      */
     public function download($identifier);
 
@@ -35,7 +35,7 @@ interface FileUploaderInterface
      *
      * @param string $identifier File identifier
      *
-     * @return ContentStoreFile
+     * @return \Laminas\Http\Response
      */
     public function remove($identifier);
 }

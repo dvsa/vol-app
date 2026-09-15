@@ -20,24 +20,23 @@ use Dvsa\Olcs\Api\Domain\Repository\TmCaseDecision as Repo;
 /**
  * TmCaseDecision Repo test
  */
-class TmCaseDecisionTest extends RepositoryTestCase
+final class TmCaseDecisionTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);
     }
 
-    public static function dpFetchLatestUsingCaseDataProvider(): array
+    public static function dpFetchLatestUsingCaseDataProvider(): \Iterator
     {
-        return [
-            'Decision exists' => [
-                'expected' => 'result',
-                'mockResult' => [0 => 'result']
-            ],
-            'Decision does not exist' => [
-                'expected' => false ,
-                'mockResult' => []
-            ],
+        yield 'Decision exists' => [
+            'expected' => 'result',
+            'mockResult' => [0 => 'result']
+        ];
+        yield 'Decision does not exist' => [
+            'expected' => false ,
+            'mockResult' => []
         ];
     }
 

@@ -20,7 +20,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ProcessApplicationOperatingCentresTest extends AbstractCommandHandlerTestCase
+final class ProcessApplicationOperatingCentresTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

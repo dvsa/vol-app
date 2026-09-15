@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
+final class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -31,7 +31,7 @@ class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
 
     #[\PHPUnit\Framework\Attributes\DataProvider('scenariosProvider')]
     public function testHandleQuery(
-        mixed $lastOpenWindow,
+        bool $hasOpenWindow,
         mixed $applicationIds,
         mixed $combinedRangeSize,
         mixed $permitCount,
@@ -39,6 +39,7 @@ class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
         mixed $expectedMessage
     ): void {
         $stockId = 25;
+        $lastOpenWindow = $hasOpenWindow ? m::mock(IrhpPermitWindow::class) : null;
 
         if (is_null($lastOpenWindow)) {
             $this->repoMap['IrhpPermitWindow']->shouldReceive('fetchLastOpenWindowByStockId')
@@ -75,49 +76,47 @@ class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
         );
     }
 
-    public static function scenariosProvider(): array
+    public static function scenariosProvider(): \Iterator
     {
-        return [
-            [
-                null,
-                [1, 2, 3],
-                50,
-                25,
-                true,
-                'Prerequisites passed'
-            ],
-            [
-                m::mock(IrhpPermitWindow::class),
-                [1, 2, 3],
-                50,
-                25,
-                false,
-                'A window is currently open within the stock'
-            ],
-            [
-                null,
-                [],
-                50,
-                25,
-                false,
-                'No under consideration applications available'
-            ],
-            [
-                null,
-                [1, 2, 3],
-                null,
-                0,
-                false,
-                'No ranges available in this stock'
-            ],
-            [
-                null,
-                [1, 2, 3],
-                25,
-                25,
-                false,
-                'No free permits available within the stock'
-            ],
+        yield [
+            false,
+            [1, 2, 3],
+            50,
+            25,
+            true,
+            'Prerequisites passed'
+        ];
+        yield [
+            true,
+            [1, 2, 3],
+            50,
+            25,
+            false,
+            'A window is currently open within the stock'
+        ];
+        yield [
+            false,
+            [],
+            50,
+            25,
+            false,
+            'No under consideration applications available'
+        ];
+        yield [
+            false,
+            [1, 2, 3],
+            null,
+            0,
+            false,
+            'No ranges available in this stock'
+        ];
+        yield [
+            false,
+            [1, 2, 3],
+            25,
+            25,
+            false,
+            'No free permits available within the stock'
         ];
     }
 }

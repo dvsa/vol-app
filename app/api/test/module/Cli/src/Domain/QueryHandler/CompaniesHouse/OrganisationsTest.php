@@ -11,7 +11,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Dvsa\Olcs\Cli\Domain\Query\CompaniesHouse\Organisations as Qry;
 use Mockery as m;
 
-class OrganisationsTest extends QueryHandlerTestCase
+final class OrganisationsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

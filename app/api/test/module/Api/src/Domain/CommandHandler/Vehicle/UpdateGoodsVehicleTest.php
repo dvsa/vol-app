@@ -23,7 +23,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
+final class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -150,11 +150,11 @@ class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals(
+        $this->assertSame(
             '2015-01-01 12:00:00',
             $licenceVehicle->getSpecifiedDate()->format('Y-m-d H:i:s')
         );
-        $this->assertEquals('2015-02-02', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2015-02-02', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
         $this->assertEquals(100, $vehicle->getPlatedWeight());
         $this->assertNull($licenceVehicle->getWarningLetterSeedDate());
     }
@@ -200,14 +200,14 @@ class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals(
+        $this->assertSame(
             '2015-01-01 12:00:00',
             $licenceVehicle->getSpecifiedDate()->format('Y-m-d H:i:s')
         );
-        $this->assertEquals('2015-02-02', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame('2015-02-02', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
         $this->assertEquals(100, $vehicle->getPlatedWeight());
-        $this->assertEquals('2015-01-01', $licenceVehicle->getWarningLetterSeedDate()->format('Y-m-d'));
-        $this->assertEquals('2016-01-01', $licenceVehicle->getWarningLetterSentDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $licenceVehicle->getWarningLetterSeedDate()->format('Y-m-d'));
+        $this->assertSame('2016-01-01', $licenceVehicle->getWarningLetterSentDate()->format('Y-m-d'));
     }
 
     public function testHandleCommandUpdateRemoved(): void
@@ -247,6 +247,6 @@ class UpdateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals('2015-01-01', $licenceVehicle->getRemovalDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $licenceVehicle->getRemovalDate()->format('Y-m-d'));
     }
 }

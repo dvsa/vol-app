@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class FeeReqNumberTest extends MockeryTestCase
+final class FeeReqNumberTest extends MockeryTestCase
 {
     public function testGetQuery(): void
     {

@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DaysToPayIssueFeeProviderTest extends MockeryTestCase
+final class DaysToPayIssueFeeProviderTest extends MockeryTestCase
 {
     public function testGetDays(): void
     {

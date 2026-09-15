@@ -22,7 +22,7 @@ use Mockery as m;
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\CompaniesHouse\Compare::class)]
-class CompareTest extends AbstractCommandHandlerTestCase
+final class CompareTest extends AbstractCommandHandlerTestCase
 {
     /** @var  CompaniesHouseApi | m\MockInterface */
     protected $mockApi;
@@ -148,20 +148,18 @@ class CompareTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function handleCommandValidiateCompanyNumberDataProvider(): array
+    public static function handleCommandValidiateCompanyNumberDataProvider(): \Iterator
     {
-        return [
-            [true, '6'],
-            [true, '6563254723654732645'],
-            [true, 'A'],
-            [true, 'a'],
-            [true, 'AbCdEfGhIjKlMnOpQr'],
-            [true, 'SCO12345'],
-            [false, 'SCO 12345'],
-            [false, '.SCO 12345'],
-            [false, '.SCO12345'],
-            [false, '. 526353'],
-        ];
+        yield [true, '6'];
+        yield [true, '6563254723654732645'];
+        yield [true, 'A'];
+        yield [true, 'a'];
+        yield [true, 'AbCdEfGhIjKlMnOpQr'];
+        yield [true, 'SCO12345'];
+        yield [false, 'SCO 12345'];
+        yield [false, '.SCO 12345'];
+        yield [false, '.SCO12345'];
+        yield [false, '. 526353'];
     }
 
     /**
@@ -266,819 +264,813 @@ class CompareTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedSaveData, $newCompany->toArray());
     }
 
-    public static function noChangesProvider(): array
+    public static function noChangesProvider(): \Iterator
     {
-        return [
-            'no changes' => [
-                'companyNumber' => '03127414',
-                'stubResponse' => [
-                    'registered_office_address' => [
-                        'address_line_1' => '120 Aldersgate Street',
-                        'address_line_2' => 'London',
-                        'postal_code' => 'EC1A 4JQ',
-                    ],
-                    'last_full_members_list_date' => '2014-11-17',
-                    'accounts' => [
-                        'next_due' => '2015-09-30',
-                        'last_accounts' => [
-                            'type' => 'full',
-                            'made_up_to' => '2013-12-31',
-                        ],
-                        'accounting_reference_date' => [
-                            'day' => '31',
-                            'month' => '12',
-                        ],
-                        'next_made_up_to' => '2014-12-31',
-                        'overdue' => false,
-                    ],
-                    'date_of_creation' => '1995-11-17',
-                    'sic_codes' => [
-                        0 => '62020',
-                    ],
-                    'undeliverable_registered_office_address' => false,
-                    'annual_return' => [
-                        'next_due' => '2015-12-15',
-                        'overdue' => false,
-                        'next_made_up_to' => '2015-11-17',
-                        'last_made_up_to' => '2014-11-17',
-                    ],
-                    'company_name' => 'VALTECH LIMITED',
-                    'jurisdiction' => 'england-wales',
-                    'company_number' => '03127414',
-                    'type' => 'ltd',
-                    'has_been_liquidated' => false,
-                    'has_insolvency_history' => false,
-                    'etag' => 'ec52ec76d16210d1133df1b4c9bb8f797a38d09c',
-                    'officer_summary' => [
-                        'resigned_count' => 17,
-                        'officers' => [
-                            0 => [
-                                'officer_role' => 'director',
-                                'name' => 'DILLON, Andrew',
-                                'date_of_birth' => [
-                                    'year' => '1979',
-                                    'month' => '02',
-                                ],
-                            ],
-                            1 => [
-                                'officer_role' => 'director',
-                                'name' => 'HALL, Philip',
-                                'date_of_birth' => [
-                                    'year' => '1968',
-                                    'month' => '12',
-                                ],
-                            ],
-                            2 => [
-                                'officer_role' => 'director',
-                                'name' => 'SKINNER, Mark James',
-                                'date_of_birth' => [
-                                    'year' => '1969',
-                                    'month' => '06',
-                                ],
-                            ],
-                        ],
-                        'active_count' => 3,
-                    ],
-                    'company_status' => 'active',
-                    'can_file' => true,
+        yield 'no changes' => [
+            'companyNumber' => '03127414',
+            'stubResponse' => [
+                'registered_office_address' => [
+                    'address_line_1' => '120 Aldersgate Street',
+                    'address_line_2' => 'London',
+                    'postal_code' => 'EC1A 4JQ',
                 ],
-                'stubSavedData' => [
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'locality' => null,
-                    'poBox' => null,
-                    'postalCode' => 'EC1A 4JQ',
-                    'premises' => null,
-                    'region' => null,
-                    'id' => 2,
-                    'version' => 1,
+                'last_full_members_list_date' => '2014-11-17',
+                'accounts' => [
+                    'next_due' => '2015-09-30',
+                    'last_accounts' => [
+                        'type' => 'full',
+                        'made_up_to' => '2013-12-31',
+                    ],
+                    'accounting_reference_date' => [
+                        'day' => '31',
+                        'month' => '12',
+                    ],
+                    'next_made_up_to' => '2014-12-31',
+                    'overdue' => false,
+                ],
+                'date_of_creation' => '1995-11-17',
+                'sic_codes' => [
+                    0 => '62020',
+                ],
+                'undeliverable_registered_office_address' => false,
+                'annual_return' => [
+                    'next_due' => '2015-12-15',
+                    'overdue' => false,
+                    'next_made_up_to' => '2015-11-17',
+                    'last_made_up_to' => '2014-11-17',
+                ],
+                'company_name' => 'VALTECH LIMITED',
+                'jurisdiction' => 'england-wales',
+                'company_number' => '03127414',
+                'type' => 'ltd',
+                'has_been_liquidated' => false,
+                'has_insolvency_history' => false,
+                'etag' => 'ec52ec76d16210d1133df1b4c9bb8f797a38d09c',
+                'officer_summary' => [
+                    'resigned_count' => 17,
                     'officers' => [
-                        [
-                            'dateOfBirth' => new \DateTime('1979-02-01'),
+                        0 => [
+                            'officer_role' => 'director',
                             'name' => 'DILLON, Andrew',
-                            'role' => 'director'
+                            'date_of_birth' => [
+                                'year' => '1979',
+                                'month' => '02',
+                            ],
                         ],
-                        [
-                            'dateOfBirth' => new \DateTime('1968-12-01'),
+                        1 => [
+                            'officer_role' => 'director',
                             'name' => 'HALL, Philip',
-                            'role' => 'director',
+                            'date_of_birth' => [
+                                'year' => '1968',
+                                'month' => '12',
+                            ],
                         ],
-                        [
-                            'dateOfBirth' => new \DateTime('1969-06-01'),
+                        2 => [
+                            'officer_role' => 'director',
                             'name' => 'SKINNER, Mark James',
-                            'role' => 'director',
+                            'date_of_birth' => [
+                                'year' => '1969',
+                                'month' => '06',
+                            ],
                         ],
                     ],
-                    'companyStatus' => 'active',
-                    'country' => null,
-                ]
+                    'active_count' => 3,
+                ],
+                'company_status' => 'active',
+                'can_file' => true,
             ],
+            'stubSavedData' => [
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'companyName' => 'VALTECH LIMITED',
+                'companyNumber' => '03127414',
+                'locality' => null,
+                'poBox' => null,
+                'postalCode' => 'EC1A 4JQ',
+                'premises' => null,
+                'region' => null,
+                'id' => 2,
+                'version' => 1,
+                'officers' => [
+                    [
+                        'dateOfBirth' => new \DateTime('1979-02-01'),
+                        'name' => 'DILLON, Andrew',
+                        'role' => 'director'
+                    ],
+                    [
+                        'dateOfBirth' => new \DateTime('1968-12-01'),
+                        'name' => 'HALL, Philip',
+                        'role' => 'director',
+                    ],
+                    [
+                        'dateOfBirth' => new \DateTime('1969-06-01'),
+                        'name' => 'SKINNER, Mark James',
+                        'role' => 'director',
+                    ],
+                ],
+                'companyStatus' => 'active',
+                'country' => null,
+            ]
         ];
     }
 
-    public static function firstTimeProvider(): array
+    public static function firstTimeProvider(): \Iterator
     {
-        return [
-            [
-                'companyNumber' => '03127414',
-                'stubResponse' => [
-                    'registered_office_address' => [
-                        'address_line_1' => '120 Aldersgate Street',
-                        'address_line_2' => 'London',
-                        'postal_code' => 'EC1A 4JQ',
-                    ],
-                    'company_name' => 'VALTECH LIMITED',
-                    'company_number' => '03127414',
-                    'officer_summary' => [
-                        'resigned_count' => 17,
-                        'officers' => [
-                            0 => [
-                                'officer_role' => 'director',
-                                'name' => 'DILLON, Andrew',
-                                'date_of_birth' => [
-                                    'year' => '1979',
-                                    'month' => '02',
-                                ],
-                            ],
-                            1 => [
-                                'officer_role' => 'director',
-                                'name' => 'HALL, Philip',
-                                'date_of_birth' => [
-                                    'year' => '1968',
-                                    'month' => '12',
-                                ],
-                            ],
-                            2 => [
-                                'officer_role' => 'director',
-                                'name' => 'SKINNER, Mark James',
-                                'date_of_birth' => [
-                                    'year' => '1969',
-                                    'month' => '06',
-                                ],
-                            ],
-                        ],
-                        'active_count' => 3,
-                    ],
-                    'company_status' => 'active',
+        yield [
+            'companyNumber' => '03127414',
+            'stubResponse' => [
+                'registered_office_address' => [
+                    'address_line_1' => '120 Aldersgate Street',
+                    'address_line_2' => 'London',
+                    'postal_code' => 'EC1A 4JQ',
                 ],
-                'expectedSaveData' => [
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'companyStatus' => 'active',
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'postalCode' => 'EC1A 4JQ',
+                'company_name' => 'VALTECH LIMITED',
+                'company_number' => '03127414',
+                'officer_summary' => [
+                    'resigned_count' => 17,
                     'officers' => [
-                        [
+                        0 => [
+                            'officer_role' => 'director',
                             'name' => 'DILLON, Andrew',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1979-02-01'),
+                            'date_of_birth' => [
+                                'year' => '1979',
+                                'month' => '02',
+                            ],
                         ],
-                        [
+                        1 => [
+                            'officer_role' => 'director',
                             'name' => 'HALL, Philip',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1968-12-01'),
+                            'date_of_birth' => [
+                                'year' => '1968',
+                                'month' => '12',
+                            ],
                         ],
-                        [
+                        2 => [
+                            'officer_role' => 'director',
                             'name' => 'SKINNER, Mark James',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1969-06-01'),
+                            'date_of_birth' => [
+                                'year' => '1969',
+                                'month' => '06',
+                            ],
                         ],
                     ],
-                    'country' => null,
-                    'locality' => null,
-                    'poBox' => null,
-                    'premises' => null,
-                    'region' => null,
-                    'insolvencyProcessed' => null
+                    'active_count' => 3,
                 ],
+                'company_status' => 'active',
+            ],
+            'expectedSaveData' => [
+                'companyName' => 'VALTECH LIMITED',
+                'companyNumber' => '03127414',
+                'companyStatus' => 'active',
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'postalCode' => 'EC1A 4JQ',
+                'officers' => [
+                    [
+                        'name' => 'DILLON, Andrew',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1979-02-01'),
+                    ],
+                    [
+                        'name' => 'HALL, Philip',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1968-12-01'),
+                    ],
+                    [
+                        'name' => 'SKINNER, Mark James',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1969-06-01'),
+                    ],
+                ],
+                'country' => null,
+                'locality' => null,
+                'poBox' => null,
+                'premises' => null,
+                'region' => null,
+                'insolvencyProcessed' => null
             ],
         ];
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function changesProvider(): array
+    public static function changesProvider(): \Iterator
     {
-        return [
-            'non_insolvent_status_change' => [
+        yield 'non_insolvent_status_change' => [
+            'companyNumber' => '03127414',
+            'stubResponse' => [
+                'registered_office_address' => [
+                    'address_line_1' => '120 Aldersgate Street',
+                    'address_line_2' => 'London',
+                    'postal_code' => 'EC1A 4JQ',
+                ],
+                'last_full_members_list_date' => '2014-11-17',
+                'accounts' => [
+                    'next_due' => '2015-09-30',
+                    'last_accounts' => [
+                        'type' => 'full',
+                        'made_up_to' => '2013-12-31',
+                    ],
+                    'accounting_reference_date' => [
+                        'day' => '31',
+                        'month' => '12',
+                    ],
+                    'next_made_up_to' => '2014-12-31',
+                    'overdue' => false,
+                ],
+                'date_of_creation' => '1995-11-17',
+                'sic_codes' => [
+                    0 => '62020',
+                ],
+                'undeliverable_registered_office_address' => false,
+                'annual_return' => [
+                    'next_due' => '2015-12-15',
+                    'overdue' => false,
+                    'next_made_up_to' => '2015-11-17',
+                    'last_made_up_to' => '2014-11-17',
+                ],
+                'company_name' => 'VALTECH LIMITED',
+                'jurisdiction' => 'england-wales',
+                'company_number' => '03127414',
+                'type' => 'ltd',
+                'has_been_liquidated' => false,
+                'has_insolvency_history' => false,
+                'etag' => 'ec52ec76d16210d1133df1b4c9bb8f797a38d09c',
+                'officer_summary' => [
+                    'resigned_count' => 17,
+                    'officers' => [
+                        0 => [
+                            'officer_role' => 'director',
+                            'name' => 'DILLON, Andrew',
+                            'date_of_birth' => [
+                                'year' => '1979',
+                                'month' => '02',
+                            ],
+                        ],
+                        1 => [
+                            'officer_role' => 'director',
+                            'name' => 'HALL, Philip',
+                            'date_of_birth' => [
+                                'year' => '1968',
+                                'month' => '12',
+                            ],
+                        ],
+                        2 => [
+                            'officer_role' => 'director',
+                            'name' => 'SKINNER, Mark James',
+                            'date_of_birth' => [
+                                'year' => '1969',
+                                'month' => '06',
+                            ],
+                        ],
+                    ],
+                    'active_count' => 3,
+                ],
+                'company_status' => 'dissolved',
+                'can_file' => true,
+            ],
+            'stubSavedData' => [
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'companyName' => 'VALTECH LIMITED',
                 'companyNumber' => '03127414',
-                'stubResponse' => [
-                    'registered_office_address' => [
-                        'address_line_1' => '120 Aldersgate Street',
-                        'address_line_2' => 'London',
-                        'postal_code' => 'EC1A 4JQ',
+                'locality' => null,
+                'poBox' => null,
+                'postalCode' => 'EC1A 4JQ',
+                'premises' => null,
+                'region' => null,
+                'id' => 2,
+                'version' => 1,
+                'officers' => [
+                    [
+                        'dateOfBirth' => new \DateTime('1979-02-01'),
+                        'name' => 'DILLON, Andrew',
+                        'role' => 'director',
                     ],
-                    'last_full_members_list_date' => '2014-11-17',
-                    'accounts' => [
-                        'next_due' => '2015-09-30',
-                        'last_accounts' => [
-                            'type' => 'full',
-                            'made_up_to' => '2013-12-31',
-                        ],
-                        'accounting_reference_date' => [
-                            'day' => '31',
-                            'month' => '12',
-                        ],
-                        'next_made_up_to' => '2014-12-31',
-                        'overdue' => false,
+                    [
+                        'dateOfBirth' => new \DateTime('1968-12-01'),
+                        'name' => 'HALL, Philip',
+                        'role' => 'director',
                     ],
-                    'date_of_creation' => '1995-11-17',
-                    'sic_codes' => [
-                        0 => '62020',
-                    ],
-                    'undeliverable_registered_office_address' => false,
-                    'annual_return' => [
-                        'next_due' => '2015-12-15',
-                        'overdue' => false,
-                        'next_made_up_to' => '2015-11-17',
-                        'last_made_up_to' => '2014-11-17',
-                    ],
-                    'company_name' => 'VALTECH LIMITED',
-                    'jurisdiction' => 'england-wales',
-                    'company_number' => '03127414',
-                    'type' => 'ltd',
-                    'has_been_liquidated' => false,
-                    'has_insolvency_history' => false,
-                    'etag' => 'ec52ec76d16210d1133df1b4c9bb8f797a38d09c',
-                    'officer_summary' => [
-                        'resigned_count' => 17,
-                        'officers' => [
-                            0 => [
-                                'officer_role' => 'director',
-                                'name' => 'DILLON, Andrew',
-                                'date_of_birth' => [
-                                    'year' => '1979',
-                                    'month' => '02',
-                                ],
-                            ],
-                            1 => [
-                                'officer_role' => 'director',
-                                'name' => 'HALL, Philip',
-                                'date_of_birth' => [
-                                    'year' => '1968',
-                                    'month' => '12',
-                                ],
-                            ],
-                            2 => [
-                                'officer_role' => 'director',
-                                'name' => 'SKINNER, Mark James',
-                                'date_of_birth' => [
-                                    'year' => '1969',
-                                    'month' => '06',
-                                ],
-                            ],
-                        ],
-                        'active_count' => 3,
-                    ],
-                    'company_status' => 'dissolved',
-                    'can_file' => true,
-                ],
-                'stubSavedData' => [
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'locality' => null,
-                    'poBox' => null,
-                    'postalCode' => 'EC1A 4JQ',
-                    'premises' => null,
-                    'region' => null,
-                    'id' => 2,
-                    'version' => 1,
-                    'officers' => [
-                        [
-                            'dateOfBirth' => new \DateTime('1979-02-01'),
-                            'name' => 'DILLON, Andrew',
-                            'role' => 'director',
-                        ],
-                        [
-                            'dateOfBirth' => new \DateTime('1968-12-01'),
-                            'name' => 'HALL, Philip',
-                            'role' => 'director',
-                        ],
-                        [
-                            'dateOfBirth' => new \DateTime('1969-06-01'),
-                            'name' => 'SKINNER, Mark James',
-                            'role' => 'director',
-                        ],
-                    ],
-                    'companyStatus' => 'active',
-                    'country' => null,
-                ],
-                'expectedAlertData' => [
-                    'companyNumber' => '03127414',
-                    'reasons' => [
-                        AlertEntity::REASON_STATUS_CHANGE,
+                    [
+                        'dateOfBirth' => new \DateTime('1969-06-01'),
+                        'name' => 'SKINNER, Mark James',
+                        'role' => 'director',
                     ],
                 ],
-                'expectedSaveData' => [
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'companyStatus' => 'dissolved',
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'postalCode' => 'EC1A 4JQ',
-                    'officers' => [
-                        [
-                            'name' => 'DILLON, Andrew',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1979-02-01'),
-                        ],
-                        [
-                            'name' => 'HALL, Philip',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1968-12-01'),
-                        ],
-                        [
-                            'name' => 'SKINNER, Mark James',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1969-06-01'),
-                        ],
-                    ],
-                    'country' => null,
-                    'locality' => null,
-                    'poBox' => null,
-                    'premises' => null,
-                    'region' => null,
-                    'insolvencyProcessed' => 0
+                'companyStatus' => 'active',
+                'country' => null,
+            ],
+            'expectedAlertData' => [
+                'companyNumber' => '03127414',
+                'reasons' => [
+                    AlertEntity::REASON_STATUS_CHANGE,
                 ],
             ],
-            'name status address and people change' => [
+            'expectedSaveData' => [
+                'companyName' => 'VALTECH LIMITED',
                 'companyNumber' => '03127414',
-                'stubResponse' => [
-                    'registered_office_address' => [
-                        'address_line_1' => '122 Aldersgate Street',
-                        'address_line_2' => 'London',
-                        'postal_code' => 'EC1A 4JQ',
+                'companyStatus' => 'dissolved',
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'postalCode' => 'EC1A 4JQ',
+                'officers' => [
+                    [
+                        'name' => 'DILLON, Andrew',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1979-02-01'),
                     ],
-                    'last_full_members_list_date' => '2014-11-17',
-                    'accounts' => [
-                        'next_due' => '2015-09-30',
-                        'last_accounts' => [
-                            'type' => 'full',
-                            'made_up_to' => '2013-12-31',
-                        ],
-                        'accounting_reference_date' => [
-                            'day' => '31',
-                            'month' => '12',
-                        ],
-                        'next_made_up_to' => '2014-12-31',
-                        'overdue' => false,
+                    [
+                        'name' => 'HALL, Philip',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1968-12-01'),
                     ],
-                    'date_of_creation' => '1995-11-17',
-                    'sic_codes' => [
-                        0 => '62020',
+                    [
+                        'name' => 'SKINNER, Mark James',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1969-06-01'),
                     ],
-                    'undeliverable_registered_office_address' => false,
-                    'annual_return' => [
-                        'next_due' => '2015-12-15',
-                        'overdue' => false,
-                        'next_made_up_to' => '2015-11-17',
-                        'last_made_up_to' => '2014-11-17',
-                    ],
-                    'company_name' => 'VALTECH 2 LIMITED',
-                    'jurisdiction' => 'england-wales',
-                    'company_number' => '03127414',
-                    'type' => 'ltd',
-                    'has_been_liquidated' => false,
-                    'has_insolvency_history' => false,
-                    'etag' => 'ec52ec76d16210d1133df1b4c9bb8f797a38d09c',
-                    'officer_summary' => [
-                        'resigned_count' => 18,
-                        'officers' => [
-                            0 => [
-                                'officer_role' => 'director',
-                                'name' => 'DILLON, Andrew',
-                                'date_of_birth' => [
-                                    'year' => '1979',
-                                    'month' => '02',
-                                ],
-                            ],
-                            1 => [
-                                'officer_role' => 'director',
-                                'name' => 'SMITH, John',
-                                'date_of_birth' => [
-                                    'year' => '1969',
-                                    'month' => '06',
-                                ],
-                            ],
-                        ],
-                        'active_count' => 2,
-                    ],
-                    'company_status' => 'dissolved',
-                    'can_file' => true,
                 ],
-                'stubSavedData' => [
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'locality' => null,
-                    'poBox' => null,
-                    'postalCode' => 'EC1A 4JQ',
-                    'premises' => null,
-                    'region' => null,
-                    'id' => 2,
-                    'version' => 1,
+                'country' => null,
+                'locality' => null,
+                'poBox' => null,
+                'premises' => null,
+                'region' => null,
+                'insolvencyProcessed' => 0
+            ],
+        ];
+        yield 'name status address and people change' => [
+            'companyNumber' => '03127414',
+            'stubResponse' => [
+                'registered_office_address' => [
+                    'address_line_1' => '122 Aldersgate Street',
+                    'address_line_2' => 'London',
+                    'postal_code' => 'EC1A 4JQ',
+                ],
+                'last_full_members_list_date' => '2014-11-17',
+                'accounts' => [
+                    'next_due' => '2015-09-30',
+                    'last_accounts' => [
+                        'type' => 'full',
+                        'made_up_to' => '2013-12-31',
+                    ],
+                    'accounting_reference_date' => [
+                        'day' => '31',
+                        'month' => '12',
+                    ],
+                    'next_made_up_to' => '2014-12-31',
+                    'overdue' => false,
+                ],
+                'date_of_creation' => '1995-11-17',
+                'sic_codes' => [
+                    0 => '62020',
+                ],
+                'undeliverable_registered_office_address' => false,
+                'annual_return' => [
+                    'next_due' => '2015-12-15',
+                    'overdue' => false,
+                    'next_made_up_to' => '2015-11-17',
+                    'last_made_up_to' => '2014-11-17',
+                ],
+                'company_name' => 'VALTECH 2 LIMITED',
+                'jurisdiction' => 'england-wales',
+                'company_number' => '03127414',
+                'type' => 'ltd',
+                'has_been_liquidated' => false,
+                'has_insolvency_history' => false,
+                'etag' => 'ec52ec76d16210d1133df1b4c9bb8f797a38d09c',
+                'officer_summary' => [
+                    'resigned_count' => 18,
                     'officers' => [
-                        [
-                            'dateOfBirth' => new \DateTime('1979-02-01'),
+                        0 => [
+                            'officer_role' => 'director',
                             'name' => 'DILLON, Andrew',
-                            'role' => 'director',
+                            'date_of_birth' => [
+                                'year' => '1979',
+                                'month' => '02',
+                            ],
                         ],
-                        [
-                            'dateOfBirth' => new \DateTime('1968-12-01'),
-                            'name' => 'HALL, Philip',
-                            'role' => 'director',
-                        ],
-                        [
-                            'dateOfBirth' => new \DateTime('1969-06-01'),
-                            'name' => 'SKINNER, Mark James',
-                            'role' => 'director',
-                        ],
-                    ],
-                    'companyStatus' => 'active',
-                    'country' => null,
-                ],
-                'expectedAlertData' => [
-                    'companyNumber' => '03127414',
-                    'reasons' => [
-                        AlertEntity::REASON_STATUS_CHANGE,
-                        AlertEntity::REASON_NAME_CHANGE,
-                        AlertEntity::REASON_ADDRESS_CHANGE,
-                        AlertEntity::REASON_PEOPLE_CHANGE,
-                    ],
-                ],
-                'expectedSaveData' => [
-                    'companyName' => 'VALTECH 2 LIMITED',
-                    'companyNumber' => '03127414',
-                    'companyStatus' => 'dissolved',
-                    'addressLine1' => '122 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'postalCode' => 'EC1A 4JQ',
-                    'officers' => [
-                        [
-                            'name' => 'DILLON, Andrew',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1979-02-01'),
-                        ],
-                        [
+                        1 => [
+                            'officer_role' => 'director',
                             'name' => 'SMITH, John',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1969-06-01'),
+                            'date_of_birth' => [
+                                'year' => '1969',
+                                'month' => '06',
+                            ],
                         ],
                     ],
-                    'country' => null,
-                    'locality' => null,
-                    'poBox' => null,
-                    'premises' => null,
-                    'region' => null,
-                    'insolvencyProcessed' => null
+                    'active_count' => 2,
+                ],
+                'company_status' => 'dissolved',
+                'can_file' => true,
+            ],
+            'stubSavedData' => [
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'companyName' => 'VALTECH LIMITED',
+                'companyNumber' => '03127414',
+                'locality' => null,
+                'poBox' => null,
+                'postalCode' => 'EC1A 4JQ',
+                'premises' => null,
+                'region' => null,
+                'id' => 2,
+                'version' => 1,
+                'officers' => [
+                    [
+                        'dateOfBirth' => new \DateTime('1979-02-01'),
+                        'name' => 'DILLON, Andrew',
+                        'role' => 'director',
+                    ],
+                    [
+                        'dateOfBirth' => new \DateTime('1968-12-01'),
+                        'name' => 'HALL, Philip',
+                        'role' => 'director',
+                    ],
+                    [
+                        'dateOfBirth' => new \DateTime('1969-06-01'),
+                        'name' => 'SKINNER, Mark James',
+                        'role' => 'director',
+                    ],
+                ],
+                'companyStatus' => 'active',
+                'country' => null,
+            ],
+            'expectedAlertData' => [
+                'companyNumber' => '03127414',
+                'reasons' => [
+                    AlertEntity::REASON_STATUS_CHANGE,
+                    AlertEntity::REASON_NAME_CHANGE,
+                    AlertEntity::REASON_ADDRESS_CHANGE,
+                    AlertEntity::REASON_PEOPLE_CHANGE,
                 ],
             ],
-            // additional tests for various address changes
-            'address field removed' => [
+            'expectedSaveData' => [
+                'companyName' => 'VALTECH 2 LIMITED',
                 'companyNumber' => '03127414',
-                'stubResponse' => [
-                    'registered_office_address' => [
-                        'address_line_1' => '120 Aldersgate Street',
-                        'postal_code' => 'EC1A 4JQ',
+                'companyStatus' => 'dissolved',
+                'addressLine1' => '122 Aldersgate Street',
+                'addressLine2' => 'London',
+                'postalCode' => 'EC1A 4JQ',
+                'officers' => [
+                    [
+                        'name' => 'DILLON, Andrew',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1979-02-01'),
                     ],
-                    'company_name' => 'VALTECH LIMITED',
-                    'company_number' => '03127414',
-                    'officer_summary' => [],
-                    'company_status' => 'active',
-                ],
-                'stubSavedData' => [
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'locality' => null,
-                    'poBox' => null,
-                    'postalCode' => 'EC1A 4JQ',
-                    'premises' => null,
-                    'region' => null,
-                    'id' => 2,
-                    'version' => 1,
-                    'officers' => [],
-                    'companyStatus' => 'active',
-                    'country' => null,
-                ],
-                'expectedAlertData' => [
-                    'companyNumber' => '03127414',
-                    'reasons' => [
-                        AlertEntity::REASON_ADDRESS_CHANGE,
+                    [
+                        'name' => 'SMITH, John',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1969-06-01'),
                     ],
                 ],
-                'expectedSaveData' => [
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'companyStatus' => 'active',
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => null,
-                    'postalCode' => 'EC1A 4JQ',
-                    'officers' => [],
-                    'country' => null,
-                    'locality' => null,
-                    'poBox' => null,
-                    'premises' => null,
-                    'region' => null,
-                    'insolvencyProcessed' => null
+                'country' => null,
+                'locality' => null,
+                'poBox' => null,
+                'premises' => null,
+                'region' => null,
+                'insolvencyProcessed' => null
+            ],
+        ];
+        // additional tests for various address changes
+        yield 'address field removed' => [
+            'companyNumber' => '03127414',
+            'stubResponse' => [
+                'registered_office_address' => [
+                    'address_line_1' => '120 Aldersgate Street',
+                    'postal_code' => 'EC1A 4JQ',
+                ],
+                'company_name' => 'VALTECH LIMITED',
+                'company_number' => '03127414',
+                'officer_summary' => [],
+                'company_status' => 'active',
+            ],
+            'stubSavedData' => [
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'companyName' => 'VALTECH LIMITED',
+                'companyNumber' => '03127414',
+                'locality' => null,
+                'poBox' => null,
+                'postalCode' => 'EC1A 4JQ',
+                'premises' => null,
+                'region' => null,
+                'id' => 2,
+                'version' => 1,
+                'officers' => [],
+                'companyStatus' => 'active',
+                'country' => null,
+            ],
+            'expectedAlertData' => [
+                'companyNumber' => '03127414',
+                'reasons' => [
+                    AlertEntity::REASON_ADDRESS_CHANGE,
                 ],
             ],
-            'address field added' => [
+            'expectedSaveData' => [
+                'companyName' => 'VALTECH LIMITED',
                 'companyNumber' => '03127414',
-                'stubResponse' => [
-                    'registered_office_address' => [
-                        'address_line_1' => '120 Aldersgate Street',
-                        'address_line_2' => 'London',
-                        'locality' => 'Greater London',
-                        'postal_code' => 'EC1A 4JQ',
-                    ],
-                    'company_name' => 'VALTECH LIMITED',
-                    'company_number' => '03127414',
-                    'officer_summary' => [],
-                    'company_status' => 'active',
-                ],
-                'stubSavedData' => [
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'locality' => null,
-                    'poBox' => null,
-                    'postalCode' => 'EC1A 4JQ',
-                    'premises' => null,
-                    'region' => null,
-                    'id' => 2,
-                    'version' => 1,
-                    'officers' => [],
-                    'companyStatus' => 'active',
-                    'country' => null,
-                ],
-                'expectedAlertData' => [
-                    'companyNumber' => '03127414',
-                    'reasons' => [
-                        AlertEntity::REASON_ADDRESS_CHANGE,
-                    ],
-                ],
-                'expectedSaveData' => [
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'companyStatus' => 'active',
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'postalCode' => 'EC1A 4JQ',
+                'companyStatus' => 'active',
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => null,
+                'postalCode' => 'EC1A 4JQ',
+                'officers' => [],
+                'country' => null,
+                'locality' => null,
+                'poBox' => null,
+                'premises' => null,
+                'region' => null,
+                'insolvencyProcessed' => null
+            ],
+        ];
+        yield 'address field added' => [
+            'companyNumber' => '03127414',
+            'stubResponse' => [
+                'registered_office_address' => [
+                    'address_line_1' => '120 Aldersgate Street',
+                    'address_line_2' => 'London',
                     'locality' => 'Greater London',
-                    'officers' => [],
-                    'country' => null,
-                    'poBox' => null,
-                    'premises' => null,
-                    'region' => null,
-                    'insolvencyProcessed' => null
+                    'postal_code' => 'EC1A 4JQ',
+                ],
+                'company_name' => 'VALTECH LIMITED',
+                'company_number' => '03127414',
+                'officer_summary' => [],
+                'company_status' => 'active',
+            ],
+            'stubSavedData' => [
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'companyName' => 'VALTECH LIMITED',
+                'companyNumber' => '03127414',
+                'locality' => null,
+                'poBox' => null,
+                'postalCode' => 'EC1A 4JQ',
+                'premises' => null,
+                'region' => null,
+                'id' => 2,
+                'version' => 1,
+                'officers' => [],
+                'companyStatus' => 'active',
+                'country' => null,
+            ],
+            'expectedAlertData' => [
+                'companyNumber' => '03127414',
+                'reasons' => [
+                    AlertEntity::REASON_ADDRESS_CHANGE,
                 ],
             ],
-            'people role change' => [
+            'expectedSaveData' => [
+                'companyName' => 'VALTECH LIMITED',
                 'companyNumber' => '03127414',
-                'stubResponse' => [
-                    'registered_office_address' => [
-                        'address_line_1' => '120 Aldersgate Street',
-                        'address_line_2' => 'London',
-                        'postal_code' => 'EC1A 4JQ',
-                    ],
-                    'company_name' => 'VALTECH LIMITED',
-                    'company_number' => '03127414',
-                    'officer_summary' => [
-                        'resigned_count' => 18,
-                        'officers' => [
-                            0 => [
-                                'officer_role' => 'director',
-                                'name' => 'DILLON, Andrew',
-                                'date_of_birth' => [
-                                    'year' => '1979',
-                                    'month' => '02',
-                                ],
-                            ],
-                            1 => [
-                                'officer_role' => 'director',
-                                'name' => 'SMITH, John',
-                                'date_of_birth' => [
-                                    'year' => '1969',
-                                    'month' => '06',
-                                ],
-                            ],
-                        ],
-                        'active_count' => 2,
-                    ],
-                    'company_status' => 'active',
-                ],
-                'stubSavedData' => [
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'locality' => null,
-                    'poBox' => null,
-                    'postalCode' => 'EC1A 4JQ',
-                    'premises' => null,
-                    'region' => null,
-                    'id' => 2,
-                    'version' => 1,
-                    'officers' => [
-                        [
-                            'dateOfBirth' => new \DateTime('1979-02-01'),
-                            'name' => 'DILLON, Andrew',
-                            'role' => 'director',
-                        ],
-                        [
-                            'dateOfBirth' => new \DateTime('1968-12-01'),
-                            'name' => 'SMITH, John',
-                            'role' => 'secretary',
-                        ],
-                    ],
-                    'companyStatus' => 'active',
-                    'country' => null,
-                ],
-                'expectedAlertData' => [
-                    'companyNumber' => '03127414',
-                    'reasons' => [
-                        AlertEntity::REASON_PEOPLE_CHANGE,
-                    ],
-                ],
-                'expectedSaveData' => [
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'companyStatus' => 'active',
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'postalCode' => 'EC1A 4JQ',
-                    'officers' => [
-                        [
-                            'name' => 'DILLON, Andrew',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1979-02-01'),
-                        ],
-                        [
-                            'name' => 'SMITH, John',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1969-06-01'),
-                        ],
-                    ],
-                    'country' => null,
-                    'locality' => null,
-                    'poBox' => null,
-                    'premises' => null,
-                    'region' => null,
-                    'insolvencyProcessed' => null
-                ]
+                'companyStatus' => 'active',
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'postalCode' => 'EC1A 4JQ',
+                'locality' => 'Greater London',
+                'officers' => [],
+                'country' => null,
+                'poBox' => null,
+                'premises' => null,
+                'region' => null,
+                'insolvencyProcessed' => null
             ],
-            'insolvent_status_change' => [
+        ];
+        yield 'people role change' => [
+            'companyNumber' => '03127414',
+            'stubResponse' => [
+                'registered_office_address' => [
+                    'address_line_1' => '120 Aldersgate Street',
+                    'address_line_2' => 'London',
+                    'postal_code' => 'EC1A 4JQ',
+                ],
+                'company_name' => 'VALTECH LIMITED',
+                'company_number' => '03127414',
+                'officer_summary' => [
+                    'resigned_count' => 18,
+                    'officers' => [
+                        0 => [
+                            'officer_role' => 'director',
+                            'name' => 'DILLON, Andrew',
+                            'date_of_birth' => [
+                                'year' => '1979',
+                                'month' => '02',
+                            ],
+                        ],
+                        1 => [
+                            'officer_role' => 'director',
+                            'name' => 'SMITH, John',
+                            'date_of_birth' => [
+                                'year' => '1969',
+                                'month' => '06',
+                            ],
+                        ],
+                    ],
+                    'active_count' => 2,
+                ],
+                'company_status' => 'active',
+            ],
+            'stubSavedData' => [
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'companyName' => 'VALTECH LIMITED',
                 'companyNumber' => '03127414',
-                'stubResponse' => [
-                    'registered_office_address' => [
-                        'address_line_1' => '120 Aldersgate Street',
-                        'address_line_2' => 'London',
-                        'postal_code' => 'EC1A 4JQ',
+                'locality' => null,
+                'poBox' => null,
+                'postalCode' => 'EC1A 4JQ',
+                'premises' => null,
+                'region' => null,
+                'id' => 2,
+                'version' => 1,
+                'officers' => [
+                    [
+                        'dateOfBirth' => new \DateTime('1979-02-01'),
+                        'name' => 'DILLON, Andrew',
+                        'role' => 'director',
                     ],
-                    'last_full_members_list_date' => '2014-11-17',
-                    'accounts' => [
-                        'next_due' => '2015-09-30',
-                        'last_accounts' => [
-                            'type' => 'full',
-                            'made_up_to' => '2013-12-31',
-                        ],
-                        'accounting_reference_date' => [
-                            'day' => '31',
-                            'month' => '12',
-                        ],
-                        'next_made_up_to' => '2014-12-31',
-                        'overdue' => false,
+                    [
+                        'dateOfBirth' => new \DateTime('1968-12-01'),
+                        'name' => 'SMITH, John',
+                        'role' => 'secretary',
                     ],
-                    'date_of_creation' => '1995-11-17',
-                    'sic_codes' => [
-                        0 => '62020',
-                    ],
-                    'undeliverable_registered_office_address' => false,
-                    'annual_return' => [
-                        'next_due' => '2015-12-15',
-                        'overdue' => false,
-                        'next_made_up_to' => '2015-11-17',
-                        'last_made_up_to' => '2014-11-17',
-                    ],
-                    'company_name' => 'VALTECH LIMITED',
-                    'jurisdiction' => 'england-wales',
-                    'company_number' => '03127414',
-                    'type' => 'ltd',
-                    'has_been_liquidated' => false,
-                    'has_insolvency_history' => false,
-                    'etag' => 'ec52ec76d16210d1133df1b4c9bb8f797a38d09c',
-                    'officer_summary' => [
-                        'resigned_count' => 17,
-                        'officers' => [
-                            0 => [
-                                'officer_role' => 'director',
-                                'name' => 'DILLON, Andrew',
-                                'date_of_birth' => [
-                                    'year' => '1979',
-                                    'month' => '02',
-                                ],
-                            ],
-                            1 => [
-                                'officer_role' => 'director',
-                                'name' => 'HALL, Philip',
-                                'date_of_birth' => [
-                                    'year' => '1968',
-                                    'month' => '12',
-                                ],
-                            ],
-                            2 => [
-                                'officer_role' => 'director',
-                                'name' => 'SKINNER, Mark James',
-                                'date_of_birth' => [
-                                    'year' => '1969',
-                                    'month' => '06',
-                                ],
-                            ],
-                        ],
-                        'active_count' => 3,
-                    ],
-                    'company_status' => 'administration',
-                    'can_file' => true,
                 ],
-                'stubSavedData' => [
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'locality' => null,
-                    'poBox' => null,
-                    'postalCode' => 'EC1A 4JQ',
-                    'premises' => null,
-                    'region' => null,
-                    'id' => 2,
-                    'version' => 1,
+                'companyStatus' => 'active',
+                'country' => null,
+            ],
+            'expectedAlertData' => [
+                'companyNumber' => '03127414',
+                'reasons' => [
+                    AlertEntity::REASON_PEOPLE_CHANGE,
+                ],
+            ],
+            'expectedSaveData' => [
+                'companyName' => 'VALTECH LIMITED',
+                'companyNumber' => '03127414',
+                'companyStatus' => 'active',
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'postalCode' => 'EC1A 4JQ',
+                'officers' => [
+                    [
+                        'name' => 'DILLON, Andrew',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1979-02-01'),
+                    ],
+                    [
+                        'name' => 'SMITH, John',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1969-06-01'),
+                    ],
+                ],
+                'country' => null,
+                'locality' => null,
+                'poBox' => null,
+                'premises' => null,
+                'region' => null,
+                'insolvencyProcessed' => null
+            ]
+        ];
+        yield 'insolvent_status_change' => [
+            'companyNumber' => '03127414',
+            'stubResponse' => [
+                'registered_office_address' => [
+                    'address_line_1' => '120 Aldersgate Street',
+                    'address_line_2' => 'London',
+                    'postal_code' => 'EC1A 4JQ',
+                ],
+                'last_full_members_list_date' => '2014-11-17',
+                'accounts' => [
+                    'next_due' => '2015-09-30',
+                    'last_accounts' => [
+                        'type' => 'full',
+                        'made_up_to' => '2013-12-31',
+                    ],
+                    'accounting_reference_date' => [
+                        'day' => '31',
+                        'month' => '12',
+                    ],
+                    'next_made_up_to' => '2014-12-31',
+                    'overdue' => false,
+                ],
+                'date_of_creation' => '1995-11-17',
+                'sic_codes' => [
+                    0 => '62020',
+                ],
+                'undeliverable_registered_office_address' => false,
+                'annual_return' => [
+                    'next_due' => '2015-12-15',
+                    'overdue' => false,
+                    'next_made_up_to' => '2015-11-17',
+                    'last_made_up_to' => '2014-11-17',
+                ],
+                'company_name' => 'VALTECH LIMITED',
+                'jurisdiction' => 'england-wales',
+                'company_number' => '03127414',
+                'type' => 'ltd',
+                'has_been_liquidated' => false,
+                'has_insolvency_history' => false,
+                'etag' => 'ec52ec76d16210d1133df1b4c9bb8f797a38d09c',
+                'officer_summary' => [
+                    'resigned_count' => 17,
                     'officers' => [
-                        [
-                            'dateOfBirth' => new \DateTime('1979-02-01'),
+                        0 => [
+                            'officer_role' => 'director',
                             'name' => 'DILLON, Andrew',
-                            'role' => 'director',
+                            'date_of_birth' => [
+                                'year' => '1979',
+                                'month' => '02',
+                            ],
                         ],
-                        [
-                            'dateOfBirth' => new \DateTime('1968-12-01'),
+                        1 => [
+                            'officer_role' => 'director',
                             'name' => 'HALL, Philip',
-                            'role' => 'director',
+                            'date_of_birth' => [
+                                'year' => '1968',
+                                'month' => '12',
+                            ],
                         ],
-                        [
-                            'dateOfBirth' => new \DateTime('1969-06-01'),
+                        2 => [
+                            'officer_role' => 'director',
                             'name' => 'SKINNER, Mark James',
-                            'role' => 'director',
+                            'date_of_birth' => [
+                                'year' => '1969',
+                                'month' => '06',
+                            ],
                         ],
                     ],
-                    'companyStatus' => 'active',
-                    'country' => null,
+                    'active_count' => 3,
                 ],
-                'expectedAlertData' => [
-                    'companyNumber' => '03127414',
-                    'reasons' => [
-                        AlertEntity::REASON_STATUS_CHANGE,
+                'company_status' => 'administration',
+                'can_file' => true,
+            ],
+            'stubSavedData' => [
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'companyName' => 'VALTECH LIMITED',
+                'companyNumber' => '03127414',
+                'locality' => null,
+                'poBox' => null,
+                'postalCode' => 'EC1A 4JQ',
+                'premises' => null,
+                'region' => null,
+                'id' => 2,
+                'version' => 1,
+                'officers' => [
+                    [
+                        'dateOfBirth' => new \DateTime('1979-02-01'),
+                        'name' => 'DILLON, Andrew',
+                        'role' => 'director',
+                    ],
+                    [
+                        'dateOfBirth' => new \DateTime('1968-12-01'),
+                        'name' => 'HALL, Philip',
+                        'role' => 'director',
+                    ],
+                    [
+                        'dateOfBirth' => new \DateTime('1969-06-01'),
+                        'name' => 'SKINNER, Mark James',
+                        'role' => 'director',
                     ],
                 ],
-                'expectedSaveData' => [
-                    'companyName' => 'VALTECH LIMITED',
-                    'companyNumber' => '03127414',
-                    'companyStatus' => 'administration',
-                    'addressLine1' => '120 Aldersgate Street',
-                    'addressLine2' => 'London',
-                    'postalCode' => 'EC1A 4JQ',
-                    'officers' => [
-                        [
-                            'name' => 'DILLON, Andrew',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1979-02-01'),
-                        ],
-                        [
-                            'name' => 'HALL, Philip',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1968-12-01'),
-                        ],
-                        [
-                            'name' => 'SKINNER, Mark James',
-                            'role' => 'director',
-                            'dateOfBirth' => new \DateTime('1969-06-01'),
-                        ],
-                    ],
-                    'country' => null,
-                    'locality' => null,
-                    'poBox' => null,
-                    'premises' => null,
-                    'region' => null,
-                    'insolvencyProcessed' => 0
+                'companyStatus' => 'active',
+                'country' => null,
+            ],
+            'expectedAlertData' => [
+                'companyNumber' => '03127414',
+                'reasons' => [
+                    AlertEntity::REASON_STATUS_CHANGE,
                 ],
+            ],
+            'expectedSaveData' => [
+                'companyName' => 'VALTECH LIMITED',
+                'companyNumber' => '03127414',
+                'companyStatus' => 'administration',
+                'addressLine1' => '120 Aldersgate Street',
+                'addressLine2' => 'London',
+                'postalCode' => 'EC1A 4JQ',
+                'officers' => [
+                    [
+                        'name' => 'DILLON, Andrew',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1979-02-01'),
+                    ],
+                    [
+                        'name' => 'HALL, Philip',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1968-12-01'),
+                    ],
+                    [
+                        'name' => 'SKINNER, Mark James',
+                        'role' => 'director',
+                        'dateOfBirth' => new \DateTime('1969-06-01'),
+                    ],
+                ],
+                'country' => null,
+                'locality' => null,
+                'poBox' => null,
+                'premises' => null,
+                'region' => null,
+                'insolvencyProcessed' => 0
             ],
         ];
     }

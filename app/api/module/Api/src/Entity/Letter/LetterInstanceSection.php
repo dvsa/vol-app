@@ -8,10 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LetterInstanceSection Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_instance_section")
  */
+#[ORM\Table(name: 'letter_instance_section')]
+#[ORM\Entity]
 class LetterInstanceSection extends AbstractLetterInstanceSection
 {
     /**

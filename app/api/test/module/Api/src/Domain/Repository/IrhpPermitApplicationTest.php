@@ -20,8 +20,9 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IrhpPermitApplicationTest extends RepositoryTestCase
+final class IrhpPermitApplicationTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(IrhpPermitApplication::class);
@@ -138,14 +139,12 @@ class IrhpPermitApplicationTest extends RepositoryTestCase
         );
     }
 
-    public static function dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment(): array
+    public static function dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment(): \Iterator
     {
-        return [
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF, 'requiredEuro5', 33, 33],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF, 'requiredEuro6', 33, 33],
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF, 'requiredEuro5', null, 0],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF, 'requiredEuro6', null, 0],
-        ];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, 'requiredEuro5', 33, 33];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, 'requiredEuro6', 33, 33];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, 'requiredEuro5', null, 0];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, 'requiredEuro6', null, 0];
     }
 
     public function testGetRequiredPermitCountWhereApplicationAwaitingPaymentBadEmissionsCategoryId(): void

@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class PermitUsageUpdaterTest extends MockeryTestCase
+final class PermitUsageUpdaterTest extends MockeryTestCase
 {
     public function testUpdate(): void
     {

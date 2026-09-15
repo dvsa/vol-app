@@ -67,7 +67,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      *
      * @return void
      */
-    public function disableSoftDeleteable(array $entities = null)
+    public function disableSoftDeleteable(?array $entities = null)
     {
         if ($this->getEntityManager()->getFilters()->isEnabled('soft-deleteable')) {
             if (!empty($entities)) {
@@ -376,7 +376,7 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
      * @return \ArrayIterator|\Traversable
      */
     #[\Override]
-    public function fetchPaginatedList(QueryBuilder $qb, $hydrateMode = Query::HYDRATE_ARRAY, QueryInterface $originalQuery = null)
+    public function fetchPaginatedList(QueryBuilder $qb, $hydrateMode = Query::HYDRATE_ARRAY, ?QueryInterface $originalQuery = null)
     {
         $query = $qb->getQuery();
         $query->setHydrationMode($hydrateMode);

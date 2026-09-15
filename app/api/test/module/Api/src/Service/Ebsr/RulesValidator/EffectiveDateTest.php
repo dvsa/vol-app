@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  * Class EffectiveDateTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator
  */
-class EffectiveDateTest extends TestCase
+final class EffectiveDateTest extends TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid(mixed $data, mixed $validity): void
@@ -21,37 +21,34 @@ class EffectiveDateTest extends TestCase
         $this->assertEquals($validity, $sut->isValid($data));
     }
 
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
         $today = strtotime(date('Y-m-d'));
-
-        return [
-            [['txcAppType' => BusRegEntity::TXC_APP_NEW, 'effectiveDate' => date('Y-m-d', $today - 86400)], false],
-            [['txcAppType' => BusRegEntity::TXC_APP_NEW, 'effectiveDate' => date('Y-m-d', $today + 86400)], true],
-            [['txcAppType' => BusRegEntity::TXC_APP_CANCEL, 'effectiveDate' => date('Y-m-d', $today - 86400)], true],
-            [['txcAppType' => BusRegEntity::TXC_APP_CANCEL, 'effectiveDate' => date('Y-m-d', $today + 86400)], true],
+        yield [['txcAppType' => BusRegEntity::TXC_APP_NEW, 'effectiveDate' => date('Y-m-d', $today - 86400)], false];
+        yield [['txcAppType' => BusRegEntity::TXC_APP_NEW, 'effectiveDate' => date('Y-m-d', $today + 86400)], true];
+        yield [['txcAppType' => BusRegEntity::TXC_APP_CANCEL, 'effectiveDate' => date('Y-m-d', $today - 86400)], true];
+        yield [['txcAppType' => BusRegEntity::TXC_APP_CANCEL, 'effectiveDate' => date('Y-m-d', $today + 86400)], true];
+        yield [
+            ['txcAppType' => BusRegEntity::TXC_APP_CHARGEABLE, 'effectiveDate' => date('Y-m-d', $today - 86400)],
+            true
+        ];
+        yield [
+            ['txcAppType' => BusRegEntity::TXC_APP_CHARGEABLE, 'effectiveDate' => date('Y-m-d', $today + 86400)],
+            true
+        ];
+        yield [
             [
-                ['txcAppType' => BusRegEntity::TXC_APP_CHARGEABLE, 'effectiveDate' => date('Y-m-d', $today - 86400)],
-                true
+                'txcAppType' => BusRegEntity::TXC_APP_NON_CHARGEABLE,
+                'effectiveDate' => date('Y-m-d', $today - 86400)
             ],
+            true
+        ];
+        yield [
             [
-                ['txcAppType' => BusRegEntity::TXC_APP_CHARGEABLE, 'effectiveDate' => date('Y-m-d', $today + 86400)],
-                true
+                'txcAppType' => BusRegEntity::TXC_APP_NON_CHARGEABLE,
+                'effectiveDate' => date('Y-m-d', $today + 86400)
             ],
-            [
-                [
-                    'txcAppType' => BusRegEntity::TXC_APP_NON_CHARGEABLE,
-                    'effectiveDate' => date('Y-m-d', $today - 86400)
-                ],
-                true
-            ],
-            [
-                [
-                    'txcAppType' => BusRegEntity::TXC_APP_NON_CHARGEABLE,
-                    'effectiveDate' => date('Y-m-d', $today + 86400)
-                ],
-                true
-            ],
+            true
         ];
     }
 }

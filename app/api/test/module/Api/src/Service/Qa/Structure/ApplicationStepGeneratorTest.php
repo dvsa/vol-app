@@ -23,7 +23,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ApplicationStepGeneratorTest extends MockeryTestCase
+final class ApplicationStepGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Entity\Publication\Publication as PublicationEntity;
 /**
  * Class DeletePublicationLinkTest
  */
-class DeletePublicationLinkTest extends AbstractCommandHandlerTestCase
+final class DeletePublicationLinkTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

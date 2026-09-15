@@ -16,7 +16,7 @@ use Olcs\Service\Processing\DashboardProcessingService;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DashboardProcessingServiceTest extends MockeryTestCase
+final class DashboardProcessingServiceTest extends MockeryTestCase
 {
     /**
      * Test get tables
@@ -52,102 +52,100 @@ class DashboardProcessingServiceTest extends MockeryTestCase
     /**
      * Applications provider
      *
-     * @return ((bool|int|string|string[])[]|bool|int|string)[][][][]
+     * @return \Iterator<(int | string), array<array<array<(array<(array<string> | bool | int | string)> | bool | int | string)>>>>
      *
      * @psalm-return array{'empty data': list{array{licences: array<never, never>, applications: array<never, never>, variations: array<never, never>}, array<never, never>, array<never, never>, array<never, never>}, 'sample data': list{array{licences: list{array{id: 1, status: array{id: 'lsts_valid'}, licenceType: array{id: 'type'}, licNo: '123', trafficArea: array{name: 'foo'}}}, applications: list{array{status: array{id: 'apsts_consideration'}, isVariation: false, id: 1, licenceType: array{id: 'type'}, licence: array{licNo: '123'}}}, variations: list{array{status: array{id: 'apsts_consideration'}, isVariation: true, id: 2, licenceType: array{id: 'type'}, licence: array{licNo: '123'}}}}, list{array{id: 1, licenceType: array{id: 'type'}, licNo: '123', status: array{id: 'lsts_valid'}, type: 'type', trafficArea: 'foo'}}, list{array{isVariation: true, id: 2, licNo: '123', status: array{id: 'apsts_consideration'}, licence: array{licNo: '123'}, licenceType: array{id: 'type'}, type: 'type'}}, list{array{isVariation: false, id: 1, licNo: '123', status: array{id: 'apsts_consideration'}, licence: array{licNo: '123'}, licenceType: array{id: 'type'}, type: 'type'}}}}
      */
-    public static function applicationsProvider(): array
+    public static function applicationsProvider(): \Iterator
     {
-        return [
-            'empty data' => [
-                [
-                    'licences' => [],
-                    'applications' => [],
-                    'variations' => [],
-                ],
-                [],
-                [],
-                []
+        yield 'empty data' => [
+            [
+                'licences' => [],
+                'applications' => [],
+                'variations' => [],
             ],
-            'sample data' => [
-                // source data
-                [
-                    'licences' => [
-                        [
-                            'id' => 1,
-                            'status' => ['id' => RefData::LICENCE_STATUS_VALID],
-                            'licenceType' => ['id' => 'type'],
-                            'licNo' => '123',
-                            'trafficArea' => ['name' => 'foo']
-                        ]
-                    ],
-                    'applications' => [
-                        [
-                            'status' => [
-                                'id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
-                            ],
-                            'isVariation' => false,
-                            'id' => 1,
-                            'licenceType' => ['id' => 'type'],
-                            'licence' => [
-                                'licNo' => '123',
-                            ],
-                        ],
-                    ],
-                    'variations' => [
-                        [
-                            'status' => [
-                                'id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
-                            ],
-                            'isVariation' => true,
-                            'id' => 2,
-                            'licenceType' => ['id' => 'type'],
-                            'licence' => [
-                                'licNo' => '123',
-                            ],
-                        ],
-                    ],
-                ],
-                // licences
-                [
+            [],
+            [],
+            []
+        ];
+        yield 'sample data' => [
+            // source data
+            [
+                'licences' => [
                     [
                         'id' => 1,
-                        'licenceType' => ['id' => 'type'],
-                        'licNo' => '123',
                         'status' => ['id' => RefData::LICENCE_STATUS_VALID],
-                        'type' => 'type',
-                        'trafficArea' => 'foo'
-                    ]
-                ],
-                // variations
-                [
-                    [
-                        'isVariation' => true,
-                        'id' => 2,
-                        'licNo' => '123',
-                        'status' => ['id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION],
-                        'licence' => [
-                                'licNo' => '123',
-                        ],
                         'licenceType' => ['id' => 'type'],
-                        'type' => 'type',
+                        'licNo' => '123',
+                        'trafficArea' => ['name' => 'foo']
                     ]
                 ],
-                // applications
-                [
+                'applications' => [
                     [
+                        'status' => [
+                            'id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
+                        ],
                         'isVariation' => false,
                         'id' => 1,
-                        'licNo' => '123',
-                        'status' => ['id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION],
-                        'licence' => [
-                                'licNo' => '123',
-                        ],
                         'licenceType' => ['id' => 'type'],
-                        'type' => 'type',
-                    ]
+                        'licence' => [
+                            'licNo' => '123',
+                        ],
+                    ],
+                ],
+                'variations' => [
+                    [
+                        'status' => [
+                            'id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
+                        ],
+                        'isVariation' => true,
+                        'id' => 2,
+                        'licenceType' => ['id' => 'type'],
+                        'licence' => [
+                            'licNo' => '123',
+                        ],
+                    ],
+                ],
+            ],
+            // licences
+            [
+                [
+                    'id' => 1,
+                    'licenceType' => ['id' => 'type'],
+                    'licNo' => '123',
+                    'status' => ['id' => RefData::LICENCE_STATUS_VALID],
+                    'type' => 'type',
+                    'trafficArea' => 'foo'
                 ]
             ],
+            // variations
+            [
+                [
+                    'isVariation' => true,
+                    'id' => 2,
+                    'licNo' => '123',
+                    'status' => ['id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION],
+                    'licence' => [
+                            'licNo' => '123',
+                    ],
+                    'licenceType' => ['id' => 'type'],
+                    'type' => 'type',
+                ]
+            ],
+            // applications
+            [
+                [
+                    'isVariation' => false,
+                    'id' => 1,
+                    'licNo' => '123',
+                    'status' => ['id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION],
+                    'licence' => [
+                            'licNo' => '123',
+                    ],
+                    'licenceType' => ['id' => 'type'],
+                    'type' => 'type',
+                ]
+            ]
         ];
     }
 }

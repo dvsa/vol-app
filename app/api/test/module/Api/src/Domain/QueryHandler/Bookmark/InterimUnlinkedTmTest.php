@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application as Entity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class InterimUnlinkedTmTest extends QueryHandlerTestCase
+final class InterimUnlinkedTmTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

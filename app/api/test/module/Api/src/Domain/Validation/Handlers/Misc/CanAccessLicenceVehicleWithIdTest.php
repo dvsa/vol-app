@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessLicenceVehicleWithId;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CanAccessLicenceVehicleWithIdTest extends AbstractHandlerTestCase
+final class CanAccessLicenceVehicleWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessLicenceVehicleWithId
@@ -46,11 +46,9 @@ class CanAccessLicenceVehicleWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

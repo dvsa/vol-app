@@ -16,7 +16,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class PublishValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class PublishValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \Dvsa\Olcs\Api\Service\Lva\Application\PublishValidationService
@@ -28,6 +28,7 @@ class PublishValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestC
      */
     protected $feesHelperService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->feesHelperService = m::mock();
@@ -35,7 +36,7 @@ class PublishValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         $sm = m::mock(ContainerInterface::class);
         $sm->shouldReceive('get')->with('FeesHelperService')->once()->andReturn($this->feesHelperService);
 
-        $this->sut = (new PublishValidationService())->__invoke($sm, PublishValidationService::class);
+        $this->sut = new PublishValidationService()->__invoke($sm, PublishValidationService::class);
     }
 
     public function testValidate(): void

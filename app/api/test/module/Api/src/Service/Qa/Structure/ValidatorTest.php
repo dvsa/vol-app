@@ -13,7 +13,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ValidatorTest extends MockeryTestCase
+final class ValidatorTest extends MockeryTestCase
 {
     private $validator;
 
@@ -21,6 +21,7 @@ class ValidatorTest extends MockeryTestCase
 
     private $params;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->rule = 'Between';

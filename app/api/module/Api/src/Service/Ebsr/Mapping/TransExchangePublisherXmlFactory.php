@@ -23,7 +23,7 @@ class TransExchangePublisherXmlFactory implements FactoryInterface
      * @return Recursion
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Recursion
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Recursion
     {
         $publisherResponse = [
             'BadRequest' => new NodeValue('error'),

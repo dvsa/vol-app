@@ -11,7 +11,7 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\TransportManagerApplication\Delete;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 
-class DeleteTest extends AbstractHandlerTestCase
+final class DeleteTest extends AbstractHandlerTestCase
 {
     /**
      * @var Delete
@@ -48,12 +48,10 @@ class DeleteTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true, 10],
-            [false, false, 10],
-            [false, true, IdentityProviderInterface::SYSTEM_USER]
-        ];
+        yield [true, true, 10];
+        yield [false, false, 10];
+        yield [false, true, IdentityProviderInterface::SYSTEM_USER];
     }
 }

@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessPeopleWithPersonIds;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CanAccessPeopleWithPersonIdsTest extends AbstractHandlerTestCase
+final class CanAccessPeopleWithPersonIdsTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessPeopleWithPersonIds
@@ -47,29 +47,27 @@ class CanAccessPeopleWithPersonIdsTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [
-                true,
-                true,
-                true
-            ],
-            [
-                false,
-                false,
-                false
-            ],
-            [
-                true,
-                false,
-                false
-            ],
-            [
-                false,
-                true,
-                false
-            ]
+        yield [
+            true,
+            true,
+            true
+        ];
+        yield [
+            false,
+            false,
+            false
+        ];
+        yield [
+            true,
+            false,
+            false
+        ];
+        yield [
+            false,
+            true,
+            false
         ];
     }
 }

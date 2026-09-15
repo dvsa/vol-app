@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * OrganisationUnprocessedList Test
  */
-class OrganisationUnprocessedListTest extends QueryHandlerTestCase
+final class OrganisationUnprocessedListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -75,7 +75,7 @@ class OrganisationUnprocessedListTest extends QueryHandlerTestCase
             1 => $document2
         ];
 
-        $expectedQueryResult = (new ResultList($expectedDocuments, []))->serialize();
+        $expectedQueryResult = new ResultList($expectedDocuments, [])->serialize();
 
         $this->repoMap['EbsrSubmission']->shouldReceive('fetchForOrganisationByStatus')
             ->with($organisationId, EbsrSubmissionEntity::UPLOADED_STATUS)

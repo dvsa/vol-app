@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Cases\Hearing as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class HearingEntityTest extends EntityTester
+final class HearingEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

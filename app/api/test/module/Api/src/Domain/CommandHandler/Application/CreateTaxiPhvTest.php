@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CreateTaxiPhvTest extends AbstractCommandHandlerTestCase
+final class CreateTaxiPhvTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -70,7 +70,7 @@ class CreateTaxiPhvTest extends AbstractCommandHandlerTestCase
                 'address' => $params['address'],
                 'lva' => 'application'
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('CREATE')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('CREATE')
         );
 
         $this->expectedSideEffect(
@@ -79,7 +79,7 @@ class CreateTaxiPhvTest extends AbstractCommandHandlerTestCase
                 'id' => 323,
                 'section' => 'taxiPhv',
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('UPDATE_COMPLETION')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('UPDATE_COMPLETION')
         );
 
         $response = $this->sut->handleCommand($command);

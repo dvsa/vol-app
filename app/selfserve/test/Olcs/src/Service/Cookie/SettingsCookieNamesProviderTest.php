@@ -9,7 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Cookie\SettingsCookieNamesProvider;
 use Laminas\Http\Header\Cookie;
 
-class SettingsCookieNamesProviderTest extends MockeryTestCase
+final class SettingsCookieNamesProviderTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

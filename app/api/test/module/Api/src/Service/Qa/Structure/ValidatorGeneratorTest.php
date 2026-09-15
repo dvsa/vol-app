@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ValidatorGeneratorTest extends MockeryTestCase
+final class ValidatorGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

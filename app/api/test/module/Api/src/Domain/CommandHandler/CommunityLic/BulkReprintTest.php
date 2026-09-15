@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class BulkReprintTest extends AbstractCommandHandlerTestCase
+final class BulkReprintTest extends AbstractCommandHandlerTestCase
 {
     private $mockFileUploader;
 

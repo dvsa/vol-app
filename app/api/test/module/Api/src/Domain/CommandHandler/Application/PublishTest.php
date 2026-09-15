@@ -24,7 +24,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class PublishTest extends AbstractCommandHandlerTestCase
+final class PublishTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

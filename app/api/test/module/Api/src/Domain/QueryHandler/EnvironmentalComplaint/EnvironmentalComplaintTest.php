@@ -21,7 +21,7 @@ use Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaint as Qr
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class EnvironmentalComplaintTest extends QueryHandlerTestCase
+final class EnvironmentalComplaintTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

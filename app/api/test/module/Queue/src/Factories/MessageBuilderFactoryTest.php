@@ -10,11 +10,12 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Psr\Container\ContainerInterface;
 
-class MessageBuilderFactoryTest extends TestCase
+final class MessageBuilderFactoryTest extends TestCase
 {
     protected $mockSl;
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockSl = m::mock(ContainerInterface::class);

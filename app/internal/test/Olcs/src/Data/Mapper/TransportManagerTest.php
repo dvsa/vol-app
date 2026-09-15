@@ -12,7 +12,7 @@ use Laminas\Form\Form;
 /**
  * Transport Manager Mapper Test
  */
-class TransportManagerTest extends MockeryTestCase
+final class TransportManagerTest extends MockeryTestCase
 {
     public function testMapFromErrors(): void
     {

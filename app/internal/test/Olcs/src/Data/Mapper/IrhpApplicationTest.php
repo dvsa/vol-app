@@ -12,12 +12,13 @@ use Mockery as m;
 /**
  * IrhpApplicationTest
  */
-class IrhpApplicationTest extends MockeryTestCase
+final class IrhpApplicationTest extends MockeryTestCase
 {
     private $applicationStepsPostDataTransformer;
 
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->applicationStepsPostDataTransformer = m::mock(ApplicationStepsPostDataTransformer::class);

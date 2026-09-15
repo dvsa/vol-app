@@ -29,7 +29,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\RefData;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class VariationOperatingCentresTest extends MockeryTestCase
+final class VariationOperatingCentresTest extends MockeryTestCase
 {
     protected $form;
 
@@ -44,6 +44,7 @@ class VariationOperatingCentresTest extends MockeryTestCase
 
     protected $translator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->tableBuilder = m::mock();

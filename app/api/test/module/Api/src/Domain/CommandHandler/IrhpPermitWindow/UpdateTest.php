@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     use ProcessDateTrait;
 

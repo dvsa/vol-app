@@ -25,10 +25,9 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class DownloadReportTest extends AbstractCommandHandlerTestCase
+final class DownloadReportTest extends AbstractCommandHandlerTestCase
 {
     public $mockCpmsService;
-    protected $mockApi;
 
     public function setUp(): void
     {

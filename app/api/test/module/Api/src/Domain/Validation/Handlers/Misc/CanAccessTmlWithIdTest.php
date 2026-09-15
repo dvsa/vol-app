@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessTmlWithId;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CanAccessTmlWithIdTest extends AbstractHandlerTestCase
+final class CanAccessTmlWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessTmaWithId
@@ -40,11 +40,9 @@ class CanAccessTmlWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

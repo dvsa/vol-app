@@ -12,15 +12,19 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Letter\SectionRenderer\ContentSectionRenderer::class)]
-class ContentSectionRendererTest extends MockeryTestCase
+final class ContentSectionRendererTest extends MockeryTestCase
 {
     private ContentSectionRenderer $sut;
     private m\MockInterface|ConverterService $mockConverterService;
     private m\MockInterface|VolGrabReplacementService $mockVolGrabService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockConverterService = m::mock(ConverterService::class);
+        // normalize() fills in the EditorJS envelope and returns conforming content
+        // untouched, so the tests below assert against exactly what they pass in.
+        $this->mockConverterService->shouldReceive('normalize')->andReturnUsing(fn(array $d): array => $d);
         $this->mockVolGrabService = m::mock(VolGrabReplacementService::class);
         $this->sut = new ContentSectionRenderer($this->mockConverterService, $this->mockVolGrabService);
     }
@@ -48,7 +52,7 @@ class ContentSectionRendererTest extends MockeryTestCase
 
         $result = $this->sut->render($mockSection);
 
-        $this->assertEquals('<div class="section"><p>Test content</p></div>', $result);
+        $this->assertSame('<div class="section"><p>Test content</p></div>', $result);
     }
 
     public function testRenderWithEmptyContent(): void
@@ -59,7 +63,7 @@ class ContentSectionRendererTest extends MockeryTestCase
 
         $result = $this->sut->render($mockSection);
 
-        $this->assertEquals('', $result);
+        $this->assertSame('', $result);
     }
 
     public function testRenderWithNullContent(): void
@@ -70,7 +74,7 @@ class ContentSectionRendererTest extends MockeryTestCase
 
         $result = $this->sut->render($mockSection);
 
-        $this->assertEquals('', $result);
+        $this->assertSame('', $result);
     }
 
     public function testRenderThrowsExceptionForUnsupportedEntity(): void
@@ -128,7 +132,7 @@ class ContentSectionRendererTest extends MockeryTestCase
 
         $result = $this->sut->render($mockSection, $context);
 
-        $this->assertEquals('<div class="section"><p>Hello Test Operator</p></div>', $result);
+        $this->assertSame('<div class="section"><p>Hello Test Operator</p></div>', $result);
     }
 
     public function testRenderWithEmptyContextPassedToVolGrabs(): void
@@ -155,6 +159,6 @@ class ContentSectionRendererTest extends MockeryTestCase
 
         $result = $this->sut->render($mockSection, []);
 
-        $this->assertEquals('<div class="section"><p>Some content</p></div>', $result);
+        $this->assertSame('<div class="section"><p>Some content</p></div>', $result);
     }
 }

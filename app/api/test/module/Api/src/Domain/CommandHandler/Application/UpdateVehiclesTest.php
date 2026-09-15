@@ -26,7 +26,7 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdateVehicles as Cmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateVehiclesTest extends AbstractCommandHandlerTestCase
+final class UpdateVehiclesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

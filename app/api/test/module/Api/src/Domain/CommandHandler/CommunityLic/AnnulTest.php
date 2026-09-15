@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\Annul::class)]
-class AnnulTest extends AbstractCommandHandlerTestCase
+final class AnnulTest extends AbstractCommandHandlerTestCase
 {
     /** @var  CommandHandler\CommunityLic\Annul */
     protected $sut;

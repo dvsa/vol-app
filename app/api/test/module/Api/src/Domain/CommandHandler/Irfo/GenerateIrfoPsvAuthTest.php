@@ -26,7 +26,7 @@ use Mockery as m;
 /**
  * Generate Irfo Psv Auth Test
  */
-class GenerateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
+final class GenerateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -125,46 +125,44 @@ class GenerateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_EU_REG_17,
+            ['IRFO_eu_auth_pink_GV280']
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_EU_REG_19A,
+            ['IRFO_eu_auth_pink_GV280']
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_OCCASIONAL_19,
+            ['IRFO_eu_auth_pink_special_regular_GV280']
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_REG_18,
             [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_EU_REG_17,
-                ['IRFO_eu_auth_pink_GV280']
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_EU_REG_19A,
-                ['IRFO_eu_auth_pink_GV280']
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_OCCASIONAL_19,
-                ['IRFO_eu_auth_pink_special_regular_GV280']
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_REG_18,
-                [
-                    'IRFO_uk_green_authorisation_INT_P17',
-                    'IRFO_non_eu_blue_authorisation_to_foreign_partner_INT_P18',
-                ]
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_REG_19,
-                ['IRFO_non_eu_blue_authorisation_foreign_operator_no_partner_INT_P18A']
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_SHUTTLE_OPERATOR_20,
-                ['IRFO_eu_auth_pink_special_regular_GV280']
-            ],
-            [
-                IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_OWN_AC_21,
-                ['IRFO_own_acc']
-            ],
-            [
-                '',
-                []
-            ],
+                'IRFO_uk_green_authorisation_INT_P17',
+                'IRFO_non_eu_blue_authorisation_to_foreign_partner_INT_P18',
+            ]
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_NON_EU_REG_19,
+            ['IRFO_non_eu_blue_authorisation_foreign_operator_no_partner_INT_P18A']
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_SHUTTLE_OPERATOR_20,
+            ['IRFO_eu_auth_pink_special_regular_GV280']
+        ];
+        yield [
+            IrfoPsvAuthTypeEntity::IRFO_FEE_TYPE_OWN_AC_21,
+            ['IRFO_own_acc']
+        ];
+        yield [
+            '',
+            []
         ];
     }
 }

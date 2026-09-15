@@ -32,7 +32,7 @@ class CacheClearCommand extends AbstractBatchCommand
     ];
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Clear Redis cache (full flush or selective by namespace/pattern)')

@@ -22,7 +22,7 @@ class NotTakenUpControllerFactory implements FactoryInterface
      * @return NotTakenUpController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NotTakenUpController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): NotTakenUpController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

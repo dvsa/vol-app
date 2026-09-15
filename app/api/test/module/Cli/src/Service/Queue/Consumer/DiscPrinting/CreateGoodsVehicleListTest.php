@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateGoodsVehicleListTest extends AbstractConsumerTestCase
+final class CreateGoodsVehicleListTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 

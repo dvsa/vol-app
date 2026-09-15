@@ -12,9 +12,9 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\IrhpExpiryDate;
  *
  * @author Henry White <henry.white@capgemini.com>
  */
-class IrhpExpiryDateTest extends \PHPUnit\Framework\TestCase
+final class IrhpExpiryDateTest extends \PHPUnit\Framework\TestCase
 {
-    public const SUT_CLASS_NAME = IrhpExpiryDate::class;
+    public const string SUT_CLASS_NAME = IrhpExpiryDate::class;
 
     public function testGetQuery(): void
     {
@@ -32,36 +32,34 @@ class IrhpExpiryDateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function dpRenderProvider(): array
+    public static function dpRenderProvider(): \Iterator
     {
-        return [
-            'no expiry date, use stock end date' => [
-                [
-                    'irhpPermitRange' => [
-                        'irhpPermitStock' => [
-                            'validTo' => '2021-12-25',
-                        ],
+        yield 'no expiry date, use stock end date' => [
+            [
+                'irhpPermitRange' => [
+                    'irhpPermitStock' => [
+                        'validTo' => '2021-12-25',
                     ],
                 ],
-                '25 December 2021'
             ],
-            'expiry date only' => [
-                [
-                    'expiryDate' => '2021-12-31',
-                ],
-                '31 December 2021',
+            '25 December 2021'
+        ];
+        yield 'expiry date only' => [
+            [
+                'expiryDate' => '2021-12-31',
             ],
-            'expiry date used in preference to stock end date' => [
-                [
-                    'irhpPermitRange' => [
-                        'irhpPermitStock' => [
-                            'validTo' => '2021-12-25',
-                        ],
+            '31 December 2021',
+        ];
+        yield 'expiry date used in preference to stock end date' => [
+            [
+                'irhpPermitRange' => [
+                    'irhpPermitStock' => [
+                        'validTo' => '2021-12-25',
                     ],
-                    'expiryDate' => '2021-12-31',
                 ],
-                '31 December 2021'
+                'expiryDate' => '2021-12-31',
             ],
+            '31 December 2021'
         ];
     }
 }

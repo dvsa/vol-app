@@ -21,7 +21,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class SubmitFormTest extends AbstractCommandHandlerTestCase
+final class SubmitFormTest extends AbstractCommandHandlerTestCase
 {
     /** @var Sut */
     protected $sut;

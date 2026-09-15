@@ -16,7 +16,7 @@ use Dvsa\Olcs\Queue\Service\Message\MessageBuilder;
 use Dvsa\Olcs\Queue\Service\Queue;
 use Mockery as m;
 
-class CompanyProfileTest extends AbstractCompaniesHouseConsumerTestCase
+final class CompanyProfileTest extends AbstractCompaniesHouseConsumerTestCase
 {
     protected $config = [
         'message_queue' => [

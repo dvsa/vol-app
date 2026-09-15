@@ -15,7 +15,7 @@ use Laminas\Http\Response\Stream;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Document\DownloadGuide::class)]
-class DownloadGuideTest extends QueryHandlerTestCase
+final class DownloadGuideTest extends QueryHandlerTestCase
 {
     /** @var  m\MockInterface */
     protected $sut;
@@ -67,7 +67,7 @@ class DownloadGuideTest extends QueryHandlerTestCase
         );
         $actual = $this->sut->handleQuery($query);
 
-        static::assertEquals($file, $actual);
+        $this->assertEquals($file, $actual);
     }
 
     public function testHandleQueryIsSlug(): void
@@ -102,6 +102,6 @@ class DownloadGuideTest extends QueryHandlerTestCase
         );
         $actual = $this->sut->handleQuery($query);
 
-        static::assertEquals($file, $actual);
+        $this->assertEquals($file, $actual);
     }
 }

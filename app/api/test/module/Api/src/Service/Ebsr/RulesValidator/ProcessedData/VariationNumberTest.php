@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class VariationNumberTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator\ProcessedData
  */
-class VariationNumberTest extends MockeryTestCase
+final class VariationNumberTest extends MockeryTestCase
 {
     /**
      * tests isValid returns true for a valid new app
@@ -123,16 +123,14 @@ class VariationNumberTest extends MockeryTestCase
     /**
      * Provider for testValidVariation
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function validVariationProvider(): array
+    public static function validVariationProvider(): \Iterator
     {
-        return [
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, 1, 0],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, 2, 1],
-            [BusRegEntity::TXC_APP_CHARGEABLE, 1, 0],
-            [BusRegEntity::TXC_APP_CHARGEABLE, 2, 1],
-        ];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, 1, 0];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, 2, 1];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, 1, 0];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, 2, 1];
     }
 
     /**
@@ -174,20 +172,18 @@ class VariationNumberTest extends MockeryTestCase
     /**
      * Provider for testInvalidVariation
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function invalidVariationProvider(): array
+    public static function invalidVariationProvider(): \Iterator
     {
-        return [
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, 2, 0],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, 0, 0],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, 0, 1],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, 0, 2],
-            [BusRegEntity::TXC_APP_CHARGEABLE, 2, 0],
-            [BusRegEntity::TXC_APP_CHARGEABLE, 0, 0],
-            [BusRegEntity::TXC_APP_CHARGEABLE, 0, 1],
-            [BusRegEntity::TXC_APP_CHARGEABLE, 0, 2]
-        ];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, 2, 0];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, 0, 0];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, 0, 1];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, 0, 2];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, 2, 0];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, 0, 0];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, 0, 1];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, 0, 2];
     }
 
     /**

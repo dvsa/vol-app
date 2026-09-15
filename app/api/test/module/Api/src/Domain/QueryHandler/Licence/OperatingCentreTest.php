@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Licence as LicenceRepo;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class OperatingCentreTest extends QueryHandlerTestCase
+final class OperatingCentreTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

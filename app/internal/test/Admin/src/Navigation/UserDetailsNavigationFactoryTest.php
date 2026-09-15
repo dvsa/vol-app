@@ -19,7 +19,7 @@ use Admin\Navigation\UserDetailsNavigationFactory;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class UserDetailsNavigationFactoryTest extends MockeryTestCase
+final class UserDetailsNavigationFactoryTest extends MockeryTestCase
 {
     public function testGetName(): void
     {

@@ -1,0 +1,7 @@
+<?php
+echo $this->partial(
+    'partials/continuation/checklist-section',
+    [
+        'data' => $this->licenceChecklist(\Common\RefData::LICENCE_CHECKLIST_BUSINESS_DETAILS, $this->data)
+    ]
+);

@@ -55,7 +55,7 @@ final class WithdrawUnpaidIrhp extends AbstractCommandHandler implements Transac
         return $this->result;
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->daysToPayIssueFeeProvider = $container->get('PermitsFeesDaysToPayIssueFeeProvider');
         return parent::__invoke($container, $requestedName, $options);

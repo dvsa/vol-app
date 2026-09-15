@@ -42,7 +42,17 @@ variable "services" {
       effect    = string
       actions   = list(string)
       resources = list(string)
+      conditions = optional(list(object({
+        test     = string
+        values   = list(string)
+        variable = string
+      })), [])
     }))
+    task_exec_iam_role_statements = optional(list(object({
+      effect    = string
+      actions   = list(string)
+      resources = list(string)
+    })), [])
     add_cdn_url_to_env          = optional(bool, false)
     set_custom_port             = optional(bool, false)
     enable_autoscaling_policies = optional(bool, true)
@@ -77,16 +87,27 @@ variable "batch" {
       effect    = string
       actions   = list(string)
       resources = list(string)
+      conditions = optional(list(object({
+        test     = string
+        values   = list(string)
+        variable = string
+      })), [])
     }))
     jobs = list(object({
-      name     = string
-      type     = optional(string, "default")
-      queue    = optional(string, "default")
-      commands = optional(list(string))
-      cpu      = optional(number, 1)
-      memory   = optional(number, 2048)
-      timeout  = optional(number, 300)
-      schedule = optional(list(string), [])
+      name              = string
+      type              = optional(string, "default")
+      queue             = optional(string, "default")
+      commands          = optional(list(string))
+      cpu               = optional(number, 1)
+      memory            = optional(number, 4096)
+      timeout           = optional(number, 300)
+      ephemeral_storage = optional(number)
+      schedule          = optional(list(string), [])
     }))
   })
+}
+
+variable "dva_ni_export_s3uri" {
+  type        = string
+  description = "The S3 URI for the DVA NI export bucket, sourced from SSM parameters"
 }

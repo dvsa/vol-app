@@ -20,7 +20,7 @@ use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermit as Qry;
 /**
  * IrfoGvPermit Test
  */
-class IrfoGvPermitTest extends QueryHandlerTestCase
+final class IrfoGvPermitTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

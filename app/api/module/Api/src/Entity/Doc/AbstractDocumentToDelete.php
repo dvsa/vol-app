@@ -17,11 +17,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="document_to_delete")
  */
+#[ORM\Table(name: 'document_to_delete')]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractDocumentToDelete implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -33,47 +32,42 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Document store id
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="document_store_id", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'document_store_id', length: 255, nullable: false)]
     protected $documentStoreId = '';
 
     /**
      * Document id
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="document_id", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'document_id', nullable: false, options: ['unsigned' => true])]
     protected $documentId = 0;
 
     /**
      * Attempts
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="attempts", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'attempts', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $attempts = 0;
 
     /**
      * Process after date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="process_after_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'process_after_date', nullable: true)]
     protected $processAfterDate;
 
 
@@ -82,7 +76,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return DocumentToDelete
+     * @return static
      */
     public function setId($id)
     {
@@ -106,7 +100,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @param string $documentStoreId new value being set
      *
-     * @return DocumentToDelete
+     * @return static
      */
     public function setDocumentStoreId($documentStoreId)
     {
@@ -130,7 +124,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @param int $documentId new value being set
      *
-     * @return DocumentToDelete
+     * @return static
      */
     public function setDocumentId($documentId)
     {
@@ -154,7 +148,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @param int $attempts new value being set
      *
-     * @return DocumentToDelete
+     * @return static
      */
     public function setAttempts($attempts)
     {
@@ -178,7 +172,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @param \DateTime $processAfterDate new value being set
      *
-     * @return DocumentToDelete
+     * @return static
      */
     public function setProcessAfterDate($processAfterDate)
     {

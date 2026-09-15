@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\DataRetention\Postcheck;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class PostcheckTest extends QueryHandlerTestCase
+final class PostcheckTest extends QueryHandlerTestCase
 {
     private $mockedConnection;
 

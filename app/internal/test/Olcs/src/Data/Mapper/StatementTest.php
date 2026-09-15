@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * Statement Mapper Test
  */
-class StatementTest extends MockeryTestCase
+final class StatementTest extends MockeryTestCase
 {
     /**
      *
@@ -25,13 +25,31 @@ class StatementTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
             [
-                [
+                'case' => 24,
+                'requestorsContactDetails' => [
+                    'person' => [
+                        'forename' => 'Joe',
+                        'familyName' => 'Smith'
+                    ],
+                    'address' => [
+                        'addressLine1' => 'foo'
+                    ]
+                ],
+                'someEntity' => [
+                    'id' => 44
+                ]
+            ],
+            [
+                'fields' => [
                     'case' => 24,
+                    'requestorsForename' => 'Joe',
+                    'requestorsFamilyName' => 'Smith',
+                    'someEntity' => 44,
                     'requestorsContactDetails' => [
                         'person' => [
                             'forename' => 'Joe',
@@ -41,40 +59,42 @@ class StatementTest extends MockeryTestCase
                             'addressLine1' => 'foo'
                         ]
                     ],
-                    'someEntity' => [
-                        'id' => 44
+                ],
+                'requestorsAddress' => [
+                    'addressLine1' => 'foo'
+                ],
+                'base' => [
+                    'case' => 24
+                ]
+            ]
+        ];
+        // edit
+        yield [
+            [
+                'id' => 99,
+                'version' => 3,
+                'case' => 24,
+                'requestorsContactDetails' => [
+                    'person' => [
+                        'forename' => 'Joe',
+                        'familyName' => 'Smith'
+                    ],
+                    'address' => [
+                        'addressLine1' => 'foo'
                     ]
                 ],
-                [
-                    'fields' => [
-                        'case' => 24,
-                        'requestorsForename' => 'Joe',
-                        'requestorsFamilyName' => 'Smith',
-                        'someEntity' => 44,
-                        'requestorsContactDetails' => [
-                            'person' => [
-                                'forename' => 'Joe',
-                                'familyName' => 'Smith'
-                            ],
-                            'address' => [
-                                'addressLine1' => 'foo'
-                            ]
-                        ],
-                    ],
-                    'requestorsAddress' => [
-                        'addressLine1' => 'foo'
-                    ],
-                    'base' => [
-                        'case' => 24
-                    ]
+                'someEntity' => [
+                    'id' => 44
                 ]
             ],
-            // edit
             [
-                [
+                'fields' => [
                     'id' => 99,
                     'version' => 3,
                     'case' => 24,
+                    'requestorsForename' => 'Joe',
+                    'requestorsFamilyName' => 'Smith',
+                    'someEntity' => 44,
                     'requestorsContactDetails' => [
                         'person' => [
                             'forename' => 'Joe',
@@ -84,38 +104,16 @@ class StatementTest extends MockeryTestCase
                             'addressLine1' => 'foo'
                         ]
                     ],
-                    'someEntity' => [
-                        'id' => 44
-                    ]
                 ],
-                [
-                    'fields' => [
-                        'id' => 99,
-                        'version' => 3,
-                        'case' => 24,
-                        'requestorsForename' => 'Joe',
-                        'requestorsFamilyName' => 'Smith',
-                        'someEntity' => 44,
-                        'requestorsContactDetails' => [
-                            'person' => [
-                                'forename' => 'Joe',
-                                'familyName' => 'Smith'
-                            ],
-                            'address' => [
-                                'addressLine1' => 'foo'
-                            ]
-                        ],
-                    ],
-                    'requestorsAddress' => [
-                        'addressLine1' => 'foo'
-                    ],
-                    'base' => [
-                        'id' => 99,
-                        'version' => 3,
-                        'case' => 24
-                    ]
+                'requestorsAddress' => [
+                    'addressLine1' => 'foo'
+                ],
+                'base' => [
+                    'id' => 99,
+                    'version' => 3,
+                    'case' => 24
                 ]
-            ],
+            ]
         ];
     }
 

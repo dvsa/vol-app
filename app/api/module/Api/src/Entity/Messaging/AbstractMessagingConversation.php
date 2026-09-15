@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="messaging_conversation",
- *    indexes={
- *        @ORM\Index(name="fk_messaging_conversation_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_messaging_conversation_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_messaging_conversation_task_id", columns={"task_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'messaging_conversation')]
+#[ORM\Index(name: 'fk_messaging_conversation_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_messaging_conversation_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'fk_messaging_conversation_task_id', columns: ['task_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractMessagingConversation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,98 +40,88 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Task
      *
      * @var \Dvsa\Olcs\Api\Entity\Task\Task
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", fetch="LAZY")
-     * @ORM\JoinColumn(name="task_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, fetch: 'LAZY')]
     protected $task;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Subject
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="subject", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'subject', length: 255, nullable: false)]
     protected $subject = '';
 
     /**
      * Is attachments enabled
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_attachments_enabled", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_attachments_enabled', nullable: true, options: ['default' => 0])]
     protected $isAttachmentsEnabled = 0;
 
     /**
      * Last read at
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="last_read_at", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'last_read_at', nullable: true)]
     protected $lastReadAt;
 
     /**
      * Is closed
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_closed", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_closed', nullable: true, options: ['default' => 0])]
     protected $isClosed = 0;
 
     /**
      * Is archived
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_archived", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_archived', nullable: true, options: ['default' => 0])]
     protected $isArchived = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -159,7 +145,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setId($id)
     {
@@ -183,7 +169,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Task\Task $task new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setTask($task)
     {
@@ -207,7 +193,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -231,7 +217,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -255,7 +241,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param string $subject new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setSubject($subject)
     {
@@ -279,7 +265,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param bool $isAttachmentsEnabled new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setIsAttachmentsEnabled($isAttachmentsEnabled)
     {
@@ -303,7 +289,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param \DateTime $lastReadAt new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setLastReadAt($lastReadAt)
     {
@@ -333,7 +319,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param bool $isClosed new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setIsClosed($isClosed)
     {
@@ -357,7 +343,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param bool $isArchived new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setIsArchived($isArchived)
     {
@@ -381,7 +367,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setVersion($version)
     {

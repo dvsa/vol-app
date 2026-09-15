@@ -33,7 +33,7 @@ use Dvsa\Olcs\Transfer\Command\Document\Upload as UploadCmd;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CopyDocumentTest extends AbstractCommandHandlerTestCase
+final class CopyDocumentTest extends AbstractCommandHandlerTestCase
 {
     /** @var  m\MockInterface */
     private $mockUploader;

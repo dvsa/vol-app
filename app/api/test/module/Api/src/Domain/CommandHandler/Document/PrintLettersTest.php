@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetters as PrintLettersCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 
-class PrintLettersTest extends AbstractCommandHandlerTestCase
+final class PrintLettersTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

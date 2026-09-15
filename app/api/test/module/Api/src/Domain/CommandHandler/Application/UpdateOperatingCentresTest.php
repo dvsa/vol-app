@@ -37,7 +37,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\MocksLicenceOperatingCentreRepositoryTra
 /**
  * @see \Dvsa\Olcs\Api\Domain\CommandHandler\Application\UpdateOperatingCentres
  */
-class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
+final class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
@@ -46,16 +46,16 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
     use MocksApplicationOperatingCentreRepositoryTrait;
     use MocksLicenceOperatingCentreRepositoryTrait;
 
-    protected const TOT_AUTH_HGV_VEHICLES_COMMAND_PROPERTY = 'totAuthHgvVehicles';
-    protected const ID_COMMAND_PROPERTY = 'id';
-    protected const TOT_AUTH_LGV_VEHICLES_COMMAND_PROPERTY = 'totAuthLgvVehicles';
-    protected const TOT_COMMUNITY_LICENCES_COMMAND_PROPERTY = 'totCommunityLicences';
-    protected const COMMUNITY_LICENCE_COUNT_TOO_HIGH_VALIDATION_ERROR_CODE = 'ERR_OC_CL_1';
-    protected const VALIDATION_MESSAGES = ['A VALIDATION MESSAGE KEY' => 'A VALIDATION MESSAGE VALUE'];
-    protected const ONE_HGV = 1;
-    protected const ONE_LGV = 1;
-    protected const NO_HGVS = 1;
-    protected const TWO_LGVS = 2;
+    protected const string TOT_AUTH_HGV_VEHICLES_COMMAND_PROPERTY = 'totAuthHgvVehicles';
+    protected const string ID_COMMAND_PROPERTY = 'id';
+    protected const string TOT_AUTH_LGV_VEHICLES_COMMAND_PROPERTY = 'totAuthLgvVehicles';
+    protected const string TOT_COMMUNITY_LICENCES_COMMAND_PROPERTY = 'totCommunityLicences';
+    protected const string COMMUNITY_LICENCE_COUNT_TOO_HIGH_VALIDATION_ERROR_CODE = 'ERR_OC_CL_1';
+    protected const array VALIDATION_MESSAGES = ['A VALIDATION MESSAGE KEY' => 'A VALIDATION MESSAGE VALUE'];
+    protected const int ONE_HGV = 1;
+    protected const int ONE_LGV = 1;
+    protected const int NO_HGVS = 1;
+    protected const int TWO_LGVS = 2;
 
     #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandIsCallable(): void
@@ -561,7 +561,7 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
             $data = [
                 'id' => 111,
             ],
-            (new Result())->addMessage('HandleOcVariationFees')
+            new Result()->addMessage('HandleOcVariationFees')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -668,7 +668,7 @@ class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
             $data = [
                 'id' => 111,
             ],
-            (new Result())->addMessage('HandleOcVariationFees')
+            new Result()->addMessage('HandleOcVariationFees')
         );
 
         $result = $this->sut->handleCommand($command);

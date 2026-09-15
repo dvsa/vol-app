@@ -25,7 +25,7 @@ use Olcs\Listener\RouteParam\Licence;
 use Olcs\Listener\RouteParams;
 use Olcs\Service\Marker\MarkerService;
 
-class LicenceTest extends TestCase
+final class LicenceTest extends TestCase
 {
     /**
      * @var Licence
@@ -39,6 +39,7 @@ class LicenceTest extends TestCase
         $this->sut = new Licence();
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         $this->signatureType = null;

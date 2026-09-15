@@ -18,7 +18,7 @@ class GenericAnswerProviderFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GenericAnswerProvider
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): GenericAnswerProvider
     {
         return new GenericAnswerProvider(
             $container->get('RepositoryServiceManager')->get('Answer')

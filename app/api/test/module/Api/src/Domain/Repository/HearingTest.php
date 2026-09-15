@@ -12,11 +12,12 @@ use Dvsa\Olcs\Api\Domain\Repository\Hearing as Repo;
  * HearingTest
  *
  */
-class HearingTest extends RepositoryTestCase
+final class HearingTest extends RepositoryTestCase
 {
     /** @var m\MockInterface|Repo */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);
@@ -34,11 +35,11 @@ class HearingTest extends RepositoryTestCase
                 ->andReturn('RESULT')
                 ->getMock()
         );
-        static::assertEquals('RESULT', $this->sut->fetchOneByCase(123));
+        $this->assertEquals('RESULT', $this->sut->fetchOneByCase(123));
 
         $expectedQuery = 'BLAH AND m.case = 123';
 
-        static::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 
     public function testFetchOneByCaseNull(): void

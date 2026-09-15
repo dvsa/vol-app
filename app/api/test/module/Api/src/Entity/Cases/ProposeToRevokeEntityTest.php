@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class ProposeToRevokeEntityTest extends EntityTester
+final class ProposeToRevokeEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -42,7 +42,7 @@ class ProposeToRevokeEntityTest extends EntityTester
         $this->assertSame($mockCase, $entity->getCase());
         $this->assertSame($reasons, $entity->getReasons());
         $this->assertSame($ptrAgreedDate, $entity->getPtrAgreedDate());
-        $this->assertSame(null, $entity->getAssignedCaseworker());
+        $this->assertNull($entity->getAssignedCaseworker());
     }
 
     public function testConstructorWithAssignedCaseworker(): void
@@ -88,7 +88,7 @@ class ProposeToRevokeEntityTest extends EntityTester
         $this->assertSame($newReasons, $entity->getReasons());
         $this->assertSame($newMockPresidingTc, $entity->getPresidingTc());
         $this->assertSame($newPtrAgreedDate, $entity->getPtrAgreedDate());
-        $this->assertSame(null, $entity->getAssignedCaseworker());
+        $this->assertNull($entity->getAssignedCaseworker());
     }
 
     public function testUpdateWithAssignedCaseworker(): void

@@ -22,32 +22,25 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="condition_undertaking",
- *    indexes={
- *        @ORM\Index(name="ix_condition_undertaking_added_via", columns={"added_via"}),
- *        @ORM\Index(name="ix_condition_undertaking_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_condition_undertaking_approval_user_id", columns={"approval_user_id"}),
- *        @ORM\Index(name="ix_condition_undertaking_attached_to", columns={"attached_to"}),
- *        @ORM\Index(name="ix_condition_undertaking_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_condition_undertaking_condition_category", columns={"condition_category"}),
- *        @ORM\Index(name="ix_condition_undertaking_condition_type", columns={"condition_type"}),
- *        @ORM\Index(name="ix_condition_undertaking_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_condition_undertaking_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_condition_undertaking_lic_condition_variation_id", columns={"lic_condition_variation_id"}),
- *        @ORM\Index(name="ix_condition_undertaking_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_condition_undertaking_operating_centre_id", columns={"operating_centre_id"}),
- *        @ORM\Index(name="ix_condition_undertaking_s4_id", columns={"s4_id"}),
- *        @ORM\Index(name="uk_condition_undertaking_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_condition_undertaking_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'condition_undertaking')]
+#[ORM\Index(name: 'ix_condition_undertaking_added_via', columns: ['added_via'])]
+#[ORM\Index(name: 'ix_condition_undertaking_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_condition_undertaking_approval_user_id', columns: ['approval_user_id'])]
+#[ORM\Index(name: 'ix_condition_undertaking_attached_to', columns: ['attached_to'])]
+#[ORM\Index(name: 'ix_condition_undertaking_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_condition_undertaking_condition_category', columns: ['condition_category'])]
+#[ORM\Index(name: 'ix_condition_undertaking_condition_type', columns: ['condition_type'])]
+#[ORM\Index(name: 'ix_condition_undertaking_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_condition_undertaking_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_condition_undertaking_lic_condition_variation_id', columns: ['lic_condition_variation_id'])]
+#[ORM\Index(name: 'ix_condition_undertaking_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_condition_undertaking_operating_centre_id', columns: ['operating_centre_id'])]
+#[ORM\Index(name: 'ix_condition_undertaking_s4_id', columns: ['s4_id'])]
+#[ORM\UniqueConstraint(name: 'uk_condition_undertaking_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractConditionUndertaking implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -61,216 +54,194 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'conditionUndertakings', fetch: 'LAZY')]
     protected $application;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'conditionUndertakings', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Foreign Key to operating_centre
      *
      * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", fetch="LAZY")
-     * @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, inversedBy: 'conditionUndertakings', fetch: 'LAZY')]
     protected $operatingCentre;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'conditionUndertakings', fetch: 'LAZY')]
     protected $case;
 
     /**
      * The condition on linked to the licence that is being changed by the application condition. Changes applied when application is granted.
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking", fetch="LAZY")
-     * @ORM\JoinColumn(name="lic_condition_variation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'lic_condition_variation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking::class, inversedBy: 'variationRecords', fetch: 'LAZY')]
     protected $licConditionVariation;
 
     /**
      * Condition or Undertaking
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="condition_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'condition_type', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $conditionType;
 
     /**
      * ConditionCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="condition_category", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'condition_category', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $conditionCategory;
 
     /**
      * Foreign Key to s4
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\S4
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\S4", fetch="LAZY")
-     * @ORM\JoinColumn(name="s4_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 's4_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\S4::class, fetch: 'LAZY')]
     protected $s4;
 
     /**
      * Episode, Application or Licence
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="added_via", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'added_via', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $addedVia;
 
     /**
      * Licence or Operating Centre
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="attached_to", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'attached_to', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $attachedTo;
 
     /**
      * ApprovalUser
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="approval_user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'approval_user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $approvalUser;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * For application conditions A for add and U for update, if updating a licence condition via an app.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="action", length=1, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'action', length: 1, nullable: true)]
     protected $action;
 
     /**
      * isDraft
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_draft", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_draft', nullable: false, options: ['default' => 0])]
     protected $isDraft = 0;
 
     /**
      * isFulfilled
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_fulfilled", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_fulfilled', nullable: false, options: ['default' => 0])]
     protected $isFulfilled = 0;
 
     /**
      * Notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=8000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'notes', length: 8000, nullable: true)]
     protected $notes;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**
      * VariationRecords
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking", mappedBy="licConditionVariation")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking::class, mappedBy: 'licConditionVariation')]
     protected $variationRecords;
 
     /**
@@ -295,7 +266,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setId($id)
     {
@@ -319,7 +290,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setApplication($application)
     {
@@ -343,7 +314,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -367,7 +338,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setOperatingCentre($operatingCentre)
     {
@@ -391,7 +362,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setCase($case)
     {
@@ -415,7 +386,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking $licConditionVariation new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setLicConditionVariation($licConditionVariation)
     {
@@ -439,7 +410,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $conditionType new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setConditionType($conditionType)
     {
@@ -463,7 +434,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $conditionCategory new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setConditionCategory($conditionCategory)
     {
@@ -487,7 +458,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\S4 $s4 new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setS4($s4)
     {
@@ -511,7 +482,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $addedVia new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setAddedVia($addedVia)
     {
@@ -535,7 +506,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $attachedTo new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setAttachedTo($attachedTo)
     {
@@ -559,7 +530,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $approvalUser new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setApprovalUser($approvalUser)
     {
@@ -583,7 +554,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -607,7 +578,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -631,7 +602,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param string $action new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setAction($action)
     {
@@ -655,7 +626,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param string $isDraft new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setIsDraft($isDraft)
     {
@@ -679,7 +650,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param string $isFulfilled new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setIsFulfilled($isFulfilled)
     {
@@ -703,7 +674,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param string $notes new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -727,7 +698,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setVersion($version)
     {
@@ -751,7 +722,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param int $olbsKey new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -775,7 +746,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param string $olbsType new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setOlbsType($olbsType)
     {
@@ -799,7 +770,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $variationRecords collection being set as the value
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setVariationRecords($variationRecords)
     {
@@ -823,7 +794,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $variationRecords collection being added
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function addVariationRecords($variationRecords)
     {
@@ -846,7 +817,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $variationRecords collection being removed
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function removeVariationRecords($variationRecords)
     {

@@ -30,7 +30,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class CreateImpoundingTest extends AbstractCommandHandlerTestCase
+final class CreateImpoundingTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -174,7 +174,7 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             PublishImpoundingCmd::class,
             $commandData,
-            (new Result())->addMessage('Impounding published')
+            new Result()->addMessage('Impounding published')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -239,7 +239,7 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             PublishImpoundingCmd::class,
             $commandData,
-            (new Result())->addMessage('Impounding published')
+            new Result()->addMessage('Impounding published')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -253,62 +253,58 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
 
     /**
      * Provides licence type and expected publish command data for cases attached to licence
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provideImpoundingLicencePublishCommands(): array
+    public static function provideImpoundingLicencePublishCommands(): \Iterator
     {
-        return [
+        yield [
+            LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
             [
-                LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
-                [
-                    'id' => 99,
-                    'trafficArea' => 'B',
-                    'pi' => null,
-                    'pubType' => 'A&D',
-                    'licence' => 7
-                ]
-            ],
+                'id' => 99,
+                'trafficArea' => 'B',
+                'pi' => null,
+                'pubType' => 'A&D',
+                'licence' => 7
+            ]
+        ];
+        yield [
+            LicenceEntity::LICENCE_CATEGORY_PSV,
             [
-                LicenceEntity::LICENCE_CATEGORY_PSV,
-                [
-                    'id' => 99,
-                    'trafficArea' => 'B',
-                    'pi' => null,
-                    'pubType' => 'N&P',
-                    'licence' => 7
-                ]
+                'id' => 99,
+                'trafficArea' => 'B',
+                'pi' => null,
+                'pubType' => 'N&P',
+                'licence' => 7
             ]
         ];
     }
 
     /**
      * Provides licence type and expected publish command data for cases attached to application
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provideImpoundingApplicationPublishCommands(): array
+    public static function provideImpoundingApplicationPublishCommands(): \Iterator
     {
-        return [
+        yield [
+            LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
             [
-                LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
-                [
-                    'id' => 99,
-                    'trafficArea' => 'B',
-                    'pi' => 77,
-                    'pubType' => 'A&D',
-                    'application' => 1,
-                    'licence' => null
-                ]
-            ],
+                'id' => 99,
+                'trafficArea' => 'B',
+                'pi' => 77,
+                'pubType' => 'A&D',
+                'application' => 1,
+                'licence' => null
+            ]
+        ];
+        yield [
+            LicenceEntity::LICENCE_CATEGORY_PSV,
             [
-                LicenceEntity::LICENCE_CATEGORY_PSV,
-                [
-                    'id' => 99,
-                    'trafficArea' => 'B',
-                    'pi' => 77,
-                    'pubType' => 'N&P',
-                    'application' => 1,
-                    'licence' => null
-                ]
+                'id' => 99,
+                'trafficArea' => 'B',
+                'pi' => 77,
+                'pubType' => 'N&P',
+                'application' => 1,
+                'licence' => null
             ]
         ];
     }

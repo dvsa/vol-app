@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\InsMoreFreqNo;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class InsMoreFreqNoTest extends \PHPUnit\Framework\TestCase
+final class InsMoreFreqNoTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -38,11 +38,9 @@ class InsMoreFreqNoTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function safetyInsProvider(): array
+    public static function safetyInsProvider(): \Iterator
     {
-        return [
-            [0, 'X'],
-            [1, '']
-        ];
+        yield [0, 'X'];
+        yield [1, ''];
     }
 }

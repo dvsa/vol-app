@@ -14,7 +14,7 @@ use Laminas\Mvc\Application;
 use Symfony\Component\Console\Command\Command;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class InspectionRequestEmailCommandTest extends AbstractBatchCommandCases
+final class InspectionRequestEmailCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

@@ -20,15 +20,11 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="companies_house_officer",
- *    indexes={
- *        @ORM\Index(name="ix_companies_house_officer_companies_house_company_id", columns={"companies_house_company_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'companies_house_officer')]
+#[ORM\Index(name: 'ix_companies_house_officer_companies_house_company_id', columns: ['companies_house_company_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -41,58 +37,52 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to companies_house_company
      *
      * @var \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany", fetch="LAZY")
-     * @ORM\JoinColumn(name="companies_house_company_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'companies_house_company_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany::class, inversedBy: 'officers', fetch: 'LAZY')]
     protected $companiesHouseCompany;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 100, nullable: true)]
     protected $name;
 
     /**
      * Role
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="role", length=64, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'role', length: 64, nullable: true)]
     protected $role;
 
     /**
      * Date of birth
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="date_of_birth", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'date_of_birth', nullable: true)]
     protected $dateOfBirth;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -116,7 +106,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setId($id)
     {
@@ -140,7 +130,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany $companiesHouseCompany new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setCompaniesHouseCompany($companiesHouseCompany)
     {
@@ -164,7 +154,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param string $name new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setName($name)
     {
@@ -188,7 +178,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param string $role new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setRole($role)
     {
@@ -212,7 +202,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param \DateTime $dateOfBirth new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setDateOfBirth($dateOfBirth)
     {
@@ -242,7 +232,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setVersion($version)
     {

@@ -31,7 +31,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TmNominatedTaskTest extends AbstractCommandHandlerTestCase
+final class TmNominatedTaskTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -107,7 +107,7 @@ class TmNominatedTaskTest extends AbstractCommandHandlerTestCase
             'category' => Category::CATEGORY_LICENSING,
             'subCategory' => Category::TASK_SUB_CATEGORY_TM_PERIOD_OF_GRACE,
             'description' => 'Transport manager to be nominated',
-            'actionDate' => (new DateTime('+14 days'))->format('Y-m-d'),
+            'actionDate' => new DateTime('+14 days')->format('Y-m-d'),
             'assignedToUser' => 11,
             'assignedToTeam' => 22,
             'licence' => 222

@@ -27,7 +27,8 @@ return [
         ],
         [
             'title' => 'Complainant name',
-            'formatter' => fn($data) => $data['complainantForename'] . ' ' . $data['complainantFamilyName'],
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['complainantForename'])
+                . ' ' . \Common\Util\Escape::html($data['complainantFamilyName']),
         ],
         [
             'title' => 'Description',

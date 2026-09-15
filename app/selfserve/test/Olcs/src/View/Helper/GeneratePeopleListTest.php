@@ -19,7 +19,7 @@ use Olcs\View\Helper\GeneratePeopleList;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class GeneratePeopleListTest extends MockeryTestCase
+final class GeneratePeopleListTest extends MockeryTestCase
 {
     /**
      * Test render no persons

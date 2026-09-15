@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Service\Permits\Allocate\IrhpPermitAllocator;
 use Mockery as m;
 use RuntimeException;
 
-class AllocateIrhpApplicationPermitsTest extends AbstractCommandHandlerTestCase
+final class AllocateIrhpApplicationPermitsTest extends AbstractCommandHandlerTestCase
 {
     private $irhpApplicationId;
 

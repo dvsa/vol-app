@@ -21,22 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="template",
- *    indexes={
- *        @ORM\Index(name="ix_template_category_id", columns={"category_id"}),
- *        @ORM\Index(name="ix_template_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_template_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_template_template_test_data_id", columns={"template_test_data_id"}),
- *        @ORM\Index(name="unique_name", columns={"locale", "format", "name"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="unique_name", columns={"locale", "format", "name"})
- *    }
- * )
  */
+#[ORM\Table(name: 'template')]
+#[ORM\Index(name: 'ix_template_category_id', columns: ['category_id'])]
+#[ORM\Index(name: 'ix_template_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_template_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_template_template_test_data_id', columns: ['template_test_data_id'])]
+#[ORM\UniqueConstraint(name: 'unique_name', columns: ['locale', 'format', 'name'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTemplate implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,117 +42,105 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * TemplateTestData
      *
      * @var \Dvsa\Olcs\Api\Entity\Template\TemplateTestData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Template\TemplateTestData", fetch="LAZY")
-     * @ORM\JoinColumn(name="template_test_data_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'template_test_data_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Template\TemplateTestData::class, fetch: 'LAZY')]
     protected $templateTestData;
 
     /**
      * Category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Category name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="category_name", length=40, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'category_name', length: 40, nullable: true)]
     protected $categoryName;
 
     /**
      * Locale
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="locale", length=5, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'locale', length: 5, nullable: false)]
     protected $locale = '';
 
     /**
      * Format
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="format", length=5, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'format', length: 5, nullable: false)]
     protected $format = '';
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: false)]
     protected $name = '';
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: false)]
     protected $description = '';
 
     /**
      * Source
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="source", nullable=false)
      */
+    #[ORM\Column(type: 'text', name: 'source', nullable: false)]
     protected $source = '';
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -183,7 +164,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setId($id)
     {
@@ -207,7 +188,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Template\TemplateTestData $templateTestData new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setTemplateTestData($templateTestData)
     {
@@ -231,7 +212,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setCategory($category)
     {
@@ -255,7 +236,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -279,7 +260,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -303,7 +284,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $categoryName new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setCategoryName($categoryName)
     {
@@ -327,7 +308,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $locale new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setLocale($locale)
     {
@@ -351,7 +332,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $format new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setFormat($format)
     {
@@ -375,7 +356,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $name new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setName($name)
     {
@@ -399,7 +380,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $description new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setDescription($description)
     {
@@ -423,7 +404,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $source new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setSource($source)
     {
@@ -447,7 +428,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setVersion($version)
     {

@@ -16,7 +16,7 @@ use Psr\Container\ContainerInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\DocumentGenerator::class)]
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class DocumentGeneratorTest extends MockeryTestCase
+final class DocumentGeneratorTest extends MockeryTestCase
 {
     /** @var  DocumentGenerator */
     protected $sut;
@@ -30,10 +30,9 @@ class DocumentGeneratorTest extends MockeryTestCase
     /** @var  m\MockInterface */
     protected $fileUploader;
     /** @var  m\MockInterface */
-    protected $namingService;
-    /** @var  m\MockInterface */
     protected $documentRepo;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new DocumentGenerator();
@@ -42,7 +41,7 @@ class DocumentGeneratorTest extends MockeryTestCase
         $this->document = m::mock();
         $this->queryHandlerManager = m::mock();
         $this->fileUploader = m::mock();
-        $this->namingService = m::mock(NamingService::class);
+        $namingService = m::mock(NamingService::class);
         $this->documentRepo = m::mock();
 
         /** @var \Laminas\ServiceManager\ServiceLocatorInterface $sm */
@@ -51,13 +50,45 @@ class DocumentGeneratorTest extends MockeryTestCase
             ->shouldReceive('get')->with('Document')->andReturn($this->document)
             ->shouldReceive('get')->with('QueryHandlerManager')->andReturn($this->queryHandlerManager)
             ->shouldReceive('get')->with('FileUploader')->andReturn($this->fileUploader)
-            ->shouldReceive('get')->with('DocumentNamingService')->andReturn($this->namingService)
+            ->shouldReceive('get')->with('DocumentNamingService')->andReturn($namingService)
             ->shouldReceive('get')->with('RepositoryServiceManager')->andReturn(
                 m::mock()->shouldReceive('get')->with('Document')->andReturn($this->documentRepo)->getMock()
             )
             ->getMock();
 
         $this->sut->__invoke($sm, DocumentGenerator::class);
+    }
+
+    public function testGenerateFromTemplateUsesRepoTrackedTemplateWithoutContentStore(): void
+    {
+        // the *DiscTemplateGotenberg templates are repo-tracked next to
+        // DocumentGenerator and must be served from disk - the content store
+        // must not be consulted for the /templates/... path at all
+        $expectedContent = file_get_contents(
+            __DIR__ . '/../../../../../../module/Api/src/Service/Document/Template/GVDiscTemplateGotenberg.rtf'
+        );
+        $this->assertNotFalse($expectedContent);
+
+        $this->contentStore->shouldReceive('read')
+            ->with('GVDiscTemplateGotenberg')
+            ->andReturn(null);
+        $this->contentStore->shouldNotReceive('read')
+            ->with('/templates/GVDiscTemplateGotenberg.rtf');
+
+        $isRepoTemplate = m::on(
+            static fn ($file) => $file instanceof \Dvsa\Olcs\DocumentShare\Data\Object\File
+                && $file->getContent() === $expectedContent
+        );
+
+        $this->document
+            ->shouldReceive('getBookmarkQueries')
+            ->with($isRepoTemplate, [])
+            ->andReturn([])
+            ->shouldReceive('populateBookmarks')
+            ->with($isRepoTemplate, [])
+            ->andReturn('populated');
+
+        $this->assertSame('populated', $this->sut->generateFromTemplate('GVDiscTemplateGotenberg'));
     }
 
     #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
@@ -286,14 +317,14 @@ class DocumentGeneratorTest extends MockeryTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($fileName, DsFile $file) use ($expectFileName, $expectBody) {
-                    static::assertSame($expectFileName, $fileName);
-                    static::assertEquals($expectBody, $file->getContent());
+                    $this->assertSame($expectFileName, $fileName);
+                    $this->assertEquals($expectBody, $file->getContent());
 
                     return 'EXPECT';
                 }
             );
 
-        static::assertEquals('EXPECT', $this->sut->uploadGeneratedContent($expectBody, $expectFileName));
+        $this->assertEquals('EXPECT', $this->sut->uploadGeneratedContent($expectBody, $expectFileName));
     }
 
     public function testUploadGeneratedContentError(): void
@@ -368,14 +399,14 @@ class DocumentGeneratorTest extends MockeryTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($fileName, DsFile $file) use ($expectFileName, $expectBody) {
-                    static::assertSame($expectFileName, $fileName);
-                    static::assertEquals($expectBody, $file->getContent());
+                    $this->assertSame($expectFileName, $fileName);
+                    $this->assertEquals($expectBody, $file->getContent());
 
                     return 'EXPECT';
                 }
             );
 
-        static::assertEquals('EXPECT', $this->sut->uploadGeneratedContent($expectBody, $expectFileName));
+        $this->assertEquals('EXPECT', $this->sut->uploadGeneratedContent($expectBody, $expectFileName));
     }
 
     public function testDisableBookmarksFlagWithN(): void
@@ -423,13 +454,13 @@ class DocumentGeneratorTest extends MockeryTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($fileName, DsFile $file) use ($expectFileName, $expectBody) {
-                    static::assertSame($expectFileName, $fileName);
-                    static::assertEquals($expectBody, $file->getContent());
+                    $this->assertSame($expectFileName, $fileName);
+                    $this->assertEquals($expectBody, $file->getContent());
 
                     return 'EXPECT';
                 }
             );
 
-        static::assertEquals('EXPECT', $this->sut->uploadGeneratedContent($expectBody, $expectFileName));
+        $this->assertEquals('EXPECT', $this->sut->uploadGeneratedContent($expectBody, $expectFileName));
     }
 }

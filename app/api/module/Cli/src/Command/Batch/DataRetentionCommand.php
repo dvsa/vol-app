@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DataRetentionCommand extends AbstractBatchCommand
 {
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('data-retention:run')

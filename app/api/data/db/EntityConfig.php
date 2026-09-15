@@ -1576,6 +1576,88 @@ return array(
             )
         )
     ),
+    // Letter module: the inverse collections are hand-written in the concrete
+    // entities (with cascade/orphanRemoval options), so generateInverse is false -
+    // the owning side still emits a matching inversedBy, but no collection is
+    // generated that would duplicate the hand-written one.
+    'letter_appendix_version' => array(
+        'letter_appendix_id' => array(
+            'inversedBy' => array('entity' => 'LetterAppendix', 'property' => 'version', 'generateInverse' => false)
+        )
+    ),
+    'letter_instance_appendix' => array(
+        'letter_instance_id' => array(
+            'inversedBy' => array('entity' => 'LetterInstance', 'property' => 'letterInstanceAppendix', 'generateInverse' => false)
+        )
+    ),
+    'letter_instance_choice' => array(
+        'letter_instance_id' => array(
+            'inversedBy' => array('entity' => 'LetterInstance', 'property' => 'letterInstanceChoice', 'generateInverse' => false)
+        )
+    ),
+    'letter_instance_issue' => array(
+        'letter_instance_id' => array(
+            'inversedBy' => array('entity' => 'LetterInstance', 'property' => 'letterInstanceIssue', 'generateInverse' => false)
+        )
+    ),
+    'letter_instance_section' => array(
+        'letter_instance_id' => array(
+            'inversedBy' => array('entity' => 'LetterInstance', 'property' => 'letterInstanceSection', 'generateInverse' => false)
+        )
+    ),
+    'letter_instance_todo' => array(
+        'letter_instance_id' => array(
+            'inversedBy' => array('entity' => 'LetterInstance', 'property' => 'letterInstanceTodo', 'generateInverse' => false)
+        ),
+        'letter_instance_issue_id' => array(
+            'inversedBy' => array('entity' => 'LetterInstanceIssue', 'property' => 'letterInstanceTodo', 'generateInverse' => false)
+        )
+    ),
+    'letter_issue_version' => array(
+        'letter_issue_id' => array(
+            'inversedBy' => array('entity' => 'LetterIssue', 'property' => 'version', 'generateInverse' => false)
+        )
+    ),
+    'letter_issue_todo' => array(
+        'letter_issue_version_id' => array(
+            'inversedBy' => array('entity' => 'LetterIssueVersion', 'property' => 'letterIssueTodo', 'generateInverse' => false)
+        )
+    ),
+    'letter_section_variant' => array(
+        'letter_section_id' => array(
+            'inversedBy' => array('entity' => 'LetterSection', 'property' => 'variant', 'generateInverse' => false)
+        )
+    ),
+    'letter_section_version' => array(
+        'letter_section_variant_id' => array(
+            'inversedBy' => array('entity' => 'LetterSectionVariant', 'property' => 'version', 'generateInverse' => false)
+        )
+    ),
+    'letter_todo_version' => array(
+        'letter_todo_id' => array(
+            'inversedBy' => array('entity' => 'LetterTodo', 'property' => 'version', 'generateInverse' => false)
+        )
+    ),
+    'letter_type_appendix' => array(
+        'letter_type_id' => array(
+            'inversedBy' => array('entity' => 'LetterType', 'property' => 'letterTypeAppendix', 'generateInverse' => false)
+        )
+    ),
+    'letter_type_choice' => array(
+        'letter_type_id' => array(
+            'inversedBy' => array('entity' => 'LetterType', 'property' => 'letterTypeChoice', 'generateInverse' => false)
+        )
+    ),
+    'letter_type_issue' => array(
+        'letter_type_id' => array(
+            'inversedBy' => array('entity' => 'LetterType', 'property' => 'letterTypeIssue', 'generateInverse' => false)
+        )
+    ),
+    'letter_type_section' => array(
+        'letter_type_id' => array(
+            'inversedBy' => array('entity' => 'LetterType', 'property' => 'letterTypeSection', 'generateInverse' => false)
+        )
+    ),
     'tm_case_decision' => array(
         'is_msi' => array(
             'type' => 'yesno'

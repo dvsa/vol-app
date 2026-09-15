@@ -15,13 +15,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * IpaAnswersSummaryGeneratorTest
  */
-class IpaAnswersSummaryGeneratorTest extends MockeryTestCase
+final class IpaAnswersSummaryGeneratorTest extends MockeryTestCase
 {
     private $irhpPermitApplication;
 
     private $answersSummary;
-
-    private $answersSummaryFactory;
 
     private $defaultAnswersSummaryRowsAdder;
 
@@ -29,14 +27,15 @@ class IpaAnswersSummaryGeneratorTest extends MockeryTestCase
 
     private $customRowsAdderForType2;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);
 
         $this->answersSummary = m::mock(AnswersSummary::class);
 
-        $this->answersSummaryFactory = m::mock(AnswersSummaryFactory::class);
-        $this->answersSummaryFactory->shouldReceive('create')
+        $answersSummaryFactory = m::mock(AnswersSummaryFactory::class);
+        $answersSummaryFactory->shouldReceive('create')
             ->withNoArgs()
             ->once()
             ->andReturn($this->answersSummary);
@@ -44,7 +43,7 @@ class IpaAnswersSummaryGeneratorTest extends MockeryTestCase
         $this->defaultAnswersSummaryRowsAdder = m::mock(AnswersSummaryRowsAdderInterface::class);
 
         $this->answersSummaryGenerator = new IpaAnswersSummaryGenerator(
-            $this->answersSummaryFactory,
+            $answersSummaryFactory,
             $this->defaultAnswersSummaryRowsAdder
         );
 
@@ -92,11 +91,9 @@ class IpaAnswersSummaryGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpSnapshot(): array
+    public static function dpSnapshot(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

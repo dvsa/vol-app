@@ -11,19 +11,15 @@ use Dvsa\Olcs\Api\Entity\User\User;
 
 /**
  * DocTemplate Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="doc_template",
- *    indexes={
- *        @ORM\Index(name="ix_doc_template_sub_category_id", columns={"sub_category_id"}),
- *        @ORM\Index(name="ix_doc_template_document_id", columns={"document_id"}),
- *        @ORM\Index(name="ix_doc_template_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_doc_template_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_doc_template_letter_type_id", columns={"letter_type_id"}),
- *        @ORM\Index(name="ix_doc_template_category_id", columns={"category_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'doc_template')]
+#[ORM\Index(name: 'ix_doc_template_sub_category_id', columns: ['sub_category_id'])]
+#[ORM\Index(name: 'ix_doc_template_document_id', columns: ['document_id'])]
+#[ORM\Index(name: 'ix_doc_template_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_doc_template_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_doc_template_letter_type_id', columns: ['letter_type_id'])]
+#[ORM\Index(name: 'ix_doc_template_category_id', columns: ['category_id'])]
+#[ORM\Entity]
 class DocTemplate extends AbstractDocTemplate implements DeletableInterface
 {
     public const TEMPLATE_PATH_PREFIXES = [

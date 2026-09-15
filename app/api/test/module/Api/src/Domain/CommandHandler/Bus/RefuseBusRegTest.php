@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrRefused;
 /**
  * Refuse BusReg Test
  */
-class RefuseBusRegTest extends AbstractCommandHandlerTestCase
+final class RefuseBusRegTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

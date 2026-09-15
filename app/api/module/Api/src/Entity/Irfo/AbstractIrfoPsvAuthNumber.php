@@ -22,18 +22,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="irfo_psv_auth_number",
- *    indexes={
- *        @ORM\Index(name="ix_irfo_psv_auth_number_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_number_irfo_psv_auth_id", columns={"irfo_psv_auth_id"}),
- *        @ORM\Index(name="ix_irfo_psv_auth_number_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irfo_psv_auth_number')]
+#[ORM\Index(name: 'ix_irfo_psv_auth_number_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_number_irfo_psv_auth_id', columns: ['irfo_psv_auth_id'])]
+#[ORM\Index(name: 'ix_irfo_psv_auth_number_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,62 +43,56 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to irfo_psv_auth
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_psv_auth_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irfo_psv_auth_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth::class, inversedBy: 'irfoPsvAuthNumbers', fetch: 'LAZY')]
     protected $irfoPsvAuth;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=70, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 70, nullable: false)]
     protected $name = '';
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -126,7 +116,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setId($id)
     {
@@ -150,7 +140,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth $irfoPsvAuth new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setIrfoPsvAuth($irfoPsvAuth)
     {
@@ -174,7 +164,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -198,7 +188,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -222,7 +212,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param string $name new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setName($name)
     {
@@ -246,7 +236,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setVersion($version)
     {

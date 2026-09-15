@@ -20,7 +20,7 @@ use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class UserWithNameTest extends AbstractDataServiceTestCase
+final class UserWithNameTest extends AbstractDataServiceTestCase
 {
     /** @var UserWithName */
     private $sut;

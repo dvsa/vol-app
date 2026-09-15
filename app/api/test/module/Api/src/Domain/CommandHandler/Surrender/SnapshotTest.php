@@ -17,7 +17,7 @@ use Mockery as m;
 use Doctrine\ORM\Query;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
-class SnapshotTest extends AbstractCommandHandlerTestCase
+final class SnapshotTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

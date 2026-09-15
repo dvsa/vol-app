@@ -23,8 +23,9 @@ use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ViOcViewTest extends RepositoryTestCase
+final class ViOcViewTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(ViOcViewRepo::class);

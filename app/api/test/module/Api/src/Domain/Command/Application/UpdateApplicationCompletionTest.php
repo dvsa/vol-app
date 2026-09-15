@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateApplicationCompletionTest extends \PHPUnit\Framework\TestCase
+final class UpdateApplicationCompletionTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

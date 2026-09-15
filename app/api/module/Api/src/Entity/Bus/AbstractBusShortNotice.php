@@ -21,22 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="bus_short_notice",
- *    indexes={
- *        @ORM\Index(name="ix_bus_short_notice_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_bus_short_notice_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_bus_short_notice_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="uk_bus_short_notice_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_bus_short_notice_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\UniqueConstraint(name="uk_bus_short_notice_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'bus_short_notice')]
+#[ORM\Index(name: 'ix_bus_short_notice_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_bus_short_notice_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\UniqueConstraint(name: 'uk_bus_short_notice_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\UniqueConstraint(name: 'uk_bus_short_notice_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractBusShortNotice implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,233 +41,208 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'shortNotice', fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * bankHolidayChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="bank_holiday_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'bank_holiday_change', nullable: false, options: ['default' => 0])]
     protected $bankHolidayChange = 0;
 
     /**
      * unforseenChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="unforseen_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'unforseen_change', nullable: false, options: ['default' => 0])]
     protected $unforseenChange = 0;
 
     /**
      * Unforseen detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="unforseen_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'unforseen_detail', length: 255, nullable: true)]
     protected $unforseenDetail;
 
     /**
      * timetableChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="timetable_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'timetable_change', nullable: false, options: ['default' => 0])]
     protected $timetableChange = 0;
 
     /**
      * Timetable detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="timetable_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'timetable_detail', length: 255, nullable: true)]
     protected $timetableDetail;
 
     /**
      * replacementChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="replacement_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'replacement_change', nullable: false, options: ['default' => 0])]
     protected $replacementChange = 0;
 
     /**
      * Replacement detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="replacement_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'replacement_detail', length: 255, nullable: true)]
     protected $replacementDetail;
 
     /**
      * holidayChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="holiday_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'holiday_change', nullable: false, options: ['default' => 0])]
     protected $holidayChange = 0;
 
     /**
      * Holiday detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="holiday_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'holiday_detail', length: 255, nullable: true)]
     protected $holidayDetail;
 
     /**
      * trcChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="trc_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'trc_change', nullable: false, options: ['default' => 0])]
     protected $trcChange = 0;
 
     /**
      * Trc detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="trc_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'trc_detail', length: 255, nullable: true)]
     protected $trcDetail;
 
     /**
      * policeChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="police_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'police_change', nullable: false, options: ['default' => 0])]
     protected $policeChange = 0;
 
     /**
      * Police detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="police_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'police_detail', length: 255, nullable: true)]
     protected $policeDetail;
 
     /**
      * specialOccasionChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="special_occasion_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'special_occasion_change', nullable: false, options: ['default' => 0])]
     protected $specialOccasionChange = 0;
 
     /**
      * Special occasion detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="special_occasion_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'special_occasion_detail', length: 255, nullable: true)]
     protected $specialOccasionDetail;
 
     /**
      * connectionChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="connection_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'connection_change', nullable: false, options: ['default' => 0])]
     protected $connectionChange = 0;
 
     /**
      * Connection detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="connection_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'connection_detail', length: 255, nullable: true)]
     protected $connectionDetail;
 
     /**
      * notAvailableChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="not_available_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'not_available_change', nullable: false, options: ['default' => 0])]
     protected $notAvailableChange = 0;
 
     /**
      * Not available detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="not_available_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'not_available_detail', length: 255, nullable: true)]
     protected $notAvailableDetail;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -299,7 +266,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setId($id)
     {
@@ -323,7 +290,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -347,7 +314,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -371,7 +338,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -395,7 +362,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $bankHolidayChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setBankHolidayChange($bankHolidayChange)
     {
@@ -419,7 +386,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $unforseenChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setUnforseenChange($unforseenChange)
     {
@@ -443,7 +410,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $unforseenDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setUnforseenDetail($unforseenDetail)
     {
@@ -467,7 +434,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $timetableChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setTimetableChange($timetableChange)
     {
@@ -491,7 +458,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $timetableDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setTimetableDetail($timetableDetail)
     {
@@ -515,7 +482,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $replacementChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setReplacementChange($replacementChange)
     {
@@ -539,7 +506,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $replacementDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setReplacementDetail($replacementDetail)
     {
@@ -563,7 +530,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $holidayChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setHolidayChange($holidayChange)
     {
@@ -587,7 +554,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $holidayDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setHolidayDetail($holidayDetail)
     {
@@ -611,7 +578,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $trcChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setTrcChange($trcChange)
     {
@@ -635,7 +602,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $trcDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setTrcDetail($trcDetail)
     {
@@ -659,7 +626,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $policeChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setPoliceChange($policeChange)
     {
@@ -683,7 +650,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $policeDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setPoliceDetail($policeDetail)
     {
@@ -707,7 +674,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $specialOccasionChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setSpecialOccasionChange($specialOccasionChange)
     {
@@ -731,7 +698,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $specialOccasionDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setSpecialOccasionDetail($specialOccasionDetail)
     {
@@ -755,7 +722,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $connectionChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setConnectionChange($connectionChange)
     {
@@ -779,7 +746,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $connectionDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setConnectionDetail($connectionDetail)
     {
@@ -803,7 +770,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $notAvailableChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setNotAvailableChange($notAvailableChange)
     {
@@ -827,7 +794,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $notAvailableDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setNotAvailableDetail($notAvailableDetail)
     {
@@ -851,7 +818,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setVersion($version)
     {
@@ -875,7 +842,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param int $olbsKey new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

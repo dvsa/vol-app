@@ -388,7 +388,7 @@ class Licence extends AbstractRepository
      *
      * @return array
      */
-    public function fetchForContinuationNotSought(\DateTime $now = null, $limit = null)
+    public function fetchForContinuationNotSought(?\DateTime $now = null, $limit = null)
     {
         if (is_null($now)) {
             $now = new DateTime('now');
@@ -468,7 +468,7 @@ class Licence extends AbstractRepository
      *
      * @return array
      */
-    public function fetchPsvLicenceIdsToSurrender(\DateTime $now = null)
+    public function fetchPsvLicenceIdsToSurrender(?\DateTime $now = null)
     {
         if (is_null($now)) {
             $now = new DateTime('now');

@@ -19,7 +19,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ActivateTest extends AbstractCommandHandlerTestCase
+final class ActivateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

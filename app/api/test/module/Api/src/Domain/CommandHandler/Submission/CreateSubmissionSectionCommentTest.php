@@ -14,9 +14,9 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Submission\CreateSubmissionSectionComment::class)]
-class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
+final class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
 {
-    public const COMMENT_ID = 9999;
+    public const int COMMENT_ID = 9999;
 
     /** @var CreateSubmissionSectionComment */
     protected $sut;

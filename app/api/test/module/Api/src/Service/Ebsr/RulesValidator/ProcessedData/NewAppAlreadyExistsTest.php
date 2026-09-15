@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see NewAppAlreadyExists
  */
-class NewAppAlreadyExistsTest extends MockeryTestCase
+final class NewAppAlreadyExistsTest extends MockeryTestCase
 {
     /**
      * tests whether a new application is prevented from reusing an existing number
@@ -23,8 +23,9 @@ class NewAppAlreadyExistsTest extends MockeryTestCase
      * @param bool $valid
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
-    public function testIsValid(mixed $txcAppType, mixed $busReg, mixed $valid): void
+    public function testIsValid(mixed $txcAppType, bool $hasBusReg, mixed $valid): void
     {
+        $busReg = $hasBusReg ? m::mock(BusRegEntity::class) : null;
         $sut = new NewAppAlreadyExists();
 
         $value = [
@@ -40,21 +41,17 @@ class NewAppAlreadyExistsTest extends MockeryTestCase
     /**
      * Provider for testIsValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
-        $busMock = m::mock(BusRegEntity::class);
-
-        return [
-            [BusRegEntity::TXC_APP_NEW, $busMock, false],
-            [BusRegEntity::TXC_APP_NEW, null, true],
-            [BusRegEntity::TXC_APP_CANCEL, $busMock, true],
-            [BusRegEntity::TXC_APP_CANCEL, null, true],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, $busMock, true],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, null, true],
-            [BusRegEntity::TXC_APP_CHARGEABLE, $busMock, true],
-            [BusRegEntity::TXC_APP_CHARGEABLE, null, true],
-        ];
+        yield [BusRegEntity::TXC_APP_NEW, true, false];
+        yield [BusRegEntity::TXC_APP_NEW, false, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, true, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, false, true];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, true, true];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, false, true];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, true, true];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, false, true];
     }
 }

@@ -22,30 +22,23 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="publication_link",
- *    indexes={
- *        @ORM\Index(name="ix_publication_link_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_publication_link_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="ix_publication_link_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_publication_link_impounding_id", columns={"impounding_id"}),
- *        @ORM\Index(name="ix_publication_link_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_publication_link_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_publication_link_pi_id", columns={"pi_id"}),
- *        @ORM\Index(name="ix_publication_link_publication_id", columns={"publication_id"}),
- *        @ORM\Index(name="ix_publication_link_publication_section_id", columns={"publication_section_id"}),
- *        @ORM\Index(name="ix_publication_link_traffic_area_id", columns={"traffic_area_id"}),
- *        @ORM\Index(name="ix_publication_link_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="uk_publication_link_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_publication_link_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'publication_link')]
+#[ORM\Index(name: 'ix_publication_link_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_publication_link_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'ix_publication_link_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_publication_link_impounding_id', columns: ['impounding_id'])]
+#[ORM\Index(name: 'ix_publication_link_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_publication_link_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_publication_link_pi_id', columns: ['pi_id'])]
+#[ORM\Index(name: 'ix_publication_link_publication_id', columns: ['publication_id'])]
+#[ORM\Index(name: 'ix_publication_link_publication_section_id', columns: ['publication_section_id'])]
+#[ORM\Index(name: 'ix_publication_link_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\Index(name: 'ix_publication_link_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\UniqueConstraint(name: 'uk_publication_link_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractPublicationLink implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -59,205 +52,184 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to publication
      *
      * @var \Dvsa\Olcs\Api\Entity\Publication\Publication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Publication\Publication", fetch="LAZY")
-     * @ORM\JoinColumn(name="publication_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\Publication::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $publication;
 
     /**
      * Foreign Key to traffic_area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $application;
 
     /**
      * Foreign Key to pi
      *
      * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi", fetch="LAZY")
-     * @ORM\JoinColumn(name="pi_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $pi;
 
     /**
      * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * Foreign key to impounding
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Impounding
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Impounding", fetch="LAZY")
-     * @ORM\JoinColumn(name="impounding_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'impounding_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Impounding::class, fetch: 'LAZY')]
     protected $impounding;
 
     /**
      * Foreign Key to publication_section
      *
      * @var \Dvsa\Olcs\Api\Entity\Publication\PublicationSection
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationSection", fetch="LAZY")
-     * @ORM\JoinColumn(name="publication_section_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'publication_section_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationSection::class, fetch: 'LAZY')]
     protected $publicationSection;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Publish after date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="publish_after_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'publish_after_date', nullable: true)]
     protected $publishAfterDate;
 
     /**
      * Text1
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="text1", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'text1', nullable: true)]
     protected $text1;
 
     /**
      * Text2
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="text2", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'text2', nullable: true)]
     protected $text2;
 
     /**
      * Text3
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="text3", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'text3', nullable: true)]
     protected $text3;
 
     /**
      * Orig pub date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="orig_pub_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'orig_pub_date', nullable: true)]
     protected $origPubDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**
      * PoliceDatas
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationPoliceData", mappedBy="publicationLink", cascade={"persist"}, orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationPoliceData::class, mappedBy: 'publicationLink', cascade: ['persist'], orphanRemoval: true)]
     protected $policeDatas;
 
     /**
@@ -282,7 +254,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setId($id)
     {
@@ -306,7 +278,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Publication\Publication $publication new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setPublication($publication)
     {
@@ -330,7 +302,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -354,7 +326,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -378,7 +350,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -402,7 +374,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setApplication($application)
     {
@@ -426,7 +398,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\Pi $pi new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setPi($pi)
     {
@@ -450,7 +422,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -474,7 +446,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Impounding $impounding new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setImpounding($impounding)
     {
@@ -498,7 +470,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Publication\PublicationSection $publicationSection new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setPublicationSection($publicationSection)
     {
@@ -522,7 +494,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -546,7 +518,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -570,7 +542,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \DateTime $publishAfterDate new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setPublishAfterDate($publishAfterDate)
     {
@@ -600,7 +572,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param string $text1 new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setText1($text1)
     {
@@ -624,7 +596,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param string $text2 new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setText2($text2)
     {
@@ -648,7 +620,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param string $text3 new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setText3($text3)
     {
@@ -672,7 +644,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \DateTime $origPubDate new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setOrigPubDate($origPubDate)
     {
@@ -702,7 +674,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setVersion($version)
     {
@@ -726,7 +698,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param int $olbsKey new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -750,7 +722,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param string $olbsType new value being set
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setOlbsType($olbsType)
     {
@@ -774,7 +746,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $policeDatas collection being set as the value
      *
-     * @return PublicationLink
+     * @return static
      */
     public function setPoliceDatas($policeDatas)
     {
@@ -798,7 +770,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $policeDatas collection being added
      *
-     * @return PublicationLink
+     * @return static
      */
     public function addPoliceDatas($policeDatas)
     {
@@ -821,7 +793,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $policeDatas collection being removed
      *
-     * @return PublicationLink
+     * @return static
      */
     public function removePoliceDatas($policeDatas)
     {

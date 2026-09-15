@@ -10,10 +10,8 @@ use Dvsa\Olcs\Api\Domain\Repository\Factory\DataGovUkFactory;
 use Dvsa\Olcs\Api\Domain\Repository\DataGovUk;
 use Mockery as m;
 
-/**
- * @covers  Dvsa\Olcs\Api\Domain\Repository\Factory\DataGovUkFactory
- */
-class DataGovUkFactoryTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Factory\DataGovUkFactory::class)]
+final class DataGovUkFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -28,9 +26,6 @@ class DataGovUkFactoryTest extends MockeryTestCase
             ->andReturn($mockConn)
             ->getMock();
 
-        static::assertInstanceOf(
-            DataGovUk::class,
-            (new DataGovUkFactory())->__invoke($container, DataGovUk::class)
-        );
+        $this->assertInstanceOf(DataGovUk::class, new DataGovUkFactory()->__invoke($container, DataGovUk::class));
     }
 }

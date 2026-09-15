@@ -10,7 +10,7 @@ use Permits\Data\Mapper\SelectedCandidatePermits;
 /**
  * SelectedCandidatePermitsTest
  */
-class SelectedCandidatePermitsTest extends TestCase
+final class SelectedCandidatePermitsTest extends TestCase
 {
     public function testMapFromForm(): void
     {

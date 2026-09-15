@@ -247,7 +247,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerMarker
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TransportManagerMarker
     {
         $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));
         $this->setAnnotationBuilderService($container->get('TransferAnnotationBuilder'));

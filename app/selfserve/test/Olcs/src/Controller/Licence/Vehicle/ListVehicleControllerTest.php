@@ -48,9 +48,9 @@ use PHPUnit\Framework\Attributes\Test;
 /**
  * @see ListVehicleController
  */
-class ListVehicleControllerTest extends MockeryTestCase
+final class ListVehicleControllerTest extends MockeryTestCase
 {
-    protected const ROUTE_CONFIGURATION_FOR_LICENCE_WITH_REMOVED_VEHICLES_SHOWING_AND_FOCUSED = [
+    protected const array ROUTE_CONFIGURATION_FOR_LICENCE_WITH_REMOVED_VEHICLES_SHOWING_AND_FOCUSED = [
         'licence/vehicle/list/GET',
         [
             'licence' => 0,
@@ -62,7 +62,7 @@ class ListVehicleControllerTest extends MockeryTestCase
             'fragment' => ListVehicleController::REMOVE_TABLE_WRAPPER_ID,
         ],
     ];
-    protected const ROUTE_CONFIGURATION_FOR_LICENCE_WITHOUT_REMOVED_VEHICLES_SHOWING = [
+    protected const array ROUTE_CONFIGURATION_FOR_LICENCE_WITHOUT_REMOVED_VEHICLES_SHOWING = [
         'licence/vehicle/list/GET',
         [
             'licence' => 0,
@@ -72,7 +72,7 @@ class ListVehicleControllerTest extends MockeryTestCase
             ],
         ],
     ];
-    protected const A_URL = 'A URL';
+    protected const string A_URL = 'A URL';
 
     /**
      * @var ListVehicleController|null
@@ -123,11 +123,6 @@ class ListVehicleControllerTest extends MockeryTestCase
      * @var Redirect
      */
     protected $redirectHelperMock;
-
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
 
     /**
      * @var ServiceLocatorInterface
@@ -191,7 +186,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
 
-        assert($this->queryHandlerMock instanceof MockInterface, 'Expected instance of MockInterface');
+        $this->assertInstanceOf(MockInterface::class, $this->queryHandlerMock, 'Expected instance of MockInterface');
         $licenceData = $this->setUpDefaultLicenceData();
         $licenceQueryMatcher = IsInstanceOf::anInstanceOf(Licence::class);
         $licenceQueryResponse = m::mock(QueryResponse::class);
@@ -331,16 +326,14 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @return (int|string)[][]
+     * @return \Iterator<(int | string), array<(int | string)>>
      *
      * @psalm-return array{'title when table total not equal to one': list{2, 'licence.vehicle.list.section.removed.header.title.plural'}, 'title when table total is one': list{1, 'licence.vehicle.list.section.removed.header.title.singular'}}
      */
-    public static function setUpRemovedTableTitleData(): array
+    public static function setUpRemovedTableTitleData(): \Iterator
     {
-        return [
-            'title when table total not equal to one' => [2, 'licence.vehicle.list.section.removed.header.title.plural'],
-            'title when table total is one' => [1, 'licence.vehicle.list.section.removed.header.title.singular'],
-        ];
+        yield 'title when table total not equal to one' => [2, 'licence.vehicle.list.section.removed.header.title.plural'];
+        yield 'title when table total is one' => [1, 'licence.vehicle.list.section.removed.header.title.singular'];
     }
 
     #[DataProvider('setUpRemovedTableTitleData')]
@@ -484,14 +477,12 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function buttonTranslationKeyTypes(): array
+    public static function buttonTranslationKeyTypes(): \Iterator
     {
-        return [
-            'title' => ['title'],
-            'label' => ['label'],
-        ];
+        yield 'title' => ['title'];
+        yield 'label' => ['label'];
     }
 
     #[Test]
@@ -541,7 +532,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $expectedQueryParam = ListVehicleController::QUERY_KEY_INCLUDE_REMOVED;
         $message = sprintf('Expected route reference to have "%s" query parameter set', $expectedQueryParam);
         $notExpectedString = sprintf("%s=", $expectedQueryParam);
-        $this->assertStringNotContainsString($notExpectedString, $variables['toggleRemovedAction'] ?? '', $message);
+        $this->assertStringNotContainsString($notExpectedString, (string) ($variables['toggleRemovedAction'] ?? ''), $message);
     }
 
     #[Test]
@@ -559,7 +550,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         // Assert
         $message = sprintf('Expected route reference to not have "%s" query parameter set', $expectedQueryParam);
         $notExpectedString = sprintf("%s=", $expectedQueryParam);
-        $this->assertStringNotContainsString($notExpectedString, $variables['toggleRemovedAction'] ?? '', $message);
+        $this->assertStringNotContainsString($notExpectedString, (string) ($variables['toggleRemovedAction'] ?? ''), $message);
     }
 
     #[DataProvider('buttonTranslationKeyTypes')]
@@ -604,50 +595,44 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey($expectedKey, $variables, sprintf('Expected result variables to not have a key "%s"', $expectedKey));
     }
 
-    public static function invalidInputDataNoMessageProvider(): array
+    public static function invalidInputDataNoMessageProvider(): \Iterator
     {
-        return [
-            'sort-r query param set to invalid column' => [['sort-r' => 'foo']],
-            'sort-r query param set to empty' => [['sort-r' => '']],
-            'sort-c query param set to invalid column' => [['sort-c' => 'bar']],
-            'sort-c query param set to empty' => [['sort-c' => '']],
-            'order-r is invalid' => [['order-r' => 'foo']],
-            'order-r is empty' => [['order-r' => '']],
-            'order-c is invalid' => [['order-c' => 'foo']],
-            'order-c is empty' => [['order-c' => '']],
-        ];
+        yield 'sort-r query param set to invalid column' => [['sort-r' => 'foo']];
+        yield 'sort-r query param set to empty' => [['sort-r' => '']];
+        yield 'sort-c query param set to invalid column' => [['sort-c' => 'bar']];
+        yield 'sort-c query param set to empty' => [['sort-c' => '']];
+        yield 'order-r is invalid' => [['order-r' => 'foo']];
+        yield 'order-r is empty' => [['order-r' => '']];
+        yield 'order-c is invalid' => [['order-c' => 'foo']];
+        yield 'order-c is empty' => [['order-c' => '']];
     }
 
-    public static function invalidInputDataProvider(): array
+    public static function invalidInputDataProvider(): \Iterator
     {
-        return [
-            'sort-r query param set to invalid column' => [['sort-r' => 'foo'], 'table.validation.error.sort.in-array'],
-            'sort-r query param set to empty' => [['sort-r' => ''], 'table.validation.error.sort.in-array'],
-            'sort-c query param set to invalid column' => [['sort-c' => 'bar'], 'table.validation.error.sort.in-array'],
-            'sort-c query param set to empty' => [['sort-c' => ''], 'table.validation.error.sort.in-array'],
-            'order-r is invalid' => [['order-r' => 'foo'], 'table.validation.error.order.in-array'],
-            'order-r is empty' => [['order-r' => ''], 'table.validation.error.order.in-array'],
-            'order-c is invalid' => [['order-c' => 'foo'], 'table.validation.error.order.in-array'],
-            'order-c is empty' => [['order-c' => ''], 'table.validation.error.order.in-array'],
-        ];
+        yield 'sort-r query param set to invalid column' => [['sort-r' => 'foo'], 'table.validation.error.sort.in-array'];
+        yield 'sort-r query param set to empty' => [['sort-r' => ''], 'table.validation.error.sort.in-array'];
+        yield 'sort-c query param set to invalid column' => [['sort-c' => 'bar'], 'table.validation.error.sort.in-array'];
+        yield 'sort-c query param set to empty' => [['sort-c' => ''], 'table.validation.error.sort.in-array'];
+        yield 'order-r is invalid' => [['order-r' => 'foo'], 'table.validation.error.order.in-array'];
+        yield 'order-r is empty' => [['order-r' => ''], 'table.validation.error.order.in-array'];
+        yield 'order-c is invalid' => [['order-c' => 'foo'], 'table.validation.error.order.in-array'];
+        yield 'order-c is empty' => [['order-c' => ''], 'table.validation.error.order.in-array'];
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function validInputDataProvider(): array
+    public static function validInputDataProvider(): \Iterator
     {
-        return [
-            'sort removed vehicles table by "v.vrm" column' => [['sort-r' => 'v.vrm']],
-            'sort removed vehicles table by "specifiedDate" column' => [['sort-r' => 'specifiedDate']],
-            'sort removed vehicles table by "removalDate" column' => [['sort-r' => 'removalDate']],
-            'sort current vehicles table by "v.vrm" column' => [['sort-c' => 'v.vrm']],
-            'sort current vehicles table by "specifiedDate" column' => [['sort-c' => 'specifiedDate']],
-            'order removed vehicles table descending' => [['order-r' => 'DESC']],
-            'order removed vehicles table descending lowercase' => [['order-r' => 'desc']],
-            'order removed vehicles table ascending' => [['order-r' => 'ASC']],
-            'order removed vehicles table lowercase' => [['order-r' => 'asc']],
-        ];
+        yield 'sort removed vehicles table by "v.vrm" column' => [['sort-r' => 'v.vrm']];
+        yield 'sort removed vehicles table by "specifiedDate" column' => [['sort-r' => 'specifiedDate']];
+        yield 'sort removed vehicles table by "removalDate" column' => [['sort-r' => 'removalDate']];
+        yield 'sort current vehicles table by "v.vrm" column' => [['sort-c' => 'v.vrm']];
+        yield 'sort current vehicles table by "specifiedDate" column' => [['sort-c' => 'specifiedDate']];
+        yield 'order removed vehicles table descending' => [['order-r' => 'DESC']];
+        yield 'order removed vehicles table descending lowercase' => [['order-r' => 'desc']];
+        yield 'order removed vehicles table ascending' => [['order-r' => 'ASC']];
+        yield 'order removed vehicles table lowercase' => [['order-r' => 'asc']];
     }
 
     #[Depends('indexActionIsCallable')]
@@ -860,6 +845,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey('showRemovedVehicles', $result);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->commandHandlerMock = m::mock(HandleCommand::class);

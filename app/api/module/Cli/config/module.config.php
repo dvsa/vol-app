@@ -10,6 +10,7 @@ use Dvsa\Olcs\Cli\Domain\Query;
 use Dvsa\Olcs\Cli\Domain\QueryHandler;
 use Dvsa\Olcs\Cli;
 use Dvsa\Olcs\Cli\Command\Batch as BatchCommands;
+use Dvsa\Olcs\Cli\Command\Idp as IdpCommands;
 use Dvsa\Olcs\Cli\Command\Permits as PermitsCommands;
 use Dvsa\Olcs\Cli\Command\Queue as QueueCommands;
 use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
@@ -29,6 +30,7 @@ return [
             'batch:cache-clear' => Dvsa\Olcs\Cli\Command\Batch\CacheClearCommand::class,
             'batch:ch-vs-olcs-diffs' => Dvsa\Olcs\Cli\Command\Batch\CompaniesHouseVsOlcsDiffsExportCommand::class,
             'batch:clean-up-variations' => Dvsa\Olcs\Cli\Command\Batch\CleanUpAbandonedVariationsCommand::class,
+            'batch:retrieval-link-purge' => Dvsa\Olcs\Cli\Command\Batch\RetrievalLinkPurgeCommand::class,
             'batch:cns' => Dvsa\Olcs\Cli\Command\Batch\ContinuationNotSoughtCommand::class,
             'batch:create-psv-licence-surrender-tasks' => Dvsa\Olcs\Cli\Command\Batch\CreatePsvLicenceSurrenderTasksCommand::class,
             'batch:data-dva-ni-export' => Dvsa\Olcs\Cli\Command\Batch\DataDvaNiExportCommand::class,
@@ -52,6 +54,8 @@ return [
             'batch:process-ntu' => Dvsa\Olcs\Cli\Command\Batch\ProcessNtuCommand::class,
             'batch:remove-read-audit' => Dvsa\Olcs\Cli\Command\Batch\RemoveReadAuditCommand::class,
             'batch:resolve-payments' => Dvsa\Olcs\Cli\Command\Batch\ResolvePaymentsCommand::class,
+            'idp:sweep-stale-document-analysis' => Dvsa\Olcs\Cli\Command\Idp\SweepStaleDocumentAnalysisCommand::class,
+            'idp:store-document-analysis-result' => Dvsa\Olcs\Cli\Command\Idp\StoreDocumentAnalysisResultCommand::class,
             'permits:cancel-unsubmitted-bilateral' => Dvsa\Olcs\Cli\Command\Permits\CancelUnsubmittedBilateralCommand::class,
             'permits:close-expired-windows' => Dvsa\Olcs\Cli\Command\Permits\CloseExpiredWindowsCommand::class,
             'permits:mark-expired-permits' => Dvsa\Olcs\Cli\Command\Permits\MarkExpiredPermitsCommand::class,
@@ -72,6 +76,9 @@ return [
             'migrations:status'     => MigrationCommands\StatusCommand::class,
             'migrations:version'    => MigrationCommands\VersionCommand::class,
             'entity:generate'       => Dvsa\Olcs\Cli\Command\EntityGenerator\GenerateEntitiesCommand::class,
+            'notify:hello-world'    => Dvsa\Olcs\Cli\Command\Email\NotifyHelloWorldCommand::class,
+            'template:render-all'   => Dvsa\Olcs\Cli\Command\Email\RenderAllTemplatesCommand::class,
+            'template:convert-to-md' => Dvsa\Olcs\Cli\Command\Email\ConvertToMarkdownCommand::class,
         ],
     ],
     'dependencies' => [
@@ -182,6 +189,7 @@ return [
     ConfigAbstractFactory::class => [
         BatchCommands\CacheClearCommand::class => $commonBatchCommandDeps,
         BatchCommands\CleanUpAbandonedVariationsCommand::class => $commonBatchCommandDeps,
+        BatchCommands\RetrievalLinkPurgeCommand::class => $commonBatchCommandDeps,
         BatchCommands\CompaniesHouseVsOlcsDiffsExportCommand::class => $commonBatchCommandDeps,
         BatchCommands\ContinuationNotSoughtCommand::class => $commonBatchCommandDeps,
         BatchCommands\CreatePsvLicenceSurrenderTasksCommand::class => $commonBatchCommandDeps,
@@ -206,6 +214,8 @@ return [
         BatchCommands\ProcessNtuCommand::class => $commonBatchCommandDeps,
         BatchCommands\RemoveReadAuditCommand::class => $commonBatchCommandDeps,
         BatchCommands\ResolvePaymentsCommand::class => $commonBatchCommandDeps,
+        IdpCommands\SweepStaleDocumentAnalysisCommand::class => $commonBatchCommandDeps,
+        IdpCommands\StoreDocumentAnalysisResultCommand::class => $commonBatchCommandDeps,
         PermitsCommands\CancelUnsubmittedBilateralCommand::class => $commonBatchCommandDeps,
         PermitsCommands\CloseExpiredWindowsCommand::class => $commonBatchCommandDeps,
         PermitsCommands\MarkExpiredPermitsCommand::class => $commonBatchCommandDeps,
@@ -218,6 +228,20 @@ return [
         QueueCommands\ProcessInsolvencyDlqSQSQueueCommand::class => $commonCommandDeps,
         QueueCommands\TransXChangeConsumerSQSQueueCommand::class => $commonCommandDeps,
         \Dvsa\Olcs\Cli\Command\EntityGenerator\GenerateEntitiesCommand::class => $commonCommandDeps,
+        \Dvsa\Olcs\Cli\Command\Email\NotifyHelloWorldCommand::class => [
+            ...$commonCommandDeps,
+            \Dvsa\Olcs\Email\Service\TemplateRenderer::class,
+        ],
+        \Dvsa\Olcs\Cli\Command\Email\RenderAllTemplatesCommand::class => [
+            ...$commonCommandDeps,
+            'doctrine.entitymanager.orm_default',
+            'TemplateTwigRenderer',
+        ],
+        \Dvsa\Olcs\Cli\Command\Email\ConvertToMarkdownCommand::class => [
+            ...$commonCommandDeps,
+            'doctrine.entitymanager.orm_default',
+            'TemplateTwigRenderer',
+        ],
     ],
     'cache' => [
         'adapter' => [

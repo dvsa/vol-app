@@ -187,8 +187,6 @@ module "ecs_cluster" {
 
   cluster_name = "vol-app-${var.environment}-${each.key}-cluster"
 
-  create_task_exec_iam_role = true
-
   cluster_settings = [
     {
       name  = "containerInsights"
@@ -212,7 +210,7 @@ module "ecs_service" {
 
   enable_execute_command = true
 
-  task_exec_iam_role_arn = module.ecs_cluster[each.key].task_exec_iam_role_arn
+  task_exec_iam_statements = var.services[each.key].task_exec_iam_role_statements
 
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory

@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DateGeneratorTest extends MockeryTestCase
+final class DateGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

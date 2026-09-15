@@ -20,7 +20,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\MaxStockPermitsByApplication;
 use Mockery as m;
 use RuntimeException;
 
-class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
+final class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -309,16 +309,14 @@ class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dpUnsupportedPermitType(): array
+    public static function dpUnsupportedPermitType(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpUnsupportedPermitType')]

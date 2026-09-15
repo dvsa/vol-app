@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * Opposition Mapper Test
  */
-class OppositionTest extends MockeryTestCase
+final class OppositionTest extends MockeryTestCase
 {
     /**
      *
@@ -25,90 +25,88 @@ class OppositionTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
+            [],
+            ['fields' => []]
+        ];
+        // edit
+        yield [
             [
-                [],
-                ['fields' => []]
-            ],
-            // edit
-            [
-                [
-                    'id' => 987,
-                    'version' => 1,
-                    'opposer' => [
-                        'id' => 111,
-                        'opposerType' => 'otf_obj',
-                        'contactDetails' => [
-                            'id' => 555,
-                            'description' => 'desc',
-                            'address' => [
-                                'id' => 200,
+                'id' => 987,
+                'version' => 1,
+                'opposer' => [
+                    'id' => 111,
+                    'opposerType' => 'otf_obj',
+                    'contactDetails' => [
+                        'id' => 555,
+                        'description' => 'desc',
+                        'address' => [
+                            'id' => 200,
+                            'version' => 1,
+                            'addressLine1' => 'a1'
+                        ],
+                        'emailAddress' => 'test@test.me',
+                        'phoneContacts' => [
+                            [
+                                'id' => 301,
                                 'version' => 1,
-                                'addressLine1' => 'a1'
+                                'phoneContactType' => ['id' => 'phone_t_primary'],
+                                'phoneNumber' => 'pn1',
                             ],
-                            'emailAddress' => 'test@test.me',
-                            'phoneContacts' => [
-                                [
-                                    'id' => 301,
-                                    'version' => 1,
-                                    'phoneContactType' => ['id' => 'phone_t_primary'],
-                                    'phoneNumber' => 'pn1',
-                                ],
-                                [
-                                    'id' => 302,
-                                    'version' => 4,
-                                    'phoneContactType' => ['id' => 'phone_t_secondary'],
-                                    'phoneNumber' => 'pn2',
-                                ],
+                            [
+                                'id' => 302,
+                                'version' => 4,
+                                'phoneContactType' => ['id' => 'phone_t_secondary'],
+                                'phoneNumber' => 'pn2',
                             ],
-                            'person' => [
-                                'id' => 400,
-                                'version' => 1,
-                                'forename' => 'forename'
-                            ],
-                        ]
-                    ],
-                    'operatingCentres' => [800, 801],
-                    'case' => [
-                        'id' => 120,
-                        'application' => [
-                            'id' => 123
-                        ]
+                        ],
+                        'person' => [
+                            'id' => 400,
+                            'version' => 1,
+                            'forename' => 'forename'
+                        ],
                     ]
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'version' => 1,
-                        'opposer' => 111,
-                        'opposerType' => 'otf_obj',
-                        'contactDetailsDescription' => 'desc',
-                        'case' => 120,
-                        'applicationOperatingCentres' => [800, 801],
-                    ],
-                    'contact' => [
-                        'emailAddress' => 'test@test.me',
-                        'phone_primary' => 'pn1',
-                        'phone_primary_id' => 301,
-                        'phone_primary_version' => 1,
-                        'phone_secondary' => 'pn2',
-                        'phone_secondary_id' => 302,
-                        'phone_secondary_version' => 4,
-                    ],
-                    'person' => [
-                        'id' => 400,
-                        'version' => 1,
-                        'forename' => 'forename'
-                    ],
-                    'address' => [
-                        'id' => 200,
-                        'version' => 1,
-                        'addressLine1' => 'a1',
-                    ],
+                'operatingCentres' => [800, 801],
+                'case' => [
+                    'id' => 120,
+                    'application' => [
+                        'id' => 123
+                    ]
                 ]
+            ],
+            [
+                'fields' => [
+                    'id' => 987,
+                    'version' => 1,
+                    'opposer' => 111,
+                    'opposerType' => 'otf_obj',
+                    'contactDetailsDescription' => 'desc',
+                    'case' => 120,
+                    'applicationOperatingCentres' => [800, 801],
+                ],
+                'contact' => [
+                    'emailAddress' => 'test@test.me',
+                    'phone_primary' => 'pn1',
+                    'phone_primary_id' => 301,
+                    'phone_primary_version' => 1,
+                    'phone_secondary' => 'pn2',
+                    'phone_secondary_id' => 302,
+                    'phone_secondary_version' => 4,
+                ],
+                'person' => [
+                    'id' => 400,
+                    'version' => 1,
+                    'forename' => 'forename'
+                ],
+                'address' => [
+                    'id' => 200,
+                    'version' => 1,
+                    'addressLine1' => 'a1',
+                ],
             ]
         ];
     }
@@ -124,125 +122,123 @@ class OppositionTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public static function mapFromFormDataProvider(): array
+    public static function mapFromFormDataProvider(): \Iterator
     {
-        return [
-            'Application operating centre' => [
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'version' => 1,
-                        'opposerType' => 'otf_obj',
-                        'contactDetailsDescription' => 'desc',
-                        'applicationOperatingCentres' => [800, 801],
-                    ],
-                    'contact' => [
-                        'emailAddress' => 'test@test.me',
-                        'phone_primary' => 'pn1',
-                        'phone_primary_id' => 301,
-                        'phone_primary_version' => 1,
-                        'phone_secondary' => 'pn2',
-                        'phone_secondary_id' => 303,
-                        'phone_secondary_version' => 3,
-                    ],
-                    'person' => [
-                        'forename' => 'forename'
-                    ],
-                    'address' => [
-                        'addressLine1' => 'a1',
-                    ],
-                ],
-                [
+        yield 'Application operating centre' => [
+            [
+                'fields' => [
                     'id' => 987,
                     'version' => 1,
                     'opposerType' => 'otf_obj',
                     'contactDetailsDescription' => 'desc',
                     'applicationOperatingCentres' => [800, 801],
-                    'opposerContactDetails' => [
-                        'description' => 'desc',
-                        'address' => [
-                            'addressLine1' => 'a1'
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'phoneContacts' => [
-                            [
-                                'id' => 301,
-                                'version' => 1,
-                                'phoneContactType' => 'phone_t_primary',
-                                'phoneNumber' => 'pn1',
-                            ],
-                            [
-                                'id' => 303,
-                                'version' => 3,
-                                'phoneContactType' => 'phone_t_secondary',
-                                'phoneNumber' => 'pn2',
-                            ],
-                        ],
-                        'person' => [
-                            'forename' => 'forename'
-                        ],
-                    ],
-                    'operatingCentres' => [800, 801],
-                ]
+                ],
+                'contact' => [
+                    'emailAddress' => 'test@test.me',
+                    'phone_primary' => 'pn1',
+                    'phone_primary_id' => 301,
+                    'phone_primary_version' => 1,
+                    'phone_secondary' => 'pn2',
+                    'phone_secondary_id' => 303,
+                    'phone_secondary_version' => 3,
+                ],
+                'person' => [
+                    'forename' => 'forename'
+                ],
+                'address' => [
+                    'addressLine1' => 'a1',
+                ],
             ],
-            'Licensing operating centre' => [
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'version' => 1,
-                        'opposerType' => 'otf_obj',
-                        'contactDetailsDescription' => 'desc',
-                        'licenceOperatingCentres' => [800, 801],
+            [
+                'id' => 987,
+                'version' => 1,
+                'opposerType' => 'otf_obj',
+                'contactDetailsDescription' => 'desc',
+                'applicationOperatingCentres' => [800, 801],
+                'opposerContactDetails' => [
+                    'description' => 'desc',
+                    'address' => [
+                        'addressLine1' => 'a1'
                     ],
-                    'contact' => [
-                        'emailAddress' => 'test@test.me',
-                        'phone_primary' => 'pn1',
-                        'phone_primary_id' => 301,
-                        'phone_primary_version' => 1,
-                        'phone_secondary' => 'pn2',
-                        'phone_secondary_id' => 303,
-                        'phone_secondary_version' => 3,
+                    'emailAddress' => 'test@test.me',
+                    'phoneContacts' => [
+                        [
+                            'id' => 301,
+                            'version' => 1,
+                            'phoneContactType' => 'phone_t_primary',
+                            'phoneNumber' => 'pn1',
+                        ],
+                        [
+                            'id' => 303,
+                            'version' => 3,
+                            'phoneContactType' => 'phone_t_secondary',
+                            'phoneNumber' => 'pn2',
+                        ],
                     ],
                     'person' => [
                         'forename' => 'forename'
                     ],
-                    'address' => [
-                        'addressLine1' => 'a1',
-                    ],
                 ],
-                [
+                'operatingCentres' => [800, 801],
+            ]
+        ];
+        yield 'Licensing operating centre' => [
+            [
+                'fields' => [
                     'id' => 987,
                     'version' => 1,
                     'opposerType' => 'otf_obj',
                     'contactDetailsDescription' => 'desc',
                     'licenceOperatingCentres' => [800, 801],
-                    'opposerContactDetails' => [
-                        'description' => 'desc',
-                        'address' => [
-                            'addressLine1' => 'a1'
+                ],
+                'contact' => [
+                    'emailAddress' => 'test@test.me',
+                    'phone_primary' => 'pn1',
+                    'phone_primary_id' => 301,
+                    'phone_primary_version' => 1,
+                    'phone_secondary' => 'pn2',
+                    'phone_secondary_id' => 303,
+                    'phone_secondary_version' => 3,
+                ],
+                'person' => [
+                    'forename' => 'forename'
+                ],
+                'address' => [
+                    'addressLine1' => 'a1',
+                ],
+            ],
+            [
+                'id' => 987,
+                'version' => 1,
+                'opposerType' => 'otf_obj',
+                'contactDetailsDescription' => 'desc',
+                'licenceOperatingCentres' => [800, 801],
+                'opposerContactDetails' => [
+                    'description' => 'desc',
+                    'address' => [
+                        'addressLine1' => 'a1'
+                    ],
+                    'emailAddress' => 'test@test.me',
+                    'phoneContacts' => [
+                        [
+                            'id' => 301,
+                            'version' => 1,
+                            'phoneContactType' => 'phone_t_primary',
+                            'phoneNumber' => 'pn1',
                         ],
-                        'emailAddress' => 'test@test.me',
-                        'phoneContacts' => [
-                            [
-                                'id' => 301,
-                                'version' => 1,
-                                'phoneContactType' => 'phone_t_primary',
-                                'phoneNumber' => 'pn1',
-                            ],
-                            [
-                                'id' => 303,
-                                'version' => 3,
-                                'phoneContactType' => 'phone_t_secondary',
-                                'phoneNumber' => 'pn2',
-                            ],
-                        ],
-                        'person' => [
-                            'forename' => 'forename'
+                        [
+                            'id' => 303,
+                            'version' => 3,
+                            'phoneContactType' => 'phone_t_secondary',
+                            'phoneNumber' => 'pn2',
                         ],
                     ],
-                    'operatingCentres' => [800, 801],
-                ]
-            ],
+                    'person' => [
+                        'forename' => 'forename'
+                    ],
+                ],
+                'operatingCentres' => [800, 801],
+            ]
         ];
     }
 

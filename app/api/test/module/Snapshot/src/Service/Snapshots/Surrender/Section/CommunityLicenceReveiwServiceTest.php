@@ -13,11 +13,12 @@ use Dvsa\Olcs\Snapshot\Service\Snapshots\Surrender\Section\CommunityLicenceRevie
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\I18n\Translator\TranslatorInterface;
 
-class CommunityLicenceReveiwServiceTest extends MockeryTestCase
+final class CommunityLicenceReveiwServiceTest extends MockeryTestCase
 {
     /** @var CommunityLicenceReviewService review service */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -47,54 +48,52 @@ class CommunityLicenceReveiwServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($mockEntity));
     }
 
-    public static function dpTestGetConfigFromData(): array
+    public static function dpTestGetConfigFromData(): \Iterator
     {
-        return [
-            'stolen_community_licence' => [
-                [
-                    'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'commLicDescription' => 'Document stolen',
-                    'commLicStatus' => RefData::SURRENDER_DOC_STATUS_STOLEN,
-                    'commLicInfo' => 'Document stolen',
-                ],
-                [
-
-                    'multiItems' => [
-                        [
-                            [
-                                'label' => 'surrender-review-documentation-community-licence',
-                                'value' => 'Document stolen'
-                            ],
-                            [
-                                'label' => 'surrender-review-additional-information',
-                                'value' => 'Document stolen'
-                            ]
-                        ]
-                    ]
-                ]
+        yield 'stolen_community_licence' => [
+            [
+                'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'commLicDescription' => 'Document stolen',
+                'commLicStatus' => RefData::SURRENDER_DOC_STATUS_STOLEN,
+                'commLicInfo' => 'Document stolen',
             ],
-            'community_licence_destroyed' => [
-                [
+            [
 
-                    'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'commLicDescription' => 'Document destroyed',
-                    'commLicStatus' => RefData::SURRENDER_DOC_STATUS_DESTROYED,
-                    'commLicInfo' => null,
-                ],
-                [
-
-                    'multiItems' => [
+                'multiItems' => [
+                    [
                         [
-
-                            [
-                                'label' => 'surrender-review-documentation-community-licence',
-                                'value' => 'Document destroyed'
-                            ],
+                            'label' => 'surrender-review-documentation-community-licence',
+                            'value' => 'Document stolen'
+                        ],
+                        [
+                            'label' => 'surrender-review-additional-information',
+                            'value' => 'Document stolen'
                         ]
                     ]
                 ]
-
             ]
+        ];
+        yield 'community_licence_destroyed' => [
+            [
+
+                'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'commLicDescription' => 'Document destroyed',
+                'commLicStatus' => RefData::SURRENDER_DOC_STATUS_DESTROYED,
+                'commLicInfo' => null,
+            ],
+            [
+
+                'multiItems' => [
+                    [
+
+                        [
+                            'label' => 'surrender-review-documentation-community-licence',
+                            'value' => 'Document destroyed'
+                        ],
+                    ]
+                ]
+            ]
+
         ];
     }
 }

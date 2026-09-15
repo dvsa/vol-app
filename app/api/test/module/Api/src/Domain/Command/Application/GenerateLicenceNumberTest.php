@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\GenerateLicenceNumber;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GenerateLicenceNumberTest extends \PHPUnit\Framework\TestCase
+final class GenerateLicenceNumberTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

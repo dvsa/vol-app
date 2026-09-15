@@ -17,13 +17,11 @@ use Olcs\Logging\Log\Logger;
  * Class NysiisRestClientTest
  * @package Dvsa\OlcsTest\Api\Service\Nysiis
  */
-class NysiisRestClientTest extends MockeryTestCase
+final class NysiisRestClientTest extends MockeryTestCase
 {
     public function setUp(): void
     {
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
 
         parent::setUp();
     }
@@ -62,13 +60,11 @@ class NysiisRestClientTest extends MockeryTestCase
     /**
      * data provider for makeRequest
      */
-    public static function makeRequestProvider(): array
+    public static function makeRequestProvider(): \Iterator
     {
-        return [
-            ['38{"nysiisFirstName":"nysiis first name","nysiisFamilyName":"nysiis family name"}0'],
-            ['3a{"nysiisFirstName":"nysiis first name","nysiisFamilyName":"nysiis family name"}0'],
-            ['{"nysiisFirstName":"nysiis first name","nysiisFamilyName":"nysiis family name"}']
-        ];
+        yield ['38{"nysiisFirstName":"nysiis first name","nysiisFamilyName":"nysiis family name"}0'];
+        yield ['3a{"nysiisFirstName":"nysiis first name","nysiisFamilyName":"nysiis family name"}0'];
+        yield ['{"nysiisFirstName":"nysiis first name","nysiisFamilyName":"nysiis family name"}'];
     }
 
     /**

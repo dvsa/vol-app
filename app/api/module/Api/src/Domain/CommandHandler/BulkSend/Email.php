@@ -62,7 +62,7 @@ final class Email extends AbstractCommandHandler implements UploaderAwareInterfa
     private function processFile($fp)
     {
         rewind($fp);
-        while (($row = fgetcsv($fp)) !== false) {
+        while (($row = fgetcsv($fp, null, ',', '"', '\\')) !== false) {
             $licenceId = $row[0];
             if ($licenceId != 'licence_id' && !in_array($licenceId, $this->licenceIds)) {
                 $this->licenceIds[] = $licenceId;

@@ -8,8 +8,9 @@ use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository\Conversation;
 use Mockery as m;
 
-class ConversationTest extends RepositoryTestCase
+final class ConversationTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Conversation::class);

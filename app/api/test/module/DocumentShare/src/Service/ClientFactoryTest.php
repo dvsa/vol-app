@@ -6,12 +6,12 @@ namespace Dvsa\OlcsTest\DocumentShare\Service;
 
 use Dvsa\Olcs\DocumentShare\Service\ClientFactory;
 use Dvsa\Olcs\DocumentShare\Service\WebDavClient;
-use Laminas\Log\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class ClientFactoryTest extends MockeryTestCase
+final class ClientFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -31,7 +31,7 @@ class ClientFactoryTest extends MockeryTestCase
 
         $mockContainer = m::mock(ContainerInterface::class);
         $mockContainer->expects('get')->with('Configuration')->andReturn($config);
-        $mockContainer->expects('get')->with('Logger')->andReturn($this->createStub(\Dvsa\OlcsTest\SafeLogger::class));
+        $mockContainer->expects('get')->with('Logger')->andReturn($this->createStub(\Psr\Log\LoggerInterface::class));
 
         $service = $sut->__invoke($mockContainer, WebDavClient::class);
         $this->assertInstanceOf(WebDavClient::class, $service);
@@ -49,7 +49,7 @@ class ClientFactoryTest extends MockeryTestCase
         $sut->__invoke($mockContainer, WebDavClient::class);
     }
 
-    public static function dpProvideMissingConfig(): array
+    public static function dpProvideMissingConfig(): \Iterator
     {
         $configWebDavMissingHttpOption = [
             'document_share' => [
@@ -106,32 +106,29 @@ class ClientFactoryTest extends MockeryTestCase
                 ]
             ]
         ];
-
-        return [
-            "OptionsMissingHttp" => [
-                $configWebDavMissingHttpOption,
-                'Options could not be found in "document_share.http',
-            ],
-            "OptionsMissingClient" => [
-                $configWebDavMissingClientOption,
-                'Options could not be found in "document_share.client',
-            ],
-            "WebDavConfigMissingUsername" => [
-                $configWebDavMissingUsername,
-                'Missing required option document_share.client.username',
-            ],
-            "WebDavConfigMissingPassword" => [
-                $configWebDavMissingPassword,
-                'Missing required option document_share.client.password',
-            ],
-            "WebDavConfigMissingWorkspace" => [
-                $webDavConfigMissingWorkspace,
-                'Missing required option document_share.client.workspace',
-            ],
-            "WebDavConfigMissingPWebDavBaseUri" => [
-                $webDavConfigMissingBaseUri,
-                'Missing required option document_share.client.webdav_baseuri',
-            ]
+        yield "OptionsMissingHttp" => [
+            $configWebDavMissingHttpOption,
+            'Options could not be found in "document_share.http',
+        ];
+        yield "OptionsMissingClient" => [
+            $configWebDavMissingClientOption,
+            'Options could not be found in "document_share.client',
+        ];
+        yield "WebDavConfigMissingUsername" => [
+            $configWebDavMissingUsername,
+            'Missing required option document_share.client.username',
+        ];
+        yield "WebDavConfigMissingPassword" => [
+            $configWebDavMissingPassword,
+            'Missing required option document_share.client.password',
+        ];
+        yield "WebDavConfigMissingWorkspace" => [
+            $webDavConfigMissingWorkspace,
+            'Missing required option document_share.client.workspace',
+        ];
+        yield "WebDavConfigMissingPWebDavBaseUri" => [
+            $webDavConfigMissingBaseUri,
+            'Missing required option document_share.client.webdav_baseuri',
         ];
     }
 }

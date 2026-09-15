@@ -34,7 +34,7 @@ return [
                     'lva-variation/transport_managers' : 'lva-application/transport_managers';
                 $url = $this->generateUrl($routeParams, $route);
                 return '<a class="govuk-link" href="' . $url . '">' .
-                    $row['application']['licence']['licNo'] . '/' . $row['application']['id'] .
+                    \Common\Util\Escape::html($row['application']['licence']['licNo'] . '/' . $row['application']['id']) .
                     '</a>';
             },
         ],

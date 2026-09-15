@@ -12,7 +12,7 @@ use Psr\Container\ContainerInterface;
 final class CheckReputeFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CheckRepute
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CheckRepute
     {
         $inrClient = $container->build(InrClientInterface::class, ['path' => '/outbound/message/requests/cgr']);
         $checkGoodReputeService = $container->get(CheckGoodRepute::class);

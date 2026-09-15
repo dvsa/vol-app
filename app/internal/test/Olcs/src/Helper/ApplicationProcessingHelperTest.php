@@ -12,7 +12,7 @@ use Olcs\Helper\ApplicationProcessingHelper;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ApplicationProcessingHelperTest extends \PHPUnit\Framework\TestCase
+final class ApplicationProcessingHelperTest extends \PHPUnit\Framework\TestCase
 {
     public $sut;
 
@@ -53,11 +53,9 @@ class ApplicationProcessingHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->sut->getNavigation($applicationId, $activeSection));
     }
 
-    public static function getNavigationProvider(): array
+    public static function getNavigationProvider(): \Iterator
     {
-        return [
-            [7, 'notes', ['notes' => [], 'tasks' => []]],
-            [7, 'tasks', ['notes' => [], 'tasks' => []]]
-        ];
+        yield [7, 'notes', ['notes' => [], 'tasks' => []]];
+        yield [7, 'tasks', ['notes' => [], 'tasks' => []]];
     }
 }

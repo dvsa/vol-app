@@ -11,8 +11,15 @@
     <directory name="module"/>
     <directory name="public"/>
     <directory name="config"/>
+    <!-- In-tree shared libs (symlinked into vendor/olcs/*) are scanned here for symbol
+         resolution (app code uses their classes) but excluded from analysis in
+         ignoreFiles below — the libs have their own psalm runs (CI lib matrix). Listing
+         in BOTH scans them deterministically (avoids a parallel-scan race) without
+         reporting their issues. -->
+    <directory name="../../lib"/>
     <ignoreFiles allowMissingFiles="true">
       <directory name="vendor" />
+      <directory name="../../lib" />
       <directory name=".phpstorm.meta" />
       <file name=".phpstorm.meta.php" />
     </ignoreFiles>
@@ -27,7 +34,6 @@
     <UndefinedClass>
       <errorLevel type="suppress">
         <file name="module/Email/src/Service/Imap.php"/>
-        <file name="module/Api/src/Domain/Repository/LetterTypeTodo.php"/>
         <file name="module/Api/src/Service/ConvertToPdf/ConvertToPdfFactory.php"/>
       </errorLevel>
     </UndefinedClass>
@@ -36,7 +42,6 @@
         <file name="module/Email/src/Service/Imap.php"/>
         <file name="module/Api/src/Domain/CommandHandler/ConditionUndertaking/Delete.php"/>
         <file name="module/Api/src/Domain/Validation/Handlers/Misc/CanVerify.php"/>
-        <file name="module/Api/src/Entity/AbstractOperatingCentreOpposition.php"/>
         <file name="module/Api/src/Entity/Application/AbstractApplication.php"/>
         <file name="module/Api/src/Entity/Application/Application.php"/>
         <file name="module/Api/src/Entity/Bus/AbstractBusReg.php"/>
@@ -44,6 +49,7 @@
         <file name="module/Api/src/Entity/Cases/AbstractCases.php"/>
         <file name="module/Api/src/Entity/Cases/Cases.php"/>
         <file name="module/Api/src/Entity/Doc/AbstractDocument.php"/>
+        <file name="module/Api/src/Service/Cache/RedisConnectionFactory.php"/>
       </errorLevel>
     </UndefinedDocblockClass>
     <!-- Generated Letter entity files contain dead code branches -->

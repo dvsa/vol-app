@@ -36,7 +36,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class RevokeTest extends AbstractCommandHandlerTestCase
+final class RevokeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -87,7 +87,7 @@ class RevokeTest extends AbstractCommandHandlerTestCase
             function (LicenceEntity $saveLicence) {
                 $this->assertSame($this->refData['lsts_revoked'], $saveLicence->getStatus());
                 $this->assertInstanceOf(\DateTime::class, $saveLicence->getRevokedDate());
-                $this->assertSame((new \DateTime())->format('Y-m-d'), $saveLicence->getRevokedDate()->format('Y-m-d'));
+                $this->assertSame(new \DateTime()->format('Y-m-d'), $saveLicence->getRevokedDate()->format('Y-m-d'));
             }
         );
 
@@ -183,7 +183,7 @@ class RevokeTest extends AbstractCommandHandlerTestCase
             function (LicenceEntity $saveLicence) {
                 $this->assertSame($this->refData['lsts_revoked'], $saveLicence->getStatus());
                 $this->assertInstanceOf(\DateTime::class, $saveLicence->getRevokedDate());
-                $this->assertSame((new \DateTime())->format('Y-m-d'), $saveLicence->getRevokedDate()->format('Y-m-d'));
+                $this->assertSame(new \DateTime()->format('Y-m-d'), $saveLicence->getRevokedDate()->format('Y-m-d'));
             }
         );
 
@@ -263,7 +263,7 @@ class RevokeTest extends AbstractCommandHandlerTestCase
             function (LicenceEntity $saveLicence) {
                 $this->assertSame($this->refData['lsts_revoked'], $saveLicence->getStatus());
                 $this->assertInstanceOf(\DateTime::class, $saveLicence->getRevokedDate());
-                $this->assertSame((new \DateTime())->format('Y-m-d'), $saveLicence->getRevokedDate()->format('Y-m-d'));
+                $this->assertSame(new \DateTime()->format('Y-m-d'), $saveLicence->getRevokedDate()->format('Y-m-d'));
             }
         );
 
@@ -371,12 +371,12 @@ class RevokeTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\DeleteApplication::class,
             ['id' => 345],
-            (new Result())->addMessage('NOT_SUBMITTED')
+            new Result()->addMessage('NOT_SUBMITTED')
         );
         $this->expectedSideEffect(
             \Dvsa\Olcs\Transfer\Command\Application\RefuseApplication::class,
             ['id' => 567],
-            (new Result())->addMessage('UNDER_CONSIDERATION')
+            new Result()->addMessage('UNDER_CONSIDERATION')
         );
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Publication\Licence::class,
@@ -423,7 +423,7 @@ class RevokeTest extends AbstractCommandHandlerTestCase
      */
     private function stubApplication(mixed $licence, mixed $id, mixed $status, bool $isVariation = false): mixed
     {
-        $application = new Application($licence, (new RefData())->setId($status), $isVariation);
+        $application = new Application($licence, new RefData()->setId($status), $isVariation);
         $application->setId($id);
         $licence->addApplications($application);
 

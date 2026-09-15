@@ -26,7 +26,8 @@ return [
         ],
         [
             'title' => 'Penalty type',
-            'formatter' => fn($data) => $data['siPenaltyImposedType']['id'] . ' - ' . $data['siPenaltyImposedType']['description'],
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['siPenaltyImposedType']['id'])
+                . ' - ' . \Common\Util\Escape::html($data['siPenaltyImposedType']['description']),
         ],
         [
             'title' => 'Start date',
@@ -54,7 +55,7 @@ return [
         ],
         [
             'title' => 'Executed',
-            'formatter' => fn($data) => $data['executed']['description'],
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['executed']['description']),
         ]
     ]
 ];

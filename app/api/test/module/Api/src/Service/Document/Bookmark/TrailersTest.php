@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Trailers;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class TrailersTest extends \PHPUnit\Framework\TestCase
+final class TrailersTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender(): void
     {

@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * IrhpApplicationBundleTest
  */
-class IrhpApplicationBundleTest extends QueryHandlerTestCase
+final class IrhpApplicationBundleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

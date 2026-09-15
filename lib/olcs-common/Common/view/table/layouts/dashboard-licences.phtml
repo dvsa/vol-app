@@ -1,0 +1,49 @@
+<?php use Common\RefData; ?>
+<?php assert($this->object instanceof Common\Service\Table\TableBuilder); ?>
+<?php echo $this->object->renderLayout('default-header'); ?>
+<div class="table__wrapper">
+    <table <?php echo $this->object->renderAttributes($this->object->getAttributes()); ?>>
+        <caption class="govuk-table__caption govuk-table__caption--m">
+            <?php echo $this->getEscaper()->escapeHtml($this->object->renderCaption()); ?>
+        </caption>
+        <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <?php
+            foreach ($this->object->getColumns() as $column) {
+                echo $this->object->renderHeaderColumn($column);
+            }
+            ?>
+        </tr>
+        </thead>
+        <tbody class="govuk-table__body" aria-live="assertive">
+        <?php foreach ($this->object->getRows() as $row) { ?>
+            <tr class="govuk-table__row<?php if ($this->object->isRowDisabled($row)): ?> disabled<?php endif; ?>">
+                <?php
+                foreach ($this->object->getColumns() as $column) {
+                    $attributes = [];
+                    if (
+                        $row['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION &&
+                        $column['name'] === 'type'
+                    ) {
+                        continue;
+                    }
+
+                    if (
+                        $row['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION &&
+                        $column['name'] === 'status'
+                    ) {
+                        $attributes['colspan'] = '2';
+                    }
+                    echo $this->object->renderBodyColumn($row, $column, '{{[elements/td]}}', $attributes);
+                }
+                ?>
+            </tr>
+            <?php
+        }
+        echo $this->object->renderExtraRows();
+        ?>
+        </tbody>
+        <?php echo $this->object->renderTableFooter(); ?>
+    </table>
+</div>
+<?php echo $this->object->renderFooter();

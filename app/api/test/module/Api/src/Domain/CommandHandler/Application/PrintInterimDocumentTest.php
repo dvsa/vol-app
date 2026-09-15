@@ -26,7 +26,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PrintInterimDocumentTest extends AbstractCommandHandlerTestCase
+final class PrintInterimDocumentTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -72,108 +72,106 @@ class PrintInterimDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            'mixed fleet application' => [
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'isVariation' => false,
-                'expectedData' => [
-                    'template' => 'GV_INT_LICENCE_V1',
-                    'query' => ['application' => 111, 'licence' => 222],
-                    'description' => 'GV Interim Licence',
-                    'application' => 111,
-                    'licence' => 222,
-                    'category' => Category::CATEGORY_LICENSING,
-                    'subCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
-                    'isExternal' => false,
-                    'isScan' => false,
-                    'busReg' => null,
-                    'case' => null,
-                    'irfoOrganisation' => null,
-                    'submission' => null,
-                    'trafficArea' => null,
-                    'transportManager' => null,
-                    'operatingCentre' => null,
-                    'opposition' => null,
-                    'issuedDate' => null,
-                    'dispatch' => true
-                ],
+        yield 'mixed fleet application' => [
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'isVariation' => false,
+            'expectedData' => [
+                'template' => 'GV_INT_LICENCE_V1',
+                'query' => ['application' => 111, 'licence' => 222],
+                'description' => 'GV Interim Licence',
+                'application' => 111,
+                'licence' => 222,
+                'category' => Category::CATEGORY_LICENSING,
+                'subCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
+                'isExternal' => false,
+                'isScan' => false,
+                'busReg' => null,
+                'case' => null,
+                'irfoOrganisation' => null,
+                'submission' => null,
+                'trafficArea' => null,
+                'transportManager' => null,
+                'operatingCentre' => null,
+                'opposition' => null,
+                'issuedDate' => null,
+                'dispatch' => true
             ],
-            'lgv application' => [
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'isVariation' => false,
-                'expectedData' => [
-                    'template' => 'GV_LGV_INT_LICENCE_V1',
-                    'query' => ['application' => 111, 'licence' => 222],
-                    'description' => 'GV Interim Licence LGV Only',
-                    'application' => 111,
-                    'licence' => 222,
-                    'category' => Category::CATEGORY_LICENSING,
-                    'subCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
-                    'isExternal' => false,
-                    'isScan' => false,
-                    'busReg' => null,
-                    'case' => null,
-                    'irfoOrganisation' => null,
-                    'submission' => null,
-                    'trafficArea' => null,
-                    'transportManager' => null,
-                    'operatingCentre' => null,
-                    'opposition' => null,
-                    'issuedDate' => null,
-                    'dispatch' => true
-                ],
+        ];
+        yield 'lgv application' => [
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'isVariation' => false,
+            'expectedData' => [
+                'template' => 'GV_LGV_INT_LICENCE_V1',
+                'query' => ['application' => 111, 'licence' => 222],
+                'description' => 'GV Interim Licence LGV Only',
+                'application' => 111,
+                'licence' => 222,
+                'category' => Category::CATEGORY_LICENSING,
+                'subCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
+                'isExternal' => false,
+                'isScan' => false,
+                'busReg' => null,
+                'case' => null,
+                'irfoOrganisation' => null,
+                'submission' => null,
+                'trafficArea' => null,
+                'transportManager' => null,
+                'operatingCentre' => null,
+                'opposition' => null,
+                'issuedDate' => null,
+                'dispatch' => true
             ],
-            'mixed fleet variation' => [
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'isVariation' => true,
-                'expectedData' => [
-                    'template' => 'GV_INT_DIRECTION_V1',
-                    'query' => ['application' => 111, 'licence' => 222],
-                    'description' => 'GV Interim Direction',
-                    'application' => 111,
-                    'licence' => 222,
-                    'category' => Category::CATEGORY_LICENSING,
-                    'subCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
-                    'isExternal' => false,
-                    'isScan' => false,
-                    'busReg' => null,
-                    'case' => null,
-                    'irfoOrganisation' => null,
-                    'submission' => null,
-                    'trafficArea' => null,
-                    'transportManager' => null,
-                    'operatingCentre' => null,
-                    'opposition' => null,
-                    'issuedDate' => null,
-                    'dispatch' => true
-                ],
+        ];
+        yield 'mixed fleet variation' => [
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'isVariation' => true,
+            'expectedData' => [
+                'template' => 'GV_INT_DIRECTION_V1',
+                'query' => ['application' => 111, 'licence' => 222],
+                'description' => 'GV Interim Direction',
+                'application' => 111,
+                'licence' => 222,
+                'category' => Category::CATEGORY_LICENSING,
+                'subCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
+                'isExternal' => false,
+                'isScan' => false,
+                'busReg' => null,
+                'case' => null,
+                'irfoOrganisation' => null,
+                'submission' => null,
+                'trafficArea' => null,
+                'transportManager' => null,
+                'operatingCentre' => null,
+                'opposition' => null,
+                'issuedDate' => null,
+                'dispatch' => true
             ],
-            'lgv variation' => [
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'isVariation' => true,
-                'expectedData' => [
-                    'template' => 'GV_LGV_INT_DIRECTION_V1',
-                    'query' => ['application' => 111, 'licence' => 222],
-                    'description' => 'GV Interim Direction LGV Only',
-                    'application' => 111,
-                    'licence' => 222,
-                    'category' => Category::CATEGORY_LICENSING,
-                    'subCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
-                    'isExternal' => false,
-                    'isScan' => false,
-                    'busReg' => null,
-                    'case' => null,
-                    'irfoOrganisation' => null,
-                    'submission' => null,
-                    'trafficArea' => null,
-                    'transportManager' => null,
-                    'operatingCentre' => null,
-                    'opposition' => null,
-                    'issuedDate' => null,
-                    'dispatch' => true
-                ],
+        ];
+        yield 'lgv variation' => [
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'isVariation' => true,
+            'expectedData' => [
+                'template' => 'GV_LGV_INT_DIRECTION_V1',
+                'query' => ['application' => 111, 'licence' => 222],
+                'description' => 'GV Interim Direction LGV Only',
+                'application' => 111,
+                'licence' => 222,
+                'category' => Category::CATEGORY_LICENSING,
+                'subCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
+                'isExternal' => false,
+                'isScan' => false,
+                'busReg' => null,
+                'case' => null,
+                'irfoOrganisation' => null,
+                'submission' => null,
+                'trafficArea' => null,
+                'transportManager' => null,
+                'operatingCentre' => null,
+                'opposition' => null,
+                'issuedDate' => null,
+                'dispatch' => true
             ],
         ];
     }

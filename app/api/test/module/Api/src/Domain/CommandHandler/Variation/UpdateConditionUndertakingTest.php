@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdateConditionUndertakingTest extends AbstractCommandHandlerTestCase
+final class UpdateConditionUndertakingTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -92,7 +92,7 @@ class UpdateConditionUndertakingTest extends AbstractCommandHandlerTestCase
                 $this->assertSame($this->refData[$data['attachedTo']], $cu->getAttachedTo());
                 $this->assertSame($data['fulfilled'], $cu->getIsFulfilled());
                 $this->assertSame($data['notes'], $cu->getNotes());
-                $this->assertSame(null, $cu->getOperatingCentre());
+                $this->assertNull($cu->getOperatingCentre());
             }
         );
 
@@ -172,11 +172,11 @@ class UpdateConditionUndertakingTest extends AbstractCommandHandlerTestCase
                 $this->assertSame($this->refData[$data['attachedTo']], $cu->getAttachedTo());
                 $this->assertSame($data['fulfilled'], $cu->getIsFulfilled());
                 $this->assertSame($data['notes'], $cu->getNotes());
-                $this->assertSame(null, $cu->getOperatingCentre());
+                $this->assertNull($cu->getOperatingCentre());
                 $this->assertSame('U', $cu->getAction());
                 $this->assertSame('Y', $cu->getIsDraft());
                 $this->assertSame($mockConditionUndertaking, $cu->getLicConditionVariation());
-                $this->assertSame(null, $cu->getLicence());
+                $this->assertNull($cu->getLicence());
                 $this->assertSame($this->references[ApplicationEntity::class][64], $cu->getApplication());
                 $this->assertNull($cu->getOlbsKey());
                 $this->assertNull($cu->getOlbsType());

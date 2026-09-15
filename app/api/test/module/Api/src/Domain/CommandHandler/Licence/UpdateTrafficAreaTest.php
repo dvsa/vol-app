@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdateTrafficAreaTest extends AbstractCommandHandlerTestCase
+final class UpdateTrafficAreaTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

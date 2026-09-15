@@ -5,6 +5,7 @@ namespace Olcs\Controller\Letter;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Util\SafeRedirectUrl;
 use Laminas\Http\Response;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
@@ -167,9 +168,20 @@ class LetterGenerationController extends AbstractInternalController implements L
             'selectedAppendices' => $postData['letterAppendices'] ?? [],
         ];
 
+        // Checkbox choices post as letterChoices[]; radio "pick one" groups post as
+        // letterChoiceGroup[<groupIndex>] => choiceId. Merge both into selectedChoices.
+        $radioSelections = array_values($postData['letterChoiceGroup'] ?? []);
+        $selectedChoices = array_merge($postData['letterChoices'] ?? [], $radioSelections);
+
+        // Enforce "pick exactly one" for every radio group on this letter type
+        $radioError = $this->validateRequiredRadioChoices($templateId, $selectedChoices);
+        if ($radioError !== null) {
+            return $this->jsonError($radioError);
+        }
+
         // Only include selectedChoices if any were actually selected
-        if (!empty($postData['letterChoices'])) {
-            $commandData['selectedChoices'] = $postData['letterChoices'];
+        if (!empty($selectedChoices)) {
+            $commandData['selectedChoices'] = $selectedChoices;
         }
 
         if (!empty($entityContext['type'])) {
@@ -195,12 +207,14 @@ class LetterGenerationController extends AbstractInternalController implements L
 
         $letterInstanceData = $this->fetchLetterInstanceById($letterInstanceId);
 
-        // Extract required section warnings if present
+        // Extract section warnings if present. Optional sections are reported too: a section
+        // dropping out of a letter is worth telling the caseworker about whether or not the
+        // letter type marked it required.
         $warnings = [];
         if (!empty($result['flags']['hasRequiredSectionWarnings'])) {
             $warnings = array_values(array_filter(
                 $result['messages'] ?? [],
-                fn($m) => str_starts_with($m, 'Required section')
+                fn($m) => str_starts_with($m, 'Required section') || str_starts_with($m, 'Optional section')
             ));
         }
 
@@ -255,6 +269,10 @@ class LetterGenerationController extends AbstractInternalController implements L
                 'id' => $issue['id'],
                 'name' => $issue['letterIssueVersion']['heading'] ?? 'Issue',
                 'type' => 'issue',
+                // VOL-7402: flagged content must be edited before the letter can be
+                // sent (enforced server-side in PrepareToSend) — highlight it here.
+                'inputPending' => !empty($issue['letterIssueVersion']['requiresInput'])
+                    && empty($issue['editedContent']),
             ];
         }
 
@@ -300,6 +318,29 @@ class LetterGenerationController extends AbstractInternalController implements L
                 'name' => $name,
                 'position' => $instanceSection['positionInAssembly'] ?? 0,
                 'type' => 'section',
+                'inputPending' => !empty($sectionVersion['requiresInput'])
+                    && empty($instanceSection['editedContent']),
+            ];
+        }
+
+        // Build the to-dos list for the sidebar.
+        //
+        // A to-do carries no name of its own on the instance row -- the label lives on the
+        // version, and the key on the parent. Both are needed: two to-dos can share a name
+        // (FI01 and FI02 both read "You need to upload bank statements to your online account"),
+        // so the key is what makes them tellable apart.
+        $todosList = [];
+        foreach ($result['letterInstanceTodos'] ?? [] as $todo) {
+            $todoVersion = $todo['letterTodoVersion'] ?? [];
+            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
+            $name = $todoVersion['name'] ?? null;
+
+            $todosList[] = [
+                'id' => $todo['id'] ?? null,
+                // Falls back to the key alone while the name backfill has not run.
+                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
+                'type' => 'todo',
+                'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
             ];
         }
 
@@ -312,6 +353,7 @@ class LetterGenerationController extends AbstractInternalController implements L
             'sectionsList' => $sectionsList,
             'appendicesList' => $appendicesList,
             'instanceSectionsList' => $instanceSectionsList,
+            'todosList' => $todosList,
         ]);
         $sidebarView->setTemplate('pages/letter/preview-sidebar');
         $this->leftView = $sidebarView;
@@ -395,14 +437,18 @@ class LetterGenerationController extends AbstractInternalController implements L
         $selectedSections = $this->params()->fromQuery('sections', []);
         $selectedAppendices = $this->params()->fromQuery('appendices', []);
         $letterSectionIds = $this->params()->fromQuery('letterSections', []);
+        $todoIds = $this->params()->fromQuery('todos', []);
 
         if (!$letterInstanceId) {
             $this->flashMessengerHelperService->addErrorMessage('Letter instance ID is required');
             return $this->redirect()->toRoute('dashboard');
         }
 
-        if (empty($selectedSections) && empty($selectedAppendices) && empty($letterSectionIds)) {
-            $this->flashMessengerHelperService->addErrorMessage('No sections or appendices selected');
+        if (
+            empty($selectedSections) && empty($selectedAppendices)
+            && empty($letterSectionIds) && empty($todoIds)
+        ) {
+            $this->flashMessengerHelperService->addErrorMessage('Nothing selected to edit');
             return $this->redirect()->toUrl('/letter/preview?id=' . urlencode($letterInstanceId));
         }
 
@@ -537,12 +583,53 @@ class LetterGenerationController extends AbstractInternalController implements L
             ];
         }
 
+        // Build editable to-do data.
+        //
+        // Unlike the three above, the fallback is the shared wording on the version -- there is
+        // no per-instance default. requiringIssueCount comes from the API and drives the note
+        // telling the caseworker that a shared to-do is standing in for several issues.
+        $groupedTodos = [];
+        foreach ($letterInstance['letterInstanceTodos'] ?? [] as $todo) {
+            if (!in_array($todo['id'], $todoIds)) {
+                continue;
+            }
+
+            $todoVersion = $todo['letterTodoVersion'] ?? [];
+            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
+
+            $editedDescription = $todo['editedDescription'] ?? null;
+            $description = $todoVersion['description'] ?? null;
+
+            if (!empty($editedDescription)) {
+                $effectiveContent = is_string($editedDescription)
+                    ? $editedDescription
+                    : json_encode($editedDescription);
+            } elseif (!empty($description)) {
+                $effectiveContent = is_string($description)
+                    ? $description
+                    : json_encode($description);
+            } else {
+                $effectiveContent = json_encode(['blocks' => [], 'version' => '2.28.2']);
+            }
+
+            $name = $todoVersion['name'] ?? null;
+
+            $groupedTodos[] = [
+                'id' => $todo['id'],
+                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
+                'content' => $effectiveContent,
+                'version' => $todo['version'] ?? 1,
+                'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
+            ];
+        }
+
         $view = new ViewModel([
             'letterInstanceId' => $letterInstanceId,
             'letterInstance' => $letterInstance,
             'groupedIssues' => $groupedIssues,
             'groupedAppendices' => $groupedAppendices,
             'groupedSections' => $groupedSections,
+            'groupedTodos' => $groupedTodos,
         ]);
 
         $view->setTemplate('pages/letter/edit');
@@ -651,6 +738,50 @@ class LetterGenerationController extends AbstractInternalController implements L
      *
      * @return Response
      */
+    /**
+     * Save a caseworker's edit to one to-do's wording.
+     *
+     * The field is editedDescription, not editedContent like the three siblings: a to-do's
+     * wording is called `description` throughout its own code path, so the override is named
+     * after what it overrides.
+     */
+    public function saveTodoContentAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $body = json_decode($this->getRequest()->getContent(), true);
+
+        if (empty($body['todoId']) || !isset($body['editedDescription']) || empty($body['version'])) {
+            return $this->jsonError('Missing required fields: todoId, editedDescription, version');
+        }
+
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\UpdateContent::create([
+            'id' => (int) $body['todoId'],
+            'editedDescription' => is_string($body['editedDescription'])
+                ? $body['editedDescription']
+                : json_encode($body['editedDescription']),
+            'version' => (int) $body['version'],
+        ]);
+
+        $response = $this->handleCommand($command);
+
+        if (!$response->isOk()) {
+            $messages = $response->getResult()['messages'] ?? [];
+            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
+            return $this->jsonError('Failed to save: ' . $errorMessage);
+        }
+
+        $result = $response->getResult();
+
+        return $this->jsonSuccess([
+            'todoId' => (int) $body['todoId'],
+            'message' => $result['messages'][0] ?? 'Saved successfully',
+            'version' => ($body['version'] + 1),
+        ]);
+    }
+
     public function saveSectionContentAction()
     {
         if (!$this->getRequest()->isPost()) {
@@ -716,9 +847,17 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
-            return $this->jsonError('Failed to prepare letter: ' . $errorMessage);
+            // Validation failures arrive keyed and nested (field => [message, ...]),
+            // so flatten before joining or the user sees the literal string "Array".
+            $messages = (array) ($response->getResult()['messages'] ?? []);
+            $flatMessages = [];
+            array_walk_recursive(
+                $messages,
+                static function ($message) use (&$flatMessages): void {
+                    $flatMessages[] = (string) $message;
+                }
+            );
+            return $this->jsonError('Failed to prepare letter: ' . implode(', ', $flatMessages));
         }
 
         $result = $response->getResult();
@@ -994,11 +1133,48 @@ class LetterGenerationController extends AbstractInternalController implements L
                     'label' => $letterChoice['label'] ?? '',
                     'groupLabel' => $letterChoice['groupLabel'] ?? 'Other letter choices',
                     'inputType' => $letterChoice['inputType'] ?? 'checkbox',
+                    'displayOrder' => (int) ($letterChoice['displayOrder'] ?? 0),
                 ];
             }
         }
 
+        // VOL-7282: honour the admin-configured ordering (label as tiebreak)
+        usort(
+            $choices,
+            fn(array $a, array $b) => [$a['displayOrder'], $a['label']] <=> [$b['displayOrder'], $b['label']]
+        );
+
         return $choices;
+    }
+
+    /**
+     * Validate that every radio "pick one" group on the letter type has exactly one option selected.
+     *
+     * Radio groups are mandatory by rule (no default, must pick one). Checkbox choices are optional
+     * and not validated here. Mirrors the client-side guard so the rule holds if JS is bypassed.
+     *
+     * @param int $templateId Doc template ID
+     * @param array $selectedChoices Selected letter choice IDs (checkbox + radio merged)
+     * @return string|null Error message if a radio group is unsatisfied, otherwise null
+     */
+    protected function validateRequiredRadioChoices(int $templateId, array $selectedChoices): ?string
+    {
+        $radioGroups = [];
+        foreach ($this->fetchLetterChoicesForLetterType($templateId) as $choice) {
+            if (($choice['inputType'] ?? 'checkbox') === 'radio') {
+                $radioGroups[$choice['groupLabel']][] = (int) $choice['id'];
+            }
+        }
+
+        $selectedIds = array_map('intval', $selectedChoices);
+
+        foreach ($radioGroups as $groupLabel => $optionIds) {
+            if (count(array_intersect($optionIds, $selectedIds)) !== 1) {
+                return sprintf('Select one option for "%s"', $groupLabel);
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -1169,7 +1345,11 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     protected function redirectToReturnUrl(array $queryParams): Response
     {
-        if (isset($queryParams['returnUrl'])) {
+        // returnUrl arrives from the query string, so it is attacker-controlled. Only a
+        // root-relative path is accepted: DocumentGenerationController sets it from
+        // Request::getRequestUri(), which is always a path, so nothing legitimate is lost.
+        // An unchecked redirect here is a phishing primitive inside the authenticated app.
+        if (isset($queryParams['returnUrl']) && SafeRedirectUrl::isSafePath((string) $queryParams['returnUrl'])) {
             return $this->redirect()->toUrl($queryParams['returnUrl']);
         }
 

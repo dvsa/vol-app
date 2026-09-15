@@ -119,7 +119,7 @@ class VariationOperatingCentreHelper implements FactoryInterface
         return $value;
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $repoSm = $container->get('RepositoryServiceManager');
         $this->aocRepo = $repoSm->get('ApplicationOperatingCentre');

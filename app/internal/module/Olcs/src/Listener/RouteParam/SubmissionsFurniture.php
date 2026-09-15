@@ -152,7 +152,7 @@ class SubmissionsFurniture implements
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionsFurniture
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SubmissionsFurniture
     {
         $this->setQuerySender($container->get('QuerySender'));
         $this->setCommandSender($container->get('CommandSender'));

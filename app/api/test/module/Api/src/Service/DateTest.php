@@ -20,17 +20,16 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DateTest extends MockeryTestCase
+final class DateTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new Date();
 
-        $logger = new \Dvsa\OlcsTest\SafeLogger();
-        $logger->addWriter(new \Laminas\Log\Writer\Mock());
-        Logger::setLogger($logger);
+        Logger::setLogger(new \Psr\Log\NullLogger());
     }
 
     public function testGetDateWithNoParams(): void
@@ -63,7 +62,7 @@ class DateTest extends MockeryTestCase
         );
 
         $this->assertInstanceOf('DateTime', $obj);
-        $this->assertEquals('2015-01-07', $obj->format('Y-m-d'));
+        $this->assertSame('2015-01-07', $obj->format('Y-m-d'));
     }
 
     public function testCalculateDate(): void

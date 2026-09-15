@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class StayTest extends QueryHandlerTestCase
+final class StayTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

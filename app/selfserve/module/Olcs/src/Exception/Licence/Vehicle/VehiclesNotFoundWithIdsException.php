@@ -17,7 +17,7 @@ class VehiclesNotFoundWithIdsException extends ResourceNotFoundException
      * @param string|null $message
      * @param Throwable|null $previous
      */
-    public function __construct(array $vehicleIds, string $message = null, int $code = 0, Throwable $previous = null)
+    public function __construct(array $vehicleIds, ?string $message = null, int $code = 0, ?Throwable $previous = null)
     {
         $this->vehicleIds = $vehicleIds;
         if (null === $message) {

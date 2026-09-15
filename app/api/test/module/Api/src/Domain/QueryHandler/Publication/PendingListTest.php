@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Publication as PublicationRepo;
 use Dvsa\Olcs\Transfer\Query\Publication\PendingList as Qry;
 use Mockery as m;
 
-class PendingListTest extends QueryHandlerTestCase
+final class PendingListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

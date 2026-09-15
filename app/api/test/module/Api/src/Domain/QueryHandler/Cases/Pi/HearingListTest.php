@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class HearingListTest extends QueryHandlerTestCase
+final class HearingListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

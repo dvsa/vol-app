@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationBundleTest extends QueryHandlerTestCase
+final class ApplicationBundleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

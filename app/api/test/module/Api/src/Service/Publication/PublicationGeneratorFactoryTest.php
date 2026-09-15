@@ -12,10 +12,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Publication\PublicationGeneratorFactory
- */
-class PublicationGeneratorFactoryTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Publication\PublicationGeneratorFactory::class)]
+final class PublicationGeneratorFactoryTest extends MockeryTestCase
 {
     public function testCanCreateServiceWithName(): void
     {
@@ -37,8 +35,8 @@ class PublicationGeneratorFactoryTest extends MockeryTestCase
             )
             ->getMock();
 
-        $actual = (new PublicationGeneratorFactory())->__invoke($mockSl, PublicationGenerator::class);
+        $actual = new PublicationGeneratorFactory()->__invoke($mockSl, PublicationGenerator::class);
 
-        static::assertInstanceOf(PublicationGenerator::class, $actual);
+        $this->assertInstanceOf(PublicationGenerator::class, $actual);
     }
 }

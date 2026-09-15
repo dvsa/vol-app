@@ -20,8 +20,9 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TmQualificationTest extends RepositoryTestCase
+final class TmQualificationTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(TmQualificationRepo::class);

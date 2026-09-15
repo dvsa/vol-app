@@ -23,7 +23,7 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationPeopleReviewServiceTest extends MockeryTestCase
+final class VariationPeopleReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -33,6 +33,7 @@ class VariationPeopleReviewServiceTest extends MockeryTestCase
     /** @var PeopleReviewService */
     protected $mockPeopleReview;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -86,53 +87,51 @@ class VariationPeopleReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'applicationOrganisationPersons' => [
-                        [
-                            'action' => 'A',
-                            'person' => 'Andy'
-                        ],
-                        [
-                            'action' => 'U',
-                            'person' => 'Uncle Sam'
-                        ],
-                        [
-                            'action' => 'D',
-                            'person' => 'Danny'
-                        ]
+                'applicationOrganisationPersons' => [
+                    [
+                        'action' => 'A',
+                        'person' => 'Andy'
                     ],
-                    'licence' => [
-                        'organisation' => [
-                            'type' => [
-                                'id' => Organisation::ORG_TYPE_REGISTERED_COMPANY
-                            ]
-                        ]
+                    [
+                        'action' => 'U',
+                        'person' => 'Uncle Sam'
+                    ],
+                    [
+                        'action' => 'D',
+                        'person' => 'Danny'
                     ]
                 ],
-                3,
-                [
-                    'subSections' => [
-                        [
-                            'title' => 'variation-review-people-A-title',
-                            'mainItems' => [
-                                'PERSON_CONFIG'
-                            ]
-                        ],
-                        [
-                            'title' => 'variation-review-people-U-title',
-                            'mainItems' => [
-                                'PERSON_CONFIG'
-                            ]
-                        ],
-                        [
-                            'title' => 'variation-review-people-D-title',
-                            'mainItems' => [
-                                'PERSON_CONFIG'
-                            ]
+                'licence' => [
+                    'organisation' => [
+                        'type' => [
+                            'id' => Organisation::ORG_TYPE_REGISTERED_COMPANY
+                        ]
+                    ]
+                ]
+            ],
+            3,
+            [
+                'subSections' => [
+                    [
+                        'title' => 'variation-review-people-A-title',
+                        'mainItems' => [
+                            'PERSON_CONFIG'
+                        ]
+                    ],
+                    [
+                        'title' => 'variation-review-people-U-title',
+                        'mainItems' => [
+                            'PERSON_CONFIG'
+                        ]
+                    ],
+                    [
+                        'title' => 'variation-review-people-D-title',
+                        'mainItems' => [
+                            'PERSON_CONFIG'
                         ]
                     ]
                 ]
@@ -140,11 +139,9 @@ class VariationPeopleReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    public static function simpleProvider(): array
+    public static function simpleProvider(): \Iterator
     {
-        return [
-            [Organisation::ORG_TYPE_SOLE_TRADER],
-            [Organisation::ORG_TYPE_PARTNERSHIP]
-        ];
+        yield [Organisation::ORG_TYPE_SOLE_TRADER];
+        yield [Organisation::ORG_TYPE_PARTNERSHIP];
     }
 }

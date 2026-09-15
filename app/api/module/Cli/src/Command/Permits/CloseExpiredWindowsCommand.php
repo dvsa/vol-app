@@ -13,7 +13,7 @@ class CloseExpiredWindowsCommand extends AbstractOlcsCommand
     protected static $defaultName = 'permits:close-expired-windows';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Close all recently expired permit windows.')
             ->addOption('since', null, InputOption::VALUE_OPTIONAL, 'Date since when to close expired windows', '-1 day');

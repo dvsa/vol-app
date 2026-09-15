@@ -20,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * BilateralIpaAnswersSummaryRowsAdderTest
  */
-class BilateralIpaAnswersSummaryRowsAdderTest extends MockeryTestCase
+final class BilateralIpaAnswersSummaryRowsAdderTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpAddRows')]
     public function testAddRows(mixed $isSnapshot, mixed $availableStocks, mixed $isMultiStock, mixed $expectedSlug): void
@@ -89,19 +89,16 @@ class BilateralIpaAnswersSummaryRowsAdderTest extends MockeryTestCase
         $sut->addRows($answersSummary, $irhpPermitApplication, $isSnapshot);
     }
 
-    public static function dpAddRows(): array
+    public static function dpAddRows(): \Iterator
     {
         $noStocks = [];
         $oneStock = [['id' => 1]];
         $multipleStocks = [['id' => 1], ['id' => 2]];
-
-        return [
-            [true, $noStocks, false, null],
-            [true, $oneStock, false,  null],
-            [true, $multipleStocks, true, null],
-            [false, $noStocks, false, null],
-            [false, $oneStock, false, null],
-            [false, $multipleStocks, true, 'period'],
-        ];
+        yield [true, $noStocks, false, null];
+        yield [true, $oneStock, false,  null];
+        yield [true, $multipleStocks, true, null];
+        yield [false, $noStocks, false, null];
+        yield [false, $oneStock, false, null];
+        yield [false, $multipleStocks, true, 'period'];
     }
 }

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\View\ViVhlView;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ViVhlViewTest extends \PHPUnit\Framework\TestCase
+final class ViVhlViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ViVhlView

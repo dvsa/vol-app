@@ -15,7 +15,7 @@ class CheckGoodReputeFactory implements FactoryInterface
     public const ROOT_ELEMENT = 'CheckGoodRepute_Request';
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CheckGoodRepute
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CheckGoodRepute
     {
         $config = $container->get('config');
         if (!isset($config['nr']['compliance_episode']['xmlNs'])) {

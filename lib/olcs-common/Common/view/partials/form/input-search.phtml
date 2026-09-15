@@ -1,0 +1,53 @@
+<?php
+
+use Common\Form\Elements\Types\AbstractInputSearch;
+use Common\Form\Elements\Types\PlainText;
+use Laminas\Form\Element\Button;
+use Laminas\Form\Element\Text;
+
+/** @var AbstractInputSearch $fieldsetElement */
+/** @var PlainText $hintElement */
+$hintElement = $fieldsetElement->get(AbstractInputSearch::ELEMENT_HINT_NAME);
+/** @var Text $inputElement */
+$inputElement = $fieldsetElement->get(AbstractInputSearch::ELEMENT_INPUT_NAME);
+/** @var Button $submitElement */
+$submitElement = $fieldsetElement->get(AbstractInputSearch::ELEMENT_SUBMIT_NAME);
+
+$fieldSetName = $this->escapeHtmlAttr($fieldsetElement->getName());
+$inputName = $this->escapeHtmlAttr($inputElement->getAttribute('name'));
+$submitName = $this->escapeHtmlAttr($submitElement->getAttribute('name'));
+$error = array_values($fieldsetElement->getMessages(AbstractInputSearch::ELEMENT_INPUT_NAME))[0];
+$label = $fieldsetElement->getOption('label');
+$legend = $fieldsetElement->getOption('legend');
+
+?>
+
+<div class="<?php echo !empty($error) ? "validation-wrapper" : ""; ?>">
+    <fieldset class="lookup" data-group="<?php echo $fieldSetName; ?>">
+        <?php if (!empty($legend)) : ?>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h2 class="govuk-fieldset__heading">
+                <?php echo $this->escapeHtml($this->translate($legend)); ?>
+            </h2>
+        </legend>
+        <?php endif; ?>
+        <?php if (!empty($label)) : ?>
+        <label class="govuk-label" for="<?php echo $inputName ?>"><?php echo $this->escapeHtml($this->translate($label)); ?></label>
+        <?php endif; ?>
+        <div class="field hint">
+            <?php echo $this->escapeHtml($this->translate($hintElement->getOption('value'))); ?>
+        </div>
+        <?php if (!empty($error)) : ?>
+            <p class="govuk-error-message"><span class="govuk-visually-hidden"><?php echo $this->translate('Error'); ?>:</span><?php echo $this->translate($error) ?></p>
+        <?php endif; ?>
+        <div class="field inline">
+            <input name="<?php echo $inputName; ?>" data-container-class="inline" id="<?php echo $inputName; ?>" type="text" value="<?php echo $this->escapeHtml($inputElement->getValue()); ?>">
+        </div>
+        <div class="field inline">
+            <button type="submit" name="<?php echo $submitName; ?>" class="govuk-button" data-prevent-double-click="true" data-container-class="inline"
+                    id="<?php echo $submitName; ?>" data-module="govuk-button">
+                <?php echo $this->escapeHtml($this->translate($submitElement->getLabel())) ?>
+            </button>
+        </div>
+    </fieldset>
+</div>

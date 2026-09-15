@@ -19,14 +19,14 @@ use Dvsa\Olcs\Api\Service\Permits\Checkable\CreateTaskCommandGenerator;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Mockery as m;
 
-class SubmitApplicationTest extends AbstractCommandHandlerTestCase
+final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
 {
-    public const TASK_CREATION_MESSAGE = 'Task created';
-    public const SUBMISSION_TASK_DESCRIPTION = 'Submission task description';
+    public const string TASK_CREATION_MESSAGE = 'Task created';
+    public const string SUBMISSION_TASK_DESCRIPTION = 'Submission task description';
 
-    public const IRHP_APPLICATION_ID = 44;
-    public const LICENCE_ID = 7;
-    public const IRHP_PERMIT_TYPE_ID = 11;
+    public const int IRHP_APPLICATION_ID = 44;
+    public const int LICENCE_ID = 7;
+    public const int IRHP_PERMIT_TYPE_ID = 11;
 
     private $irhpApplication;
 
@@ -140,7 +140,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CreateTask::class,
             $this->expectedTaskParams,
-            (new Result())->addMessage(self::TASK_CREATION_MESSAGE)
+            new Result()->addMessage(self::TASK_CREATION_MESSAGE)
         );
 
         $result = $this->sut->handleCommand($this->command);
@@ -186,7 +186,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CreateTask::class,
             $this->expectedTaskParams,
-            (new Result())->addMessage(self::TASK_CREATION_MESSAGE)
+            new Result()->addMessage(self::TASK_CREATION_MESSAGE)
         );
 
         $result = $this->sut->handleCommand($this->command);
@@ -199,11 +199,9 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(self::IRHP_APPLICATION_ID, $result->getId('irhpApplication'));
     }
 
-    public static function dpSubmissionStatuses(): array
+    public static function dpSubmissionStatuses(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_ISSUING],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION],
-        ];
+        yield [IrhpInterface::STATUS_ISSUING];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION];
     }
 }

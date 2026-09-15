@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdatePenaltiesNoteTest extends AbstractCommandHandlerTestCase
+final class UpdatePenaltiesNoteTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

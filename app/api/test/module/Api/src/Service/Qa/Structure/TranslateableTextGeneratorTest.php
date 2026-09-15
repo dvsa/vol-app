@@ -17,33 +17,32 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class TranslateableTextGeneratorTest extends MockeryTestCase
+final class TranslateableTextGeneratorTest extends MockeryTestCase
 {
     private $optionsKey;
 
     private $translateableText;
 
-    private $translateableTextFactory;
-
     private $translateableTextParameterGenerator;
 
     private $translateableTextGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->optionsKey = 'optionsKey';
 
         $this->translateableText = m::mock(TranslateableText::class);
 
-        $this->translateableTextFactory = m::mock(TranslateableTextFactory::class);
-        $this->translateableTextFactory->shouldReceive('create')
+        $translateableTextFactory = m::mock(TranslateableTextFactory::class);
+        $translateableTextFactory->shouldReceive('create')
             ->with($this->optionsKey)
             ->andReturn($this->translateableText);
 
         $this->translateableTextParameterGenerator = m::mock(TranslateableTextParameterGenerator::class);
 
         $this->translateableTextGenerator = new TranslateableTextGenerator(
-            $this->translateableTextFactory,
+            $translateableTextFactory,
             $this->translateableTextParameterGenerator
         );
     }

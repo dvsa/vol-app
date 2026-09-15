@@ -18,7 +18,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\GenerateCoverLetter::class)]
-class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
+final class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
 {
     /** @var GenerateCoverLetter */
     protected $sut;
@@ -80,7 +80,7 @@ class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
                 'isExternal' => false,
                 'isScan' => false
             ],
-            (new Result())->addId('document', $documentId)->addMessage('Document generated')
+            new Result()->addId('document', $documentId)->addMessage('Document generated')
         );
 
         $this->expectedSideEffect(
@@ -90,7 +90,7 @@ class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
                 'jobName' => 'UK licence for the Community cover letter',
                 'user' => $userId,
             ],
-            (new Result())->addMessage('Document scheduled for printing')
+            new Result()->addMessage('Document scheduled for printing')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -109,17 +109,15 @@ class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpHandleCommandForGoods(): array
+    public static function dpHandleCommandForGoods(): \Iterator
     {
-        return [
-            'GB' => [
-                'isNi' => false,
-                'expectedTemplate' => Document::GV_UK_COMMUNITY_LICENCE_GB_COVER_LETTER
-            ],
-            'NI' => [
-                'isNi' => true,
-                'expectedTemplate' => Document::GV_UK_COMMUNITY_LICENCE_NI_COVER_LETTER
-            ],
+        yield 'GB' => [
+            'isNi' => false,
+            'expectedTemplate' => Document::GV_UK_COMMUNITY_LICENCE_GB_COVER_LETTER
+        ];
+        yield 'NI' => [
+            'isNi' => true,
+            'expectedTemplate' => Document::GV_UK_COMMUNITY_LICENCE_NI_COVER_LETTER
         ];
     }
 

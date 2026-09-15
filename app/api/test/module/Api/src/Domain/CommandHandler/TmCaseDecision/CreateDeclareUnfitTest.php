@@ -27,7 +27,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Create DeclareUnfit Test
  */
-class CreateDeclareUnfitTest extends AbstractCommandHandlerTestCase
+final class CreateDeclareUnfitTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

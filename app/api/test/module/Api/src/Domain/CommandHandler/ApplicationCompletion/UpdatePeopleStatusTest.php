@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdatePeopleStatusTest extends AbstractUpdateStatusTestCase
+final class UpdatePeopleStatusTest extends AbstractUpdateStatusTestCase
 {
     /**
      * @var Organisation

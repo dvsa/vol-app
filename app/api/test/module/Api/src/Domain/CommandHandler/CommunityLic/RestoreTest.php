@@ -30,7 +30,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class RestoreTest extends AbstractCommandHandlerTestCase
+final class RestoreTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -207,12 +207,10 @@ class RestoreTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($specifiedDate, $communityLic->getSpecifiedDate());
     }
 
-    public static function statusProvider(): array
+    public static function statusProvider(): \Iterator
     {
-        return [
-            [new DateTime('now'),  CommunityLicEntity::STATUS_ACTIVE],
-            [null, CommunityLicEntity::STATUS_PENDING],
-        ];
+        yield [new DateTime('now'),  CommunityLicEntity::STATUS_ACTIVE];
+        yield [null, CommunityLicEntity::STATUS_PENDING];
     }
 
     public function testHandleCommandWithException(): void
