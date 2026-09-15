@@ -20,7 +20,6 @@ use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 #[ORM\Index(name: 'ix_pi_hearing_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_pi_hearing_presided_by_role', columns: ['presided_by_role'])]
 #[ORM\Index(name: 'ix_pi_hearing_venue_id', columns: ['venue_id'])]
-#[ORM\UniqueConstraint(name: 'uk_pi_hearing_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\Entity]
 class PiHearing extends AbstractPiHearing
 {

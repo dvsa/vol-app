@@ -28,7 +28,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_goods_disc_issued_date', columns: ['issued_date'])]
 #[ORM\Index(name: 'ix_goods_disc_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_goods_disc_licence_vehicle_id', columns: ['licence_vehicle_id'])]
-#[ORM\UniqueConstraint(name: 'uk_goods_disc_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -142,14 +141,6 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
 
     /**
      * Initialise the collections
@@ -465,30 +456,6 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**

@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_operating_centre_address_id', columns: ['address_id'])]
 #[ORM\Index(name: 'ix_operating_centre_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_operating_centre_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_operating_centre_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 abstract class AbstractOperatingCentre implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -84,14 +83,6 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
 
     /**
      * Complaints
@@ -272,30 +263,6 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**

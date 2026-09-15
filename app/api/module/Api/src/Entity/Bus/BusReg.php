@@ -35,7 +35,6 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 #[ORM\Index(name: 'ix_bus_reg_revert_status', columns: ['revert_status'])]
 #[ORM\Index(name: 'ix_bus_reg_reg_no', columns: ['reg_no'])]
 #[ORM\Index(name: 'fk_bus_reg_parent_id_bus_reg_id', columns: ['parent_id'])]
-#[ORM\UniqueConstraint(name: 'uk_bus_reg_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class BusReg extends AbstractBusReg implements ContextProviderInterface, OrganisationProviderInterface
 {
@@ -253,7 +252,6 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
                 'lastModifiedBy' => null,
                 'createdOn' => null,
                 'lastModifiedOn' => null,
-                'olbsKey' => null,
                 // new variation reasons will be required for a new variation
                 'variationReasons' => null,
             ]
@@ -291,7 +289,6 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
             $newOtherService->setLastModifiedBy(null);
             $newOtherService->setCreatedOn(null);
             $newOtherService->setLastModifiedOn(null);
-            $newOtherService->setOlbsKey(null);
             $newOtherService->setBusReg($busReg);
 
             $otherServices->add($newOtherService);

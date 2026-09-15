@@ -116,7 +116,7 @@ LOAD DATA LOCAL INFILE '$ANON_DATA_DIR/$POLICE_ANON_DATA_FILE' INTO table public
 ,@last_modified_by
 ,@created_on
 ,@last_modified_on
-,@version,@olbs_key)
+,@version)
  SET publication_link_id=nullif(@publication_link_id,'')
 ,person_id=nullif(@person_id,'')
 ,forename=nullif(@forename,'')
@@ -126,8 +126,7 @@ LOAD DATA LOCAL INFILE '$ANON_DATA_DIR/$POLICE_ANON_DATA_FILE' INTO table public
 ,created_by=nullif(@created_by,'')
 ,last_modified_by=nullif(@last_modified_by,'')
 ,created_on=now(),last_modified_on=now()
-,version=nullif(@version,'')
-,olbs_key=nullif(@olbs_key,'');
+,version=nullif(@version,'');
 
 #hack - patch person_id 0
 

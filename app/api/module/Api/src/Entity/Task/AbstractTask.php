@@ -40,7 +40,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_task_assigned_to_user_id', columns: ['assigned_to_user_id'])]
 #[ORM\Index(name: 'ix_task_assigned_to_team_id', columns: ['assigned_to_team_id'])]
 #[ORM\Index(name: 'ix_task_application_id', columns: ['application_id'])]
-#[ORM\UniqueConstraint(name: 'uk_task_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 abstract class AbstractTask implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -255,14 +254,6 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
 
     /**
      * Initialise the collections
@@ -836,30 +827,6 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**

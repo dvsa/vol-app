@@ -6,16 +6,14 @@ ALTER TABLE application_operating_centre CHANGE ad_placed ad_placed SMALLINT NOT
 ALTER TABLE application_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE application_step CHANGE weight weight NUMERIC(10, 0) DEFAULT NULL
 ALTER TABLE application_validation CHANGE weight weight NUMERIC(10, 0) DEFAULT NULL
-ALTER TABLE bus_reg_bus_service_type DROP olbs_key
 ALTER TABLE bus_reg_bus_service_type RENAME INDEX fk_bus_reg_bus_serv_type_bus_service_type_id_bus_service_type_id TO IDX_CE30F69C4424474C
 ALTER TABLE bus_reg_bus_service_type RENAME INDEX ix_bus_reg_bus_service_type_bus_reg_id TO IDX_CE30F69C5327B2E3
-ALTER TABLE bus_reg_local_auth DROP olbs_key
 ALTER TABLE bus_reg_local_auth RENAME INDEX ix_bus_reg_local_auth_local_authority_id TO IDX_B1BB6E19B0E901C6
 ALTER TABLE bus_reg_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
-ALTER TABLE bus_reg_traffic_area DROP olbs_key, CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
+ALTER TABLE bus_reg_traffic_area CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
 ALTER TABLE bus_reg_traffic_area RENAME INDEX ix_bus_reg_traffic_area_bus_reg_id TO IDX_B7B2BC105327B2E3
 ALTER TABLE bus_reg_traffic_area RENAME INDEX ix_bus_reg_traffic_area_traffic_area_id TO IDX_B7B2BC1018E0B1DB
-ALTER TABLE bus_reg_variation_reason DROP olbs_key, DROP olbs_key2
+ALTER TABLE bus_reg_variation_reason DROP olbs_key2
 ALTER TABLE bus_reg_variation_reason RENAME INDEX ix_bus_reg_variation_reason_bus_reg_id TO IDX_F841EA265327B2E3
 ALTER TABLE bus_reg_variation_reason RENAME INDEX ix_bus_reg_variation_reason_variation_reason_id TO IDX_F841EA264D98204B
 ALTER TABLE case_category RENAME INDEX ix_case_category_case_id TO IDX_913163BCCF10D4F5
@@ -23,7 +21,6 @@ ALTER TABLE case_category RENAME INDEX ix_case_category_category_id TO IDX_91316
 ALTER TABLE case_outcome RENAME INDEX ix_case_outcome_cases_id TO IDX_9F1F98C92A69AB62
 ALTER TABLE case_outcome RENAME INDEX ix_case_outcome_outcome_id TO IDX_9F1F98C9E6EE6D63
 ALTER TABLE cases_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
-ALTER TABLE condition_undertaking CHANGE olbs_type olbs_type VARCHAR(32) DEFAULT NULL
 ALTER TABLE continuation_detail CHANGE average_balance_amount average_balance_amount NUMERIC(10, 0) DEFAULT NULL, CHANGE overdraft_amount overdraft_amount NUMERIC(10, 0) DEFAULT NULL, CHANGE factoring_amount factoring_amount NUMERIC(10, 0) DEFAULT NULL, CHANGE other_finances_amount other_finances_amount NUMERIC(10, 0) DEFAULT NULL
 ALTER TABLE data_retention DROP INDEX ix_entity_name_entity_pk, ADD UNIQUE INDEX uk_entity_name_entity_pk (entity_name, entity_pk)
 ALTER TABLE digital_signature CHANGE attributes attributes VARCHAR(65535) DEFAULT NULL, CHANGE saml_response saml_response LONGTEXT DEFAULT NULL
@@ -67,13 +64,11 @@ ALTER TABLE master_template CHANGE template_content template_content LONGTEXT NO
 ALTER TABLE messaging_content CHANGE text text LONGTEXT NOT NULL
 ALTER TABLE messaging_subject CHANGE is_active is_active SMALLINT DEFAULT 1
 ALTER TABLE note CHANGE comment comment LONGTEXT DEFAULT NULL
-ALTER TABLE oc_complaint DROP olbs_key
 ALTER TABLE oc_complaint RENAME INDEX ix_oc_complaint_complaint_id TO IDX_19143EF1EDAE188E
 ALTER TABLE oc_complaint RENAME INDEX ix_oc_complaint_operating_centre_id TO IDX_19143EF135382CCB
-ALTER TABLE operating_centre_opposition DROP olbs_oc_id, DROP olbs_opp_id, DROP olbs_type
+ALTER TABLE operating_centre_opposition DROP olbs_oc_id, DROP olbs_opp_id
 ALTER TABLE operating_centre_opposition RENAME INDEX ix_operating_centre_opposition_operating_centre_id TO IDX_14273D7035382CCB
 ALTER TABLE operating_centre_opposition RENAME INDEX ix_operating_centre_opposition_opposition_id TO IDX_14273D70B4BE57B7
-ALTER TABLE opposition_grounds DROP olbs_key
 ALTER TABLE opposition_grounds RENAME INDEX ix_opposition_grounds_ground_id TO IDX_3591EE421D297B0A
 ALTER TABLE opposition_grounds RENAME INDEX ix_opposition_grounds_opposition_id TO IDX_3591EE42B4BE57B7
 ALTER TABLE organisation_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
@@ -98,7 +93,6 @@ ALTER TABLE queue CHANGE last_error last_error LONGTEXT DEFAULT NULL
 ALTER TABLE recipient_traffic_area CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
 ALTER TABLE recipient_traffic_area RENAME INDEX ix_recipient_traffic_area_recipient_id TO IDX_667E3D0E92F8F78
 ALTER TABLE recipient_traffic_area RENAME INDEX ix_recipient_traffic_area_traffic_area_id TO IDX_667E3D018E0B1DB
-ALTER TABLE ref_data CHANGE olbs_key olbs_key VARCHAR(20) DEFAULT NULL
 ALTER TABLE sectors CHANGE sifting_percentage sifting_percentage NUMERIC(10, 0) DEFAULT NULL, CHANGE version version SMALLINT DEFAULT 1
 ALTER TABLE si_penalty_imposed_type CHANGE deleted_date deleted_date DATETIME DEFAULT NULL
 ALTER TABLE sla_exception CHANGE created_by created_by INT UNSIGNED DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
@@ -112,10 +106,8 @@ ALTER TABLE submission_section_comment CHANGE comment comment LONGTEXT DEFAULT N
 ALTER TABLE surrender CHANGE disc_lost_info disc_lost_info LONGTEXT DEFAULT NULL, CHANGE disc_stolen_info disc_stolen_info LONGTEXT DEFAULT NULL, CHANGE licence_document_info licence_document_info LONGTEXT DEFAULT NULL, CHANGE community_licence_document_info community_licence_document_info LONGTEXT DEFAULT NULL
 ALTER TABLE team CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
 ALTER TABLE template CHANGE source source LONGTEXT NOT NULL
-ALTER TABLE tm_case_decision_rehab DROP olbs_key
 ALTER TABLE tm_case_decision_rehab RENAME INDEX ix_tm_case_decision_rehab_rehab_measure_id TO IDX_353BF96738237A80
 ALTER TABLE tm_case_decision_rehab RENAME INDEX ix_tm_case_decision_rehab_tm_case_decision_id TO IDX_353BF9672543F459
-ALTER TABLE tm_case_decision_unfitness DROP olbs_key
 ALTER TABLE tm_case_decision_unfitness RENAME INDEX ix_tm_case_decision_unfitness_tm_case_decision_id TO IDX_659D1A272543F459
 ALTER TABLE tm_case_decision_unfitness RENAME INDEX ix_tm_case_decision_unfitness_unfitness_reason_id TO IDX_659D1A274942EB41
 ALTER TABLE tm_qualification CHANGE country_code country_code VARCHAR(2) NOT NULL
@@ -205,15 +197,5 @@ CREATE INDEX ix_sla_target_date_document_id ON sla_target_date (document_id)
 CREATE INDEX ix_task_etl ON task (description, category_id, sub_category_id)
 CREATE UNIQUE INDEX application_id_UNIQUE ON application_tracking (application_id)
 CREATE UNIQUE INDEX uk_fee_txn_fee_id_txn_id ON fee_txn (fee_id, txn_id)
-DROP INDEX ix_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area
-DROP INDEX ix_bus_reg_variation_reason_olbs_key_olbs_key2 ON bus_reg_variation_reason
-DROP INDEX uk_bus_reg_bus_service_type_olbs_key_bus_service_type_id ON bus_reg_bus_service_type
-DROP INDEX uk_bus_reg_local_auth_olbs_key_local_authority_id ON bus_reg_local_auth
-DROP INDEX uk_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area
-DROP INDEX uk_oc_complaint_olbs_key ON oc_complaint
 DROP INDEX uk_oc_complaint_operating_centre_id_complaint_id ON oc_complaint
-DROP INDEX uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type ON operating_centre_opposition
-DROP INDEX uk_opposition_grounds_olbs_key ON opposition_grounds
 DROP INDEX uk_pi_type_pi_id_pi_type_id ON pi_type
-DROP INDEX uk_tm_case_decision_rehab_olbs_key ON tm_case_decision_rehab
-DROP INDEX uk_tm_case_decision_unfitness_olbs_key ON tm_case_decision_unfitness

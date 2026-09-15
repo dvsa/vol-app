@@ -21,7 +21,6 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 #[ORM\Index(name: 'ix_document_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_document_bus_reg_id', columns: ['bus_reg_id'])]
 #[ORM\Index(name: 'ix_document_irfo_organisation_id', columns: ['irfo_organisation_id'])]
-#[ORM\UniqueConstraint(name: 'uk_document_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\Entity]
 class Document extends AbstractDocument implements OrganisationProviderInterface
 {

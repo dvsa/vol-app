@@ -176,14 +176,6 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     protected $version = 1;
 
     /**
-     * Olbs key
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
-
-    /**
      * Cases
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -659,30 +651,6 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**

@@ -23,7 +23,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Table(name: 'ref_data')]
 #[ORM\Index(name: 'ix_ref_data_parent_id', columns: ['parent_id'])]
 #[ORM\Index(name: 'ix_ref_data_ref_data_category_id', columns: ['ref_data_category_id'])]
-#[ORM\UniqueConstraint(name: 'uk_ref_data_ref_data_category_id_olbs_key', columns: ['ref_data_category_id', 'olbs_key'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractRefData implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
@@ -65,14 +64,6 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      */
     #[ORM\Column(type: 'string', name: 'ref_data_category_id', length: 32, nullable: false)]
     protected $refDataCategoryId = '';
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var string
-     */
-    #[ORM\Column(type: 'string', name: 'olbs_key', length: 20, nullable: true)]
-    protected $olbsKey;
 
     /**
      * Display order
@@ -201,30 +192,6 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     public function getRefDataCategoryId()
     {
         return $this->refDataCategoryId;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param string $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return string
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**

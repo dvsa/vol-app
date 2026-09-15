@@ -21,7 +21,6 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 #[ORM\Index(name: 'ix_inspection_request_requestor_user_id', columns: ['requestor_user_id'])]
 #[ORM\Index(name: 'ix_inspection_request_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_inspection_request_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_inspection_request_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class InspectionRequest extends AbstractInspectionRequest
 {
