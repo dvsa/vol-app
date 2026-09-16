@@ -293,6 +293,7 @@ return [
             DataService\TrafficArea::class => DataService\AbstractDataServiceFactory::class,
 
             HelperService\FileUploadHelperService::class => HelperService\FileUploadHelperServiceFactory::class,
+            \Common\Service\FlashMessenger\LaminasSessionFlashMessenger::class => \Common\Service\FlashMessenger\LaminasSessionFlashMessengerFactory::class,
             HelperService\FlashMessengerHelperService::class => HelperService\FlashMessengerHelperServiceFactory::class,
             HelperService\FormHelperService::class => HelperService\FormHelperServiceFactory::class,
             HelperService\GuidanceHelperService::class => HelperService\GuidanceHelperServiceFactory::class,
