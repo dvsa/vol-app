@@ -32,6 +32,7 @@ class ApplicationTracking extends AbstractApplicationTracking
         'FinancialEvidence',
         'FinancialHistory',
         'LicenceHistory',
+        'KnowledgeExperience',
         'OperatingCentres',
         'People',
         'Safety',
