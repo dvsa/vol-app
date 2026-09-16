@@ -30,9 +30,10 @@ return [
         ]
     ],
 
-    // Elastic search
+    // OpenSearch (config keys kept as-is so local.php overrides carry on working).
+    // In-VPC endpoint reached directly: deliberately NOT routed via the shared squid proxy.
     'elastic_search' => [
-        // Hostname e.g. elasticsearch-dev.olcs.mgt.mtpdvsa *Environment specific*
+        // Hostname e.g. searchv6.dev.olcs.dev-dvsacloud.uk *Environment specific*
         'host' => 'searchv6.%domain%',
         // Port, e.g. 9200
         'port' => '443',
@@ -50,6 +51,7 @@ return [
             'orm_default' => [
                 'connection' => 'orm_default',
                 'configuration' => 'orm_default',
+                'event_manager' => 'orm_default',
             ],
         ],
         'cache' => [
@@ -77,14 +79,9 @@ return [
         'configuration' => [
             'orm_default' => [
                 'metadata_cache' => 'redis',
-                'auto_generate_proxy_classes' => true,
                 'query_cache'       => 'redis',
                 'result_cache'      => 'redis',
                 'hydration_cache'   => 'redis',
-
-
-                // Log SQL queries to the OLCS application log file
-                //'sql_logger' => 'DoctrineLogger',
             ]
         ],
         'migrations' => [
@@ -599,7 +596,7 @@ return [
         'doctrine-cache' => [
             'options' => [
                 'ttl' => 3600,
-                'namespace' => 'doctrine',
+                'namespace' => 'doctrine-orm3',
             ]
         ],
         // Backs the Cognito JWKS cache. Its own namespace so a key rotation can be forced

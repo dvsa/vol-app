@@ -43,22 +43,25 @@ final class DocumentTest extends RepositoryTestCase
         /** @var QueryBuilder $qb */
         $mockQb = m::mock(QueryBuilder::class);
 
-        $mockQb->shouldReceive('expr->eq')->with('m.category', ':category')->once()->andReturn('category');
-        $mockQb->shouldReceive('andWhere')->with('category')->once()->andReturnSelf();
+        $category = $this->mockExprEq('m.category', ':category');
+        $mockQb->shouldReceive('expr->eq')->with('m.category', ':category')->once()->andReturn($category);
+        $mockQb->shouldReceive('andWhere')->with($category)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('category', CategoryEntity::CATEGORY_TRANSPORT_MANAGER)
             ->once()
             ->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.subCategory', ':subCategory')->once()->andReturn('subCategory');
-        $mockQb->shouldReceive('andWhere')->with('subCategory')->once()->andReturnSelf();
+        $subcategory = $this->mockExprEq('m.subCategory', ':subCategory');
+        $mockQb->shouldReceive('expr->eq')->with('m.subCategory', ':subCategory')->once()->andReturn($subcategory);
+        $mockQb->shouldReceive('andWhere')->with($subcategory)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('subCategory', CategoryEntity::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION)
             ->once()
             ->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.transportManager', ':transportManager')->once()->andReturn('tm');
-        $mockQb->shouldReceive('andWhere')->with('tm')->once()->andReturnSelf();
+        $tm = $this->mockExprEq('m.transportManager', ':transportManager');
+        $mockQb->shouldReceive('expr->eq')->with('m.transportManager', ':transportManager')->once()->andReturn($tm);
+        $mockQb->shouldReceive('andWhere')->with($tm)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('transportManager', 1)
             ->once()
@@ -68,7 +71,7 @@ final class DocumentTest extends RepositoryTestCase
 
         $mockQb->shouldReceive('getQuery')
             ->andReturn(
-                m::mock()
+                m::mock(Query::class)
                     ->shouldReceive('execute')
                     ->andReturn('result')
                     ->once()
@@ -93,29 +96,33 @@ final class DocumentTest extends RepositoryTestCase
         /** @var QueryBuilder $qb */
         $mockQb = m::mock(QueryBuilder::class);
 
-        $mockQb->shouldReceive('expr->eq')->with('m.category', ':category')->once()->andReturn('category');
-        $mockQb->shouldReceive('andWhere')->with('category')->once()->andReturnSelf();
+        $category = $this->mockExprEq('m.category', ':category');
+        $mockQb->shouldReceive('expr->eq')->with('m.category', ':category')->once()->andReturn($category);
+        $mockQb->shouldReceive('andWhere')->with($category)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('category', CategoryEntity::CATEGORY_TRANSPORT_MANAGER)
             ->once()
             ->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.subCategory', ':subCategory')->once()->andReturn('subCategory');
-        $mockQb->shouldReceive('andWhere')->with('subCategory')->once()->andReturnSelf();
+        $subcategory = $this->mockExprEq('m.subCategory', ':subCategory');
+        $mockQb->shouldReceive('expr->eq')->with('m.subCategory', ':subCategory')->once()->andReturn($subcategory);
+        $mockQb->shouldReceive('andWhere')->with($subcategory)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('subCategory', CategoryEntity::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL)
             ->once()
             ->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.transportManager', ':transportManager')->once()->andReturn('tm');
-        $mockQb->shouldReceive('andWhere')->with('tm')->once()->andReturnSelf();
+        $tm = $this->mockExprEq('m.transportManager', ':transportManager');
+        $mockQb->shouldReceive('expr->eq')->with('m.transportManager', ':transportManager')->once()->andReturn($tm);
+        $mockQb->shouldReceive('andWhere')->with($tm)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('transportManager', 1)
             ->once()
             ->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.' . $type, ':' . $type)->once()->andReturn('tm');
-        $mockQb->shouldReceive('andWhere')->with('tm')->once()->andReturnSelf();
+        $tm = $this->mockExprEq('m.' . $type, ':' . $type);
+        $mockQb->shouldReceive('expr->eq')->with('m.' . $type, ':' . $type)->once()->andReturn($tm);
+        $mockQb->shouldReceive('andWhere')->with($tm)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with($type, 2)
             ->once()
@@ -125,7 +132,7 @@ final class DocumentTest extends RepositoryTestCase
 
         $mockQb->shouldReceive('getQuery')
             ->andReturn(
-                m::mock()
+                m::mock(Query::class)
                 ->shouldReceive('execute')
                 ->andReturn('result')
                 ->once()
@@ -193,7 +200,7 @@ final class DocumentTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('getResult')->with(Query::HYDRATE_OBJECT)->once()->andReturn('RESULT')
+            m::mock(Query::class)->shouldReceive('getResult')->with(Query::HYDRATE_OBJECT)->once()->andReturn('RESULT')
                 ->getMock()
         );
         $this->assertEquals('RESULT', $this->sut->fetchListForContinuationDetail(95));
@@ -209,7 +216,7 @@ final class DocumentTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('getResult')->with(Query::HYDRATE_OBJECT)->once()->andReturn('RESULT')
+            m::mock(Query::class)->shouldReceive('getResult')->with(Query::HYDRATE_OBJECT)->once()->andReturn('RESULT')
                 ->getMock()
         );
         $this->assertEquals('RESULT', $this->sut->fetchListForStatement(123));

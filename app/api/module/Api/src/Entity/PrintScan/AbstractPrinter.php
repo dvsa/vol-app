@@ -40,7 +40,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
     /**
      * Printer tray
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'printer_tray', length: 45, nullable: true)]
     protected $printerTray;
@@ -48,7 +48,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
     /**
      * Printer name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'printer_name', length: 45, nullable: true)]
     protected $printerName;
@@ -56,7 +56,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
@@ -64,7 +64,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
     /**
      * TeamPrinters
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter::class, mappedBy: 'printer')]
     protected $teamPrinters;

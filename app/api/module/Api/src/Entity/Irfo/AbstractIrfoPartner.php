@@ -50,7 +50,7 @@ abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonS
     /**
      * Foreign Key to organisation
      *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, inversedBy: 'irfoPartners', fetch: 'LAZY')]
@@ -59,7 +59,7 @@ abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonS
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonS
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -96,7 +96,7 @@ abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonS
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
