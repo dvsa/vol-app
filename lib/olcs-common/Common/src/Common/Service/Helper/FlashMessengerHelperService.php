@@ -8,7 +8,7 @@
 
 namespace Common\Service\Helper;
 
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 
 /**
  * Flash Messenger Helper Service
@@ -27,17 +27,12 @@ class FlashMessengerHelperService
         'info' => []
     ];
 
-    /** @var FlashMessenger */
+    /** @var FlashMessengerInterface */
     protected $flashMessenger;
 
-    /**
-     * Create service instance
-     *
-     *
-     * @return FlashMessengerHelperService
-     */
+
     public function __construct(
-        FlashMessenger $flashMessenger
+        FlashMessengerInterface $flashMessenger
     ) {
         $this->flashMessenger = $flashMessenger;
     }
@@ -88,7 +83,7 @@ class FlashMessengerHelperService
      * Add a success message
      *
      * @param string $message
-     * @return \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger
+     * @return FlashMessengerInterface
      */
     public function addSuccessMessage($message)
     {
@@ -99,7 +94,7 @@ class FlashMessengerHelperService
      * Add a error message
      *
      * @param string $message
-     * @return \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger
+     * @return FlashMessengerInterface
      */
     public function addErrorMessage($message)
     {
@@ -122,7 +117,7 @@ class FlashMessengerHelperService
      * Add a warning message
      *
      * @param string $message
-     * @return \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger
+     * @return FlashMessengerInterface
      */
     public function addWarningMessage($message)
     {
@@ -134,7 +129,7 @@ class FlashMessengerHelperService
      * Add a info message
      *
      * @param string $message
-     * @return \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger
+     * @return FlashMessengerInterface
      */
     public function addInfoMessage($message)
     {
@@ -144,7 +139,7 @@ class FlashMessengerHelperService
     /**
      * Get the flash messenger
      *
-     * @return \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger
+     * @return FlashMessengerInterface
      */
     protected function getFlashMessenger()
     {
