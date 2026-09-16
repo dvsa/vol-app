@@ -241,6 +241,8 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
 
         // create bus reg based on the previous record
         $busReg = clone $this;
+        $busReg->setSubsidyTrafficAreas(new ArrayCollection($this->getSubsidyTrafficAreas()->toArray()));
+        $busReg->setSubsidyLocalAuthorities(new ArrayCollection($this->getSubsidyLocalAuthorities()->toArray()));
 
         // override columns which need different defaults for a variation
         $data = array_merge(

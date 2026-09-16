@@ -305,7 +305,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @var string
      */
-    #[ORM\Column(type: 'string', name: 'subsidy_detail', length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', name: 'subsidy_detail', length: 1000, nullable: true)]
     protected $subsidyDetail;
 
     /**
@@ -551,6 +551,24 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     protected $trafficAreas;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    #[ORM\JoinTable(name: 'bus_reg_subsidy_traffic_area')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
+    protected $subsidyTrafficAreas;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    #[ORM\JoinTable(name: 'bus_reg_subsidy_local_auth')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'local_authority_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, fetch: 'LAZY')]
+    protected $subsidyLocalAuthorities;
+
+    /**
      * VariationReasons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -649,6 +667,8 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
         $this->busServiceTypes = new ArrayCollection();
         $this->localAuthoritys = new ArrayCollection();
         $this->trafficAreas = new ArrayCollection();
+        $this->subsidyTrafficAreas = new ArrayCollection();
+        $this->subsidyLocalAuthorities = new ArrayCollection();
         $this->variationReasons = new ArrayCollection();
         $this->otherServices = new ArrayCollection();
         $this->readAudits = new ArrayCollection();
@@ -2846,5 +2866,41 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     public function __toString(): string
     {
         return (string) $this->getId();
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $subsidyTrafficAreas
+     * @return self
+     */
+    public function setSubsidyTrafficAreas($subsidyTrafficAreas)
+    {
+        $this->subsidyTrafficAreas = $subsidyTrafficAreas;
+        return $this;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getSubsidyTrafficAreas()
+    {
+        return $this->subsidyTrafficAreas;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $subsidyLocalAuthorities
+     * @return self
+     */
+    public function setSubsidyLocalAuthorities($subsidyLocalAuthorities)
+    {
+        $this->subsidyLocalAuthorities = $subsidyLocalAuthorities;
+        return $this;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getSubsidyLocalAuthorities()
+    {
+        return $this->subsidyLocalAuthorities;
     }
 }

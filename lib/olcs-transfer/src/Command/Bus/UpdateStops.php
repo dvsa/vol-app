@@ -72,10 +72,29 @@ final class UpdateStops extends AbstractCommand
 
     /**
      * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"max":255})
+     * @Transfer\Validator("Laminas\Validator\StringLength", options={"max":1000})
      * @Transfer\Optional
      */
     protected $subsidyDetail;
+
+    /**
+     * @Transfer\ArrayInput
+     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\UniqueItems")
+     * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":1})
+     * @Transfer\Optional
+     */
+    protected $subsidyTrafficAreas = [];
+
+    /**
+     * @Transfer\ArrayInput
+     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\UniqueItems")
+     * @Transfer\Filter("Laminas\Filter\Digits")
+     * @Transfer\Validator("Laminas\Validator\Digits")
+     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
+     * @Transfer\Optional
+     */
+    protected $subsidyLocalAuthorities = [];
 
     /**
      * @return string
@@ -147,5 +166,21 @@ final class UpdateStops extends AbstractCommand
     public function getSubsidyDetail()
     {
         return $this->subsidyDetail;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubsidyTrafficAreas()
+    {
+        return $this->subsidyTrafficAreas;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubsidyLocalAuthorities()
+    {
+        return $this->subsidyLocalAuthorities;
     }
 }

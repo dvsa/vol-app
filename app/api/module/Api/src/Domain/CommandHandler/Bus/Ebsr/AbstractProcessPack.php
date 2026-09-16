@@ -536,6 +536,10 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
         $ebsrData['naptanAuthorities'] = $this->processNaptan($ebsrData['naptan']);
         $ebsrData['localAuthoritys'] = $this->processLocalAuthority($ebsrData['localAuthorities']);
         $ebsrData['trafficAreas'] = $this->processTrafficAreas($ebsrData['trafficAreas'], $ebsrData['localAuthoritys']);
+        if (isset($ebsrData['subsidyAuthorityNames'])) {
+            $ebsrData['subsidyLocalAuthorities'] = $this->processSubsidyAuthorities($ebsrData['subsidyAuthorityNames']);
+            $ebsrData['subsidyTrafficAreas'] = $this->processTrafficAreas([], $ebsrData['subsidyLocalAuthorities']);
+        }
         $ebsrData['busServiceTypes'] = $this->processServiceTypes($ebsrData['serviceClassifications']);
         $ebsrData['busNoticePeriod'] = $this->getRepo()->getReference(
             BusNoticePeriodEntity::class,
@@ -543,6 +547,37 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
         );
 
         return $ebsrData;
+    }
+
+    /**
+     * Match displayed names exactly, independently of database collation and TXC codes.
+     *
+     * @param string[] $names
+     * @return ArrayCollection
+     */
+    private function processSubsidyAuthorities(array $names): ArrayCollection
+    {
+        $collection = new ArrayCollection();
+        if ($names === []) {
+            return $collection;
+        }
+
+        $authorities = $this->getRepo('LocalAuthority')->fetchList(
+            \Dvsa\Olcs\Transfer\Query\LocalAuthority\LocalAuthorityList::create([]),
+            \Doctrine\ORM\Query::HYDRATE_OBJECT
+        );
+        $byName = [];
+        foreach ($authorities as $authority) {
+            $byName[$authority->getDescription()][] = $authority;
+        }
+        foreach (array_unique($names) as $name) {
+            $matches = $byName[$name] ?? [];
+            if (count($matches) === 1) {
+                $collection->add($matches[0]);
+            }
+        }
+
+        return $collection;
     }
 
     /**
