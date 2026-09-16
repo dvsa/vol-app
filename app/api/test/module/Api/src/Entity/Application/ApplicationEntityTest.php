@@ -939,6 +939,54 @@ final class ApplicationEntityTest extends EntityTester
         ];
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestKnowledgeExperienceSectionCompleted')]
+    public function testKnowledgeExperienceSectionCompleted(
+        bool $isCompleted,
+        mixed $evidenceUploaded,
+        ?string $olat
+    ): void {
+        $this->entity->setKnowledgeExperienceEvidenceUploaded($evidenceUploaded);
+        $this->entity->setKnowledgeExperienceOlat($olat);
+
+        $this->assertEquals(
+            $isCompleted,
+            $this->entity->isSectionCompleted('KnowledgeExperience')
+        );
+    }
+
+    public static function dpTestKnowledgeExperienceSectionCompleted(): \Iterator
+    {
+        yield 'nothing selected' => [
+            false,
+            null,
+            null,
+        ];
+
+        yield 'upload now' => [
+            true,
+            Entity::FINANCIAL_EVIDENCE_UPLOADED,
+            'N',
+        ];
+
+        yield 'upload later' => [
+            false,
+            Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            'N',
+        ];
+
+        yield 'olat selected' => [
+            true,
+            null,
+            'Y',
+        ];
+
+        yield 'olat selected even when upload later' => [
+            true,
+            Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            'Y',
+        ];
+    }
+
     public function testOperateLargeVehiclesSectionCompleted(): void
     {
         $this->assertFalse($this->entity->isSectionCompleted('PsvOperateLarge'));
@@ -5663,5 +5711,112 @@ final class ApplicationEntityTest extends EntityTester
         $tmApplications = new ArrayCollection([$tmApplication]);
         $application->setTransportManagers($tmApplications);
         $this->assertTrue($application->showPeriodOfGraceQuestion());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRequiresKnowledgeExperience')]
+    public function testRequiresKnowledgeExperience(
+        bool $isVariation,
+        string $niFlag,
+        string $goodsOrPsv,
+        string $licenceType,
+        string $prevHasLicence,
+        string $prevHadLicence,
+        bool $expected
+    ): void {
+        /** @var RefData $goodsOrPsvRefData */
+        $goodsOrPsvRefData = m::mock(RefData::class)->makePartial();
+        $goodsOrPsvRefData->setId($goodsOrPsv);
+
+        /** @var RefData $licenceTypeRefData */
+        $licenceTypeRefData = m::mock(RefData::class)->makePartial();
+        $licenceTypeRefData->setId($licenceType);
+
+        /** @var Entity $application */
+        $application = $this->instantiate(Entity::class);
+
+        $application->setIsVariation($isVariation);
+        $application->setNiFlag($niFlag);
+        $application->setGoodsOrPsv($goodsOrPsvRefData);
+        $application->setLicenceType($licenceTypeRefData);
+        $application->setPrevHasLicence($prevHasLicence);
+        $application->setPrevHadLicence($prevHadLicence);
+
+        $this->assertEquals(
+            $expected,
+            $application->requiresKnowledgeExperience()
+        );
+    }
+
+    public static function dpRequiresKnowledgeExperience(): \Iterator
+    {
+        yield 'yes yes' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'Y',
+            'Y',
+            false,
+        ];
+
+        yield 'yes no' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'Y',
+            'N',
+            true,
+        ];
+
+        yield 'no yes' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            'Y',
+            true,
+        ];
+
+        yield 'no no' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            'N',
+            true,
+        ];
+
+        yield 'NI application' => [
+            false,
+            'Y',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            'N',
+            false,
+        ];
+
+        yield 'restricted PSV' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            'N',
+            'N',
+            false,
+        ];
+
+        yield 'variation' => [
+            true,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            'N',
+            false,
+        ];
     }
 }
