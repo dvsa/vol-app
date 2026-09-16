@@ -43,6 +43,76 @@ final class QueryTemplateTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals($expected, $sut->getParam('query'));
     }
 
+    public function testQueryTemplateNotDecodingToAnArrayIsRejected(): void
+    {
+        $file = tempnam(sys_get_temp_dir(), 'qt');
+        file_put_contents($file, '"not an object"');
+
+        try {
+            $this->expectException(\RuntimeException::class);
+            $this->expectExceptionMessage('Empty params for query template file');
+            new QueryTemplate($file, 'bar');
+        } finally {
+            unlink($file);
+        }
+    }
+
+    public function testToArrayReturnsTheDecodedTemplate(): void
+    {
+        $sut = new QueryTemplate(__DIR__ . '/mock-query-template.json', 'SMITH');
+
+        $this->assertSame(
+            ['query' => ['bool' => ['must' => ['bool' => ['should' => [['match' => ['field_1' => 'SMITH']]]]]]]],
+            $sut->toArray()
+        );
+    }
+
+    public function testGetParamReturnsNullForMissingParam(): void
+    {
+        $sut = new QueryTemplate(__DIR__ . '/mock-query-template.json', 'SMITH');
+
+        $this->assertNull($sut->getParam('sort'));
+    }
+
+    public function testPaginationAndSortSettersAreAddedToTheBody(): void
+    {
+        $sut = new QueryTemplate(__DIR__ . '/mock-query-template.json', 'SMITH');
+
+        $result = $sut->setSort(['foo' => 'desc'])->setSize(10)->setFrom(20);
+
+        $this->assertSame($sut, $result);
+        $body = $sut->toArray();
+        $this->assertSame(['foo' => 'desc'], $body['sort']);
+        $this->assertSame(10, $body['size']);
+        $this->assertSame(20, $body['from']);
+    }
+
+    public function testSetPostFilterIsAddedToTheBody(): void
+    {
+        $sut = new QueryTemplate(__DIR__ . '/mock-query-template.json', 'SMITH');
+        $postFilter = ['bool' => ['must_not' => [['match' => ['ta_id' => 'N']]]]];
+
+        $sut->setPostFilter($postFilter);
+
+        $this->assertSame($postFilter, $sut->toArray()['post_filter']);
+    }
+
+    public function testAddAggregationAccumulatesNamedAggregations(): void
+    {
+        $sut = new QueryTemplate(__DIR__ . '/mock-query-template.json', 'SMITH');
+
+        $sut->addAggregation('org_name', ['terms' => ['field' => 'org_name']]);
+        $sut->addAggregation('ta_id', ['terms' => ['field' => 'ta_id']]);
+
+        $this->assertSame(
+            [
+                'org_name' => ['terms' => ['field' => 'org_name']],
+                'ta_id' => ['terms' => ['field' => 'ta_id']],
+            ],
+            $sut->toArray()['aggs']
+        );
+    }
+
     public static function queryTemplateDataProvider(): \Iterator
     {
         // simple query
