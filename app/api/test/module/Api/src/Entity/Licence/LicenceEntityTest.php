@@ -2559,23 +2559,28 @@ final class LicenceEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestDetermineNpNumber')]
-    public function testDetermineNpNumber(mixed $expected, mixed $publication): void
+    public function testDetermineNpNumber(mixed $expected, \Closure $createPublication): void
     {
         $licence = m::mock(Entity::class)->makePartial();
         $licence->shouldReceive('getLatestPublicationByType')->with(Publication::PUB_TYPE_N_P)->once()
-            ->andReturn($publication);
+            ->andReturn($createPublication());
 
         $this->assertSame($expected, $licence->determineNpNumber());
     }
 
     public static function dataProviderTestDetermineNpNumber(): array
     {
-        $publication = m::mock(Publication::class);
-        $publication->shouldReceive('getPublicationNo')->with()->andReturn(99);
+        $createPublication = static function () {
+            $publication = m::mock(Publication::class);
+            $publication->shouldReceive('getPublicationNo')->with()->andReturn(99);
+
+            return $publication;
+        };
+
         return [
-            [99, $publication],
-            [null, 'X'],
-            [null, new \stdClass()]
+            [99, $createPublication],
+            [null, static fn () => 'X'],
+            [null, static fn () => new \stdClass()]
         ];
     }
 
@@ -2778,34 +2783,41 @@ final class LicenceEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHasQueuedRevocation')]
-    public function testHasQueuedRevocation(mixed $expected, ArrayCollection $licenceStatusRules): void
+    /**
+     * @param array<array{string, bool}> $licenceStatusRules [licence status, is queued] per rule
+     */
+    public function testHasQueuedRevocation(mixed $expected, array $licenceStatusRules): void
     {
+        $rules = array_map(
+            static function (array $rule) {
+                [$licenceStatus, $isQueued] = $rule;
+                $lsr = m::mock(LicenceStatusRule::class)->makePartial()
+                    ->setLicenceStatus(new RefData($licenceStatus));
+                $lsr->shouldReceive('isQueued')->with()->andReturn($isQueued);
+
+                return $lsr;
+            },
+            $licenceStatusRules
+        );
+
         /** @var Licence $licence */
         $licence = $this->instantiate(Entity::class);
-        $licence->setLicenceStatusRules($licenceStatusRules);
+        $licence->setLicenceStatusRules(new ArrayCollection($rules));
         $this->assertSame($expected, $licence->hasQueuedRevocation());
     }
 
     public static function dataProviderTestHasQueuedRevocation(): array
     {
-        $lsr1 = m::mock(LicenceStatusRule::class)->makePartial()
-            ->setLicenceStatus(new RefData(Licence::LICENCE_STATUS_VALID));
-        $lsr1->shouldReceive('isQueued')->with()->andReturn(false);
-        $lsr2 = m::mock(LicenceStatusRule::class)->makePartial()
-            ->setLicenceStatus(new RefData(Licence::LICENCE_STATUS_GRANTED));
-        $lsr2->shouldReceive('isQueued')->with()->andReturn(false);
-        $lsr3 = m::mock(LicenceStatusRule::class)->makePartial()
-            ->setLicenceStatus(new RefData(Licence::LICENCE_STATUS_REVOKED));
-        $lsr3->shouldReceive('isQueued')->with()->andReturn(false);
-        $lsr4 = m::mock(LicenceStatusRule::class)->makePartial()
-            ->setLicenceStatus(new RefData(Licence::LICENCE_STATUS_REVOKED));
-        $lsr4->shouldReceive('isQueued')->with()->andReturn(true);
+        $lsr1 = [Licence::LICENCE_STATUS_VALID, false];
+        $lsr2 = [Licence::LICENCE_STATUS_GRANTED, false];
+        $lsr3 = [Licence::LICENCE_STATUS_REVOKED, false];
+        $lsr4 = [Licence::LICENCE_STATUS_REVOKED, true];
 
         return [
-            [true, new ArrayCollection([$lsr1, $lsr2, $lsr3, $lsr4])],
-            [true, new ArrayCollection([$lsr4])],
-            [false, new ArrayCollection()],
-            [false, new ArrayCollection([$lsr1, $lsr2, $lsr3])],
+            [true, [$lsr1, $lsr2, $lsr3, $lsr4]],
+            [true, [$lsr4]],
+            [false, []],
+            [false, [$lsr1, $lsr2, $lsr3]],
         ];
     }
 
@@ -2937,7 +2949,7 @@ final class LicenceEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCanMakeIrhpApplicationCertificateOfRoadworthiness')]
-    public function testCanMakeIrhpApplicationCertificateOfRoadworthiness(mixed $irhpApplication): void
+    public function testCanMakeIrhpApplicationCertificateOfRoadworthiness(\Closure $createIrhpApplication): void
     {
         $stock = m::mock(IrhpPermitStock::class);
         $stock->shouldReceive('isCertificateOfRoadworthiness')
@@ -2946,13 +2958,13 @@ final class LicenceEntityTest extends EntityTester
 
         $licence = $this->createEligibleForPermits(true);
 
-        $this->assertTrue($licence->canMakeIrhpApplication($stock, $irhpApplication));
+        $this->assertTrue($licence->canMakeIrhpApplication($stock, $createIrhpApplication()));
     }
 
     public static function dpCanMakeIrhpApplicationCertificateOfRoadworthiness(): \Iterator
     {
-        yield [null];
-        yield [m::mock(IrhpApplication::class)];
+        yield [static fn () => null];
+        yield [static fn () => m::mock(IrhpApplication::class)];
     }
 
     public function testCanMakeIrhpApplicationNotEligibleForPermits(): void
@@ -3084,11 +3096,27 @@ final class LicenceEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasUnderConsiderationOrAwaitingFeeApplicationForStock')]
+    /**
+     * @param bool[] $applicationsSatisfyCriteria whether each application satisfies the criteria for the stock
+     */
     public function testHasUnderConsiderationOrAwaitingFeeApplicationForStock(
-        mixed $irhpPermitStock,
-        mixed $irhpApplications,
+        array $applicationsSatisfyCriteria,
         mixed $expected
     ): void {
+        $irhpPermitStock = m::mock(IrhpPermitStock::class);
+
+        $irhpApplications = array_map(
+            static function (bool $satisfiesCriteria) use ($irhpPermitStock) {
+                $irhpApplication = m::mock(IrhpApplication::class);
+                $irhpApplication->shouldReceive('isUnderConsiderationOrAwaitingFeeAndAssociatedWithStock')
+                    ->with($irhpPermitStock)
+                    ->andReturn($satisfiesCriteria);
+
+                return $irhpApplication;
+            },
+            $applicationsSatisfyCriteria
+        );
+
         $licence = $this->instantiate(Entity::class);
         $licence->setIrhpApplications($irhpApplications);
 
@@ -3100,52 +3128,33 @@ final class LicenceEntityTest extends EntityTester
 
     public static function dpHasUnderConsiderationOrAwaitingFeeApplicationForStock(): array
     {
-        $irhpPermitStock = m::mock(IrhpPermitStock::class);
-
-        $irhpApplicationSatisfyingCriteria = m::mock(IrhpApplication::class);
-        $irhpApplicationSatisfyingCriteria->shouldReceive('isUnderConsiderationOrAwaitingFeeAndAssociatedWithStock')
-            ->with($irhpPermitStock)
-            ->andReturnTrue();
-
-        $irhpApplicationNotSatisfyingCriteria = m::mock(IrhpApplication::class);
-        $irhpApplicationNotSatisfyingCriteria->shouldReceive('isUnderConsiderationOrAwaitingFeeAndAssociatedWithStock')
-            ->with($irhpPermitStock)
-            ->andReturnFalse();
-
         return [
-            [
-                $irhpPermitStock,
-                [
-                    $irhpApplicationNotSatisfyingCriteria,
-                    $irhpApplicationNotSatisfyingCriteria,
-                    $irhpApplicationNotSatisfyingCriteria
-                ],
-                false
-            ],
-            [
-                $irhpPermitStock,
-                [
-                    $irhpApplicationNotSatisfyingCriteria,
-                    $irhpApplicationSatisfyingCriteria,
-                    $irhpApplicationNotSatisfyingCriteria
-                ],
-                true
-            ],
-            [
-                $irhpPermitStock,
-                [
-                    $irhpApplicationSatisfyingCriteria,
-                    $irhpApplicationSatisfyingCriteria,
-                    $irhpApplicationSatisfyingCriteria
-                ],
-                true
-            ],
+            [[false, false, false], false],
+            [[false, true, false], true],
+            [[true, true, true], true],
         ];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasValidCertificateOfRoadworthinessApplications')]
-    public function testHasValidCertificateOfRoadworthinessApplications(mixed $irhpApplications, mixed $expected): void
-    {
+    /**
+     * @param bool[] $applicationsHaveValidCor whether each application has a valid certificate of roadworthiness
+     */
+    public function testHasValidCertificateOfRoadworthinessApplications(
+        array $applicationsHaveValidCor,
+        mixed $expected
+    ): void {
+        $irhpApplications = array_map(
+            static function (bool $isValidCor) {
+                $irhpApplication = m::mock(IrhpApplication::class);
+                $irhpApplication->shouldReceive('isValidCertificateOfRoadworthiness')
+                    ->withNoArgs()
+                    ->andReturn($isValidCor);
+
+                return $irhpApplication;
+            },
+            $applicationsHaveValidCor
+        );
+
         $licence = $this->instantiate(Entity::class);
 
         $licence->setIrhpApplications(
@@ -3160,31 +3169,21 @@ final class LicenceEntityTest extends EntityTester
 
     public static function dpHasValidCertificateOfRoadworthinessApplications(): array
     {
-        $irhpApplicationValidCor = m::mock(IrhpApplication::class);
-        $irhpApplicationValidCor->shouldReceive('isValidCertificateOfRoadworthiness')
-            ->withNoArgs()
-            ->andReturnTrue();
-
-        $irhpApplicationNotValidCor = m::mock(IrhpApplication::class);
-        $irhpApplicationNotValidCor->shouldReceive('isValidCertificateOfRoadworthiness')
-            ->withNoArgs()
-            ->andReturnFalse();
-
         return [
             'no applications' => [
                 [],
                 false,
             ],
             'all valid cor' => [
-                [$irhpApplicationValidCor, $irhpApplicationValidCor, $irhpApplicationValidCor],
+                [true, true, true],
                 true,
             ],
             'some valid cor' => [
-                [$irhpApplicationValidCor, $irhpApplicationNotValidCor, $irhpApplicationValidCor],
+                [true, false, true],
                 true,
             ],
             'no valid cor' => [
-                [$irhpApplicationNotValidCor, $irhpApplicationNotValidCor],
+                [false, false],
                 false,
             ]
         ];

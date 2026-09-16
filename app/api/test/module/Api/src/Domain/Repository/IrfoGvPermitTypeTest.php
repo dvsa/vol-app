@@ -45,7 +45,7 @@ final class IrfoGvPermitTypeTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')
             ->once()
-            ->andReturn(m::mock(\Doctrine\ORM\AbstractQuery::class)->shouldReceive('getResult')
+            ->andReturn(m::mock(\Doctrine\ORM\Query::class)->shouldReceive('getResult')
                 ->once()
                 ->andReturn(['Mocked Result'])
                 ->getMock());
@@ -53,7 +53,7 @@ final class IrfoGvPermitTypeTest extends RepositoryTestCase
         $this->assertEquals(['Mocked Result'], $this->sut->fetchActiveRecords('ORG1'));
 
         $actualQuery = $this->query;
-        $expectedPattern = '/QRYSTART AND \(m\.displayUntil IS NULL OR m\.displayUntil >= \[\[.*\]\]\) ORDER BY m\.description ASC/';
+        $expectedPattern = '/QRYSTART AND m\.displayUntil IS NULL OR m\.displayUntil >= \[\[.*\]\] ORDER BY m\.description ASC/';
         $this->assertMatchesRegularExpression($expectedPattern, $actualQuery);
     }
 }

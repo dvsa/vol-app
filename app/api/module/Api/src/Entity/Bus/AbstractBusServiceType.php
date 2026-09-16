@@ -39,7 +39,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 70, nullable: true)]
     protected $description;
@@ -47,7 +47,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     /**
      * TransXChange name.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'txc_name', length: 70, nullable: true)]
     protected $txcName;
@@ -55,7 +55,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     /**
      * BusRegs
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Bus\BusReg>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, mappedBy: 'busServiceTypes', fetch: 'LAZY')]
     protected $busRegs;

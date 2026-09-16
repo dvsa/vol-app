@@ -47,8 +47,10 @@ final class TransportManagerPreviousLicenceReviewServiceTest extends MockeryTest
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
-    public function testGetConfig(mixed $tma, mixed $expected): void
+    public function testGetConfig(string $tmaKey, mixed $expected): void
     {
+        $tma = self::createTransportManagerApplications()[$tmaKey];
+
         $this->mockTranslator->shouldReceive('translate')
             ->andReturnUsing(
                 fn($string) => $string . '-translated'
@@ -59,39 +61,9 @@ final class TransportManagerPreviousLicenceReviewServiceTest extends MockeryTest
 
     public static function provider(): array
     {
-        /** @var Entity\Tm\TransportManager $tm1 */
-        $tm1 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
-        $tm1->setOtherLicences(new ArrayCollection());
-
-        /** @var Entity\Tm\TransportManagerApplication $tma1 */
-        $tma1 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
-        $tma1->setTransportManager($tm1);
-
-        /** @var Entity\OtherLicence\OtherLicence $otherLicence1 */
-        $otherLicence1 = m::mock(Entity\OtherLicence\OtherLicence::class)->makePartial();
-        $otherLicence1->setLicNo('AB12345678');
-        $otherLicence1->setHolderName('Some holder');
-
-        /** @var Entity\OtherLicence\OtherLicence $otherLicence2 */
-        $otherLicence2 = m::mock(Entity\OtherLicence\OtherLicence::class)->makePartial();
-        $otherLicence2->setLicNo('BA12345678');
-        $otherLicence2->setHolderName('Some other holder');
-
-        $otherLicences = new ArrayCollection();
-        $otherLicences->add($otherLicence1);
-        $otherLicences->add($otherLicence2);
-
-        /** @var Entity\Tm\TransportManager $tm2 */
-        $tm2 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
-        $tm2->setOtherLicences($otherLicences);
-
-        /** @var Entity\Tm\TransportManagerApplication $tma2 */
-        $tma2 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
-        $tma2->setTransportManager($tm2);
-
         return [
             [
-                $tma1,
+                'noOtherLicences',
                 [
                     'subSections' => [
                         [
@@ -105,7 +77,7 @@ final class TransportManagerPreviousLicenceReviewServiceTest extends MockeryTest
                 ]
             ],
             [
-                $tma2,
+                'withOtherLicences',
                 [
                     'subSections' => [
                         [
@@ -145,6 +117,49 @@ final class TransportManagerPreviousLicenceReviewServiceTest extends MockeryTest
                     ]
                 ]
             ]
+        ];
+    }
+
+    /**
+     * Built per test rather than in the provider, so the mocks belong to the running test's Mockery container.
+     *
+     * @return array<string, \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication>
+     */
+    private static function createTransportManagerApplications(): array
+    {
+        /** @var Entity\Tm\TransportManager $tm1 */
+        $tm1 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
+        $tm1->setOtherLicences(new ArrayCollection());
+
+        /** @var Entity\Tm\TransportManagerApplication $tma1 */
+        $tma1 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
+        $tma1->setTransportManager($tm1);
+
+        /** @var Entity\OtherLicence\OtherLicence $otherLicence1 */
+        $otherLicence1 = m::mock(Entity\OtherLicence\OtherLicence::class)->makePartial();
+        $otherLicence1->setLicNo('AB12345678');
+        $otherLicence1->setHolderName('Some holder');
+
+        /** @var Entity\OtherLicence\OtherLicence $otherLicence2 */
+        $otherLicence2 = m::mock(Entity\OtherLicence\OtherLicence::class)->makePartial();
+        $otherLicence2->setLicNo('BA12345678');
+        $otherLicence2->setHolderName('Some other holder');
+
+        $otherLicences = new ArrayCollection();
+        $otherLicences->add($otherLicence1);
+        $otherLicences->add($otherLicence2);
+
+        /** @var Entity\Tm\TransportManager $tm2 */
+        $tm2 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
+        $tm2->setOtherLicences($otherLicences);
+
+        /** @var Entity\Tm\TransportManagerApplication $tma2 */
+        $tma2 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
+        $tma2->setTransportManager($tm2);
+
+        return [
+            'noOtherLicences' => $tma1,
+            'withOtherLicences' => $tma2,
         ];
     }
 }

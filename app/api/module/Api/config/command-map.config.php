@@ -498,6 +498,8 @@ return [
         => CommandHandler\Document\AnalyseDocument\FinancialEvidenceFactory::class,
     Command\Document\SweepStaleDocumentAnalysis::class
         => CommandHandler\Document\SweepStaleDocumentAnalysis::class,
+    Command\Document\StoreDocumentAnalysisResult::class
+        => CommandHandler\Document\StoreDocumentAnalysisResultFactory::class,
 
     // Transfer - DocumentTemplate
     TransferCommand\DocTemplate\Create::class => CommandHandler\DocTemplate\Create::class,

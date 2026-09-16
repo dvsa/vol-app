@@ -47,11 +47,14 @@ final class TemplateEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetComputedCategoryName')]
-    public function testGetComputedCategoryName(mixed $categoryName, mixed $linkedCategoryEntity, mixed $expectedCategoryName): void
-    {
+    public function testGetComputedCategoryName(
+        mixed $categoryName,
+        \Closure $createLinkedCategoryEntity,
+        mixed $expectedCategoryName
+    ): void {
         $template = m::mock(Entity::class)->makePartial();
         $template->setCategoryName($categoryName);
-        $template->setCategory($linkedCategoryEntity);
+        $template->setCategory($createLinkedCategoryEntity());
 
         $this->assertEquals($expectedCategoryName, $template->getComputedCategoryName());
     }
@@ -61,14 +64,18 @@ final class TemplateEntityTest extends EntityTester
         $categoryName = 'Category name';
         $linkedCategoryName = 'Linked category name';
 
-        $linkedCategoryEntity = m::mock(Category::class);
-        $linkedCategoryEntity->shouldReceive('getDescription')
-            ->andReturn($linkedCategoryName);
+        $createLinkedCategoryEntity = static function () use ($linkedCategoryName) {
+            $linkedCategoryEntity = m::mock(Category::class);
+            $linkedCategoryEntity->shouldReceive('getDescription')
+                ->andReturn($linkedCategoryName);
+
+            return $linkedCategoryEntity;
+        };
 
         return [
-            [$categoryName, null, $categoryName],
-            [null, $linkedCategoryEntity, $linkedCategoryName],
-            [$categoryName, $linkedCategoryEntity, $categoryName],
+            [$categoryName, static fn () => null, $categoryName],
+            [null, $createLinkedCategoryEntity, $linkedCategoryName],
+            [$categoryName, $createLinkedCategoryEntity, $categoryName],
         ];
     }
 

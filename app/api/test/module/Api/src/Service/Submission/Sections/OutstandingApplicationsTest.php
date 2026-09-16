@@ -103,7 +103,7 @@ final class OutstandingApplicationsTest extends AbstractSubmissionSectionTestCas
      */
     public static function sectionTestProvider(): \Iterator
     {
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
         yield [$case, static::EXPECTED_RESULT];
     }

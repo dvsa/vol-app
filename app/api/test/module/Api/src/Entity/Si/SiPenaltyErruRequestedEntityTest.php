@@ -45,17 +45,17 @@ final class SiPenaltyErruRequestedEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasRequestedPenalties')]
-    public function testHasAppliedPenalty(ArrayCollection $appliedPenalties, bool $expectedResult): void
+    public function testHasAppliedPenalty(\Closure $createAppliedPenalties, bool $expectedResult): void
     {
         /** @var Entity|m\LegacyMockInterface $entity */
         $entity = m::mock(Entity::class)->makePartial();
-        $entity->setAppliedPenalties($appliedPenalties);
+        $entity->setAppliedPenalties($createAppliedPenalties());
         $this->assertEquals($expectedResult, $entity->hasAppliedPenalty());
     }
 
     public static function dpHasRequestedPenalties(): \Iterator
     {
-        yield [new ArrayCollection(), false];
-        yield [new ArrayCollection([m::mock(SiPenalty::class)]), true];
+        yield [static fn () => new ArrayCollection(), false];
+        yield [static fn () => new ArrayCollection([m::mock(SiPenalty::class)]), true];
     }
 }

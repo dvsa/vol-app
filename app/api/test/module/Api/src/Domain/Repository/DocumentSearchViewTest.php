@@ -75,10 +75,10 @@ final class DocumentSearchViewTest extends RepositoryTestCase
         $expected = '{QUERY} AND m.identifier = [[' . DocumentSearchViewEntity::IDENTIFIER_UNLINKED . ']]' .
             ' AND m.isExternal = [[1]]' .
             ' AND m.category = 11' .
-            ' AND m.documentSubCategory IN 22' .
+            ' AND m.documentSubCategory IN(22)' .
             ' AND m.extension = [[FOO]]' .
-            ' AND (m.licenceId = :licence OR m.tmId = :tm OR m.caseId = :case' .
-            ' OR m.irfoOrganisationId = :irfoOrganisation)';
+            ' AND m.licenceId = :licence OR m.tmId = :tm OR m.caseId = :case' .
+            ' OR m.irfoOrganisationId = :irfoOrganisation';
 
         $this->assertEquals($expected, $this->query);
     }
@@ -113,9 +113,8 @@ final class DocumentSearchViewTest extends RepositoryTestCase
             ' AND m.caseId = [[unit_CaseId]]' .
             ' AND m.busRegId = [[unit_BusReg]]' .
             ' AND m.irhpApplicationId = [[unit_IrhpApplication]]' .
-            ' AND (' .
-                'm.irfoOrganisationId = :irfoOrganisation' .
-            ')';
+            ' AND ' .
+                'm.irfoOrganisationId = :irfoOrganisation';
 
         $this->assertEquals($expected, $this->query);
     }
@@ -143,7 +142,7 @@ final class DocumentSearchViewTest extends RepositoryTestCase
 
         $expected = '{QUERY}' .
             ' AND m.irhpApplicationId IS NULL' .
-            ' AND (m.licenceId = :licence)';
+            ' AND m.licenceId = :licence';
 
         $this->assertEquals($expected, $this->query);
     }
@@ -170,7 +169,7 @@ final class DocumentSearchViewTest extends RepositoryTestCase
 
         $this->assertEquals(['DOC', 'RTF', 'DOCX'], $this->sut->fetchDistinctListExtensions($query));
 
-        $expected = '{QUERY} SELECT DISTINCT m.extension AND (m.licenceId = :licence)';
+        $expected = '{QUERY} SELECT DISTINCT m.extension AND m.licenceId = :licence';
         $this->assertEquals($expected, $this->query);
     }
 }

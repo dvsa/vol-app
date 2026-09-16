@@ -344,10 +344,10 @@ final class CasesEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('canAddSiProvider')]
-    public function testCanAddSi(?m\mockInterface $erruRequest, ?\DateTime $closedDate, bool $expectedResult): void
+    public function testCanAddSi(\Closure $createErruRequest, ?\DateTime $closedDate, bool $expectedResult): void
     {
         $sut = $this->instantiate($this->entityClass);
-        $sut->setErruRequest($erruRequest);
+        $sut->setErruRequest($createErruRequest());
         $sut->setClosedDate($closedDate);
 
         $this->assertEquals($expectedResult, $sut->canAddSi());
@@ -358,19 +358,17 @@ final class CasesEntityTest extends EntityTester
      */
     public static function canAddSiProvider(): array
     {
-        $erruRequestNoModify = m::mock(ErruRequestEntity::class);
-        $erruRequestNoModify->shouldReceive('canModify')->andReturn(false);
-
-        $erruRequestCanModify = m::mock(ErruRequestEntity::class);
-        $erruRequestCanModify->shouldReceive('canModify')->andReturn(true);
+        $noErruRequest = static fn () => null;
+        $erruRequestNoModify = static fn () => self::createErruRequest(false);
+        $erruRequestCanModify = static fn () => self::createErruRequest(true);
 
         $closedDate = new \DateTime('2016-12-25');
 
         return [
-            [null, $closedDate, false],
+            [$noErruRequest, $closedDate, false],
             [$erruRequestNoModify, $closedDate, false],
             [$erruRequestCanModify, $closedDate, false],
-            [null, null, false],
+            [$noErruRequest, null, false],
             [$erruRequestNoModify, null, false],
             [$erruRequestCanModify, null, true]
         ];
@@ -378,14 +376,14 @@ final class CasesEntityTest extends EntityTester
 
     #[\PHPUnit\Framework\Attributes\DataProvider('canSendMsiResponseProvider')]
     public function testCanSendMsiResponse(
-        ?m\mockInterface $erruRequest,
-        ArrayCollection $si,
+        \Closure $createErruRequest,
+        \Closure $createSi,
         ?\DateTime $closedDate,
         bool $expectedResult
     ): void {
         $sut = $this->instantiate($this->entityClass);
-        $sut->setSeriousInfringements($si);
-        $sut->setErruRequest($erruRequest);
+        $sut->setSeriousInfringements($createSi());
+        $sut->setErruRequest($createErruRequest());
         $sut->setClosedDate($closedDate);
 
         $this->assertEquals($expectedResult, $sut->canSendMsiResponse());
@@ -396,30 +394,41 @@ final class CasesEntityTest extends EntityTester
      */
     public static function canSendMsiResponseProvider(): array
     {
-        $siResponseSet = m::mock(SeriousInfringement::class);
-        $siResponseSet->shouldReceive('responseSet')->andReturn(true);
+        $siResponseSet = static fn () => new ArrayCollection([self::createSi(true)]);
+        $siMixedResponseSet = static fn () => new ArrayCollection([self::createSi(false), self::createSi(true)]);
 
-        $siNoResponseSet = m::mock(SeriousInfringement::class);
-        $siNoResponseSet->shouldReceive('responseSet')->andReturn(false);
-
-        $erruRequestNoModify = m::mock(ErruRequestEntity::class);
-        $erruRequestNoModify->shouldReceive('canModify')->andReturn(false);
-
-        $erruRequestCanModify = m::mock(ErruRequestEntity::class);
-        $erruRequestCanModify->shouldReceive('canModify')->andReturn(true);
+        $noErruRequest = static fn () => null;
+        $erruRequestNoModify = static fn () => self::createErruRequest(false);
+        $erruRequestCanModify = static fn () => self::createErruRequest(true);
 
         $closedDate = new \DateTime('2016-12-25');
 
         return [
-            [null, new ArrayCollection([$siResponseSet]), $closedDate, false],
-            [$erruRequestNoModify, new ArrayCollection([$siResponseSet]), $closedDate, false],
-            [$erruRequestCanModify, new ArrayCollection([$siNoResponseSet, $siResponseSet]), $closedDate, false],
-            [$erruRequestCanModify, new ArrayCollection([$siResponseSet]), $closedDate, false],
-            [null, new ArrayCollection([$siResponseSet]), null, false],
-            [$erruRequestNoModify, new ArrayCollection([$siResponseSet]), null, false],
-            [$erruRequestCanModify, new ArrayCollection([$siNoResponseSet, $siResponseSet]), null, false],
-            [$erruRequestCanModify, new ArrayCollection([$siResponseSet]), null, true]
+            [$noErruRequest, $siResponseSet, $closedDate, false],
+            [$erruRequestNoModify, $siResponseSet, $closedDate, false],
+            [$erruRequestCanModify, $siMixedResponseSet, $closedDate, false],
+            [$erruRequestCanModify, $siResponseSet, $closedDate, false],
+            [$noErruRequest, $siResponseSet, null, false],
+            [$erruRequestNoModify, $siResponseSet, null, false],
+            [$erruRequestCanModify, $siMixedResponseSet, null, false],
+            [$erruRequestCanModify, $siResponseSet, null, true]
         ];
+    }
+
+    private static function createErruRequest(bool $canModify): ErruRequestEntity
+    {
+        $erruRequest = m::mock(ErruRequestEntity::class);
+        $erruRequest->shouldReceive('canModify')->andReturn($canModify);
+
+        return $erruRequest;
+    }
+
+    private static function createSi(bool $responseSet): SeriousInfringement
+    {
+        $si = m::mock(SeriousInfringement::class);
+        $si->shouldReceive('responseSet')->andReturn($responseSet);
+
+        return $si;
     }
 
     public function testHasErruRequestedPenaltiesTrue(): void

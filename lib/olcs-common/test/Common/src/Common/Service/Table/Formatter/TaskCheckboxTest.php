@@ -13,13 +13,14 @@ namespace CommonTest\Service\Table\Formatter;
 use Common\Service\Table\Formatter\TaskCheckbox;
 use Common\Service\Table\TableBuilder;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Task checkbox formatter tests
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-final class TaskCheckboxTest extends \PHPUnit\Framework\TestCase
+final class TaskCheckboxTest extends MockeryTestCase
 {
     protected $tableBuilder;
 

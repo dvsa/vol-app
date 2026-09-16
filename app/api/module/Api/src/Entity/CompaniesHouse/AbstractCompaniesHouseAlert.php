@@ -58,7 +58,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Company or llp no
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'company_or_llp_no', length: 20, nullable: true)]
     protected $companyOrLlpNo;
@@ -103,7 +103,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Reasons
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlertReason>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlertReason::class, mappedBy: 'companiesHouseAlert', cascade: ['persist'])]
     protected $reasons;

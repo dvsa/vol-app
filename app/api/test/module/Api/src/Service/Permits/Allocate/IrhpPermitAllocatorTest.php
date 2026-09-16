@@ -37,8 +37,10 @@ final class IrhpPermitAllocatorTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCriteriaAndExpiryDate')]
-    public function testAllocatePermitInFirstRange(mixed $criteria, mixed $expiryDate): void
+    public function testAllocatePermitInFirstRange(bool $hasCriteria, mixed $expiryDate): void
     {
+        $criteria = $hasCriteria ? m::mock(RangeMatchingCriteriaInterface::class) : null;
+
         $pendingStatus = m::mock(RefData::class);
         $this->irhpPermitRepo->shouldReceive('getRefdataReference')
             ->with(IrhpPermit::STATUS_PENDING)
@@ -98,7 +100,7 @@ final class IrhpPermitAllocatorTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCriteriaAndExpiryDate')]
-    public function testFirstRangeFullAllocatePermitInSecondRange(mixed $criteria, mixed $expiryDate): void
+    public function testFirstRangeFullAllocatePermitInSecondRange(bool $hasCriteria, mixed $expiryDate): void
     {
         $criteria = m::mock(RangeMatchingCriteriaInterface::class);
 
@@ -169,7 +171,7 @@ final class IrhpPermitAllocatorTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCriteriaAndExpiryDate')]
-    public function testExceptionOnAllRangesFull(mixed $criteria, mixed $expiryDate): void
+    public function testExceptionOnAllRangesFull(bool $hasCriteria, mixed $expiryDate): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to find range with free permits for irhp permit application 400');
@@ -217,9 +219,9 @@ final class IrhpPermitAllocatorTest extends MockeryTestCase
 
     public static function dpCriteriaAndExpiryDate(): \Iterator
     {
-        yield [m::mock(RangeMatchingCriteriaInterface::class), null];
-        yield [null, null];
-        yield [null, new DateTime('2030-10-22')];
+        yield [true, null];
+        yield [false, null];
+        yield [false, new DateTime('2030-10-22')];
     }
 
     private function createMockRange(mixed $id, mixed $fromNo, mixed $toNo, mixed $size, DateTime $stockValidTo): mixed

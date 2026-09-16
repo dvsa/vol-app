@@ -117,8 +117,13 @@ final class ResetApplicationTest extends AbstractCommandHandlerTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('providerWithConfirm')]
-    public function testHandleCommandRequireConfirmationWithConfirm(mixed $receivedDate, mixed $expectedCreateApp, mixed $associatedOperatingCentres): void
-    {
+    public function testHandleCommandRequireConfirmationWithConfirm(
+        mixed $receivedDate,
+        mixed $expectedCreateApp,
+        \Closure $createAssociatedOperatingCentres
+    ): void {
+        $associatedOperatingCentres = $createAssociatedOperatingCentres();
+
         $data = [
             'niFlag' => 'N',
             'operatorType' => LicenceEntity::LICENCE_CATEGORY_PSV,
@@ -199,7 +204,7 @@ final class ResetApplicationTest extends AbstractCommandHandlerTestCase
                 'licenceType' => LicenceEntity::LICENCE_TYPE_SPECIAL_RESTRICTED,
                 'receivedDate' => null
             ],
-            [
+            static fn () => [
                 m::mock(\Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class),
                 m::mock(\Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class),
                 m::mock(\Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class),
@@ -214,9 +219,8 @@ final class ResetApplicationTest extends AbstractCommandHandlerTestCase
                 'licenceType' => LicenceEntity::LICENCE_TYPE_SPECIAL_RESTRICTED,
                 'receivedDate' => '2015-01-01'
             ],
-            [
-                // No Operating Centres
-            ]
+            // No Operating Centres
+            static fn () => []
         ];
     }
 }

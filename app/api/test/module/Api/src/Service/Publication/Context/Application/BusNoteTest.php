@@ -61,9 +61,8 @@ Test the application bus note filter')]
      */
     public static function provideTestProvider(): \Iterator
     {
-        $sut = new BusNote(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
-        yield [PublicationSectionEntity::LIC_SURRENDERED_SECTION, $sut::BUS_SURRENDERED];
-        yield [PublicationSectionEntity::LIC_REVOKED_SECTION, $sut::BUS_REVOKED];
-        yield [PublicationSectionEntity::LIC_CNS_SECTION, $sut::BUS_CNS];
+        yield [PublicationSectionEntity::LIC_SURRENDERED_SECTION, BusNote::BUS_SURRENDERED];
+        yield [PublicationSectionEntity::LIC_REVOKED_SECTION, BusNote::BUS_REVOKED];
+        yield [PublicationSectionEntity::LIC_CNS_SECTION, BusNote::BUS_CNS];
     }
 }

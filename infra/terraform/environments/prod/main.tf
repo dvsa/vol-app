@@ -207,7 +207,11 @@ locals {
       ]
       resources = [
         "arn:aws:s3:::app-olcs-pri-integration-dva-s3",
-        "arn:aws:s3:::app-olcs-pri-integration-dva-s3/*"
+        "arn:aws:s3:::app-olcs-pri-integration-dva-s3/*",
+        "arn:aws:s3:::app-olcs-pri-integration-reporting-s3",
+        "arn:aws:s3:::app-olcs-pri-integration-reporting-s3/*",
+        "arn:aws:s3:::app-mc-pri-integration-data-s3",
+        "arn:aws:s3:::app-mc-pri-integration-data-s3/*"
       ]
     }
   ]
@@ -636,7 +640,7 @@ module "service" {
         name     = "process-inbox",
         commands = ["batch:process-inbox"],
         timeout  = 43200,
-        schedule = ["cron(45 01 * * ? *)"],
+        schedule = ["cron(0 07 * * ? *)"],
       },
       {
         name     = "process-ntu",
@@ -766,10 +770,11 @@ module "service" {
         queue = "liquibase"
       },
       {
-        name     = "sas-mi-extract",
-        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
-        type     = "scripts",
-        schedule = ["cron(00 01 * * ? *)"],
+        name              = "sas-mi-extract",
+        commands          = ["/mnt/data/scripts/sas_mi_extract.sh"],
+        type              = "scripts",
+        ephemeral_storage = 50,
+        schedule          = ["cron(00 01 * * ? *)"],
       },
       {
         name     = "import-anondb",
@@ -786,6 +791,7 @@ module "service" {
       {
         name     = "ni-compliance",
         commands = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
+        ephemeral_storage = 50,
         type     = "scripts"
       },
       {

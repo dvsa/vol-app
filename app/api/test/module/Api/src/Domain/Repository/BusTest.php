@@ -186,14 +186,16 @@ final class BusTest extends RepositoryTestCase
         $mockQuery->shouldReceive('getBusRegStatus')->never();
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->lt')->with('m.variationNo', ':byVariationNo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->times(3)
+            ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byVariationNo', $variationNo)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.routeNo', ':byRouteNo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byRouteNo', $routeNo)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':byLicence')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byLicence', $licenceId)->once()->andReturnSelf();
 
         $sut->applyListFilters($mockQb, $mockQuery);
@@ -214,14 +216,16 @@ final class BusTest extends RepositoryTestCase
         $mockQuery->shouldReceive('getVariationNo')->never();
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':byLicence')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->times(3)
+            ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byLicence', $licenceId)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.routeNo', ':byRouteNo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byRouteNo', $routeNo)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->in')->with('m.status', ':byStatus')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byStatus', $busStatus)->once()->andReturnSelf();
 
         $sut->applyListFilters($mockQb, $mockQuery);
@@ -242,11 +246,15 @@ final class BusTest extends RepositoryTestCase
         $mockQuery->shouldReceive('getVariationNo')->never();
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':byLicence')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->times(2)
+            ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byLicence', $licenceId)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.routeNo', ':byRouteNo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byRouteNo', $routeNo)->once()->andReturnSelf();
 
         $sut->applyListFilters($mockQb, $mockQuery);
@@ -356,13 +364,17 @@ final class BusTest extends RepositoryTestCase
             ->once();
 
         $qb->shouldReceive('addSelect');
-        $qb->shouldReceive('expr')->andReturnSelf()->shouldReceive('eq')->andReturn('t.localAuthority = 1');
+        $qb->shouldReceive('expr')->andReturn(new \Doctrine\ORM\Query\Expr());
         $qb->shouldReceive('leftJoin')
             ->with(
                 m::type('string'),
                 m::type('string'),
                 'WITH',
-                MatchesPattern::matchesPattern('/localAuthority = 1/')
+                m::on(
+                    static fn ($condition): bool =>
+                    $condition instanceof \Doctrine\ORM\Query\Expr\Comparison
+                    && (string) $condition === 't.localAuthority = :localAuthority'
+                )
             )
             ->andReturnSelf()
             ->shouldReceive('setParameter')->with('localAuthority', 1);
@@ -407,7 +419,7 @@ final class BusTest extends RepositoryTestCase
             ->once();
 
         $qb->shouldReceive('addSelect');
-        $qb->shouldReceive('expr')->andReturnSelf()->shouldReceive('isNull')->andReturn('t.localAuthority IS NULL');
+        $qb->shouldReceive('expr')->andReturn(new \Doctrine\ORM\Query\Expr());
         $qb->shouldReceive('leftJoin')
             ->with(
                 m::type('string'),

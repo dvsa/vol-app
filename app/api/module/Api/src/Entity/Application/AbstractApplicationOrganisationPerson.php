@@ -61,7 +61,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Populated if change is an edit of a person record on a licence.
      *
-     * @var \Dvsa\Olcs\Api\Entity\Person\Person
+     * @var \Dvsa\Olcs\Api\Entity\Person\Person|null
      */
     #[ORM\JoinColumn(name: 'original_person_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -116,7 +116,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Populated if org type is other.  For Ltd companies derived from company type.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'position', length: 45, nullable: true)]
     protected $position;
