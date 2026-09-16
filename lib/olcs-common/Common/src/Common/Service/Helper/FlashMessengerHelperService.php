@@ -87,7 +87,7 @@ class FlashMessengerHelperService
      */
     public function addSuccessMessage($message)
     {
-        return $this->getFlashMessenger()->addSuccessMessage($message);
+        return $this->flashMessenger->addSuccessMessage($message);
     }
 
     /**
@@ -98,17 +98,17 @@ class FlashMessengerHelperService
      */
     public function addErrorMessage($message)
     {
-        return $this->getFlashMessenger()->addErrorMessage($message);
+        return $this->flashMessenger->addErrorMessage($message);
     }
 
     public function addProminentErrorMessage($message): static
     {
-        $namespace = $this->getFlashMessenger()->getNamespace();
+        $namespace = $this->flashMessenger->getNamespace();
 
-        $this->getFlashMessenger()->setNamespace(self::NAMESPACE_PROMINENT_ERROR);
-        $this->getFlashMessenger()->addMessage($message);
+        $this->flashMessenger->setNamespace(self::NAMESPACE_PROMINENT_ERROR);
+        $this->flashMessenger->addMessage($message);
 
-        $this->getFlashMessenger()->setNamespace($namespace);
+        $this->flashMessenger->setNamespace($namespace);
 
         return $this;
     }
@@ -121,7 +121,7 @@ class FlashMessengerHelperService
      */
     public function addWarningMessage($message)
     {
-        return $this->getFlashMessenger()->addWarningMessage($message);
+        return $this->flashMessenger->addWarningMessage($message);
     }
 
 
@@ -133,17 +133,7 @@ class FlashMessengerHelperService
      */
     public function addInfoMessage($message)
     {
-        return $this->getFlashMessenger()->addInfoMessage($message);
-    }
-
-    /**
-     * Get the flash messenger
-     *
-     * @return FlashMessengerInterface
-     */
-    protected function getFlashMessenger()
-    {
-        return $this->flashMessenger;
+        return $this->flashMessenger->addInfoMessage($message);
     }
 
     public function addUnknownError()

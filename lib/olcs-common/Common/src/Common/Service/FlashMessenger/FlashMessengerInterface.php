@@ -4,7 +4,7 @@ namespace Common\Service\FlashMessenger;
 
 interface FlashMessengerInterface
 {
-    public function addMessage(string $message, string $namespace): self;
+    public function addMessage(string $message, ?string $namespace = null, int $hops = 1): self;
     public function addSuccessMessage(string $message): self;
 
     public function addErrorMessage(string $message): self;

@@ -8,10 +8,14 @@ use IteratorAggregate;
 use Laminas\Session\Container;
 use Laminas\Stdlib\SplQueue;
 
+/**
+ * Flash Messenger implementation using Laminas\Session\Container
+ *
+ * @template-implements IteratorAggregate<array-key, string>
+ * @psalm-type MessageList = SplQueue<array-key, string>
+ */
 class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorAggregate, Countable
 {
-    // TODO: Add annotations where necessary for static analysis tools like Psalm or PHPStan
-    // TODO: convert these to an enum
     public const string NAMESPACE_DEFAULT = 'default';
 
     public const string NAMESPACE_SUCCESS = 'success';
@@ -32,7 +36,8 @@ class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorA
     {
     }
 
-    public function addMessage(string $message, ?string $namespace = null, ?int $hops = 1): self
+    #[\Override]
+    public function addMessage(string $message, ?string $namespace = null, int $hops = 1): self
     {
         $container = $this->container;
 
@@ -58,35 +63,41 @@ class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorA
         return $this;
     }
 
+    #[\Override]
     public function addSuccessMessage(string $message): self
     {
         $this->addMessage($message, self::NAMESPACE_SUCCESS);
         return $this;
     }
 
+    #[\Override]
     public function addErrorMessage(string $message): self
     {
         $this->addMessage($message, self::NAMESPACE_ERROR);
         return $this;
     }
 
+    #[\Override]
     public function addWarningMessage(string $message): self
     {
         $this->addMessage($message, self::NAMESPACE_WARNING);
         return $this;
     }
 
+    #[\Override]
     public function addInfoMessage(string $message): self
     {
         $this->addMessage($message, self::NAMESPACE_INFO);
         return $this;
     }
 
+    #[\Override]
     public function getNamespace(): string
     {
         return $this->namespace;
     }
 
+    #[\Override]
     public function setNamespace(string $namespace = self::NAMESPACE_DEFAULT): self
     {
         $this->namespace = $namespace;
@@ -108,12 +119,13 @@ class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorA
             $namespaces[]               = $namespace;
         }
 
+
         foreach ($namespaces as $namespace) {
             unset($container->{$namespace});
         }
     }
 
-    public function hasMessages($namespace = null): bool
+    public function hasMessages(?string $namespace = null): bool
     {
         if (null === $namespace) {
             $namespace = $this->getNamespace();
@@ -124,7 +136,7 @@ class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorA
         return isset($this->messages[$namespace]);
     }
 
-    public function getMessages($namespace = null): array
+    public function getMessages(?string $namespace = null): array
     {
         if (null === $namespace) {
             $namespace = $this->getNamespace();
@@ -137,6 +149,7 @@ class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorA
         return [];
     }
 
+    #[\Override]
     public function getIterator(): ArrayIterator
     {
         if ($this->hasMessages()) {
@@ -146,6 +159,7 @@ class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorA
         return new ArrayIterator();
     }
 
+    #[\Override]
     public function count(): int
     {
         if ($this->hasMessages()) {
