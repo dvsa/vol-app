@@ -46,7 +46,7 @@ final class UpdateTest extends TestCase
                 'tm_qt_nilgvar',
             ],
             'serialNo' => [str_repeat('a', 50)],
-            'countryCode' => ['a', 'aa'],
+            'countryCode' => ['A', 'AA'],
             'issuedDate' => ['2019-01-01']
         ];
     }
@@ -71,7 +71,7 @@ final class UpdateTest extends TestCase
             'version' => [[2, '2']],
             'qualificationType' => [['tm_qt_ar ', 'tm_qt_ar']],
             'serialNo' => [['aaaaa ', 'aaaaa']],
-            'countryCode' => [['a ', 'a']],
+            'countryCode' => [['gb ', 'GB']],
         ];
     }
 }

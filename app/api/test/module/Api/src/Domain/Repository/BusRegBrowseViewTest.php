@@ -27,7 +27,7 @@ final class BusRegBrowseViewTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -45,7 +45,7 @@ final class BusRegBrowseViewTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('toIterable')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -62,7 +62,7 @@ final class BusRegBrowseViewTest extends RepositoryTestCase
         $expectedQuery
             = 'BLAH SELECT m.FIELD1, m.FIELD2 '
             . 'AND m.acceptedDate = [[2017-02-01]] '
-            . 'AND m.trafficAreaId IN [[["TA1","TA2"]]] '
+            . 'AND m.trafficAreaId IN([[["TA1","TA2"]]]) '
             . 'AND m.status = [[STATUS]]';
         $this->assertEquals($expectedQuery, $this->query);
     }
@@ -74,7 +74,7 @@ final class BusRegBrowseViewTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('toIterable')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -90,7 +90,7 @@ final class BusRegBrowseViewTest extends RepositoryTestCase
         $expectedQuery
             = 'BLAH SELECT m.FIELD1 '
             . 'AND m.acceptedDate = [[2017-02-01]] '
-            . 'AND m.trafficAreaId IN [[["TA1"]]]';
+            . 'AND m.trafficAreaId IN([[["TA1"]]])';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -119,7 +119,7 @@ final class BusRegBrowseViewTest extends RepositoryTestCase
         $expectedQuery
             = 'BLAH '
             . 'AND m.acceptedDate = [[2017-02-01]] '
-            . 'AND m.trafficAreaId IN [[["TA1","TA2"]]] '
+            . 'AND m.trafficAreaId IN([[["TA1","TA2"]]]) '
             . 'AND m.status = [[STATUS]]';
         $this->assertEquals($expectedQuery, $this->query);
     }

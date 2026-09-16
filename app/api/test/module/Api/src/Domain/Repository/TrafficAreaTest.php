@@ -95,8 +95,9 @@ final class TrafficAreaTest extends RepositoryTestCase
     {
         $mockQb = $this->createMockQueryBuilder();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.isNi', ':isNi')->andReturn('expr')->once();
-        $mockQb->shouldReceive('andWhere')->with('expr')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.isNi', ':isNi');
+        $mockQb->shouldReceive('expr->eq')->with('m.isNi', ':isNi')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('isNi', 0)->once()->andReturnSelf();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('results')->getMock();
@@ -127,8 +128,9 @@ final class TrafficAreaTest extends RepositoryTestCase
      */
     protected function expectWhereNiOnly(mixed $mockQb): void
     {
-        $mockQb->shouldReceive('expr->eq')->with('m.isNi', ':isNi')->andReturn('DUMMY_WHERE_EXPR');
-        $mockQb->shouldReceive('andWhere')->with('DUMMY_WHERE_EXPR')->once(1)->andReturnSelf();
+        $dummy_where_expr = $this->mockExprEq('m.isNi', ':isNi');
+        $mockQb->shouldReceive('expr->eq')->with('m.isNi', ':isNi')->andReturn($dummy_where_expr);
+        $mockQb->shouldReceive('andWhere')->with($dummy_where_expr)->once(1)->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('isNi', 0)->once(1)->andReturnSelf();
     }
 

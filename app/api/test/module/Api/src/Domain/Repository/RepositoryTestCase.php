@@ -17,6 +17,12 @@ use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use Doctrine\ORM\Query\Expr\Andx;
+use Doctrine\ORM\Query\Expr\Comparison;
+use Doctrine\ORM\Query\Expr\Func;
+use Doctrine\ORM\Query\Expr\Orx;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * Repository Test Case
@@ -268,46 +274,46 @@ class RepositoryTestCase extends MockeryTestCase
         return $this->qb;
     }
 
-    public function mockExprEq(mixed $field, mixed $value): mixed
+    public function mockExprEq(mixed $field, mixed $value): Comparison
     {
         $value = $this->formatValue($value);
 
-        return $field . ' = ' . $value;
+        return new Comparison($field, '=', $value);
     }
 
-    public function mockExprNeq(mixed $field, mixed $value): mixed
+    public function mockExprNeq(mixed $field, mixed $value): Comparison
     {
         $value = $this->formatValue($value);
 
-        return $field . ' != ' . $value;
+        return new Comparison($field, '!=', $value);
     }
 
-    public function mockExprLte(mixed $field, mixed $value): mixed
+    public function mockExprLte(mixed $field, mixed $value): Comparison
     {
         $value = $this->formatValue($value);
 
-        return $field . ' <= ' . $value;
+        return new Comparison($field, '<=', $value);
     }
 
-    public function mockExprLt(mixed $field, mixed $value): mixed
+    public function mockExprLt(mixed $field, mixed $value): Comparison
     {
         $value = $this->formatValue($value);
 
-        return $field . ' < ' . $value;
+        return new Comparison($field, '<', $value);
     }
 
-    public function mockExprGte(mixed $field, mixed $value): mixed
+    public function mockExprGte(mixed $field, mixed $value): Comparison
     {
         $value = $this->formatValue($value);
 
-        return $field . ' >= ' . $value;
+        return new Comparison($field, '>=', $value);
     }
 
-    public function mockExprGt(mixed $field, mixed $value): mixed
+    public function mockExprGt(mixed $field, mixed $value): Comparison
     {
         $value = $this->formatValue($value);
 
-        return $field . ' > ' . $value;
+        return new Comparison($field, '>', $value);
     }
 
     public function mockExprBetween(mixed $field, mixed $from, mixed $to): mixed
@@ -318,18 +324,18 @@ class RepositoryTestCase extends MockeryTestCase
         return $field . ' BETWEEN ' . $from . ' AND ' . $to;
     }
 
-    public function mockExprIn(mixed $field, mixed $value): mixed
+    public function mockExprIn(mixed $field, mixed $value): Func
     {
         $value = $this->formatValue($value);
 
-        return $field . ' IN ' . $value;
+        return new Func($field . ' IN', $value);
     }
 
-    public function mockExprNotIn(mixed $field, mixed $value): mixed
+    public function mockExprNotIn(mixed $field, mixed $value): Func
     {
         $value = $this->formatValue($value);
 
-        return $field . ' NOT IN ' . $value;
+        return new Func($field . ' NOT IN', $value);
     }
 
     public function mockExprIsNull(mixed $field): mixed
@@ -342,26 +348,26 @@ class RepositoryTestCase extends MockeryTestCase
         return $field . ' IS NOT NULL';
     }
 
-    public function mockExprLike(mixed $field, mixed $value): mixed
+    public function mockExprLike(mixed $field, mixed $value): Comparison
     {
         $value = $this->formatValue($value);
 
-        return $field . ' LIKE ' . $value;
+        return new Comparison($field, 'LIKE', $value);
     }
 
-    public function mockOrX(): mixed
+    public function mockOrX(): Orx
     {
-        return '(' . implode(' OR ', func_get_args()) . ')';
+        return new Orx(func_get_args());
     }
 
-    public function mockAndX(): mixed
+    public function mockAndX(): Andx
     {
-        return '(' . implode(' AND ', func_get_args()) . ')';
+        return new Andx(func_get_args());
     }
 
-    public function mockCount(mixed $countable): mixed
+    public function mockCount(mixed $countable): Func
     {
-        return sprintf('COUNT(%s)', $countable);
+        return new Func('COUNT', $countable);
     }
 
     protected function formatValue(mixed $value): mixed
@@ -446,8 +452,21 @@ class RepositoryTestCase extends MockeryTestCase
     {
         $instance = m::mock(QueryBuilder::class, QueryBuilderInterface::class);
         $instance->shouldIgnoreMissing($instance);
-        $query = m::mock()->shouldIgnoreMissing();
-        $instance->shouldReceive('getQuery')->andReturn($query)->byDefault();
+
+        $expr = m::mock(Expr::class);
+        $expr->shouldIgnoreMissing();
+
+        $query = m::mock(Query::class);
+        $query->shouldIgnoreMissing();
+
+        $instance->shouldReceive('expr')
+            ->andReturn($expr)
+            ->byDefault();
+
+        $instance->shouldReceive('getQuery')
+            ->andReturn($query)
+            ->byDefault();
+
         return $instance;
     }
 

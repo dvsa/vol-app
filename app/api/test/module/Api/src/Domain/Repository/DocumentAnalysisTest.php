@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
@@ -29,9 +30,11 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $token = (new UuidV7())->toBinary();
         $entity = new Entity();
 
+        $tokenEq = new Comparison('da.token', '=', ':token');
+
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('da.token', ':token')->once()->andReturn('tokenEq');
-        $mockQb->shouldReceive('andWhere')->with('tokenEq')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr->eq')->with('da.token', ':token')->once()->andReturn($tokenEq);
+        $mockQb->shouldReceive('andWhere')->with($tokenEq)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('token', $token, Types::BINARY)
             ->once()
@@ -51,7 +54,7 @@ final class DocumentAnalysisTest extends RepositoryTestCase
     public function testFetchByTokenReturnsNullWhenNoRowMatches(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->andReturn('tokenEq');
+        $mockQb->shouldReceive('expr->eq')->andReturn(new Comparison('da.token', '=', ':token'));
         $mockQb->shouldReceive('andWhere')->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->andReturnSelf();
         $mockQb->shouldReceive('setMaxResults')->andReturnSelf();
@@ -70,7 +73,7 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         self::assertIsString($token);
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->andReturn('tokenEq');
+        $mockQb->shouldReceive('expr->eq')->andReturn(new Comparison('da.token', '=', ':token'));
         $mockQb->shouldReceive('andWhere')->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->withArgs(function (string $name, string $value, string $type) use ($token): bool {
@@ -98,10 +101,12 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $mockQb->shouldReceive('set')->with('da.result', ':result')->once()->andReturnSelf();
         $mockQb->shouldReceive('set')->with('da.resultMetadata', ':metadata')->once()->andReturnSelf();
         $mockQb->shouldReceive('set')->with('da.completedAt', ':now')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('da.id', ':id')->once()->andReturn('idEq');
-        $mockQb->shouldReceive('expr->eq')->with('da.status', ':pending')->once()->andReturn('pendingEq');
-        $mockQb->shouldReceive('where')->with('idEq')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('pendingEq')->once()->andReturnSelf();
+        $idEq = new Comparison('da.id', '=', ':id');
+        $pendingEq = new Comparison('da.status', '=', ':pending');
+        $mockQb->shouldReceive('expr->eq')->with('da.id', ':id')->once()->andReturn($idEq);
+        $mockQb->shouldReceive('expr->eq')->with('da.status', ':pending')->once()->andReturn($pendingEq);
+        $mockQb->shouldReceive('where')->with($idEq)->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($pendingEq)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('success', Entity::STATUS_SUCCESS)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('result', $result, Types::JSON)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('metadata', $metadata, Types::JSON)->once()->andReturnSelf();
@@ -120,7 +125,7 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $mockQb = m::mock(QueryBuilder::class);
         $mockQb->shouldReceive('update')->andReturnSelf();
         $mockQb->shouldReceive('set')->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->andReturn('eq');
+        $mockQb->shouldReceive('expr->eq')->andReturn(new Comparison('da.id', '=', ':id'));
         $mockQb->shouldReceive('where')->andReturnSelf();
         $mockQb->shouldReceive('andWhere')->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->andReturnSelf();
@@ -138,10 +143,12 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $mockQb->shouldReceive('set')->with('da.status', ':error')->once()->andReturnSelf();
         $mockQb->shouldReceive('set')->with('da.errorDetail', ':errorDetail')->once()->andReturnSelf();
         $mockQb->shouldReceive('set')->with('da.completedAt', ':now')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('da.id', ':id')->once()->andReturn('idEq');
-        $mockQb->shouldReceive('expr->eq')->with('da.status', ':pending')->once()->andReturn('pendingEq');
-        $mockQb->shouldReceive('where')->with('idEq')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('pendingEq')->once()->andReturnSelf();
+        $idEq = new Comparison('da.id', '=', ':id');
+        $pendingEq = new Comparison('da.status', '=', ':pending');
+        $mockQb->shouldReceive('expr->eq')->with('da.id', ':id')->once()->andReturn($idEq);
+        $mockQb->shouldReceive('expr->eq')->with('da.status', ':pending')->once()->andReturn($pendingEq);
+        $mockQb->shouldReceive('where')->with($idEq)->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($pendingEq)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('error', Entity::STATUS_ERROR)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('errorDetail', 'bad JSON')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('now', m::type(\DateTime::class))->once()->andReturnSelf();

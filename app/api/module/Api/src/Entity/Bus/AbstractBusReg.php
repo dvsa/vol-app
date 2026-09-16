@@ -60,7 +60,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Parent
      *
-     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg|null
      */
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
@@ -114,7 +114,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * WithdrawnReason
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'withdrawn_reason', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -123,7 +123,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -133,7 +133,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -143,7 +143,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Used for reporting on SLAs. Updated whenever state changes.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'status_change_date', nullable: true)]
     protected $statusChangeDate;
@@ -167,7 +167,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Number on front of bus
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'service_no', length: 70, nullable: true)]
     protected $serviceNo;
@@ -175,7 +175,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Start point
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'start_point', length: 100, nullable: true)]
     protected $startPoint;
@@ -183,7 +183,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Finish point
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'finish_point', length: 100, nullable: true)]
     protected $finishPoint;
@@ -191,7 +191,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Via
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'via', length: 255, nullable: true)]
     protected $via;
@@ -199,7 +199,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Other details
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'other_details', length: 800, nullable: true)]
     protected $otherDetails;
@@ -207,7 +207,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Received date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'received_date', nullable: true)]
     protected $receivedDate;
@@ -215,7 +215,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Effective date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'effective_date', nullable: true)]
     protected $effectiveDate;
@@ -223,7 +223,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * End date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'end_date', nullable: true)]
     protected $endDate;
@@ -231,7 +231,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Application complete date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'application_complete_date', nullable: true)]
     protected $applicationCompleteDate;
@@ -263,7 +263,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Manoeuvre detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'manoeuvre_detail', length: 255, nullable: true)]
     protected $manoeuvreDetail;
@@ -279,7 +279,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * New stop detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'new_stop_detail', length: 255, nullable: true)]
     protected $newStopDetail;
@@ -295,7 +295,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Not fixed stop detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'not_fixed_stop_detail', length: 255, nullable: true)]
     protected $notFixedStopDetail;
@@ -303,7 +303,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Subsidy detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'subsidy_detail', length: 255, nullable: true)]
     protected $subsidyDetail;
@@ -327,7 +327,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Route description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'route_description', length: 1000, nullable: true)]
     protected $routeDescription;
@@ -375,7 +375,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Stopping arrangements
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'stopping_arrangements', length: 800, nullable: true)]
     protected $stoppingArrangements;
@@ -391,7 +391,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Trc notes
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'trc_notes', length: 255, nullable: true)]
     protected $trcNotes;
@@ -399,7 +399,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Organisation email
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'organisation_email', length: 255, nullable: true)]
     protected $organisationEmail;
@@ -423,7 +423,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Txc app type
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'txc_app_type', length: 20, nullable: true)]
     protected $txcAppType;
@@ -431,7 +431,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Reason cancelled
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'reason_cancelled', length: 255, nullable: true)]
     protected $reasonCancelled;
@@ -439,7 +439,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Reason refused
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'reason_refused', length: 255, nullable: true)]
     protected $reasonRefused;
@@ -447,7 +447,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Reason sn refused
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'reason_sn_refused', length: 255, nullable: true)]
     protected $reasonSnRefused;
@@ -471,7 +471,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Quality partnership details
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'quality_partnership_details', length: 4000, nullable: true)]
     protected $qualityPartnershipDetails;
@@ -495,7 +495,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Quality contract details
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'quality_contract_details', length: 4000, nullable: true)]
     protected $qualityContractDetails;
@@ -512,7 +512,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -520,7 +520,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * BusServiceTypes
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Bus\BusServiceType>
      */
     #[ORM\JoinTable(name: 'bus_reg_bus_service_type')]
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
@@ -531,7 +531,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * LocalAuthoritys
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority>
      */
     #[ORM\JoinTable(name: 'bus_reg_local_auth')]
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
@@ -542,7 +542,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * TrafficAreas
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea>
      */
     #[ORM\JoinTable(name: 'bus_reg_traffic_area')]
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
@@ -553,7 +553,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * VariationReasons
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\RefData>
      */
     #[ORM\JoinTable(name: 'bus_reg_variation_reason')]
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
@@ -564,7 +564,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * OtherServices
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Bus\BusRegOtherService>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusRegOtherService::class, mappedBy: 'busReg', cascade: ['persist'])]
     protected $otherServices;
@@ -572,7 +572,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * ReadAudits
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Bus\BusRegReadAudit>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusRegReadAudit::class, mappedBy: 'busReg')]
     protected $readAudits;
@@ -580,7 +580,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * ShortNotice
      *
-     * @var \Dvsa\Olcs\Api\Entity\BusShortNotice
+     * @var \Dvsa\Olcs\Api\Entity\Bus\BusShortNotice|null
      */
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusShortNotice::class, mappedBy: 'busReg', cascade: ['persist'])]
     protected $shortNotice;
@@ -588,7 +588,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Documents
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Doc\Document>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'busReg')]
     protected $documents;
@@ -596,7 +596,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * EbsrSubmissions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission::class, mappedBy: 'busReg')]
     protected $ebsrSubmissions;
@@ -604,7 +604,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Fees
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Fee\Fee>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'busReg')]
     protected $fees;
@@ -612,7 +612,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * PublicationLinks
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Publication\PublicationLink>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, mappedBy: 'busReg')]
     protected $publicationLinks;
@@ -620,7 +620,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * Tasks
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Task\Task>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, mappedBy: 'busReg')]
     protected $tasks;
@@ -628,7 +628,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     /**
      * TxcInboxs
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Ebsr\TxcInbox>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Ebsr\TxcInbox::class, mappedBy: 'busReg', cascade: ['persist'])]
     protected $txcInboxs;

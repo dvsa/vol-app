@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Db\Service\Search;
 
 use Dvsa\Olcs\Db\Service\Search\ClientFactory;
-use Elastica\Client;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Mockery as m;
+use OpenSearch\Client;
 use Psr\Container\ContainerInterface;
 
 final class ClientFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
@@ -41,5 +41,54 @@ final class ClientFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
         }
 
         $this->assertTrue($passed, 'Expected exception not thrown or message didn\'t match');
+    }
+
+    public function testHttpClientOptionsBuildsBaseUriFromTransportHostAndPort(): void
+    {
+        $sut = new ClientFactory();
+
+        $this->assertSame(
+            ['base_uri' => 'https://searchv6.example.com:443', 'timeout' => 300],
+            $sut->getHttpClientOptions(['host' => 'searchv6.example.com', 'port' => '443', 'transport' => 'Https'])
+        );
+    }
+
+    public function testHttpClientOptionsDefaultsToHttpOnPort9200WithA300SecondTimeout(): void
+    {
+        $sut = new ClientFactory();
+
+        $this->assertSame(
+            ['base_uri' => 'http://localhost:9200', 'timeout' => 300],
+            $sut->getHttpClientOptions([])
+        );
+    }
+
+    public function testHttpClientOptionsTimeoutIsConfigurable(): void
+    {
+        $sut = new ClientFactory();
+
+        $this->assertSame(30, $sut->getHttpClientOptions(['timeout' => 30])['timeout']);
+    }
+
+    public function testHttpClientOptionsPassesCurlOptionsThrough(): void
+    {
+        $sut = new ClientFactory();
+
+        $options = $sut->getHttpClientOptions(
+            ['host' => 'h', 'curl' => [CURLOPT_SSL_VERIFYHOST => false]]
+        );
+
+        $this->assertSame([CURLOPT_SSL_VERIFYHOST => false], $options['curl']);
+    }
+
+    public function testHttpClientOptionsAddsRequestLoggingMiddlewareWhenLogIsSet(): void
+    {
+        $sut = new ClientFactory();
+
+        $this->assertArrayNotHasKey('middleware', $sut->getHttpClientOptions(['host' => 'h']));
+
+        $options = $sut->getHttpClientOptions(['host' => 'h', 'log' => true]);
+        $this->assertCount(1, $options['middleware']);
+        $this->assertIsCallable($options['middleware'][0]);
     }
 }

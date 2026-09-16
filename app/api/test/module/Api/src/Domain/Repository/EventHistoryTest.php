@@ -32,7 +32,7 @@ final class EventHistoryTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -50,7 +50,7 @@ final class EventHistoryTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -68,7 +68,7 @@ final class EventHistoryTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -86,7 +86,7 @@ final class EventHistoryTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -135,33 +135,40 @@ final class EventHistoryTest extends RepositoryTestCase
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
 
-        $qb->shouldReceive('expr->eq')->with('m.licence', ':licenceId')->once()->andReturn('licence');
-        $qb->shouldReceive('orWhere')->with('licence')->once()->andReturnSelf();
+        $licenceExpr = $this->mockExprEq('m.licence', ':licenceId');
+        $qb->shouldReceive('expr->eq')->with('m.licence', ':licenceId')->once()->andReturn($licenceExpr);
+        $qb->shouldReceive('orWhere')->with($licenceExpr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licenceId', $licenceId)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.case', ':caseId')->once()->andReturn('case');
-        $qb->shouldReceive('orWhere')->with('case')->once()->andReturnSelf();
+        $caseExpr = $this->mockExprEq('m.case', ':caseId');
+        $qb->shouldReceive('expr->eq')->with('m.case', ':caseId')->once()->andReturn($caseExpr);
+        $qb->shouldReceive('orWhere')->with($caseExpr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('caseId', $caseId)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.organisation', ':organisationId')->once()->andReturn('organisation');
-        $qb->shouldReceive('orWhere')->with('organisation')->once()->andReturnSelf();
+        $organisationExpr = $this->mockExprEq('m.organisation', ':organisationId');
+        $qb->shouldReceive('expr->eq')->with('m.organisation', ':organisationId')->once()->andReturn($organisationExpr);
+        $qb->shouldReceive('orWhere')->with($organisationExpr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('organisationId', $organisationId)->once()->andReturnSelf();
 
+        $transportManagerExpr = $this->mockExprEq('m.transportManager', ':transportManagerId');
         $qb->shouldReceive('expr->eq')
-            ->with('m.transportManager', ':transportManagerId')->once()->andReturn('transportManager');
-        $qb->shouldReceive('orWhere')->with('transportManager')->once()->andReturnSelf();
+            ->with('m.transportManager', ':transportManagerId')->once()->andReturn($transportManagerExpr);
+        $qb->shouldReceive('orWhere')->with($transportManagerExpr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('transportManagerId', $transportManagerId)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.user', ':userId')->once()->andReturn('user');
-        $qb->shouldReceive('orWhere')->with('user')->once()->andReturnSelf();
+        $userExpr = $this->mockExprEq('m.user', ':userId');
+        $qb->shouldReceive('expr->eq')->with('m.user', ':userId')->once()->andReturn($userExpr);
+        $qb->shouldReceive('orWhere')->with($userExpr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('userId', $userId)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.application', ':applicationId')->once()->andReturn('application');
-        $qb->shouldReceive('orWhere')->with('application')->once()->andReturnSelf();
+        $applicationExpr = $this->mockExprEq('m.application', ':applicationId');
+        $qb->shouldReceive('expr->eq')->with('m.application', ':applicationId')->once()->andReturn($applicationExpr);
+        $qb->shouldReceive('orWhere')->with($applicationExpr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('applicationId', $applicationId)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.irhpApplication', ':irhpApplicationId')->once()->andReturn('irhpApplication');
-        $qb->shouldReceive('orWhere')->with('irhpApplication')->once()->andReturnSelf();
+        $irhpApplicationExpr = $this->mockExprEq('m.irhpApplication', ':irhpApplicationId');
+        $qb->shouldReceive('expr->eq')->with('m.irhpApplication', ':irhpApplicationId')->once()->andReturn($irhpApplicationExpr);
+        $qb->shouldReceive('orWhere')->with($irhpApplicationExpr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('irhpApplicationId', $irhpApplicationId)->once()->andReturnSelf();
 
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
@@ -202,7 +209,7 @@ final class EventHistoryTest extends RepositoryTestCase
                 )
                 ->andReturn(
                     m::mock()
-                    ->shouldReceive('fetchAll')
+                    ->shouldReceive('fetchAllAssociative')
                     ->andReturn($results)
                     ->once()
                     ->getMock()
@@ -259,7 +266,7 @@ final class EventHistoryTest extends RepositoryTestCase
             ->with(['id' => $id, 'version' => [$version, $version - 1]])
             ->andReturn(
                 m::mock()
-                ->shouldReceive('fetchAll')
+                ->shouldReceive('fetchAllAssociative')
                 ->andReturn($results)
                 ->once()
                 ->getMock()
@@ -317,35 +324,32 @@ final class EventHistoryTest extends RepositoryTestCase
         $qb = m::mock(QueryBuilder::class);
         $this->mockCreateQueryBuilder($qb);
 
+        $expr = m::mock(\Doctrine\ORM\Query\Expr::class);
+        $condition = $this->mockExprEq('m.task', ':task');
+        $query = m::mock(Query::class);
+
         $qb->shouldReceive('expr')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('eq')
-                ->with('m.task', ':task')
-                ->andReturn('expr')
-                ->once()
-                ->getMock()
-            )
+            ->andReturn($expr)
+            ->once();
+        $expr->shouldReceive('eq')
+            ->with('m.task', ':task')
+            ->andReturn($condition)
+            ->once();
+        $qb->shouldReceive('andWhere')
+            ->with($condition)
             ->once()
-            ->shouldReceive('andWhere')
-            ->with('expr')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
+            ->andReturnSelf();
+        $qb->shouldReceive('setParameter')
             ->with('task', $taskId)
             ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getResult')
-                ->with(Query::HYDRATE_ARRAY)
-                ->andReturn(['foo'])
-                ->once()
-                ->getMock()
-            )
-            ->once()
-            ->getMock();
+            ->andReturnSelf();
+        $qb->shouldReceive('getQuery')
+            ->andReturn($query)
+            ->once();
+        $query->shouldReceive('getResult')
+            ->with(Query::HYDRATE_ARRAY)
+            ->andReturn(['foo'])
+            ->once();
 
         $this->queryBuilder
             ->shouldReceive('modifyQuery')
@@ -383,7 +387,7 @@ final class EventHistoryTest extends RepositoryTestCase
 
         $this->sut->fetchPreviousLicenceStatus($licenceId);
 
-        $expectedQuery = 'QUERY SELECT eht.id INNER JOIN m.eventHistoryType eht INNER JOIN m.licence l AND eht.id IN [7,31,75] AND l.id = [[' . $licenceId . ']] ORDER BY m.eventDatetime DESC LIMIT 1';
+        $expectedQuery = 'QUERY SELECT eht.id INNER JOIN m.eventHistoryType eht INNER JOIN m.licence l AND eht.id IN([7,31,75]) AND l.id = [[' . $licenceId . ']] ORDER BY m.eventDatetime DESC LIMIT 1';
 
         $this->assertSame($expectedQuery, $this->query);
     }
@@ -426,11 +430,11 @@ final class EventHistoryTest extends RepositoryTestCase
         $qb = $this->createMockQb();
         $exception = new NoResultException();
 
+        $query = m::mock(Query::class);
         $qb->shouldReceive('getQuery')
             ->once()
-            ->andReturn($qb)
-            ->getMock();
-        $qb->shouldReceive('getSingleScalarResult')
+            ->andReturn($query);
+        $query->shouldReceive('getSingleScalarResult')
             ->once()
             ->andThrow($exception);
 
@@ -446,11 +450,11 @@ final class EventHistoryTest extends RepositoryTestCase
         $qb = $this->createMockQb();
 
         $ex = new \Exception('testException');
+        $query = m::mock(Query::class);
         $qb->shouldReceive('getQuery')
             ->once()
-            ->andReturn($qb)
-            ->getMock();
-        $qb->shouldReceive('getSingleScalarResult')
+            ->andReturn($query);
+        $query->shouldReceive('getSingleScalarResult')
             ->once()
             ->andThrow($ex);
 
