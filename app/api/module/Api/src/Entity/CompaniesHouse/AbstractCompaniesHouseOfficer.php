@@ -55,7 +55,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
     /**
      * Name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'name', length: 100, nullable: true)]
     protected $name;
@@ -63,7 +63,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
     /**
      * Role
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'role', length: 64, nullable: true)]
     protected $role;
@@ -71,7 +71,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
     /**
      * Date of birth
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'date_of_birth', nullable: true)]
     protected $dateOfBirth;

@@ -50,7 +50,7 @@ class GetEventHistoryDetails extends AbstractRawQuery
     protected function getParamTypes()
     {
         return [
-            'version' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY
+            'version' => \Doctrine\DBAL\ArrayParameterType::INTEGER
         ];
     }
 }

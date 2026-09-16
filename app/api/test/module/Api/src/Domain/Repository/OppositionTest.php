@@ -98,8 +98,9 @@ final class OppositionTest extends RepositoryTestCase
         $query->shouldReceive('getLicence')->with()->andReturn(null);
         $query->shouldReceive('getApplication')->with()->andReturn(null);
 
-        $qb->shouldReceive('expr->eq')->with('m.case', ':byCase')->once()->andReturn('EXPR');
-        $qb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.case', ':byCase');
+        $qb->shouldReceive('expr->eq')->with('m.case', ':byCase')->once()->andReturn($expr);
+        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('byCase', 746)->once()->andReturnSelf();
 
         $sut->applyListFilters($qb, $query);
@@ -117,8 +118,9 @@ final class OppositionTest extends RepositoryTestCase
         $query->shouldReceive('getLicence')->with()->andReturn(43);
         $query->shouldReceive('getApplication')->with()->andReturn(null);
 
-        $qb->shouldReceive('expr->eq')->with('ca.licence', ':licence')->once()->andReturn('EXPR');
-        $qb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('ca.licence', ':licence');
+        $qb->shouldReceive('expr->eq')->with('ca.licence', ':licence')->once()->andReturn($expr);
+        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licence', 43)->once()->andReturnSelf();
 
         $sut->applyListFilters($qb, $query);
@@ -136,8 +138,9 @@ final class OppositionTest extends RepositoryTestCase
         $query->shouldReceive('getLicence')->with()->andReturn(null);
         $query->shouldReceive('getApplication')->with()->andReturn(543);
 
-        $qb->shouldReceive('expr->eq')->with('ca.application', ':application')->once()->andReturn('EXPR');
-        $qb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('ca.application', ':application');
+        $qb->shouldReceive('expr->eq')->with('ca.application', ':application')->once()->andReturn($expr);
+        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('application', 543)->once()->andReturnSelf();
 
         $sut->applyListFilters($qb, $query);
@@ -166,12 +169,16 @@ final class OppositionTest extends RepositoryTestCase
             ->with('createdOn', 'DESC')
             ->andReturnSelf();
 
+        $expr = $this->mockExprEq('c.application', ':application');
+
         $mockQb
             ->shouldReceive('expr->eq')
             ->with('c.application', ':application')
-            ->andReturnSelf();
+            ->andReturn($expr);
+
         $mockQb
             ->shouldReceive('andWhere')
+            ->with($expr)
             ->andReturnSelf();
         $mockQb
             ->shouldReceive('setParameter')

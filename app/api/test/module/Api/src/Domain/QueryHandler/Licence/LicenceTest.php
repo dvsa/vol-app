@@ -59,8 +59,11 @@ final class LicenceTest extends QueryHandlerTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
-    public function testHandleQuery(mixed $isLicenceSurrenderAllowed, mixed $openApplicationsForLicence): void
-    {
+    public function testHandleQuery(
+        mixed $isLicenceSurrenderAllowed,
+        mixed $openApplicationsForLicence,
+        bool $hasQueuedRevocation
+    ): void {
         $query = Qry::create(['id' => 111]);
 
         /** @var LicenceEntity $licence */
@@ -83,6 +86,7 @@ final class LicenceTest extends QueryHandlerTestCase
             ->once()
             ->shouldReceive('getStatus->getId')
             ->andReturn(LicenceEntity::LICENCE_STATUS_VALID);
+        $licence->shouldReceive('hasQueuedRevocation')->andReturn($hasQueuedRevocation);
 
         $mockContinuationDetail = m::mock(\Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail::class)
             ->shouldReceive('serialize')->with(['continuation', 'licence'])->once()->andReturn(['CD'])
@@ -124,14 +128,18 @@ final class LicenceTest extends QueryHandlerTestCase
             'isLicenceSurrenderAllowed' => $isLicenceSurrenderAllowed,
             'activeVehicleCount' => 1,
             'totalVehicleCount' => 1,
+            'hasQueuedRevocation' => $hasQueuedRevocation,
         ];
 
         $this->assertEquals($expected, $result->serialize());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
-    public function testHandleQueryNoContinuationDetail(mixed $isLicenceSurrenderAllowed, mixed $openApplicationsForLicence): void
-    {
+    public function testHandleQueryNoContinuationDetail(
+        mixed $isLicenceSurrenderAllowed,
+        mixed $openApplicationsForLicence,
+        bool $hasQueuedRevocation
+    ): void {
         $query = Qry::create(['id' => 111]);
 
         /** @var LicenceEntity $licence */
@@ -154,6 +162,7 @@ final class LicenceTest extends QueryHandlerTestCase
             ->once()
             ->shouldReceive('getStatus->getId')
             ->andReturn(LicenceEntity::LICENCE_STATUS_VALID);
+        $licence->shouldReceive('hasQueuedRevocation')->andReturn($hasQueuedRevocation);
 
         $this->repoMap['ContinuationDetail']->shouldReceive('fetchForLicence')->with(111)
             ->andReturn([]);
@@ -192,6 +201,7 @@ final class LicenceTest extends QueryHandlerTestCase
             'isLicenceSurrenderAllowed' => $isLicenceSurrenderAllowed,
             'activeVehicleCount' => 1,
             'totalVehicleCount' => 1,
+            'hasQueuedRevocation' => $hasQueuedRevocation,
         ];
 
         $this->assertEquals($expected, $result->serialize());
@@ -204,7 +214,8 @@ final class LicenceTest extends QueryHandlerTestCase
         mixed $isSystemParamDisabled,
         mixed $continuationDetailStatusId,
         mixed $isLicenceSurrenderAllowed,
-        mixed $openApplicationsForLicence
+        mixed $openApplicationsForLicence,
+        bool $hasQueuedRevocation
     ): void {
         $query = Qry::create(['id' => 111]);
 
@@ -230,6 +241,7 @@ final class LicenceTest extends QueryHandlerTestCase
             ->shouldReceive('isExpiring')->with()->once()->andReturn($isExpiring)
             ->shouldReceive('getStatus->getId')
             ->andReturn(LicenceEntity::LICENCE_STATUS_VALID);
+        $licence->shouldReceive('hasQueuedRevocation')->andReturn($hasQueuedRevocation);
 
         $this->repoMap['ContinuationDetail']->shouldReceive('fetchForLicence')->with(111)
             ->andReturn([$continuationDetail]);
@@ -268,6 +280,7 @@ final class LicenceTest extends QueryHandlerTestCase
             'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
             'isLicenceSurrenderAllowed' => true,
             'openApplicationsForLicence' => [],
+            'hasQueuedRevocation' => false,
         ];
         yield 'licence is expiring' => [
             'expected' => false,
@@ -276,6 +289,7 @@ final class LicenceTest extends QueryHandlerTestCase
             'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
             'isLicenceSurrenderAllowed' => true,
             'openApplicationsForLicence' => [],
+            'hasQueuedRevocation' => false,
         ];
         yield 'system Parameter disabled' => [
             'expected' => false,
@@ -284,6 +298,7 @@ final class LicenceTest extends QueryHandlerTestCase
             'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
             'isLicenceSurrenderAllowed' => false,
             'openApplicationsForLicence' => ['some data'],
+            'hasQueuedRevocation' => false,
         ];
         yield 'wrong continuation detail status' => [
             'expected' => false,
@@ -292,13 +307,15 @@ final class LicenceTest extends QueryHandlerTestCase
             'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTING,
             'isLicenceSurrenderAllowed' => false,
             'openApplicationsForLicence' => ['some data'],
+            'hasQueuedRevocation' => false,
         ];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
     public function testHandleQueryShowExpiryWarningNoContinuationDetail(
         mixed $isLicenceSurrenderAllowed,
-        mixed $openApplicationsForLicence
+        mixed $openApplicationsForLicence,
+        bool $hasQueuedRevocation
     ): void {
         $query = Qry::create(['id' => 111]);
 
@@ -320,6 +337,7 @@ final class LicenceTest extends QueryHandlerTestCase
             ->shouldReceive('isSpecialRestricted')->andReturn(true)->once()
             ->shouldReceive('getStatus->getId')
             ->andReturn(LicenceEntity::LICENCE_STATUS_VALID);
+        $licence->shouldReceive('hasQueuedRevocation')->andReturn($hasQueuedRevocation);
 
         $this->repoMap['ContinuationDetail']->shouldReceive('fetchForLicence')->with(111)
             ->andReturn([]);
@@ -355,11 +373,18 @@ final class LicenceTest extends QueryHandlerTestCase
     {
         yield [
             'isLicenceSurrenderAllowed' => true,
-            'openApplicationsForLicence' => []
+            'openApplicationsForLicence' => [],
+            'hasQueuedRevocation' => false,
         ];
         yield [
             'isLicenceSurrenderAllowed' => false,
-            'openApplicationsForLicence' => ['some data']
+            'openApplicationsForLicence' => ['some data'],
+            'hasQueuedRevocation' => false,
+        ];
+        yield [
+            'isLicenceSurrenderAllowed' => false,
+            'openApplicationsForLicence' => [],
+            'hasQueuedRevocation' => true,
         ];
     }
 }

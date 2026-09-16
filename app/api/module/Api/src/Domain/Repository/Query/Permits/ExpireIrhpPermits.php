@@ -2,7 +2,6 @@
 
 namespace Dvsa\Olcs\Api\Domain\Repository\Query\Permits;
 
-use Doctrine\DBAL\Connection;
 use Dvsa\Olcs\Api\Domain\Repository\Query\AbstractRawQuery;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange;
@@ -68,7 +67,7 @@ class ExpireIrhpPermits extends AbstractRawQuery
     protected function getParamTypes()
     {
         return [
-            'validStatuses' => Connection::PARAM_STR_ARRAY,
+            'validStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING,
         ];
     }
 }
