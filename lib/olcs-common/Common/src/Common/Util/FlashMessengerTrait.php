@@ -16,7 +16,7 @@ trait FlashMessengerTrait
      */
     public function getFlashMessenger()
     {
-        return $this->plugin(LaminasSessionFlashMessenger::class);
+        return $this->plugin('FlashMessenger');
     }
 
     /**
