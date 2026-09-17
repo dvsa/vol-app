@@ -71,7 +71,7 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
         return $dataVariable;
     }
 
-    #[\PHPUnit\Framework\Attributes\Depends('__construct_SetsDataVariable')]
+    #[\PHPUnit\Framework\Attributes\Depends('constructSetsDataVariable')]
     #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsDataVariableWithCurrentSectionNumber(array $data): void
     {
@@ -79,7 +79,7 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
         $this->assertEquals(static::A_SECTIONS_NUMBER_IN_A_JOURNEY, $data[0]);
     }
 
-    #[\PHPUnit\Framework\Attributes\Depends('__construct_SetsDataVariable')]
+    #[\PHPUnit\Framework\Attributes\Depends('constructSetsDataVariable')]
     #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsDataVariableWithNumberOfSections(array $data): void
     {

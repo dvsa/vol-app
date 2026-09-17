@@ -33,6 +33,7 @@
   <testsuites>
     <testsuite name="OLCS Selfserve Application">
       <directory>test</directory>
+      <directory>module</directory>
     </testsuite>
   </testsuites>
   <!-- failOnDeprecation applies to first-party module/ code only; PHP 8.4
