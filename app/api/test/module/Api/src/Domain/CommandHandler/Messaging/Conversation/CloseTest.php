@@ -17,7 +17,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-class Close extends AbstractCommandHandlerTestCase
+class CloseTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
