@@ -17,4 +17,9 @@ interface FlashMessengerInterface
 
     public function setNamespace(string $namespace): self;
 
+    public function getMessages(?string $namespace = null): array;
+    public function getMessagesFromNamespace(string $namespace): array;
+
+    public function hasMessages(?string $namespace = null): bool;
+
 }

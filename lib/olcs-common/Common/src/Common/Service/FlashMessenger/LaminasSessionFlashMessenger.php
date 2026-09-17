@@ -125,6 +125,7 @@ class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorA
         }
     }
 
+    #[\Override]
     public function hasMessages(?string $namespace = null): bool
     {
         if (null === $namespace) {
@@ -136,6 +137,7 @@ class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorA
         return isset($this->messages[$namespace]);
     }
 
+    #[\Override]
     public function getMessages(?string $namespace = null): array
     {
         if (null === $namespace) {
@@ -147,6 +149,15 @@ class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorA
         }
 
         return [];
+    }
+
+    /**
+     * This method exists to proxy existing calls that existed in the original Laminas Flash Messenger implementation.
+     */
+    #[\Override]
+    public function getMessagesFromNamespace(string $namespace): array
+    {
+        return $this->getMessages($namespace);
     }
 
     #[\Override]
