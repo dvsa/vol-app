@@ -5,6 +5,7 @@ namespace Olcs\Controller\Lva\Application;
 use Common\Controller\Lva\AbstractController;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
+use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use LmcRbacMvc\Service\AuthorizationService;
 use Laminas\View\Model\ViewModel;
@@ -39,37 +40,53 @@ class FinancialEvidenceAssessmentController extends AbstractController implement
     }
 
     /**
-     * Build the tab list: one guaranteed "Latest" tab, plus
-     * any additional tabs sourced from data.
+     * One tab per analysed document, most recent first. First tab is always
+     * labelled "Latest"; the rest are labelled by their received date.
      *
-     * @return array<int, array{id: string, label: string, template: string, variables: array}>
+     * @return array<int, array{id: string, label: string, date: ?string, status: ?string}>
      */
     protected function getTabs(): array
     {
-        $tabs = [
-            [
-                'id'        => 'latest',
-                'label'     => 'Latest',
-                'template'  => 'sections/lva/financial-evidence-assessment/tab-latest',
-                'variables' => [],
-            ],
-        ];
+        $analyses = $this->getAnalyses();
 
-        foreach ($this->getAdditionalTabsData() as $tabData) {
+        $tabs = [];
+
+        foreach ($analyses as $index => $analysis) {
             $tabs[] = [
-                'id'        => $tabData['id'],
-                'label'     => $tabData['label'],
-                'template'  => 'sections/lva/financial-evidence-assessment/tab-generic',
-                'variables' => ['data' => $tabData],
+                'id'     => 'analysis-' . $analysis['id'],
+                'label'  => $index === 0 ? 'Latest' : ($analysis['completedAt'] ?? 'Unknown date'),
+                'date'   => $analysis['completedAt'],
+                'status' => $this->mapStatus($analysis['status']),
             ];
         }
 
         return $tabs;
     }
 
-    protected function getAdditionalTabsData(): array
+    protected function mapStatus(?string $status): string
     {
-        // Stub for now — swap for a real query/repo call.
-        return [];
+        return match ($status) {
+            'SUCCESS' => 'Approved',
+            'ERROR'   => 'Rejected',
+            'PENDING' => 'Pending',
+            default   => 'Pending',
+        };
+    }
+
+    protected function getAnalyses(): array
+    {
+        $response = $this->handleQuery(
+            DocumentAnalysisList::create(['application' => $this->getIdentifier()])
+        );
+
+        if (!$response->isOk()) {
+            return [];
+        }
+
+        $analyses = $response->getResult()['analyses'];
+
+        usort($analyses, static fn($a, $b) => strcmp($b['completedAt'] ?? '', $a['completedAt'] ?? ''));
+
+        return $analyses;
     }
 }

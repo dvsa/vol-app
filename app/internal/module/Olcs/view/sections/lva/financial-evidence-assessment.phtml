@@ -1,11 +1,9 @@
-<!--warning about no statements passing, or warning if one statement passed IDP goes here-->
-
 <div class="govuk-tabs" data-module="govuk-tabs">
     <ul class="govuk-tabs__list">
         <?php foreach ($tabs as $index => $tab) : ?>
             <li class="govuk-tabs__list-item<?php echo $index === 0 ? ' govuk-tabs__list-item--selected' : ''; ?>">
                 <a class="govuk-tabs__tab" href="#<?php echo $this->escapeHtmlAttr($tab['id']); ?>">
-                    <?php echo $this->translate($tab['label']); ?>
+                    <?php echo $this->escapeHtml($tab['label']); ?>
                 </a>
             </li>
         <?php endforeach; ?>
@@ -14,7 +12,8 @@
     <?php foreach ($tabs as $index => $tab) : ?>
         <div class="govuk-tabs__panel<?php echo $index === 0 ? '' : ' govuk-tabs__panel--hidden'; ?>"
              id="<?php echo $this->escapeHtmlAttr($tab['id']); ?>">
-            <?php echo $this->partial($tab['template'], $tab['variables']); ?>
+            <p>Date: <?php echo $this->escapeHtml($tab['date'] ?? 'Unknown'); ?></p>
+            <p>Status: <?php echo $this->escapeHtml($tab['status'] ?? 'Unknown'); ?></p>
         </div>
     <?php endforeach; ?>
 </div>

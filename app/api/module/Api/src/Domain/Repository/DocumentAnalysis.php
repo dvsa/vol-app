@@ -75,6 +75,22 @@ class DocumentAnalysis extends AbstractRepository
     }
 
     /**
+     * Fetch all document analysis for a given application, newest first
+     *
+     * @return Entity[]
+     */
+
+    public function fetchByApplicationId(int $applicationId): array
+    {
+        $qb = $this->createQueryBuilder();
+        $qb->andWhere($qb->expr()->eq($this->alias . '.applicationId', ':applicationId'))
+            ->setParameter('applicationId', $applicationId)
+            ->orderBy($this->alias . '.createdOn', 'DESC');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * Resolve stale PENDING rows to TIMEOUT in one atomic statement.
      *
      * @return int rows swept
