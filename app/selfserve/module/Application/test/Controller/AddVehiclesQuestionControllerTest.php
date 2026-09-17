@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Application\Controller;
 
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Common\Test\MockeryTestCase;
 use Common\Test\MocksServicesTrait;
 use Common\Controller\Plugin\Redirect;
@@ -19,7 +20,6 @@ use Laminas\Http\Response as HttpResponse;
 use Hamcrest\Core\IsInstanceOf;
 use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Laminas\Stdlib\Parameters;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Dvsa\Olcs\Application\Form\AddVehiclesQuestionForm;
 use Laminas\Form\Form;
 use Laminas\Form\Exception\DomainException;
@@ -1141,7 +1141,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     protected function flashMessenger(): MockInterface
     {
         if (!$this->serviceManager->has('FlashMessenger')) {
-            $this->serviceManager->setService('FlashMessenger', $this->setUpMockService(FlashMessenger::class));
+            $this->serviceManager->setService('FlashMessenger', $this->setUpMockService(LaminasSessionFlashMessenger::class));
         }
         $instance = $this->serviceManager->get('FlashMessenger');
         assert($instance instanceof MockInterface);
