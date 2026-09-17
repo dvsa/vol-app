@@ -2,6 +2,8 @@
 
 namespace Common\Util;
 
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
+
 /**
  * A trait that controllers can use to easily interact with the flash messenger.
  */
@@ -10,11 +12,11 @@ trait FlashMessengerTrait
     /**
      * returns an instance of the flash messenger plugin.
      *
-     * @return \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger
+     * @return LaminasSessionFlashMessenger
      */
     public function getFlashMessenger()
     {
-        return $this->plugin('FlashMessenger');
+        return $this->plugin(LaminasSessionFlashMessenger::class);
     }
 
     /**

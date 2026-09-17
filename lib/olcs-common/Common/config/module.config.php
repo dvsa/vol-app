@@ -116,6 +116,7 @@ return [
             \Common\Controller\Plugin\HandleCommand::class => \Common\Controller\Plugin\HandleCommandFactory::class,
             'featuresEnabled' => \Common\Controller\Plugin\FeaturesEnabledFactory::class,
             'featuresEnabledForMethod' => \Common\Controller\Plugin\FeaturesEnabledForMethodFactory::class,
+            \Common\Service\FlashMessenger\LaminasSessionFlashMessenger::class => \Common\Service\FlashMessenger\LaminasSessionFlashMessengerFactory::class,
         ]
     ],
     'console' => [
