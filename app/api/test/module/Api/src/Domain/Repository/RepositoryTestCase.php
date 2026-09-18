@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\DbQueryServiceManager;
 use Dvsa\Olcs\Api\Domain\QueryBuilder as OlcsQueryBuilder;
@@ -140,6 +141,43 @@ class RepositoryTestCase extends MockeryTestCase
         $this->qb = $qb;
 
         return $qb;
+    }
+
+    /**
+     * Hand out a distinct real QueryBuilder for each entity and alias given, for the repository
+     * methods that build more than one. They need separating: a single shared builder would let
+     * a sub-select write its own predicates into the outer query.
+     *
+     * Aliases are unique within a query, so the builders come back keyed by alias:
+     *
+     *     ['m' => $root, 'gp' => $graceSubSelect] = $this->createRealQbs([
+     *         Entity::class => 'm',
+     *         GracePeriodEntity::class => 'gp',
+     *     ]);
+     *
+     * @param array<class-string, string|list<string>> $aliasesByEntity
+     *
+     * @return array<string, TestQueryBuilder>
+     */
+    protected function createRealQbs(array $aliasesByEntity): array
+    {
+        $builders = [];
+
+        foreach ($aliasesByEntity as $entity => $aliases) {
+            $repository = m::mock(EntityRepository::class);
+
+            foreach ((array) $aliases as $alias) {
+                $qb = $this->newRealQb();
+                $qb->select($alias)->from($entity, $alias);
+
+                $repository->shouldReceive('createQueryBuilder')->with($alias)->andReturn($qb);
+                $builders[$alias] = $qb;
+            }
+
+            $this->em->shouldReceive('getRepository')->with($entity)->andReturn($repository);
+        }
+
+        return $builders;
     }
 
     /**

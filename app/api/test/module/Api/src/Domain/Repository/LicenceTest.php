@@ -6,7 +6,6 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Result;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\FilterCollection;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -550,32 +549,19 @@ final class LicenceTest extends RepositoryTestCase
     }
 
     /**
-     * fetchForLastTmAutoLetter() builds three more query builders off the EntityManager, so each
-     * has to be handed out separately — sharing one would let the sub-selects write their
-     * predicates into the outer query.
+     * fetchForLastTmAutoLetter() builds three more query builders off the EntityManager.
      *
      * @return TestQueryBuilder the root builder
      */
     private function wireAutoLetterQueryBuilders(): TestQueryBuilder
     {
-        $builders = [
-            Entity::class => ['m' => $this->newRealQb()],
-            GracePeriodEntity::class => ['gp' => $this->newRealQb()],
-            TMLicenceEntity::class => ['tml2' => $this->newRealQb(), 't2' => $this->newRealQb()],
-        ];
+        $builders = $this->createRealQbs([
+            Entity::class => 'm',
+            GracePeriodEntity::class => 'gp',
+            TMLicenceEntity::class => ['tml2', 't2'],
+        ]);
 
-        foreach ($builders as $entity => $byAlias) {
-            $repository = m::mock(EntityRepository::class);
-
-            foreach ($byAlias as $alias => $qb) {
-                $qb->select($alias)->from($entity, $alias);
-                $repository->shouldReceive('createQueryBuilder')->with($alias)->andReturn($qb);
-            }
-
-            $this->em->shouldReceive('getRepository')->with($entity)->andReturn($repository);
-        }
-
-        return $this->qb = $builders[Entity::class]['m'];
+        return $this->qb = $builders['m'];
     }
 
     private function expectSoftDeleteableDisabledFor(string $entityClass): void
