@@ -293,6 +293,14 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     protected $licenceHistoryStatus;
 
     /**
+     * Knowledge experience status
+     *
+     * @var int|null
+     */
+    #[ORM\Column(type: 'integer', name: 'knowledge_experience_status', nullable: true)]
+    protected $knowledgeExperienceStatus;
+
+    /**
      * Convictions penalties status
      *
      * @var int|null
@@ -1075,6 +1083,30 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     public function getLicenceHistoryStatus()
     {
         return $this->licenceHistoryStatus;
+    }
+
+    /**
+     * Set the knowledge experience status
+     *
+     * @param int|null $knowledgeExperienceStatus new value being set
+     *
+     * @return static
+     */
+    public function setKnowledgeExperienceStatus($knowledgeExperienceStatus)
+    {
+        $this->knowledgeExperienceStatus = $knowledgeExperienceStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get the knowledge experience status
+     *
+     * @return int|null
+     */
+    public function getKnowledgeExperienceStatus()
+    {
+        return $this->knowledgeExperienceStatus;
     }
 
     /**
