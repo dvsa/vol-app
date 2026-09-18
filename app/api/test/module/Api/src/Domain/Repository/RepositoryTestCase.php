@@ -133,13 +133,22 @@ class RepositoryTestCase extends MockeryTestCase
             $alias ??= $sutAlias;
         }
 
-        $qb = new TestQueryBuilder(DoctrineMetadata::entityManager());
+        $qb = $this->newRealQb();
         $qb->select($alias)->from($entity, $alias);
 
         $this->mockCreateQueryBuilder($qb);
         $this->qb = $qb;
 
         return $qb;
+    }
+
+    /**
+     * A real QueryBuilder with nothing selected and no wiring, for the few repositories that
+     * build a query from scratch off the EntityManager rather than through createQueryBuilder().
+     */
+    protected function newRealQb(): TestQueryBuilder
+    {
+        return new TestQueryBuilder(DoctrineMetadata::entityManager());
     }
 
     /**
