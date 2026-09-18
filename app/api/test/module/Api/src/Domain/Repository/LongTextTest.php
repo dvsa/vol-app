@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\Query\Expr\Comparison;
+use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Repository\LongText as LongTextRepo;
@@ -28,7 +31,7 @@ final class LongTextTest extends RepositoryTestCase
     {
         $entity = m::mock(LongTextEntity::class);
 
-        $this->expectLookup(['cy_NI'], $entity);
+        $this->expectLookup('application-declaration-gv79-gb', ['cy_NI'], $entity);
 
         self::assertSame(
             $entity,
@@ -40,7 +43,7 @@ final class LongTextTest extends RepositoryTestCase
     {
         $entity = m::mock(LongTextEntity::class);
 
-        $this->expectLookup(['cy_NI', 'cy_GB', 'en_GB'], $entity);
+        $this->expectLookup('application-declaration-gv79-gb', ['cy_NI', 'cy_GB', 'en_GB'], $entity);
 
         self::assertSame(
             $entity,
@@ -51,22 +54,36 @@ final class LongTextTest extends RepositoryTestCase
     /**
      * @param list<string> $expectedLocales locales tried in order; the last one matches
      */
-    private function expectLookup(array $expectedLocales, ?object $found): void
+    private function expectLookup(string $referenceKey, array $expectedLocales, ?LongTextEntity $found): void
     {
         $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('expr->eq')->andReturn('CONDITION');
-        $qb->shouldReceive('andWhere')->andReturnSelf();
+        $qb->shouldReceive('expr')->times(count($expectedLocales) * 2)->andReturn(new Expr());
+        $qb->shouldReceive('andWhere')
+            ->times(count($expectedLocales))
+            ->with(m::on(
+                static fn (mixed $condition): bool => $condition instanceof Comparison
+                    && (string) $condition === 'm.referenceKey = :referenceKey'
+            ))
+            ->andReturnSelf();
+        $qb->shouldReceive('andWhere')
+            ->times(count($expectedLocales))
+            ->with(m::on(
+                static fn (mixed $condition): bool => $condition instanceof Comparison
+                    && (string) $condition === 'm.locale = :locale'
+            ))
+            ->andReturnSelf();
+        $qb->shouldReceive('setParameter')
+            ->times(count($expectedLocales))
+            ->with('referenceKey', $referenceKey)
+            ->andReturnSelf();
 
-        $seen = [];
-        $qb->shouldReceive('setParameter')->andReturnUsing(
-            function (string $name, $value) use ($qb, &$seen) {
-                if ($name === 'locale') {
-                    $seen[] = $value;
-                }
-
-                return $qb;
-            },
-        );
+        foreach ($expectedLocales as $locale) {
+            $qb->shouldReceive('setParameter')
+                ->once()
+                ->with('locale', $locale)
+                ->ordered()
+                ->andReturnSelf();
+        }
 
         $results = array_fill(0, count($expectedLocales) - 1, null);
         $results[] = $found;
@@ -76,33 +93,11 @@ final class LongTextTest extends RepositoryTestCase
             ->andReturn(...$results);
 
         $this->em->shouldReceive('getRepository->createQueryBuilder')->andReturn($qb);
-
-        $this->expectedLocales = $expectedLocales;
-        $this->seenLocales = &$seen;
-    }
-
-    private array $expectedLocales = [];
-
-    private array $seenLocales = [];
-
-    protected function tearDown(): void
-    {
-        if ($this->expectedLocales !== []) {
-            self::assertSame($this->expectedLocales, $this->seenLocales, 'locale fallback order');
-        }
-
-        parent::tearDown();
     }
 
     public function testFetchByReferenceKeyThrowsWhenTheContentIsMissing(): void
     {
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('expr->eq')->andReturn('CONDITION');
-        $qb->shouldReceive('andWhere')->andReturnSelf();
-        $qb->shouldReceive('setParameter')->andReturnSelf();
-        $qb->shouldReceive('getQuery->getOneOrNullResult')->andReturn(null);
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->andReturn($qb);
+        $this->expectLookup('does-not-exist', ['en_GB'], null);
 
         $this->expectException(NotFoundException::class);
 
@@ -112,9 +107,18 @@ final class LongTextTest extends RepositoryTestCase
     public function testTheListCanBeSearchedByUidAndPageName(): void
     {
         $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('orWhere')->once()->with('m.referenceKey LIKE :search')->andReturnSelf();
-        $qb->shouldReceive('orWhere')->once()->with('m.pageName LIKE :search')->andReturnSelf();
-        $qb->shouldReceive('orWhere')->once()->with('m.description LIKE :search')->andReturnSelf();
+        $qb->shouldReceive('expr')->once()->andReturn(new Expr());
+        $qb->shouldReceive('andWhere')
+            ->once()
+            ->with(m::on(
+                static fn (mixed $condition): bool => $condition instanceof Orx
+                    && $condition->getParts() === [
+                        'm.referenceKey LIKE :search',
+                        'm.pageName LIKE :search',
+                        'm.description LIKE :search',
+                    ]
+            ))
+            ->andReturnSelf();
         $qb->shouldReceive('setParameter')->once()->with('search', '%gv79%')->andReturnSelf();
 
         $this->applyListFilters($qb, GetList::create(['search' => 'gv79']));
