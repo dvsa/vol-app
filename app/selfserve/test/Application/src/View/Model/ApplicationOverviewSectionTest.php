@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dvsa\Olcs\Application\View\Model;
+namespace Dvsa\OlcsTest\Application\View\Model;
 
 use Common\RefData;
 use Dvsa\Olcs\Application\View\Model\ApplicationOverviewSection;
@@ -75,7 +75,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertEquals('section.name.type_of_licence', $viewModel->getVariable('name'));
         $this->assertEquals('grey', $viewModel->getVariable('statusColour'));
-        $this->assertEquals('Not Started', $viewModel->getVariable('status'));
+        $this->assertEquals('Not started', $viewModel->getVariable('status'));
         $this->assertFalse($viewModel->getVariable('enabled'));
         $this->assertEquals(1, $viewModel->getVariable('sectionNumber'));
     }

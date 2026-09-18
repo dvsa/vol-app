@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dvsa\Olcs\Application\Controller;
+namespace Dvsa\OlcsTest\Application\Controller;
 
+use Dvsa\Olcs\Application\Controller\AddVehiclesQuestionController;
 use Common\Test\MockeryTestCase;
 use Common\Test\MocksServicesTrait;
 use Common\Controller\Plugin\Redirect;
