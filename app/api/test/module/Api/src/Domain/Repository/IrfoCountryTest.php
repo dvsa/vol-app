@@ -2,38 +2,30 @@
 
 declare(strict_types=1);
 
-/**
- * IrfoCountryTest
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrfoCountry as Repo;
+use Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-/**
- * IrfoCountry Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class IrfoCountryTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockQ = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
-        $mockQb->shouldReceive('orderBy')->with('m.description', 'ASC')->once()->andReturnSelf();
+        $this->sut->applyListFilters($qb, m::mock(QueryInterface::class));
 
-        $this->sut->applyListFilters($mockQb, $mockQ);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m ORDER BY m.description ASC',
+            $qb->getDQL(),
+        );
     }
 }
