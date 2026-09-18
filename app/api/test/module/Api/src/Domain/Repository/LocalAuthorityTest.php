@@ -40,10 +40,10 @@ final class LocalAuthorityTest extends RepositoryTestCase
         $txcNames = ['name1', 'name2'];
 
         /** @var Expr $expr */
-        $expr = m::mock(QueryBuilder::class);
+        $expr = m::mock(Expr::class);
         $expr->shouldReceive('in')
             ->with('m.txcName', $txcNames)
-            ->andReturnSelf();
+            ->andReturn(m::mock(\Doctrine\ORM\Query\Expr\Func::class));
 
         $qb = $this->getQueryBuilder($expr, $mockResult);
 
@@ -71,10 +71,10 @@ final class LocalAuthorityTest extends RepositoryTestCase
         $naptan = ['naptan1', 'naptan2'];
 
         /** @var Expr $expr */
-        $expr = m::mock(QueryBuilder::class);
+        $expr = m::mock(Expr::class);
         $expr->shouldReceive('in')
             ->with('m.naptanCode', $naptan)
-            ->andReturnSelf();
+            ->andReturn(m::mock(\Doctrine\ORM\Query\Expr\Func::class));
 
         $qb = $this->getQueryBuilder($expr, $mockResult);
 
@@ -109,7 +109,7 @@ final class LocalAuthorityTest extends RepositoryTestCase
             ->andReturn($expr);
 
         $qb->shouldReceive('andWhere')
-            ->with($expr)
+            ->with(m::type(\Doctrine\ORM\Query\Expr\Func::class))
             ->andReturnSelf();
 
         $this->queryBuilder->shouldReceive('modifyQuery')

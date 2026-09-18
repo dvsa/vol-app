@@ -3,23 +3,24 @@
 namespace Dvsa\Olcs\Db\Service\Search;
 
 use DomainException;
-use Elastica\Query;
-use InvalidArgumentException;
 use Dvsa\Olcs\Db\Service\Search\Indices\AbstractIndex;
-use Dvsa\Olcs\Db\Service\Search\Indices\Terms\ComplexTermInterface;
 use RuntimeException;
 
 /**
- * Class QueryTemplate
+ * Builds an OpenSearch request body from a JSON query template plus the
+ * filters, date ranges, sorting and pagination requested by the caller.
  *
  * @package Olcs\Db\Service\Search
  */
-class QueryTemplate extends Query
+class QueryTemplate
 {
     public const FILTER_TYPE_DYNAMIC = 'DYNAMIC';
     public const FILTER_TYPE_FIXED = 'FIXED';
     public const FILTER_TYPE_COMPLEX = 'COMPLEX';
     public const FILTER_TYPE_BOOLEAN = 'BOOLEAN';
+
+    /** @var array<string, mixed> The request body */
+    protected array $params = [];
 
     /**
      * @param AbstractIndex[] $searchTypes
@@ -51,19 +52,69 @@ class QueryTemplate extends Query
             file_get_contents($filename)
         );
 
-        $this->_params = json_decode($template, true);
+        $params = json_decode($template, true);
 
-        if (empty($this->_params)) {
+        if (!is_array($params) || $params === []) {
             throw new RuntimeException(
                 "Empty params for query template file '" . $filename . "' and search term '" . $searchTerm . "'"
             );
         }
+
+        $this->params = $params;
 
         // apply filters
         $this->applyFilters($filters, $filterTypes);
 
         // apply date ranges
         $this->applyDateRanges($dateRanges);
+    }
+
+    /**
+     * @return array<string, mixed> The request body to send to OpenSearch
+     */
+    public function toArray(): array
+    {
+        return $this->params;
+    }
+
+    public function getParam(string $name): mixed
+    {
+        return $this->params[$name] ?? null;
+    }
+
+    public function setSort(array $sort): static
+    {
+        $this->params['sort'] = $sort;
+
+        return $this;
+    }
+
+    public function setSize(int $size): static
+    {
+        $this->params['size'] = $size;
+
+        return $this;
+    }
+
+    public function setFrom(int $from): static
+    {
+        $this->params['from'] = $from;
+
+        return $this;
+    }
+
+    public function setPostFilter(array $postFilter): static
+    {
+        $this->params['post_filter'] = $postFilter;
+
+        return $this;
+    }
+
+    public function addAggregation(string $name, array $aggregation): static
+    {
+        $this->params['aggs'][$name] = $aggregation;
+
+        return $this;
     }
 
     private function applyFilters(array $filters, array $filterTypes): self
@@ -83,7 +134,7 @@ class QueryTemplate extends Query
                         $filters = $searchType->getFilters();
 
                         foreach ($filters as $filter) {
-                            $filter->applySearch($this->_params['query']['bool']);
+                            $filter->applySearch($this->params['query']['bool']);
                         }
                     }
                     break;
@@ -91,7 +142,7 @@ class QueryTemplate extends Query
                 case self::FILTER_TYPE_FIXED:
                     $fields = explode('|', (string) $field);
                     foreach ($fields as $subField) {
-                        $this->_params['query']['bool']['must']['bool']['must']['bool']['should'][] = [
+                        $this->params['query']['bool']['must']['bool']['must']['bool']['should'][] = [
                             'terms' => [
                                 $subField => explode('|', (string) $value),
                             ],
@@ -99,7 +150,7 @@ class QueryTemplate extends Query
                     }
                     break;
                 case self::FILTER_TYPE_DYNAMIC:
-                    $this->_params['query']['bool']['filter'][] = [
+                    $this->params['query']['bool']['filter'][] = [
                         'term' => [
                             $field => $value,
                         ],
@@ -107,13 +158,13 @@ class QueryTemplate extends Query
                     break;
                 case self::FILTER_TYPE_BOOLEAN:
                     if ((int)$value === 1) {
-                        $this->_params['query']['bool']['must']['bool']['must'][] = [
+                        $this->params['query']['bool']['must']['bool']['must'][] = [
                             'exists' => [
                                 'field' => $field,
                             ],
                         ];
                     } else {
-                        $this->_params['query']['bool']['must_not'][] = [
+                        $this->params['query']['bool']['must_not'][] = [
                             'exists' => [
                                 'field' => $field,
                             ],
@@ -151,7 +202,7 @@ class QueryTemplate extends Query
                  */
                 $fieldName = substr((string) $fieldName, 0, -12);
 
-                $this->_params['query']['bool']['filter'][] = [
+                $this->params['query']['bool']['filter'][] = [
                     'term' => [
                         $fieldName => $value
                     ]
@@ -169,7 +220,7 @@ class QueryTemplate extends Query
                     $criteria['to'] = $dates[$toFieldName];
                 }
 
-                $this->_params['query']['bool']['filter'][] = [
+                $this->params['query']['bool']['filter'][] = [
                     'range' => [
                         $fieldName => $criteria
                     ]

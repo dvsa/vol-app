@@ -39,8 +39,15 @@ final class TmQualificationTest extends RepositoryTestCase
             ->getMock();
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('tq.transportManager', ':transportManager')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('tq.transportManager', ':transportManager');
+        $mockQb->shouldReceive('expr->eq')
+            ->with('tq.transportManager', ':transportManager')
+            ->once()
+            ->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')
+            ->with($expr)
+            ->once()
+            ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('transportManager', 1)->once()->andReturnSelf();
 
         $sut->applyListFilters($mockQb, $mockQuery);

@@ -49,16 +49,19 @@ final class ContinuationTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('trafficArea', 'ta')->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.month', ':month')->once()->andReturn('conditionMonth');
-        $qb->shouldReceive('andWhere')->with('conditionMonth')->once()->andReturnSelf();
+        $conditionmonth = $this->mockExprEq('m.month', ':month');
+        $qb->shouldReceive('expr->eq')->with('m.month', ':month')->once()->andReturn($conditionmonth);
+        $qb->shouldReceive('andWhere')->with($conditionmonth)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('month', 1)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.year', ':year')->once()->andReturn('conditionYear');
-        $qb->shouldReceive('andWhere')->with('conditionYear')->once()->andReturnSelf();
+        $conditionyear = $this->mockExprEq('m.year', ':year');
+        $qb->shouldReceive('expr->eq')->with('m.year', ':year')->once()->andReturn($conditionyear);
+        $qb->shouldReceive('andWhere')->with($conditionyear)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('year', 2015)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('ta.id', ':trafficArea')->once()->andReturn('conditionTa');
-        $qb->shouldReceive('andWhere')->with('conditionTa')->once()->andReturnSelf();
+        $conditionta = $this->mockExprEq('ta.id', ':trafficArea');
+        $qb->shouldReceive('expr->eq')->with('ta.id', ':trafficArea')->once()->andReturn($conditionta);
+        $qb->shouldReceive('andWhere')->with($conditionta)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('trafficArea', 'B')->once()->andReturnSelf();
 
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($qb);
