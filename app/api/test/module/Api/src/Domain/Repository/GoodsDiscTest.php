@@ -10,12 +10,15 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\NoResultException;
-use Mockery as m;
+use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Repository\GoodsDisc as GoodsDiscRepo;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
+use Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc as Entity;
+use Mockery as m;
 
 /**
  * Goods Disc test
@@ -24,236 +27,138 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
  */
 final class GoodsDiscTest extends RepositoryTestCase
 {
-    /**
-     * @var m\MockInterface|GoodsDiscRepo
-     */
-    protected $sut;
+    private const string JOINS = ' LEFT JOIN gd.licenceVehicle lv LEFT JOIN lv.licence lvl'
+        . ' LEFT JOIN lvl.goodsOrPsv lvlgp LEFT JOIN lvl.licenceType lvllt'
+        . ' LEFT JOIN lvl.trafficArea lvlta LEFT JOIN lv.vehicle lvv'
+        . ' LEFT JOIN lv.application lva LEFT JOIN lva.licenceType lvalt'
+        . ' LEFT JOIN lva.goodsOrPsv lvagp';
 
-    protected $activeStatuses;
+    /** Applied on both branches, after the interim/non-interim alternation. */
+    private const string COMMON_WHERE = ' AND gd.issuedDate IS NULL AND gd.ceasedDate IS NULL'
+        . ' AND lv.removalDate IS NULL AND lvl.status IN(:activeStatuses)';
+
+    private const array ACTIVE_STATUSES = [
+        LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION,
+        LicenceEntity::LICENCE_STATUS_GRANTED,
+        LicenceEntity::LICENCE_STATUS_VALID,
+        LicenceEntity::LICENCE_STATUS_CURTAILED,
+        LicenceEntity::LICENCE_STATUS_SUSPENDED,
+    ];
 
     #[\Override]
     public function setUp(): void
     {
-        $this->activeStatuses = [
-            LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION,
-            LicenceEntity::LICENCE_STATUS_GRANTED,
-            LicenceEntity::LICENCE_STATUS_VALID,
-            LicenceEntity::LICENCE_STATUS_CURTAILED,
-            LicenceEntity::LICENCE_STATUS_SUSPENDED
-        ];
-        $this->setUpSut(GoodsDiscRepo::class);
+        $this->setUpRealSut(GoodsDiscRepo::class, true);
     }
 
+    /**
+     * NI licences are matched on traffic area and licence type only; the operator type check is
+     * deliberately skipped. The ORDER BY matters: disc numbers are assigned from this order, so
+     * an unstable one would print numbers that disagree with the database.
+     */
     public function testFetchDiscsToPrintNi(): void
     {
-        $licenceType = 'ltyp_r';
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['result']);
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $condition1 = $this->mockExprEq('lvlta.isNi', 1);
-        $condition2 = $this->mockExprEq('gd.isInterim', 1);
-        $condition3 = $this->mockExprEq('lvalt.id', ':applicationLicenceType');
-        $conditionAndX1 = $this->mockAndX();
+        $this->assertSame(['result'], $this->sut->fetchDiscsToPrint('Y', 'ltyp_r', 1));
 
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 1)->once()->andReturn($condition1);
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 1)->once()->andReturn($condition2);
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvalt.id', ':applicationLicenceType')->once()->andReturn($condition3);
-        $mockQb->shouldReceive('expr->andX')
-            ->with($condition1, $condition2, $condition3)->once()->andReturn($conditionAndX1);
-        $mockQb->shouldReceive('setMaxResults')->with(1)->once()->andReturnSelf();
-
-        $condition5 = $this->mockExprEq('lvlta.isNi', 1);
-        $condition6 = $this->mockExprEq('gd.isInterim', 0);
-        $condition7 = $this->mockExprEq('lvllt.id', ':licenceLicenceType');
-        $conditionAndX2 = $this->mockAndX();
-
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 1)->once()->andReturn($condition5);
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 0)->once()->andReturn($condition6);
-        $mockQb->shouldReceive('expr->eq')->with('lvllt.id', ':licenceLicenceType')->once()->andReturn($condition7);
-        $mockQb->shouldReceive('expr->andX')
-            ->with($condition5, $condition6, $condition7)->once()->andReturn($conditionAndX2);
-
-        $conditionOrX = $this->mockOrX();
-        $mockQb->shouldReceive('expr->orX')->with($conditionAndX1, $conditionAndX2)->once()->andReturn($conditionOrX);
-        $mockQb->shouldReceive('andWhere')->with($conditionOrX)->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->isNull')->with('gd.ceasedDate')->once()->andReturn('noCeasedDateCond');
-        $mockQb->shouldReceive('expr->isNull')->with('gd.issuedDate')->once()->andReturn('noIssuedDateCond');
-        $mockQb->shouldReceive('expr->isNull')->with('lv.removalDate')->once()->andReturn('noRemovalDateCond');
-        $mockQb->shouldReceive('andWhere')->with('noCeasedDateCond')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('noIssuedDateCond')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('noRemovalDateCond')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
-            ->with('applicationLicenceType', $licenceType)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
-            ->with('licenceLicenceType', $licenceType)
-            ->once()
-            ->andReturnSelf();
-
-        $activeStatusesExpr = $this->mockExprIn('lvl.status', ':activeStatuses');
-        $mockQb->shouldReceive('expr->in')->with('lvl.status', ':activeStatuses')->once()->andReturn($activeStatusesExpr);
-        $mockQb->shouldReceive('andWhere')->with($activeStatusesExpr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('activeStatuses', $this->activeStatuses)
-            ->once()
-            ->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('gd.licenceVehicle', 'lv')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lv.licence', 'lvl')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lvl.goodsOrPsv', 'lvlgp')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lvl.licenceType', 'lvllt')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lvl.trafficArea', 'lvlta')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lv.vehicle', 'lvv')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lv.application', 'lva')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lva.licenceType', 'lvalt')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lva.goodsOrPsv', 'lvagp')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('order')->with('lvl.licNo', 'ASC')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('order')->with('gd.id', 'ASC')->once()->andReturnSelf();
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('gd')->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['result']);
-
-        $maxResults = 1;
-        $this->sut->fetchDiscsToPrint('Y', $licenceType, $maxResults);
+        $this->assertSame(
+            'SELECT gd, lv, lvl, lvlgp, lvllt, lvlta, lvv, lva, lvalt, lvagp'
+            . ' FROM ' . Entity::class . ' gd' . self::JOINS
+            . ' WHERE ((lvlta.isNi = 1 AND gd.isInterim = 1 AND lvalt.id = :applicationLicenceType)'
+            . ' OR (lvlta.isNi = 1 AND gd.isInterim = 0 AND lvllt.id = :licenceLicenceType))'
+            . self::COMMON_WHERE
+            . ' ORDER BY lvl.licNo ASC, gd.id ASC',
+            $qb->getDQL(),
+        );
+        $this->assertSame('ltyp_r', $qb->getParameter('applicationLicenceType')->getValue());
+        $this->assertSame('ltyp_r', $qb->getParameter('licenceLicenceType')->getValue());
+        $this->assertSame(self::ACTIVE_STATUSES, $qb->getParameter('activeStatuses')->getValue());
+        $this->assertSame(1, $qb->getMaxResults());
     }
 
+    /**
+     * Non-NI licences additionally check the operator type, against the application on the
+     * interim branch and the licence on the non-interim one.
+     */
     public function testFetchDiscsToPrint(): void
     {
-        $licenceType = 'ltyp_r';
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['result']);
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $condition1 = $this->mockExprEq('lvlta.isNi', 0);
-        $condition2 = $this->mockExprEq('gd.isInterim', 1);
-        $condition3 = $this->mockExprEq('lvagp.id', ':operatorType');
-        $condition4 = $this->mockExprEq('lvalt.id', ':applicationLicenceType');
+        $this->assertSame(['result'], $this->sut->fetchDiscsToPrint('N', 'ltyp_r', 1));
 
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn($condition1);
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 1)->once()->andReturn($condition2);
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvagp.id', ':operatorType')->once()->andReturn($condition3);
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvalt.id', ':applicationLicenceType')->once()->andReturn($condition4);
-        $mockQb->shouldReceive('setMaxResults')->with(1)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->andX')
-            ->with($condition1, $condition2, $condition3, $condition4)
-            ->once()
-            ->andReturn($conditionAndX1 = $this->mockAndX());
-
-        $condition6 = $this->mockExprEq('lvlta.isNi', 0);
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn($condition6);
-        $condition7 = $this->mockExprEq('gd.isInterim', 0);
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 0)->once()->andReturn($condition7);
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvlgp.id', ':operatorType1')->once()->andReturn($condition8 = $this->mockExprEq('lvlgp.id', ':operatorType1'));
-        $condition9 = $this->mockExprEq('lvllt.id', ':licenceLicenceType');
-        $mockQb->shouldReceive('expr->eq')->with('lvllt.id', ':licenceLicenceType')->once()->andReturn($condition9);
-        $mockQb->shouldReceive('expr->andX')
-            ->with($condition6, $condition7, $condition8, $condition9)
-            ->once()
-            ->andReturn($conditionAndX2 = $this->mockAndX());
-
-        $conditionOrX = $this->mockOrX();
-        $mockQb->shouldReceive('expr->orX')->with($conditionAndX1, $conditionAndX2)->once()->andReturn($conditionOrX);
-        $mockQb->shouldReceive('andWhere')->with($conditionOrX)->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->isNull')->with('gd.ceasedDate')->once()->andReturn('noCeasedDateCond');
-        $mockQb->shouldReceive('expr->isNull')->with('gd.issuedDate')->once()->andReturn('noIssuedDateCond');
-        $mockQb->shouldReceive('expr->isNull')->with('lv.removalDate')->once()->andReturn('noRemovalDateCond');
-        $mockQb->shouldReceive('andWhere')->with('noCeasedDateCond')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('noIssuedDateCond')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('noRemovalDateCond')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
-            ->with('operatorType', LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE)
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('applicationLicenceType', $licenceType)
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('operatorType1', LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE)
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('licenceLicenceType', $licenceType)
-            ->once()
-            ->andReturnSelf();
-
-        $activeStatusesExpr = $this->mockExprIn('lvl.status', ':activeStatuses');
-        $mockQb->shouldReceive('expr->in')->with('lvl.status', ':activeStatuses')->once()->andReturn($activeStatusesExpr);
-        $mockQb->shouldReceive('andWhere')->with($activeStatusesExpr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('activeStatuses', $this->activeStatuses)
-            ->once()
-            ->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('gd.licenceVehicle', 'lv')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lv.licence', 'lvl')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lvl.goodsOrPsv', 'lvlgp')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lvl.licenceType', 'lvllt')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lvl.trafficArea', 'lvlta')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lv.vehicle', 'lvv')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lv.application', 'lva')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lva.licenceType', 'lvalt')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('lva.goodsOrPsv', 'lvagp')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('order')->with('lvl.licNo', 'ASC')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('order')->with('gd.id', 'ASC')->once()->andReturnSelf();
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('gd')->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['result']);
-
-        $maxResults = 1;
-        $this->sut->fetchDiscsToPrint('N', $licenceType, $maxResults);
+        $this->assertSame(
+            'SELECT gd, lv, lvl, lvlgp, lvllt, lvlta, lvv, lva, lvalt, lvagp'
+            . ' FROM ' . Entity::class . ' gd' . self::JOINS
+            . ' WHERE ((lvlta.isNi = 0 AND gd.isInterim = 1 AND lvagp.id = :operatorType'
+            . ' AND lvalt.id = :applicationLicenceType)'
+            . ' OR (lvlta.isNi = 0 AND gd.isInterim = 0 AND lvlgp.id = :operatorType1'
+            . ' AND lvllt.id = :licenceLicenceType))'
+            . self::COMMON_WHERE
+            . ' ORDER BY lvl.licNo ASC, gd.id ASC',
+            $qb->getDQL(),
+        );
+        $this->assertSame(
+            LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+            $qb->getParameter('operatorType')->getValue(),
+        );
+        $this->assertSame(
+            LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+            $qb->getParameter('operatorType1')->getValue(),
+        );
     }
 
-    public function testSetPrintingOn(): void
+    /**
+     * The 'min' variant shares the filters but joins with plain leftJoin() and selects only the
+     * root, so it carries no ORDER BY and no eager-loaded associations.
+     */
+    public function testFetchDiscsToPrintMin(): void
     {
-        $discs = [1, 2];
-        $sut = m::mock(GoodsDiscRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-        $sut->shouldReceive('setIsPrinting')
-            ->with(1, $discs)
-            ->once()
-            ->getMock();
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['result']);
 
-        $this->assertNull($sut->setIsPrintingOn($discs));
+        $this->assertSame(['result'], $this->sut->fetchDiscsToPrintMin('N', 'ltyp_r'));
+
+        $this->assertSame(
+            'SELECT gd FROM ' . Entity::class . ' gd' . self::JOINS
+            . ' WHERE ((lvlta.isNi = 0 AND gd.isInterim = 1 AND lvagp.id = :operatorType'
+            . ' AND lvalt.id = :applicationLicenceType)'
+            . ' OR (lvlta.isNi = 0 AND gd.isInterim = 0 AND lvlgp.id = :operatorType1'
+            . ' AND lvllt.id = :licenceLicenceType))'
+            . self::COMMON_WHERE,
+            $qb->getDQL(),
+        );
     }
 
-    public function testSetPrintingOff(): void
-    {
-        $discs = [1, 2];
-        $sut = m::mock(GoodsDiscRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-        $sut->shouldReceive('setIsPrinting')
-            ->with(0, $discs)
-            ->once()
-            ->getMock();
-
-        $this->assertNull($sut->setIsPrintingOff($discs));
-    }
-
-    public function testSetPrinting(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('isPrintingProvider')]
+    public function testSetIsPrinting(string $method, int $expectedFlag): void
     {
         $this->expectQueryWithData(
             'Discs\GoodsDiscsSetIsPrinting',
-            ['isPrinting' => 1, 'ids' => [1, 2]],
-            ['isPrinting' => \Doctrine\DBAL\ParameterType::INTEGER, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
+            ['isPrinting' => $expectedFlag, 'ids' => [1, 2]],
+            ['isPrinting' => ParameterType::INTEGER, 'ids' => ArrayParameterType::INTEGER],
         );
 
-        $this->sut->setIsPrintingOn([1, 2]);
+        $this->sut->{$method}([1, 2]);
     }
 
+    public static function isPrintingProvider(): \Iterator
+    {
+        yield 'on' => ['setIsPrintingOn', 1];
+        yield 'off' => ['setIsPrintingOff', 0];
+    }
+
+    /**
+     * Disc numbers are assigned in the order given, so each id gets the next number up.
+     */
     public function testSetIsPrintingOffAndAssignNumbers(): void
     {
         $query = m::mock();
-        $query->shouldReceive('execute')->once()->with(['id' => 1, 'discNo' => 634]);
-        $query->shouldReceive('execute')->once()->with(['id' => 32, 'discNo' => 635]);
-        $query->shouldReceive('execute')->once()->with(['id' => 4, 'discNo' => 636]);
+        $query->expects('execute')->with(['id' => 1, 'discNo' => 634]);
+        $query->expects('execute')->with(['id' => 32, 'discNo' => 635]);
+        $query->expects('execute')->with(['id' => 4, 'discNo' => 636]);
 
         $this->dbQueryService->shouldReceive('get')
             ->with('Discs\GoodsDiscsSetIsPrintingOffAndDiscNo')
@@ -262,212 +167,92 @@ final class GoodsDiscTest extends RepositoryTestCase
         $this->sut->setIsPrintingOffAndAssignNumbers([1, 32, 4], 634);
     }
 
-    public function testCeaseDiscsForLicence(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('rowCountQueryProvider')]
+    public function testRowCountQueries(string $method, mixed $arg, string $queryName, array $data): void
     {
-        $licenceId = 123;
+        $statement = m::mock();
+        $statement->expects('rowCount')->withNoArgs()->andReturn(564);
+        $this->expectQueryWithData($queryName, $data, [], $statement);
 
-        $stmt = m::mock();
-        $stmt->shouldReceive('rowCount')->with()->once()->andReturn(564);
-
-        $this->expectQueryWithData('LicenceVehicle\CeaseDiscsForLicence', ['licence' => 123], [], $stmt);
-
-        $this->assertSame(564, $this->sut->ceaseDiscsForLicence($licenceId));
+        $this->assertSame(564, $this->sut->{$method}($arg));
     }
 
-    public function testCeaseDiscsForLicenceVehicle(): void
+    public static function rowCountQueryProvider(): \Iterator
     {
-        $lvId = 123;
-        $rowCount = 564;
-
-        $stmt = m::mock();
-        $stmt->shouldReceive('rowCount')->with()->once()->andReturn($rowCount);
-
-        $this->expectQueryWithData(
+        yield 'cease for licence' => [
+            'ceaseDiscsForLicence',
+            123,
+            'LicenceVehicle\CeaseDiscsForLicence',
+            ['licence' => 123],
+        ];
+        yield 'cease for licence vehicle' => [
+            'ceaseDiscsForLicenceVehicle',
+            123,
             'LicenceVehicle\CeaseDiscsForLicenceVehicle',
-            ['licenceVehicle' => $lvId],
-            [],
-            $stmt
-        );
-
-        $this->assertSame($rowCount, $this->sut->ceaseDiscsForLicenceVehicle($lvId));
-    }
-
-    public function testCeaseDiscsForApplication(): void
-    {
-        $stmt = m::mock();
-        $stmt->shouldReceive('rowCount')->with()->once()->andReturn(123);
-
-        $this->expectQueryWithData('LicenceVehicle\CeaseDiscsForApplication', ['application' => 45], [], $stmt);
-
-        $this->assertSame(123, $this->sut->ceaseDiscsForApplication(45));
-    }
-
-    public function testFetchDiscsToPrintMin(): void
-    {
-        $licenceType = 'ltyp_r';
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $condition1 = $this->mockExprEq('lvlta.isNi', 0);
-        $condition2 = $this->mockExprEq('gd.isInterim', 1);
-        $condition3 = $this->mockExprEq('lvagp.id', ':operatorType');
-        $condition4 = $this->mockExprEq('lvalt.id', ':applicationLicenceType');
-
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn($condition1);
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 1)->once()->andReturn($condition2);
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvagp.id', ':operatorType')->once()->andReturn($condition3);
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvalt.id', ':applicationLicenceType')->once()->andReturn($condition4);
-        $mockQb->shouldReceive('expr->andX')
-            ->with($condition1, $condition2, $condition3, $condition4)
-            ->once()
-            ->andReturn($conditionAndX1 = $this->mockAndX());
-
-        $condition6 = $this->mockExprEq('lvlta.isNi', 0);
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn($condition6);
-        $condition7 = $this->mockExprEq('gd.isInterim', 0);
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 0)->once()->andReturn($condition7);
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvlgp.id', ':operatorType1')->once()->andReturn($condition8 = $this->mockExprEq('lvlgp.id', ':operatorType1'));
-        $condition9 = $this->mockExprEq('lvllt.id', ':licenceLicenceType');
-        $mockQb->shouldReceive('expr->eq')->with('lvllt.id', ':licenceLicenceType')->once()->andReturn($condition9);
-        $mockQb->shouldReceive('expr->andX')
-            ->with($condition6, $condition7, $condition8, $condition9)
-            ->once()
-            ->andReturn($conditionAndX2 = $this->mockAndX());
-
-        $conditionOrX = $this->mockOrX();
-        $mockQb->shouldReceive('expr->orX')->with($conditionAndX1, $conditionAndX2)->once()->andReturn($conditionOrX);
-        $mockQb->shouldReceive('andWhere')->with($conditionOrX)->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->isNull')->with('gd.ceasedDate')->once()->andReturn('noCeasedDateCond');
-        $mockQb->shouldReceive('expr->isNull')->with('gd.issuedDate')->once()->andReturn('noIssuedDateCond');
-        $mockQb->shouldReceive('expr->isNull')->with('lv.removalDate')->once()->andReturn('noRemovalDateCond');
-        $mockQb->shouldReceive('andWhere')->with('noCeasedDateCond')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('noIssuedDateCond')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('noRemovalDateCond')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
-            ->with('operatorType', LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE)
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('applicationLicenceType', $licenceType)
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('operatorType1', LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE)
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('licenceLicenceType', $licenceType)
-            ->once()
-            ->andReturnSelf();
-
-        $activeStatusesExpr = $this->mockExprIn('lvl.status', ':activeStatuses');
-        $mockQb->shouldReceive('expr->in')->with('lvl.status', ':activeStatuses')->once()->andReturn($activeStatusesExpr);
-        $mockQb->shouldReceive('andWhere')->with($activeStatusesExpr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('activeStatuses', $this->activeStatuses)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('leftJoin')->with('gd.licenceVehicle', 'lv')->once()->andReturnSelf();
-        $mockQb->shouldReceive('leftJoin')->with('lv.licence', 'lvl')->once()->andReturnSelf();
-        $mockQb->shouldReceive('leftJoin')->with('lvl.goodsOrPsv', 'lvlgp')->once()->andReturnSelf();
-        $mockQb->shouldReceive('leftJoin')->with('lvl.licenceType', 'lvllt')->once()->andReturnSelf();
-        $mockQb->shouldReceive('leftJoin')->with('lvl.trafficArea', 'lvlta')->once()->andReturnSelf();
-        $mockQb->shouldReceive('leftJoin')->with('lv.vehicle', 'lvv')->once()->andReturnSelf();
-        $mockQb->shouldReceive('leftJoin')->with('lv.application', 'lva')->once()->andReturnSelf();
-        $mockQb->shouldReceive('leftJoin')->with('lva.licenceType', 'lvalt')->once()->andReturnSelf();
-        $mockQb->shouldReceive('leftJoin')->with('lva.goodsOrPsv', 'lvagp')->once()->andReturnSelf();
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('gd')->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['result']);
-
-        $this->sut->fetchDiscsToPrintMin('N', $licenceType);
+            ['licenceVehicle' => 123],
+        ];
+        yield 'cease for application' => [
+            'ceaseDiscsForApplication',
+            45,
+            'LicenceVehicle\CeaseDiscsForApplication',
+            ['application' => 45],
+        ];
+        yield 'create for licence' => [
+            'createDiscsForLicence',
+            1502,
+            'LicenceVehicle\CreateDiscsForLicence',
+            ['licence' => 1502],
+        ];
     }
 
     public function testUpdateExistingGoodsDiscs(): void
     {
-        $application = m::mock(\Dvsa\Olcs\Api\Entity\Application\Application::class);
+        $application = m::mock(Application::class);
         $application->shouldReceive('getId')->andReturn(1102);
         $application->shouldReceive('getLicence->getId')->andReturn(321);
 
         $this->expectQueryWithData('Discs\CeaseGoodsDiscsForApplication', ['application' => 1102, 'licence' => 321]);
-        $this->expectQueryWithData('Discs\CreateGoodsDiscs', ['application' => 1102, 'licence' => 321, 'isCopy' => 0]);
+        $this->expectQueryWithData(
+            'Discs\CreateGoodsDiscs',
+            ['application' => 1102, 'licence' => 321, 'isCopy' => 0],
+        );
 
         $this->sut->updateExistingGoodsDiscs($application);
     }
 
-    public function testCreateDiscsForLicence(): void
-    {
-        $stmt = m::mock();
-        $stmt->shouldReceive('rowCount')->with()->once()->andReturn(83);
-
-        $this->expectQueryWithData('LicenceVehicle\CreateDiscsForLicence', ['licence' => 1502], [], $stmt);
-
-        $this->assertSame(83, $this->sut->createDiscsForLicence(1502));
-    }
-
     public function testCountForLicence(): void
     {
-        $licenceId = 1;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andReturn(1);
 
-        $qb = $this->createMockQb('{QUERY}');
+        $this->assertSame(['discCount' => 1], $this->sut->countForLicence(1));
 
-        $qb->shouldReceive('getQuery->getSingleScalarResult')
-            ->once()
-            ->andReturn(1);
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->sut->countForLicence($licenceId);
-
-        $expectedQuery = '{QUERY} SELECT count(gd) INNER JOIN gd.licenceVehicle lv AND lv.licence = [[' . $licenceId . ']] AND gd.ceasedDate IS NULL LIMIT 1';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT count(gd) FROM ' . Entity::class . ' gd'
+            . ' INNER JOIN gd.licenceVehicle lv'
+            . ' WHERE lv.licence = :id AND gd.ceasedDate IS NULL',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('id')->getValue());
+        $this->assertSame(1, $qb->getMaxResults());
     }
 
     public function testCountForLicenceNoResult(): void
     {
-        $licenceId = 1;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andThrow(new NoResultException());
 
-        $qb = $this->createMockQb();
-        $exception = new NoResultException();
-
-        $query = m::mock(\Doctrine\ORM\Query::class);
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn($query);
-        $query->shouldReceive('getSingleScalarResult')
-            ->once()
-            ->andThrow($exception);
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->assertSame(['discCount' => 0], $this->sut->countForLicence($licenceId));
+        $this->assertSame(['discCount' => 0], $this->sut->countForLicence(1));
     }
 
-    public function testCountForLicenceException(): void
+    public function testCountForLicenceRethrowsOtherExceptions(): void
     {
-        $licenceId = 1;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andThrow(new \RuntimeException('boom'));
 
-        $qb = $this->createMockQb();
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('boom');
 
-        $ex = new \Exception('testException');
-        $query = m::mock(\Doctrine\ORM\Query::class);
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn($query);
-        $query->shouldReceive('getSingleScalarResult')
-            ->once()
-            ->andThrow($ex);
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->expectExceptionMessage('testException');
-
-        $this->sut->countForLicence($licenceId);
+        $this->sut->countForLicence(1);
     }
 }
