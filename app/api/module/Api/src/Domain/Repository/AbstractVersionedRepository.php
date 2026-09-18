@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Api\Domain\Repository;
 
+use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Exception;
 
 /**
@@ -92,7 +93,7 @@ abstract class AbstractVersionedRepository extends AbstractRepository
      * @return mixed
      */
     #[\Override]
-    public function fetchById($id, $hydrateMode = null, $version = null)
+    public function fetchById($id, $hydrateMode = Query::HYDRATE_OBJECT, $version = null)
     {
         $qb = $this->createQueryBuilder();
 
