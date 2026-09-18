@@ -5,463 +5,248 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\NoResultException;
-use Dvsa\Olcs\Api\Entity\Licence\Licence;
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\EventHistory as Repo;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Domain\Repository\EventHistory as Repo;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistory as Entity;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
-/**
- * EventHistoryTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 final class EventHistoryTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testFetchByOrganisation(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('singleFilterProvider')]
+    public function testFetchByColumn(string $method, string $expectedWhere, string $parameter): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->{$method}(1));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByOrganisation('ORG1'));
-
-        $expectedQuery = 'BLAH AND m.organisation = [[ORG1]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame('SELECT m' . self::FROM . ' WHERE ' . $expectedWhere, $qb->getDQL());
+        $this->assertSame(1, $qb->getParameter($parameter)->getValue());
     }
 
-    public function testFetchByTransportManager(): void
+    public static function singleFilterProvider(): \Iterator
     {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByTransportManager('TM1'));
-
-        $expectedQuery = 'BLAH AND m.transportManager = [[TM1]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        // The organisation parameter name carries a typo in the repository.
+        yield 'by organisation' => ['fetchByOrganisation', 'm.organisation = :organisaion', 'organisaion'];
+        yield 'by transport manager' => [
+            'fetchByTransportManager',
+            'm.transportManager = :transportManager',
+            'transportManager',
+        ];
     }
 
-    public function testFetchByAccount(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('accountProvider')]
+    public function testFetchByAccount(array $args, string $expectedTail, ?int $expectedMaxResults): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchByAccount(...$args));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.account = :account' . $expectedTail,
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByAccount('USER', 'EHT', 'SORT', 'ORDER', 1));
-
-        $expectedQuery = 'BLAH AND m.account = [[USER]] AND m.eventHistoryType = [[EHT]] ORDER BY m.SORT ORDER LIMIT 1';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame($expectedMaxResults, $qb->getMaxResults());
     }
 
-    public function testFetchByAccountWithoutEventType(): void
+    public static function accountProvider(): \Iterator
     {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByAccount('USER'));
-
-        $expectedQuery = 'BLAH AND m.account = [[USER]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        yield 'account only' => [[1], '', null];
+        yield 'with event type' => [
+            [1, 'type'],
+            ' AND m.eventHistoryType = :eventHistoryType',
+            null,
+        ];
+        yield 'sorted and limited' => [
+            [1, null, 'eventDatetime', 'DESC', 10],
+            ' ORDER BY m.eventDatetime DESC',
+            10,
+        ];
     }
 
+    /**
+     * Every entity filter is an orWhere, so the list returns history for any of the entities
+     * named rather than only rows matching all of them.
+     */
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repo::class, true);
-
-        $caseId = 1;
-        $licenceId = 2;
-        $organisationId = 3;
-        $transportManagerId = 4;
-        $userId = 5;
-        $applicationId = 6;
-        $irhpApplicationId = 7;
+        $qb = $this->createRealQb();
 
         $query = m::mock(QueryInterface::class);
-        $query->shouldReceive('getLicence')
-            ->andReturn($licenceId)
-            ->twice()
-            ->shouldReceive('getCase')
-            ->andReturn($caseId)
-            ->twice()
-            ->shouldReceive('getOrganisation')
-            ->andReturn($organisationId)
-            ->twice()
-            ->shouldReceive('getTransportManager')
-            ->andReturn($transportManagerId)
-            ->twice()
-            ->shouldReceive('getUser')
-            ->andReturn($userId)
-            ->twice()
-            ->shouldReceive('getApplication')
-            ->andReturn($applicationId)
-            ->twice()
-            ->shouldReceive('getIrhpApplication')
-            ->andReturn($irhpApplicationId)
-            ->twice();
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $licenceExpr = $this->mockExprEq('m.licence', ':licenceId');
-        $qb->shouldReceive('expr->eq')->with('m.licence', ':licenceId')->once()->andReturn($licenceExpr);
-        $qb->shouldReceive('orWhere')->with($licenceExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('licenceId', $licenceId)->once()->andReturnSelf();
-
-        $caseExpr = $this->mockExprEq('m.case', ':caseId');
-        $qb->shouldReceive('expr->eq')->with('m.case', ':caseId')->once()->andReturn($caseExpr);
-        $qb->shouldReceive('orWhere')->with($caseExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('caseId', $caseId)->once()->andReturnSelf();
-
-        $organisationExpr = $this->mockExprEq('m.organisation', ':organisationId');
-        $qb->shouldReceive('expr->eq')->with('m.organisation', ':organisationId')->once()->andReturn($organisationExpr);
-        $qb->shouldReceive('orWhere')->with($organisationExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('organisationId', $organisationId)->once()->andReturnSelf();
-
-        $transportManagerExpr = $this->mockExprEq('m.transportManager', ':transportManagerId');
-        $qb->shouldReceive('expr->eq')
-            ->with('m.transportManager', ':transportManagerId')->once()->andReturn($transportManagerExpr);
-        $qb->shouldReceive('orWhere')->with($transportManagerExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('transportManagerId', $transportManagerId)->once()->andReturnSelf();
-
-        $userExpr = $this->mockExprEq('m.user', ':userId');
-        $qb->shouldReceive('expr->eq')->with('m.user', ':userId')->once()->andReturn($userExpr);
-        $qb->shouldReceive('orWhere')->with($userExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('userId', $userId)->once()->andReturnSelf();
-
-        $applicationExpr = $this->mockExprEq('m.application', ':applicationId');
-        $qb->shouldReceive('expr->eq')->with('m.application', ':applicationId')->once()->andReturn($applicationExpr);
-        $qb->shouldReceive('orWhere')->with($applicationExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('applicationId', $applicationId)->once()->andReturnSelf();
-
-        $irhpApplicationExpr = $this->mockExprEq('m.irhpApplication', ':irhpApplicationId');
-        $qb->shouldReceive('expr->eq')->with('m.irhpApplication', ':irhpApplicationId')->once()->andReturn($irhpApplicationExpr);
-        $qb->shouldReceive('orWhere')->with($irhpApplicationExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('irhpApplicationId', $irhpApplicationId)->once()->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('eventHistoryType')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withUser')->once()->andReturnSelf();
+        foreach ([
+            'getCase' => 1,
+            'getLicence' => 2,
+            'getOrganisation' => 3,
+            'getTransportManager' => 4,
+            'getUser' => 5,
+            'getApplication' => 6,
+            'getIrhpApplication' => 7,
+        ] as $getter => $value) {
+            $query->shouldReceive($getter)->andReturn($value);
+        }
 
         $this->sut->applyListFilters($qb, $query);
-    }
 
-    public function testFetchEventHistoryDetails(): void
-    {
-        $table = 'application_hist';
-        $id = 1;
-        $version = 2;
-        $results = [
-            [
-                'foo' => 'bar2',
-                'cake' => 'baz2',
-                'same' => 'value',
-                'version' => 2
-            ],
-            [
-                'foo' => 'bar1',
-                'cake' => 'baz1',
-                'same' => 'value',
-                'version' => 1
-            ]
-        ];
-
-        $this->dbQueryService
-            ->shouldReceive('get')
-            ->with('EventHistory\GetEventHistoryDetails')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('execute')
-                ->with(
-                    ['id' => $id, 'version' => [$version, $version - 1]]
-                )
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('fetchAllAssociative')
-                    ->andReturn($results)
-                    ->once()
-                    ->getMock()
-                )
-                ->once()
-                ->shouldReceive('setHistoryTable')
-                ->with($table)
-                ->once()
-                ->getMock()
-            );
-
-        $expected = [
-            [
-                'name' => 'foo',
-                'oldValue' => 'bar1',
-                'newValue' => 'bar2'
-            ],
-            [
-                'name' => 'cake',
-                'oldValue' => 'baz1',
-                'newValue' => 'baz2'
-            ]
-        ];
-
-        $this->assertEquals($expected, $this->sut->fetchEventHistoryDetails($id, $version, $table));
-    }
-
-    public function testFetchEventHistoryDetailsWithDeletedDate(): void
-    {
-        $table = 'application_hist';
-        $id = 1;
-        $version = 2;
-
-        $results = [
-            [ // new row
-                'foo' => 'bar2',
-                'cake' => 'baz2',
-                'same' => 'value',
-                'deleted_date' => '2026-01-28',
-                'version' => 2
-            ],
-            [ // old row
-                'foo' => 'bar1',
-                'cake' => 'baz1',
-                'same' => 'value',
-                'deleted_date' => null,
-                'version' => 1
-            ]
-        ];
-
-        $mockQuery = m::mock()
-            ->shouldReceive('setHistoryTable')->with($table)->once()->andReturnSelf()
-            ->shouldReceive('execute')
-            ->with(['id' => $id, 'version' => [$version, $version - 1]])
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('fetchAllAssociative')
-                ->andReturn($results)
-                ->once()
-                ->getMock()
-            )
-            ->once()
-            ->getMock();
-
-        $this->dbQueryService->shouldReceive('get')
-            ->with('EventHistory\GetEventHistoryDetails')
-            ->andReturn($mockQuery);
-
-        $expected = [
-            ['name' => 'foo', 'oldValue' => 'bar1', 'newValue' => ''],
-            ['name' => 'cake', 'oldValue' => 'baz1', 'newValue' => ''],
-            ['name' => 'same', 'oldValue' => 'value', 'newValue' => ''],
-            ['name' => 'deleted_date', 'oldValue' => '', 'newValue' => ''],
-        ];
-
-        $this->assertEquals(
-            $expected,
-            $this->sut->fetchEventHistoryDetails($id, $version, $table)
+        $this->assertSame(
+            'SELECT m, w0, u, cd, p' . self::FROM
+            . ' LEFT JOIN m.eventHistoryType w0 LEFT JOIN m.user u'
+            . ' LEFT JOIN u.contactDetails cd LEFT JOIN cd.person p'
+            . ' WHERE m.case = :caseId OR m.licence = :licenceId'
+            . ' OR m.organisation = :organisationId OR m.transportManager = :transportManagerId'
+            . ' OR m.user = :userId OR m.application = :applicationId'
+            . ' OR m.irhpApplication = :irhpApplicationId',
+            $qb->getDQL(),
         );
+        $this->assertSame(1, $qb->getParameter('caseId')->getValue());
+        $this->assertSame(7, $qb->getParameter('irhpApplicationId')->getValue());
     }
-
-
 
     public function testApplyListJoins(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
+        $this->sut->applyListJoins($qb);
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->once()->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('case')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('licence')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('application')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('organisation')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('transportManager')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('busReg')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('irhpApplication')->once()->andReturnSelf();
-
-        $this->assertNull($this->sut->applyListJoins($qb));
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, w3, w4, w5, w6' . self::FROM
+            . ' LEFT JOIN m.case w0 LEFT JOIN m.licence w1 LEFT JOIN m.application w2'
+            . ' LEFT JOIN m.organisation w3 LEFT JOIN m.transportManager w4'
+            . ' LEFT JOIN m.busReg w5 LEFT JOIN m.irhpApplication w6',
+            $qb->getDQL(),
+        );
     }
 
     public function testFetchByTask(): void
     {
-        $taskId = 1;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
 
-        $this->setUpSut(Repo::class, true);
+        $this->assertSame(['RESULTS'], $this->sut->fetchByTask(1));
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $this->mockCreateQueryBuilder($qb);
-
-        $expr = m::mock(\Doctrine\ORM\Query\Expr::class);
-        $condition = $this->mockExprEq('m.task', ':task');
-        $query = m::mock(Query::class);
-
-        $qb->shouldReceive('expr')
-            ->andReturn($expr)
-            ->once();
-        $expr->shouldReceive('eq')
-            ->with('m.task', ':task')
-            ->andReturn($condition)
-            ->once();
-        $qb->shouldReceive('andWhere')
-            ->with($condition)
-            ->once()
-            ->andReturnSelf();
-        $qb->shouldReceive('setParameter')
-            ->with('task', $taskId)
-            ->once()
-            ->andReturnSelf();
-        $qb->shouldReceive('getQuery')
-            ->andReturn($query)
-            ->once();
-        $query->shouldReceive('getResult')
-            ->with(Query::HYDRATE_ARRAY)
-            ->andReturn(['foo'])
-            ->once();
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('eventHistoryType', 'eht')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('user', 'u')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('u.contactDetails', 'cd')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('cd.person', 'p')
-            ->once()
-            ->getMock();
-
-        $this->assertEquals(['foo'], $this->sut->fetchByTask($taskId));
+        $this->assertSame(
+            'SELECT m, eht, u, cd, p' . self::FROM
+            . ' LEFT JOIN m.eventHistoryType eht LEFT JOIN m.user u'
+            . ' LEFT JOIN u.contactDetails cd LEFT JOIN cd.person p'
+            . ' WHERE m.task = :task',
+            $qb->getDQL(),
+        );
     }
 
-    public function testFetchPreviousLicenceStatus(): void
+    /**
+     * The event types are inlined, and the most recent of them decides the status the licence
+     * reverts to. No matching history at all is treated as a return to valid.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('previousStatusProvider')]
+    public function testFetchPreviousLicenceStatus(int $eventTypeId, string $expectedStatus): void
     {
-        $licenceId = 1;
-        $qb = $this->createMockQb('QUERY');
-        $qb->shouldReceive('getQuery->getSingleScalarResult')
-            ->once()
-            ->andReturn(7);
-        $this->mockCreateQueryBuilder($qb);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andReturn($eventTypeId);
 
-        $this->sut->fetchPreviousLicenceStatus($licenceId);
+        $this->assertSame(['status' => $expectedStatus], $this->sut->fetchPreviousLicenceStatus(1));
 
-        $expectedQuery = 'QUERY SELECT eht.id INNER JOIN m.eventHistoryType eht INNER JOIN m.licence l AND eht.id IN([7,31,75]) AND l.id = [[' . $licenceId . ']] ORDER BY m.eventDatetime DESC LIMIT 1';
-
-        $this->assertSame($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT eht.id' . self::FROM
+            . ' INNER JOIN m.eventHistoryType eht INNER JOIN m.licence l'
+            . ' WHERE eht.id IN(7, 31, 75) AND l.id = :licenceId'
+            . ' ORDER BY m.eventDatetime DESC',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getMaxResults());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('fetchPreviousLicenceStatusDataProvider')]
-    public function testFetchPreviousLicenceStatusReturn(mixed $eventTypeId, mixed $expectedStatus): void
+    public static function previousStatusProvider(): \Iterator
     {
-        $qb = $this->createMockQb('QUERY');
-        $qb->shouldReceive('getQuery->getSingleScalarResult')
-            ->once()
-            ->andReturn($eventTypeId);
-        $this->mockCreateQueryBuilder($qb);
-
-        $result = $this->sut->fetchPreviousLicenceStatus(1);
-        $expectedResult = ['status' => $expectedStatus];
-
-        $this->assertEquals($expectedResult, $result);
+        yield 'curtailed' => [7, Licence::LICENCE_STATUS_CURTAILED];
+        yield 'suspended' => [31, Licence::LICENCE_STATUS_SUSPENDED];
+        yield 'valid' => [75, Licence::LICENCE_STATUS_VALID];
     }
 
-    public static function fetchPreviousLicenceStatusDataProvider(): \Iterator
+    public function testFetchPreviousLicenceStatusDefaultsToValidWhenThereIsNoHistory(): void
     {
-        yield 'case_curtailed' => [
-            'eventTypeId' => 7,
-            'expectedStatus' => Licence::LICENCE_STATUS_CURTAILED
-        ];
-        yield 'case_suspended' => [
-            'eventTypeId' => 31,
-            'expectedStatus' => Licence::LICENCE_STATUS_SUSPENDED
-        ];
-        yield 'case_valid' => [
-            'eventTypeId' => 75,
-            'expectedStatus' => Licence::LICENCE_STATUS_VALID
-        ];
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andThrow(new NoResultException());
+
+        $this->assertSame(
+            ['status' => Licence::LICENCE_STATUS_VALID],
+            $this->sut->fetchPreviousLicenceStatus(1),
+        );
     }
 
-    public function testFetchPreviousLicenceStatusNoResult(): void
+    public function testFetchPreviousLicenceStatusRethrowsOtherExceptions(): void
     {
-        $licenceId = 1;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andThrow(new \RuntimeException('boom'));
 
-        $qb = $this->createMockQb();
-        $exception = new NoResultException();
+        $this->expectException(\RuntimeException::class);
 
-        $query = m::mock(Query::class);
-        $qb->shouldReceive('getQuery')
-            ->once()
+        $this->sut->fetchPreviousLicenceStatus(1);
+    }
+
+    /**
+     * Two consecutive versions are diffed, dropping the audit bookkeeping columns and any field
+     * whose value did not change.
+     */
+    public function testFetchEventHistoryDetails(): void
+    {
+        $this->expectHistoryQuery('table', 1, 2, [
+            ['foo' => 'bar2', 'cake' => 'baz2', 'same' => 'value', 'version' => 2],
+            ['foo' => 'bar1', 'cake' => 'baz1', 'same' => 'value', 'version' => 1],
+        ]);
+
+        $this->assertSame(
+            [
+                ['newValue' => 'bar2', 'oldValue' => 'bar1', 'name' => 'foo'],
+                ['newValue' => 'baz2', 'oldValue' => 'baz1', 'name' => 'cake'],
+            ],
+            $this->sut->fetchEventHistoryDetails(1, 2, 'table'),
+        );
+    }
+
+    /**
+     * A newly set deleted_date means the row was deleted, so every old value is reported as
+     * having been cleared rather than diffed field by field.
+     */
+    public function testFetchEventHistoryDetailsWithDeletedDate(): void
+    {
+        $this->expectHistoryQuery('table', 1, 2, [
+            ['foo' => 'bar2', 'cake' => 'baz2', 'same' => 'value', 'deleted_date' => '2026-01-28', 'version' => 2],
+            ['foo' => 'bar1', 'cake' => 'baz1', 'same' => 'value', 'deleted_date' => null, 'version' => 1],
+        ]);
+
+        $this->assertSame(
+            [
+                ['name' => 'foo', 'oldValue' => 'bar1', 'newValue' => ''],
+                ['name' => 'cake', 'oldValue' => 'baz1', 'newValue' => ''],
+                ['name' => 'same', 'oldValue' => 'value', 'newValue' => ''],
+                // The previous row's deleted_date was null, and it is reported as-is.
+                ['name' => 'deleted_date', 'oldValue' => null, 'newValue' => ''],
+            ],
+            $this->sut->fetchEventHistoryDetails(1, 2, 'table'),
+        );
+    }
+
+    private function expectHistoryQuery(string $table, int $id, int $version, array $rows): void
+    {
+        $statement = m::mock();
+        $statement->expects('fetchAllAssociative')->andReturn($rows);
+
+        $query = m::mock();
+        $query->expects('setHistoryTable')->with($table)->andReturnSelf();
+        $query->expects('execute')
+            ->with(['id' => $id, 'version' => [$version, $version - 1]])
+            ->andReturn($statement);
+
+        $this->dbQueryService->shouldReceive('get')
+            ->with('EventHistory\GetEventHistoryDetails')
             ->andReturn($query);
-        $query->shouldReceive('getSingleScalarResult')
-            ->once()
-            ->andThrow($exception);
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->assertSame(['status' => Licence::LICENCE_STATUS_VALID], $this->sut->fetchPreviousLicenceStatus($licenceId));
-    }
-
-    public function testFetchPreviousLicenceStatusException(): void
-    {
-        $licenceId = 1;
-
-        $qb = $this->createMockQb();
-
-        $ex = new \Exception('testException');
-        $query = m::mock(Query::class);
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn($query);
-        $query->shouldReceive('getSingleScalarResult')
-            ->once()
-            ->andThrow($ex);
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->expectExceptionMessage('testException');
-
-        $this->sut->fetchPreviousLicenceStatus($licenceId);
     }
 }
