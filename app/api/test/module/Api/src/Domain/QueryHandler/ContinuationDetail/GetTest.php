@@ -168,8 +168,10 @@ final class GetTest extends QueryHandlerTestCase
             ->shouldReceive('getFinanceCalculationForOrganisation')->with(99)->once()->andReturn('123.99');
 
         $this->mockedSmServices['ContinuationReview\Declaration']
-            ->shouldReceive('getDeclarationMarkup')->with($continuationDetail)->once()
-            ->andReturn('DECLARATIONS');
+            ->shouldReceive('getLongTextDeclarationMarkup')->with($continuationDetail)->once()
+            ->andReturn('DECLARATIONS')
+            ->shouldReceive('getLongTextReviewMarkup')->once()
+            ->andReturn('REVIEW');
 
         $this->assertEquals(
             [
@@ -182,6 +184,7 @@ final class GetTest extends QueryHandlerTestCase
                 'documents' => ['document1', 'document2'],
                 'organisationTypeId' => 'ORG_TYPE_ID',
                 'declarations' => 'DECLARATIONS',
+                'reviewText' => 'REVIEW',
                 'disableSignatures' => 'DISABLE_SIGNATURES',
                 'hasOutstandingContinuationFee' => true,
                 'signature' => [],
@@ -244,8 +247,10 @@ final class GetTest extends QueryHandlerTestCase
             ->shouldReceive('getFinanceCalculationForOrganisation')->with(99)->once()->andReturn('123.99');
 
         $this->mockedSmServices['ContinuationReview\Declaration']
-            ->shouldReceive('getDeclarationMarkup')->with($continuationDetail)->once()
-            ->andReturn('DECLARATIONS');
+            ->shouldReceive('getLongTextDeclarationMarkup')->with($continuationDetail)->once()
+            ->andReturn('DECLARATIONS')
+            ->shouldReceive('getLongTextReviewMarkup')->once()
+            ->andReturn('REVIEW');
 
         $this->assertEquals(
             [
@@ -258,6 +263,7 @@ final class GetTest extends QueryHandlerTestCase
                 'documents' => ['document1', 'document2'],
                 'organisationTypeId' => 'ORG_TYPE_ID',
                 'declarations' => 'DECLARATIONS',
+                'reviewText' => 'REVIEW',
                 'disableSignatures' => 'DISABLE_SIGNATURES',
                 'hasOutstandingContinuationFee' => true,
                 'signature' => [],
@@ -334,8 +340,10 @@ final class GetTest extends QueryHandlerTestCase
             ->shouldReceive('getFinanceCalculationForOrganisation')->with(99)->once()->andReturn('123.99');
 
         $this->mockedSmServices['ContinuationReview\Declaration']
-            ->shouldReceive('getDeclarationMarkup')->with($continuationDetail)->once()
-            ->andReturn('DECLARATIONS');
+            ->shouldReceive('getLongTextDeclarationMarkup')->with($continuationDetail)->once()
+            ->andReturn('DECLARATIONS')
+            ->shouldReceive('getLongTextReviewMarkup')->once()
+            ->andReturn('REVIEW');
 
         $this->assertEquals(
             [
@@ -348,6 +356,7 @@ final class GetTest extends QueryHandlerTestCase
                 'documents' => ['document1', 'document2'],
                 'organisationTypeId' => 'ORG_TYPE_ID',
                 'declarations' => 'DECLARATIONS',
+                'reviewText' => 'REVIEW',
                 'disableSignatures' => 'DISABLE_SIGNATURES',
                 'hasOutstandingContinuationFee' => true,
                 'signature' => [
@@ -415,8 +424,10 @@ final class GetTest extends QueryHandlerTestCase
             ->shouldReceive('getFinanceCalculationForOrganisation')->with(99)->once()->andReturn('123.99');
 
         $this->mockedSmServices['ContinuationReview\Declaration']
-            ->shouldReceive('getDeclarationMarkup')->with($continuationDetail)->once()
-            ->andReturn('DECLARATIONS');
+            ->shouldReceive('getLongTextDeclarationMarkup')->with($continuationDetail)->once()
+            ->andReturn('DECLARATIONS')
+            ->shouldReceive('getLongTextReviewMarkup')->once()
+            ->andReturn('REVIEW');
 
         $this->assertEquals(
             [
@@ -429,6 +440,7 @@ final class GetTest extends QueryHandlerTestCase
                 'documents' => ['document1', 'document2'],
                 'organisationTypeId' => 'ORG_TYPE_ID',
                 'declarations' => 'DECLARATIONS',
+                'reviewText' => 'REVIEW',
                 'disableSignatures' => 'DISABLE_SIGNATURES',
                 'hasOutstandingContinuationFee' => true,
                 'signature' => [
