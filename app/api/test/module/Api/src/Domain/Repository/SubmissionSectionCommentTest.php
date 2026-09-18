@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\SubmissionSectionComment;
+use Dvsa\Olcs\Api\Entity\Submission\SubmissionSectionComment as Entity;
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionSectionComment as Cmd;
-use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\SubmissionSectionComment::class)]
 final class SubmissionSectionCommentTest extends RepositoryTestCase
@@ -20,32 +20,29 @@ final class SubmissionSectionCommentTest extends RepositoryTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(SubmissionSectionComment::class);
+        $this->setUpRealSut(SubmissionSectionComment::class);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsExistsProvider')]
     public function testIsExist(mixed $queryResult, mixed $exists): void
     {
-        $qb = $this->createMockQb('QUERY');
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn($queryResult);
+        $qb = $this->createRealQb()->willReturn($queryResult);
 
-        $this->mockCreateQueryBuilder($qb);
-
-        //  check result
         $data = [
             'submission' => self::SUBMISSION_ID,
             'submissionSection' => self::SUBMISSION_SECTION,
         ];
 
-        $this->assertEquals($exists, $this->sut->isExist(Cmd::create($data)));
+        $this->assertSame($exists, $this->sut->isExist(Cmd::create($data)));
 
-        //  check query
-        $expect = 'QUERY ' .
-            'AND m.submission = [[' . self::SUBMISSION_ID . ']] ' .
-            'AND m.submissionSection = [[' . self::SUBMISSION_SECTION . ']] ' .
-            'LIMIT 1';
-
-        $this->assertEquals($expect, $this->query);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m'
+            . ' WHERE m.submission = :SUBMISSION_ID AND m.submissionSection = :SUBMISSION_SECTION',
+            $qb->getDQL(),
+        );
+        $this->assertSame(self::SUBMISSION_ID, $qb->getParameter('SUBMISSION_ID')->getValue());
+        $this->assertSame(self::SUBMISSION_SECTION, $qb->getParameter('SUBMISSION_SECTION')->getValue());
+        $this->assertSame(1, $qb->getMaxResults());
     }
 
     public static function dpTestIsExistsProvider(): \Iterator

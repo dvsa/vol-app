@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\Query;
-use Mockery as m;
+use Dvsa\Olcs\Api\Domain\Repository\Vehicle as Repo;
+use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle as Entity;
 
 /**
  * VehicleTest
@@ -17,28 +17,21 @@ final class VehicleTest extends RepositoryTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(\Dvsa\Olcs\Api\Domain\Repository\Vehicle::class);
+        $this->setUpRealSut(Repo::class);
     }
 
     public function testFetchByVrm(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturnSelf();
+        $qb->stubbedQuery()->expects('getResult')->withNoArgs()->andReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchByVrm('ABC123'));
 
-        $query = m::mock(Query::class);
-
-        $query->shouldReceive('execute')
-            ->andReturnSelf();
-
-        $query->shouldReceive('getResult')
-            ->andReturn(['RESULTS']);
-
-        $qb->shouldReceive('getQuery')
-            ->andReturn($query);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByVrm('ABC123'));
-
-        $expectedQuery = 'BLAH AND m.vrm = [[ABC123]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.vrm = :vrm',
+            $qb->getDQL(),
+        );
+        $this->assertSame('ABC123', $qb->getParameter('vrm')->getValue());
     }
 }

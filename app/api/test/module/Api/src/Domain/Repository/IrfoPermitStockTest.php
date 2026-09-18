@@ -2,107 +2,48 @@
 
 declare(strict_types=1);
 
-/**
- * IrfoPermitStock Repo test
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
-use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Entity\Irfo\IrfoPermitStock;
 use Dvsa\Olcs\Api\Domain\Repository\IrfoPermitStock as Repo;
-use Doctrine\ORM\EntityRepository;
+use Dvsa\Olcs\Api\Entity\Irfo\IrfoPermitStock as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
-/**
- * IrfoPermitStock Repo test
- */
 final class IrfoPermitStockTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
+    /**
+     * The result is indexed by serial number, so a caller can address a single permit in the range
+     * without scanning.
+     */
     public function testFetchUsingSerialNoStartEnd(): void
     {
-        $irfoCountryId = 99;
-        $validForYear = 2015;
-        $serialNoStart = 1;
-        $serialNoEnd = 2;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['result']);
 
-        $mockResult = [0 => 'result'];
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getIrfoCountry')->andReturn(99);
+        $query->shouldReceive('getValidForYear')->andReturn(2015);
+        $query->shouldReceive('getSerialNoStart')->andReturn(1);
+        $query->shouldReceive('getSerialNoEnd')->andReturn(2);
 
-        $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getIrfoCountry')
-            ->once()
-            ->andReturn($irfoCountryId);
-        $command->shouldReceive('getValidForYear')
-            ->once()
-            ->andReturn($validForYear);
-        $command->shouldReceive('getSerialNoStart')
-            ->once()
-            ->andReturn($serialNoStart);
-        $command->shouldReceive('getSerialNoEnd')
-            ->once()
-            ->andReturn($serialNoEnd);
+        $this->assertSame(['result'], $this->sut->fetchUsingSerialNoStartEnd($query));
 
-    /** @var Expr $expr */
-        $expr = new Expr();
-
-    /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $qb->shouldReceive('expr')
-        ->times(4)
-        ->andReturn($expr);
-
-        $qb->shouldReceive('setParameter')
-            ->once()
-            ->with('byIrfoCountry', $irfoCountryId)
-            ->andReturnSelf();
-        $qb->shouldReceive('setParameter')
-            ->once()
-            ->with('byValidForYear', $validForYear)
-            ->andReturnSelf();
-        $qb->shouldReceive('setParameter')
-            ->once()
-            ->with('bySerialNoStart', $serialNoStart)
-            ->andReturnSelf();
-        $qb->shouldReceive('setParameter')
-            ->once()
-            ->with('bySerialNoEnd', $serialNoEnd)
-            ->andReturnSelf();
-
-        $qb->shouldReceive('andWhere')
-        ->with(m::type(\Doctrine\ORM\Query\Expr\Comparison::class))
-        ->times(4)
-        ->andReturnSelf();
-        $qb->shouldReceive('indexBy')
-            ->once()
-            ->with(m::type('string'), 'm.serialNo')
-            ->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($mockResult);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(IrfoPermitStock::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchUsingSerialNoStartEnd($command);
-
-        $this->assertEquals($mockResult, $result);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m INDEX BY m.serialNo'
+            . ' WHERE m.irfoCountry = :byIrfoCountry AND m.validForYear = :byValidForYear'
+            . ' AND m.serialNo >= :bySerialNoStart AND m.serialNo <= :bySerialNoEnd',
+            $qb->getDQL(),
+        );
+        $this->assertSame(99, $qb->getParameter('byIrfoCountry')->getValue());
+        $this->assertSame(2015, $qb->getParameter('byValidForYear')->getValue());
+        $this->assertSame(1, $qb->getParameter('bySerialNoStart')->getValue());
+        $this->assertSame(2, $qb->getParameter('bySerialNoEnd')->getValue());
     }
 }

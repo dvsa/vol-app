@@ -4,44 +4,40 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\TaskAlphaSplit as TaskAlphaSplitRepo;
+use Dvsa\Olcs\Api\Entity\Task\TaskAlphaSplit as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Dvsa\Olcs\Transfer\Query\TaskAlphaSplit\GetList;
+use Mockery as m;
 
-/**
- * Task Alpha SplitTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 final class TaskAlphaSplitTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(TaskAlphaSplitRepo::class);
+        $this->setUpRealSut(TaskAlphaSplitRepo::class, true);
     }
 
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(TaskAlphaSplitRepo::class, true);
+        $qb = $this->createRealQb();
 
-        $qb = $this->createMockQb('[QUERY]');
-        $query = m::mock(QueryInterface::class);
+        // A bare QueryInterface has no getTaskAllocationRule(), so the filter is skipped.
+        $this->sut->applyListFilters($qb, m::mock(QueryInterface::class));
 
-        $this->sut->applyListFilters($qb, $query);
-
-        $this->assertSame('[QUERY]', $this->query);
+        $this->assertSame('SELECT m FROM ' . Entity::class . ' m', $qb->getDQL());
     }
 
     public function testApplyListFiltersWithTaskAllocationRule(): void
     {
-        $this->setUpSut(TaskAlphaSplitRepo::class, true);
+        $qb = $this->createRealQb();
 
-        $qb = $this->createMockQb('[QUERY]');
-        $query = \Dvsa\Olcs\Transfer\Query\TaskAlphaSplit\GetList::create(['taskAllocationRule' => 723]);
+        $this->sut->applyListFilters($qb, GetList::create(['taskAllocationRule' => 723]));
 
-        $this->sut->applyListFilters($qb, $query);
-
-        $this->assertSame('[QUERY] AND m.taskAllocationRule = [[723]]', $this->query);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.taskAllocationRule = :taskAllocationRule',
+            $qb->getDQL(),
+        );
+        $this->assertSame(723, $qb->getParameter('taskAllocationRule')->getValue());
     }
 }
