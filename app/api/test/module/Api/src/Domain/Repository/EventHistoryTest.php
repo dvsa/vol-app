@@ -82,7 +82,8 @@ final class EventHistoryTest extends RepositoryTestCase
         $qb = $this->createRealQb();
 
         $query = m::mock(QueryInterface::class);
-        foreach ([
+        foreach (
+            [
             'getCase' => 1,
             'getLicence' => 2,
             'getOrganisation' => 3,
@@ -90,7 +91,8 @@ final class EventHistoryTest extends RepositoryTestCase
             'getUser' => 5,
             'getApplication' => 6,
             'getIrhpApplication' => 7,
-        ] as $getter => $value) {
+            ] as $getter => $value
+        ) {
             $query->shouldReceive($getter)->andReturn($value);
         }
 
