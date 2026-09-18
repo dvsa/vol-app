@@ -298,6 +298,12 @@ return [
                     'route' => 'admin-dashboard/admin-feature-toggle',
                 ],
                 [
+                    'id' => 'admin-dashboard/admin-cache-clear',
+                    'class' => 'govuk-link--no-visited-state',
+                    'label' => 'Clear cache',
+                    'route' => 'admin-dashboard/admin-cache-clear',
+                ],
+                [
                     'id' => 'admin-dashboard/admin-s3-browser',
                     'class' => 'govuk-link--no-visited-state',
                     'label' => 'Document store browser',

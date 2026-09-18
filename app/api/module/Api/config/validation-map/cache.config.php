@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSideEffect;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\NoValidationRequired;
+use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemUserOrSystemAdmin;
 
 return [
     QueryHandler\Cache\ById::class => NoValidationRequired::class,
@@ -17,6 +18,7 @@ return [
     QueryHandler\Cache\Single::class => NoValidationRequired::class,
     QueryHandler\Cache\RecordList::class => NoValidationRequired::class,
 
+    CommandHandler\Cache\Clear::class => IsSystemUserOrSystemAdmin::class,
     CommandHandler\Cache\ClearForOrganisation::class => IsSideEffect::class,
     CommandHandler\Cache\ClearForLicence::class => IsSideEffect::class,
     CommandHandler\Cache\Generate::class => IsSideEffect::class
