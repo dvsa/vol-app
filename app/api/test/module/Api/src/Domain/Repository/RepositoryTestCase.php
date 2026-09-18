@@ -12,7 +12,6 @@ use Dvsa\Olcs\Api\Domain\QueryBuilder as OlcsQueryBuilder;
 use Dvsa\Olcs\Api\Domain\QueryBuilderInterface;
 use Dvsa\Olcs\Api\Domain\Repository\AbstractReadonlyRepository;
 use Dvsa\Olcs\Api\Domain\Repository\AbstractRepository;
-use Dvsa\Olcs\Api\Domain\Repository\CommunityLic as CommunityLicRepo;
 use Dvsa\Olcs\Api\Domain\Repository\RepositoryInterface;
 use Dvsa\OlcsTest\Builder\ServiceManagerBuilder;
 use Dvsa\OlcsTest\Support\DoctrineMetadata;
@@ -23,10 +22,6 @@ use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
-use Doctrine\ORM\Query\Expr\Andx;
-use Doctrine\ORM\Query\Expr\Comparison;
-use Doctrine\ORM\Query\Expr\Func;
-use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr;
 
@@ -57,7 +52,7 @@ class RepositoryTestCase extends MockeryTestCase
      */
     protected $dbQueryService;
 
-    protected $query = '';
+    /** The query builder the test under way is asserting on, set by createRealQb(). */
     protected $qb;
 
     public function setUpSut(mixed $class = null, bool $mockSut = false): void
@@ -74,7 +69,6 @@ class RepositoryTestCase extends MockeryTestCase
             $this->sut = new $class($this->em, $this->queryBuilder, $this->dbQueryService);
         }
 
-        $this->query = '';
         $this->qb = null;
     }
 
@@ -108,7 +102,6 @@ class RepositoryTestCase extends MockeryTestCase
             $this->sut = new $class($this->em, $this->queryBuilder, $this->dbQueryService);
         }
 
-        $this->query = '';
         $this->qb = null;
     }
 
@@ -198,323 +191,6 @@ class RepositoryTestCase extends MockeryTestCase
     protected function compileDql(string $dql): string
     {
         return DoctrineMetadata::entityManager()->createQuery($dql)->getSQL();
-    }
-
-    /**
-     * @return m\MockInterface
-     */
-    protected function createMockQb(string $query = ''): mixed
-    {
-        $this->query = $query;
-
-        $this->qb = m::mock(QueryBuilder::class);
-
-        $this->qb->shouldReceive('expr->eq')
-            ->andReturnUsing($this->mockExprEq(...));
-
-        $this->qb->shouldReceive('expr->neq')
-            ->andReturnUsing($this->mockExprNeq(...));
-
-        $this->qb->shouldReceive('expr->lte')
-            ->andReturnUsing($this->mockExprLte(...));
-
-        $this->qb->shouldReceive('expr->lt')
-            ->andReturnUsing($this->mockExprLt(...));
-
-        $this->qb->shouldReceive('expr->gte')
-            ->andReturnUsing($this->mockExprGte(...));
-
-        $this->qb->shouldReceive('expr->gt')
-            ->andReturnUsing($this->mockExprGt(...));
-
-        $this->qb->shouldReceive('expr->isNull')
-            ->andReturnUsing($this->mockExprIsNull(...));
-
-        $this->qb->shouldReceive('expr->between')
-            ->andReturnUsing($this->mockExprBetween(...));
-
-        $this->qb->shouldReceive('expr->in')
-            ->andReturnUsing($this->mockExprIn(...));
-
-        $this->qb->shouldReceive('expr->notIn')
-            ->andReturnUsing($this->mockExprNotIn(...));
-
-        $this->qb->shouldReceive('expr->isNotNull')
-            ->andReturnUsing($this->mockExprIsNotNull(...));
-
-        $this->qb->shouldReceive('expr->like')
-            ->andReturnUsing($this->mockExprLike(...));
-
-        $this->qb->shouldReceive('expr->orX')
-            ->andReturnUsing($this->mockOrX(...));
-
-        $this->qb->shouldReceive('expr->andX')
-            ->andReturnUsing($this->mockAndX(...));
-
-        $this->qb->shouldReceive('expr->count')
-            ->andReturnUsing($this->mockCount(...));
-
-        $this->qb->shouldReceive('select')
-            ->andReturnUsing($this->mockAddSelect(...));
-
-        $this->qb->shouldReceive('distinct')
-            ->andReturnUsing($this->mockDistinct(...));
-
-        $this->qb->shouldReceive('addSelect')
-            ->andReturnUsing($this->mockAddSelect(...));
-
-        $this->qb->shouldReceive('select')
-            ->andReturnUsing($this->mockAddSelect(...));
-
-        $this->qb->shouldReceive('where')
-            ->andReturnUsing($this->mockAndWhere(...));
-
-        $this->qb->shouldReceive('andWhere')
-            ->andReturnUsing($this->mockAndWhere(...));
-
-        $this->qb->shouldReceive('orWhere')
-            ->andReturnUsing($this->mockOrWhere(...));
-
-        $this->qb->shouldReceive('join')
-            ->andReturnUsing($this->mockInnerJoin(...));
-
-        $this->qb->shouldReceive('innerJoin')
-            ->andReturnUsing($this->mockInnerJoin(...));
-
-        $this->qb->shouldReceive('leftJoin')
-            ->andReturnUsing($this->mockLeftJoin(...));
-
-        $this->qb->shouldReceive('orderBy')
-            ->andReturnUsing($this->mockOrderBy(...));
-
-        $this->qb->shouldReceive('addOrderBy')
-            ->andReturnUsing($this->mockOrderBy(...));
-
-        $this->qb->shouldReceive('groupBy')
-            ->andReturnUsing($this->mockGroupBy(...));
-
-        $this->qb->shouldReceive('setParameter')
-            ->andReturnUsing($this->mockSetParameter(...));
-
-        $this->qb->shouldReceive('setMaxResults')
-            ->andReturnUsing($this->mockSetMaxResults(...));
-
-        $this->qb->shouldReceive('distinct')
-            ->andReturnUsing($this->mockDistinct(...));
-
-        return $this->qb;
-    }
-
-    public function mockOrderBy(mixed $sort, mixed $order): mixed
-    {
-        $this->query .= ' ORDER BY ' . $sort . ' ' . $order;
-
-        return $this->qb;
-    }
-
-    public function mockGroupBy(mixed $field): mixed
-    {
-        $fields = func_get_args();
-        if (func_num_args() === 1 && is_array($field)) {
-            $fields = $field;
-        }
-
-        $this->query .= ' GROUP BY ' . implode(', ', $fields);
-
-        return $this->qb;
-    }
-
-    public function mockSetMaxResults(mixed $maxResults): mixed
-    {
-        $this->query .= ' LIMIT ' . $maxResults;
-
-        return $this->qb;
-    }
-
-    public function mockSetParameter(mixed $name, mixed $value): mixed
-    {
-        $value = $this->formatValue($value);
-
-        $this->query = str_replace(':' . $name, '[[' . $value . ']]', $this->query);
-
-        return $this->qb;
-    }
-
-    public function mockDistinct(): mixed
-    {
-        $this->query .= ' DISTINCT';
-
-        return $this->qb;
-    }
-
-    public function mockAddSelect(mixed $select): mixed
-    {
-        $selects = func_get_args();
-        if (func_num_args() === 1 && is_array($select)) {
-            $selects = $select;
-        }
-
-        $this->query .= ' SELECT ' . implode(', ', $selects);
-
-        return $this->qb;
-    }
-
-    public function mockAndWhere(mixed $where): mixed
-    {
-        $this->query .= ' AND ' . $where;
-        return $this->qb;
-    }
-
-    public function mockOrWhere(mixed $where): mixed
-    {
-        $this->query .= ' OR ' . $where;
-
-        return $this->qb;
-    }
-
-    public function mockInnerJoin(mixed $field, mixed $alias, mixed $type = null, mixed $condition = null): mixed
-    {
-        $this->query .= ' INNER JOIN ' . $field . ' ' . $alias;
-
-        if ($condition !== null) {
-            $this->query .= ' ' . $type;
-            $this->query .= ' ' . $condition;
-        }
-
-        return $this->qb;
-    }
-
-    public function mockLeftJoin(mixed $field, mixed $alias, mixed $type = null, mixed $condition = null): mixed
-    {
-        $this->query .= ' LEFT JOIN ' . $field . ' ' . $alias;
-
-        if ($condition !== null) {
-            $this->query .= ' ' . $type;
-            $this->query .= ' ' . $condition;
-        }
-
-        return $this->qb;
-    }
-
-    public function mockExprEq(mixed $field, mixed $value): Comparison
-    {
-        $value = $this->formatValue($value);
-
-        return new Comparison($field, '=', $value);
-    }
-
-    public function mockExprNeq(mixed $field, mixed $value): Comparison
-    {
-        $value = $this->formatValue($value);
-
-        return new Comparison($field, '!=', $value);
-    }
-
-    public function mockExprLte(mixed $field, mixed $value): Comparison
-    {
-        $value = $this->formatValue($value);
-
-        return new Comparison($field, '<=', $value);
-    }
-
-    public function mockExprLt(mixed $field, mixed $value): Comparison
-    {
-        $value = $this->formatValue($value);
-
-        return new Comparison($field, '<', $value);
-    }
-
-    public function mockExprGte(mixed $field, mixed $value): Comparison
-    {
-        $value = $this->formatValue($value);
-
-        return new Comparison($field, '>=', $value);
-    }
-
-    public function mockExprGt(mixed $field, mixed $value): Comparison
-    {
-        $value = $this->formatValue($value);
-
-        return new Comparison($field, '>', $value);
-    }
-
-    public function mockExprBetween(mixed $field, mixed $from, mixed $to): mixed
-    {
-        $from = $this->formatValue($from);
-        $to = $this->formatValue($to);
-
-        return $field . ' BETWEEN ' . $from . ' AND ' . $to;
-    }
-
-    public function mockExprIn(mixed $field, mixed $value): Func
-    {
-        $value = $this->formatValue($value);
-
-        return new Func($field . ' IN', $value);
-    }
-
-    public function mockExprNotIn(mixed $field, mixed $value): Func
-    {
-        $value = $this->formatValue($value);
-
-        return new Func($field . ' NOT IN', $value);
-    }
-
-    public function mockExprIsNull(mixed $field): mixed
-    {
-        return $field . ' IS NULL';
-    }
-
-    public function mockExprIsNotNull(mixed $field): mixed
-    {
-        return $field . ' IS NOT NULL';
-    }
-
-    public function mockExprLike(mixed $field, mixed $value): Comparison
-    {
-        $value = $this->formatValue($value);
-
-        return new Comparison($field, 'LIKE', $value);
-    }
-
-    public function mockOrX(): Orx
-    {
-        return new Orx(func_get_args());
-    }
-
-    public function mockAndX(): Andx
-    {
-        return new Andx(func_get_args());
-    }
-
-    public function mockCount(mixed $countable): Func
-    {
-        return new Func('COUNT', $countable);
-    }
-
-    protected function formatValue(mixed $value): mixed
-    {
-        if (is_array($value)) {
-            $value = json_encode($value);
-        }
-
-        if ($value instanceof \DateTime) {
-            return $value->format(\DateTime::W3C);
-        }
-
-        if ($value instanceof \Dvsa\Olcs\Api\Entity\System\RefData) {
-            return $value->getId();
-        }
-
-        if (is_object($value)) {
-            $value = $value::class;
-        }
-
-        if (is_bool($value)) {
-            $value = $value ? 'true' : 'false';
-        }
-
-        return $value;
     }
 
     protected function expectQueryWithData(mixed $queryName, array $data = [], array $types = [], mixed $queryResponse = null): void
