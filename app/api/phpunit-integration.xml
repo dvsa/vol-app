@@ -11,6 +11,15 @@
   <php>
     <ini name="date.timezone" value="UTC"/>
     <ini name="memory_limit" value="2G"/>
+    <!--
+      Doctrine deprecations are silent by default (doctrine/deprecations ships with
+      TYPE_NONE unless DOCTRINE_DEPRECATIONS is set). This is the only suite where real
+      Doctrine runs against real metadata, so it is the only place they can surface.
+      Reported, not fatal: displayDetailsOnTestsThatTriggerDeprecations above prints them
+      and there is no failOnDeprecation here, so they read as advance notice of the next
+      major rather than a broken build.
+    -->
+    <env name="DOCTRINE_DEPRECATIONS" value="trigger"/>
   </php>
   <testsuites>
     <testsuite name="Integration">

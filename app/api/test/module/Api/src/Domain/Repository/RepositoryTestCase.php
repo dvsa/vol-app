@@ -7,11 +7,16 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\DbQueryServiceManager;
+use Dvsa\Olcs\Api\Domain\QueryBuilder as OlcsQueryBuilder;
 use Dvsa\Olcs\Api\Domain\QueryBuilderInterface;
+use Dvsa\Olcs\Api\Domain\Repository\AbstractReadonlyRepository;
 use Dvsa\Olcs\Api\Domain\Repository\AbstractRepository;
 use Dvsa\Olcs\Api\Domain\Repository\CommunityLic as CommunityLicRepo;
 use Dvsa\Olcs\Api\Domain\Repository\RepositoryInterface;
 use Dvsa\OlcsTest\Builder\ServiceManagerBuilder;
+use Dvsa\OlcsTest\Support\DoctrineMetadata;
+use Dvsa\OlcsTest\Support\QueryPartials;
+use Dvsa\OlcsTest\Support\TestQueryBuilder;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
@@ -76,6 +81,65 @@ class RepositoryTestCase extends MockeryTestCase
     {
         $this->em->shouldReceive('getRepository->createQueryBuilder')
             ->andReturn($mock);
+    }
+
+    /**
+     * Build the repository against real Doctrine: real entity metadata, and the query
+     * partials the application itself wires, so assertions are made on the DQL the
+     * repository really produces. Prefer this over setUpSut() for anything that builds a
+     * query — see createRealQb().
+     *
+     * The EntityManager stays a mock because the repository uses it only to hand out
+     * repositories and to persist; the metadata EntityManager the partials read from is a
+     * separate, real one, and nothing in either path opens a connection.
+     */
+    protected function setUpRealSut(mixed $class = null, bool $mockSut = false): void
+    {
+        $this->em = m::mock(EntityManager::class);
+        $this->queryBuilder = new OlcsQueryBuilder(QueryPartials::serviceManager(DoctrineMetadata::entityManager()));
+        $this->dbQueryService = m::mock(DbQueryServiceManager::class);
+
+        if ($mockSut) {
+            $this->sut = m::mock($class, [$this->em, $this->queryBuilder, $this->dbQueryService])
+                ->makePartial()
+                ->shouldAllowMockingProtectedMethods();
+        } else {
+            $this->sut = new $class($this->em, $this->queryBuilder, $this->dbQueryService);
+        }
+
+        $this->query = '';
+        $this->qb = null;
+    }
+
+    /**
+     * A real QueryBuilder rooted on the entity and alias the repository under test declares,
+     * wired in as the one createQueryBuilder() hands back. Assert on $qb->getDQL(); declare
+     * rows with $qb->willReturn([...]).
+     *
+     * Pass $entity/$alias only to root somewhere other than the repository's own entity.
+     */
+    protected function createRealQb(?string $entity = null, ?string $alias = null): TestQueryBuilder
+    {
+        if ($entity === null || $alias === null) {
+            // Bound to the abstract so the protected declarations resolve through any
+            // subclass, including a Mockery partial.
+            [$sutEntity, $sutAlias] = \Closure::bind(
+                fn() => [$this->entity, $this->alias],
+                $this->sut,
+                AbstractReadonlyRepository::class,
+            )();
+
+            $entity ??= $sutEntity;
+            $alias ??= $sutAlias;
+        }
+
+        $qb = new TestQueryBuilder(DoctrineMetadata::entityManager());
+        $qb->select($alias)->from($entity, $alias);
+
+        $this->mockCreateQueryBuilder($qb);
+        $this->qb = $qb;
+
+        return $qb;
     }
 
     /**

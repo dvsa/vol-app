@@ -98,22 +98,44 @@ final class ReasonTest extends RepositoryTestCase
     }
 
     /**
-     * Multi-column sort/order lists may contain whitespace after the comma (the transfer Order validator trims each
-     * element, so 'ASC, ASC' is valid). Doctrine ORM 3.7 rejects ' ASC' outright, so the repository must trim too.
+     * Multi-column sort/order lists may contain whitespace after the comma: the transfer Order validator trims
+     * each element, so 'sectionCode, description' / 'ASC, ASC' is valid input on the wire. Doctrine ORM 3.7
+     * rejects ' ASC' outright, so the repository must trim too.
      */
-    public function testBuildDefaultListQueryTrimsWhitespaceInMultiColumnSortAndOrder(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('sortAndOrderProvider')]
+    public function testBuildDefaultListQueryOrdersBy(string $sort, string $order, string $expectedOrderBy): void
     {
-        $this->setUpSut(Repo::class, true);
+        $this->setUpRealSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(QueryBuilder::class);
+        $this->sut->buildDefaultListQuery($qb, ReasonList::create(['sort' => $sort, 'order' => $order]));
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('order')->with('sectionCode', 'ASC', [])->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('order')->with('description', 'ASC', [])->once()->andReturnSelf();
+        $this->assertStringEndsWith(' ORDER BY ' . $expectedOrderBy, $qb->getDQL());
+    }
 
-        $query = ReasonList::create(['sort' => 'sectionCode, description', 'order' => 'ASC, ASC']);
-
-        $this->sut->buildDefaultListQuery($mockQb, $query);
+    public static function sortAndOrderProvider(): \Iterator
+    {
+        // Exactly what the internal PI data services send (VOL-6852).
+        yield 'spaced multi column' => [
+            'sectionCode, description',
+            'ASC, ASC',
+            'm.sectionCode ASC, m.description ASC',
+        ];
+        yield 'unspaced multi column' => [
+            'sectionCode,description',
+            'ASC,DESC',
+            'm.sectionCode ASC, m.description DESC',
+        ];
+        yield 'single column' => [
+            'sectionCode',
+            'DESC',
+            'm.sectionCode DESC',
+        ];
+        // Fewer directions than columns falls back to the first, which must also be trimmed.
+        yield 'spaced sort with a single direction' => [
+            'sectionCode, description',
+            'DESC',
+            'm.sectionCode DESC, m.description DESC',
+        ];
     }
 }
