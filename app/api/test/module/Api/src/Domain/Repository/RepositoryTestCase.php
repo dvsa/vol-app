@@ -152,6 +152,17 @@ class RepositoryTestCase extends MockeryTestCase
     }
 
     /**
+     * Compile DQL through the real parser, which resolves aliases and field names against the
+     * entity metadata. Use it to assert that a query the repository builds is actually valid
+     * (or, for a pinned defect, that it is not). TestQueryBuilder cannot do this itself: its
+     * getQuery() is stubbed precisely so tests never execute anything.
+     */
+    protected function compileDql(string $dql): string
+    {
+        return DoctrineMetadata::entityManager()->createQuery($dql)->getSQL();
+    }
+
+    /**
      * @return m\MockInterface
      */
     protected function createMockQb(string $query = ''): mixed
