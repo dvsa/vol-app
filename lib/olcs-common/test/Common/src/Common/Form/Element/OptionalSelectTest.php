@@ -6,7 +6,7 @@ namespace CommonTest\Common\Form\Element;
 
 use PHPUnit\Framework\TestCase;
 
-class OptionalSelect extends TestCase
+class OptionalSelectTest extends TestCase
 {
     public function testSelectNotRequired(): void
     {
