@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Domain\Exception\VersionConflictException;
-use Dvsa\Olcs\Api\Domain\Repository;
-use Dvsa\Olcs\Api\Entity\Application\Application;
+use Dvsa\Olcs\Api\Domain\Repository\Application as Repo;
+use Dvsa\Olcs\Api\Entity\Application\Application as Entity;
 use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
 use Dvsa\Olcs\Api\Entity\Fee\FeeType as FeeTypeEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -21,37 +19,62 @@ use Dvsa\Olcs\Api\Entity\System\Category;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\System\SubCategory;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Application::class)]
-#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 final class ApplicationTest extends RepositoryTestCase
 {
-    public const int APP_ID = 8001;
-    public const int ORG_ID = 7001;
+    private const string FROM = ' FROM ' . Entity::class . ' a';
 
-    /** @var Repository\Application | m\MockInterface */
-    protected $sut;
+    /** withRefdata() joins eleven RefData associations on Application. */
+    private const string REFDATA_SELECT = 'a, w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10';
+
+    private const string REFDATA_JOINS = ' LEFT JOIN a.status w0 LEFT JOIN a.variationType w1'
+        . ' LEFT JOIN a.psvWhichVehicleSizes w2 LEFT JOIN a.licenceType w3'
+        . ' LEFT JOIN a.goodsOrPsv w4 LEFT JOIN a.vehicleType w5'
+        . ' LEFT JOIN a.grantAuthority w6 LEFT JOIN a.withdrawnReason w7'
+        . ' LEFT JOIN a.interimStatus w8 LEFT JOIN a.appliedVia w9'
+        . ' LEFT JOIN a.signatureType w10';
+
+    /** The organisation filter is a join condition, not a WHERE clause. */
+    private const string ORG_JOIN = ' INNER JOIN a.licence l WITH l.organisation = :organisationId';
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\Application::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testLockWithoutApplication(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('wrongEntityProvider')]
+    public function testRejectsEntitiesOfTheWrongType(string $method): void
     {
         $this->expectException(RuntimeException::class);
 
-        $this->sut->lock(m::mock(Licence::class), 1);
+        $this->sut->{$method}(m::mock(Licence::class), 1);
+    }
+
+    public static function wrongEntityProvider(): \Iterator
+    {
+        yield 'lock' => ['lock'];
+        yield 'save' => ['save'];
+        yield 'delete' => ['delete'];
+    }
+
+    public function testLock(): void
+    {
+        $entity = m::mock(Entity::class);
+
+        $this->em->expects('lock')->with($entity, LockMode::OPTIMISTIC, 1);
+
+        $this->sut->lock($entity, 1);
+
+        $this->assertTrue(true);
     }
 
     public function testLockWithConflict(): void
     {
-        $entity = m::mock(Application::class);
+        $entity = m::mock(Entity::class);
 
-        $this->em->shouldReceive('lock')
+        $this->em->expects('lock')
             ->with($entity, LockMode::OPTIMISTIC, 1)
             ->andThrow(OptimisticLockException::class);
 
@@ -60,599 +83,300 @@ final class ApplicationTest extends RepositoryTestCase
         $this->sut->lock($entity, 1);
     }
 
-    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
-    public function testLock(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('persistenceProvider')]
+    public function testPersistence(string $method, string $expectedEmCall): void
     {
-        $entity = m::mock(Application::class);
+        $entity = m::mock(Entity::class);
 
-        $this->em->shouldReceive('lock')
-            ->with($entity, LockMode::OPTIMISTIC, 1);
+        $this->em->expects($expectedEmCall)->with($entity);
+        $this->em->expects('flush');
 
-        $this->sut->lock($entity, 1);
+        $this->sut->{$method}($entity);
+
+        $this->assertTrue(true);
     }
 
-    public function testSaveWithoutApplication(): void
+    public static function persistenceProvider(): \Iterator
     {
-        $this->expectException(RuntimeException::class);
-
-        $this->sut->save(m::mock(Licence::class));
+        yield 'save' => ['save', 'persist'];
+        yield 'delete' => ['delete', 'remove'];
     }
 
-    public function testSave(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('referenceProvider')]
+    public function testGetReference(string $method, string $expectedClass): void
     {
-        $entity = m::mock(Application::class);
+        $reference = m::mock($expectedClass);
 
-        $this->em->shouldReceive('persist')
-            ->once()
-            ->with($entity)
-            ->shouldReceive('flush')
-            ->once();
+        $this->em->expects('getReference')->with($expectedClass, 'foo')->andReturn($reference);
 
-        $this->sut->save($entity);
+        $this->assertSame($reference, $this->sut->{$method}('foo'));
     }
 
-    public function testDeleteWithoutApplication(): void
+    public static function referenceProvider(): \Iterator
     {
-        $this->expectException(RuntimeException::class);
-
-        $this->sut->delete(m::mock(Licence::class));
-    }
-
-    public function testDelete(): void
-    {
-        $entity = m::mock(Application::class);
-
-        $this->em->shouldReceive('remove')
-            ->once()
-            ->with($entity)
-            ->shouldReceive('flush')
-            ->once();
-
-        $this->sut->delete($entity);
-    }
-
-    public function testGetRefdataReference(): void
-    {
-        $id = 'foo';
-
-        $reference = m::mock(RefData::class);
-
-        $this->em->shouldReceive('getReference')
-            ->with(RefData::class, $id)
-            ->andReturn($reference);
-
-        $this->assertSame($reference, $this->sut->getRefdataReference($id));
-    }
-
-    public function testGetCategoryReference(): void
-    {
-        $id = 'foo';
-
-        $reference = m::mock(Category::class);
-
-        $this->em->shouldReceive('getReference')
-            ->with(Category::class, $id)
-            ->andReturn($reference);
-
-        $this->assertSame($reference, $this->sut->getCategoryReference($id));
-    }
-
-    public function testGetSubCategoryReference(): void
-    {
-        $id = 'foo';
-
-        $reference = m::mock(SubCategory::class);
-
-        $this->em->shouldReceive('getReference')
-            ->with(SubCategory::class, $id)
-            ->andReturn($reference);
-
-        $this->assertSame($reference, $this->sut->getSubCategoryReference($id));
-    }
-
-    public function testGetReference(): void
-    {
-        $id = 'foo';
-
-        $reference = m::mock(RefData::class);
-
-        $this->em->shouldReceive('getReference')
-            ->with(RefData::class, $id)
-            ->andReturn($reference);
-
-        $this->assertSame($reference, $this->sut->getReference(RefData::class, $id));
+        yield 'refdata' => ['getRefdataReference', RefData::class];
+        yield 'category' => ['getCategoryReference', Category::class];
+        yield 'sub category' => ['getSubCategoryReference', SubCategory::class];
     }
 
     public function testFetchUsingId(): void
     {
-        /** @var QueryInterface | m\MockInterface $command */
-        $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getId')
-            ->andReturn(111);
+        $result = m::mock(Entity::class);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn(null);
+        $query = m::mock(TransferQry\QueryInterface::class);
+        $query->shouldReceive('getId')->andReturn(1);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('licence')
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with(111);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$result]);
+        $this->em->expects('lock')->with($result, LockMode::OPTIMISTIC, 1);
 
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('a')
-            ->andReturn($qb);
+        $this->assertSame($result, $this->sut->fetchUsingId($query, Query::HYDRATE_OBJECT, 1));
 
-        $this->em->shouldReceive('getRepository')
-            ->with(Application::class)
-            ->andReturn($repo);
-
-        $this->expectException(NotFoundException::class);
-
-        $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, 1);
+        $this->assertSame(
+            'SELECT ' . self::REFDATA_SELECT . ', w11' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN a.licence w11'
+            . ' WHERE a.id = :byId',
+            $qb->getDQL(),
+        );
     }
 
-    public function testFetchUsingIdWithResults(): void
-    {
-        /** @var QueryInterface | m\MockInterface $command */
-        $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getId')
-            ->andReturn(111);
-
-        $result = m::mock(Application::class);
-        $results = [$result];
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($results);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('licence')
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with(111);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('a')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Application::class)
-            ->andReturn($repo)
-            ->shouldReceive('lock')
-            ->with($result, LockMode::OPTIMISTIC, 1);
-
-        $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, 1);
-    }
-
+    /**
+     * Pulls both the licence's and the application's operating centres in one query, so the two
+     * sets can be compared without a second round trip.
+     */
     public function testFetchWithLicenceAndOc(): void
     {
-        $applicationId = 1;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn('RESULT');
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
+        $this->assertSame('RESULT', $this->sut->fetchWithLicenceAndOc(1));
 
-        $qb->shouldReceive('getQuery->getSingleResult')
-            ->andReturn('RESULT');
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('licence', 'l')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('l.operatingCentres', 'l_oc')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('l_oc.operatingCentre', 'l_oc_oc')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('l_oc_oc.address', 'l_oc_oc_a')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('operatingCentres', 'a_oc')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('a_oc.operatingCentre', 'a_oc_oc')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('a_oc_oc.address', 'a_oc_oc_a')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with("l.enforcementArea", "l_ea")
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('byId')
-            ->with($applicationId)
-            ->once()
-            ->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Application::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchWithLicenceAndOc($applicationId);
-        $this->assertEquals('RESULT', $result);
+        $this->assertSame(
+            'SELECT a, l, l_oc, l_oc_oc, l_oc_oc_a, a_oc, a_oc_oc, a_oc_oc_a, l_ea' . self::FROM
+            . ' LEFT JOIN a.licence l LEFT JOIN l.operatingCentres l_oc'
+            . ' LEFT JOIN l_oc.operatingCentre l_oc_oc LEFT JOIN l_oc_oc.address l_oc_oc_a'
+            . ' LEFT JOIN a.operatingCentres a_oc LEFT JOIN a_oc.operatingCentre a_oc_oc'
+            . ' LEFT JOIN a_oc_oc.address a_oc_oc_a LEFT JOIN l.enforcementArea l_ea'
+            . ' WHERE a.id = :byId',
+            $qb->getDQL(),
+        );
     }
 
-    public function testFetchActiveForOrganisation(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('withLicenceProvider')]
+    public function testFetchWithLicenceVariants(string $method, string $expectedSelect, string $expectedJoins): void
     {
-        $organisationId = 123;
+        $qb = $this->createRealQb()->willReturn(['RESULT']);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
+        $this->assertSame('RESULT', $this->sut->{$method}(1));
 
-        $qb->shouldReceive('expr->eq')
-            ->with('l.organisation', ':organisationId');
-
-        $qb->shouldReceive('expr->in')
-            ->with('a.status', ['apsts_consideration', 'apsts_granted']);
-
-        $qb
-            ->shouldReceive('innerJoin')
-            ->with('a.licence', 'l', 'WITH', m::any())
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('organisationId', $organisationId)
-            ->shouldReceive('getQuery->execute')
-            ->andReturn('RESULT');
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Application::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchActiveForOrganisation($organisationId);
-
-        $this->assertEquals('RESULT', $result);
+        $this->assertSame(
+            'SELECT ' . $expectedSelect . self::FROM . $expectedJoins . ' WHERE a.id = :byId',
+            $qb->getDQL(),
+        );
     }
 
-    public function testFetchWithLicence(): void
+    public static function withLicenceProvider(): \Iterator
     {
-        $applicationId = 1;
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $qb->shouldReceive('getQuery->getResult')
-            ->andReturn(['RESULT']);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('licence', 'l')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('byId')
-            ->with($applicationId)
-            ->once()
-            ->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Application::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchWithLicence($applicationId);
-        $this->assertEquals('RESULT', $result);
-    }
-
-    public function testFetchWithLicenceAndOrg(): void
-    {
-        $applicationId = 1;
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $qb->shouldReceive('getQuery->getResult')
-            ->andReturn(['RESULT']);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('licence', 'l')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('l.organisation', 'l_org')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('byId')
-            ->with($applicationId)
-            ->once()
-            ->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Application::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchWithLicenceAndOrg($applicationId);
-        $this->assertEquals('RESULT', $result);
-    }
-
-    public function testFetchByOrgAndStatusForActiveLicences(): void
-    {
-        $qb = $this->createMockQb('{{QUERY}}');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->execute')->andReturn('EXPECT');
-
-        $actual = $this->sut->fetchByOrgAndStatusForActiveLicences(self::ORG_ID, ['unit1', 'unit2']);
-
-        $this->assertEquals('EXPECT', $actual);
-
-        $this->assertEquals('{{QUERY}} ' .
-        'INNER JOIN a.licence l WITH l.organisation = [[' . self::ORG_ID . ']] ' .
-        'AND a.status IN(["unit1","unit2"]) ' .
-        'AND a.isVariation = 0 ' .
-        'OR (' .
-        'l.status IN(["lsts_valid","lsts_suspended","lsts_curtailed"]) ' .
-        'AND a.isVariation = 1 ' .
-        'AND (' .
-        'a.variationType IS NULL ' .
-        'OR a.variationType != [[' . Application::VARIATION_TYPE_DIRECTOR_CHANGE . ']]' .
-        ')' .
-        ')', $this->query);
+        yield 'licence only' => ['fetchWithLicence', 'a, l', ' LEFT JOIN a.licence l'];
+        yield 'licence and organisation' => [
+            'fetchWithLicenceAndOrg',
+            'a, l, l_org',
+            ' LEFT JOIN a.licence l LEFT JOIN l.organisation l_org',
+        ];
     }
 
     public function testFetchWithLicenceNotFound(): void
     {
-        $applicationId = 1;
+        $this->createRealQb()->willReturn([]);
 
         $this->expectException(NotFoundException::class);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $qb->shouldReceive('getQuery->getResult')
-            ->andReturn([]);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('licence', 'l')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('byId')
-            ->with($applicationId)
-            ->once()
-            ->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Application::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchWithLicence($applicationId);
-        $this->assertEquals('RESULT', $result);
-    }
-
-    public function testApplyListJoins(): void
-    {
-        $this->setUpSut(Repository\Application::class, true);
-
-        $this->sut->shouldReceive('getQueryBuilder')->with()->once()->andReturnSelf();
-        $this->sut->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
-
-        /** @var QueryBuilder | m\MockInterface $mockQb */
-        $mockQb = m::mock(QueryBuilder::class);
-        $this->sut->applyListJoins($mockQb);
-    }
-
-    public function testApplyListFilters(): void
-    {
-        $this->setUpSut(Repository\Application::class, true);
-
-        $status = 'unit_status';
-        $orgId = 999;
-
-        /** @var QueryBuilder | m\MockInterface $mockQb */
-        $mockQb = m::mock(QueryBuilder::class);
-        $expr1 = $this->mockExprEq('l.organisation', ':organisation');
-        $mockQb->shouldReceive('expr->eq')->with('l.organisation', ':organisation')->once()->andReturn($expr1);
-        $mockQb->shouldReceive('setParameter')->with('organisation', $orgId)->once();
-        $mockQb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
-
-        $expr2 = $this->mockExprEq('a.status', ':STATUS');
-        $mockQb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('a.status', ':STATUS')->once()->andReturn($expr2);
-        $mockQb->shouldReceive('setParameter')->with('STATUS', $status)->once();
-
-        $expr4 = $this->mockExprEq('a.isVariation', ':isVariation');
-        $expr5 = $this->mockExprNeq('COALESCE(IDENTITY(a.variationType), \'\')', ':variationType');
-        $expr3 = $this->mockOrX();
-
-        $mockQb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->orX')->with($expr4, $expr5)->andReturn($expr3);
-        $mockQb->shouldReceive('expr->eq')->with('a.isVariation', ':isVariation')->once()->andReturn($expr4);
-        $mockQb->shouldReceive('expr->neq')->with('COALESCE(IDENTITY(a.variationType), \'\')', ':variationType')->once()->andReturn($expr5);
-        $mockQb->shouldReceive('setParameter')->with('isVariation', false)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('variationType', Application::VARIATION_TYPE_DIRECTOR_CHANGE);
-
-        $mockQuery = TransferQry\Application\GetList::create(
-            [
-                'organisation' => $orgId,
-                'status' => $status,
-            ]
-        );
-
-        $this->sut->applyListFilters($mockQb, $mockQuery);
+        $this->sut->fetchWithLicence(1);
     }
 
     public function testFetchWithTmLicences(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('a')->once()->andReturn($mockQb);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn('RESULT');
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.tmLicences', 'ltml')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('byId')->with(1)->once()->andReturnSelf();
+        $this->assertSame('RESULT', $this->sut->fetchWithTmLicences(1));
 
-        $mockQb->shouldReceive('getQuery->getSingleResult')->once()->andReturn(['RESULT']);
-        $this->assertEquals(['RESULT'], $this->sut->fetchWithTmLicences(1));
+        $this->assertSame(
+            'SELECT a, l, ltml' . self::FROM
+            . ' LEFT JOIN a.licence l LEFT JOIN l.tmLicences ltml'
+            . ' WHERE a.id = :byId',
+            $qb->getDQL(),
+        );
     }
 
+    public function testFetchActiveForOrganisation(): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('execute')->andReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchActiveForOrganisation(7));
+
+        // The statuses are inlined into the IN() rather than bound.
+        $this->assertSame(
+            'SELECT ' . self::REFDATA_SELECT . self::FROM . self::REFDATA_JOINS . self::ORG_JOIN
+            . " WHERE a.status IN('" . Entity::APPLICATION_STATUS_UNDER_CONSIDERATION
+            . "', '" . Entity::APPLICATION_STATUS_GRANTED . "')",
+            $qb->getDQL(),
+        );
+        $this->assertSame(7, $qb->getParameter('organisationId')->getValue());
+    }
+
+    /**
+     * New applications always count; variations only count against a strictly active licence and
+     * only when they are not a director-change variation.
+     */
+    public function testFetchByOrgAndStatusForActiveLicences(): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('execute')->andReturn(['RESULTS']);
+
+        $this->assertSame(
+            ['RESULTS'],
+            $this->sut->fetchByOrgAndStatusForActiveLicences(7, ['apsts_new']),
+        );
+
+        $this->assertSame(
+            'SELECT ' . self::REFDATA_SELECT . self::FROM . self::REFDATA_JOINS . self::ORG_JOIN
+            . " WHERE a.status IN('apsts_new')"
+            . ' AND (a.isVariation = 0 OR (l.status IN('
+            . "'" . Licence::LICENCE_STATUS_VALID . "', '" . Licence::LICENCE_STATUS_SUSPENDED
+            . "', '" . Licence::LICENCE_STATUS_CURTAILED . "')"
+            . ' AND a.isVariation = 1'
+            . ' AND (a.variationType IS NULL OR a.variationType <> :directorChangeVariationType)))',
+            $qb->getDQL(),
+        );
+        $this->assertSame(
+            Entity::VARIATION_TYPE_DIRECTOR_CHANGE,
+            $qb->getParameter('directorChangeVariationType')->getValue(),
+        );
+    }
+
+    public function testApplyListJoins(): void
+    {
+        $qb = $this->createRealQb();
+
+        // applyListJoins() omits modifyQuery(); fetchList() points the helper here first.
+        $this->queryBuilder->modifyQuery($qb);
+
+        $this->sut->applyListJoins($qb);
+
+        $this->assertSame('SELECT a, l' . self::FROM . ' LEFT JOIN a.licence l', $qb->getDQL());
+    }
+
+    /**
+     * Director-change variations are excluded from every list, whatever else is filtered.
+     */
+    public function testApplyListFilters(): void
+    {
+        $qb = $this->createRealQb();
+
+        $query = TransferQry\Application\GetList::create([
+            'organisation' => 7,
+            'status' => 'apsts_new',
+        ]);
+
+        $this->sut->applyListFilters($qb, $query);
+
+        $this->assertSame(
+            'SELECT a' . self::FROM
+            . ' WHERE l.organisation = :organisation AND a.status = :STATUS'
+            . ' AND (a.isVariation = :isVariation'
+            . " OR COALESCE(IDENTITY(a.variationType), '') <> :variationType)",
+            $qb->getDQL(),
+        );
+        $this->assertFalse($qb->getParameter('isVariation')->getValue());
+        $this->assertSame(
+            Entity::VARIATION_TYPE_DIRECTOR_CHANGE,
+            $qb->getParameter('variationType')->getValue(),
+        );
+    }
+
+    /**
+     * NTU candidates are granted applications still carrying an outstanding grant fee.
+     */
     public function testFetchForNtu(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('a')->once()->andReturn($mockQb);
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.trafficArea', 'lta')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('fees', 'f')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('f.feeType', 'ft')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('f.feeStatus', 'fs')->once()->andReturnSelf();
+        $this->assertSame(['RESULTS'], $this->sut->fetchForNtu());
 
-        $expr1 = $this->mockExprEq('a.status', ':appStatus');
-        $mockQb->shouldReceive('expr->eq')->with('a.status', ':appStatus')->once()->andReturn($expr1);
-        $mockQb->shouldReceive('setParameter')
-            ->with('appStatus', Application::APPLICATION_STATUS_GRANTED)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
-
-        $expr2 = $this->mockExprEq('f.feeStatus', ':feeStatus');
-        $mockQb->shouldReceive('expr->eq')->with('f.feeStatus', ':feeStatus')->once()->andReturn($expr2);
-        $mockQb->shouldReceive('setParameter')
-            ->with('feeStatus', FeeEntity::STATUS_OUTSTANDING)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
-
-        $expr3 = $this->mockExprIn('ft.feeType', ':feeType');
-        $mockQb->shouldReceive('expr->in')->with('ft.feeType', ':feeType')->once()->andReturn($expr3);
-        $mockQb->shouldReceive('setParameter')
-            ->with('feeType', [FeeTypeEntity::FEE_TYPE_GRANT, FeeTypeEntity::FEE_TYPE_GRANTVAR])->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
-        $this->assertEquals(['RESULT'], $this->sut->fetchForNtu());
+        $this->assertSame(
+            'SELECT a, l, lta, f, ft, fs' . self::FROM
+            . ' LEFT JOIN a.licence l LEFT JOIN l.trafficArea lta LEFT JOIN a.fees f'
+            . ' LEFT JOIN f.feeType ft LEFT JOIN f.feeStatus fs'
+            . ' WHERE a.status = :appStatus AND f.feeStatus = :feeStatus'
+            . ' AND ft.feeType IN(:feeType)',
+            $qb->getDQL(),
+        );
+        $this->assertSame(Entity::APPLICATION_STATUS_GRANTED, $qb->getParameter('appStatus')->getValue());
+        $this->assertSame(FeeEntity::STATUS_OUTSTANDING, $qb->getParameter('feeStatus')->getValue());
+        $this->assertSame(
+            [FeeTypeEntity::FEE_TYPE_GRANT, FeeTypeEntity::FEE_TYPE_GRANTVAR],
+            $qb->getParameter('feeType')->getValue(),
+        );
     }
 
     public function testFetchAbandonedVariations(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('a')->once()->andReturn($mockQb);
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $expr1 = $this->mockExprEq('a.isVariation', ':isVariation');
-        $mockQb->shouldReceive('expr->eq')->with('a.isVariation', ':isVariation')->once()->andReturn($expr1);
-        $mockQb->shouldReceive('setParameter')->with('isVariation', 1)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
+        $this->assertSame(['RESULTS'], $this->sut->fetchAbandonedVariations('2019-01-01'));
 
-        $expr2 = $this->mockExprEq('a.variationType', ':variationType');
-        $mockQb->shouldReceive('expr->eq')->with('a.variationType', ':variationType')->once()->andReturn($expr2);
-        $mockQb->shouldReceive('setParameter')
-            ->with('variationType', Application::VARIATION_TYPE_DIRECTOR_CHANGE)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
-
-        $expr3 = $this->mockExprEq('a.status', ':status');
-        $mockQb->shouldReceive('expr->eq')->with('a.status', ':status')->once()->andReturn($expr3);
-        $mockQb->shouldReceive('setParameter')
-            ->with('status', Application::APPLICATION_STATUS_NOT_SUBMITTED)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
-
-        $olderThanDate = date('Y-m-d H:i:s', strtotime('- 4 hours'));
-        $expr4 = $this->mockExprLt('a.createdOn', ':olderThanDate');
-        $mockQb->shouldReceive('expr->lt')->with('a.createdOn', ':olderThanDate')->once()->andReturn($expr4);
-        $mockQb->shouldReceive('setParameter')->with('olderThanDate', $olderThanDate)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with($expr4)->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
-
-        $this->assertEquals(['RESULT'], $this->sut->fetchAbandonedVariations($olderThanDate));
+        $this->assertSame(
+            'SELECT a' . self::FROM
+            . ' WHERE a.isVariation = :isVariation AND a.variationType = :variationType'
+            . ' AND a.status = :status AND a.createdOn < :olderThanDate',
+            $qb->getDQL(),
+        );
+        $this->assertSame(
+            Entity::APPLICATION_STATUS_NOT_SUBMITTED,
+            $qb->getParameter('status')->getValue(),
+        );
     }
 
     public function testFetchOpenApplicationsForLicence(): void
     {
-        $licenceId = 5;
-        $status = Application::APPLICATION_STATUS_UNDER_CONSIDERATION;
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $qb = $this->createMockQb('QUERY');
+        $this->assertSame(['RESULTS'], $this->sut->fetchOpenApplicationsForLicence(7));
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(
+            'SELECT a' . self::FROM
+            . ' WHERE a.licence = :licenceId AND a.status = :applicationStatus',
+            $qb->getDQL(),
+        );
+        $this->assertSame(
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            $qb->getParameter('applicationStatus')->getValue(),
+        );
+    }
 
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
+    /**
+     * The interim cutoff is midnight today, so an interim ending earlier today still counts.
+     */
+    public function testFetchOpenApplicationsWhereInterimInForceAndInterimEndDateIsPast(): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $result = $this->sut->fetchOpenApplicationsForLicence($licenceId);
+        $this->assertSame(
+            ['RESULTS'],
+            $this->sut->fetchOpenApplicationsWhereInterimInForceAndInterimEndDateIsPast(),
+        );
 
-        $this->assertEquals('QUERY AND a.licence = [[5]] AND a.status = ' . "[[$status]]", $this->query);
-
-        $this->assertEquals(['RESULT'], $result);
+        $this->assertSame(
+            'SELECT a' . self::FROM
+            . ' WHERE a.status = :applicationStatus AND a.interimStatus = :interimStatus'
+            . ' AND a.interimEnd < :interimEnd',
+            $qb->getDQL(),
+        );
+        $this->assertSame(
+            new \DateTime()->format('Y-m-d') . ' 00:00:00',
+            $qb->getParameter('interimEnd')->getValue()->format('Y-m-d H:i:s'),
+        );
     }
 }
