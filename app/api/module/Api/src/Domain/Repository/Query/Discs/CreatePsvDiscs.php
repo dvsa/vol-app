@@ -52,7 +52,7 @@ class CreatePsvDiscs extends AbstractRawQuery
         }
 
         try {
-            return $this->connection->executeUpdate($query);
+            return $this->connection->executeStatement($query);
         } catch (\Exception) {
             throw new RuntimeException('An unexpected error occurred while running query: ' . static::class);
         }

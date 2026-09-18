@@ -207,7 +207,11 @@ locals {
       ]
       resources = [
         "arn:aws:s3:::apppp-olcs-pri-integration-dva-s3",
-        "arn:aws:s3:::apppp-olcs-pri-integration-dva-s3/*"
+        "arn:aws:s3:::apppp-olcs-pri-integration-dva-s3/*",
+        "arn:aws:s3:::apppp-olcs-pri-integration-reporting-s3",
+        "arn:aws:s3:::apppp-olcs-pri-integration-reporting-s3/*",
+        "arn:aws:s3:::apppp-mc-pri-integration-data-s3",
+        "arn:aws:s3:::apppp-mc-pri-integration-data-s3/*"
       ]
     }
   ]
@@ -780,9 +784,10 @@ module "service" {
         type     = "scripts"
       },
       {
-        name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
-        type     = "scripts"
+        name              = "ni-compliance",
+        commands          = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
+        ephemeral_storage = 50,
+        type              = "scripts"
       },
       {
         name     = "first-tm-letter",

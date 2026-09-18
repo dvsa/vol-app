@@ -52,7 +52,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * QuestionType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'question_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -61,7 +61,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * FormControlType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'form_control_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -70,7 +70,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * SubmitOptions
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'submit_options', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -99,7 +99,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Title
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'title', length: 100, nullable: true)]
     protected $title;
@@ -107,7 +107,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
@@ -115,7 +115,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Option source
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'option_source', length: 4096, nullable: true)]
     protected $optionSource;
@@ -123,7 +123,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Slug
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'slug', length: 255, nullable: true)]
     protected $slug;
@@ -140,7 +140,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * ApplicationValidations
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation::class, mappedBy: 'question')]
     #[ORM\OrderBy(['weight' => 'ASC'])]
@@ -149,7 +149,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * QuestionTexts
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Generic\QuestionText>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\QuestionText::class, mappedBy: 'question')]
     protected $questionTexts;

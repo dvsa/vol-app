@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dvsa\Olcs\Application\View\Model;
+namespace Dvsa\OlcsTest\Application\View\Model;
 
 use Common\RefData;
 use Dvsa\Olcs\Application\View\Model\ApplicationOverviewSection;

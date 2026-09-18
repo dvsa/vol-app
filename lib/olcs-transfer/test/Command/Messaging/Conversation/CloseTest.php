@@ -6,7 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Command\Messaging\Conversation;
 
 use PHPUnit\Framework\TestCase;
 
-class Close extends TestCase
+class CloseTest extends TestCase
 {
     public function testStructure()
     {

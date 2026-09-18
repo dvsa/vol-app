@@ -58,7 +58,7 @@ final class DocumentToDeleteTest extends RepositoryTestCase
             $expected = '{{QUERY}}' .
             ' AND m.attempts < [[3]]' .
             ' AND m.documentStoreId != [[]]' .
-            ' AND (m.processAfterDate IS NULL OR m.processAfterDate <= [[' . $now . ']])' .
+            ' AND m.processAfterDate IS NULL OR m.processAfterDate <= [[' . $now . ']]' .
             ' LIMIT 77';
 
         $this->assertEquals($expected, $this->query);
