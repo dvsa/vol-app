@@ -6,12 +6,12 @@ namespace Dvsa\OlcsTest\Transfer\Command\Messaging;
 
 use PHPUnit\Framework\TestCase;
 
-class EnableFileUpload extends TestCase
+class EnableFileUploadTest extends TestCase
 {
     public function testStructure()
     {
         $data = [
-            'id' => 111,
+            'organisation' => 111,
         ];
 
         $command = \Dvsa\Olcs\Transfer\Command\Messaging\EnableFileUpload::create($data);

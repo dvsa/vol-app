@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Command\Messaging\Conversation\Create as CreateConversati
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class Create extends AbstractCommandHandlerTestCase
+class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

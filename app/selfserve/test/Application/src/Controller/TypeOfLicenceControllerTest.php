@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dvsa\Olcs\Application\Controller;
+namespace Dvsa\OlcsTest\Application\Controller;
 
+use Dvsa\Olcs\Application\Controller\TypeOfLicenceController;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
 use Mockery as m;
 use Laminas\Form\Form;
