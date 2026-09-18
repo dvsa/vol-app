@@ -158,6 +158,49 @@ class LaminasSessionFlashMessenger extends AbstractPlugin implements FlashMessen
     }
 
     /**
+     * Check to see if messages have been added to the current
+     * namespace within this request
+     *
+     * @param  string|null $namespace
+     * @return bool
+     */
+    #[\Override]
+    public function hasCurrentMessages($namespace = null): bool
+    {
+        $container = $this->getContainer();
+        if (null === $namespace) {
+            $namespace = $this->getNamespace();
+        }
+
+        return isset($container->{$namespace});
+    }
+
+    /**
+     * Get messages that have been added to the current
+     * namespace within this request
+     *
+     * @param  string|null $namespace
+     * @return array<array-key, string>
+     */
+    #[\Override]
+    public function getCurrentMessages($namespace = null): array
+    {
+        if (null === $namespace) {
+            $namespace = $this->getNamespace();
+        }
+
+        if ($this->hasCurrentMessages($namespace)) {
+            $container = $this->getContainer();
+            /** @psalm-var MessageList $queue */
+            $queue = $container->{$namespace};
+
+            return $queue->toArray();
+        }
+
+        return [];
+    }
+
+    /**
      * This method exists to proxy existing calls that existed in the original Laminas Flash Messenger implementation.
      */
     #[\Override]

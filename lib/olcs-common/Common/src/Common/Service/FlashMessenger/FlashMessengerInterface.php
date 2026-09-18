@@ -24,4 +24,7 @@ interface FlashMessengerInterface
 
     public function clearCurrentMessagesFromContainer(): bool;
 
+    public function hasCurrentMessages($namespace = null): bool;
+
+    public function getCurrentMessages($namespace = null): array;
 }

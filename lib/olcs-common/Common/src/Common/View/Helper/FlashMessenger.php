@@ -2,16 +2,17 @@
 
 namespace Common\View\Helper;
 
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Common\Service\Helper\FlashMessengerHelperService;
-use Laminas\View\Helper\FlashMessenger as LaminasFlashMessenger;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger as PluginFlashMessenger;
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger as PluginFlashMessenger;
+use Laminas\Translator\TranslatorInterface;
 
 /**
  * Flash messenger view helper (Extends laminas flash messenger)
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class FlashMessenger extends LaminasFlashMessenger
+class FlashMessenger
 {
     /**
      * Templates for the open/close/separators for message tags
@@ -41,7 +42,11 @@ class FlashMessenger extends LaminasFlashMessenger
     /** @var FlashMessengerHelperService */
     protected $flashMessengerHelperService;
 
-    public function __construct(FlashMessengerHelperService $flashMessengerHelperService)
+    public function __construct(
+        FlashMessengerHelperService $flashMessengerHelperService,
+        protected FlashMessengerInterface $flashMessengerPlugin,
+        protected TranslatorInterface $translator
+    )
     {
         $this->flashMessengerHelperService = $flashMessengerHelperService;
     }
@@ -53,7 +58,6 @@ class FlashMessenger extends LaminasFlashMessenger
      *
      * @return static|string
      */
-    #[\Override]
     public function __invoke($namespace = null): string|static
     {
         if ($namespace === 'norender') {
@@ -72,7 +76,7 @@ class FlashMessenger extends LaminasFlashMessenger
      */
     public function getMessagesFromNamespace($namespace)
     {
-        $fm = $this->getPluginFlashMessenger();
+        $fm = $this->flashMessengerPlugin;
 
         return $fm->getMessagesFromNamespace($namespace);
     }
@@ -110,12 +114,7 @@ class FlashMessenger extends LaminasFlashMessenger
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    #[\Override]
-    public function render(
-        $namespace = PluginFlashMessenger::NAMESPACE_DEFAULT,
-        array $classes = [],
-        $autoEscape = null
-    ) {
+    public function render() {
         if ($this->getIsRendered()) {
             return '';
         }
@@ -147,8 +146,22 @@ class FlashMessenger extends LaminasFlashMessenger
         $namespace = PluginFlashMessenger::NAMESPACE_DEFAULT,
         array $classes = []
     ) {
-        return parent::render($namespace, $classes) .
+        return $this->renderParent($namespace, $classes) .
             $this->renderCurrent($namespace, $classes);
+    }
+
+    /**
+     * Render Messages
+     *
+     * @param  string    $namespace
+     * @param  null|bool $autoEscape
+     * @return string
+     */
+    public function renderParent($namespace = 'default', array $classes = [], $autoEscape = null)
+    {
+        $flashMessenger = $this->flashMessengerPlugin;
+        $messages       = $flashMessenger->getMessagesFromNamespace($namespace);
+        return $this->renderMessages($namespace, $messages, $classes, $autoEscape);
     }
 
     /**
@@ -160,13 +173,12 @@ class FlashMessenger extends LaminasFlashMessenger
      *
      * @return string
      */
-    #[\Override]
     public function renderCurrent(
         $namespace = PluginFlashMessenger::NAMESPACE_DEFAULT,
         array $classes = [],
         $autoEscape = null
     ) {
-        $content = parent::renderCurrent($namespace, $classes);
+        $content = $this->renderCurrentParent($namespace, $classes);
 
         return $content . $this->renderMessages(
             $namespace,
@@ -174,6 +186,20 @@ class FlashMessenger extends LaminasFlashMessenger
             $classes,
             $autoEscape
         );
+    }
+
+    /**
+     * Render Current Messages
+     *
+     * @param  string    $namespace
+     * @param  bool|null $autoEscape
+     * @return string
+     */
+    public function renderCurrentParent($namespace = 'default', array $classes = [], $autoEscape = null)
+    {
+        $flashMessenger = $this->flashMessengerPlugin;
+        $messages       = $flashMessenger->getCurrentMessages($namespace);
+        return $this->renderMessages($namespace, $messages, $classes, $autoEscape);
     }
 
     /**
@@ -189,26 +215,27 @@ class FlashMessenger extends LaminasFlashMessenger
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    #[\Override]
     protected function renderMessages(
         $namespace = PluginFlashMessenger::NAMESPACE_DEFAULT,
         array $messages = [],
         array $classes = [],
         $autoEscape = null
     ) {
+        if (empty($messages)) {
+            return '';
+        }
+
+        // TODO: Do we need the prepare classes and auto escape code from the parent? Everything else is the same
+
         // Flatten message array
         $messagesToPrint = [];
-        $translator = $this->getTranslator();
-        $translatorTextDomain = $this->getTranslatorTextDomain();
+        $translator = $this->translator;
 
         array_walk_recursive(
             $messages,
-            static function ($item) use (&$messagesToPrint, $translator, $translatorTextDomain) {
+            static function ($item) use (&$messagesToPrint, $translator) {
                 if ($translator !== null) {
-                    $item = $translator->translate(
-                        $item,
-                        $translatorTextDomain
-                    );
+                    $item = $translator->translate($item);
                 }
                 $messagesToPrint[] = $item;
             }
@@ -233,5 +260,35 @@ class FlashMessenger extends LaminasFlashMessenger
         );
 
         return $markup . $this->getMessageCloseString();
+    }
+
+    /**
+     * Get the formatted string used to open message representation
+     *
+     * @return string
+     */
+    public function getMessageOpenFormat()
+    {
+        return $this->messageOpenFormat;
+    }
+
+    /**
+     * Get the string used to separate messages
+     *
+     * @return string
+     */
+    public function getMessageSeparatorString()
+    {
+        return $this->messageSeparatorString;
+    }
+
+    /**
+     * Get the string used to close message representation
+     *
+     * @return string
+     */
+    public function getMessageCloseString()
+    {
+        return $this->messageCloseString;
     }
 }
