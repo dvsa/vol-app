@@ -551,7 +551,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     protected $trafficAreas;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var Collection<int, \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea>
      */
     #[ORM\JoinTable(name: 'bus_reg_subsidy_traffic_area')]
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
@@ -560,7 +560,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     protected $subsidyTrafficAreas;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var Collection<int, \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority>
      */
     #[ORM\JoinTable(name: 'bus_reg_subsidy_local_auth')]
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
@@ -2869,7 +2869,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $subsidyTrafficAreas
+     * @param Collection<int, \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea> $subsidyTrafficAreas
      * @return self
      */
     public function setSubsidyTrafficAreas($subsidyTrafficAreas)
@@ -2879,7 +2879,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Collection<int, \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea>
      */
     public function getSubsidyTrafficAreas()
     {
@@ -2887,7 +2887,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $subsidyLocalAuthorities
+     * @param Collection<int, \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority> $subsidyLocalAuthorities
      * @return self
      */
     public function setSubsidyLocalAuthorities($subsidyLocalAuthorities)
@@ -2897,7 +2897,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Collection<int, \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority>
      */
     public function getSubsidyLocalAuthorities()
     {
