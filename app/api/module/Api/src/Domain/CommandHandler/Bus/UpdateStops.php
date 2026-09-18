@@ -60,8 +60,8 @@ final class UpdateStops extends AbstractCommandHandler implements TransactionedI
 
         $authorities = new ArrayCollection();
         foreach ($command->getSubsidyLocalAuthorities() as $id) {
-            $authority = $this->getRepo()->getReference(LocalAuthority::class, $id);
-            if (!in_array($authority->getTrafficArea()->getId(), $areaIds, true)) {
+            $trafficArea = $authority->getTrafficArea();
+            if ($trafficArea === null || !in_array($trafficArea->getId(), $areaIds, true)) {
                 throw new ValidationException([
                     'subsidyLocalAuthorities' => [
                         'Select local authorities within the TAOs providing subsidies',
