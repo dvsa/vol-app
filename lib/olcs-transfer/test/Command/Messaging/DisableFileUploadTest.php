@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Command\Messaging;
+namespace Dvsa\OlcsTest\Transfer\Command\Messaging;
 
 use PHPUnit\Framework\TestCase;
 
-class DisableFileUpload extends TestCase
+class DisableFileUploadTest extends TestCase
 {
     public function testStructure()
     {
         $data = [
-            'id' => 111,
+            'organisation' => 111,
         ];
 
         $command = \Dvsa\Olcs\Transfer\Command\Messaging\DisableFileUpload::create($data);

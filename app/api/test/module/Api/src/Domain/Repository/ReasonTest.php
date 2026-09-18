@@ -96,4 +96,24 @@ final class ReasonTest extends RepositoryTestCase
 
         $this->sut->applyListFilters($mockQb, $query);
     }
+
+    /**
+     * Multi-column sort/order lists may contain whitespace after the comma (the transfer Order validator trims each
+     * element, so 'ASC, ASC' is valid). Doctrine ORM 3.7 rejects ' ASC' outright, so the repository must trim too.
+     */
+    public function testBuildDefaultListQueryTrimsWhitespaceInMultiColumnSortAndOrder(): void
+    {
+        $this->setUpSut(Repo::class, true);
+
+        $mockQb = m::mock(QueryBuilder::class);
+
+        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
+        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
+        $this->queryBuilder->shouldReceive('order')->with('sectionCode', 'ASC', [])->once()->andReturnSelf();
+        $this->queryBuilder->shouldReceive('order')->with('description', 'ASC', [])->once()->andReturnSelf();
+
+        $query = ReasonList::create(['sort' => 'sectionCode, description', 'order' => 'ASC, ASC']);
+
+        $this->sut->buildDefaultListQuery($mockQb, $query);
+    }
 }
