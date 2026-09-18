@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dvsa\OlcsTest\Integration\Support;
+namespace Dvsa\OlcsTest\Support;
 
 use Doctrine\Deprecations\Deprecation;
 use PHPUnit\Event\Application\Finished;
@@ -15,14 +15,17 @@ use PHPUnit\TextUI\Configuration\Configuration;
 /**
  * Reports the Doctrine deprecations the suite triggered.
  *
- * Doctrine's own reporting cannot be used here. Setting DOCTRINE_DEPRECATIONS=trigger makes
- * the library call `@trigger_error()` — with the suppression operator — so PHPUnit's error
- * handler discards it and nothing is ever displayed. Tracking mode records the same
- * deprecations without raising an error, which is what this reads.
+ * Doctrine's own reporting cannot be used. Setting DOCTRINE_DEPRECATIONS=trigger makes the
+ * library call `@trigger_error()` — with the suppression operator — so PHPUnit's error handler
+ * discards it and nothing is displayed. Tracking mode records the same deprecations without
+ * raising an error, which is what this reads.
  *
- * This is the only suite where real Doctrine runs against real metadata and a real
- * connection, so it is the only place these can surface at all. Reported, never fatal: they
- * are advance notice of the next major, not a broken build.
+ * Registered by both suites. The unit suite is where CI sees this, and it has something to
+ * report because the repository tests build real queries against real entity metadata; the
+ * integration suite adds whatever a real connection and schema comparison reach.
+ *
+ * Reported, never fatal. Tracking mode raises no error at all, so failOnDeprecation is
+ * unaffected: these are advance notice of the next major, not a broken build.
  */
 final class DoctrineDeprecations implements Extension
 {

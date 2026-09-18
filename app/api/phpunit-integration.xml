@@ -15,7 +15,7 @@
   <extensions>
     <!-- Reports the Doctrine deprecations this suite triggers; see the class for why the
          DOCTRINE_DEPRECATIONS env var cannot do this. -->
-    <bootstrap class="Dvsa\OlcsTest\Integration\Support\DoctrineDeprecations"/>
+    <bootstrap class="Dvsa\OlcsTest\Support\DoctrineDeprecations"/>
   </extensions>
   <testsuites>
     <testsuite name="Integration">
