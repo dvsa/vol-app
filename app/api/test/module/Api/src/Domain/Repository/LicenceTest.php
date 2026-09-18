@@ -4,979 +4,589 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Result;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\Expr\Comparison;
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\FilterCollection;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
-use Dvsa\Olcs\Api\Domain\Repository\Licence as LicenceRepo;
-use Dvsa\Olcs\Api\Domain\Repository\Query\Licence\InternationalGoodsReport;
-use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
+use Dvsa\Olcs\Api\Domain\Repository\Licence as Repo;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Address as AddressEntity;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
-use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact as PhoneContactEntity;
-use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
+use Dvsa\Olcs\Api\Entity\Fee\FeeType as FeeTypeEntity;
+use Dvsa\Olcs\Api\Entity\Licence\GracePeriod as GracePeriodEntity;
+use Dvsa\Olcs\Api\Entity\Licence\Licence as Entity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
+use Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence as TMLicenceEntity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Dvsa\OlcsTest\Support\TestQueryBuilder;
+use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
 use Mockery as m;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Licence::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\AbstractRepository::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\AbstractReadonlyRepository::class)]
 final class LicenceTest extends RepositoryTestCase
 {
-    /** @var LicenceRepo | m\MockInterface */
-    protected $sut;
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
+    /** withRefdata() joins goodsOrPsv, vehicleType, licenceType, status and tachographIns. */
+    private const string REFDATA_SELECT = 'm, w0, w1, w2, w3, w4';
+
+    private const string REFDATA_JOINS = ' LEFT JOIN m.goodsOrPsv w0 LEFT JOIN m.vehicleType w1'
+        . ' LEFT JOIN m.licenceType w2 LEFT JOIN m.status w3 LEFT JOIN m.tachographIns w4';
+
+    private const array ACTIVE_STATUSES = [
+        Entity::LICENCE_STATUS_VALID,
+        Entity::LICENCE_STATUS_CURTAILED,
+        Entity::LICENCE_STATUS_SUSPENDED,
+    ];
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(LicenceRepo::class, true);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testFetchSafetyDetailsUsingId(): void
+    public function testFetchByCaseId(): void
     {
-        /** @var QueryInterface | m\MockInterface $command */
-        $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getId')
-            ->andReturn(111);
+        $result = m::mock(Entity::class);
 
-        /** @var QueryBuilder | m\MockInterface $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')->once()->with(Query::HYDRATE_OBJECT)->andReturn(null);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$result]);
+        $this->em->expects('lock')->with($result, LockMode::OPTIMISTIC, 1);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with(111)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('workshops', 'w')
-            ->andReturnSelf()
-            ->shouldReceive('withContactDetails')
-            ->once();
+        $this->assertSame($result, $this->sut->fetchByCaseId(1, Query::HYDRATE_OBJECT, 1));
 
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
+        $this->assertSame(
+            'SELECT ' . self::REFDATA_SELECT . ', ta' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.trafficArea ta INNER JOIN m.cases c'
+            . ' WHERE c.id = :caseId',
+            $qb->getDQL(),
+        );
+    }
 
-        $this->em->shouldReceive('getRepository')
-            ->with(Licence::class)
-            ->andReturn($repo);
+    public function testFetchSafetyDetailsById(): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULT']);
+
+        $this->assertSame('RESULT', $this->sut->fetchSafetyDetailsById(1));
+
+        $this->assertSame(
+            'SELECT ' . self::REFDATA_SELECT . ', w, m_cd, m_cd_a, m_cd_a_cc, m_cd_pc, w5, w6'
+            . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.workshops w LEFT JOIN w.contactDetails m_cd'
+            . ' LEFT JOIN m_cd.address m_cd_a LEFT JOIN m_cd_a.countryCode m_cd_a_cc'
+            . ' LEFT JOIN m_cd.phoneContacts m_cd_pc LEFT JOIN m_cd.contactType w5'
+            . ' LEFT JOIN m_cd_pc.phoneContactType w6'
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
+    }
+
+    public function testFetchSafetyDetailsByIdNotFound(): void
+    {
+        $this->createRealQb()->stubbedQuery()->expects('getResult')->andReturn([]);
 
         $this->expectException(NotFoundException::class);
 
-        $this->sut->fetchSafetyDetailsUsingId($command, Query::HYDRATE_OBJECT, 1);
-    }
-
-    public function testFetchSafetyDetailsUsingIdWithResults(): void
-    {
-        /** @var QueryInterface | m\MockInterface $command */
-        $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getId')
-            ->andReturn(111);
-
-        $result = m::mock(Licence::class);
-        $results = [$result];
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($results);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with(111)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('workshops', 'w')
-            ->andReturnSelf()
-            ->shouldReceive('withContactDetails')
-            ->once();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Licence::class)
-            ->andReturn($repo)
-            ->shouldReceive('lock')
-            ->with($result, LockMode::OPTIMISTIC, 1);
-
-        $this->sut->fetchSafetyDetailsUsingId($command, Query::HYDRATE_OBJECT, 1);
+        $this->sut->fetchSafetyDetailsById(1);
     }
 
     /**
-     * Test existsByLicNo method
-     *
-     * @param array $result
-     * @param bool $licenceFound
+     * The widest query in the repository: 37 selected aliases over 32 joins, four of them
+     * duplicated (see the migration findings).
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('existsByLicNoProvider')]
-    public function testExistsByLicNo(mixed $result, mixed $licenceFound): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('addressQueryProvider')]
+    public function testFetchWithAddressesUsingId(mixed $argument): void
     {
-        $licNo = 'OB1234567';
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-        $doctrineComparison = m::mock(Comparison::class);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn('RESULT');
 
-        $this->em->shouldReceive('getRepository')->with(Licence::class)->andReturn($repo);
+        $this->assertSame('RESULT', $this->sut->fetchWithAddressesUsingId($argument));
 
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $qb->shouldReceive('expr->eq')->with('m.licNo', ':licNo')->once()->andReturn($doctrineComparison);
-        $qb->shouldReceive('where')->with($doctrineComparison)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('licNo', $licNo)->once()->andReturnSelf();
-        $qb->shouldReceive('setMaxResults')->with(1)->once()->andReturnSelf();
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn($result);
-
-        $this->assertSame($licenceFound, $this->sut->existsByLicNo($licNo));
+        $this->assertStringStartsWith(
+            'SELECT m, w0, w1, w2, w3, w4, c, c_a, c_a_cc, c_pc, w5, w6, c_p, c_p_pct, w7,'
+            . ' o, o_cd, o_cd_a, o_cd_a_cc, o_cd_pc, w8, w9, e, e_a, e_a_cc, e_pc, w10, w11,'
+            . ' t, t_a, t_a_cc, t_pc, w12, w13, t_p, t_p_pct, w14',
+            $qb->getDQL(),
+        );
+        $this->assertStringEndsWith(' WHERE m.id = :byId', $qb->getDQL());
+        $this->assertSame(1, $qb->getParameter('byId')->getValue());
     }
 
-    /**
-     * Data provider for testExistsByLicNo
-     *
-     * @return \Iterator<(int | string), mixed>
-     */
-    public static function existsByLicNoProvider(): \Iterator
+    public static function addressQueryProvider(): \Iterator
     {
-        yield [[0 => 'Result'], true];
-        yield [[], false];
-    }
+        yield 'an int id' => [1];
 
-    /**
-     * Tests finding a licence by licNo without retreiving the additional data
-     */
-    public function testFetchByLicNoWithoutAdditionalData(): void
-    {
-        $licNo = 'OB1234567';
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-        $doctrineComparison = m::mock(Comparison::class);
-
-        $this->em->shouldReceive('getRepository')->with(Licence::class)->andReturn($repo);
-
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $qb->shouldReceive('expr->eq')->with('m.licNo', ':licNo')->once()->andReturn($doctrineComparison);
-        $qb->shouldReceive('where')->with($doctrineComparison)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('licNo', $licNo)->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getOneOrNullResult')->with()->once()->andReturn('RESULT');
-
-        $this->assertSame('RESULT', $this->sut->fetchByLicNoWithoutAdditionalData($licNo));
-    }
-
-    /**
-     * Tests exception thrown when returned licence record is null
-     */
-    public function testFetchByLicNoWithoutAdditionalDataNotFound(): void
-    {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
-
-        $licNo = 'OB1234567';
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-        $doctrineComparison = m::mock(Comparison::class);
-
-        $this->em->shouldReceive('getRepository')->with(Licence::class)->andReturn($repo);
-
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $qb->shouldReceive('expr->eq')->with('m.licNo', ':licNo')->once()->andReturn($doctrineComparison);
-        $qb->shouldReceive('where')->with($doctrineComparison)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('licNo', $licNo)->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getOneOrNullResult')->with()->once()->andReturn(null);
-
-        $this->sut->fetchByLicNoWithoutAdditionalData($licNo);
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getId')->andReturn(1);
+        yield 'a query object' => [$query];
     }
 
     public function testFetchByLicNo(): void
     {
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
+        $qb = $this->createRealQb()->willReturn(['RESULT']);
 
-        $this->em->shouldReceive('getRepository')->with(Licence::class)->andReturn($repo);
+        $this->assertSame('RESULT', $this->sut->fetchByLicNo('OB123'));
 
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('with')->with('operatingCentres', 'ocs')->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('ocs.operatingCentre', 'ocs_oc')->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('ocs_oc.address', 'ocs_oc_a')->andReturnSelf();
-
-        $expr = $this->mockExprEq('m.licNo', ':licNo');
-        $qb->shouldReceive('expr->eq')->with('m.licNo', ':licNo')->once()->andReturn($expr);
-        $qb->shouldReceive('where')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('licNo', 'LIC0001')->once()->andReturnSelf();
-
-        $query = m::mock(\Doctrine\ORM\Query::class);
-        $qb->shouldReceive('getQuery')->once()->andReturn($query);
-        $query->shouldReceive('getResult')->with()->once()->andReturn(['RESULTS']);
-
-        $this->assertSame('RESULTS', $this->sut->fetchByLicNo('LIC0001'));
+        $this->assertSame(
+            'SELECT ' . self::REFDATA_SELECT . ', ocs, ocs_oc, ocs_oc_a' . self::FROM
+            . self::REFDATA_JOINS
+            . ' LEFT JOIN m.operatingCentres ocs LEFT JOIN ocs.operatingCentre ocs_oc'
+            . ' LEFT JOIN ocs_oc.address ocs_oc_a'
+            . ' WHERE m.licNo = :licNo',
+            $qb->getDQL(),
+        );
+        $this->assertSame('OB123', $qb->getParameter('licNo')->getValue());
     }
 
     public function testFetchByLicNoNotFound(): void
     {
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-
-        $this->em->shouldReceive('getRepository')->with(Licence::class)->andReturn($repo);
-
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('with')->with('operatingCentres', 'ocs')->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('ocs.operatingCentre', 'ocs_oc')->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('ocs_oc.address', 'ocs_oc_a')->andReturnSelf();
-
-        $expr = $this->mockExprEq('m.licNo', ':licNo');
-        $qb->shouldReceive('expr->eq')->with('m.licNo', ':licNo')->once()->andReturn($expr);
-        $qb->shouldReceive('where')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('licNo', 'LIC0001')->once()->andReturnSelf();
-
-        $query = m::mock(\Doctrine\ORM\Query::class);
-        $qb->shouldReceive('getQuery')->once()->andReturn($query);
-        $query->shouldReceive('getResult')->with()->once()->andReturn([]);
+        $this->createRealQb()->willReturn([]);
 
         $this->expectException(NotFoundException::class);
 
-        $this->sut->fetchByLicNo('LIC0001');
+        $this->sut->fetchByLicNo('OB123');
     }
 
-    public function testFetchForUserRegistration(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('existsProvider')]
+    public function testExistsByLicNo(array $results, bool $expected): void
     {
-        $licNo = 'LIC0001';
+        $qb = $this->createRealQb()->willReturn($results);
 
-        $address = m::mock(AddressEntity::class)->makePartial();
-        $address->setAddressLine1('a1');
+        $this->assertSame($expected, $this->sut->existsByLicNo('OB123'));
 
-        $cd = m::mock(ContactDetailsEntity::class)->makePartial();
-        $cd->setAddress($address);
-
-        $org = m::mock(OrganisationEntity::class)->makePartial();
-        $org->setOrganisationUsers(new ArrayCollection([]));
-
-        $licence = m::mock(Licence::class)->makePartial();
-        $licence->setCorrespondenceCd($cd);
-        $licence->setOrganisation($org);
-
-        $this->sut->shouldReceive('fetchByLicNo')->with($licNo)->once()->andReturn($licence);
-
-        $this->assertSame($licence, $this->sut->fetchForUserRegistration($licNo));
-    }
-
-    public function testFetchForUserRegistrationThrowsIncorrectAddressException(): void
-    {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
-
-        $licNo = 'LIC0001';
-
-        $address = m::mock(AddressEntity::class)->makePartial();
-
-        $cd = m::mock(ContactDetailsEntity::class)->makePartial();
-        $cd->setAddress($address);
-
-        $org = m::mock(OrganisationEntity::class)->makePartial();
-        $org->setOrganisationUsers(new ArrayCollection([]));
-
-        $licence = m::mock(Licence::class)->makePartial();
-        $licence->setCorrespondenceCd($cd);
-        $licence->setOrganisation($org);
-
-        $this->sut->shouldReceive('fetchByLicNo')->with($licNo)->once()->andReturn($licence);
-
-        $this->sut->fetchForUserRegistration($licNo);
-    }
-
-    public function testFetchForUserRegistrationThrowsUnlicencedException(): void
-    {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
-
-        $licNo = 'LIC0001';
-
-        $address = m::mock(AddressEntity::class)->makePartial();
-        $address->setAddressLine1('a1');
-
-        $cd = m::mock(ContactDetailsEntity::class)->makePartial();
-        $cd->setAddress($address);
-
-        $org = m::mock(OrganisationEntity::class)->makePartial();
-        $org->setOrganisationUsers(new ArrayCollection([]));
-        $org->setIsUnlicensed(true);
-
-        $licence = m::mock(Licence::class)->makePartial();
-        $licence->setCorrespondenceCd($cd);
-        $licence->setOrganisation($org);
-
-        $this->sut->shouldReceive('fetchByLicNo')->with($licNo)->once()->andReturn($licence);
-
-        $this->sut->fetchForUserRegistration($licNo);
-    }
-
-    public function testFetchForUserRegistrationThrowsAdminUsersException(): void
-    {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
-
-        $licNo = 'LIC0001';
-
-        $address = m::mock(AddressEntity::class)->makePartial();
-        $address->setAddressLine1('a1');
-
-        $cd = m::mock(ContactDetailsEntity::class)->makePartial();
-        $cd->setAddress($address);
-
-        $orgUser = m::mock();
-
-        $org = m::mock(OrganisationEntity::class)->makePartial();
-        $org->shouldReceive('getAdminOrganisationUsers')->once()->andReturn(new ArrayCollection([$orgUser]));
-
-        $licence = m::mock(Licence::class)->makePartial();
-        $licence->setCorrespondenceCd($cd);
-        $licence->setOrganisation($org);
-
-        $this->sut->shouldReceive('fetchByLicNo')->with($licNo)->once()->andReturn($licence);
-
-        $this->sut->fetchForUserRegistration($licNo);
-    }
-
-    public function testFetchByVrm(): void
-    {
-        $qb = $this->createMockQb('[QUERY]');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.licNo = :licNo',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByVrm('ABC123'));
-
-        $expectedQuery = '[QUERY] INNER JOIN m.licenceVehicles lv INNER JOIN lv.vehicle v'
-            . ' AND lv.removalDate IS NULL AND v.vrm = [[ABC123]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(1, $qb->getMaxResults());
     }
 
-    public function testFetchByVrmAndStatus(): void
+    public static function existsProvider(): \Iterator
     {
-        $qb = $this->createMockQb('[QUERY]');
+        yield 'found' => [['a licence'], true];
+        yield 'not found' => [[], false];
+    }
 
-        $this->mockCreateQueryBuilder($qb);
+    public function testFetchByLicNoWithoutAdditionalData(): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getOneOrNullResult')->andReturn('RESULT');
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame('RESULT', $this->sut->fetchByLicNoWithoutAdditionalData('OB123'));
+
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.licNo = :licNo',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByVrm('ABC123', true));
-
-        $expectedQuery = '[QUERY] INNER JOIN m.licenceVehicles lv ' .
-            'INNER JOIN lv.vehicle v AND lv.removalDate IS NULL AND v.vrm = [[ABC123]] ' .
-            'INNER JOIN lv.application a AND a.status NOT IN(' .
-            '["apsts_cancelled","apsts_refused","apsts_withdrawn","apsts_ntu"])';
-        $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchWithEnforcementArea(): void
+    public function testFetchByLicNoWithoutAdditionalDataNotFound(): void
     {
-        $licenceId = 1;
+        $this->createRealQb()->stubbedQuery()->expects('getOneOrNullResult')->andReturnNull();
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
+        $this->expectException(NotFoundException::class);
 
-        $qb->shouldReceive('getQuery->getSingleResult')
+        $this->sut->fetchByLicNoWithoutAdditionalData('OB123');
+    }
+
+    /**
+     * Registration is refused for a licence with no usable correspondence address, an unlicensed
+     * organisation, or an organisation that already has an admin user.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('userRegistrationProvider')]
+    public function testFetchForUserRegistration(
+        bool $addressUsable,
+        bool $unlicensed,
+        bool $hasAdminUsers,
+        ?string $expectedError,
+    ): void {
+        $address = m::mock(AddressEntity::class)->makePartial();
+        $address->shouldReceive('isEmpty')->andReturn(!$addressUsable);
+
+        $contactDetails = m::mock(ContactDetailsEntity::class)->makePartial();
+        $contactDetails->shouldReceive('getAddress')->andReturn($address);
+
+        $adminUsers = m::mock();
+        $adminUsers->shouldReceive('isEmpty')->andReturn(!$hasAdminUsers);
+
+        $organisation = m::mock(OrganisationEntity::class)->makePartial();
+        $organisation->shouldReceive('getIsUnlicensed')->andReturn($unlicensed);
+        $organisation->shouldReceive('getAdminOrganisationUsers')->andReturn($adminUsers);
+
+        $licence = m::mock(Entity::class)->makePartial();
+        $licence->shouldReceive('getCorrespondenceCd')->andReturn($contactDetails);
+        $licence->shouldReceive('getOrganisation')->andReturn($organisation);
+
+        $this->sut->expects('fetchByLicNo')->with('OB123')->andReturn($licence);
+
+        if ($expectedError !== null) {
+            try {
+                $this->sut->fetchForUserRegistration('OB123');
+                $this->fail('Expected a ValidationException');
+            } catch (ValidationException $e) {
+                $this->assertSame(['licenceNumber' => [$expectedError]], $e->getMessages());
+            }
+
+            return;
+        }
+
+        $this->assertSame($licence, $this->sut->fetchForUserRegistration('OB123'));
+    }
+
+    public static function userRegistrationProvider(): \Iterator
+    {
+        yield 'accepted' => [true, false, false, null];
+        yield 'no usable address' => [false, false, false, 'ERR_ADDRESS_NOT_FOUND'];
+        yield 'unlicensed organisation' => [true, true, false, 'ERR_UNLICENCED_ORG'];
+        yield 'organisation already has admin users' => [true, false, true, 'ERR_ADMIN_EXISTS'];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('vrmProvider')]
+    public function testFetchByVrm(bool $checkByStatus, string $expectedExtraJoin, string $expectedExtra): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs();
+        $qb->stubbedQuery()->expects('getResult')->withNoArgs()->andReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchByVrm('ABC123', $checkByStatus));
+
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' INNER JOIN m.licenceVehicles lv INNER JOIN lv.vehicle v' . $expectedExtraJoin
+            . ' WHERE lv.removalDate IS NULL AND v.vrm = :vrm' . $expectedExtra,
+            $qb->getDQL(),
+        );
+        $this->assertSame('ABC123', $qb->getParameter('vrm')->getValue());
+    }
+
+    public static function vrmProvider(): \Iterator
+    {
+        yield 'any status' => [false, '', ''];
+        // The excluded statuses are inlined into the NOT IN().
+        yield 'excluding dead applications' => [
+            true,
+            ' INNER JOIN lv.application a',
+            " AND a.status NOT IN('" . ApplicationEntity::APPLICATION_STATUS_CANCELLED
+            . "', '" . ApplicationEntity::APPLICATION_STATUS_REFUSED
+            . "', '" . ApplicationEntity::APPLICATION_STATUS_WITHDRAWN
+            . "', '" . ApplicationEntity::APPLICATION_STATUS_NOT_TAKEN_UP . "')",
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('byIdProvider')]
+    public function testFetchWithAssociations(
+        string $method,
+        string $expectedSelect,
+        string $expectedJoins,
+        bool $hydrated,
+    ): void {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()
+            ->expects('getSingleResult')
+            ->with(...($hydrated ? [Query::HYDRATE_OBJECT] : []))
             ->andReturn('RESULT');
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('enforcementArea')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('byId')
-            ->with($licenceId)
-            ->once()
-            ->andReturnSelf();
+        $this->assertSame('RESULT', $this->sut->{$method}(1));
 
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Licence::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchWithEnforcementArea($licenceId);
-        $this->assertEquals('RESULT', $result);
-    }
-
-    public function testFetchWithOperatingCentres(): void
-    {
-        $licenceId = 1;
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $qb->shouldReceive('getQuery->getSingleResult')
-            ->andReturn('RESULT');
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('operatingCentres', 'oc')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('oc.operatingCentre', 'oc_oc')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('oc_oc.address', 'oc_oc_a')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('byId')
-            ->with($licenceId)
-            ->once()
-            ->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Licence::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchWithOperatingCentres($licenceId);
-        $this->assertEquals('RESULT', $result);
-    }
-
-    public function testFetchWithPrivateHireLicence(): void
-    {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('privateHireLicences', 'phl')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('phl.contactDetails', 'cd')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('cd.address', 'add')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('add.countryCode')->once()->andReturnSelf()
-            ->shouldReceive('byId')->with(21)->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getSingleResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT ' . $expectedSelect . self::FROM . $expectedJoins . ' WHERE m.id = :byId',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchWithPrivateHireLicence(21));
+    }
 
-        $expectedQuery = 'BLAH';
-        $this->assertEquals($expectedQuery, $this->query);
+    public static function byIdProvider(): \Iterator
+    {
+        yield 'enforcement area' => [
+            'fetchWithEnforcementArea',
+            'm, w0',
+            ' LEFT JOIN m.enforcementArea w0',
+            false,
+        ];
+        yield 'operating centres' => [
+            'fetchWithOperatingCentres',
+            'm, oc, oc_oc, oc_oc_a',
+            ' LEFT JOIN m.operatingCentres oc LEFT JOIN oc.operatingCentre oc_oc'
+            . ' LEFT JOIN oc_oc.address oc_oc_a',
+            true,
+        ];
+        yield 'private hire licences' => [
+            'fetchWithPrivateHireLicence',
+            self::REFDATA_SELECT . ', phl, cd, add, w5',
+            self::REFDATA_JOINS . ' LEFT JOIN m.privateHireLicences phl'
+            . ' LEFT JOIN phl.contactDetails cd LEFT JOIN cd.address add'
+            . ' LEFT JOIN add.countryCode w5',
+            true,
+        ];
     }
 
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(LicenceRepo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $expr1 = $this->mockExprEq('m.organisation', ':organisation');
-        $mockQb->shouldReceive('expr->eq')->with('m.organisation', ':organisation')->once()->andReturn($expr1);
-        $mockQb->shouldReceive('setParameter')->with('organisation', 723)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getOrganisation')->andReturn(723);
+        $query->shouldReceive('getExcludeStatuses')->andReturn(['status1', 'status2']);
 
-        $expr2 = $this->mockExprNotIn('m.status', ':excludeStatuses');
-        $mockQb->shouldReceive('expr->notIn')->with('m.status', ':excludeStatuses')->once()->andReturn($expr2);
-        $mockQb->shouldReceive('setParameter')->with('excludeStatuses', ['status1', 'status2'])->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
+        $this->sut->applyListFilters($qb, $query);
 
-        $mockQuery = m::mock(QueryInterface::class);
-        $mockQuery->shouldReceive('getOrganisation')->with()->andReturn(723);
-        $mockQuery->shouldReceive('getExcludeStatuses')->with()->andReturn(['status1', 'status2']);
-
-        $this->sut->applyListFilters($mockQb, $mockQuery);
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' WHERE m.organisation = :organisation AND m.status NOT IN(:excludeStatuses)',
+            $qb->getDQL(),
+        );
+        $this->assertSame(723, $qb->getParameter('organisation')->getValue());
+        $this->assertSame(['status1', 'status2'], $qb->getParameter('excludeStatuses')->getValue());
     }
 
+    /**
+     * The continuation window is the whole calendar month.
+     */
     public function testFetchForContinuation(): void
     {
-        $qb = m::mock(QueryBuilder::class);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->once()->with($qb)->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('trafficArea', 'ta')->once()->andReturnSelf();
+        $this->assertSame(['RESULTS'], $this->sut->fetchForContinuation(2019, 2, 'B'));
 
-        $condFrom = $this->mockExprGte('m.expiryDate', ':expiryFrom');
-        $qb->shouldReceive('expr->gte')->with('m.expiryDate', ':expiryFrom')->once()->andReturn($condFrom);
-        $qb->shouldReceive('andWhere')->with($condFrom)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('expiryFrom', m::type(\DateTime::class))->once()->andReturnSelf();
-
-        $condTo = $this->mockExprLte('m.expiryDate', ':expiryTo');
-        $qb->shouldReceive('expr->lte')->with('m.expiryDate', ':expiryTo')->once()->andReturn($condTo);
-        $qb->shouldReceive('andWhere')->with($condTo)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('expiryTo', m::type(\DateTime::class))->once()->andReturnSelf();
-
-        $condTa = $this->mockExprEq('ta.id', ':trafficArea');
-        $qb->shouldReceive('expr->eq')->with('ta.id', ':trafficArea')->once()->andReturn($condTa);
-        $qb->shouldReceive('andWhere')->with($condTa)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('trafficArea', 'B')->once()->andReturnSelf();
-
-        $query = m::mock(\Doctrine\ORM\Query::class);
-        $qb->shouldReceive('getQuery')->andReturn($query);
-        $query->shouldReceive('getResult')
-            ->andReturn('RESULT');
-
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-        $this->em->shouldReceive('getRepository')
-            ->with(Licence::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchForContinuation(2015, 1, 'B');
-        $this->assertEquals('RESULT', $result);
+        $this->assertSame(
+            'SELECT ' . self::REFDATA_SELECT . ', ta' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.trafficArea ta'
+            . ' WHERE m.expiryDate >= :expiryFrom AND m.expiryDate <= :expiryTo'
+            . ' AND ta.id = :trafficArea',
+            $qb->getDQL(),
+        );
+        $this->assertSame('2019-02-01', $qb->getParameter('expiryFrom')->getValue()->format('Y-m-d'));
+        $this->assertSame('2019-02-28', $qb->getParameter('expiryTo')->getValue()->format('Y-m-d'));
     }
 
+    /**
+     * Continuation not sought: an expired active licence with an outstanding continuation fee,
+     * restricted to goods licences and PSV special restricted.
+     */
     public function testFetchForContinuationNotSought(): void
     {
-        $qb = $this->createMockQb('[QUERY]');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn([
+            ['id' => 1, 'version' => 2, 'licNo' => 'OB123', 'trafficArea' => ['name' => 'B']],
+        ]);
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $results = [
-            [
-                'id' => 1,
-                'version' => 2,
-                'licNo' => 'foo',
-                'trafficArea' => [
-                    'name' => 'bar'
-                ]
-            ]
-        ];
-        $expected = [
-            [
-                'id' => 1,
-                'version' => 2,
-                'licNo' => 'foo',
-                'taName' => 'bar'
-            ]
-        ];
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)
-                ->shouldReceive('getResult')
-                ->with(Query::HYDRATE_ARRAY)
-                ->once()
-                ->andReturn($results)
-                ->getMock()
+        $this->assertSame(
+            [['id' => 1, 'version' => 2, 'licNo' => 'OB123', 'taName' => 'B']],
+            $this->sut->fetchForContinuationNotSought(new \DateTime('2019-01-01'), 10),
         );
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->andReturnSelf();
-
-        $now = new DateTime();
-
-        $this->assertEquals($expected, $this->sut->fetchForContinuationNotSought($now, 200));
-
-        $expectedQuery = '[QUERY] ' .
-            'SELECT m, ta ' .
-            'AND m.expiryDate < [[' . $now->format(\DateTime::W3C) . ']] ' .
-            'AND m.status IN([[["lsts_valid","lsts_curtailed","lsts_suspended"]]]) ' .
-            'AND m.goodsOrPsv = [[lcat_gv]] OR (m.goodsOrPsv = [[lcat_psv]] AND m.licenceType = [[ltyp_sr]]) ' .
-            'INNER JOIN m.fees f INNER JOIN f.feeType ft AND f.feeStatus = [[lfs_ot]] AND ft.feeType = [[CONT]] ' .
-            'LIMIT 200';
-
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchWithVariationsAndInterimInforce(): void
-    {
-        $licenceId = 1;
-        $qb = m::mock(QueryBuilder::class);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->once()->with($qb)->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('applications', 'a')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('a.interimStatus', 'ais')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('byId')->with($licenceId)->once()->andReturnSelf();
-
-        $condVar = $this->mockExprEq('a.isVariation', true);
-        $qb->shouldReceive('expr->eq')->with('a.isVariation', true)->once()->andReturn($condVar);
-        $qb->shouldReceive('andWhere')->with($condVar)->once()->andReturnSelf();
-
-        $condApp = $this->mockExprEq('a.status', ':applicationStatus');
-        $qb->shouldReceive('expr->eq')->with('a.status', ':applicationStatus')->once()->andReturn($condApp);
-        $qb->shouldReceive('andWhere')->with($condApp)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')
-            ->with('applicationStatus', ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION)
-            ->once()
-            ->andReturnSelf();
-
-        $condInt = $this->mockExprEq('a.interimStatus', ':interimStatus');
-        $qb->shouldReceive('expr->eq')->with('a.interimStatus', ':interimStatus')->once()->andReturn($condInt);
-        $qb->shouldReceive('andWhere')->with($condInt)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')
-            ->with('interimStatus', ApplicationEntity::INTERIM_STATUS_INFORCE)
-            ->once()
-            ->andReturnSelf();
-
-        $query = m::mock(\Doctrine\ORM\Query::class);
-        $qb->shouldReceive('getQuery')->andReturn($query);
-        $query->shouldReceive('getResult')->andReturn(['result']);
-
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-        $this->em->shouldReceive('getRepository')
-            ->with(Licence::class)
-            ->andReturn($repo);
-
-        $this->assertEquals(['result'], $this->sut->fetchWithVariationsAndInterimInforce($licenceId));
-    }
-
-    public function testFetchWithAddressesUsingIdWithQuery(): void
-    {
-        $id = 9999;
-
-        $mockQb = $this->createMockQb('[QUERY]');
-
-        $this->mockCreateQueryBuilder($mockQb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->once()->with($mockQb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('byId')->once()->with($id)->andReturnSelf()
-            ->shouldReceive('withContactDetails')->once()->with('correspondenceCd', 'c')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('c.phoneContacts', 'c_p')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('c_p.phoneContactType', 'c_p_pct')->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->with(PhoneContactEntity::class, 'c_p')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('organisation', 'o')->andReturnSelf()
-            ->shouldReceive('withContactDetails')->once()->with('o.contactDetails', 'o_cd')->andReturnSelf()
-            ->shouldReceive('withContactDetails')->once()->with('establishmentCd', 'e')->andReturnSelf()
-            ->shouldReceive('withContactDetails')->once()->with('transportConsultantCd', 't')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('t.phoneContacts', 't_p')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('t_p.phoneContactType', 't_p_pct')->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->with(PhoneContactEntity::class, 't_p')->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getSingleResult')
-            ->with()
-            ->once()
-            ->andReturn(['EXPECT']);
-
-        /** @var QueryInterface $mockQuery */
-        $mockQuery = m::mock(QueryInterface::class)
-            ->shouldReceive('getId')->with()->andReturn($id)
-            ->getMock();
-
-        $this->assertEquals(['EXPECT'], $this->sut->fetchWithAddressesUsingId($mockQuery));
-    }
-
-    public function testFetchWithAddressesUsingIdWithInt(): void
-    {
-        $id = 9999;
-
-        $mockQb = $this->createMockQb('[QUERY]');
-
-        $this->mockCreateQueryBuilder($mockQb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->once()->with($mockQb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('byId')->once()->with($id)->andReturnSelf()
-            ->shouldReceive('withContactDetails')->once()->with('correspondenceCd', 'c')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('c.phoneContacts', 'c_p')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('c_p.phoneContactType', 'c_p_pct')->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->with(PhoneContactEntity::class, 'c_p')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('organisation', 'o')->andReturnSelf()
-            ->shouldReceive('withContactDetails')->once()->with('o.contactDetails', 'o_cd')->andReturnSelf()
-            ->shouldReceive('withContactDetails')->once()->with('establishmentCd', 'e')->andReturnSelf()
-            ->shouldReceive('withContactDetails')->once()->with('transportConsultantCd', 't')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('t.phoneContacts', 't_p')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('t_p.phoneContactType', 't_p_pct')->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->with(PhoneContactEntity::class, 't_p')->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getSingleResult')
-            ->with()
-            ->once()
-            ->andReturn(['EXPECT']);
-
-        $this->assertEquals(['EXPECT'], $this->sut->fetchWithAddressesUsingId($id));
-    }
-
-    public function testFetchByOrganisationIdAndStatuses(): void
-    {
-
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-
-        $statuses = ['foo', 'bar'];
-
-        $this->em->shouldReceive('getRepository')->with(Licence::class)->andReturn($repo);
-
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $orgCond = $this->mockExprEq('m.organisation', ':organisationId');
-        $qb->shouldReceive('expr->eq')->with('m.organisation', ':organisationId')->once()->andReturn($orgCond);
-        $qb->shouldReceive('andWhere')->with($orgCond)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('organisationId', 1)->once()->andReturnSelf();
-
-        $stCond = $this->mockExprIn('m.status', ':statuses');
-        $qb->shouldReceive('expr->in')->with('m.status', ':statuses')->once()->andReturn($stCond);
-        $qb->shouldReceive('andWhere')->with($stCond)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('statuses', $statuses)->once()->andReturnSelf();
-
-        $query = m::mock(\Doctrine\ORM\Query::class);
-        $qb->shouldReceive('getQuery')->once()->andReturn($query);
-        $query->shouldReceive('getResult')->with(Query::HYDRATE_ARRAY)->once()->andReturn(['result']);
-
-        $this->assertSame(['result'], $this->sut->fetchByOrganisationIdAndStatuses(1, $statuses));
-    }
-
-    public function testFetchByOrganisationId(): void
-    {
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_ARRAY)->once()->andReturn(['RESULTS']);
-
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByOrganisationId(2017));
-
-        $expectedQuery = 'BLAH AND m.organisation = [[2017]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        // The explicit select() narrows to the root and traffic area, keeping the other joins
+        // for filtering only — the comment in the repository cites memory_limit.
+        $this->assertSame(
+            'SELECT m, ta' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.licenceVehicles lv LEFT JOIN lv.goodsDiscs gd'
+            . ' LEFT JOIN m.psvDiscs pd LEFT JOIN m.trafficArea ta'
+            . ' INNER JOIN m.fees f INNER JOIN f.feeType ft'
+            . ' WHERE m.expiryDate < :now AND m.status IN(:statuses)'
+            . ' AND (m.goodsOrPsv = :gv OR (m.goodsOrPsv = :psv AND m.licenceType = :sr))'
+            . ' AND f.feeStatus = :feeStatus AND ft.feeType = :feeType',
+            $qb->getDQL(),
+        );
+        $this->assertSame(self::ACTIVE_STATUSES, $qb->getParameter('statuses')->getValue());
+        $this->assertSame(FeeEntity::STATUS_OUTSTANDING, $qb->getParameter('feeStatus')->getValue());
+        $this->assertSame(FeeTypeEntity::FEE_TYPE_CONT, $qb->getParameter('feeType')->getValue());
+        $this->assertSame(10, $qb->getMaxResults());
     }
 
     public function testFetchPsvLicenceIdsToSurrender(): void
     {
-        $qb = m::mock(QueryBuilder::class);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn([
+            ['id' => 1],
+            ['id' => 2],
+        ]);
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf();
+        $this->assertSame([1, 2], $this->sut->fetchPsvLicenceIdsToSurrender(new \DateTime('2019-01-01')));
 
-        $licTypes = [
-            Licence::LICENCE_TYPE_RESTRICTED,
-            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-        ];
-
-        $statuses = [
-            Licence::LICENCE_STATUS_VALID,
-            Licence::LICENCE_STATUS_CURTAILED,
-            Licence::LICENCE_STATUS_SUSPENDED,
-        ];
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Licence::class)
-            ->andReturn($repo);
-
-        $expr1 = $this->mockExprLt('m.expiryDate', ':now');
-        $qb->shouldReceive('expr->lt')->with('m.expiryDate', ':now')->once()->andReturn($expr1);
-        $qb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('now', m::type(DateTime::class))->once()->andReturnSelf();
-
-        $expr2 = $this->mockExprEq('m.goodsOrPsv', ':psv');
-        $qb->shouldReceive('expr->eq')->with('m.goodsOrPsv', ':psv')->once()->andReturn($expr2);
-        $qb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('psv', Licence::LICENCE_CATEGORY_PSV)->once()->andReturnSelf();
-
-        $expr3 = $this->mockExprIn('m.licenceType', ':licTypes');
-        $qb->shouldReceive('expr->in')->with('m.licenceType', ':licTypes')->once()->andReturn($expr3);
-        $qb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('licTypes', $licTypes)->once()->andReturnSelf();
-
-        $expr4 = $this->mockExprIn('m.status', ':statuses');
-        $qb->shouldReceive('expr->in')->with('m.status', ':statuses')->once()->andReturn($expr4);
-        $qb->shouldReceive('andWhere')->with($expr4)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('statuses', $statuses)->once()->andReturnSelf();
-
-        $results = [
+        $this->assertSame(
+            'SELECT ' . self::REFDATA_SELECT . self::FROM . self::REFDATA_JOINS
+            . ' WHERE m.expiryDate < :now AND m.goodsOrPsv = :psv'
+            . ' AND m.licenceType IN(:licTypes) AND m.status IN(:statuses)',
+            $qb->getDQL(),
+        );
+        $this->assertSame(Entity::LICENCE_CATEGORY_PSV, $qb->getParameter('psv')->getValue());
+        $this->assertSame(
             [
-                'id' => 1
+                Entity::LICENCE_TYPE_RESTRICTED,
+                Entity::LICENCE_TYPE_STANDARD_NATIONAL,
+                Entity::LICENCE_TYPE_STANDARD_INTERNATIONAL,
             ],
-            [
-                'id' => 2
-            ]
+            $qb->getParameter('licTypes')->getValue(),
+        );
+    }
+
+    public function testFetchWithVariationsAndInterimInforce(): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchWithVariationsAndInterimInforce(1));
+
+        $this->assertSame(
+            'SELECT ' . self::REFDATA_SELECT . ', a, ais' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.applications a LEFT JOIN a.interimStatus ais'
+            . ' WHERE m.id = :byId AND a.isVariation = 1'
+            . ' AND a.status = :applicationStatus AND a.interimStatus = :interimStatus',
+            $qb->getDQL(),
+        );
+        $this->assertSame(
+            ApplicationEntity::INTERIM_STATUS_INFORCE,
+            $qb->getParameter('interimStatus')->getValue(),
+        );
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('byOrganisationProvider')]
+    public function testFetchByOrganisation(string $method, array $args, string $expectedExtra): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->{$method}(...$args));
+
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.organisation = :organisationId' . $expectedExtra,
+            $qb->getDQL(),
+        );
+        $this->assertSame(7, $qb->getParameter('organisationId')->getValue());
+    }
+
+    public static function byOrganisationProvider(): \Iterator
+    {
+        yield 'any status' => ['fetchByOrganisationId', [7], ''];
+        yield 'given statuses' => [
+            'fetchByOrganisationIdAndStatuses',
+            [7, ['lsts_valid']],
+            ' AND m.status IN(:statuses)',
         ];
-
-        $query = m::mock(\Doctrine\ORM\Query::class);
-        $qb->shouldReceive('getQuery')->once()->andReturn($query);
-        $query->shouldReceive('getResult')->with(Query::HYDRATE_ARRAY)->once()->andReturn($results);
-
-        $this->assertSame([1, 2], $this->sut->fetchPsvLicenceIdsToSurrender());
     }
 
     public function testInternationalGoodsReport(): void
     {
-        $this->expectQueryWithData(InternationalGoodsReport::class, [], [], m::mock(Result::class));
-        $this->sut->internationalGoodsReport();
+        $result = m::mock(Result::class);
+
+        $query = m::mock();
+        $query->expects('execute')->with([])->andReturn($result);
+
+        $this->dbQueryService->expects('get')
+            ->with(\Dvsa\Olcs\Api\Domain\Repository\Query\Licence\InternationalGoodsReport::class)
+            ->andReturn($query);
+
+        $this->assertSame($result, $this->sut->internationalGoodsReport());
     }
 
-    public function testFetchForLastTmAutoLetterFirstLetter(): void
-    {
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->em->shouldReceive('getFilters->isEnabled')->with('soft-deleteable')->andReturn(false);
-        $qb->shouldReceive('getDQL')->times(2);
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
-
-        $this->sut->fetchForLastTmAutoLetter($this->sut::LETTER_FIRST);
-
-        $today = new DateTime()->setTime(0, 0, 0, 0)->format('Y-m-d');
-        $tomorrow = new DateTime()->add(new \DateInterval('P1D'))->setTime(0, 0, 0, 0)->format('Y-m-d H:i:s');
-
-        $expectedQuery =
-            '[QUERY] DISTINCT ' .
-            'AND m.goodsOrPsv IN([[["lcat_gv","lcat_psv"]]]) ' .
-            'AND m.status IN([[["lsts_suspended","lsts_valid","lsts_curtailed"]]]) ' .
-            'AND m.licenceType IN([[["ltyp_sn","ltyp_si"]]]) ' .
-            'AND m.expiryDate >= [[' . $tomorrow . ']] ' .
-            'AND tml.lastTmLetterDate IS NULL ' .
-            'AND tml.lastTmFirstEmailDate IS NULL ' .
-            'AND m.optOutTmLetter = 0 ' .
-            'AND m.totAuthVehicles >= 1 ' .
-            'INNER JOIN Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence tml WITH m.id = tml.licence ' .
-            'SELECT IDENTITY(gp.licence) ' .
-            'AND gp.startDate <= [[' . $today . ']] ' .
-            'AND gp.endDate >= [[' . $today . ']] ' .
-            'AND m.id NOT IN() ' .
-            'SELECT IDENTITY(tml2.licence) ' .
-            'AND tml2.deletedDate >= [[' . $tomorrow . ']] ' .
-            'OR tml2.deletedDate IS NULL ' .
-            'AND tml2.licence = m.id ' .
-            'AND m.id NOT IN()';
-
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchForLastTmAutoLetterSecondLetter(): void
-    {
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->em->shouldReceive('getFilters->isEnabled')
-            ->with('soft-deleteable')
-            ->andReturn(false);
-
-        // SECOND letter: latestDeletedQb + graceQb + tmlQb
-        $qb->shouldReceive('getDQL')->times(3);
-
-        $qb->shouldReceive('getQuery->getResult')
-            ->once()
-            ->andReturn(['RESULTS']);
-
-        $this->sut->fetchForLastTmAutoLetter($this->sut::LETTER_SECOND);
-
-        $today = new DateTime()
-            ->setTime(0, 0, 0, 0)
-            ->format('Y-m-d');
-
-        $tomorrow = new DateTime()
-            ->add(new \DateInterval('P1D'))
-            ->setTime(0, 0, 0, 0)
-            ->format('Y-m-d H:i:s');
-
-        $this->assertStringContainsString('[QUERY] DISTINCT', (string) $this->query);
-
-        $this->assertStringContainsString('AND m.goodsOrPsv IN([[["lcat_gv","lcat_psv"]]])', (string) $this->query);
-        $this->assertStringContainsString('AND m.status IN([[["lsts_suspended","lsts_valid","lsts_curtailed"]]])', (string) $this->query);
-        $this->assertStringContainsString('AND m.licenceType IN([[["ltyp_sn","ltyp_si"]]])', (string) $this->query);
-        $this->assertStringContainsString('AND m.expiryDate >= [[' . $tomorrow . ']]', (string) $this->query);
-
-        $this->assertStringContainsString('AND tml.lastTmLetterDate IS NULL', (string) $this->query);
-
-        $this->assertStringContainsString('AND m.optOutTmLetter = 0', (string) $this->query);
-        $this->assertStringContainsString('AND m.totAuthVehicles >= 1', (string) $this->query);
-
-        $this->assertStringContainsString(
-            'INNER JOIN Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence tml WITH m.id = tml.licence',
-            (string) $this->query
-        );
-
-        $this->assertStringContainsString('SELECT IDENTITY(gp.licence)', (string) $this->query);
-        $this->assertStringContainsString('gp.startDate <= [[' . $today . ']]', (string) $this->query);
-        $this->assertStringContainsString('gp.endDate >= [[' . $today . ']]', (string) $this->query);
-
-        $this->assertStringContainsString('SELECT IDENTITY(tml2.licence)', (string) $this->query);
-        $this->assertStringContainsString('tml2.deletedDate >= [[' . $tomorrow . ']]', (string) $this->query);
-        $this->assertStringContainsString('OR tml2.deletedDate IS NULL', (string) $this->query);
-        $this->assertStringContainsString('AND tml2.licence = m.id', (string) $this->query);
-
-        // ---------
-        // SECOND letter-specific assertions
-        // ---------
-        $this->assertStringContainsString('tml.lastTmFirstEmailDate IS NOT NULL', (string) $this->query);
-
-        // latest-deleted subquery
-        $this->assertStringContainsString('SELECT MAX(t2.deletedDate)', (string) $this->query);
-        $this->assertStringContainsString('t2.deletedDate IS NOT NULL', (string) $this->query);
-        $this->assertStringContainsString('tml.deletedDate = (', (string) $this->query);
-
-        // 28-day condition
-        $this->assertStringContainsString('tml.deletedDate <=', (string) $this->query);
-    }
-
-    public function testFetchForLastTmAutoLetterThrowsOnInvalidType(): void
+    public function testFetchForLastTmAutoLetterRejectsAnInvalidType(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->sut->fetchForLastTmAutoLetter(999);
+
+        $this->sut->fetchForLastTmAutoLetter(99);
+    }
+
+    /**
+     * The auto-letter query is the largest in the repository: two correlated NOT IN sub-selects,
+     * a soft-delete override, and a second-letter branch that adds a MAX(deletedDate) correlation.
+     * Asserting that it compiles proves every alias and field in it actually resolves.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('letterTypeProvider')]
+    public function testFetchForLastTmAutoLetter(int $letterType, array $expectedFragments): void
+    {
+        $this->expectSoftDeleteableDisabledFor(TMLicenceEntity::class);
+
+        $qb = $this->wireAutoLetterQueryBuilders();
+        $qb->willReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchForLastTmAutoLetter($letterType));
+
+        $dql = $qb->getDQL();
+
+        $this->assertStringStartsWith('SELECT DISTINCT m' . self::FROM, $dql);
+        $this->assertStringContainsString(
+            ' INNER JOIN ' . TMLicenceEntity::class . ' tml WITH m.id = tml.licence',
+            $dql,
+        );
+        $this->assertStringContainsString(' tml.lastTmLetterDate IS NULL', $dql);
+        $this->assertStringContainsString(' m.optOutTmLetter = 0', $dql);
+        $this->assertStringContainsString(' m.totAuthVehicles >= 1', $dql);
+
+        // Neither correlated sub-select leaks its own predicates into the outer WHERE.
+        $this->assertStringContainsString(
+            '(m.id NOT IN(SELECT IDENTITY(gp.licence) FROM ' . GracePeriodEntity::class . ' gp'
+            . ' WHERE gp.startDate <= :today AND gp.endDate >= :today))',
+            $dql,
+        );
+        $this->assertStringContainsString(
+            '(m.id NOT IN(SELECT IDENTITY(tml2.licence) FROM ' . TMLicenceEntity::class . ' tml2'
+            . ' WHERE (tml2.deletedDate >= :tomorrow OR tml2.deletedDate IS NULL)'
+            . ' AND tml2.licence = m.id))',
+            $dql,
+        );
+
+        foreach ($expectedFragments as $fragment) {
+            $this->assertStringContainsString($fragment, $dql);
+        }
+
+        $this->compileDql($dql);
+    }
+
+    public static function letterTypeProvider(): \Iterator
+    {
+        yield 'first letter' => [Repo::LETTER_FIRST, [' tml.lastTmFirstEmailDate IS NULL']];
+        yield 'second letter' => [
+            Repo::LETTER_SECOND,
+            [
+                ' tml.lastTmFirstEmailDate IS NOT NULL',
+                '(tml.deletedDate = (SELECT MAX(t2.deletedDate) FROM ' . TMLicenceEntity::class . ' t2'
+                . ' WHERE t2.licence = m.id AND t2.deletedDate IS NOT NULL))',
+                ' tml.deletedDate <= :date28DaysAgo',
+            ],
+        ];
+    }
+
+    /**
+     * fetchForLastTmAutoLetter() builds three more query builders off the EntityManager, so each
+     * has to be handed out separately — sharing one would let the sub-selects write their
+     * predicates into the outer query.
+     *
+     * @return TestQueryBuilder the root builder
+     */
+    private function wireAutoLetterQueryBuilders(): TestQueryBuilder
+    {
+        $builders = [
+            Entity::class => ['m' => $this->newRealQb()],
+            GracePeriodEntity::class => ['gp' => $this->newRealQb()],
+            TMLicenceEntity::class => ['tml2' => $this->newRealQb(), 't2' => $this->newRealQb()],
+        ];
+
+        foreach ($builders as $entity => $byAlias) {
+            $repository = m::mock(EntityRepository::class);
+
+            foreach ($byAlias as $alias => $qb) {
+                $qb->select($alias)->from($entity, $alias);
+                $repository->shouldReceive('createQueryBuilder')->with($alias)->andReturn($qb);
+            }
+
+            $this->em->shouldReceive('getRepository')->with($entity)->andReturn($repository);
+        }
+
+        return $this->qb = $builders[Entity::class]['m'];
+    }
+
+    private function expectSoftDeleteableDisabledFor(string $entityClass): void
+    {
+        $filter = m::mock(SoftDeleteableFilter::class);
+        $filter->shouldReceive('disableForEntity')->with($entityClass);
+
+        $filters = m::mock(FilterCollection::class);
+        $filters->shouldReceive('isEnabled')->with('soft-deleteable')->andReturnTrue();
+        $filters->shouldReceive('getFilter')->with('soft-deleteable')->andReturn($filter);
+
+        $this->em->shouldReceive('getFilters')->withNoArgs()->andReturn($filters);
     }
 }
