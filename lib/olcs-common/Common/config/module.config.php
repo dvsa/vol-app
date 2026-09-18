@@ -119,9 +119,7 @@ return [
             \Common\Service\FlashMessenger\LaminasSessionFlashMessenger::class => \Common\Service\FlashMessenger\LaminasSessionFlashMessengerFactory::class,
         ],
         'aliases' => [
-            'flashMessenger' => \Common\Service\FlashMessenger\LaminasSessionFlashMessenger::class,
-            'flashmessenger' => \Common\Service\FlashMessenger\LaminasSessionFlashMessenger::class,
-            'FlashMessenger' => \Common\Service\FlashMessenger\LaminasSessionFlashMessenger::class,
+            'commonFlashMessenger' => \Common\Service\FlashMessenger\LaminasSessionFlashMessenger::class,
         ]
     ],
     'console' => [

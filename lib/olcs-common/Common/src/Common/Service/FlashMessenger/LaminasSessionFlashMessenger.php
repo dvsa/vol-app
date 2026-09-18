@@ -5,6 +5,7 @@ namespace Common\Service\FlashMessenger;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
 use Laminas\Session\Container;
 use Laminas\Stdlib\SplQueue;
 
@@ -14,7 +15,7 @@ use Laminas\Stdlib\SplQueue;
  * @template-implements IteratorAggregate<array-key, string>
  * @psalm-type MessageList = SplQueue<array-key, string>
  */
-class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorAggregate, Countable
+class LaminasSessionFlashMessenger extends AbstractPlugin implements FlashMessengerInterface, IteratorAggregate, Countable
 {
     public const string NAMESPACE_DEFAULT = 'default';
 
@@ -34,6 +35,11 @@ class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorA
 
     public function __construct(private Container $container)
     {
+    }
+
+    public function getContainer(): Container
+    {
+        return $this->container;
     }
 
     #[\Override]
@@ -178,5 +184,30 @@ class LaminasSessionFlashMessenger implements FlashMessengerInterface, IteratorA
         }
 
         return 0;
+    }
+
+    /**
+     * Clear messages from the container
+     *
+     * @return bool True if current messages were cleared from the container, false if none existed.
+     */
+    public function clearCurrentMessagesFromContainer(): bool
+    {
+        $container = $this->container;
+
+        $namespaces = [];
+        foreach ($container as $namespace => $messages) {
+            $namespaces[] = $namespace;
+        }
+
+        if (empty($namespaces)) {
+            return false;
+        }
+
+        foreach ($namespaces as $namespace) {
+            unset($container->{$namespace});
+        }
+
+        return true;
     }
 }

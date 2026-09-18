@@ -150,4 +150,14 @@ class FlashMessengerHelperService
     {
         $this->addCurrentErrorMessage('unknown-error');
     }
+
+    public function clearCurrentMessagesFromContainer(): void
+    {
+        $this->flashMessenger->clearCurrentMessagesFromContainer();
+    }
+
+    public function offsetSet(string $key, mixed $value): void
+    {
+        $this->flashMessenger->getContainer()->offsetSet($key, $value);
+    }
 }

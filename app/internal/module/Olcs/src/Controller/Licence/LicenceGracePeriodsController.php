@@ -120,7 +120,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
                         $this->flashMessengerHelper->addErrorMessage('unknown-error');
                     }
 
-                    $this->flashMessenger()->addErrorMessage('licence.grace-period.saved.failure');
+                    $this->flashMessengerHelper->addErrorMessage('licence.grace-period.saved.failure');
                     return $this->redirectToIndex();
                 }
 
@@ -180,11 +180,11 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
                         $this->flashMessengerHelper->addErrorMessage('unknown-error');
                     }
 
-                    $this->flashMessenger()->addErrorMessage('licence.grace-period.saved.failure');
+                    $this->flashMessengerHelper->addErrorMessage('licence.grace-period.saved.failure');
                     return $this->redirectToIndex();
                 }
 
-                $this->flashMessenger()->addSuccessMessage('licence.grace-period.saved.success');
+                $this->flashMessengerHelper->addSuccessMessage('licence.grace-period.saved.success');
                 return $this->redirectToIndex();
             }
         }

@@ -16,7 +16,7 @@ trait FlashMessengerTrait
      */
     public function getFlashMessenger()
     {
-        return $this->plugin('FlashMessenger');
+        return $this->plugin('commonFlashMessenger');
     }
 
     /**

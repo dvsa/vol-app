@@ -233,7 +233,7 @@ class LetterSectionController extends AbstractInternalController implements Left
         );
 
         if (!$response->isOk()) {
-            $this->flashMessenger()->addErrorMessage('Unable to load version history');
+            $this->flashMessengerHelperService->addErrorMessage('Unable to load version history');
             return $this->redirect()->toRoute('admin-dashboard/letter-management/letter-section');
         }
 
