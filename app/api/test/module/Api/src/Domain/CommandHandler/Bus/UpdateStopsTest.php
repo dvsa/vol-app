@@ -63,8 +63,9 @@ final class UpdateStopsTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
     #[\PHPUnit\Framework\Attributes\DataProvider('subsidyAreaProvider')]
-    public function testSavesSubsidyProvidersIndependentlyOfRouteCoverage(bool $matchingArea): void
+    public function testSavesSubsidyProvidersIndependentlyOfRouteCoverage(?string $authorityAreaId): void
     {
+        $matchingArea = $authorityAreaId === 'F';
         $busReg = m::mock(BusEntity::class)->makePartial();
         $busReg->initCollections();
         $busReg->shouldReceive('canEdit')->andReturn(true);
@@ -74,7 +75,9 @@ final class UpdateStopsTest extends AbstractCommandHandlerTestCase
         $area->setId('F');
         $authority = new \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority();
         $authority->setId(87);
-        $authority->setTrafficArea($matchingArea ? $area : (new \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea())->setId('B'));
+        if ($authorityAreaId !== null) {
+            $authority->setTrafficArea($matchingArea ? $area : (new \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea())->setId($authorityAreaId));
+        }
         $command = Cmd::create([
             'id' => 99,
             'subsidyTrafficAreas' => ['F'],
@@ -87,6 +90,7 @@ final class UpdateStopsTest extends AbstractCommandHandlerTestCase
         $this->repoMap['Bus']->shouldReceive('save')->times($matchingArea ? 1 : 0)->with($busReg);
         if (!$matchingArea) {
             $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
+            $this->expectExceptionMessage('Select local authorities within the TAOs providing subsidies');
         }
 
         $this->sut->handleCommand($command);
@@ -99,7 +103,11 @@ final class UpdateStopsTest extends AbstractCommandHandlerTestCase
     }
     public static function subsidyAreaProvider(): array
     {
-        return [[true], [false]];
+        return [
+            'matching traffic area' => ['F'],
+            'different traffic area' => ['B'],
+            'no traffic area' => [null],
+        ];
     }
     public function testClearsProvidersAndKeepsLegacyValues(): void
     {

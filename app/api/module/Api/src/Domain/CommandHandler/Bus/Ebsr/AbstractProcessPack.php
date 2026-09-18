@@ -572,7 +572,7 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
         }
         foreach (array_unique($names) as $name) {
             $matches = $byName[$name] ?? [];
-            if (count($matches) === 1) {
+            if (count($matches) === 1 && $matches[0]->getTrafficArea() !== null) {
                 $collection->add($matches[0]);
             }
         }

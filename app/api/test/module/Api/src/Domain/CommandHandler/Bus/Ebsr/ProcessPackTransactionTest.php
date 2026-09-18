@@ -598,9 +598,22 @@ final class ProcessPackTransactionTest extends ProcessPackTestCase
         $secondAuthority = (new LocalAuthorityEntity())->setId(88);
         $secondAuthority->setDescription('Second Council');
         $secondAuthority->setTrafficArea($secondArea);
+        $unassignedAuthority = (new LocalAuthorityEntity())->setId(89);
+        $unassignedAuthority->setDescription('Unassigned Council');
+        $ambiguousAuthority = (new LocalAuthorityEntity())->setId(90);
+        $ambiguousAuthority->setDescription('Ambiguous Council');
+        $ambiguousAuthority->setTrafficArea($subsidyArea);
+        $ambiguousUnassignedAuthority = (new LocalAuthorityEntity())->setId(91);
+        $ambiguousUnassignedAuthority->setDescription('Ambiguous Council');
         $subsidyAuthorities = [87 => $subsidyAuthority, 88 => $secondAuthority];
         $subsidyAreas = ['F' => $subsidyArea, 'B' => $secondArea];
-        $this->repoMap['LocalAuthority']->shouldReceive('fetchList')->andReturn([$subsidyAuthority, $secondAuthority]);
+        $this->repoMap['LocalAuthority']->shouldReceive('fetchList')->andReturn([
+            $subsidyAuthority,
+            $secondAuthority,
+            $unassignedAuthority,
+            $ambiguousAuthority,
+            $ambiguousUnassignedAuthority,
+        ]);
 
         $docIdentifier = 'doc/identifier';
         $document = $this->basicDocument($docIdentifier, $documentDescription);
@@ -726,7 +739,15 @@ final class ProcessPackTransactionTest extends ProcessPackTestCase
             'busRegNoExclusions' => null,
         ];
 
-        $this->mockInput(ProcessedDataInputFactory::class, $processedDataOutput, $processedContext, $processedDataOutput);
+        $this->mockInput(
+            ProcessedDataInputFactory::class,
+            m::on(function (array $value) use ($processedDataOutput) {
+                $this->assertEquals($processedDataOutput, $value);
+                return true;
+            }),
+            $processedContext,
+            $processedDataOutput
+        );
         $this->mockInput(ShortNoticeInputFactory::class, $processedDataOutput, m::type('array'), $processedDataOutput);
 
         $ebsrSubmission->shouldReceive('finishValidating')
@@ -1536,6 +1557,9 @@ final class ProcessPackTransactionTest extends ProcessPackTestCase
             'multiple TAOs' => [['Milton Keynes Council', 'Second Council'], [87, 88], ['F', 'B']],
             'case mismatch' => [['milton keynes council'], [], []],
             'duplicate' => [['Milton Keynes Council', 'Milton Keynes Council'], [87], ['F']],
+            'no traffic area' => [['Unassigned Council'], [], []],
+            'mixed with no traffic area' => [['Unassigned Council', 'Milton Keynes Council'], [87], ['F']],
+            'ambiguous with no traffic area' => [['Ambiguous Council', 'Milton Keynes Council'], [87], ['F']],
             'absent' => [[], [], []],
         ];
     }
