@@ -54,7 +54,7 @@ $config->setCustomStringFunctions($ormConfig['string_functions']);
 $config->enableNativeLazyObjects(true);
 
 $connection = DriverManager::getConnection(
-    ['driver' => 'pdo_mysql', 'serverVersion' => '8.0'],
+    ['driver' => 'pdo_mysql', 'serverVersion' => '8.0.0'],
     $config,
 );
 
