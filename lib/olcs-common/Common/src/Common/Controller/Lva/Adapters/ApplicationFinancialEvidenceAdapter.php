@@ -5,6 +5,7 @@ namespace Common\Controller\Lva\Adapters;
 use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Data\CategoryDataService as Category;
 use Dvsa\Olcs\Transfer\Query\Application\FinancialEvidence;
+use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Psr\Container\ContainerInterface;
 
@@ -36,11 +37,21 @@ class ApplicationFinancialEvidenceAdapter extends AbstractFinancialEvidenceAdapt
      * @return array
      */
     #[\Override]
+    #[\Override]
     public function getDocuments($applicationId)
     {
         $documents = $this->getData($applicationId)['documents'];
+        $documents = is_array($documents) ? $documents : [];
 
-        return is_array($documents) ? $documents : [];
+        $analysesByDocumentId = $this->getAnalysesByDocumentId($applicationId);
+
+        foreach ($documents as &$document) {
+            $analysis = $analysesByDocumentId[$document['id']] ?? null;
+            $document['analysisStatus'] = $analysis['status'] ?? null;
+        }
+        unset($document);
+
+        return $documents;
     }
 
     /**
