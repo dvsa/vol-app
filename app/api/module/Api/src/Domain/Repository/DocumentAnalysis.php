@@ -9,6 +9,8 @@ use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
+use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
 /**
  * Status transitions are single atomic conditional UPDATEs: the sweeper and the result handler
@@ -80,15 +82,39 @@ class DocumentAnalysis extends AbstractRepository
      * @return Entity[]
      */
 
-    public function fetchByApplicationId(int $applicationId): array
+    public function fetchAnalyses(?QueryInterface $query = null): array
     {
         $qb = $this->createQueryBuilder();
-        $qb->andWhere($qb->expr()->eq($this->alias . '.applicationId', ':applicationId'))
-            ->setParameter('applicationId', $applicationId)
-            ->orderBy($this->alias . '.createdOn', 'DESC');
 
-        return $qb->getQuery()->getResult();
+        if ($query !== null) {
+            $this->applyAnalysisFilters($qb, $query);
+        }
+
+        $qb->orderBy($this->alias . '.createdOn', 'DESC');
+
+        $result = $qb->getQuery()->getResult();
+
+        return is_array($result) ? $result : iterator_to_array($result);
     }
+
+    protected function applyAnalysisFilters(QueryBuilder $qb, QueryInterface $query): void
+    {
+        if ($query->getApplication() !== null) {
+            $qb->andWhere('IDENTITY(' . $this->alias . '.application) = :applicationId')
+                ->setParameter('applicationId', (int) $query->getApplication());
+        }
+
+        if ($query->getDocument() !== null) {
+            $qb->andWhere('IDENTITY(' . $this->alias . '.document) = :documentId')
+                ->setParameter('documentId', (int) $query->getDocument());
+        }
+
+        if ($query->getStatus() !== null) {
+            $qb->andWhere($qb->expr()->eq($this->alias . '.status', ':status'))
+                ->setParameter('status', $query->getStatus());
+        }
+    }
+
 
     /**
      * Resolve stale PENDING rows to TIMEOUT in one atomic statement.

@@ -10,10 +10,33 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
  */
 class DocumentAnalysisList extends AbstractQuery
 {
+    /**
+     * @Transfer\Optional
+     */
     protected $application;
+
+    /**
+     * @Transfer\Optional
+     */
+    protected $document;
+
+    /**
+     * @Transfer\Optional
+     */
+    protected $status;
 
     public function getApplication()
     {
         return $this->application;
+    }
+
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
     }
 }
