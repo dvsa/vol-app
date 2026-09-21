@@ -45,13 +45,17 @@ class LetterPreviewService
      */
     private ?bool $isNiOverride = null;
 
+    private readonly VolGrabContextBuilder $contextBuilder;
+
     public function __construct(
         private readonly SectionRendererPluginManager $rendererManager,
         private $contentStore,
         private $docTemplateRepo,
         private readonly VolGrabReplacementService $volGrabReplacementService,
-        private readonly ?ConverterService $converterService = null
+        private readonly ?ConverterService $converterService = null,
+        ?VolGrabContextBuilder $contextBuilder = null
     ) {
+        $this->contextBuilder = $contextBuilder ?? new VolGrabContextBuilder();
     }
 
     /**
@@ -591,12 +595,6 @@ class LetterPreviewService
     }
 
     /**
-     * Build context array for vol-grab replacement
-     *
-     * @param LetterInstance $letterInstance
-     * @return array Context containing entity IDs for bookmark resolution
-     */
-    /**
      * Wraps a section's HTML in a locator the builder's diagnostics can scroll to.
      * A no-op unless this render asked for annotation, so letters and caseworker
      * previews are byte-identical to before.
@@ -610,21 +608,12 @@ class LetterPreviewService
         return sprintf('<div data-preview-section="%d">%s</div>', $section->getId(), $html);
     }
 
+    /**
+     * Context for vol-grab replacement, plus the outcome collector when this render has one.
+     */
     private function buildVolGrabContext(LetterInstance $letterInstance): array
     {
-        $context = array_filter([
-            'licence' => $letterInstance->getLicence()?->getId(),
-            'application' => $letterInstance->getApplication()?->getId(),
-            'user' => $letterInstance->getCreatedBy()?->getId(),
-            'case' => $letterInstance->getCase()?->getId(),
-            'busRegId' => $letterInstance->getBusReg()?->getId(),
-            'organisation' => $letterInstance->getOrganisation()?->getId(),
-        ]);
-
-        // VOL-7305: isNi is needed by the OTC_LOGO token resolver and is a useful
-        // signal for any future region-aware bookmark. Added outside the array_filter
-        // because false is a meaningful value (GB letter) that should survive.
-        $context['isNi'] = $this->isNiOverride ?? (bool) ($letterInstance->getLicence()?->isNi() ?? false);
+        $context = $this->contextBuilder->build($letterInstance, $this->isNiOverride);
 
         if ($this->grabOutcomes !== null) {
             $context[GrabOutcomeCollector::CONTEXT_KEY] = $this->grabOutcomes;
