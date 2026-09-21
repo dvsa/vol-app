@@ -149,6 +149,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection([$mockIssue]));
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('VOL/LET/12345');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -211,6 +212,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')
             ->andReturn($mockUser);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -260,6 +262,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -312,6 +315,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -370,6 +374,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -423,6 +428,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -481,6 +487,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -530,6 +537,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -587,6 +595,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -651,6 +660,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection([$mockIssue1, $mockIssue2, $mockIssue3]));
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -947,6 +957,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -1100,6 +1111,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getReference')->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLicence')->andReturn(null);
@@ -1323,6 +1335,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')->andReturn(new ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getReference')->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
         $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLicence')->andReturn(null);
@@ -1331,6 +1344,46 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
 
         return $mockLetterInstance;
+    }
+
+    private function createPlainTemplate(string $templateContent): m\MockInterface
+    {
+        $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null);
+        $mockTemplate->shouldReceive('getHeaderRightContent')->andReturn(null);
+        $mockTemplate->shouldReceive('getSignoffContent')->andReturn(null);
+        $mockTemplate->shouldReceive('getFooterContent')->andReturn(null);
+        $mockTemplate->shouldReceive('getTemplateContent')->andReturn($templateContent);
+
+        return $mockTemplate;
+    }
+
+    public function testLetterDateIsTheDayTheLetterWasGenerated(): void
+    {
+        $this->mockVolGrabReplacementService->shouldReceive('replaceGrabsInHtml')
+            ->andReturnUsing(fn (string $html) => $html);
+
+        $mockLetterInstance = $this->createMinimalLetterInstance();
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(new \DateTime('2026-09-01 10:15:00'));
+
+        $result = $this->createSutWithRealConverter()
+            ->renderPreview($mockLetterInstance, $this->createPlainTemplate('Date: {{LETTER_DATE}}'));
+
+        $this->assertSame('Date: 1st September 2026', $result);
+    }
+
+    public function testLetterDateFallsBackToTodayWhenNotYetPersisted(): void
+    {
+        $this->mockVolGrabReplacementService->shouldReceive('replaceGrabsInHtml')
+            ->andReturnUsing(fn (string $html) => $html);
+
+        $mockLetterInstance = $this->createMinimalLetterInstance();
+        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null);
+
+        $result = $this->createSutWithRealConverter()
+            ->renderPreview($mockLetterInstance, $this->createPlainTemplate('Date: {{LETTER_DATE}}'));
+
+        $this->assertSame('Date: ' . date('jS F Y'), $result);
     }
 
     /**

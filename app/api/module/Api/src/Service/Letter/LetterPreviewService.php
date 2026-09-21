@@ -306,7 +306,7 @@ class LetterPreviewService
         return [
             '{{LOGO_IMAGE}}' => $this->buildLogoImage(),
             '{{LETTER_REFERENCE}}' => htmlspecialchars($letterInstance->getReference() ?? ''),
-            '{{LETTER_DATE}}' => date('jS F Y'),
+            '{{LETTER_DATE}}' => $this->buildLetterDate($letterInstance),
             '{{SECTIONS_CONTENT}}' => $sectionsHtml,
             '{{ISSUES_CONTENT}}' => $issuesHtml,
             '{{CLOSING_CONTENT}}' => $closingHtml,
@@ -482,6 +482,17 @@ class LetterPreviewService
             ]);
             return '';
         }
+    }
+
+    /**
+     * The letter is dated when it was generated, matching the deadline grabs resolved at the
+     * same moment. Unsaved instances (builder previews) have no createdOn, so use today.
+     */
+    private function buildLetterDate(LetterInstance $letterInstance): string
+    {
+        $createdOn = $letterInstance->getCreatedOn();
+
+        return ($createdOn instanceof \DateTimeInterface ? $createdOn : new \DateTime())->format('jS F Y');
     }
 
     /**
