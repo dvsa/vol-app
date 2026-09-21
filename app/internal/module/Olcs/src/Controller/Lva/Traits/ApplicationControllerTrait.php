@@ -158,6 +158,10 @@ trait ApplicationControllerTrait
                     break;
             }
 
+            if ($section === 'financial_evidence_assessment') {
+                $class = 'complete';
+            }
+
             $sections[$section] = array_merge(
                 $settings,
                 [

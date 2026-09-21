@@ -9,7 +9,7 @@ use Laminas\Filter\Word\UnderscoreToCamelCase;
 /**
  * Section Config
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>_
  */
 class SectionConfig
 {
@@ -73,7 +73,20 @@ class SectionConfig
                 ]
             ]
         ],
-        'financial_evidence_assessment' => [],
+        'financial_evidence_assessment' =>[
+            'restricted' => [
+                [
+                    [
+                        'internal'
+                    ],
+                    [
+                        RefData::LICENCE_TYPE_RESTRICTED,
+                        RefData::LICENCE_TYPE_STANDARD_NATIONAL,
+                        RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    ]
+                ]
+            ],
+        ],
         'transport_managers' => [
             'restricted' => [
                 RefData::LICENCE_TYPE_STANDARD_NATIONAL,
