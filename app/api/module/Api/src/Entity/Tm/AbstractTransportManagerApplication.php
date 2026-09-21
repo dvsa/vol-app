@@ -77,7 +77,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * TmType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'tm_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -86,7 +86,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * type of signature used from ref data one of sig_physical_signature the application is signed with a physical signature sig_digital_signature the application is signed digitally sig_signature_not_required
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'tm_signature_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -95,7 +95,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * id of the TM Verify signature where applicable.
      *
-     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
+     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature|null
      */
     #[ORM\JoinColumn(name: 'tm_digital_signature_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DigitalSignature::class, fetch: 'LAZY')]
@@ -104,7 +104,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * type of signature used from ref data one of sig_physical_signature the application is signed with a physical signature sig_digital_signature the application is signed digitally sig_signature_not_required
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'op_signature_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -113,7 +113,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * id of the Operator Verify signature where applicable.
      *
-     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
+     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature|null
      */
     #[ORM\JoinColumn(name: 'op_digital_signature_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DigitalSignature::class, fetch: 'LAZY')]
@@ -122,7 +122,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * TmApplicationStatus
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'tm_application_status', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -131,7 +131,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -141,7 +141,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -151,7 +151,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * isOwner
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_owner', nullable: true)]
     protected $isOwner;
@@ -167,63 +167,63 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Hours mon
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_mon', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_mon', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursMon;
 
     /**
      * Hours tue
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_tue', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_tue', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursTue;
 
     /**
      * Hours wed
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_wed', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_wed', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursWed;
 
     /**
      * Hours thu
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_thu', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_thu', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursThu;
 
     /**
      * Hours fri
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_fri', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_fri', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursFri;
 
     /**
      * Hours sat
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_sat', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_sat', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursSat;
 
     /**
      * Hours sun
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_sun', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_sun', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursSun;
 
     /**
      * Has other licences
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'has_other_licences', nullable: true)]
     protected $hasOtherLicences;
@@ -231,7 +231,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Has other employment
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'has_other_employment', nullable: true)]
     protected $hasOtherEmployment;
@@ -239,7 +239,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Has convictions
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'has_convictions', nullable: true)]
     protected $hasConvictions;
@@ -247,7 +247,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Has previous licences
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'has_previous_licences', nullable: true)]
     protected $hasPreviousLicences;
@@ -255,7 +255,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Whether TM has undertaken training in last 5 years - added November 2021
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'has_undertaken_training', nullable: true)]
     protected $hasUndertakenTraining;
@@ -271,7 +271,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * Additional information
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'additional_information', length: 4000, nullable: true)]
     protected $additionalInformation;
@@ -288,7 +288,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     /**
      * OtherLicences
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence::class, mappedBy: 'transportManagerApplication')]
     protected $otherLicences;

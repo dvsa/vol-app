@@ -12,7 +12,6 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 #[ORM\Table(name: 'company_subsidiary')]
 #[ORM\Index(name: 'ix_company_subsidiary_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_company_subsidiary_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'fk_company_subsidiary_licence1_idx', columns: ['licence_id'])]
 #[ORM\Entity]
 class CompanySubsidiary extends AbstractCompanySubsidiary implements OrganisationProviderInterface
 {

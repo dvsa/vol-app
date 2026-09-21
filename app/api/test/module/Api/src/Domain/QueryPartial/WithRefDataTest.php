@@ -31,7 +31,7 @@ final class WithRefDataTest extends QueryPartialTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testModifyQuery(mixed $expectedDql, mixed $arguments, string $entity = 'foo'): void
     {
-        $entityMetadata = m::mock();
+        $entityMetadata = m::mock(\Doctrine\ORM\Mapping\ClassMetadata::class);
         $entityMetadata->associationMappings = [
             'property1' => ['targetEntity' => 'Foo'],
             'property2' => ['targetEntity' => RefData::class],

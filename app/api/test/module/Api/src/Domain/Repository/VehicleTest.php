@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\ORM\Query;
 use Mockery as m;
 
 /**
@@ -25,12 +26,16 @@ final class VehicleTest extends RepositoryTestCase
 
         $this->mockCreateQueryBuilder($qb);
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
+        $query = m::mock(Query::class);
+
+        $query->shouldReceive('execute')
+            ->andReturnSelf();
+
+        $query->shouldReceive('getResult')
+            ->andReturn(['RESULTS']);
+
+        $qb->shouldReceive('getQuery')
+            ->andReturn($query);
         $this->assertEquals(['RESULTS'], $this->sut->fetchByVrm('ABC123'));
 
         $expectedQuery = 'BLAH AND m.vrm = [[ABC123]]';

@@ -42,7 +42,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Parent
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -51,7 +51,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 512, nullable: true)]
     #[Gedmo\Translatable]
@@ -68,7 +68,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Display order
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'display_order', nullable: true, options: ['unsigned' => true])]
     protected $displayOrder;

@@ -73,7 +73,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * ConvictionCategory
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'conviction_category', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -82,7 +82,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Foreign Key to transport_manager
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -101,7 +101,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -111,7 +111,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Offence date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'offence_date', nullable: true)]
     protected $offenceDate;
@@ -119,7 +119,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Conviction date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'conviction_date', nullable: true)]
     protected $convictionDate;
@@ -127,7 +127,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Court
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'court', length: 70, nullable: true)]
     protected $court;
@@ -135,7 +135,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Penalty
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'penalty', length: 255, nullable: true)]
     protected $penalty;
@@ -143,7 +143,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * New olcs field?
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'costs', length: 255, nullable: true)]
     protected $costs;
@@ -151,7 +151,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * msi
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'msi', nullable: true)]
     protected $msi;
@@ -175,7 +175,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Birth date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'birth_date', nullable: true)]
     protected $birthDate;
@@ -183,7 +183,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Person firstname
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'person_firstname', length: 70, nullable: true)]
     protected $personFirstname;
@@ -191,7 +191,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Length 70 because of ETL. Will hold some org names from legacy data.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'person_lastname', length: 70, nullable: true)]
     protected $personLastname;
@@ -199,7 +199,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Notes
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
@@ -207,7 +207,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Taken into consideration
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'taken_into_consideration', length: 4000, nullable: true)]
     protected $takenIntoConsideration;
@@ -215,7 +215,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * user entered category for non act
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'category_text', length: 1024, nullable: true)]
     protected $categoryText;
@@ -223,7 +223,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Set if defendant type is operator. Copy of op name at time of conviction.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'operator_name', length: 70, nullable: true)]
     protected $operatorName;

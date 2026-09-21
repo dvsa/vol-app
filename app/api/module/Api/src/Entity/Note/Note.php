@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'ix_note_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_note_note_type', columns: ['note_type'])]
 #[ORM\Index(name: 'ix_note_bus_reg_id', columns: ['bus_reg_id'])]
-#[ORM\Index(name: 'fk_note_transport_manager1_idx', columns: ['transport_manager_id'])]
 #[ORM\Entity]
 class Note extends AbstractNote
 {

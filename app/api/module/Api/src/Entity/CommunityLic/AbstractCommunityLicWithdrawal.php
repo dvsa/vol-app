@@ -61,7 +61,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -71,7 +71,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
     /**
      * Start date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'start_date', nullable: true)]
     protected $startDate;
@@ -89,7 +89,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
     /**
      * End date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'end_date', nullable: true)]
     protected $endDate;

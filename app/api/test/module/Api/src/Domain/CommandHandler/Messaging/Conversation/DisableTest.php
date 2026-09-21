@@ -8,15 +8,19 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Messaging\Conversation\Disable as Disabl
 use Dvsa\Olcs\Api\Domain\Repository\Organisation as OrganisationRepo;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Command\Messaging\Conversation\Disable as DisableCommand;
+use Dvsa\Olcs\Transfer\Service\CacheEncryption;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class Disable extends AbstractCommandHandlerTestCase
+class DisableTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
         $this->sut = new DisableCommandHandler();
         $this->mockRepo(OrganisationRepo::class, OrganisationRepo::class);
+        $this->mockedSmServices = [
+            CacheEncryption::class => m::mock(CacheEncryption::class),
+        ];
 
         parent::setUp();
     }
@@ -26,25 +30,21 @@ class Disable extends AbstractCommandHandlerTestCase
         $mockCommand = DisableCommand::create(['organisation' => 123]);
 
         $mockOrganisation = m::mock(Organisation::class);
-        $mockOrganisation->shouldReceive('setIsMessagingDisabled')
-                         ->once()
-                         ->with(true);
-        $mockOrganisation->shouldReceive('getId')
-                         ->atLeast()
-                         ->andReturn(123);
+        $mockOrganisation->expects('setIsMessagingDisabled')->with(true);
+        $mockOrganisation->expects('getId')->withNoArgs()->andReturn(123);
+        $this->expectedOrganisationCacheClear($mockOrganisation);
 
         $this->repoMap[OrganisationRepo::class]
-            ->shouldReceive('fetchById')
-            ->atLeast()
+            ->expects('fetchById')
             ->with(123)
             ->andReturn($mockOrganisation);
         $this->repoMap[OrganisationRepo::class]
-            ->shouldReceive('save')
-            ->once()
+            ->expects('save')
             ->with($mockOrganisation);
 
         $result = $this->sut->handleCommand($mockCommand);
 
         $this->assertEquals(123, $result->getId('organisation'));
+        $this->assertEquals(['Messaging disabled'], $result->getMessages());
     }
 }

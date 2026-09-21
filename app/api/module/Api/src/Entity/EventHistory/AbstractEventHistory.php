@@ -62,7 +62,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Foreign Key to user
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -71,7 +71,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Foreign Key to licence
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence|null
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
@@ -80,7 +80,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Foreign Key to application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Foreign Key to transport_manager
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Foreign Key to organisation
      *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
@@ -107,7 +107,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Case
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases|null
      */
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
@@ -116,7 +116,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Foreign Key to bus_reg
      *
-     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg|null
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
@@ -125,7 +125,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Account
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'account_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -134,7 +134,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Task
      *
-     * @var \Dvsa\Olcs\Api\Entity\Task\Task
+     * @var \Dvsa\Olcs\Api\Entity\Task\Task|null
      */
     #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, fetch: 'LAZY')]
@@ -143,7 +143,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * IrhpApplication
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication|null
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
@@ -152,7 +152,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Change made by
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'change_made_by', length: 80, nullable: true)]
     protected $changeMadeBy;
@@ -160,7 +160,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Member of organisation
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'member_of_organisation', length: 160, nullable: true)]
     protected $memberOfOrganisation;
@@ -176,7 +176,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Entity type
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'entity_type', length: 45, nullable: true)]
     protected $entityType;
@@ -184,7 +184,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Entity pk
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'entity_pk', nullable: true, options: ['unsigned' => true])]
     protected $entityPk;
@@ -192,7 +192,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Entity version
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'entity_version', nullable: true, options: ['unsigned' => true])]
     protected $entityVersion;
@@ -200,7 +200,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     /**
      * Event data
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'event_data', length: 255, nullable: true)]
     protected $eventData;

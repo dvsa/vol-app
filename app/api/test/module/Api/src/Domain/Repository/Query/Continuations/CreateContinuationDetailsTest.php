@@ -70,13 +70,13 @@ final class CreateContinuationDetailsTest extends BaseAbstractDbQueryTestCase
                 }
             );
 
-        $this->connection->shouldReceive('executeUpdate')
+        $this->connection->expects('executeStatement')
             ->with(
                 'INSERT INTO continuation_detail '
                 . '(licence_id, received, status, continuation_id, created_on, created_by) '
                 . 'VALUES (\'1\', \'0\', \'status\', \'2\', NOW(), 1), '
                 . '(\'1\', \'0\', \'status\', \'2\', NOW(), 1)'
-            )->once()
+            )
             ->andReturn(1);
         $this->assertEquals(1, $this->sut->executeInsert([1, 1], false, 'status', 2));
     }
@@ -99,12 +99,12 @@ final class CreateContinuationDetailsTest extends BaseAbstractDbQueryTestCase
                 }
             );
 
-        $this->connection->shouldReceive('executeUpdate')
+        $this->connection->expects('executeStatement')
             ->with(
                 'INSERT INTO continuation_detail '
                 . '(licence_id, received, status, continuation_id, created_on, created_by) '
                 . 'VALUES (\'1\', \'0\', \'status\', \'2\', NOW(), 1)'
-            )->once()
+            )
             ->andThrow(new \Exception());
 
         $this->sut->executeInsert([1], false, 'status', 2);

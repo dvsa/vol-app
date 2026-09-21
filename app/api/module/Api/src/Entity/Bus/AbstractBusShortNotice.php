@@ -58,7 +58,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -94,7 +94,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Unforseen detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'unforseen_detail', length: 255, nullable: true)]
     protected $unforseenDetail;
@@ -110,7 +110,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Timetable detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'timetable_detail', length: 255, nullable: true)]
     protected $timetableDetail;
@@ -126,7 +126,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Replacement detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'replacement_detail', length: 255, nullable: true)]
     protected $replacementDetail;
@@ -142,7 +142,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Holiday detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'holiday_detail', length: 255, nullable: true)]
     protected $holidayDetail;
@@ -158,7 +158,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Trc detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'trc_detail', length: 255, nullable: true)]
     protected $trcDetail;
@@ -174,7 +174,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Police detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'police_detail', length: 255, nullable: true)]
     protected $policeDetail;
@@ -190,7 +190,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Special occasion detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'special_occasion_detail', length: 255, nullable: true)]
     protected $specialOccasionDetail;
@@ -206,7 +206,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Connection detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'connection_detail', length: 255, nullable: true)]
     protected $connectionDetail;
@@ -222,7 +222,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
     /**
      * Not available detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'not_available_detail', length: 255, nullable: true)]
     protected $notAvailableDetail;

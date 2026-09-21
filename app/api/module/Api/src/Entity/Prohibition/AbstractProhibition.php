@@ -71,7 +71,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -99,7 +99,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Cleared date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'cleared_date', nullable: true)]
     protected $clearedDate;
@@ -109,13 +109,13 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @var string
      */
-    #[ORM\Column(type: 'yesnonull', name: 'is_trailer', nullable: true, options: ['default' => 0])]
+    #[ORM\Column(type: 'yesnonull', name: 'is_trailer', nullable: false, options: ['default' => 0])]
     protected $isTrailer = 0;
 
     /**
      * Vrm
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;
@@ -123,7 +123,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Imposed at
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'imposed_at', length: 255, nullable: true)]
     protected $imposedAt;
@@ -140,7 +140,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
     /**
      * Defects
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Prohibition\ProhibitionDefect>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Prohibition\ProhibitionDefect::class, mappedBy: 'prohibition')]
     protected $defects;

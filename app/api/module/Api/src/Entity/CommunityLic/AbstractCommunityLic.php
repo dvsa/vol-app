@@ -68,7 +68,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * The date the licence expired.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'expired_date', nullable: true)]
     protected $expiredDate;
@@ -96,7 +96,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Activation date of com licence.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'specified_date', nullable: true)]
     protected $specifiedDate;
@@ -104,7 +104,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * The date the community licence will expire. Typically 5 years after specified date.  Generally less for an interim licence.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'licence_expired_date', nullable: true)]
     protected $licenceExpiredDate;
@@ -112,7 +112,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Issue 0 is the office copy. 0 is the licence, all others are refered to as certified copies.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'issue_no', nullable: true, options: ['unsigned' => true])]
     protected $issueNo;
@@ -120,7 +120,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * Business ID
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'serial_no', nullable: true, options: ['unsigned' => true])]
     protected $serialNo;
@@ -128,7 +128,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * UKGB or UKNI
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'serial_no_prefix', length: 4, nullable: true)]
     protected $serialNoPrefix;
@@ -145,7 +145,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * CommunityLicSuspensions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspension>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspension::class, mappedBy: 'communityLic')]
     protected $communityLicSuspensions;
@@ -153,7 +153,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
     /**
      * CommunityLicWithdrawals
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal::class, mappedBy: 'communityLic')]
     protected $communityLicWithdrawals;

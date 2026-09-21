@@ -31,7 +31,6 @@ use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 #[ORM\Index(name: 'ix_publication_link_publication_section_id', columns: ['publication_section_id'])]
 #[ORM\Index(name: 'ix_publication_link_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_publication_link_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'fk_publication_link_transport_manager1_idx', columns: ['transport_manager_id'])]
 #[ORM\Entity]
 class PublicationLink extends AbstractPublicationLink
 {

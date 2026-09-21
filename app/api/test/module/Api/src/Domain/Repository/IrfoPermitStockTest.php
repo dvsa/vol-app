@@ -51,30 +51,15 @@ final class IrfoPermitStockTest extends RepositoryTestCase
             ->once()
             ->andReturn($serialNoEnd);
 
-        /** @var Expr $expr */
-        $expr = m::mock(QueryBuilder::class);
-        $expr->shouldReceive('eq')
-            ->once()
-            ->with(m::type('string'), ':byIrfoCountry')
-            ->andReturnSelf();
-        $expr->shouldReceive('eq')
-            ->once()
-            ->with(m::type('string'), ':byValidForYear')
-            ->andReturnSelf();
-        $expr->shouldReceive('gte')
-            ->once()
-            ->with(m::type('string'), ':bySerialNoStart')
-            ->andReturnSelf();
-        $expr->shouldReceive('lte')
-            ->once()
-            ->with(m::type('string'), ':bySerialNoEnd')
-            ->andReturnSelf();
+    /** @var Expr $expr */
+        $expr = new Expr();
 
-        /** @var QueryBuilder $qb */
+    /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
 
         $qb->shouldReceive('expr')
-            ->andReturn($expr);
+        ->times(4)
+        ->andReturn($expr);
 
         $qb->shouldReceive('setParameter')
             ->once()
@@ -94,8 +79,9 @@ final class IrfoPermitStockTest extends RepositoryTestCase
             ->andReturnSelf();
 
         $qb->shouldReceive('andWhere')
-            ->with($expr)
-            ->andReturnSelf();
+        ->with(m::type(\Doctrine\ORM\Query\Expr\Comparison::class))
+        ->times(4)
+        ->andReturnSelf();
         $qb->shouldReceive('indexBy')
             ->once()
             ->with(m::type('string'), 'm.serialNo')

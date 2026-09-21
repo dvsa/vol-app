@@ -53,7 +53,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Local council name.Defines traffic area
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea|null
      */
     #[ORM\JoinColumn(name: 'admin_area', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea::class, fetch: 'LAZY')]
@@ -62,7 +62,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * ISO country code
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country|null
      */
     #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, fetch: 'LAZY')]
@@ -71,7 +71,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Unique reference number.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'bigint', name: 'uprn', nullable: true)]
     protected $uprn;
@@ -99,7 +99,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Primary addressable object prefix
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'paon_start', length: 5, nullable: true)]
     protected $paonStart;
@@ -107,7 +107,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Primary addressable object suffix end range. e.g. 10 in 1 to 10
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'paon_end', length: 5, nullable: true)]
     protected $paonEnd;
@@ -115,7 +115,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Primary adressable object. Second line of address
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'paon_desc', length: 90, nullable: true)]
     protected $addressLine2;
@@ -123,7 +123,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * secondary addressable object prefix start
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'saon_start', length: 5, nullable: true)]
     protected $saonStart;
@@ -131,7 +131,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Secondary addressable object prefix end
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'saon_end', length: 5, nullable: true)]
     protected $saonEnd;
@@ -139,7 +139,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Secondary addressable object. First line od address
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'saon_desc', length: 90, nullable: true)]
     protected $addressLine1;
@@ -147,7 +147,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * street road etc
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'street', length: 100, nullable: true)]
     protected $addressLine3;
@@ -155,7 +155,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * area of town
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'locality', length: 35, nullable: true)]
     protected $addressLine4;
@@ -163,7 +163,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * town village city name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'town', length: 30, nullable: true)]
     protected $town;
@@ -171,7 +171,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * uk postcode
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'postcode', length: 8, nullable: true)]
     protected $postcode;
@@ -188,7 +188,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * ContactDetails
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, mappedBy: 'address')]
     protected $contactDetails;

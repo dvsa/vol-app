@@ -50,7 +50,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Foreign Key to organisation
      *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, inversedBy: 'disqualifications', fetch: 'LAZY')]
@@ -59,7 +59,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Foreign Key to person
      *
-     * @var \Dvsa\Olcs\Api\Entity\Person\Person
+     * @var \Dvsa\Olcs\Api\Entity\Person\Person|null
      */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, inversedBy: 'disqualifications', fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * isDisqualified
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_disqualified', nullable: true)]
     protected $isDisqualified;
@@ -96,7 +96,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Start date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'start_date', nullable: true)]
     protected $startDate;
@@ -104,7 +104,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Notes
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
@@ -112,7 +112,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
     /**
      * Null for permanent, else no of days disqualified
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'period', nullable: true, options: ['unsigned' => true])]
     protected $period;

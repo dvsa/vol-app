@@ -81,7 +81,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -101,7 +101,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Issued date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'issued_date', nullable: true)]
     protected $issuedDate;
@@ -109,7 +109,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
     /**
      * Serial no
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'serial_no', length: 50, nullable: true)]
     protected $serialNo;

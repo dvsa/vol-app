@@ -69,7 +69,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * AssignedCaseworker
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'assigned_caseworker', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * User PI is assigned to.
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'assigned_to', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -87,7 +87,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * TC who agreed the PI
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc|null
      */
     #[ORM\JoinColumn(name: 'agreed_by_tc_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
@@ -96,7 +96,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * TC who presided over PI decision
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc|null
      */
     #[ORM\JoinColumn(name: 'decided_by_tc_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
@@ -105,7 +105,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * e.g. Traffic Commissioner or Deputy Traffic Commissioner
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'agreed_by_tc_role', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -114,7 +114,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * e.g. Traffic Commissioner or Deputy Traffic Commissioner
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'decided_by_tc_role', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -132,7 +132,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * WrittenOutcome
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'written_outcome', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -141,7 +141,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -151,7 +151,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -161,7 +161,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Is ecms case
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'is_ecms_case', nullable: true, options: ['default' => 0])]
     protected $isEcmsCase = 0;
@@ -169,7 +169,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Ecms first received date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'ecms_first_received_date', nullable: true)]
     protected $ecmsFirstReceivedDate;
@@ -177,7 +177,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Agreed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'agreed_date', nullable: true)]
     protected $agreedDate;
@@ -193,7 +193,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Witnesses for the PI decision
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'witnesses', nullable: true, options: ['unsigned' => true])]
     protected $witnesses;
@@ -209,7 +209,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Decision date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'decision_date', nullable: true)]
     protected $decisionDate;
@@ -241,7 +241,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Notification date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'notification_date', nullable: true)]
     protected $notificationDate;
@@ -249,15 +249,15 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Decision notes
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'decision_notes', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'decision_notes', length: 65535, nullable: true)]
     protected $decisionNotes;
 
     /**
      * Comment
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'comment', length: 4000, nullable: true)]
     protected $comment;
@@ -265,7 +265,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Call up letter date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'call_up_letter_date', nullable: true)]
     protected $callUpLetterDate;
@@ -273,7 +273,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Brief to tc date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'brief_to_tc_date', nullable: true)]
     protected $briefToTcDate;
@@ -281,7 +281,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Written reason date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'written_reason_date', nullable: true)]
     protected $writtenReasonDate;
@@ -289,7 +289,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Decision letter sent date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'decision_letter_sent_date', nullable: true)]
     protected $decisionLetterSentDate;
@@ -297,7 +297,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Tc written reason date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'tc_written_reason_date', nullable: true)]
     protected $tcWrittenReasonDate;
@@ -305,7 +305,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Tc written decision date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'tc_written_decision_date', nullable: true)]
     protected $tcWrittenDecisionDate;
@@ -313,7 +313,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Written reason letter date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'written_reason_letter_date', nullable: true)]
     protected $writtenReasonLetterDate;
@@ -321,7 +321,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Written decision letter date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'written_decision_letter_date', nullable: true)]
     protected $writtenDecisionLetterDate;
@@ -329,7 +329,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Date pi closed.For showing important, open records to user.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'closed_date', nullable: true)]
     protected $closedDate;
@@ -346,7 +346,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Decisions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Pi\Decision>
      */
     #[ORM\JoinTable(name: 'pi_decision')]
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
@@ -357,7 +357,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Reasons
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Pi\Reason>
      */
     #[ORM\JoinTable(name: 'pi_reason')]
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
@@ -368,7 +368,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * TmDecisions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\RefData>
      */
     #[ORM\JoinTable(name: 'pi_tm_decision')]
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
@@ -379,7 +379,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * PiTypes
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\RefData>
      */
     #[ORM\JoinTable(name: 'pi_type')]
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
@@ -390,7 +390,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * PiHearings
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Pi\PiHearing>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PiHearing::class, mappedBy: 'pi')]
     protected $piHearings;
@@ -398,7 +398,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * PiSlaExceptions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Pi\PiSlaException>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PiSlaException::class, mappedBy: 'pi')]
     protected $piSlaExceptions;
@@ -406,7 +406,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * PublicationLinks
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Publication\PublicationLink>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, mappedBy: 'pi')]
     protected $publicationLinks;
@@ -414,7 +414,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * SlaTargetDates
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\SlaTargetDate>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\SlaTargetDate::class, mappedBy: 'pi', cascade: ['persist'], indexBy: 'sla_id', orphanRemoval: true)]
     protected $slaTargetDates;

@@ -78,7 +78,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Foreign Key to transport_manager
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
@@ -87,7 +87,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Foreign Key to licence
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence|null
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
@@ -96,7 +96,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Foreign Key to application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
@@ -105,7 +105,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Foreign Key to pi
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
+     * @var \Dvsa\Olcs\Api\Entity\Pi\Pi|null
      */
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
@@ -114,7 +114,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Foreign Key to bus_reg
      *
-     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg|null
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
@@ -123,7 +123,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Foreign key to impounding
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Impounding
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Impounding|null
      */
     #[ORM\JoinColumn(name: 'impounding_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Impounding::class, fetch: 'LAZY')]
@@ -141,7 +141,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -151,7 +151,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -161,7 +161,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Publish after date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'publish_after_date', nullable: true)]
     protected $publishAfterDate;
@@ -169,31 +169,31 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * Text1
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'text1', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'text1', length: 65535, nullable: true)]
     protected $text1;
 
     /**
      * Text2
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'text2', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'text2', length: 65535, nullable: true)]
     protected $text2;
 
     /**
      * Text3
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'text3', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'text3', length: 65535, nullable: true)]
     protected $text3;
 
     /**
      * Orig pub date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'orig_pub_date', nullable: true)]
     protected $origPubDate;
@@ -210,7 +210,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
     /**
      * PoliceDatas
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Publication\PublicationPoliceData>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationPoliceData::class, mappedBy: 'publicationLink', cascade: ['persist'], orphanRemoval: true)]
     protected $policeDatas;

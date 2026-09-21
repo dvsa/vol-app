@@ -63,7 +63,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Foreign Key to address
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Address
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Address|null
      */
     #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Address::class, inversedBy: 'contactDetails', fetch: 'LAZY', cascade: ['persist'])]
@@ -72,7 +72,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Foreign Key to person
      *
-     * @var \Dvsa\Olcs\Api\Entity\Person\Person
+     * @var \Dvsa\Olcs\Api\Entity\Person\Person|null
      */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, inversedBy: 'contactDetails', fetch: 'LAZY', cascade: ['persist'])]
@@ -81,7 +81,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -101,7 +101,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Email address
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'email_address', length: 255, nullable: true)]
     protected $emailAddress;
@@ -109,7 +109,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Fao
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'fao', length: 90, nullable: true)]
     protected $fao;
@@ -117,7 +117,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
@@ -142,7 +142,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * PhoneContacts
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact::class, mappedBy: 'contactDetails', cascade: ['persist'], indexBy: 'id', orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'DESC'])]

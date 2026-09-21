@@ -53,7 +53,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -63,7 +63,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -73,7 +73,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Nullable for PSVs
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;
@@ -81,7 +81,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Weight in Kg
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'plated_weight', nullable: true, options: ['unsigned' => true])]
     protected $platedWeight;
@@ -89,7 +89,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * psv only
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'certificate_no', length: 50, nullable: true)]
     protected $certificateNo;
@@ -97,7 +97,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Flag to send vehicle data to mobile compliance system
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vi_action', length: 1, nullable: true)]
     protected $viAction;
@@ -137,7 +137,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * For small PSV vehicles the make and model are recorded.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'make_model', length: 100, nullable: true)]
     protected $makeModel;
@@ -154,7 +154,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * LicenceVehicles
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle::class, mappedBy: 'vehicle')]
     protected $licenceVehicles;

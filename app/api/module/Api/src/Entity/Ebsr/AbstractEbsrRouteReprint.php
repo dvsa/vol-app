@@ -60,7 +60,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Exception name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'exception_name', length: 45, nullable: true)]
     protected $exceptionName;
@@ -76,7 +76,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Published timestamp
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'published_timestamp', nullable: true)]
     protected $publishedTimestamp;

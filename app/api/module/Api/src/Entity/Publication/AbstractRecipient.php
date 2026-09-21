@@ -51,7 +51,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -61,7 +61,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -103,7 +103,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Contact name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'contact_name', length: 100, nullable: true)]
     protected $contactName;
@@ -111,7 +111,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * Email address
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'email_address', length: 255, nullable: true)]
     protected $emailAddress;
@@ -128,7 +128,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
     /**
      * TrafficAreas
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea>
      */
     #[ORM\JoinTable(name: 'recipient_traffic_area')]
     #[ORM\JoinColumn(name: 'recipient_id', referencedColumnName: 'id')]

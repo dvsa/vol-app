@@ -61,7 +61,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Foreign Key to presiding_tc
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc|null
      */
     #[ORM\JoinColumn(name: 'presiding_tc_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
@@ -70,7 +70,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * PresidedByRole
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'presided_by_role', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * The venue at the time of selection is stored in venue_other. If venue data changes, other still stores data at time of selection.
      *
-     * @var \Dvsa\Olcs\Api\Entity\Venue
+     * @var \Dvsa\Olcs\Api\Entity\Venue|null
      */
     #[ORM\JoinColumn(name: 'venue_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Venue::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -108,7 +108,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Hearing date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'hearing_date', nullable: true)]
     protected $hearingDate;
@@ -116,7 +116,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Half day / Full day
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_full_day', nullable: true)]
     protected $isFullDay;
@@ -124,7 +124,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Presiding tc other
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'presiding_tc_other', length: 45, nullable: true)]
     protected $presidingTcOther;
@@ -132,7 +132,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Venue other
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'venue_other', length: 255, nullable: true)]
     protected $venueOther;
@@ -140,7 +140,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Witnesses
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'witnesses', nullable: true, options: ['unsigned' => true])]
     protected $witnesses;
@@ -148,7 +148,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Drivers
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'drivers', nullable: true, options: ['unsigned' => true])]
     protected $drivers;
@@ -164,7 +164,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Cancelled reason
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'cancelled_reason', length: 4000, nullable: true)]
     protected $cancelledReason;
@@ -172,7 +172,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Cancelled date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'cancelled_date', nullable: true)]
     protected $cancelledDate;
@@ -188,7 +188,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Adjourned date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'adjourned_date', nullable: true)]
     protected $adjournedDate;
@@ -196,7 +196,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Adjourned reason
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'adjourned_reason', length: 4000, nullable: true)]
     protected $adjournedReason;
@@ -204,7 +204,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
     /**
      * Details
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'details', length: 4000, nullable: true)]
     protected $details;
