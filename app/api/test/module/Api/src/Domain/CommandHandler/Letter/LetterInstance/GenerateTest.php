@@ -30,11 +30,14 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection as LetterTypeSectionEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer;
+use Dvsa\Olcs\Api\Service\Letter\LetterInstanceGrabSnapshotter;
 use Dvsa\Olcs\Api\Service\Letter\Resolution\VariantResolution;
 use Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
 /**
@@ -42,6 +45,10 @@ use Mockery as m;
  */
 final class GenerateTest extends AbstractCommandHandlerTestCase
 {
+    private m\MockInterface $mockAuthService;
+
+    private m\MockInterface $mockSnapshotter;
+
     /**
      * Wrap a variant in the resolution the section now hands back.
      *
@@ -58,9 +65,17 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
     {
         // The resolver is pure (no repos, no persistence), so the handler is exercised
         // against the real one — a mock here would let Generate drift from the shared path.
+        $this->mockAuthService = m::mock(AuthorizationService::class);
+        $this->mockAuthService->shouldReceive('getIdentity')->andReturnNull()->byDefault();
+
+        $this->mockSnapshotter = m::mock(LetterInstanceGrabSnapshotter::class);
+        $this->mockSnapshotter->shouldReceive('snapshot')->byDefault();
+
         $this->mockedSmServices = [
             SectionVariantResolver::class => new SectionVariantResolver(),
             LetterInstanceComposer::class => new LetterInstanceComposer(),
+            LetterInstanceGrabSnapshotter::class => $this->mockSnapshotter,
+            AuthorizationService::class => $this->mockAuthService,
         ];
 
         $this->sut = new CommandHandler();
@@ -1143,5 +1158,38 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
             'Deduped to-do should attach to the first issue in display order'
         );
         $this->assertSame($letterInstance, $instanceTodo->getLetterInstance());
+    }
+
+    public function testHandleCommandStampsCurrentUserAndSnapshotsGrabsBeforeSaving(): void
+    {
+        $user = m::mock(UserEntity::class);
+        $identity = m::mock();
+        $identity->shouldReceive('getUser')->andReturn($user);
+        $this->mockAuthService->shouldReceive('getIdentity')->andReturn($identity);
+
+        $letterType = m::mock(LetterTypeEntity::class)->makePartial();
+        $letterType->setId(123);
+        $this->repoMap['LetterType']->shouldReceive('fetchById')->with(123)->andReturn($letterType);
+
+        $order = [];
+
+        $this->mockSnapshotter->shouldReceive('snapshot')
+            ->once()
+            ->with(m::type(LetterInstanceEntity::class))
+            ->andReturnUsing(function (LetterInstanceEntity $entity) use (&$order, $user) {
+                $order[] = 'snapshot';
+                $this->assertSame($user, $entity->getCreatedBy(), 'createdBy must be set before grabs resolve');
+            });
+
+        $this->repoMap['LetterInstance']->shouldReceive('save')
+            ->once()
+            ->andReturnUsing(function (LetterInstanceEntity $entity) use (&$order) {
+                $order[] = 'save';
+                $entity->setId(999);
+            });
+
+        $this->sut->handleCommand(Cmd::create(['letterType' => 123, 'selectedIssues' => []]));
+
+        $this->assertSame(['snapshot', 'save'], $order);
     }
 }
