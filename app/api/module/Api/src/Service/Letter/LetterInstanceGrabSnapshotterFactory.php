@@ -14,7 +14,7 @@ class LetterInstanceGrabSnapshotterFactory implements FactoryInterface
     {
         return new LetterInstanceGrabSnapshotter(
             $container->get(VolGrabReplacementService::class),
-            new VolGrabContextBuilder()
+            $container->get(VolGrabContextBuilder::class)
         );
     }
 }

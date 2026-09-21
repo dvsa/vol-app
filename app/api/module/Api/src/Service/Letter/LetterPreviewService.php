@@ -45,17 +45,14 @@ class LetterPreviewService
      */
     private ?bool $isNiOverride = null;
 
-    private readonly VolGrabContextBuilder $contextBuilder;
-
     public function __construct(
         private readonly SectionRendererPluginManager $rendererManager,
         private $contentStore,
         private $docTemplateRepo,
         private readonly VolGrabReplacementService $volGrabReplacementService,
-        private readonly ?ConverterService $converterService = null,
-        ?VolGrabContextBuilder $contextBuilder = null
+        private readonly VolGrabContextBuilder $contextBuilder,
+        private readonly ?ConverterService $converterService = null
     ) {
-        $this->contextBuilder = $contextBuilder ?? new VolGrabContextBuilder();
     }
 
     /**

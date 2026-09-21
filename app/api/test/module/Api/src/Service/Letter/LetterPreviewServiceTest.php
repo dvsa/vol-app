@@ -21,6 +21,7 @@ use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
 use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererInterface;
 use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager;
+use Dvsa\Olcs\Api\Service\Letter\VolGrabContextBuilder;
 use Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Mockery as m;
@@ -69,7 +70,8 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             $this->mockRendererManager,
             $this->mockContentStore,
             $this->mockDocTemplateRepo,
-            $this->mockVolGrabReplacementService
+            $this->mockVolGrabReplacementService,
+            new VolGrabContextBuilder()
         );
     }
 
@@ -1109,6 +1111,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             $this->mockContentStore,
             $this->mockDocTemplateRepo,
             $this->mockVolGrabReplacementService,
+            new VolGrabContextBuilder(),
             new \Dvsa\Olcs\Api\Service\EditorJs\ConverterService()
         );
 
@@ -1342,6 +1345,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             $this->mockContentStore,
             $this->mockDocTemplateRepo,
             $this->mockVolGrabReplacementService,
+            new VolGrabContextBuilder(),
             new \Dvsa\Olcs\Api\Service\EditorJs\ConverterService()
         );
     }
