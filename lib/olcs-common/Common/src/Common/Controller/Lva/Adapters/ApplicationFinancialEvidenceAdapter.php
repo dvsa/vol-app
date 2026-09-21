@@ -37,7 +37,6 @@ class ApplicationFinancialEvidenceAdapter extends AbstractFinancialEvidenceAdapt
      * @return array
      */
     #[\Override]
-    #[\Override]
     public function getDocuments($applicationId)
     {
         $documents = $this->getData($applicationId)['documents'];
@@ -90,5 +89,24 @@ class ApplicationFinancialEvidenceAdapter extends AbstractFinancialEvidenceAdapt
         }
 
         return $this->applicationData;
+    }
+
+    protected function getAnalysesByDocumentId(int $applicationId): array
+    {
+        $query = $this->container->get(AnnotationBuilder::class)
+            ->createQuery(DocumentAnalysisList::create(['application' => $applicationId]));
+
+        $response = $this->container->get(CachingQueryService::class)->send($query);
+
+        if (!$response->isOk()) {
+            return [];
+        }
+
+        $indexed = [];
+        foreach ($response->getResult()['analyses'] ?? [] as $analysis) {
+            $indexed[$analysis['documentId']] = $analysis;
+        }
+
+        return $indexed;
     }
 }

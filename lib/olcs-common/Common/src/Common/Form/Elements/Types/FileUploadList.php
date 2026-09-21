@@ -72,7 +72,6 @@ class FileUploadList extends Fieldset
             //Only documents with an 'analysisStatus' key (set by ApplicationFinancialEvidenceAdapter)
             //get a status tag. Other callers' documents lack this key and are unaffected.
             [$statusLabel, $statusClass] = $statusMap[$file['analysisStatus'] ?? ''] ?? [null, null];
-            [$statusLabel, $statusClass] = $statusMap[$file['analysisStatus'] ?? ''] ?? [null, null];
             $statusTag = $statusLabel !== null
                 ? ' <strong class="govuk-tag ' . $statusClass . '">' . $statusLabel . '</strong>'
                 : '';
@@ -81,7 +80,7 @@ class FileUploadList extends Fieldset
             $html->setAttribute('data-container-class', 'file-upload');
             $html->setValue(
                 '<a class="govuk-link" href="' . $file['url'] . '">'
-                . $file['description'] . '</a> <span>' . $file['size'] . '</span>'
+                . $file['description'] . '</a> <span>' . $file['size'] . '</span>' . $statusTag
             );
 
             $remove = new Submit('remove', ['render-container' => false]);
