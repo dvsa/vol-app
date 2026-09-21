@@ -1163,6 +1163,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
     public function testHandleCommandStampsCurrentUserAndSnapshotsGrabsBeforeSaving(): void
     {
         $user = m::mock(UserEntity::class);
+        $user->shouldReceive('isAnonymous')->andReturn(false);
         $identity = m::mock();
         $identity->shouldReceive('getUser')->andReturn($user);
         $this->mockAuthService->shouldReceive('getIdentity')->andReturn($identity);
@@ -1191,5 +1192,29 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand(Cmd::create(['letterType' => 123, 'selectedIssues' => []]));
 
         $this->assertSame(['snapshot', 'save'], $order);
+    }
+
+    public function testHandleCommandDoesNotStampAnAnonymousUser(): void
+    {
+        // same rule as OlcsBlameableListener: anon is transient and must never be persisted
+        $identity = m::mock();
+        $identity->shouldReceive('getUser')->andReturn(UserEntity::anon());
+        $this->mockAuthService->shouldReceive('getIdentity')->andReturn($identity);
+
+        $letterType = m::mock(LetterTypeEntity::class)->makePartial();
+        $letterType->setId(123);
+        $this->repoMap['LetterType']->shouldReceive('fetchById')->with(123)->andReturn($letterType);
+
+        $saved = null;
+        $this->repoMap['LetterInstance']->shouldReceive('save')
+            ->once()
+            ->andReturnUsing(function (LetterInstanceEntity $entity) use (&$saved) {
+                $saved = $entity;
+                $entity->setId(999);
+            });
+
+        $this->sut->handleCommand(Cmd::create(['letterType' => 123, 'selectedIssues' => []]));
+
+        $this->assertNull($saved->getCreatedBy());
     }
 }

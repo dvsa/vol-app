@@ -73,9 +73,10 @@ final class Generate extends AbstractCommandHandler implements AuthAwareInterfac
         $status = $this->getRepo()->getRefdataReference(LetterInstanceEntity::STATUS_DRAFT);
         $letterInstance->setStatus($status);
 
-        // Blameable only stamps createdBy on flush, and the caseworker grabs need it before then
+        // Blameable only stamps createdBy on flush, and the caseworker grabs need it before then.
+        // Same rule as OlcsBlameableListener: never persist the transient anonymous user.
         $currentUser = $this->getCurrentUser();
-        if ($currentUser !== null) {
+        if ($currentUser !== null && !$currentUser->isAnonymous()) {
             $letterInstance->setCreatedBy($currentUser);
         }
 
