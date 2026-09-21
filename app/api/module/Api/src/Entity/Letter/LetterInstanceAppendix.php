@@ -28,6 +28,10 @@ class LetterInstanceAppendix extends AbstractLetterInstanceAppendix
             return $this->editedContent;
         }
 
+        if (!empty($this->generatedContent) && is_array($this->generatedContent)) {
+            return $this->generatedContent;
+        }
+
         $version = $this->getLetterAppendixVersion();
         if ($version !== null) {
             return $version->getDefaultContentAsArray();
@@ -55,6 +59,13 @@ class LetterInstanceAppendix extends AbstractLetterInstanceAppendix
     public function setEditedContentFromArray(array $content): self
     {
         $this->editedContent = $content;
+        return $this;
+    }
+
+    public function setGeneratedContentFromArray(array $content): self
+    {
+        $this->generatedContent = $content;
+
         return $this;
     }
 

@@ -39,6 +39,10 @@ class LetterInstanceTodo extends AbstractLetterInstanceTodo
             return is_array($description) ? $description : [];
         }
 
+        if (!empty($this->generatedDescription) && is_array($this->generatedDescription)) {
+            return $this->generatedDescription;
+        }
+
         return $this->letterTodoVersion?->getDescriptionAsArray() ?? [];
     }
 
@@ -57,6 +61,13 @@ class LetterInstanceTodo extends AbstractLetterInstanceTodo
     public function setEditedDescriptionFromArray(array $description): self
     {
         $this->editedDescription = $description;
+
+        return $this;
+    }
+
+    public function setGeneratedDescriptionFromArray(array $content): self
+    {
+        $this->generatedDescription = $content;
 
         return $this;
     }

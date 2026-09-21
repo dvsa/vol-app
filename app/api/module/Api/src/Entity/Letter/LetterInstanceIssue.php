@@ -65,6 +65,10 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
             return $content;
         }
 
+        if (!empty($this->generatedContent) && is_array($this->generatedContent)) {
+            return $this->generatedContent;
+        }
+
         return $this->letterIssueVersion->getDefaultBodyContentAsArray() ?: [];
     }
 
@@ -98,6 +102,13 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
     public function setEditedContentFromArray(array $content)
     {
         $this->editedContent = $content;
+        return $this;
+    }
+
+    public function setGeneratedContentFromArray(array $content): self
+    {
+        $this->generatedContent = $content;
+
         return $this;
     }
 
