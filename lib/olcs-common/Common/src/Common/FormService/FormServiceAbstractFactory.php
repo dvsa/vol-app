@@ -27,7 +27,6 @@ use Common\FormService\Form\Lva\ConditionsUndertakings\LicenceConditionsUndertak
 use Common\FormService\Form\Lva\ConditionsUndertakings\VariationConditionsUndertakings;
 use Common\FormService\Form\Lva\ConvictionsPenalties;
 use Common\FormService\Form\Lva\FinancialEvidence;
-use Common\FormService\Form\Lva\FinancialEvidenceAssessment;
 use Common\FormService\Form\Lva\FinancialHistory;
 use Common\FormService\Form\Lva\GenericVehiclesVehicle;
 use Common\FormService\Form\Lva\Licence;
@@ -179,9 +178,6 @@ class FormServiceAbstractFactory implements AbstractFactoryInterface
         // Financial Evidence form services
         'lva-variation-financial_evidence' => VariationFinancialEvidence::class,
         'lva-application-financial_evidence' => FinancialEvidence::class,
-
-        // Financial Evidence Assessment form services
-        'lva-application-financial_evidence_assessment' => FinancialEvidenceAssessment::class,
 
         // Declarations (undertakings) form services
         'lva-variation-undertakings' => Undertakings::class,
@@ -464,10 +460,6 @@ class FormServiceAbstractFactory implements AbstractFactoryInterface
                 $urlHelper = $serviceLocator->get(UrlHelperService::class);
                 $validatorPluginManager = $serviceLocator->get('ValidatorManager');
                 return new FinancialEvidence($formHelper, $authService, $translator, $urlHelper, $validatorPluginManager);
-
-            // Financial Evidence Assessment form services
-            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-financial_evidence_assessment']:
-                return new FinancialEvidenceAssessment($formHelper);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_documentary_evidence_large']:
             case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-vehicles_declarations_psv_documentary_evidence_large']:
                 $authService = $serviceLocator->get(AuthorizationService::class);
