@@ -257,7 +257,8 @@ class VolGrabReplacementService
 
                 if ($result !== null) {
                     if ($forHtml) {
-                        $populated[$token] = nl2br($result, false);
+                        // spliced straight into HTML, after the purifier, so escape it here
+                        $populated[$token] = nl2br(htmlspecialchars((string) $result, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), false);
                     } else {
                         // EditorJS: Return structured data for parser
                         $populated[$token] = [

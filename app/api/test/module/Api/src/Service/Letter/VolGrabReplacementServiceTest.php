@@ -512,6 +512,25 @@ final class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('Line 1<br>' . "\n" . 'Line 2<br>' . "\n" . 'Line 3', $result);
     }
 
+    public function testReplaceGrabsInHtmlEscapesMarkupInValues(): void
+    {
+        // This pass runs after the purifier, so a value with markup must land as literal text.
+        $html = '<p>Dear [[OP_NAME]]</p>';
+
+        $mockBookmark = m::mock(StaticBookmark::class);
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn("Acme <img src=x onerror=alert(1)>\n& Sons");
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('OP_NAME')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        $this->assertSame('<p>Dear Acme &lt;img src=x onerror=alert(1)&gt;<br>' . "\n" . '&amp; Sons</p>', $result);
+    }
+
     public function testReplaceGrabsStripsUnresolvableTokensInsteadOfLeakingThem(): void
     {
         // A token no bookmark can serve (unknown class, or a dynamic bookmark whose
