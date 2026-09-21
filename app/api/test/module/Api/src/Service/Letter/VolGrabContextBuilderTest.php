@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
+use Dvsa\Olcs\Api\Entity\Tm\TransportManager;
 use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Api\Service\Letter\VolGrabContextBuilder;
 use Mockery as m;
@@ -41,12 +42,16 @@ class VolGrabContextBuilderTest extends MockeryTestCase
         $organisation = m::mock(Organisation::class)->makePartial();
         $organisation->setId(50);
 
+        $transportManager = m::mock(TransportManager::class)->makePartial();
+        $transportManager->setId(60);
+
         $instance = new LetterInstance();
         $instance->setLicence($licence);
         $instance->setApplication($application);
         $instance->setCreatedBy($user);
         $instance->setCase($case);
         $instance->setOrganisation($organisation);
+        $instance->setTransportManager($transportManager);
 
         $this->assertSame(
             [
@@ -55,6 +60,7 @@ class VolGrabContextBuilderTest extends MockeryTestCase
                 'user' => 30,
                 'case' => 40,
                 'organisation' => 50,
+                'transportManager' => 60,
                 'isNi' => false,
             ],
             $this->sut->build($instance)

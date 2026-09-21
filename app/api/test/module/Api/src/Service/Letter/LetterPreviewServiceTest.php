@@ -106,6 +106,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
         $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
@@ -162,6 +163,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -225,6 +227,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -275,6 +278,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -328,6 +332,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -387,6 +392,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -441,6 +447,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -500,6 +507,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -550,6 +558,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -608,6 +617,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -673,6 +683,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -736,6 +747,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
@@ -808,6 +820,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn($mockBusReg);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn($mockOrganisation);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -857,6 +870,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
@@ -909,6 +923,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
@@ -970,6 +985,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
 
@@ -1022,6 +1038,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
         $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
@@ -1070,6 +1087,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
         $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
         $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
             ->andReturn(new ArrayCollection());
@@ -1118,6 +1136,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
         $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
 
         $mockTemplate = m::mock(MasterTemplate::class);
         $mockTemplate->shouldReceive('getHeaderLeftContent')->andReturn(null);
@@ -1342,6 +1361,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
         $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
         $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getTransportManager')->andReturn(null);
 
         return $mockLetterInstance;
     }

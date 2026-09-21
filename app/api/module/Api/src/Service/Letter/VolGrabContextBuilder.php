@@ -25,6 +25,7 @@ class VolGrabContextBuilder
             'case' => $letterInstance->getCase()?->getId(),
             'busRegId' => $letterInstance->getBusReg()?->getId(),
             'organisation' => $letterInstance->getOrganisation()?->getId(),
+            'transportManager' => $letterInstance->getTransportManager()?->getId(),
         ]);
 
         // false is a real value here (GB letter), so it sits outside the array_filter
