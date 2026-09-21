@@ -115,6 +115,13 @@ emits for such tables as well as the `DROP TABLE` itself; missing that is how
 four stale `document_analysis` lines survived in the baseline after the table
 gained an entity.
 
+Dropping the `*_hist` tables here leaves no gap: they are checked in olcs-etl,
+against the database its `Database build` workflow builds from the changelog.
+`make test-history` compares each one's schema to its source table, and
+`make test-history-triggers` inserts, updates and deletes a row to confirm the
+triggers actually write to it. Each carries its own baseline of known
+divergences, in `utils/schema/`.
+
 ### Reading the baseline
 
 The file is grouped under two headings carrying a count. Grouping is
