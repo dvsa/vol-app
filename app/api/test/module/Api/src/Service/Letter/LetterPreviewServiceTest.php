@@ -1364,7 +1364,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturnUsing(fn (string $html) => $html);
 
         $mockLetterInstance = $this->createMinimalLetterInstance();
-        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(new \DateTime('2026-09-01 10:15:00'));
+        $mockLetterInstance->shouldReceive('getCreatedOn')->with(true)->andReturn(new \DateTime('2026-09-01 10:15:00'));
 
         $result = $this->createSutWithRealConverter()
             ->renderPreview($mockLetterInstance, $this->createPlainTemplate('Date: {{LETTER_DATE}}'));
@@ -1378,7 +1378,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturnUsing(fn (string $html) => $html);
 
         $mockLetterInstance = $this->createMinimalLetterInstance();
-        $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCreatedOn')->with(true)->andReturn(null);
 
         $result = $this->createSutWithRealConverter()
             ->renderPreview($mockLetterInstance, $this->createPlainTemplate('Date: {{LETTER_DATE}}'));

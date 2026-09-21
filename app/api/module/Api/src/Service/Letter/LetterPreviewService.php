@@ -490,7 +490,7 @@ class LetterPreviewService
      */
     private function buildLetterDate(LetterInstance $letterInstance): string
     {
-        $createdOn = $letterInstance->getCreatedOn();
+        $createdOn = $letterInstance->getCreatedOn(true);
 
         return ($createdOn instanceof \DateTimeInterface ? $createdOn : new \DateTime())->format('jS F Y');
     }
