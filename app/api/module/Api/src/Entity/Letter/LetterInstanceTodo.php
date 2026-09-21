@@ -64,11 +64,4 @@ class LetterInstanceTodo extends AbstractLetterInstanceTodo
 
         return $this;
     }
-
-    public function setGeneratedDescriptionFromArray(array $content): self
-    {
-        $this->generatedDescription = $content;
-
-        return $this;
-    }
 }

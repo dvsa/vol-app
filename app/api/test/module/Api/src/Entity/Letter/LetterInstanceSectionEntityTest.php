@@ -45,7 +45,7 @@ final class LetterInstanceSectionEntityTest extends EntityTester
     {
         $generated = ['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Dear ACME LTD']]]];
         $entity = $this->entityWithDefault(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Dear [[OP_NAME_ONLY]]']]]]);
-        $entity->setGeneratedContentFromArray($generated);
+        $entity->setGeneratedContent($generated);
 
         $this->assertSame($generated, $entity->getEffectiveContent());
     }
@@ -54,7 +54,7 @@ final class LetterInstanceSectionEntityTest extends EntityTester
     {
         $edited = ['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Dear Acme (edited)']]]];
         $entity = $this->entityWithDefault(['blocks' => []]);
-        $entity->setGeneratedContentFromArray(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Dear ACME LTD']]]]);
+        $entity->setGeneratedContent(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Dear ACME LTD']]]]);
         $entity->setEditedContentFromArray($edited);
 
         $this->assertSame($edited, $entity->getEffectiveContent());
@@ -63,7 +63,7 @@ final class LetterInstanceSectionEntityTest extends EntityTester
     public function testGeneratedContentDoesNotCountAsEdited(): void
     {
         $entity = $this->entityWithDefault(['blocks' => []]);
-        $entity->setGeneratedContentFromArray(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Dear ACME LTD']]]]);
+        $entity->setGeneratedContent(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Dear ACME LTD']]]]);
 
         $this->assertFalse($entity->hasBeenEdited());
     }

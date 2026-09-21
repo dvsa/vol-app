@@ -105,13 +105,6 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
         return $this;
     }
 
-    public function setGeneratedContentFromArray(array $content): self
-    {
-        $this->generatedContent = $content;
-
-        return $this;
-    }
-
     /**
      * Check if this issue requires input
      *

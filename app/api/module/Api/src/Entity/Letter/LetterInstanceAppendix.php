@@ -62,13 +62,6 @@ class LetterInstanceAppendix extends AbstractLetterInstanceAppendix
         return $this;
     }
 
-    public function setGeneratedContentFromArray(array $content): self
-    {
-        $this->generatedContent = $content;
-
-        return $this;
-    }
-
     /**
      * Check if this is an editable appendix (delegates to version)
      *

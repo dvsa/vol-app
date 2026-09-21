@@ -97,6 +97,25 @@ class LetterInstanceGrabSnapshotterTest extends MockeryTestCase
         $this->assertSame(self::paragraph('Appendix for ACME LTD'), $appendix->getGeneratedContent());
     }
 
+    public function testContentThatResolvesToItselfIsNotStored(): void
+    {
+        // no grabs in it, so the version default already says everything the snapshot would
+        $this->grabServiceResolves('OP_NAME_ONLY', 'ACME LTD');
+
+        $version = new LetterSectionVersion();
+        $version->setDefaultContent(self::paragraph('Nothing to resolve here'));
+        $section = new LetterInstanceSection();
+        $section->setLetterSectionVersion($version);
+
+        $instance = new LetterInstance();
+        $instance->addLetterInstanceSection($section);
+
+        $this->sut->snapshot($instance);
+
+        $this->assertNull($section->getGeneratedContent());
+        $this->assertSame(self::paragraph('Nothing to resolve here'), $section->getEffectiveContent());
+    }
+
     public function testChildrenWithNoDefaultContentAreLeftAlone(): void
     {
         $this->grabService->shouldNotReceive('replaceGrabs');

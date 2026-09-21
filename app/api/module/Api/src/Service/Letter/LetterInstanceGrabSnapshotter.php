@@ -29,28 +29,28 @@ class LetterInstanceGrabSnapshotter
         foreach ($letterInstance->getLetterInstanceSections() as $section) {
             $resolved = $this->resolve($section->getLetterSectionVersion()?->getDefaultContentAsArray(), $context);
             if ($resolved !== null) {
-                $section->setGeneratedContentFromArray($resolved);
+                $section->setGeneratedContent($resolved);
             }
         }
 
         foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
             $resolved = $this->resolve($issue->getLetterIssueVersion()?->getDefaultBodyContentAsArray(), $context);
             if ($resolved !== null) {
-                $issue->setGeneratedContentFromArray($resolved);
+                $issue->setGeneratedContent($resolved);
             }
         }
 
         foreach ($letterInstance->getLetterInstanceTodos() as $todo) {
             $resolved = $this->resolve($todo->getLetterTodoVersion()?->getDescriptionAsArray(), $context);
             if ($resolved !== null) {
-                $todo->setGeneratedDescriptionFromArray($resolved);
+                $todo->setGeneratedDescription($resolved);
             }
         }
 
         foreach ($letterInstance->getLetterInstanceAppendices() as $appendix) {
             $resolved = $this->resolve($appendix->getLetterAppendixVersion()?->getDefaultContentAsArray(), $context);
             if ($resolved !== null) {
-                $appendix->setGeneratedContentFromArray($resolved);
+                $appendix->setGeneratedContent($resolved);
             }
         }
     }
@@ -58,7 +58,7 @@ class LetterInstanceGrabSnapshotter
     /**
      * @param array<string, mixed>|null $content EditorJS content
      * @param array<string, mixed> $context
-     * @return array<string, mixed>|null null when there is nothing to snapshot
+     * @return array<string, mixed>|null null when there is nothing to snapshot, or nothing changed
      */
     private function resolve(?array $content, array $context): ?array
     {
@@ -73,6 +73,11 @@ class LetterInstanceGrabSnapshotter
 
         $decoded = json_decode($this->volGrabReplacementService->replaceGrabs($json, $context, false), true);
 
-        return is_array($decoded) ? $decoded : null;
+        // content with no grabs in it would just duplicate the version default
+        if (!is_array($decoded) || $decoded === $content) {
+            return null;
+        }
+
+        return $decoded;
     }
 }
