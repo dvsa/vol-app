@@ -233,6 +233,7 @@ class LaminasSessionFlashMessenger extends AbstractPlugin implements FlashMessen
      *
      * @return bool True if current messages were cleared from the container, false if none existed.
      */
+    #[\Override]
     public function clearCurrentMessagesFromContainer(): bool
     {
         $container = $this->container;
