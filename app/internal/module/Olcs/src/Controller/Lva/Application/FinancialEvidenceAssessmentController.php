@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Data\CategoryDataService as Category;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -25,7 +26,9 @@ class FinancialEvidenceAssessmentController extends AbstractController implement
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         protected StringHelperService $stringHelper,
-        protected RestrictionHelperService $restrictionHelper
+        protected RestrictionHelperService $restrictionHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected $navigation
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }

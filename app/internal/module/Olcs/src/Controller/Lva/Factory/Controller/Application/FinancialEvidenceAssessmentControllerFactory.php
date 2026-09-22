@@ -5,6 +5,7 @@ namespace Olcs\Controller\Lva\Factory\Controller\Application;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Common\Service\Helper\FlashMessengerHelperService;
 use LmcRbacMvc\Service\AuthorizationService;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Application\FinancialEvidenceAssessmentController;
@@ -19,7 +20,9 @@ class FinancialEvidenceAssessmentControllerFactory implements FactoryInterface
             $container->get(NiTextTranslation::class),
             $container->get(AuthorizationService::class),
             $container->get(StringHelperService::class),
-            $container->get(RestrictionHelperService::class)
+            $container->get(RestrictionHelperService::class),
+            $container->get(FlashMessengerHelperService::class),
+            $container->get('navigation')
         );
     }
 }

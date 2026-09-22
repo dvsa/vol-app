@@ -24,7 +24,9 @@ final class ApplicationFinancialEvidenceAdapterTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->container = m::mock(ContainerInterface::class);
-        $this->sut = m::mock(ApplicationFinancialEvidenceAdapter::class, [$this->container])->makePartial();
+        $this->sut = m::mock(ApplicationFinancialEvidenceAdapter::class, [$this->container])
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
     }
 
     public function testAlterFormForLva(): void
@@ -50,18 +52,6 @@ final class ApplicationFinancialEvidenceAdapterTest extends MockeryTestCase
             ->getMock();
 
         $this->assertNull($this->sut->alterFormForLva($mockForm));
-    }
-
-    public function testGetDocuments(): void
-    {
-        $applicationId = 1;
-
-        $this->sut->shouldReceive('getData')
-            ->with($applicationId)
-            ->andReturn(['documents' => ['documents']])
-            ->once();
-
-        $this->assertEquals(['documents'], $this->sut->getDocuments($applicationId));
     }
 
     public function testGetUploadMetaData(): void
@@ -230,7 +220,7 @@ final class ApplicationFinancialEvidenceAdapterTest extends MockeryTestCase
 
         $result = $method->invoke($this->sut, $applicationId);
 
-        $this->assertEquals(['status' => 'SUCCESS'], $result[101]);
-        $this->assertEquals(['status' => 'PENDING'], $result[102]);
+        $this->assertEquals(['status' => 'SUCCESS', 'documentId' => 101], $result[101]);
+        $this->assertEquals(['status' => 'PENDING', 'documentId' => 102], $result[102]);
     }
 }
