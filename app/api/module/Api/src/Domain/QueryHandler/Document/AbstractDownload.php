@@ -117,7 +117,13 @@ abstract class AbstractDownload extends AbstractQueryHandler implements Uploader
             // snapshot layouts use href="javascript:window.print()" for their Print link and
             // already-stored snapshots cannot be re-rendered. The no-token form would break
             // Print on every historical document.
-            $headers->addHeaderLine('Content-Security-Policy', 'sandbox allow-scripts');
+            // allow-scripts is present because the snapshot layouts use
+            // href="javascript:window.print()" for their Print link and already-stored
+            // snapshots cannot be re-rendered.
+            //
+            // allow-modals is also required because window.print() opens the browser
+            // print dialog, which is blocked by a sandbox unless allow-modals is set.
+            $headers->addHeaderLine('Content-Security-Policy', 'sandbox allow-scripts allow-modals');
         }
 
         return $response;
