@@ -9,7 +9,9 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
+use Common\FeatureToggle;
 use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled;
 use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Traits\ApplicationControllerTrait as GenericInternalApplicationControllerTrait;
@@ -138,6 +140,10 @@ trait ApplicationControllerTrait
             $applicationStatuses
         );
 
+        if (isset($accessibleSections['financial_evidence_assessment']) && !$this->isIdpEnabled()) {
+            unset($accessibleSections['financial_evidence_assessment']);
+        }
+
         foreach ($accessibleSections as $section => $settings) {
             $alias = $section;
             if ($section == 'community_licences' && $isPsv) {
@@ -173,6 +179,17 @@ trait ApplicationControllerTrait
         }
 
         return $sections;
+    }
+
+    /**
+     * Use the same feature gate for navigation and direct controller access.
+     */
+    protected function isIdpEnabled(): bool
+    {
+        $response = $this->handleQuery(IsEnabled::create(['ids' => [FeatureToggle::IDP]]));
+
+        // Do not expose IDP when the toggle response is unsuccessful or missing its flag.
+        return $response->isOk() && ($response->getResult()['isEnabled'] ?? false) === true;
     }
 
     /**

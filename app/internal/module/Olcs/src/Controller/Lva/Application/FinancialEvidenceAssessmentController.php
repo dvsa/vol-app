@@ -2,7 +2,9 @@
 
 namespace Olcs\Controller\Lva\Application;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Controller\Lva\AbstractController;
+use Common\FeatureToggle;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Data\CategoryDataService as Category;
 use Common\Service\Helper\RestrictionHelperService;
@@ -15,12 +17,18 @@ use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
-class FinancialEvidenceAssessmentController extends AbstractController implements ApplicationControllerInterface
+class FinancialEvidenceAssessmentController extends AbstractController implements
+    ApplicationControllerInterface,
+    ToggleAwareInterface
 {
     use ApplicationControllerTrait;
 
     protected $lva = 'application';
     protected string $location = 'internal';
+
+    protected $toggleConfig = [
+        'default' => [FeatureToggle::IDP],
+    ];
 
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
