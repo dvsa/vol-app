@@ -100,7 +100,7 @@ final class AbstractDownloadTest extends QueryHandlerTestCase
             true,
         );
         if ($isScriptable) {
-            $expectHeaders[] = 'Content-Security-Policy: sandbox allow-scripts;';
+            $expectHeaders[] = 'Content-Security-Policy: sandbox allow-scripts allow-modals;';
         }
 
         $this->assertSame(
