@@ -125,7 +125,6 @@ class LaminasSessionFlashMessenger extends AbstractPlugin implements FlashMessen
             $namespaces[]               = $namespace;
         }
 
-
         foreach ($namespaces as $namespace) {
             unset($container->{$namespace});
         }

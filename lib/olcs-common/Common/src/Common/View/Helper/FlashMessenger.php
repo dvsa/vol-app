@@ -46,8 +46,7 @@ class FlashMessenger
         FlashMessengerHelperService $flashMessengerHelperService,
         protected FlashMessengerInterface $flashMessengerPlugin,
         protected TranslatorInterface $translator
-    )
-    {
+    ) {
         $this->flashMessengerHelperService = $flashMessengerHelperService;
     }
 
@@ -114,7 +113,8 @@ class FlashMessenger
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function render() {
+    public function render()
+    {
         if ($this->getIsRendered()) {
             return '';
         }
