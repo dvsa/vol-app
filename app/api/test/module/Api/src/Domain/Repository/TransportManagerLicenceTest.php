@@ -4,201 +4,205 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Dvsa\Olcs\Api\Domain\Repository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\FilterCollection;
+use Dvsa\Olcs\Api\Domain\Repository\TransportManagerLicence as Repo;
+use Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence as Entity;
+use Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetList;
+use Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter;
 use Mockery as m;
 
-/**
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
-#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\TransportManagerLicence::class)]
 final class TransportManagerLicenceTest extends RepositoryTestCase
 {
-    /** @var  Repository\TransportManagerLicence */
-    protected $sut;
+    private const string FROM = ' FROM ' . Entity::class . ' tml';
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\TransportManagerLicence::class, true);
+        $this->setUpRealSut(Repo::class, true);
+    }
+
+    public function testFetchForLicence(): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchForLicence(7));
+
+        $this->assertSame(
+            'SELECT tml' . self::FROM . ' WHERE tml.licence = :licenceId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(7, $qb->getParameter('licenceId')->getValue());
+    }
+
+    /**
+     * Removed transport managers are soft-deleted, so the filter has to be switched off for this
+     * entity before the query can see them at all.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('removedTmProvider')]
+    public function testFetchRemovedTmForLicence(bool $isSecondLetter, string $expectedExtra): void
+    {
+        $this->expectSoftDeleteableDisabledFor(Entity::class);
+
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchRemovedTmForLicence(7, $isSecondLetter));
+
+        $this->assertSame(
+            'SELECT tml' . self::FROM
+            . ' WHERE tml.licence = :licenceId AND tml.deletedDate IS NOT NULL'
+            . ' AND tml.lastTmLetterDate IS NULL'
+            . $expectedExtra
+            . ' ORDER BY tml.deletedDate DESC',
+            $qb->getDQL(),
+        );
+    }
+
+    public static function removedTmProvider(): \Iterator
+    {
+        yield 'first letter' => [false, ' AND tml.lastTmFirstEmailDate IS NULL'];
+        // The second letter only goes out 28 days after removal, and only if the first was sent.
+        yield 'second letter' => [
+            true,
+            ' AND tml.lastTmFirstEmailDate IS NOT NULL AND tml.deletedDate <= :date28DaysAgo',
+        ];
+    }
+
+    public function testFetchRemovedTmForLicenceSecondLetterLooksBack28Days(): void
+    {
+        $this->expectSoftDeleteableDisabledFor(Entity::class);
+
+        $qb = $this->createRealQb()->willReturn([]);
+
+        $this->sut->fetchRemovedTmForLicence(7, true);
+
+        $this->assertSame(
+            new \DateTime()->modify('-28 days')->format('Y-m-d') . ' 00:00:00',
+            $qb->getParameter('date28DaysAgo')->getValue()->format('Y-m-d H:i:s'),
+        );
     }
 
     public function testFetchWithContactDetailsByLicence(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tml')->once()->andReturn($mockQb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchWithContactDetailsByLicence(7));
 
-        $mockQb->shouldReceive('join')->with('tml.transportManager', 'tm')->once()->andReturnSelf();
-        $mockQb->shouldReceive('join')->with('tm.homeCd', 'hcd')->once()->andReturnSelf();
-        $mockQb->shouldReceive('join')->with('hcd.person', 'p')->once()->andReturnSelf();
-        $mockQb->shouldReceive('select')->with('tml.id')->once()->andReturnSelf();
-        $mockQb->shouldReceive('addSelect')->with('tm.id as tmid')->once()->andReturnSelf();
-        $mockQb->shouldReceive('addSelect')->with('p.birthDate, p.forename, p.familyName')->once()->andReturnSelf();
-        $mockQb->shouldReceive('addSelect')->with('hcd.emailAddress')->once()->andReturnSelf();
-        $condition = $this->mockExprEq('tml.licence', ':licenceId');
-        $mockQb->shouldReceive('expr->eq')->with('tml.licence', ':licenceId')->once()->andReturn($condition);
-        $mockQb->shouldReceive('andWhere')->with($condition)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('licenceId', 834)->once();
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
-
-        $this->assertSame('RESULT', $this->sut->fetchWithContactDetailsByLicence(834));
+        // The explicit select() replaces the root select, so only the listed columns come back.
+        $this->assertSame(
+            'SELECT tml.id, tm.id as tmid, p.birthDate, p.forename, p.familyName, hcd.emailAddress'
+            . self::FROM
+            . ' INNER JOIN tml.transportManager tm INNER JOIN tm.homeCd hcd INNER JOIN hcd.person p'
+            . ' WHERE tml.licence = :licenceId',
+            $qb->getDQL(),
+        );
     }
 
-    public function testFetchRemovedTmForLicenceFirstLetter(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceStatusProvider')]
+    public function testFetchForTransportManager(?array $statuses, string $expectedExtra): void
     {
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->em->shouldReceive('getFilters->isEnabled')->with('soft-deleteable')->andReturn(false);
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
+        $this->assertSame(['RESULTS'], $this->sut->fetchForTransportManager(3, $statuses));
 
-        $licenceId = 1;
-        $this->sut->fetchRemovedTmForLicence($licenceId); // default => first letter
-
-        $expectedQuery =
-            '[QUERY] AND tml.licence = [[' . $licenceId . ']] ' .
-            'AND tml.deletedDate IS NOT NULL ' .
-            'AND tml.lastTmLetterDate IS NULL ' .
-            'AND tml.lastTmFirstEmailDate IS NULL ' .
-            'ORDER BY tml.deletedDate DESC';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT tml, tmt, l, lo, ls, tm' . self::FROM
+            . ' LEFT JOIN tml.tmType tmt LEFT JOIN tml.licence l LEFT JOIN l.organisation lo'
+            . ' LEFT JOIN l.status ls LEFT JOIN tml.transportManager tm'
+            . ' WHERE tml.transportManager = :transportManager'
+            . $expectedExtra,
+            $qb->getDQL(),
+        );
+        $this->assertSame(3, $qb->getParameter('transportManager')->getValue());
     }
 
-    public function testFetchRemovedTmForLicenceSecondLetter(): void
+    public static function licenceStatusProvider(): \Iterator
     {
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->em->shouldReceive('getFilters->isEnabled')->with('soft-deleteable')->andReturn(false);
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
-
-        $licenceId = 1;
-        $this->sut->fetchRemovedTmForLicence($licenceId, true);
-
-        $this->assertStringContainsString('[QUERY] AND tml.licence = [[' . $licenceId . ']]', (string) $this->query);
-        $this->assertStringContainsString('AND tml.deletedDate IS NOT NULL', (string) $this->query);
-        $this->assertStringContainsString('AND tml.lastTmLetterDate IS NULL', (string) $this->query);
-        $this->assertStringContainsString('AND tml.lastTmFirstEmailDate IS NOT NULL', (string) $this->query);
-        $this->assertStringContainsString('AND tml.deletedDate <=', (string) $this->query);
-        $this->assertStringContainsString('ORDER BY tml.deletedDate DESC', (string) $this->query);
-    }
-
-    public function testFetchForTransportManager()
-    {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tml')->once()->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tmType', 'tmt')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.organisation', 'lo')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.status', 'ls')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('transportManager', 'tm')->once()->andReturnSelf();
-
-        $conditionTm = $this->mockExprEq('tml.transportManager', ':transportManager');
-        $mockQb->shouldReceive('expr->eq')->with('tml.transportManager', ':transportManager')->once()->andReturn($conditionTm);
-        $mockQb->shouldReceive('where')->with($conditionTm)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('transportManager', 1)->once();
-
-        $statuses = ['s0', 's1'];
-        $conditionStatuses = $this->mockExprIn('l.status', $statuses);
-        $mockQb->shouldReceive('expr->in')->with('l.status', $statuses)->once()->andReturn($conditionStatuses);
-        $mockQb->shouldReceive('andWhere')->with($conditionStatuses)->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
-
-        $this->assertEquals(['RESULT'], $this->sut->fetchForTransportManager(1, $statuses));
+        yield 'any status' => [null, ''];
+        // The statuses are inlined into the IN() rather than bound.
+        yield 'specific statuses' => [['lsts_valid'], " AND l.status IN('lsts_valid')"];
     }
 
     public function testFetchForResponsibilities(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tml')->once()->andReturn($mockQb);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn('RESULT');
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.organisation', 'lo')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.status', 'lst')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('transportManager', 'tm')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tm.tmType', 'tmty')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tmType', 'tmt')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('byId')->with(1)->once()->andReturnSelf();
+        $this->assertSame('RESULT', $this->sut->fetchForResponsibilities(1));
 
-        $mockQb->shouldReceive('getQuery->getSingleResult')->once()->andReturn(['RESULT']);
-        $this->assertEquals(['RESULT'], $this->sut->fetchForResponsibilities(1));
+        $this->assertSame(
+            'SELECT tml, l, lo, lst, tm, tmty, tmt' . self::FROM
+            . ' LEFT JOIN tml.licence l LEFT JOIN l.organisation lo LEFT JOIN l.status lst'
+            . ' LEFT JOIN tml.transportManager tm LEFT JOIN tm.tmType tmty LEFT JOIN tml.tmType tmt'
+            . ' WHERE tml.id = :byId',
+            $qb->getDQL(),
+        );
     }
 
     public function testFetchByTmAndLicence(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tml')->once()->andReturn($mockQb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchByTmAndLicence(3, 7));
 
-        $conditionTm = $this->mockExprEq('tml.transportManager', ':tmId');
-        $mockQb->shouldReceive('expr->eq')->with('tml.transportManager', ':tmId')->once()->andReturn($conditionTm);
-        $mockQb->shouldReceive('andWhere')->with($conditionTm)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('tmId', 1)->once();
-
-        $conditionLicence = $this->mockExprEq('tml.licence', ':licenceId');
-        $mockQb->shouldReceive('expr->eq')->with('tml.licence', ':licenceId')->once()->andReturn($conditionLicence);
-        $mockQb->shouldReceive('andWhere')->with($conditionLicence)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('licenceId', 2)->once();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
-        $this->assertEquals('RESULT', $this->sut->fetchByTmAndLicence(1, 2));
-    }
-
-    /**
-     * Mock SUT so that can just test the protected method
-     */
-    public function testApplyListFiltersLicence(): void
-    {
-        $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $condition = $this->mockExprEq('tml.licence', ':licence');
-        $mockDqb->shouldReceive('expr->eq')->with('tml.licence', ':licence')->once()
-            ->andReturn($condition);
-        $mockDqb->shouldReceive('where')->with($condition)->once()->andReturnSelf();
-        $mockDqb->shouldReceive('setParameter')->with('licence', 73)->once();
-
-        $query = \Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetList::create(['licence' => 73]);
-        $this->sut->applyListFilters($mockDqb, $query);
-    }
-
-    /**
-     * Mock SUT so that can just test the protected method
-     */
-    public function testApplyListFiltersTransportManager(): void
-    {
-        $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $condition = $this->mockExprEq('tml.transportManager', ':transportManager');
-        $mockDqb->shouldReceive('expr->eq')->with('tml.transportManager', ':transportManager')->once()
-            ->andReturn($condition);
-        $mockDqb->shouldReceive('where')->with($condition)->once()->andReturnSelf();
-        $mockDqb->shouldReceive('setParameter')->with('transportManager', 73)->once();
-
-        $query = \Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetList::create(['transportManager' => 73]);
-        $this->sut->applyListFilters($mockDqb, $query);
+        $this->assertSame(
+            'SELECT tml' . self::FROM
+            . ' WHERE tml.transportManager = :tmId AND tml.licence = :licenceId',
+            $qb->getDQL(),
+        );
     }
 
     public function testFetchByLicence(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tml')->once()->andReturn($mockQb);
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.applications', 'la')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('la.licenceType')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('transportManager', 'tm')->once()->andReturnSelf();
+        $this->assertSame(['RESULTS'], $this->sut->fetchByLicence(7));
 
-        $condition = $this->mockExprEq('tml.licence', ':licence');
-        $mockQb->shouldReceive('expr->eq')->with('tml.licence', ':licence')->once()->andReturn($condition);
-        $mockQb->shouldReceive('where')->with($condition)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('licence', 7)->once();
+        $this->assertSame(
+            'SELECT tml, l, la, w0, tm' . self::FROM
+            . ' LEFT JOIN tml.licence l LEFT JOIN l.applications la'
+            . ' LEFT JOIN la.licenceType w0 LEFT JOIN tml.transportManager tm'
+            . ' WHERE tml.licence = :licence',
+            $qb->getDQL(),
+        );
+    }
 
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
+    /**
+     * Both filters use where() rather than andWhere(), so the second replaces the first — only
+     * one of licence or transport manager can ever apply.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
+    public function testApplyListFilters(array $data, string $expectedWhere, string $parameter): void
+    {
+        $qb = $this->createRealQb();
 
-        $this->assertEquals(['RESULT'], $this->sut->fetchByLicence(7));
+        $this->sut->applyListFilters($qb, GetList::create($data));
+
+        $this->assertSame('SELECT tml' . self::FROM . ' WHERE ' . $expectedWhere, $qb->getDQL());
+        $this->assertSame(73, $qb->getParameter($parameter)->getValue());
+    }
+
+    public static function listFilterProvider(): \Iterator
+    {
+        yield 'licence' => [['licence' => 73], 'tml.licence = :licence', 'licence'];
+        yield 'transport manager' => [
+            ['transportManager' => 73],
+            'tml.transportManager = :transportManager',
+            'transportManager',
+        ];
+    }
+
+    private function expectSoftDeleteableDisabledFor(string $entityClass): void
+    {
+        $filter = m::mock(SoftDeleteableFilter::class);
+        $filter->expects('disableForEntity')->with($entityClass);
+
+        $filters = m::mock(FilterCollection::class);
+        $filters->shouldReceive('isEnabled')->with('soft-deleteable')->andReturnTrue();
+        $filters->shouldReceive('getFilter')->with('soft-deleteable')->andReturn($filter);
+
+        // disableSoftDeleteable() reaches for getFilters() twice: once to test, once to fetch.
+        $this->em->shouldReceive('getFilters')->withNoArgs()->andReturn($filters);
     }
 }

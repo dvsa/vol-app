@@ -4,154 +4,106 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\Query;
-use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
-use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitApplication;
+use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitApplication as Repo;
 use Dvsa\Olcs\Api\Entity\IrhpInterface;
-use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication as IrhpPermitApplicationEntity;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication as Entity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
-use Mockery as m;
-use RuntimeException;
+use Dvsa\OlcsTest\Support\TestQueryBuilder;
 
-/**
- * IRHP Permit Application test
- *
- * @author Jonathan Thomas <jonathan@opalise.co.uk>
- */
 final class IrhpPermitApplicationTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' ipa';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(IrhpPermitApplication::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
+    /**
+     * The stock's validity and country hang two joins above the permit application, so they are
+     * projected alongside it rather than left to lazy loading.
+     */
     public function testGetByIrhpApplicationWithStockInfo(): void
     {
-        $irhpApplicationId = 7;
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('getResult')->withNoArgs()->andReturn(['RESULTS']);
 
-        $expectedResult = [
-            [
-                'irhpPermitApplication' => m::mock(IrhpPermitApplicationEntity::class),
-                'validTo' => '2019-12-31',
-                'countryId' => 'ES'
-            ],
-            [
-                'irhpPermitApplication' => m::mock(IrhpPermitApplicationEntity::class),
-                'validTo' => '2018-12-31',
-                'countryId' => 'IT'
-            ],
-        ];
+        $this->assertSame(['RESULTS'], $this->sut->getByIrhpApplicationWithStockInfo(1));
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
-
-        $queryBuilder->shouldReceive('select')
-            ->with(
-                'ipa as irhpPermitApplication, ips.validTo as validTo, ips.id as stockId, ' .
-                'IDENTITY(ips.country) as countryId'
-            )
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitApplicationEntity::class, 'ipa')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ipa.irhpPermitWindow', 'ipw')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ipw.irhpPermitStock', 'ips')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('IDENTITY(ipa.irhpApplication) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $irhpApplicationId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getResult')
-            ->once()
-            ->andReturn($expectedResult);
-
-        $this->assertEquals(
-            $expectedResult,
-            $this->sut->getByIrhpApplicationWithStockInfo($irhpApplicationId)
+        $this->assertSame(
+            'SELECT ipa as irhpPermitApplication, ips.validTo as validTo, ips.id as stockId,'
+            . ' IDENTITY(ips.country) as countryId'
+            . self::FROM
+            . ' INNER JOIN ipa.irhpPermitWindow ipw INNER JOIN ipw.irhpPermitStock ips'
+            . ' WHERE IDENTITY(ipa.irhpApplication) = ?1',
+            $qb->getDQL(),
         );
+        $this->assertSame(1, $qb->getParameter(1)->getValue());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment')]
+    /**
+     * The emissions category selects which column to sum, so it is interpolated into the DQL. Only
+     * the two mapped categories are allowed through.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('emissionsCategoryProvider')]
     public function testGetRequiredPermitCountWhereApplicationAwaitingPayment(
-        mixed $emissionsCategoryId,
-        mixed $fieldName,
-        mixed $queryReturnValue,
-        mixed $expectedResult
+        string $emissionsCategoryId,
+        string $expectedField,
     ): void {
-        $stockId = 47;
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->withNoArgs()->andReturn(32);
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $this->assertSame(
+            32,
+            $this->sut->getRequiredPermitCountWhereApplicationAwaitingPayment(5, $emissionsCategoryId),
+        );
 
-        $queryBuilder->shouldReceive('select')
-            ->with('sum(ipa.' . $fieldName . ')')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitApplicationEntity::class, 'ipa')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ipa.irhpPermitWindow', 'ipw')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ipa.irhpApplication', 'ia')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('IDENTITY(ipw.irhpPermitStock) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('ia.status = ?2')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $stockId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, IrhpInterface::STATUS_AWAITING_FEE)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getSingleScalarResult')
-            ->once()
-            ->andReturn($queryReturnValue);
+        $this->assertSame(
+            'SELECT sum(ipa.' . $expectedField . ')' . self::FROM
+            . ' INNER JOIN ipa.irhpPermitWindow ipw INNER JOIN ipa.irhpApplication ia'
+            . ' WHERE IDENTITY(ipw.irhpPermitStock) = ?1 AND ia.status = ?2',
+            $qb->getDQL(),
+        );
+        $this->assertSame(5, $qb->getParameter(1)->getValue());
+        $this->assertSame(IrhpInterface::STATUS_AWAITING_FEE, $qb->getParameter(2)->getValue());
+    }
 
-        $this->assertEquals(
-            $expectedResult,
-            $this->sut->getRequiredPermitCountWhereApplicationAwaitingPayment($stockId, $emissionsCategoryId)
+    public static function emissionsCategoryProvider(): \Iterator
+    {
+        yield 'euro 5' => [RefData::EMISSIONS_CATEGORY_EURO5_REF, 'requiredEuro5'];
+        yield 'euro 6' => [RefData::EMISSIONS_CATEGORY_EURO6_REF, 'requiredEuro6'];
+    }
+
+    /** No rows to sum means no permits required, not an unknown count. */
+    public function testGetRequiredPermitCountWithNoMatchingApplications(): void
+    {
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->withNoArgs()->andReturnNull();
+
+        $this->assertSame(
+            0,
+            $this->sut->getRequiredPermitCountWhereApplicationAwaitingPayment(
+                5,
+                RefData::EMISSIONS_CATEGORY_EURO5_REF,
+            ),
         );
     }
 
-    public static function dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment(): \Iterator
+    public function testGetRequiredPermitCountRejectsAnUnmappedEmissionsCategory(): void
     {
-        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, 'requiredEuro5', 33, 33];
-        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, 'requiredEuro6', 33, 33];
-        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, 'requiredEuro5', null, 0];
-        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, 'requiredEuro6', null, 0];
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Emissions category id emissions_cat_nil is not supported');
+
+        $this->sut->getRequiredPermitCountWhereApplicationAwaitingPayment(5, 'emissions_cat_nil');
     }
 
-    public function testGetRequiredPermitCountWhereApplicationAwaitingPaymentBadEmissionsCategoryId(): void
+    private function expectEntityManagerQb(): TestQueryBuilder
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Emissions category id bad_ref_data is not supported');
+        $qb = $this->newRealQb();
 
-        $this->sut->getRequiredPermitCountWhereApplicationAwaitingPayment(47, 'bad_ref_data');
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
+
+        return $qb;
     }
 }

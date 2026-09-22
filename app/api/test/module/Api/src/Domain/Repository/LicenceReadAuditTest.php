@@ -21,7 +21,7 @@ final class LicenceReadAuditTest extends AbstractReadAuditTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(LicenceReadAudit::class, true);
+        $this->setUpRealSut(LicenceReadAudit::class, true);
     }
 
     public function testFetchOneOrMore(): void
@@ -33,7 +33,7 @@ final class LicenceReadAuditTest extends AbstractReadAuditTestCase
     {
         parent::commonTestFetchList(
             ReadLicence::create(['id' => 111]),
-            ' AND m.licence = [[111]]'
+            'licence'
         );
     }
 

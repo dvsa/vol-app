@@ -5,134 +5,92 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository;
+use Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert as Entity;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Transfer\Query\CompaniesHouse\AlertList as AlertListQry;
-use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseAlert::class)]
 final class CompaniesHouseAlertTest extends RepositoryTestCase
 {
-    /** @var  Repository\CompaniesHouseAlert | m\MockInterface */
     protected $sut;
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\CompaniesHouseAlert::class, true);
+        $this->setUpRealSut(Repository\CompaniesHouseAlert::class, true);
     }
 
-    public function testFetchListDefault(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchListProvider')]
+    public function testFetchList(array $data, string $expectedDql): void
     {
-        $mockQb = $this->createMockQb('{QUERY}');
-        $this->mockCreateQueryBuilder($mockQb);
+        $qb = $this->createRealQb();
 
-        $data = [
-            'includeClosed' => '',
-            'typeOfChange' => '',
-            'trafficAreas' => ['A', 'B'],
-        ];
+        $this->sut->expects('fetchPaginatedList')
+            ->with($qb, Query::HYDRATE_ARRAY)
+            ->andReturn(['foo' => 'bar']);
 
-        $query = AlertListQry::create($data);
+        $this->assertSame(['foo' => 'bar'], $this->sut->fetchList(AlertListQry::create($data)));
 
-        $this->sut->shouldReceive('fetchPaginatedList')
-            ->once()
-            ->with($mockQb, Query::HYDRATE_ARRAY)
-            ->andReturn(['foo' => 'bar'])
-            ->shouldReceive('buildDefaultListQuery')
-            ->once();
-
-        $this->assertEquals(['foo' => 'bar'], $this->sut->fetchList($query));
-
-        $expected = '{QUERY} SELECT cha_o, cha_o_ls, cha_o_lst INNER JOIN cha.organisation cha_o INNER JOIN cha_o.licences cha_o_ls WITH cha_o_ls.status IN ([[["lsts_curtailed","lsts_valid","lsts_suspended"]]]) INNER JOIN cha_o_ls.licenceType cha_o_lst AND cha.isClosed = 0 AND cha_o_ls.trafficArea IN([[["A","B"]]])';
-
-        $this->assertEquals($expected, $this->query);
+        $this->assertSame($expectedDql, $qb->getDQL());
+        $this->assertSame(
+            [
+                Licence::LICENCE_STATUS_CURTAILED,
+                Licence::LICENCE_STATUS_VALID,
+                Licence::LICENCE_STATUS_SUSPENDED,
+            ],
+            $qb->getParameter('licenceStatuses')->getValue(),
+        );
+        $this->assertSame(['A', 'B'], $qb->getParameter('trafficAreas')->getValue());
     }
 
-    public function testFetchListIncludeClosedAndFilterType(): void
+    public static function fetchListProvider(): \Iterator
     {
-        $mockQb = $this->createMockQb('{QUERY}');
-        $this->mockCreateQueryBuilder($mockQb);
+        $joins = ' FROM ' . Entity::class . ' cha'
+            . ' INNER JOIN cha.organisation cha_o'
+            . ' INNER JOIN cha_o.licences cha_o_ls WITH cha_o_ls.status IN (:licenceStatuses)'
+            . ' INNER JOIN cha_o_ls.licenceType cha_o_lst';
 
-        $data = [
-            'includeClosed' => 1,
-            'typeOfChange' => 'some_type',
-            'trafficAreas' => ['A', 'B'],
+        // AlertList defaults to sorting by id; the old test stubbed buildDefaultListQuery
+        // out entirely, so the default ordering was never exercised.
+        $order = ' ORDER BY cha.id ASC';
+
+        yield 'default excludes closed alerts' => [
+            ['includeClosed' => '', 'typeOfChange' => '', 'trafficAreas' => ['A', 'B']],
+            'SELECT cha, cha_o, cha_o_ls, cha_o_lst' . $joins
+            . ' WHERE cha.isClosed = 0 AND cha_o_ls.trafficArea IN(:trafficAreas)'
+            . $order,
         ];
 
-        $query = AlertListQry::create($data);
-
-        $this->sut->shouldReceive('fetchPaginatedList')
-            ->once()
-            ->with($mockQb, Query::HYDRATE_ARRAY)
-            ->andReturn(['foo' => 'bar'])
-            ->shouldReceive('buildDefaultListQuery')
-            ->once();
-
-        $this->assertEquals(['foo' => 'bar'], $this->sut->fetchList($query));
-
-        $expected = '{QUERY} SELECT cha_o, cha_o_ls, cha_o_lst INNER JOIN cha.organisation cha_o INNER JOIN cha_o.licences cha_o_ls WITH cha_o_ls.status IN ([[["lsts_curtailed","lsts_valid","lsts_suspended"]]]) INNER JOIN cha_o_ls.licenceType cha_o_lst INNER JOIN cha.reasons r WITH r.reasonType = [[some_type]] AND cha_o_ls.trafficArea IN([[["A","B"]]])';
-
-        $this->assertEquals($expected, $this->query);
+        yield 'includeClosed drops the isClosed filter and adds the reason join' => [
+            ['includeClosed' => 1, 'typeOfChange' => 'some_type', 'trafficAreas' => ['A', 'B']],
+            'SELECT cha, cha_o, cha_o_ls, cha_o_lst' . $joins
+            . ' INNER JOIN cha.reasons r WITH r.reasonType = :reasonType'
+            . ' WHERE cha_o_ls.trafficArea IN(:trafficAreas)'
+            . $order,
+        ];
     }
 
     public function testGetReasonValueOptions(): void
     {
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
+        $qb = $this->newRealQb();
+        $qb->select('r')->from(RefData::class, 'r');
+        $qb->stubbedQuery()->expects('getArrayResult')->andReturn([
+            ['id' => 'reason_1', 'description' => 'Reason 1'],
+            ['id' => 'reason_2', 'description' => 'Reason 2'],
+        ]);
+        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('r')->andReturn($qb);
 
-        $mockRefDataRepo = m::mock(\Doctrine\ORM\EntityRepository::class);
-
-        $this->em
-            ->shouldReceive('getRepository')
-            ->with(RefData::class)
-            ->andReturn($mockRefDataRepo);
-
-        $mockRefDataRepo
-            ->shouldReceive('createQueryBuilder')
-            ->with('r')
-            ->andReturn($qb);
-
-        $where = m::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
-        $qb
-            ->shouldReceive('where')
-            ->once()
-            ->with($where)
-            ->andReturnSelf();
-        $qb
-            ->shouldReceive('expr->eq')
-            ->once()
-            ->with('r.refDataCategoryId', ':CATEGORY_ID')
-            ->andReturn($where);
-        $qb
-            ->shouldReceive('setParameter')
-            ->once()
-            ->with('CATEGORY_ID', 'ch_alert_reason')
-            ->andReturnSelf();
-
-        $result = [
-            [
-                'id' => 'reason_1',
-                'description' => 'Reason 1',
-            ],
-            [
-                'id' => 'reason_2',
-                'description' => 'Reason 2',
-            ],
-        ];
-
-        $qb
-            ->shouldReceive('getQuery->getArrayResult')
-            ->once()
-            ->andReturn($result);
-
-        $this->assertEquals(
-            [
-                'reason_1' => 'Reason 1',
-                'reason_2' => 'Reason 2',
-            ],
-            $this->sut->getReasonValueOptions()
+        $this->assertSame(
+            ['reason_1' => 'Reason 1', 'reason_2' => 'Reason 2'],
+            $this->sut->getReasonValueOptions(),
         );
+
+        $this->assertSame(
+            'SELECT r FROM ' . RefData::class . ' r WHERE r.refDataCategoryId = :CATEGORY_ID',
+            $qb->getDQL(),
+        );
+        $this->assertSame('ch_alert_reason', $qb->getParameter('CATEGORY_ID')->getValue());
     }
 }

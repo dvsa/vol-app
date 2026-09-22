@@ -21,7 +21,7 @@ final class OrganisationReadAuditTest extends AbstractReadAuditTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(OrganisationReadAudit::class, true);
+        $this->setUpRealSut(OrganisationReadAudit::class, true);
     }
 
     public function testFetchOneOrMore(): void
@@ -33,7 +33,7 @@ final class OrganisationReadAuditTest extends AbstractReadAuditTestCase
     {
         parent::commonTestFetchList(
             ReadOrganisation::create(['id' => 111]),
-            ' AND m.organisation = [[111]]'
+            'organisation'
         );
     }
 

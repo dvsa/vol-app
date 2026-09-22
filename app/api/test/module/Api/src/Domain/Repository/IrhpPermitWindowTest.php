@@ -6,412 +6,247 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use DateTime;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\Expr;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitWindow;
-use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow as IrhpPermitWindowEntity;
-use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType;
-use Mockery as m;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
+use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitWindow as Repo;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow as Entity;
 
-/**
- * IRHP Permit Window test
- *
- * @author Jonathan Thomas <jonathan@opalise.co.uk>
- */
 final class IrhpPermitWindowTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' ipw';
+
+    private const string STOCK_JOINS = ' INNER JOIN ipw.irhpPermitStock ips'
+        . ' INNER JOIN ips.irhpPermitType ipt';
+
+    /** The two families of method name their type parameter differently. */
+    private const string OPEN_WHERE = ' WHERE ipt.id = :type'
+        . ' AND ipw.startDate <= :now AND ipw.endDate > :now';
+
+    private const string OPEN_WHERE_BY_TYPE_ID = ' WHERE ipt.id = :irhpPermitTypeId'
+        . ' AND ipw.startDate <= :now AND ipw.endDate > :now';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(IrhpPermitWindow::class);
+        $this->setUpRealSut(Repo::class);
     }
 
+    /**
+     * The parameters are on the left of both comparisons — the window is matched by the date
+     * falling inside it, not the other way round.
+     */
     public function testFetchOpenWindows(): void
     {
-        $expectedResult = [
-            m::mock(IrhpPermitWindowEntity::class),
-            m::mock(IrhpPermitWindowEntity::class),
-        ];
+        $now = new DateTime('2019-01-01');
 
-        $dateTime = m::mock(DateTime::class);
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $irhpPermitStock = 1;
+        $this->assertSame(['RESULTS'], $this->sut->fetchOpenWindows(1, $now));
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $this->assertSame(
+            // The outer andX is flattened into the WHERE; only the BETWEEN keeps brackets.
+            'SELECT ipw' . self::FROM
+            . ' WHERE ?1 = ipw.irhpPermitStock AND (?2 BETWEEN ipw.startDate AND ipw.endDate)',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter(1)->getValue());
+        $this->assertSame($now, $qb->getParameter(2)->getValue());
+    }
 
-        $expr = new Expr();
+    public function testFetchByIrhpPermitStockId(): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $queryBuilder->shouldReceive('expr')
-        ->andReturn($expr);
+        $this->assertSame(['RESULTS'], $this->sut->fetchByIrhpPermitStockId(1));
 
-        $queryBuilder->shouldReceive('select')
-            ->with('ipw')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitWindowEntity::class, 'ipw')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with(m::type(\Doctrine\ORM\Query\Expr\Andx::class))
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $irhpPermitStock)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, $dateTime)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getResult')
-            ->once()
-            ->with(Query::HYDRATE_ARRAY)
-            ->andReturn($expectedResult);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($queryBuilder)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-
-        $this->assertEquals(
-            $expectedResult,
-            $this->sut->fetchOpenWindows($irhpPermitStock, $dateTime)
+        $this->assertSame(
+            'SELECT ipw' . self::FROM . ' WHERE ipw.irhpPermitStock = :irhpPermitStock',
+            $qb->getDQL(),
         );
     }
 
     public function testFetchLastOpenWindowByStockId(): void
     {
-        $expectedResult = m::mock(IrhpPermitWindowEntity::class);
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULT']);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $irhpPermitStockId = 1;
+        $this->assertSame('RESULT', $this->sut->fetchLastOpenWindowByStockId(1));
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
-
-        $expr = new Expr();
-
-        $queryBuilder->shouldReceive('expr')
-        ->andReturn($expr);
-
-        $queryBuilder->shouldReceive('select')
-            ->with('ipw')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitWindowEntity::class, 'ipw')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with(m::type(\Doctrine\ORM\Query\Expr\Andx::class))
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('orderBy')
-            ->with('ipw.id', 'DESC')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, m::type('DateTime'))
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, $irhpPermitStockId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_ARRAY)
-            ->once()
-            ->andReturn([$expectedResult]);
-
-        $this->assertEquals(
-            $expectedResult,
-            $this->sut->fetchLastOpenWindowByStockId($irhpPermitStockId, Query::HYDRATE_ARRAY)
+        $this->assertSame(
+            'SELECT ipw' . self::FROM
+            . ' WHERE (?1 BETWEEN ipw.startDate AND ipw.endDate) AND ipw.irhpPermitStock = ?2'
+            . ' ORDER BY ipw.id DESC',
+            $qb->getDQL(),
         );
     }
 
+    public function testFetchLastOpenWindowByStockIdNotFound(): void
+    {
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getResult')->andReturn([]);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
+
+        $this->expectException(NotFoundException::class);
+
+        $this->sut->fetchLastOpenWindowByStockId(1);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('lastOpenByTypeProvider')]
+    public function testFetchLastOpenWindowByIrhpPermitType(?int $year, string $expectedExtra): void
+    {
+        $now = new DateTime('2019-06-01');
+
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULT']);
+
+        $this->assertSame(
+            'RESULT',
+            $this->sut->fetchLastOpenWindowByIrhpPermitType(1, $now, Query::HYDRATE_OBJECT, $year),
+        );
+
+        $this->assertSame(
+            'SELECT ipw' . self::FROM . self::STOCK_JOINS . self::OPEN_WHERE_BY_TYPE_ID . $expectedExtra
+            . ' ORDER BY ipw.endDate DESC',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getMaxResults());
+    }
+
+    public static function lastOpenByTypeProvider(): \Iterator
+    {
+        yield 'any year' => [null, ''];
+        // A BETWEEN nested inside an AND chain is bracketed.
+        yield 'one year' => [2019, ' AND (ips.validTo BETWEEN :fromDate AND :toDate)'];
+    }
+
+    public function testFetchLastOpenWindowByIrhpPermitTypeNotFound(): void
+    {
+        $this->createRealQb()->stubbedQuery()->expects('getResult')->andReturn([]);
+
+        $this->expectException(NotFoundException::class);
+
+        $this->sut->fetchLastOpenWindowByIrhpPermitType(1, new DateTime());
+    }
+
+    /**
+     * The window is closed if its end date fell inside the period looked back over.
+     */
     public function testFetchWindowsToBeClosed(): void
     {
-        $now = new \DateTime('2018-10-25 13:21:10');
+        $now = new DateTime('2019-06-02 09:00:00');
 
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchWindowsToBeClosed($now));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT ipw' . self::FROM
+            . ' WHERE ipw.endDate >= :periodStart AND ipw.endDate < :periodEnd',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchWindowsToBeClosed($now, '-2 days'));
-
-        $expectedQuery = 'BLAH '
-            . 'AND ipw.endDate >= [[2018-10-23T00:00:00+00:00]] '
-            . 'AND ipw.endDate < [[2018-10-25T13:21:10+00:00]]';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            '2019-06-01 00:00:00',
+            $qb->getParameter('periodStart')->getValue()->format('Y-m-d H:i:s'),
+        );
+        $this->assertSame($now, $qb->getParameter('periodEnd')->getValue());
     }
 
     public function testFetchOpenWindowsByCountry(): void
     {
-        $now = new \DateTime('2018-10-25 13:21:10');
+        $now = new DateTime('2019-01-01');
 
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchOpenWindowsByCountry(1, ['FR', 'DE'], $now));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT DISTINCT ipw' . self::FROM . self::STOCK_JOINS . ' INNER JOIN ips.country c'
+            . self::OPEN_WHERE . ' AND c.id IN(:countries)',
+            $qb->getDQL(),
         );
-        $this->assertEquals(
+        $this->assertSame(['FR', 'DE'], $qb->getParameter('countries')->getValue());
+    }
+
+    /**
+     * Stocks flagged hiddenSs are withheld from self-serve but visible internally.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('internalUserProvider')]
+    public function testFetchOpenWindowsByType(bool $internalUser, string $expectedExtra): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(
             ['RESULTS'],
-            $this->sut->fetchOpenWindowsByCountry(
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
-                ['DE', 'NL'],
-                $now
-            )
+            $this->sut->fetchOpenWindowsByType(1, new DateTime('2019-01-01'), $internalUser),
         );
 
-        $expectedQuery = 'BLAH '
-            . 'SELECT ipw DISTINCT '
-            . 'INNER JOIN ipw.irhpPermitStock ips '
-            . 'INNER JOIN ips.irhpPermitType ipt '
-            . 'INNER JOIN ips.country c '
-            . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
-            . 'AND ipw.startDate <= [[2018-10-25T13:21:10+00:00]] '
-            . 'AND ipw.endDate > [[2018-10-25T13:21:10+00:00]] '
-            . 'AND c.id IN([[["DE","NL"]]])';
-
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchLastOpenWindowByIrhpPermitType(): void
-    {
-        $now = new \DateTime('2018-10-25 13:21:10');
-
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(
-            'RESULTS',
-            $this->sut->fetchLastOpenWindowByIrhpPermitType(
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                $now
-            )
-        );
-
-        $expectedQuery = 'BLAH '
-            . 'SELECT ipw '
-            . 'INNER JOIN ipw.irhpPermitStock ips '
-            . 'INNER JOIN ips.irhpPermitType ipt '
-            . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT . ']] '
-            . 'AND ipw.startDate <= [[2018-10-25T13:21:10+00:00]] '
-            . 'AND ipw.endDate > [[2018-10-25T13:21:10+00:00]] '
-            . 'ORDER BY ipw.endDate DESC '
-            . 'LIMIT 1';
-
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchLastOpenWindowByIrhpPermitTypeWhenNoWindowOpen(): void
-    {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
-        $this->expectExceptionMessage('No window available.');
-
-        $now = new \DateTime('2018-10-25 13:21:10');
-
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn([])
-                ->getMock()
-        );
-
-        $this->sut->fetchLastOpenWindowByIrhpPermitType(
-            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-            $now
+        $this->assertSame(
+            'SELECT ipw' . self::FROM . self::STOCK_JOINS . self::OPEN_WHERE . $expectedExtra,
+            $qb->getDQL(),
         );
     }
 
-    public function testFetchLastOpenWindowByIrhpPermitTypeWithYear(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('internalUserProvider')]
+    public function testFetchOpenWindowsByTypeYear(bool $internalUser, string $expectedExtra): void
     {
-        $now = new \DateTime('2018-10-25 13:21:10');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULTS']);
 
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(
-            'RESULTS',
-            $this->sut->fetchLastOpenWindowByIrhpPermitType(
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                $now,
-                Query::HYDRATE_OBJECT,
-                3030
-            )
-        );
-
-        $expectedQuery = 'BLAH '
-            . 'SELECT ipw '
-            . 'INNER JOIN ipw.irhpPermitStock ips '
-            . 'INNER JOIN ips.irhpPermitType ipt '
-            . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT . ']] '
-            . 'AND ipw.startDate <= [[2018-10-25T13:21:10+00:00]] '
-            . 'AND ipw.endDate > [[2018-10-25T13:21:10+00:00]] '
-            . 'ORDER BY ipw.endDate DESC '
-            . 'LIMIT 1 '
-            . 'AND ips.validTo BETWEEN [[3030-01-01T00:00:00+00:00]] AND [[3030-12-31T23:59:59+00:00]]';
-
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('fetchOpenWindowsByTypeProvider')]
-    public function testFetchOpenWindowsByType(mixed $isInternal, mixed $expected): void
-    {
-        $now = new DateTime('2019-04-08 09:51:10');
-
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(
+        $this->assertSame(
             ['RESULTS'],
-            $this->sut->fetchOpenWindowsByType(IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, $now, $isInternal)
+            $this->sut->fetchOpenWindowsByTypeYear(1, new DateTime('2019-01-01'), 2019, $internalUser),
         );
 
-        $this->assertEquals($expected, $this->query);
-    }
-
-    public static function fetchOpenWindowsByTypeProvider(): \Iterator
-    {
-        yield [false, 'BLAH '
-            . 'SELECT ipw '
-            . 'INNER JOIN ipw.irhpPermitStock ips '
-            . 'INNER JOIN ips.irhpPermitType ipt '
-            . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
-            . 'AND ipw.startDate <= [[2019-04-08T09:51:10+00:00]] '
-            . 'AND ipw.endDate > [[2019-04-08T09:51:10+00:00]] '
-            . 'AND ips.hiddenSs != 1'];
-        yield [true, 'BLAH '
-            . 'SELECT ipw '
-            . 'INNER JOIN ipw.irhpPermitStock ips '
-            . 'INNER JOIN ips.irhpPermitType ipt '
-            . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
-            . 'AND ipw.startDate <= [[2019-04-08T09:51:10+00:00]] '
-            . 'AND ipw.endDate > [[2019-04-08T09:51:10+00:00]]'];
-    }
-
-    public function testFetchOpenWindowsByTypeYear(): void
-    {
-        $now = new DateTime('2019-04-08 09:51:10');
-
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT ipw, ipr, ips' . self::FROM . self::STOCK_JOINS
+            . ' INNER JOIN ips.irhpPermitRanges ipr'
+            . self::OPEN_WHERE
+            . ' AND (ips.validTo BETWEEN :fromDate AND :toDate)'
+            . $expectedExtra,
+            $qb->getDQL(),
         );
+        $this->assertSame(
+            '2019-01-01 00:00:00',
+            $qb->getParameter('fromDate')->getValue()->format('Y-m-d H:i:s'),
+        );
+        $this->assertSame(
+            '2019-12-31 23:59:59',
+            $qb->getParameter('toDate')->getValue()->format('Y-m-d H:i:s'),
+        );
+    }
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
+    public static function internalUserProvider(): \Iterator
+    {
+        yield 'self serve hides hidden stocks' => [false, ' AND ips.hiddenSs <> 1'];
+        yield 'internal sees everything' => [true, ''];
+    }
 
-        $this->assertEquals(
+    #[\PHPUnit\Framework\Attributes\DataProvider('overlappingProvider')]
+    public function testFindOverlappingWindowsByType(?int $excluded, string $expectedExtra): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(
             ['RESULTS'],
-            $this->sut->fetchOpenWindowsByTypeYear(IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, $now, 3000)
+            $this->sut->findOverlappingWindowsByType(1, '2019-01-01', '2019-12-31', $excluded),
         );
 
-        $expectedQuery = 'BLAH '
-            . 'SELECT ipw, ipr, ips '
-            . 'INNER JOIN ipw.irhpPermitStock ips '
-            . 'INNER JOIN ips.irhpPermitType ipt '
-            . 'INNER JOIN ips.irhpPermitRanges ipr '
-            . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT . ']] '
-            . 'AND ipw.startDate <= [[2019-04-08T09:51:10+00:00]] '
-            . 'AND ipw.endDate > [[2019-04-08T09:51:10+00:00]] '
-            . 'AND ips.validTo BETWEEN [[3000-01-01T00:00:00+00:00]] AND [[3000-12-31T23:59:59+00:00]] '
-            . 'AND ips.hiddenSs != 1';
-
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public static function fetchOpenWindowsByTypeYearProvider(): array
-    {
-        return [
-            [false, 'BLAH '
-                . 'SELECT ipw '
-                . 'INNER JOIN ipw.irhpPermitStock ips '
-                . 'INNER JOIN ips.irhpPermitType ipt '
-                . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
-                . 'AND ipw.startDate <= [[2019-04-08T09:51:10+00:00]] '
-                . 'AND ipw.endDate > [[2019-04-08T09:51:10+00:00]] '
-                . 'AND ips.hiddenSs != 1'],
-            [true, 'BLAH '
-                . 'SELECT ipw '
-                . 'INNER JOIN ipw.irhpPermitStock ips '
-                . 'INNER JOIN ips.irhpPermitType ipt '
-                . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
-                . 'AND ipw.startDate <= [[2019-04-08T09:51:10+00:00]] '
-                . 'AND ipw.endDate > [[2019-04-08T09:51:10+00:00]]']
-        ];
-    }
-
-    public function testFindOverlappingWindowsByType(): void
-    {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->once()->andReturn($mockQb);
-        $mockWindow = m::mock(IrhpPermitWindowEntity::class);
-
-        $expr = new \Doctrine\ORM\Query\Expr();
-
-        $mockQb->shouldReceive('expr')
-        ->zeroOrMoreTimes()
-        ->andReturn($expr);
-
-        $mockQb->shouldReceive('orWhere')
-        ->times(3)
-        ->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->times(4)
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getResult')
-            ->withNoArgs()
-            ->once()
-            ->andReturn(['RESULTS']);
-
-        $this->assertEquals(
-            ['RESULTS'],
-            $this->sut->findOverlappingWindowsByType(11, '2029-01-01 11:11:11', '2029-01-02 12:12:12', $mockWindow)
+        $this->assertSame(
+            'SELECT ipw' . self::FROM
+            . ' WHERE ((ipw.startDate BETWEEN :proposedStartDate AND :proposedEndDate)'
+            . ' OR (ipw.endDate BETWEEN :proposedStartDate AND :proposedEndDate)'
+            . ' OR (:proposedStartDate BETWEEN ipw.startDate AND ipw.endDate))'
+            . ' AND ipw.irhpPermitStock = :irhpPermitStock'
+            . $expectedExtra,
+            $qb->getDQL(),
         );
+    }
+
+    public static function overlappingProvider(): \Iterator
+    {
+        yield 'without an excluded window' => [null, ''];
+        yield 'excluding a window' => [7, ' AND ipw.id <> :irhpPermitWindow'];
     }
 }

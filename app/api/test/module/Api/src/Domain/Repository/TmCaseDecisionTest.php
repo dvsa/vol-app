@@ -2,98 +2,51 @@
 
 declare(strict_types=1);
 
-/**
- * TmCaseDecision Repo test
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
-use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
-use Dvsa\Olcs\Api\Entity\Tm\TmCaseDecision;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\Olcs\Api\Domain\Repository\TmCaseDecision as Repo;
+use Dvsa\Olcs\Api\Entity\Tm\TmCaseDecision as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
-/**
- * TmCaseDecision Repo test
- */
 final class TmCaseDecisionTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public static function dpFetchLatestUsingCaseDataProvider(): \Iterator
+    /**
+     * A case can be decided more than once; the newest decision is the one that stands, so the
+     * ordering is what makes this "latest".
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('latestDecisionProvider')]
+    public function testFetchLatestUsingCase(array $results, mixed $expected): void
     {
-        yield 'Decision exists' => [
-            'expected' => 'result',
-            'mockResult' => [0 => 'result']
-        ];
-        yield 'Decision does not exist' => [
-            'expected' => false ,
-            'mockResult' => []
-        ];
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn($results);
+
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getCase')->andReturn(24);
+
+        $this->assertSame($expected, $this->sut->fetchLatestUsingCase($query, Query::HYDRATE_OBJECT));
+
+        $this->assertSame(
+            'SELECT m, w0, w1, w2 FROM ' . Entity::class . ' m'
+            . ' LEFT JOIN m.decision w0 LEFT JOIN m.rehabMeasures w1'
+            . ' LEFT JOIN m.unfitnessReasons w2'
+            . ' WHERE m.case = :byCase'
+            . ' ORDER BY m.id DESC',
+            $qb->getDQL(),
+        );
+        $this->assertSame(24, $qb->getParameter('byCase')->getValue());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchLatestUsingCaseDataProvider')]
-    public function testFetchLatestUsingCase(mixed $expected, mixed $mockResult): void
+    public static function latestDecisionProvider(): \Iterator
     {
-        $case = 24;
-
-        $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getCase')
-            ->andReturn($case);
-
-        /** @var Expr $expr */
-        $expr = new \Doctrine\ORM\Query\Expr();
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $qb->shouldReceive('expr')
-            ->andReturn($expr);
-
-        $qb->shouldReceive('setParameter')
-            ->with('byCase', $case)
-            ->andReturnSelf();
-
-        $qb->shouldReceive('andWhere')
-            ->with(m::type(\Doctrine\ORM\Query\Expr\Comparison::class))
-            ->andReturnSelf();
-
-        $qb->shouldReceive('orderBy')
-            ->with(m::type('string'), 'DESC')
-            ->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($mockResult);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(TmCaseDecision::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchLatestUsingCase($command, Query::HYDRATE_OBJECT);
-
-        $this->assertEquals($expected, $result);
+        yield 'a decision exists' => [['result', 'older'], 'result'];
+        yield 'no decision' => [[], false];
     }
 }

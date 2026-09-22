@@ -5,602 +5,320 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Result;
-use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Domain\Repository\IrhpPermit as Repo;
 use Dvsa\Olcs\Api\Domain\Repository\Query\Permits\ExpireIrhpPermits as ExpireIrhpPermitsQuery;
-use Dvsa\Olcs\Api\Entity\System\RefData;
-use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByIrhpId;
-use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrint;
-use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintConfirm;
-use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByLicence;
-use Dvsa\Olcs\Api\Domain\Repository\IrhpPermit;
-use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit as IrhpPermitEntity;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit as Entity;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange as IrhpPermitRangeEntity;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType as IrhpPermitTypeEntity;
+use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByIrhpId;
+use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByLicence;
+use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrint;
+use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintConfirm;
 use Mockery as m;
 
-/**
- * IRHP Permit test
- *
- * @author Jonathan Thomas <jonathan@opalise.co.uk>
- */
 final class IrhpPermitTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
+    private const string LIST_SELECT = 'SELECT m, w0, ipa';
+
+    private const string LIST_JOINS = ' LEFT JOIN m.status w0 LEFT JOIN m.irhpPermitApplication ipa';
+
+    private const string COUNT_FROM = ' FROM ' . Entity::class . ' ip';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(IrhpPermit::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testGetPermitCountWithoutEmissionsCategoryId(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('permitCountProvider')]
+    public function testGetPermitCount(?string $emissionsCategoryId, string $expectedExtra): void
     {
-        $permitCount = 744;
-        $stockId = 5;
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andReturn(5);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $this->assertSame(5, $this->sut->getPermitCount(1, $emissionsCategoryId));
 
-        $queryBuilder->shouldReceive('select')
-            ->with('count(ip.id)')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitEntity::class, 'ip')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ip.irhpPermitRange', 'ipr')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('IDENTITY(ipr.irhpPermitStock) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('ipr.ssReserve = false')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('ipr.lostReplacement = false')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $stockId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getSingleScalarResult')
-            ->once()
-            ->andReturn($permitCount);
-
-        $this->assertEquals(
-            $permitCount,
-            $this->sut->getPermitCount($stockId)
+        $this->assertSame(
+            'SELECT count(ip.id)' . self::COUNT_FROM . ' INNER JOIN ip.irhpPermitRange ipr'
+            . ' WHERE IDENTITY(ipr.irhpPermitStock) = ?1'
+            . ' AND ipr.ssReserve = false AND ipr.lostReplacement = false'
+            . $expectedExtra,
+            $qb->getDQL(),
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPermitCountWithEmissionsCategoryId')]
-    public function testGetPermitCountWithEmissionsCategoryId(mixed $emissionsCategoryId): void
+    public static function permitCountProvider(): \Iterator
     {
-        $permitCount = 744;
-        $stockId = 5;
-
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
-
-        $queryBuilder->shouldReceive('select')
-            ->with('count(ip.id)')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitEntity::class, 'ip')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ip.irhpPermitRange', 'ipr')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('IDENTITY(ipr.irhpPermitStock) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('ipr.ssReserve = false')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('ipr.lostReplacement = false')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $stockId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('IDENTITY(ipr.emissionsCategory) = ?2')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, $emissionsCategoryId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getSingleScalarResult')
-            ->once()
-            ->andReturn($permitCount);
-
-        $this->assertEquals(
-            $permitCount,
-            $this->sut->getPermitCount($stockId, $emissionsCategoryId)
-        );
-    }
-
-    public static function dpTestGetPermitCountWithEmissionsCategoryId(): \Iterator
-    {
-        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF];
-        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF];
+        yield 'all emissions categories' => [null, ''];
+        yield 'one emissions category' => [
+            RefData::EMISSIONS_CATEGORY_EURO5_REF,
+            ' AND IDENTITY(ipr.emissionsCategory) = ?2',
+        ];
     }
 
     public function testGetPermitCountByRange(): void
     {
-        $permitCount = 200;
-        $rangeId = 3;
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andReturn(5);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $this->assertSame(5, $this->sut->getPermitCountByRange(1));
 
-        $queryBuilder->shouldReceive('select')
-            ->with('count(ip.id)')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitEntity::class, 'ip')
-            ->once()
-            ->andReturnSelf()
-           ->shouldReceive('where')
-            ->with('IDENTITY(ip.irhpPermitRange) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $rangeId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getSingleScalarResult')
-            ->once()
-            ->andReturn($permitCount);
-
-        $this->assertEquals(
-            $permitCount,
-            $this->sut->getPermitCountByRange($rangeId)
+        $this->assertSame(
+            'SELECT count(ip.id)' . self::COUNT_FROM . ' WHERE IDENTITY(ip.irhpPermitRange) = ?1',
+            $qb->getDQL(),
         );
     }
 
     public function testGetEcmtAnnualPermitCountByLicenceAndStockEndYear(): void
     {
-        $licenceId = 47;
-        $stockEndYear = 2023;
-        $permitCount = 55;
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andReturn(5);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $this->assertSame(5, $this->sut->getEcmtAnnualPermitCountByLicenceAndStockEndYear(7, 2019));
 
-        $queryBuilder->shouldReceive('select')
-            ->with('count(ip.id)')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitEntity::class, 'ip')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ip.irhpPermitRange', 'ipr')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ipr.irhpPermitStock', 'ips')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ip.irhpPermitApplication', 'ipa')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ipa.irhpApplication', 'ia')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('IDENTITY(ia.licence) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('YEAR(ips.validTo) = ?2')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('IDENTITY(ips.irhpPermitType) = ?3')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $licenceId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, $stockEndYear)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(3, IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getSingleScalarResult')
-            ->once()
-            ->andReturn($permitCount);
-
-        $this->assertEquals(
-            $permitCount,
-            $this->sut->getEcmtAnnualPermitCountByLicenceAndStockEndYear($licenceId, $stockEndYear)
+        $this->assertSame(
+            'SELECT count(ip.id)' . self::COUNT_FROM
+            . ' INNER JOIN ip.irhpPermitRange ipr INNER JOIN ipr.irhpPermitStock ips'
+            . ' INNER JOIN ip.irhpPermitApplication ipa INNER JOIN ipa.irhpApplication ia'
+            . ' WHERE IDENTITY(ia.licence) = ?1 AND YEAR(ips.validTo) = ?2'
+            . ' AND IDENTITY(ips.irhpPermitType) = ?3',
+            $qb->getDQL(),
+        );
+        $this->assertSame(
+            IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT,
+            $qb->getParameter(3)->getValue(),
         );
     }
 
     public function testGetAssignedPermitNumbersByRange(): void
     {
-        $rangeId = 45;
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getScalarResult')->andReturn([
+            ['permitNumber' => 1],
+            ['permitNumber' => 2],
+        ]);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $this->assertSame([1, 2], $this->sut->getAssignedPermitNumbersByRange(1));
 
-        $unflattenedPermitNumbers = [
-            ['permitNumber' => 4],
-            ['permitNumber' => 5],
-            ['permitNumber' => 7],
-            ['permitNumber' => 8],
+        $this->assertSame(
+            'SELECT ip.permitNumber' . self::COUNT_FROM . ' WHERE IDENTITY(ip.irhpPermitRange) = ?1',
+            $qb->getDQL(),
+        );
+    }
+
+    public function testFetchByNumberAndRange(): void
+    {
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(['RESULTS']);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchByNumberAndRange(1, 2));
+
+        $this->assertSame(
+            'SELECT ip' . self::COUNT_FROM
+            . ' WHERE ip.permitNumber = ?1 AND ip.irhpPermitRange = ?2',
+            $qb->getDQL(),
+        );
+    }
+
+    /**
+     * The irhpApplication join is not needed by the filter itself; it exists so the table can be
+     * sorted by application id later.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('readyToPrintProvider')]
+    public function testFetchListForReadyToPrint(array $data, string $expectedTail): void
+    {
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchList(ReadyToPrint::create($data)));
+
+        $this->assertSame(self::LIST_SELECT . self::FROM . self::LIST_JOINS . $expectedTail, $qb->getDQL());
+        $this->assertSame(Entity::$readyToPrintStatuses, $qb->getParameter('statuses')->getValue());
+    }
+
+    public static function readyToPrintProvider(): \Iterator
+    {
+        $applicationJoin = ' INNER JOIN ipa.irhpApplication ia';
+
+        yield 'no stock' => [[], $applicationJoin . ' WHERE m.status IN(:statuses)'];
+
+        yield 'with stock' => [
+            ['irhpPermitStock' => 100],
+            $applicationJoin . ' INNER JOIN m.irhpPermitRange ipr INNER JOIN ipr.irhpPermitStock ips'
+            . ' WHERE ips.id = :stockId AND m.status IN(:statuses)',
         ];
+    }
 
-        $flattenedPermitNumbers = [4, 5, 7, 8];
+    /**
+     * Each bilateral range type maps to a journey and cabotage pair.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('rangeTypeProvider')]
+    public function testFetchListForReadyToPrintWithStockAndRangeType(
+        string $rangeType,
+        string $expectedJourney,
+        bool $expectedCabotage,
+    ): void {
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
 
-        $queryBuilder->shouldReceive('select')
-            ->with('ip.permitNumber')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitEntity::class, 'ip')
-            ->once()
-            ->andReturnSelf()
-           ->shouldReceive('where')
-            ->with('IDENTITY(ip.irhpPermitRange) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $rangeId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getScalarResult')
-            ->once()
-            ->andReturn($unflattenedPermitNumbers);
+        $query = ReadyToPrint::create(['irhpPermitStock' => 100, 'irhpPermitRangeType' => $rangeType]);
 
-        $this->assertEquals(
-            $flattenedPermitNumbers,
-            $this->sut->getAssignedPermitNumbersByRange($rangeId)
+        $this->assertSame(['RESULTS'], $this->sut->fetchList($query));
+
+        $this->assertStringContainsString(
+            'AND ipr.journey = :journey AND ipr.cabotage = :cabotage',
+            $qb->getDQL(),
         );
+        $this->assertSame($expectedJourney, $qb->getParameter('journey')->getValue());
+        $this->assertSame($expectedCabotage, $qb->getParameter('cabotage')->getValue());
     }
 
-    public function testFetchListForReadyToPrint(): void
+    public static function rangeTypeProvider(): \Iterator
     {
-        $this->setUpSut(IrhpPermit::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
-
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('irhpPermitApplication', 'ipa')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
-
-        $query = ReadyToPrint::create([]);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'INNER JOIN ipa.irhpApplication ia '
-            . 'AND m.status IN([[['
-                . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
-                . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]])';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchListForReadyToPrintWithStock(): void
-    {
-        $this->setUpSut(IrhpPermit::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
-
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('irhpPermitApplication', 'ipa')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
-
-        $query = ReadyToPrint::create(['irhpPermitStock' => 100]);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'INNER JOIN ipa.irhpApplication ia '
-            . 'INNER JOIN m.irhpPermitRange ipr '
-            . 'INNER JOIN ipr.irhpPermitStock ips '
-            . 'AND ips.id = [[100]] '
-            . 'AND m.status IN([[['
-                . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
-                . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]])';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchListForReadyToPrintWithStockAndRangeType')]
-    public function testFetchListForReadyToPrintWithStockAndRangeType(mixed $irhpPermitRangeType, mixed $expectedJourney, mixed $expectedCabotage): void
-    {
-        $this->setUpSut(IrhpPermit::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
-
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('irhpPermitApplication', 'ipa')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
-
-        $query = ReadyToPrint::create(
-            [
-                'irhpPermitStock' => 100,
-                'irhpPermitRangeType' => $irhpPermitRangeType,
-            ]
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'INNER JOIN ipa.irhpApplication ia '
-            . 'INNER JOIN m.irhpPermitRange ipr '
-            . 'INNER JOIN ipr.irhpPermitStock ips '
-            . 'AND ips.id = [[100]] '
-            . 'AND ipr.journey = [[' . $expectedJourney . ']] '
-            . 'AND ipr.cabotage = [[' . $expectedCabotage . ']] '
-            . 'AND m.status IN([[['
-                . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
-                . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]])';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public static function dpFetchListForReadyToPrintWithStockAndRangeType(): \Iterator
-    {
-        yield [
+        yield 'standard single' => [
             IrhpPermitRangeEntity::BILATERAL_TYPE_STANDARD_SINGLE,
             RefData::JOURNEY_SINGLE,
-            'false',
+            false,
         ];
-        yield [
+        yield 'standard multiple' => [
             IrhpPermitRangeEntity::BILATERAL_TYPE_STANDARD_MULTIPLE,
             RefData::JOURNEY_MULTIPLE,
-            'false',
+            false,
         ];
-        yield [
+        yield 'cabotage single' => [
             IrhpPermitRangeEntity::BILATERAL_TYPE_CABOTAGE_SINGLE,
             RefData::JOURNEY_SINGLE,
-            'true',
+            true,
         ];
-        yield [
+        yield 'cabotage multiple' => [
             IrhpPermitRangeEntity::BILATERAL_TYPE_CABOTAGE_MULTIPLE,
             RefData::JOURNEY_MULTIPLE,
-            'true',
+            true,
         ];
     }
 
     public function testFetchListForReadyToPrintConfirm(): void
     {
-        $this->setUpSut(IrhpPermit::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
 
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('irhpPermitApplication', 'ipa')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->andReturnSelf();
-
-        $query = ReadyToPrintConfirm::create(['ids' => [1, 2, 3]]);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'AND m.id IN([[[1,2,3]]]) '
-            . 'ORDER BY m.permitNumber ASC';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchByNumberAndRange(): void
-    {
-        $permitNumber = 1500;
-        $rangeId = 7;
-
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
-
-        $queryBuilder->shouldReceive('select')
-            ->with('ip')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitEntity::class, 'ip')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('ip.permitNumber = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('ip.irhpPermitRange = ?2')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $permitNumber)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, $rangeId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->execute')
-            ->once()
-            ->andReturn([]);
-
-        $this->assertEquals(
-            [],
-            $this->sut->fetchByNumberAndRange($permitNumber, $rangeId)
+        $this->assertSame(
+            ['RESULTS'],
+            $this->sut->fetchList(ReadyToPrintConfirm::create(['ids' => [1, 2, 3]])),
         );
-    }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchListByLicence')]
-    public function testFetchListByLicence(mixed $status, mixed $validOnly, mixed $expectedStatuses): void
-    {
-        $this->setUpSut(IrhpPermit::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
-
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('irhpPermitApplication', 'ipa')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
-
-        $query = GetListByLicence::create(
-            [
-                'licence' => 7,
-                'irhpPermitType' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL,
-                'page' => 1,
-                'limit' => 10,
-                'status' => $status,
-                'validOnly' => $validOnly,
-            ]
+        $this->assertSame(
+            self::LIST_SELECT . self::FROM . self::LIST_JOINS
+            . ' WHERE m.id IN(:ids)'
+            . ' ORDER BY m.permitNumber ASC',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'INNER JOIN ipa.irhpApplication ia '
-            . 'INNER JOIN m.irhpPermitRange ipr '
-            . 'INNER JOIN ipr.irhpPermitStock ips '
-            . 'LEFT JOIN ips.country ipc '
-            . 'AND ia.licence = [[7]] '
-            . 'AND m.status IN([[["' . implode('","', $expectedStatuses) . '"]]]) '
-            . 'AND ips.irhpPermitType = [[' . IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
-            . 'ORDER BY ipc.countryDesc ASC '
-            . 'ORDER BY m.expiryDate ASC '
-            . 'ORDER BY ipa.id ASC '
-            . 'ORDER BY m.permitNumber ASC';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public static function dpFetchListByLicence(): \Iterator
-    {
-        yield 'valid only' => [null, true, IrhpPermitEntity::$validStatuses];
-        yield 'all' => [null, false, IrhpPermitEntity::ALL_STATUSES];
-        yield 'specific' => [IrhpPermitEntity::STATUS_PRINTING, null, [IrhpPermitEntity::STATUS_PRINTING]];
-    }
-
-    public function testGetLivePermitCountsGroupedByStock(): void
-    {
-        $licenceId = 47;
-
-        $livePermitCounts = [
-            [
-                'irhpPermitStockId' => 7,
-                'irhpPermitCount' => 8
-            ],
-            [
-                'irhpPermitStockId' => 5,
-                'irhpPermitCount' => 12
-            ]
-        ];
-
-        $dbalResult = m::mock(Result::class);
-        $dbalResult->expects('fetchAllAssociative')
-            ->andReturn($livePermitCounts);
-
-        $connection = m::mock(Connection::class);
-        $connection->expects('executeQuery')
-            ->with(
-                'select ips.id AS irhpPermitStockId, ' .
-                'count(ip.id) AS irhpPermitCount ' .
-                'from irhp_permit ip ' .
-                'inner join irhp_permit_application ipa ON ip.irhp_permit_application_id = ipa.id ' .
-                'and ip.status in (?) ' .
-                'inner join irhp_application ia ON ipa.irhp_application_id = ia.id ' .
-                'inner join irhp_permit_window ipw ON ipa.irhp_permit_window_id = ipw.id ' .
-                'inner join irhp_permit_stock ips ON ipw.irhp_permit_stock_id = ips.id ' .
-                'where ia.licence_id = ? ' .
-                'group BY ips.id',
-                [
-                    [
-                        IrhpPermitEntity::STATUS_PENDING,
-                        IrhpPermitEntity::STATUS_AWAITING_PRINTING,
-                        IrhpPermitEntity::STATUS_PRINTING,
-                        IrhpPermitEntity::STATUS_PRINTED
-                    ],
-                    $licenceId
-                ],
-                [
-                    ArrayParameterType::STRING,
-                    ParameterType::INTEGER
-                ]
-            )
-            ->andReturn($dbalResult);
-
-        $this->em->shouldReceive('getConnection')->once()->andReturn($connection);
-
-        $this->assertEquals(
-            $livePermitCounts,
-            $this->sut->getLivePermitCountsGroupedByStock($licenceId)
-        );
+        $this->assertSame([1, 2, 3], $qb->getParameter('ids')->getValue());
     }
 
     public function testFetchListByIrhpId(): void
     {
-        $this->setUpSut(IrhpPermit::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
-
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('irhpPermitApplication', 'ipa')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
 
         $query = GetListByIrhpId::create(['irhpApplication' => 2, 'page' => 1, 'limit' => 10]);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
 
-        $expectedQuery = 'BLAH '
-            . 'AND ipa.irhpApplication = [[2]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(['RESULTS'], $this->sut->fetchList($query));
+
+        $this->assertSame(
+            self::LIST_SELECT . self::FROM . self::LIST_JOINS
+            . ' WHERE ipa.irhpApplication = :irhpId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(2, $qb->getParameter('irhpId')->getValue());
+    }
+
+    /**
+     * A specific status wins over validOnly, which in turn narrows the default of all statuses.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('listByLicenceProvider')]
+    public function testFetchListByLicence(?string $status, ?bool $validOnly, array $expectedStatuses): void
+    {
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
+
+        $query = GetListByLicence::create([
+            'licence' => 7,
+            'irhpPermitType' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL,
+            'page' => 1,
+            'limit' => 10,
+            'status' => $status,
+            'validOnly' => $validOnly,
+        ]);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchList($query));
+
+        $this->assertSame(
+            self::LIST_SELECT . self::FROM . self::LIST_JOINS
+            . ' INNER JOIN ipa.irhpApplication ia INNER JOIN m.irhpPermitRange ipr'
+            . ' INNER JOIN ipr.irhpPermitStock ips LEFT JOIN ips.country ipc'
+            . ' WHERE ia.licence = :licenceId AND m.status IN(:statuses)'
+            . ' AND ips.irhpPermitType = :irhpPermitTypeId'
+            . ' ORDER BY ipc.countryDesc ASC, m.expiryDate ASC, ipa.id ASC, m.permitNumber ASC',
+            $qb->getDQL(),
+        );
+        $this->assertSame($expectedStatuses, $qb->getParameter('statuses')->getValue());
+    }
+
+    public static function listByLicenceProvider(): \Iterator
+    {
+        yield 'valid only' => [null, true, Entity::$validStatuses];
+        yield 'all' => [null, false, Entity::ALL_STATUSES];
+        yield 'specific status' => [Entity::STATUS_PRINTING, null, [Entity::STATUS_PRINTING]];
+    }
+
+    public function testGetLivePermitCountsGroupedByStock(): void
+    {
+        $rows = [['irhpPermitStockId' => 7, 'irhpPermitCount' => 8]];
+
+        $dbalResult = m::mock(Result::class);
+        $dbalResult->expects('fetchAllAssociative')->andReturn($rows);
+
+        $connection = m::mock(Connection::class);
+        $connection->expects('executeQuery')
+            ->with(
+                m::type('string'),
+                [
+                    [
+                        Entity::STATUS_PENDING,
+                        Entity::STATUS_AWAITING_PRINTING,
+                        Entity::STATUS_PRINTING,
+                        Entity::STATUS_PRINTED,
+                    ],
+                    7,
+                ],
+                [ArrayParameterType::STRING, ParameterType::INTEGER],
+            )
+            ->andReturn($dbalResult);
+
+        $this->em->expects('getConnection')->withNoArgs()->andReturn($connection);
+
+        $this->assertSame($rows, $this->sut->getLivePermitCountsGroupedByStock(7));
     }
 
     public function testMarkAsExpired(): void
     {
-        $this->expectQueryWithData(ExpireIrhpPermitsQuery::class, []);
+        $query = m::mock();
+        $query->expects('execute')->with([]);
+
+        $this->dbQueryService->expects('get')->with(ExpireIrhpPermitsQuery::class)->andReturn($query);
+
         $this->sut->markAsExpired();
     }
 }
