@@ -8,6 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as Repo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
+use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\OlcsTest\Support\TestQueryBuilder;
 use Symfony\Component\Uid\UuidV7;
 
@@ -239,90 +240,66 @@ final class DocumentAnalysisTest extends RepositoryTestCase
 
     public function testFetchAnalysesFiltersByApplicationOnly(): void
     {
-        $query = \Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList::create(['application' => 8]);
+        $query = DocumentAnalysisList::create(['application' => 8]);
+        $qb = $this->createRealQb()->willReturn(['row1', 'row2']);
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('andWhere')
-            ->with('IDENTITY(da.application) = :applicationId')
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('applicationId', 8)->once()->andReturnSelf();
-        $mockQb->shouldReceive('orderBy')->with('da.createdOn', 'DESC')->once()->andReturnSelf();
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['row1', 'row2']);
+        $this->assertSame(['row1', 'row2'], $this->sut->fetchAnalyses($query));
 
-        $sut = m::mock(DocumentAnalysisRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-        $sut->shouldReceive('createQueryBuilder')->once()->andReturn($mockQb);
-
-        $this->assertSame(['row1', 'row2'], $sut->fetchAnalyses($query));
+        // Assert the final query so an extra filter or missing ordering cannot pass unnoticed.
+        $this->assertSame(
+            'SELECT da' . self::FROM . ' WHERE IDENTITY(da.application) = :applicationId ORDER BY da.createdOn DESC',
+            $qb->getDQL(),
+        );
+        $this->assertCount(1, $qb->getParameters());
+        $this->assertSame(8, $qb->getParameter('applicationId')->getValue());
     }
 
     public function testFetchAnalysesFiltersByDocumentOnly(): void
     {
-        $query = \Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList::create(['document' => 123]);
+        $query = DocumentAnalysisList::create(['document' => 123]);
+        $qb = $this->createRealQb()->willReturn([]);
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('andWhere')
-            ->with('IDENTITY(da.document) = :documentId')
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('documentId', 123)->once()->andReturnSelf();
-        $mockQb->shouldReceive('orderBy')->once()->andReturnSelf();
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn([]);
+        $this->assertSame([], $this->sut->fetchAnalyses($query));
 
-        $sut = m::mock(DocumentAnalysisRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-        $sut->shouldReceive('createQueryBuilder')->once()->andReturn($mockQb);
-
-        $this->assertSame([], $sut->fetchAnalyses($query));
+        $this->assertSame(
+            'SELECT da' . self::FROM . ' WHERE IDENTITY(da.document) = :documentId ORDER BY da.createdOn DESC',
+            $qb->getDQL(),
+        );
+        $this->assertCount(1, $qb->getParameters());
+        $this->assertSame(123, $qb->getParameter('documentId')->getValue());
     }
 
     public function testFetchAnalysesFiltersByStatusOnly(): void
     {
-        $query = \Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList::create(['status' => 'PENDING']);
+        $query = DocumentAnalysisList::create(['status' => Entity::STATUS_PENDING]);
+        $qb = $this->createRealQb()->willReturn([]);
 
-        $statusEq = new Comparison('da.status', '=', ':status');
+        $this->assertSame([], $this->sut->fetchAnalyses($query));
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('da.status', ':status')->once()->andReturn($statusEq);
-        $mockQb->shouldReceive('andWhere')->with($statusEq)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('status', 'PENDING')->once()->andReturnSelf();
-        $mockQb->shouldReceive('orderBy')->once()->andReturnSelf();
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn([]);
-
-        $sut = m::mock(DocumentAnalysisRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-        $sut->shouldReceive('createQueryBuilder')->once()->andReturn($mockQb);
-
-        $this->assertSame([], $sut->fetchAnalyses($query));
+        $this->assertSame(
+            'SELECT da' . self::FROM . ' WHERE da.status = :status ORDER BY da.createdOn DESC',
+            $qb->getDQL(),
+        );
+        $this->assertCount(1, $qb->getParameters());
+        $this->assertSame(Entity::STATUS_PENDING, $qb->getParameter('status')->getValue());
     }
 
     public function testFetchAnalysesWithNoQueryOnlyOrders(): void
     {
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('andWhere')->never();
-        $mockQb->shouldReceive('setParameter')->never();
-        $mockQb->shouldReceive('orderBy')->with('da.createdOn', 'DESC')->once()->andReturnSelf();
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn([]);
+        $qb = $this->createRealQb()->willReturn([]);
 
-        $sut = m::mock(DocumentAnalysisRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-        $sut->shouldReceive('createQueryBuilder')->once()->andReturn($mockQb);
+        $this->assertSame([], $this->sut->fetchAnalyses(null));
 
-        $this->assertSame([], $sut->fetchAnalyses(null));
+        $this->assertSame('SELECT da' . self::FROM . ' ORDER BY da.createdOn DESC', $qb->getDQL());
+        $this->assertCount(0, $qb->getParameters());
     }
 
     public function testFetchAnalysesConvertsIteratorResultToArray(): void
     {
-        $query = \Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList::create(['application' => 8]);
-
+        $query = DocumentAnalysisList::create(['application' => 8]);
         $iterator = new \ArrayIterator(['row1', 'row2']);
+        $this->createRealQb()->willReturn($iterator);
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->once()->andReturnSelf();
-        $mockQb->shouldReceive('orderBy')->once()->andReturnSelf();
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn($iterator);
-
-        $sut = m::mock(DocumentAnalysisRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-        $sut->shouldReceive('createQueryBuilder')->once()->andReturn($mockQb);
-
-        $this->assertSame(['row1', 'row2'], $sut->fetchAnalyses($query));
+        $this->assertSame(['row1', 'row2'], $this->sut->fetchAnalyses($query));
     }
 }
