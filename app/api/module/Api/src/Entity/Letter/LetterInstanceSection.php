@@ -37,6 +37,10 @@ class LetterInstanceSection extends AbstractLetterInstanceSection
             return $content;
         }
 
+        if (!empty($this->generatedContent) && is_array($this->generatedContent)) {
+            return $this->generatedContent;
+        }
+
         return $this->letterSectionVersion->getDefaultContentAsArray() ?: [];
     }
 
