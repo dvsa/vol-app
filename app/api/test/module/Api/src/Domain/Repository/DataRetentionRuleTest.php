@@ -4,223 +4,89 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\DBAL\Driver\PDO\Result;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Domain\Repository\DataRetentionRule;
+use Dvsa\Olcs\Api\Domain\Repository\DataRetentionRule as Repo;
+use Dvsa\Olcs\Api\Entity\DataRetentionRule as Entity;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleAdmin;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList;
 use Mockery as m;
 
 final class DataRetentionRuleTest extends RepositoryTestCase
 {
-    /** @var DataRetentionRule */
     protected $sut;
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(DataRetentionRule::class, true);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testFetchEnabledRules(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('rulesProvider')]
+    public function testFetchRules(string $method, array $args, string $expectedDql): void
     {
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $expr1 = $this->mockExprEq('m.isEnabled', 1);
-        $qb->shouldReceive('expr->eq')->with('m.isEnabled', 1)->once()->andReturn($expr1);
-
-        $expr2 = 'm.deletedDate IS NULL';
-        $qb->shouldReceive('expr->isNull')
-            ->with('m.deletedDate')
-            ->once()
-            ->andReturn($expr2);
-
-        $qb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
-        $qb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['RESULT']);
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->andReturnSelf()
-            ->shouldReceive('paginate')
-            ->andReturnSelf();
+        $qb = $this->createRealQb()->willReturn(['RESULT']);
 
         $paginator = m::mock();
         $paginator->shouldReceive('count')->withNoArgs()->andReturn(1);
-        $paginator->shouldReceive('getIterator')->andReturn('result');
-
         $this->sut->shouldReceive('getPaginator')->andReturn($paginator);
 
-        $result = $this->sut->fetchEnabledRules();
-
         $this->assertSame(
-            [
-                'results' => ['RESULT'],
-                'count' => 1
-            ],
-            $result
+            ['results' => ['RESULT'], 'count' => 1],
+            $this->sut->{$method}(...$args),
         );
+
+        $this->assertSame($expectedDql, $qb->getDQL());
     }
 
-    public function testFetchEnabledRulesWithQueryBuilderAndIsReview(): void
+    public static function rulesProvider(): \Iterator
     {
-        $query = RuleList::create(
-            ['sort' => 'id', 'order' => 'DESC']
-        );
+        // Both methods only modifyQuery() up front; withRefdata() (which joins actionType as
+        // w0) runs inside buildDefaultListQuery, and that is reached only when a query is given.
+        $bare = 'SELECT m FROM ' . Entity::class . ' m';
+        $joined = 'SELECT m, w0 FROM ' . Entity::class . ' m LEFT JOIN m.actionType w0';
+        $enabled = ' WHERE m.isEnabled = 1 AND m.deletedDate IS NULL';
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $expr1 = $this->mockExprEq('m.isEnabled', 1);
-        $qb->shouldReceive('expr->eq')->with('m.isEnabled', 1)->once()->andReturn($expr1);
+        yield 'enabled rules' => ['fetchEnabledRules', [], $bare . $enabled];
 
-        $expr2 = $this->mockExprEq('m.actionType', ':actionType');
-        $qb->shouldReceive('expr->eq')->with('m.actionType', ':actionType')->once()->andReturn($expr2);
+        yield 'enabled review rules with a list query' => [
+            'fetchEnabledRules',
+            [RuleList::create(['sort' => 'id', 'order' => 'DESC']), true],
+            $joined . $enabled . ' AND m.actionType = :actionType ORDER BY m.id DESC',
+        ];
 
-        $expr3 = 'm.deletedDate IS NULL';
-        $qb->shouldReceive('expr->isNull')
-            ->with('m.deletedDate')
-            ->once()
-            ->andReturn($expr3);
+        yield 'all rules' => ['fetchAllRules', [], $bare];
 
-        $qb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
-        $qb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
-        $qb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('actionType', 'Review')->once()->andReturnSelf();
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['RESULT']);
+        yield 'all rules with a list query' => [
+            'fetchAllRules',
+            [RuleAdmin::create(['sort' => 'id', 'order' => 'DESC'])],
+            $joined . ' ORDER BY m.id DESC',
+        ];
+    }
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->andReturnSelf()
-            ->shouldReceive('paginate')
-            ->andReturnSelf();
+    public function testFetchEnabledRulesBindsTheReviewActionType(): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULT']);
 
         $paginator = m::mock();
         $paginator->shouldReceive('count')->withNoArgs()->andReturn(1);
-        $paginator->shouldReceive('getIterator')->andReturn('result');
-
         $this->sut->shouldReceive('getPaginator')->andReturn($paginator);
 
-        $result = $this->sut->fetchEnabledRules($query, true);
+        $this->sut->fetchEnabledRules(RuleList::create(['sort' => 'id', 'order' => 'DESC']), true);
 
-        $this->assertSame(
-            [
-                'results' => ['RESULT'],
-                'count' => 1
-            ],
-            $result
-        );
-    }
-
-    public function testFetchAllRules(): void
-    {
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['RESULT']);
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->andReturnSelf()
-            ->shouldReceive('paginate')
-            ->andReturnSelf();
-
-        $paginator = m::mock();
-        $paginator->shouldReceive('count')->withNoArgs()->andReturn(1);
-        $paginator->shouldReceive('getIterator')->andReturn('result');
-
-        $this->sut->shouldReceive('getPaginator')->andReturn($paginator);
-
-        $result = $this->sut->fetchAllRules();
-
-        $this->assertSame(
-            [
-                'results' => ['RESULT'],
-                'count' => 1
-            ],
-            $result
-        );
-    }
-
-    public function testFetchAllNotDeletedRulesWithQuery(): void
-    {
-        $query = RuleAdmin::create(
-            ['sort' => 'id', 'order' => 'DESC']
-        );
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['RESULT']);
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->andReturnSelf()
-            ->shouldReceive('paginate')
-            ->andReturnSelf();
-
-        $paginator = m::mock();
-        $paginator->shouldReceive('count')->withNoArgs()->andReturn(1);
-        $paginator->shouldReceive('getIterator')->andReturn('result');
-
-        $this->sut->shouldReceive('getPaginator')->andReturn($paginator);
-
-        $result = $this->sut->fetchAllRules($query);
-
-        $this->assertSame(
-            [
-                'results' => ['RESULT'],
-                'count' => 1
-            ],
-            $result
-        );
+        $this->assertSame('Review', $qb->getParameter('actionType')->getValue());
     }
 
     public function testRunProc(): void
     {
-        //doctrine pdo result is marked final
-        $result = true;
-
-        $mockedStatement = m::mock(\PDOStatement::class);
-        $mockedStatement
-            ->shouldReceive('rowCount')
-            ->andReturn(12)
+        $statement = m::mock(\PDOStatement::class);
+        $statement->shouldReceive('rowCount')->andReturn(12)
             ->shouldReceive('nextRowset')
-            ->shouldReceive('execute')
-            ->andReturn($result)
-            ->shouldReceive('closeCursor')
-            ->andReturn(true);
+            ->shouldReceive('execute')->andReturn(true)
+            ->shouldReceive('closeCursor')->andReturn(true);
 
-        $this->em
-            ->shouldReceive('getConnection->getNativeConnection->prepare')
+        $this->em->expects('getConnection->getNativeConnection->prepare')
             ->with('CALL proc(99)')
-            ->once()
-            ->andReturn($mockedStatement);
+            ->andReturn($statement);
 
-        $this->assertSame($result, $this->sut->runProc('proc', 99));
+        $this->assertTrue($this->sut->runProc('proc', 99));
     }
 }

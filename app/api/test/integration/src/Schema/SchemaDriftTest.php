@@ -87,7 +87,7 @@ class SchemaDriftTest extends IntegrationTestCase
                         implode('_', $foreignKey->getForeignColumns()),
                     ));
                     if (strtolower($foreignKey->getName()) !== $canonical) {
-                        $table->removeForeignKey($foreignKey->getName());
+                        $table->dropForeignKey($foreignKey->getName());
                         $table->addForeignKeyConstraint(
                             $foreignKey->getForeignTableName(),
                             $foreignKey->getLocalColumns(),

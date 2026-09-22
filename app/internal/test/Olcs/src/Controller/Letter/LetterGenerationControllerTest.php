@@ -99,6 +99,33 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertStringContainsString('Stage', $error);
     }
 
+    private function editorContent(mixed ...$candidates): string
+    {
+        $method = new \ReflectionMethod(Sut::class, 'editorContent');
+
+        return $method->invoke($this->makeSut([]), ...$candidates);
+    }
+
+    public function testEditorContentPrefersEditedThenGeneratedThenDefault(): void
+    {
+        $edited = ['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'edited']]]];
+        $generated = ['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'ACME LTD']]]];
+        $default = ['blocks' => [['type' => 'paragraph', 'data' => ['text' => '[[OP_NAME_ONLY]]']]]];
+
+        $this->assertSame(json_encode($edited), $this->editorContent($edited, $generated, $default));
+        $this->assertSame(json_encode($generated), $this->editorContent(null, $generated, $default));
+        $this->assertSame(json_encode($default), $this->editorContent(null, null, $default));
+    }
+
+    public function testEditorContentPassesJsonStringsThroughAndFallsBackToAnEmptyDocument(): void
+    {
+        $this->assertSame('{"blocks":[]}', $this->editorContent(null, '{"blocks":[]}', ['blocks' => ['x']]));
+        $this->assertSame(
+            json_encode(['blocks' => [], 'version' => '2.28.2']),
+            $this->editorContent(null, null, null)
+        );
+    }
+
     public function testFetchLetterChoicesSortsByDisplayOrder(): void
     {
         // VOL-7282: admin sets First request = 1, Final request = 2, but the modal
