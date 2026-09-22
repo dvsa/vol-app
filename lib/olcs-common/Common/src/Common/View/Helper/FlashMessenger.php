@@ -225,8 +225,6 @@ class FlashMessenger
             return '';
         }
 
-        // TODO: Do we need the prepare classes and auto escape code from the parent? Everything else is the same
-
         // Flatten message array
         $messagesToPrint = [];
         $translator = $this->translator;
