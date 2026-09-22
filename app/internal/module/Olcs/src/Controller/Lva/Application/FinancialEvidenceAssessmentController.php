@@ -35,7 +35,7 @@ class FinancialEvidenceAssessmentController extends AbstractController implement
 
     public function indexAction()
     {
-        $analyses = $this->getAnalyses();
+        $analyses = $this->getSuccessfulAnalyses();
         $documents = $this->findDocumentsForApplication()['results'] ?? [];
 
         $view = new ViewModel([
@@ -64,27 +64,6 @@ class FinancialEvidenceAssessmentController extends AbstractController implement
         return $this->handleQuery($query)->getResult();
     }
 
-    protected function getDocumentsWithAnalysisStatus(array $analyses): array
-    {
-        $documentsResult = $this->findDocumentsForApplication();
-        $documents = $documentsResult['results'] ?? [];
-
-        $analysesByDocumentId = [];
-        foreach ($analyses as $analysis) {
-            $analysesByDocumentId[$analysis['documentId']] = $analysis;
-        }
-
-        foreach ($documents as &$document) {
-            $analysis = $analysesByDocumentId[$document['document']] ?? null;
-            $document['analysisStatus']    = $analysis['status'] ?? null;
-            $document['analysisStatusTag'] = $this->mapStatusTagClass($analysis['status'] ?? null);
-            $document['analysisLabel']     = $this->mapStatus($analysis['status'] ?? null);
-        }
-        unset($document);
-
-        return $documents;
-    }
-
     protected function getTabsFromAnalyses(array $analyses, array $documents): array
     {
         $documentsByDocumentId = [];
@@ -92,60 +71,54 @@ class FinancialEvidenceAssessmentController extends AbstractController implement
             $documentsByDocumentId[$document['document']] = $document;
         }
 
-        $latest = $analyses[0] ?? null;
-        $latestDoc = $latest !== null ? ($documentsByDocumentId[$latest['documentId']] ?? null) : null;
-        $latestDate = isset($latestDoc['issuedDate']) ? (new \DateTime($latestDoc['issuedDate']))->format('d/m/Y') : null;
+        // Temporary caseworker stamp until stamping is implemented; independent of processing status.
+        $caseworkerStamp = 'APPROVED';
+        $tabs = [];
 
-        $tabs = [
-            [
-                'id'        => 'latest',
-                'label'     => 'Latest',
-                'date'      => $latestDate,
-                'status'    => $latest !== null ? $this->mapStatus($latest['status']) : 'No analysis yet',
-                'statusTag' => $latest !== null ? $this->mapStatusTagClass($latest['status']) : 'govuk-tag--grey',
-            ],
-        ];
-
-        foreach (array_slice($analyses, 1) as $analysis) {
+        foreach ($analyses as $analysis) {
             $doc = $documentsByDocumentId[$analysis['documentId']] ?? null;
             $date = isset($doc['issuedDate']) ? (new \DateTime($doc['issuedDate']))->format('d/m/Y') : null;
+            $isLatest = $tabs === [];
 
             $tabs[] = [
-                'id'        => 'analysis-' . $analysis['id'],
-                'label'     => $date ?? 'Unknown date',
+                'id'        => $isLatest ? 'latest' : 'analysis-' . $analysis['id'],
+                'label'     => $isLatest ? 'Latest' : ($date ?? 'Unknown date'),
                 'date'      => $date,
-                'status'    => $this->mapStatus($analysis['status']),
-                'statusTag' => $this->mapStatusTagClass($analysis['status']),
+                'status'    => $this->mapStatus($caseworkerStamp),
+                'statusTag' => $this->mapStatusTagClass($caseworkerStamp),
             ];
         }
 
         return $tabs;
     }
 
-    protected function mapStatus(?string $status): string
+    protected function mapStatus(?string $caseworkerStamp): string
     {
-        return match ($status) {
-            'SUCCESS' => 'Approved',
-            'ERROR'   => 'Rejected',
-            'PENDING' => 'Pending',
-            default   => 'Unknown',
+        return match ($caseworkerStamp) {
+            'APPROVED' => 'Approved',
+            'REJECTED' => 'Rejected',
+            'PENDING'  => 'Pending',
+            default    => 'Unknown',
         };
     }
 
-    protected function mapStatusTagClass(?string $status): string
+    protected function mapStatusTagClass(?string $caseworkerStamp): string
     {
-        return match ($status) {
-            'SUCCESS' => 'govuk-tag--green',
-            'ERROR'   => 'govuk-tag--red',
-            'PENDING' => 'govuk-tag--grey',
-            default   => 'govuk-tag--grey',
+        return match ($caseworkerStamp) {
+            'APPROVED' => 'govuk-tag--green',
+            'REJECTED' => 'govuk-tag--red',
+            'PENDING'  => 'govuk-tag--grey',
+            default    => 'govuk-tag--grey',
         };
     }
 
-    protected function getAnalyses(): array
+    protected function getSuccessfulAnalyses(): array
     {
         $response = $this->handleQuery(
-            DocumentAnalysisList::create(['application' => $this->getIdentifier()])
+            DocumentAnalysisList::create([
+                'application' => $this->getIdentifier(),
+                'status' => 'SUCCESS',
+            ])
         );
 
         if (!$response->isOk()) {
@@ -154,8 +127,9 @@ class FinancialEvidenceAssessmentController extends AbstractController implement
 
         $analyses = $response->getResult()['analyses'] ?? [];
 
+        // "Latest" means the most recently completed successful analysis.
         usort($analyses, static fn($a, $b) => strcmp($b['completedAt'] ?? '', $a['completedAt'] ?? ''));
-        //dd($analyses);
+
         return $analyses;
     }
 }
