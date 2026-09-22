@@ -2,46 +2,32 @@
 
 declare(strict_types=1);
 
-/**
- * Community Lic Withdrawal Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\CommunityLicWithdrawal as CommunityLicWithdrawalRepo;
+use Dvsa\Olcs\Api\Domain\Repository\CommunityLicWithdrawal as Repo;
+use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal as Entity;
 
-/**
- * Community Lic Withdrawal Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class CommunityLicWithdrawalTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(CommunityLicWithdrawalRepo::class);
+        $this->setUpRealSut(Repo::class);
     }
 
     public function testFetchByCommunityLicIds(): void
     {
         $ids = [1];
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
-        $foo = $this->mockExprIn('m.communityLic', ':communityLic');
-        $mockQb->shouldReceive('expr->in')
-        ->with('m.communityLic', ':communityLic')
-        ->once()
-        ->andReturn($foo);
-        $mockQb->shouldReceive('andWhere')->with($foo)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('communityLic', $ids)->once()->andReturnSelf();
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn('result');
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('getQuery->execute')->once()->andReturn('result');
+        $this->assertSame('result', $this->sut->fetchByCommunityLicIds($ids));
 
-        $this->assertEquals('result', $this->sut->fetchByCommunityLicIds($ids));
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.communityLic IN(:communityLic)',
+            $qb->getDQL(),
+        );
+        $this->assertSame($ids, $qb->getParameter('communityLic')->getValue());
     }
 }

@@ -2,73 +2,32 @@
 
 declare(strict_types=1);
 
-/**
- * Workshop test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
+use Dvsa\Olcs\Api\Domain\Repository\Workshop as WorkshopRepo;
 use Dvsa\Olcs\Api\Entity\Application\Application;
+use Dvsa\Olcs\Api\Entity\Licence\Workshop as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\Workshop as WorkshopRepo;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
-use Dvsa\Olcs\Api\Entity\Licence\Workshop;
-use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
-use Doctrine\DBAL\LockMode;
 
-/**
- * Workshop test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 final class WorkshopTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(WorkshopRepo::class);
+        $this->setUpRealSut(WorkshopRepo::class, true);
     }
 
-    public function testFetchUsingId(): void
+    public function testFetchUsingIdThrowsWhenNothingFound(): void
     {
         $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getId')
-            ->andReturn(111);
+        $command->shouldReceive('getId')->andReturn(111);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn(null);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with(111)
-            ->andReturnSelf()
-            ->shouldReceive('withContactDetails')
-            ->once();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Workshop::class)
-            ->andReturn($repo);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(null);
 
         $this->expectException(NotFoundException::class);
 
@@ -77,91 +36,80 @@ final class WorkshopTest extends RepositoryTestCase
 
     public function testFetchUsingIdWithResults(): void
     {
+        $result = m::mock(Entity::class);
+
         $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getId')
-            ->andReturn(111);
+        $command->shouldReceive('getId')->andReturn(111);
 
-        $result = m::mock(Workshop::class);
-        $results = [$result];
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$result]);
+        $this->em->expects('lock')->with($result, LockMode::OPTIMISTIC, 1);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($results);
+        $this->assertSame($result, $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, 1));
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with(111)
-            ->andReturnSelf()
-            ->shouldReceive('withContactDetails')
-            ->once();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Workshop::class)
-            ->andReturn($repo)
-            ->shouldReceive('lock')
-            ->with($result, LockMode::OPTIMISTIC, 1);
-
-        $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, 1);
+        // withContactDetails() expands to the whole contact-details tree.
+        $this->assertSame(
+            'SELECT m, m_cd, m_cd_a, m_cd_a_cc, m_cd_pc, w0, w1 FROM ' . Entity::class . ' m'
+            . ' LEFT JOIN m.contactDetails m_cd LEFT JOIN m_cd.address m_cd_a'
+            . ' LEFT JOIN m_cd_a.countryCode m_cd_a_cc LEFT JOIN m_cd.phoneContacts m_cd_pc'
+            . ' LEFT JOIN m_cd.contactType w0 LEFT JOIN m_cd_pc.phoneContactType w1'
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
     }
 
     public function testFetchForLicence(): void
     {
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULTS']);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('contactDetails', 'cd')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('cd.address')->once()->andReturnSelf();
+        $this->assertSame(['RESULTS'], $this->sut->fetchForLicence(2017));
 
-        $qb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_OBJECT)->once()->andReturn(['RESULTS']);
-
-        $this->assertEquals(['RESULTS'], $this->sut->fetchForLicence(2017));
-
-        $expectedQuery = 'BLAH AND m.licence = [[2017]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT m, cd, w0 FROM ' . Entity::class . ' m'
+            . ' LEFT JOIN m.contactDetails cd LEFT JOIN cd.address w0'
+            . ' WHERE m.licence = :licenceId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(2017, $qb->getParameter('licenceId')->getValue());
     }
 
-    public function testApplyFiltersLicence(): void
+    public function testApplyListFiltersForALicenceQuery(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb();
+
         $query = m::mock(\Dvsa\Olcs\Transfer\Query\Licence\Safety::class);
-        $query->shouldReceive('getId')->with()->once()->andReturn(34);
+        $query->expects('getId')->withNoArgs()->andReturn(34);
 
         $this->sut->applyListFilters($qb, $query);
 
-        $expectedQuery = 'BLAH AND m.licence = [[34]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.licence = :byLicence',
+            $qb->getDQL(),
+        );
+        $this->assertSame(34, $qb->getParameter('byLicence')->getValue());
     }
 
-    public function testApplyFiltersApplication(): void
+    /**
+     * An application query filters on the application's licence, not the application itself.
+     */
+    public function testApplyListFiltersForAnApplicationQuery(): void
     {
-        $qb = $this->createMockQb('BLAH');
-        $query = m::mock(\Dvsa\Olcs\Transfer\Query\Application\Safety::class);
-        $query->shouldReceive('getId')->with()->once()->andReturn(134);
+        $qb = $this->createRealQb();
 
-        $mockApplication = m::mock();
-        $mockApplication->shouldReceive('getLicence->getId')->with()->once()->andReturn(24);
-        $this->em->shouldReceive('getReference')->with(Application::class, 134)->once()->andReturn($mockApplication);
+        $query = m::mock(\Dvsa\Olcs\Transfer\Query\Application\Safety::class);
+        $query->expects('getId')->withNoArgs()->andReturn(134);
+
+        $application = m::mock();
+        $application->expects('getLicence->getId')->withNoArgs()->andReturn(24);
+        $this->em->expects('getReference')->with(Application::class, 134)->andReturn($application);
 
         $this->sut->applyListFilters($qb, $query);
 
-        $expectedQuery = 'BLAH AND m.licence = [[24]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.licence = :byLicence',
+            $qb->getDQL(),
+        );
+        $this->assertSame(24, $qb->getParameter('byLicence')->getValue());
     }
 }

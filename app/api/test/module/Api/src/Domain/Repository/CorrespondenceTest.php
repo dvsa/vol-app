@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository;
+use Dvsa\Olcs\Api\Entity\Organisation\CorrespondenceInbox as Entity;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Mockery as m;
 
@@ -17,26 +18,28 @@ final class CorrespondenceTest extends RepositoryTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\Correspondence::class, true);
+        $this->setUpRealSut(Repository\Correspondence::class, true);
     }
 
     public function testApplyListMethods(): void
     {
         $orgId = 9999;
 
-        $mockQb = $this->createMockQb('{{QUERY}}');
+        $qb = $this->createRealQb();
 
         $mockQry = m::mock(TransferQry\Correspondence\Correspondences::class)
             ->shouldReceive('getOrganisation')->once()->andReturn($orgId)
             ->getMock();
 
-        $this->sut->applyListJoins($mockQb);
-        $this->sut->applyListFilters($mockQb, $mockQry);
+        $this->sut->applyListJoins($qb);
+        $this->sut->applyListFilters($qb, $mockQry);
 
-        $this->assertEquals('{{QUERY}} ' .
-        'SELECT l, d ' .
-        'INNER JOIN co.licence l ' .
-        'INNER JOIN co.document d ' .
-        'AND l.organisation = [[' . $orgId . ']]', $this->query);
+        $this->assertSame(
+            'SELECT co, l, d FROM ' . Entity::class . ' co'
+            . ' INNER JOIN co.licence l INNER JOIN co.document d'
+            . ' WHERE l.organisation = :ORG_ID',
+            $qb->getDQL(),
+        );
+        $this->assertSame($orgId, $qb->getParameter('ORG_ID')->getValue());
     }
 }

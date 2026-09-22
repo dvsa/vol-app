@@ -4,100 +4,61 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Query\Team\TeamListByTrafficArea;
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\Team as TeamRepo;
+use Dvsa\Olcs\Api\Entity\User\Team as Entity;
 
-/**
- * @see TeamRepo
- */
 final class TeamTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(TeamRepo::class);
+        $this->setUpRealSut(TeamRepo::class, true);
     }
 
     public function testApplyTrafficAreaListFilterApplied(): void
     {
-        $this->setUpSut(TeamRepo::class, true);
         $trafficAreas = ['A', 'B'];
-        $queryData = ['trafficAreas' => $trafficAreas];
-        $query = TeamListByTrafficArea::create($queryData);
 
-        $expression = m::mock(\Doctrine\ORM\Query\Expr\Func::class);
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $queryBuilder->expects('expr->in')->with('m.trafficArea', ':byTrafficAreas')->andReturn($expression);
-        $queryBuilder->expects('setParameter')->with('byTrafficAreas', $trafficAreas);
-        $queryBuilder->expects('andWhere')->with($expression)->andReturnSelf();
+        $qb = $this->createRealQb();
 
-        $this->sut->applyListFilters($queryBuilder, $query);
+        $this->sut->applyListFilters($qb, TeamListByTrafficArea::create(['trafficAreas' => $trafficAreas]));
+
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.trafficArea IN(:byTrafficAreas)',
+            $qb->getDQL(),
+        );
+        $this->assertSame($trafficAreas, $qb->getParameter('byTrafficAreas')->getValue());
     }
 
     public function testFetchByName(): void
     {
-        $name = 'foo';
+        $qb = $this->createRealQb()->willReturn(['result']);
 
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
+        $this->assertSame(['result'], $this->sut->fetchByName('foo'));
 
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->once()
-            ->andReturn($mockQb);
-
-        $expr = $this->mockExprEq('m.name', ':name');
-        $mockQb->shouldReceive('expr->eq')->with('m.name', ':name')->once()->andReturn($expr);
-        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('name', $name)->once();
-
-        $mockQb->shouldReceive('getQuery->getResult')->andReturn(['result']);
-
-        $this->assertSame(['result'], $this->sut->fetchByName($name));
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.name = :name',
+            $qb->getDQL(),
+        );
+        $this->assertSame('foo', $qb->getParameter('name')->getValue());
     }
 
     public function testFetchWithPrinters(): void
     {
-        $id = 1;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->with(1)->andReturn('result');
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->once()
-            ->andReturn($mockQb);
+        $this->assertSame('result', $this->sut->fetchWithPrinters(1, 1));
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->with($id)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('teamPrinters', 'tp')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('tp.printer', 'tpp')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('tp.user', 'pu')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('tp.subCategory', 'ps')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getSingleResult')->andReturn('result');
-
-        $this->assertSame('result', $this->sut->fetchWithPrinters($id, 1));
+        // Team has no RefData associations, so withRefdata() contributes no joins here.
+        $this->assertSame(
+            'SELECT m, tp, tpp, pu, ps FROM ' . Entity::class . ' m'
+            . ' LEFT JOIN m.teamPrinters tp LEFT JOIN tp.printer tpp'
+            . ' LEFT JOIN tp.user pu LEFT JOIN tp.subCategory ps'
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('byId')->getValue());
     }
 }
