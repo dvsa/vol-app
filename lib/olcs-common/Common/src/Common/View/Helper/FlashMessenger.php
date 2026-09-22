@@ -8,7 +8,7 @@ use Common\Service\FlashMessenger\LaminasSessionFlashMessenger as PluginFlashMes
 use Laminas\Translator\TranslatorInterface;
 
 /**
- * Flash messenger view helper (Extends laminas flash messenger)
+ * Flash messenger view helper
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
