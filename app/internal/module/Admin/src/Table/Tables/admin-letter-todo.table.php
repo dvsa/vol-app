@@ -73,6 +73,14 @@ return [
             },
         ],
         [
+            'title' => 'Requires Input',
+            'name' => 'requiresInput',
+            'formatter' => function ($row) {
+                $requiresInput = $row['currentVersion']['requiresInput'] ?? $row['requiresInput'] ?? false;
+                return $requiresInput ? '<span class="govuk-tag govuk-tag--green">Yes</span>' : '<span class="govuk-tag govuk-tag--grey">No</span>';
+            },
+        ],
+        [
             'title' => 'markup-table-th-action',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}',
