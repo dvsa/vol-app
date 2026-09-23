@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Integration\Repository;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\Query;
 use Dvsa\OlcsTest\Integration\IntegrationTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -231,6 +232,22 @@ final class LetterContentDeleteTest extends IntegrationTestCase
 
         $this->assertNotNull($this->conn()->fetchOne("SELECT deleted_on FROM {$table} WHERE id = ?", [$id]));
         $this->assertSame($versionsBefore, $this->versionCount($table, $id));
+    }
+
+    #[DataProvider('softDeleteProvider')]
+    public function testListsLeaveOutSoftDeletedRows(string $repoName, string $table, string $fixture): void
+    {
+        [$liveId] = $this->{$fixture}();
+        [$deletedId] = $this->{$fixture}();
+        $this->conn()->update($table, ['deleted_on' => self::NOW], ['id' => $deletedId]);
+
+        $dto = 'Dvsa\\Olcs\\Transfer\\Query\\Letter\\' . $repoName . '\\GetList';
+        $query = $dto::create(['sort' => 'id', 'order' => 'DESC', 'page' => 1, 'limit' => 100]);
+        $rows = iterator_to_array($this->repo($repoName)->fetchList($query, Query::HYDRATE_ARRAY));
+        $ids = array_map(fn (array $row): int => (int) $row['id'], $rows);
+
+        $this->assertContains($liveId, $ids);
+        $this->assertNotContains($deletedId, $ids);
     }
 
     /**

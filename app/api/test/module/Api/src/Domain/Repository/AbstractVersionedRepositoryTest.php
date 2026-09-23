@@ -14,6 +14,8 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterAppendix as LetterAppendixEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssue as LetterIssueEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSection as LetterSectionEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTodo as LetterTodoEntity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
 /**
  * fetchById() is declared once on AbstractVersionedRepository and inherited by all four letter
@@ -68,6 +70,22 @@ final class AbstractVersionedRepositoryTest extends RepositoryTestCase
         $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn([['id' => 1]]);
 
         $this->assertSame(['id' => 1], $this->sut->fetchById(1, Query::HYDRATE_ARRAY));
+    }
+
+    /**
+     * Content deleted in admin stays in the database for the generated letters that use it, so
+     * every list has to leave it out.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('versionedRepositoryProvider')]
+    public function testApplyListFiltersHidesDeleted(string $repositoryClass, string $entityClass): void
+    {
+        $this->setUpRealSut($repositoryClass, true);
+        $qb = $this->createRealQb();
+
+        $this->sut->applyListFilters($qb, m::mock(QueryInterface::class));
+
+        $this->assertSame('SELECT m FROM ' . $entityClass . ' m WHERE m.deletedOn IS NULL', $qb->getDQL());
+        $this->assertStringContainsString('deleted_on IS NULL', $this->compileDql($qb->getDQL()));
     }
 
     public static function versionedRepositoryProvider(): \Iterator

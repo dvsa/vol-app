@@ -3,7 +3,9 @@
 namespace Dvsa\Olcs\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Exception;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
 /**
  * Abstract Versioned Repository
@@ -110,6 +112,22 @@ abstract class AbstractVersionedRepository extends AbstractRepository
         }
 
         return $result[0];
+    }
+
+    /**
+     * Leave out soft-deleted rows. This is explicit rather than the Gedmo filter, which would
+     * also hide them from the generated letters that still use them.
+     *
+     * @param QueryBuilder $qb
+     * @param QueryInterface $query
+     * @return void
+     */
+    #[\Override]
+    protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
+    {
+        parent::applyListFilters($qb, $query);
+
+        $qb->andWhere($this->alias . '.deletedOn IS NULL');
     }
 
     /**
