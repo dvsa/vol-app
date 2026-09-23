@@ -2,182 +2,108 @@
 
 declare(strict_types=1);
 
-/**
- * ComplaintTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
 use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository\Complaint as ComplaintRepo;
-use Dvsa\Olcs\Api\Entity\Cases\Complaint;
+use Dvsa\Olcs\Api\Entity\Cases\Complaint as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
-/**
- * ComplaintTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 final class ComplaintTest extends RepositoryTestCase
 {
+    private const string REFDATA_JOINS = ' LEFT JOIN m.status w0 LEFT JOIN m.complaintType w1';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(ComplaintRepo::class);
+        $this->setUpRealSut(ComplaintRepo::class, true);
     }
 
-    public function testFetchById(): void
+    public function testFetchUsingId(): void
     {
+        $result = m::mock(Entity::class);
+
         $command = m::mock(QueryInterface::class);
         $command->shouldReceive('getId')->andReturn(111);
         $command->shouldReceive('getIsCompliance')->andReturn(false);
 
-        $result = m::mock(Complaint::class);
-        $results = [$result];
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$result]);
+        $this->em->expects('lock')->with($result, LockMode::OPTIMISTIC, 1);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $expr = $this->mockExprEq('m.isCompliance', ':byIsCompliance');
-        $qb->shouldReceive('expr->eq')->with('m.isCompliance', ':byIsCompliance')->once()->andReturn($expr);
-        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('byIsCompliance', false)->once()->andReturnSelf();
-        $qb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_OBJECT)->andReturn($results);
+        $this->assertSame($result, $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, 1));
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->once()->with('complainantContactDetails', 'cd')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('cd.person')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('operatingCentres', 'oc')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('oc.address')->andReturnSelf()
-            ->shouldReceive('byId')->once()->with(111);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Complaint::class)
-            ->andReturn($repo)
-            ->shouldReceive('lock')
-            ->with($result, LockMode::OPTIMISTIC, 1);
-
-        $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, 1);
+        $this->assertSame(
+            'SELECT m, w0, w1, cd, w2, oc, w3 FROM ' . Entity::class . ' m' . self::REFDATA_JOINS
+            . ' LEFT JOIN m.complainantContactDetails cd LEFT JOIN cd.person w2'
+            . ' LEFT JOIN m.operatingCentres oc LEFT JOIN oc.address w3'
+            . ' WHERE m.id = :byId AND m.isCompliance = :byIsCompliance',
+            $qb->getDQL(),
+        );
+        $this->assertFalse($qb->getParameter('byIsCompliance')->getValue());
     }
 
     public function testApplyListJoins(): void
     {
-        // mock SUT to allow testing the protected method
-        $sut = m::mock(ComplaintRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(QueryBuilder::class);
+        // applyListJoins() omits modifyQuery(); fetchList() has already pointed the shared
+        // helper at $qb by this stage, so reproduce that.
+        $this->queryBuilder->modifyQuery($qb);
 
-        $sut->shouldReceive('getQueryBuilder')->with()->andReturn($mockQb);
-        $mockQb->shouldReceive('with')->with('complainantContactDetails', 'ccd')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('ccd.person')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('operatingCentres', 'oc')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('oc.address')->once()->andReturnSelf();
+        $this->sut->applyListJoins($qb);
 
-        $sut->applyListJoins($mockQb);
+        $this->assertSame(
+            'SELECT m, ccd, w0, oc, w1 FROM ' . Entity::class . ' m'
+            . ' LEFT JOIN m.complainantContactDetails ccd LEFT JOIN ccd.person w0'
+            . ' LEFT JOIN m.operatingCentres oc LEFT JOIN oc.address w1',
+            $qb->getDQL(),
+        );
     }
 
-    public function testApplyFiltersCase(): void
-    {
-        // mock SUT to allow testing the protected method
-        $sut = m::mock(ComplaintRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
+    #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
+    public function testApplyListFilters(
+        array $criteria,
+        string $expectedWhere,
+        string $parameter,
+        mixed $expectedValue,
+        bool $joinsCase,
+    ): void {
+        $qb = $this->createRealQb();
+        $this->queryBuilder->modifyQuery($qb);
 
-        $qb = m::mock(QueryBuilder::class);
         $query = m::mock(QueryInterface::class);
+        foreach (['getCase', 'getIsCompliance', 'getLicence', 'getApplication'] as $getter) {
+            $query->shouldReceive($getter)->with()->andReturn($criteria[$getter] ?? null);
+        }
 
-        $query->shouldReceive('getCase')->with()->andReturn(213);
-        $query->shouldReceive('getIsCompliance')->with()->andReturn(null);
-        $query->shouldReceive('getLicence')->with()->andReturn(null);
-        $query->shouldReceive('getApplication')->with()->andReturn(null);
+        $this->sut->applyListFilters($qb, $query);
 
-        $expr = $this->mockExprEq('m.case', ':byCase');
-        $qb->shouldReceive('expr->eq')->with('m.case', ':byCase')->once()->andReturn($expr);
-        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('byCase', 213)->once()->andReturnSelf();
-
-        $sut->applyListFilters($qb, $query);
+        $this->assertStringEndsWith(' WHERE ' . $expectedWhere, $qb->getDQL());
+        $this->assertSame($expectedValue, $qb->getParameter($parameter)->getValue());
+        $this->assertSame($joinsCase, str_contains($qb->getDQL(), 'LEFT JOIN m.case ca'));
     }
 
-    public function testApplyFiltersCompliance(): void
+    public static function listFilterProvider(): \Iterator
     {
-        // mock SUT to allow testing the protected method
-        $sut = m::mock(ComplaintRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $qb = m::mock(QueryBuilder::class);
-        $query = m::mock(QueryInterface::class);
-
-        $query->shouldReceive('getCase')->with()->andReturn(null);
-        $query->shouldReceive('getIsCompliance')->with()->andReturn(324);
-        $query->shouldReceive('getLicence')->with()->andReturn(null);
-        $query->shouldReceive('getApplication')->with()->andReturn(null);
-
-        $expr = $this->mockExprEq('m.isCompliance', ':isCompliance');
-        $qb->shouldReceive('expr->eq')->with('m.isCompliance', ':isCompliance')->once()->andReturn($expr);
-        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('isCompliance', 324)->once()->andReturnSelf();
-
-        $sut->applyListFilters($qb, $query);
-    }
-
-    public function testApplyFiltersLicence(): void
-    {
-        // mock SUT to allow testing the protected method
-        $sut = m::mock(ComplaintRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $qb = m::mock(QueryBuilder::class);
-        $query = m::mock(QueryInterface::class);
-
-        $query->shouldReceive('getCase')->with()->andReturn(null);
-        $query->shouldReceive('getIsCompliance')->with()->andReturn(null);
-        $query->shouldReceive('getLicence')->with()->andReturn(33);
-        $query->shouldReceive('getApplication')->with()->andReturn(null);
-
-        $expr = $this->mockExprEq('ca.licence', ':licence');
-        $qb->shouldReceive('expr->eq')->with('ca.licence', ':licence')->once()->andReturn($expr);
-        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('licence', 33)->once()->andReturnSelf();
-
-        $mockQb = m::mock(\Dvsa\Olcs\Api\Domain\QueryBuilder::class);
-        $sut->shouldReceive('getQueryBuilder')->with()->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('with')->with('case', 'ca')->once()->andReturnSelf();
-
-        $sut->applyListFilters($qb, $query);
-    }
-
-    public function testApplyFiltersApplication(): void
-    {
-        // mock SUT to allow testing the protected method
-        $sut = m::mock(ComplaintRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $qb = m::mock(QueryBuilder::class);
-        $query = m::mock(QueryInterface::class);
-
-        $query->shouldReceive('getCase')->with()->andReturn(null);
-        $query->shouldReceive('getIsCompliance')->with()->andReturn(null);
-        $query->shouldReceive('getLicence')->with()->andReturn(null);
-        $query->shouldReceive('getApplication')->with()->andReturn(133);
-
-        $expr = $this->mockExprEq('ca.application', ':application');
-        $qb->shouldReceive('expr->eq')->with('ca.application', ':application')->once()->andReturn($expr);
-        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('application', 133)->once()->andReturnSelf();
-
-        $mockQb = m::mock(\Dvsa\Olcs\Api\Domain\QueryBuilder::class);
-        $sut->shouldReceive('getQueryBuilder')->with()->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('with')->with('case', 'ca')->once()->andReturnSelf();
-
-        $sut->applyListFilters($qb, $query);
+        yield 'by case' => [['getCase' => 213], 'm.case = :byCase', 'byCase', 213, false];
+        yield 'by compliance' => [
+            ['getIsCompliance' => 324],
+            'm.isCompliance = :isCompliance',
+            'isCompliance',
+            324,
+            false,
+        ];
+        // The licence and application branches join case themselves.
+        yield 'by licence' => [['getLicence' => 33], 'ca.licence = :licence', 'licence', 33, true];
+        yield 'by application' => [
+            ['getApplication' => 133],
+            'ca.application = :application',
+            'application',
+            133,
+            true,
+        ];
     }
 }

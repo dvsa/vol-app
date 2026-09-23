@@ -9,24 +9,27 @@ use Dvsa\Olcs\Api\Entity\Application\Application;
 
 final class GetDbValueTest extends RepositoryTestCase
 {
-    /** @var GetDbValueRepo */
     protected $sut;
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(GetDbValueRepo::class, true);
+        $this->setUpRealSut(GetDbValueRepo::class, true);
     }
 
     public function testFetchOneEntityByX(): void
     {
-        $fetchBy = 'id';
-        $args = [0 => 'arg'];
         $this->sut->setEntity(Application::class);
-        $qb = $this->createMockQb('Query');
-        $qb->shouldReceive('getQuery->getSingleResult')->andReturn(['RESULTS']);
-        $this->sut->shouldReceive('getRepository->createQueryBuilder')
-            ->andReturn($qb);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchOneEntityByX($fetchBy, $args));
+
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchOneEntityByX('id', [0 => 'arg']));
+
+        $this->assertSame(
+            'SELECT m FROM ' . Application::class . ' m WHERE m.id = :id',
+            $qb->getDQL(),
+        );
+        $this->assertSame('arg', $qb->getParameter('id')->getValue());
     }
 }

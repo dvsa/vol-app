@@ -2,63 +2,48 @@
 
 declare(strict_types=1);
 
-/**
- * PreviousConvictionTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\PreviousConviction as Repo;
+use Dvsa\Olcs\Api\Entity\Application\PreviousConviction as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-/**
- * PreviousConvictionTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 final class PreviousConvictionTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testFetchByTransportManager(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('pc')->once()->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-
-        $expr = $this->mockExprEq('pc.transportManager', ':tmId');
-        $mockQb->shouldReceive('expr->eq')->with('pc.transportManager', ':tmId')->once()->andReturn($expr);
-        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('tmId', 123)->once();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
+        $qb = $this->createRealQb()->willReturn('RESULT');
 
         $this->assertSame('RESULT', $this->sut->fetchByTransportManager(123));
+
+        $this->assertSame(
+            'SELECT pc, w0 FROM ' . Entity::class . ' pc LEFT JOIN pc.title w0'
+            . ' WHERE pc.transportManager = :tmId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(123, $qb->getParameter('tmId')->getValue());
     }
 
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getTransportManager')->with()->andReturn(33);
 
-        $mockQ = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
-        $mockQ->shouldReceive('getTransportManager')->with()->twice()->andReturn(33);
+        $this->sut->applyListFilters($qb, $query);
 
-        $expr = $this->mockExprEq('pc.transportManager', ':tmId');
-        $mockQb->shouldReceive('expr->eq')->with('pc.transportManager', ':tmId')->once()->andReturn($expr);
-        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('tmId', 33)->once();
-
-        $this->sut->applyListFilters($mockQb, $mockQ);
+        $this->assertSame(
+            'SELECT pc FROM ' . Entity::class . ' pc WHERE pc.transportManager = :tmId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(33, $qb->getParameter('tmId')->getValue());
     }
 }

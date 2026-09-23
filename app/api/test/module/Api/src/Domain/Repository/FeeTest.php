@@ -4,1157 +4,596 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\Query\Expr;
-use Doctrine\ORM\Query\Expr\Orx;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Domain\Repository\Fee;
-use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
-use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\Fee as FeeRepo;
+use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Domain\Repository\Fee as Repo;
+use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
+use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
+use Dvsa\Olcs\Api\Entity\Fee\Fee as Entity;
+use Dvsa\Olcs\Api\Entity\Fee\FeeType as FeeTypeEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData as RefDataEntity;
-use Dvsa\Olcs\Api\Entity\Fee\FeeType as FeeTypeEntity;
-use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
-use Doctrine\ORM\Query;
-use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeList;
+use Dvsa\OlcsTest\Support\TestQueryBuilder;
+use Mockery as m;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Fee::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(Repo::class)]
 final class FeeTest extends RepositoryTestCase
 {
-    /** @var   FeeRepo */
-    protected $sut;
+    private const string FROM = ' FROM ' . Entity::class . ' f';
+
+    /** withRefdata() reaches only feeStatus; the other refdata columns hang off the joins. */
+    private const string FEE_STATUS_JOIN = ' LEFT JOIN f.feeStatus w0';
+
+    private const string TRANSACTION_SELECT = 'f, w0, ft, t, w1';
+
+    private const string TRANSACTION_JOINS = self::FEE_STATUS_JOIN
+        . ' LEFT JOIN f.feeTransactions ft LEFT JOIN ft.transaction t LEFT JOIN t.status w1';
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(FeeRepo::class, true);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    private function setupFetchInterimFeesByApplicationId(m\MockInterface $mockQb, mixed $applicationId): void
+    /**
+     * getQueryByApplicationFeeTypeFeeType() calls the shared query-builder helper without
+     * modifyQuery() first, so its refdata join and ORDER BY are applied to whichever builder the
+     * helper is still holding — never to its own. Nothing here is what the repository intends;
+     * this pins the behaviour so the eventual fix has a failing test to flip.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('interimFeeProvider')]
+    public function testFetchInterimFeesByApplicationId(bool $outstanding, bool $paid, string $expectedStatus): void
     {
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('f')->once()->andReturn($mockQb);
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('order')->with('invoicedDate', 'ASC')->once()->andReturnSelf();
+        // Stand in for the previous repository call that left the shared helper warm.
+        $unrelated = $this->newRealQb();
+        $unrelated->select('f')->from(Entity::class, 'f');
+        $this->queryBuilder->modifyQuery($unrelated);
 
-        $mockQb->shouldReceive('join')->with('f.feeType', 'ft')->once()->andReturnSelf();
+        $refData = $this->expectRefdataReference();
 
-        $feeTypeExpr = $this->mockExprEq('ft.feeType', ':feeTypeFeeType');
-        $mockQb->shouldReceive('expr->eq')->with('ft.feeType', ':feeTypeFeeType')->once()->andReturn($feeTypeExpr);
-        $mockQb->shouldReceive('andWhere')->with($feeTypeExpr)->once()->andReturnSelf();
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $applicationExpr = $this->mockExprEq('f.application', ':applicationId');
-        $mockQb->shouldReceive('expr->eq')->with('f.application', ':applicationId')->once()->andReturn($applicationExpr);
-        $mockQb->shouldReceive('andWhere')->with($applicationExpr)->once()->andReturnSelf();
+        $this->assertSame(['RESULTS'], $this->sut->fetchInterimFeesByApplicationId(33, $outstanding, $paid));
 
-        $this->em->shouldReceive('getReference')->with(
-            RefDataEntity::class,
-            FeeTypeEntity::FEE_TYPE_GRANTINT
-        )->once()->andReturn($refData = m::mock(RefDataEntity::class));
-        $mockQb->shouldReceive('setParameter')->with('feeTypeFeeType', $refData)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('applicationId', $applicationId)->once()->andReturnSelf();
+        $this->assertSame(
+            'SELECT f' . self::FROM . ' INNER JOIN f.feeType ft'
+            . ' WHERE ft.feeType = :feeTypeFeeType AND f.application = :applicationId'
+            . $expectedStatus,
+            $qb->getDQL(),
+        );
+        $this->assertSame($refData, $qb->getParameter('feeTypeFeeType')->getValue());
+        $this->assertSame(33, $qb->getParameter('applicationId')->getValue());
 
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
+        // The refdata join and the ordering landed on the unrelated builder instead.
+        $this->assertSame(
+            'SELECT f, w0' . self::FROM . self::FEE_STATUS_JOIN . ' ORDER BY f.invoicedDate ASC',
+            $unrelated->getDQL(),
+        );
     }
 
-    public function testFetchInterimFeesByApplicationId(): void
+    public static function interimFeeProvider(): \Iterator
     {
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->setupFetchInterimFeesByApplicationId($mockQb, 33);
-
-        $this->assertSame('result', $this->sut->fetchInterimFeesByApplicationId(33));
+        yield 'any status' => [false, false, ''];
+        yield 'outstanding only' => [true, false, ' AND f.feeStatus = :feeStatus'];
+        yield 'paid only' => [false, true, ' AND f.feeStatus = :feeStatus'];
+        yield 'outstanding or paid' => [true, true, ' AND f.feeStatus IN(:feeStatus)'];
     }
 
-    public function testFetchInterimFeesByApplicationIdOutstanding(): void
+    /**
+     * With a cold helper — the first query of the request — the same call throws outright.
+     */
+    public function testFetchInterimFeesByApplicationIdWithAColdQueryBuilder(): void
     {
-        $mockQb = m::mock(QueryBuilder::class);
+        $this->expectRefdataReference();
+        $this->createRealQb();
 
-        $this->setupFetchInterimFeesByApplicationId($mockQb, 12);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Doctrine Query Builder is not set');
 
-        $this->em->shouldReceive('getReference')->with(
-            RefDataEntity::class,
-            FeeEntity::STATUS_OUTSTANDING
-        )->once()->andReturn($outstandingRef = m::mock(RefDataEntity::class));
-
-        $statusExpr = $this->mockExprEq('f.feeStatus', ':feeStatus');
-        $mockQb->shouldReceive('expr->eq')->with('f.feeStatus', ':feeStatus')->once()->andReturn($statusExpr);
-        $mockQb->shouldReceive('andWhere')->with($statusExpr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('feeStatus', $outstandingRef)->once();
-
-        $this->assertSame('result', $this->sut->fetchInterimFeesByApplicationId(12, true));
+        $this->sut->fetchInterimFeesByApplicationId(33);
     }
 
     public function testFetchInterimRefunds(): void
     {
-        $alias = 'f';
-        $startDate = new DateTime();
-        $startDate = $startDate->sub(new \DateInterval('P' . abs((7 - date("N") - 7)) . 'D'));
-        $endDate = new DateTime();
-        $trafficAreas = ['B', 'C'];
-        $sort = 'invoicedDate';
-        $order = 'DESC';
-
-        $mockRepo = m::mock(\Doctrine\ORM\EntityRepository::class);
-        $mockRepo->shouldAllowMockingProtectedMethods();
-
-        $this->em->shouldReceive('getRepository')->andReturn($mockRepo);
-
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->once()->with($mockQb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->zeroOrMoreTimes()->andReturnSelf()
-            ->shouldReceive('order')->with($sort, $order)->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('leftJoin')->with($alias . '.application', 'a')->once()->andReturnSelf();
-        $mockQb->shouldReceive('join')->with($alias . '.feeType', 'fty')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr')->andReturn(new Expr());
-
-        $mockQb->shouldReceive('andWhere')->andReturnSelf();
-
-        $feeStatuses = [
-            FeeEntity::STATUS_REFUNDED,
-            FeeEntity::STATUS_REFUND_FAILED,
-            FeeEntity::STATUS_REFUND_PENDING
-        ];
-        $mockQb->shouldReceive('setParameter')->with('feeStatus', $feeStatuses)->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('feeType', FeeTypeEntity::FEE_TYPE_GRANTINT)->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('after', $startDate)->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('before', $endDate)->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('trafficArea', $trafficAreas)->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
-
-        $mockRepo->shouldReceive('createQuerybuilder')->andReturn($mockQb);
-        $mockRepo->shouldReceive('getQueryBuilder')->andReturn($mockQb);
-
-        $this->assertSame('result', $this->sut->fetchInterimRefunds($startDate, $endDate, $sort, $order, $trafficAreas));
-    }
-
-    public function testFetchInterimFeesByApplicationIdPaid(): void
-    {
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->setupFetchInterimFeesByApplicationId($mockQb, 12);
-
-        $this->em->shouldReceive('getReference')->with(
-            RefDataEntity::class,
-            FeeEntity::STATUS_PAID
-        )->once()->andReturn($paidRef = m::mock(RefDataEntity::class));
-
-        $statusExpr = $this->mockExprEq('f.feeStatus', ':feeStatus');
-        $mockQb->shouldReceive('expr->eq')->with('f.feeStatus', ':feeStatus')->once()->andReturn($statusExpr);
-        $mockQb->shouldReceive('andWhere')->with($statusExpr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('feeStatus', $paidRef)->once();
-
-        $this->assertSame('result', $this->sut->fetchInterimFeesByApplicationId(12, false, true));
-    }
-
-    public function testFetchInterimFeesByApplicationIdOutstandingOrPaid(): void
-    {
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->setupFetchInterimFeesByApplicationId($mockQb, 12);
-
-        $this->em->shouldReceive('getReference')->with(
-            RefDataEntity::class,
-            FeeEntity::STATUS_PAID
-        )->once()->andReturn($paidRef = m::mock(RefDataEntity::class));
-
-        $this->em->shouldReceive('getReference')->with(
-            RefDataEntity::class,
-            FeeEntity::STATUS_OUTSTANDING
-        )->once()->andReturn($outstandingRef = m::mock(RefDataEntity::class));
-
-        $statusExpr = $this->mockExprIn('f.feeStatus', ':feeStatus');
-        $mockQb->shouldReceive('expr->in')->with('f.feeStatus', ':feeStatus')->once()->andReturn($statusExpr);
-        $mockQb->shouldReceive('andWhere')->with($statusExpr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('feeStatus', [$paidRef, $outstandingRef])->once();
-
-        $this->assertSame('result', $this->sut->fetchInterimFeesByApplicationId(12, true, true));
-    }
-
-    public function testFetchOutstandingFeesByOrganisationId(): void
-    {
-        $organisationId = 123;
-
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $ceasedStatuses = [
-            LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
-            LicenceEntity::LICENCE_STATUS_REVOKED,
-            LicenceEntity::LICENCE_STATUS_SURRENDERED,
-            LicenceEntity::LICENCE_STATUS_TERMINATED
-        ];
-
-        $excludedApplicationStatuses = [
-            ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED,
-            ApplicationEntity::APPLICATION_STATUS_CANCELLED,
-            ApplicationEntity::APPLICATION_STATUS_WITHDRAWN,
-        ];
-
-        $mockQb->shouldReceive('leftJoin')
-            ->with('f.application', 'app')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->isNull')
-            ->with('f.application')
-            ->once()
-            ->andReturn('condition3');
-
-        $condition4 = $this->mockExprNotIn('app.status', ':excludedApplicationStatuses');
-        $mockQb->shouldReceive('expr->notIn')
-            ->with('app.status', ':excludedApplicationStatuses')
-            ->once()
-            ->andReturn($condition4);
-
-        $condition5 = $this->mockOrX();
-        $mockQb->shouldReceive('expr->orX')
-            ->withAnyArgs()
-            ->once()
-            ->andReturn($condition5);
-
-        $mockQb->shouldReceive('andWhere')
-            ->with($condition5)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
-            ->with('excludedApplicationStatuses', $excludedApplicationStatuses)
-            ->once()
-            ->andReturnSelf();
-
-        $condition1 = $this->mockExprNotIn('l.status', ':ceasedStatuses');
-        $condition2 = $this->mockExprNeq('ftype.feeType', ':feeType');
-        $mockQb->shouldReceive('expr->notIn')->with('l.status', ':ceasedStatuses')->once()->andReturn($condition1);
-        $mockQb->shouldReceive('expr->neq')->with('ftype.feeType', ':feeType')->once()->andReturn($condition2);
-        $mockQb->shouldReceive('andWhere')->with($condition1)->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('ceasedStatuses', $ceasedStatuses)->andReturnSelf();
-        $mockQb->shouldReceive('innerJoin')->with('f.feeType', 'ftype')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with($condition2)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('feeType', RefDataEntity::FEE_TYPE_CONT)->once()->andReturnSelf();
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->once()->with($mockQb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->zeroOrMoreTimes()->andReturnSelf()
-            ->shouldReceive('order')->with('invoicedDate', 'ASC')->once()->andReturnSelf();
-
-        $this->mockWhereOutstandingFee($mockQb);
-
-        $this->mockWhereCurrentLicenceOrApplicationFee($mockQb, $organisationId);
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
         $this->assertSame(
-            'result',
-            $this->sut->fetchOutstandingFeesByOrganisationId($organisationId, true, true)
+            ['RESULTS'],
+            $this->sut->fetchInterimRefunds('2015-01-01', '2015-12-31', 'invoicedDate', 'ASC', ['B']),
         );
-    }
-
-    public function testFetchFeesByIrfoGvPermitId(): void
-    {
-        $irfoGvPermitId = 123;
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->with('invoicedDate', 'ASC')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb
-            ->shouldReceive('expr->eq');
-        $mockQb
-            ->shouldReceive('andWhere')
-            ->andReturnSelf();
-        $mockQb
-            ->shouldReceive('setParameter')
-            ->with('irfoGvPermitId', $irfoGvPermitId)
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
 
         $this->assertSame(
-            'result',
-            $this->sut->fetchFeesByIrfoGvPermitId($irfoGvPermitId)
+            'SELECT f, w0, ftr, l, o' . self::FROM . self::FEE_STATUS_JOIN
+            . ' LEFT JOIN f.feeTransactions ftr LEFT JOIN f.licence l LEFT JOIN l.organisation o'
+            . ' LEFT JOIN f.application a INNER JOIN f.feeType fty'
+            . ' WHERE f.feeStatus IN(:feeStatus)'
+            // A refund is only interim once the application it belongs to has been resolved.
+            . ' AND COALESCE(a.withdrawnDate, a.refusedDate, a.grantedDate) IS NOT NULL'
+            . ' AND fty.feeType = :feeType'
+            . ' AND f.invoicedDate >= :after AND f.invoicedDate <= :before'
+            . ' AND l.trafficArea IN(:trafficArea)'
+            . ' ORDER BY f.invoicedDate ASC',
+            $qb->getDQL(),
         );
+        $this->assertSame(
+            [Entity::STATUS_REFUNDED, Entity::STATUS_REFUND_FAILED, Entity::STATUS_REFUND_PENDING],
+            $qb->getParameter('feeStatus')->getValue(),
+        );
+        $this->assertSame(FeeTypeEntity::FEE_TYPE_GRANTINT, $qb->getParameter('feeType')->getValue());
+        $this->assertSame('2015-01-01', $qb->getParameter('after')->getValue());
+        $this->assertSame('2015-12-31', $qb->getParameter('before')->getValue());
+        $this->assertSame(['B'], $qb->getParameter('trafficArea')->getValue());
     }
 
-    public function testFetchOutstandingFeesByIds(): void
+    public function testFetchInterimRefundsWithoutADateRangeOrTrafficArea(): void
     {
-        $ids = [1, 2, 3];
+        $qb = $this->createRealQb()->willReturn([]);
 
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
+        $this->sut->fetchInterimRefunds(null, null, 'invoicedDate', 'ASC');
 
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->once()->with($mockQb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->zeroOrMoreTimes()->andReturnSelf()
-            ->shouldReceive('order')->with('invoicedDate', 'ASC')->once()->andReturnSelf();
-
-        $this->mockWhereOutstandingFee($mockQb);
-
-        $mockQb
-            ->shouldReceive('expr->eq');
-        $mockQb
-            ->shouldReceive('expr->in');
-        $mockQb
-            ->shouldReceive('andWhere')
-            ->andReturnSelf();
-        $mockQb
-            ->shouldReceive('setParameter')
-            ->with('feeIds', $ids)
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
-
-        $this->assertSame(
-            'result',
-            $this->sut->fetchOutstandingFeesByIds($ids)
-        );
+        $this->assertStringNotContainsString(':after', $qb->getDQL());
+        $this->assertStringNotContainsString(':before', $qb->getDQL());
+        $this->assertStringNotContainsString(':trafficArea', $qb->getDQL());
     }
 
     /**
-     * @param string $status
+     * An outstanding fee counts only where it hangs off a live licence or a live application, so
+     * this one carries three alternations plus the excluded-application-status guard.
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
-    public function testFetchList(mixed $status): void
+    public function testFetchOutstandingFeesByOrganisationId(): void
     {
-        // in practice this query would never return results, but it covers all
-        // possible conditions
-        $query = FeeListQry::create(
-            [
-                'application' => 11,
-                'licence' => 12,
-                'task' => 13,
-                'busReg' => 14,
-                'irfoGvPermit' => 15,
-                'organisation' => 16,
-                'page' => 1,
-                'limit' => 10,
-                'sort' => 'id',
-                'order' => 'ASC',
-                'isMiscellaneous' => true,
-                'ids' => [1, 2, 3],
-                'status' => $status,
-            ]
-        );
+        $refData = $this->expectRefdataReference();
 
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->with($mockQb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('paginate')
-            ->once()
-            ->with(1, 10)
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->once()
-            ->with('id', 'ASC', [])
-            ->andReturnSelf()
-            ->shouldReceive('withCreatedBy')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('filterByLicence')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('filterByApplication')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('filterByIds')
-            ->once()
-            ->andReturnSelf();
-
-        $busRegQb = m::mock(QueryBuilder::class);
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('br')
-            ->once()
-            ->andReturn($busRegQb);
-
-        $busRegQb
-            ->shouldReceive('select')->once()->andReturnSelf()
-            ->shouldReceive('join')->once()->andReturnSelf()
-            ->shouldReceive('where')->once()->andReturnSelf()
-            ->shouldReceive('andWhere')->once()->andReturnSelf()
-            ->shouldReceive('setParameter')->once()->with('id', 14)->andReturnSelf();
-
-        $busRegIds = [14, 15, 16];
-        $busRegQb
-            ->shouldReceive('getQuery->getArrayResult')
-            ->once()
-            ->andReturn($busRegIds);
-
-        // we *could* assert all the conditions here, but just stub the methods for now
-        $mockQb
-            ->shouldReceive('andWhere')->zeroOrMoreTimes()->andReturnSelf()
-            ->shouldReceive('setParameter')->zeroOrMoreTimes()->andReturnSelf()
-            ->shouldReceive('innerJoin')->once()->andReturnSelf()
-            ->shouldReceive('leftJoin')->times(2)->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->orX')->times(2);
-        $mockQb->shouldReceive('expr->eq')->times(2);
-        $mockQb->shouldReceive('expr->isNotNull')->times(2);
-        $mockQb->shouldReceive('expr->in');
-
-        // mock pagination
-        $mockQuery = m::mock(\Doctrine\ORM\Query::class);
-        $mockQb->shouldReceive('getQuery')->andReturn($mockQuery);
-        $mockQuery->shouldReceive('setHydrationMode');
-        $paginator = m::mock();
-        $this->sut->shouldReceive('getPaginator')->andReturn($paginator);
-        $paginator->shouldReceive('getIterator')->andReturn('result');
+        $this->assertSame(['RESULTS'], $this->sut->fetchOutstandingFeesByOrganisationId(1));
 
         $this->assertSame(
-            'result',
-            $this->sut->fetchList($query)
+            'SELECT ' . self::TRANSACTION_SELECT . self::FROM . self::TRANSACTION_JOINS
+            . ' LEFT JOIN f.application a LEFT JOIN f.licence l LEFT JOIN a.licence al'
+            . ' LEFT JOIN f.application app'
+            . ' WHERE f.feeStatus = :feeStatus'
+            . ' AND (l.organisation = :organisationId OR al.organisation = :organisationId)'
+            . ' AND (a.status IN(:appStatus) OR l.status IN(:licStatus))'
+            . ' AND (f.licence IS NOT NULL OR f.application IS NOT NULL)'
+            . ' AND (f.application IS NULL OR app.status NOT IN(:excludedApplicationStatuses))'
+            . ' ORDER BY f.invoicedDate ASC',
+            $qb->getDQL(),
         );
+        $this->assertSame($refData, $qb->getParameter('feeStatus')->getValue());
+        $this->assertSame(1, $qb->getParameter('organisationId')->getValue());
+        $this->assertSame(
+            [
+                ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED,
+                ApplicationEntity::APPLICATION_STATUS_CANCELLED,
+                ApplicationEntity::APPLICATION_STATUS_WITHDRAWN,
+            ],
+            $qb->getParameter('excludedApplicationStatuses')->getValue(),
+        );
+    }
+
+    public function testFetchOutstandingFeesByOrganisationIdHidingCeasedAndContinuations(): void
+    {
+        $this->expectRefdataReference();
+
+        $qb = $this->createRealQb()->willReturn([]);
+
+        $this->sut->fetchOutstandingFeesByOrganisationId(1, true, true);
+
+        $this->assertStringContainsString(' INNER JOIN f.feeType ftype', $qb->getDQL());
+        $this->assertStringContainsString(' AND l.status NOT IN(:ceasedStatuses)', $qb->getDQL());
+        $this->assertStringContainsString(' AND ftype.feeType <> :feeType', $qb->getDQL());
+        $this->assertSame(
+            [
+                LicenceEntity::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
+                LicenceEntity::LICENCE_STATUS_REVOKED,
+                LicenceEntity::LICENCE_STATUS_SURRENDERED,
+                LicenceEntity::LICENCE_STATUS_TERMINATED,
+            ],
+            $qb->getParameter('ceasedStatuses')->getValue(),
+        );
+        $this->assertSame(RefDataEntity::FEE_TYPE_CONT, $qb->getParameter('feeType')->getValue());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('plainQueryProvider')]
+    public function testPlainQueries(
+        string $method,
+        array $args,
+        string $expectedDql,
+        array $expectedParameters,
+    ): void {
+        $refData = $this->expectRefdataReference();
+
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->{$method}(...$args));
+
+        $this->assertSame('SELECT f' . self::FROM . $expectedDql, $qb->getDQL());
+
+        foreach ($expectedParameters as $name => $expected) {
+            $this->assertSame(
+                $expected === '<refdata>' ? $refData : $expected,
+                $qb->getParameter($name)->getValue(),
+                sprintf('parameter %s', $name),
+            );
+        }
+    }
+
+    public static function plainQueryProvider(): \Iterator
+    {
+        yield 'outstanding fees for an application' => [
+            'fetchOutstandingFeesByApplicationId',
+            [1],
+            ' WHERE f.feeStatus = :feeStatus AND f.application = :application',
+            ['feeStatus' => '<refdata>', 'application' => 1],
+        ];
+        yield 'outstanding grant fees for an application' => [
+            'fetchOutstandingGrantFeesByApplicationId',
+            [1],
+            ' INNER JOIN f.feeType ft'
+            . ' WHERE f.feeStatus = :feeStatus AND f.application = :application'
+            . ' AND ft.feeType = :feeType',
+            ['application' => 1, 'feeType' => RefDataEntity::FEE_TYPE_GRANT],
+        ];
+        yield 'outstanding continuation fees for a licence' => [
+            'fetchOutstandingContinuationFeesByLicenceId',
+            [1, '2015-01-01'],
+            ' INNER JOIN f.feeType ft'
+            . ' WHERE f.licence = :licence AND ft.feeType = :feeType'
+            . ' AND f.feeStatus = :feeStatus AND f.invoicedDate >= :after',
+            ['licence' => 1, 'feeType' => RefDataEntity::FEE_TYPE_CONT, 'after' => '2015-01-01'],
+        ];
+        // $hasAnyStatus drops the outstanding filter; no $after drops the date bound.
+        yield 'continuation fees for a licence in any status' => [
+            'fetchOutstandingContinuationFeesByLicenceId',
+            [1, null, true],
+            ' INNER JOIN f.feeType ft WHERE f.licence = :licence AND ft.feeType = :feeType',
+            ['licence' => 1],
+        ];
+        yield 'a fee by type and application' => [
+            'fetchFeeByTypeAndApplicationId',
+            ['ft_app', 1],
+            ' INNER JOIN f.feeType ft WHERE f.application = :application AND ft.feeType = :feeType',
+            ['application' => 1, 'feeType' => 'ft_app'],
+        ];
+    }
+
+    /**
+     * Both by-id fetches eager-load the same associations and order oldest invoice first; only
+     * the outstanding filter differs.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('byIdsProvider')]
+    public function testFetchByIds(string $method, string $expectedExtra): void
+    {
+        $this->expectRefdataReference();
+
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->{$method}([1, 2]));
+
+        $this->assertSame(
+            'SELECT f, w0, w1, w2, ft, t, w3' . self::FROM . self::FEE_STATUS_JOIN
+            . ' LEFT JOIN f.licence w1 LEFT JOIN f.application w2'
+            . ' LEFT JOIN f.feeTransactions ft LEFT JOIN ft.transaction t LEFT JOIN t.status w3'
+            . ' WHERE' . $expectedExtra . ' f.id IN(:feeIds)'
+            . ' ORDER BY f.invoicedDate ASC',
+            $qb->getDQL(),
+        );
+        $this->assertSame([1, 2], $qb->getParameter('feeIds')->getValue());
+    }
+
+    public static function byIdsProvider(): \Iterator
+    {
+        yield 'outstanding only' => ['fetchOutstandingFeesByIds', ' f.feeStatus = :feeStatus AND'];
+        yield 'any status' => ['fetchFeesByIds', ''];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('irfoProvider')]
+    public function testFetchIrfoFees(string $method, array $args, string $expectedWhere): void
+    {
+        $this->expectRefdataReference();
+
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->{$method}(...$args));
+
+        $this->assertSame(
+            'SELECT f, w0' . self::FROM . self::FEE_STATUS_JOIN
+            . ' WHERE ' . $expectedWhere
+            . ' ORDER BY f.invoicedDate ASC',
+            $qb->getDQL(),
+        );
+    }
+
+    public static function irfoProvider(): \Iterator
+    {
+        yield 'goods permit' => [
+            'fetchFeesByIrfoGvPermitId',
+            [1],
+            'f.irfoGvPermit = :irfoGvPermitId',
+        ];
+        yield 'psv authorisation' => [
+            'fetchFeesByIrfoPsvAuthId',
+            [1],
+            'f.irfoPsvAuth = :irfoPsvAuthId',
+        ];
+        yield 'psv authorisation, outstanding only' => [
+            'fetchFeesByIrfoPsvAuthId',
+            [1, true],
+            'f.irfoPsvAuth = :irfoPsvAuthId AND f.feeStatus = :feeStatus',
+        ];
+    }
+
+    /**
+     * The feeType join is added before the helper runs, so it precedes the refdata join here
+     * rather than following it.
+     */
+    public function testFetchFeesByPsvAuthIdAndType(): void
+    {
+        $refData = $this->expectRefdataReference();
+
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(
+            ['RESULTS'],
+            $this->sut->fetchFeesByPsvAuthIdAndType(1, RefDataEntity::FEE_TYPE_IRFOPSVAPP),
+        );
+
+        $this->assertSame(
+            'SELECT f, w0' . self::FROM . ' INNER JOIN f.feeType ft' . self::FEE_STATUS_JOIN
+            . ' WHERE ft.feeType = :feeTypeFeeType AND f.irfoPsvAuth = :irfoPsvAuthId'
+            . ' ORDER BY f.invoicedDate DESC',
+            $qb->getDQL(),
+        );
+        $this->assertSame($refData, $qb->getParameter('feeTypeFeeType')->getValue());
+        $this->assertSame(1, $qb->getParameter('irfoPsvAuthId')->getValue());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('firstOrNullProvider')]
+    public function testFetchApplicationFeeByPsvAuthId(array $results, mixed $expected): void
+    {
+        $this->sut->expects('fetchFeesByPsvAuthIdAndType')
+            ->with(1, RefDataEntity::FEE_TYPE_IRFOPSVAPP)
+            ->andReturn($results);
+
+        $this->assertSame($expected, $this->sut->fetchApplicationFeeByPsvAuthId(1));
+    }
+
+    public static function firstOrNullProvider(): \Iterator
+    {
+        yield 'a fee' => [['first', 'second'], 'first'];
+        yield 'no fees' => [[], null];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('latestFeeProvider')]
+    public function testFetchLatestFeeByTypeStatusesAndApplicationId(array $results, mixed $expected): void
+    {
+        $this->expectRefdataReference();
+
+        $qb = $this->createRealQb()->willReturn($results);
+
+        $this->assertSame(
+            $expected,
+            $this->sut->fetchLatestFeeByTypeStatusesAndApplicationId('ft_app', ['lfs_ot'], 69),
+        );
+
+        $this->assertSame(
+            'SELECT f, w0' . self::FROM . self::FEE_STATUS_JOIN
+            . ' WHERE f.application = :application AND f.feeStatus IN(:feeStatuses)'
+            . ' AND f.feeType = :feeType'
+            . ' ORDER BY f.invoicedDate DESC',
+            $qb->getDQL(),
+        );
+        $this->assertSame(69, $qb->getParameter('application')->getValue());
+        $this->assertSame(['lfs_ot'], $qb->getParameter('feeStatuses')->getValue());
+        $this->assertSame('ft_app', $qb->getParameter('feeType')->getValue());
+        $this->assertSame(1, $qb->getMaxResults());
+    }
+
+    public static function latestFeeProvider(): \Iterator
+    {
+        yield 'a fee' => [['latest', 'older'], 'latest'];
+        yield 'no fees' => [[], null];
+    }
+
+    /**
+     * "Latest paid" is decided by the transaction, not the fee, so the ordering is on the
+     * transaction's completed date with its id as the tie-break.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('latestPaidProvider')]
+    public function testFetchLatestPaid(
+        string $method,
+        string $expectedDql,
+        array $results,
+        mixed $expected,
+    ): void {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn($results);
+
+        $this->assertSame($expected, $this->sut->{$method}(1));
+
+        $this->assertSame('SELECT f' . self::FROM . $expectedDql, $qb->getDQL());
+        $this->assertSame(1, $qb->getMaxResults());
+    }
+
+    public static function latestPaidProvider(): \Iterator
+    {
+        $byApplication = ' INNER JOIN f.feeTransactions ft INNER JOIN ft.transaction t'
+            . ' WHERE f.application = :application'
+            . ' ORDER BY t.completedDate DESC, t.id DESC';
+
+        $continuation = ' INNER JOIN f.feeTransactions ft INNER JOIN f.feeType ftp'
+            . ' INNER JOIN ft.transaction t'
+            . ' WHERE f.licence = :licence AND f.feeStatus = :feeStatus AND ftp.feeType = :feeType'
+            . ' ORDER BY t.completedDate DESC, t.id DESC';
+
+        yield 'by application' => ['fetchLatestPaidFeeByApplicationId', $byApplication, ['fee'], 'fee'];
+        // The two no-result cases disagree: one returns [], the other null.
+        yield 'by application, none' => ['fetchLatestPaidFeeByApplicationId', $byApplication, [], []];
+        yield 'continuation' => ['fetchLatestPaidContinuationFee', $continuation, ['fee'], 'fee'];
+        yield 'continuation, none' => ['fetchLatestPaidContinuationFee', $continuation, [], null];
+    }
+
+    /**
+     * Every list filter at once. It would return nothing in practice, but it is the only way to
+     * see the whole WHERE clause in one place.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
+    public function testFetchList(?string $status, string $expectedStatusFilter, mixed $expectedStatuses): void
+    {
+        ['f' => $qb, 'br' => $busRegQb] = $this->createRealQbs([
+            Entity::class => 'f',
+            BusRegEntity::class => 'br',
+        ]);
+
+        $busRegQb->stubbedQuery()->expects('getArrayResult')->andReturn([14, 15, 16]);
+
+        $qb->stubbedQuery()->expects('setHydrationMode')->with(Query::HYDRATE_ARRAY);
+        $paginator = m::mock();
+        $paginator->expects('getIterator')->withNoArgs()->andReturn('RESULTS');
+        $this->sut->expects('getPaginator')->with($qb->stubbedQuery())->andReturn($paginator);
+
+        $query = FeeList::create([
+            'application' => 11,
+            'licence' => 12,
+            'task' => 13,
+            'busReg' => 14,
+            'irfoGvPermit' => 15,
+            'organisation' => 16,
+            'irhpApplication' => 17,
+            'page' => 1,
+            'limit' => 10,
+            'sort' => 'id',
+            'order' => 'ASC',
+            'isMiscellaneous' => 'Y',
+            'ids' => [1, 2, 3],
+            'status' => $status,
+        ]);
+
+        $this->assertSame('RESULTS', $this->sut->fetchList($query));
+
+        $this->assertSame(
+            'SELECT f, w0, u, cd, p' . self::FROM . self::FEE_STATUS_JOIN
+            . ' LEFT JOIN f.irfoGvPermit igp LEFT JOIN f.irfoPsvAuth ipa'
+            . ' INNER JOIN f.feeType ft'
+            . ' LEFT JOIN f.createdBy u LEFT JOIN u.contactDetails cd LEFT JOIN cd.person p'
+            . ' WHERE f.licence = :licenceId AND f.application = :applicationId'
+            . ' AND f.id IN(:byIds)'
+            . ' AND (f.irfoGvPermit IS NOT NULL OR f.irfoPsvAuth IS NOT NULL)'
+            . ' AND (igp.organisation = :organisationId OR ipa.organisation = :organisationId)'
+            . ' AND f.busReg IN(:busRegIds)'
+            . ' AND f.task = :taskId AND f.irfoGvPermit = :irfoGvPermitId'
+            . ' AND f.irhpApplication = :irhpApplicationId'
+            . ' AND ft.isMiscellaneous = :isMiscellaneous'
+            . $expectedStatusFilter
+            . ' ORDER BY f.id ASC',
+            $qb->getDQL(),
+        );
+        $this->assertSame(12, $qb->getParameter('licenceId')->getValue());
+        $this->assertSame(11, $qb->getParameter('applicationId')->getValue());
+        $this->assertSame([1, 2, 3], $qb->getParameter('byIds')->getValue());
+        $this->assertSame([14, 15, 16], $qb->getParameter('busRegIds')->getValue());
+        $this->assertSame(16, $qb->getParameter('organisationId')->getValue());
+        $this->assertSame(13, $qb->getParameter('taskId')->getValue());
+        $this->assertSame(15, $qb->getParameter('irfoGvPermitId')->getValue());
+        $this->assertSame(17, $qb->getParameter('irhpApplicationId')->getValue());
+        $this->assertSame('Y', $qb->getParameter('isMiscellaneous')->getValue());
+
+        if ($expectedStatuses !== null) {
+            $this->assertSame($expectedStatuses, $qb->getParameter('feeStatus')->getValue());
+        }
+
+        // The bus registration filter widens to every registration sharing the route number.
+        $this->assertSame(
+            'SELECT br2.id FROM ' . BusRegEntity::class . ' br'
+            . ' INNER JOIN ' . BusRegEntity::class . ' br2'
+            . ' WHERE br.routeNo = br2.routeNo AND br.id = :id',
+            $busRegQb->getDQL(),
+        );
+        $this->assertSame(14, $busRegQb->getParameter('id')->getValue());
     }
 
     public static function statusProvider(): \Iterator
     {
-        yield ['all'];
-        yield ['current'];
-        yield ['historical'];
-    }
-
-    public function testFetchLatestFeeByTypeStatusesAndApplicationId(): void
-    {
-        $feeType = 'APP';
-        $feeStatuses = ['lfs_ot', 'lfs_cn'];
-        $applicationId = 69;
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->once()->with($mockQb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('order')->with('invoicedDate', 'DESC')->once()->andReturnSelf();
-
-        $mockQb
-            ->shouldReceive('expr->in');
-        $mockQb
-            ->shouldReceive('expr->eq');
-        $mockQb
-            ->shouldReceive('andWhere')->zeroOrMoreTimes()->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('application', $applicationId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('feeType', $feeType)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('feeStatuses', $feeStatuses)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setMaxResults')
-            ->with(1)
-            ->andReturnSelf();
-
-        $fee1 = m::mock();
-        $results = [$fee1];
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn($results);
-
-        $this->assertSame(
-            $fee1,
-            $this->sut->fetchLatestFeeByTypeStatusesAndApplicationId($feeType, $feeStatuses, $applicationId)
-        );
-    }
-
-    public function testFetchLatestFeeByTypeStatusesAndApplicationIdNull(): void
-    {
-        $feeType = 'APP';
-        $feeStatuses = ['lfs_ot', 'lfs_cn'];
-        $appId = 69;
-
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $mockExpr = new Expr();
-        $mockQb->shouldReceive('expr')->with()->andReturn($mockExpr);
-
-        $mockQb
-            ->shouldReceive('andWhere')->times(3)->andReturnSelf()
-            ->shouldReceive('setParameter')->times(3)->andReturnSelf()
-            ->shouldReceive('setMaxResults')->with(1)->once()->andReturnSelf()
-            ->shouldReceive('getQuery->getResult')->with()->once()->andReturn([]);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')->with('f')->once()->andReturn($mockQb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->once()->with($mockQb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('order')->once()->andReturnSelf();
-
-        $this->assertNull($this->sut->fetchLatestFeeByTypeStatusesAndApplicationId($feeType, $feeStatuses, $appId));
-    }
-
-    public function testFetchOutstandingFeesByApplicationId(): void
-    {
-        $applicationId = 69;
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->mockWhereOutstandingFee($mockQb);
-
-        $applicationExpr = $this->mockExprEq('f.application', ':application');
-
-        $mockQb
-            ->shouldReceive('expr->eq')
-            ->with('f.application', ':application')
-            ->andReturn($applicationExpr);
-        $mockQb
-            ->shouldReceive('andWhere')
-            ->with($applicationExpr)
-            ->andReturnSelf();
-        $mockQb
-            ->shouldReceive('setParameter')
-            ->with('application', $applicationId)
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
-
-        $this->assertSame(
-            'result',
-            $this->sut->fetchOutstandingFeesByApplicationId($applicationId)
-        );
-    }
-
-    private function mockWhereOutstandingFee(m\MockInterface $mockQb): void
-    {
-        $where = $this->mockExprEq('f.feeStatus', ':feeStatus');
-        $mockQb
-            ->shouldReceive('expr->eq')
-            ->with('f.feeStatus', ':feeStatus')
-            ->once()
-            ->andReturn($where);
-
-        $mockQb
-            ->shouldReceive('setParameter')
-            ->with('feeStatus', m::any()) // refdata 'lfs_ot'
-            ->andReturnSelf();
-
-        $mockQb
-            ->shouldReceive('andWhere')
-            ->with($where)
-            ->andReturnSelf();
-
-        $this->em
-            ->shouldReceive('getReference');
-    }
-
-    private function mockWhereCurrentLicenceOrApplicationFee(m\MockInterface $mockQb, mixed $organisationId): void
-    {
-        $mockQb
-            ->shouldReceive('leftJoin')
-            ->with('f.application', 'a')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('leftJoin')
-            ->with('f.licence', 'l')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('leftJoin')
-            ->with('a.licence', 'al')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb
-            ->shouldReceive('expr->eq');
-        $mockQb
-            ->shouldReceive('expr->in');
-        $mockQb
-            ->shouldReceive('expr->orX');
-        $mockQb
-            ->shouldReceive('expr->isNotNull');
-        $mockQb
-            ->shouldReceive('andWhere')
-            ->andReturnSelf();
-
-        $mockQb
-            ->shouldReceive('setParameter')
-            ->with('organisationId', $organisationId)
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('appStatus', m::type('array')) // refdata ['apsts_consideration', 'apsts_granted']
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('licStatus', m::type('array')); // refdata ['lsts_valid', 'lsts_curtailed', 'lsts_suspended']
-
-        $this->em
-            ->shouldReceive('getReference');
-    }
-
-    public function testFetchOutstandingGrantFeesByApplicationId(): void
-    {
-        $mockQb = $this->createMockQb('{QUERY}');
-
-        $this->mockCreateQueryBuilder($mockQb);
-
-        $this->em->shouldReceive('getReference')
-            ->andReturnUsing(
-                function ($refData, $input) {
-                    unset($refData); // unused
-                    $reference = m::mock(RefDataEntity::class);
-                    $reference->shouldReceive('getId')->andReturn($input);
-                    return $reference;
-                }
-            );
-
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->once()
-            ->andReturn('Foo');
-
-        $this->assertEquals('Foo', $this->sut->fetchOutstandingGrantFeesByApplicationId(111));
-
-        $this->assertEquals(
-            '{QUERY}'
-            // whereOutstandingFee
-            . ' AND f.feeStatus = [[lfs_ot]]'
-            . ' INNER JOIN f.feeType ft AND f.application = [[111]] AND ft.feeType = [[GRANT]]',
-            $this->query
-        );
-    }
-
-    public function testFetchOutstandingContinuationFeesByLicenceId(): void
-    {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->em->shouldReceive('getReference')->with(
-            RefDataEntity::class,
-            FeeEntity::STATUS_OUTSTANDING
-        )->once()->andReturn($outstandingRef = m::mock(RefDataEntity::class));
-        $outstandingRef->shouldReceive('getId')->andReturn(FeeEntity::STATUS_OUTSTANDING);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)
-                ->shouldReceive('execute')->zeroOrMoreTimes()->andReturnNull()
-                ->shouldReceive('getResult')->andReturn(['RESULTS'])->getMock()
-        );
-
-        $after = new \DateTime('2015-09-22');
-        $expectedAfterStr = $after->format(\DateTime::W3C);
-        $this->assertEquals(
-            ['RESULTS'],
-            $this->sut->fetchOutstandingContinuationFeesByLicenceId(716, $after)
-        );
-
-        $expectedQuery = 'BLAH INNER JOIN f.feeType ft AND f.licence = [[716]] AND '
-            . 'ft.feeType = [[CONT]] AND f.feeStatus = [[lfs_ot]]'
-            . ' AND f.invoicedDate >= [[' . $expectedAfterStr . ']]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchLatestPaidFeeByApplicationId(): void
-    {
-        $applicationId = 69;
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $condition = $this->mockExprEq('f.application', ':application');
-
-        $mockQb
-            ->shouldReceive('expr->eq')->with('f.application', ':application')->once()->andReturn($condition);
-
-        $mockQb
-            ->shouldReceive('innerJoin')->with('f.feeTransactions', 'ft')->once()->andReturnSelf()
-            ->shouldReceive('innerJoin')->with('ft.transaction', 't')->once()->andReturnSelf()
-            ->shouldReceive('addOrderBy')->with('t.completedDate', 'DESC')->once()->andReturnSelf()
-            ->shouldReceive('addOrderBy')->with('t.id', 'DESC')->once()->andReturnSelf()
-            ->shouldReceive('andWhere')->with($condition)->andReturnSelf()
-            ->shouldReceive('setParameter')->with('application', $applicationId)->once()->andReturnSelf()
-            ->shouldReceive('setMaxResults')->with(1)->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['result']);
-
-        $this->assertSame('result', $this->sut->fetchLatestPaidFeeByApplicationId($applicationId));
-    }
-
-    public function testFetchFeesByPsvAuthIdAndType(): void
-    {
-        $irfoPsvAuthId = 123;
-        $feeTypeFeeType = 'fee-type-fee-type';
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->em->shouldReceive('getReference')->with(
-            RefDataEntity::class,
-            $feeTypeFeeType
-        )->once()->andReturn($feeTypeRef = m::mock(RefDataEntity::class));
-        $feeTypeRef->shouldReceive('getId')->andReturn($feeTypeFeeType);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->with('invoicedDate', 'DESC')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb
-            ->shouldReceive('join')
-            ->andReturnSelf();
-        $mockQb
-            ->shouldReceive('expr->eq');
-        $mockQb
-            ->shouldReceive('andWhere')
-            ->andReturnSelf();
-        $mockQb
-            ->shouldReceive('setParameter')
-            ->with('irfoPsvAuthId', $irfoPsvAuthId)
-            ->andReturnSelf();
-        $mockQb
-            ->shouldReceive('setParameter')
-            ->with('feeTypeFeeType', $feeTypeRef)
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
-
-        $this->assertSame(
-            'result',
-            $this->sut->fetchFeesByPsvAuthIdAndType($irfoPsvAuthId, $feeTypeFeeType)
-        );
-    }
-
-    public function testFetchApplicationFeeByPsvAuthId(): void
-    {
-        $irfoPsvAuthId = 123;
-
-        $this->sut->shouldReceive('fetchFeesByPsvAuthIdAndType')
-            ->with($irfoPsvAuthId, FeeTypeEntity::FEE_TYPE_IRFOPSVAPP)
-            ->andReturn(['foo']);
-
-        $this->assertStringContainsString(
-            'foo',
-            (string) $this->sut->fetchApplicationFeeByPsvAuthId($irfoPsvAuthId)
-        );
-    }
-
-    public function testFetchApplicationFeeByPsvAuthIdNoFees(): void
-    {
-        $irfoPsvAuthId = 123;
-
-        $this->sut->shouldReceive('fetchFeesByPsvAuthIdAndType')
-            ->with($irfoPsvAuthId, FeeTypeEntity::FEE_TYPE_IRFOPSVAPP)
-            ->andReturn([]);
-
-        $this->assertEmpty($this->sut->fetchApplicationFeeByPsvAuthId($irfoPsvAuthId));
-    }
-
-    public function testFetchFeesByIrfoPsvAuthId(): void
-    {
-        $irfoPsvAuthId = 123;
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->with('invoicedDate', 'ASC')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb
-            ->shouldReceive('expr->eq');
-        $mockQb
-            ->shouldReceive('andWhere')
-            ->andReturnSelf();
-        $mockQb
-            ->shouldReceive('setParameter')
-            ->with('irfoPsvAuthId', $irfoPsvAuthId)
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
-
-        $this->assertSame(
-            'result',
-            $this->sut->fetchFeesByIrfoPsvAuthId($irfoPsvAuthId)
-        );
-    }
-
-    public function testFetchFeesByIrfoPsvAuthIdOutstanding(): void
-    {
-        $irfoPsvAuthId = 123;
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $outstandingRef = m::mock(RefDataEntity::class);
-
-        $this->em
-            ->shouldReceive('getReference')
-            ->with(
-                RefDataEntity::class,
-                FeeEntity::STATUS_OUTSTANDING
-            )
-            ->once()
-            ->andReturn($outstandingRef);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->with('invoicedDate', 'ASC')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb
-            ->shouldReceive('expr->eq');
-        $mockQb
-            ->shouldReceive('andWhere')
-            ->andReturnSelf();
-        $mockQb
-            ->shouldReceive('setParameter')
-            ->with('irfoPsvAuthId', $irfoPsvAuthId)
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('feeStatus', $outstandingRef)
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
-
-        $this->assertSame(
-            'result',
-            $this->sut->fetchFeesByIrfoPsvAuthId($irfoPsvAuthId, true)
-        );
-    }
-
-    public function testFetchFeeByTypeAndApplicationId(): void
-    {
-        $feeType = 'APP';
-        $applicationId = 69;
-
-        /** @var QueryBuilder $qb */
-        $applicationExpr = $this->mockExprEq('f.application', ':application');
-        $feeTypeExpr = $this->mockExprEq('ft.feeType', ':feeType');
-        $mockExpr = m::mock(Expr::class)
-            ->shouldReceive('eq')->with('f.application', ':application')->once()->andReturn($applicationExpr)
-            ->shouldReceive('eq')->with('ft.feeType', ':feeType')->once()->andReturn($feeTypeExpr)
-            ->getMock();
-
-        $mockQb = m::mock(QueryBuilder::class)
-            ->shouldReceive('expr')
-            ->andReturn($mockExpr)
-            ->twice()
-            ->shouldReceive('andWhere')
-            ->with($applicationExpr)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with($feeTypeExpr)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('application', $applicationId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('feeType', $feeType)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('join')
-            ->with('f.feeType', 'ft')
-            ->once()
-            ->andReturnSelf()
-            ->getMock();
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $results = [m::mock()];
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn($results);
-
-        $this->assertSame(
-            $results,
-            $this->sut->fetchFeeByTypeAndApplicationId($feeType, $applicationId)
-        );
-    }
-
-    public function testFetchFeesByIds(): void
-    {
-        $ids = [1, 2, 3];
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->once()->with($mockQb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('licence')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('application')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('feeTransactions', 'ft')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('ft.transaction', 't')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('t.status')->once()->andReturnSelf()
-            ->shouldReceive('order')->with('invoicedDate', 'ASC')->once()->andReturnSelf();
-
-        $condition = $this->mockExprIn('f.id', ':feeIds');
-        $mockQb->shouldReceive('expr->in')->with('f.id', ':feeIds')->once()->andReturn($condition);
-        $mockQb->shouldReceive('andWhere')->with($condition)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('feeIds', $ids)->andReturnSelf();
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
-
-        $this->assertSame('result', $this->sut->fetchFeesByIds($ids));
-    }
-
-    public function testFetchLatestPaidContinuationFee(): void
-    {
-        $licenceId = 1;
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $mockQb
-            ->shouldReceive('innerJoin')->once()->with('f.feeTransactions', 'ft')->andReturnSelf()
-            ->shouldReceive('innerJoin')->once()->with('f.feeType', 'ftp')->andReturnSelf()
-            ->shouldReceive('innerJoin')->once()->with('ft.transaction', 't')->andReturnSelf()
-            ->shouldReceive('addOrderBy')->once()->with('t.completedDate', 'DESC')->andReturnSelf()
-            ->shouldReceive('addOrderBy')->once()->with('t.id', 'DESC')->andReturnSelf()
-            ->shouldReceive('expr')
-            ->andReturnUsing(function () {
-                static $expressions;
-
-                $expressions ??= [
-                    $this->mockExprEq('f.licence', ':licence'),
-                    $this->mockExprEq('f.feeStatus', ':feeStatus'),
-                    $this->mockExprEq('ftp.feeType', ':feeType'),
-                ];
-
-                $expr = m::mock(Expr::class);
-                $expr->shouldReceive('eq')->andReturnUsing(fn () => array_shift($expressions));
-
-                return $expr;
-            })
-            ->times(3)
-            ->shouldReceive('andWhere')->with(m::type(\Doctrine\ORM\Query\Expr\Comparison::class))->times(3)->andReturnSelf()
-            ->shouldReceive('setParameter')->with('licence', $licenceId)->once()->andReturnSelf()
-            ->shouldReceive('setMaxResults')->with(1)->once()->andReturnSelf()
-            ->shouldReceive('setParameter')->with('feeType', RefDataEntity::FEE_TYPE_CONT)->once()->andReturnSelf()
-            ->shouldReceive('setParameter')->with('feeStatus', FeeEntity::STATUS_PAID)->once()->andReturnSelf()
-            ->getMock();
-
-        $mockQb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_OBJECT)->once()->andReturn(['foo']);
-
-        $this->assertSame('foo', $this->sut->fetchLatestPaidContinuationFee($licenceId));
-    }
-
-    public function testFetchListByLicenceHidesFeesForExcludedApplicationStatuses(): void
-    {
-        $query = FeeListQry::create(
-            [
-                'licence' => 12,
-                'page' => 1,
-                'limit' => 10,
-                'sort' => 'id',
-                'order' => 'ASC',
-            ]
-        );
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('f')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->with($mockQb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('paginate')
-            ->once()
-            ->with(1, 10)
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->once()
-            ->with('id', 'ASC', [])
-            ->andReturnSelf()
-            ->shouldReceive('withCreatedBy')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('filterByLicence')
-            ->once()
-            ->with(12)
-            ->andReturnSelf()
-            ->shouldReceive('filterByApplication')
-            ->once()
-            ->with(null)
-            ->andReturnSelf()
-            ->shouldReceive('filterByIds')
-            ->once()
-            ->with(null)
-            ->andReturnSelf();
-
-        $excludedApplicationStatuses = [
-            ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED,
-            ApplicationEntity::APPLICATION_STATUS_CANCELLED,
-            ApplicationEntity::APPLICATION_STATUS_WITHDRAWN,
+        yield 'current' => [
+            'current',
+            ' AND f.feeStatus IN(:feeStatus)',
+            [Entity::STATUS_OUTSTANDING],
         ];
+        yield 'historical' => [
+            'historical',
+            ' AND f.feeStatus IN(:feeStatus)',
+            [
+                Entity::STATUS_PAID,
+                Entity::STATUS_CANCELLED,
+                Entity::STATUS_REFUNDED,
+                Entity::STATUS_REFUND_FAILED,
+                Entity::STATUS_REFUND_PENDING,
+            ],
+        ];
+        yield 'all' => ['all', '', null];
+        yield 'unset' => [null, '', null];
+    }
 
-        $mockQb->shouldReceive('leftJoin')
-            ->with('f.application', 'app')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->isNull')
-            ->with('f.application')
-            ->once()
-            ->andReturn('condition1');
-
-        $condition2 = $this->mockExprNotIn('app.status', ':excludedApplicationStatuses');
-        $mockQb->shouldReceive('expr->notIn')
-            ->with('app.status', ':excludedApplicationStatuses')
-            ->once()
-            ->andReturn($condition2);
-
-        $condition3 = $this->mockOrX();
-        $mockQb->shouldReceive('expr->orX')
-            ->withAnyArgs()
-            ->once()
-            ->andReturn($condition3);
-
-        $mockQb->shouldReceive('andWhere')
-            ->with($condition3)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
-            ->with('excludedApplicationStatuses', $excludedApplicationStatuses)
-            ->once()
-            ->andReturnSelf();
-
-        // mock pagination
-        $mockQuery = m::mock(\Doctrine\ORM\Query::class);
-        $mockQb->shouldReceive('getQuery')->andReturn($mockQuery);
-        $mockQuery->shouldReceive('setHydrationMode');
+    /**
+     * Listing a licence's fees drops the ones belonging to applications the operator never
+     * submitted; fees with no application at all stay. Asking for a specific application instead
+     * turns the guard off, so a not-submitted application can still list its own fees.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('excludedStatusProvider')]
+    public function testFetchListExcludesUnsubmittedApplicationFees(?int $application, bool $expectedGuard): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('setHydrationMode')->with(Query::HYDRATE_ARRAY);
 
         $paginator = m::mock();
-        $this->sut->shouldReceive('getPaginator')->andReturn($paginator);
-        $paginator->shouldReceive('getIterator')->andReturn('result');
+        $paginator->expects('getIterator')->withNoArgs()->andReturn('RESULTS');
+        $this->sut->expects('getPaginator')->with($qb->stubbedQuery())->andReturn($paginator);
 
-        $this->assertSame(
-            'result',
-            $this->sut->fetchList($query)
-        );
+        $this->sut->fetchList(FeeList::create(['licence' => 12, 'application' => $application]));
+
+        $guard = ' LEFT JOIN f.application app';
+
+        if ($expectedGuard) {
+            $this->assertStringContainsString($guard, $qb->getDQL());
+            $this->assertStringContainsString(
+                ' AND (f.application IS NULL OR app.status NOT IN(:excludedApplicationStatuses))',
+                $qb->getDQL(),
+            );
+            $this->assertSame(
+                [
+                    ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED,
+                    ApplicationEntity::APPLICATION_STATUS_CANCELLED,
+                    ApplicationEntity::APPLICATION_STATUS_WITHDRAWN,
+                ],
+                $qb->getParameter('excludedApplicationStatuses')->getValue(),
+            );
+
+            return;
+        }
+
+        $this->assertStringNotContainsString($guard, $qb->getDQL());
+        $this->assertNull($qb->getParameter('excludedApplicationStatuses'));
+    }
+
+    public static function excludedStatusProvider(): \Iterator
+    {
+        yield 'a licence alone' => [null, true];
+        yield 'a licence and an application' => [11, false];
+    }
+
+    /**
+     * getRefdataReference() resolves through the EntityManager; the repositories only ever pass
+     * the reference straight into a parameter, so one shared instance is enough.
+     */
+    private function expectRefdataReference(): RefDataEntity
+    {
+        $refData = m::mock(RefDataEntity::class);
+
+        $this->em->shouldReceive('getReference')
+            ->with(RefDataEntity::class, m::any())
+            ->andReturn($refData);
+
+        return $refData;
     }
 }

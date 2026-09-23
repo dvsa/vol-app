@@ -2,124 +2,48 @@
 
 declare(strict_types=1);
 
-/**
- * Local Authority test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\Expr;
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\LocalAuthority as LocalAuthorityRepo;
-use Dvsa\Olcs\Api\Entity\Bus\LocalAuthority as LocalAuthorityEntity;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
+use Dvsa\Olcs\Api\Domain\Repository\LocalAuthority as Repo;
+use Dvsa\Olcs\Api\Entity\Bus\LocalAuthority as Entity;
 
-/**
- * Local Authority test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 final class LocalAuthorityTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(LocalAuthorityRepo::class, true);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     /**
-     * Tests fetchByTxcName
+     * Both lookups take the names straight from an EBSR submission, so the values are inlined
+     * into the IN() rather than bound.
      */
-    public function testFetchByTxcName(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('lookupProvider')]
+    public function testLookups(string $method, array $values, string $expectedWhere): void
     {
-        $mockResult = ['result'];
-        $txcNames = ['name1', 'name2'];
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(['result']);
 
-        /** @var Expr $expr */
-        $expr = m::mock(Expr::class);
-        $expr->shouldReceive('in')
-            ->with('m.txcName', $txcNames)
-            ->andReturn(m::mock(\Doctrine\ORM\Query\Expr\Func::class));
+        $this->assertSame(['result'], $this->sut->{$method}($values));
 
-        $qb = $this->getQueryBuilder($expr, $mockResult);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(LocalAuthorityEntity::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchByTxcName($txcNames);
-
-        $this->assertEquals($result, $mockResult);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE ' . $expectedWhere,
+            $qb->getDQL(),
+        );
     }
 
-    /**
-     * Tests fetchByNaptan
-     */
-    public function testFetchByNaptan(): void
+    public static function lookupProvider(): \Iterator
     {
-        $mockResult = ['result'];
-        $naptan = ['naptan1', 'naptan2'];
-
-        /** @var Expr $expr */
-        $expr = m::mock(Expr::class);
-        $expr->shouldReceive('in')
-            ->with('m.naptanCode', $naptan)
-            ->andReturn(m::mock(\Doctrine\ORM\Query\Expr\Func::class));
-
-        $qb = $this->getQueryBuilder($expr, $mockResult);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(LocalAuthorityEntity::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchByNaptan($naptan);
-
-        $this->assertEquals($result, $mockResult);
-    }
-
-    /**
-     * Gets a query builder with expression
-     *
-     * @param $expr
-     * @param $mockResult
-     * @return QueryBuilder
-     */
-    public function getQueryBuilder(mixed $expr, mixed $mockResult): mixed
-    {
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $qb->shouldReceive('expr')
-            ->andReturn($expr);
-
-        $qb->shouldReceive('andWhere')
-            ->with(m::type(\Doctrine\ORM\Query\Expr\Func::class))
-            ->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->execute')
-            ->andReturn($mockResult);
-
-        return $qb;
+        yield 'by TransXChange name' => [
+            'fetchByTxcName',
+            ['name1', 'name2'],
+            "m.txcName IN('name1', 'name2')",
+        ];
+        yield 'by NaPTAN code' => [
+            'fetchByNaptan',
+            ['naptan1', 'naptan2'],
+            "m.naptanCode IN('naptan1', 'naptan2')",
+        ];
     }
 }

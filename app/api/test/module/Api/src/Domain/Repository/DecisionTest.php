@@ -2,71 +2,45 @@
 
 declare(strict_types=1);
 
-/**
- * Decision repo test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
 use Dvsa\Olcs\Api\Domain\Repository\Decision as Repo;
+use Dvsa\Olcs\Api\Entity\Pi\Decision as Entity;
 use Dvsa\Olcs\Transfer\Query\Decision\DecisionList;
 
-/**
- * Decision repo test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
 final class DecisionTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testApplyListFilters(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
+    public function testApplyListFilters(array $data, string $expectedWhere): void
     {
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
 
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchList(DecisionList::create($data)));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf();
-
-        $query = DecisionList::create(['isNi' => 'Y', 'goodsOrPsv' => 'lcat_psv']);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'AND m.isNi = [[true]] '
-            . 'AND m.goodsOrPsv = [[lcat_psv]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT m, w0 FROM ' . Entity::class . ' m LEFT JOIN m.goodsOrPsv w0' . $expectedWhere,
+            $qb->getDQL(),
+        );
+        $this->assertTrue($qb->getParameter('isNi')->getValue());
     }
 
-    public function testApplyListFiltersForTm(): void
+    public static function listFilterProvider(): \Iterator
     {
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
-
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf();
-
-        $query = DecisionList::create(['isNi' => 'Y', 'goodsOrPsv' => 'NULL']);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'AND m.isNi = [[true]] '
-            . 'AND m.goodsOrPsv IS NULL';
-        $this->assertEquals($expectedQuery, $this->query);
+        yield 'goodsOrPsv value' => [
+            ['isNi' => 'Y', 'goodsOrPsv' => 'lcat_psv'],
+            ' WHERE m.isNi = :isNi AND m.goodsOrPsv = :goodsOrPsv',
+        ];
+        // The literal string 'NULL' switches the filter to an IS NULL check.
+        yield 'goodsOrPsv NULL means transport manager decisions' => [
+            ['isNi' => 'Y', 'goodsOrPsv' => 'NULL'],
+            ' WHERE m.isNi = :isNi AND m.goodsOrPsv IS NULL',
+        ];
     }
 }

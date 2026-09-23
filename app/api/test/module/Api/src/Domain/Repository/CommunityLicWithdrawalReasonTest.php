@@ -2,45 +2,32 @@
 
 declare(strict_types=1);
 
-/**
- * Community Lic Withdrawal Reason Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\CommunityLicWithdrawalReason as CommunityLicWithdrawalReasonRepo;
+use Dvsa\Olcs\Api\Domain\Repository\CommunityLicWithdrawalReason as Repo;
+use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawalReason as Entity;
 
-/**
- * Community Lic Withdrawal Reason Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class CommunityLicWithdrawalReasonTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(CommunityLicWithdrawalReasonRepo::class);
+        $this->setUpRealSut(Repo::class);
     }
 
     public function testFetchByWithdrawalIds(): void
     {
         $ids = [1];
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $foo = $this->mockExprIn('m.communityLicWithdrawal', ':communityLicWithdrawal');
-        $mockQb->shouldReceive('expr->in')
-            ->with('m.communityLicWithdrawal', ':communityLicWithdrawal')
-            ->once()
-            ->andReturn($foo);
-        $mockQb->shouldReceive('andWhere')->with($foo)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('communityLicWithdrawal', $ids)->once()->andReturnSelf();
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('getQuery->execute')->once()->andReturn('result');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn('result');
 
-        $this->assertEquals('result', $this->sut->fetchByWithdrawalIds($ids));
+        $this->assertSame('result', $this->sut->fetchByWithdrawalIds($ids));
+
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.communityLicWithdrawal IN(:communityLicWithdrawal)',
+            $qb->getDQL(),
+        );
+        $this->assertSame($ids, $qb->getParameter('communityLicWithdrawal')->getValue());
     }
 }

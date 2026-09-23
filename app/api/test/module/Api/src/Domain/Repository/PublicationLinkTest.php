@@ -2,486 +2,180 @@
 
 declare(strict_types=1);
 
-/**
- * Publication link test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use DateTime;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Query\Expr\Comparison;
-use Dvsa\Olcs\Api\Domain\Repository\PublicationLink;
-use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
-use Dvsa\Olcs\Api\Entity\Publication\Publication as PublicationEntity;
-use Dvsa\Olcs\Api\Entity\Publication\PublicationLink as PublicationLinkEntity;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Mockery as m;
+use Dvsa\Olcs\Api\Domain\Query\Bookmark\PreviousPublicationByApplication;
+use Dvsa\Olcs\Api\Domain\Query\Bookmark\PreviousPublicationByLicence;
+use Dvsa\Olcs\Api\Domain\Query\Bookmark\PreviousPublicationByPi;
+use Dvsa\Olcs\Api\Domain\Query\Bookmark\UnpublishedApplication;
+use Dvsa\Olcs\Api\Domain\Query\Bookmark\UnpublishedBusReg;
+use Dvsa\Olcs\Api\Domain\Query\Bookmark\UnpublishedPi;
 use Dvsa\Olcs\Api\Domain\Repository\PublicationLink as PublicationLinkRepo;
-use Doctrine\ORM\EntityRepository;
+use Dvsa\Olcs\Api\Entity\Publication\Publication as PublicationEntity;
+use Dvsa\Olcs\Api\Entity\Publication\PublicationLink as Entity;
 use Dvsa\Olcs\Transfer\Query\Publication\PublicationLinkList;
 use Dvsa\Olcs\Transfer\Query\Publication\PublicationLinkTmList;
-use Dvsa\Olcs\Api\Domain\Query\Bookmark\UnpublishedBusReg;
-use Dvsa\Olcs\Api\Domain\Query\Bookmark\UnpublishedApplication;
-use Dvsa\Olcs\Api\Domain\Query\Bookmark\UnpublishedPi;
-use Dvsa\Olcs\Api\Domain\Query\Bookmark\PreviousPublicationByPi;
-use Dvsa\Olcs\Api\Domain\Query\Bookmark\PreviousPublicationByLicence;
-use Dvsa\Olcs\Api\Domain\Query\Bookmark\PreviousPublicationByApplication;
+use Mockery as m;
 
-/**
- * Publication link test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 final class PublicationLinkTest extends RepositoryTestCase
 {
-    /**
-     * @var PublicationLink
-     */
-    protected $sut;
+    private const string FROM = ' FROM ' . Entity::class . ' m';
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(PublicationLinkRepo::class);
+        $this->setUpRealSut(PublicationLinkRepo::class, true);
     }
 
-    /**
-     * @param $qb
-     * @return m\MockInterface
-     */
-    private function getMockRepo(mixed $qb): mixed
+    public function testFetchByBusRegId(): void
     {
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULT']);
 
-        return $repo;
-    }
+        $this->assertSame(['RESULT'], $this->sut->fetchByBusRegId(5));
 
-    /**
-     * @param QueryInterface $query
-     * @return m\MockInterface
-     */
-    private function getPublicationAndSectionQb(mixed $query): m\MockInterface
-    {
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.publication', ':byPublication')->once()->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with(
-                'byPublication',
-                $query->getPublication()
-            )->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')
-            ->with('m.publicationSection', ':byPublicationSection')
-            ->once()
-            ->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('byPublicationSection', $query->getPublicationSection())
-            ->once()
-            ->andReturnSelf();
-
-        return $mockQb;
-    }
-
-    /**
-     * @param QueryInterface $query
-     * @return m\MockInterface
-     */
-    private function getPublicationNoPubTypeTaQb(mixed $query): m\MockInterface
-    {
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('p.pubType', ':byPubType')->once()->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with(
-                'byPubType',
-                $query->getPubType()
-            )->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')
-            ->with('m.trafficArea', ':byTrafficArea')
-            ->once()
-            ->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('byTrafficArea', $query->getTrafficArea())
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('expr->lt')
-            ->with('p.publicationNo', ':byPublicationNo')
-            ->once()
-            ->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('byPublicationNo', $query->getPublicationNo())
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('orderBy')
-            ->with('p.publicationNo', 'DESC')
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('setMaxResults')
-            ->with(1)
-            ->once()
-            ->andReturnSelf();
-
-        return $mockQb;
-    }
-
-    /**
-     * @param $query
-     * @param UnpublishedPi|PreviousPublicationByPi $mockQb
-     * @return mixed
-     */
-    private function addPi(QueryInterface $query, mixed $mockQb): m\MockInterface
-    {
-        $mockQb->shouldReceive('expr->eq')->with('m.pi', ':byPi')->once()->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byPi', $query->getPi())->once()->andReturnSelf();
-
-        return $mockQb;
-    }
-
-    /**
-     * @param $mockQb
-     * @return mixed
-     */
-    private function addBus(QueryInterface $query, mixed $mockQb): m\MockInterface
-    {
-        $mockQb->shouldReceive('expr->eq')->with('m.busReg', ':byBusReg')->once()->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byBusReg', $query->getBusReg())->once()->andReturnSelf();
-
-        return $mockQb;
-    }
-
-    /**
-     * @param $mockQb
-     * @return mixed
-     */
-    private function addApplication(QueryInterface $query, mixed $mockQb): m\MockInterface
-    {
-        $mockQb->shouldReceive('expr->eq')->with('m.application', ':byApplication')->once()->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('byApplication', $query->getApplication())
-            ->once()
-            ->andReturnSelf();
-
-        return $mockQb;
-    }
-
-    /**
-     * @param $mockQb
-     * @return mixed
-     */
-    private function addLicence(QueryInterface $query, mixed $mockQb): m\MockInterface
-    {
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':byLicence')->once()->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('byLicence', $query->getLicence())
-            ->once()
-            ->andReturnSelf();
-
-        return $mockQb;
-    }
-
-    /**
-     * @param $mockQb
-     * @param bool|false $results
-     * @return mixed
-     */
-    private function addQueryResult(mixed $mockQb, bool $results = false): m\MockInterface
-    {
-        if ($results === false) {
-            $results = [0 => m::mock(PublicationLinkEntity::class)];
-        }
-
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($results);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)->andReturnSelf();
-
-        return $mockQb;
-    }
-
-    /**
-     * @param $mockQb
-     * @param bool|false $results
-     * @return mixed
-     */
-    private function addPreviousPublicationResult(mixed $mockQb, bool $results = false): m\MockInterface
-    {
-        if ($results === false) {
-            $results = [0 => m::mock(PublicationLinkEntity::class)];
-        }
-
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($results);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('publication', 'p')
-            ->once()
-            ->andReturnSelf();
-
-        return $mockQb;
-    }
-
-    /**
-     * Tests fetch unpublished application
-     */
-    public function testFetchSingleUnpublishedApplication(): void
-    {
-        $query = UnpublishedApplication::create(
-            [
-                'publication' => 123,
-                'publicationSection' => 456,
-                'application' => 789
-            ]
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.busReg = :busReg',
+            $qb->getDQL(),
         );
-
-        $mockQb = $this->getPublicationAndSectionQb($query);
-        $mockQb = $this->addApplication($query, $mockQb);
-        $mockQb = $this->addQueryResult($mockQb);
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($mockQb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(PublicationLinkEntity::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchSingleUnpublished($query);
+        $this->assertSame(5, $qb->getParameter('busReg')->getValue());
     }
 
     /**
-     * Tests fetch unpublished pi
+     * The optional filters are gated on method_exists(), so which ones apply is decided by the
+     * bookmark query class rather than by the values it carries.
      */
-    public function testFetchSingleUnpublishedPi(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('unpublishedProvider')]
+    public function testFetchSingleUnpublished(string $queryClass, array $data, string $expectedExtra): void
     {
-        $query = UnpublishedPi::create(
-            [
-                'publication' => 123,
-                'publicationSection' => 456,
-                'pi' => 789
-            ]
+        $result = m::mock(Entity::class);
+
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$result]);
+
+        $this->assertSame($result, $this->sut->fetchSingleUnpublished($queryClass::create($data)));
+
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' WHERE m.publication = :byPublication AND m.publicationSection = :byPublicationSection'
+            . $expectedExtra,
+            $qb->getDQL(),
         );
+        $this->assertSame(123, $qb->getParameter('byPublication')->getValue());
+        $this->assertSame(456, $qb->getParameter('byPublicationSection')->getValue());
+    }
 
-        $mockQb = $this->getPublicationAndSectionQb($query);
-        $mockQb = $this->addPi($query, $mockQb);
-        $mockQb = $this->addQueryResult($mockQb);
+    public static function unpublishedProvider(): \Iterator
+    {
+        $base = ['publication' => 123, 'publicationSection' => 456];
 
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($mockQb);
+        yield 'application' => [
+            UnpublishedApplication::class,
+            $base + ['application' => 789],
+            // The application bookmark declares no getLicence(), so that filter is skipped.
+            ' AND m.application = :byApplication',
+        ];
+        yield 'pi' => [UnpublishedPi::class, $base + ['pi' => 789], ' AND m.pi = :byPi'];
+        yield 'bus reg' => [UnpublishedBusReg::class, $base + ['busReg' => 789], ' AND m.busReg = :byBusReg'];
+    }
 
-        $this->em->shouldReceive('getRepository')
-            ->with(PublicationLinkEntity::class)
-            ->andReturn($repo);
+    public function testFetchSingleUnpublishedReturnsNullWhenNothingMatches(): void
+    {
+        $this->createRealQb()->stubbedQuery()->expects('getResult')->andReturn([]);
 
-        $this->sut->fetchSingleUnpublished($query);
+        $this->assertNull($this->sut->fetchSingleUnpublished(
+            UnpublishedPi::create(['publication' => 123, 'publicationSection' => 456, 'pi' => 789]),
+        ));
     }
 
     /**
-     * Tests fetch unpublished bus
+     * The previous publication is the highest publication number below the current one, in the
+     * same traffic area and publication type.
      */
-    public function testFetchSingleUnpublishedBus(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('previousPublicationProvider')]
+    public function testFetchPreviousPublicationNo(string $queryClass, array $data, string $expectedExtra): void
     {
-        $query = UnpublishedBusReg::create(
-            [
-                'publication' => 123,
-                'publicationSection' => 456,
-                'busReg' => 789
-            ]
+        $result = m::mock(Entity::class);
+
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$result]);
+
+        $this->assertSame($result, $this->sut->fetchPreviousPublicationNo($queryClass::create($data)));
+
+        $this->assertSame(
+            'SELECT m, p' . self::FROM . ' LEFT JOIN m.publication p'
+            . ' WHERE m.trafficArea = :byTrafficArea AND p.pubType = :byPubType'
+            . ' AND p.publicationNo < :byPublicationNo'
+            . $expectedExtra
+            . ' ORDER BY p.publicationNo DESC',
+            $qb->getDQL(),
         );
+        $this->assertSame(1, $qb->getMaxResults());
+    }
 
-        $mockQb = $this->getPublicationAndSectionQb($query);
-        $mockQb = $this->addBus($query, $mockQb);
-        $mockQb = $this->addQueryResult($mockQb);
+    public static function previousPublicationProvider(): \Iterator
+    {
+        $base = ['trafficArea' => 'M', 'pubType' => 'A&D', 'publicationNo' => 10];
 
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($mockQb);
+        yield 'by pi' => [PreviousPublicationByPi::class, $base + ['pi' => 1], ' AND m.pi = :byPi'];
+        yield 'by application' => [
+            PreviousPublicationByApplication::class,
+            $base + ['application' => 1],
+            ' AND m.application = :byApplication',
+        ];
+        yield 'by licence' => [
+            PreviousPublicationByLicence::class,
+            $base + ['licence' => 1],
+            ' AND m.licence = :byLicence',
+        ];
+    }
 
-        $this->em->shouldReceive('getRepository')
-            ->with(PublicationLinkEntity::class)
-            ->andReturn($repo);
+    #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
+    public function testApplyListFilters(string $queryClass, array $data, string $expectedWhere): void
+    {
+        $qb = $this->createRealQb();
 
-        $this->sut->fetchSingleUnpublished($query);
+        $this->sut->applyListFilters($qb, $queryClass::create($data));
+
+        $this->assertSame('SELECT m' . self::FROM . ' WHERE ' . $expectedWhere, $qb->getDQL());
+    }
+
+    public static function listFilterProvider(): \Iterator
+    {
+        yield 'transport manager' => [
+            PublicationLinkTmList::class,
+            ['transportManager' => 11],
+            'm.transportManager = :transportManager',
+        ];
+        yield 'licence' => [PublicationLinkList::class, ['licence' => 22], 'm.licence = :licence'];
+        yield 'application' => [
+            PublicationLinkList::class,
+            ['application' => 610],
+            'm.application = :application',
+        ];
     }
 
     /**
-     * Tests fetch previous publication
+     * Ineligible links are those held back by a publishAfterDate still in the future.
      */
-    public function testFetchPreviousPublicationPi(): void
+    public function testFetchIneligiblePublicationLinks(): void
     {
-        $query = PreviousPublicationByPi::create(
-            [
-                'publicationNo' => 123,
-                'pubType' => 'N&P',
-                'trafficArea' => 'M',
-                'pi' => 789
-            ]
+        $publication = m::mock(PublicationEntity::class);
+        $publication->shouldReceive('getId')->andReturn(1);
+
+        $qb = $this->createRealQb()->willReturn(['RESULT']);
+
+        $this->assertSame(['RESULT'], $this->sut->fetchIneligiblePublicationLinks($publication));
+
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' WHERE m.publication = :publicationId AND m.publishAfterDate IS NOT NULL'
+            . ' AND m.publishAfterDate > :today',
+            $qb->getDQL(),
         );
-
-        $mockQb = $this->getPublicationNoPubTypeTaQb($query);
-        $mockQb = $this->addPi($query, $mockQb);
-        $mockQb = $this->addPreviousPublicationResult($mockQb);
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($mockQb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(PublicationLinkEntity::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchPreviousPublicationNo($query);
-    }
-
-    /**
-     * Tests fetch previous publication
-     */
-    public function testFetchPreviousPublicationApp(): void
-    {
-        $query = PreviousPublicationByApplication::create(
-            [
-                'publicationNo' => 123,
-                'pubType' => 'N&P',
-                'trafficArea' => 'M',
-                'application' => 789
-            ]
-        );
-
-        $mockQb = $this->getPublicationNoPubTypeTaQb($query);
-        $mockQb = $this->addApplication($query, $mockQb);
-        $mockQb = $this->addPreviousPublicationResult($mockQb);
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($mockQb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(PublicationLinkEntity::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchPreviousPublicationNo($query);
-    }
-
-    /**
-     * Tests fetch previous publication
-     */
-    public function testFetchPreviousPublicationLic(): void
-    {
-        $query = PreviousPublicationByLicence::create(
-            [
-                'publicationNo' => 123,
-                'pubType' => 'N&P',
-                'trafficArea' => 'M',
-                'licence' => 789
-            ]
-        );
-
-        $mockQb = $this->getPublicationNoPubTypeTaQb($query);
-        $mockQb = $this->addLicence($query, $mockQb);
-        $mockQb = $this->addPreviousPublicationResult($mockQb);
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($mockQb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(PublicationLinkEntity::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchPreviousPublicationNo($query);
-    }
-
-    /**
-     * Tests the tm list filter is applied correctly
-     */
-    public function testApplyListFiltersTm(): void
-    {
-        $sut = m::mock(PublicationLinkRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $transportManager = 11;
-
-        $query = PublicationLinkTmList::create(['transportManager' => $transportManager]);
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.transportManager', ':transportManager')->once()->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('transportManager', $transportManager)->once()->andReturnSelf();
-
-        $sut->applyListFilters($mockQb, $query);
-    }
-
-    /**
-     * Tests the licence list filter is applied correctly
-     */
-    public function testApplyListFiltersLicence(): void
-    {
-        $sut = m::mock(PublicationLinkRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $licence = 22;
-
-        $query = PublicationLinkList::create(['licence' => $licence]);
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('licence', $licence)->once()->andReturnSelf();
-
-        $sut->applyListFilters($mockQb, $query);
-    }
-
-    /**
-     * Tests the applciation list filter is applied correctly
-     */
-    public function testApplyListFiltersApplication(): void
-    {
-        $sut = m::mock(PublicationLinkRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $application = 610;
-
-        $query = PublicationLinkList::create(['application' => $application]);
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.application', ':application')->once()->andReturn(m::mock(Comparison::class));
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('application', $application)->once()->andReturnSelf();
-
-        $sut->applyListFilters($mockQb, $query);
-    }
-
-    public function testFetchIneligiblePiPublicationLinks(): void
-    {
-        $publicationEntityId = 1;
-        $today = new Datetime()->format('Y-m-d');
-        $mockQb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($mockQb);
-
-        $mockQb->shouldReceive('getQuery->getResult');
-
-        $expectedQuery = '[QUERY]' .
-            ' AND m.publication = [[' . $publicationEntityId . ']]' .
-            ' AND m.publishAfterDate IS NOT NULL' .
-            ' AND m.publishAfterDate > [[' . $today . ']]';
-
-        /** @var PublicationEntity $publicationEntity */
-        $publicationEntity = m::mock(PublicationEntity::class)->makePartial();
-        $publicationEntity->setId(1);
-        $this->sut->fetchIneligiblePublicationLinks($publicationEntity);
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(1, $qb->getParameter('publicationId')->getValue());
+        $this->assertSame(new DateTime()->format('Y-m-d'), $qb->getParameter('today')->getValue());
     }
 }

@@ -5,126 +5,55 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Repository\Template as Repo;
-use Dvsa\Olcs\Api\Entity\Template\Template;
+use Dvsa\Olcs\Api\Entity\Template\Template as Entity;
+use Dvsa\OlcsTest\Support\TestQueryBuilder;
 use Mockery as m;
 
-/**
- * TemplateTest
- */
 final class TemplateTest extends RepositoryTestCase
 {
-    /** @var m\MockInterface|Repo */
-    protected $sut;
+    private const string FROM = ' FROM ' . Entity::class . ' t';
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        // Not a partial mock: resolvePrimaryVariantId() is private and reached by reflection.
+        $this->setUpRealSut(Repo::class);
     }
 
+    /** A template is identified by all three of locale, format and name, never by name alone. */
     public function testFetchByLocaleFormatName(): void
     {
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $template = m::mock(Entity::class);
 
-        $locale = 'en_GB';
-        $format = 'plain';
-        $name = 'send-ecmt-successful';
-
-        $template = m::mock(Template::class);
-
-        $queryBuilder->shouldReceive('select')
-            ->with('t')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(Template::class, 't')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('t.locale = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('t.format = ?2')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('t.name = ?3')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $locale)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, $format)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(3, $name)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getSingleResult')
-            ->andReturn($template);
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->withNoArgs()->andReturn($template);
 
         $this->assertSame(
             $template,
-            $this->sut->fetchByLocaleFormatName($locale, $format, $name)
+            $this->sut->fetchByLocaleFormatName('en_GB', 'plain', 'send-ecmt-successful'),
         );
+
+        $this->assertSame(
+            'SELECT t' . self::FROM
+            . ' WHERE t.locale = ?1 AND t.format = ?2 AND t.name = ?3',
+            $qb->getDQL(),
+        );
+        $this->assertSame('en_GB', $qb->getParameter(1)->getValue());
+        $this->assertSame('plain', $qb->getParameter(2)->getValue());
+        $this->assertSame('send-ecmt-successful', $qb->getParameter(3)->getValue());
     }
 
     public function testFetchByLocaleFormatNameNotFound(): void
     {
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->withNoArgs()->andThrow(new NoResultException());
+
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('Resource not found');
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
-
-        $locale = 'en_GB';
-        $format = 'plain';
-        $name = 'send-ecmt-successful';
-
-        $queryBuilder->shouldReceive('select')
-            ->with('t')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(Template::class, 't')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('t.locale = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('t.format = ?2')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('t.name = ?3')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $locale)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, $format)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(3, $name)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getSingleResult')
-            ->andThrow(new NoResultException());
-
-        $this->sut->fetchByLocaleFormatName($locale, $format, $name);
+        $this->sut->fetchByLocaleFormatName('en_GB', 'plain', 'send-ecmt-successful');
     }
 
     /**
@@ -174,66 +103,52 @@ final class TemplateTest extends RepositoryTestCase
         return $reflection->invokeArgs($this->sut, $args);
     }
 
+    /** The row being edited is excluded: it is not a sibling of itself. */
     public function testFetchSiblings(): void
     {
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
-
         $siblings = [
             ['id' => 2, 'locale' => 'cy_GB', 'format' => 'html'],
             ['id' => 3, 'locale' => 'en_GB', 'format' => 'md'],
         ];
 
-        $queryBuilder->shouldReceive('select')->with('t.id, t.locale, t.format')->once()->andReturnSelf()
-            ->shouldReceive('from')->with(Template::class, 't')->once()->andReturnSelf()
-            ->shouldReceive('where')->with('t.name = :name')->once()->andReturnSelf()
-            ->shouldReceive('andWhere')->with('t.id != :id')->once()->andReturnSelf()
-            ->shouldReceive('setParameter')->with('name', 'auth-forgot-password')->once()->andReturnSelf()
-            ->shouldReceive('setParameter')->with('id', 1)->once()->andReturnSelf()
-            ->shouldReceive('orderBy')->with('t.locale', 'ASC')->once()->andReturnSelf()
-            ->shouldReceive('addOrderBy')->with('t.format', 'ASC')->once()->andReturnSelf()
-            ->shouldReceive('getQuery->getArrayResult')->andReturn($siblings);
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('getArrayResult')->withNoArgs()->andReturn($siblings);
 
         $this->assertSame($siblings, $this->sut->fetchSiblings('auth-forgot-password', 1));
+
+        $this->assertSame(
+            'SELECT t.id, t.locale, t.format' . self::FROM
+            . ' WHERE t.name = :name AND t.id != :id'
+            . ' ORDER BY t.locale ASC, t.format ASC',
+            $qb->getDQL(),
+        );
+        $this->assertSame('auth-forgot-password', $qb->getParameter('name')->getValue());
+        $this->assertSame(1, $qb->getParameter('id')->getValue());
     }
 
     public function testFetchDistinctCategories(): void
     {
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $categories = [['id' => 4, 'description' => 'Permits']];
 
-        $categories = [
-            [
-                'id' => 4,
-                'description' => 'Permits'
-            ]
-        ];
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('getResult')->withNoArgs()->andReturn($categories);
 
-        $queryBuilder->shouldReceive('select')
-            ->with('cat.description', 'cat.id')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(\Dvsa\Olcs\Api\Entity\Template\Template::class, 't')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('distinct')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->once()
-            ->with('t.category', 'cat')
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('t.category IS NOT NULL')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getResult')
-            ->andReturn($categories);
+        $this->assertSame($categories, $this->sut->fetchDistinctCategories());
 
         $this->assertSame(
-            $categories,
-            $this->sut->fetchDistinctCategories()
+            'SELECT DISTINCT cat.description, cat.id' . self::FROM
+            . ' INNER JOIN t.category cat'
+            . ' WHERE t.category IS NOT NULL',
+            $qb->getDQL(),
         );
+    }
+
+    private function expectEntityManagerQb(): TestQueryBuilder
+    {
+        $qb = $this->newRealQb();
+
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
+
+        return $qb;
     }
 }
