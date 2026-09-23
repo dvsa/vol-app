@@ -14,7 +14,7 @@ etl_short="${etl_sha:0:12}"
 
 status=$(aws batch describe-jobs --jobs "$job_id" --query 'jobs[0].status' --output text)
 status_reason=$(aws batch describe-jobs --jobs "$job_id" --query 'jobs[0].statusReason' --output text 2>/dev/null || true)
-[ "$status_reason" = "None" ] && status_reason=""
+if [ "$status_reason" = "None" ] || [ "$status" = "SUCCEEDED" ]; then status_reason=""; fi
 
 # Batch keeps one log stream per attempt; read them all so a retried job is summarised completely.
 mapfile -t streams < <(aws batch describe-jobs --jobs "$job_id" \
@@ -24,21 +24,33 @@ if [ "${#streams[@]}" -eq 0 ]; then
     --query 'jobs[0].container.logStreamName' --output text | grep -v -E '^(None)?$' || true)
 fi
 
+read_stream() {
+  local args=() page next
+  for _ in $(seq 1 1000); do
+    page=$(aws logs get-log-events --log-group-name "$group" --log-stream-name "$1" \
+      --start-from-head "${args[@]}" --output json) || return 0
+    jq -r '.events[].message' <<<"$page"
+    next=$(jq -r '.nextForwardToken' <<<"$page")
+    [ "${args[1]:-}" = "$next" ] && return 0
+    args=(--next-token "$next")
+  done
+}
+
 log=""
 for stream in "${streams[@]}"; do
-  log+=$(aws logs get-log-events --log-group-name "$group" --log-stream-name "$stream" \
-    --start-from-head --query 'events[].message' --output text | tr '\t' '\n' || true)
+  log+=$(read_stream "$stream")
   log+=$'\n'
 done
 
 run_count=$(grep -E '^Run:' <<<"$log" | tail -1 | awk '{print $2}' || true)
 ran_sha=$(grep -E '^olcs-etl commit: ' <<<"$log" | tail -1 | sed -E 's/^olcs-etl commit: //' || true)
 
-# "Running Changeset" lines whose next line is a precondition skip ("NOT applying") are not real work.
+# A changeset skipped by its precondition logs "NOT applying" before the next changeset starts.
 executed=$(awk '
-  /^Running Changeset:/ { if (pending != "") print pending; pending=$0; next }
-  pending != "" { if ($0 !~ /NOT applying/) print pending; pending="" }
-  END { if (pending != "") print pending }' <<<"$log" | sed -E 's/^Running Changeset: /- /')
+  /^Running Changeset:/ { if (cs != "" && !skip) print cs; cs=$0; skip=0; next }
+  /NOT applying/ { skip=1 }
+  /^(UPDATE SUMMARY|Run:)/ { if (cs != "" && !skip) print cs; cs="" }
+  END { if (cs != "" && !skip) print cs }' <<<"$log" | sed -E 's/^Running Changeset: /- /')
 
 {
   echo "### Database migrations (${ENVIRONMENT:-unknown})"
