@@ -28,7 +28,7 @@ module "ecr" {
 
   create_lifecycle_policy = true
   repository_lifecycle_policy = jsonencode({
-    rules = [
+    rules = concat(each.key == "liquibase" ? [
       {
         # Liquibase release images are referenced by prep/prod job definitions and by rollbacks;
         # keep effectively all of them. Must stay a lower rulePriority than the catch-all.
@@ -44,6 +44,7 @@ module "ecr" {
           type = "expire"
         }
       },
+      ] : [], [
       {
         rulePriority = 10,
         description  = "Keep last 20 release images",
@@ -88,7 +89,7 @@ module "ecr" {
           type = "expire"
         }
       },
-    ]
+    ])
   })
 
   manage_registry_scanning_configuration = true
