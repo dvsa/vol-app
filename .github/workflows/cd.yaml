@@ -580,6 +580,9 @@ jobs:
       ETL_SHORT: ${{ needs.get-version.outputs.etl_short }}
       RELEASE_TAG: release-${{ needs.release-please.outputs.tag_name }}
     steps:
+      - uses: actions/checkout@v6
+        with:
+          sparse-checkout: .github/scripts/liquibase
       - name: Configure AWS credentials for NONPROD
         uses: aws-actions/configure-aws-credentials@v5
         with:
@@ -603,26 +606,26 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ${{ env.PROD_REGISTRY }}
-      # imagetools copies the manifest and blobs registry-to-registry; both logins stay valid in docker config.
+      # The prod repository is immutable, so an existing tag is reused rather than pushed again.
       - name: Copy image to PROD ECR by digest
         env:
           SOURCE_DIGEST: ${{ steps.source.outputs.digest }}
         run: |
-          docker buildx imagetools create \
-            --prefer-index=false \
-            --tag "${PROD_REGISTRY}/vol-app/liquibase:${ETL_SHORT}" \
-            --tag "${PROD_REGISTRY}/vol-app/liquibase:${RELEASE_TAG}" \
-            --tag "${PROD_REGISTRY}/vol-app/liquibase:latest" \
-            "${NONPROD_REGISTRY}/vol-app/liquibase@${SOURCE_DIGEST}"
-      - name: Verify
-        env:
-          SOURCE_DIGEST: ${{ steps.source.outputs.digest }}
-        run: |
-          PROD_DIGEST=$(aws ecr describe-images --repository-name vol-app/liquibase --image-ids imageTag="${ETL_SHORT}" --query 'imageDetails[0].imageDigest' --output text)
-          echo "nonprod ${SOURCE_DIGEST}"
-          echo "prod    ${PROD_DIGEST}"
-          [ "${PROD_DIGEST}" = "${SOURCE_DIGEST}" ] || { echo "::error::prod digest differs from nonprod"; exit 1; }
-          echo "- liquibase \`${ETL_SHORT}\` / \`${RELEASE_TAG}\` copied to prod ECR (\`${PROD_DIGEST}\`)" >> "$GITHUB_STEP_SUMMARY"
+          PROD_DIGEST=$(aws ecr describe-images --repository-name vol-app/liquibase --image-ids imageTag="${ETL_SHORT}" --query 'imageDetails[0].imageDigest' --output text 2>/dev/null || true)
+          if [ -z "${PROD_DIGEST}" ] || [ "${PROD_DIGEST}" = "None" ]; then
+            docker buildx imagetools create \
+              --prefer-index=false \
+              --tag "${PROD_REGISTRY}/vol-app/liquibase:${ETL_SHORT}" \
+              "${NONPROD_REGISTRY}/vol-app/liquibase@${SOURCE_DIGEST}"
+            PROD_DIGEST=$(aws ecr describe-images --repository-name vol-app/liquibase --image-ids imageTag="${ETL_SHORT}" --query 'imageDetails[0].imageDigest' --output text)
+            echo "nonprod ${SOURCE_DIGEST}"
+            echo "prod    ${PROD_DIGEST}"
+            [ "${PROD_DIGEST}" = "${SOURCE_DIGEST}" ] || { echo "::error::prod digest differs from nonprod"; exit 1; }
+          else
+            echo "vol-app/liquibase:${ETL_SHORT} already in prod ECR at ${PROD_DIGEST}"
+          fi
+          bash .github/scripts/liquibase/ecr-tag-image.sh vol-app/liquibase "${ETL_SHORT}" "${RELEASE_TAG}"
+          echo "- liquibase \`${ETL_SHORT}\` / \`${RELEASE_TAG}\` in prod ECR (\`${PROD_DIGEST}\`)" >> "$GITHUB_STEP_SUMMARY"
 
   cdn-prod:
     name: CDN
