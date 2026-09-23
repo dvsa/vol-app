@@ -157,7 +157,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
             'filename' => $fileName,
             'identifier' => $file->getIdentifier(),
             'size' => $file->getSize(),
-            'description' => $description . ' - ' . ($letterInstance->getReference() ?? ''),
+            'description' => $description,
             'isExternal' => false,
             'category' => $category ? $category->getId() : null,
             'subCategory' => $subCategory ? $subCategory->getId() : null,
