@@ -5,346 +5,228 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
-use Dvsa\Olcs\Api\Domain\Repository;
-use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
-use Dvsa\Olcs\Transfer\Query as TransferQry;
+use Dvsa\Olcs\Api\Domain\Repository\Cases as Repo;
+use Dvsa\Olcs\Api\Entity\Cases\Cases as Entity;
 use Dvsa\Olcs\Transfer\Query\Cases\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Cases\ByTransportManager;
+use Dvsa\Olcs\Transfer\Query as TransferQry;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Cases::class)]
 final class CasesTest extends RepositoryTestCase
 {
-    /** @var  Repository\Cases | m\MockInterface */
-    protected $sut;
+    private const string FROM = ' FROM ' . Entity::class . ' m';
 
-    /** @var  \Doctrine\ORM\QueryBuilder | m\MockInterface */
-    private $mockDqb;
-    /** @var  \Dvsa\Olcs\Transfer\Query\QueryInterface | m\MockInterface */
-    private $mockQi;
+    /** withRefdata() joins caseType, categorys and outcomes. */
+    private const string REFDATA = ' LEFT JOIN m.caseType w0 LEFT JOIN m.categorys w1'
+        . ' LEFT JOIN m.outcomes w2';
+
+    private const string HIDDEN_CASE_TYPE = 'CONCAT(ct.description, m.id) as HIDDEN caseType';
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\Cases::class, true);
-
-        $this->mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->mockQi = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     /**
-     * @param $qb
-     *
-     * @return m\MockInterface
+     * m.caseType is joined twice: w0 by withRefdata and ct explicitly. The explicit alias is
+     * what the HIDDEN caseType select needs — see the migration findings.
      */
-    public function getMockRepo(mixed $qb): m\MockInterface
+    public function testBuildDefaultListQuery(): void
     {
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
+        $qb = $this->createRealQb();
 
-        return $repo;
+        $this->sut->buildDefaultListQuery($qb, m::mock(QueryInterface::class));
+
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, ct, ' . self::HIDDEN_CASE_TYPE . self::FROM . self::REFDATA
+            . ' LEFT JOIN m.caseType ct',
+            $qb->getDQL(),
+        );
     }
 
-    public function testApplyListFiltersTm(): void
-    {
-        $sut = m::mock(Repository\Cases::class)->makePartial()->shouldAllowMockingProtectedMethods();
+    /**
+     * The filters are gated on method_exists(), so each one needs a query class that actually
+     * declares the getter — a bare QueryInterface mock skips them all.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('simpleListFilterProvider')]
+    public function testApplyListFilters(
+        string $queryClass,
+        string $getter,
+        string $expectedWhere,
+        string $parameter,
+    ): void {
+        $qb = $this->createRealQb();
 
-        $transportManager = 3;
+        $query = m::mock($queryClass);
+        $query->shouldReceive($getter)->andReturn(42);
 
-        $mockQuery = m::mock(ByTransportManager::class);
-        $mockQuery->shouldReceive('getTransportManager')
-            ->once()
-            ->andReturn($transportManager)
-            ->getMock();
+        $this->sut->applyListFilters($qb, $query);
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.transportManager', ':byTransportManager')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byTransportManager', $transportManager)->once()->andReturnSelf();
-
-        $sut->applyListFilters($mockQb, $mockQuery);
+        $this->assertSame('SELECT m' . self::FROM . ' WHERE ' . $expectedWhere, $qb->getDQL());
+        $this->assertSame(42, $qb->getParameter($parameter)->getValue());
     }
 
-    public function testApplyListFiltersLicence(): void
+    public static function simpleListFilterProvider(): \Iterator
     {
-        $sut = m::mock(Repository\Cases::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $licence = 7;
-
-        $mockQuery = m::mock(ByLicence::class);
-        $mockQuery->shouldReceive('getLicence')
-            ->once()
-            ->andReturn($licence)
-            ->getMock();
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':byLicence')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byLicence', $licence)->once()->andReturnSelf();
-
-        $sut->applyListFilters($mockQb, $mockQuery);
+        yield 'transport manager' => [
+            ByTransportManager::class,
+            'getTransportManager',
+            'm.transportManager = :byTransportManager',
+            'byTransportManager',
+        ];
+        yield 'licence' => [ByLicence::class, 'getLicence', 'm.licence = :byLicence', 'byLicence'];
     }
 
-    public function testForReportOpenListQry(): void
+    /**
+     * The open-case report joins licence, application and traffic area, then narrows on the
+     * statuses and traffic areas supplied.
+     */
+    public function testFetchListForTheOpenCaseReport(): void
     {
-        /** @var \Dvsa\Olcs\Transfer\Query\QueryInterface |m\MockInterface $mockQry */
-        $mockQry = m::mock(TransferQry\Cases\Report\OpenList::class)->makePartial();
-        $mockQry
-            ->shouldReceive('getCaseType')->twice()->andReturn('unit_CaseType')
-            ->shouldReceive('getApplicationStatus')->twice()->andReturn('unit_AppStatus')
-            ->shouldReceive('getLicenceStatus')->twice()->andReturn('unit_LicStatus')
-            ->shouldReceive('getTrafficAreas')->once()->andReturn(['unit_TA']);
+        $qb = $this->createRealQb();
 
-        $qb = $this->createMockQb('{{QUERY}}');
-        $this->mockCreateQueryBuilder($qb);
+        $query = m::mock(TransferQry\Cases\Report\OpenList::class)->makePartial();
+        $query->shouldReceive('getCaseType')->andReturn('unit_CaseType')
+            ->shouldReceive('getApplicationStatus')->andReturn('unit_AppStatus')
+            ->shouldReceive('getLicenceStatus')->andReturn('unit_LicStatus')
+            ->shouldReceive('getTrafficAreas')->andReturn(['unit_TA']);
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('application', 'a')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('l.trafficArea', 'ta')->once()->andReturnSelf()
-            ->shouldReceive('with')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
+        $this->sut->expects('fetchPaginatedList')->andReturn('EXPECT');
 
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn('EXPECT');
+        $this->assertSame('EXPECT', $this->sut->fetchList($query));
 
-        $this->assertEquals('EXPECT', $this->sut->fetchList($mockQry));
-
-        $expected = '{{QUERY}}' .
-            ' SELECT CONCAT(ct.description, m.id) as HIDDEN caseType' .
-            ' AND m.caseType = [[unit_CaseType]]' .
-            ' AND m.closedDate IS NULL' .
-            ' AND a.status = [[unit_AppStatus]]' .
-            ' AND l.status = [[unit_LicStatus]]' .
-            ' AND ta.id IN [[["unit_TA"]]]';
-
-        $this->assertEquals($expected, $this->query);
+        $this->assertSame(
+            // buildDefaultListQuery() adds the HIDDEN select before applyListJoins() adds the
+            // licence, application and traffic-area aliases.
+            'SELECT m, w0, w1, w2, ct, ' . self::HIDDEN_CASE_TYPE . ', l, a, ta' . self::FROM . self::REFDATA
+            . ' LEFT JOIN m.caseType ct LEFT JOIN m.licence l LEFT JOIN m.application a'
+            . ' LEFT JOIN l.trafficArea ta'
+            . ' WHERE m.caseType = :CASE_TYPE AND m.closedDate IS NULL'
+            . ' AND a.status = :APP_STATUS AND l.status = :LIC_STATUS'
+            . ' AND ta.id IN(:trafficAreas)',
+            $qb->getDQL(),
+        );
+        $this->assertSame(['unit_TA'], $qb->getParameter('trafficAreas')->getValue());
     }
 
-    public function testForReportOpenListQryOtherTa(): void
+    /**
+     * 'other' is not a traffic area id — it is removed from the list and turned into an IS NULL
+     * alternative, so cases with no traffic area are included. Note the remaining array keeps
+     * its original keys.
+     */
+    public function testFetchListForTheOpenCaseReportWithOtherTrafficArea(): void
     {
-        $trafficAreas = ['other', 'A', 'B'];
+        $qb = $this->createRealQb();
 
-        /** @var \Dvsa\Olcs\Transfer\Query\QueryInterface |m\MockInterface $mockQry */
-        $mockQry = m::mock(TransferQry\Cases\Report\OpenList::class)->makePartial();
-        $mockQry->shouldReceive('getTrafficAreas')->once()->andReturn($trafficAreas);
+        $query = m::mock(TransferQry\Cases\Report\OpenList::class)->makePartial();
+        $query->shouldReceive('getCaseType')->andReturnNull()
+            ->shouldReceive('getApplicationStatus')->andReturnNull()
+            ->shouldReceive('getLicenceStatus')->andReturnNull()
+            ->shouldReceive('getTrafficAreas')->andReturn(['other', 'A', 'B']);
 
-        $qb = $this->createMockQb('{{QUERY}}');
-        $this->mockCreateQueryBuilder($qb);
+        $this->sut->expects('fetchPaginatedList')->andReturn('EXPECT');
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
+        $this->assertSame('EXPECT', $this->sut->fetchList($query));
 
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn('EXPECT');
-
-        $this->assertEquals('EXPECT', $this->sut->fetchList($mockQry));
-
-        $expected = '{{QUERY}}' .
-            ' SELECT CONCAT(ct.description, m.id) as HIDDEN caseType' .
-            ' AND m.closedDate IS NULL' .
-            ' AND (ta.id IS NULL OR ta.id IN [[{"1":"A","2":"B"}]])';
-
-        $this->assertEquals($expected, $this->query);
+        $this->assertStringEndsWith(
+            ' WHERE m.closedDate IS NULL AND (ta.id IS NULL OR ta.id IN(:trafficAreas))',
+            $qb->getDQL(),
+        );
+        $this->assertSame([1 => 'A', 2 => 'B'], $qb->getParameter('trafficAreas')->getValue());
     }
 
     public function testFetchWithLicenceUsingId(): void
     {
-        $this->mockQi->shouldReceive('getId')->andReturn(24);
+        $result = m::mock(Entity::class);
 
-        $result = m::mock(CasesEntity::class);
-        $results = [$result];
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getId')->andReturn(1);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_OBJECT)->andReturn($results);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$result]);
+        $this->em->expects('lock')->with($result, LockMode::OPTIMISTIC, 1);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->once()->with('licence', 'l')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('l.operatingCentres', 'loc')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('loc.operatingCentre', 'oc')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('oc.address')->andReturnSelf()
-            ->shouldReceive('byId')->once()->with(24);
+        $this->assertSame($result, $this->sut->fetchWithLicenceUsingId($query, Query::HYDRATE_OBJECT, 1));
 
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(CasesEntity::class)
-            ->andReturn($repo)
-            ->shouldReceive('lock')
-            ->with($result, LockMode::OPTIMISTIC, 1);
-
-        $this->sut->fetchWithLicenceUsingId($this->mockQi, Query::HYDRATE_OBJECT, 1);
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, l, loc, oc, w3' . self::FROM . self::REFDATA
+            . ' LEFT JOIN m.licence l LEFT JOIN l.operatingCentres loc'
+            . ' LEFT JOIN loc.operatingCentre oc LEFT JOIN oc.address w3'
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
     }
 
-    public function testFetchWithLicence(): void
+    public function testFetchWithLicenceUsingIdNotFound(): void
     {
-        $caseId = 1;
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getId')->andReturn(1);
 
-        $result = m::mock(CasesEntity::class);
-        $results = [$result];
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')->andReturn($results);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('licence', 'l')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('application', 'a')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('transportManager', 'tm')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('byId')
-            ->with($caseId)
-            ->once()
-            ->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(CasesEntity::class)
-            ->andReturn($repo)
-            ->shouldReceive('lock')
-            ->with($result, LockMode::OPTIMISTIC, 1);
-
-        $this->sut->fetchExtended($caseId);
-    }
-
-    public function testFetchWithLicenceNotFound(): void
-    {
-        $caseId = 1;
-
-        $results = null;
+        $this->createRealQb()->stubbedQuery()->expects('getResult')->andReturn([]);
 
         $this->expectException(NotFoundException::class);
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')->andReturn($results);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('licence', 'l')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('application', 'a')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('with')
-            ->with('transportManager', 'tm')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('byId')
-            ->with($caseId)
-            ->once()
-            ->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(CasesEntity::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchExtended($caseId);
+        $this->sut->fetchWithLicenceUsingId($query);
     }
 
-    public function testBuildDefaultListQuery(): void
+    public function testFetchExtended(): void
     {
-        $this->sut->shouldReceive('getQueryBuilder')->with()->andReturn($this->mockDqb);
+        $qb = $this->createRealQb()->willReturn(['RESULT']);
 
-        $this->mockDqb
-            ->shouldReceive('modifyQuery')->with($this->mockDqb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('caseType', 'ct')->once()->andReturnSelf()
-            ->shouldReceive('addSelect')
-            ->with('CONCAT(ct.description, m.id) as HIDDEN caseType')
-            ->once()
-            ->andReturnSelf();
+        $this->assertSame('RESULT', $this->sut->fetchExtended(24));
 
-        $this->sut->buildDefaultListQuery($this->mockDqb, $this->mockQi);
+        $this->assertSame(
+            'SELECT m, l, a, tm' . self::FROM
+            . ' LEFT JOIN m.licence l LEFT JOIN m.application a LEFT JOIN m.transportManager tm'
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(24, $qb->getParameter('byId')->getValue());
+    }
+
+    public function testFetchExtendedNotFound(): void
+    {
+        $this->createRealQb()->willReturn([]);
+
+        $this->expectException(NotFoundException::class);
+
+        $this->sut->fetchExtended(24);
     }
 
     public function testFetchOpenCasesForSurrender(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getId')->andReturn(95);
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->times(2)->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->times(2)->andReturnSelf()
-            ->shouldReceive('with')->with('caseType', 'ct')->times(2)->andReturnSelf();
+        $this->assertSame(['RESULTS'], $this->sut->fetchOpenCasesForSurrender($query));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, ct, ' . self::HIDDEN_CASE_TYPE . self::FROM . self::REFDATA
+            . ' LEFT JOIN m.caseType ct'
+            . ' WHERE m.licence = :byLicence AND m.closedDate IS NULL',
+            $qb->getDQL(),
         );
-
-        $this->mockQi->shouldReceive('getId')->andReturn(95);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchOpenCasesForSurrender($this->mockQi));
-
-        $expectedQuery = 'BLAH SELECT CONCAT(ct.description, m.id) as HIDDEN caseType AND m.licence = [[95]] AND m.closedDate IS NULL';
-        $this->assertEquals($expectedQuery, $this->query);
-        $this->sut->fetchOpenCasesForSurrender($this->mockQi);
+        $this->assertSame(95, $qb->getParameter('byLicence')->getValue());
     }
 
     public function testFetchOpenCasesForApplication(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchOpenCasesForApplication(7));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->times(1)->andReturnSelf()
-            ->shouldReceive('with')->with('application', 'a')->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn([$this->createStub(CasesEntity::class), $this->createStub(CasesEntity::class)])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m, a' . self::FROM . ' LEFT JOIN m.application a'
+            . ' WHERE a.id = :byApplication AND m.closedDate IS NULL',
+            $qb->getDQL(),
         );
-        $result = $this->sut->fetchOpenCasesForApplication(1);
-        $expectedQuery = 'BLAH AND a.id = [[1]] AND m.closedDate IS NULL';
-        $this->assertEquals($expectedQuery, $this->query);
-        $this->assertCount(2, $result);
+        $this->assertSame(7, $qb->getParameter('byApplication')->getValue());
     }
 }

@@ -2,93 +2,70 @@
 
 declare(strict_types=1);
 
-/**
- * OtherLicenceTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\OtherLicence as Repo;
+use Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-/**
- * OtherLicenceTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 final class OtherLicenceTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class
+        . ' ol LEFT JOIN ol.role w0 LEFT JOIN ol.previousLicenceType w1';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testFetchByTransportManager(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('ol')->once()->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')->with('ol.transportManager', ':tmId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('tmId', 834)->once();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
+        $qb = $this->createRealQb()->willReturn('RESULT');
 
         $this->assertSame('RESULT', $this->sut->fetchByTransportManager(834));
+
+        $this->assertSame(
+            'SELECT ol, w0, w1' . self::FROM . ' WHERE ol.transportManager = :tmId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(834, $qb->getParameter('tmId')->getValue());
     }
 
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getTransportManager')->with()->andReturn(33);
 
-        $mockQ = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
-        $mockQ->shouldReceive('getTransportManager')->with()->twice()->andReturn(33);
+        $this->sut->applyListFilters($qb, $query);
 
-        $mockQb->shouldReceive('expr->eq')->with('ol.transportManager', ':tmId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('tmId', 33)->once();
-
-        $this->sut->applyListFilters($mockQb, $mockQ);
+        $this->assertSame(
+            'SELECT ol FROM ' . Entity::class . ' ol WHERE ol.transportManager = :tmId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(33, $qb->getParameter('tmId')->getValue());
     }
 
-    public function testFetchForTransportManagerApplication(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('parentProvider')]
+    public function testFetchForParent(string $method, string $field): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('ol')->once()->andReturn($mockQb);
+        $qb = $this->createRealQb()->willReturn(['RESULT']);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
+        $this->assertSame(['RESULT'], $this->sut->{$method}(1));
 
-        $mockQb->shouldReceive('expr->eq')->with('ol.transportManagerApplication', ':id')->once()->andReturn('tma');
-        $mockQb->shouldReceive('andWhere')->with('tma')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('id', 1)->once();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
-        $this->assertEquals(['RESULT'], $this->sut->fetchForTransportManagerApplication(1));
+        $this->assertSame(
+            'SELECT ol, w0, w1' . self::FROM . ' WHERE ol.' . $field . ' = :id',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('id')->getValue());
     }
 
-    public function testFetchForTransportManagerLicence(): void
+    public static function parentProvider(): \Iterator
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('ol')->once()->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')->with('ol.transportManagerLicence', ':id')->once()->andReturn('tml');
-        $mockQb->shouldReceive('andWhere')->with('tml')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('id', 1)->once();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
-        $this->assertEquals(['RESULT'], $this->sut->fetchForTransportManagerLicence(1));
+        yield 'application' => ['fetchForTransportManagerApplication', 'transportManagerApplication'];
+        yield 'licence' => ['fetchForTransportManagerLicence', 'transportManagerLicence'];
     }
 }

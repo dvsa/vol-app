@@ -2,78 +2,49 @@
 
 declare(strict_types=1);
 
-/**
- * PiTest
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
-use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository\Pi as PiRepo;
-use Dvsa\Olcs\Api\Entity\Pi\Pi as PiEntity;
+use Dvsa\Olcs\Api\Entity\Pi\Pi as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
-/**
- * PiTest
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
 final class PiTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(PiRepo::class);
+        $this->setUpRealSut(PiRepo::class);
     }
 
     public function testFetchUsingCase(): void
     {
+        $pi = m::mock(Entity::class);
+
         $command = m::mock(QueryInterface::class);
         $command->shouldReceive('getId')->andReturn(24);
 
-        $result = m::mock(PiEntity::class);
-        $results = [$result];
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$pi]);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('expr->eq')->with('m.case', ':byId')->once()->andReturn('EXPR');
-        $qb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('byId', 24)->once()->andReturnSelf();
-        $qb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_OBJECT)->andReturn($results);
+        $this->assertSame($pi, $this->sut->fetchUsingCase($command, Query::HYDRATE_OBJECT));
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->once()->with('agreedByTc')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('assignedTo')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('decidedByTc')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('reasons')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('decisions')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('tmDecisions')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('piHearings')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('case', 'c')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('c.transportManager')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('piSlaExceptions', 's')->andReturnSelf()
-            ->shouldReceive('withCreatedBy')->once()->withNoArgs()->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(PiEntity::class)
-            ->andReturn($repo)
-            ->shouldReceive('lock')
-            ->with($result, LockMode::OPTIMISTIC, 1);
-
-        $this->sut->fetchUsingCase($command, Query::HYDRATE_OBJECT);
+        // withRefdata() joins the RefData associations as w0..w5 before the explicit with()
+        // calls. m.tmDecisions appears twice (w4 and w11) — see the migration findings.
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, c, w13, s, u, cd, p'
+            . ' FROM ' . Entity::class . ' m'
+            . ' LEFT JOIN m.agreedByTcRole w0 LEFT JOIN m.decidedByTcRole w1 LEFT JOIN m.piStatus w2'
+            . ' LEFT JOIN m.writtenOutcome w3 LEFT JOIN m.tmDecisions w4 LEFT JOIN m.piTypes w5'
+            . ' LEFT JOIN m.agreedByTc w6 LEFT JOIN m.assignedTo w7 LEFT JOIN m.decidedByTc w8'
+            . ' LEFT JOIN m.reasons w9 LEFT JOIN m.decisions w10 LEFT JOIN m.tmDecisions w11'
+            . ' LEFT JOIN m.piHearings w12 LEFT JOIN m.case c LEFT JOIN c.transportManager w13'
+            . ' LEFT JOIN m.piSlaExceptions s LEFT JOIN m.createdBy u'
+            . ' LEFT JOIN u.contactDetails cd LEFT JOIN cd.person p'
+            . ' WHERE m.case = :byId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(24, $qb->getParameter('byId')->getValue());
     }
 }

@@ -81,7 +81,7 @@ final class Database
                     'user' => getenv('VOL_TEST_DB_USER') ?: 'root',
                     'password' => getenv('VOL_TEST_DB_PASSWORD') ?: 'olcs',
                     'dbname' => getenv('VOL_TEST_DB_NAME') ?: 'olcs_be',
-                    'serverVersion' => '8.0',
+                    'serverVersion' => '8.0.0',
                     'charset' => 'utf8',
                 ],
                 $configuration,

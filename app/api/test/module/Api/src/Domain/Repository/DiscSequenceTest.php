@@ -2,80 +2,63 @@
 
 declare(strict_types=1);
 
-/**
- * Disc Sequence test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\DiscSequence as DiscSequenceRepo;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Domain\Repository\DiscSequence as Repo;
+use Dvsa\Olcs\Api\Entity\System\DiscSequence as Entity;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea as TrafficAreaEntity;
 
-/**
- * Disc Sequence test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class DiscSequenceTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(DiscSequenceRepo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testFetchDiscPrefixesNi(): void
-    {
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->isNotNull')->with('ta.id')->once()->andReturn('condition1');
-        $mockQb->shouldReceive('expr->eq')->with('ta.id', ':taId')->once()->andReturn('condition2');
-        $mockQb->shouldReceive('expr->andX')->with('condition1', 'condition2')->once()->andReturn('conditionAnd');
-        $mockQb->shouldReceive('andWhere')->with('conditionAnd')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('taId', TrafficAreaEntity::NORTHERN_IRELAND_TRAFFIC_AREA_CODE)
-            ->once()
-            ->andReturnSelf();
+    /**
+     * NI is identified by its traffic area alone; everywhere else is "not NI" plus the operator
+     * type, because GB goods and PSV discs come from different sequences.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('discPrefixProvider')]
+    public function testFetchDiscPrefixes(
+        string $niFlag,
+        ?string $operatorType,
+        string $expectedWhere,
+        array $expectedParameters,
+    ): void {
+        $qb = $this->createRealQb()->willReturn(['result']);
 
-        $this->queryBuilder->shouldReceive('with')->with('trafficArea', 'ta')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('goodsOrPsv', 'gp')->once()->getMock();
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
+        $this->assertSame(['result'], $this->sut->fetchDiscPrefixes($niFlag, $operatorType));
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('ds')->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['result']);
+        $this->assertSame(
+            'SELECT ds, ta, gp FROM ' . Entity::class . ' ds'
+            . ' LEFT JOIN ds.trafficArea ta LEFT JOIN ds.goodsOrPsv gp'
+            . ' WHERE ' . $expectedWhere,
+            $qb->getDQL(),
+        );
 
-        $this->sut->fetchDiscPrefixes('Y', null);
+        foreach ($expectedParameters as $name => $expected) {
+            $this->assertSame($expected, $qb->getParameter($name)->getValue());
+        }
     }
 
-    public function testFetchDiscPrefixes(): void
+    public static function discPrefixProvider(): \Iterator
     {
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->isNotNull')->with('ta.id')->once()->andReturn('condition1');
-        $mockQb->shouldReceive('expr->neq')->with('ta.id', ':taId')->once()->andReturn('condition2');
-        $mockQb->shouldReceive('expr->eq')->with('gp.id', ':operatorType')->once()->andReturn('condition3');
-        $mockQb->shouldReceive('expr->andX')
-            ->with('condition1', 'condition2', 'condition3')->once()->andReturn('conditionAnd');
-        $mockQb->shouldReceive('andWhere')->with('conditionAnd')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('taId', TrafficAreaEntity::NORTHERN_IRELAND_TRAFFIC_AREA_CODE)
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('operatorType', 'lcat_gv')
-            ->once()
-            ->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('with')->with('trafficArea', 'ta')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('goodsOrPsv', 'gp')->once()->getMock();
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('ds')->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['result']);
-
-        $this->sut->fetchDiscPrefixes('N', 'lcat_gv');
+        yield 'northern ireland' => [
+            'Y',
+            null,
+            'ta.id IS NOT NULL AND ta.id = :taId',
+            ['taId' => TrafficAreaEntity::NORTHERN_IRELAND_TRAFFIC_AREA_CODE],
+        ];
+        yield 'goods, elsewhere' => [
+            'N',
+            'lcat_gv',
+            'ta.id IS NOT NULL AND ta.id <> :taId AND gp.id = :operatorType',
+            [
+                'taId' => TrafficAreaEntity::NORTHERN_IRELAND_TRAFFIC_AREA_CODE,
+                'operatorType' => 'lcat_gv',
+            ],
+        ];
     }
 }

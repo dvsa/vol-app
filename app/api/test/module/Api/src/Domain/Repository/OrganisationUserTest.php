@@ -4,85 +4,38 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\OrganisationUser as Repo;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
-use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser;
+use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser as Entity;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\OrganisationUser::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(Repo::class)]
 final class OrganisationUserTest extends RepositoryTestCase
 {
-    /**
-     * @var Repo
-     */
-    protected $sut;
-
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testFetchByUserId(): void
     {
-        $userId = 1;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs();
+        $qb->stubbedQuery()->expects('getResult')->withNoArgs()->andReturn(['res']);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('execute')
-                    ->once()
-                    ->shouldReceive('getResult')
-                    ->andReturn(['res'])
-                    ->once()
-                    ->getMock()
-            )
-            ->once()
-            ->shouldReceive('expr')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('eq')
-                    ->with('m.user', $userId)
-                    ->andReturn('wherecond')
-                    ->once()
-                    ->getMock()
-            )
-            ->once()
-            ->shouldReceive('andWhere')
-            ->with('wherecond')
-            ->once()
-            ->getMock();
+        $this->assertSame(['res'], $this->sut->fetchByUserId(1));
 
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->once()
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(OrganisationUser::class)
-            ->once()
-            ->andReturn($repo);
-
-        $this->assertEquals(['res'], $this->sut->fetchByUserId($userId));
+        // The user id is inlined rather than bound.
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.user = 1',
+            $qb->getDQL(),
+        );
     }
 
     public function testDeleteByUserId(): void
     {
-        $userId = 1;
+        $this->sut->expects('fetchByUserId')->with(1)->andReturn(['FOO']);
+        $this->sut->expects('delete')->with('FOO');
 
-        $this->sut->shouldReceive('fetchByUserId')
-            ->with($userId)
-            ->once()
-            ->andReturn(['FOO'])
-            ->shouldReceive('delete')
-            ->with('FOO')
-            ->once();
-
-        $this->assertNull($this->sut->deleteByUserId($userId));
+        $this->assertNull($this->sut->deleteByUserId(1));
     }
 }

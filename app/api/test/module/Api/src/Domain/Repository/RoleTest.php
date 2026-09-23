@@ -5,61 +5,52 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository;
+use Dvsa\Olcs\Api\Entity\User\Role as Entity;
 
-/**
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Role::class)]
 final class RoleTest extends RepositoryTestCase
 {
     public const string ROLE = 'unit_role';
 
-    /** @var  Repository\Role */
     protected $sut;
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\Role::class);
+        $this->setUpRealSut(Repository\Role::class);
     }
 
     public function testFetchByRole(): void
     {
-        $qb = $this->createMockQb('QUERY');
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['EXPECT']);
+        $qb = $this->createRealQb()->willReturn(['EXPECT']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame('EXPECT', $this->sut->fetchByRole(self::ROLE));
 
-        $actual = $this->sut->fetchByRole(self::ROLE);
-
-        $this->assertEquals('QUERY AND m.role = [[' . self::ROLE . ']]', $this->query);
-        $this->assertEquals('EXPECT', $actual);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.role = :role',
+            $qb->getDQL(),
+        );
+        $this->assertSame(self::ROLE, $qb->getParameter('role')->getValue());
     }
 
     public function testFetchByRoleNull(): void
     {
-        $qb = $this->createMockQb('QUERY');
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn([]);
+        $this->createRealQb()->willReturn([]);
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\User\Role::class, $this->sut->fetchByRole(self::ROLE));
+        $this->assertNull($this->sut->fetchByRole(self::ROLE));
     }
 
     public function testFetchOneByRole(): void
     {
-        $role = 'foo';
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn('foo');
 
-        $qb = $this->createMockQb('QUERY');
+        $this->assertSame('foo', $this->sut->fetchOneByRole('foo'));
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery->getSingleResult')->once()->andReturn('foo');
-
-        $result = $this->sut->fetchOneByRole($role);
-
-        $this->assertEquals('QUERY AND m.role = [[foo]]', $this->query);
-
-        $this->assertEquals('foo', $result);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.role = :role',
+            $qb->getDQL(),
+        );
+        $this->assertSame('foo', $qb->getParameter('role')->getValue());
     }
 }

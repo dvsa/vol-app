@@ -51,7 +51,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * GoodsOrPsv
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -60,7 +60,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -70,7 +70,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -121,7 +121,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Licences
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\Licence>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, mappedBy: 'decisions', fetch: 'LAZY')]
     protected $licences;
@@ -129,7 +129,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Pis
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Pi\Pi>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, mappedBy: 'decisions', fetch: 'LAZY')]
     protected $pis;

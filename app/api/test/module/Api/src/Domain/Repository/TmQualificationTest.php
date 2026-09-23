@@ -2,61 +2,53 @@
 
 declare(strict_types=1);
 
-/**
- * TmQualification test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\TmQualification as TmQualificationRepo;
+use Dvsa\Olcs\Api\Entity\Tm\TmQualification as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Doctrine\ORM\QueryBuilder;
+use Mockery as m;
 
-/**
- * TmQualification test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class TmQualificationTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(TmQualificationRepo::class);
+        $this->setUpRealSut(TmQualificationRepo::class, true);
     }
 
     public function testApplyListFilters(): void
     {
-        $sut = m::mock(TmQualificationRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $qb = $this->createRealQb();
 
         $mockQuery = m::mock(QueryInterface::class);
-        $mockQuery->shouldReceive('getTransportManager')
-            ->andReturn(1)
-            ->once()
-            ->getMock();
+        $mockQuery->expects('getTransportManager')->andReturn(1);
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('tq.transportManager', ':transportManager')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('transportManager', 1)->once()->andReturnSelf();
+        $this->sut->applyListFilters($qb, $mockQuery);
 
-        $sut->applyListFilters($mockQb, $mockQuery);
+        $this->assertSame(
+            'SELECT tq FROM ' . Entity::class . ' tq WHERE tq.transportManager = :transportManager',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('transportManager')->getValue());
     }
 
     public function testApplyListJoins(): void
     {
-        $sut = m::mock(TmQualificationRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        // applyListJoins() calls with() without modifyQuery() first, so it only reaches $qb
+        // because fetchList() runs buildDefaultListQuery() immediately before, leaving the
+        // shared helper pointed here. Reproduce that sequencing rather than paper over it.
+        $this->queryBuilder->modifyQuery($qb);
 
-        $sut->shouldReceive('getQueryBuilder')->with()->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('orderBy')->with('qt.displayOrder', 'ASC')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('countryCode', 'cc')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('qualificationType', 'qt')->once()->andReturnSelf();
+        $this->sut->applyListJoins($qb);
 
-        $sut->applyListJoins($mockQb);
+        $this->assertSame(
+            'SELECT tq, cc, qt FROM ' . Entity::class . ' tq'
+            . ' LEFT JOIN tq.countryCode cc LEFT JOIN tq.qualificationType qt'
+            . ' ORDER BY qt.displayOrder ASC',
+            $qb->getDQL(),
+        );
     }
 }

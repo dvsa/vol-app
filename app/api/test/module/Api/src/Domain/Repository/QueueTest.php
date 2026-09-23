@@ -7,289 +7,161 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Domain\Repository\Queue as QueueRepo;
-use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
-use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
+use Dvsa\Olcs\Api\Domain\Repository\Queue as Repo;
+use Dvsa\Olcs\Api\Entity\Queue\Queue as Entity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Mockery as m;
 
 final class QueueTest extends RepositoryTestCase
 {
-    /**
-     * @var \Dvsa\Olcs\Api\Domain\Repository\Queue
-     */
-    protected $sut;
+    private const string FROM = ' FROM ' . Entity::class . ' q';
+
+    /** The next item is the oldest queued one whose postponement, if any, has elapsed. */
+    private const string NEXT_ITEM_WHERE = ' WHERE q.status = :statusId'
+        . ' AND (q.processAfterDate <= :processAfter OR q.processAfterDate IS NULL)';
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(QueueRepo::class, true);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testGetNextItem(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('typeFilterProvider')]
+    public function testGetNextItem(array $includeTypes, array $excludeTypes, string $expectedExtra): void
     {
-        $item = m::mock(QueueEntity::class)->makePartial();
+        $item = m::mock(Entity::class);
+        $item->expects('incrementAttempts');
+        $item->expects('setStatus')->with(m::type(RefData::class));
 
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('order')->with('id', 'ASC')->once()->andReturnSelf();
+        $qb = $this->createRealQb()->willReturn([$item]);
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn([$item])
-                ->getMock()
+        $this->em->shouldReceive('getReference')->andReturn(m::mock(RefData::class));
+        $this->sut->expects('save')->with($item);
+
+        $this->assertSame($item, $this->sut->getNextItem($includeTypes, $excludeTypes));
+
+        $this->assertSame(
+            'SELECT q' . self::FROM . self::NEXT_ITEM_WHERE . $expectedExtra . ' ORDER BY q.id ASC',
+            $qb->getDQL(),
         );
-
-        $ref = m::mock(RefData::class)->makePartial();
-        $this->sut->shouldReceive('getRefdataReference')
-            ->with(QueueEntity::STATUS_PROCESSING)
-            ->once()
-            ->andReturn($ref);
-        $this->sut
-            ->shouldReceive('save')
-            ->with($item)
-            ->once();
-
-        $this->assertEquals($item, $this->sut->getNextItem());
-
-        $now = new DateTime();
-        $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] AND ' .
-            '(q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL) LIMIT 1';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(Entity::STATUS_QUEUED, $qb->getParameter('statusId')->getValue());
+        $this->assertSame(1, $qb->getMaxResults());
     }
 
-    public function testGetNextItemInclude(): void
+    public static function typeFilterProvider(): \Iterator
     {
-        $item = m::mock(QueueEntity::class)->makePartial();
-
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('order')->with('id', 'ASC')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn([$item])
-                ->getMock()
-        );
-
-        $ref = m::mock(RefData::class)->makePartial();
-        $this->sut->shouldReceive('getRefdataReference')
-            ->with(QueueEntity::STATUS_PROCESSING)
-            ->once()
-            ->andReturn($ref);
-        $this->sut
-            ->shouldReceive('save')
-            ->with($item)
-            ->once();
-
-        $this->assertEquals($item, $this->sut->getNextItem(['foo']));
-
-        $now = new DateTime();
-        $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] AND' .
-            ' (q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL) LIMIT 1' .
-            ' AND q.type IN [[["foo"]]]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testGetNextItemExclude(): void
-    {
-        $item = m::mock(QueueEntity::class)->makePartial();
-
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('order')->with('id', 'ASC')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn([$item])
-                ->getMock()
-        );
-
-        $ref = m::mock(RefData::class)->makePartial();
-        $this->sut->shouldReceive('getRefdataReference')
-            ->with(QueueEntity::STATUS_PROCESSING)
-            ->once()
-            ->andReturn($ref);
-        $this->sut
-            ->shouldReceive('save')
-            ->with($item)
-            ->once();
-
-        $this->assertEquals($item, $this->sut->getNextItem(['foo'], ['bar']));
-
-        $now = new DateTime();
-        $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] AND' .
-            ' (q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL) LIMIT 1' .
-            ' AND q.type IN [[["foo"]]] AND q.type NOT IN [[["bar"]]]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testEnqueueContinuationNotSought(): void
-    {
-        $options1 = '{"id":1,"version":2}';
-        $options2 = '{"id":3,"version":4}';
-
-        $query = 'INSERT INTO `queue` (`status`, `type`, `options`) VALUES '
-            . '(:status1, :type1, :options1), (:status2, :type2, :options2)';
-
-        $queryResult = m::mock(Result::class);
-        $queryResult->expects('rowCount')
-            ->withNoArgs()
-            ->andReturn(2);
-
-        $mockStatement = m::mock(Statement::class);
-        $mockStatement ->expects('executeQuery')
-            ->withNoArgs()
-            ->andReturn($queryResult);
-        $mockStatement->expects('bindValue')->with('status1', QueueEntity::STATUS_QUEUED);
-        $mockStatement->expects('bindValue')->with('type1', QueueEntity::TYPE_CNS);
-        $mockStatement->expects('bindValue')->with('options1', $options1);
-        $mockStatement->expects('bindValue')->with('status2', QueueEntity::STATUS_QUEUED);
-        $mockStatement->expects('bindValue')->with('type2', QueueEntity::TYPE_CNS);
-        $mockStatement->expects('bindValue')->with('options2', $options2);
-
-        $mockConnection = m::mock(Connection::class);
-        $mockConnection->expects('prepare')
-            ->with($query)
-            ->andReturn($mockStatement);
-
-        $this->em->expects('getConnection')->withNoArgs()->andReturn($mockConnection);
-
-        $licences = [
-            ['id' => 1, 'version' => 2],
-            ['id' => 3, 'version' => 4]
+        yield 'no type filter' => [[], [], ''];
+        yield 'include types' => [['t1'], [], ' AND q.type IN(:includeTypes)'];
+        yield 'exclude types' => [[], ['t2'], ' AND q.type NOT IN(:excludeTypes)'];
+        yield 'both' => [
+            ['t1'],
+            ['t2'],
+            ' AND q.type IN(:includeTypes) AND q.type NOT IN(:excludeTypes)',
         ];
-
-        $this->assertEquals(2, $this->sut->enqueueContinuationNotSought($licences));
     }
 
-    public function testIsItemTypeQueuedTrue(): void
+    public function testGetNextItemReturnsNullWhenTheQueueIsEmpty(): void
     {
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('order')->with('id', 'ASC')->once()->andReturnSelf();
+        $this->createRealQb()->willReturn([]);
 
-        $qb->shouldReceive('getQuery->getArrayResult')->with()->once()->andReturn(['X']);
-
-        $this->assertTrue($this->sut->isItemTypeQueued('foo'));
-
-        $now = new DateTime();
-        $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] AND' .
-            ' (q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL) LIMIT 1' .
-            ' AND q.type = [[foo]]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testIsItemTypeQueuedFalse(): void
-    {
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('order')->with('id', 'ASC')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getArrayResult')->with()->once()->andReturn([]);
-
-        $this->assertFalse($this->sut->isItemTypeQueued('foo'));
-
-        $now = new DateTime();
-        $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] AND' .
-            ' (q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL) LIMIT 1' .
-            ' AND q.type = [[foo]]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchNextItemIncludingPostponedWithIncludeTypes(): void
-    {
-        $item = m::mock(QueueEntity::class)->makePartial();
-
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('order')->with('q.processAfterDate', 'ASC')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn([$item])
-                ->getMock()
-        );
-
-        $this->assertEquals($item, $this->sut->fetchNextItemIncludingPostponed(['foo']));
-
-        $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] LIMIT 1' .
-            ' AND q.type IN [[["foo"]]]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchNextItemIncludingPostponedWithexcludeTypes(): void
-    {
-        $item = m::mock(QueueEntity::class)->makePartial();
-
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('order')->with('q.processAfterDate', 'ASC')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn([$item])
-                ->getMock()
-        );
-
-        $this->assertEquals($item, $this->sut->fetchNextItemIncludingPostponed(['foo'], ['bar']));
-        $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] LIMIT 1' .
-            ' AND q.type IN [[["foo"]]] AND q.type NOT IN [[["bar"]]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertNull($this->sut->getNextItem());
     }
 
     /**
-     * @param array $results
-     * @param bool  $expected
+     * The postponed variant drops the processAfterDate condition entirely and orders by it, so
+     * a postponed item can be picked up before its time.
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsItemInQueue')]
-    public function testIsItemInQueue(mixed $results, mixed $expected): void
+    public function testFetchNextItemIncludingPostponed(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $item = m::mock(Entity::class);
 
-        $this->mockCreateQueryBuilder($qb);
+        $qb = $this->createRealQb()->willReturn([$item]);
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getArrayResult')
-                ->andReturn($results)
-                ->getMock()
+        $this->assertSame($item, $this->sut->fetchNextItemIncludingPostponed(['t1'], ['t2']));
+
+        $this->assertSame(
+            'SELECT q' . self::FROM
+            . ' WHERE q.status = :statusId AND q.type IN(:includeTypes)'
+            . ' AND q.type NOT IN(:excludeTypes)'
+            . ' ORDER BY q.processAfterDate ASC',
+            $qb->getDQL(),
         );
-        $this->assertEquals($expected, $this->sut->isItemInQueue(['T1', 'T2'], ['S1', 'S2']));
-
-        $expectedQuery = 'BLAH '
-            . 'SELECT q.id '
-            . 'AND q.type IN [[["T1","T2"]]] '
-            . 'AND q.status IN [[["S1","S2"]]] '
-            . 'LIMIT 1';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(1, $qb->getMaxResults());
     }
 
-    public static function dpIsItemInQueue(): \Iterator
+    #[\PHPUnit\Framework\Attributes\DataProvider('emptinessProvider')]
+    public function testIsItemTypeQueued(array $results, bool $expected): void
     {
-        yield 'exists in the queue' => [['RESULTS'], true];
-        yield 'not in the queue' => [[], false];
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getArrayResult')->andReturn($results);
+
+        $this->assertSame($expected, $this->sut->isItemTypeQueued('t1'));
+
+        $this->assertSame(
+            'SELECT q' . self::FROM . self::NEXT_ITEM_WHERE . ' AND q.type = :type'
+            . ' ORDER BY q.id ASC',
+            $qb->getDQL(),
+        );
+        $this->assertSame('t1', $qb->getParameter('type')->getValue());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('emptinessProvider')]
+    public function testIsItemInQueue(array $results, bool $expected): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getArrayResult')->andReturn($results);
+
+        $this->assertSame($expected, $this->sut->isItemInQueue(['t1'], ['s1']));
+
+        $this->assertSame(
+            'SELECT q.id' . self::FROM
+            . ' WHERE q.type IN(:types) AND q.status IN(:statuses)',
+            $qb->getDQL(),
+        );
+        $this->assertSame(['t1'], $qb->getParameter('types')->getValue());
+        $this->assertSame(['s1'], $qb->getParameter('statuses')->getValue());
+        $this->assertSame(1, $qb->getMaxResults());
+    }
+
+    public static function emptinessProvider(): \Iterator
+    {
+        yield 'found' => [[['id' => 1]], true];
+        yield 'not found' => [[], false];
+    }
+
+    /**
+     * Continuation-not-sought rows are inserted with one placeholder triple per licence, built
+     * into a single raw INSERT.
+     */
+    public function testEnqueueContinuationNotSought(): void
+    {
+        $licences = [
+            ['id' => 1, 'version' => 2],
+            ['id' => 3, 'version' => 4],
+        ];
+
+        $result = m::mock(Result::class);
+        $result->expects('rowCount')->andReturn(2);
+
+        $statement = m::mock(Statement::class);
+        $statement->expects('bindValue')->with('status1', Entity::STATUS_QUEUED);
+        $statement->expects('bindValue')->with('type1', Entity::TYPE_CNS);
+        $statement->expects('bindValue')->with('options1', '{"id":1,"version":2}');
+        $statement->expects('bindValue')->with('status2', Entity::STATUS_QUEUED);
+        $statement->expects('bindValue')->with('type2', Entity::TYPE_CNS);
+        $statement->expects('bindValue')->with('options2', '{"id":3,"version":4}');
+        $statement->expects('executeQuery')->andReturn($result);
+
+        $connection = m::mock(Connection::class);
+        $connection->expects('prepare')
+            ->with(
+                'INSERT INTO `queue` (`status`, `type`, `options`) VALUES '
+                . '(:status1, :type1, :options1), (:status2, :type2, :options2)',
+            )
+            ->andReturn($statement);
+
+        $this->em->expects('getConnection')->withNoArgs()->andReturn($connection);
+
+        $this->assertSame(2, $this->sut->enqueueContinuationNotSought($licences));
     }
 }

@@ -386,8 +386,8 @@ resource "aws_cloudwatch_event_target" "analyse_financial_document" {
 
 # The AnalyseFinancialDocument SM emits DocumentProcessing-FinancialDocumentAnalysed when
 # the pipeline finishes. The detail contains analysis_token and execution_arn.
-# EventBridge submits an AWS Batch job to store the result using those values
-# as command arguments, overriding the default container command.
+# EventBridge submits an AWS Batch job to store the result, passing those values
+# as job parameters; the job definition command references them as Ref:: placeholders.
 locals {
   # Batch ARNs follow the naming conventions established by the service module.
   store_result_batch_queue_arn   = "arn:aws:batch:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:job-queue/vol-app-${var.environment}-idp-events"
@@ -414,15 +414,17 @@ resource "aws_cloudwatch_event_target" "store_document_analysis_result" {
     job_name       = "${local.name_prefix}-store-document-analysis-result"
   }
 
-  # Pass analysis_token and execution_arn as container command overrides so the
-  # Batch job can find the correct item in the table from the analysis_token and
-  # retrieve the S3 bucket and S3 key from the execution_arn from AnalyseFinancialDocument SM
+  # Pass analysis_token and execution_arn as Batch job parameters. The job
+  # definition command uses Ref::analysis_token / Ref::execution_arn (as
+  # separate arguments, Batch only substitutes whole args) and Batch fills
+  # them in at submit time. Placeholders are unquoted because EventBridge
+  # quotes string values itself.
   input_transformer {
     input_paths = {
       analysis_token = "$.detail.analysis_token"
       execution_arn  = "$.detail.execution_arn"
     }
-    input_template = "{\"containerOverrides\":{\"command\":[\"/var/www/html/vendor/bin/laminas\",\"--container=/var/www/html/config/container-cli.php\",\"-v\",\"idp:store-document-analysis-result\",\"--analysis-token=<analysis_token>\",\"--execution-arn=<execution_arn>\"]}}"
+    input_template = "{\"Parameters\":{\"analysis_token\":<analysis_token>,\"execution_arn\":<execution_arn>}}"
   }
 }
 
