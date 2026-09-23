@@ -18,7 +18,7 @@ LIQUIBASE_OPTS="--driver=com.mysql.cj.jdbc.Driver \
   --changelog-file=changesets/OLCS.xml \
   --log-level=info"
 
-if [[ "$1" == "--dry-run" ]]; then
+if [[ "${1:-}" == "--dry-run" || "${DRY_RUN:-false}" == "true" ]]; then
     echo "Running in dry-run mode - showing pending changes:"
     liquibase ${LIQUIBASE_OPTS} status --verbose --contexts=${CONTEXT}
     liquibase ${LIQUIBASE_OPTS} update-sql --contexts=${CONTEXT}
