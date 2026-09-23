@@ -169,6 +169,7 @@ jobs:
           private-key: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
           owner: dvsa
           repositories: olcs-etl
+          permission-contents: read
       # Same resolution as cd.yaml so a PR's environment plan uses the value a release would apply.
       - name: Resolve olcs-etl main
         id: etl

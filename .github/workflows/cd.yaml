@@ -187,6 +187,7 @@ jobs:
           private-key: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
           owner: dvsa
           repositories: olcs-etl
+          permission-contents: read
       # Resolved once so int, prep and prod all migrate from the same olcs-etl commit.
       - name: Resolve olcs-etl main
         id: etl

@@ -76,6 +76,7 @@ jobs:
           private-key: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
           owner: dvsa
           repositories: olcs-etl
+          permission-contents: read
       - name: Resolve olcs-etl ref
         id: etl
         env:
