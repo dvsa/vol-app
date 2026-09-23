@@ -11,6 +11,12 @@ module "assets" {
   version = "~> 4.0"
 
   bucket = "${local.account_id}-vol-app-assets"
+
+  lifecycle_rule = [{
+    id                                     = "abort-incomplete-multipart-uploads"
+    status                                 = "Enabled"
+    abort_incomplete_multipart_upload_days = 7
+  }]
 }
 
 data "aws_iam_policy_document" "s3_policy" {

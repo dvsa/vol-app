@@ -178,6 +178,12 @@ module "log_bucket" {
 
   bucket = "vol-app-${var.environment}-assets-logs"
 
+  lifecycle_rule = [{
+    id                                     = "abort-incomplete-multipart-uploads"
+    status                                 = "Enabled"
+    abort_incomplete_multipart_upload_days = 7
+  }]
+
   control_object_ownership = true
   object_ownership         = "ObjectWriter"
 
