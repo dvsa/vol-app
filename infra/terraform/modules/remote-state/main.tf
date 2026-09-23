@@ -46,8 +46,9 @@ module "dynamodb_table" {
   source  = "terraform-aws-modules/dynamodb-table/aws"
   version = "~> 4.0"
 
-  name     = "${local.identifier}-lock"
-  hash_key = "LockID"
+  name                           = "${local.identifier}-lock"
+  hash_key                       = "LockID"
+  point_in_time_recovery_enabled = true
 
   attributes = [
     {
