@@ -21,8 +21,10 @@ class LetterTodo extends AbstractVersionedRepository
     protected function getVersionedFields(): array
     {
         return [
+            'name',
             'description',
-            'helpText'
+            'helpText',
+            'requiresInput'
         ];
     }
 

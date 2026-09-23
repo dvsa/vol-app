@@ -211,7 +211,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
     }
 
     /**
-     * VOL-7402: block sending while any issue or section flagged "requires input"
+     * VOL-7402: block sending while any issue, section or to-do flagged "requires input"
      * still carries its default content. The flag exists precisely so a caseworker
      * must replace boilerplate (deadlines, amounts, names) before the letter goes out.
      *
@@ -230,6 +230,13 @@ final class PrepareToSend extends AbstractCommandHandler implements
         foreach ($letterInstance->getLetterInstanceSections() as $section) {
             if ($section->requiresInput() && !$section->hasBeenEdited()) {
                 $pending[] = $section->getLetterSectionVersion()?->getName() ?: 'Section';
+            }
+        }
+
+        foreach ($letterInstance->getLetterInstanceTodos() as $todo) {
+            if ($todo->requiresInput() && !$todo->hasBeenEdited()) {
+                $todoVersion = $todo->getLetterTodoVersion();
+                $pending[] = $todoVersion?->getName() ?: $todoVersion?->getLetterTodo()?->getTodoKey() ?: 'To-do';
             }
         }
 
