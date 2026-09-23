@@ -17,6 +17,8 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 
 class LetterIssueController extends AbstractInternalController implements LeftViewProvider
 {
+    use LetterDeleteErrorTrait;
+
     protected $tableName = 'admin-letter-issue';
     protected $defaultTableSortField = 'issueKey';
     protected $defaultTableOrderField = 'ASC';
