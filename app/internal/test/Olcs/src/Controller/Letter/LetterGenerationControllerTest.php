@@ -9,6 +9,8 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\GenerationContext;
+use Dvsa\Olcs\Transfer\Query\Letter\LetterIssue\GetList as LetterIssueList;
+use Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList as LetterIssueTypeList;
 use Laminas\Http\Request;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
@@ -302,5 +304,45 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $sut->shouldReceive('buildAccordionData')->with(null)->once()->andReturn([]);
 
         $this->runCreateAction($sut, ['template' => '5']);
+    }
+
+    /**
+     * Hands back $total rows in pages of 100, the most the list queries allow
+     */
+    private function pagedSut(string $queryClass, int $total, array $row): Sut
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleQuery')
+            ->with(m::type($queryClass))
+            ->andReturnUsing(function ($query) use ($total, $row) {
+                $this->assertSame(100, (int) $query->getLimit());
+                $offset = ((int) $query->getPage() - 1) * 100;
+                $rows = [];
+                for ($i = $offset + 1; $i <= min($total, $offset + 100); $i++) {
+                    $rows[] = ['id' => $i] + $row;
+                }
+
+                return $this->okResponse(['results' => $rows, 'count' => $total]);
+            });
+
+        return $sut;
+    }
+
+    public function testEveryLetterIssueIsLoadedNotJustTheFirstHundred(): void
+    {
+        $sut = $this->pagedSut(LetterIssueList::class, 130, []);
+
+        $method = new \ReflectionMethod(Sut::class, 'fetchActiveLetterIssues');
+
+        $this->assertSame(range(1, 130), array_column($method->invoke($sut), 'id'));
+    }
+
+    public function testEveryIssueTypeIsLoadedNotJustTheFirstHundred(): void
+    {
+        $sut = $this->pagedSut(LetterIssueTypeList::class, 101, ['isActive' => true]);
+
+        $method = new \ReflectionMethod(Sut::class, 'fetchActiveIssueTypes');
+
+        $this->assertSame(range(1, 101), array_column($method->invoke($sut), 'id'));
     }
 }

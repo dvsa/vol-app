@@ -1014,23 +1014,13 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     protected function fetchActiveIssueTypes(): array
     {
-        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList::create([
-            'sort' => 'displayOrder',
-            'order' => 'ASC',
-            'page' => 1,
-            'limit' => 100,
-        ]);
-
-        $response = $this->handleQuery($query);
-
-        if (!$response->isOk()) {
-            return [];
-        }
-
-        $result = $response->getResult();
+        $results = $this->fetchAllPages(
+            \Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList::class,
+            ['sort' => 'displayOrder', 'order' => 'ASC']
+        );
 
         // Filter active issue types only
-        $issueTypes = array_filter($result['results'] ?? [], fn($issueType) => !empty($issueType['isActive']));
+        $issueTypes = array_filter($results, fn($issueType) => !empty($issueType['isActive']));
 
         return array_values($issueTypes);
     }
@@ -1042,22 +1032,38 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     protected function fetchActiveLetterIssues(): array
     {
-        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterIssue\GetList::create([
-            'sort' => 'issueKey',
-            'order' => 'ASC',
-            'page' => 1,
-            'limit' => 100, // Maximum allowed limit
-        ]);
+        return $this->fetchAllPages(
+            \Dvsa\Olcs\Transfer\Query\Letter\LetterIssue\GetList::class,
+            ['sort' => 'issueKey', 'order' => 'ASC']
+        );
+    }
 
-        $response = $this->handleQuery($query);
+    /**
+     * Fetch every row of a list query, a page at a time
+     *
+     * @param string $listQueryClass Paged list query DTO class
+     * @param array $params Sort and order
+     * @return array
+     */
+    protected function fetchAllPages(string $listQueryClass, array $params): array
+    {
+        $results = [];
+        $page = 1;
 
-        if (!$response->isOk()) {
-            return [];
-        }
+        do {
+            // 100 is the most a list query allows per page
+            $response = $this->handleQuery($listQueryClass::create($params + ['page' => $page++, 'limit' => 100]));
 
-        $result = $response->getResult();
+            if (!$response->isOk()) {
+                break;
+            }
 
-        return $result['results'] ?? [];
+            $result = $response->getResult();
+            $pageResults = $result['results'] ?? [];
+            $results = array_merge($results, $pageResults);
+        } while (!empty($pageResults) && count($results) < (int) ($result['count'] ?? 0));
+
+        return $results;
     }
 
     /**
