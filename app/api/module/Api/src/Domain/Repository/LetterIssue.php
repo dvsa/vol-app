@@ -54,6 +54,58 @@ class LetterIssue extends AbstractVersionedRepository
     }
 
     /**
+     * Names of the letter types using any version of the issue
+     *
+     * @param int $id
+     * @return string[]
+     */
+    public function fetchLetterTypeNamesUsing(int $id): array
+    {
+        return $this->getEntityManager()->getConnection()->fetchFirstColumn(
+            'SELECT DISTINCT lt.name FROM letter_type lt ' .
+            'JOIN letter_type_issue lti ON lti.letter_type_id = lt.id ' .
+            'JOIN letter_issue_version v ON v.id = lti.letter_issue_version_id ' .
+            'WHERE v.letter_issue_id = :id ' .
+            'ORDER BY lt.name',
+            ['id' => $id]
+        );
+    }
+
+    /**
+     * Whether any generated letter uses a version of the issue
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function isUsedByLetterInstances(int $id): bool
+    {
+        return $this->getEntityManager()->getConnection()->fetchOne(
+            'SELECT 1 FROM letter_instance_issue lii ' .
+            'JOIN letter_issue_version v ON v.id = lii.letter_issue_version_id ' .
+            'WHERE v.letter_issue_id = :id LIMIT 1',
+            ['id' => $id]
+        ) !== false;
+    }
+
+    /**
+     * Delete the issue, all its versions and their to-do links
+     *
+     * @param int $id
+     * @return void
+     */
+    public function hardDelete(int $id): void
+    {
+        $this->deleteRows($id, [
+            'UPDATE letter_issue SET current_version_id = NULL WHERE id = :id',
+            'DELETE lit FROM letter_issue_todo lit ' .
+            'JOIN letter_issue_version v ON v.id = lit.letter_issue_version_id ' .
+            'WHERE v.letter_issue_id = :id',
+            'DELETE FROM letter_issue_version WHERE letter_issue_id = :id',
+            'DELETE FROM letter_issue WHERE id = :id',
+        ]);
+    }
+
+    /**
      * Get the list of fields that should trigger versioning when changed
      *
      * @return array

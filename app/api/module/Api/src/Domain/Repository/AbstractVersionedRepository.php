@@ -113,6 +113,45 @@ abstract class AbstractVersionedRepository extends AbstractRepository
     }
 
     /**
+     * Hide the entity in admin but keep every row, for generated letters that still use it.
+     * Only the parent row changes, so this skips versioning.
+     *
+     * @param mixed $entity
+     * @return void
+     */
+    public function softDelete($entity): void
+    {
+        $entity->setDeletedOn(new \DateTime());
+
+        parent::save($entity);
+    }
+
+    /**
+     * Run native delete statements bound to :id, in the order given, then stop the entity
+     * manager tracking the deleted row so nothing flushes it later.
+     *
+     * Native SQL so that soft-deleted rows the Gedmo filter hides are removed as well.
+     *
+     * @param int $id
+     * @param string[] $statements
+     * @return void
+     */
+    protected function deleteRows(int $id, array $statements): void
+    {
+        $em = $this->getEntityManager();
+
+        foreach ($statements as $sql) {
+            $em->getConnection()->executeStatement($sql, ['id' => $id]);
+        }
+
+        $managed = $em->getUnitOfWork()->tryGetById($id, $this->entity);
+
+        if ($managed !== false) {
+            $em->detach($managed);
+        }
+    }
+
+    /**
      * Extract current state from entity
      *
      * @param mixed $entity
