@@ -25,12 +25,12 @@ on:
           - prod
         required: true
       etl_ref:
-        description: "olcs-etl ref to bundle as the changelog: branch, tag or commit sha"
+        description: "olcs-etl ref to bundle as the changelog: branch, tag or commit sha. A submitted job only runs if the environment is already pinned to it"
         required: false
         type: string
         default: "main"
       release_tag:
-        description: "Release build only: tag to create in olcs-etl and apply to the image (e.g. release-v9.4.0). Requires branch_build unticked."
+        description: "Release build only, nonprod: tag to create in olcs-etl and apply to the image (e.g. release-v9.4.0). Requires branch_build unticked."
         required: false
         type: string
         default: ""
@@ -128,10 +128,28 @@ jobs:
     runs-on: ubuntu-24.04-arm
     steps:
       - name: Validate inputs
-        if: ${{ inputs.branch_build && inputs.release_tag != '' }}
+        env:
+          ACCOUNT: ${{ inputs.account }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          BRANCH_BUILD: ${{ inputs.branch_build }}
         run: |
-          echo "::error::release_tag cannot be combined with branch_build"
-          exit 1
+          case "$ENVIRONMENT" in
+            prep|prod) expected=prod ;;
+            *) expected=nonprod ;;
+          esac
+          if [ "$ACCOUNT" != "$expected" ]; then
+            echo "::error::$ENVIRONMENT is in the $expected account, not $ACCOUNT"
+            exit 1
+          fi
+          if [ -n "$RELEASE_TAG" ] && [ "$BRANCH_BUILD" = "true" ]; then
+            echo "::error::release_tag cannot be combined with branch_build"
+            exit 1
+          fi
+          if [ -n "$RELEASE_TAG" ] && [ "$ACCOUNT" = "prod" ]; then
+            echo "::error::release tags are applied in nonprod and copied to prod by CD"
+            exit 1
+          fi
 
       - uses: actions/checkout@v6
         with:
@@ -215,14 +233,6 @@ jobs:
           bash .github/scripts/liquibase/ecr-tag-image.sh vol-app/liquibase "$ETL_SHORT" "${extra[@]}" | tee "$RUNNER_TEMP/tag.out"
           grep '^image_digest=' "$RUNNER_TEMP/tag.out" >> "$GITHUB_OUTPUT"
 
-      - name: Tag olcs-etl for the release
-        if: ${{ inputs.release_tag != '' }}
-        env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-          RELEASE_TAG: ${{ inputs.release_tag }}
-          ETL_SHA: ${{ steps.resolve.outputs.etl_sha }}
-        run: bash .github/scripts/liquibase/create-etl-tag.sh "$RELEASE_TAG" "$ETL_SHA"
-
       - name: Summary
         env:
           ETL_REF: ${{ inputs.etl_ref }}
@@ -253,6 +263,18 @@ jobs:
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Check the job definition runs this olcs-etl commit
+        env:
+          JOB_DEFINITION: ${{ vars[env.BATCH_QUEUE] }}
+          ETL_SHORT: ${{ needs.build.outputs.etl_short }}
+        run: |
+          image=$(aws batch describe-job-definitions --job-definition-name "$JOB_DEFINITION" --status ACTIVE \
+            --query 'sort_by(jobDefinitions, &revision)[-1].containerProperties.image' --output text)
+          if [ "${image##*:}" != "$ETL_SHORT" ]; then
+            echo "::error::$JOB_DEFINITION is pinned to $image, not olcs-etl $ETL_SHORT. Deploy the environment to change it."
+            exit 1
+          fi
 
       - name: Submit AWS Batch job
         id: submit-job
@@ -305,3 +327,33 @@ jobs:
             echo "::error::Batch job $JOB_ID finished $JOB_STATUS"
             exit 1
           fi
+
+  tag-etl-release:
+    name: Tag olcs-etl release
+    needs:
+      - build
+      - submit-batch-job
+    if: ${{ always() && inputs.release_tag != '' && needs.build.result == 'success' && (needs.submit-batch-job.result == 'success' || needs.submit-batch-job.result == 'skipped') }}
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+          sparse-checkout: .github/scripts/liquibase
+
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.VOL_GITHUB_APP_ID }}
+          private-key: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
+          owner: dvsa
+          repositories: olcs-etl
+
+      - name: Tag olcs-etl
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          ETL_SHA: ${{ needs.build.outputs.etl_sha }}
+        run: bash .github/scripts/liquibase/create-etl-tag.sh "$RELEASE_TAG" "$ETL_SHA"
