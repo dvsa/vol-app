@@ -17,7 +17,6 @@ use Laminas\View\Model\ViewModel;
 use Olcs\Logging\Log\Logger;
 use Olcs\Service\Data\DocumentSubCategoryWithDocs;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
-use Dvsa\Olcs\Transfer\Query\DocTemplate\ById as DocTemplateById;
 use Common\FeatureToggle;
 
 class DocumentGenerationController extends AbstractDocumentController
@@ -76,16 +75,17 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     public function listTemplateBookmarksAction()
     {
-        $templateId = (int) $this->params('id');
+        $value = $this->params('id');
 
-        // Check if this template uses database-driven letter type
-        if ($this->isLettersDatabaseDrivenEnabled() && $this->templateHasLetterType($templateId)) {
-            // Return JSON response indicating redirect is needed
+        // The [New] entry opens the letters flow, the plain template id stays on the old RTF letter
+        if ($this->isLettersDatabaseDrivenEnabled() && NewLetterTemplateOption::matches($value)) {
             return new \Laminas\View\Model\JsonModel([
                 'redirectToNewLetterFlow' => true,
-                'templateId' => $templateId
+                'templateId' => NewLetterTemplateOption::templateId($value)
             ]);
         }
+
+        $templateId = (int) $value;
 
         $form = new Form();
 
@@ -265,16 +265,12 @@ class DocumentGenerationController extends AbstractDocumentController
         $docTemplates = ['' => self::EMPTY_LABEL];
         if (isset($details['documentSubCategory'])) {
             $subCategoryId = (int) $details['documentSubCategory'];
-            // The template the form already carries (a re-generated document's stored template,
-            // or the user's POSTed choice) must stay selectable even when the letter-type
-            // consolidation would collapse it away, or the value silently falls back to a
-            // different template after the original document has been deleted.
-            $docTemplates = $this->getListDataDocTemplates(null, $subCategoryId, null, $details['documentTemplate'] ?? null);
+            $docTemplates = $this->getListDataDocTemplates(null, $subCategoryId);
         }
 
         $form->get('details')->get('documentTemplate')->setValueOptions($docTemplates);
 
-        if (isset($details['documentTemplate'])) {
+        if (isset($details['documentTemplate']) && !NewLetterTemplateOption::matches($details['documentTemplate'])) {
             $this->addTemplateBookmarks($details['documentTemplate'], $form->get('bookmarks'));
         }
 
@@ -357,13 +353,7 @@ class DocumentGenerationController extends AbstractDocumentController
             return false;
         }
 
-        // Check if template has letterType
-        $templateId = $data['details']['documentTemplate'] ?? null;
-        if (!$templateId) {
-            return false;
-        }
-
-        return $this->templateHasLetterType($templateId);
+        return NewLetterTemplateOption::matches($data['details']['documentTemplate'] ?? null);
     }
 
     /**
@@ -382,24 +372,6 @@ class DocumentGenerationController extends AbstractDocumentController
     }
 
     /**
-     * Check if template uses database-driven letter type
-     *
-     * @param int $templateId Template ID
-     * @return bool
-     */
-    protected function templateHasLetterType(int $templateId): bool
-    {
-        $response = $this->handleQuery(DocTemplateById::create(['id' => $templateId]));
-
-        if (!$response->isOk()) {
-            return false;
-        }
-
-        $templateData = $response->getResult();
-        return !empty($templateData['letterType']['id']);
-    }
-
-    /**
      * Redirect to letter generation (database-driven letters)
      *
      * @param array $data Form data
@@ -408,7 +380,7 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     protected function redirectToLetterChoices(array $data, array $routeParams)
     {
-        $templateId = $data['details']['documentTemplate'];
+        $templateId = NewLetterTemplateOption::templateId($data['details']['documentTemplate']);
 
         // Build query parameters for the new unified letter generation route
         $queryParams = [
