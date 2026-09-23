@@ -41,6 +41,7 @@ class FinancialEvidenceAssessmentController extends AbstractController implement
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
+    #[\Override]
     public function indexAction()
     {
         $analyses = $this->getSuccessfulAnalyses();

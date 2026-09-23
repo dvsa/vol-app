@@ -73,7 +73,7 @@ class SectionConfig
                 ]
             ]
         ],
-        'financial_evidence_assessment' =>[
+        'financial_evidence_assessment' => [
             'restricted' => [
                 [
                     [
