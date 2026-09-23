@@ -1072,6 +1072,85 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertCount(1, $letterInstance->getLetterInstanceSections());
     }
 
+    private function refData(string $id): RefData
+    {
+        $refData = m::mock(RefData::class)->makePartial();
+        $refData->setId($id);
+
+        return $refData;
+    }
+
+    private function expectLetterTypeAndLicence(int $letterTypeId, int $licenceId, string $goodsOrPsv): void
+    {
+        $letterType = m::mock(LetterTypeEntity::class)->makePartial();
+        $letterType->setId($letterTypeId);
+
+        $this->repoMap['LetterType']->shouldReceive('fetchById')
+            ->with($letterTypeId)
+            ->once()
+            ->andReturn($letterType);
+
+        $licence = m::mock(LicenceEntity::class)->makePartial();
+        $licence->setId($licenceId);
+        $licence->shouldReceive('getOrganisation')->andReturnNull();
+        $licence->shouldReceive('getGoodsOrPsv')->andReturn($this->refData($goodsOrPsv));
+        $licence->shouldReceive('isNi')->andReturn(false);
+
+        $this->repoMap['Licence']->shouldReceive('fetchById')
+            ->with($licenceId)
+            ->once()
+            ->andReturn($licence);
+    }
+
+    private function captureSavedInstance(?LetterInstanceEntity &$letterInstance): void
+    {
+        $this->repoMap['LetterInstance']->shouldReceive('save')
+            ->with(m::type(LetterInstanceEntity::class))
+            ->once()
+            ->andReturnUsing(
+                function (LetterInstanceEntity $entity) use (&$letterInstance) {
+                    $letterInstance = $entity;
+                    $entity->setId(999);
+                }
+            );
+    }
+
+    public function testHandleCommandSkipsIssuesForTheOtherLicenceType(): void
+    {
+        $command = Cmd::create([
+            'letterType' => 123,
+            'licence' => 456,
+            'selectedIssues' => [1, 2],
+        ]);
+
+        $this->expectLetterTypeAndLicence(123, 456, 'lcat_psv');
+
+        $goodsOnlyVersion = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $goodsOnlyVersion->setGoodsOrPsv($this->refData('lcat_gv'));
+
+        $anyVersion = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $anyVersion->setGoodsOrPsv(null);
+
+        foreach ([1 => $goodsOnlyVersion, 2 => $anyVersion] as $issueId => $version) {
+            $issue = m::mock(LetterIssueEntity::class)->makePartial();
+            $issue->shouldReceive('getCurrentVersion')->andReturn($version);
+
+            $this->repoMap['LetterIssue']->shouldReceive('fetchById')
+                ->with($issueId)
+                ->once()
+                ->andReturn($issue);
+        }
+
+        $letterInstance = null;
+        $this->captureSavedInstance($letterInstance);
+
+        $this->sut->handleCommand($command);
+
+        $issues = $letterInstance->getLetterInstanceIssues();
+        $this->assertCount(1, $issues);
+        $this->assertSame($anyVersion, $issues->first()->getLetterIssueVersion());
+    }
+
     /**
      * VOL-7280: when two selected issues link to the same LetterTodoVersion, exactly one
      * LetterInstanceTodo should be created and attached to the FIRST issue in display order.

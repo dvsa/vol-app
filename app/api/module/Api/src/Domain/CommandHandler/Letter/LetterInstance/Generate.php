@@ -109,11 +109,13 @@ final class Generate extends AbstractCommandHandler implements AuthAwareInterfac
             $this->result->setFlag('hasRequiredSectionWarnings', true);
         }
 
-        // Create instance issues from selected issues
+        // Create instance issues from selected issues. The screen only offers issues that
+        // match the licence's Goods/PSV, this catches anything posted that doesn't.
+        $goodsOrPsv = $context['goodsOrPsv'];
         $issueVersions = [];
         foreach ($command->getSelectedIssues() ?? [] as $issueId) {
             $issueVersion = $this->getRepo('LetterIssue')->fetchById($issueId)->getCurrentVersion();
-            if ($issueVersion) {
+            if ($issueVersion && ($goodsOrPsv === null || $issueVersion->appliesToType($goodsOrPsv))) {
                 $issueVersions[] = $issueVersion;
             }
         }

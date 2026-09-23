@@ -405,6 +405,12 @@ class DocumentGenerationController extends AbstractDocumentController
                     $queryParams['application'] = $entityId;
                 }
                 break;
+            case 'case':
+                $entityId = $routeParams['case'] ?? null;
+                if ($entityId) {
+                    $queryParams['case'] = $entityId;
+                }
+                break;
             case 'busReg':
                 $entityId = $routeParams['busRegId'] ?? null;
                 if ($entityId) {

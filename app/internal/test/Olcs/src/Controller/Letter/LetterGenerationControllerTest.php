@@ -4,27 +4,47 @@ declare(strict_types=1);
 
 namespace OlcsTest\Controller\Letter;
 
+use Common\Service\Cqrs\Response;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\GenerationContext;
+use Laminas\Http\Request;
 use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Letter\LetterGenerationController as Sut;
+use Olcs\Mvc\Controller\Plugin\Placeholder;
+use Olcs\Mvc\Controller\Plugin\ViewBuilder;
 
 /**
  * Covers the radio "pick one" letter-choice validation (VOL-7282/VOL-7303).
  */
 final class LetterGenerationControllerTest extends MockeryTestCase
 {
-    private function makeSut(array $letterChoices): Sut
+    private function bareSut(): Sut
     {
-        $sut = m::mock(Sut::class, [
+        return m::mock(Sut::class, [
             m::mock(TranslationHelperService::class),
             m::mock(FormHelperService::class),
             m::mock(FlashMessengerHelperService::class),
             m::mock(Navigation::class),
         ])->makePartial()->shouldAllowMockingProtectedMethods();
+    }
+
+    private function okResponse(array $result): Response
+    {
+        $response = m::mock(Response::class);
+        $response->shouldReceive('isOk')->andReturn(true);
+        $response->shouldReceive('getResult')->andReturn($result);
+
+        return $response;
+    }
+
+    private function makeSut(array $letterChoices): Sut
+    {
+        $sut = $this->bareSut();
 
         $sut->shouldReceive('fetchLetterChoicesForLetterType')->andReturn($letterChoices);
 
@@ -195,5 +215,92 @@ final class LetterGenerationControllerTest extends MockeryTestCase
     public function testATodoThatDoesNotNeedInputIsNeverFlagged(): void
     {
         $this->assertFalse($this->todosList([$this->instanceTodo(false, null)])[0]['inputPending']);
+    }
+
+    /**
+     * Adverts is goods only, Finance has one issue for both and one PSV only. The PSV one
+     * comes back as a bare id to cover both shapes the API can serialise a RefData in.
+     */
+    private function accordionFor(?string $goodsOrPsv): array
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchActiveIssueTypes')->andReturn([
+            ['id' => 1, 'name' => 'Adverts', 'isActive' => true],
+            ['id' => 2, 'name' => 'Finance', 'isActive' => true],
+        ]);
+        $sut->shouldReceive('fetchActiveLetterIssues')->andReturn([
+            ['id' => 10, 'currentVersion' => ['letterIssueType' => ['id' => 1], 'goodsOrPsv' => ['id' => 'lcat_gv']]],
+            ['id' => 20, 'currentVersion' => ['letterIssueType' => ['id' => 2], 'goodsOrPsv' => null]],
+            ['id' => 21, 'currentVersion' => ['letterIssueType' => ['id' => 2], 'goodsOrPsv' => 'lcat_psv']],
+        ]);
+
+        $method = new \ReflectionMethod(Sut::class, 'buildAccordionData');
+        $accordion = $method->invoke($sut, $goodsOrPsv);
+
+        $issueIds = [];
+        foreach ($accordion as $section) {
+            $issueIds[$section['issueType']['name']] = array_column($section['issues'], 'id');
+        }
+
+        return $issueIds;
+    }
+
+    public function testPsvContextHidesGoodsOnlyIssuesAndLeavesTheirTypeEmpty(): void
+    {
+        $this->assertSame(['Adverts' => [], 'Finance' => [20, 21]], $this->accordionFor('lcat_psv'));
+    }
+
+    public function testGoodsContextKeepsGoodsOnlyIssues(): void
+    {
+        $this->assertSame(['Adverts' => [10], 'Finance' => [20]], $this->accordionFor('lcat_gv'));
+    }
+
+    public function testUnknownContextShowsEveryIssue(): void
+    {
+        $this->assertSame(['Adverts' => [10], 'Finance' => [20, 21]], $this->accordionFor(null));
+    }
+
+    private function runCreateAction(Sut $sut, array $query): void
+    {
+        $request = new Request();
+        $request->getQuery()->fromArray($query);
+
+        $placeholder = m::mock(Placeholder::class);
+        $placeholder->shouldReceive('setPlaceholder');
+
+        $viewBuilder = m::mock(ViewBuilder::class);
+        $viewBuilder->shouldReceive('buildView')->andReturnUsing(fn(ViewModel $view) => $view);
+
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('extractRouteParams')->andReturn([]);
+        $sut->shouldReceive('placeholder')->andReturn($placeholder);
+        $sut->shouldReceive('viewBuilder')->andReturn($viewBuilder);
+        $sut->shouldReceive('fetchAppendicesForLetterType')->andReturn([]);
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->andReturn([]);
+
+        $sut->createAction();
+    }
+
+    public function testCreateActionFiltersIssuesByTheLicenceGoodsOrPsv(): void
+    {
+        $sut = $this->bareSut();
+
+        $sut->shouldReceive('handleQuery')
+            ->with(m::on(fn($query) => $query instanceof GenerationContext && $query->getLicence() === 7))
+            ->once()
+            ->andReturn($this->okResponse(['goodsOrPsv' => 'lcat_psv', 'isNi' => false]));
+        $sut->shouldReceive('buildAccordionData')->with('lcat_psv')->once()->andReturn([]);
+
+        $this->runCreateAction($sut, ['template' => '5', 'licence' => '7']);
+    }
+
+    public function testCreateActionWithoutAnEntityShowsEverything(): void
+    {
+        $sut = $this->bareSut();
+
+        $sut->shouldReceive('handleQuery')->never();
+        $sut->shouldReceive('buildAccordionData')->with(null)->once()->andReturn([]);
+
+        $this->runCreateAction($sut, ['template' => '5']);
     }
 }

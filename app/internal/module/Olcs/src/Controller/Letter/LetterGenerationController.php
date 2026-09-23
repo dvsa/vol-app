@@ -103,8 +103,11 @@ class LetterGenerationController extends AbstractInternalController implements L
         // Extract entity context from query and route params
         $entityContext = $this->extractEntityContext($allParams);
 
+        // Goods/PSV of the licence or application, null when there isn't one (TM, IRFO)
+        $goodsOrPsv = $this->fetchLetterContext($entityContext)['goodsOrPsv'] ?? null;
+
         // Build accordion data structure with issue types and their issues
-        $accordionData = $this->buildAccordionData();
+        $accordionData = $this->buildAccordionData($goodsOrPsv);
 
         // Fetch appendices for this letter type
         $appendicesData = $this->fetchAppendicesForLetterType($templateId);
@@ -925,9 +928,10 @@ class LetterGenerationController extends AbstractInternalController implements L
     /**
      * Build accordion data structure with issue types and their issues
      *
+     * @param string|null $goodsOrPsv Letter's Goods/PSV, null shows every issue
      * @return array Array of ['issueType' => [...], 'issues' => [...]]
      */
-    protected function buildAccordionData(): array
+    protected function buildAccordionData(?string $goodsOrPsv = null): array
     {
         // Fetch all active issue types ordered by display order
         $issueTypes = $this->fetchActiveIssueTypes();
@@ -938,6 +942,10 @@ class LetterGenerationController extends AbstractInternalController implements L
         // Group issues by issue type ID
         $issuesByType = [];
         foreach ($letterIssues as $issue) {
+            if (!$this->appliesToGoodsOrPsv($issue['currentVersion']['goodsOrPsv'] ?? null, $goodsOrPsv)) {
+                continue;
+            }
+
             $typeId = $issue['currentVersion']['letterIssueType']['id'] ?? null;
             if ($typeId) {
                 if (!isset($issuesByType[$typeId])) {
@@ -958,6 +966,45 @@ class LetterGenerationController extends AbstractInternalController implements L
         }
 
         return $accordionData;
+    }
+
+    /**
+     * Goods/PSV and NI of the entity the letter is for, worked out the same way generation does
+     *
+     * @param array $entityContext Entity context with type and ID
+     * @return array ['goodsOrPsv' => ?string, 'isNi' => ?bool], empty when there is no entity
+     */
+    protected function fetchLetterContext(array $entityContext): array
+    {
+        if (empty($entityContext['type'])) {
+            return [];
+        }
+
+        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\GenerationContext::create([
+            $entityContext['type'] => $entityContext['id'],
+        ]);
+
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            return [];
+        }
+
+        return $response->getResult();
+    }
+
+    /**
+     * Whether an issue or choice set to Goods, PSV or neither (both) belongs on this letter
+     *
+     * @param array|string|null $setting Serialised RefData or just its id
+     * @param string|null $goodsOrPsv Letter's Goods/PSV, null when unknown
+     * @return bool
+     */
+    protected function appliesToGoodsOrPsv(array|string|null $setting, ?string $goodsOrPsv): bool
+    {
+        $settingId = is_array($setting) ? ($setting['id'] ?? null) : $setting;
+
+        return $goodsOrPsv === null || empty($settingId) || $settingId === $goodsOrPsv;
     }
 
     /**
