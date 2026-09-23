@@ -150,7 +150,7 @@ abstract class AbstractFinancialEvidenceController extends AbstractController
 
         return $adapter->getDocuments(
             $this->getIdentifier(),
-            $this->location==='internal'
+            $this->shouldShowAnalysis()
         );
     }
 
@@ -200,5 +200,13 @@ abstract class AbstractFinancialEvidenceController extends AbstractController
         }
 
         return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function shouldShowAnalysis(): bool
+    {
+        return $this->location === 'internal' && $this->isIdpEnabled();
     }
 }

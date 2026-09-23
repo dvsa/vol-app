@@ -140,9 +140,9 @@ trait ApplicationControllerTrait
             $applicationStatuses
         );
 
-        if (isset($accessibleSections['financial_evidence_assessment']) && !$this->isIdpEnabled()) {
-            unset($accessibleSections['financial_evidence_assessment']);
-        }
+//        if (isset($accessibleSections['financial_evidence_assessment']) && !$this->isIdpEnabled()) {
+//            unset($accessibleSections['financial_evidence_assessment']);
+//        }
 
         foreach ($accessibleSections as $section => $settings) {
             $alias = $section;

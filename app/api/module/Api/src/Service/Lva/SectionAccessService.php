@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Psr\Container\ContainerInterface;
@@ -33,6 +34,8 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
      */
     private $restrictionService;
 
+    private $toggleService;
+
     /**
      * Get sections from section config
      *
@@ -42,6 +45,10 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
     {
         if ($this->sections === null) {
             $this->sections = $this->sectionConfig->getAll();
+        }
+
+        if ($this->toggleService->isDisabled('idp')) {
+            unset($this->sections['financial_evidence_assessment']);
         }
 
         return $this->sections;
@@ -161,6 +168,7 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
         $this->restrictionService = $container->get('RestrictionService');
         $this->sectionConfig = $container->get('SectionConfig');
         $this->setAuthService($container->get(AuthorizationService::class));
+        $this->toggleService = $container->get(ToggleService::class);
         return $this;
     }
 }
