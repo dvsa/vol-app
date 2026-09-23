@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
@@ -47,7 +48,7 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
             $this->sections = $this->sectionConfig->getAll();
         }
 
-        if ($this->toggleService->isDisabled('idp')) {
+        if ($this->toggleService->isDisabled(FeatureToggle::IDP)) {
             unset($this->sections['financial_evidence_assessment']);
         }
 

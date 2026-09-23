@@ -11,10 +11,12 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Dvsa\Olcs\Api\Service\Lva\RestrictionService;
 use Dvsa\Olcs\Api\Service\Lva\SectionAccessService;
+use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 use Laminas\ServiceManager\ServiceManager;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Lva\SectionAccessService::class)]
 final class SectionAccessServiceTest extends MockeryTestCase
@@ -33,6 +35,8 @@ final class SectionAccessServiceTest extends MockeryTestCase
     /** @var  m\MockInterface */
     private $authService;
 
+    private ToggleService $toggleService;
+
     #[\Override]
     public function setUp(): void
     {
@@ -40,6 +44,9 @@ final class SectionAccessServiceTest extends MockeryTestCase
 
         $this->sectionConfig = m::mock();
         $this->authService = m::mock(AuthorizationService::class);
+        $this->toggleService = m::mock(ToggleService::class);
+        // Keep the wire value explicit so the test catches accidental changes to the toggle key.
+        $this->toggleService->shouldReceive('isDisabled')->with('idp')->andReturn(true)->byDefault();
 
         $sm = m::mock(ServiceManager::class);
 
@@ -56,6 +63,7 @@ final class SectionAccessServiceTest extends MockeryTestCase
         $serviceLocator->setService('RestrictionService', $this->mockRestrictionHelper);
         $serviceLocator->setService('SectionConfig', $this->sectionConfig);
         $serviceLocator->setService(AuthorizationService::class, $this->authService);
+        $serviceLocator->setService(ToggleService::class, $this->toggleService);
 
         $sut = new SectionAccessService();
         $this->sut = $sut->__invoke($serviceLocator, SectionAccessService::class);
@@ -71,15 +79,19 @@ final class SectionAccessServiceTest extends MockeryTestCase
                 'restricted' => [
                     'no-access'
                 ]
-            ]
+            ],
+            'financial_evidence_assessment' => [],
         ];
 
         $this->sectionConfig->shouldReceive('getAll')
             ->andReturn($sections);
     }
 
-    public function testGetAccessibleSectionsApplication(): void
+    #[DataProvider('idpToggleProvider')]
+    public function testGetAccessibleSectionsApplication(bool $idpDisabled): void
     {
+        $this->toggleService->shouldReceive('isDisabled')->with('idp')->andReturn($idpDisabled);
+
         /** @var RefData|m\MockInterface $goodsOrPsv */
         $goodsOrPsv = m::mock(RefData::class)->makePartial();
         $goodsOrPsv->setId(Licence::LICENCE_CATEGORY_GOODS_VEHICLE);
@@ -139,7 +151,19 @@ final class SectionAccessServiceTest extends MockeryTestCase
             ],
         ];
 
+        if (!$idpDisabled) {
+            $expected['financial_evidence_assessment'] = [];
+        }
+
         $this->assertEquals($expected, $sections);
+    }
+
+    public static function idpToggleProvider(): array
+    {
+        return [
+            'IDP disabled hides assessment' => [true],
+            'IDP enabled retains assessment' => [false],
+        ];
     }
 
     public function testGetAccessibleSectionsVariation(): void

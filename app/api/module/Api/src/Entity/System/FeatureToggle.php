@@ -29,6 +29,7 @@ class FeatureToggle extends AbstractFeatureToggle
     public const S3_BUCKET_BROWSER = 's3_bucket_browser';
     public const S3_BUCKET_BROWSER_OVERWRITE = 's3_bucket_browser_overwrite';
     public const CPMS_HYBRID_GATEWAY = 'cpms_hybrid_gateway';
+    public const IDP = 'idp';
 
     public static function create(/*string*/ $configName, /*string*/ $friendlyName, RefData $status)/*: FeatureToggle */
     {
