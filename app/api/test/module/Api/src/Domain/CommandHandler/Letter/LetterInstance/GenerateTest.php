@@ -1080,7 +1080,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         return $refData;
     }
 
-    private function expectLetterTypeAndLicence(int $letterTypeId, int $licenceId, string $goodsOrPsv): void
+    private function expectLetterTypeAndLicence(int $letterTypeId, int $licenceId, string $goodsOrPsv): m\MockInterface
     {
         $letterType = m::mock(LetterTypeEntity::class)->makePartial();
         $letterType->setId($letterTypeId);
@@ -1100,6 +1100,8 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
             ->with($licenceId)
             ->once()
             ->andReturn($licence);
+
+        return $letterType;
     }
 
     private function captureSavedInstance(?LetterInstanceEntity &$letterInstance): void
@@ -1149,6 +1151,51 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $issues = $letterInstance->getLetterInstanceIssues();
         $this->assertCount(1, $issues);
         $this->assertSame($anyVersion, $issues->first()->getLetterIssueVersion());
+    }
+
+    public function testHandleCommandDropsChoicesForTheOtherLicenceType(): void
+    {
+        $command = Cmd::create([
+            'letterType' => 123,
+            'licence' => 456,
+            'selectedIssues' => [],
+            'selectedChoices' => [1, 2],
+        ]);
+
+        $letterType = $this->expectLetterTypeAndLicence(123, 456, 'lcat_psv');
+
+        $goodsOnlyChoice = m::mock(LetterChoiceEntity::class)->makePartial();
+        $goodsOnlyChoice->setId(1);
+        $goodsOnlyChoice->setGoodsOrPsv($this->refData('lcat_gv'));
+
+        $anyChoice = m::mock(LetterChoiceEntity::class)->makePartial();
+        $anyChoice->setId(2);
+
+        $this->repoMap['LetterChoice']->shouldReceive('fetchById')->with(1)->once()->andReturn($goodsOnlyChoice);
+        $this->repoMap['LetterChoice']->shouldReceive('fetchById')->with(2)->once()->andReturn($anyChoice);
+
+        // A dropped choice must not steer section variants either
+        $section = m::mock(LetterSectionEntity::class)->makePartial();
+        $section->shouldReceive('explainVariantForContext')
+            ->with(m::on(fn($context) => $context['selectedChoiceIds'] === [2]))
+            ->once()
+            ->andReturn($this->variantResolution(null));
+
+        $typeSection = m::mock(LetterTypeSectionEntity::class)->makePartial();
+        $typeSection->shouldReceive('getLetterSection')->andReturn($section);
+        $typeSection->shouldReceive('getDisplayOrder')->andReturn(0);
+
+        $letterType->shouldReceive('getLetterTypeSections')
+            ->andReturn(new ArrayCollection([$typeSection]));
+
+        $letterInstance = null;
+        $this->captureSavedInstance($letterInstance);
+
+        $this->sut->handleCommand($command);
+
+        $choices = $letterInstance->getLetterInstanceChoices();
+        $this->assertCount(1, $choices);
+        $this->assertSame($anyChoice, $choices->first()->getLetterChoice());
     }
 
     /**

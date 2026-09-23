@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Transfer\Command\Letter\LetterChoice;
 
 use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
+use Dvsa\Olcs\Transfer\FieldType\Traits\GoodsOrPsvOptional;
 
 /**
  * @Transfer\RouteName("backend/letter/letter-choice")
@@ -11,6 +12,8 @@ use Dvsa\Olcs\Transfer\Command\AbstractCommand;
  */
 final class Create extends AbstractCommand
 {
+    use GoodsOrPsvOptional;
+
     /**
      * @var string
      * @Transfer\Filter("Laminas\Filter\StringTrim")

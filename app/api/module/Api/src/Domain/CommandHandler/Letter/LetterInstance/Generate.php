@@ -84,8 +84,20 @@ final class Generate extends AbstractCommandHandler implements AuthAwareInterfac
         // Set optional relations (licence, application, case, etc.)
         $this->setOptionalRelations($letterInstance, $command);
 
+        // Drop choices that don't apply to the licence's Goods/PSV before they can steer variants
+        $goodsOrPsv = $this->goodsOrPsvAndNi($letterInstance)['goodsOrPsv'];
+        $selectedChoiceIds = [];
+        $letterChoices = [];
+        foreach ($command->getSelectedChoices() ?? [] as $choiceId) {
+            $letterChoice = $this->getRepo('LetterChoice')->fetchById($choiceId);
+            if ($letterChoice->appliesToGoodsOrPsv($goodsOrPsv)) {
+                $selectedChoiceIds[] = $choiceId;
+                $letterChoices[] = $letterChoice;
+            }
+        }
+
         // Build context for variant resolution
-        $context = $this->buildVariantContext($letterInstance, $command);
+        $context = $this->buildVariantContext($letterInstance, $selectedChoiceIds);
 
         // Populate instance sections from letter type assembly, resolving variants
         $resolution = $this->sectionVariantResolver->resolveForLetterType($letterType, $context);
@@ -111,7 +123,6 @@ final class Generate extends AbstractCommandHandler implements AuthAwareInterfac
 
         // Create instance issues from selected issues. The screen only offers issues that
         // match the licence's Goods/PSV, this catches anything posted that doesn't.
-        $goodsOrPsv = $context['goodsOrPsv'];
         $issueVersions = [];
         foreach ($command->getSelectedIssues() ?? [] as $issueId) {
             $issueVersion = $this->getRepo('LetterIssue')->fetchById($issueId)->getCurrentVersion();
@@ -134,14 +145,11 @@ final class Generate extends AbstractCommandHandler implements AuthAwareInterfac
         $this->letterInstanceComposer->composeAppendices($letterInstance, $appendixVersions);
 
         // Record selected letter choices
-        if (!empty($command->getSelectedChoices())) {
-            foreach ($command->getSelectedChoices() as $choiceId) {
-                $letterChoice = $this->getRepo('LetterChoice')->fetchById($choiceId);
-                $instanceChoice = new LetterInstanceChoice();
-                $instanceChoice->setLetterInstance($letterInstance);
-                $instanceChoice->setLetterChoice($letterChoice);
-                $letterInstance->addLetterInstanceChoice($instanceChoice);
-            }
+        foreach ($letterChoices as $letterChoice) {
+            $instanceChoice = new LetterInstanceChoice();
+            $instanceChoice->setLetterInstance($letterInstance);
+            $instanceChoice->setLetterChoice($letterChoice);
+            $letterInstance->addLetterInstanceChoice($instanceChoice);
         }
 
         // Resolve grabs now so the caseworker edits real values, not [[TOKENS]]
@@ -160,10 +168,10 @@ final class Generate extends AbstractCommandHandler implements AuthAwareInterfac
      * Build context array for variant resolution
      *
      * @param LetterInstanceEntity $letterInstance
-     * @param Cmd $command
+     * @param array $selectedChoiceIds Choices that apply to this letter
      * @return array
      */
-    private function buildVariantContext(LetterInstanceEntity $letterInstance, Cmd $command): array
+    private function buildVariantContext(LetterInstanceEntity $letterInstance, array $selectedChoiceIds): array
     {
         $application = $letterInstance->getApplication();
         $goodsOrPsvAndNi = $this->goodsOrPsvAndNi($letterInstance);
@@ -175,7 +183,7 @@ final class Generate extends AbstractCommandHandler implements AuthAwareInterfac
             'isVariation' => $application ? (bool) $application->getIsVariation() : null,
             'isNi' => $goodsOrPsvAndNi['isNi'],
             'organisationType' => $organisation?->getType()?->getId(),
-            'selectedChoiceIds' => $command->getSelectedChoices() ?? [],
+            'selectedChoiceIds' => $selectedChoiceIds,
         ];
     }
 }

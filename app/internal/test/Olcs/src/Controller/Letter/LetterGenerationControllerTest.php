@@ -278,7 +278,6 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $sut->shouldReceive('placeholder')->andReturn($placeholder);
         $sut->shouldReceive('viewBuilder')->andReturn($viewBuilder);
         $sut->shouldReceive('fetchAppendicesForLetterType')->andReturn([]);
-        $sut->shouldReceive('fetchLetterChoicesForLetterType')->andReturn([]);
 
         $sut->createAction();
     }
@@ -292,6 +291,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($this->okResponse(['goodsOrPsv' => 'lcat_psv', 'isNi' => false]));
         $sut->shouldReceive('buildAccordionData')->with('lcat_psv')->once()->andReturn([]);
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->with(5, 'lcat_psv')->once()->andReturn([]);
 
         $this->runCreateAction($sut, ['template' => '5', 'licence' => '7']);
     }
@@ -302,6 +302,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
 
         $sut->shouldReceive('handleQuery')->never();
         $sut->shouldReceive('buildAccordionData')->with(null)->once()->andReturn([]);
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->with(5, null)->once()->andReturn([]);
 
         $this->runCreateAction($sut, ['template' => '5']);
     }
@@ -344,5 +345,60 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $method = new \ReflectionMethod(Sut::class, 'fetchActiveIssueTypes');
 
         $this->assertSame(range(1, 101), array_column($method->invoke($sut), 'id'));
+    }
+
+    public function testFetchLetterChoicesDropsChoicesForTheOtherLicenceType(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchTemplateById')->with(1)->andReturn(['letterType' => ['id' => 7]]);
+        $sut->shouldReceive('handleQuery')->andReturn($this->okResponse([
+            'letterTypeChoices' => [
+                ['letterChoice' => ['id' => 1, 'label' => 'Interims', 'isActive' => true, 'goodsOrPsv' => ['id' => 'lcat_gv']]],
+                ['letterChoice' => ['id' => 2, 'label' => 'Is final', 'isActive' => true, 'goodsOrPsv' => null]],
+            ],
+        ]));
+
+        $method = new \ReflectionMethod(Sut::class, 'fetchLetterChoicesForLetterType');
+
+        $this->assertSame(['Is final'], array_column($method->invoke($sut, 1, 'lcat_psv'), 'label'));
+        $this->assertSame(['Interims', 'Is final'], array_column($method->invoke($sut, 1, 'lcat_gv'), 'label'));
+        $this->assertSame(['Interims', 'Is final'], array_column($method->invoke($sut, 1, null), 'label'));
+    }
+
+    public function testRadioGroupHiddenByGoodsOrPsvIsNotDemanded(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->with(1, 'lcat_psv')->andReturn([]);
+
+        $method = new \ReflectionMethod(Sut::class, 'validateRequiredRadioChoices');
+
+        $this->assertNull($method->invoke($sut, 1, [], 'lcat_psv'));
+    }
+
+    public function testGenerateActionChecksRadioGroupsAgainstTheLicenceGoodsOrPsv(): void
+    {
+        $sut = $this->bareSut();
+
+        $request = new Request();
+        $request->getPost()->fromArray(['letterType' => '5']);
+        $request->getQuery()->fromArray(['licence' => '7']);
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('extractRouteParams')->andReturn([]);
+        $sut->shouldReceive('fetchTemplateById')->with(5)->andReturn(['letterType' => ['id' => 3]]);
+        $sut->shouldReceive('fetchLetterContext')
+            ->with(['type' => 'licence', 'id' => 7])
+            ->andReturn(['goodsOrPsv' => 'lcat_psv', 'isNi' => false]);
+
+        // The goods only "pick one" group isn't on a PSV letter, so nothing has to be picked
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->with(5, 'lcat_psv')->once()->andReturn([]);
+
+        $failed = m::mock(Response::class);
+        $failed->shouldReceive('isOk')->andReturn(false);
+        $failed->shouldReceive('getResult')->andReturn(['messages' => ['stop here']]);
+        $sut->shouldReceive('handleCommand')->once()->andReturn($failed);
+
+        $response = $sut->generateAction();
+
+        $this->assertStringContainsString('Failed to generate letter', $response->getContent());
     }
 }

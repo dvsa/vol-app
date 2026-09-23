@@ -113,7 +113,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $appendicesData = $this->fetchAppendicesForLetterType($templateId);
 
         // Fetch letter choices for this letter type
-        $letterChoicesData = $this->fetchLetterChoicesForLetterType($templateId);
+        $letterChoicesData = $this->fetchLetterChoicesForLetterType($templateId, $goodsOrPsv);
 
         $view = new ViewModel([
             'templateId' => $templateId,
@@ -164,6 +164,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $letterTypeId = $template['letterType']['id'];
 
         $entityContext = $this->extractEntityContext($allParams);
+        $goodsOrPsv = $this->fetchLetterContext($entityContext)['goodsOrPsv'] ?? null;
 
         $commandData = [
             'letterType' => $letterTypeId,
@@ -177,7 +178,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $selectedChoices = array_merge($postData['letterChoices'] ?? [], $radioSelections);
 
         // Enforce "pick exactly one" for every radio group on this letter type
-        $radioError = $this->validateRequiredRadioChoices($templateId, $selectedChoices);
+        $radioError = $this->validateRequiredRadioChoices($templateId, $selectedChoices, $goodsOrPsv);
         if ($radioError !== null) {
             return $this->jsonError($radioError);
         }
@@ -1115,9 +1116,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      * Fetch letter choices linked to a letter type
      *
      * @param int $templateId Doc template ID
+     * @param string|null $goodsOrPsv Letter's Goods/PSV, null offers every choice
      * @return array Letter choices data [{id, label, groupLabel, inputType}]
      */
-    protected function fetchLetterChoicesForLetterType(int $templateId): array
+    protected function fetchLetterChoicesForLetterType(int $templateId, ?string $goodsOrPsv = null): array
     {
         $template = $this->fetchTemplateById($templateId);
 
@@ -1142,7 +1144,10 @@ class LetterGenerationController extends AbstractInternalController implements L
 
         foreach ($result['letterTypeChoices'] ?? [] as $ltc) {
             $letterChoice = $ltc['letterChoice'] ?? [];
-            if (!empty($letterChoice['isActive'])) {
+            if (
+                !empty($letterChoice['isActive'])
+                && $this->appliesToGoodsOrPsv($letterChoice['goodsOrPsv'] ?? null, $goodsOrPsv)
+            ) {
                 $choices[] = [
                     'id' => $letterChoice['id'] ?? null,
                     'label' => $letterChoice['label'] ?? '',
@@ -1170,12 +1175,16 @@ class LetterGenerationController extends AbstractInternalController implements L
      *
      * @param int $templateId Doc template ID
      * @param array $selectedChoices Selected letter choice IDs (checkbox + radio merged)
+     * @param string|null $goodsOrPsv Letter's Goods/PSV, so a group that wasn't shown isn't demanded
      * @return string|null Error message if a radio group is unsatisfied, otherwise null
      */
-    protected function validateRequiredRadioChoices(int $templateId, array $selectedChoices): ?string
-    {
+    protected function validateRequiredRadioChoices(
+        int $templateId,
+        array $selectedChoices,
+        ?string $goodsOrPsv = null
+    ): ?string {
         $radioGroups = [];
-        foreach ($this->fetchLetterChoicesForLetterType($templateId) as $choice) {
+        foreach ($this->fetchLetterChoicesForLetterType($templateId, $goodsOrPsv) as $choice) {
             if (($choice['inputType'] ?? 'checkbox') === 'radio') {
                 $radioGroups[$choice['groupLabel']][] = (int) $choice['id'];
             }
