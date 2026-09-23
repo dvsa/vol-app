@@ -37,18 +37,20 @@ class ApplicationFinancialEvidenceAdapter extends AbstractFinancialEvidenceAdapt
      * @return array
      */
     #[\Override]
-    public function getDocuments($applicationId)
+    public function getDocuments($applicationId, $showAnalysisStatus = false)
     {
         $documents = $this->getData($applicationId)['documents'];
         $documents = is_array($documents) ? $documents : [];
 
-        $analysesByDocumentId = $this->getAnalysesByDocumentId($applicationId);
+        if ($showAnalysisStatus) {
+            $analysesByDocumentId = $this->getAnalysesByDocumentId($applicationId);
 
-        foreach ($documents as &$document) {
-            $analysis = $analysesByDocumentId[$document['id']] ?? null;
-            $document['analysisStatus'] = $analysis['status'] ?? null;
+            foreach ($documents as &$document) {
+                $analysis = $analysesByDocumentId[$document['id']] ?? null;
+                $document['analysisStatus'] = $analysis['status'] ?? null;
+            }
+            unset($document);
         }
-        unset($document);
 
         return $documents;
     }

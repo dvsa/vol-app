@@ -149,7 +149,8 @@ abstract class AbstractFinancialEvidenceController extends AbstractController
         $adapter = $this->lvaAdapter;
 
         return $adapter->getDocuments(
-            $this->getIdentifier()
+            $this->getIdentifier(),
+            $this->location==='internal'
         );
     }
 
