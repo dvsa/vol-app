@@ -207,6 +207,14 @@ abstract class AbstractFinancialEvidenceController extends AbstractController
      */
     public function shouldShowAnalysis(): bool
     {
-        return $this->location === 'internal' && $this->isIdpEnabled();
+        return $this->location === self::LOC_INTERNAL && $this->isIdpEnabled();
+    }
+
+    private function isIdpEnabled(): bool
+    {
+        $response = $this->handleQuery(\Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled::create(['ids' => [\Common\FeatureToggle::IDP]]));
+
+        // Do not expose IDP when the toggle response is unsuccessful or missing its flag.
+        return $response->isOk() && ($response->getResult()['isEnabled'] ?? false) === true;
     }
 }
