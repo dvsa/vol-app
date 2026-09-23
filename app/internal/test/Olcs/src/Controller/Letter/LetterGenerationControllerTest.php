@@ -154,4 +154,46 @@ final class LetterGenerationControllerTest extends MockeryTestCase
 
         $this->assertSame(['First request', 'Final request'], array_column($choices, 'label'));
     }
+
+    private function todosList(array $letterInstanceTodos): array
+    {
+        $method = new \ReflectionMethod(Sut::class, 'buildTodosList');
+
+        return $method->invoke($this->makeSut([]), ['letterInstanceTodos' => $letterInstanceTodos]);
+    }
+
+    private function instanceTodo(bool $requiresInput, ?array $editedDescription): array
+    {
+        return [
+            'id' => 3,
+            'editedDescription' => $editedDescription,
+            'requiringIssueCount' => 2,
+            'letterTodoVersion' => [
+                'name' => 'Upload bank statements',
+                'requiresInput' => $requiresInput,
+                'letterTodo' => ['todoKey' => 'FI01'],
+            ],
+        ];
+    }
+
+    public function testATodoNeedingInputIsFlaggedUntilEdited(): void
+    {
+        $todos = $this->todosList([$this->instanceTodo(true, null)]);
+
+        $this->assertTrue($todos[0]['inputPending']);
+        $this->assertSame('Upload bank statements (FI01)', $todos[0]['name']);
+        $this->assertSame(2, $todos[0]['requiringIssueCount']);
+    }
+
+    public function testATodoNeedingInputIsNotFlaggedOnceEdited(): void
+    {
+        $edited = ['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'By 1 October']]]];
+
+        $this->assertFalse($this->todosList([$this->instanceTodo(true, $edited)])[0]['inputPending']);
+    }
+
+    public function testATodoThatDoesNotNeedInputIsNeverFlagged(): void
+    {
+        $this->assertFalse($this->todosList([$this->instanceTodo(false, null)])[0]['inputPending']);
+    }
 }

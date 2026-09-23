@@ -323,26 +323,7 @@ class LetterGenerationController extends AbstractInternalController implements L
             ];
         }
 
-        // Build the to-dos list for the sidebar.
-        //
-        // A to-do carries no name of its own on the instance row -- the label lives on the
-        // version, and the key on the parent. Both are needed: two to-dos can share a name
-        // (FI01 and FI02 both read "You need to upload bank statements to your online account"),
-        // so the key is what makes them tellable apart.
-        $todosList = [];
-        foreach ($result['letterInstanceTodos'] ?? [] as $todo) {
-            $todoVersion = $todo['letterTodoVersion'] ?? [];
-            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
-            $name = $todoVersion['name'] ?? null;
-
-            $todosList[] = [
-                'id' => $todo['id'] ?? null,
-                // Falls back to the key alone while the name backfill has not run.
-                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
-                'type' => 'todo',
-                'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
-            ];
-        }
+        $todosList = $this->buildTodosList($result);
 
         // Check for missing required sections
         $warnings = $this->checkRequiredSections($result);
@@ -1156,6 +1137,39 @@ class LetterGenerationController extends AbstractInternalController implements L
         }
 
         return null;
+    }
+
+    /**
+     * Build the to-dos list for the preview sidebar.
+     *
+     * A to-do carries no name of its own on the instance row -- the label lives on the
+     * version, and the key on the parent. Both are needed: two to-dos can share a name
+     * (FI01 and FI02 both read "You need to upload bank statements to your online account"),
+     * so the key is what makes them tellable apart.
+     *
+     * @param array $letterInstanceData Letter instance query result
+     */
+    protected function buildTodosList(array $letterInstanceData): array
+    {
+        $todosList = [];
+        foreach ($letterInstanceData['letterInstanceTodos'] ?? [] as $todo) {
+            $todoVersion = $todo['letterTodoVersion'] ?? [];
+            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
+            $name = $todoVersion['name'] ?? null;
+
+            $todosList[] = [
+                'id' => $todo['id'] ?? null,
+                // Falls back to the key alone while the name backfill has not run.
+                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
+                'type' => 'todo',
+                'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
+                // flagged to-dos must be edited before the letter can be sent (PrepareToSend)
+                'inputPending' => !empty($todoVersion['requiresInput'])
+                    && empty($todo['editedDescription']),
+            ];
+        }
+
+        return $todosList;
     }
 
     /**
