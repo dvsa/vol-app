@@ -56,7 +56,7 @@ final class NextItemTest extends QueryHandlerTestCase
      * @param $exception
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('exceptionProvider')]
-    public function testHandleQueryNoItem(mixed $exception): void
+    public function testHandleQueryNoItem(string $exceptionClass): void
     {
         $query = Qry::create(['includeTypes' => ['foo'], 'excludeTypes' => ['bar']]);
 
@@ -64,7 +64,7 @@ final class NextItemTest extends QueryHandlerTestCase
             ->shouldReceive('getNextItem')
             ->with(['foo'], ['bar'])
             ->once()
-            ->andThrow($exception);
+            ->andThrow(m::mock($exceptionClass));
 
         $this->assertNull($this->sut->handleQuery($query));
     }
@@ -74,7 +74,7 @@ final class NextItemTest extends QueryHandlerTestCase
      */
     public static function exceptionProvider(): \Iterator
     {
-        yield [m::mock(NotFoundException::class)];
-        yield [m::mock(OptimisticLockException::class)];
+        yield [NotFoundException::class];
+        yield [OptimisticLockException::class];
     }
 }

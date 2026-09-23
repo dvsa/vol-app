@@ -2,44 +2,32 @@
 
 declare(strict_types=1);
 
-/**
- * Community Lic Suspension Reason Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\CommunityLicSuspensionReason as CommunityLicSuspensionReasonRepo;
+use Dvsa\Olcs\Api\Domain\Repository\CommunityLicSuspensionReason as Repo;
+use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspensionReason as Entity;
 
-/**
- * Community Lic Suspension Reason Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class CommunityLicSuspensionReasonTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(CommunityLicSuspensionReasonRepo::class);
+        $this->setUpRealSut(Repo::class);
     }
 
     public function testFetchBySuspensionIds(): void
     {
         $ids = [1];
-        $mockQb = m::mock();
-        $mockQb->shouldReceive('expr->in')
-            ->with('m.communityLicSuspension', ':communityLicSuspension')
-            ->once()
-            ->andReturn('foo');
-        $mockQb->shouldReceive('andWhere')->with('foo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('communityLicSuspension', $ids)->once()->andReturnSelf();
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('getQuery->execute')->once()->andReturn('result');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn('result');
 
-        $this->assertEquals('result', $this->sut->fetchBySuspensionIds($ids));
+        $this->assertSame('result', $this->sut->fetchBySuspensionIds($ids));
+
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.communityLicSuspension IN(:communityLicSuspension)',
+            $qb->getDQL(),
+        );
+        $this->assertSame($ids, $qb->getParameter('communityLicSuspension')->getValue());
     }
 }

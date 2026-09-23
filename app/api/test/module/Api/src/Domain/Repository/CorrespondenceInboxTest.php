@@ -4,144 +4,88 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Dvsa\Olcs\Api\Domain\Repository;
-use Dvsa\Olcs\Api\Entity;
-use Mockery as m;
+use Dvsa\Olcs\Api\Entity\Organisation\CorrespondenceInbox as Entity;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\CorrespondenceInbox::class)]
 final class CorrespondenceInboxTest extends RepositoryTestCase
 {
-    /** @var  Repository\CorrespondenceInbox */
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
     protected $sut;
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\CorrespondenceInbox::class);
+        $this->setUpRealSut(Repository\CorrespondenceInbox::class);
     }
 
+    /**
+     * Welsh correspondence is excluded from printing; the emailReminderSent flag deliberately
+     * is not consulted, since a sent reminder does not remove the need to print.
+     */
     public function testGetAllRequiringPrint(): void
     {
-        $minDate = '2015-01-01';
-        $maxDate = '2016-01-01';
-
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('addSelect')->with('d, l')->once()->andReturnSelf();
-        $qb->shouldReceive('join')->with('m.document', 'd')->once()->andReturnSelf();
-        $qb->shouldReceive('join')->with('m.licence', 'l')->once()->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->eq')->with('l.translateToWelsh', 0)->once()->andReturn('condition1');
-        $qb->shouldReceive('andWhere')->with('condition1')->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->eq')->with('m.accessed', 0)->once()->andReturn('condition2');
-        $qb->shouldReceive('andWhere')->with('condition2')->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->gte')->with('m.createdOn', ':minDate')->once()->andReturn('condition3');
-        $qb->shouldReceive('andWhere')->with('condition3')->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('minDate', $minDate)->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->lte')->with('m.createdOn', ':maxDate')->once()->andReturn('condition4');
-        $qb->shouldReceive('andWhere')->with('condition4')->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('maxDate', $maxDate)->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->eq')->with('m.printed', 0)->once()->andReturn('condition5');
-        $qb->shouldReceive('andWhere')->with('condition5')->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->isNotNull')->with('l.id')->once()->andReturn('condition6');
-        $qb->shouldReceive('andWhere')->with('condition6')->once()->andReturnSelf();
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $mockQry = m::mock(\Doctrine\ORM\AbstractQuery::class);
-        $mockQry->shouldReceive('setFetchMode')
-            ->once()
-            ->with(
-                Entity\Organisation\CorrespondenceInbox::class,
-                'document',
-                \Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER
-            )
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()
+            ->expects('setFetchMode')
+            ->with(Entity::class, 'document', ClassMetadata::FETCH_EAGER)
             ->andReturnSelf();
-        $mockQry->shouldReceive('getResult')->once()->andReturn('EXPECT');
+        $qb->stubbedQuery()->expects('getResult')->withNoArgs()->andReturn(['RESULTS']);
 
-        $qb->shouldReceive('getQuery')->once()->andReturn($mockQry);
+        $this->assertSame(['RESULTS'], $this->sut->getAllRequiringPrint('2015-01-01', '2016-01-01'));
 
-        $this->assertEquals('EXPECT', $this->sut->getAllRequiringPrint($minDate, $maxDate));
+        $this->assertSame(
+            'SELECT m, d, l' . self::FROM
+            . ' INNER JOIN m.document d INNER JOIN m.licence l'
+            . ' WHERE l.translateToWelsh = 0 AND m.accessed = 0'
+            . ' AND m.createdOn >= :minDate AND m.createdOn <= :maxDate'
+            . ' AND m.printed = 0 AND l.id IS NOT NULL',
+            $qb->getDQL(),
+        );
+        $this->assertSame('2015-01-01', $qb->getParameter('minDate')->getValue());
+        $this->assertSame('2016-01-01', $qb->getParameter('maxDate')->getValue());
     }
 
+    /**
+     * Reminders additionally skip anything already printed, so an organisation with no email
+     * address is not chased indefinitely past the print threshold.
+     */
     public function testGetAllRequiringReminder(): void
     {
-        $minDate = '2015-01-01';
-        $maxDate = '2016-01-01';
-
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('addSelect')->with('d, l, lo, lou, louu, louucd')->once()->andReturnSelf();
-        $qb->shouldReceive('join')->with('m.document', 'd')->once()->andReturnSelf();
-        $qb->shouldReceive('join')->with('m.licence', 'l')->once()->andReturnSelf();
-        $qb->shouldReceive('join')->with('l.organisation', 'lo')->once()->andReturnSelf();
-        $qb->shouldReceive('join')->with('lo.organisationUsers', 'lou')->once()->andReturnSelf();
-        $qb->shouldReceive('join')->with('lou.user', 'louu')->once()->andReturnSelf();
-        $qb->shouldReceive('join')->with('louu.contactDetails', 'louucd')->once()->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('d.continuationDetails', 'cd')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('cd.checklistDocument', 'cdd')->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->eq')->with('m.accessed', 0)->once()->andReturn('condition1');
-        $qb->shouldReceive('andWhere')->with('condition1')->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->gte')->with('m.createdOn', ':minDate')->once()->andReturn('condition2');
-        $qb->shouldReceive('andWhere')->with('condition2')->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('minDate', $minDate)->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->lte')->with('m.createdOn', ':maxDate')->once()->andReturn('condition3');
-        $qb->shouldReceive('andWhere')->with('condition3')->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('maxDate', $maxDate)->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->eq')->with('m.emailReminderSent', 0)->once()->andReturn('condition4');
-        $qb->shouldReceive('andWhere')->with('condition4')->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->eq')->with('m.printed', 0)->once()->andReturn('condition5');
-        $qb->shouldReceive('andWhere')->with('condition5')->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->isNotNull')->with('l.id')->once()->andReturn('condition6');
-        $qb->shouldReceive('andWhere')->with('condition6')->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->eq')->with('l.translateToWelsh', 0)->once()->andReturn('condition7');
-        $qb->shouldReceive('andWhere')->with('condition7')->once()->andReturnSelf();
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $mockQry = m::mock(\Doctrine\ORM\AbstractQuery::class);
-        $mockQry->shouldReceive('setFetchMode')
-            ->once()
-            ->with(
-                Entity\Organisation\CorrespondenceInbox::class,
-                'document',
-                \Doctrine\ORM\Mapping\ClassMetadata::FETCH_EAGER
-            )
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()
+            ->expects('setFetchMode')
+            ->with(Entity::class, 'document', ClassMetadata::FETCH_EAGER)
             ->andReturnSelf();
-        $mockQry->shouldReceive('getResult')->once()->andReturn('EXPECT');
+        $qb->stubbedQuery()->expects('getResult')->withNoArgs()->andReturn(['RESULTS']);
 
-        $qb->shouldReceive('getQuery')->once()->andReturn($mockQry);
+        $this->assertSame(['RESULTS'], $this->sut->getAllRequiringReminder('2015-01-01', '2016-01-01'));
 
-        $this->assertEquals('EXPECT', $this->sut->getAllRequiringReminder($minDate, $maxDate));
+        $this->assertSame(
+            'SELECT m, d, l, lo, lou, louu, louucd, cd, cdd' . self::FROM
+            . ' INNER JOIN m.document d INNER JOIN m.licence l INNER JOIN l.organisation lo'
+            . ' INNER JOIN lo.organisationUsers lou INNER JOIN lou.user louu'
+            . ' INNER JOIN louu.contactDetails louucd'
+            . ' LEFT JOIN d.continuationDetails cd LEFT JOIN cd.checklistDocument cdd'
+            . ' WHERE m.accessed = 0 AND m.createdOn >= :minDate AND m.createdOn <= :maxDate'
+            . ' AND m.emailReminderSent = 0 AND m.printed = 0 AND l.id IS NOT NULL'
+            . ' AND l.translateToWelsh = 0',
+            $qb->getDQL(),
+        );
     }
 
     public function testFetchByDocumentId(): void
     {
-        $documentId = 123;
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $qb = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchByDocumentId(7));
 
-        $qb->shouldReceive('expr->eq')->with('m.document', ':document')->once()->andReturn('condition');
-        $qb->shouldReceive('andWhere')->with('condition')->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('document', $documentId)->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn('FOO');
-        $this->assertEquals('FOO', $this->sut->fetchByDocumentId($documentId));
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.document = :document',
+            $qb->getDQL(),
+        );
+        $this->assertSame(7, $qb->getParameter('document')->getValue());
     }
 }

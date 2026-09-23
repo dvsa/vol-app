@@ -38,8 +38,17 @@ final class StandardFieldsGeneratorTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
-    public function testGenerate(mixed $applicationPathGroupId, mixed $permitUsageList, mixed $currentFieldValues, mixed $expected): void
+    public function testGenerate(mixed $applicationPathGroupId, array $permitUsageIds, mixed $currentFieldValues, mixed $expected): void
     {
+        $permitUsageList = array_map(
+            static fn ($permitUsageId) => m::mock(RefData::class)
+                ->shouldReceive('getId')
+                ->withNoArgs()
+                ->andReturn($permitUsageId)
+                ->getMock(),
+            $permitUsageIds
+        );
+
         $this->irhpPermitStock->shouldReceive('getApplicationPathGroup->getId')
             ->withNoArgs()
             ->andReturn($applicationPathGroupId);
@@ -61,19 +70,9 @@ final class StandardFieldsGeneratorTest extends MockeryTestCase
 
     public static function dpGenerate(): array
     {
-        $singlePermitUsage = m::mock(RefData::class);
-        $singlePermitUsage->shouldReceive('getId')
-            ->withNoArgs()
-            ->andReturn(RefData::JOURNEY_SINGLE);
-
-        $multiplePermitUsage = m::mock(RefData::class);
-        $multiplePermitUsage->shouldReceive('getId')
-            ->withNoArgs()
-            ->andReturn(RefData::JOURNEY_MULTIPLE);
-
-        $singleOnlyPermitUsageList = [$singlePermitUsage];
-        $multipleOnlyPermitUsageList = [$multiplePermitUsage];
-        $singleAndMultiplePermitUsageList = [$singlePermitUsage, $multiplePermitUsage];
+        $singleOnlyPermitUsageList = [RefData::JOURNEY_SINGLE];
+        $multipleOnlyPermitUsageList = [RefData::JOURNEY_MULTIPLE];
+        $singleAndMultiplePermitUsageList = [RefData::JOURNEY_SINGLE, RefData::JOURNEY_MULTIPLE];
 
         return [
             'standard only, single only' => [

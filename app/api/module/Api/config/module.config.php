@@ -45,7 +45,6 @@ return [
             'AddressFormatter' => \Dvsa\Olcs\Api\Service\Helper\FormatAddress::class,
             'VariationPublishValidationService' =>
                 \Dvsa\Olcs\Api\Service\Lva\Variation\PublishValidationService::class,
-            'DoctrineLogger' => Util\DoctrineExtension\Logger::class,
             'CommonCurrentDateTimeFactory' =>
                 ApiSrv\Common\CurrentDateTimeFactory::class,
             'CqrsCommandCreator' => ApiSrv\Cqrs\CommandCreator::class,
@@ -240,6 +239,12 @@ return [
             // Letter instance assembly shared by letter generation and builder preview
             \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer::class =>
                 \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposerFactory::class,
+
+            // Resolves grabs into the instance at generation time
+            \Dvsa\Olcs\Api\Service\Letter\LetterInstanceGrabSnapshotter::class =>
+                \Dvsa\Olcs\Api\Service\Letter\LetterInstanceGrabSnapshotterFactory::class,
+            \Dvsa\Olcs\Api\Service\Letter\VolGrabContextBuilder::class =>
+                \Laminas\ServiceManager\Factory\InvokableFactory::class,
 
             // Explains a proposed composition for the letter type builder
             \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnostics::class =>

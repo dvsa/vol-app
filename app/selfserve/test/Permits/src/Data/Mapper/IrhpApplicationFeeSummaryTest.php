@@ -13,15 +13,15 @@ use Mockery as m;
 use Permits\Data\Mapper\EcmtNoOfPermits;
 use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\View\Helper\IrhpApplicationSection;
-use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * IrhpApplicationFeeSummaryTest
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-final class IrhpApplicationFeeSummaryTest extends TestCase
+final class IrhpApplicationFeeSummaryTest extends MockeryTestCase
 {
     private $translationHelperService;
 

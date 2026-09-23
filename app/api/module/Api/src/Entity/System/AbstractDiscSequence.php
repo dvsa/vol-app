@@ -58,7 +58,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Foreign Key to traffic_area
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea|null
      */
     #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
@@ -67,7 +67,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -77,7 +77,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -87,7 +87,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Restricted
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'restricted', nullable: true, options: ['unsigned' => true])]
     protected $restricted;
@@ -95,7 +95,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Special restricted
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'special_restricted', nullable: true, options: ['unsigned' => true])]
     protected $specialRestricted;
@@ -103,7 +103,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Standard national
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'standard_national', nullable: true, options: ['unsigned' => true])]
     protected $standardNational;
@@ -111,7 +111,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Standard international
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'standard_international', nullable: true, options: ['unsigned' => true])]
     protected $standardInternational;
@@ -119,7 +119,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * R prefix
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'r_prefix', length: 3, nullable: true)]
     protected $rPrefix;
@@ -127,7 +127,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Sr prefix
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'sr_prefix', length: 3, nullable: true)]
     protected $srPrefix;
@@ -135,7 +135,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Sn prefix
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'sn_prefix', length: 3, nullable: true)]
     protected $snPrefix;
@@ -143,7 +143,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Si prefix
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'si_prefix', length: 3, nullable: true)]
     protected $siPrefix;

@@ -4,116 +4,67 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
+use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Repository\RefData as Repo;
 use Dvsa\Olcs\Api\Entity\System\RefData as Entity;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Dvsa\Olcs\Transfer\Query\RefData\RefDataList;
+use Gedmo\Translatable\Query\TreeWalker\TranslationWalker;
+use Gedmo\Translatable\TranslatableListener;
+use Mockery as m;
 
-/**
- * Class RefDataTest
- * @package OlcsTest\Db\Entity\Repository
- */
 final class RefDataTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testApplyListFilters(): void
     {
-        $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $qb = $this->createRealQb();
 
-        $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockDqb->shouldReceive('expr->eq')->with('m.refDataCategoryId', ':category')->once()
-            ->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockDqb->shouldReceive('setParameter')->with('category', 'cat')->once()->andReturnSelf();
-        $mockDqb->shouldReceive('orderBy')->with('m.displayOrder')->once()->andReturnSelf();
-        $mockDqb->shouldReceive('addOrderBy')->with('m.description')->once()->andReturnSelf();
+        $query = $qb->stubbedQuery();
+        $query->expects('setHint')->with(Query::HINT_CUSTOM_OUTPUT_WALKER, TranslationWalker::class);
+        $query->expects('setHint')->with(TranslatableListener::HINT_FALLBACK, 1);
+        $query->expects('setHint')->with(TranslatableListener::HINT_TRANSLATABLE_LOCALE, 'en');
 
-        $mockDqb->shouldReceive('getQuery')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('setHint')
-                ->with(
-                    \Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER,
-                    \Gedmo\Translatable\Query\TreeWalker\TranslationWalker::class
-                )
-                ->once()
-                ->shouldReceive('setHint')
-                ->with(\Gedmo\Translatable\TranslatableListener::HINT_FALLBACK, 1)
-                ->once()
-                ->shouldReceive('setHint')
-                ->with(\Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE, 'en')
-                ->once()
-                ->getMock()
-            )
-            ->once()
-            ->getMock();
+        $this->sut->applyListFilters($qb, RefDataList::create(['refDataCategory' => 'cat', 'language' => 'en']));
 
-        $params = [
-            'refDataCategory' => 'cat',
-            'language' => 'en'
-        ];
-        $query = \Dvsa\Olcs\Transfer\Query\RefData\RefDataList::create($params);
-        $sut->applyListFilters($mockDqb, $query);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.refDataCategoryId = :category'
+            . ' ORDER BY m.displayOrder ASC, m.description ASC',
+            $qb->getDQL(),
+        );
+        $this->assertSame('cat', $qb->getParameter('category')->getValue());
     }
 
     public function testApplyListJoins(): void
     {
-        $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(QueryBuilder::class);
+        $this->sut->applyListJoins($qb);
 
-        $mockQb->shouldReceive('modifyQuery')->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('parent', 'p')->once()->andReturnSelf();
-        $sut->shouldReceive('getQueryBuilder')->with()->andReturn($mockQb);
-
-        $sut->applyListJoins($mockQb);
+        $this->assertSame(
+            'SELECT m, p FROM ' . Entity::class . ' m LEFT JOIN m.parent p',
+            $qb->getDQL(),
+        );
     }
 
     public function testFetchByCategoryId(): void
     {
         $categoryId = 'permit_status';
+        $refDataEntities = [m::mock(Entity::class), m::mock(Entity::class)];
 
-        $refDataEntities = [
-            m::mock(Entity::class),
-            m::mock(Entity::class)
-        ];
+        $qb = $this->newRealQb()->willReturn($refDataEntities);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $this->assertSame($refDataEntities, $this->sut->fetchByCategoryId($categoryId));
 
-        $queryBuilder->shouldReceive('select')
-            ->with('r')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(Entity::class, 'r')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('r.refDataCategoryId = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('orderBy')
-            ->with('r.displayOrder', 'ASC')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $categoryId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getResult')
-            ->once()
-            ->andReturn($refDataEntities);
-
-        $this->assertEquals(
-            $refDataEntities,
-            $this->sut->fetchByCategoryId($categoryId)
+        $this->assertSame(
+            'SELECT r FROM ' . Entity::class . ' r WHERE r.refDataCategoryId = ?1 ORDER BY r.displayOrder ASC',
+            $qb->getDQL(),
         );
+        $this->assertSame($categoryId, $qb->getParameter(1)->getValue());
     }
 }

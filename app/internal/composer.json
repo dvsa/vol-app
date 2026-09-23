@@ -48,7 +48,7 @@
   "require": {
     "php": "~8.4.0",
     "ext-redis": "*",
-    "dvsa/laminas-config-cloud-parameters": "^2.1",
+    "dvsa/laminas-config-cloud-parameters": "^2.3",
     "laminas/laminas-authentication": "^2.19",
     "laminas/laminas-code": "^4.17",
     "laminas/laminas-escaper": "^2.18",

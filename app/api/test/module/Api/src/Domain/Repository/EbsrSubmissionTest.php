@@ -4,185 +4,110 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\QueryException;
+use Dvsa\Olcs\Api\Domain\Repository\EbsrSubmission as Repo;
+use Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission as Entity;
 use Dvsa\Olcs\Api\Domain\Query\Bus\EbsrSubmissionList;
 use Mockery as m;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Domain\Repository\EbsrSubmission as Repo;
-use Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission as EbsrSubmissionEntity;
 
-/**
- * EbsrSubmissionTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
-#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 final class EbsrSubmissionTest extends RepositoryTestCase
 {
+    private const string JOINS = ' LEFT JOIN m.ebsrSubmissionStatus w0 LEFT JOIN m.ebsrSubmissionType w1'
+        . ' LEFT JOIN m.busReg b LEFT JOIN b.licence l'
+        . ' LEFT JOIN b.otherServices w2 LEFT JOIN l.organisation w3';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
+    /**
+     * The only production caller passes the organisation alone, which is the path that works.
+     */
     public function testFetchByOrganisation(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->andReturnSelf();
+        $this->assertSame(['RESULTS'], $this->sut->fetchByOrganisation('ORG1'));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m, w0, w1, b, l, w2, w3 FROM ' . Entity::class . ' m' . self::JOINS
+            . ' WHERE m.organisation = :organisation',
+            $qb->getDQL(),
         );
-
-        $this->assertEquals(
-            [
-                'RESULTS'
-            ],
-            $this->sut->fetchByOrganisation(
-                'ORG1',
-                'submission_type',
-                'submission_status'
-            )
-        );
-
-        $expectedQuery = 'BLAH AND m.ebsrSubmissionType = [[submission_type]] AND e.ebsrSubmissionStatus = ' .
-            '[[submission_status]] AND m.organisation = [[ORG1]]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testBuildDefaultQuery(): void
-    {
-        $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQi = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
-
-        $sut->shouldReceive('getQueryBuilder')->with()->andReturn($mockQb);
-
-        $mockQb->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $mockQb->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('m.busReg', 'b')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('b.licence', 'l')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('b.otherServices')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('l.organisation')->once()->andReturnSelf();
-
-        $sut->buildDefaultListQuery($mockQb, $mockQi);
+        $this->assertSame('ORG1', $qb->getParameter('organisation')->getValue());
     }
 
     /**
-     * tests fetching a list by organisation and status
+     * Pins a latent defect: the submission-status branch filters on 'e.ebsrSubmissionStatus',
+     * but this method never joins an 'e' alias (TxcInbox does, which is where it looks copied
+     * from). The resulting DQL cannot compile. Unreachable today because the sole caller omits
+     * the argument; correcting the alias to 'm' will fail this test, which is the intent.
      */
+    public function testFetchByOrganisationWithAStatusBuildsUncompilableDql(): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->shouldReceive('getResult')->andReturn([]);
+
+        $this->sut->fetchByOrganisation('ORG1', 'submission_type', 'submission_status');
+
+        $this->assertStringContainsString('AND e.ebsrSubmissionStatus = :ebsrSubmissionStatus', $qb->getDQL());
+
+        $this->expectException(QueryException::class);
+        $this->expectExceptionMessageMatches("/'e' is not defined/");
+
+        $this->compileDql($qb->getDQL());
+    }
+
     public function testFetchForOrganisationByStatus(): void
     {
-        $organisation = 3;
-        $status = 'status';
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(1)->andReturn(['RESULTS']);
 
-        $qb = m::mock(QueryBuilder::class);
-        $this->mockCreateQueryBuilder($qb);
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
+        $this->assertSame(['RESULTS'], $this->sut->fetchForOrganisationByStatus(3, 'status', 1));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m'
+            . ' WHERE m.ebsrSubmissionStatus = :ebsrSubmissionStatus AND m.organisation = :organisation',
+            $qb->getDQL(),
         );
-
-        // organisation clause
-        $qb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->with('m.organisation', ':organisation')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('organisation', $organisation)
-            ->andReturnSelf();
-
-        // status clause
-        $qb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->with('m.ebsrSubmissionStatus', ':ebsrSubmissionStatus')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('ebsrSubmissionStatus', $status)
-            ->andReturnSelf();
-
-        $this->assertEquals(['RESULTS'], $this->sut->fetchForOrganisationByStatus($organisation, $status, 1));
+        $this->assertSame('status', $qb->getParameter('ebsrSubmissionStatus')->getValue());
+        $this->assertSame(3, $qb->getParameter('organisation')->getValue());
     }
 
-    /**
-     * Tests applyListFilters
-     */
-    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testBuildDefaultListQuery(): void
+    {
+        $qb = $this->createRealQb();
+
+        $this->sut->buildDefaultListQuery($qb, m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class));
+
+        $this->assertSame(
+            'SELECT m, w0, w1, b, l, w2, w3 FROM ' . Entity::class . ' m' . self::JOINS,
+            $qb->getDQL(),
+        );
+    }
+
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repo::class, true);
-
-        $mockQb = m::mock(QueryBuilder::class);
-
-        // organisation clause
-        $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->with('m.organisation', ':organisation')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('organisation', 3)
-            ->andReturnSelf();
-
-        // status clause
-        $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('in')
-            ->with('m.ebsrSubmissionStatus', ':ebsrSubmissionStatus')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('ebsrSubmissionStatus', 'foo')
-            ->andReturnSelf();
-
-        // subType clause
-        $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->with('m.ebsrSubmissionType', ':ebsrSubmissionType')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('ebsrSubmissionType', 'bar')
-            ->andReturnSelf();
-
-        // always ignore uploaded status
-        $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('neq')
-            ->with('m.ebsrSubmissionStatus', ':ebsrtSubmissionStatus')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('ebsrtSubmissionStatus', EbsrSubmissionEntity::UPLOADED_STATUS)
-            ->andReturnSelf();
+        $qb = $this->createRealQb();
 
         $query = EbsrSubmissionList::create(['organisation' => 3, 'subType' => 'bar', 'status' => 'foo']);
 
-        $this->sut->applyListFilters($mockQb, $query);
+        $this->sut->applyListFilters($qb, $query);
+
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m'
+            . ' WHERE m.organisation = :organisation'
+            . ' AND m.ebsrSubmissionStatus IN(:ebsrSubmissionStatus)'
+            . ' AND m.ebsrSubmissionType = :ebsrSubmissionType'
+            . ' AND m.ebsrSubmissionStatus <> :ebsrtSubmissionStatus',
+            $qb->getDQL(),
+        );
+        $this->assertSame('foo', $qb->getParameter('ebsrSubmissionStatus')->getValue());
+        $this->assertSame('bar', $qb->getParameter('ebsrSubmissionType')->getValue());
+        $this->assertSame(Entity::UPLOADED_STATUS, $qb->getParameter('ebsrtSubmissionStatus')->getValue());
     }
 }

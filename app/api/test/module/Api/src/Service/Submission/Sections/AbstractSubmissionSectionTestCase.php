@@ -60,6 +60,12 @@ abstract class AbstractSubmissionSectionTestCase extends MockeryTestCase
     #[DataProvider('sectionTestProvider')]
     public function testGenerateSection(mixed $input, mixed $expectedResult = null): void
     {
+        // Providers run at suite build time, before Mockery has a container for this test. A closure lets a
+        // section test build its mocked case here instead, so expectations on it are actually verified.
+        if ($input instanceof \Closure) {
+            $input = $input();
+        }
+
         if (!empty($input)) {
             $mockQueryHandler = m::mock(QueryHandlerManager::class);
             $mockViewRenderer = m::mock(PhpRenderer::class);

@@ -4,326 +4,241 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Dvsa\Olcs\Api\Domain\Repository;
-use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
-use Mockery as m;
+use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
+use Dvsa\Olcs\Api\Domain\Repository\TransportManagerApplication as Repo;
+use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication as Entity;
+use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList;
 
-/**
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
-#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\TransportManagerApplication::class)]
 final class TransportManagerApplicationTest extends RepositoryTestCase
 {
-    public const int APP_ID = 9001;
+    private const string FROM = ' FROM ' . Entity::class . ' tma';
 
-    /** @var  Repository\TransportManagerApplication | m\MockInterface */
-    protected $sut;
+    /** withRefdata() joins tmType, tmSignatureType, opSignatureType and tmApplicationStatus. */
+    private const string REFDATA_JOINS = ' LEFT JOIN tma.tmType w0 LEFT JOIN tma.tmSignatureType w1'
+        . ' LEFT JOIN tma.opSignatureType w2 LEFT JOIN tma.tmApplicationStatus w3';
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\TransportManagerApplication::class, true);
-
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
+    /**
+     * An explicit select() of scalar columns, so this returns rows rather than entities.
+     */
     public function testFetchWithContactDetailsByApplication(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tma')->once()->andReturn($mockQb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchWithContactDetailsByApplication(7));
 
-        $mockQb->shouldReceive('leftJoin')->with('tma.transportManager', 'tm')->once()->andReturnSelf();
-        $mockQb->shouldReceive('leftJoin')->with('tma.tmApplicationStatus', 'tmas')->once()->andReturnSelf();
-        $mockQb->shouldReceive('leftJoin')->with('tm.homeCd', 'hcd')->once()->andReturnSelf();
-        $mockQb->shouldReceive('leftJoin')->with('hcd.person', 'hp')->once()->andReturnSelf();
-        $mockQb->shouldReceive('select')->with('tma.id')->once()->andReturnSelf();
-        $mockQb->shouldReceive('addSelect')->with('tma.action')->once()->andReturnSelf();
-        $mockQb->shouldReceive('addSelect')->with('tm.id as tmid')->once()->andReturnSelf();
-        $mockQb->shouldReceive('addSelect')
-            ->with('tmas.id as tmasid, tmas.description as tmasdesc')
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('addSelect')->with('hcd.emailAddress')->once()->andReturnSelf();
-        $mockQb->shouldReceive('addSelect')
-            ->with('hp.birthDate, hp.forename, hp.familyName')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')->with('tma.application', ':applicationId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('applicationId', self::APP_ID)->once();
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
-
-        $this->assertSame('RESULT', $this->sut->fetchWithContactDetailsByApplication(self::APP_ID));
+        $this->assertSame(
+            'SELECT tma.id, tma.action, tm.id as tmid,'
+            . ' tmas.id as tmasid, tmas.description as tmasdesc, hcd.emailAddress,'
+            . ' hp.birthDate, hp.forename, hp.familyName'
+            . self::FROM
+            . ' LEFT JOIN tma.transportManager tm LEFT JOIN tma.tmApplicationStatus tmas'
+            . ' LEFT JOIN tm.homeCd hcd LEFT JOIN hcd.person hp'
+            . ' WHERE tma.application = :applicationId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(7, $qb->getParameter('applicationId')->getValue());
     }
 
+    /**
+     * joinTmContactDetails() calls with() without modifyQuery(); it works because the chain
+     * above it opened with modifyQuery($dqb) on the same shared helper.
+     */
     public function testFetchDetails(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $qb = $this->createRealQb()->willReturn(['RESULT']);
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tma')->once()->andReturn($mockQb);
+        $this->assertSame('RESULT', $this->sut->fetchDetails(1));
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tma.application', 'a')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tma.otherLicences', 'ol')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('ol.role')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('a.goodsOrPsv', 'gop')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('a.licence')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('a.status')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('byId')->with(self::APP_ID)->once()->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('with')->with('tma.transportManager', 'tm')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tm.homeCd', 'hcd')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('hcd.address', 'hadd')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('hadd.countryCode')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('hcd.person', 'hp')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tm.workCd', 'wcd')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('wcd.address', 'wadd')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('wadd.countryCode')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
-
-        $this->assertSame('RESULT', $this->sut->fetchDetails(self::APP_ID));
+        $this->assertSame(
+            'SELECT tma, w0, w1, w2, w3, a, ol, w4, gop, w5, w6, tm, hcd, hadd, w7, hp, wcd, wadd, w8'
+            . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN tma.application a LEFT JOIN tma.otherLicences ol LEFT JOIN ol.role w4'
+            . ' LEFT JOIN a.goodsOrPsv gop LEFT JOIN a.licence w5 LEFT JOIN a.status w6'
+            . ' LEFT JOIN tma.transportManager tm LEFT JOIN tm.homeCd hcd'
+            . ' LEFT JOIN hcd.address hadd LEFT JOIN hadd.countryCode w7 LEFT JOIN hcd.person hp'
+            . ' LEFT JOIN tm.workCd wcd LEFT JOIN wcd.address wadd LEFT JOIN wadd.countryCode w8'
+            . ' WHERE tma.id = :byId',
+            $qb->getDQL(),
+        );
     }
 
-    public function testFetchDetailsEmpty(): void
+    public function testFetchDetailsNotFound(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $this->createRealQb()->willReturn([]);
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tma')->once()->andReturn($mockQb);
+        $this->expectException(NotFoundException::class);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tma.application', 'a')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tma.otherLicences', 'ol')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('ol.role')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('a.goodsOrPsv', 'gop')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('a.licence')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('a.status')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('byId')->with(self::APP_ID)->once()->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('with')->with('tma.transportManager', 'tm')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tm.homeCd', 'hcd')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('hcd.address', 'hadd')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('hadd.countryCode')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('hcd.person', 'hp')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tm.workCd', 'wcd')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('wcd.address', 'wadd')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('wadd.countryCode')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn([]);
-
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
-
-        $this->sut->fetchDetails(self::APP_ID);
+        $this->sut->fetchDetails(1);
     }
 
-    /**
-     * Mock SUT so that can just test the protected method
-     */
     public function testApplyListJoins(): void
     {
-        $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockQb = m::mock();
+        $qb = $this->createRealQb();
 
-        $this->sut->shouldReceive('getQueryBuilder')->with()->once()->andReturn($mockQb);
+        // applyListJoins() omits modifyQuery(); fetchList() points the helper here first.
+        $this->queryBuilder->modifyQuery($qb);
 
-        $mockQb->shouldReceive('with')->with('application', 'a')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('a.licence', 'l')->once()->andReturnSelf();
+        $this->sut->applyListJoins($qb);
 
-        $this->sut->applyListJoins($mockDqb);
-    }
-
-    /**
-     * Mock SUT so that can just test the protected method
-     */
-    public function testApplyListFiltersUser(): void
-    {
-        $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockDqb->shouldReceive('join')->with('tma.transportManager', 'tm')->once();
-        $mockDqb->shouldReceive('join')->with('tm.users', 'u')->once();
-        $mockDqb->shouldReceive('expr->eq')->with('u.id', ':user')->once()->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockDqb->shouldReceive('setParameter')->with('user', 73)->once();
-
-        $query = \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(['user' => 73]);
-        $this->sut->applyListFilters($mockDqb, $query);
-    }
-
-    /**
-     * Mock SUT so that can just test the protected method
-     */
-    public function testApplyListFiltersApplication(): void
-    {
-        $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockDqb->shouldReceive('expr->eq')->with('tma.application', ':application')->once()->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockDqb->shouldReceive('setParameter')->with('application', 73)->once();
-
-        $query = \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(['application' => 73]);
-        $this->sut->applyListFilters($mockDqb, $query);
-    }
-
-    /**
-     * Mock SUT so that can just test the protected method
-     */
-    public function testApplyListFiltersTransportManager(): void
-    {
-        $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockDqb->shouldReceive('expr->eq')->with('tma.transportManager', ':transportManager')->once()
-            ->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockDqb->shouldReceive('setParameter')->with('transportManager', 73)->once();
-
-        $query = \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(['transportManager' => 73]);
-        $this->sut->applyListFilters($mockDqb, $query);
-    }
-
-    /**
-     * Mock SUT so that can just test the protected method
-     */
-    public function testApplyListFiltersAppStatuses(): void
-    {
-        $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockDqb->shouldReceive('expr->in')->with('a.status', ':appStatuses')->once()->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockDqb->shouldReceive('setParameter')->with('appStatuses', ['st1', 'st2'])->once();
-
-        $query = \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(
-            ['appStatuses' => ['st1', 'st2']]
+        $this->assertSame(
+            'SELECT tma, a, l' . self::FROM
+            . ' LEFT JOIN tma.application a LEFT JOIN a.licence l',
+            $qb->getDQL(),
         );
-        $this->sut->applyListFilters($mockDqb, $query);
     }
 
-    public function testFetchForTransportManager(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
+    public function testApplyListFilters(array $data, string $expectedTail): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tma')->once()->andReturn($mockQb);
+        $qb = $this->createRealQb();
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tmType', 'tmt')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('application', 'a')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('a.licence', 'al')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('al.organisation', 'alo')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('a.status', 'ast')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('transportManager', 'tm')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tmApplicationStatus', 'tmast')->once()->andReturnSelf();
+        $this->sut->applyListFilters($qb, GetList::create($data));
 
-        $mockQb->shouldReceive('expr->eq')->with('tma.transportManager', ':transportManager')->once()->andReturn('tm');
-        $mockQb->shouldReceive('where')->with('tm')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('transportManager', 1)->once();
-
-        $mockQb->shouldReceive('expr->neq')->with('tma.action', ':action')->once()->andReturn('ac');
-        $mockQb->shouldReceive('andWhere')->with('ac')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('action', 'D')->once();
-
-        $statuses = ['s0', 's1'];
-        $mockQb->shouldReceive('expr->in')->with('a.status', $statuses)->once()->andReturn('IN_STATUS');
-        $mockQb->shouldReceive('andWhere')->with('IN_STATUS')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
-
-        $this->assertEquals(['RESULT'], $this->sut->fetchForTransportManager(1, $statuses));
+        $this->assertSame('SELECT tma' . self::FROM . $expectedTail, $qb->getDQL());
     }
 
-    public function testFetchByTmAndApplication(): void
+    public static function listFilterProvider(): \Iterator
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        yield 'by user' => [
+            ['user' => 73],
+            ' INNER JOIN tma.transportManager tm INNER JOIN tm.users u WHERE u.id = :user',
+        ];
+        yield 'by application' => [['application' => 73], ' WHERE tma.application = :application'];
+        yield 'by transport manager' => [
+            ['transportManager' => 73],
+            ' WHERE tma.transportManager = :transportManager',
+        ];
+        // a.status belongs to the join applyListJoins() adds, not to this method.
+        yield 'by application statuses' => [
+            ['appStatuses' => ['apsts_new']],
+            ' WHERE a.status IN(:appStatuses)',
+        ];
+        // filterByOrgUser only takes effect alongside a user, and pulls in the organisation
+        // chain hanging off the licence alias applyListJoins() creates.
+        yield 'filtered by organisation user' => [
+            ['user' => 73, 'filterByOrgUser' => 'Y'],
+            ' INNER JOIN tma.transportManager tm INNER JOIN tm.users u'
+            . ' INNER JOIN l.organisation o INNER JOIN o.organisationUsers ou'
+            . ' INNER JOIN ou.user ouu'
+            . ' WHERE u.id = :user AND ouu.id = :orgUsersUser',
+        ];
+    }
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tma')->once()->andReturn($mockQb);
+    #[\PHPUnit\Framework\Attributes\DataProvider('forTransportManagerProvider')]
+    public function testFetchForTransportManager(
+        ?array $statuses,
+        bool $includeDeleted,
+        string $expectedExtra,
+    ): void {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $mockQb->shouldReceive('expr->eq')->with('tma.transportManager', ':tmId')->once()->andReturn('EXPR1');
-        $mockQb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('tmId', 1)->once();
+        $this->assertSame(
+            ['RESULTS'],
+            $this->sut->fetchForTransportManager(3, $statuses, $includeDeleted),
+        );
 
-        $mockQb->shouldReceive('expr->eq')->with('tma.application', ':applicationId')->once()->andReturn('EXPR2');
-        $mockQb->shouldReceive('andWhere')->with('EXPR2')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('applicationId', 2)->once();
+        $this->assertSame(
+            'SELECT tma, tmt, a, al, alo, ast, tm, tmast' . self::FROM
+            . ' LEFT JOIN tma.tmType tmt LEFT JOIN tma.application a LEFT JOIN a.licence al'
+            . ' LEFT JOIN al.organisation alo LEFT JOIN a.status ast'
+            . ' LEFT JOIN tma.transportManager tm LEFT JOIN tma.tmApplicationStatus tmast'
+            . ' WHERE tma.transportManager = :transportManager' . $expectedExtra,
+            $qb->getDQL(),
+        );
+    }
 
-        $mockQb->shouldReceive('expr->neq')->with('tma.action', ':action')->once()->andReturn('EXPR3');
-        $mockQb->shouldReceive('andWhere')->with('EXPR3')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('action', 'D')->once();
+    public static function forTransportManagerProvider(): \Iterator
+    {
+        yield 'excluding deleted' => [null, false, " AND tma.action <> :action"];
+        yield 'including deleted' => [null, true, ''];
+        // The statuses are inlined into the IN() rather than bound.
+        yield 'narrowed by status' => [
+            ['apsts_new'],
+            true,
+            " AND a.status IN('apsts_new')",
+        ];
+    }
 
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
-        $this->assertEquals('RESULT', $this->sut->fetchByTmAndApplication(1, 2, true));
+    #[\PHPUnit\Framework\Attributes\DataProvider('ignoreDeletedProvider')]
+    public function testFetchByTmAndApplication(bool $ignoreDeleted, string $expectedExtra): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchByTmAndApplication(3, 7, $ignoreDeleted));
+
+        $this->assertSame(
+            'SELECT tma' . self::FROM
+            . ' WHERE tma.transportManager = :tmId AND tma.application = :applicationId'
+            . $expectedExtra,
+            $qb->getDQL(),
+        );
+    }
+
+    public static function ignoreDeletedProvider(): \Iterator
+    {
+        yield 'including deleted' => [false, ''];
+        yield 'ignoring deleted' => [true, ' AND tma.action <> :action'];
     }
 
     public function testFetchForResponsibilities(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tma')->once()->andReturn($mockQb);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn('RESULT');
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('application', 'a')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tmType', 'tmty')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('a.licence', 'al')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('al.organisation', 'alo')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('a.status', 'ast')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('transportManager', 'tm')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tm.tmType', 'tmt')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('tmApplicationStatus', 'tmast')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('byId')->with(1)->once()->andReturnSelf();
+        $this->assertSame('RESULT', $this->sut->fetchForResponsibilities(1));
 
-        $mockQb->shouldReceive('getQuery->getSingleResult')->once()->andReturn(['RESULT']);
-        $this->assertEquals(['RESULT'], $this->sut->fetchForResponsibilities(1));
-    }
-
-    public function testApplyListFiltersFilterOrgUser(): void
-    {
-        $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockDqb->shouldReceive('join')->with('tma.transportManager', 'tm')->once();
-        $mockDqb->shouldReceive('join')->with('tm.users', 'u')->once();
-        $mockDqb->shouldReceive('join')->with('l.organisation', 'o')->once();
-        $mockDqb->shouldReceive('join')->with('o.organisationUsers', 'ou')->once();
-        $mockDqb->shouldReceive('join')->with('ou.user', 'ouu')->once();
-        $mockDqb->shouldReceive('expr->eq')->with('u.id', ':user')->once()->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockDqb->shouldReceive('setParameter')->with('user', 73)->once();
-        $mockDqb->shouldReceive('expr->eq')->with('ouu.id', ':orgUsersUser')->once()->andReturn('EXPR1');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
-        $mockDqb->shouldReceive('setParameter')->with('orgUsersUser', 73)->once();
-
-        $query = \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(
-            ['user' => 73, 'filterByOrgUser' => true]
+        $this->assertSame(
+            'SELECT tma, a, tmty, al, alo, ast, tm, tmt, tmast' . self::FROM
+            . ' LEFT JOIN tma.application a LEFT JOIN tma.tmType tmty LEFT JOIN a.licence al'
+            . ' LEFT JOIN al.organisation alo LEFT JOIN a.status ast'
+            . ' LEFT JOIN tma.transportManager tm LEFT JOIN tm.tmType tmt'
+            . ' LEFT JOIN tma.tmApplicationStatus tmast'
+            . ' WHERE tma.id = :byId',
+            $qb->getDQL(),
         );
-        $this->sut->applyListFilters($mockDqb, $query);
     }
 
+    /**
+     * One row per application carrying a conditional count for each action, defaulted to zero
+     * so callers always get all three keys.
+     */
     public function testFetchStatByAppId(): void
     {
-        $mockQb = $this->createMockQb('{QUERY}');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getOneOrNullResult')->with(Query::HYDRATE_ARRAY)->andReturn(['A' => 2]);
 
-        $this->mockCreateQueryBuilder($mockQb);
+        $this->assertSame(
+            ['action' => ['A' => 2, 'U' => 0, 'D' => 0]],
+            $this->sut->fetchStatByAppId(7),
+        );
 
-        $mockQb->shouldReceive('getQuery->getOneOrNullResult')
-            ->once()
-            ->andReturn(
-                [
-                    TransportManagerApplication::ACTION_ADD => 3,
-                    TransportManagerApplication::ACTION_UPDATE => 5,
-                    TransportManagerApplication::ACTION_DELETE => 7,
-                ]
-            );
+        $this->assertSame(
+            "SELECT tma.id, SUM(CASE WHEN tma.action = 'A' THEN 1 ELSE 0 END) AS A,"
+            . " SUM(CASE WHEN tma.action = 'U' THEN 1 ELSE 0 END) AS U,"
+            . " SUM(CASE WHEN tma.action = 'D' THEN 1 ELSE 0 END) AS D"
+            . self::FROM
+            . ' WHERE tma.application = :applicationId'
+            . ' GROUP BY tma.application',
+            $qb->getDQL(),
+        );
+    }
 
-        $expectQry = '{QUERY}' .
-            ' SELECT tma.id' .
-            ' GROUP BY tma.application' .
-            ' AND tma.application = [[' . self::APP_ID . ']]' .
-            ' SELECT SUM(CASE WHEN tma.action = \'A\' THEN 1 ELSE 0 END) AS A' .
-            ' SELECT SUM(CASE WHEN tma.action = \'U\' THEN 1 ELSE 0 END) AS U' .
-            ' SELECT SUM(CASE WHEN tma.action = \'D\' THEN 1 ELSE 0 END) AS D';
+    public function testFetchStatByAppIdWithNoRows(): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getOneOrNullResult')->andReturnNull();
 
-        $actual = $this->sut->fetchStatByAppId(self::APP_ID);
-
-        $this->assertEquals($expectQry, $this->query);
-        $this->assertEquals([
-            'action' => [
-                'A' => 3,
-                'U' => 5,
-                'D' => 7,
-            ]
-        ], $actual);
+        $this->assertSame(
+            ['action' => ['A' => 0, 'U' => 0, 'D' => 0]],
+            $this->sut->fetchStatByAppId(7),
+        );
     }
 }

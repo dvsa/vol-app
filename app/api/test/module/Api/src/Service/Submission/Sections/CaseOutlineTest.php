@@ -17,7 +17,7 @@ final class CaseOutlineTest extends AbstractSubmissionSectionTestCase
      */
     public static function sectionTestProvider(): \Iterator
     {
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
         $expectedResult = ['data' => ['text' => 'case description']];
 

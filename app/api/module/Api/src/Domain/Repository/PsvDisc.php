@@ -2,7 +2,6 @@
 
 namespace Dvsa\Olcs\Api\Domain\Repository;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
@@ -95,7 +94,7 @@ class PsvDisc extends AbstractRepository
         return $this->getDbQueryManager()->get('Discs\PsvDiscsSetIsPrinting')
             ->execute(
                 ['isPrinting' => $type, 'ids' => $discIds],
-                ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY]
+                ['isPrinting' => \Doctrine\DBAL\ParameterType::INTEGER, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
             );
     }
 

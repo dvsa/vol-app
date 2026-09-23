@@ -2,95 +2,68 @@
 
 declare(strict_types=1);
 
-/**
- * SlaTargetDate Repo Test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository;
-use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Entity\System\SlaTargetDate as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
-/**
- * SlaTargetDate Repo Test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
-#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 final class SlaTargetDateTest extends RepositoryTestCase
 {
-    /**
-     * @var m\MockInterface|Repository\SlaTargetDate
-     */
     protected $sut;
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\SlaTargetDate::class);
+        $this->setUpRealSut(Repository\SlaTargetDate::class, true);
     }
 
     public function testFetchUsingEntityIdAndType(): void
     {
-        $entityType = 'document';
-        $entityId = 100;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn('foobar');
 
-        $qb = $this->createMockQb('QUERY');
+        $this->assertSame('foobar', $this->sut->fetchUsingEntityIdAndType('document', 100));
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery->getSingleResult')->once()->andReturn('foobar');
-
-        $result = $this->sut->fetchUsingEntityIdAndType($entityType, $entityId);
-
-        $this->assertEquals('QUERY AND m.document = [[100]]', $this->query);
-
-        $this->assertEquals('foobar', $result);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.document = :byEntityId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(100, $qb->getParameter('byEntityId')->getValue());
     }
 
     public function testFetchByDocumentId(): void
     {
-        $documentId = 1;
+        $qb = $this->createRealQb()->willReturn('foobar');
 
-        $qb = $this->createMockQb('QUERY');
+        $this->assertSame('foobar', $this->sut->fetchByDocumentId(1));
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn('foobar');
-
-        $result = $this->sut->fetchByDocumentId($documentId);
-
-        $this->assertEquals('QUERY AND m.document = [[' . $documentId . ']]', $this->query);
-
-        $this->assertEquals('foobar', $result);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.document = :documentId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('documentId')->getValue());
     }
 
-    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    /**
+     * The entity type names both the column and the parameter, so 'document' yields
+     * m.document = :byDocument.
+     */
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repository\SlaTargetDate::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('byDocument', 100)
-            ->andReturnSelf();
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getEntityType')->andReturn('document');
+        $query->shouldReceive('getEntityId')->andReturn(100);
 
-        $mockQ = m::mock(QueryInterface::class);
-        $mockQ->shouldReceive('getEntityType')
-            ->andReturn('document')
-            ->shouldReceive('getEntityId')
-            ->andReturn(100);
+        $this->sut->applyListFilters($qb, $query);
 
-        $this->sut->applyListFilters($mockQb, $mockQ);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.document = :byDocument',
+            $qb->getDQL(),
+        );
+        $this->assertSame(100, $qb->getParameter('byDocument')->getValue());
     }
 }

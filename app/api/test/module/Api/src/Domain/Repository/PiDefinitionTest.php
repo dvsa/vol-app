@@ -2,88 +2,47 @@
 
 declare(strict_types=1);
 
-/**
- * PiDefinition Repo Test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Dvsa\Olcs\Transfer\Query\Cases\Pi\PiDefinitionList;
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\Olcs\Api\Domain\Repository\PiDefinition as Repo;
+use Dvsa\Olcs\Api\Entity\Pi\PiDefinition as Entity;
+use Dvsa\Olcs\Transfer\Query\Cases\Pi\PiDefinitionList;
 
-/**
- * PiDefinition Repo Test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
-#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 final class PiDefinitionTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
-    public function testApplyListFilters(): void
+    /**
+     * Transport manager definitions have no operator type, so 'NULL' arrives on the wire as the
+     * string and has to become an IS NULL rather than a bound comparison.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('goodsOrPsvProvider')]
+    public function testApplyListFilters(string $goodsOrPsv, string $expectedCondition): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('isNi', 'Y')
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('goodsOrPsv', 'lcat_gv')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('isVisibleInInternal', true)
-            ->andReturnSelf();
+        $query = PiDefinitionList::create(['isNi' => 'Y', 'goodsOrPsv' => $goodsOrPsv]);
 
-        $query = PiDefinitionList::create(['isNi' => 'Y', 'goodsOrPsv' => 'lcat_gv']);
+        $this->sut->applyListFilters($qb, $query);
 
-        $this->sut->applyListFilters($mockQb, $query);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m'
+            . ' WHERE m.isNi = :isNi AND ' . $expectedCondition
+            . ' AND m.isVisibleInInternal = :isVisibleInInternal',
+            $qb->getDQL(),
+        );
+        // The transfer query casts the Y/N flag to a boolean before it reaches the repository.
+        $this->assertTrue($qb->getParameter('isNi')->getValue());
+        $this->assertTrue($qb->getParameter('isVisibleInInternal')->getValue());
     }
 
-    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
-    public function testApplyListFiltersForTm(): void
+    public static function goodsOrPsvProvider(): \Iterator
     {
-        $this->setUpSut(Repo::class, true);
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('isNi', 'Y')
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('isNull')
-            ->with('m.goodsOrPsv')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('isVisibleInInternal', true)
-            ->andReturnSelf();
-
-        $query = PiDefinitionList::create(['isNi' => 'Y', 'goodsOrPsv' => 'NULL']);
-
-        $this->sut->applyListFilters($mockQb, $query);
+        yield 'goods' => ['lcat_gv', 'm.goodsOrPsv = :goodsOrPsv'];
+        yield 'transport manager' => ['NULL', 'm.goodsOrPsv IS NULL'];
     }
 }

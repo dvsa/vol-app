@@ -384,6 +384,50 @@ resource "aws_cloudwatch_event_target" "analyse_financial_document" {
   input_path = "$.detail"
 }
 
+# The AnalyseFinancialDocument SM emits DocumentProcessing-FinancialDocumentAnalysed when
+# the pipeline finishes. The detail contains analysis_token and execution_arn.
+# EventBridge submits an AWS Batch job to store the result, passing those values
+# as job parameters; the job definition command references them as Ref:: placeholders.
+locals {
+  # Batch ARNs follow the naming conventions established by the service module.
+  store_result_batch_queue_arn   = "arn:aws:batch:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:job-queue/vol-app-${var.environment}-idp-events"
+  store_result_batch_job_def_arn = "arn:aws:batch:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:job-definition/vol-app-${var.environment}-idp-store-document-analysis-result"
+}
+
+resource "aws_cloudwatch_event_rule" "financial_document_analysed" {
+  name        = "${local.name_prefix}-financial-document-analysed"
+  description = "Trigger idp-store-document-analysis-result Batch job when the orchestrator SM completes financial document analysis"
+
+  event_pattern = jsonencode({
+    source      = ["custom.documentProcessing"]
+    detail-type = ["DocumentProcessing-FinancialDocumentAnalysed"]
+  })
+}
+
+resource "aws_cloudwatch_event_target" "store_document_analysis_result" {
+  rule     = aws_cloudwatch_event_rule.financial_document_analysed.name
+  arn      = local.store_result_batch_queue_arn
+  role_arn = aws_iam_role.eventbridge_invoke_store_result.arn
+
+  batch_target {
+    job_definition = local.store_result_batch_job_def_arn
+    job_name       = "${local.name_prefix}-store-document-analysis-result"
+  }
+
+  # Pass analysis_token and execution_arn as Batch job parameters. The job
+  # definition command uses Ref::analysis_token / Ref::execution_arn (as
+  # separate arguments, Batch only substitutes whole args) and Batch fills
+  # them in at submit time. Placeholders are unquoted because EventBridge
+  # quotes string values itself.
+  input_transformer {
+    input_paths = {
+      analysis_token = "$.detail.analysis_token"
+      execution_arn  = "$.detail.execution_arn"
+    }
+    input_template = "{\"Parameters\":{\"analysis_token\":<analysis_token>,\"execution_arn\":<execution_arn>}}"
+  }
+}
+
 # ============================================================
 # Bedrock Managed Prompt — Bank Statement Quality Check
 #

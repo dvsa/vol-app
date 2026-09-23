@@ -5,108 +5,73 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository\Transaction as TransactionRepo;
-use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
-use Dvsa\Olcs\Api\Entity\Fee\Transaction;
+use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
+use Dvsa\Olcs\Api\Entity\Fee\Transaction as Entity;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Transaction::class)]
 final class TransactionTest extends RepositoryTestCase
 {
-    /** @var  TransactionRepo */
     protected $sut;
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(TransactionRepo::class);
+        $this->setUpRealSut(TransactionRepo::class);
     }
 
     public function testFetchByReference(): void
     {
         $ref = 'OLCS-1234-ABCD';
+        $result = m::mock(Entity::class);
 
-        $result = m::mock(Transaction::class);
-        $results = [$result];
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$result]);
+        $this->em->expects('lock')->with($result, LockMode::OPTIMISTIC, 1);
 
-        /** @var m\MockInterface $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->once()
-            ->andReturn($results);
+        $this->assertSame($result, $this->sut->fetchByReference($ref, Query::HYDRATE_OBJECT, 1));
 
-        $where = m::mock();
-        $qb->shouldReceive('expr->eq')
-            ->with('t.reference', ':reference')
-            ->andReturn($where);
-        $qb
-            ->shouldReceive('andWhere')
-            ->with($where)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('reference', $ref)
-            ->once()
-            ->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->andReturnSelf();
-
-        /** @var m\MockInterface $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('t')
-            ->once()
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Transaction::class)
-            ->andReturn($repo)
-            ->shouldReceive('lock')
-            ->with($result, LockMode::OPTIMISTIC, 1);
-
-        $this->sut->fetchByReference($ref, Query::HYDRATE_OBJECT, 1);
+        $this->assertSame(
+            'SELECT t, w0, w1, w2, ft, f, l, w3, w4 FROM ' . Entity::class . ' t'
+            . ' LEFT JOIN t.status w0 LEFT JOIN t.type w1 LEFT JOIN t.paymentMethod w2'
+            . ' LEFT JOIN t.feeTransactions ft LEFT JOIN ft.fee f LEFT JOIN f.licence l'
+            . ' LEFT JOIN f.application w3 LEFT JOIN l.organisation w4'
+            . ' WHERE t.reference = :reference',
+            $qb->getDQL(),
+        );
+        $this->assertSame($ref, $qb->getParameter('reference')->getValue());
     }
 
-    public function testfetchOutstandingCardPayments(): void
+    public function testFetchOutstandingCardPayments(): void
     {
-        $mockQb = $this->createMockQb('{QUERY}');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($mockQb);
+        $this->em->shouldReceive('getReference')->andReturnUsing(
+            function ($class, $id) {
+                $reference = m::mock(RefData::class);
+                $reference->shouldReceive('getId')->andReturn($id);
 
-        $this->em->shouldReceive('getReference')
-            ->andReturnUsing(
-                function ($refData, $input) {
-                    unset($refData); // unused
-                    return $input;
-                }
-            );
+                return $reference;
+            }
+        );
 
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->once()
-            ->andReturn(['RESULTS']);
+        $this->assertSame(['RESULTS'], $this->sut->fetchOutstandingCardPayments(60));
 
-        $now = new DateTime();
-        $expectedDateTime = $now->sub(new \DateInterval('PT60M'))->format(\DateTime::W3C);
-        $expectedQry = '{QUERY}'
-            . ' AND t.type = [[trt_payment]]'
-            . ' AND t.status = [[pay_s_os]]'
-            . ' AND t.paymentMethod IN [[["fpm_card_online","fpm_card_offline"]]]'
-            . ' AND t.createdOn < [[' . $expectedDateTime . ']]';
-
-        $this->assertEquals(['RESULTS'], $this->sut->fetchOutstandingCardPayments(60));
-
-        $this->assertEquals($expectedQry, $this->query);
+        $this->assertSame(
+            'SELECT t FROM ' . Entity::class . ' t'
+            . ' WHERE t.type = :transactionType AND t.status = :status'
+            . ' AND t.paymentMethod IN(:paymentMethods) AND t.createdOn < :maxCreatedOn',
+            $qb->getDQL(),
+        );
+        $this->assertSame(Entity::TYPE_PAYMENT, $qb->getParameter('transactionType')->getValue()->getId());
+        $this->assertSame(Entity::STATUS_OUTSTANDING, $qb->getParameter('status')->getValue()->getId());
+        $this->assertSame(
+            [FeeEntity::METHOD_CARD_ONLINE, FeeEntity::METHOD_CARD_OFFLINE],
+            $qb->getParameter('paymentMethods')->getValue(),
+        );
+        $this->assertInstanceOf(\DateTimeInterface::class, $qb->getParameter('maxCreatedOn')->getValue());
     }
 }

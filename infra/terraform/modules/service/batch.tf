@@ -214,7 +214,7 @@ locals {
     propagate_tags        = true
     platform_capabilities = ["FARGATE"]
 
-    container_properties = jsonencode({
+    container_properties = jsonencode(merge({
 
       command = (try(job.type, "default") == "default" ? concat([
         "/var/www/html/vendor/bin/laminas",
@@ -259,8 +259,11 @@ locals {
           awslogs-stream-prefix = job.name
         }
       }
+      }, try(job.ephemeral_storage, null) == null ? {} : {
+      ephemeralStorage = {
+        sizeInGiB = job.ephemeral_storage
       }
-    )
+    }))
 
     attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy
@@ -350,6 +353,27 @@ module "batch" {
 
       tags = {
         JobQueue = "vol-app-${var.environment}-liquibase"
+      }
+    },
+    idp_events = {
+      name     = "vol-app-${var.environment}-idp-events"
+      state    = "ENABLED"
+      priority = 1
+
+      # EventBridge Batch targets can't pass shareIdentifier, and Batch rejects
+      # SubmitJob without one on a fair-share queue. Event-driven IDP jobs use
+      # this queue with no scheduling policy instead of the default queue.
+      create_scheduling_policy = false
+
+      compute_environment_order = {
+        first = {
+          order                   = 1
+          compute_environment_key = "fargate"
+        }
+      }
+
+      tags = {
+        JobQueue = "vol-app-${var.environment}-idp-events"
       }
     },
   }

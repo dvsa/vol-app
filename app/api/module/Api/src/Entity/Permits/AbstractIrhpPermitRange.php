@@ -61,7 +61,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * EmissionsCategory
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'emissions_category', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -70,7 +70,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Journey
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'journey', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -99,7 +99,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Prefix
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'prefix', length: 45, nullable: true)]
     protected $prefix;
@@ -107,7 +107,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * From no
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'from_no', nullable: true, options: ['unsigned' => true])]
     protected $fromNo;
@@ -115,7 +115,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * To no
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'to_no', nullable: true, options: ['unsigned' => true])]
     protected $toNo;
@@ -123,7 +123,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Cabotage
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'cabotage', nullable: true)]
     protected $cabotage;
@@ -131,7 +131,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Ss reserve
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'ss_reserve', nullable: true)]
     protected $ssReserve;
@@ -139,7 +139,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Lost replacement
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'lost_replacement', nullable: true)]
     protected $lostReplacement;
@@ -156,7 +156,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * IrhpPermitRangeAttributes
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\RefData>
      */
     #[ORM\JoinTable(name: 'irhp_permit_range_attribute')]
     #[ORM\JoinColumn(name: 'irhp_permit_range_id', referencedColumnName: 'id')]
@@ -167,7 +167,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Countrys
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\ContactDetails\Country>
      */
     #[ORM\JoinTable(name: 'irhp_permit_range_country')]
     #[ORM\JoinColumn(name: 'irhp_permit_stock_range_id', referencedColumnName: 'id')]
@@ -178,7 +178,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * IrhpCandidatePermits
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit::class, mappedBy: 'irhpPermitRange')]
     protected $irhpCandidatePermits;
@@ -186,7 +186,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * IrhpPermits
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit::class, mappedBy: 'irhpPermitRange')]
     protected $irhpPermits;

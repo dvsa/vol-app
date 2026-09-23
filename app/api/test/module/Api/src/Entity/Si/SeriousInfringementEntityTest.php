@@ -100,18 +100,18 @@ final class SeriousInfringementEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasRequestedPenalties')]
-    public function testHasRequestedPenalties(ArrayCollection $requestedErrus, bool $expectedResult): void
+    public function testHasRequestedPenalties(\Closure $createRequestedErrus, bool $expectedResult): void
     {
         /** @var Entity $entity */
         $entity = $this->instantiate(Entity::class);
-        $entity->setRequestedErrus($requestedErrus);
+        $entity->setRequestedErrus($createRequestedErrus());
         $this->assertEquals($expectedResult, $entity->hasRequestedPenalties());
     }
 
     public static function dpHasRequestedPenalties(): \Iterator
     {
-        yield [new ArrayCollection(), false];
-        yield [new ArrayCollection([m::mock(SiPenaltyErruRequested::class)]), true];
+        yield [static fn () => new ArrayCollection(), false];
+        yield [static fn () => new ArrayCollection([m::mock(SiPenaltyErruRequested::class)]), true];
     }
 
     public function testGetCalculatedBundleValues(): void

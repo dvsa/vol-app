@@ -4,410 +4,259 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\ContinuationDetail as Repo;
-use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
-use Dvsa\Olcs\Api\Entity\Fee\FeeType as FeeTypeEntity;
-use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail as Entity;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Domain\Repository\ContinuationDetail as Repo;
+use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
+use Dvsa\Olcs\Api\Entity\Fee\FeeType as FeeTypeEntity;
+use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail as Entity;
+use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
+use Mockery as m;
 
-/**
- * ContinuationDetailTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 final class ContinuationDetailTest extends RepositoryTestCase
 {
-    /** @var m\MockInterface|Repo */
-    protected $sut;
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
+    /** withRefdata() joins status and signatureType. */
+    private const string REFDATA_JOINS = ' LEFT JOIN m.status w0 LEFT JOIN m.signatureType w1';
+
+    private const array ACTIVE_LICENCE_STATUSES = [
+        LicenceEntity::LICENCE_STATUS_VALID,
+        LicenceEntity::LICENCE_STATUS_CURTAILED,
+        LicenceEntity::LICENCE_STATUS_SUSPENDED,
+    ];
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
-    }
-
-    public function testFetchForLicence(): void
-    {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('continuation', 'c')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchForLicence(95));
-
-        $dateTime = new \Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime();
-        $year = $dateTime->format('Y');
-        $futureYear = (int) $year + 4;
-        $month = $dateTime->format('n');
-        $pastYear = (int) $year - 4;
-
-        $expectedQuery = <<<EOT
-BLAH AND m.licence = [[95]]
-    AND l.status IN [[["lsts_valid","lsts_curtailed","lsts_suspended"]]]
-    AND (c.month >= [[$month]] AND c.year = [[$year]])
-        OR (c.year > [[$year]] AND c.year < [[$futureYear]])
-        OR (c.month <= [[$month]] AND c.year = [[$futureYear]])
-        OR (c.month <= [[$month]] AND c.year = [[$year]])
-        OR (c.year > [[$pastYear]] AND c.year < [[$year]])
-        OR (c.month >= [[$month]] AND c.year = [[$pastYear]])
-    AND m.status IN ([[["con_det_sts_printed","con_det_sts_acceptable","con_det_sts_unacceptable"]]])
-EOT;
-        // Expected query has be formatted to make it readable, need to make it non formatted for assertion
-        // remove new lines
-        $expectedQuery = str_replace("\n", ' ', $expectedQuery);
-        // remove indentation
-        $expectedQuery = str_replace("  ", '', $expectedQuery);
-
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchOngoingForLicence(): void
-    {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('continuation', 'c')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getSingleResult')
-                ->andReturn('RESULT')
-                ->getMock()
-        );
-        $this->assertEquals('RESULT', $this->sut->fetchOngoingForLicence(95));
-
-        $expectedQuery = 'BLAH AND m.licence = [[95]] AND (m.status = [[con_det_sts_acceptable]] '
-            . 'OR (m.status != [[con_det_sts_complete]] AND m.isDigital = 1))';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     /**
-     * Test fetchChecklistReminders
+     * The date window is a six-way alternation covering four years either side of today, and it
+     * is written as a raw DQL string rather than through the expression builder.
      */
-    public function testFetchChecklistReminders(): void
+    public function testFetchForLicence(): void
     {
-        $mockQb = m::mock(QueryBuilder::class);
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->twice()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
+        $this->assertSame(['RESULTS'], $this->sut->fetchForLicence(7));
 
-        $mockQb
-            ->shouldReceive('select')->once()->andReturnSelf()
-            ->shouldReceive('innerJoin')->with('m.continuation', 'c')->once()->andReturnSelf()
-            ->shouldReceive('innerJoin')->with('m.licence', 'l')->once()->andReturnSelf()
-            ->shouldReceive('leftJoin')->with('l.status', 'ls')->once()->andReturnSelf()
-            ->shouldReceive('leftJoin')->with('l.goodsOrPsv', 'lgp')->once()->andReturnSelf()
-            ->shouldReceive('leftJoin')->with('l.organisation', 'lo')->once()->andReturnSelf()
-            ->shouldReceive('leftJoin')->with('l.fees', 'lf')->once()->andReturnSelf()
-            ->shouldReceive('leftJoin')->with('lf.feeType', 'lfft')->once()->andReturnSelf()
-            ->shouldReceive('leftJoin')->with('lfft.feeType', 'lfftft')->once()->andReturnSelf()
-            ->shouldReceive('leftJoin')->with('lf.feeStatus', 'lffs')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->in')->with('l.status', ':licenceStatuses')->once()->andReturn('conditionLic');
-        $mockQb->shouldReceive('andWhere')->with('conditionLic')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with(
-                'licenceStatuses',
-                [
-                    LicenceEntity::LICENCE_STATUS_VALID,
-                    LicenceEntity::LICENCE_STATUS_CURTAILED,
-                    LicenceEntity::LICENCE_STATUS_SUSPENDED
-                ]
-            )
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->neq')->with('m.status', ':status')->once()->andReturn('unit_CondStatus');
-        $mockQb->shouldReceive('andWhere')->with('unit_CondStatus')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('status', Entity::STATUS_PREPARED);
-
-        $mockQb->shouldReceive('expr->eq')->with('m.received', 0)->once()->andReturn('conditionReceived');
-        $mockQb->shouldReceive('andWhere')->with('conditionReceived')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.isDigital', 0)->once()->andReturn('conditionIsDigital');
-        $mockQb->shouldReceive('andWhere')->with('conditionIsDigital')->once()->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('filterByIds')->with([1])->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')
-            ->with('c.month', ':month')
-            ->once()
-            ->andReturn('conditionMonth');
-        $mockQb->shouldReceive('andWhere')->with('conditionMonth')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('month', 1)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')
-            ->with('c.year', ':year')
-            ->once()
-            ->andReturn('conditionYear');
-        $mockQb->shouldReceive('andWhere')->with('conditionYear')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('year', 2016)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->expects('expr->in')->with('l.trafficArea', ':trafficAreas')->andReturn('conditionTa');
-        $mockQb->expects('andWhere')->with('conditionTa');
-        $mockQb->expects('setParameter')->with('trafficAreas', ['A', 'B']);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('m')
-            ->once()
-            ->andReturn($mockQb);
-
-        $fee1 = m::mock()
-            ->shouldReceive('getFeeType')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getFeeType')
-                    ->andReturn(
-                        m::mock()
-                        ->shouldReceive('getId')
-                        ->andReturn(FeeTypeEntity::FEE_TYPE_APP)
-                        ->once()
-                        ->getMock()
-                    )
-                    ->once()
-                    ->getMock()
-            )
-            ->once()
-            ->getMock();
-
-        $fee2 = m::mock()
-            ->shouldReceive('getFeeType')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getFeeType')
-                    ->andReturn(
-                        m::mock()
-                            ->shouldReceive('getId')
-                            ->andReturn(FeeTypeEntity::FEE_TYPE_CONT)
-                            ->once()
-                            ->getMock()
-                    )
-                    ->once()
-                    ->getMock()
-            )
-            ->once()
-            ->shouldReceive('getFeeStatus')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getId')
-                    ->andReturn(FeeEntity::STATUS_OUTSTANDING)
-                    ->once()
-                    ->getMock()
-            )
-            ->once()
-            ->getMock();
-
-        $fees = [$fee1, $fee2];
-
-        $mockEntity1 = m::mock()
-            ->shouldReceive('getLicence')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getFees')
-                    ->andReturn($fees)
-                    ->once()
-                    ->getMock()
-            )
-            ->once()
-            ->getMock();
-
-        $mockEntity2 = m::mock()
-            ->shouldReceive('getLicence')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getFees')
-                    ->andReturn([])
-                    ->once()
-                    ->getMock()
-            )
-            ->once()
-            ->getMock();
-
-        $expected = new ArrayCollection();
-        $expected->add($mockEntity2);
-
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->with(\Doctrine\ORM\Query::HYDRATE_OBJECT)
-            ->once()
-            ->andReturn([$mockEntity1, $mockEntity2]);
-
-        $this->assertEquals($expected, $this->sut->fetchChecklistReminders(['A', 'B'], 1, 2016, [1]));
+        $this->assertSame(
+            'SELECT m, w0, w1, l, c' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.licence l LEFT JOIN m.continuation c'
+            . ' WHERE m.licence = :licence AND l.status IN(:licenceStatuses)'
+            . ' AND ((c.month >= :month AND c.year = :year)'
+            . ' OR (c.year > :year AND c.year < :futureYear)'
+            . ' OR (c.month <= :futureMonth AND c.year = :futureYear)'
+            . ' OR (c.month <= :month AND c.year = :year)'
+            . ' OR (c.year > :pastYear AND c.year < :year)'
+            . ' OR (c.month >= :pastMonth AND c.year = :pastYear))'
+            . ' AND m.status IN (:continuationDetailStatuses)',
+            $qb->getDQL(),
+        );
+        $this->assertSame(7, $qb->getParameter('licence')->getValue());
+        $this->assertSame(self::ACTIVE_LICENCE_STATUSES, $qb->getParameter('licenceStatuses')->getValue());
+        $this->assertSame(
+            [Entity::STATUS_PRINTED, Entity::STATUS_ACCEPTABLE, Entity::STATUS_UNACCEPTABLE],
+            $qb->getParameter('continuationDetailStatuses')->getValue(),
+        );
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
-    public function testFetchDetails(mixed $method, mixed $allowEmail): void
+    /**
+     * Ongoing means either acceptable, or digital and not yet complete.
+     */
+    public function testFetchOngoingForLicence(): void
     {
-        $mockQb = m::mock(QueryBuilder::class);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn('RESULT');
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('continuation', 'c')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('status', 's')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.status', 'ls')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.organisation', 'lo')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.licenceType', 'lt')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.goodsOrPsv', 'lg')->once()->andReturnSelf();
+        $this->assertSame('RESULT', $this->sut->fetchOngoingForLicence(7));
 
-        $mockQb->shouldReceive('orderBy')->with('l.licNo', 'ASC')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')->with('c.id', ':continuationId')->once()->andReturn('conditionContId');
-        $mockQb->shouldReceive('andWhere')->with('conditionContId')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('continuationId', 1)->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->in')->with('l.status', ':licenceStatuses')->once()->andReturn('conditionLicSt');
-        $mockQb->shouldReceive('andWhere')->with('conditionLicSt')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('licenceStatuses', ['st'])->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')->with('l.licNo', ':licNo')->once()->andReturn('conditionLicNo');
-        $mockQb->shouldReceive('andWhere')->with('conditionLicNo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('licNo', 'ln')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')->with('lo.allowEmail', $allowEmail)->once()->andReturn('conditionMethod');
-        $mockQb->shouldReceive('andWhere')->with('conditionMethod')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':status')->once()->andReturn('conditionStatus');
-        $mockQb->shouldReceive('andWhere')->with('conditionStatus')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('status', 'st')->once()->andReturnSelf();
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('m')
-            ->once()
-            ->andReturn($mockQb);
-
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->with(\Doctrine\ORM\Query::HYDRATE_OBJECT)
-            ->once()
-            ->andReturn(['result']);
-
-        $this->assertEquals($this->sut->fetchDetails(1, ['st'], 'ln', $method, 'st'), ['result']);
+        $this->assertSame(
+            'SELECT m, w0, w1, c' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.continuation c'
+            . ' WHERE m.licence = :licence'
+            . ' AND (m.status = :status OR (m.status <> :notStatus AND m.isDigital = 1))',
+            $qb->getDQL(),
+        );
+        $this->assertSame(Entity::STATUS_ACCEPTABLE, $qb->getParameter('status')->getValue());
+        $this->assertSame(Entity::STATUS_COMPLETE, $qb->getParameter('notStatus')->getValue());
     }
 
-    public static function statusProvider(): \Iterator
+    /**
+     * Reminders go to paper continuations that have not been received. The select is a set of
+     * partials, so only the columns the reminder needs are fetched.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('checklistProvider')]
+    public function testFetchChecklistReminders(array $ids, ?int $month, ?int $year, string $expectedExtra): void
     {
-        yield [Entity::METHOD_EMAIL, 1];
-        yield [Entity::METHOD_POST, 0];
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([]);
+
+        $this->assertCount(0, $this->sut->fetchChecklistReminders(['B'], $month, $year, $ids));
+
+        $this->assertSame(
+            'SELECT m, partial l.{id, licNo}, partial lgp.{id},'
+            . ' partial lo.{id, name, allowEmail}, partial ls.{id, description},'
+            . ' partial lf.{id, feeType, feeStatus}, partial lfft.{id},'
+            . ' partial lfftft.{id}, partial lffs.{id}'
+            . self::FROM . self::REFDATA_JOINS
+            . ' INNER JOIN m.continuation c INNER JOIN m.licence l'
+            . ' LEFT JOIN l.status ls LEFT JOIN l.goodsOrPsv lgp LEFT JOIN l.organisation lo'
+            . ' LEFT JOIN l.fees lf LEFT JOIN lf.feeType lfft LEFT JOIN lfft.feeType lfftft'
+            . ' LEFT JOIN lf.feeStatus lffs'
+            . ' WHERE l.status IN(:licenceStatuses) AND m.received = 0 AND m.isDigital = 0'
+            . $expectedExtra
+            . ' AND l.trafficArea IN(:trafficAreas) AND m.status <> :status',
+            $qb->getDQL(),
+        );
+        $this->assertSame(Entity::STATUS_PREPARED, $qb->getParameter('status')->getValue());
+    }
+
+    public static function checklistProvider(): \Iterator
+    {
+        yield 'no narrowing' => [[], null, null, ''];
+        yield 'by ids' => [[1, 2], null, null, ' AND m.id IN(:byIds)'];
+        yield 'by month and year' => [
+            [],
+            5,
+            2019,
+            ' AND c.month = :month AND c.year = :year',
+        ];
+    }
+
+    /**
+     * Licences that already have an outstanding continuation fee are dropped after the query,
+     * in PHP, rather than being excluded in DQL.
+     */
+    public function testFetchChecklistRemindersFiltersOutLicencesWithAnOutstandingFee(): void
+    {
+        $withFee = $this->continuationDetailWithFee(
+            FeeTypeEntity::FEE_TYPE_CONT,
+            FeeEntity::STATUS_OUTSTANDING,
+        );
+        $withoutFee = $this->continuationDetailWithFee('OTHER', FeeEntity::STATUS_OUTSTANDING);
+
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->andReturn([$withFee, $withoutFee]);
+
+        $result = $this->sut->fetchChecklistReminders(['B'], null, null);
+
+        $this->assertCount(1, $result);
+        $this->assertSame($withoutFee, $result->first());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('detailsProvider')]
+    public function testFetchDetails(string $method, int $expectedAllowEmail): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULTS']);
+
+        $this->assertSame(
+            ['RESULTS'],
+            $this->sut->fetchDetails(1, ['lsts_valid'], 'OB123', $method, Entity::STATUS_PRINTED),
+        );
+
+        // m.status is joined twice — w0 by withRefdata and s explicitly.
+        $this->assertSame(
+            'SELECT m, w0, w1, c, s, l, ls, lo, lt, lg' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.continuation c LEFT JOIN m.status s LEFT JOIN m.licence l'
+            . ' LEFT JOIN l.status ls LEFT JOIN l.organisation lo'
+            . ' LEFT JOIN l.licenceType lt LEFT JOIN l.goodsOrPsv lg'
+            . ' WHERE c.id = :continuationId AND l.status IN(:licenceStatuses)'
+            . ' AND l.licNo = :licNo AND lo.allowEmail = ' . $expectedAllowEmail
+            . ' AND m.status = :status'
+            . ' ORDER BY l.licNo ASC',
+            $qb->getDQL(),
+        );
+    }
+
+    public static function detailsProvider(): \Iterator
+    {
+        yield 'email' => [Entity::METHOD_EMAIL, 1];
+        yield 'post' => [Entity::METHOD_POST, 0];
     }
 
     public function testFetchWithLicence(): void
     {
-        $mockQb = m::mock(QueryBuilder::class);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn('RESULT');
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('status', 's')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.licenceType', 'lt')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.goodsOrPsv', 'lg')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('byId')->with(1)->once()->andReturnSelf();
+        $this->assertSame('RESULT', $this->sut->fetchWithLicence(1));
 
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('m')
-            ->once()
-            ->andReturn($mockQb);
-
-        $mockQb->shouldReceive('getQuery->getSingleResult')
-            ->once()
-            ->andReturn(['result']);
-
-        $this->assertEquals($this->sut->fetchWithLicence(1), ['result']);
+        $this->assertSame(
+            'SELECT m, w0, w1, s, l, lt, lg' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.status s LEFT JOIN m.licence l'
+            . ' LEFT JOIN l.licenceType lt LEFT JOIN l.goodsOrPsv lg'
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
     }
 
     public function testFetchLicenceIdsForContinuationAndLicences(): void
     {
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->in')->with('m.licence', ':licences')->once()->andReturn('licences');
-        $mockQb->shouldReceive('andWhere')->with('licences')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('licences', [222, 333])->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')->with('m.continuation', ':continuation')->once()->andReturn('continuation');
-        $mockQb->shouldReceive('andWhere')->with('continuation')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('continuation', 111)->once()->andReturnSelf();
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->with('m')
-            ->once()
-            ->andReturn($mockQb);
-
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->with(\Doctrine\ORM\Query::HYDRATE_ARRAY)
-            ->once()
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')
+            ->with(Query::HYDRATE_ARRAY)
             ->andReturn([['licence' => ['id' => 123]]]);
 
-        $this->assertEquals($this->sut->fetchLicenceIdsForContinuationAndLicences(111, [222, 333]), [123]);
+        $this->assertSame([123], $this->sut->fetchLicenceIdsForContinuationAndLicences(111, [222, 333]));
+
+        $this->assertSame(
+            'SELECT m, l, w0, w1' . self::FROM . ' LEFT JOIN m.licence l'
+            . ' LEFT JOIN m.status w0 LEFT JOIN m.signatureType w1'
+            . ' WHERE m.licence IN(:licences) AND m.continuation = :continuation',
+            $qb->getDQL(),
+        );
+        $this->assertSame([222, 333], $qb->getParameter('licences')->getValue());
+        $this->assertSame(111, $qb->getParameter('continuation')->getValue());
     }
 
     public function testCreateContinuationDetails(): void
     {
         $query = m::mock();
-        $query->shouldReceive('executeInsert')->once()->with([1], false, 'status', 2);
+        $query->expects('executeInsert')->with([1, 2], 0, 'status', 7)->andReturn('RESULT');
 
-        $this->dbQueryService->shouldReceive('get')->with('Continuations\CreateContinuationDetails')->andReturn($query);
+        $this->dbQueryService->expects('get')
+            ->with('Continuations\CreateContinuationDetails')
+            ->andReturn($query);
 
-        $this->sut->createContinuationDetails([1], false, 'status', 2);
+        $this->assertSame('RESULT', $this->sut->createContinuationDetails([1, 2], 0, 'status', 7));
     }
 
+    /**
+     * Digital reminders go out for licences expiring inside the window whose notification has
+     * been sent but whose reminder has not.
+     */
     public function testFetchListForDigitalReminders(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchListForDigitalReminders(14));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('continuation', 'c')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
+        $this->assertSame(
+            'SELECT m, w0, w1, c, l' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.continuation c LEFT JOIN m.licence l'
+            . " WHERE l.status IN('" . implode("', '", self::ACTIVE_LICENCE_STATUSES) . "')"
+            . ' AND l.expiryDate >= :NOW AND l.expiryDate <= :maxExpiryDate'
+            . " AND m.status NOT IN('" . Entity::STATUS_COMPLETE . "')"
+            . ' AND c.month = MONTH(l.expiryDate) AND c.year = YEAR(l.expiryDate)'
+            . ' AND m.digitalNotificationSent = 1 AND m.digitalReminderSent = 0',
+            $qb->getDQL(),
+        );
+        $this->assertSame(new \DateTime()->format('Y-m-d'), $qb->getParameter('NOW')->getValue());
+    }
 
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn('RESULT');
+    private function continuationDetailWithFee(string $feeType, string $feeStatus): Entity|m\MockInterface
+    {
+        $fee = m::mock(FeeEntity::class);
+        $fee->shouldReceive('getFeeType->getFeeType->getId')->andReturn($feeType);
+        $fee->shouldReceive('getFeeStatus->getId')->andReturn($feeStatus);
 
-        $this->assertEquals('RESULT', $this->sut->fetchListForDigitalReminders(54));
+        $detail = m::mock(Entity::class);
+        $detail->shouldReceive('getLicence->getFees')->andReturn(new ArrayCollection([$fee]));
 
-        $fromDate = new DateTime()->format('Y-m-d');
-        $toDate = new DateTime()->add(new \DateInterval('P54D'))->format('Y-m-d');
-        $expectedQuery = 'BLAH AND l.status IN ["lsts_valid","lsts_curtailed","lsts_suspended"] ' .
-            'AND l.expiryDate >= [[' . $fromDate . ']] ' .
-            'AND l.expiryDate <= [[' . $toDate . ']] ' .
-            'AND m.status NOT IN ["con_det_sts_complete"] ' .
-            'AND c.month = MONTH(l.expiryDate) ' .
-            'AND c.year = YEAR(l.expiryDate) ' .
-            'AND m.digitalNotificationSent = 1 ' .
-            'AND m.digitalReminderSent = 0';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        return $detail;
     }
 }

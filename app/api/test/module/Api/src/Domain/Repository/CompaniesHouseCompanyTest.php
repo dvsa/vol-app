@@ -2,126 +2,46 @@
 
 declare(strict_types=1);
 
-/**
- * CompaniesHouseCompany test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseCompany as CompaniesHouseCompanyRepo;
-use Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany as CompanyEntity;
+use Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany as Entity;
 use Mockery as m;
 
-/**
- * CompaniesHouseCompany test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 final class CompaniesHouseCompanyTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(CompaniesHouseCompanyRepo::class);
+        $this->setUpRealSut(CompaniesHouseCompanyRepo::class);
     }
 
     public function testGetLatestByCompanyNumber(): void
     {
         $companyNumber = '01234567';
+        $result = m::mock(Entity::class);
 
-        $result = m::mock(CompanyEntity::class);
-        $results = [$result];
+        $qb = $this->createRealQb()->willReturn([$result]);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
+        $this->assertSame($result, $this->sut->getLatestByCompanyNumber($companyNumber));
 
-        $where = m::mock();
-        $qb->shouldReceive('expr->eq')
-            ->with('cc.companyNumber', ':companyNumber')
-            ->andReturn($where);
-        $qb
-            ->shouldReceive('andWhere')
-            ->with($where)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('companyNumber', $companyNumber)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setMaxResults')
-            ->once()
-            ->with(1)
-            ->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->with('createdOn', 'DESC')
-            ->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getResult')
-            ->andReturn($results);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(CompanyEntity::class)
-            ->andReturn($repo);
-
-        $this->sut->getLatestByCompanyNumber($companyNumber);
+        $this->assertSame(
+            'SELECT cc FROM ' . Entity::class . ' cc'
+            . ' WHERE cc.companyNumber = :companyNumber'
+            . ' ORDER BY cc.createdOn DESC',
+            $qb->getDQL(),
+        );
+        $this->assertSame($companyNumber, $qb->getParameter('companyNumber')->getValue());
+        $this->assertSame(1, $qb->getMaxResults());
     }
 
     public function testGetLatesByCompanyNumberNotFound(): void
     {
-        $companyNumber = '01234567';
-        $results = [];
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $qb->shouldReceive('expr->eq');
-        $qb
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->andReturnSelf()
-            ->shouldReceive('setMaxResults')
-            ->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getResult')
-            ->andReturn($results);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(CompanyEntity::class)
-            ->andReturn($repo);
+        $this->createRealQb()->willReturn([]);
 
         $this->expectException(NotFoundException::class);
 
-        $this->sut->getLatestByCompanyNumber($companyNumber);
+        $this->sut->getLatestByCompanyNumber('01234567');
     }
 }

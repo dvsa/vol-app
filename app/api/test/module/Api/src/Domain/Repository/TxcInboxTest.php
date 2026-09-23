@@ -4,254 +4,160 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Query\Bus\TxcInboxList;
 use Dvsa\Olcs\Api\Domain\Repository\TxcInbox as Repo;
+use Dvsa\Olcs\Api\Entity\Ebsr\TxcInbox as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-/**
- * TxcInboxTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
-#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 final class TxcInboxTest extends RepositoryTestCase
 {
-    /** @var  Repo */
-    protected $sut;
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
+    private const string BUS_REG_JOIN = ' LEFT JOIN m.busReg b';
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testFetchByOrganisation(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchByOrganisation(1));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.organisation = :organisation',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByOrganisation('ORG1'));
-
-        $expectedQuery = 'BLAH AND m.organisation = [[ORG1]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(1, $qb->getParameter('organisation')->getValue());
     }
 
+    /**
+     * An operator only ever sees its own inbox rows, which are the ones with no local authority.
+     */
     public function testFetchListForOrganisationByBusReg(): void
     {
-        $busRegId = 8888;
-        $orgId = 7777;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULTS']);
 
-        $qb = $this->createMockQb('BLAH');
+        $this->assertSame(['RESULTS'], $this->sut->fetchListForOrganisationByBusReg(1, 2));
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('busReg', 'b')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m, b' . self::FROM . self::BUS_REG_JOIN
+            . ' WHERE b.id = :busReg AND m.localAuthority IS NULL'
+            . ' AND m.organisation = :organisation',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchListForOrganisationByBusReg($busRegId, $orgId));
-
-        $this->assertEquals(
-            'BLAH ' .
-            'AND b.id = [[' . $busRegId . ']] ' .
-            'AND m.localAuthority IS NULL ' .
-            'AND m.organisation = [[' . $orgId . ']]',
-            $this->query
-        );
+        $this->assertSame(1, $qb->getParameter('busReg')->getValue());
+        $this->assertSame(2, $qb->getParameter('organisation')->getValue());
     }
 
-    public function testFetchListForLocalAuthorityByBusReg(): void
+    /**
+     * With no local authority the query degenerates to the operator's own rows; with one it also
+     * restricts to unread files.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('localAuthorityProvider')]
+    public function testFetchListForLocalAuthorityByBusReg(?int $localAuthorityId, string $expectedExtra): void
     {
-        $busRegId = 8888;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULTS']);
 
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('busReg', 'b')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            ['RESULTS'],
+            $this->sut->fetchListForLocalAuthorityByBusReg(1, $localAuthorityId),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchListForLocalAuthorityByBusReg($busRegId, 4));
 
-        $this->assertEquals(
-            'BLAH ' .
-            'AND b.id = [[' . $busRegId . ']] ' .
-            'AND m.fileRead = 0 ' .
-            'AND m.localAuthority = [[4]]',
-            $this->query
+        $this->assertSame(
+            'SELECT m, b' . self::FROM . self::BUS_REG_JOIN
+            . ' WHERE b.id = :busReg' . $expectedExtra,
+            $qb->getDQL(),
         );
     }
 
-    public function testFetchListForLocalAuthorityByBusRegOperator(): void
+    public static function localAuthorityProvider(): \Iterator
     {
-        $busRegId = 8888;
-
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('busReg', 'b')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchListForLocalAuthorityByBusReg($busRegId, null));
-
-        $this->assertEquals(
-            'BLAH ' .
-            'AND b.id = [[' . $busRegId . ']] ' .
-            'AND m.localAuthority IS NULL',
-            $this->query
-        );
+        yield 'no local authority' => [null, ' AND m.localAuthority IS NULL'];
+        yield 'a local authority' => [
+            3,
+            // The '0' is passed as a literal operand, so it lands in the DQL unquoted.
+            ' AND m.fileRead = 0 AND m.localAuthority = :localAuthority',
+        ];
     }
 
-    public function testBuildDefaultQuery(): void
+    public function testBuildDefaultListQuery(): void
     {
-        $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockQi = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
+        $this->sut->buildDefaultListQuery($qb, m::mock(QueryInterface::class));
 
-        $sut->shouldReceive('getQueryBuilder')->with()->andReturn($mockQb);
-
-        $mockQb->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $mockQb->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('m.busReg', 'b')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('b.ebsrSubmissions', 'e')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('b.licence', 'l')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('b.otherServices')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('l.organisation')->once()->andReturnSelf();
-
-        $sut->buildDefaultListQuery($mockQb, $mockQi);
+        $this->assertSame(
+            'SELECT m, b, e, l, w0, w1' . self::FROM . self::BUS_REG_JOIN
+            . ' LEFT JOIN b.ebsrSubmissions e LEFT JOIN b.licence l'
+            . ' LEFT JOIN b.otherServices w0 LEFT JOIN l.organisation w1',
+            $qb->getDQL(),
+        );
     }
 
-    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    /**
+     * Unread files only — fileRead is always applied, whatever else the query asks for.
+     */
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repo::class, true);
-
-        $mockQb = m::mock(QueryBuilder::class);
-
-        // organisation clause
-        $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->with('m.localAuthority', ':localAuthority')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('localAuthority', 3)
-            ->andReturnSelf();
-
-        // status clause
-        $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->with('b.status', ':status')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('status', 'foo')
-            ->andReturnSelf();
-
-        // subType clause
-        $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->with('e.ebsrSubmissionType', ':ebsrSubmissionType')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('ebsrSubmissionType', 'bar')
-            ->andReturnSelf();
-
-        // fileRead clause
-        $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->with('m.fileRead', '0')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf();
+        $qb = $this->createRealQb();
 
         $query = TxcInboxList::create(['localAuthority' => 3, 'subType' => 'bar', 'status' => 'foo']);
 
-        $this->sut->applyListFilters($mockQb, $query);
+        $this->sut->applyListFilters($qb, $query);
+
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' WHERE m.localAuthority = :localAuthority AND b.status = :status'
+            . ' AND e.ebsrSubmissionType = :ebsrSubmissionType'
+            . ' AND m.fileRead = 0',
+            $qb->getDQL(),
+        );
+        $this->assertSame(3, $qb->getParameter('localAuthority')->getValue());
+        $this->assertSame('foo', $qb->getParameter('status')->getValue());
+        $this->assertSame('bar', $qb->getParameter('ebsrSubmissionType')->getValue());
     }
 
     public function testFetchLinkedToDocument(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchLinkedToDocument(5));
 
-        $qb->shouldReceive('where')->with('m.zipDocument = :documentId')->andReturnSelf();
-        $qb->shouldReceive('where')->with('m.pdfDocument = :documentId')->andReturnSelf();
-        $qb->shouldReceive('where')->with('m.routeDocument = :documentId')->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' WHERE m.zipDocument = :documentId OR m.routeDocument = :documentId'
+            . ' OR m.pdfDocument = :documentId',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchLinkedToDocument(23));
-
-        $expectedQuery = 'BLAH OR m.zipDocument = [[23]] OR m.routeDocument = [[23]] OR m.pdfDocument = [[23]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(5, $qb->getParameter('documentId')->getValue());
     }
 
     public function testFetchByIdsForLocalAuthority(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchByIdsForLocalAuthority([1, 2], 3));
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        // The ids are inlined into the IN() rather than bound.
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' WHERE m.localAuthority = :localAuthority AND m.id IN(1, 2)',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByIdsForLocalAuthority([2], 4));
-
-        $expectedQuery = 'BLAH AND m.localAuthority = [[4]] AND m.id IN [2]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(3, $qb->getParameter('localAuthority')->getValue());
     }
 
-    public function testFetchByIdsForLocalAuthorityWithEmptyData(): void
+    public function testFetchByIdsForLocalAuthorityWithNoIds(): void
     {
-        $this->assertEquals([], $this->sut->fetchByIdsForLocalAuthority([], 4));
+        $this->assertSame([], $this->sut->fetchByIdsForLocalAuthority([], 3));
     }
 }

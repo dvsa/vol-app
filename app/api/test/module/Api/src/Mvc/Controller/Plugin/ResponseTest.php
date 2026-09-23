@@ -84,8 +84,10 @@ final class ResponseTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getSingleResultDataProvider')]
-    public function testSingleResult(mixed $data): void
+    public function testSingleResult(\Closure $createData): void
     {
+        $data = $createData();
+
         $result = $this->sut->singleResult($data);
 
         $this->assertInstanceOf(JsonModel::class, $result);
@@ -97,15 +99,15 @@ final class ResponseTest extends MockeryTestCase
     {
         // array
         yield [
-            ['item']
+            static fn () => ['item']
         ];
         // QueryResult
         yield [
-            m::mock(QueryResult::class)->shouldReceive('serialize')->andReturn(['item'])->getMock()
+            static fn () => m::mock(QueryResult::class)->shouldReceive('serialize')->andReturn(['item'])->getMock()
         ];
         // Entity
         yield [
-            m::mock(VenueEntity::class)->shouldReceive('jsonSerialize')->andReturn(['item'])->getMock()
+            static fn () => m::mock(VenueEntity::class)->shouldReceive('jsonSerialize')->andReturn(['item'])->getMock()
         ];
     }
 

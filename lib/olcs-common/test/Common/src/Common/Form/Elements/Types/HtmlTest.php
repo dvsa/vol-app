@@ -9,8 +9,9 @@ use Common\Form\Form;
 use Common\Form\View\Helper\FormElement;
 use Mockery;
 use Laminas\View\Renderer\PhpRenderer;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-final class HtmlTest extends \PHPUnit\Framework\TestCase
+final class HtmlTest extends MockeryTestCase
 {
     public const string INITIAL_HTML_PAYLOAD = '<em>TEST</em>';
 

@@ -2,95 +2,85 @@
 
 declare(strict_types=1);
 
-/**
- * TmEmploymentTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\TmEmployment as Repo;
+use Dvsa\Olcs\Api\Entity\Tm\TmEmployment as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-/**
- * TmEmploymentTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 final class TmEmploymentTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' te';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testBuildDefaultQuery(): void
+    public function testFetchById(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('te')->once()->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('byId')->with(834)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('contactDetails', 'cd')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('cd.address', 'ad')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('ad.countryCode', 'cc')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
+        $qb = $this->createRealQb()->willReturn(['RESULT']);
 
         $this->assertSame('RESULT', $this->sut->fetchById(834));
+
+        // TmEmployment has no RefData associations, so withRefdata() contributes nothing.
+        $this->assertSame(
+            'SELECT te, cd, ad, cc' . self::FROM
+            . ' LEFT JOIN te.contactDetails cd LEFT JOIN cd.address ad LEFT JOIN ad.countryCode cc'
+            . ' WHERE te.id = :byId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(834, $qb->getParameter('byId')->getValue());
     }
 
     public function testFetchByTransportManager(): void
     {
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('te')->once()->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('contactDetails', 'cd')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('cd.address')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')->with('te.transportManager', ':tmId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('tmId', 534)->once();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
+        $qb = $this->createRealQb()->willReturn('RESULT');
 
         $this->assertSame('RESULT', $this->sut->fetchByTransportManager(534));
+
+        $this->assertSame(
+            'SELECT te, cd, w0' . self::FROM
+            . ' LEFT JOIN te.contactDetails cd LEFT JOIN cd.address w0'
+            . ' WHERE te.transportManager = :tmId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(534, $qb->getParameter('tmId')->getValue());
     }
 
     public function testApplyListJoins(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        // applyListJoins() omits modifyQuery(); fetchList() points the shared helper at $qb
+        // first via buildDefaultListQuery(), so reproduce that.
+        $this->queryBuilder->modifyQuery($qb);
 
-        $this->sut->shouldReceive('getQueryBuilder')->with()->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('with')->with('contactDetails', 'cd')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('cd.address', 'add')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('add.countryCode')->once()->andReturnSelf();
+        $this->sut->applyListJoins($qb);
 
-        $this->sut->applyListJoins($mockQb);
+        $this->assertSame(
+            'SELECT te, cd, add, w0' . self::FROM
+            . ' LEFT JOIN te.contactDetails cd LEFT JOIN cd.address add'
+            . ' LEFT JOIN add.countryCode w0',
+            $qb->getDQL(),
+        );
     }
 
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockQi = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
+        $query = m::mock(QueryInterface::class);
+        $query->expects('getTransportManager')->withNoArgs()->andReturn(12);
 
-        $mockQi->shouldReceive('getTransportManager')->with()->once()->andReturn(12);
+        $this->sut->applyListFilters($qb, $query);
 
-        $mockQb->shouldReceive('expr->eq')->with('te.transportManager', ':transportManager')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('transportManager', 12)->once();
-
-        $this->sut->applyListFilters($mockQb, $mockQi);
+        $this->assertSame(
+            'SELECT te' . self::FROM . ' WHERE te.transportManager = :transportManager',
+            $qb->getDQL(),
+        );
+        $this->assertSame(12, $qb->getParameter('transportManager')->getValue());
     }
 }

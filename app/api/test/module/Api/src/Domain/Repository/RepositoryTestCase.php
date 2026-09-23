@@ -5,18 +5,25 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\DbQueryServiceManager;
+use Dvsa\Olcs\Api\Domain\QueryBuilder as OlcsQueryBuilder;
 use Dvsa\Olcs\Api\Domain\QueryBuilderInterface;
+use Dvsa\Olcs\Api\Domain\Repository\AbstractReadonlyRepository;
 use Dvsa\Olcs\Api\Domain\Repository\AbstractRepository;
-use Dvsa\Olcs\Api\Domain\Repository\CommunityLic as CommunityLicRepo;
 use Dvsa\Olcs\Api\Domain\Repository\RepositoryInterface;
 use Dvsa\OlcsTest\Builder\ServiceManagerBuilder;
+use Dvsa\OlcsTest\Support\DoctrineMetadata;
+use Dvsa\OlcsTest\Support\QueryPartials;
+use Dvsa\OlcsTest\Support\TestQueryBuilder;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * Repository Test Case
@@ -45,7 +52,7 @@ class RepositoryTestCase extends MockeryTestCase
      */
     protected $dbQueryService;
 
-    protected $query = '';
+    /** The query builder the test under way is asserting on, set by createRealQb(). */
     protected $qb;
 
     public function setUpSut(mixed $class = null, bool $mockSut = false): void
@@ -62,7 +69,6 @@ class RepositoryTestCase extends MockeryTestCase
             $this->sut = new $class($this->em, $this->queryBuilder, $this->dbQueryService);
         }
 
-        $this->query = '';
         $this->qb = null;
     }
 
@@ -73,320 +79,118 @@ class RepositoryTestCase extends MockeryTestCase
     }
 
     /**
-     * @return m\MockInterface
+     * Build the repository against real Doctrine: real entity metadata, and the query
+     * partials the application itself wires, so assertions are made on the DQL the
+     * repository really produces. Prefer this over setUpSut() for anything that builds a
+     * query — see createRealQb().
+     *
+     * The EntityManager stays a mock because the repository uses it only to hand out
+     * repositories and to persist; the metadata EntityManager the partials read from is a
+     * separate, real one, and nothing in either path opens a connection.
      */
-    protected function createMockQb(string $query = ''): mixed
+    protected function setUpRealSut(mixed $class = null, bool $mockSut = false): void
     {
-        $this->query = $query;
+        $this->em = m::mock(EntityManager::class);
+        $this->queryBuilder = new OlcsQueryBuilder(QueryPartials::serviceManager(DoctrineMetadata::entityManager()));
+        $this->dbQueryService = m::mock(DbQueryServiceManager::class);
 
-        $this->qb = m::mock(QueryBuilder::class);
-
-        $this->qb->shouldReceive('expr->eq')
-            ->andReturnUsing($this->mockExprEq(...));
-
-        $this->qb->shouldReceive('expr->neq')
-            ->andReturnUsing($this->mockExprNeq(...));
-
-        $this->qb->shouldReceive('expr->lte')
-            ->andReturnUsing($this->mockExprLte(...));
-
-        $this->qb->shouldReceive('expr->lt')
-            ->andReturnUsing($this->mockExprLt(...));
-
-        $this->qb->shouldReceive('expr->gte')
-            ->andReturnUsing($this->mockExprGte(...));
-
-        $this->qb->shouldReceive('expr->gt')
-            ->andReturnUsing($this->mockExprGt(...));
-
-        $this->qb->shouldReceive('expr->isNull')
-            ->andReturnUsing($this->mockExprIsNull(...));
-
-        $this->qb->shouldReceive('expr->between')
-            ->andReturnUsing($this->mockExprBetween(...));
-
-        $this->qb->shouldReceive('expr->in')
-            ->andReturnUsing($this->mockExprIn(...));
-
-        $this->qb->shouldReceive('expr->notIn')
-            ->andReturnUsing($this->mockExprNotIn(...));
-
-        $this->qb->shouldReceive('expr->isNotNull')
-            ->andReturnUsing($this->mockExprIsNotNull(...));
-
-        $this->qb->shouldReceive('expr->like')
-            ->andReturnUsing($this->mockExprLike(...));
-
-        $this->qb->shouldReceive('expr->orX')
-            ->andReturnUsing($this->mockOrX(...));
-
-        $this->qb->shouldReceive('expr->andX')
-            ->andReturnUsing($this->mockAndX(...));
-
-        $this->qb->shouldReceive('expr->count')
-            ->andReturnUsing($this->mockCount(...));
-
-        $this->qb->shouldReceive('select')
-            ->andReturnUsing($this->mockAddSelect(...));
-
-        $this->qb->shouldReceive('distinct')
-            ->andReturnUsing($this->mockDistinct(...));
-
-        $this->qb->shouldReceive('addSelect')
-            ->andReturnUsing($this->mockAddSelect(...));
-
-        $this->qb->shouldReceive('select')
-            ->andReturnUsing($this->mockAddSelect(...));
-
-        $this->qb->shouldReceive('where')
-            ->andReturnUsing($this->mockAndWhere(...));
-
-        $this->qb->shouldReceive('andWhere')
-            ->andReturnUsing($this->mockAndWhere(...));
-
-        $this->qb->shouldReceive('orWhere')
-            ->andReturnUsing($this->mockOrWhere(...));
-
-        $this->qb->shouldReceive('join')
-            ->andReturnUsing($this->mockInnerJoin(...));
-
-        $this->qb->shouldReceive('innerJoin')
-            ->andReturnUsing($this->mockInnerJoin(...));
-
-        $this->qb->shouldReceive('leftJoin')
-            ->andReturnUsing($this->mockLeftJoin(...));
-
-        $this->qb->shouldReceive('orderBy')
-            ->andReturnUsing($this->mockOrderBy(...));
-
-        $this->qb->shouldReceive('addOrderBy')
-            ->andReturnUsing($this->mockOrderBy(...));
-
-        $this->qb->shouldReceive('groupBy')
-            ->andReturnUsing($this->mockGroupBy(...));
-
-        $this->qb->shouldReceive('setParameter')
-            ->andReturnUsing($this->mockSetParameter(...));
-
-        $this->qb->shouldReceive('setMaxResults')
-            ->andReturnUsing($this->mockSetMaxResults(...));
-
-        $this->qb->shouldReceive('distinct')
-            ->andReturnUsing($this->mockDistinct(...));
-
-        return $this->qb;
-    }
-
-    public function mockOrderBy(mixed $sort, mixed $order): mixed
-    {
-        $this->query .= ' ORDER BY ' . $sort . ' ' . $order;
-
-        return $this->qb;
-    }
-
-    public function mockGroupBy(mixed $field): mixed
-    {
-        $fields = func_get_args();
-        if (func_num_args() === 1 && is_array($field)) {
-            $fields = $field;
+        if ($mockSut) {
+            $this->sut = m::mock($class, [$this->em, $this->queryBuilder, $this->dbQueryService])
+                ->makePartial()
+                ->shouldAllowMockingProtectedMethods();
+        } else {
+            $this->sut = new $class($this->em, $this->queryBuilder, $this->dbQueryService);
         }
 
-        $this->query .= ' GROUP BY ' . implode(', ', $fields);
-
-        return $this->qb;
+        $this->qb = null;
     }
 
-    public function mockSetMaxResults(mixed $maxResults): mixed
+    /**
+     * A real QueryBuilder rooted on the entity and alias the repository under test declares,
+     * wired in as the one createQueryBuilder() hands back. Assert on $qb->getDQL(); declare
+     * rows with $qb->willReturn([...]).
+     *
+     * Pass $entity/$alias only to root somewhere other than the repository's own entity.
+     */
+    protected function createRealQb(?string $entity = null, ?string $alias = null): TestQueryBuilder
     {
-        $this->query .= ' LIMIT ' . $maxResults;
+        if ($entity === null || $alias === null) {
+            // Bound to the abstract so the protected declarations resolve through any
+            // subclass, including a Mockery partial.
+            [$sutEntity, $sutAlias] = \Closure::bind(
+                fn() => [$this->entity, $this->alias],
+                $this->sut,
+                AbstractReadonlyRepository::class,
+            )();
 
-        return $this->qb;
-    }
-
-    public function mockSetParameter(mixed $name, mixed $value): mixed
-    {
-        $value = $this->formatValue($value);
-
-        $this->query = str_replace(':' . $name, '[[' . $value . ']]', $this->query);
-
-        return $this->qb;
-    }
-
-    public function mockDistinct(): mixed
-    {
-        $this->query .= ' DISTINCT';
-
-        return $this->qb;
-    }
-
-    public function mockAddSelect(mixed $select): mixed
-    {
-        $selects = func_get_args();
-        if (func_num_args() === 1 && is_array($select)) {
-            $selects = $select;
+            $entity ??= $sutEntity;
+            $alias ??= $sutAlias;
         }
 
-        $this->query .= ' SELECT ' . implode(', ', $selects);
+        $qb = $this->newRealQb();
+        $qb->select($alias)->from($entity, $alias);
 
-        return $this->qb;
+        $this->mockCreateQueryBuilder($qb);
+        $this->qb = $qb;
+
+        return $qb;
     }
 
-    public function mockAndWhere(mixed $where): mixed
+    /**
+     * Hand out a distinct real QueryBuilder for each entity and alias given, for the repository
+     * methods that build more than one. They need separating: a single shared builder would let
+     * a sub-select write its own predicates into the outer query.
+     *
+     * Aliases are unique within a query, so the builders come back keyed by alias:
+     *
+     *     ['m' => $root, 'gp' => $graceSubSelect] = $this->createRealQbs([
+     *         Entity::class => 'm',
+     *         GracePeriodEntity::class => 'gp',
+     *     ]);
+     *
+     * @param array<class-string, string|list<string>> $aliasesByEntity
+     *
+     * @return array<string, TestQueryBuilder>
+     */
+    protected function createRealQbs(array $aliasesByEntity): array
     {
-        $this->query .= ' AND ' . $where;
-        return $this->qb;
-    }
+        $builders = [];
 
-    public function mockOrWhere(mixed $where): mixed
-    {
-        $this->query .= ' OR ' . $where;
+        foreach ($aliasesByEntity as $entity => $aliases) {
+            $repository = m::mock(EntityRepository::class);
 
-        return $this->qb;
-    }
+            foreach ((array) $aliases as $alias) {
+                $qb = $this->newRealQb();
+                $qb->select($alias)->from($entity, $alias);
 
-    public function mockInnerJoin(mixed $field, mixed $alias, mixed $type = null, mixed $condition = null): mixed
-    {
-        $this->query .= ' INNER JOIN ' . $field . ' ' . $alias;
+                $repository->shouldReceive('createQueryBuilder')->with($alias)->andReturn($qb);
+                $builders[$alias] = $qb;
+            }
 
-        if ($condition !== null) {
-            $this->query .= ' ' . $type;
-            $this->query .= ' ' . $condition;
+            $this->em->shouldReceive('getRepository')->with($entity)->andReturn($repository);
         }
 
-        return $this->qb;
+        return $builders;
     }
 
-    public function mockLeftJoin(mixed $field, mixed $alias, mixed $type = null, mixed $condition = null): mixed
+    /**
+     * A real QueryBuilder with nothing selected and no wiring, for the few repositories that
+     * build a query from scratch off the EntityManager rather than through createQueryBuilder().
+     */
+    protected function newRealQb(): TestQueryBuilder
     {
-        $this->query .= ' LEFT JOIN ' . $field . ' ' . $alias;
-
-        if ($condition !== null) {
-            $this->query .= ' ' . $type;
-            $this->query .= ' ' . $condition;
-        }
-
-        return $this->qb;
+        return new TestQueryBuilder(DoctrineMetadata::entityManager());
     }
 
-    public function mockExprEq(mixed $field, mixed $value): mixed
+    /**
+     * Compile DQL through the real parser, which resolves aliases and field names against the
+     * entity metadata. Use it to assert that a query the repository builds is actually valid
+     * (or, for a pinned defect, that it is not). TestQueryBuilder cannot do this itself: its
+     * getQuery() is stubbed precisely so tests never execute anything.
+     */
+    protected function compileDql(string $dql): string
     {
-        $value = $this->formatValue($value);
-
-        return $field . ' = ' . $value;
-    }
-
-    public function mockExprNeq(mixed $field, mixed $value): mixed
-    {
-        $value = $this->formatValue($value);
-
-        return $field . ' != ' . $value;
-    }
-
-    public function mockExprLte(mixed $field, mixed $value): mixed
-    {
-        $value = $this->formatValue($value);
-
-        return $field . ' <= ' . $value;
-    }
-
-    public function mockExprLt(mixed $field, mixed $value): mixed
-    {
-        $value = $this->formatValue($value);
-
-        return $field . ' < ' . $value;
-    }
-
-    public function mockExprGte(mixed $field, mixed $value): mixed
-    {
-        $value = $this->formatValue($value);
-
-        return $field . ' >= ' . $value;
-    }
-
-    public function mockExprGt(mixed $field, mixed $value): mixed
-    {
-        $value = $this->formatValue($value);
-
-        return $field . ' > ' . $value;
-    }
-
-    public function mockExprBetween(mixed $field, mixed $from, mixed $to): mixed
-    {
-        $from = $this->formatValue($from);
-        $to = $this->formatValue($to);
-
-        return $field . ' BETWEEN ' . $from . ' AND ' . $to;
-    }
-
-    public function mockExprIn(mixed $field, mixed $value): mixed
-    {
-        $value = $this->formatValue($value);
-
-        return $field . ' IN ' . $value;
-    }
-
-    public function mockExprNotIn(mixed $field, mixed $value): mixed
-    {
-        $value = $this->formatValue($value);
-
-        return $field . ' NOT IN ' . $value;
-    }
-
-    public function mockExprIsNull(mixed $field): mixed
-    {
-        return $field . ' IS NULL';
-    }
-
-    public function mockExprIsNotNull(mixed $field): mixed
-    {
-        return $field . ' IS NOT NULL';
-    }
-
-    public function mockExprLike(mixed $field, mixed $value): mixed
-    {
-        $value = $this->formatValue($value);
-
-        return $field . ' LIKE ' . $value;
-    }
-
-    public function mockOrX(): mixed
-    {
-        return '(' . implode(' OR ', func_get_args()) . ')';
-    }
-
-    public function mockAndX(): mixed
-    {
-        return '(' . implode(' AND ', func_get_args()) . ')';
-    }
-
-    public function mockCount(mixed $countable): mixed
-    {
-        return sprintf('COUNT(%s)', $countable);
-    }
-
-    protected function formatValue(mixed $value): mixed
-    {
-        if (is_array($value)) {
-            $value = json_encode($value);
-        }
-
-        if ($value instanceof \DateTime) {
-            return $value->format(\DateTime::W3C);
-        }
-
-        if ($value instanceof \Dvsa\Olcs\Api\Entity\System\RefData) {
-            return $value->getId();
-        }
-
-        if (is_object($value)) {
-            $value = $value::class;
-        }
-
-        if (is_bool($value)) {
-            $value = $value ? 'true' : 'false';
-        }
-
-        return $value;
+        return DoctrineMetadata::entityManager()->createQuery($dql)->getSQL();
     }
 
     protected function expectQueryWithData(mixed $queryName, array $data = [], array $types = [], mixed $queryResponse = null): void
@@ -446,8 +250,21 @@ class RepositoryTestCase extends MockeryTestCase
     {
         $instance = m::mock(QueryBuilder::class, QueryBuilderInterface::class);
         $instance->shouldIgnoreMissing($instance);
-        $query = m::mock()->shouldIgnoreMissing();
-        $instance->shouldReceive('getQuery')->andReturn($query)->byDefault();
+
+        $expr = m::mock(Expr::class);
+        $expr->shouldIgnoreMissing();
+
+        $query = m::mock(Query::class);
+        $query->shouldIgnoreMissing();
+
+        $instance->shouldReceive('expr')
+            ->andReturn($expr)
+            ->byDefault();
+
+        $instance->shouldReceive('getQuery')
+            ->andReturn($query)
+            ->byDefault();
+
         return $instance;
     }
 

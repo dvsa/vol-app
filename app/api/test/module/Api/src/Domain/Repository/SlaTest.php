@@ -2,44 +2,53 @@
 
 declare(strict_types=1);
 
-/**
- * Sla Test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository;
+use Dvsa\Olcs\Api\Entity\System\Sla as Entity;
+use Mockery as m;
 
-/**
- * Sla Repo Test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
 final class SlaTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\Sla::class);
+        $this->setUpRealSut(Repository\Sla::class);
     }
 
     public function testFetchByCategories(): void
     {
         $categories = ['foo', 'bar'];
 
-        $qb = $this->createMockQb('QUERY');
+        $qb = $this->createRealQb()->willReturn('foobar');
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame('foobar', $this->sut->fetchByCategories($categories));
 
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn('foobar');
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.category IN(:category)',
+            $qb->getDQL(),
+        );
+        $this->assertSame($categories, $qb->getParameter('category')->getValue());
+    }
 
-        $result = $this->sut->fetchByCategories($categories);
+    public function testFetchByCategoryFieldAndCompareTo(): void
+    {
+        $sla = m::mock(Entity::class);
 
-        $this->assertEquals('QUERY AND m.category IN [[["foo","bar"]]]', $this->query);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn($sla);
 
-        $this->assertEquals('foobar', $result);
+        $this->assertSame($sla, $this->sut->fetchByCategoryFieldAndCompareTo('cat', 'fld', 'cmp'));
+
+        // andWhere() is variadic, so all three predicates land. The old double recorded only
+        // the first argument, which is why the field and compareTo checks went unasserted.
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m'
+            . ' WHERE m.category = :category AND m.field = :field AND m.compareTo = :compareTo',
+            $qb->getDQL(),
+        );
+        $this->assertSame('cat', $qb->getParameter('category')->getValue());
+        $this->assertSame('fld', $qb->getParameter('field')->getValue());
+        $this->assertSame('cmp', $qb->getParameter('compareTo')->getValue());
     }
 }
