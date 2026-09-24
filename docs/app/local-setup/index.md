@@ -111,6 +111,19 @@ If you have [nvm](https://github.com/nvm-sh/nvm) installed, use `nvm use` to aut
 
     :::
 
+    :::info Full database refresh and prod data
+
+    A full refresh runs your local `olcs-etl` migrations, then adds the latest anonymised prod data for translations, templates, doc templates, fees, feature toggles, system parameters and a few other reference tables.
+
+    The prod data is merged in, so rows your local ETL patches add (for example new translation keys) are always kept, and so are any new columns. Where a row exists in both, the refresh asks which should win:
+
+    - **Prod data**: the usual choice. You get prod's current wording and settings.
+    - **My local ETL**: use this when you are testing a patch that changes an existing row, such as the text of an existing translation key.
+
+    It needs valid AWS `nonprod` credentials to download the prod data.
+
+    :::
+
 :::success
 
 All done!
