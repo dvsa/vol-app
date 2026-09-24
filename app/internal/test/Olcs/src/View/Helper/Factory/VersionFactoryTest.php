@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OlcsTest\View\Helper;
+namespace OlcsTest\View\Helper\Factory;
 
 use Psr\Container\ContainerInterface;
 use Olcs\View\Helper\Factory\VersionFactory;

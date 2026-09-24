@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OlcsTest\View\Model;
+namespace OlcsTest\Service\Processing;
 
 use Common\RefData;
 use Common\Service\Table\TableFactory;

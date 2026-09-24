@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OlcsTest\View\Model\Element;
+namespace OlcsTest\View\Model\Partial;
 
 use Common\Test\MockeryTestCase;
 use Olcs\View\Model\Partial\ContentWithPartialsViewModel;

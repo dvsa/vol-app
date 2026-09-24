@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OlcsTest\Service\Marker;
+namespace OlcsTest\Service\Marker\TransportManager;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;

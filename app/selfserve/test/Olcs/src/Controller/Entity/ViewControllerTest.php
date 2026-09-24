@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OlcsTest\Controller;
+namespace OlcsTest\Controller\Entity;
 
 use Common\RefData;
 use Common\Service\Helper\FlashMessengerHelperService;

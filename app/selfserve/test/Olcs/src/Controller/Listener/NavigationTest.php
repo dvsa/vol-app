@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OlcsTest\Listener;
+namespace OlcsTest\Controller\Listener;
 
 use Common\Rbac\User as RbacUser;
 use Common\Service\Cqrs\Query\QuerySender;

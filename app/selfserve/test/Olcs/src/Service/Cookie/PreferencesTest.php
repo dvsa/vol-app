@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OlcsTest\Service\Qa;
+namespace OlcsTest\Service\Cookie;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Cookie\Preferences;

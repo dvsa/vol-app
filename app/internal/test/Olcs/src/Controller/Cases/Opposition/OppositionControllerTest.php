@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
-namespace OlcsTest\Olcs\Controller\Cases\Opposition;
+namespace OlcsTest\Controller\Cases\Opposition;
 
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OlcsTest;
+namespace OlcsTest\Controller;
 
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\ConsultantRegistrationController;

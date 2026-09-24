@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Olcs\Controller\Licence\Vehicle;
+namespace OlcsTest\Controller\Licence\Vehicle;
 
 use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\HandleQuery;
@@ -15,6 +15,8 @@ use Common\Test\MocksServicesTrait;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\ServiceManager;
+use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
+use Olcs\Controller\Licence\Vehicle\SwitchBoardControllerFactory;
 use Olcs\Session\LicenceVehicleManagement;
 
 /**
