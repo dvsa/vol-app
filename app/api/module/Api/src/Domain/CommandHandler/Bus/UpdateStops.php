@@ -10,6 +10,10 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Doctrine\ORM\Query;
+use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
+use Dvsa\Olcs\Api\Entity\Bus\LocalAuthority;
+use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
 use Dvsa\Olcs\Api\Entity\Bus\BusReg;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateStops as UpdateStopsCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
@@ -47,6 +51,28 @@ final class UpdateStops extends AbstractCommandHandler implements TransactionedI
             $this->getRepo()->getRefdataReference($command->getSubsidised()),
             $command->getSubsidyDetail()
         );
+
+        $areaIds = $command->getSubsidyTrafficAreas();
+        $areas = new ArrayCollection();
+        foreach ($areaIds as $id) {
+            $areas->add($this->getRepo()->getReference(TrafficArea::class, $id));
+        }
+
+        $authorities = new ArrayCollection();
+        foreach ($command->getSubsidyLocalAuthorities() as $id) {
+            $authority = $this->getRepo()->getReference(LocalAuthority::class, $id);
+            $trafficArea = $authority->getTrafficArea();
+            if ($trafficArea === null || !in_array($trafficArea->getId(), $areaIds, true)) {
+                throw new ValidationException([
+                    'subsidyLocalAuthorities' => [
+                        'Select local authorities within the TAOs providing subsidies',
+                    ],
+                ]);
+            }
+            $authorities->add($authority);
+        }
+        $busReg->setSubsidyTrafficAreas($areas);
+        $busReg->setSubsidyLocalAuthorities($authorities);
 
         $this->getRepo()->save($busReg);
         $result->addMessage('Saved successfully');

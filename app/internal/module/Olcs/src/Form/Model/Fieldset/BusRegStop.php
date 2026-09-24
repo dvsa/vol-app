@@ -147,6 +147,34 @@ class BusRegStop extends BusRegDetails
     public $notFixedStopDetail = null;
 
     /**
+     * @Form\Attributes({"id":"trafficAreas","placeholder":"","multiple":"multiple", "class":"chosen-select-large"})
+     * @Form\Options({
+     *     "label": "TAOs providing subsidies",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\TrafficArea",
+     *     "use_groups": "false"
+     * })
+     * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     */
+    public $subsidyTrafficAreas = null;
+
+    /**
+     * @Form\Attributes({"id":"localAuthoritys","placeholder":"","multiple":"multiple", "class":"chosen-select-large"})
+     * @Form\Options({
+     *     "label": "Local authorities providing subsidies",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\LocalAuthority",
+     *     "use_groups": "true"
+     * })
+     * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     */
+    public $subsidyLocalAuthorities = null;
+
+    /**
      * @Form\Attributes({
      *      "id":"subsidised",
      *      "placeholder":"",
@@ -180,7 +208,7 @@ class BusRegStop extends BusRegDetails
      * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Validator("Laminas\Validator\StringLength",
      *      options={
-     *          "max":255
+     *          "max":1000
      *      }
      * )
      */
