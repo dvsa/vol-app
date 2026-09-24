@@ -1036,6 +1036,7 @@ foreach (['licence', 'application', 'variation'] as $lva) {
         'trailers',
         'safety',
         'licence_history',
+        'knowledge_experience',
         'convictions_penalties',
         'transport_managers',
     ];
