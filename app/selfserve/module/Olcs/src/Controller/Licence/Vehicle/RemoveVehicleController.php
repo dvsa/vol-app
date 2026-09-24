@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Olcs\Controller\Licence\Vehicle;
 
 use Common\Form\Form;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\View\Model\ViewModel;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Olcs\Form\Model\Form\Vehicle\Vehicles as VehiclesForm;
@@ -39,14 +39,14 @@ class RemoveVehicleController extends AbstractVehicleController
      * @param FormHelperService $formHelper
      * @param TableFactory $tableBuilder
      * @param MapperManager $mapperManager
-     * @param FlashMessenger $flashMessenger
+     * @param FlashMessengerInterface $flashMessenger
      */
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
         MapperManager $mapperManager,
-        FlashMessenger $flashMessenger
+        FlashMessengerInterface $flashMessenger
     ) {
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessenger);
     }

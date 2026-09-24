@@ -8,10 +8,10 @@ use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\HandleQuery;
 use Common\Controller\Plugin\Redirect;
 use Common\Form\FormValidator;
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Psr\Container\ContainerInterface;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Session\LicenceVehicleManagement;
@@ -33,7 +33,7 @@ class SwitchBoardControllerFactory implements FactoryInterface
         $controllerPluginManager = $container->get('ControllerPluginManager');
 
         $controller = new SwitchBoardController(
-            $controllerPluginManager->get(FlashMessenger::class),
+            $container->get(LaminasSessionFlashMessenger::class),
             $container->get(FormHelperService::class),
             $controllerPluginManager->get(HandleQuery::class),
             $redirectHelper = $controllerPluginManager->get(Redirect::class),

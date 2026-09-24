@@ -123,7 +123,7 @@ class SurrenderController extends AbstractInternalController implements
 
         $canSurrender = $this->form->isValid();
         if ($this->counts['openCases'] > 0 || $this->counts['busRegistrations'] > 0) {
-            $this->flashMessenger()->addErrorMessage('licence.surrender.internal.surrender.error.open_case_active_bus');
+            $this->flashMessengerHelperService->addErrorMessage('licence.surrender.internal.surrender.error.open_case_active_bus');
             $canSurrender = false;
         }
 
@@ -132,11 +132,11 @@ class SurrenderController extends AbstractInternalController implements
         }
 
         if (!$this->surrenderLicence($this->licenceId)) {
-            $this->flashMessenger()->addErrorMessage('licence.surrender.internal.surrender.error.generic');
+            $this->flashMessengerHelperService->addErrorMessage('licence.surrender.internal.surrender.error.generic');
             return $this->getView();
         }
 
-        $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.save.success');
+        $this->flashMessengerHelperService->addSuccessMessage('licence-status.surrender.message.save.success');
         return $this->redirect()->toRoute('licence', [], [], true);
     }
 
@@ -164,10 +164,10 @@ class SurrenderController extends AbstractInternalController implements
     public function confirmWithdrawAction()
     {
         if ($this->withdrawSurrender($this->licenceId)) {
-            $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.withdrawn');
+            $this->flashMessengerHelperService->addSuccessMessage('licence-status.surrender.message.withdrawn');
             return $this->redirect()->toRouteAjax('licence', [], [], true);
         }
-        $this->flashMessenger()->addErrorMessage("licence.surrender.internal.withdraw.error");
+        $this->flashMessengerHelperService->addErrorMessage("licence.surrender.internal.withdraw.error");
         return $this->redirect()->refresh();
     }
 
@@ -190,11 +190,11 @@ class SurrenderController extends AbstractInternalController implements
             throw new BadRequestException('No data supplied to command');
         }
 
-        $this->flashMessenger()->clearCurrentMessagesFromContainer();
+        $this->flashMessengerHelperService->clearCurrentMessagesFromContainer();
         if ($this->updateSurrender($updateCmdData)) {
-            $this->flashMessenger()->addSuccessMessage('successful-changes');
+            $this->flashMessengerHelperService->addSuccessMessage('successful-changes');
         } else {
-            $this->flashMessenger()->addErrorMessage('unsuccessful-changes');
+            $this->flashMessengerHelperService->addErrorMessage('unsuccessful-changes');
         }
 
         return $this->redirect()->toRouteAjax('licence/surrender-details/GET', [], [], true);

@@ -3,6 +3,7 @@
 namespace Olcs\Controller;
 
 use Common\FeatureToggle;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
@@ -20,13 +21,15 @@ class SignatureVerificationController extends AbstractSelfserveController
      * @param TableFactory $tableBuilder
      * @param MapperManager $mapperManager
      * @param CallbackReplayStore $replayStore
+     * @param FlashMessengerHelperService $flashMessengerHelper
      */
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
         MapperManager $mapperManager,
-        private readonly CallbackReplayStore $replayStore
+        private readonly CallbackReplayStore $replayStore,
+        protected FlashMessengerHelperService $flashMessengerHelper
     ) {
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
@@ -77,7 +80,7 @@ class SignatureVerificationController extends AbstractSelfserveController
         // A replay reaching here means the owning request is still running and
         // consumed the code, so our failure is not this user's failure.
         if (!empty($error) && !$claim->isOwnReplay()) {
-            $this->flashMessenger()->getContainer()->offsetSet('govUkAccountError', true);
+            $this->flashMessengerHelper->offsetSet('govUkAccountError', true);
 
             if (!empty($redirectUrlOnError)) {
                 $redirectUrl = $redirectUrlOnError;

@@ -69,7 +69,7 @@ class DashboardController extends AbstractController
         $response = $this->handleCommand($redirectCmd);
 
         if (!$response->isOk()) {
-            $this->flashMessenger()->addErrorMessage($response->getResult()['messages'][0]);
+            $this->getFlashMessenger()->addErrorMessage($response->getResult()['messages'][0]);
             return $this->redirect()->toRoute('dashboard', [], [], true);
         }
 
@@ -112,7 +112,7 @@ class DashboardController extends AbstractController
         $organisationId = $this->getCurrentOrganisationId();
 
         if (empty($organisationId)) {
-            $this->flashMessenger()->addErrorMessage('auth.login.failed.reason.account-disabled');
+            $this->getFlashMessenger()->addErrorMessage('auth.login.failed.reason.account-disabled');
             return $this->redirect()->toRoute('auth/login/GET');
         }
         $dashboardData = $this->getDashboardData($organisationId);

@@ -5,8 +5,8 @@ namespace Common\Controller\Plugin;
 use Common\Controller\Traits\GenericMethods;
 use Common\Service\Data\Search\Search;
 use Common\Service\Data\Search\SearchType;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Navigation\Navigation;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
@@ -14,7 +14,6 @@ use Laminas\View\Model\ViewModel;
 /**
  * Class ElasticSearch - Generates and processes calls to Elastic Search
  *
- * @method FlashMessenger flashMessenger()
  * @method GenericMethods redirectToRoute($route = null, $params = [], $options = [], $reuse = false)
  */
 class ElasticSearch extends AbstractPlugin
@@ -61,6 +60,10 @@ class ElasticSearch extends AbstractPlugin
      * @var string
      */
     private $pageRoute;
+
+    public function __construct(protected FlashMessengerHelperService $flashMessengerHelper)
+    {
+    }
 
     /**
      * Invokes the plugin
@@ -219,7 +222,7 @@ class ElasticSearch extends AbstractPlugin
         $this->getSearchForm()->setData($data);
 
         if (empty($data['search'])) {
-            $this->flashMessenger()->addErrorMessage('Please provide a search term');
+            $this->flashMessengerHelper->addErrorMessage('Please provide a search term');
             return $this->redirectToRoute('dashboard');
         }
 

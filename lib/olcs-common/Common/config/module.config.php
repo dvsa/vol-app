@@ -116,6 +116,10 @@ return [
             \Common\Controller\Plugin\HandleCommand::class => \Common\Controller\Plugin\HandleCommandFactory::class,
             'featuresEnabled' => \Common\Controller\Plugin\FeaturesEnabledFactory::class,
             'featuresEnabledForMethod' => \Common\Controller\Plugin\FeaturesEnabledForMethodFactory::class,
+            \Common\Service\FlashMessenger\LaminasSessionFlashMessenger::class => \Common\Service\FlashMessenger\LaminasSessionFlashMessengerFactory::class,
+        ],
+        'aliases' => [
+            'commonFlashMessenger' => \Common\Service\FlashMessenger\LaminasSessionFlashMessenger::class,
         ]
     ],
     'console' => [
@@ -293,6 +297,7 @@ return [
             DataService\TrafficArea::class => DataService\AbstractDataServiceFactory::class,
 
             HelperService\FileUploadHelperService::class => HelperService\FileUploadHelperServiceFactory::class,
+            \Common\Service\FlashMessenger\LaminasSessionFlashMessenger::class => \Common\Service\FlashMessenger\LaminasSessionFlashMessengerFactory::class,
             HelperService\FlashMessengerHelperService::class => HelperService\FlashMessengerHelperServiceFactory::class,
             HelperService\FormHelperService::class => HelperService\FormHelperServiceFactory::class,
             HelperService\GuidanceHelperService::class => HelperService\GuidanceHelperServiceFactory::class,

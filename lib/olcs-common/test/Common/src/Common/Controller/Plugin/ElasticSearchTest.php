@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace CommonTest\Controller\Plugin;
 
 use Common\Controller\Plugin\ElasticSearch;
+use Common\Controller\Plugin\ElasticSearchFactory;
 use Common\Service\Data\Search\Search;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Mvc\Controller\PluginManager;
@@ -52,9 +54,16 @@ final class ElasticSearchTest extends MockeryTestCase
             ->makePartial()
             ->setAllowOverride(true);
 
+        $mockFlashMessengerHelperService = m::mock(FlashMessengerHelperService::class);
         $container = m::mock(ContainerInterface::class);
+        $container->shouldReceive('get')->with(FlashMessengerHelperService::class)->andReturn($mockFlashMessengerHelperService);
+        $container->shouldReceive('get')->andReturnSelf();
+
         $pm = new PluginManager($container);
-        $pm->setInvokableClass('ElasticSearch', ElasticSearch::class);
+        $pm->setFactory(
+            'ElasticSearch',
+            ElasticSearchFactory::class
+        );
 
         $this->mockPlaceholder = m::mock(Placeholder::class);
         $this->sut = new ControllerStub($this->mockPlaceholder);
