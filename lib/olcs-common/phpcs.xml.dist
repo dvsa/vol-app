@@ -9,5 +9,8 @@
   <exclude-pattern>./Common/config/language/key-analysis/translation_key_report.php</exclude-pattern>
   <exclude-pattern>./Common/config/language/import/translations-import.php</exclude-pattern>
 
+  <!-- Sniff files in parallel worker processes -->
+  <arg name="parallel" value="16"/>
+
   <rule ref="./vendor-bin/phpcs/vendor/dvsa/coding-standards/src/Profiles/DVSA/CS/ruleset.xml" />
 </ruleset>

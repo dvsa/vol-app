@@ -5,5 +5,8 @@
 
   <exclude-pattern>*/vendor/*</exclude-pattern>
 
+  <!-- Sniff files in parallel worker processes -->
+  <arg name="parallel" value="16"/>
+
   <rule ref="./vendor-bin/phpcs/vendor/dvsa/coding-standards/src/Profiles/DVSA/CS/ruleset.xml" />
 </ruleset>

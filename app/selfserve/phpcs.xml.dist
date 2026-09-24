@@ -5,6 +5,9 @@
 
   <exclude-pattern>*/vendor/*</exclude-pattern>
 
+  <!-- Sniff files in parallel worker processes -->
+  <arg name="parallel" value="16"/>
+
   <rule ref="./vendor/dvsa/coding-standards/src/Profiles/DVSA/CS/ruleset.xml" />
 
   <!-- declare(strict_types=1) before a docblock is valid modern PHP; don't require docblock-first ordering -->
