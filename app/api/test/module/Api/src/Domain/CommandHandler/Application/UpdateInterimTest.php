@@ -30,6 +30,8 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  */
 final class UpdateInterimTest extends AbstractCommandHandlerTestCase
 {
+    use \Dvsa\OlcsTest\Api\Domain\CommandHandler\Traits\InterimCommunityLicencesTestTrait;
+
     public function setUp(): void
     {
         $this->sut = new UpdateInterim();
@@ -37,6 +39,7 @@ final class UpdateInterimTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('GoodsDisc', \Dvsa\Olcs\Api\Domain\Repository\GoodsDisc::class);
         $this->mockRepo('Fee', \Dvsa\Olcs\Api\Domain\Repository\Fee::class);
         $this->mockRepo('LicenceVehicle', \Dvsa\Olcs\Api\Domain\Repository\LicenceVehicle::class);
+        $this->mockRepo('CommunityLic', \Dvsa\Olcs\Api\Domain\Repository\CommunityLic::class);
 
         parent::setUp();
     }
@@ -1100,6 +1103,10 @@ final class UpdateInterimTest extends AbstractCommandHandlerTestCase
 
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();
+        $application->setLicence(
+            m::mock(\Dvsa\Olcs\Api\Entity\Licence\Licence::class)->makePartial()
+                ->setCommunityLics(new ArrayCollection())
+        );
         $application->setId(111);
         $application->setInterimStatus($this->refData[ApplicationEntity::INTERIM_STATUS_REFUSED]);
 
@@ -1171,6 +1178,10 @@ final class UpdateInterimTest extends AbstractCommandHandlerTestCase
 
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();
+        $application->setLicence(
+            m::mock(\Dvsa\Olcs\Api\Entity\Licence\Licence::class)->makePartial()
+                ->setCommunityLics(new ArrayCollection())
+        );
         $application->setId(111);
         $application->setInterimStatus($this->refData[ApplicationEntity::INTERIM_STATUS_REFUSED]);
 
@@ -1203,6 +1214,10 @@ final class UpdateInterimTest extends AbstractCommandHandlerTestCase
     {
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();
+        $application->setLicence(
+            m::mock(\Dvsa\Olcs\Api\Entity\Licence\Licence::class)->makePartial()
+                ->setCommunityLics(new ArrayCollection())
+        );
 
         $oc1Id = 99;
         $oc2Id = 11;

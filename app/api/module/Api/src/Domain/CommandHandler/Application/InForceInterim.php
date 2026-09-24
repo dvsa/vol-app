@@ -8,11 +8,10 @@
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Application;
 
-use Dvsa\Olcs\Api\Domain\Command\CommunityLic\GenerateBatch;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Traits\InterimCommunityLicencesTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
-use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc;
@@ -29,6 +28,8 @@ use Dvsa\Olcs\Transfer\Query\Application\Application;
  */
 final class InForceInterim extends AbstractCommandHandler implements TransactionedInterface
 {
+    use InterimCommunityLicencesTrait;
+
     protected $repoServiceName = 'Application';
 
     protected $extraRepos = ['GoodsDisc', 'CommunityLic'];
@@ -93,37 +94,5 @@ final class InForceInterim extends AbstractCommandHandler implements Transaction
         $this->result->addMessage($count . ' Vehicle(s) specified');
         $this->result->addMessage($count . ' Goods Disc(s) created');
         $this->result->addMessage($ceasedCount . ' Goods Disc(s) ceased');
-    }
-
-    private function processCommunityLicences(ApplicationEntity $application)
-    {
-        $ids = [];
-
-        /** @var CommunityLic $commLic */
-        foreach ($application->getLicence()->getCommunityLics() as $commLic) {
-            if (
-                $commLic->getStatus() !== null
-                && $commLic->getStatus()->getId() == CommunityLic::STATUS_PENDING
-            ) {
-                $commLic->setStatus($this->getRepo()->getRefdataReference(CommunityLic::STATUS_ACTIVE));
-                $commLic->setSpecifiedDate(new DateTime());
-
-                $this->getRepo('CommunityLic')->save($commLic);
-
-                $ids[] = $commLic->getId();
-            }
-        }
-        if ($ids) {
-            $this->result->addMessage(count($ids) . ' Community licence(s) activated');
-
-            $data = [
-                'isBatchReprint' => false,
-                'communityLicenceIds' => $ids,
-                'licence' => $application->getLicence()->getId(),
-                'identifier' => $application->getId()
-            ];
-
-            $this->result->merge($this->handleSideEffect(GenerateBatch::create($data)));
-        }
     }
 }
