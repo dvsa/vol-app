@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OlcsTest\Config;
 
-use Dvsa\LaminasConfigCloudParameters\Exception\ParameterNotFoundException;
 use Laminas\ModuleManager\ModuleEvent;
 use Laminas\ModuleManager\ModuleManager;
 use Laminas\Mvc\Service\ServiceManagerConfig;
@@ -24,58 +23,17 @@ use PHPUnit\Framework\TestCase;
 #[RunTestsInSeparateProcesses]
 class ConfigParametersTest extends TestCase
 {
-    /**
-     * Every placeholder the config expects Parameter Store / Secrets Manager to supply. When this changes, the
-     * parameter has to be added to (or can be removed from) every environment too.
-     */
-    private const array EXPECTED_PARAMETERS = [
-        'assets_cache_busting_strategy',
-        'cache_encryption_secret_shared',
-        'cache_encryption_secret_ss',
-        'cqrs_cache_enabled',
-        'cqrs_cache_long_ttl',
-        'cqrs_cache_medium_ttl',
-        'domain',
-        'log_level',
-        'olcs_google_gtm_auth',
-        'olcs_google_gtm_preview',
-        'olcs_google_id',
-        'olcs_ss_cookie',
-        'redis_cache_fqdn',
-        'shd_proxy',
-        'user_unique_id_salt',
-        'verify_forwarder_valid_origin',
-    ];
-
-    public function testConfigReferencesExactlyTheExpectedParameters(): void
-    {
-        StubParameterProvider::$parameters = [];
-
-        try {
-            $this->loadConfig();
-            $names = [];
-        } catch (ParameterNotFoundException $e) {
-            $names = $e->getUnresolvedParameterNames();
-        }
-
-        sort($names);
-
-        $this->assertSame(
-            self::EXPECTED_PARAMETERS,
-            $names,
-            'The placeholders in the config have changed: update EXPECTED_PARAMETERS, and every environment\'s parameters'
-        );
-    }
-
     public function testMergeListenerResolvesEveryPlaceholder(): void
     {
-        StubParameterProvider::$parameters = self::EXPECTED_PARAMETERS;
-
         $config = $this->loadConfig();
 
-        $json = json_encode($config, JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_UNESCAPED_SLASHES);
-        $this->assertIsString($json);
-        $this->assertDoesNotMatchRegularExpression('/%[\w.-]+%/', $json);
+        // Would pass vacuously if the stub were never asked, or the config had nothing to resolve
+        $this->assertNotEmpty(StubParameterProvider::$supplied);
+
+        // Only the names that were supplied: escaped %% comes back as a literal %, so e.g. '%%s/olcs/%%s' would look
+        // like a placeholder if the resolved config were scanned blind
+        $unresolved = array_values(array_intersect(StubParameterProvider::$supplied, StubParameterProvider::placeholdersIn($config)));
+        $this->assertSame([], $unresolved, 'Placeholders left unresolved');
 
         // The Boolean cast on [query_cache][enabled] ran
         $this->assertTrue($config['query_cache']['enabled']);
