@@ -242,6 +242,12 @@ return [
             \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer::class =>
                 \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposerFactory::class,
 
+            // Resolves grabs into the instance at generation time
+            \Dvsa\Olcs\Api\Service\Letter\LetterInstanceGrabSnapshotter::class =>
+                \Dvsa\Olcs\Api\Service\Letter\LetterInstanceGrabSnapshotterFactory::class,
+            \Dvsa\Olcs\Api\Service\Letter\VolGrabContextBuilder::class =>
+                \Laminas\ServiceManager\Factory\InvokableFactory::class,
+
             // Explains a proposed composition for the letter type builder
             \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnostics::class =>
                 \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnosticsFactory::class,

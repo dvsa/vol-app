@@ -2,194 +2,92 @@
 
 declare(strict_types=1);
 
-/**
- * Opposition Repo test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Entity\Opposition\Opposition;
+use Dvsa\Olcs\Api\Domain\Repository\Opposition as Repo;
+use Dvsa\Olcs\Api\Entity\Opposition\Opposition as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\Opposition as Repo;
-use Doctrine\ORM\EntityRepository;
 
-/**
- * Opposition Repo test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
 final class OppositionTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testFetchUsingId(): void
     {
-        $id = 99;
-        $mockResult = [0 => 'result'];
-
         $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getId')
-            ->andReturn($id);
+        $command->shouldReceive('getId')->andReturn(99);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['result']);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with($id)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('opposer', 'o')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('grounds')
-            ->andReturnSelf()
-            ->shouldReceive('withPersonContactDetails')
-            ->once()
-            ->with('o.contactDetails', 'c');
+        $this->assertSame('result', $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT));
 
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($mockResult);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Opposition::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT);
-
-        $this->assertEquals($result, $mockResult[0]);
+        // m.grounds is joined twice (w3 from withRefdata, w4 from the explicit with) — see the
+        // migration findings.
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, w3, o, w4, c, p, a, ct, pc FROM ' . Entity::class . ' m'
+            . ' LEFT JOIN m.oppositionType w0 LEFT JOIN m.status w1 LEFT JOIN m.isValid w2'
+            . ' LEFT JOIN m.grounds w3 LEFT JOIN m.opposer o LEFT JOIN m.grounds w4'
+            . ' LEFT JOIN o.contactDetails c LEFT JOIN c.person p LEFT JOIN c.address a'
+            . ' LEFT JOIN c.contactType ct LEFT JOIN c.phoneContacts pc'
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(99, $qb->getParameter('byId')->getValue());
     }
 
-    public function testApplyFiltersCase(): void
-    {
-        // mock SUT to allow testing the protected method
-        $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
+    /**
+     * The licence and application filters key off the 'ca' alias, which only exists once
+     * buildDefaultListQuery() has joined it — so run them in the order fetchList() does.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
+    public function testApplyListFilters(
+        ?int $case,
+        ?int $licence,
+        ?int $application,
+        string $expectedWhere,
+        string $parameter,
+        int $expectedValue,
+    ): void {
+        $qb = $this->createRealQb();
 
-        $qb = m::mock(QueryBuilder::class);
         $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getCase')->with()->andReturn($case);
+        $query->shouldReceive('getLicence')->with()->andReturn($licence);
+        $query->shouldReceive('getApplication')->with()->andReturn($application);
 
-        $query->shouldReceive('getCase')->with()->andReturn(746);
-        $query->shouldReceive('getLicence')->with()->andReturn(null);
-        $query->shouldReceive('getApplication')->with()->andReturn(null);
+        $this->sut->buildDefaultListQuery($qb, $query);
+        $this->sut->applyListFilters($qb, $query);
 
-        $expr = $this->mockExprEq('m.case', ':byCase');
-        $qb->shouldReceive('expr->eq')->with('m.case', ':byCase')->once()->andReturn($expr);
-        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('byCase', 746)->once()->andReturnSelf();
-
-        $sut->applyListFilters($qb, $query);
+        $this->assertStringEndsWith(' WHERE ' . $expectedWhere, $qb->getDQL());
+        $this->assertSame($expectedValue, $qb->getParameter($parameter)->getValue());
     }
 
-    public function testApplyFiltersLicence(): void
+    public static function listFilterProvider(): \Iterator
     {
-        // mock SUT to allow testing the protected method
-        $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $qb = m::mock(QueryBuilder::class);
-        $query = m::mock(QueryInterface::class);
-
-        $query->shouldReceive('getCase')->with()->andReturn(null);
-        $query->shouldReceive('getLicence')->with()->andReturn(43);
-        $query->shouldReceive('getApplication')->with()->andReturn(null);
-
-        $expr = $this->mockExprEq('ca.licence', ':licence');
-        $qb->shouldReceive('expr->eq')->with('ca.licence', ':licence')->once()->andReturn($expr);
-        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('licence', 43)->once()->andReturnSelf();
-
-        $sut->applyListFilters($qb, $query);
-    }
-
-    public function testApplyFiltersApplication(): void
-    {
-        // mock SUT to allow testing the protected method
-        $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $qb = m::mock(QueryBuilder::class);
-        $query = m::mock(QueryInterface::class);
-
-        $query->shouldReceive('getCase')->with()->andReturn(null);
-        $query->shouldReceive('getLicence')->with()->andReturn(null);
-        $query->shouldReceive('getApplication')->with()->andReturn(543);
-
-        $expr = $this->mockExprEq('ca.application', ':application');
-        $qb->shouldReceive('expr->eq')->with('ca.application', ':application')->once()->andReturn($expr);
-        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('application', 543)->once()->andReturnSelf();
-
-        $sut->applyListFilters($qb, $query);
+        yield 'by case' => [746, null, null, 'm.case = :byCase', 'byCase', 746];
+        yield 'by licence' => [null, 43, null, 'ca.licence = :licence', 'licence', 43];
+        yield 'by application' => [null, null, 543, 'ca.application = :application', 'application', 543];
     }
 
     public function testFetchByApplicationId(): void
     {
-        $applicationId = 69;
+        $qb = $this->createRealQb()->willReturn('result');
 
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('case', 'c')
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->with('createdOn', 'DESC')
-            ->andReturnSelf();
-
-        $expr = $this->mockExprEq('c.application', ':application');
-
-        $mockQb
-            ->shouldReceive('expr->eq')
-            ->with('c.application', ':application')
-            ->andReturn($expr);
-
-        $mockQb
-            ->shouldReceive('andWhere')
-            ->with($expr)
-            ->andReturnSelf();
-        $mockQb
-            ->shouldReceive('setParameter')
-            ->with('application', $applicationId)
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
+        $this->assertSame('result', $this->sut->fetchByApplicationId(69));
 
         $this->assertSame(
-            'result',
-            $this->sut->fetchByApplicationId($applicationId)
+            'SELECT m, c FROM ' . Entity::class . ' m LEFT JOIN m.case c'
+            . ' WHERE c.application = :application'
+            . ' ORDER BY m.createdOn DESC',
+            $qb->getDQL(),
         );
+        $this->assertSame(69, $qb->getParameter('application')->getValue());
     }
 }

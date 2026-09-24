@@ -4,68 +4,37 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Dvsa\Olcs\Transfer\Query\BusRegSearchView\BusRegSearchViewList;
-use Dvsa\Olcs\Api\Domain\Query\BusRegSearchView\BusRegSearchViewList as SearchViewList;
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\BusRegSearchView as Repo;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
-use Dvsa\Olcs\Api\Entity\View\BusRegSearchView as Entity;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
+use Dvsa\Olcs\Api\Domain\Repository\BusRegSearchView as Repo;
 use Dvsa\Olcs\Api\Entity\Bus\BusReg;
+use Dvsa\Olcs\Api\Entity\View\BusRegSearchView as Entity;
+use Dvsa\Olcs\Transfer\Query\Bus\SearchViewList;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
-/**
- * BusRegSearchViewTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 final class BusRegSearchViewTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testFetchByRegNo(): void
     {
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-
-        $this->em->shouldReceive('getRepository')->with(Entity::class)->andReturn($repo);
-
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-
-        $expr = $this->mockExprEq('m.regNo', ':regNo');
-        $qb->shouldReceive('expr->eq')->with('m.regNo', ':regNo')->once()->andReturn($expr);
-        $qb->shouldReceive('where')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('regNo', 'REG0001')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['RESULTS']);
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
         $this->assertSame('RESULTS', $this->sut->fetchByRegNo('REG0001'));
+
+        $this->assertSame('SELECT m' . self::FROM . ' WHERE m.regNo = :regNo', $qb->getDQL());
+        $this->assertSame('REG0001', $qb->getParameter('regNo')->getValue());
     }
 
     public function testFetchByRegNoNotFound(): void
     {
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-
-        $this->em->shouldReceive('getRepository')->with(Entity::class)->andReturn($repo);
-
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-
-        $expr = $this->mockExprEq('m.regNo', ':regNo');
-        $qb->shouldReceive('expr->eq')->with('m.regNo', ':regNo')->once()->andReturn($expr);
-        $qb->shouldReceive('where')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('regNo', 'REG0001')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn([]);
+        $this->createRealQb()->willReturn([]);
 
         $this->expectException(NotFoundException::class);
 
@@ -74,263 +43,93 @@ final class BusRegSearchViewTest extends RepositoryTestCase
 
     public function testFetchActiveByLicence(): void
     {
-        $activeStatuses = [
-            BusReg::STATUS_NEW,
-            BusReg::STATUS_VAR,
-            BusReg::STATUS_REGISTERED,
-            BusReg::STATUS_CANCEL,
-        ];
-
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-
-        $this->em->shouldReceive('getRepository')->with(Entity::class)->andReturn($repo);
-
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-
-        $licenceExpr = $this->mockExprEq('m.licId', ':licence');
-        $qb->shouldReceive('expr->eq')->with('m.licId', ':licence')->once()->andReturn($licenceExpr);
-        $qb->shouldReceive('where')->with($licenceExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('licence', '611')->once()->andReturnSelf();
-
-        $statusExpr = $this->mockExprIn('m.busRegStatus', ':activeStatuses');
-        $qb->shouldReceive('expr->in')->with('m.busRegStatus', ':activeStatuses')->once()->andReturn($statusExpr);
-        $qb->shouldReceive('andWhere')->with($statusExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('activeStatuses', $activeStatuses)->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['RESULTS']);
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
         $this->assertSame(['RESULTS'], $this->sut->fetchActiveByLicence(611));
-    }
 
-    /**
-     * @param $context
-     */
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideContextGroupBys')]
-    public function testFetchDistinctList(mixed $context, mixed $expected): void
-    {
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-
-        $this->em->shouldReceive('getRepository')->with(Entity::class)->andReturn($repo);
-
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $qb->shouldReceive('distinct')->andReturnSelf();
-        $qb->shouldReceive('select')->with($expected)->andReturnSelf();
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
-
-        $mockQuery = m::mock(QueryInterface::class);
-        $mockQuery->shouldReceive('getContext')->andReturn($context);
-
-        $this->assertSame(['RESULTS'], $this->sut->fetchDistinctList($mockQuery));
-    }
-
-    /**
-     * @param $context
-     */
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideContextGroupBys')]
-    public function testFetchDistinctListWithOrganisationId(mixed $context, mixed $expected): void
-    {
-        $organisationId = 1;
-
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-
-        $this->em->shouldReceive('getRepository')->with(Entity::class)->andReturn($repo);
-
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $qb->shouldReceive('distinct')->andReturnSelf();
-        $qb->shouldReceive('select')->with($expected)->andReturnSelf();
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
-
-        $expr = $this->mockExprEq('m.organisationId', ':organisationId');
-        $qb->shouldReceive('expr->eq')->with('m.organisationId', ':organisationId')->once()->andReturn($expr);
-        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('organisationId', $organisationId)->once()->andReturnSelf();
-
-        $mockQuery = m::mock(QueryInterface::class);
-        $mockQuery->shouldReceive('getContext')->andReturn($context);
-
-        $this->assertSame(['RESULTS'], $this->sut->fetchDistinctList($mockQuery, $organisationId));
-    }
-
-    /**
-     * @param string $context to determine what data to return
-     */
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideContextGroupBys')]
-    public function testFetchDistinctListWithLocalAuthorityId(mixed $context, mixed $expected): void
-    {
-        $localAuthorityId = 1;
-
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-
-        $this->em->shouldReceive('getRepository')->with(Entity::class)->andReturn($repo);
-
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $qb->shouldReceive('distinct')->andReturnSelf();
-        $qb->shouldReceive('select')->with($expected)->andReturnSelf();
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
-
-        $expr = $this->mockExprEq('m.localAuthorityId', ':localAuthorityId');
-        $qb->shouldReceive('expr->eq')->with('m.localAuthorityId', ':localAuthorityId')->once()->andReturn($expr);
-        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('localAuthorityId', $localAuthorityId)->once()->andReturnSelf();
-
-        $mockQuery = m::mock(QueryInterface::class);
-        $mockQuery->shouldReceive('getContext')->andReturn($context);
-
-        $this->assertSame(['RESULTS'], $this->sut->fetchDistinctList($mockQuery, null, $localAuthorityId));
-    }
-
-    /**
-     * Data provider maps the relevant group by clauses that should be applied to the query given a certain context
-     *
-     * @return \Iterator<(int | string), mixed>
-     */
-    public static function provideContextGroupBys(): \Iterator
-    {
-        yield [
-            'licence', ['m.licId', 'm.licNo'],
-        ];
-        yield [
-            'organisation', ['m.organisationId', 'm.organisationName']
-        ];
-        yield [
-            'busRegStatus', ['m.busRegStatus', 'm.busRegStatusDesc']
-        ];
-    }
-
-    /**
-     * Test applyListFilters when logged in as an Operator
-     */
-    public function testApplyListFiltersOperator(): void
-    {
-        $this->setUpSut(Repo::class, true);
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr')
-            ->andReturn(new \Doctrine\ORM\Query\Expr())
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('licId', '1234')
-            ->andReturnSelf()
-
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('busRegStatus', 'foo')
-            ->andReturnSelf()
-
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('organisationId', 342)
-            ->andReturnSelf()
-
-            ->shouldReceive('groupBy')
-            ->with('m.id')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQ = BusRegSearchViewList::create(
-            [
-                'licId' => '1234',
-                'busRegStatus' => 'foo',
-                'organisationId' => 342
-            ]
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' WHERE m.licId = :licence AND m.busRegStatus IN(:activeStatuses)',
+            $qb->getDQL(),
         );
-
-        $this->sut->applyListFilters($mockQb, $mockQ);
-    }
-
-    /**
-     * Test applyListFilters when using status (to comply with bus reg main page)
-     */
-    public function testApplyListFiltersAlternativeStatus(): void
-    {
-        $this->setUpSut(Repo::class, true);
-
-        $mockQb = m::mock(QueryBuilder::class)
-            ->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('status', 'bar')
-            ->andReturnSelf()
-            ->shouldReceive('groupBy')
-            ->with('m.id')
-            ->once()
-            ->andReturnSelf()
-            ->getMock();
-
-        $mockQ = SearchViewList::create(['status' => 'bar']);
-
-        $this->sut->applyListFilters($mockQb, $mockQ);
-    }
-
-    /**
-     * Test applyListFilters when logged in as an LA
-     */
-    public function testApplyListFiltersLocalAuthority(): void
-    {
-        $this->setUpSut(Repo::class, true);
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr')
-            ->andReturn(new \Doctrine\ORM\Query\Expr())
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('licId', '1234')
-            ->andReturnSelf()
-
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('busRegStatus', 'foo')
-            ->andReturnSelf()
-
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('localAuthorityId', 234)
-            ->andReturnSelf()
-
-            ->shouldReceive('groupBy')
-            ->with('m.id')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQ = BusRegSearchViewList::create(
-            [
-                'licId' => '1234',
-                'busRegStatus' => 'foo',
-                'localAuthorityId' => 234
-            ]
+        $this->assertSame(611, $qb->getParameter('licence')->getValue());
+        $this->assertSame(
+            [BusReg::STATUS_NEW, BusReg::STATUS_VAR, BusReg::STATUS_REGISTERED, BusReg::STATUS_CANCEL],
+            $qb->getParameter('activeStatuses')->getValue(),
         );
+    }
 
-        $this->sut->applyListFilters($mockQb, $mockQ);
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContexts')]
+    public function testFetchDistinctList(string $context, string $expectedSelect): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getContext')->andReturn($context);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchDistinctList($query));
+
+        $this->assertSame('SELECT DISTINCT ' . $expectedSelect . self::FROM, $qb->getDQL());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContexts')]
+    public function testFetchDistinctListWithOrganisationId(string $context, string $expectedSelect): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getContext')->andReturn($context);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchDistinctList($query, 1));
+
+        $this->assertSame(
+            'SELECT DISTINCT ' . $expectedSelect . self::FROM . ' WHERE m.organisationId = :organisationId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('organisationId')->getValue());
+    }
+
+    /**
+     * A local authority filter only applies when there is no organisation.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContexts')]
+    public function testFetchDistinctListWithLocalAuthorityId(string $context, string $expectedSelect): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getContext')->andReturn($context);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchDistinctList($query, null, 1));
+
+        $this->assertSame(
+            'SELECT DISTINCT ' . $expectedSelect . self::FROM . ' WHERE m.localAuthorityId = :localAuthorityId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('localAuthorityId')->getValue());
+    }
+
+    public static function provideContexts(): \Iterator
+    {
+        yield 'licence' => ['licence', 'm.licId, m.licNo'];
+        yield 'organisation' => ['organisation', 'm.organisationId, m.organisationName'];
+        yield 'busRegStatus' => ['busRegStatus', 'm.busRegStatus, m.busRegStatusDesc'];
+    }
+
+    /**
+     * Rows are grouped by id because the view can return several per registration, which would
+     * otherwise hydrate to duplicate objects (OLCS-14215).
+     */
+    public function testApplyListFiltersGroupsById(): void
+    {
+        $qb = $this->createRealQb();
+
+        $this->sut->applyListFilters($qb, SearchViewList::create(['licId' => '1234']));
+
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.licId = :licId GROUP BY m.id',
+            $qb->getDQL(),
+        );
+        $this->assertSame('1234', $qb->getParameter('licId')->getValue());
     }
 }

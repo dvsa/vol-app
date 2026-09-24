@@ -477,20 +477,11 @@ class LetterGenerationController extends AbstractInternalController implements L
                 ];
             }
 
-            $editedContent = $issue['editedContent'] ?? null;
-            $defaultContent = $issueVersion['defaultBodyContent'] ?? null;
-
-            if (!empty($editedContent)) {
-                $effectiveContent = is_string($editedContent)
-                    ? $editedContent
-                    : json_encode($editedContent);
-            } elseif (!empty($defaultContent)) {
-                $effectiveContent = is_string($defaultContent)
-                    ? $defaultContent
-                    : json_encode($defaultContent);
-            } else {
-                $effectiveContent = json_encode(['blocks' => [], 'version' => '2.28.2']);
-            }
+            $effectiveContent = $this->editorContent(
+                $issue['editedContent'] ?? null,
+                $issue['generatedContent'] ?? null,
+                $issueVersion['defaultBodyContent'] ?? null
+            );
 
             $groupedIssues[$typeId]['issues'][] = [
                 'id' => $issue['id'],
@@ -512,20 +503,11 @@ class LetterGenerationController extends AbstractInternalController implements L
                 continue;
             }
 
-            $editedContent = $appendix['editedContent'] ?? null;
-            $defaultContent = $appendixVersion['defaultContent'] ?? null;
-
-            if (!empty($editedContent)) {
-                $effectiveContent = is_string($editedContent)
-                    ? $editedContent
-                    : json_encode($editedContent);
-            } elseif (!empty($defaultContent)) {
-                $effectiveContent = is_string($defaultContent)
-                    ? $defaultContent
-                    : json_encode($defaultContent);
-            } else {
-                $effectiveContent = json_encode(['blocks' => [], 'version' => '2.28.2']);
-            }
+            $effectiveContent = $this->editorContent(
+                $appendix['editedContent'] ?? null,
+                $appendix['generatedContent'] ?? null,
+                $appendixVersion['defaultContent'] ?? null
+            );
 
             $groupedAppendices[] = [
                 'id' => $appendix['id'],
@@ -560,20 +542,11 @@ class LetterGenerationController extends AbstractInternalController implements L
                 $name = 'Section #' . ($instanceSection['id'] ?? '');
             }
 
-            $editedContent = $instanceSection['editedContent'] ?? null;
-            $defaultContent = $sectionVersion['defaultContent'] ?? null;
-
-            if (!empty($editedContent)) {
-                $effectiveContent = is_string($editedContent)
-                    ? $editedContent
-                    : json_encode($editedContent);
-            } elseif (!empty($defaultContent)) {
-                $effectiveContent = is_string($defaultContent)
-                    ? $defaultContent
-                    : json_encode($defaultContent);
-            } else {
-                $effectiveContent = json_encode(['blocks' => [], 'version' => '2.28.2']);
-            }
+            $effectiveContent = $this->editorContent(
+                $instanceSection['editedContent'] ?? null,
+                $instanceSection['generatedContent'] ?? null,
+                $sectionVersion['defaultContent'] ?? null
+            );
 
             $groupedSections[] = [
                 'id' => $instanceSection['id'],
@@ -597,20 +570,11 @@ class LetterGenerationController extends AbstractInternalController implements L
             $todoVersion = $todo['letterTodoVersion'] ?? [];
             $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
 
-            $editedDescription = $todo['editedDescription'] ?? null;
-            $description = $todoVersion['description'] ?? null;
-
-            if (!empty($editedDescription)) {
-                $effectiveContent = is_string($editedDescription)
-                    ? $editedDescription
-                    : json_encode($editedDescription);
-            } elseif (!empty($description)) {
-                $effectiveContent = is_string($description)
-                    ? $description
-                    : json_encode($description);
-            } else {
-                $effectiveContent = json_encode(['blocks' => [], 'version' => '2.28.2']);
-            }
+            $effectiveContent = $this->editorContent(
+                $todo['editedDescription'] ?? null,
+                $todo['generatedDescription'] ?? null,
+                $todoVersion['description'] ?? null
+            );
 
             $name = $todoVersion['name'] ?? null;
 
@@ -877,6 +841,23 @@ class LetterGenerationController extends AbstractInternalController implements L
             'documentId' => $documentId,
             'printUrl' => $printUrl,
         ]);
+    }
+
+    /**
+     * What the editor opens with: the caseworker's edit, else the content resolved at generation,
+     * else the version default. Each may be an array or a JSON string from the API.
+     */
+    protected function editorContent(mixed ...$candidates): string
+    {
+        foreach ($candidates as $candidate) {
+            if (empty($candidate)) {
+                continue;
+            }
+
+            return is_string($candidate) ? $candidate : json_encode($candidate);
+        }
+
+        return json_encode(['blocks' => [], 'version' => '2.28.2']);
     }
 
     /**

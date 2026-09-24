@@ -2,157 +2,122 @@
 
 declare(strict_types=1);
 
-/**
- * TeamPrinter repo test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Domain\Repository\TeamPrinter as Repo;
+use Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\TeamPrinter as TeamPrinterRepo;
 
-/**
- * TeamPrinter repo test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class TeamPrinterTest extends RepositoryTestCase
 {
-    public function testFetchByDetails(): void
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
+    #[\Override]
+    public function setUp(): void
     {
-        $this->setUpSut(TeamPrinterRepo::class);
-
-        $command = m::mock(QueryInterface::class)
-            ->shouldReceive('getSubCategory')
-            ->andReturn(1)
-            ->twice()
-            ->shouldReceive('getUser')
-            ->andReturn(2)
-            ->twice()
-            ->shouldReceive('getTeam')
-            ->andReturn(3)
-            ->once()
-            ->getMock();
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-        $expr = new \Doctrine\ORM\Query\Expr();
-        $mockQb->shouldReceive('expr')
-            ->zeroOrMoreTimes()
-            ->andReturn($expr);
-
-        $mockQb->shouldReceive('andWhere')
-            ->times(3)
-            ->andReturnSelf();
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->once()
-            ->andReturn($mockQb);
-
-        $mockQb->shouldReceive('setParameter')->with('subCategory', 1)->once();
-
-        $mockQb->shouldReceive('setParameter')->with('user', 2)->once();
-
-        $mockQb->shouldReceive('setParameter')->with('team', 3)->once();
-
-        $mockQb->shouldReceive('getQuery->getResult')->andReturn(['result']);
-
-        $this->assertSame(['result'], $this->sut->fetchByDetails($command));
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testFetchByDetailsNoUserAndSubCategory(): void
+    /**
+     * A printer assignment is keyed on the team plus a sub-category and a user, either of which
+     * may be absent — so an absent one has to match IS NULL rather than be skipped, or the lookup
+     * would find a more specific assignment than the caller asked for.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('detailsProvider')]
+    public function testFetchByDetails(
+        ?int $subCategory,
+        ?int $user,
+        string $expectedWhere,
+        array $expectedParameters,
+    ): void {
+        $qb = $this->createRealQb()->willReturn(['result']);
+
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getSubCategory')->andReturn($subCategory);
+        $query->shouldReceive('getUser')->andReturn($user);
+        $query->shouldReceive('getTeam')->andReturn(3);
+
+        $this->assertSame(['result'], $this->sut->fetchByDetails($query));
+
+        $this->assertSame('SELECT m' . self::FROM . ' WHERE ' . $expectedWhere, $qb->getDQL());
+
+        foreach ($expectedParameters as $name => $expected) {
+            $this->assertSame($expected, $qb->getParameter($name)->getValue());
+        }
+    }
+
+    public static function detailsProvider(): \Iterator
     {
-        $this->setUpSut(TeamPrinterRepo::class);
-
-        $command = m::mock(QueryInterface::class)
-            ->shouldReceive('getSubCategory')
-            ->andReturn(null)
-            ->once()
-            ->shouldReceive('getUser')
-            ->andReturn(null)
-            ->once()
-            ->shouldReceive('getTeam')
-            ->andReturn(3)
-            ->once()
-            ->getMock();
-
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-        $expr = new \Doctrine\ORM\Query\Expr();
-        $mockQb->shouldReceive('expr')
-            ->zeroOrMoreTimes()
-            ->andReturn($expr);
-
-        $mockQb->shouldReceive('andWhere')
-            ->times(3)
-            ->andReturnSelf();
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->once()
-            ->andReturn($mockQb);
-
-        $mockQb->shouldReceive('setParameter')->with('team', 3)->once();
-
-        $mockQb->shouldReceive('getQuery->getResult')->andReturn(['result']);
-
-        $this->assertSame(['result'], $this->sut->fetchByDetails($command));
+        yield 'a user in a sub-category' => [
+            1,
+            2,
+            'm.subCategory = :subCategory AND m.user = :user AND m.team = :team',
+            ['subCategory' => 1, 'user' => 2, 'team' => 3],
+        ];
+        yield 'the team default' => [
+            null,
+            null,
+            'm.subCategory IS NULL AND m.user IS NULL AND m.team = :team',
+            ['team' => 3],
+        ];
     }
 
     public function testApplyListJoins(): void
     {
-        $this->setUpSut(TeamPrinterRepo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(QueryBuilder::class);
+        $this->sut->applyListJoins($qb);
 
-        $this->sut->shouldReceive('getQueryBuilder')->with()->andReturn($mockQb);
-        $mockQb->shouldReceive('modifyQuery')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('subCategory', 'sc')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('user', 'u')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('sc.category', 'scc')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('team', 't')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('u.contactDetails', 'ucd')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('ucd.person', 'ucdp')->once()->andReturnSelf();
-
-        $this->sut->applyListJoins($mockQb);
+        $this->assertSame(
+            'SELECT m, sc, scc, u, t, ucd, ucdp' . self::FROM
+            . ' LEFT JOIN m.subCategory sc LEFT JOIN sc.category scc'
+            . ' LEFT JOIN m.user u LEFT JOIN m.team t'
+            . ' LEFT JOIN u.contactDetails ucd LEFT JOIN ucd.person ucdp',
+            $qb->getDQL(),
+        );
     }
 
-    public function testApplyListFilters(): void
+    /**
+     * The list is sorted by name, which for a user means forename then family name and for a
+     * category means its parent then itself — neither is a column, so both are computed into a
+     * HIDDEN alias to sort on.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
+    public function testApplyListFilters(?int $team, string $expectedWhere, bool $expectTeamParameter): void
     {
-        $this->setUpSut(TeamPrinterRepo::class, true);
+        $qb = $this->createRealQb();
 
-        $query = m::mock(QueryInterface::class)
-            ->shouldReceive('getTeam')
-            ->andReturn(1)
-            ->getMock();
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $expr = new \Doctrine\ORM\Query\Expr();
-        $qb->shouldReceive('expr')
-            ->zeroOrMoreTimes()
-            ->andReturn($expr);
-
-        $qb->shouldReceive('andWhere')
-            ->times(2)
-            ->andReturnSelf();
-
-        $qb->shouldReceive('setParameter')->with('team', 1)->once()->andReturnSelf();
-
-        $qb->shouldReceive('addSelect')->with('CONCAT(ucdp.forename, ucdp.familyName) as HIDDEN userSort')
-            ->once()->andReturnSelf();
-        $qb->shouldReceive('addSelect')->with('CONCAT(scc.description, sc.subCategoryName) as HIDDEN catSort')
-            ->once()->andReturnSelf();
-        $qb->shouldReceive('addOrderBy')->with('t.name', 'ASC')->once()->andReturnSelf();
-        $qb->shouldReceive('addOrderBy')->with('userSort', 'ASC')->once()->andReturnSelf();
-        $qb->shouldReceive('addOrderBy')->with('catSort', 'ASC')->once()->andReturnSelf();
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getTeam')->andReturn($team);
 
         $this->assertNull($this->sut->applyListFilters($qb, $query));
+
+        $this->assertSame(
+            'SELECT m, CONCAT(ucdp.forename, ucdp.familyName) as HIDDEN userSort,'
+            . ' CONCAT(scc.description, sc.subCategoryName) as HIDDEN catSort'
+            . self::FROM
+            . ' WHERE ' . $expectedWhere
+            . ' ORDER BY t.name ASC, userSort ASC, catSort ASC',
+            $qb->getDQL(),
+        );
+
+        if ($expectTeamParameter) {
+            $this->assertSame($team, $qb->getParameter('team')->getValue());
+
+            return;
+        }
+
+        $this->assertNull($qb->getParameter('team'));
+    }
+
+    public static function listFilterProvider(): \Iterator
+    {
+        // An assignment with neither a sub-category nor a user is the fallback row, not a listing.
+        $notBothNull = 'NOT(sc.id IS NULL AND u.id IS NULL)';
+
+        // Bracketed only when it is not the sole predicate.
+        yield 'one team' => [1, 'm.team = :team AND (' . $notBothNull . ')', true];
+        yield 'every team' => [null, $notBothNull, false];
     }
 }
