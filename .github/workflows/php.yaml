@@ -99,10 +99,22 @@ jobs:
         run: vendor/bin/phpunit
 
   static-analysis:
-    name: Static analysis
+    name: Static analysis (${{ matrix.tool }})
     if: ${{ !inputs.skip-checks }}
     needs:
       - warm-cache
+    # One job per tool so they run side by side rather than back to back.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - tool: PHPStan
+            command: composer run-script phpstan
+          - tool: PHP CodeSniffer
+            command: composer run-script phpcs
+          # Psalm drops to a single thread when it detects CI unless --threads is given.
+          - tool: Psalm
+            command: composer run-script psalm -- --threads=$(nproc)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -131,12 +143,8 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
-      - name: PHPStan
-        run: composer run-script phpstan
-      - name: PHP CodeSniffer
-        run: composer run-script phpcs
-      - name: Psalm
-        run: composer run-script psalm
+      - name: ${{ matrix.tool }}
+        run: ${{ matrix.command }}
 
   package:
     name: Package

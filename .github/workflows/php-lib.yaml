@@ -18,7 +18,21 @@ on:
 
 jobs:
   checks:
-    name: Checks
+    name: ${{ matrix.check }}
+    # One job per check so they run side by side rather than back to back.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - check: Test
+            command: composer run-script test
+          - check: PHP CodeSniffer
+            command: composer run-script phpcs
+          # Psalm drops to a single thread when it detects CI unless --threads is given.
+          - check: Psalm
+            command: composer run-script psalm -- --threads=$(nproc)
+          - check: PHPStan
+            command: composer run-script phpstan
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -52,5 +66,5 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-lib-${{ inputs.project }}-php${{ inputs.php-version }}-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist
-      - name: Test, phpcs, psalm, phpstan
-        run: composer run-script all
+      - name: ${{ matrix.check }}
+        run: ${{ matrix.command }}
