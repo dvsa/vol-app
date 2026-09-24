@@ -1,0 +1,55 @@
+name: Security
+permissions:
+  contents: read
+  security-events: write
+
+on:
+  workflow_call:
+  schedule:
+    # Weekly on Monday at 00:00 UTC
+    - cron: 0 0 * * 1
+
+# The documentation site (https://dvsa.github.io/vol-app), built from website/. Its whole tree is
+# Docusaurus build tooling - webpack, loaders, the dev server - and none of it reaches a reader of
+# the published site or any deployed application.
+#
+# This lives apart from security-app.yaml so that a finding here fails the check - it shows red -
+# without blocking the application Docker builds, which gate on security-app's result. Nothing in
+# ci.yaml needs this job, so red here holds up no application release. Keep it that way rather
+# than reaching for continue-on-error, which turns the whole job green and hides the finding.
+#
+# Advisories with no fixed release anywhere are excluded in website/.snyk with a reason and an
+# expiry, so red here always means something new and actionable rather than a known dead end.
+jobs:
+  documentation-scan:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master
+      - name: Scan documentation site
+        run: snyk test website --sarif-file-output=website-snyk-results.sarif
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Fix SARIF security-severity values
+        if: ${{ always() }}
+        run: |
+          if [ -f "website-snyk-results.sarif" ]; then
+            jq '(.runs[].tool.driver.rules // [])[] |= (
+              if .properties["security-severity"] == null or .properties["security-severity"] == "undefined" then
+                .properties["security-severity"] = "5.0"
+              else
+                .
+              end
+            )' "website-snyk-results.sarif" > "website-snyk-results-fixed.sarif"
+            mv "website-snyk-results-fixed.sarif" "website-snyk-results.sarif"
+          fi
+      - name: Upload Results to GitHub Code Scanning
+        if: ${{ always() }}
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: website-snyk-results.sarif
+          # Unchanged from when this was the Website leg of security-app.yaml, so existing code
+          # scanning alerts carry over rather than being orphaned under a new category.
+          category: snyk-website
