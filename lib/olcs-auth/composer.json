@@ -53,6 +53,7 @@
   },
   "require-dev": {
     "bamarni/composer-bin-plugin": "^1.8.2",
+    "brianium/paratest": "^7.24.1",
     "mockery/mockery": "^1.6",
     "phpstan/phpstan-mockery": "^2.0",
     "phpstan/phpstan-phpunit": "^2.0",
@@ -87,6 +88,7 @@
       "@composer bin all install"
     ],
     "test": "phpunit",
+    "test:parallel": "paratest",
     "phpcs": "phpcs",
     "psalm": "psalm",
     "phpstan": "phpstan --memory-limit=1G",
