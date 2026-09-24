@@ -57,8 +57,9 @@ final class ApplicationKnowledgeExperienceReviewService extends AbstractReviewSe
     {
         $files = [];
 
+        // descriptions are operator-supplied filenames and the list is rendered unescaped
         foreach ($documents as $document) {
-            $files[] = $document['description'];
+            $files[] = htmlspecialchars((string) $document['description'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
         }
 
         return implode('<br>', $files);

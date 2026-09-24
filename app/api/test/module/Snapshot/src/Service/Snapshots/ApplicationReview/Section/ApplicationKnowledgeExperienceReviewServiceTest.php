@@ -95,6 +95,9 @@ final class ApplicationKnowledgeExperienceReviewServiceTest extends MockeryTestC
                     [
                         'description' => 'bar.txt',
                     ],
+                    [
+                        'description' => '<img src=x onerror=alert(1)>.pdf',
+                    ],
                 ],
             ]);
 
@@ -104,7 +107,7 @@ final class ApplicationKnowledgeExperienceReviewServiceTest extends MockeryTestC
                     [
                         'label' => 'application-review-knowledge-experience-evidence',
                         'noEscape' => true,
-                        'value' => 'foo.txt<br>bar.txt',
+                        'value' => 'foo.txt<br>bar.txt<br>&lt;img src=x onerror=alert(1)&gt;.pdf',
                     ],
                 ],
             ],

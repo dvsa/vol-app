@@ -297,7 +297,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var int|null
      */
-    #[ORM\Column(type: 'integer', name: 'knowledge_experience_status', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'knowledge_experience_status', nullable: true, options: ['unsigned' => true])]
     protected $knowledgeExperienceStatus;
 
     /**

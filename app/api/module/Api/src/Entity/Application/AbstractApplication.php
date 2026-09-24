@@ -377,7 +377,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Applicant is content to attend Operator Licence Awareness Training
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'knowledge_experience_olat', nullable: true)]
     protected $knowledgeExperienceOlat;
@@ -1819,7 +1819,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set knowledge experience OLAT
      *
-     * @param string $knowledgeExperienceOlat
+     * @param string|null $knowledgeExperienceOlat
      *
      * @return static
      */
@@ -1833,7 +1833,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get knowledge experience OLAT
      *
-     * @return string
+     * @return string|null
      */
     public function getKnowledgeExperienceOlat()
     {
