@@ -184,6 +184,14 @@ module "log_bucket" {
     abort_incomplete_multipart_upload_days = 7
   }]
 
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        sse_algorithm = "aws:kms"
+      }
+    }
+  }
+
   control_object_ownership = true
   object_ownership         = "ObjectWriter"
 
