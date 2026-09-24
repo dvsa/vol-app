@@ -512,6 +512,25 @@ final class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('Line 1<br>' . "\n" . 'Line 2<br>' . "\n" . 'Line 3', $result);
     }
 
+    public function testReplaceGrabsInHtmlEscapesMarkupInValues(): void
+    {
+        // This pass runs after the purifier, so a value with markup must land as literal text.
+        $html = '<p>Dear [[OP_NAME]]</p>';
+
+        $mockBookmark = m::mock(StaticBookmark::class);
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn("Acme <img src=x onerror=alert(1)>\n& Sons");
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('OP_NAME')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        $this->assertSame('<p>Dear Acme &lt;img src=x onerror=alert(1)&gt;<br>' . "\n" . '&amp; Sons</p>', $result);
+    }
+
     public function testReplaceGrabsStripsUnresolvableTokensInsteadOfLeakingThem(): void
     {
         // A token no bookmark can serve (unknown class, or a dynamic bookmark whose
@@ -531,6 +550,37 @@ final class VolGrabReplacementServiceTest extends MockeryTestCase
 
         $this->assertStringNotContainsString('NO_SUCH_GRAB', $result);
         $this->assertStringContainsString('Signed: ', $result);
+    }
+
+    public function testReplaceGrabsCanLeaveUnresolvableTokensInPlace(): void
+    {
+        // Generation-time resolution keeps unknown tokens so the render pass can try again.
+        $json = json_encode([
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => '[[GOOD_TOKEN]] and [[BAD_TOKEN]]']],
+            ],
+        ]);
+
+        $mockGoodBookmark = m::mock(StaticBookmark::class);
+        $mockGoodBookmark->shouldReceive('setParser')->once();
+        $mockGoodBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockGoodBookmark->shouldReceive('render')->andReturn('SUCCESS');
+        $mockGoodBookmark->shouldReceive('isPreformatted')->andReturn(false);
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('GOOD_TOKEN')
+            ->once()
+            ->andReturn($mockGoodBookmark);
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('BAD_TOKEN')
+            ->once()
+            ->andThrow(new \Exception('Bad token'));
+
+        $result = $this->service->replaceGrabs($json, [], false);
+        $decoded = json_decode($result, true);
+
+        $this->assertSame('SUCCESS and [[BAD_TOKEN]]', $decoded['blocks'][0]['data']['text']);
     }
 
     public function testReplaceGrabsRecordsEmptyOutcomeWhenRenderProducesNothing(): void

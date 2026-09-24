@@ -4,80 +4,54 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\Query;
-use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitType;
-use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit as IrhpPermitEntity;
-use Mockery as m;
 use DateTime;
+use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitType as Repo;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit as IrhpPermitEntity;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType as Entity;
 
-/**
- * IRHP Permit Type test
- */
 final class IrhpPermitTypeTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(IrhpPermitType::class);
+        $this->setUpRealSut(Repo::class);
     }
 
     public function testFetchAvailableTypes(): void
     {
         $now = new DateTime('2018-10-25 13:21:10');
 
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchAvailableTypes($now));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT ipt, rd FROM ' . Entity::class . ' ipt'
+            . ' INNER JOIN ipt.name rd INNER JOIN ipt.irhpPermitStocks ips'
+            . ' INNER JOIN ips.irhpPermitWindows ipw'
+            . ' WHERE ipw.startDate <= :now AND ipw.endDate > :now AND ips.hiddenSs <> 1'
+            . ' ORDER BY rd.displayOrder ASC',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchAvailableTypes($now));
-
-        $expectedQuery = 'BLAH '
-            . 'SELECT ipt, rd '
-            . 'INNER JOIN ipt.name rd '
-            . 'INNER JOIN ipt.irhpPermitStocks ips '
-            . 'INNER JOIN ips.irhpPermitWindows ipw '
-            . 'AND ipw.startDate <= [[2018-10-25T13:21:10+00:00]] '
-            . 'AND ipw.endDate > [[2018-10-25T13:21:10+00:00]] '
-            . 'AND ips.hiddenSs != 1 '
-            . 'ORDER BY rd.displayOrder ASC';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame($now, $qb->getParameter('now')->getValue());
     }
 
     public function testFetchReadyToPrint(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchReadyToPrint());
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT DISTINCT ipt, rd FROM ' . Entity::class . ' ipt'
+            . ' INNER JOIN ipt.name rd INNER JOIN ipt.irhpPermitStocks ips'
+            . ' INNER JOIN ips.irhpPermitRanges ipr INNER JOIN ipr.irhpPermits ip'
+            . ' WHERE ip.status IN(:statuses)'
+            . ' ORDER BY rd.description ASC',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchReadyToPrint());
-
-        $expectedQuery = 'BLAH '
-            . 'SELECT ipt, rd DISTINCT '
-            . 'INNER JOIN ipt.name rd '
-            . 'INNER JOIN ipt.irhpPermitStocks ips '
-            . 'INNER JOIN ips.irhpPermitRanges ipr '
-            . 'INNER JOIN ipr.irhpPermits ip '
-            . 'AND ip.status IN([[['
-                . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
-                . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]]) '
-            . 'ORDER BY rd.description ASC';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(IrhpPermitEntity::$readyToPrintStatuses, $qb->getParameter('statuses')->getValue());
     }
 }

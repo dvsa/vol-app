@@ -2,70 +2,37 @@
 
 declare(strict_types=1);
 
-/**
- * ErruRequest test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\Query;
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\ErruRequest as ErruRequestRepo;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
-use Dvsa\Olcs\Api\Entity\Si\ErruRequest;
-use Doctrine\ORM\Query\Expr\Comparison;
+use Dvsa\Olcs\Api\Domain\Repository\ErruRequest as Repo;
+use Dvsa\Olcs\Api\Entity\Si\ErruRequest as Entity;
 
-/**
- * ErruRequest test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 final class ErruRequestTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(ErruRequestRepo::class, true);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    /**
-     * Test existsByWorkflowId method
-     *
-     * @param array $result
-     * @param bool $recordFound
-     */
     #[\PHPUnit\Framework\Attributes\DataProvider('existsByWorkflowIdProvider')]
-    public function testExistsByWorkflowId(mixed $result, mixed $recordFound): void
+    public function testExistsByWorkflowId(array $result, bool $expected): void
     {
-        $workflowId = '123456';
-        $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(EntityRepository::class);
-        $doctrineComparison = m::mock(Comparison::class);
+        $qb = $this->createRealQb()->willReturn($result);
 
-        $this->em->shouldReceive('getRepository')->with(ErruRequest::class)->andReturn($repo);
+        $this->assertSame($expected, $this->sut->existsByWorkflowId('123456'));
 
-        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $qb->shouldReceive('expr->eq')->with('m.workflowId', ':workflowId')->once()->andReturn($doctrineComparison);
-        $qb->shouldReceive('where')->with($doctrineComparison)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('workflowId', $workflowId)->once()->andReturnSelf();
-        $qb->shouldReceive('setMaxResults')->with(1)->once()->andReturnSelf();
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn($result);
-
-        $this->assertSame($recordFound, $this->sut->existsByWorkflowId($workflowId));
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.workflowId = :workflowId',
+            $qb->getDQL(),
+        );
+        $this->assertSame('123456', $qb->getParameter('workflowId')->getValue());
+        $this->assertSame(1, $qb->getMaxResults());
     }
 
-    /**
-     * Data provider for testExistsByLicNo
-     *
-     * @return \Iterator<(int | string), mixed>
-     */
     public static function existsByWorkflowIdProvider(): \Iterator
     {
-        yield [[0 => 'Result'], true];
-        yield [[], false];
+        yield 'found' => [['Result'], true];
+        yield 'not found' => [[], false];
     }
 }
