@@ -14,9 +14,12 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 final class UpdateKnowledgeExperience extends AbstractIdWithVersionCommand
 {
     /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * The frontend sends an int, which StringTrim passes through untouched; Digits normalises it to the
+     * string the getter declares.
+     *
+     * @Transfer\Filter("Laminas\Filter\Digits")
      * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\Between", options={"min": 0, "max": 2})
+     * @Transfer\Validator("Laminas\Validator\Between", options={"min": 1, "max": 2})
      * @Transfer\Optional
      */
     protected $evidenceUploadType;
