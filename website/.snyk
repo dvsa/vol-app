@@ -1,5 +1,5 @@
-# Snyk policy file for the docs site (scanned by the Website leg of
-# .github/workflows/security-app.yaml).
+# Snyk policy file for the documentation site (scanned by the Documentation job in
+# .github/workflows/security-documentation.yaml).
 #
 # Only for advisories with no fixed release anywhere. Anything that can be resolved by moving
 # a version is resolved instead - by npm audit fix, by bumping Docusaurus, or by an entry in
@@ -28,4 +28,55 @@ ignore:
           No fixed release exists - every published version of image-size is affected. Build-time
           only, via @docusaurus/mdx-loader, on images committed to this repo's own docs.
         expires: 2027-02-17T00:00:00.000Z
+  # uri-js, percent-decoding and removeDotSegments infinite loop. 4.4.1 is the final release of an
+  # unmaintained package and both affect it. Reached only through ajv 6 inside schema-utils 3,
+  # which file-loader, url-loader and null-loader use to validate their own webpack options -
+  # options written by Docusaurus and this repo's config, never a URI from outside. ajv 8 has
+  # moved off uri-js; this goes away when Docusaurus drops the schema-utils 3 loaders.
+  SNYK-JS-URIJS-19963961:
+    - "*":
+        reason: >-
+          No fixed release exists - uri-js is unmaintained. Build-time only, via ajv 6 validating
+          webpack loader options that come from Docusaurus and this repo's config.
+        expires: 2027-03-24T00:00:00.000Z
+  SNYK-JS-URIJS-19963963:
+    - "*":
+        reason: >-
+          No fixed release exists - uri-js is unmaintained. Build-time only, via ajv 6 validating
+          webpack loader options that come from Docusaurus and this repo's config.
+        expires: 2027-03-24T00:00:00.000Z
+  # http-cache-semantics, two shared-cache flaws that serve one client's cached response to
+  # another. Every published version is affected. Reached only through update-notifier, which
+  # asks the npm registry whether a newer Docusaurus exists when the CLI runs; there is one
+  # client and no shared cache, so there is nobody else's response to leak.
+  SNYK-JS-HTTPCACHESEMANTICS-19964068:
+    - "*":
+        reason: >-
+          No fixed release exists. Build-time only, via Docusaurus's update-notifier - a single
+          client checking the npm registry, with no shared cache to leak between users.
+        expires: 2027-03-24T00:00:00.000Z
+  SNYK-JS-HTTPCACHESEMANTICS-19964064:
+    - "*":
+        reason: >-
+          No fixed release exists. Build-time only, via Docusaurus's update-notifier - a single
+          client checking the npm registry, with no shared cache to leak between users.
+        expires: 2027-03-24T00:00:00.000Z
+  # braces, stack exhaustion on deeply nested brace patterns. 3.0.3 is the latest release and is
+  # affected. Reached through micromatch/fast-glob while Docusaurus globs this repo's docs, and
+  # the patterns are Docusaurus's and this repo's own - the worst case is a failed build.
+  SNYK-JS-BRACES-19963945:
+    - "*":
+        reason: >-
+          No fixed release exists. Build-time only - the glob patterns come from Docusaurus and
+          this repo's config, and the worst outcome is a crashed build.
+        expires: 2027-03-24T00:00:00.000Z
+  # deepmerge, prototype pollution through a __proto__ key. 4.3.1 is the latest release and is
+  # affected. Reached only through @svgr/plugin-svgo merging its SVGO config while building
+  # the docs, and both sides of that merge are Docusaurus's and this repo's own config.
+  SNYK-JS-DEEPMERGE-19964053:
+    - "*":
+        reason: >-
+          No fixed release exists. Build-time only, via @svgr/plugin-svgo merging SVGO config
+          that comes from Docusaurus and this repo, not from any outside input.
+        expires: 2027-03-24T00:00:00.000Z
 patch: {}
