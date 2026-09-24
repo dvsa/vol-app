@@ -103,14 +103,17 @@ class LetterGenerationController extends AbstractInternalController implements L
         // Extract entity context from query and route params
         $entityContext = $this->extractEntityContext($allParams);
 
+        // Goods/PSV of the licence or application, null when there isn't one (TM, IRFO)
+        $goodsOrPsv = $this->fetchLetterContext($entityContext)['goodsOrPsv'] ?? null;
+
         // Build accordion data structure with issue types and their issues
-        $accordionData = $this->buildAccordionData();
+        $accordionData = $this->buildAccordionData($goodsOrPsv);
 
         // Fetch appendices for this letter type
         $appendicesData = $this->fetchAppendicesForLetterType($templateId);
 
         // Fetch letter choices for this letter type
-        $letterChoicesData = $this->fetchLetterChoicesForLetterType($templateId);
+        $letterChoicesData = $this->fetchLetterChoicesForLetterType($templateId, $goodsOrPsv);
 
         $view = new ViewModel([
             'templateId' => $templateId,
@@ -161,6 +164,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $letterTypeId = $template['letterType']['id'];
 
         $entityContext = $this->extractEntityContext($allParams);
+        $goodsOrPsv = $this->fetchLetterContext($entityContext)['goodsOrPsv'] ?? null;
 
         $commandData = [
             'letterType' => $letterTypeId,
@@ -174,7 +178,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $selectedChoices = array_merge($postData['letterChoices'] ?? [], $radioSelections);
 
         // Enforce "pick exactly one" for every radio group on this letter type
-        $radioError = $this->validateRequiredRadioChoices($templateId, $selectedChoices);
+        $radioError = $this->validateRequiredRadioChoices($templateId, $selectedChoices, $goodsOrPsv);
         if ($radioError !== null) {
             return $this->jsonError($radioError);
         }
@@ -323,26 +327,7 @@ class LetterGenerationController extends AbstractInternalController implements L
             ];
         }
 
-        // Build the to-dos list for the sidebar.
-        //
-        // A to-do carries no name of its own on the instance row -- the label lives on the
-        // version, and the key on the parent. Both are needed: two to-dos can share a name
-        // (FI01 and FI02 both read "You need to upload bank statements to your online account"),
-        // so the key is what makes them tellable apart.
-        $todosList = [];
-        foreach ($result['letterInstanceTodos'] ?? [] as $todo) {
-            $todoVersion = $todo['letterTodoVersion'] ?? [];
-            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
-            $name = $todoVersion['name'] ?? null;
-
-            $todosList[] = [
-                'id' => $todo['id'] ?? null,
-                // Falls back to the key alone while the name backfill has not run.
-                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
-                'type' => 'todo',
-                'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
-            ];
-        }
+        $todosList = $this->buildTodosList($result);
 
         // Check for missing required sections
         $warnings = $this->checkRequiredSections($result);
@@ -944,9 +929,10 @@ class LetterGenerationController extends AbstractInternalController implements L
     /**
      * Build accordion data structure with issue types and their issues
      *
+     * @param string|null $goodsOrPsv Letter's Goods/PSV, null shows every issue
      * @return array Array of ['issueType' => [...], 'issues' => [...]]
      */
-    protected function buildAccordionData(): array
+    protected function buildAccordionData(?string $goodsOrPsv = null): array
     {
         // Fetch all active issue types ordered by display order
         $issueTypes = $this->fetchActiveIssueTypes();
@@ -957,6 +943,10 @@ class LetterGenerationController extends AbstractInternalController implements L
         // Group issues by issue type ID
         $issuesByType = [];
         foreach ($letterIssues as $issue) {
+            if (!$this->appliesToGoodsOrPsv($issue['currentVersion']['goodsOrPsv'] ?? null, $goodsOrPsv)) {
+                continue;
+            }
+
             $typeId = $issue['currentVersion']['letterIssueType']['id'] ?? null;
             if ($typeId) {
                 if (!isset($issuesByType[$typeId])) {
@@ -980,17 +970,19 @@ class LetterGenerationController extends AbstractInternalController implements L
     }
 
     /**
-     * Fetch active issue types ordered by display order
+     * Goods/PSV and NI of the entity the letter is for, worked out the same way generation does
      *
-     * @return array
+     * @param array $entityContext Entity context with type and ID
+     * @return array ['goodsOrPsv' => ?string, 'isNi' => ?bool], empty when there is no entity
      */
-    protected function fetchActiveIssueTypes(): array
+    protected function fetchLetterContext(array $entityContext): array
     {
-        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList::create([
-            'sort' => 'displayOrder',
-            'order' => 'ASC',
-            'page' => 1,
-            'limit' => 100,
+        if (empty($entityContext['type'])) {
+            return [];
+        }
+
+        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\GenerationContext::create([
+            $entityContext['type'] => $entityContext['id'],
         ]);
 
         $response = $this->handleQuery($query);
@@ -999,10 +991,37 @@ class LetterGenerationController extends AbstractInternalController implements L
             return [];
         }
 
-        $result = $response->getResult();
+        return $response->getResult();
+    }
+
+    /**
+     * Whether an issue or choice set to Goods, PSV or neither (both) belongs on this letter
+     *
+     * @param array|string|null $setting Serialised RefData or just its id
+     * @param string|null $goodsOrPsv Letter's Goods/PSV, null when unknown
+     * @return bool
+     */
+    protected function appliesToGoodsOrPsv(array|string|null $setting, ?string $goodsOrPsv): bool
+    {
+        $settingId = is_array($setting) ? ($setting['id'] ?? null) : $setting;
+
+        return $goodsOrPsv === null || empty($settingId) || $settingId === $goodsOrPsv;
+    }
+
+    /**
+     * Fetch active issue types ordered by display order
+     *
+     * @return array
+     */
+    protected function fetchActiveIssueTypes(): array
+    {
+        $results = $this->fetchAllPages(
+            \Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList::class,
+            ['sort' => 'displayOrder', 'order' => 'ASC']
+        );
 
         // Filter active issue types only
-        $issueTypes = array_filter($result['results'] ?? [], fn($issueType) => !empty($issueType['isActive']));
+        $issueTypes = array_filter($results, fn($issueType) => !empty($issueType['isActive']));
 
         return array_values($issueTypes);
     }
@@ -1014,22 +1033,38 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     protected function fetchActiveLetterIssues(): array
     {
-        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterIssue\GetList::create([
-            'sort' => 'issueKey',
-            'order' => 'ASC',
-            'page' => 1,
-            'limit' => 100, // Maximum allowed limit
-        ]);
+        return $this->fetchAllPages(
+            \Dvsa\Olcs\Transfer\Query\Letter\LetterIssue\GetList::class,
+            ['sort' => 'issueKey', 'order' => 'ASC']
+        );
+    }
 
-        $response = $this->handleQuery($query);
+    /**
+     * Fetch every row of a list query, a page at a time
+     *
+     * @param string $listQueryClass Paged list query DTO class
+     * @param array $params Sort and order
+     * @return array
+     */
+    protected function fetchAllPages(string $listQueryClass, array $params): array
+    {
+        $results = [];
+        $page = 1;
 
-        if (!$response->isOk()) {
-            return [];
-        }
+        do {
+            // 100 is the most a list query allows per page
+            $response = $this->handleQuery($listQueryClass::create($params + ['page' => $page++, 'limit' => 100]));
 
-        $result = $response->getResult();
+            if (!$response->isOk()) {
+                break;
+            }
 
-        return $result['results'] ?? [];
+            $result = $response->getResult();
+            $pageResults = $result['results'] ?? [];
+            $results = array_merge($results, $pageResults);
+        } while (!empty($pageResults) && count($results) < (int) ($result['count'] ?? 0));
+
+        return $results;
     }
 
     /**
@@ -1081,9 +1116,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      * Fetch letter choices linked to a letter type
      *
      * @param int $templateId Doc template ID
+     * @param string|null $goodsOrPsv Letter's Goods/PSV, null offers every choice
      * @return array Letter choices data [{id, label, groupLabel, inputType}]
      */
-    protected function fetchLetterChoicesForLetterType(int $templateId): array
+    protected function fetchLetterChoicesForLetterType(int $templateId, ?string $goodsOrPsv = null): array
     {
         $template = $this->fetchTemplateById($templateId);
 
@@ -1108,7 +1144,10 @@ class LetterGenerationController extends AbstractInternalController implements L
 
         foreach ($result['letterTypeChoices'] ?? [] as $ltc) {
             $letterChoice = $ltc['letterChoice'] ?? [];
-            if (!empty($letterChoice['isActive'])) {
+            if (
+                !empty($letterChoice['isActive'])
+                && $this->appliesToGoodsOrPsv($letterChoice['goodsOrPsv'] ?? null, $goodsOrPsv)
+            ) {
                 $choices[] = [
                     'id' => $letterChoice['id'] ?? null,
                     'label' => $letterChoice['label'] ?? '',
@@ -1136,12 +1175,16 @@ class LetterGenerationController extends AbstractInternalController implements L
      *
      * @param int $templateId Doc template ID
      * @param array $selectedChoices Selected letter choice IDs (checkbox + radio merged)
+     * @param string|null $goodsOrPsv Letter's Goods/PSV, so a group that wasn't shown isn't demanded
      * @return string|null Error message if a radio group is unsatisfied, otherwise null
      */
-    protected function validateRequiredRadioChoices(int $templateId, array $selectedChoices): ?string
-    {
+    protected function validateRequiredRadioChoices(
+        int $templateId,
+        array $selectedChoices,
+        ?string $goodsOrPsv = null
+    ): ?string {
         $radioGroups = [];
-        foreach ($this->fetchLetterChoicesForLetterType($templateId) as $choice) {
+        foreach ($this->fetchLetterChoicesForLetterType($templateId, $goodsOrPsv) as $choice) {
             if (($choice['inputType'] ?? 'checkbox') === 'radio') {
                 $radioGroups[$choice['groupLabel']][] = (int) $choice['id'];
             }
@@ -1156,6 +1199,39 @@ class LetterGenerationController extends AbstractInternalController implements L
         }
 
         return null;
+    }
+
+    /**
+     * Build the to-dos list for the preview sidebar.
+     *
+     * A to-do carries no name of its own on the instance row -- the label lives on the
+     * version, and the key on the parent. Both are needed: two to-dos can share a name
+     * (FI01 and FI02 both read "You need to upload bank statements to your online account"),
+     * so the key is what makes them tellable apart.
+     *
+     * @param array $letterInstanceData Letter instance query result
+     */
+    protected function buildTodosList(array $letterInstanceData): array
+    {
+        $todosList = [];
+        foreach ($letterInstanceData['letterInstanceTodos'] ?? [] as $todo) {
+            $todoVersion = $todo['letterTodoVersion'] ?? [];
+            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
+            $name = $todoVersion['name'] ?? null;
+
+            $todosList[] = [
+                'id' => $todo['id'] ?? null,
+                // Falls back to the key alone while the name backfill has not run.
+                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
+                'type' => 'todo',
+                'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
+                // flagged to-dos must be edited before the letter can be sent (PrepareToSend)
+                'inputPending' => !empty($todoVersion['requiresInput'])
+                    && empty($todo['editedDescription']),
+            ];
+        }
+
+        return $todosList;
     }
 
     /**
