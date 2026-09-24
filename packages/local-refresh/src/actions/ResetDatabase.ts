@@ -8,7 +8,7 @@ import ActionInterface from "./ActionInterface";
 import dedent from "dedent";
 import createDebug from "debug";
 import { GenericBar } from "cli-progress";
-import { MergeWinner, TableSummary, mergeProdDump } from "../utils/ProdDataMerge";
+import { MergeWinner, PROD_ALWAYS_WINS, TableSummary, mergeProdDump } from "../utils/ProdDataMerge";
 
 const debug = createDebug("refresh:actions:ResetDatabase");
 
@@ -224,7 +224,9 @@ export default class ResetDatabase implements ActionInterface {
     console.log(chalk.greenBright(`Prod data merged into the local database (${winner} wins where both have a row):`));
 
     for (const { table, inBoth, prodOnly, localOnly } of this.mergeSummary) {
-      console.log(`  ${table}: ${inBoth} in both, ${prodOnly} added from prod, ${localOnly} local only kept`);
+      const note = PROD_ALWAYS_WINS.includes(table) ? " (prod always wins)" : "";
+
+      console.log(`  ${table}: ${inBoth} in both${note}, ${prodOnly} added from prod, ${localOnly} local only kept`);
     }
 
     for (const table of this.mergeSkipped) {

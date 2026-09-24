@@ -43,8 +43,13 @@ const MATCH_RULES: Record<string, MatchRule> = {
   template: { on: ["locale", "format", "name"] },
 };
 
+// ETL patches and prod both give new doc templates and their files MAX(id) + 1, so the same id can be a
+// different template on each side and nothing else identifies them reliably. Prod's rows always win here
+// so prod's templates keep pointing at their own files.
+export const PROD_ALWAYS_WINS = ["document", "doc_template"];
+
 // Parents go before the tables that point at them
-const MERGE_FIRST = ["translation_key", "translation_key_text", "template_test_data"];
+const MERGE_FIRST = ["translation_key", "translation_key_text", "template_test_data", "document"];
 
 export const SUMMARY_MARKER = "MERGE_SUMMARY";
 
@@ -128,11 +133,12 @@ export const buildMergeSql = (
         `(SELECT COUNT(*) FROM ${localTable} l WHERE NOT EXISTS (SELECT 1 FROM ${source} WHERE ${matches("l")}));`,
     );
 
+    const tableWinner = PROD_ALWAYS_WINS.includes(table.name) ? MergeWinner.PROD : winner;
     const updateColumns = common.filter(
       (name) => !rule.on.includes(name) && !primary.some((column) => column.name === name),
     );
 
-    if (winner === MergeWinner.PROD && updateColumns.length > 0) {
+    if (tableWinner === MergeWinner.PROD && updateColumns.length > 0) {
       statements.push(
         `UPDATE ${localTable} l JOIN ${source} ON ${matches("l")} ` +
           `SET ${updateColumns.map((name) => `l.${q(name)} = ${value(name)}`).join(", ")};`,
