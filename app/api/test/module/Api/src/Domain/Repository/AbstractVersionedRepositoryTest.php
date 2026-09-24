@@ -12,8 +12,12 @@ use Dvsa\Olcs\Api\Domain\Repository\LetterSection;
 use Dvsa\Olcs\Api\Domain\Repository\LetterTodo;
 use Dvsa\Olcs\Api\Entity\Letter\LetterAppendix as LetterAppendixEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssue as LetterIssueEntity;
+use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSection as LetterSectionEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTodo as LetterTodoEntity;
+use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
 /**
  * fetchById() is declared once on AbstractVersionedRepository and inherited by all four letter
@@ -68,6 +72,47 @@ final class AbstractVersionedRepositoryTest extends RepositoryTestCase
         $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn([['id' => 1]]);
 
         $this->assertSame(['id' => 1], $this->sut->fetchById(1, Query::HYDRATE_ARRAY));
+    }
+
+    /**
+     * Content deleted in admin stays in the database for the generated letters that use it, so
+     * every list has to leave it out.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('versionedRepositoryProvider')]
+    public function testApplyListFiltersHidesDeleted(string $repositoryClass, string $entityClass): void
+    {
+        $this->setUpRealSut($repositoryClass, true);
+        $qb = $this->createRealQb();
+
+        $this->sut->applyListFilters($qb, m::mock(QueryInterface::class));
+
+        $this->assertSame('SELECT m FROM ' . $entityClass . ' m WHERE m.deletedOn IS NULL', $qb->getDQL());
+        $this->assertStringContainsString('deleted_on IS NULL', $this->compileDql($qb->getDQL()));
+    }
+
+    public function testSaveMakesANewVersionWhenAFieldIsClearedBackToEmpty(): void
+    {
+        $this->setUpSut(LetterIssue::class);
+        $this->em->shouldReceive('persist');
+        $this->em->shouldReceive('flush')->once();
+
+        $goodsVersion = new LetterIssueVersion();
+        $goodsVersion->setHeading('Adverts');
+        $goodsVersion->setGoodsOrPsv(new RefData('lcat_gv'));
+        $goodsVersion->setVersionNumber(1);
+
+        $issue = new LetterIssueEntity();
+        $issue->setCurrentVersion($goodsVersion);
+
+        // Goods/PSV set back to "Both"
+        $issue->setGoodsOrPsv(null);
+        $this->sut->save($issue);
+
+        $newVersion = $issue->getCurrentVersion();
+        $this->assertNotSame($goodsVersion, $newVersion);
+        $this->assertSame(2, $newVersion->getVersionNumber());
+        $this->assertNull($newVersion->getGoodsOrPsv());
+        $this->assertSame('Adverts', $newVersion->getHeading());
     }
 
     public static function versionedRepositoryProvider(): \Iterator

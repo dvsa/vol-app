@@ -38,6 +38,12 @@ final class Update extends AbstractCommand
     protected $helpText;
 
     /**
+     * @var bool
+     * @Transfer\Optional
+     */
+    protected $requiresInput;
+
+    /**
      * @var string
      * @Transfer\Optional
      * @Transfer\Filter("Laminas\Filter\DateTimeFormatter")
@@ -67,6 +73,14 @@ final class Update extends AbstractCommand
     public function getHelpText()
     {
         return $this->helpText;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRequiresInput()
+    {
+        return $this->requiresInput;
     }
 
     /**

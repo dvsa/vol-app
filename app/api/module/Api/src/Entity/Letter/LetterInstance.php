@@ -159,7 +159,8 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
-     * How many of this letter's issues require each to-do, keyed by letter_todo_version id.
+     * How many of this letter's issues require each to-do, keyed by LetterTodoVersion::getDedupeKey
+     * so that issues linking different versions of the same to-do count towards one total (VOL-7408).
      *
      * A to-do is deduplicated when it is composed, so it appears once no matter how many of the
      * selected issues call for it -- and it is attached to whichever issue happened to come first.
@@ -171,7 +172,7 @@ class LetterInstance extends AbstractLetterInstance
      * association, so that shape is an N+1. This way the lazy load happens once per issue for the
      * whole letter.
      *
-     * @return array<int, int>
+     * @return array<string, int>
      */
     public function getTodoRequiringIssueCounts(): array
     {
@@ -193,8 +194,8 @@ class LetterInstance extends AbstractLetterInstance
                     continue;
                 }
 
-                $id = $todoVersion->getId();
-                $counts[$id] = ($counts[$id] ?? 0) + 1;
+                $key = $todoVersion->getDedupeKey();
+                $counts[$key] = ($counts[$key] ?? 0) + 1;
             }
         }
 

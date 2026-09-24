@@ -39,6 +39,11 @@ final class Create extends AbstractCommandHandler
 
         $letterChoice->setIsActive($command->getIsActive());
 
+        // No Goods/PSV means the choice is offered on both
+        if ($command->getGoodsOrPsv()) {
+            $letterChoice->setGoodsOrPsv($this->getRepo()->getRefdataReference($command->getGoodsOrPsv()));
+        }
+
         $this->getRepo()->save($letterChoice);
 
         $this->result->addId('letterChoice', $letterChoice->getId());

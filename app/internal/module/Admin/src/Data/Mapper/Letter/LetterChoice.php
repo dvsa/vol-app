@@ -27,6 +27,7 @@ class LetterChoice implements MapperInterface
                 'inputType' => $data['inputType'] ?? null,
                 'displayOrder' => $data['displayOrder'] ?? null,
                 'isActive' => $data['isActive'] ?? true,
+                'goodsOrPsv' => $data['goodsOrPsv']['id'] ?? null,
             ]
         ];
     }
@@ -44,6 +45,11 @@ class LetterChoice implements MapperInterface
         // Convert boolean values
         if (isset($commandData['isActive'])) {
             $commandData['isActive'] = (bool) $commandData['isActive'];
+        }
+
+        // "Both" posts an empty value, leaving it out tells the API to clear it
+        if (empty($commandData['goodsOrPsv'])) {
+            unset($commandData['goodsOrPsv']);
         }
 
         return $commandData;
