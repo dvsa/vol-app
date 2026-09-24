@@ -50,6 +50,7 @@ class LetterPreviewService
         private $contentStore,
         private $docTemplateRepo,
         private readonly VolGrabReplacementService $volGrabReplacementService,
+        private readonly VolGrabContextBuilder $contextBuilder,
         private readonly ?ConverterService $converterService = null
     ) {
     }
@@ -302,7 +303,7 @@ class LetterPreviewService
         return [
             '{{LOGO_IMAGE}}' => $this->buildLogoImage(),
             '{{LETTER_REFERENCE}}' => htmlspecialchars($letterInstance->getReference() ?? ''),
-            '{{LETTER_DATE}}' => date('jS F Y'),
+            '{{LETTER_DATE}}' => $this->buildLetterDate($letterInstance),
             '{{SECTIONS_CONTENT}}' => $sectionsHtml,
             '{{ISSUES_CONTENT}}' => $issuesHtml,
             '{{CLOSING_CONTENT}}' => $closingHtml,
@@ -481,6 +482,17 @@ class LetterPreviewService
     }
 
     /**
+     * The letter is dated when it was generated, matching the deadline grabs resolved at the
+     * same moment. Unsaved instances (builder previews) have no createdOn, so use today.
+     */
+    private function buildLetterDate(LetterInstance $letterInstance): string
+    {
+        $createdOn = $letterInstance->getCreatedOn(true);
+
+        return ($createdOn instanceof \DateTimeInterface ? $createdOn : new \DateTime())->format('jS F Y');
+    }
+
+    /**
      * Build caseworker name from the user who created the letter instance
      *
      * @param LetterInstance $letterInstance
@@ -591,12 +603,6 @@ class LetterPreviewService
     }
 
     /**
-     * Build context array for vol-grab replacement
-     *
-     * @param LetterInstance $letterInstance
-     * @return array Context containing entity IDs for bookmark resolution
-     */
-    /**
      * Wraps a section's HTML in a locator the builder's diagnostics can scroll to.
      * A no-op unless this render asked for annotation, so letters and caseworker
      * previews are byte-identical to before.
@@ -610,21 +616,12 @@ class LetterPreviewService
         return sprintf('<div data-preview-section="%d">%s</div>', $section->getId(), $html);
     }
 
+    /**
+     * Context for vol-grab replacement, plus the outcome collector when this render has one.
+     */
     private function buildVolGrabContext(LetterInstance $letterInstance): array
     {
-        $context = array_filter([
-            'licence' => $letterInstance->getLicence()?->getId(),
-            'application' => $letterInstance->getApplication()?->getId(),
-            'user' => $letterInstance->getCreatedBy()?->getId(),
-            'case' => $letterInstance->getCase()?->getId(),
-            'busRegId' => $letterInstance->getBusReg()?->getId(),
-            'organisation' => $letterInstance->getOrganisation()?->getId(),
-        ]);
-
-        // VOL-7305: isNi is needed by the OTC_LOGO token resolver and is a useful
-        // signal for any future region-aware bookmark. Added outside the array_filter
-        // because false is a meaningful value (GB letter) that should survive.
-        $context['isNi'] = $this->isNiOverride ?? (bool) ($letterInstance->getLicence()?->isNi() ?? false);
+        $context = $this->contextBuilder->build($letterInstance, $this->isNiOverride);
 
         if ($this->grabOutcomes !== null) {
             $context[GrabOutcomeCollector::CONTEXT_KEY] = $this->grabOutcomes;

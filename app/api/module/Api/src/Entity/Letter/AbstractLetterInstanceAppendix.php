@@ -102,6 +102,14 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     protected $editedContent;
 
     /**
+     * Default content with grabs resolved at generation
+     *
+     * @var array|null
+     */
+    #[ORM\Column(type: 'json', name: 'generated_content', nullable: true)]
+    protected $generatedContent;
+
+    /**
      * Version
      *
      * @var int
@@ -292,6 +300,30 @@ abstract class AbstractLetterInstanceAppendix implements BundleSerializableInter
     public function getEditedContent()
     {
         return $this->editedContent;
+    }
+
+    /**
+     * Set the generated content
+     *
+     * @param array $generatedContent new value being set
+     *
+     * @return static
+     */
+    public function setGeneratedContent($generatedContent)
+    {
+        $this->generatedContent = $generatedContent;
+
+        return $this;
+    }
+
+    /**
+     * Get the generated content
+     *
+     * @return array
+     */
+    public function getGeneratedContent()
+    {
+        return $this->generatedContent;
     }
 
     /**
