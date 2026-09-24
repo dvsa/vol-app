@@ -77,14 +77,19 @@ class DocumentAnalysis extends AbstractRepository
     }
 
     /**
-     * Fetch all document analysis for a given application, newest first
+     * Fetch document analyses matching the query filters, newest first.
+     *
+     * The document is fetch-joined because callers read it on every row (for example its
+     * issued date), which would otherwise be one lazy load per analysis.
      *
      * @return Entity[]
      */
-
     public function fetchAnalyses(?QueryInterface $query = null): array
     {
         $qb = $this->createQueryBuilder();
+
+        $qb->innerJoin($this->alias . '.document', 'd')
+            ->addSelect('d');
 
         if ($query !== null) {
             $this->applyAnalysisFilters($qb, $query);
@@ -99,9 +104,25 @@ class DocumentAnalysis extends AbstractRepository
 
     protected function applyAnalysisFilters(QueryBuilder $qb, QueryInterface $query): void
     {
+        // Application and variation pages: that specific application only.
         if ($query->getApplication() !== null) {
             $qb->andWhere('IDENTITY(' . $this->alias . '.application) = :applicationId')
                 ->setParameter('applicationId', (int) $query->getApplication());
+        }
+
+        // Licence page: follow the analysed document's own licence link, as the documents tab
+        // does, or an application (new or variation) on the licence for documents linked only
+        // to the application. LEFT JOIN so rows whose application was deleted (SET NULL) can
+        // still match on the document's licence.
+        if ($query->getLicence() !== null) {
+            $qb->leftJoin($this->alias . '.application', 'a')
+                ->andWhere(
+                    $qb->expr()->orX(
+                        'IDENTITY(d.licence) = :licenceId',
+                        'IDENTITY(a.licence) = :licenceId'
+                    )
+                )
+                ->setParameter('licenceId', (int) $query->getLicence());
         }
 
         if ($query->getDocument() !== null) {

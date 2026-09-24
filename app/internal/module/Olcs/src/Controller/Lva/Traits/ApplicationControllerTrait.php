@@ -151,7 +151,8 @@ trait ApplicationControllerTrait
             $statusIndex = lcfirst($filter->underscoreToCamel($section)) . 'Status';
 
             $class = '';
-            switch ($applicationStatuses[$statusIndex]) {
+            // Some sections (e.g. financial_evidence_assessment) have no completion column.
+            switch ($applicationStatuses[$statusIndex] ?? null) {
                 case RefData::APPLICATION_COMPLETION_STATUS_COMPLETE:
                     $class = 'complete';
                     break;

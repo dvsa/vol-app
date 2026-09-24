@@ -136,6 +136,11 @@ export default class ResetDatabase implements ActionInterface {
 
     if (isFullRefresh) {
       await this.#fetchAnonymisedDataset();
+
+      // The anonymised dump recreates a handful of tables (including `document`), wiping any
+      // test data Liquibase seeded into them. A second update only re-runs runAlways changesets
+      // (e.g. idp_stub_data), so seeds that depend on those tables survive a full refresh.
+      await this.#runLiquibaseUpdate();
     }
 
     progress.stop();

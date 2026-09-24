@@ -13,7 +13,6 @@ class DocumentAnalysisList extends AbstractQueryHandler
     #[\Override]
     public function handleQuery(QueryInterface $query)
     {
-        //throw new \RuntimeException('APP: ' . var_export($query->getApplication(), true));
         $rows = $this->getRepo()->fetchAnalyses($query);
 
         return [
@@ -21,6 +20,8 @@ class DocumentAnalysisList extends AbstractQueryHandler
                 static fn(DocumentAnalysis $row) => [
                     'id'          => $row->getId(),
                     'documentId'  => $row->getDocument()->getId(),
+                    // Carried on the analysis so callers need no separate, paged document lookup.
+                    'documentDate' => $row->getDocument()->getIssuedDate(true)?->format('Y-m-d H:i:s'),
                     'status'      => $row->getStatus(),
                     'result'      => $row->getResult(),
                     'metadata'    => $row->getResultMetadata(),

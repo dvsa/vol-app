@@ -16,6 +16,9 @@ final class DocumentAnalysisTest extends RepositoryTestCase
 {
     private const string FROM = ' FROM ' . Entity::class . ' da';
 
+    /** fetchAnalyses() always fetch-joins the document so callers can read it without a lazy load per row. */
+    private const string ANALYSES_SELECT = 'SELECT da, d' . self::FROM . ' INNER JOIN da.document d';
+
     /** Every status transition is guarded the same way, so a resolved row can never be rewritten. */
     private const string PENDING_GUARD = ' WHERE da.id = :id AND da.status = :pending';
 
@@ -247,11 +250,54 @@ final class DocumentAnalysisTest extends RepositoryTestCase
 
         // Assert the final query so an extra filter or missing ordering cannot pass unnoticed.
         $this->assertSame(
-            'SELECT da' . self::FROM . ' WHERE IDENTITY(da.application) = :applicationId ORDER BY da.createdOn DESC',
+            self::ANALYSES_SELECT . ' WHERE IDENTITY(da.application) = :applicationId ORDER BY da.createdOn DESC',
             $qb->getDQL(),
         );
         $this->assertCount(1, $qb->getParameters());
         $this->assertSame(8, $qb->getParameter('applicationId')->getValue());
+    }
+
+    /**
+     * Licence scope follows the analysed document's own licence link (as the documents tab does),
+     * or an application on the licence for documents linked only to the application. The left
+     * join keeps rows whose application was deleted (application_id SET NULL) but whose document
+     * is still linked to the licence.
+     */
+    public function testFetchAnalysesFiltersByLicenceOnly(): void
+    {
+        $query = DocumentAnalysisList::create(['licence' => 7]);
+        $qb = $this->createRealQb()->willReturn(['row1']);
+
+        $this->assertSame(['row1'], $this->sut->fetchAnalyses($query));
+
+        $this->assertSame(
+            self::ANALYSES_SELECT
+            . ' LEFT JOIN da.application a'
+            . ' WHERE IDENTITY(d.licence) = :licenceId OR IDENTITY(a.licence) = :licenceId'
+            . ' ORDER BY da.createdOn DESC',
+            $qb->getDQL(),
+        );
+        $this->assertCount(1, $qb->getParameters());
+        $this->assertSame(7, $qb->getParameter('licenceId')->getValue());
+    }
+
+    /** The OR must stay bracketed, or it would let another status through for the licence. */
+    public function testFetchAnalysesLicenceFilterCombinesWithStatus(): void
+    {
+        $query = DocumentAnalysisList::create(['licence' => 7, 'status' => Entity::STATUS_SUCCESS]);
+        $qb = $this->createRealQb()->willReturn([]);
+
+        $this->sut->fetchAnalyses($query);
+
+        $this->assertSame(
+            self::ANALYSES_SELECT
+            . ' LEFT JOIN da.application a'
+            . ' WHERE (IDENTITY(d.licence) = :licenceId OR IDENTITY(a.licence) = :licenceId)'
+            . ' AND da.status = :status'
+            . ' ORDER BY da.createdOn DESC',
+            $qb->getDQL(),
+        );
+        $this->assertSame(Entity::STATUS_SUCCESS, $qb->getParameter('status')->getValue());
     }
 
     public function testFetchAnalysesFiltersByDocumentOnly(): void
@@ -262,7 +308,7 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $this->assertSame([], $this->sut->fetchAnalyses($query));
 
         $this->assertSame(
-            'SELECT da' . self::FROM . ' WHERE IDENTITY(da.document) = :documentId ORDER BY da.createdOn DESC',
+            self::ANALYSES_SELECT . ' WHERE IDENTITY(da.document) = :documentId ORDER BY da.createdOn DESC',
             $qb->getDQL(),
         );
         $this->assertCount(1, $qb->getParameters());
@@ -277,7 +323,7 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $this->assertSame([], $this->sut->fetchAnalyses($query));
 
         $this->assertSame(
-            'SELECT da' . self::FROM . ' WHERE da.status = :status ORDER BY da.createdOn DESC',
+            self::ANALYSES_SELECT . ' WHERE da.status = :status ORDER BY da.createdOn DESC',
             $qb->getDQL(),
         );
         $this->assertCount(1, $qb->getParameters());
@@ -290,7 +336,7 @@ final class DocumentAnalysisTest extends RepositoryTestCase
 
         $this->assertSame([], $this->sut->fetchAnalyses(null));
 
-        $this->assertSame('SELECT da' . self::FROM . ' ORDER BY da.createdOn DESC', $qb->getDQL());
+        $this->assertSame(self::ANALYSES_SELECT . ' ORDER BY da.createdOn DESC', $qb->getDQL());
         $this->assertCount(0, $qb->getParameters());
     }
 

@@ -131,9 +131,10 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
 
     private function expectNavigationData(bool $includeAssessment): void
     {
+        // Deliberately no financialEvidenceAssessmentStatus: the section has no completion column,
+        // so the nav must cope with the key being absent.
         $completion = [
             'businessDetailsStatus' => RefData::APPLICATION_COMPLETION_STATUS_COMPLETE,
-            'financialEvidenceAssessmentStatus' => RefData::APPLICATION_COMPLETION_STATUS_COMPLETE,
         ];
         $accessibleSections = ['business_details' => ['enabled' => true]];
         if ($includeAssessment) {
