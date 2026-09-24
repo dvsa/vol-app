@@ -106,7 +106,7 @@ class ApplicationFinancialEvidenceAdapter extends AbstractFinancialEvidenceAdapt
 
         $indexed = [];
         foreach ($response->getResult()['analyses'] ?? [] as $analysis) {
-            $indexed[$analysis['documentId']] = $analysis;
+            $indexed[$analysis['documentId']] ??= $analysis;
         }
 
         return $indexed;
