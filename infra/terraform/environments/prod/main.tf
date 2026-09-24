@@ -795,6 +795,8 @@ module "service" {
         commands          = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
         ephemeral_storage = 50,
         type              = "scripts"
+        schedule          = ["cron(00 01 * * ? *)"]
+        timeout           = 86400,
       },
       {
         name     = "first-tm-letter",
