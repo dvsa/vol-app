@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic as CommunityLicEntity;
 use Dvsa\Olcs\Transfer\Query\CommunityLic\CommunityLicence as CommunityLicDTO;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
 
 class CommunityLic extends AbstractRepository
 {
@@ -151,17 +152,24 @@ class CommunityLic extends AbstractRepository
     public function fetchForSuspension($date)
     {
         $qb = $this->createQueryBuilder();
-        $qb->innerJoin('m.communityLicSuspensions', 's')
-            ->innerJoin('s.communityLicSuspensionReasons', 'sr')
+        $qb->leftJoin('m.communityLicSuspensions', 's')
+            ->leftJoin('s.communityLicSuspensionReasons', 'sr')
+            ->innerJoin('m.licence', 'l')
             ->andWhere($qb->expr()->eq($this->alias . '.status', ':status'))
-            ->andWhere($qb->expr()->lte('s.startDate', ':startDate'))
             ->andWhere(
                 $qb->expr()->orX(
-                    $qb->expr()->isNull('s.endDate'),
-                    $qb->expr()->gt('s.endDate', ':endDate')
+                    $qb->expr()->eq('l.status', ':licenceStatus'),
+                    $qb->expr()->andX(
+                        $qb->expr()->lte('s.startDate', ':startDate'),
+                        $qb->expr()->orX(
+                            $qb->expr()->isNull('s.endDate'),
+                            $qb->expr()->gt('s.endDate', ':endDate')
+                        )
+                    )
                 )
             )
             ->setParameter('status', CommunityLicEntity::STATUS_ACTIVE)
+            ->setParameter('licenceStatus', Licence::LICENCE_STATUS_SUSPENDED)
             ->setParameter('startDate', $date)
             ->setParameter('endDate', $date);
 
