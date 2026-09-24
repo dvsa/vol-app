@@ -286,14 +286,17 @@ jobs:
             php-version: "8.4"
           - project: olcs-transfer
             php-version: "8.5"
+          # The only lib whose checks (~130s) outweigh the setup that splitting them repeats per job.
           - project: olcs-common
             php-version: "8.4"
+            split: true
           - project: olcs-auth
             php-version: "8.4"
     uses: ./.github/workflows/php-lib.yaml
     with:
       project: ${{ matrix.project }}
       php-version: ${{ matrix.php-version }}
+      split: ${{ matrix.split || false }}
     permissions:
       contents: read
 
