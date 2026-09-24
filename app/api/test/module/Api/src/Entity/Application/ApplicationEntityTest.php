@@ -5819,4 +5819,68 @@ final class ApplicationEntityTest extends EntityTester
             false,
         ];
     }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRequiresKnowledgeExperienceBySubmission')]
+    public function testRequiresKnowledgeExperienceBySubmission(
+        string $status,
+        string $appliedVia,
+        ?int $knowledgeExperienceStatus,
+        bool $expected
+    ): void {
+        /** @var Entity $application */
+        $application = $this->instantiate(Entity::class);
+
+        $application->setIsVariation(false);
+        $application->setNiFlag('N');
+        $application->setGoodsOrPsv(new RefData(Licence::LICENCE_CATEGORY_GOODS_VEHICLE));
+        $application->setLicenceType(new RefData(Licence::LICENCE_TYPE_STANDARD_NATIONAL));
+        $application->setPrevHasLicence('N');
+        $application->setPrevHadLicence('N');
+        $application->setStatus(new RefData($status));
+        $application->setAppliedVia(new RefData($appliedVia));
+
+        $completion = new ApplicationCompletion($application);
+        $completion->setKnowledgeExperienceStatus($knowledgeExperienceStatus);
+        $application->setApplicationCompletion($completion);
+
+        $this->assertSame($expected, $application->requiresKnowledgeExperience());
+    }
+
+    public static function dpRequiresKnowledgeExperienceBySubmission(): \Iterator
+    {
+        yield 'not submitted, section not started' => [
+            Entity::APPLICATION_STATUS_NOT_SUBMITTED,
+            Entity::APPLIED_VIA_SELFSERVE,
+            null,
+            true,
+        ];
+
+        yield 'selfserve submitted before the section existed' => [
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Entity::APPLIED_VIA_SELFSERVE,
+            null,
+            false,
+        ];
+
+        yield 'selfserve submitted with the section completed' => [
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Entity::APPLIED_VIA_SELFSERVE,
+            ApplicationCompletion::STATUS_COMPLETE,
+            true,
+        ];
+
+        yield 'selfserve granted before the section existed' => [
+            Entity::APPLICATION_STATUS_VALID,
+            Entity::APPLIED_VIA_SELFSERVE,
+            null,
+            false,
+        ];
+
+        yield 'internally created, section not started' => [
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Entity::APPLIED_VIA_POST,
+            null,
+            true,
+        ];
+    }
 }

@@ -2884,7 +2884,30 @@ class Application extends AbstractApplication implements ContextProviderInterfac
             return false;
         }
 
+        if ($this->wasSubmittedBeforeKnowledgeExperience()) {
+            return false;
+        }
+
         return $this->getPrevHasLicence() === 'N'
             || $this->getPrevHadLicence() === 'N';
+    }
+
+    /**
+     * Selfserve can't submit while an accessible section is incomplete, so a selfserve application that was
+     * submitted without the knowledge/experience section ever being saved predates the section. Requiring it
+     * now would block grant (tracking must cover every accessible section) on an application the operator can
+     * no longer change. Internally created applications start under consideration, so they are not exempt.
+     */
+    private function wasSubmittedBeforeKnowledgeExperience(): bool
+    {
+        if ($this->isNotSubmitted()) {
+            return false;
+        }
+
+        if ((string) $this->getAppliedVia() !== self::APPLIED_VIA_SELFSERVE) {
+            return false;
+        }
+
+        return $this->getApplicationCompletion()?->getKnowledgeExperienceStatus() === null;
     }
 }
