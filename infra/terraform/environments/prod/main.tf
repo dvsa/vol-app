@@ -467,6 +467,8 @@ module "service" {
   batch = {
     cli_version = var.cli_image_tag
 
+    liquibase_version = var.liquibase_image_tag
+
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
     api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
@@ -789,10 +791,10 @@ module "service" {
         type     = "scripts"
       },
       {
-        name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
+        name              = "ni-compliance",
+        commands          = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
         ephemeral_storage = 50,
-        type     = "scripts"
+        type              = "scripts"
       },
       {
         name     = "first-tm-letter",
@@ -810,6 +812,7 @@ resource "null_resource" "deployed_versions" {
     deployed_internal_image_tag  = var.internal_image_tag
     deployed_selfserve_image_tag = var.selfserve_image_tag
     deployed_cli_image_tag       = var.cli_image_tag
+    deployed_liquibase_image_tag = var.liquibase_image_tag
     deployed_assets_version      = var.assets_version
   }
 }

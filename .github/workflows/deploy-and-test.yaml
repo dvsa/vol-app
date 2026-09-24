@@ -49,6 +49,16 @@ on:
       etl_ref:
         type: string
         required: true
+        description: "olcs-etl commit sha to deploy (resolved once by the caller)"
+      liquibase-image-tag:
+        type: string
+        required: true
+        description: "Liquibase image tag for this deploy (olcs-etl short sha)"
+      release_tag:
+        type: string
+        required: false
+        default: ""
+        description: "When set, the liquibase job creates this tag in olcs-etl and applies it to the image"
     secrets:
       VOL_GITHUB_APP_PRIVATE_KEY:
         required: true
@@ -67,6 +77,7 @@ jobs:
       selfserve-image-tag: ${{ inputs.selfserve-image-tag }}
       internal-image-tag: ${{ inputs.internal-image-tag }}
       assets-version: ${{ inputs.assets-version }}
+      liquibase-image-tag: ${{ inputs.liquibase-image-tag }}
     permissions:
       contents: read
       id-token: write
@@ -88,6 +99,7 @@ jobs:
       selfserve-image-tag: ${{ inputs.selfserve-image-tag }}
       internal-image-tag: ${{ inputs.internal-image-tag }}
       assets-version: ${{ inputs.assets-version }}
+      liquibase-image-tag: ${{ inputs.liquibase-image-tag }}
       apply: true
     permissions:
       contents: read
@@ -102,12 +114,14 @@ jobs:
       - terraform_env
     uses: ./.github/workflows/run-liquibase.yaml
     with:
-      push: false
       submit_job: true
       account: ${{ inputs.account }}
       environment: ${{ inputs.environment }}
       dry_run: false
       etl_ref: ${{ inputs.etl_ref }}
+      release_tag: ${{ inputs.release_tag }}
+      branch_build: false
+      previous_image_tag: ${{ needs.terraform_env.outputs.previous_liquibase_image_tag }}
     permissions:
       contents: read
       id-token: write
@@ -284,6 +298,7 @@ jobs:
       selfserve-image-tag: ${{ needs.terraform_env.outputs.previous_selfserve_image_tag }}
       internal-image-tag: ${{ needs.terraform_env.outputs.previous_internal_image_tag }}
       assets-version: ${{ needs.terraform_env.outputs.previous_assets_version }}
+      liquibase-image-tag: ${{ needs.terraform_env.outputs.previous_liquibase_image_tag || inputs.liquibase-image-tag }}
     permissions:
       contents: read
       id-token: write
