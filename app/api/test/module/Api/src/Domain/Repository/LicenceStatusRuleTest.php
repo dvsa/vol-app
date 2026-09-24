@@ -2,101 +2,76 @@
 
 declare(strict_types=1);
 
-/**
- * LicenceStatusRuleTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\Query;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\LicenceStatusRule as Repo;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\DBAL\LockMode;
+use Dvsa\Olcs\Api\Entity\Licence\LicenceStatusRule as Entity;
 
-/**
- * LicenceStatusRuleTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 final class LicenceStatusRuleTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' lsr';
+
+    /**
+     * withRefdata() joins licenceStatus as w0 and with('licenceStatus') joins it again as w1 —
+     * the same association twice, for no effect beyond the extra join.
+     */
+    private const string JOINS = ' LEFT JOIN lsr.licenceStatus w0 LEFT JOIN lsr.licenceStatus w1'
+        . ' LEFT JOIN lsr.licence l LEFT JOIN l.status w2';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testFetchRevokeCurtailSuspend(): void
+    /**
+     * A rule is applied once and then stamped as processed, so each sweep excludes what it has
+     * already done. Deleted rules never apply.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('sweepProvider')]
+    public function testSweeps(string $method, string $expectedWhere, string $expectedParameter): void
     {
-        $mockQb = m::mock(QueryBuilder::class);
-        $expr = new \Doctrine\ORM\Query\Expr();
-        $mockQb->shouldReceive('expr')
-            ->zeroOrMoreTimes()
-            ->andReturn($expr);
+        $date = new \DateTime('2020-01-01');
 
-        $mockQb->shouldReceive('andWhere')
-            ->times(3)
-            ->andReturnSelf();
-        $date = new \DateTime();
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->withNoArgs()->andReturn('RESULT');
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('lsr')->once()->andReturn($mockQb);
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licenceStatus')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.status')->once()->andReturnSelf();
+        $this->assertSame('RESULT', $this->sut->{$method}($date));
 
-        $mockQb->shouldReceive('setParameter')->with('startDate', $date)->once();
-
-        $mockQb->shouldReceive('getQuery->getResult')->with()->once()->andReturn('RESULT');
-
-        $this->assertSame('RESULT', $this->sut->fetchRevokeCurtailSuspend($date));
+        $this->assertSame(
+            'SELECT lsr, w0, w1, l, w2' . self::FROM . self::JOINS . ' WHERE ' . $expectedWhere,
+            $qb->getDQL(),
+        );
+        $this->assertSame($date, $qb->getParameter($expectedParameter)->getValue());
     }
 
-    public function testFetchToValid(): void
+    public static function sweepProvider(): \Iterator
     {
-        $mockQb = m::mock(QueryBuilder::class);
-        $expr = new \Doctrine\ORM\Query\Expr();
-        $mockQb->shouldReceive('expr')
-            ->zeroOrMoreTimes()
-            ->andReturn($expr);
-
-        $mockQb->shouldReceive('andWhere')
-            ->times(4)
-            ->andReturnSelf();
-        $date = new \DateTime();
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('lsr')->once()->andReturn($mockQb);
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licenceStatus')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('l.status')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')->with('endDate', $date)->once();
-
-        $mockQb->shouldReceive('getQuery->getResult')->with()->once()->andReturn('RESULT');
-
-        $this->assertSame('RESULT', $this->sut->fetchToValid($date));
+        yield 'revoke, curtail or suspend' => [
+            'fetchRevokeCurtailSuspend',
+            'lsr.startProcessedDate IS NULL AND lsr.deletedDate IS NULL'
+            . ' AND lsr.startDate <= :startDate',
+            'startDate',
+        ];
+        // Returning to valid additionally requires an end date: an open-ended rule never expires.
+        yield 'back to valid' => [
+            'fetchToValid',
+            'lsr.endProcessedDate IS NULL AND lsr.endDate IS NOT NULL'
+            . ' AND lsr.deletedDate IS NULL AND lsr.endDate <= :endDate',
+            'endDate',
+        ];
     }
 
-    public function testApplyListJoins(): void
+    public function testApplyFetchJoins(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('modifyQuery')->once()->andReturnSelf();
+        $this->sut->applyFetchJoins($qb);
 
-        $this->sut->shouldReceive('getQueryBuilder')->with()->andReturn($mockQb);
-
-        $mockQb->shouldReceive('with')->with('lsr.licence', 'l')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('l.decisions', 'd')->once()->andReturnSelf();
-
-        $this->sut->applyFetchJoins($mockQb);
+        $this->assertSame(
+            'SELECT lsr, l, d' . self::FROM
+            . ' LEFT JOIN lsr.licence l LEFT JOIN l.decisions d',
+            $qb->getDQL(),
+        );
     }
 }

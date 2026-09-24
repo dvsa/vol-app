@@ -2,12 +2,15 @@
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstance;
 
+use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
+use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceChoice;
 use Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer;
+use Dvsa\Olcs\Api\Service\Letter\LetterInstanceGrabSnapshotter;
 use Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
 use Psr\Container\ContainerInterface;
@@ -17,8 +20,10 @@ use Psr\Container\ContainerInterface;
  *
  * Creates a new letter instance from a letter type and user selections.
  */
-final class Generate extends AbstractCommandHandler
+final class Generate extends AbstractCommandHandler implements AuthAwareInterface
 {
+    use AuthAwareTrait;
+
     protected $repoServiceName = 'LetterInstance';
 
     protected $extraRepos = [
@@ -37,12 +42,14 @@ final class Generate extends AbstractCommandHandler
 
     private SectionVariantResolver $sectionVariantResolver;
     private LetterInstanceComposer $letterInstanceComposer;
+    private LetterInstanceGrabSnapshotter $grabSnapshotter;
 
     #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->sectionVariantResolver = $container->get(SectionVariantResolver::class);
         $this->letterInstanceComposer = $container->get(LetterInstanceComposer::class);
+        $this->grabSnapshotter = $container->get(LetterInstanceGrabSnapshotter::class);
         return parent::__invoke($container, $requestedName, $options);
     }
 
@@ -65,6 +72,13 @@ final class Generate extends AbstractCommandHandler
         // Set status to DRAFT
         $status = $this->getRepo()->getRefdataReference(LetterInstanceEntity::STATUS_DRAFT);
         $letterInstance->setStatus($status);
+
+        // Blameable only stamps createdBy on flush, and the caseworker grabs need it before then.
+        // Same rule as OlcsBlameableListener: never persist the transient anonymous user.
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser !== null && !$currentUser->isAnonymous()) {
+            $letterInstance->setCreatedBy($currentUser);
+        }
 
         // Set optional relations (licence, application, case, etc.)
         $this->setOptionalRelations($letterInstance, $command);
@@ -126,6 +140,9 @@ final class Generate extends AbstractCommandHandler
                 $letterInstance->addLetterInstanceChoice($instanceChoice);
             }
         }
+
+        // Resolve grabs now so the caseworker edits real values, not [[TOKENS]]
+        $this->grabSnapshotter->snapshot($letterInstance);
 
         // Save the letter instance with all its related entities
         $this->getRepo()->save($letterInstance);

@@ -2,70 +2,45 @@
 
 declare(strict_types=1);
 
-/**
- * Continuation test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\Continuation as Repo;
-use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Entity\Licence\Continuation as Entity;
 
-/**
- * Continuation test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class ContinuationTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' m LEFT JOIN m.trafficArea ta';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class);
     }
 
     public function testFetchWithTa(): void
     {
-        $qb = m::mock(QueryBuilder::class);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->andReturn(['result']);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('trafficArea', 'ta')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('byId')->with(1)->once()->andReturnSelf();
+        $this->assertSame(['result'], $this->sut->fetchWithTa(1));
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($qb);
-        $qb->shouldReceive('getQuery->getSingleResult')->once()->andReturn(['result']);
-        $this->assertEquals($this->sut->fetchWithTa(1), ['result']);
+        $this->assertSame('SELECT m, ta' . self::FROM . ' WHERE m.id = :byId', $qb->getDQL());
+        $this->assertSame(1, $qb->getParameter('byId')->getValue());
     }
 
     public function testFetchContinuation(): void
     {
-        $qb = m::mock(QueryBuilder::class);
+        $qb = $this->createRealQb()->willReturn(['result']);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('trafficArea', 'ta')->once()->andReturnSelf();
+        $this->assertSame(['result'], $this->sut->fetchContinuation(1, 2015, 'B'));
 
-        $conditionmonth = $this->mockExprEq('m.month', ':month');
-        $qb->shouldReceive('expr->eq')->with('m.month', ':month')->once()->andReturn($conditionmonth);
-        $qb->shouldReceive('andWhere')->with($conditionmonth)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('month', 1)->once()->andReturnSelf();
-
-        $conditionyear = $this->mockExprEq('m.year', ':year');
-        $qb->shouldReceive('expr->eq')->with('m.year', ':year')->once()->andReturn($conditionyear);
-        $qb->shouldReceive('andWhere')->with($conditionyear)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('year', 2015)->once()->andReturnSelf();
-
-        $conditionta = $this->mockExprEq('ta.id', ':trafficArea');
-        $qb->shouldReceive('expr->eq')->with('ta.id', ':trafficArea')->once()->andReturn($conditionta);
-        $qb->shouldReceive('andWhere')->with($conditionta)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('trafficArea', 'B')->once()->andReturnSelf();
-
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($qb);
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['result']);
-        $this->assertEquals($this->sut->fetchContinuation(1, 2015, 'B'), ['result']);
+        $this->assertSame(
+            'SELECT m, ta' . self::FROM
+            . ' WHERE m.month = :month AND m.year = :year AND ta.id = :trafficArea',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('month')->getValue());
+        $this->assertSame(2015, $qb->getParameter('year')->getValue());
+        $this->assertSame('B', $qb->getParameter('trafficArea')->getValue());
     }
 }

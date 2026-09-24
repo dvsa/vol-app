@@ -38,6 +38,11 @@
       <group>entity-decimal-precision</group>
     </exclude>
   </groups>
+  <extensions>
+    <!-- Prints the Doctrine deprecations the run triggered. This is the suite CI runs, so it
+         is the only place the report is visible there. -->
+    <bootstrap class="Dvsa\OlcsTest\Support\DoctrineDeprecations"/>
+  </extensions>
   <testsuites>
     <testsuite name="Module Unit Test">
       <directory>./module/**/test</directory>

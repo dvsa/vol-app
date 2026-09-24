@@ -2,153 +2,96 @@
 
 declare(strict_types=1);
 
-/**
- * IrfoPsvAuth Repo test
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
-use Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth as Entity;
 use Dvsa\Olcs\Api\Domain\Repository\IrfoPsvAuth as Repo;
-use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthList as IrfoPsvAuthListQry;
+use Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth as Entity;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthContinuationList as IrfoPsvAuthContinuationListQry;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthList as IrfoPsvAuthListQry;
 
-/**
- * IrfoPsvAuth Repo test
- */
 final class IrfoPsvAuthTest extends RepositoryTestCase
 {
+    private const string REFDATA = ' LEFT JOIN m.status w0 LEFT JOIN m.journeyFrequency w1'
+        . ' LEFT JOIN m.withdrawnReason w2';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testFetchById(): void
     {
-        $id = 24;
-        $mockResult = [0 => 'result'];
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['result']);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
+        $this->assertSame('result', $this->sut->fetchById(24));
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('irfoPsvAuthType')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('irfoPsvAuthNumbers')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('countrys')
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with($id);
-
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($mockResult);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Entity::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchById($id);
-
-        $this->assertEquals($result, $mockResult[0]);
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, w3, w4, w5 FROM ' . Entity::class . ' m' . self::REFDATA
+            . ' LEFT JOIN m.irfoPsvAuthType w3 LEFT JOIN m.irfoPsvAuthNumbers w4'
+            . ' LEFT JOIN m.countrys w5'
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(24, $qb->getParameter('byId')->getValue());
     }
 
     public function testFetchByOrganisation(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchByOrganisation('ORG1'));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        // The parameter name carries a typo in the repository (:organisaion).
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.organisation = :organisaion',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByOrganisation('ORG1'));
-
-        $expectedQuery = 'BLAH AND m.organisation = [[ORG1]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame('ORG1', $qb->getParameter('organisaion')->getValue());
     }
 
     public function testFetchList(): void
     {
-        $orgId = 12;
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
 
-        $this->setUpSut(Repo::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
+        $this->assertSame(['RESULTS'], $this->sut->fetchList(IrfoPsvAuthListQry::create(['organisation' => 12])));
 
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('irfoPsvAuthType')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
-
-        $query = IrfoPsvAuthListQry::create(['organisation' => $orgId]);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH AND m.organisation = [[' . $orgId . ']]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, w3 FROM ' . Entity::class . ' m' . self::REFDATA
+            . ' LEFT JOIN m.irfoPsvAuthType w3'
+            . ' WHERE m.organisation = :byOrganisation',
+            $qb->getDQL(),
+        );
+        $this->assertSame(12, $qb->getParameter('byOrganisation')->getValue());
     }
 
+    /**
+     * The continuation list takes a different filter path entirely: a one-month expiry window
+     * plus the continuable statuses, restricted to IRFO organisations.
+     */
     public function testFetchListForContinuation(): void
     {
-        $year = 2016;
-        $month = 12;
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
 
-        $this->setUpSut(Repo::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
+        $query = IrfoPsvAuthContinuationListQry::create(['year' => 2016, 'month' => 12]);
 
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchList($query));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('organisation', 'o')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
-
-        $query = IrfoPsvAuthContinuationListQry::create(['year' => $year, 'month' => $month]);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'AND m.expiryDate >= [[2016-12-01T00:00:00+00:00]] '
-            . 'AND m.expiryDate < [[2017-01-01T00:00:00+00:00]] '
-            . 'AND m.status IN(['
-                . '"' . Entity::STATUS_APPROVED . '",'
-                . '"' . Entity::STATUS_GRANTED . '",'
-                . '"' . Entity::STATUS_PENDING . '",'
-                . '"' . Entity::STATUS_RENEW . '"'
-            . ']) '
-            . 'AND o.isIrfo = [[true]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, o FROM ' . Entity::class . ' m' . self::REFDATA
+            . ' LEFT JOIN m.organisation o'
+            . " WHERE m.expiryDate >= :expiryFrom AND m.expiryDate < :expiryTo"
+            . " AND m.status IN('" . Entity::STATUS_APPROVED . "', '" . Entity::STATUS_GRANTED
+            . "', '" . Entity::STATUS_PENDING . "', '" . Entity::STATUS_RENEW . "')"
+            . ' AND o.isIrfo = :isIrfo',
+            $qb->getDQL(),
+        );
+        $this->assertEquals(new \DateTime('2016-12-01'), $qb->getParameter('expiryFrom')->getValue());
+        $this->assertEquals(new \DateTime('2017-01-01'), $qb->getParameter('expiryTo')->getValue());
+        $this->assertTrue($qb->getParameter('isIrfo')->getValue());
     }
 }

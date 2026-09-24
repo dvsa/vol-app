@@ -2,192 +2,122 @@
 
 declare(strict_types=1);
 
-/**
- * PiHearing Repo test
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
+use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Repository\PiHearing as Repo;
-use Dvsa\Olcs\Transfer\Query\Cases\Pi\HearingList as HearingListQry;
+use Dvsa\Olcs\Api\Entity\Pi\PiHearing as Entity;
+use Dvsa\Olcs\Transfer\Query\Cases\Pi\HearingList;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi\ReportList as ReportListQry;
+use Mockery as m;
 
-/**
- * PiHearing Repo test
- */
 final class PiHearingTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
+    private const string REPORT_SELECT = 'SELECT m, w0, p, c, l, o, lst, tm, tmst, tmhmcd, tmhmcdp, v, va';
+
+    private const string REPORT_JOINS = ' LEFT JOIN m.presidedByRole w0 LEFT JOIN m.pi p'
+        . ' LEFT JOIN p.case c LEFT JOIN c.licence l LEFT JOIN l.organisation o'
+        . ' LEFT JOIN l.status lst LEFT JOIN c.transportManager tm LEFT JOIN tm.tmStatus tmst'
+        . ' LEFT JOIN tm.homeCd tmhmcd LEFT JOIN tmhmcd.person tmhmcdp'
+        . ' LEFT JOIN m.venue v LEFT JOIN v.address va';
+
+    private const string DATE_WHERE = ' WHERE m.hearingDate >= :hearingDateFrom'
+        . ' AND m.hearingDate <= :hearingDateTo';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
+    /**
+     * The previous hearing is the most recent adjourned one before the date given.
+     */
     public function testFetchPreviousHearing(): void
     {
-        $piId = 123;
-        $hearingDate = new \DateTime('2016-02-10');
+        $hearing = m::mock(Entity::class);
 
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$hearing]);
 
-        $this->mockCreateQueryBuilder($qb);
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->andReturnSelf();
+        $this->assertSame($hearing, $this->sut->fetchPreviousHearing(123, '2016-02-10'));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULT'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' WHERE m.hearingDate < :hearingDate AND m.pi = :pi AND m.isAdjourned = :isAdjourned'
+            . ' ORDER BY m.hearingDate DESC',
+            $qb->getDQL(),
         );
-        $this->assertEquals('RESULT', $this->sut->fetchPreviousHearing($piId, $hearingDate));
+        $this->assertSame(123, $qb->getParameter('pi')->getValue());
+        $this->assertSame(1, $qb->getParameter('isAdjourned')->getValue());
+        $this->assertSame(1, $qb->getMaxResults());
+    }
 
-        $expectedQuery = 'BLAH '
-            . 'AND m.hearingDate < [[2016-02-10T00:00:00+00:00]] '
-            . 'AND m.pi = [[123]] '
-            . 'AND m.isAdjourned = [[1]] '
-            . 'ORDER BY m.hearingDate DESC '
-            . 'LIMIT 1';
-        $this->assertEquals($expectedQuery, $this->query);
+    public function testFetchPreviousHearingReturnsNullWhenThereIsNone(): void
+    {
+        $this->createRealQb()->stubbedQuery()->expects('getResult')->andReturn([]);
+
+        $this->assertNull($this->sut->fetchPreviousHearing(123, '2016-02-10'));
     }
 
     public function testFetchList(): void
     {
-        $piId = 123;
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
 
-        $this->setUpSut(Repo::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
+        $this->assertSame(['RESULTS'], $this->sut->fetchList(HearingList::create(['pi' => 99])));
 
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
-
-        $query = HearingListQry::create(['pi' => $piId]);
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH AND m.pi = [[' . $piId . ']]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT m, w0' . self::FROM . ' LEFT JOIN m.presidedByRole w0'
+            . ' WHERE m.pi = :byPi',
+            $qb->getDQL(),
+        );
+        $this->assertSame(99, $qb->getParameter('byPi')->getValue());
     }
 
-    public function testFetchListForReport(): void
+    /**
+     * The report query takes a different filter path: a date window over the whole day, plus an
+     * optional traffic-area narrowing where 'other' means "no venue".
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('reportProvider')]
+    public function testFetchListForReport(array $trafficAreas, string $expectedExtra): void
     {
-        $this->setUpSut(Repo::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
 
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
+        $query = ReportListQry::create([
+            'startDate' => '2016-02-01',
+            'endDate' => '2016-02-10',
+            'trafficAreas' => $trafficAreas,
+        ]);
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('pi', 'p')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('p.case', 'c')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('c.licence', 'l')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('l.organisation', 'o')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('l.status', 'lst')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('c.transportManager', 'tm')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('tm.tmStatus', 'tmst')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('tm.homeCd', 'tmhmcd')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('tmhmcd.person', 'tmhmcdp')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('venue', 'v')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('v.address', 'va')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
+        $this->assertSame(['RESULTS'], $this->sut->fetchList($query));
 
-        $query = ReportListQry::create(
-            [
-                'startDate' => '2016-02-01',
-                'endDate' => '2016-02-10',
-            ]
+        $this->assertSame(
+            self::REPORT_SELECT . self::FROM . self::REPORT_JOINS . self::DATE_WHERE . $expectedExtra,
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'AND m.hearingDate >= [[2016-02-01T00:00:00+00:00]] '
-            . 'AND m.hearingDate <= [[2016-02-10T23:59:59+00:00]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            '2016-02-01 00:00:00',
+            $qb->getParameter('hearingDateFrom')->getValue()->format('Y-m-d H:i:s'),
+        );
+        $this->assertSame(
+            '2016-02-10 23:59:59',
+            $qb->getParameter('hearingDateTo')->getValue()->format('Y-m-d H:i:s'),
+        );
     }
 
-    public function testFetchListForReportWithTrafficAreas(): void
+    public static function reportProvider(): \Iterator
     {
-        $this->setUpSut(Repo::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
-
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('pi', 'p')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('p.case', 'c')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('c.licence', 'l')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('l.organisation', 'o')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('l.status', 'lst')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('c.transportManager', 'tm')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('tm.tmStatus', 'tmst')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('tm.homeCd', 'tmhmcd')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('tmhmcd.person', 'tmhmcdp')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('venue', 'v')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('v.address', 'va')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
-
-        $query = ReportListQry::create(
-            [
-                'startDate' => '2016-02-01',
-                'endDate' => '2016-02-10',
-                'trafficAreas' => ['B']
-            ]
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'AND m.hearingDate >= [[2016-02-01T00:00:00+00:00]] '
-            . 'AND m.hearingDate <= [[2016-02-10T23:59:59+00:00]] '
-            . 'AND v.trafficArea IN(["B"])';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchListForReportWithtrafficAreasOther(): void
-    {
-        $this->setUpSut(Repo::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
-
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('pi', 'p')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('p.case', 'c')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('c.licence', 'l')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('l.organisation', 'o')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('l.status', 'lst')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('c.transportManager', 'tm')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('tm.tmStatus', 'tmst')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('tm.homeCd', 'tmhmcd')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('tmhmcd.person', 'tmhmcdp')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('venue', 'v')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('v.address', 'va')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->once()->andReturnSelf();
-
-        $query = ReportListQry::create(
-            [
-                'startDate' => '2016-02-01',
-                'endDate' => '2016-02-10',
-                'trafficAreas' => ['B', 'other']
-            ]
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'AND m.hearingDate >= [[2016-02-01T00:00:00+00:00]] '
-            . 'AND m.hearingDate <= [[2016-02-10T23:59:59+00:00]] '
-            . 'AND m.venue IS NULL OR v.trafficArea IN(["B"])';
-        $this->assertEquals($expectedQuery, $this->query);
+        yield 'no traffic areas' => [[], ''];
+        // The traffic areas are inlined into the IN(), not bound.
+        yield 'traffic areas' => [['B', 'C'], " AND v.trafficArea IN('B', 'C')"];
+        // 'other' means hearings with no venue at all, ORed with the remaining areas.
+        yield 'traffic areas including other' => [
+            ['B', 'other'],
+            " AND (m.venue IS NULL OR v.trafficArea IN('B'))",
+        ];
     }
 }
