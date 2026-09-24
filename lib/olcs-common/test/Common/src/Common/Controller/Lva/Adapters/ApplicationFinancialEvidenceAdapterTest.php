@@ -136,10 +136,34 @@ final class ApplicationFinancialEvidenceAdapterTest extends MockeryTestCase
             ])
             ->once();
 
-        $result = $this->sut->getDocuments($applicationId);
+        $result = $this->sut->getDocuments($applicationId, true);
 
         $this->assertEquals('SUCCESS', $result[0]['analysisStatus']);
         $this->assertNull($result[1]['analysisStatus']);
+    }
+
+    /**
+     * DocumentAnalysisList is internal-only (IsInternalUser), so when analysis
+     * status is not requested (e.g. selfserve) the adapter must not query it at all.
+     */
+    public function testGetDocumentsDoesNotQueryAnalysesWhenAnalysisStatusNotRequested(): void
+    {
+        $applicationId = 1;
+        $documents = [
+            ['id' => 101, 'description' => 'doc-a.pdf'],
+        ];
+
+        $this->sut->shouldReceive('getData')
+            ->with($applicationId)
+            ->andReturn(['documents' => $documents])
+            ->once();
+
+        $this->sut->shouldNotReceive('getAnalysesByDocumentId');
+
+        $result = $this->sut->getDocuments($applicationId);
+
+        $this->assertSame($documents, $result);
+        $this->assertArrayNotHasKey('analysisStatus', $result[0]);
     }
 
     public function testGetDocumentsReturnsEmptyArrayWhenDocumentsIsNotArray(): void
@@ -156,7 +180,7 @@ final class ApplicationFinancialEvidenceAdapterTest extends MockeryTestCase
             ->andReturn([])
             ->once();
 
-        $this->assertEquals([], $this->sut->getDocuments($applicationId));
+        $this->assertEquals([], $this->sut->getDocuments($applicationId, true));
     }
 
     public function testGetAnalysesByDocumentIdReturnsEmptyArrayWhenResponseNotOk(): void

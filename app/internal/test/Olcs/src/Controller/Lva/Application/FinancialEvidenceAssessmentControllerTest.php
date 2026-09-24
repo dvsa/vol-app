@@ -7,11 +7,9 @@ namespace OlcsTest\Controller\Lva\Application;
 use Common\Controller\Plugin\FeaturesEnabled;
 use Common\RefData;
 use Common\Service\Cqrs\Query\QuerySender;
-use Common\Service\Cqrs\Response;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
-use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\Controller\Plugin\CreateHttpNotFoundModel;
@@ -89,23 +87,24 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         }
     }
 
-    #[DataProvider('toggleResponseProvider')]
-    public function testNavigationRequiresIdp(bool $ok, array $result, bool $enabled): void
+    /**
+     * Visibility is decided by the API (SectionAccessService gates on IDP), so the nav
+     * must render the section whenever the API returns it, without its own toggle check.
+     */
+    public function testNavigationShowsSectionWhenApiReturnsIt(): void
     {
-        $this->expectToggleQuery($ok, $result);
+        $this->sut->shouldNotReceive('handleQuery');
         $this->expectNavigationData(true);
 
         $sections = (new ReflectionMethod($this->sut, 'getSectionsForView'))->invoke($this->sut);
 
-        self::assertSame($enabled, isset($sections['financial_evidence_assessment']));
         self::assertArrayHasKey('overview', $sections);
         self::assertArrayHasKey('business_details', $sections);
-        if ($enabled) {
-            self::assertSame(
-                'lva-application/financial_evidence_assessment',
-                $sections['financial_evidence_assessment']['route']
-            );
-        }
+        self::assertSame(
+            'lva-application/financial_evidence_assessment',
+            $sections['financial_evidence_assessment']['route']
+        );
+        self::assertSame('complete', $sections['financial_evidence_assessment']['class']);
     }
 
     public function testNavigationDoesNotQueryToggleWhenSectionIsAbsent(): void
@@ -129,33 +128,6 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         ];
     }
 
-    public static function toggleResponseProvider(): array
-    {
-        return [
-            'enabled' => [true, ['isEnabled' => true], true],
-            'disabled' => [true, ['isEnabled' => false], false],
-            'missing flag' => [true, [], false],
-            'null flag' => [true, ['isEnabled' => null], false],
-            'invalid flag type' => [true, ['isEnabled' => 'true'], false],
-            'failed query' => [false, ['isEnabled' => true], false],
-        ];
-    }
-
-    private function expectToggleQuery(bool $ok, array $result): void
-    {
-        $response = m::mock(Response::class);
-        $response->shouldReceive('isOk')->once()->andReturn($ok);
-        if ($ok) {
-            $response->shouldReceive('getResult')->once()->andReturn($result);
-        } else {
-            $response->shouldNotReceive('getResult');
-        }
-
-        $this->sut->shouldReceive('handleQuery')
-            ->with(m::on(static fn($query): bool => $query instanceof IsEnabled && $query->getIds() === ['idp']))
-            ->once()
-            ->andReturn($response);
-    }
 
     private function expectNavigationData(bool $includeAssessment): void
     {

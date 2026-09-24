@@ -9,9 +9,7 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
-use Common\FeatureToggle;
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled;
 use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Traits\ApplicationControllerTrait as GenericInternalApplicationControllerTrait;
@@ -135,14 +133,12 @@ trait ApplicationControllerTrait
         $isPsv = $applicationCompletion['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV;
         $isLgv = $applicationCompletion['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV;
 
+        // IDP-only sections are already filtered out by the API's SectionAccessService
+        // when the toggle is off, so the nav renders whatever the API returns.
         $accessibleSections = $this->setEnabledAndCompleteFlagOnSections(
             $this->getAccessibleSections(false),
             $applicationStatuses
         );
-
-//        if (isset($accessibleSections['financial_evidence_assessment']) && !$this->isIdpEnabled()) {
-//            unset($accessibleSections['financial_evidence_assessment']);
-//        }
 
         foreach ($accessibleSections as $section => $settings) {
             $alias = $section;
@@ -181,16 +177,6 @@ trait ApplicationControllerTrait
         return $sections;
     }
 
-    /**
-     * Use the same feature gate for navigation and direct controller access.
-     */
-    protected function isIdpEnabled(): bool
-    {
-        $response = $this->handleQuery(IsEnabled::create(['ids' => [FeatureToggle::IDP]]));
-
-        // Do not expose IDP when the toggle response is unsuccessful or missing its flag.
-        return $response->isOk() && ($response->getResult()['isEnabled'] ?? false) === true;
-    }
 
     /**
      * Get application data
