@@ -120,4 +120,3 @@ final class ApplicationDocsControllerTest extends MockeryTestCase
         self::assertSame('RENDERED', $controller->documentsAction());
     }
 }
-
