@@ -27,8 +27,10 @@ class LetterTodo extends AbstractLetterTodo
      * Non-persisted working properties for versioned fields
      * These hold changes until save
      */
+    private $name;
     private $description;
     private $helpText;
+    private $requiresInput;
 
     /**
      * Initialise collections
@@ -36,6 +38,31 @@ class LetterTodo extends AbstractLetterTodo
     public function __construct()
     {
         $this->versions = new ArrayCollection();
+    }
+
+    /**
+     * Proxy getter for name
+     *
+     * @return string|null
+     */
+    public function getName()
+    {
+        if ($this->name !== null) {
+            return $this->name;
+        }
+        return $this->currentVersion ? $this->currentVersion->getName() : null;
+    }
+
+    /**
+     * Proxy setter for name
+     *
+     * @param string|null $name
+     * @return self
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
     }
 
     /**
@@ -85,6 +112,31 @@ class LetterTodo extends AbstractLetterTodo
     public function setHelpText($helpText)
     {
         $this->helpText = $helpText;
+        return $this;
+    }
+
+    /**
+     * Proxy getter for requiresInput
+     *
+     * @return bool
+     */
+    public function getRequiresInput()
+    {
+        if ($this->requiresInput !== null) {
+            return $this->requiresInput;
+        }
+        return $this->currentVersion ? $this->currentVersion->getRequiresInput() : false;
+    }
+
+    /**
+     * Proxy setter for requiresInput
+     *
+     * @param bool $requiresInput
+     * @return self
+     */
+    public function setRequiresInput($requiresInput)
+    {
+        $this->requiresInput = $requiresInput;
         return $this;
     }
 
@@ -139,9 +191,11 @@ class LetterTodo extends AbstractLetterTodo
 
         $newVersion = new LetterTodoVersion();
         $newVersion->setLetterTodo($this);
+        $newVersion->setName($currentVersion->getName());
         $newVersion->setDescription($currentVersion->getDescription());
         $newVersion->setHelpText($currentVersion->getHelpText());
         $newVersion->setIsLocked(false);
+        $newVersion->setRequiresInput($currentVersion->getRequiresInput());
         $newVersion->setVersionNumber($currentVersion->getVersionNumber() + 1);
 
         $this->addVersion($newVersion);

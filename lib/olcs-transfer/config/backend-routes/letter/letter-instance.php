@@ -45,6 +45,18 @@ return [
                     'POST' => CommandConfig::getPostConfig(Command\Letter\LetterInstance\Preview::class),
                 ]
             ],
+            'generation-context' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => 'generation-context',
+                    'defaults' => [
+                        'controller' => 'Api\Generic'
+                    ]
+                ],
+                'child_routes' => [
+                    'GET' => QueryConfig::getConfig(Query\Letter\LetterInstance\GenerationContext::class),
+                ]
+            ],
             'prepare-to-send' => [
                 'type' => 'Segment',
                 'options' => [

@@ -24,6 +24,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 #[ORM\Table(name: 'letter_choice')]
 #[ORM\Index(name: 'ix_letter_choice_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_choice_goods_or_psv', columns: ['goods_or_psv'])]
 #[ORM\Index(name: 'ix_letter_choice_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\UniqueConstraint(name: 'uk_letter_choice_key', columns: ['choice_key'])]
 #[ORM\MappedSuperclass]
@@ -45,6 +46,15 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
     #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
+
+    /**
+     * FK to ref_data lcat_gv/lcat_psv. NULL = any
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
+     */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
+    protected $goodsOrPsv;
 
     /**
      * Created by
@@ -161,6 +171,30 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set the goods or psv
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
+     *
+     * @return static
+     */
+    public function setGoodsOrPsv($goodsOrPsv)
+    {
+        $this->goodsOrPsv = $goodsOrPsv;
+
+        return $this;
+    }
+
+    /**
+     * Get the goods or psv
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
+    public function getGoodsOrPsv()
+    {
+        return $this->goodsOrPsv;
     }
 
     /**

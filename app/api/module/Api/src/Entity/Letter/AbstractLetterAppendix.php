@@ -85,6 +85,14 @@ abstract class AbstractLetterAppendix implements BundleSerializableInterface, Js
     protected $appendixKey = '';
 
     /**
+     * Deleted in admin but kept for generated letters
+     *
+     * @var \DateTime|null
+     */
+    #[ORM\Column(type: 'datetime', name: 'deleted_on', nullable: true)]
+    protected $deletedOn;
+
+    /**
      * Version
      *
      * @var int
@@ -227,6 +235,36 @@ abstract class AbstractLetterAppendix implements BundleSerializableInterface, Js
     public function getAppendixKey()
     {
         return $this->appendixKey;
+    }
+
+    /**
+     * Set the deleted on
+     *
+     * @param \DateTime $deletedOn new value being set
+     *
+     * @return static
+     */
+    public function setDeletedOn($deletedOn)
+    {
+        $this->deletedOn = $deletedOn;
+
+        return $this;
+    }
+
+    /**
+     * Get the deleted on
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getDeletedOn($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->deletedOn);
+        }
+
+        return $this->deletedOn;
     }
 
     /**
