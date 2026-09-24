@@ -21,7 +21,7 @@ final class ApplicationReadAuditTest extends AbstractReadAuditTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(ApplicationReadAudit::class, true);
+        $this->setUpRealSut(ApplicationReadAudit::class, true);
     }
 
     public function testFetchOneOrMore(): void
@@ -33,7 +33,7 @@ final class ApplicationReadAuditTest extends AbstractReadAuditTestCase
     {
         parent::commonTestFetchList(
             ReadApplication::create(['id' => 111]),
-            ' AND m.application = [[111]]'
+            'application'
         );
     }
 

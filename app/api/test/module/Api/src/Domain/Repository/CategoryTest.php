@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Dvsa\Olcs\Transfer\Query as TransferQry;
+use Dvsa\Olcs\Api\Domain\Repository\Category as Repo;
 use Dvsa\Olcs\Api\Entity;
-use Mockery as m;
+use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
+use Dvsa\Olcs\Transfer\Query as TransferQry;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Category::class)]
 final class CategoryTest extends RepositoryTestCase
@@ -14,86 +15,57 @@ final class CategoryTest extends RepositoryTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(\Dvsa\Olcs\Api\Domain\Repository\Category::class, true);
-    }
-
-    public function testApplyListFiltersInvalidClass(): void
-    {
-        $qb = $this->createMockQb('QUERY');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->times(1)->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf();
-
-        $this->sut->shouldReceive('fetchPaginatedList')
-            ->andReturn('RESULTS');
-
-        $dto = TransferQry\Category\GetList::create([]);
-
-        $this->assertEquals('RESULTS', $this->sut->fetchList($dto));
-        $this->assertEquals('QUERY', $this->query);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestApplyListX')]
-    public function testApplyListX(mixed $query, mixed $expect): void
+    public function testApplyListX(array $query, string $expectedDql): void
     {
-        $qb = $this->createMockQb('QUERY');
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn('RESULTS');
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame('RESULTS', $this->sut->fetchList(TransferQry\Category\GetList::create($query)));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->atLeast(1)->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf();
-
-        $this->sut->shouldReceive('fetchPaginatedList')
-            ->andReturn('RESULTS');
-
-        $this->assertEquals(
-            'RESULTS',
-            $this->sut->fetchList(TransferQry\Category\GetList::create($query))
-        );
-
-        $this->assertEquals($expect, $this->query);
+        $this->assertSame($expectedDql, $qb->getDQL());
     }
 
     public static function dpTestApplyListX(): \Iterator
     {
-        yield [
-            'query' => [
+        // withRefdata() joins taskAllocationType as w0 on every branch.
+        $from = ' FROM ' . CategoryEntity::class . ' m LEFT JOIN m.taskAllocationType w0';
+        $allThree = ' WHERE m.isTaskCategory = :isTaskCategory'
+            . ' AND m.isDocCategory = :isDocCategory'
+            . ' AND m.isScanCategory = :isScanCategory';
+
+        yield 'no filters' => [[], 'SELECT m, w0' . $from];
+
+        yield 'doc category excluded, so no template joins' => [
+            [
                 'isTaskCategory' => 'Y',
                 'isDocCategory' => 'N',
                 'isScanCategory' => 'Y',
                 'isOnlyWithItems' => 'Y',
             ],
-            'expect' => 'QUERY ' .
-                'AND m.isTaskCategory = [[true]] ' .
-                'AND m.isDocCategory = [[false]] ' .
-                'AND m.isScanCategory = [[true]]',
+            'SELECT m, w0' . $from . $allThree,
         ];
-        yield [
-            'query' => [
-                'isDocCategory' => 'Y',
-                'isOnlyWithItems' => 'N',
-            ],
-            'expect' => 'QUERY ' .
-                'AND m.isDocCategory = [[true]]',
+
+        yield 'doc category without onlyWithItems' => [
+            ['isDocCategory' => 'Y', 'isOnlyWithItems' => 'N'],
+            'SELECT m, w0' . $from . ' WHERE m.isDocCategory = :isDocCategory',
         ];
-        yield [
-            'query' => [
+
+        // The DISTINCT select replaces the refdata addSelect, leaving w0 joined but unselected.
+        yield 'doc category with onlyWithItems joins templates' => [
+            [
                 'isTaskCategory' => 'N',
                 'isDocCategory' => 'Y',
                 'isScanCategory' => 'N',
                 'isOnlyWithItems' => 'Y',
             ],
-            'expect' => $expectedQuery = 'QUERY ' .
-                'SELECT DISTINCT m ' .
-                'INNER JOIN ' . Entity\Doc\DocTemplate::class . ' dct WITH dct.category = m.id ' .
-                'INNER JOIN ' . Entity\Doc\Document::class . ' dc WITH dc.id = dct.document ' .
-                'AND m.isTaskCategory = [[false]] ' .
-                'AND m.isDocCategory = [[true]] ' .
-                'AND m.isScanCategory = [[false]]',
+            'SELECT DISTINCT m' . $from
+            . ' INNER JOIN ' . Entity\Doc\DocTemplate::class . ' dct WITH dct.category = m.id'
+            . ' INNER JOIN ' . Entity\Doc\Document::class . ' dc WITH dc.id = dct.document'
+            . $allThree,
         ];
     }
 }

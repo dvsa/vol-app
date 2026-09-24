@@ -6,15 +6,114 @@ sidebar_position: 30
 
 The API has three layers of automated verification:
 
-| Layer            | What runs                                                        | When                                    |
-| ---------------- | ---------------------------------------------------------------- | --------------------------------------- |
-| Unit + static    | PHPUnit (mocked), phpcs, psalm, phpstan (incl. phpstan-doctrine) | Every PR (`php.yaml`)                   |
-| Integration      | Real repository queries and schema checks against a local MySQL  | Locally via `composer test:integration` |
-| Functional (E2E) | WebDriver/Cucumber suites from `dvsa/vol-functional-tests`       | Post-deploy per environment (`cd.yaml`) |
+| Layer            | What runs                                                                                     | When                                    |
+| ---------------- | --------------------------------------------------------------------------------------------- | --------------------------------------- |
+| Unit + static    | PHPUnit (real Doctrine metadata, no database), phpcs, psalm, phpstan (incl. phpstan-doctrine) | Every PR (`php.yaml`)                   |
+| Integration      | Real repository queries executed against a local MySQL, plus schema checks                    | Locally via `composer test:integration` |
+| Functional (E2E) | WebDriver/Cucumber suites from `dvsa/vol-functional-tests`                                    | Post-deploy per environment (`cd.yaml`) |
 
-This page documents the integration layer, the two baseline mechanisms that
-guard the Doctrine entity metadata, and the three tests that guard output
-escaping in the table render pipeline.
+This page documents how repository unit tests assert against real Doctrine, the
+integration layer, the two baseline mechanisms that guard the Doctrine entity
+metadata, the Doctrine deprecation report both suites print, and the three tests
+that guard output escaping in the table render pipeline.
+
+## Repository unit tests
+
+Location: `app/api/test/module/Api/src/Domain/Repository/`, base class
+`RepositoryTestCase`. They run in the normal unit suite on every PR.
+
+These tests assert on the DQL a repository actually builds, using a **real**
+Doctrine `QueryBuilder` rooted in the **real** entity metadata. Nothing opens a
+database connection.
+
+### Why not a query builder double
+
+They used to assert against `RepositoryTestCase::createMockQb()`, a hand-rolled
+double whose `mockOrderBy()` was `$sort . ' ' . $order` — a verbatim
+reimplementation of ORM 2's `Expr\OrderBy::add()`. That double did not stub
+Doctrine, it forked it, so the suite went on asserting ORM 2 semantics after the
+ORM 3.7 upgrade and could not notice the library changing underneath it. That is
+how the `' ASC'` sort direction bug (#1785) reached production with 887
+repository tests green.
+
+With a real builder, a mistyped field or a join to an association that does not
+exist fails the test where production would fail, and `getDQL()` is the query the
+repository really asked for.
+
+### The helpers
+
+| Helper                                           | What it gives you                                                                                                                                                              |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `setUpRealSut($class, $mockSut = false)`         | The repository wired to a real `QueryBuilder` service and the application's own query partials. Use it instead of `setUpSut()` for anything that builds a query.               |
+| `createRealQb()`                                 | A real builder rooted on the repository's own entity and alias, wired in as the one `createQueryBuilder()` hands back. Assert on `$qb->getDQL()` and `$qb->getParameter(...)`. |
+| `createRealQbs([Entity::class => 'alias', ...])` | One distinct builder per entity/alias, keyed by alias, for methods that build more than one query — a shared builder would let a sub-select write into the outer query.        |
+| `newRealQb()`                                    | A bare real builder, nothing selected and no wiring, for repositories that build off the EntityManager rather than through `createQueryBuilder()`.                             |
+| `compileDql($dql)`                               | Runs DQL through the real parser and returns the SQL, to assert a query is genuinely valid — or, for a pinned defect, that it is not.                                          |
+| `$qb->willReturn($rows)`                         | Declares the rows the query returns. Shorthand for `$qb->stubbedQuery()->shouldReceive('getResult')->andReturn($rows)`; pass a second argument for a different result method.  |
+
+Two things stay mocked, and only two:
+
+- **`getQuery()` on the builder.** Repositories build and execute in a single
+  call, so the seam has to be inside the builder rather than around it. It
+  returns a mock of the concrete `Doctrine\ORM\Query`, which keeps Doctrine's
+  real parameter types — that is how the unit lane now rejects the null
+  hydration mode that shipped in #1787, where the old
+  `shouldReceive('getQuery->getResult')` chain built an anonymous mock whose
+  untyped `__call` swallowed it.
+- **The `EntityManager` the repository holds**, because it is used only to hand
+  out repositories and to persist. The metadata EntityManager the builders and
+  partials read from is a separate, real one, and neither path connects.
+
+A worked example, from `ReasonTest`:
+
+```php
+final class ReasonTest extends RepositoryTestCase
+{
+    public function setUp(): void
+    {
+        $this->setUpRealSut(Repo::class, true);
+    }
+
+    public function testApplyListFilters(): void
+    {
+        $qb = $this->createRealQb();
+
+        $this->sut->applyListFilters($qb, ReasonList::create(['isNi' => 'Y']));
+
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m'
+            . ' WHERE m.isNi = :isNi AND m.isVisibleInInternal = :isVisibleInInternal',
+            $qb->getDQL(),
+        );
+        $this->assertTrue($qb->getParameter('isNi')->getValue());
+    }
+}
+```
+
+### What it costs
+
+`Support\DoctrineMetadata` reuses `phpstan-object-manager.php` — the same loader
+PHPStan and the integration suite build on, with `serverVersion` pinned so DBAL
+never opens a connection. It is the third consumer of that file, and the only one
+that needs it exactly as-is. Metadata parses once per process (~200 ms) and the
+DQL parser caches, so each query after that costs well under a millisecond; the
+943 repository tests run in about 30 seconds.
+
+`Support\QueryPartials` builds a real `QueryPartialServiceManager` from the
+application's own `module/Api/config/module.config.php` rather than a restatement
+of it, so the partials a test exercises cannot drift from the ones production
+wires.
+
+### What it still cannot catch
+
+The query is built and compiled, never executed. Anything that depends on
+actually running it — hydration, streaming, the schema the DQL lands on —
+belongs in the integration suite below.
+
+A few repositories have no query builder to make real: `DataGovUk`, `DataDvaNi`
+and `CompaniesHouseVsOlcsDiffs` go straight to a DBAL connection with native SQL
+or a stored procedure, and `PostcodeEnforcementArea` uses `findOneBy()`. Those
+tests keep `setUpSut()` and `expectQueryWithData()`.
 
 ## Integration test suite
 
@@ -52,10 +151,59 @@ managers wired exactly as the production `RepositoryFactory` expects.
 `tearDown()`, so tests may insert whatever fixture data they need.
 
 Repository tests fetch repositories by their production short name
-(`$this->repo('LicenceVehicle')`) and run real DQL against the real schema —
-the class of bug that mocked-query-builder unit tests cannot catch (see
-VOL-7445, where `iterate()` → `toIterable()` broke three CSV exports that all
-had green unit tests).
+(`$this->repo('LicenceVehicle')`) and **execute** real DQL against the real
+schema. That is what separates them from the repository unit tests above, which
+build and compile the same queries but never run one: VOL-7445, where
+`iterate()` → `toIterable()` broke three CSV exports that all had green unit
+tests, would still pass a compiled-DQL assertion today.
+
+## Doctrine deprecation report
+
+Both PHPUnit configs register `Support\DoctrineDeprecations` as a bootstrap
+extension, so every run ends with the Doctrine deprecations it triggered:
+
+```
+5 distinct Doctrine deprecations (248 occurrences):
+  207x https://github.com/doctrine/orm/issues/11313
+  34x https://github.com/doctrine/collections/pull/472
+  4x https://github.com/doctrine/collections/pull/389
+  2x https://github.com/doctrine/orm/issues/12192
+  1x https://github.com/doctrine/orm/pull/12005
+```
+
+Each line is the link Doctrine documents that deprecation under, and how many
+times it was reached — which is why a schema comparison shows thousands of one
+and a single figure of another.
+
+**Reported, never fatal.** The extension uses Doctrine's _tracking_ mode, which
+records deprecations without raising an error, so `failOnDeprecation` is
+unaffected. These are advance notice of the next major, not a broken build.
+
+The `DOCTRINE_DEPRECATIONS` environment variable cannot do this job. In `trigger`
+mode the library calls `@trigger_error()` — with the suppression operator — so
+PHPUnit's error handler discards it and nothing is displayed.
+
+It is registered in **both** configs deliberately. CI runs bare
+`vendor/bin/phpunit` and nothing under `.github/` references the integration
+config, so the unit suite is the only place the report is visible there; it has
+something to report because the repository tests build real queries against real
+entity metadata. The integration suite adds whatever a real connection and the
+schema comparison reach.
+
+Turning the report on surfaced three first-party problems:
+
+- Both metadata EntityManagers pinned `serverVersion` to `'8.0'`, which
+  `version_compare` puts _below_ `'8.0.0'`, so DBAL resolved the legacy
+  `MySQLPlatform` rather than `MySQL80Platform`. PHPStan and the schema drift
+  comparison had been reading the wrong platform. Fixed in both loaders; the
+  drift baseline does not move.
+- `SchemaDriftTest` called `Table::removeForeignKey()`, deprecated in favour of
+  `dropForeignKey()` — 2138 of the occurrences reported. Fixed.
+- 19 entity `OrderBy` attributes pass `'ASC'` / `'DESC'` as strings where ORM 4
+  will require a `SortDirection` instance. Left alone: five sit in generated
+  abstracts, so they are [entity generator](../entity-generator.md) work rather
+  than an edit to make by hand, and the nine hand-written `Letter*` entities
+  should move with them.
 
 ## The two metadata baselines
 
@@ -573,9 +721,11 @@ Three live leaks were sitting behind it.
 ## Adding integration tests
 
 Extend `Dvsa\OlcsTest\Integration\IntegrationTestCase` and use `$this->repo()`
-/ `$this->em()`. Good candidates are repository methods with non-trivial DQL
-(joins, subqueries, streaming via `toIterable()`), anything that regressed in
-production despite green unit tests, and query paths against database views.
+/ `$this->em()`. Reach for this layer when the answer depends on _running_ the
+query: streaming via `toIterable()`, hydration, stored procedures, and query
+paths against database views. Whether the query is well-formed — its joins,
+field names, predicates and ordering — is settled faster and without Docker by a
+[repository unit test](#repository-unit-tests).
 Prefer selecting fixture rows from the seeded test data over hardcoding ids;
 insert your own rows where the dataset is not enough — the per-test transaction
 rolls them back.

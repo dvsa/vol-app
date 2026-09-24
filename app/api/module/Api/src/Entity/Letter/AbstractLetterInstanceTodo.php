@@ -104,6 +104,14 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     protected $editedDescription;
 
     /**
+     * To-do wording with grabs resolved at generation
+     *
+     * @var array|null
+     */
+    #[ORM\Column(type: 'json', name: 'generated_description', nullable: true)]
+    protected $generatedDescription;
+
+    /**
      * False if duplicate
      *
      * @var bool
@@ -310,6 +318,30 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     public function getEditedDescription()
     {
         return $this->editedDescription;
+    }
+
+    /**
+     * Set the generated description
+     *
+     * @param array $generatedDescription new value being set
+     *
+     * @return static
+     */
+    public function setGeneratedDescription($generatedDescription)
+    {
+        $this->generatedDescription = $generatedDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get the generated description
+     *
+     * @return array
+     */
+    public function getGeneratedDescription()
+    {
+        return $this->generatedDescription;
     }
 
     /**

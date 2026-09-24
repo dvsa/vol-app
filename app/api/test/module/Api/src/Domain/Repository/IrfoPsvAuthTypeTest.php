@@ -2,42 +2,30 @@
 
 declare(strict_types=1);
 
-/**
- * IrfoPsvAuthType repo test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
 use Dvsa\Olcs\Api\Domain\Repository\IrfoPsvAuthType as Repo;
+use Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
-/**
- * IrfoPsvAuthType repo test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class IrfoPsvAuthTypeTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockQ = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
+        $this->sut->applyListFilters($qb, m::mock(QueryInterface::class));
 
-        $mockQb->shouldReceive('orderBy')->with('m.description', 'ASC')->once()->andReturnSelf();
-
-        $this->sut->applyListFilters($mockQb, $mockQ);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m ORDER BY m.description ASC',
+            $qb->getDQL(),
+        );
     }
 }

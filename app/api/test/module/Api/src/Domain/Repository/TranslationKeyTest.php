@@ -4,88 +4,66 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\TranslationKey as Repo;
-use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Entity\System\TranslationKey as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\Olcs\Transfer\Query\TranslationKey\GetList;
+use Mockery as m;
 
-/**
- * TranslationKeyTest
- *
- * @author Andy Newton <andy@vitri.ltd>
- */
 final class TranslationKeyTest extends RepositoryTestCase
 {
+    private const string SELECT = 'SELECT m FROM ' . Entity::class . ' m';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
+    /**
+     * The search matches the key, its description or any of its translations, so it is an OR
+     * across a join rather than a filter on the root.
+     */
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
         $query = m::mock(GetList::class);
-        $query->shouldReceive('getTranslationSearch')
-            ->andReturn('searchText')
-            ->times(2);
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $qb->shouldReceive('orWhere')
-            ->with('m.id LIKE :translationSearch')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('orWhere')
-            ->with('m.description LIKE :translationSearch')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('orWhere')
-            ->with('m.translationKey LIKE :translationSearch')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('leftJoin')
-            ->with('m.translationKeyTexts', 'tkt')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('orWhere')
-            ->with('tkt.translatedText LIKE :translationSearch')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('translationSearch', '%searchText%')
-            ->once()
-            ->andReturnSelf();
+        $query->shouldReceive('getTranslationSearch')->andReturn('searchText');
 
         $this->sut->applyListFilters($qb, $query);
+
+        $this->assertSame(
+            self::SELECT . ' LEFT JOIN m.translationKeyTexts tkt'
+            . ' WHERE m.id LIKE :translationSearch'
+            . ' OR m.description LIKE :translationSearch'
+            . ' OR m.translationKey LIKE :translationSearch'
+            . ' OR tkt.translatedText LIKE :translationSearch',
+            $qb->getDQL(),
+        );
+        $this->assertSame('%searchText%', $qb->getParameter('translationSearch')->getValue());
     }
 
-    public function testApplyListFiltersNullSearch(): void
+    /** No search term, or a query that cannot carry one, leaves the list query untouched. */
+    #[\PHPUnit\Framework\Attributes\DataProvider('noSearchProvider')]
+    public function testApplyListFiltersWithoutASearch(string $queryClass, bool $stubSearch): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $query = m::mock(GetList::class);
-        $query->shouldReceive('getTranslationSearch')
-            ->andReturnNull()
-            ->once();
+        $query = m::mock($queryClass);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
+        if ($stubSearch) {
+            $query->shouldReceive('getTranslationSearch')->andReturnNull();
+        }
 
-        $this->sut->applyListFilters($qb, $query);
-    }
-
-    public function testApplyListFiltersNotGetList(): void
-    {
-        $this->setUpSut(Repo::class, true);
-
-        $query = m::mock(QueryInterface::class);
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
         $this->assertNull($this->sut->applyListFilters($qb, $query));
+
+        $this->assertSame(self::SELECT, $qb->getDQL());
+    }
+
+    public static function noSearchProvider(): \Iterator
+    {
+        yield 'an empty search' => [GetList::class, true];
+        yield 'another query type' => [QueryInterface::class, false];
     }
 }
