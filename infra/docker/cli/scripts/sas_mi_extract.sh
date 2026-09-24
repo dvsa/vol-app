@@ -7,7 +7,7 @@
 # set -o pipefail: catch errors in pipes
 set -euo pipefail
 
-VALID_ENVIRONMENTS=("DEV" "INT" "PP" "PREP" "PROD")
+VALID_ENVIRONMENTS=("DEV" "INT" "PP" "PREP" "PROD" "APP")
 DUMP_DIR="/mnt/data/olcsdump"
 DB_NAME="OLCS_RDS_OLCSDB"
 DB_USER="olcsbatch"
@@ -64,7 +64,7 @@ case "${ENVIRONMENT}" in
     REPORTS_BUCKET="apppp-olcs-pri-integration-reporting-s3"
     INTEGRATION_BUCKET="apppp-mc-pri-integration-data-s3"
     ;;
-  "PROD")
+  "PROD"|"APP")
     REPORTS_BUCKET="app-olcs-pri-integration-reporting-s3"
     INTEGRATION_BUCKET="app-mc-pri-integration-data-s3"
     ;;
