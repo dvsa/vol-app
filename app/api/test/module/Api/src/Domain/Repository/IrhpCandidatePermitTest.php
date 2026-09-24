@@ -4,275 +4,156 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Domain\Repository\IrhpCandidatePermit;
+use Dvsa\Olcs\Api\Domain\Repository\IrhpCandidatePermit as Repo;
 use Dvsa\Olcs\Api\Entity\IrhpInterface;
-use Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit as IrhpCandidatePermitEntity;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit as Entity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
-use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetList;
 use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication;
 use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplicationUnpaged;
-use Mockery as m;
 
-/**
- * IRHP Candidate Permit test
- *
- * @author Jonathan Thomas <jonathan@opalise.co.uk>
- */
 final class IrhpCandidatePermitTest extends RepositoryTestCase
 {
     public const int IRHP_APPLICATION_ID = 10;
 
+    private const string LIST_FROM = 'SELECT m, w0, w1, ipa, ia FROM ' . Entity::class . ' m'
+        . ' LEFT JOIN m.requestedEmissionsCategory w0 LEFT JOIN m.assignedEmissionsCategory w1'
+        . ' LEFT JOIN m.irhpPermitApplication ipa LEFT JOIN ipa.irhpApplication ia';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(IrhpCandidatePermit::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetListByIrhpApplicationVariants')]
-    public function testFetchListForGetListByIrhpApplication(mixed $query, mixed $paginateCallCount): void
+    /**
+     * Both list query classes take the same filter path; only paging differs, which does not
+     * reach the DQL.
+     *
+     * The old fixture passed 'order' => 'id', 'sort' => 'ASC' — transposed. The double
+     * concatenated whatever it was given, so nothing noticed; a real QueryBuilder rejects
+     * 'id' as a sort direction outright.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('listQueryProvider')]
+    public function testFetchList(string $queryClass, array $extraParams, string $expectedWhere): void
     {
-        $this->setUpSut(IrhpCandidatePermit::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
 
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('irhpPermitApplication', 'ipa')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('ipa.irhpApplication', 'ia')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->times($paginateCallCount)->andReturnSelf()
-            ->shouldReceive('order')->once()->andReturnSelf();
-
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'AND m.successful = [[true]] '
-            . 'AND ia.status = [[' . RefData::PERMIT_APP_STATUS_AWAITING_FEE . ']] '
-            . 'AND ipa.irhpApplication = [[' . self::IRHP_APPLICATION_ID . ']]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public static function dpGetListByIrhpApplicationVariants(): \Iterator
-    {
-        $params = [
+        $query = $queryClass::create([
             'irhpApplication' => self::IRHP_APPLICATION_ID,
             'page' => 1,
             'limit' => 25,
-            'order' => 'id',
-            'sort' => 'ASC',
-        ];
-        yield [GetListByIrhpApplication::create($params), 1];
-        yield [GetListByIrhpApplicationUnpaged::create($params), 0];
+            'sort' => 'id',
+            'order' => 'ASC',
+            ...$extraParams,
+        ]);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchList($query));
+
+        $this->assertSame(self::LIST_FROM . $expectedWhere . ' ORDER BY m.id ASC', $qb->getDQL());
+        $this->assertSame(self::IRHP_APPLICATION_ID, $qb->getParameter('irhpApplicationId')->getValue());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetListByIrhpApplicationWantedOnlyVariants')]
-    public function testFetchListForGetListByIrhpApplicationWantedOnly(mixed $query, mixed $paginateCallCount): void
+    public static function listQueryProvider(): \Iterator
     {
-        $this->setUpSut(IrhpCandidatePermit::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
+        $awaitingFee = ' WHERE m.successful = :successful AND ia.status = :status'
+            . ' AND ipa.irhpApplication = :irhpApplicationId';
+        $preGrant = ' WHERE ia.status IN(:status) AND ipa.irhpApplication = :irhpApplicationId';
 
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('irhpPermitApplication', 'ipa')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('ipa.irhpApplication', 'ia')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->times($paginateCallCount)->andReturnSelf()
-            ->shouldReceive('order')->once()->andReturnSelf();
-
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'AND m.successful = [[true]] '
-            . 'AND ia.status = [[' . RefData::PERMIT_APP_STATUS_AWAITING_FEE . ']] '
-            . 'AND ipa.irhpApplication = [[' . self::IRHP_APPLICATION_ID . ']] '
-            . 'AND m.wanted = [[true]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        foreach ([GetListByIrhpApplication::class, GetListByIrhpApplicationUnpaged::class] as $class) {
+            $short = substr((string) strrchr($class, '\\'), 1);
+            yield "{$short}: awaiting fee" => [$class, [], $awaitingFee];
+            yield "{$short}: wanted only" => [
+                $class,
+                ['wantedOnly' => true],
+                $awaitingFee . ' AND m.wanted = :wanted',
+            ];
+            yield "{$short}: pre grant" => [$class, ['isPreGrant' => true], $preGrant];
+        }
     }
 
-    public static function dpGetListByIrhpApplicationWantedOnlyVariants(): \Iterator
+    public function testFetchListBindsTheAwaitingFeeStatus(): void
     {
-        $params = [
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
+
+        $this->sut->fetchList(GetListByIrhpApplication::create([
             'irhpApplication' => self::IRHP_APPLICATION_ID,
             'page' => 1,
             'limit' => 25,
-            'order' => 'id',
-            'sort' => 'ASC',
-            'wantedOnly' => true,
-        ];
-        yield [GetListByIrhpApplication::create($params), 1];
-        yield [GetListByIrhpApplicationUnpaged::create($params), 0];
+            'sort' => 'id',
+            'order' => 'ASC',
+        ]));
+
+        $this->assertTrue($qb->getParameter('successful')->getValue());
+        $this->assertSame(RefData::PERMIT_APP_STATUS_AWAITING_FEE, $qb->getParameter('status')->getValue());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetListByIrhpApplicationPreGrantVariants')]
-    public function testFetchListForGetListByIrhpApplicationPreGrant(mixed $query, mixed $paginateCallCount): void
+    public function testFetchListBindsThePreGrantStatuses(): void
     {
-        $this->setUpSut(IrhpCandidatePermit::class, true);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn(['RESULTS']);
 
-        $qb = $this->createMockQb('BLAH');
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('irhpPermitApplication', 'ipa')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('ipa.irhpApplication', 'ia')->once()->andReturnSelf()
-            ->shouldReceive('paginate')->times($paginateCallCount)->andReturnSelf()
-            ->shouldReceive('order')->once()->andReturnSelf();
-
-        $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
-
-        $expectedQuery = 'BLAH '
-            . 'AND ia.status IN([[["' . RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION . '"]]]) '
-            . 'AND ipa.irhpApplication = [[' . self::IRHP_APPLICATION_ID . ']]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public static function dpGetListByIrhpApplicationPreGrantVariants(): \Iterator
-    {
-        $params = [
+        $this->sut->fetchList(GetListByIrhpApplication::create([
             'irhpApplication' => self::IRHP_APPLICATION_ID,
             'page' => 1,
             'limit' => 25,
-            'order' => 'id',
-            'sort' => 'ASC',
-            'isPreGrant' => true
-        ];
-        yield [GetListByIrhpApplication::create($params), 1];
-        yield [GetListByIrhpApplicationUnpaged::create($params), 0];
+            'sort' => 'id',
+            'order' => 'ASC',
+            'isPreGrant' => true,
+        ]));
+
+        $this->assertSame(IrhpInterface::PRE_GRANT_STATUSES, $qb->getParameter('status')->getValue());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchCountInRangeWhereApplicationAwaitingFee')]
-    public function testFetchCountInRangeWhereApplicationAwaitingFee(mixed $countInRange, mixed $expectedResult): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('nullCountProvider')]
+    public function testFetchCountInRangeWhereApplicationAwaitingFee(?int $count, int $expected): void
     {
-        $rangeId = 22;
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andReturn($count);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $this->assertSame($expected, $this->sut->fetchCountInRangeWhereApplicationAwaitingFee(1));
 
-        $queryBuilder->shouldReceive('select')
-            ->with('count(icp.id)')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpCandidatePermitEntity::class, 'icp')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('icp.irhpPermitApplication', 'ipa')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ipa.irhpApplication', 'ia')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('IDENTITY(icp.irhpPermitRange) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('ia.status = ?2')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $rangeId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, IrhpInterface::STATUS_AWAITING_FEE)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getSingleScalarResult')
-            ->once()
-            ->andReturn($countInRange);
-
-        $this->assertEquals(
-            $expectedResult,
-            $this->sut->fetchCountInRangeWhereApplicationAwaitingFee($rangeId)
+        $this->assertSame(
+            'SELECT count(icp.id) FROM ' . Entity::class . ' icp'
+            . ' INNER JOIN icp.irhpPermitApplication ipa INNER JOIN ipa.irhpApplication ia'
+            . ' WHERE IDENTITY(icp.irhpPermitRange) = ?1 AND ia.status = ?2',
+            $qb->getDQL(),
         );
+        $this->assertSame(IrhpInterface::STATUS_AWAITING_FEE, $qb->getParameter(2)->getValue());
     }
 
-    public static function dpFetchCountInRangeWhereApplicationAwaitingFee(): \Iterator
+    #[\PHPUnit\Framework\Attributes\DataProvider('nullCountProvider')]
+    public function testFetchCountInStockWhereApplicationAwaitingFee(?int $count, int $expected): void
     {
-        yield [null, 0];
-        yield [42, 42];
-    }
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andReturn($count);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchCountInStockWhereApplicationAwaitingFee')]
-    public function testFetchCountInStockWhereApplicationAwaitingFee(mixed $emissionsCategoryId, mixed $countInStock, mixed $expectedResult): void
-    {
-        $stockId = 22;
-
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
-
-        $queryBuilder->shouldReceive('select')
-            ->with('count(icp.id)')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpCandidatePermitEntity::class, 'icp')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('icp.irhpPermitApplication', 'ipa')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('icp.irhpPermitRange', 'ipr')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ipa.irhpApplication', 'ia')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('IDENTITY(ipr.irhpPermitStock) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('ia.status = ?2')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('IDENTITY(ipr.emissionsCategory) = ?3')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $stockId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, IrhpInterface::STATUS_AWAITING_FEE)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(3, $emissionsCategoryId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getSingleScalarResult')
-            ->once()
-            ->andReturn($countInStock);
-
-        $this->assertEquals(
-            $expectedResult,
-            $this->sut->fetchCountInStockWhereApplicationAwaitingFee($stockId, $emissionsCategoryId)
+        $this->assertSame(
+            $expected,
+            $this->sut->fetchCountInStockWhereApplicationAwaitingFee(22, RefData::EMISSIONS_CATEGORY_EURO5_REF),
         );
+
+        $this->assertSame(
+            'SELECT count(icp.id) FROM ' . Entity::class . ' icp'
+            . ' INNER JOIN icp.irhpPermitApplication ipa INNER JOIN icp.irhpPermitRange ipr'
+            . ' INNER JOIN ipa.irhpApplication ia'
+            . ' WHERE IDENTITY(ipr.irhpPermitStock) = ?1 AND ia.status = ?2'
+            . ' AND IDENTITY(ipr.emissionsCategory) = ?3',
+            $qb->getDQL(),
+        );
+        $this->assertSame(22, $qb->getParameter(1)->getValue());
+        $this->assertSame(RefData::EMISSIONS_CATEGORY_EURO5_REF, $qb->getParameter(3)->getValue());
     }
 
-    public static function dpFetchCountInStockWhereApplicationAwaitingFee(): \Iterator
+    /**
+     * A null count means no rows, which the repository normalises to zero.
+     */
+    public static function nullCountProvider(): \Iterator
     {
-        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, null, 0];
-        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, null, 0];
-        yield [null, null, 0];
-        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, 20, 20];
-        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, 20, 20];
-        yield [null, 20, 20];
+        yield 'no rows' => [null, 0];
+        yield 'some rows' => [42, 42];
     }
 }

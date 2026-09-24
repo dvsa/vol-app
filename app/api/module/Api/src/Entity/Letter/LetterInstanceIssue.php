@@ -65,6 +65,10 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
             return $content;
         }
 
+        if (!empty($this->generatedContent) && is_array($this->generatedContent)) {
+            return $this->generatedContent;
+        }
+
         return $this->letterIssueVersion->getDefaultBodyContentAsArray() ?: [];
     }
 

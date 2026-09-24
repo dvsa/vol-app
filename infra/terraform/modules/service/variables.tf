@@ -78,6 +78,7 @@ variable "batch" {
   description = "Configuration for the batch process"
   type = object({
     cli_version          = string
+    liquibase_version    = string
     cli_repository       = string
     liquibase_repository = string
     api_secret_file      = string

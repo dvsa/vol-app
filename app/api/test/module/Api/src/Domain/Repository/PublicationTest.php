@@ -2,321 +2,116 @@
 
 declare(strict_types=1);
 
-/**
- * Publication test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Domain\Repository\Publication;
-use Dvsa\Olcs\Api\Entity\Publication\Publication as PublicationEntity;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
+use Dvsa\Olcs\Api\Domain\Repository\Publication as PublicationRepo;
+use Dvsa\Olcs\Api\Entity\Publication\Publication as Entity;
 use Dvsa\Olcs\Transfer\Query\Publication\PendingList;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\Publication as PublicationRepo;
-use Doctrine\ORM\EntityRepository;
 
-/**
- * Publication test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- *
- * @property Publication|m\Mock $sut
- */
 final class PublicationTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(PublicationRepo::class, true);
+        $this->setUpRealSut(PublicationRepo::class, true);
     }
 
-    /**
-     * @param $qb
-     *
-     * @return m\MockInterface
-     */
-    public function getMockRepo(mixed $qb): mixed
-    {
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
-
-        return $repo;
-    }
-
-    /**
-     * Tests fetch latest publication for traffic area and type
-     */
     public function testFetchLatestForTrafficAreaAndType(): void
     {
-        $trafficArea = 'M';
-        $pubType = 'A&D';
-        $results = [0 => m::mock(PublicationEntity::class)];
+        $publication = m::mock(Entity::class);
 
-        $mockQb = $this->getMockTaAndTypeQb($trafficArea, $pubType, $results);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$publication]);
 
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($mockQb);
+        $this->assertSame($publication, $this->sut->fetchLatestForTrafficAreaAndType('M', 'A&D'));
 
-        $this->em->shouldReceive('getRepository')
-            ->with(PublicationEntity::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchLatestForTrafficAreaAndType($trafficArea, $pubType);
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' WHERE m.trafficArea = :trafficArea AND m.pubType = :pubType'
+            . ' AND m.pubStatus = :pubStatus',
+            $qb->getDQL(),
+        );
+        $this->assertSame('M', $qb->getParameter('trafficArea')->getValue());
+        $this->assertSame('A&D', $qb->getParameter('pubType')->getValue());
+        $this->assertSame(Entity::PUB_NEW_STATUS, $qb->getParameter('pubStatus')->getValue());
     }
 
     public function testFetchLatestForTrafficAreaAndTypeNotFound(): void
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
+        $this->createRealQb()->stubbedQuery()->expects('getResult')->andReturn([]);
 
-        $trafficArea = 'M';
-        $pubType = 'A&D';
-        $results = [];
+        $this->expectException(NotFoundException::class);
 
-        $mockQb = $this->getMockTaAndTypeQb($trafficArea, $pubType, $results);
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($mockQb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(PublicationEntity::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchLatestForTrafficAreaAndType($trafficArea, $pubType);
+        $this->sut->fetchLatestForTrafficAreaAndType('M', 'A&D');
     }
 
-    /**
-     * @param string $trafficArea
-     * @param string $pubType
-     * @param array  $results
-     *
-     * @return m\MockInterface
-     */
-    public function getMockTaAndTypeQb(mixed $trafficArea, mixed $pubType, mixed $results): m\MockInterface
-    {
-        $mockQb = m::mock(QueryBuilder::class);
-        $trafficAreaExpr = $this->mockExprEq('m.trafficArea', ':trafficArea');
-        $mockQb->shouldReceive('expr->eq')->with('m.trafficArea', ':trafficArea')->once()->andReturn($trafficAreaExpr);
-        $mockQb->shouldReceive('andWhere')->with($trafficAreaExpr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('trafficArea', $trafficArea)->once()->andReturnSelf();
-        $pubTypeExpr = $this->mockExprEq('m.pubType', ':pubType');
-        $mockQb->shouldReceive('expr->eq')->with('m.pubType', ':pubType')->once()->andReturn($pubTypeExpr);
-        $mockQb->shouldReceive('andWhere')->with($pubTypeExpr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('pubType', $pubType)->once()->andReturnSelf();
-        $pubStatusExpr = $this->mockExprEq('m.pubStatus', ':pubStatus');
-        $mockQb->shouldReceive('expr->eq')->with('m.pubStatus', ':pubStatus')->once()->andReturn($pubStatusExpr);
-        $mockQb->shouldReceive('andWhere')->with($pubStatusExpr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('pubStatus', PublicationEntity::PUB_NEW_STATUS)
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($results);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)->andReturnSelf();
-
-        return $mockQb;
-    }
-
-    /**
-     * tests fetchPendingList
-     */
     public function testFetchPendingList(): void
     {
-        /** @var PendingList|m\Mock $query */
+        $results = [m::mock(Entity::class)];
+
+        $qb = $this->createRealQb()->willReturn($results);
+
         $query = m::mock(PendingList::class);
+        $this->sut->expects('buildDefaultListQuery')->with($qb, $query)->andReturnSelf();
+        $this->sut->expects('fetchPaginatedCount')->with($qb)->andReturn(1);
 
-        $count = 1;
-        $results = [0 => m::mock(PublicationEntity::class)];
-        $resultArray = [
-            'results' => $results,
-            'count' => $count
-        ];
+        $this->assertSame(
+            ['results' => $results, 'count' => 1],
+            $this->sut->fetchPendingList($query),
+        );
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $pubStatusExpr = $this->mockExprIn('m.pubStatus', ':pubStatus');
-        $mockQb->shouldReceive('expr->in')->with('m.pubStatus', ':pubStatus')->once()->andReturn($pubStatusExpr);
-        $mockQb->shouldReceive('andWhere')->with($pubStatusExpr)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('pubStatus', [PublicationEntity::PUB_NEW_STATUS, PublicationEntity::PUB_GENERATED_STATUS])
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->andReturn($results);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($mockQb);
-
-        $this->sut->shouldReceive('buildDefaultListQuery')->once()->with($mockQb, $query)->andReturnSelf();
-
-        $this->sut->shouldReceive('fetchPaginatedCount')
-            ->once()
-            ->with($mockQb)
-            ->andReturn($count);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(PublicationEntity::class)
-            ->andReturn($repo);
-
-        $this->assertEquals($resultArray, $this->sut->fetchPendingList($query));
-    }
-
-    /**
-     *
-     * @param $withPubType
-     * @param $withTrafficArea
-     */
-    #[\PHPUnit\Framework\Attributes\DataProvider('providePublishedListCases')]
-    public function testFetchPublishedList(mixed $withPubType, mixed $withTrafficArea): void
-    {
-        /** @var QueryInterface|m\Mock $query */
-        $query = m::mock(QueryInterface::class);
-
-        $count = 1;
-        $results = [0 => m::mock(PublicationEntity::class)];
-        $resultArray = [
-            'results' => $results,
-            'count' => $count
-        ];
-        $status = PublicationEntity::PUB_PRINTED_STATUS;
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $pubStatusExpr = $this->mockExprEq('m.pubStatus', ':pubStatus');
-        $mockQb->shouldReceive('expr->eq')
-            ->with('m.pubStatus', ':pubStatus')
-            ->once()
-            ->andReturn($pubStatusExpr);
-
-        $mockQb->shouldReceive('andWhere')
-            ->with($pubStatusExpr)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
-            ->with('pubStatus', $status)
-            ->once()
-            ->andReturnSelf();
-
-        $pubDateFromExpr = $this->mockExprGte('m.pubDate', ':pubDateFrom');
-        $mockQb->shouldReceive('expr->gte')
-            ->with('m.pubDate', ':pubDateFrom')
-            ->once()
-            ->andReturn($pubDateFromExpr);
-
-        $mockQb->shouldReceive('andWhere')
-            ->with($pubDateFromExpr)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
-            ->with('pubDateFrom', 'DUMMY_PUB_DATE_FROM')
-            ->once()
-            ->andReturnSelf();
-
-        $pubDateToExpr = $this->mockExprLt('m.pubDate', ':pubDateTo');
-        $mockQb->shouldReceive('expr->lt')
-            ->with('m.pubDate', ':pubDateTo')
-            ->once()
-            ->andReturn($pubDateToExpr);
-
-        $mockQb->shouldReceive('andWhere')
-            ->with($pubDateToExpr)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
-            ->with('pubDateTo', 'DUMMY_PUB_DATE_TO')
-            ->once()
-            ->andReturnSelf();
-
-        if ($withPubType) {
-            $pubTypeExpr = $this->mockExprEq('m.pubType', ':pubType');
-            $mockQb->shouldReceive('expr->eq')
-                ->with('m.pubType', ':pubType')
-                ->once()
-                ->andReturn($pubTypeExpr);
-
-            $mockQb->shouldReceive('andWhere')
-                ->with($pubTypeExpr)
-                ->once()
-                ->andReturnSelf();
-
-            $mockQb->shouldReceive('setParameter')
-                ->with('pubType', $withPubType)
-                ->once()
-                ->andReturnSelf();
-        }
-
-        if ($withTrafficArea) {
-            $trafficAreaExpr = $this->mockExprEq('m.trafficArea', ':trafficArea');
-            $mockQb->shouldReceive('expr->eq')
-                ->with('m.trafficArea', ':trafficArea')
-                ->once()
-                ->andReturn($trafficAreaExpr);
-
-            $mockQb->shouldReceive('andWhere')
-                ->with($trafficAreaExpr)
-                ->once()
-                ->andReturnSelf();
-
-            $mockQb->shouldReceive('setParameter')
-                ->with('trafficArea', 'DUMMY_TRAFFIC_AREA')
-                ->once()
-                ->andReturnSelf();
-        }
-
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->andReturn($results);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($mockQb);
-
-        $this->sut->shouldReceive('buildDefaultListQuery')->once()->with($mockQb, $query)->andReturnSelf();
-
-        $this->sut->shouldReceive('fetchPaginatedCount')
-            ->once()
-            ->with($mockQb)
-            ->andReturn($count);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(PublicationEntity::class)
-            ->andReturn($repo);
-
-        $this->assertEquals(
-            $resultArray,
-            $this->sut->fetchPublishedList(
-                $query,
-                $withPubType ? 'DUMMY_PUB_TYPE' : '',
-                'DUMMY_PUB_DATE_FROM',
-                'DUMMY_PUB_DATE_TO',
-                $withTrafficArea ? 'DUMMY_TRAFFIC_AREA' : ''
-            )
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.pubStatus IN(:pubStatus)',
+            $qb->getDQL(),
+        );
+        $this->assertSame(
+            [Entity::PUB_NEW_STATUS, Entity::PUB_GENERATED_STATUS],
+            $qb->getParameter('pubStatus')->getValue(),
         );
     }
 
-    public static function providePublishedListCases(): \Iterator
+    /**
+     * Publication type and traffic area are both optional narrowings on top of the printed
+     * status and the date window.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('publishedListProvider')]
+    public function testFetchPublishedList(?string $pubType, ?string $trafficAreaId, string $expectedExtra): void
     {
-        yield [false, true];
-        yield [true, true];
-        yield [false, false];
-        yield [true, false];
+        $results = [m::mock(Entity::class)];
+
+        $qb = $this->createRealQb()->willReturn($results);
+
+        $query = m::mock(QueryInterface::class);
+        $this->sut->expects('buildDefaultListQuery')->with($qb, $query)->andReturnSelf();
+        $this->sut->expects('fetchPaginatedCount')->with($qb)->andReturn(1);
+
+        $this->assertSame(
+            ['results' => $results, 'count' => 1],
+            $this->sut->fetchPublishedList($query, $pubType, '2015-01-01', '2015-02-01', $trafficAreaId),
+        );
+
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' WHERE m.pubStatus = :pubStatus AND m.pubDate >= :pubDateFrom AND m.pubDate < :pubDateTo'
+            . $expectedExtra,
+            $qb->getDQL(),
+        );
+        $this->assertSame(Entity::PUB_PRINTED_STATUS, $qb->getParameter('pubStatus')->getValue());
+        $this->assertSame('2015-01-01', $qb->getParameter('pubDateFrom')->getValue());
+        $this->assertSame('2015-02-01', $qb->getParameter('pubDateTo')->getValue());
+    }
+
+    public static function publishedListProvider(): \Iterator
+    {
+        yield 'neither' => [null, null, ''];
+        yield 'pub type only' => ['A&D', null, ' AND m.pubType = :pubType'];
+        yield 'traffic area only' => [null, 'M', ' AND m.trafficArea = :trafficArea'];
+        yield 'both' => ['A&D', 'M', ' AND m.pubType = :pubType AND m.trafficArea = :trafficArea'];
     }
 }

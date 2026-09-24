@@ -4,37 +4,30 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\Submission as Repo;
-use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Entity\Submission\Submission as Entity;
 
-/**
- * SubmissionTest
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class SubmissionTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testFetchByUserWithOpenOnly(): void
+    public function testFetchWithCaseAndLicenceById(): void
     {
-        $submissionId = 1;
-        $qb = m::mock(QueryBuilder::class);
-        $this->mockCreateQueryBuilder($qb);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->withNoArgs()->andReturn('RESULT');
 
-        $this->queryBuilder->shouldReceive('modifyQuery')->once()->with($qb)->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('case', 'c')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('with')->with('c.licence', 'cl')->once()->andReturnSelf();
-        $this->queryBuilder->shouldReceive('byId')->with($submissionId)->once()->andReturnSelf();
+        $this->assertSame('RESULT', $this->sut->fetchWithCaseAndLicenceById(1));
 
-        $qb->shouldReceive('getQuery->getSingleResult')->andReturn('RESULT');
-
-        $result = $this->sut->fetchWithCaseAndLicenceById($submissionId);
-        $this->assertEquals('RESULT', $result);
+        $this->assertSame(
+            'SELECT m, c, cl FROM ' . Entity::class . ' m'
+            . ' LEFT JOIN m.case c LEFT JOIN c.licence cl'
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('byId')->getValue());
     }
 }

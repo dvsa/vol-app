@@ -219,6 +219,9 @@ class EditorJsParser implements ParserInterface
                 $preformatted = false;
             }
 
+            // Block text is HTML to EditorJS, so the value goes in as literal text
+            $content = htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
             // For EditorJS, convert newlines to <br> for HTML compatibility (unless preformatted)
             if (!$preformatted && !empty($content)) {
                 $content = str_replace("\n", '<br>', $content);

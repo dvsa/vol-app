@@ -4,327 +4,244 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking as Repo;
+use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository;
-use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking as ConditionUndertakingEntity;
-use Doctrine\ORM\QueryBuilder;
 
-/**
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
-#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking::class)]
 final class ConditionUndertakingTest extends RepositoryTestCase
 {
-    /** @var Repository\ConditionUndertaking | m\MockInterface */
-    protected $sut;
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
+    /** withRefdata() joins conditionType, conditionCategory, addedVia and attachedTo. */
+    private const string REFDATA_JOINS = ' LEFT JOIN m.conditionType w0'
+        . ' LEFT JOIN m.conditionCategory w1 LEFT JOIN m.addedVia w2'
+        . ' LEFT JOIN m.attachedTo w3';
+
+    /** The joins shared by the application, variation and licence lists (no withRefdata). */
+    private const string LIST_JOINS = ' LEFT JOIN m.attachedTo w0 LEFT JOIN m.conditionType w1'
+        . ' LEFT JOIN m.operatingCentre oc LEFT JOIN oc.address add'
+        . ' LEFT JOIN add.countryCode w2';
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\ConditionUndertaking::class, true);
+        $this->setUpRealSut(Repo::class, true);
     }
 
+    public function testBuildDefaultQuery(): void
+    {
+        $qb = $this->createRealQb();
+
+        $this->sut->buildDefaultQuery($qb, 1);
+
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, w3, oc, w4' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.operatingCentre oc LEFT JOIN oc.address w4'
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
+    }
+
+    /**
+     * Only live conditions are shown read-only: drafts and fulfilled ones are excluded.
+     *
+     * This query joins m.attachedTo and m.conditionType twice each — withRefdata() covers both
+     * and the method then asks for them explicitly. See the migration findings.
+     */
     public function testFetchListForLicenceReadOnly(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchListForLicenceReadOnly(7));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('attachedTo')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('conditionType')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('operatingCentre', 'oc')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('oc.address')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, w3, w4, w5, oc, w6' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.attachedTo w4 LEFT JOIN m.conditionType w5'
+            . ' LEFT JOIN m.operatingCentre oc LEFT JOIN oc.address w6'
+            . ' WHERE m.licence = :licence AND m.isDraft = 0 AND m.isFulfilled = 0',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchListForLicenceReadOnly(95));
+        $this->assertSame(7, $qb->getParameter('licence')->getValue());
+    }
 
-        $expectedQuery = 'BLAH AND m.licence = [[95]] AND m.isDraft = 0 AND m.isFulfilled = 0';
-        $this->assertEquals($expectedQuery, $this->query);
+    public function testApplyListFilters(): void
+    {
+        $qb = $this->createRealQb();
+
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getCase')->andReturn(1);
+
+        $this->sut->applyListFilters($qb, $query);
+
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.case = :byCase',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('byCase')->getValue());
+    }
+
+    public function testApplyListJoins(): void
+    {
+        $qb = $this->createRealQb();
+
+        $this->sut->applyListJoins($qb);
+
+        $this->assertSame(
+            'SELECT m, w0, w1, w2, w3, oc, w4, w5, w6' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.operatingCentre oc LEFT JOIN oc.address w4'
+            . ' LEFT JOIN m.createdBy w5 LEFT JOIN m.lastModifiedBy w6',
+            $qb->getDQL(),
+        );
     }
 
     public function testFetchListForApplication(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchListForApplication(1));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('with')->with('attachedTo')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('conditionType')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('operatingCentre', 'oc')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('oc.address', 'add')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('add.countryCode')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('addedVia')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m, w0, w1, oc, add, w2, w3' . self::FROM . self::LIST_JOINS
+            . ' LEFT JOIN m.addedVia w3'
+            . ' WHERE m.application = :application',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchListForApplication(95));
-
-        $expectedQuery = 'BLAH AND m.application = [[95]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(1, $qb->getParameter('application')->getValue());
     }
 
+    /**
+     * A variation returns conditions attached to either the application or the licence, so the
+     * licence clause is an orWhere.
+     */
     public function testFetchListForVariation(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchListForVariation(1, 7));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('with')->with('attachedTo')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('conditionType')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('operatingCentre', 'oc')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('oc.address', 'add')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('add.countryCode')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('licConditionVariation')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('addedVia')->once()->andReturnSelf()
-            ->shouldReceive('order')->with('id', 'ASC')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m, w0, w1, oc, add, w2, w3, w4' . self::FROM . self::LIST_JOINS
+            . ' LEFT JOIN m.licConditionVariation w3 LEFT JOIN m.addedVia w4'
+            . ' WHERE m.application = :application OR m.licence = :licence'
+            . ' ORDER BY m.id ASC',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchListForVariation(95, 33));
-
-        $expectedQuery = 'BLAH AND m.application = [[95]] OR m.licence = [[33]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(1, $qb->getParameter('application')->getValue());
+        $this->assertSame(7, $qb->getParameter('licence')->getValue());
     }
 
-    public function testFetchListForLicence(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('conditionTypeProvider')]
+    public function testFetchListForLicence(?string $conditionType, string $expectedExtra): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchListForLicence(7, $conditionType));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('with')->with('attachedTo')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('conditionType')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('operatingCentre', 'oc')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('oc.address', 'add')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('add.countryCode')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('addedVia')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchListForLicence(95));
-
-        $expectedQuery = 'BLAH AND m.licence = [[95]]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchListForS4(): void
-    {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchListForS4(95));
-
-        $expectedQuery = 'BLAH AND m.s4 = [[95]]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchListForLicenceAndConditionType(): void
-    {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('with')->with('attachedTo')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('conditionType')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('operatingCentre', 'oc')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('oc.address', 'add')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('add.countryCode')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('addedVia')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(
-            ['RESULTS'],
-            $this->sut->fetchListForLicence(95, ConditionUndertakingEntity::TYPE_CONDITION)
-        );
-
-        $expectedQuery
-            = 'BLAH AND m.licence = [[95]] AND m.conditionType = [[' . ConditionUndertakingEntity::TYPE_CONDITION . ']]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchListForLicConditionVariation(): void
-    {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchListForLicConditionVariation(95));
-
-        $expectedQuery = 'BLAH AND m.licConditionVariation = [[95]]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchSmallVehilceUndertakings(): void
-    {
-        $licenceId = 1;
-
-        $qb = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($qb);
-
-        $licExpr = $this->mockExprEq('m.licence', ':licence');
-        $qb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn($licExpr);
-        $qb->shouldReceive('andWhere')->with($licExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('licence', $licenceId)->once()->andReturnSelf();
-
-        $condExpr = $this->mockExprEq('m.conditionType', ':conditionType');
-        $qb->shouldReceive('expr->eq')->with('m.conditionType', ':conditionType')->once()->andReturn($condExpr);
-        $qb->shouldReceive('andWhere')->with($condExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')
-            ->with('conditionType', ConditionUndertakingEntity::TYPE_UNDERTAKING)->once()->andReturnSelf();
-
-        $likeExpr = m::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
-        $qb->shouldReceive('expr->like')->with('m.notes', ':note')->once()->andReturn($likeExpr);
-        $qb->shouldReceive('andWhere')->with($likeExpr)->once()->andReturnSelf();
-        $qb->shouldReceive('setParameter')
-            ->with('note', '%' . ConditionUndertakingEntity::SMALL_VEHICLE_UNDERTAKINGS . '%')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn('results');
-
-        $this->assertEquals('results', $this->sut->fetchSmallVehilceUndertakings($licenceId));
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasLightGoodsVehicleUndertakings')]
-    public function testHasLightGoodsVehicleUndertakings(mixed $resultCount, mixed $expected): void
-    {
-        $licenceId = 42;
-
-        $qb = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('getRepository->createQueryBuilder')
-            ->with('m')
-            ->once()
-            ->andReturn($qb);
-
-        $qb->shouldReceive('select')
-            ->with('count(m.id)')
-            ->once()
-            ->andReturnSelf();
-
-        $licExpr = $this->mockExprEq('m.licence', ':licence');
-        $qb->shouldReceive('expr->eq')
-           ->with('m.licence', ':licence')
-           ->once()
-           ->andReturn($licExpr);
-        $qb->shouldReceive('andWhere')
-           ->with($licExpr)
-           ->once()
-           ->andReturnSelf();
-        $qb->shouldReceive('setParameter')
-           ->with('licence', $licenceId)
-           ->once()
-           ->andReturnSelf();
-
-        $condExpr = $this->mockExprEq('m.conditionType', ':conditionType');
-        $qb->shouldReceive('expr->eq')
-           ->with('m.conditionType', ':conditionType')
-           ->once()
-           ->andReturn($condExpr);
-        $qb->shouldReceive('andWhere')
-           ->with($condExpr)
-           ->once()
-           ->andReturnSelf();
-        $qb->shouldReceive('setParameter')
-           ->with('conditionType', ConditionUndertakingEntity::TYPE_UNDERTAKING)
-           ->once()
-           ->andReturnSelf();
-
-        $noteExpr = $this->mockExprEq('m.notes', ':note');
-        $qb->shouldReceive('expr->eq')
-           ->with('m.notes', ':note')
-           ->once()
-           ->andReturn($noteExpr);
-        $qb->shouldReceive('andWhere')
-           ->with($noteExpr)
-           ->once()
-           ->andReturnSelf();
-        $qb->shouldReceive('setParameter')
-           ->with('note', ConditionUndertakingEntity::LIGHT_GOODS_VEHICLE_UNDERTAKINGS)
-           ->once()
-           ->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getSingleScalarResult')
-            ->withNoArgs()
-            ->once()
-            ->andReturn($resultCount);
-
-        $this->assertEquals(
-            $expected,
-            $this->sut->hasLightGoodsVehicleUndertakings($licenceId)
+        $this->assertSame(
+            'SELECT m, w0, w1, oc, add, w2, w3' . self::FROM . self::LIST_JOINS
+            . ' LEFT JOIN m.addedVia w3'
+            . ' WHERE m.licence = :licence' . $expectedExtra,
+            $qb->getDQL(),
         );
     }
 
-    public static function dpHasLightGoodsVehicleUndertakings(): \Iterator
+    public static function conditionTypeProvider(): \Iterator
     {
-        yield [0, false];
-        yield [1, true];
-        yield [2, true];
+        yield 'any type' => [null, ''];
+        yield 'one type' => [Entity::TYPE_UNDERTAKING, ' AND m.conditionType = :conditionType'];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('singleFilterProvider')]
+    public function testFetchByColumn(string $method, string $expectedWhere, string $parameter): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->{$method}(1));
+
+        $this->assertSame('SELECT m' . self::FROM . ' WHERE ' . $expectedWhere, $qb->getDQL());
+        $this->assertSame(1, $qb->getParameter($parameter)->getValue());
+    }
+
+    public static function singleFilterProvider(): \Iterator
+    {
+        yield 'by s4' => ['fetchListForS4', 'm.s4 = :s4Id', 's4Id'];
+        yield 'by licence condition variation' => [
+            'fetchListForLicConditionVariation',
+            'm.licConditionVariation = :id',
+            'id',
+        ];
+    }
+
+    /**
+     * Small-vehicle undertakings are identified by a substring of the free-text notes.
+     */
+    public function testFetchSmallVehicleUndertakings(): void
+    {
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchSmallVehilceUndertakings(7));
+
+        $this->assertSame(
+            'SELECT m' . self::FROM
+            . ' WHERE m.licence = :licence AND m.conditionType = :conditionType'
+            . ' AND m.notes LIKE :note',
+            $qb->getDQL(),
+        );
+        $this->assertSame(Entity::TYPE_UNDERTAKING, $qb->getParameter('conditionType')->getValue());
+        $this->assertSame(
+            '%' . Entity::SMALL_VEHICLE_UNDERTAKINGS . '%',
+            $qb->getParameter('note')->getValue(),
+        );
+    }
+
+    /**
+     * The light-goods variant matches the note exactly rather than by substring.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('countProvider')]
+    public function testHasLightGoodsVehicleUndertakings(int $count, bool $expected): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->andReturn($count);
+
+        $this->assertSame($expected, $this->sut->hasLightGoodsVehicleUndertakings(7));
+
+        $this->assertSame(
+            'SELECT count(m.id)' . self::FROM
+            . ' WHERE m.licence = :licence AND m.conditionType = :conditionType'
+            . ' AND m.notes = :note',
+            $qb->getDQL(),
+        );
+        $this->assertSame(
+            Entity::LIGHT_GOODS_VEHICLE_UNDERTAKINGS,
+            $qb->getParameter('note')->getValue(),
+        );
+    }
+
+    public static function countProvider(): \Iterator
+    {
+        yield 'none' => [0, false];
+        yield 'some' => [2, true];
     }
 
     public function testDeleteFromVariations(): void
     {
-        $ids = [9001, 9002, 9003];
+        $first = m::mock(Entity::class);
+        $second = m::mock(Entity::class);
 
-        $qb = $this->createMockQb('[[QUERY]]');
-        $this->mockCreateQueryBuilder($qb);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$first, $second]);
 
-        $mockEnt = m::mock(ConditionUndertakingEntity::class);
-        $mockEnt2 = clone $mockEnt;
-        $mockEnt3 = clone $mockEnt;
+        $this->sut->expects('delete')->with($first);
+        $this->sut->expects('delete')->with($second);
 
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn([$mockEnt, $mockEnt2, $mockEnt3]);
-        $this->sut
-            ->shouldReceive('delete')
-            ->with(m::any())
-            ->times(3);
+        $this->assertSame(2, $this->sut->deleteFromVariations([1, 2]));
 
-        $this->assertEquals(3, $this->sut->deleteFromVariations($ids));
-
-        $this->assertEquals('[[QUERY]]' .
-        ' AND m.licConditionVariation IN([[[9001,9002,9003]]])', $this->query);
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.licConditionVariation IN(:CU_IDS)',
+            $qb->getDQL(),
+        );
+        $this->assertSame([1, 2], $qb->getParameter('CU_IDS')->getValue());
     }
 }
