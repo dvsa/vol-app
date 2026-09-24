@@ -78,7 +78,7 @@ jobs:
             command: composer run-script phpcs
           # Psalm drops to a single thread for both scanning and analysis when it detects CI, unless told otherwise.
           - tool: Psalm
-            command: composer run-script psalm -- --threads=$(nproc) --scan-threads=$(nproc) --force-jit
+            command: composer run-script psalm -- --threads=$(nproc) --scan-threads=$(nproc)
     runs-on: ubuntu-latest
     defaults:
       run:

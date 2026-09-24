@@ -69,7 +69,7 @@ jobs:
             Test) composer run-script test ;;
             "PHP CodeSniffer") composer run-script phpcs ;;
             # Psalm drops to a single thread for both scanning and analysis when it detects CI, unless told otherwise.
-            Psalm) composer run-script psalm -- --threads="$(nproc)" --scan-threads="$(nproc)" --force-jit ;;
+            Psalm) composer run-script psalm -- --threads="$(nproc)" --scan-threads="$(nproc)" ;;
             PHPStan) composer run-script phpstan ;;
             *) composer run-script all ;;
           esac
