@@ -261,7 +261,7 @@ jobs:
       contents: read
 
   lib:
-    name: Lib
+    name: Lib (${{ matrix.project }}, ${{ matrix.php-version }})
     if: ${{ needs.orchestrator.outputs.should-build-libs }}
     needs:
       - orchestrator
