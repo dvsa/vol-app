@@ -35,7 +35,7 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
      */
     private $restrictionService;
 
-    private $toggleService;
+    private ToggleService $toggleService;
 
     /**
      * Get sections from section config
@@ -116,6 +116,18 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
             $vehicleType = $entity->getVehicleType()->getId();
         }
 
+        $knowledgeExperience = null;
+
+        if ($entity instanceof Application) {
+            $knowledgeExperienceRequired =
+                $this->toggleService->isEnabled(FeatureToggle::KNOWLEDGE_EXPERIENCE)
+                && $entity->requiresKnowledgeExperience();
+
+            $knowledgeExperience = $knowledgeExperienceRequired
+                ? 'knowledgeExperienceRequired'
+                : 'knowledgeExperienceNotRequired';
+        }
+
         $access = [
             $location,
             $lva,
@@ -124,6 +136,7 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
             $vehicleType,
             $vehicleSizes,
             $operatingSmallVehiclesSmallPart,
+            $knowledgeExperience,
             $hasConditions ? 'hasConditions' : 'noConditions'
         ];
 

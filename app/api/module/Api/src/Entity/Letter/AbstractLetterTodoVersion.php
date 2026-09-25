@@ -108,6 +108,14 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     protected $isLocked = 0;
 
     /**
+     * To-do has placeholders that must be edited
+     *
+     * @var bool
+     */
+    #[ORM\Column(type: 'boolean', name: 'requires_input', nullable: false, options: ['default' => 0])]
+    protected $requiresInput = 0;
+
+    /**
      * Embargo until this date
      *
      * @var \DateTime|null
@@ -338,6 +346,30 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     public function getIsLocked()
     {
         return $this->isLocked;
+    }
+
+    /**
+     * Set the requires input
+     *
+     * @param bool $requiresInput new value being set
+     *
+     * @return static
+     */
+    public function setRequiresInput($requiresInput)
+    {
+        $this->requiresInput = $requiresInput;
+
+        return $this;
+    }
+
+    /**
+     * Get the requires input
+     *
+     * @return bool
+     */
+    public function getRequiresInput()
+    {
+        return $this->requiresInput;
     }
 
     /**

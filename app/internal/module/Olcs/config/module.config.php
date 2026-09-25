@@ -163,6 +163,7 @@ return [
             'LvaApplication/CommunityLicences' => \Olcs\Controller\Lva\Application\CommunityLicencesController::class,
             'LvaApplication/FinancialHistory' => \Olcs\Controller\Lva\Application\FinancialHistoryController::class,
             'LvaApplication/LicenceHistory' => \Olcs\Controller\Lva\Application\LicenceHistoryController::class,
+            'LvaApplication/KnowledgeExperience' => \Olcs\Controller\Lva\Application\KnowledgeExperienceController::class,
             'LvaApplication/ConvictionsPenalties' => \Olcs\Controller\Lva\Application\ConvictionsPenaltiesController::class,
             'LvaApplication/TaxiPhv' => \Olcs\Controller\Lva\Application\TaxiPhvController::class,
             'LvaApplication/ConditionsUndertakings'
@@ -241,6 +242,7 @@ return [
             LvaApplicationControllers\FinancialEvidenceAssessmentController::class => LvaControllerFactories\FinancialEvidenceAssessmentControllerFactory::class,
             LvaLicenceControllers\FinancialEvidenceAssessmentController::class => LvaControllerFactories\FinancialEvidenceAssessmentControllerFactory::class,
             LvaVariationControllers\FinancialEvidenceAssessmentController::class => LvaControllerFactories\FinancialEvidenceAssessmentControllerFactory::class,
+            LvaApplicationControllers\KnowledgeExperienceController::class => LvaApplicationControllerFactories\KnowledgeExperienceControllerFactory::class,
             LvaApplicationControllers\FinancialHistoryController::class => LvaApplicationControllerFactories\FinancialHistoryControllerFactory::class,
             LvaApplicationControllers\GrantController::class => LvaApplicationControllerFactories\GrantControllerFactory::class,
             LvaApplicationControllers\InterimController::class => LvaApplicationControllerFactories\InterimControllerFactory::class,
@@ -475,6 +477,7 @@ return [
             'LvaApplication/OperatingCentres' => LvaApplicationControllers\OperatingCentresController::class,
             'LvaApplication/FinancialEvidence' => LvaApplicationControllers\FinancialEvidenceController::class,
             'LvaApplication/FinancialEvidenceAssessment' => LvaApplicationControllers\FinancialEvidenceAssessmentController::class,
+            'LvaApplication/KnowledgeExperience' => LvaApplicationControllers\KnowledgeExperienceController::class,
             'LvaApplication/TransportManagers' => LvaApplicationControllers\TransportManagersController::class,
             'LvaApplication/Vehicles' => LvaApplicationControllers\VehiclesController::class,
             'LvaApplication/VehiclesPsv' => LvaApplicationControllers\VehiclesPsvController::class,

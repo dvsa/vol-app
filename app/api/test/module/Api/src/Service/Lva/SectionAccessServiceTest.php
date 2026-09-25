@@ -11,12 +11,13 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Dvsa\Olcs\Api\Service\Lva\RestrictionService;
 use Dvsa\Olcs\Api\Service\Lva\SectionAccessService;
-use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 use Laminas\ServiceManager\ServiceManager;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
+use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Lva\SectionAccessService::class)]
 final class SectionAccessServiceTest extends MockeryTestCase
@@ -34,8 +35,8 @@ final class SectionAccessServiceTest extends MockeryTestCase
     private $sectionConfig;
     /** @var  m\MockInterface */
     private $authService;
-
-    private ToggleService $toggleService;
+    /** @var ToggleService|m\MockInterface */
+    private $toggleService;
 
     #[\Override]
     public function setUp(): void
@@ -46,7 +47,13 @@ final class SectionAccessServiceTest extends MockeryTestCase
         $this->authService = m::mock(AuthorizationService::class);
         $this->toggleService = m::mock(ToggleService::class);
         // Keep the wire value explicit so the test catches accidental changes to the toggle key.
-        $this->toggleService->shouldReceive('isDisabled')->with('idp')->andReturn(true)->byDefault();
+        $this->toggleService->shouldReceive('isDisabled')->with(FeatureToggle::IDP)->andReturn(true)->byDefault();
+
+        $this->toggleService
+            ->shouldReceive('isEnabled')
+            ->with(FeatureToggle::KNOWLEDGE_EXPERIENCE)
+            ->andReturn(true)
+            ->byDefault();
 
         $sm = m::mock(ServiceManager::class);
 
@@ -135,6 +142,7 @@ final class SectionAccessServiceTest extends MockeryTestCase
             RefData::APP_VEHICLE_TYPE_HGV,
             Application::PSV_VEHICLE_SIZE_SMALL,
             'isNotOperatingSmallVehiclesSmallPart',
+            'knowledgeExperienceNotRequired',
             'noConditions'
         ];
 
@@ -218,6 +226,7 @@ final class SectionAccessServiceTest extends MockeryTestCase
             RefData::APP_VEHICLE_TYPE_HGV,
             Application::PSV_VEHICLE_SIZE_BOTH,
             'isOperatingSmallVehiclesSmallPart',
+            'knowledgeExperienceNotRequired',
             'hasConditions'
         ];
 
@@ -285,5 +294,128 @@ final class SectionAccessServiceTest extends MockeryTestCase
         $this->mockRestrictionHelper->shouldReceive('isRestrictionSatisfied')
             ->with(['no-access'], $access, 'hasnt_got_access')
             ->andReturn(false);
+    }
+
+    public function testGetAccessibleSectionsApplicationKnowledgeExperienceRequired(): void
+    {
+        /** @var RefData|m\MockInterface $goodsOrPsv */
+        $goodsOrPsv = m::mock(RefData::class)->makePartial();
+        $goodsOrPsv->setId(Licence::LICENCE_CATEGORY_GOODS_VEHICLE);
+
+        /** @var RefData|m\MockInterface $licenceType */
+        $licenceType = m::mock(RefData::class)->makePartial();
+        $licenceType->setId(Licence::LICENCE_TYPE_STANDARD_NATIONAL);
+
+        /** @var Licence|m\MockInterface $licence */
+        $licence = m::mock(Licence::class)->makePartial();
+        $licence->shouldReceive('hasApprovedUnfulfilledConditions')
+            ->andReturn(false);
+
+        /** @var Application $application */
+        $application = m::mock(Application::class)->makePartial();
+
+        $application->setIsVariation(false);
+        $application->setGoodsOrPsv($goodsOrPsv);
+        $application->setLicenceType($licenceType);
+        $application->setLicence($licence);
+
+        $application->setPrevHasLicence('N');
+        $application->setPrevHadLicence('Y');
+
+        $this->authService->shouldReceive('isGranted')
+            ->with(Permission::INTERNAL_USER, null)
+            ->andReturn(true);
+
+        $expectedAccess = [
+            'internal',
+            'application',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            null,
+            null,
+            'isNotOperatingSmallVehiclesSmallPart',
+            'knowledgeExperienceRequired',
+            'noConditions'
+        ];
+
+        $this->setSharedMockRestrictionHelperExpectations($expectedAccess);
+
+        $sections = $this->sut->getAccessibleSections($application);
+
+        $expected = [
+            'no_restriction' => [],
+            'has_access' => [
+                'restricted' => [
+                    'access'
+                ]
+            ],
+        ];
+
+        $this->assertEquals($expected, $sections);
+    }
+
+    public function testGetAccessibleSectionsApplicationKnowledgeExperienceNotRequiredWhenToggleDisabled(): void
+    {
+        /** @var RefData|m\MockInterface $goodsOrPsv */
+        $goodsOrPsv = m::mock(RefData::class)->makePartial();
+        $goodsOrPsv->setId(Licence::LICENCE_CATEGORY_GOODS_VEHICLE);
+
+        /** @var RefData|m\MockInterface $licenceType */
+        $licenceType = m::mock(RefData::class)->makePartial();
+        $licenceType->setId(Licence::LICENCE_TYPE_STANDARD_NATIONAL);
+
+        /** @var Licence|m\MockInterface $licence */
+        $licence = m::mock(Licence::class)->makePartial();
+        $licence->shouldReceive('hasApprovedUnfulfilledConditions')
+            ->andReturn(false);
+
+        /** @var Application $application */
+        $application = m::mock(Application::class)->makePartial();
+        $application->setIsVariation(false);
+        $application->setGoodsOrPsv($goodsOrPsv);
+        $application->setLicenceType($licenceType);
+        $application->setLicence($licence);
+
+        // Application itself requires the new section.
+        $application->setPrevHasLicence('N');
+        $application->setPrevHadLicence('Y');
+
+        // But the feature is switched off.
+        $this->toggleService
+            ->shouldReceive('isEnabled')
+            ->with(FeatureToggle::KNOWLEDGE_EXPERIENCE)
+            ->once()
+            ->andReturn(false);
+
+        $this->authService->shouldReceive('isGranted')
+            ->with(Permission::INTERNAL_USER, null)
+            ->andReturn(true);
+
+        $expectedAccess = [
+            'internal',
+            'application',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            null,
+            null,
+            'isNotOperatingSmallVehiclesSmallPart',
+            'knowledgeExperienceNotRequired',
+            'noConditions'
+        ];
+
+        $this->setSharedMockRestrictionHelperExpectations($expectedAccess);
+
+        $sections = $this->sut->getAccessibleSections($application);
+
+        $expected = [
+            'no_restriction' => [],
+            'has_access' => [
+                'restricted' => [
+                    'access'
+                ]
+            ],
+        ];
+
+        $this->assertEquals($expected, $sections);
     }
 }

@@ -3,7 +3,9 @@
 namespace Dvsa\Olcs\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Exception;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
 /**
  * Abstract Versioned Repository
@@ -110,6 +112,61 @@ abstract class AbstractVersionedRepository extends AbstractRepository
         }
 
         return $result[0];
+    }
+
+    /**
+     * Leave out soft-deleted rows. This is explicit rather than the Gedmo filter, which would
+     * also hide them from the generated letters that still use them.
+     *
+     * @param QueryBuilder $qb
+     * @param QueryInterface $query
+     * @return void
+     */
+    #[\Override]
+    protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
+    {
+        parent::applyListFilters($qb, $query);
+
+        $qb->andWhere($this->alias . '.deletedOn IS NULL');
+    }
+
+    /**
+     * Hide the entity in admin but keep every row, for generated letters that still use it.
+     * Only the parent row changes, so this skips versioning.
+     *
+     * @param mixed $entity
+     * @return void
+     */
+    public function softDelete($entity): void
+    {
+        $entity->setDeletedOn(new \DateTime());
+
+        parent::save($entity);
+    }
+
+    /**
+     * Run native delete statements bound to :id, in the order given, then stop the entity
+     * manager tracking the deleted row so nothing flushes it later.
+     *
+     * Native SQL so that soft-deleted rows the Gedmo filter hides are removed as well.
+     *
+     * @param int $id
+     * @param string[] $statements
+     * @return void
+     */
+    protected function deleteRows(int $id, array $statements): void
+    {
+        $em = $this->getEntityManager();
+
+        foreach ($statements as $sql) {
+            $em->getConnection()->executeStatement($sql, ['id' => $id]);
+        }
+
+        $managed = $em->getUnitOfWork()->tryGetById($id, $this->entity);
+
+        if ($managed !== false) {
+            $em->detach($managed);
+        }
     }
 
     /**
