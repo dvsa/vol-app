@@ -1,5 +1,39 @@
 # Changelog
 
+## [9.4.0](https://github.com/dvsa/vol-app/compare/v9.3.0...v9.4.0) (2026-09-25)
+
+
+### Features
+
+* add knowledge and experience section for new applications VOL-7423 ([#1782](https://github.com/dvsa/vol-app/issues/1782)) ([5b62d77](https://github.com/dvsa/vol-app/commit/5b62d77bdb5c5b279759c3ef878de4fc299c2d28))
+* add sas extract storage s3 perms ([#1774](https://github.com/dvsa/vol-app/issues/1774)) ([7f31dbb](https://github.com/dvsa/vol-app/commit/7f31dbbb08c36c838119053ec998ec3cd99f3b8f))
+* added inset text to annotated form for financial evidence section ([#1745](https://github.com/dvsa/vol-app/issues/1745)) ([253d634](https://github.com/dvsa/vol-app/commit/253d6348051657ae21b66547fb29e44685c60965))
+* **cdn:** update govuk-frontend to v6.5.0 ([#1769](https://github.com/dvsa/vol-app/issues/1769)) ([c531b52](https://github.com/dvsa/vol-app/commit/c531b52511a42eca284c57c91040257cc802eb7d))
+* idp stage 3 (process analysis results) ([#1764](https://github.com/dvsa/vol-app/issues/1764)) ([510beba](https://github.com/dvsa/vol-app/commit/510bebac2f4325a4d950ecfae7d369a110438894))
+* liquibase cd hardening ([#1773](https://github.com/dvsa/vol-app/issues/1773)) ([f07b64c](https://github.com/dvsa/vol-app/commit/f07b64cc61fa66e55f533d7b5baf0117a5db0c6a))
+* resolve letter grabs at generation time VOL-7584 ([#1791](https://github.com/dvsa/vol-app/issues/1791)) ([b1906fb](https://github.com/dvsa/vol-app/commit/b1906fbca818010563923d1621a4c0d7ff8a969a))
+* **terraform:** point dev, int and reg GOV.UK Sign In at the nonprod mock ([#1794](https://github.com/dvsa/vol-app/issues/1794)) ([0e67a26](https://github.com/dvsa/vol-app/commit/0e67a26453395e787da9b8ae0efe72e48a1e47c3))
+* update extract jobs ([#1801](https://github.com/dvsa/vol-app/issues/1801)) ([a596090](https://github.com/dvsa/vol-app/commit/a596090615757863fb614b38f03c8e48f8d1d333))
+* upgrade to doctrine orm 3.7.1 and fix most schema drift issues VOL-7070 VOL-7481 ([#1721](https://github.com/dvsa/vol-app/issues/1721)) ([432e036](https://github.com/dvsa/vol-app/commit/432e036cffbba94fb20be1eee58455c71e57b6c8))
+* vol 7469 duplicate vehicle letter email ([#1766](https://github.com/dvsa/vol-app/issues/1766)) ([4d2d88d](https://github.com/dvsa/vol-app/commit/4d2d88dc14bf99b62451c149208c447e5ae65a85))
+* vol-7442 block digital surrender for licences with queued revocation ([#1716](https://github.com/dvsa/vol-app/issues/1716)) ([0c6bcf5](https://github.com/dvsa/vol-app/commit/0c6bcf5dc2187ed248af37eb251a9068b7e863a7))
+
+
+### Bug Fixes
+
+* allow printing of HTML snapshots ([#1792](https://github.com/dvsa/vol-app/issues/1792)) ([8ed627c](https://github.com/dvsa/vol-app/commit/8ed627c879579f398e6e83eb02e4658dfd330a7f))
+* correct batch syntax on ni compliance ([#1802](https://github.com/dvsa/vol-app/issues/1802)) ([989a228](https://github.com/dvsa/vol-app/commit/989a2288c10cc4c629065753aa444c258f11518a))
+* created and moved the IDP analysed event to it's own batch job queue ([#1771](https://github.com/dvsa/vol-app/issues/1771)) ([c0022af](https://github.com/dvsa/vol-app/commit/c0022aff6e554dcbcf119e8ef4a9e5a8d91874da))
+* letters feedback ([#1798](https://github.com/dvsa/vol-app/issues/1798)) ([18842bb](https://github.com/dvsa/vol-app/commit/18842bb7f35e2fe9d421c8dd2eb6e462f6e153a5))
+* NI extract MariaDB dump arguments ([#1772](https://github.com/dvsa/vol-app/issues/1772)) ([c364a80](https://github.com/dvsa/vol-app/commit/c364a808409e1c7936f261c77275d04e7509d51b))
+* pass analysis_token/execution_arn as batch job parameters ([#1775](https://github.com/dvsa/vol-app/issues/1775)) ([85431da](https://github.com/dvsa/vol-app/commit/85431da95ce6867dd792c6b218b3166da4c35cd3))
+* some tests weren't being run by the suite, some also required fixes VOL-7579 ([#1786](https://github.com/dvsa/vol-app/issues/1786)) ([2ca58b2](https://github.com/dvsa/vol-app/commit/2ca58b2d30566e02d6e958af63762e456f5d2b11))
+* sort mockery test leaks ([#1767](https://github.com/dvsa/vol-app/issues/1767)) ([a5b96b7](https://github.com/dvsa/vol-app/commit/a5b96b7dff3792a5b77fc57f5349974f87396c22))
+* stop sm from double stringifying json object & update FI10 to use ApplicationDate rather than DocumentUploadDate ([#1777](https://github.com/dvsa/vol-app/issues/1777)) ([07685d4](https://github.com/dvsa/vol-app/commit/07685d4ba6bd3c4b828b8c1bcf81eb8dfe488af1))
+* trim whitespace in multi-column sort/order (breaks Add PI on Doctrine ORM 3) ([#1785](https://github.com/dvsa/vol-app/issues/1785)) ([5fccc49](https://github.com/dvsa/vol-app/commit/5fccc49083047b3d27a0e365f65182ab00340317))
+* update phpseclib patch version for security update ([#1780](https://github.com/dvsa/vol-app/issues/1780)) ([15f6403](https://github.com/dvsa/vol-app/commit/15f64039978b8ef76e4b1337e00110175031128a))
+* versioned repository fetchById passed a null hydration mode to ORM 3 ([#1787](https://github.com/dvsa/vol-app/issues/1787)) ([4cde91a](https://github.com/dvsa/vol-app/commit/4cde91af9180bd6f9df8325f6a918a7afb56ea5f))
+
 ## [9.3.0](https://github.com/dvsa/vol-app/compare/v9.2.2...v9.3.0) (2026-09-07)
 
 
