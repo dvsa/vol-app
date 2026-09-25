@@ -118,4 +118,82 @@ final class ApplicationKnowledgeExperienceReviewServiceTest extends MockeryTestC
             $this->sut->getConfigFromData($data)
         );
     }
+
+    public function testGetConfigFromDataWithOlatSelectedAndEvidenceDocuments(): void
+    {
+        $data = [
+            'id' => 123,
+        ];
+
+        $this->qhManager
+            ->shouldReceive('handleQuery->serialize')
+            ->andReturn([
+                'knowledgeExperienceOlat' => 'Y',
+                'documents' => [
+                    [
+                        'description' => 'foo.txt',
+                    ],
+                    [
+                        'description' => 'bar.txt',
+                    ],
+                ],
+            ]);
+
+        $this->mockTranslator
+            ->shouldReceive('translate')
+            ->with('Yes')
+            ->andReturn('Yes-translated');
+
+        $expected = [
+            'multiItems' => [
+                [
+                    [
+                        'label' => 'application-review-knowledge-experience-evidence',
+                        'noEscape' => true,
+                        'value' => 'foo.txt<br>bar.txt',
+                    ],
+                    [
+                        'label' => 'application-review-knowledge-experience-olat',
+                        'value' => 'Yes-translated',
+                    ],
+                ],
+            ],
+        ];
+
+        $this->assertEquals(
+            $expected,
+            $this->sut->getConfigFromData($data)
+        );
+    }
+
+    public function testGetConfigFromDataWithNothingSupplied(): void
+    {
+        $data = [
+            'id' => 123,
+        ];
+
+        $this->qhManager
+            ->shouldReceive('handleQuery->serialize')
+            ->andReturn([
+                'knowledgeExperienceOlat' => 'N',
+                'documents' => [],
+            ]);
+
+        $expected = [
+            'multiItems' => [
+                [
+                    [
+                        'label' => 'application-review-knowledge-experience-evidence',
+                        'noEscape' => true,
+                        'value' => '',
+                    ],
+                ],
+            ],
+        ];
+
+        $this->assertEquals(
+            $expected,
+            $this->sut->getConfigFromData($data)
+        );
+    }
 }
