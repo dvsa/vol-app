@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\QueryException;
 use Dvsa\Olcs\Api\Domain\Repository\EbsrSubmission as Repo;
 use Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission as Entity;
 use Dvsa\Olcs\Api\Domain\Query\Bus\EbsrSubmissionList;
@@ -41,25 +40,24 @@ final class EbsrSubmissionTest extends RepositoryTestCase
         $this->assertSame('ORG1', $qb->getParameter('organisation')->getValue());
     }
 
-    /**
-     * Pins a latent defect: the submission-status branch filters on 'e.ebsrSubmissionStatus',
-     * but this method never joins an 'e' alias (TxcInbox does, which is where it looks copied
-     * from). The resulting DQL cannot compile. Unreachable today because the sole caller omits
-     * the argument; correcting the alias to 'm' will fail this test, which is the intent.
-     */
-    public function testFetchByOrganisationWithAStatusBuildsUncompilableDql(): void
+    public function testFetchByOrganisationWithTypeAndStatus(): void
     {
         $qb = $this->createRealQb();
-        $qb->stubbedQuery()->shouldReceive('getResult')->andReturn([]);
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([]);
 
-        $this->sut->fetchByOrganisation('ORG1', 'submission_type', 'submission_status');
+        $this->assertSame([], $this->sut->fetchByOrganisation('ORG1', 'submission_type', 'submission_status'));
 
-        $this->assertStringContainsString('AND e.ebsrSubmissionStatus = :ebsrSubmissionStatus', $qb->getDQL());
-
-        $this->expectException(QueryException::class);
-        $this->expectExceptionMessageMatches("/'e' is not defined/");
-
-        $this->compileDql($qb->getDQL());
+        $this->assertSame(
+            'SELECT m, w0, w1, b, l, w2, w3 FROM ' . Entity::class . ' m' . self::JOINS
+            . ' WHERE m.ebsrSubmissionType = :ebsrSubmissionType'
+            . ' AND m.ebsrSubmissionStatus = :ebsrSubmissionStatus'
+            . ' AND m.organisation = :organisation',
+            $qb->getDQL(),
+        );
+        $this->assertSame('submission_type', $qb->getParameter('ebsrSubmissionType')->getValue());
+        $this->assertSame('submission_status', $qb->getParameter('ebsrSubmissionStatus')->getValue());
+        $this->assertSame('ORG1', $qb->getParameter('organisation')->getValue());
+        $this->assertNotEmpty($this->compileDql($qb->getDQL()));
     }
 
     public function testFetchForOrganisationByStatus(): void
