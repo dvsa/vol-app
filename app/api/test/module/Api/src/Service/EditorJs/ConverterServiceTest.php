@@ -44,6 +44,42 @@ final class ConverterServiceTest extends TestCase
         $this->assertStringContainsString('Test content', $result);
     }
 
+    public function testConvertsAndSanitisesGovukLongTextVocabulary(): void
+    {
+        $json = json_encode([
+            'time' => 1234567890,
+            'version' => '2.31.0',
+            'blocks' => [
+                [
+                    'id' => 'heading-id',
+                    'type' => 'heading',
+                    'data' => ['text' => 'Guidance <script>alert(1)</script>', 'level' => 2],
+                ],
+                [
+                    'id' => 'paragraph-id',
+                    'type' => 'paragraph',
+                    'data' => [
+                        'text' => '<strong>Read</strong> <a href="javascript:alert(1)">this</a>',
+                        'size' => 'body',
+                    ],
+                ],
+                [
+                    'id' => 'list-id',
+                    'type' => 'list',
+                    'data' => ['style' => 'number', 'items' => ['First', 'Second']],
+                ],
+            ],
+        ], JSON_THROW_ON_ERROR);
+
+        $result = $this->sut->convertJsonToHtml($json);
+
+        $this->assertStringContainsString('<h2>Guidance', $result);
+        $this->assertStringContainsString('<ol>', $result);
+        $this->assertStringContainsString('<strong>Read</strong>', $result);
+        $this->assertStringNotContainsString('<script', $result);
+        $this->assertStringNotContainsString('javascript:', $result);
+    }
+
     /**
      * Genuine 1x1 PNG: the purifier's data-scheme handler verifies the payload
      * decodes to a real image, so a truncated string would be dropped.
