@@ -698,6 +698,7 @@ return [
 
     // Document Internal
     Query\Document\ByDocumentStoreId::class => QueryHandler\Document\ByDocumentStoreId::class,
+    TransferQuery\Document\DocumentAnalysisList::class => QueryHandler\Document\DocumentAnalysisList::class,
 
     // Templates
     TransferQuery\Template\AvailableTemplates::class => QueryHandler\Template\AvailableTemplates::class,

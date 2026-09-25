@@ -6,10 +6,12 @@ namespace Dvsa\OlcsTest\Api\Service\Lva\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
+use Dvsa\Olcs\Api\Entity\Application\ApplicationTracking;
 use Dvsa\Olcs\Api\Entity\Fee\Fee;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Service\Lva\Application\GrantValidationService;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -416,5 +418,55 @@ final class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryT
         $this->assertArrayNotHasKey('APP-GRA-S4-EMPTY', $result);
         $this->assertArrayHasKey('APP-GRA-OOOD-NOT-PASSED', $result);
         $this->assertArrayHasKey('APP-GRA-OORD-NOT-PASSED', $result);
+    }
+
+    /**
+     * Sections with no application_tracking status (such as the read-only
+     * financial evidence assessment page) must not reach ApplicationTracking::isValid(),
+     * which builds a status getter per section name and would otherwise call an
+     * undefined method. A real tracking entity is used so the getter-building path runs.
+     */
+    #[DataProvider('untrackedSectionProvider')]
+    public function testUntrackedSectionsAreExcludedFromTrackingValidation(bool $isVariation): void
+    {
+        $sections = [
+            'financial_evidence' => [],
+            'financial_evidence_assessment' => [],
+        ];
+
+        /** @var ApplicationEntity $application */
+        $application = m::mock(ApplicationEntity::class)->makePartial();
+        $application->setIsVariation($isVariation);
+
+        // Every tracked section is accepted, so isValid() reaches the untracked section.
+        $tracking = new ApplicationTracking($application);
+        $tracking->setFinancialEvidenceStatus(ApplicationTracking::STATUS_ACCEPTED);
+
+        $application->shouldReceive('getApplicationTracking')->andReturn($tracking);
+        $application->shouldReceive('getS4s')->andReturn(new ArrayCollection());
+        $application->shouldReceive('getOverrideOoo')->andReturn('Y');
+        $application->shouldReceive('getFees')->andReturn(new ArrayCollection());
+        $application->shouldReceive('getApplicationCompletion->isComplete')->andReturn(true);
+        $application->shouldReceive('isGoods')->andReturn(true);
+        $application->shouldReceive('getLicence->getEnforcementArea')->andReturn(['foo']);
+        $application->shouldReceive('hasVariationChanges')->andReturn(true);
+        $application->shouldReceive('getSectionsRequiringAttention')->andReturn([]);
+
+        $this->sectionAccessService->shouldReceive('getAccessibleSections')
+            ->with($application)
+            ->andReturn($sections);
+
+        $result = $this->sut->validate($application);
+
+        $this->assertArrayNotHasKey('application-grant-error-tracking', $result);
+        $this->assertEquals([], $result);
+    }
+
+    public static function untrackedSectionProvider(): array
+    {
+        return [
+            'new application' => [false],
+            'variation' => [true],
+        ];
     }
 }

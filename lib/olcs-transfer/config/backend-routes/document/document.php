@@ -62,6 +62,12 @@ return [
                     )
                 ]
             ),
+            'analysis-list' => RouteConfig::getRouteConfig(
+                'analysis-list',
+                [
+                    'GET' => QueryConfig::getConfig(Query\Document\DocumentAnalysisList::class),
+                ]
+            ),
             'POST' => CommandConfig::getPostConfig(Command\Document\CreateDocument::class),
             'DELETE' => CommandConfig::getDeleteConfig(Command\Document\DeleteDocuments::class),
             'GET' => QueryConfig::getConfig(Query\Document\DocumentList::class),

@@ -39,6 +39,11 @@ class FileUploadList extends Fieldset
         }
 
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        $statusMap = [
+            'SUCCESS' => ['Approved', 'govuk-tag--green'],
+            'ERROR'   => ['Rejected', 'govuk-tag--red'],
+            'PENDING' => ['Pending', 'govuk-tag--grey'],
+        ];
 
         foreach ($fileData as $file) {
             $file['url'] = $url->fromRoute(
@@ -64,12 +69,18 @@ class FileUploadList extends Fieldset
 
             $version = new Hidden('version');
             $version->setValue($file['version']);
+            //Only documents with an 'analysisStatus' key (set by ApplicationFinancialEvidenceAdapter)
+            //get a status tag. Other callers' documents lack this key and are unaffected.
+            [$statusLabel, $statusClass] = $statusMap[$file['analysisStatus'] ?? ''] ?? [null, null];
+            $statusTag = $statusLabel !== null
+                ? ' <strong class="govuk-tag ' . $statusClass . '">' . $statusLabel . '</strong>'
+                : '';
 
             $html = new Html('link', ['render-container' => false]);
             $html->setAttribute('data-container-class', 'file-upload');
             $html->setValue(
                 '<a class="govuk-link" href="' . $file['url'] . '">'
-                . $file['description'] . '</a> <span>' . $file['size'] . '</span>'
+                . $file['description'] . '</a> <span>' . $file['size'] . '</span>' . $statusTag
             );
 
             $remove = new Submit('remove', ['render-container' => false]);

@@ -149,7 +149,8 @@ abstract class AbstractFinancialEvidenceController extends AbstractController
         $adapter = $this->lvaAdapter;
 
         return $adapter->getDocuments(
-            $this->getIdentifier()
+            $this->getIdentifier(),
+            $this->shouldShowAnalysis()
         );
     }
 
@@ -199,5 +200,21 @@ abstract class AbstractFinancialEvidenceController extends AbstractController
         }
 
         return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function shouldShowAnalysis(): bool
+    {
+        return $this->location === self::LOC_INTERNAL && $this->isIdpEnabled();
+    }
+
+    private function isIdpEnabled(): bool
+    {
+        $response = $this->handleQuery(\Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled::create(['ids' => [\Common\FeatureToggle::IDP]]));
+
+        // Do not expose IDP when the toggle response is unsuccessful or missing its flag.
+        return $response->isOk() && ($response->getResult()['isEnabled'] ?? false) === true;
     }
 }

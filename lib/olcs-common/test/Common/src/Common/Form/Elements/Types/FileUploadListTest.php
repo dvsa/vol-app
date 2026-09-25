@@ -113,4 +113,67 @@ final class FileUploadListTest extends \PHPUnit\Framework\TestCase
             $element->get('file-11')->get('preview')->getValue()
         );
     }
+
+    public function testElementRendersStatusTagWhenAnalysisStatusPresent(): void
+    {
+        $files = [
+            [
+                'identifier' => 'a',
+                'filename' => 'approved.pdf',
+                'description' => 'approved',
+                'size' => 50,
+                'id' => 20,
+                'version' => 1,
+                'analysisStatus' => 'SUCCESS',
+            ],
+            [
+                'identifier' => 'b',
+                'filename' => 'rejected.pdf',
+                'description' => 'rejected',
+                'size' => 50,
+                'id' => 21,
+                'version' => 1,
+                'analysisStatus' => 'ERROR',
+            ],
+            [
+                'identifier' => 'c',
+                'filename' => 'pending.pdf',
+                'description' => 'pending',
+                'size' => 50,
+                'id' => 22,
+                'version' => 1,
+                'analysisStatus' => 'PENDING',
+            ],
+            [
+                'identifier' => 'd',
+                'filename' => 'no-status.pdf',
+                'description' => 'no-status',
+                'size' => 50,
+                'id' => 23,
+                'version' => 1,
+                // no analysisStatus key at all — simulates other MultipleFileUpload/MultipleZipUpload callers
+            ],
+        ];
+
+        $mockUrl = $this->createPartialMock(UrlHelperService::class, ['fromRoute']);
+        $mockUrl->method('fromRoute')->willReturn('url');
+
+        $element = new FileUploadList();
+        $element->setFiles($files, $mockUrl);
+
+        $approvedHtml = $element->get('file-20')->get('link')->getValue();
+        $this->assertStringContainsString('govuk-tag--green', $approvedHtml);
+        $this->assertStringContainsString('Approved', $approvedHtml);
+
+        $rejectedHtml = $element->get('file-21')->get('link')->getValue();
+        $this->assertStringContainsString('govuk-tag--red', $rejectedHtml);
+        $this->assertStringContainsString('Rejected', $rejectedHtml);
+
+        $pendingHtml = $element->get('file-22')->get('link')->getValue();
+        $this->assertStringContainsString('govuk-tag--grey', $pendingHtml);
+        $this->assertStringContainsString('Pending', $pendingHtml);
+
+        $noStatusHtml = $element->get('file-23')->get('link')->getValue();
+        $this->assertStringNotContainsString('govuk-tag', $noStatusHtml);
+    }
 }

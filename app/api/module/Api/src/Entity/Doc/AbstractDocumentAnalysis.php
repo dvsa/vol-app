@@ -56,7 +56,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy:'documentAnalyses', fetch: 'LAZY')]
     protected $document;
 
     /**
