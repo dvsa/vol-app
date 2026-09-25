@@ -794,7 +794,7 @@ module "service" {
         name              = "ni-compliance",
         commands          = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
         ephemeral_storage = 50,
-        type              = "scripts"
+        type              = "scripts",
         schedule          = ["cron(00 01 * * ? *)"]
         timeout           = 86400,
       },
