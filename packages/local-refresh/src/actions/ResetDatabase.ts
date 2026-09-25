@@ -8,6 +8,7 @@ import ActionInterface from "./ActionInterface";
 import dedent from "dedent";
 import createDebug from "debug";
 import { GenericBar } from "cli-progress";
+import { MergeWinner, PROD_ALWAYS_WINS, TableSummary, mergeProdDump } from "../utils/ProdDataMerge";
 
 const debug = createDebug("refresh:actions:ResetDatabase");
 
@@ -32,6 +33,9 @@ export default class ResetDatabase implements ActionInterface {
 
   etlDirectory = "../olcs-etl";
   refreshType: DatabaseRefreshEnum = DatabaseRefreshEnum.NONE;
+  mergeWinner: MergeWinner = MergeWinner.PROD;
+  mergeSummary: TableSummary[] = [];
+  mergeSkipped: string[] = [];
 
   liquibasePropertiesFileName = `vol-app.liquibase.properties`;
   createLiquibaseProperties = false;
@@ -59,6 +63,34 @@ export default class ResetDatabase implements ActionInterface {
     }
 
     this.refreshType = refreshType;
+
+    if (refreshType === DatabaseRefreshEnum.FULL) {
+      const { mergeWinner } = await prompts({
+        type: "select",
+        name: "mergeWinner",
+        message:
+          "The full refresh adds prod data on top of your local ETL. Where both have the same row, which should win?",
+        choices: [
+          {
+            title: "Prod data",
+            description: "Prod's wording and settings. Rows your ETL patches add are always kept.",
+            value: MergeWinner.PROD,
+          },
+          {
+            title: "My local ETL",
+            description:
+              "Keep what your ETL patches set, e.g. when testing a patch that changes an existing translation.",
+            value: MergeWinner.LOCAL,
+          },
+        ],
+      });
+
+      if (mergeWinner === undefined) {
+        return false;
+      }
+
+      this.mergeWinner = mergeWinner;
+    }
 
     const { directory } = await prompts({
       type: "text",
@@ -139,6 +171,10 @@ export default class ResetDatabase implements ActionInterface {
     }
 
     progress.stop();
+
+    if (isFullRefresh) {
+      this.#printMergeSummary();
+    }
   }
 
   async #createBaseDatabase(): Promise<void> {
@@ -182,6 +218,22 @@ export default class ResetDatabase implements ActionInterface {
     );
   }
 
+  #printMergeSummary(): void {
+    const winner = this.mergeWinner === MergeWinner.PROD ? "prod" : "local";
+
+    console.log(chalk.greenBright(`Prod data merged into the local database (${winner} wins where both have a row):`));
+
+    for (const { table, inBoth, prodOnly, localOnly } of this.mergeSummary) {
+      const note = PROD_ALWAYS_WINS.includes(table) ? " (prod always wins)" : "";
+
+      console.log(`  ${table}: ${inBoth} in both${note}, ${prodOnly} added from prod, ${localOnly} local only kept`);
+    }
+
+    for (const table of this.mergeSkipped) {
+      console.log(chalk.yellow(`  Skipped ${table}`));
+    }
+  }
+
   async #fetchAnonymisedDataset(): Promise<void> {
     // Full reset requires AWS credentials to pull down the anonymised dataset from S3.
     try {
@@ -216,10 +268,17 @@ export default class ResetDatabase implements ActionInterface {
         debug,
       );
 
-      exec(
-        `docker compose exec -T db /bin/bash -c 'zcat /var/lib/etl/olcs-db-localdev-anon-prod.sql.gz | mysql -u mysql -polcs olcs_be'`,
-        debug,
+      // Merged rather than piped straight in: the dump drops and recreates its tables, which would
+      // wipe anything local ETL patches added to them
+      const { summary, skipped } = mergeProdDump(
+        this.etlDirectory,
+        "olcs-db-localdev-anon-prod.sql.gz",
+        "olcs_be",
+        this.mergeWinner,
       );
+
+      this.mergeSummary = summary;
+      this.mergeSkipped = skipped;
     } finally {
       cleanUp();
     }

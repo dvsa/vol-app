@@ -22,8 +22,9 @@ const actionOrder = [
   "CopyAppDistFiles",
   "SyncAwsSecretsAndParameters",
   "CopyDockerComposeDist",
-  "FlushRedis",
   "ResetDatabase",
+  // After the database, so cached translations can't outlive a reset
+  "FlushRedis",
   "ResetLdap",
 ];
 
