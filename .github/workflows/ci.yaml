@@ -136,7 +136,6 @@ jobs:
           files: |
             website/**
             docs/**
-          since_last_remote_commit: true
 
   docs:
     name: Documentation
