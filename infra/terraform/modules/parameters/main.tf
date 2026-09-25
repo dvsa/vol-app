@@ -3,7 +3,7 @@ module "application_paramters" {
   version  = ">= 2.1.1"
   for_each = var.application_parameters
 
-  name        = "/applicationparams/${var.environment}/${each.key}"
-  value       = each.value
-  secure_type = true
+  name  = "/applicationparams/${var.environment}/${each.key}"
+  value = each.value
+  type  = "SecureString"
 }
