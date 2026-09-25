@@ -63,6 +63,8 @@ return [
         CommandHandler\Application\UpdateVehicleSize::class,
     TransferCommand\Application\UpdateMainOccupationEvidence::class =>
         CommandHandler\Application\UpdateMainOccupationEvidence::class,
+    TransferCommand\Application\UpdateKnowledgeExperience::class =>
+        CommandHandler\Application\UpdateKnowledgeExperience::class,
     TransferCommand\Application\UpdateSmallVehicleEvidence::class =>
         CommandHandler\Application\UpdateSmallVehicleEvidence::class,
     TransferCommand\Application\UpdateMainOccupationUndertakings::class =>
@@ -742,6 +744,8 @@ return [
     => AppCompCommandHandler\UpdatePsvDocumentaryEvidenceLargeStatus::class,
     AppCompCommand\UpdatePsvMainOccupationUndertakingsStatus::class
     => AppCompCommandHandler\UpdatePsvMainOccupationUndertakingsStatus::class,
+    AppCompCommand\UpdateKnowledgeExperienceStatus::class
+    => AppCompCommandHandler\UpdateKnowledgeExperienceStatus::class,
     AppCompCommand\UpdatePsvOperateLargeStatus::class
     => AppCompCommandHandler\UpdatePsvOperateLargeStatus::class,
     AppCompCommand\UpdatePsvOperateSmallStatus::class

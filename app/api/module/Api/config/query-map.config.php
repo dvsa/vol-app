@@ -72,6 +72,7 @@ return [
     TransferQuery\Application\Documents::class => QueryHandler\Application\Documents::class,
     TransferQuery\Application\FinancialHistory::class => QueryHandler\Application\FinancialHistory::class,
     TransferQuery\Application\FinancialEvidence::class => QueryHandler\Application\FinancialEvidence::class,
+    TransferQuery\Application\KnowledgeExperience::class => QueryHandler\Application\KnowledgeExperience::class,
     TransferQuery\Application\PreviousConvictions::class => QueryHandler\Application\PreviousConvictions::class,
     TransferQuery\Application\Safety::class => QueryHandler\Application\Safety::class,
     TransferQuery\Application\Declaration::class => QueryHandler\Application\Declaration::class,
