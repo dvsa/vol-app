@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ApplicationReview\Section;
 
+use Dvsa\Olcs\Api\Domain\QueryHandler\Result;
 use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\AbstractReviewServiceServices;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\ApplicationKnowledgeExperienceReviewService;
+use Dvsa\Olcs\Transfer\Query\Application\KnowledgeExperience;
 use Laminas\I18n\Translator\TranslatorInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -31,7 +33,7 @@ final class ApplicationKnowledgeExperienceReviewServiceTest extends MockeryTestC
         );
 
         $abstractReviewServiceServices
-            ->shouldReceive('getTranslator')
+            ->expects('getTranslator')
             ->withNoArgs()
             ->andReturn($this->mockTranslator);
 
@@ -49,15 +51,13 @@ final class ApplicationKnowledgeExperienceReviewServiceTest extends MockeryTestC
             'id' => 123,
         ];
 
-        $this->qhManager
-            ->shouldReceive('handleQuery->serialize')
-            ->andReturn([
-                'knowledgeExperienceOlat' => 'Y',
-                'documents' => [],
-            ]);
+        $this->mockKnowledgeExperienceQuery([
+            'knowledgeExperienceOlat' => 'Y',
+            'documents' => [],
+        ]);
 
         $this->mockTranslator
-            ->shouldReceive('translate')
+            ->expects('translate')
             ->with('Yes')
             ->andReturn('Yes-translated');
 
@@ -84,22 +84,20 @@ final class ApplicationKnowledgeExperienceReviewServiceTest extends MockeryTestC
             'id' => 123,
         ];
 
-        $this->qhManager
-            ->shouldReceive('handleQuery->serialize')
-            ->andReturn([
-                'knowledgeExperienceOlat' => 'N',
-                'documents' => [
-                    [
-                        'description' => 'foo.txt',
-                    ],
-                    [
-                        'description' => 'bar.txt',
-                    ],
-                    [
-                        'description' => '<img src=x onerror=alert(1)>.pdf',
-                    ],
+        $this->mockKnowledgeExperienceQuery([
+            'knowledgeExperienceOlat' => 'N',
+            'documents' => [
+                [
+                    'description' => 'foo.txt',
                 ],
-            ]);
+                [
+                    'description' => 'bar.txt',
+                ],
+                [
+                    'description' => '<img src=x onerror=alert(1)>.pdf',
+                ],
+            ],
+        ]);
 
         $expected = [
             'multiItems' => [
@@ -125,22 +123,20 @@ final class ApplicationKnowledgeExperienceReviewServiceTest extends MockeryTestC
             'id' => 123,
         ];
 
-        $this->qhManager
-            ->shouldReceive('handleQuery->serialize')
-            ->andReturn([
-                'knowledgeExperienceOlat' => 'Y',
-                'documents' => [
-                    [
-                        'description' => 'foo.txt',
-                    ],
-                    [
-                        'description' => 'bar.txt',
-                    ],
+        $this->mockKnowledgeExperienceQuery([
+            'knowledgeExperienceOlat' => 'Y',
+            'documents' => [
+                [
+                    'description' => 'foo.txt',
                 ],
-            ]);
+                [
+                    'description' => 'bar.txt',
+                ],
+            ],
+        ]);
 
         $this->mockTranslator
-            ->shouldReceive('translate')
+            ->expects('translate')
             ->with('Yes')
             ->andReturn('Yes-translated');
 
@@ -172,12 +168,10 @@ final class ApplicationKnowledgeExperienceReviewServiceTest extends MockeryTestC
             'id' => 123,
         ];
 
-        $this->qhManager
-            ->shouldReceive('handleQuery->serialize')
-            ->andReturn([
-                'knowledgeExperienceOlat' => 'N',
-                'documents' => [],
-            ]);
+        $this->mockKnowledgeExperienceQuery([
+            'knowledgeExperienceOlat' => 'N',
+            'documents' => [],
+        ]);
 
         $expected = [
             'multiItems' => [
@@ -195,5 +189,20 @@ final class ApplicationKnowledgeExperienceReviewServiceTest extends MockeryTestC
             $expected,
             $this->sut->getConfigFromData($data)
         );
+    }
+
+    private function mockKnowledgeExperienceQuery(array $knowledgeExperienceData): void
+    {
+        $result = m::mock(Result::class);
+        $result->expects('serialize')
+            ->withNoArgs()
+            ->andReturn($knowledgeExperienceData);
+
+        $this->qhManager
+            ->expects('handleQuery')
+            ->with(m::on(
+                fn($query): bool => $query instanceof KnowledgeExperience && $query->getId() === 123
+            ))
+            ->andReturn($result);
     }
 }
