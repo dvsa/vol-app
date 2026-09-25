@@ -2,18 +2,33 @@
 
 namespace Dvsa\Olcs\Api\Domain\QueryHandler\Document;
 
+use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
+use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
+/**
+ * One page of document analyses plus the total, through the repository's standard paged and
+ * ordered list like DocumentList. The rows are mapped by hand rather than bundle-serialised:
+ * the entity carries the raw analysis token, which must never leave the API, and callers want
+ * the document's issued date flattened onto each row.
+ */
 class DocumentAnalysisList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'DocumentAnalysis';
 
+    /**
+     * @param \Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList $query
+     */
     #[\Override]
     public function handleQuery(QueryInterface $query)
     {
-        $rows = $this->getRepo()->fetchAnalyses($query);
+        /** @var DocumentAnalysisRepo $repo */
+        $repo = $this->getRepo();
+
+        // fetchList() yields the paginator's iterator, not an array.
+        $rows = iterator_to_array($repo->fetchList($query, Query::HYDRATE_OBJECT), false);
 
         return [
             'analyses' => array_map(
@@ -30,6 +45,7 @@ class DocumentAnalysisList extends AbstractQueryHandler
                 ],
                 $rows
             ),
+            'count' => $repo->fetchCount($query),
         ];
     }
 }

@@ -28,6 +28,12 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     /** Only completed, successful analyses are shown; pending and failed ones have nothing to assess. */
     private const string ANALYSIS_STATUS_SUCCESS = 'SUCCESS';
 
+    /**
+     * One tab per analysis, so a single page is fetched at the largest limit the transfer
+     * validation allows. An LVA with more successful analyses than this shows only the newest.
+     */
+    private const int ANALYSIS_PAGE_LIMIT = 100;
+
     protected string $location = 'internal';
 
     protected $toggleConfig = [
@@ -72,6 +78,12 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             DocumentAnalysisList::create([
                 $this->getIdentifierIndex() => $this->getIdentifier(),
                 'status' => self::ANALYSIS_STATUS_SUCCESS,
+                // The query is paged and ordered, so these are required. "Latest" means the most
+                // recently completed successful analysis, so the API orders by completion.
+                'page' => 1,
+                'limit' => self::ANALYSIS_PAGE_LIMIT,
+                'sort' => 'completedAt',
+                'order' => 'DESC',
             ])
         );
 
@@ -79,12 +91,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             return [];
         }
 
-        $analyses = $response->getResult()['analyses'] ?? [];
-
-        // "Latest" means the most recently completed successful analysis.
-        usort($analyses, static fn($a, $b) => strcmp($b['completedAt'] ?? '', $a['completedAt'] ?? ''));
-
-        return $analyses;
+        return $response->getResult()['analyses'] ?? [];
     }
 
     /**

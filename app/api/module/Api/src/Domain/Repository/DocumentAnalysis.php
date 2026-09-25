@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
 use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList as DocumentAnalysisListQuery;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
 /**
@@ -77,32 +78,26 @@ class DocumentAnalysis extends AbstractRepository
     }
 
     /**
-     * Fetch document analyses matching the query filters, newest first.
+     * Joins for fetchList() and fetchCount().
      *
      * The document is fetch-joined because callers read it on every row (for example its
      * issued date), which would otherwise be one lazy load per analysis.
-     *
-     * @return Entity[]
      */
-    public function fetchAnalyses(?QueryInterface $query = null): array
+    #[\Override]
+    protected function applyListJoins(QueryBuilder $qb)
     {
-        $qb = $this->createQueryBuilder();
-
         $qb->innerJoin($this->alias . '.document', 'd')
             ->addSelect('d');
-
-        if ($query !== null) {
-            $this->applyAnalysisFilters($qb, $query);
-        }
-
-        $qb->orderBy($this->alias . '.createdOn', 'DESC');
-
-        $result = $qb->getQuery()->getResult();
-
-        return is_array($result) ? $result : iterator_to_array($result);
     }
 
-    protected function applyAnalysisFilters(QueryBuilder $qb, QueryInterface $query): void
+    /**
+     * Filters for fetchList() and fetchCount(). Paging and ordering are applied by the base
+     * repository from the query's PagedTrait / OrderedTrait, so nothing here orders or limits.
+     *
+     * @param DocumentAnalysisListQuery $query
+     */
+    #[\Override]
+    protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         // Application and variation pages: that specific application only.
         if ($query->getApplication() !== null) {

@@ -53,9 +53,15 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
                 $otherKey = $expectedKey === 'licence' ? 'application' : 'licence';
 
                 // Asserting the other scope is absent stops a query leaking across contexts.
+                // The paging and ordering fields are required by the transfer validation, and
+                // the API's completion ordering is what makes the first row "Latest".
                 return (int) $query->{'get' . ucfirst($expectedKey)}() === 42
                     && $query->{'get' . ucfirst($otherKey)}() === null
-                    && $query->getStatus() === 'SUCCESS';
+                    && $query->getStatus() === 'SUCCESS'
+                    && $query->getPage() === 1
+                    && $query->getLimit() === 100
+                    && $query->getSort() === 'completedAt'
+                    && $query->getOrder() === 'DESC';
             }))
             ->andReturn($this->okResponse([]));
 
@@ -68,8 +74,9 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     }
 
     /**
-     * Tabs come solely from successful analyses, newest completion first, with the date carried
-     * on each analysis. No document list is queried.
+     * Tabs come solely from successful analyses, in the order the API returns them (newest
+     * completion first, as the query asks), with the date carried on each analysis. No document
+     * list is queried.
      */
     public function testTabsAreBuiltFromAnalysesOnly(): void
     {
@@ -79,8 +86,8 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut->expects('handleQuery')
             ->once()
             ->andReturn($this->okResponse([
-                ['id' => 1, 'documentId' => 11, 'documentDate' => '2026-01-02 00:00:00', 'completedAt' => '2026-01-03 00:00:00'],
                 ['id' => 2, 'documentId' => 12, 'documentDate' => '2026-02-02 00:00:00', 'completedAt' => '2026-02-03 00:00:00'],
+                ['id' => 1, 'documentId' => 11, 'documentDate' => '2026-01-02 00:00:00', 'completedAt' => '2026-01-03 00:00:00'],
                 ['id' => 3, 'documentId' => 13, 'documentDate' => null, 'completedAt' => '2025-12-01 00:00:00'],
             ]));
 

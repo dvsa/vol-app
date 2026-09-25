@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Document;
 
+use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\QueryHandler\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
@@ -24,6 +25,51 @@ final class DocumentAnalysisListTest extends QueryHandlerTestCase
     }
 
     /**
+     * The list goes through the repository's standard paged list and count, like DocumentList,
+     * so a caller gets one page of rows and the total rather than the whole table.
+     */
+    public function testHandleQueryReturnsOnePageAndTheCount(): void
+    {
+        $query = Qry::create([
+            'licence' => 7,
+            'status' => DocumentAnalysis::STATUS_SUCCESS,
+            'page' => 2,
+            'limit' => 10,
+            'sort' => 'completedAt',
+            'order' => 'DESC',
+        ]);
+
+        $this->repoMap['DocumentAnalysis']->expects('fetchList')
+            ->with($query, Query::HYDRATE_OBJECT)
+            // fetchList hands back the paginator's iterator, not an array.
+            ->andReturn(new \ArrayIterator([
+                $this->mockAnalysis(1, 11, new \DateTime('2026-03-04 10:11:12')),
+                $this->mockAnalysis(2, 12, null),
+            ]));
+        $this->repoMap['DocumentAnalysis']->expects('fetchCount')
+            ->with($query)
+            ->andReturn(12);
+
+        $result = $this->sut->handleQuery($query);
+
+        $this->assertSame(12, $result['count']);
+        $this->assertCount(2, $result['analyses']);
+        $this->assertSame(
+            [
+                'id' => 1,
+                'documentId' => 11,
+                'documentDate' => '2026-03-04 10:11:12',
+                'status' => DocumentAnalysis::STATUS_SUCCESS,
+                'result' => [],
+                'metadata' => [],
+                'errorDetail' => null,
+                'completedAt' => '2026-03-05 09:00:00',
+            ],
+            $result['analyses'][0]
+        );
+    }
+
+    /**
      * The document's issued date travels with each analysis so the caller can label tabs
      * without a second, paged document lookup.
      */
@@ -31,12 +77,13 @@ final class DocumentAnalysisListTest extends QueryHandlerTestCase
     {
         $query = Qry::create(['licence' => 7, 'status' => DocumentAnalysis::STATUS_SUCCESS]);
 
-        $this->repoMap['DocumentAnalysis']->expects('fetchAnalyses')
-            ->with($query)
-            ->andReturn([
+        $this->repoMap['DocumentAnalysis']->expects('fetchList')
+            ->with($query, Query::HYDRATE_OBJECT)
+            ->andReturn(new \ArrayIterator([
                 $this->mockAnalysis(1, 11, new \DateTime('2026-03-04 10:11:12')),
                 $this->mockAnalysis(2, 12, null),
-            ]);
+            ]));
+        $this->repoMap['DocumentAnalysis']->expects('fetchCount')->with($query)->andReturn(2);
 
         $result = $this->sut->handleQuery($query);
 

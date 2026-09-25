@@ -7,6 +7,7 @@ namespace CommonTest\Common\Controller\Lva\Adapters;
 use Common\Controller\Lva\Adapters\ApplicationFinancialEvidenceAdapter;
 use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Data\CategoryDataService as Category;
+use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Psr\Container\ContainerInterface;
 use Laminas\Form\ElementInterface;
@@ -211,6 +212,10 @@ final class ApplicationFinancialEvidenceAdapterTest extends MockeryTestCase
         $this->assertEquals([], $method->invoke($this->sut, $applicationId));
     }
 
+    /**
+     * The first row per document wins, so the query must ask for one page, newest first. The
+     * paging and ordering fields are required by the transfer validation.
+     */
     public function testGetAnalysesByDocumentIdIndexesByDocumentId(): void
     {
         $applicationId = 1;
@@ -228,7 +233,14 @@ final class ApplicationFinancialEvidenceAdapterTest extends MockeryTestCase
         $this->container->shouldReceive('get')
             ->with(AnnotationBuilder::class)
             ->andReturn(
-                m::mock()->shouldReceive('createQuery')->andReturn('query')->once()->getMock()
+                m::mock()->shouldReceive('createQuery')
+                    ->with(m::on(static fn($dto): bool => $dto instanceof DocumentAnalysisList
+                        && $dto->getApplication() === $applicationId
+                        && $dto->getPage() === 1
+                        && $dto->getLimit() === 100
+                        && $dto->getSort() === 'createdOn'
+                        && $dto->getOrder() === 'DESC'))
+                    ->andReturn('query')->once()->getMock()
             )
             ->once()
             ->shouldReceive('get')

@@ -93,10 +93,22 @@ class ApplicationFinancialEvidenceAdapter extends AbstractFinancialEvidenceAdapt
         return $this->applicationData;
     }
 
+    /**
+     * One page of analyses is fetched at the largest limit the transfer validation allows; the
+     * newest analysis per document wins below, so the list is ordered newest first.
+     */
+    private const int ANALYSIS_PAGE_LIMIT = 100;
+
     protected function getAnalysesByDocumentId(int $applicationId): array
     {
         $query = $this->container->get(AnnotationBuilder::class)
-            ->createQuery(DocumentAnalysisList::create(['application' => $applicationId]));
+            ->createQuery(DocumentAnalysisList::create([
+                'application' => $applicationId,
+                'page' => 1,
+                'limit' => self::ANALYSIS_PAGE_LIMIT,
+                'sort' => 'createdOn',
+                'order' => 'DESC',
+            ]));
 
         $response = $this->container->get(CachingQueryService::class)->send($query);
 

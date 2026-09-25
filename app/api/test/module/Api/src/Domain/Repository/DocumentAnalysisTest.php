@@ -241,20 +241,70 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         return $qb;
     }
 
-    public function testFetchAnalysesFiltersByApplicationOnly(): void
+    /**
+     * The list goes through the base fetchList(), so paging and ordering come from the query
+     * (PagedTrait / OrderedTrait) exactly as they do for DocumentList, and the result is one
+     * bounded page rather than every analysis in the table.
+     */
+    public function testFetchListPagesAndOrdersFromTheQuery(): void
     {
-        $query = DocumentAnalysisList::create(['application' => 8]);
-        $qb = $this->createRealQb()->willReturn(['row1', 'row2']);
+        $query = DocumentAnalysisList::create([
+            'application' => 8,
+            'page' => 2,
+            'limit' => 10,
+            'sort' => 'completedAt',
+            'order' => 'DESC',
+        ]);
+        $qb = $this->createRealQb();
 
-        $this->assertSame(['row1', 'row2'], $this->sut->fetchAnalyses($query));
+        $this->sut->expects('fetchPaginatedList')
+            ->with($qb, Query::HYDRATE_OBJECT)
+            ->andReturn(new \ArrayIterator(['row1', 'row2']));
 
-        // Assert the final query so an extra filter or missing ordering cannot pass unnoticed.
+        $result = $this->sut->fetchList($query, Query::HYDRATE_OBJECT);
+
+        $this->assertSame(['row1', 'row2'], iterator_to_array($result));
+
+        // Assert the final query so an extra filter or a lost ordering cannot pass unnoticed.
         $this->assertSame(
-            self::ANALYSES_SELECT . ' WHERE IDENTITY(da.application) = :applicationId ORDER BY da.createdOn DESC',
+            self::ANALYSES_SELECT
+            . ' WHERE IDENTITY(da.application) = :applicationId'
+            . ' ORDER BY da.completedAt DESC',
             $qb->getDQL(),
         );
+        $this->assertSame(10, $qb->getFirstResult());
+        $this->assertSame(10, $qb->getMaxResults());
         $this->assertCount(1, $qb->getParameters());
         $this->assertSame(8, $qb->getParameter('applicationId')->getValue());
+    }
+
+    /**
+     * The count runs the same joins and filters as the list (so it matches what the list
+     * pages over) but drops the ordering, which only slows a count down.
+     */
+    public function testFetchCountUsesTheSameFiltersWithoutOrdering(): void
+    {
+        $query = DocumentAnalysisList::create([
+            'application' => 8,
+            'status' => Entity::STATUS_SUCCESS,
+            'page' => 1,
+            'limit' => 10,
+            'sort' => 'completedAt',
+            'order' => 'DESC',
+        ]);
+        $qb = $this->createRealQb();
+
+        $this->sut->expects('fetchPaginatedCount')->with($qb)->andReturn(3);
+
+        $this->assertSame(3, $this->sut->fetchCount($query));
+
+        $this->assertSame(
+            self::ANALYSES_SELECT
+            . ' WHERE IDENTITY(da.application) = :applicationId AND da.status = :status',
+            $qb->getDQL(),
+        );
+        $this->assertSame(8, $qb->getParameter('applicationId')->getValue());
+        $this->assertSame(Entity::STATUS_SUCCESS, $qb->getParameter('status')->getValue());
     }
 
     /**
@@ -263,18 +313,19 @@ final class DocumentAnalysisTest extends RepositoryTestCase
      * join keeps rows whose application was deleted (application_id SET NULL) but whose document
      * is still linked to the licence.
      */
-    public function testFetchAnalysesFiltersByLicenceOnly(): void
+    public function testFetchListFiltersByLicenceOnly(): void
     {
         $query = DocumentAnalysisList::create(['licence' => 7]);
-        $qb = $this->createRealQb()->willReturn(['row1']);
+        $qb = $this->createRealQb();
 
-        $this->assertSame(['row1'], $this->sut->fetchAnalyses($query));
+        $this->sut->expects('fetchPaginatedList')->andReturn(new \ArrayIterator(['row1']));
+
+        $this->assertSame(['row1'], iterator_to_array($this->sut->fetchList($query, Query::HYDRATE_OBJECT)));
 
         $this->assertSame(
             self::ANALYSES_SELECT
             . ' LEFT JOIN da.application a'
-            . ' WHERE IDENTITY(d.licence) = :licenceId OR IDENTITY(a.licence) = :licenceId'
-            . ' ORDER BY da.createdOn DESC',
+            . ' WHERE IDENTITY(d.licence) = :licenceId OR IDENTITY(a.licence) = :licenceId',
             $qb->getDQL(),
         );
         $this->assertCount(1, $qb->getParameters());
@@ -282,70 +333,75 @@ final class DocumentAnalysisTest extends RepositoryTestCase
     }
 
     /** The OR must stay bracketed, or it would let another status through for the licence. */
-    public function testFetchAnalysesLicenceFilterCombinesWithStatus(): void
+    public function testFetchListLicenceFilterCombinesWithStatus(): void
     {
         $query = DocumentAnalysisList::create(['licence' => 7, 'status' => Entity::STATUS_SUCCESS]);
-        $qb = $this->createRealQb()->willReturn([]);
+        $qb = $this->createRealQb();
 
-        $this->sut->fetchAnalyses($query);
+        $this->sut->expects('fetchPaginatedList')->andReturn(new \ArrayIterator([]));
+
+        $this->sut->fetchList($query, Query::HYDRATE_OBJECT);
 
         $this->assertSame(
             self::ANALYSES_SELECT
             . ' LEFT JOIN da.application a'
             . ' WHERE (IDENTITY(d.licence) = :licenceId OR IDENTITY(a.licence) = :licenceId)'
-            . ' AND da.status = :status'
-            . ' ORDER BY da.createdOn DESC',
+            . ' AND da.status = :status',
             $qb->getDQL(),
         );
         $this->assertSame(Entity::STATUS_SUCCESS, $qb->getParameter('status')->getValue());
     }
 
-    public function testFetchAnalysesFiltersByDocumentOnly(): void
+    public function testFetchListFiltersByDocumentOnly(): void
     {
         $query = DocumentAnalysisList::create(['document' => 123]);
-        $qb = $this->createRealQb()->willReturn([]);
+        $qb = $this->createRealQb();
 
-        $this->assertSame([], $this->sut->fetchAnalyses($query));
+        $this->sut->expects('fetchPaginatedList')->andReturn(new \ArrayIterator([]));
+
+        $this->sut->fetchList($query, Query::HYDRATE_OBJECT);
 
         $this->assertSame(
-            self::ANALYSES_SELECT . ' WHERE IDENTITY(da.document) = :documentId ORDER BY da.createdOn DESC',
+            self::ANALYSES_SELECT . ' WHERE IDENTITY(da.document) = :documentId',
             $qb->getDQL(),
         );
         $this->assertCount(1, $qb->getParameters());
         $this->assertSame(123, $qb->getParameter('documentId')->getValue());
     }
 
-    public function testFetchAnalysesFiltersByStatusOnly(): void
+    public function testFetchListFiltersByStatusOnly(): void
     {
         $query = DocumentAnalysisList::create(['status' => Entity::STATUS_PENDING]);
-        $qb = $this->createRealQb()->willReturn([]);
+        $qb = $this->createRealQb();
 
-        $this->assertSame([], $this->sut->fetchAnalyses($query));
+        $this->sut->expects('fetchPaginatedList')->andReturn(new \ArrayIterator([]));
+
+        $this->sut->fetchList($query, Query::HYDRATE_OBJECT);
 
         $this->assertSame(
-            self::ANALYSES_SELECT . ' WHERE da.status = :status ORDER BY da.createdOn DESC',
+            self::ANALYSES_SELECT . ' WHERE da.status = :status',
             $qb->getDQL(),
         );
         $this->assertCount(1, $qb->getParameters());
         $this->assertSame(Entity::STATUS_PENDING, $qb->getParameter('status')->getValue());
     }
 
-    public function testFetchAnalysesWithNoQueryOnlyOrders(): void
+    /**
+     * No scope means no WHERE: the query stays reusable for any caller, and it is the page
+     * limit (required by the transfer validation) that keeps the result bounded, not a scope.
+     */
+    public function testFetchListWithNoFiltersSelectsEveryAnalysis(): void
     {
-        $qb = $this->createRealQb()->willReturn([]);
+        $query = DocumentAnalysisList::create(['page' => 1, 'limit' => 25]);
+        $qb = $this->createRealQb();
 
-        $this->assertSame([], $this->sut->fetchAnalyses(null));
+        $this->sut->expects('fetchPaginatedList')->andReturn(new \ArrayIterator([]));
 
-        $this->assertSame(self::ANALYSES_SELECT . ' ORDER BY da.createdOn DESC', $qb->getDQL());
+        $this->sut->fetchList($query, Query::HYDRATE_OBJECT);
+
+        $this->assertSame(self::ANALYSES_SELECT, $qb->getDQL());
         $this->assertCount(0, $qb->getParameters());
-    }
-
-    public function testFetchAnalysesConvertsIteratorResultToArray(): void
-    {
-        $query = DocumentAnalysisList::create(['application' => 8]);
-        $iterator = new \ArrayIterator(['row1', 'row2']);
-        $this->createRealQb()->willReturn($iterator);
-
-        $this->assertSame(['row1', 'row2'], $this->sut->fetchAnalyses($query));
+        $this->assertSame(0, $qb->getFirstResult());
+        $this->assertSame(25, $qb->getMaxResults());
     }
 }
