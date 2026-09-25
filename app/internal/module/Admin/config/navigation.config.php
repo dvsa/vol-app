@@ -394,6 +394,12 @@ return [
                             'class' => 'govuk-link--no-visited-state',
                             'label' => 'Replacements',
                             'route' => 'admin-dashboard/admin-replacements',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/content-management/long-text',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Long Text',
+                            'route' => 'admin-dashboard/admin-long-text',
                         ]
                     ],
                 ],

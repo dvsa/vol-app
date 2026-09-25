@@ -5,7 +5,10 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\TransportManagerApplication;
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Entity\Tm\TmQualification;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
+use Dvsa\Olcs\Api\Service\LongText\LongTextTranslator;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Get a Transport Manager Application
@@ -14,6 +17,8 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  */
 class GetDetails extends AbstractQueryHandler
 {
+    private TranslatorInterface $longTextTranslator;
+
     protected $repoServiceName = 'TransportManagerApplication';
 
     protected $extraRepos = [
@@ -116,7 +121,16 @@ class GetDetails extends AbstractQueryHandler
                 'isTmLoggedInUser' => $this->getCurrentUser()->getTransportManager() === $tma->getTransportManager(),
                 'disableSignatures' => $this->getRepo('SystemParameter')->getDisableGdsVerifySignatures(),
                 'lgvAcquiredRightsReferenceNumber' => $lgvAcquiredRightsReferenceNumber,
+                'declaration' => $this->longTextTranslator->translate('markup-tma-tm_declaration'),
             ]
         );
+    }
+
+    #[\Override]
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    {
+        $this->longTextTranslator = $container->get(LongTextTranslator::class);
+
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

@@ -13,6 +13,8 @@ namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Application;
 use Dvsa\Olcs\Api\Domain\QueryHandler\Application\DeclarationUndertakings;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepo;
+use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\ApplicationUndertakingsReviewService;
+use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\VariationUndertakingsReviewService;
 use Dvsa\Olcs\Transfer\Query\Application\DeclarationUndertakings as Qry;
 use Mockery as m;
 
@@ -28,7 +30,12 @@ final class DeclarationUndertakingsTest extends QueryHandlerTestCase
         $this->sut = new DeclarationUndertakings();
         $this->mockRepo('Application', ApplicationRepo::class);
 
-        $this->mockedSmServices['Review\ApplicationUndertakings'] = m::mock();
+        $this->mockedSmServices['Review\ApplicationUndertakings'] = m::mock(
+            ApplicationUndertakingsReviewService::class
+        );
+        $this->mockedSmServices['Review\VariationUndertakings'] = m::mock(
+            VariationUndertakingsReviewService::class
+        );
 
         parent::setUp();
     }
@@ -39,6 +46,7 @@ final class DeclarationUndertakingsTest extends QueryHandlerTestCase
 
         $mockApplication = m::mock(\Dvsa\Olcs\Api\Entity\Application\Application::class);
         $mockApplication->shouldReceive('isGoods')->andReturn(true);
+        $mockApplication->shouldReceive('isVariation')->once()->andReturn(true);
 
         $data = [
             'foo' => 'bar',
@@ -46,7 +54,7 @@ final class DeclarationUndertakingsTest extends QueryHandlerTestCase
             'isInternal' => false
         ];
 
-        $this->mockedSmServices['Review\ApplicationUndertakings']->shouldReceive('getMarkup')
+        $this->mockedSmServices['Review\VariationUndertakings']->shouldReceive('getLongTextMarkup')
             ->once()->with($data)->andReturn('markup');
 
         $this->repoMap['Application']->shouldReceive('fetchUsingId')

@@ -89,6 +89,46 @@ class ApplicationUndertakingsReviewService extends AbstractReviewService
         return $this->getGv79($data);
     }
 
+    public function getLongTextMarkup(array $data): string
+    {
+        if ($this->isPsv($data)) {
+            $key = $data['licenceType']['id'] === Licence::LICENCE_TYPE_SPECIAL_RESTRICTED
+                ? 'markup-application-declaration-psv-special-restricted'
+                : ($this->isStandard($data)
+                    ? 'markup-application-declaration-psv-standard'
+                    : 'markup-application-declaration-psv-restricted');
+
+            return $this->translate($key);
+        }
+
+        if (ValueHelper::isOn($data['niFlag'])) {
+            if ($data['vehicleType']['id'] === RefData::APP_VEHICLE_TYPE_LGV) {
+                return $this->translate('markup-application-declaration-goods-ni-lgv');
+            }
+
+            return $this->translate(
+                $this->isStandard($data)
+                    ? 'markup-application-declaration-goods-ni-standard'
+                    : 'markup-application-declaration-goods-ni-restricted'
+            );
+        }
+
+        $key = match (true) {
+            $this->isLgvOnly($data) => 'markup-application-declaration-goods-gb-lgv',
+            $this->isGoodsStandardInternational($data) =>
+                'markup-application-declaration-goods-gb-standard-international',
+            $this->isGoodsRestricted($data) => 'markup-application-declaration-goods-gb-restricted',
+            default => 'markup-application-declaration-goods-gb',
+        };
+
+        return $this->translate($key);
+    }
+
+    public function getLongTextReviewMarkup(): string
+    {
+        return $this->translate('markup-review-text');
+    }
+
     private function getGv79(array $data)
     {
         $isInternal = $this->isInternal($data);
