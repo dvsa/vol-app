@@ -5,4 +5,5 @@ module "application_paramters" {
 
   name  = "/applicationparams/${var.environment}/${each.key}"
   value = each.value
+  type  = "SecureString"
 }

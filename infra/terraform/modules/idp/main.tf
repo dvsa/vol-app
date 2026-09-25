@@ -22,6 +22,7 @@ data "aws_s3_bucket" "documents" {
 # Created before the Lambda so Terraform controls retention
 # rather than letting Lambda auto-create it with no expiry.
 # ============================================================
+#checkov:skip=CKV_AWS_338: Retention is intentionally limited to 30 days for this Lambda log group.
 resource "aws_cloudwatch_log_group" "classify_document" {
   name              = "/aws/lambda/${local.name_prefix}-classify-document"
   retention_in_days = 30
@@ -65,6 +66,7 @@ resource "aws_lambda_function" "classify_document" {
 # Must be under /aws/vendedlogs/states/ so Step Functions has
 # the resource-policy permissions it needs to write to it.
 # ============================================================
+#checkov:skip=CKV_AWS_338: Retention is intentionally limited to 30 days for this Step Functions log group.
 resource "aws_cloudwatch_log_group" "classification_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-classification"
   retention_in_days = 30
@@ -176,7 +178,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "idp_output" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      sse_algorithm = "aws:kms"
     }
   }
 }
@@ -197,6 +199,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "idp_output" {
 # ============================================================
 # CloudWatch — Extraction SM Log Group
 # ============================================================
+#checkov:skip=CKV_AWS_338: Retention is intentionally limited to 30 days for this Step Functions log group.
 resource "aws_cloudwatch_log_group" "extraction_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-extraction"
   retention_in_days = 30
@@ -239,6 +242,7 @@ resource "aws_sfn_state_machine" "extraction" {
 # Used by the AI Analysis SM to fetch inference_result and the
 # document markdown without loading the full result.json.
 # ============================================================
+#checkov:skip=CKV_AWS_338: Retention is intentionally limited to 30 days for this Lambda log group.
 resource "aws_cloudwatch_log_group" "extract_s3_json_field" {
   name              = "/aws/lambda/${local.name_prefix}-extract-s3-json-field"
   retention_in_days = 30
@@ -274,6 +278,7 @@ resource "aws_lambda_function" "extract_s3_json_field" {
 # ============================================================
 # CloudWatch — AI Analysis SM Log Group
 # ============================================================
+#checkov:skip=CKV_AWS_338: Retention is intentionally limited to 30 days for this Step Functions log group.
 resource "aws_cloudwatch_log_group" "ai_analysis_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-ai-analysis"
   retention_in_days = 30
@@ -317,6 +322,7 @@ resource "aws_sfn_state_machine" "ai_analysis" {
 # Orchestrates the full IDP pipeline: check/run classification,
 # run extraction, run AI analysis, emit FinancialDocumentAnalysed.
 # ============================================================
+#checkov:skip=CKV_AWS_338: Retention is intentionally limited to 30 days for this Step Functions log group.
 resource "aws_cloudwatch_log_group" "analyse_financial_document_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-analyse-financial-document"
   retention_in_days = 30

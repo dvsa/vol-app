@@ -1,8 +1,60 @@
+data "aws_region" "current" {}
+
 data "aws_caller_identity" "current" {}
 
 locals {
   account_id = data.aws_caller_identity.current.account_id
   identifier = var.environment != null ? "${var.identifier}-${local.account_id}-${var.environment}-terraform-state" : "${var.identifier}-${local.account_id}-terraform-state"
+}
+
+resource "aws_kms_key" "dynamodb_table" {
+  description         = "KMS key for the ${local.identifier}-lock DynamoDB table"
+  enable_key_rotation = true
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "EnableRootPermissions"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${local.account_id}:root"
+        }
+        Action   = "kms:*"
+        Resource = "*"
+      },
+      {
+        Sid    = "AllowDynamoDBUseOfTheKey"
+        Effect = "Allow"
+        Principal = {
+          Service = "dynamodb.amazonaws.com"
+        }
+        Action = [
+          "kms:CreateGrant",
+          "kms:Decrypt",
+          "kms:DescribeKey",
+          "kms:Encrypt",
+          "kms:GenerateDataKey*",
+          "kms:ReEncrypt*"
+        ]
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "kms:CallerAccount" = local.account_id
+            "kms:ViaService"    = "dynamodb.${data.aws_region.current.name}.amazonaws.com"
+          }
+          Bool = {
+            "kms:GrantIsForAWSResource" = "true"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_kms_alias" "dynamodb_table" {
+  name          = "alias/${local.identifier}-lock"
+  target_key_id = aws_kms_key.dynamodb_table.key_id
 }
 
 module "s3" {
@@ -18,6 +70,8 @@ module "s3" {
   lifecycle_rule = [{
     id = "lifecycle"
 
+    abort_incomplete_multipart_upload_days = 7
+
     noncurrent_version_expiration = {
       noncurrent_days = 90
     }
@@ -28,7 +82,7 @@ module "s3" {
   server_side_encryption_configuration = {
     rule = {
       apply_server_side_encryption_by_default = {
-        sse_algorithm = "AES256"
+        sse_algorithm = "aws:kms"
       }
     }
   }
@@ -46,8 +100,11 @@ module "dynamodb_table" {
   source  = "terraform-aws-modules/dynamodb-table/aws"
   version = "~> 4.0"
 
-  name     = "${local.identifier}-lock"
-  hash_key = "LockID"
+  name                               = "${local.identifier}-lock"
+  hash_key                           = "LockID"
+  point_in_time_recovery_enabled     = true
+  server_side_encryption_enabled     = true
+  server_side_encryption_kms_key_arn = aws_kms_key.dynamodb_table.arn
 
   attributes = [
     {

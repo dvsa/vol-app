@@ -407,6 +407,7 @@ module "eventbridge" {
 
 }
 
+#checkov:skip=CKV_AWS_338: Retention is intentionally limited to 1 day for these batch job log groups.
 resource "aws_cloudwatch_log_group" "this" {
   for_each = { for job in var.batch.jobs : job.name => job }
 
