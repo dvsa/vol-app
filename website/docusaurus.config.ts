@@ -5,6 +5,19 @@ import type * as Preset from "@docusaurus/preset-classic";
 const lightTheme = themes.github;
 const darkTheme = themes.dracula;
 
+// Stamped into the footer so a reader can tell whether a deploy has landed: it changes on every
+// build, even one where no page content changed. GITHUB_SHA is set by Actions; a local build has
+// no commit to name, so it only gets the time.
+const builtAt = new Date().toLocaleString("en-GB", {
+  dateStyle: "long",
+  timeStyle: "short",
+  timeZone: "Europe/London",
+});
+const commit = process.env.GITHUB_SHA;
+const builtFrom = commit
+  ? ` from <a href="https://github.com/dvsa/vol-app/commit/${commit}">${commit.slice(0, 7)}</a>`
+  : "";
+
 const config: Config = {
   title: "VOL Application",
   tagline: "VOL documentation",
@@ -18,9 +31,10 @@ const config: Config = {
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
 
+  // en-GB rather than en: Docusaurus formats the per-page "Last updated" date in this locale.
   i18n: {
-    defaultLocale: "en",
-    locales: ["en"],
+    defaultLocale: "en-GB",
+    locales: ["en-GB"],
   },
 
   presets: [
@@ -32,6 +46,9 @@ const config: Config = {
           routeBasePath: "/",
           path: "../docs",
           editUrl: "https://github.com/dvsa/vol-app/tree/main/docs/",
+          // Taken from the last commit to touch each page, so the deploy workflow's checkout needs
+          // full history (fetch-depth: 0) - a shallow clone would date every page to the latest commit.
+          showLastUpdateTime: true,
         },
         blog: false,
         theme: {
@@ -64,7 +81,9 @@ const config: Config = {
     },
     footer: {
       style: "dark",
-      copyright: "All content is available under the Open Government Licence v3.0, except where otherwise stated.",
+      copyright:
+        "All content is available under the Open Government Licence v3.0, except where otherwise stated." +
+        `<br>Built ${builtAt} (UK time)${builtFrom}.`,
     },
     prism: {
       theme: lightTheme,
