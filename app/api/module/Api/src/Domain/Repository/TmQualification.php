@@ -45,6 +45,7 @@ class TmQualification extends AbstractRepository
     protected function applyListJoins(\Doctrine\ORM\QueryBuilder $qb)
     {
         $this->getQueryBuilder()
+            ->modifyQuery($qb)
             ->with('countryCode', 'cc')
             ->with('qualificationType', 'qt');
 

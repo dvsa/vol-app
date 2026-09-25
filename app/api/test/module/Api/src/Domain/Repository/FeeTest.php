@@ -35,12 +35,6 @@ final class FeeTest extends RepositoryTestCase
         $this->setUpRealSut(Repo::class, true);
     }
 
-    /**
-     * getQueryByApplicationFeeTypeFeeType() calls the shared query-builder helper without
-     * modifyQuery() first, so its refdata join and ORDER BY are applied to whichever builder the
-     * helper is still holding — never to its own. Nothing here is what the repository intends;
-     * this pins the behaviour so the eventual fix has a failing test to flip.
-     */
     #[\PHPUnit\Framework\Attributes\DataProvider('interimFeeProvider')]
     public function testFetchInterimFeesByApplicationId(bool $outstanding, bool $paid, string $expectedStatus): void
     {
@@ -56,19 +50,15 @@ final class FeeTest extends RepositoryTestCase
         $this->assertSame(['RESULTS'], $this->sut->fetchInterimFeesByApplicationId(33, $outstanding, $paid));
 
         $this->assertSame(
-            'SELECT f' . self::FROM . ' INNER JOIN f.feeType ft'
+            'SELECT f, w0' . self::FROM . self::FEE_STATUS_JOIN . ' INNER JOIN f.feeType ft'
             . ' WHERE ft.feeType = :feeTypeFeeType AND f.application = :applicationId'
-            . $expectedStatus,
+            . $expectedStatus . ' ORDER BY f.invoicedDate ASC',
             $qb->getDQL(),
         );
         $this->assertSame($refData, $qb->getParameter('feeTypeFeeType')->getValue());
         $this->assertSame(33, $qb->getParameter('applicationId')->getValue());
 
-        // The refdata join and the ordering landed on the unrelated builder instead.
-        $this->assertSame(
-            'SELECT f, w0' . self::FROM . self::FEE_STATUS_JOIN . ' ORDER BY f.invoicedDate ASC',
-            $unrelated->getDQL(),
-        );
+        $this->assertSame('SELECT f' . self::FROM, $unrelated->getDQL());
     }
 
     public static function interimFeeProvider(): \Iterator
@@ -79,18 +69,32 @@ final class FeeTest extends RepositoryTestCase
         yield 'outstanding or paid' => [true, true, ' AND f.feeStatus IN(:feeStatus)'];
     }
 
-    /**
-     * With a cold helper — the first query of the request — the same call throws outright.
-     */
     public function testFetchInterimFeesByApplicationIdWithAColdQueryBuilder(): void
     {
         $this->expectRefdataReference();
-        $this->createRealQb();
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Doctrine Query Builder is not set');
+        $this->assertSame(['RESULTS'], $this->sut->fetchInterimFeesByApplicationId(33));
+        $this->assertSame(
+            'SELECT f, w0' . self::FROM . self::FEE_STATUS_JOIN . ' INNER JOIN f.feeType ft'
+            . ' WHERE ft.feeType = :feeTypeFeeType AND f.application = :applicationId'
+            . ' ORDER BY f.invoicedDate ASC',
+            $qb->getDQL(),
+        );
+    }
 
-        $this->sut->fetchInterimFeesByApplicationId(33);
+    public function testApplyListFiltersBindsItsOwnQuery(): void
+    {
+        $qb = $this->createRealQb();
+        $previous = $this->newRealQb();
+        $previous->select('other')->from(Entity::class, 'other');
+        $this->queryBuilder->modifyQuery($previous);
+
+        $this->sut->applyListFilters($qb, FeeList::create(['licence' => 12]));
+
+        $this->assertStringContainsString('f.licence = :licenceId', $qb->getDQL());
+        $this->assertStringContainsString('LEFT JOIN f.createdBy u', $qb->getDQL());
+        $this->assertSame('SELECT other FROM ' . Entity::class . ' other', $previous->getDQL());
     }
 
     public function testFetchInterimRefunds(): void

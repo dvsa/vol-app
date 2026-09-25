@@ -105,7 +105,7 @@ class EbsrSubmission extends AbstractRepository
         parent::buildDefaultListQuery($qb, $query, $compositeFields);
 
         // join in person details
-        $this->getQueryBuilder()->with($this->alias . '.busReg', 'b')
+        $this->getQueryBuilder()->modifyQuery($qb)->with($this->alias . '.busReg', 'b')
             ->with('b.licence', 'l')
             ->with('b.otherServices')
             ->with('l.organisation');

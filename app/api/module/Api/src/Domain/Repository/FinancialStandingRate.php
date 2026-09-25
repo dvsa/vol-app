@@ -29,7 +29,7 @@ class FinancialStandingRate extends AbstractRepository
     {
         $qb = $this->createQueryBuilder();
 
-        $this->getQueryBuilder()->withRefdata();
+        $this->getQueryBuilder()->modifyQuery($qb)->withRefdata();
 
         $qb
             ->andWhere($qb->expr()->isNull($this->alias . '.deletedDate'))
