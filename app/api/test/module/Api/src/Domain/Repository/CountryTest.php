@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Country;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Country as Entity;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit as IrhpPermitEntity;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType;
+use Dvsa\Olcs\Transfer\Query\ContactDetail\CountryList;
 
 final class CountryTest extends RepositoryTestCase
 {
@@ -36,6 +37,31 @@ final class CountryTest extends RepositoryTestCase
             'SELECT c.id as countryId, c.countryDesc as description FROM ' . Entity::class . ' c',
             $qb->getDQL(),
         );
+    }
+
+    public function testApplyListFiltersBindsItsOwnConstraintsJoin(): void
+    {
+        $this->setUpRealSut(Country::class, true);
+        $qb = $this->createRealQb();
+        $previous = $this->newRealQb();
+        $previous->select('other')->from(Entity::class, 'other');
+        $this->queryBuilder->modifyQuery($previous);
+
+        $query = new class extends CountryList {
+            public function hasEcmtConstraints(): bool
+            {
+                return true;
+            }
+        };
+
+        $this->sut->applyListFilters($qb, $query);
+
+        $this->assertSame(
+            'SELECT m, c FROM ' . Entity::class . ' m LEFT JOIN m.constraints c'
+            . ' WHERE c.id IS NOT NULL ORDER BY m.countryDesc ASC',
+            $qb->getDQL(),
+        );
+        $this->assertSame('SELECT other FROM ' . Entity::class . ' other', $previous->getDQL());
     }
 
     public function testFetchAvailableCountriesForIrhpApplication(): void

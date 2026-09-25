@@ -81,6 +81,7 @@ class Complaint extends AbstractRepository
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()
+            ->modifyQuery($qb)
             ->with('complainantContactDetails', 'ccd')
             ->with('ccd.person')
             ->with('operatingCentres', 'oc')
@@ -94,6 +95,14 @@ class Complaint extends AbstractRepository
     #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
+        $queryBuilder = $this->getQueryBuilder()->modifyQuery($qb);
+        $licence = $query->getLicence();
+        $application = $query->getApplication();
+
+        if ($licence !== null || $application !== null) {
+            $queryBuilder->with('case', 'ca');
+        }
+
         if ($query->getCase()) {
             $qb->andWhere($qb->expr()->eq($this->alias . '.case', ':byCase'))
                 ->setParameter('byCase', $query->getCase());
@@ -102,15 +111,13 @@ class Complaint extends AbstractRepository
             $qb->andWhere($qb->expr()->eq($this->alias . '.isCompliance', ':isCompliance'))
                 ->setParameter('isCompliance', $query->getIsCompliance());
         }
-        if ($query->getLicence() !== null) {
-            $this->getQueryBuilder()->with('case', 'ca');
+        if ($licence !== null) {
             $qb->andWhere($qb->expr()->eq('ca.licence', ':licence'))
-                ->setParameter('licence', $query->getLicence());
+                ->setParameter('licence', $licence);
         }
-        if ($query->getApplication() !== null) {
-            $this->getQueryBuilder()->with('case', 'ca');
+        if ($application !== null) {
             $qb->andWhere($qb->expr()->eq('ca.application', ':application'))
-                ->setParameter('application', $query->getApplication());
+                ->setParameter('application', $application);
         }
     }
 }
