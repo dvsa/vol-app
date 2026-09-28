@@ -83,11 +83,10 @@ final class ListDataTraitTest extends MockeryTestCase
     }
 
     /**
-     * Several legacy templates point at one letter type -- the letters engine's choices adapt
-     * a single type at generation time, so the list must offer that journey once, labelled
-     * with the letter type's own name rather than one of the RTF-era descriptions.
+     * Old and new letters run side by side: every template keeps its own old letter entry, and
+     * each letter type gets one [New] entry at the top.
      */
-    public function testDocTemplatesLinkedToTheSameLetterTypeCollapseToOneEntry(): void
+    public function testLinkedTemplatesListBothOldLettersAndOneNewEntryPerLetterType(): void
     {
         $this->mockResponse->shouldReceive('getResult')->andReturn(
             ['isEnabled' => true],
@@ -106,41 +105,10 @@ final class ListDataTraitTest extends MockeryTestCase
         $this->assertSame(
             [
                 '' => 'Please select',
-                7 => '[New] First and Finals GB',
+                'new-7' => '[New] First and Finals GB',
                 12 => 'A legacy RTF template',
-            ],
-            $result
-        );
-    }
-
-    /**
-     * Regenerating a document must keep its stored template selectable. By the time the form
-     * re-validates, the original document has already been deleted -- so if the stored id is a
-     * sibling that consolidation dropped, the browser silently falls back to a different
-     * template or the POST fails InArray validation. The kept row therefore stands as its
-     * letter type's single representative instead of the first row in description order.
-     */
-    public function testKeepTemplateIdSurvivesTheLetterTypeCollapse(): void
-    {
-        $this->mockResponse->shouldReceive('getResult')->andReturn(
-            ['isEnabled' => true],
-            ['results' => [
-                ['id' => 7, 'description' => 'GV - 1st request for supporting docs',
-                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
-                ['id' => 8, 'description' => 'GV - final request for supporting docs',
-                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
-                ['id' => 12, 'description' => 'A legacy RTF template'],
-            ]]
-        );
-        $this->mockResponse->shouldReceive('isOk')->andReturn(true);
-
-        $result = $this->sut->getListDataDocTemplates(9, 31, 'Please select', 8);
-
-        $this->assertSame(
-            [
-                '' => 'Please select',
-                8 => '[New] First and Finals GB',
-                12 => 'A legacy RTF template',
+                7 => 'GV - 1st request for supporting docs',
+                8 => 'GV - final request for supporting docs',
             ],
             $result
         );

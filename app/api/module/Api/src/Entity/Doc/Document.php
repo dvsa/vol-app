@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Entity\Doc;
 
 use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Document Entity
@@ -118,6 +119,28 @@ class Document extends AbstractDocument implements OrganisationProviderInterface
 
     public const IRHP_PERMIT_ANN_MULTILAT = 'IRHP_PERMIT_ANN_MULTILATERAL';
     public const IRHP_PERMIT_ANN_MULTILAT_COVERING_LETTER = 'IRHP_PERMIT_ANN_MULTILAT_COVERING_LETTER';
+
+
+    #[ORM\OneToMany(targetEntity: DocumentAnalysis::class, mappedBy: 'document', fetch: 'LAZY')]
+    protected $documentAnalyses;
+
+
+
+    public function getAnalysis(): ?DocumentAnalysis
+    {
+        $analyses = $this->getDocumentAnalyses();
+
+        if ($analyses->isEmpty()) {
+            return null;
+        }
+
+        return $analyses->first();
+    }
+
+    public function getDocumentAnalyses(): Collection
+    {
+        return $this->documentAnalyses;
+    }
 
     /**
      * Document constructor.

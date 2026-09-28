@@ -25,6 +25,17 @@ class GrantValidationService implements FactoryInterface
     public const ERROR_OORD_NOT_PASSED = 'APP-GRA-OORD-NOT-PASSED';
 
     /**
+     * Sections that can be accessible but have no application_tracking status.
+     *
+     * ApplicationTracking::isValid() builds a status getter from each section name,
+     * so passing one of these in would call an undefined method rather than fail
+     * validation. Enforcing any of these at grant time needs a tracking column first.
+     */
+    private const UNTRACKED_SECTIONS = [
+        'financial_evidence_assessment',
+    ];
+
+    /**
      * @var SectionAccessService
      */
     private $sectionAccessService;
@@ -113,7 +124,9 @@ class GrantValidationService implements FactoryInterface
     protected function getAccessibleSections(ApplicationEntity $application)
     {
         $accessible = $this->sectionAccessService->getAccessibleSections($application);
-        return array_keys($accessible);
+
+        // Re-index so callers get a plain list, as array_keys() previously returned.
+        return array_values(array_diff(array_keys($accessible), self::UNTRACKED_SECTIONS));
     }
 
     protected function shouldValidateEnforcementArea(ApplicationEntity $application)

@@ -18,6 +18,10 @@ output "deployed_assets_version" {
   value = null_resource.deployed_versions.triggers["deployed_assets_version"]
 }
 
+output "deployed_liquibase_image_tag" {
+  value = null_resource.deployed_versions.triggers["deployed_liquibase_image_tag"]
+}
+
 output "idp_classification_sm_arn" {
   description = "ARN of the IDP Classification Step Functions state machine"
   value       = module.idp.classification_sm_arn

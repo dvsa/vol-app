@@ -64,6 +64,20 @@ class SectionConfig
                 ]
             ]
         ],
+        'financial_evidence_assessment' => [
+            'restricted' => [
+                [
+                    [
+                        'internal'
+                    ],
+                    [
+                        Licence::LICENCE_TYPE_RESTRICTED,
+                        Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                        Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    ]
+                ]
+            ],
+        ],
         'transport_managers' => [
             'prerequisite' => [
                 'operating_centres'
@@ -372,6 +386,19 @@ class SectionConfig
             'restricted' => [
                 [
                     'application',
+                    [
+                        Licence::LICENCE_TYPE_RESTRICTED,
+                        Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                        Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    ]
+                ]
+            ]
+        ],
+        'knowledge_experience' => [
+            'restricted' => [
+                [
+                    'application',
+                    'knowledgeExperienceRequired',
                     [
                         Licence::LICENCE_TYPE_RESTRICTED,
                         Licence::LICENCE_TYPE_STANDARD_NATIONAL,

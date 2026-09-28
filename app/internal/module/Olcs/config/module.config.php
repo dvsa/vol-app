@@ -65,6 +65,7 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController;
 use Olcs\Controller\Licence\Processing\LicenceProcessingPublicationsController;
 use Olcs\Controller\Licence\Processing\LicenceProcessingPublicationsControllerFactory;
 use Olcs\Controller\Lva\Application as LvaApplicationControllers;
+use Olcs\Controller\Lva\Factory\Controller as LvaControllerFactories;
 use Olcs\Controller\Lva\Factory\Controller\Application as LvaApplicationControllerFactories;
 use Olcs\Controller\Lva\Factory\Controller\Licence as LvaLicenceControllerFactories;
 use Olcs\Controller\Lva\Factory\Controller\Variation as LvaVariationControllerFactories;
@@ -154,6 +155,7 @@ return [
             'LvaApplication/People' => \Olcs\Controller\Lva\Application\PeopleController::class,
             'LvaApplication/OperatingCentres' => \Olcs\Controller\Lva\Application\OperatingCentresController::class,
             'LvaApplication/FinancialEvidence' => \Olcs\Controller\Lva\Application\FinancialEvidenceController::class,
+            'LvaApplication/FinancialEvidenceAssessment' => \Olcs\Controller\Lva\Application\FinancialEvidenceAssessmentController::class,
             'LvaApplication/TransportManagers' => \Olcs\Controller\Lva\Application\TransportManagersController::class,
             'LvaApplication/Vehicles' => \Olcs\Controller\Lva\Application\VehiclesController::class,
             'LvaApplication/VehiclesPsv' => \Olcs\Controller\Lva\Application\VehiclesPsvController::class,
@@ -161,6 +163,7 @@ return [
             'LvaApplication/CommunityLicences' => \Olcs\Controller\Lva\Application\CommunityLicencesController::class,
             'LvaApplication/FinancialHistory' => \Olcs\Controller\Lva\Application\FinancialHistoryController::class,
             'LvaApplication/LicenceHistory' => \Olcs\Controller\Lva\Application\LicenceHistoryController::class,
+            'LvaApplication/KnowledgeExperience' => \Olcs\Controller\Lva\Application\KnowledgeExperienceController::class,
             'LvaApplication/ConvictionsPenalties' => \Olcs\Controller\Lva\Application\ConvictionsPenaltiesController::class,
             'LvaApplication/TaxiPhv' => \Olcs\Controller\Lva\Application\TaxiPhvController::class,
             'LvaApplication/ConditionsUndertakings'
@@ -193,6 +196,7 @@ return [
             'LvaLicence/ConditionsUndertakings' => \Olcs\Controller\Lva\Licence\ConditionsUndertakingsController::class,
             'LvaLicence/Variation' => \Olcs\Controller\Lva\Licence\VariationController::class,
             'LvaLicence/Trailers' => \Olcs\Controller\Lva\Licence\TrailersController::class,
+            'LvaLicence/FinancialEvidenceAssessment' => \Olcs\Controller\Lva\Licence\FinancialEvidenceAssessmentController::class,
             'LvaVariation' => Olcs\Controller\Lva\Variation\OverviewController::class,
             'LvaVariation/TypeOfLicence' => \Olcs\Controller\Lva\Variation\TypeOfLicenceController::class,
             'LvaVariation/BusinessType' => \Olcs\Controller\Lva\Variation\BusinessTypeController::class,
@@ -209,6 +213,7 @@ return [
             'LvaVariation/Discs' => \Olcs\Controller\Lva\Variation\DiscsController::class,
             'LvaVariation/ConditionsUndertakings' => \Olcs\Controller\Lva\Variation\ConditionsUndertakingsController::class,
             'LvaVariation/FinancialEvidence' => \Olcs\Controller\Lva\Variation\FinancialEvidenceController::class,
+            'LvaVariation/FinancialEvidenceAssessment' => \Olcs\Controller\Lva\Variation\FinancialEvidenceAssessmentController::class,
             'LvaVariation/FinancialHistory' => \Olcs\Controller\Lva\Variation\FinancialHistoryController::class,
             'LvaVariation/LicenceHistory' => \Olcs\Controller\Lva\Variation\LicenceHistoryController::class,
             'LvaVariation/ConvictionsPenalties' => \Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController::class,
@@ -234,6 +239,10 @@ return [
             LvaApplicationControllers\ConvictionsPenaltiesController::class => LvaApplicationControllerFactories\ConvictionsPenaltiesControllerFactory::class,
             LvaApplicationControllers\DeclarationsInternalController::class => LvaApplicationControllerFactories\DeclarationsInternalControllerFactory::class,
             LvaApplicationControllers\FinancialEvidenceController::class => LvaApplicationControllerFactories\FinancialEvidenceControllerFactory::class,
+            LvaApplicationControllers\FinancialEvidenceAssessmentController::class => LvaControllerFactories\FinancialEvidenceAssessmentControllerFactory::class,
+            LvaLicenceControllers\FinancialEvidenceAssessmentController::class => LvaControllerFactories\FinancialEvidenceAssessmentControllerFactory::class,
+            LvaVariationControllers\FinancialEvidenceAssessmentController::class => LvaControllerFactories\FinancialEvidenceAssessmentControllerFactory::class,
+            LvaApplicationControllers\KnowledgeExperienceController::class => LvaApplicationControllerFactories\KnowledgeExperienceControllerFactory::class,
             LvaApplicationControllers\FinancialHistoryController::class => LvaApplicationControllerFactories\FinancialHistoryControllerFactory::class,
             LvaApplicationControllers\GrantController::class => LvaApplicationControllerFactories\GrantControllerFactory::class,
             LvaApplicationControllers\InterimController::class => LvaApplicationControllerFactories\InterimControllerFactory::class,
@@ -467,6 +476,8 @@ return [
             'LvaApplication/People' => LvaApplicationControllers\PeopleController::class,
             'LvaApplication/OperatingCentres' => LvaApplicationControllers\OperatingCentresController::class,
             'LvaApplication/FinancialEvidence' => LvaApplicationControllers\FinancialEvidenceController::class,
+            'LvaApplication/FinancialEvidenceAssessment' => LvaApplicationControllers\FinancialEvidenceAssessmentController::class,
+            'LvaApplication/KnowledgeExperience' => LvaApplicationControllers\KnowledgeExperienceController::class,
             'LvaApplication/TransportManagers' => LvaApplicationControllers\TransportManagersController::class,
             'LvaApplication/Vehicles' => LvaApplicationControllers\VehiclesController::class,
             'LvaApplication/VehiclesPsv' => LvaApplicationControllers\VehiclesPsvController::class,
@@ -505,6 +516,7 @@ return [
             'LvaLicence/ConditionsUndertakings' => LvaLicenceControllers\ConditionsUndertakingsController::class,
             'LvaLicence/Variation' => LvaLicenceControllers\VariationController::class,
             'LvaLicence/Trailers' => LvaLicenceControllers\TrailersController::class,
+            'LvaLicence/FinancialEvidenceAssessment' => LvaLicenceControllers\FinancialEvidenceAssessmentController::class,
             'LvaVariation' => Olcs\Controller\Lva\Variation\OverviewController::class,
             'LvaVariation/TypeOfLicence' => LvaVariationControllers\TypeOfLicenceController::class,
             'LvaVariation/BusinessType' => LvaVariationControllers\BusinessTypeController::class,
@@ -521,6 +533,7 @@ return [
             'LvaVariation/Discs' => LvaVariationControllers\DiscsController::class,
             'LvaVariation/ConditionsUndertakings' => LvaVariationControllers\ConditionsUndertakingsController::class,
             'LvaVariation/FinancialEvidence' => LvaVariationControllers\FinancialEvidenceController::class,
+            'LvaVariation/FinancialEvidenceAssessment' => LvaVariationControllers\FinancialEvidenceAssessmentController::class,
             'LvaVariation/FinancialHistory' => LvaVariationControllers\FinancialHistoryController::class,
             'LvaVariation/LicenceHistory' => LvaVariationControllers\LicenceHistoryController::class,
             'LvaVariation/ConvictionsPenalties' => LvaVariationControllers\ConvictionsPenaltiesController::class,

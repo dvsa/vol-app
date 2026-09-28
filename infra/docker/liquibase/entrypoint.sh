@@ -3,6 +3,8 @@ set -e
 
 cd /liquibase/changelog
 
+echo "olcs-etl commit: $(cat /liquibase/ETL_SHA 2>/dev/null || echo unknown)"
+
 # Default to 'all' if ENVIRONMENT not set (maintains backward compatibility) e.g. local envs
 CONTEXT=${ENVIRONMENT:-all}
 
@@ -16,7 +18,7 @@ LIQUIBASE_OPTS="--driver=com.mysql.cj.jdbc.Driver \
   --changelog-file=changesets/OLCS.xml \
   --log-level=info"
 
-if [[ "$1" == "--dry-run" ]]; then
+if [[ "${1:-}" == "--dry-run" || "${DRY_RUN:-false}" == "true" ]]; then
     echo "Running in dry-run mode - showing pending changes:"
     liquibase ${LIQUIBASE_OPTS} status --verbose --contexts=${CONTEXT}
     liquibase ${LIQUIBASE_OPTS} update-sql --contexts=${CONTEXT}
