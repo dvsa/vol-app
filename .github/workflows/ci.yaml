@@ -15,6 +15,16 @@ jobs:
       security-events: write
     secrets: inherit
 
+  # Deliberately not in any job's needs: a finding in the documentation site's build tooling
+  # shows red on the PR but must not hold up an application build.
+  security-documentation:
+    name: Security
+    uses: ./.github/workflows/security-documentation.yaml
+    permissions:
+      contents: read
+      security-events: write
+    secrets: inherit
+
   security-docker:
     name: Security
     uses: ./.github/workflows/security-docker.yaml
@@ -126,7 +136,6 @@ jobs:
           files: |
             website/**
             docs/**
-          since_last_remote_commit: true
 
   docs:
     name: Documentation
