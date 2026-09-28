@@ -8,6 +8,7 @@ use Common\Controller\Plugin\FeaturesEnabled;
 use Common\RefData;
 use Common\Service\Cqrs\Query\QuerySender;
 use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -38,6 +39,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             new StringHelperService(),
             m::mock(RestrictionHelperService::class),
             m::mock(FlashMessengerHelperService::class),
+            m::mock(FormHelperService::class),
             [],
         ])->makePartial()->shouldAllowMockingProtectedMethods();
     }
