@@ -150,7 +150,7 @@ Shows detailed AWS calls, cache hits, and config updates.
     {
         "Effect": "Allow",
         "Action": ["kms:Decrypt"],
-        "Resource": "*"
+        "Resource": "arn:aws:kms:<region>:<account-id>:key/<ssm-key-id>"
     }
 ]
 ```
