@@ -8,6 +8,7 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Controller\Lva\AbstractController;
 use Common\FeatureToggle;
 use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
@@ -46,6 +47,8 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         protected StringHelperService $stringHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
+        // The licence context uses this to build its header search form.
+        protected FormHelperService $formHelper,
         protected $navigation
     ) {
         parent::__construct($niTextTranslationUtil, $authService);

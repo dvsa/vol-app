@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Olcs\Controller\Lva\Factory\Controller;
 
 use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -43,6 +44,7 @@ class FinancialEvidenceAssessmentControllerFactory implements FactoryInterface
             $container->get(StringHelperService::class),
             $container->get(RestrictionHelperService::class),
             $container->get(FlashMessengerHelperService::class),
+            $container->get(FormHelperService::class),
             $container->get('navigation')
         );
     }
