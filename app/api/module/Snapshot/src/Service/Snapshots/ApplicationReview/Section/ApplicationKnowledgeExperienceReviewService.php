@@ -23,33 +23,44 @@ final class ApplicationKnowledgeExperienceReviewService extends AbstractReviewSe
             ->handleQuery(KnowledgeExperience::create(['id' => $data['id']]))
             ->serialize();
 
-        if ($knowledgeExperienceData['knowledgeExperienceOlat'] === 'Y') {
-            return [
-                'multiItems' => [
-                    [
-                        [
-                            'label' => 'application-review-knowledge-experience-olat',
-                            'value' => $this->translate('Yes'),
-                        ],
-                    ],
-                ],
-            ];
-        }
-
         $documents = is_array($knowledgeExperienceData['documents'])
             ? $knowledgeExperienceData['documents']
             : [];
 
+        $olatSelected = $knowledgeExperienceData['knowledgeExperienceOlat'] === 'Y';
+
+        // the operator can both upload evidence and confirm OLAT, so the snapshot has to record both
+        $items = [];
+
+        if ($documents !== []) {
+            $items[] = $this->getEvidenceItem($documents);
+        }
+
+        if ($olatSelected) {
+            $items[] = [
+                'label' => 'application-review-knowledge-experience-olat',
+                'value' => $this->translate('Yes'),
+            ];
+        }
+
+        // nothing supplied yet (upload later chosen, or the section not saved): keep the section's heading row
+        if ($items === []) {
+            $items[] = $this->getEvidenceItem([]);
+        }
+
         return [
             'multiItems' => [
-                [
-                    [
-                        'label' => 'application-review-knowledge-experience-evidence',
-                        'noEscape' => true,
-                        'value' => $this->formatDocumentList($documents),
-                    ],
-                ],
+                $items,
             ],
+        ];
+    }
+
+    private function getEvidenceItem(array $documents): array
+    {
+        return [
+            'label' => 'application-review-knowledge-experience-evidence',
+            'noEscape' => true,
+            'value' => $this->formatDocumentList($documents),
         ];
     }
 
