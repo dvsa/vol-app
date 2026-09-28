@@ -26,6 +26,7 @@ final class Create extends AbstractCommandHandler
         $entity->setTodoKey($command->getTodoKey());
         $entity->setDescription($command->getDescription());
         $entity->setHelpText($command->getHelpText());
+        $entity->setRequiresInput($command->getRequiresInput());
 
         $this->getRepo()->save($entity);
 

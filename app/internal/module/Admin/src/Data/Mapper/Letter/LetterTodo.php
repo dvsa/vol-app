@@ -20,6 +20,7 @@ class LetterTodo implements MapperInterface
                 'todoKey' => $data['todoKey'] ?? null,
                 'description' => $currentVersion['description'] ?? $data['description'] ?? null,
                 'helpText' => $currentVersion['helpText'] ?? $data['helpText'] ?? null,
+                'requiresInput' => $currentVersion['requiresInput'] ?? $data['requiresInput'] ?? false,
             ]
         ];
 
@@ -33,7 +34,13 @@ class LetterTodo implements MapperInterface
 
     public static function mapFromForm(array $data): array
     {
-        return $data['letterTodo'] ?? [];
+        $commandData = $data['letterTodo'] ?? [];
+
+        if (isset($commandData['requiresInput'])) {
+            $commandData['requiresInput'] = (bool) $commandData['requiresInput'];
+        }
+
+        return $commandData;
     }
 
     public static function mapFromErrors(FormInterface $form, array $errors): array

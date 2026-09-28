@@ -41,6 +41,13 @@ class LetterIssue extends AbstractLetterIssue
     private $letterIssueType;
 
     /**
+     * Dropdowns set back to none (e.g. Goods/PSV to "Both"), so null reads as a change instead
+     * of falling back to the current version. Text fields keep the fallback so a missing post
+     * can't wipe content.
+     */
+    private array $touched = [];
+
+    /**
      * Initialise collections
      */
     public function __construct()
@@ -80,7 +87,7 @@ class LetterIssue extends AbstractLetterIssue
      */
     public function getSubCategory()
     {
-        if ($this->subCategory !== null) {
+        if ($this->subCategory !== null || isset($this->touched['subCategory'])) {
             return $this->subCategory;
         }
         return $this->currentVersion ? $this->currentVersion->getSubCategory() : null;
@@ -95,6 +102,7 @@ class LetterIssue extends AbstractLetterIssue
     public function setSubCategory($subCategory)
     {
         $this->subCategory = $subCategory;
+        $this->touched['subCategory'] = true;
         return $this;
     }
 
@@ -305,7 +313,7 @@ class LetterIssue extends AbstractLetterIssue
      */
     public function getGoodsOrPsv()
     {
-        if ($this->goodsOrPsv !== null) {
+        if ($this->goodsOrPsv !== null || isset($this->touched['goodsOrPsv'])) {
             return $this->goodsOrPsv;
         }
         return $this->currentVersion ? $this->currentVersion->getGoodsOrPsv() : null;
@@ -320,6 +328,7 @@ class LetterIssue extends AbstractLetterIssue
     public function setGoodsOrPsv($goodsOrPsv)
     {
         $this->goodsOrPsv = $goodsOrPsv;
+        $this->touched['goodsOrPsv'] = true;
         return $this;
     }
 
@@ -330,7 +339,7 @@ class LetterIssue extends AbstractLetterIssue
      */
     public function getLetterIssueType()
     {
-        if ($this->letterIssueType !== null) {
+        if ($this->letterIssueType !== null || isset($this->touched['letterIssueType'])) {
             return $this->letterIssueType;
         }
         return $this->currentVersion ? $this->currentVersion->getLetterIssueType() : null;
@@ -345,6 +354,7 @@ class LetterIssue extends AbstractLetterIssue
     public function setLetterIssueType($letterIssueType)
     {
         $this->letterIssueType = $letterIssueType;
+        $this->touched['letterIssueType'] = true;
         return $this;
     }
 
