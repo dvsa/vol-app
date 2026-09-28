@@ -1,0 +1,23 @@
+# GitLeaks configuration for VOL App
+# This file configures GitLeaks to ignore intentionally committed mock/test keys
+
+title = "VOL App GitLeaks Configuration"
+
+[allowlist]
+description = "Allowlist for intentionally committed test/mock keys"
+paths = [
+    # Mock GOV.UK Sign In service keys - these are intentionally insecure mock keys
+    # used only for local testing and have no security implications
+    "app/mock-govuk-signin/mock-private.pem",
+    "app/mock-govuk-signin/mock-public.pem", 
+    "app/mock-govuk-signin/mock-ec-private.pem",
+    "app/mock-govuk-signin/mock-ec-public.pem"
+]
+
+# Additional patterns to ignore for mock services
+[[rules]]
+description = "Ignore mock service private keys"
+id = "mock-service-keys"
+regex = '''mock-.*\.(pem|key)'''
+path = '''app/mock-.*'''
+allowlist = true
