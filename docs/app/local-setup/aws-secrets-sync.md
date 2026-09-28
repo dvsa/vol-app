@@ -61,15 +61,15 @@ Mappings are defined in `packages/local-refresh/src/actions/SyncAwsSecretsAndPar
 
 Dynamic values resolved at runtime (note, cannot use them directly, they must be defined in the placeholder):
 
-- `${environment}` - Selected environment ("dev", "int")
-- `${environment.toUpperCase()}` - Uppercase environment ("DEV", "INT")
-- `${service}` - Service name from config
-- `${service.toUpperCase()}` - Uppercase service name
+-   `${environment}` - Selected environment ("dev", "int")
+-   `${environment.toUpperCase()}` - Uppercase environment ("DEV", "INT")
+-   `${service}` - Service name from config
+-   `${service.toUpperCase()}` - Uppercase service name
 
 #### Supported Transformations
 
-- toUpperCase()
-- toLowerCase()
+-   toUpperCase()
+-   toLowerCase()
 
 ### Mapping Fields
 
@@ -141,12 +141,21 @@ Shows detailed AWS calls, cache hits, and config updates.
 ## Required IAM Permissions
 
 ```json
-{
-    "Effect": "Allow",
-    "Action": ["ssm:GetParameter", "secretsmanager:GetSecretValue", "sts:GetCallerIdentity"],
-    "Resource": ["arn:aws:ssm:*:*:parameter/applicationparams/*", "arn:aws:secretsmanager:*:*:secret:DEVAPP*"]
-}
+[
+    {
+        "Effect": "Allow",
+        "Action": ["ssm:GetParameter", "secretsmanager:GetSecretValue", "sts:GetCallerIdentity"],
+        "Resource": ["arn:aws:ssm:*:*:parameter/applicationparams/*", "arn:aws:secretsmanager:*:*:secret:DEVAPP*"]
+    },
+    {
+        "Effect": "Allow",
+        "Action": ["kms:Decrypt"],
+        "Resource": "*"
+    }
+]
 ```
+
+If the synced SSM parameters are stored as `SecureString`, the caller also needs decrypt access to the KMS key used by Parameter Store (for the shared AWS-managed key this is `alias/aws/ssm` in the target account and region).
 
 ## Common Errors
 

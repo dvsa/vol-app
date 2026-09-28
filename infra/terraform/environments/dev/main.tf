@@ -5,6 +5,8 @@ locals {
 
   supporting_service_names = ["liquibase"]
 
+  application_parameters_arn = "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+
   task_exec_iam_role_statements = [
     {
       effect = "Allow"
@@ -34,7 +36,16 @@ locals {
         "ssm:GetParametersByPath"
       ]
       resources = [
-        "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+        local.application_parameters_arn
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "kms:Decrypt"
+      ]
+      resources = [
+        data.aws_kms_alias.ssm.target_key_arn
       ]
     },
     {
@@ -270,6 +281,10 @@ data "aws_secretsmanager_secret" "infra" {
   name = "DEVAPPDEV-BASE-SM-INFRA"
 }
 
+data "aws_kms_alias" "ssm" {
+  name = "alias/aws/ssm"
+}
+
 data "aws_cognito_user_pools" "this" {
   name = "DVSA-DEVAPPDEV-COGNITO-USERS"
 }
@@ -370,7 +385,16 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+            local.application_parameters_arn
+          ]
+        },
+        {
+          effect = "Allow"
+          actions = [
+            "kms:Decrypt"
+          ]
+          resources = [
+            data.aws_kms_alias.ssm.target_key_arn
           ]
         },
       ]
@@ -412,7 +436,16 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+            local.application_parameters_arn
+          ]
+        },
+        {
+          effect = "Allow"
+          actions = [
+            "kms:Decrypt"
+          ]
+          resources = [
+            data.aws_kms_alias.ssm.target_key_arn
           ]
         },
       ]
