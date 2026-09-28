@@ -26,7 +26,7 @@ abstract class AbstractFinancialEvidenceAdapter extends AbstractControllerAwareA
      * @return array
      */
     #[\Override]
-    abstract public function getDocuments($id);
+    abstract public function getDocuments($id, $showAnalysisStatus = false);
 
     /**
      * Prepare Meta data for uploading file
