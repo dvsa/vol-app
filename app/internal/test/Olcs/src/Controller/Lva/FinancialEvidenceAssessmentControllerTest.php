@@ -6,11 +6,14 @@ namespace OlcsTest\Controller\Lva;
 
 use Common\Service\Cqrs\Response as CqrsResponse;
 use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\Form;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
@@ -119,12 +122,14 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     #[DataProvider('contextProvider')]
     public function testFactoryCreatesEachContext(string $class, string $scopeKey): void
     {
+        $formHelper = m::mock(FormHelperService::class);
         $container = m::mock(ContainerInterface::class);
         $container->allows('get')->with(NiTextTranslation::class)->andReturn(m::mock(NiTextTranslation::class));
         $container->allows('get')->with(AuthorizationService::class)->andReturn(m::mock(AuthorizationService::class));
         $container->allows('get')->with(StringHelperService::class)->andReturn(new StringHelperService());
         $container->allows('get')->with(RestrictionHelperService::class)->andReturn(m::mock(RestrictionHelperService::class));
         $container->allows('get')->with(FlashMessengerHelperService::class)->andReturn(m::mock(FlashMessengerHelperService::class));
+        $container->expects('get')->with(FormHelperService::class)->andReturn($formHelper);
         $container->allows('get')->with('navigation')->andReturn([]);
 
         $controller = (new FinancialEvidenceAssessmentControllerFactory())($container, $class);
@@ -135,6 +140,19 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             $scopeKey,
             (new \ReflectionMethod($controller, 'getIdentifierIndex'))->invoke($controller)
         );
+
+        if ($controller instanceof LicenceController) {
+            // Exercise the trait through the real factory so a missing dependency cannot hide behind a mock.
+            $form = m::mock(Form::class);
+            $formHelper->expects('createForm')->with('HeaderSearch', false, false)->andReturn($form);
+            $form->expects('bind')->with(m::on(
+                static fn($session): bool => $session instanceof Container && $session->getName() === 'search'
+            ));
+
+            $this->assertSame($form, $controller->getSearchForm());
+            // Reusing the form preserves the header search query without rebinding the session.
+            $this->assertSame($form, $controller->getSearchForm());
+        }
     }
 
     public function testFactoryRejectsUnrelatedClasses(): void
@@ -155,6 +173,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             new StringHelperService(),
             m::mock(RestrictionHelperService::class),
             m::mock(FlashMessengerHelperService::class),
+            m::mock(FormHelperService::class),
             [],
         ])->makePartial()->shouldAllowMockingProtectedMethods();
     }
