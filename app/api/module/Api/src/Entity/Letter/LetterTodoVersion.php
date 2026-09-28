@@ -42,6 +42,17 @@ class LetterTodoVersion extends AbstractLetterTodoVersion
     }
 
     /**
+     * Identifies the to-do across its versions. Issues can link different versions of the same
+     * to-do, so de-duping on the version id lets duplicates through (VOL-7408).
+     */
+    public function getDedupeKey(): string
+    {
+        $todoId = $this->getLetterTodo()?->getId();
+
+        return $todoId !== null ? 'todo-' . $todoId : 'version-' . $this->getId();
+    }
+
+    /**
      * Check if this version is published
      *
      * @return bool

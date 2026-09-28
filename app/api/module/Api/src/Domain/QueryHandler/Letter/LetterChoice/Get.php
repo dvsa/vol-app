@@ -10,4 +10,8 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryByIdHandler;
 class Get extends AbstractQueryByIdHandler
 {
     protected $repoServiceName = 'LetterChoice';
+
+    protected $bundle = [
+        'goodsOrPsv',
+    ];
 }

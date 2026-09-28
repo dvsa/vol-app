@@ -23,13 +23,14 @@ final class ApplicationTrackingTest extends \PHPUnit\Framework\TestCase
             'financialEvidenceStatus' => 9,
             'financialHistoryStatus' => 10,
             'licenceHistoryStatus' => 11,
-            'operatingCentresStatus' => 12,
-            'peopleStatus' => 13,
-            'safetyStatus' => 14,
-            'taxiPhvStatus' => 15,
-            'transportManagersStatus' => 16,
-            'typeOfLicenceStatus' => 17,
-            'declarationsInternalStatus' => 18,
+            'knowledgeExperienceStatus' => 12,
+            'operatingCentresStatus' => 13,
+            'peopleStatus' => 14,
+            'safetyStatus' => 15,
+            'taxiPhvStatus' => 16,
+            'transportManagersStatus' => 17,
+            'typeOfLicenceStatus' => 18,
+            'declarationsInternalStatus' => 19,
             'vehiclesPsvStatus' => 20,
             'vehiclesStatus' => 21,
             'vehiclesSizeStatus' => 22,
@@ -57,13 +58,14 @@ final class ApplicationTrackingTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(9, $command->getFinancialEvidenceStatus());
         $this->assertEquals(10, $command->getFinancialHistoryStatus());
         $this->assertEquals(11, $command->getLicenceHistoryStatus());
-        $this->assertEquals(12, $command->getOperatingCentresStatus());
-        $this->assertEquals(13, $command->getPeopleStatus());
-        $this->assertEquals(14, $command->getSafetyStatus());
-        $this->assertEquals(15, $command->getTaxiPhvStatus());
-        $this->assertEquals(16, $command->getTransportManagersStatus());
-        $this->assertEquals(17, $command->getTypeOfLicenceStatus());
-        $this->assertEquals(18, $command->getDeclarationsInternalStatus());
+        $this->assertEquals(12, $command->getKnowledgeExperienceStatus());
+        $this->assertEquals(13, $command->getOperatingCentresStatus());
+        $this->assertEquals(14, $command->getPeopleStatus());
+        $this->assertEquals(15, $command->getSafetyStatus());
+        $this->assertEquals(16, $command->getTaxiPhvStatus());
+        $this->assertEquals(17, $command->getTransportManagersStatus());
+        $this->assertEquals(18, $command->getTypeOfLicenceStatus());
+        $this->assertEquals(19, $command->getDeclarationsInternalStatus());
         $this->assertEquals(20, $command->getVehiclesPsvStatus());
         $this->assertEquals(21, $command->getVehiclesStatus());
         $this->assertEquals(22, $command->getVehiclesSizeStatus());

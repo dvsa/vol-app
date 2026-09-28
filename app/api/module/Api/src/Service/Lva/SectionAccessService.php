@@ -11,6 +11,8 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Psr\Container\ContainerInterface;
+use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
+use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 
 class SectionAccessService implements FactoryInterface, AuthAwareInterface
 {
@@ -32,6 +34,8 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
      * @var \Dvsa\Olcs\Api\Service\Lva\RestrictionService
      */
     private $restrictionService;
+
+    private ToggleService $toggleService;
 
     /**
      * Get sections from section config
@@ -108,6 +112,18 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
             $vehicleType = $entity->getVehicleType()->getId();
         }
 
+        $knowledgeExperience = null;
+
+        if ($entity instanceof Application) {
+            $knowledgeExperienceRequired =
+                $this->toggleService->isEnabled(FeatureToggle::KNOWLEDGE_EXPERIENCE)
+                && $entity->requiresKnowledgeExperience();
+
+            $knowledgeExperience = $knowledgeExperienceRequired
+                ? 'knowledgeExperienceRequired'
+                : 'knowledgeExperienceNotRequired';
+        }
+
         $access = [
             $location,
             $lva,
@@ -116,6 +132,7 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
             $vehicleType,
             $vehicleSizes,
             $operatingSmallVehiclesSmallPart,
+            $knowledgeExperience,
             $hasConditions ? 'hasConditions' : 'noConditions'
         ];
 
@@ -160,6 +177,7 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
     {
         $this->restrictionService = $container->get('RestrictionService');
         $this->sectionConfig = $container->get('SectionConfig');
+        $this->toggleService = $container->get(ToggleService::class);
         $this->setAuthService($container->get(AuthorizationService::class));
         return $this;
     }

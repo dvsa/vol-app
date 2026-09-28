@@ -509,6 +509,19 @@ class SectionConfig
                 ]
             ]
         ],
+        'knowledge_experience' => [
+            'restricted' => [
+                [
+                    'application',
+                    'knowledgeExperienceRequired',
+                    [
+                        RefData::LICENCE_TYPE_RESTRICTED,
+                        RefData::LICENCE_TYPE_STANDARD_NATIONAL,
+                        RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                    ]
+                ]
+            ]
+        ],
         'convictions_penalties' => [
             'restricted' => [
                 [
