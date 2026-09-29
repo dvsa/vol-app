@@ -5,6 +5,7 @@ namespace Common\Controller\Lva\Adapters;
 use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Data\CategoryDataService as Category;
 use Dvsa\Olcs\Transfer\Query\Application\FinancialEvidence;
+use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Psr\Container\ContainerInterface;
 
@@ -36,11 +37,22 @@ class ApplicationFinancialEvidenceAdapter extends AbstractFinancialEvidenceAdapt
      * @return array
      */
     #[\Override]
-    public function getDocuments($applicationId)
+    public function getDocuments($applicationId, $showAnalysisStatus = false)
     {
         $documents = $this->getData($applicationId)['documents'];
+        $documents = is_array($documents) ? $documents : [];
 
-        return is_array($documents) ? $documents : [];
+        if ($showAnalysisStatus) {
+            $analysesByDocumentId = $this->getAnalysesByDocumentId($applicationId);
+
+            foreach ($documents as &$document) {
+                $analysis = $analysesByDocumentId[$document['id']] ?? null;
+                $document['analysisStatus'] = $analysis['status'] ?? null;
+            }
+            unset($document);
+        }
+
+        return $documents;
     }
 
     /**
@@ -79,5 +91,36 @@ class ApplicationFinancialEvidenceAdapter extends AbstractFinancialEvidenceAdapt
         }
 
         return $this->applicationData;
+    }
+
+    /**
+     * One page of analyses is fetched at the largest limit the transfer validation allows; the
+     * newest analysis per document wins below, so the list is ordered newest first.
+     */
+    private const int ANALYSIS_PAGE_LIMIT = 100;
+
+    protected function getAnalysesByDocumentId(int $applicationId): array
+    {
+        $query = $this->container->get(AnnotationBuilder::class)
+            ->createQuery(DocumentAnalysisList::create([
+                'application' => $applicationId,
+                'page' => 1,
+                'limit' => self::ANALYSIS_PAGE_LIMIT,
+                'sort' => 'createdOn',
+                'order' => 'DESC',
+            ]));
+
+        $response = $this->container->get(CachingQueryService::class)->send($query);
+
+        if (!$response->isOk()) {
+            return [];
+        }
+
+        $indexed = [];
+        foreach ($response->getResult()['analyses'] ?? [] as $analysis) {
+            $indexed[$analysis['documentId']] ??= $analysis;
+        }
+
+        return $indexed;
     }
 }

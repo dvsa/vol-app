@@ -133,6 +133,8 @@ trait ApplicationControllerTrait
         $isPsv = $applicationCompletion['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV;
         $isLgv = $applicationCompletion['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV;
 
+        // IDP-only sections are already filtered out by the API's SectionAccessService
+        // when the toggle is off, so the nav renders whatever the API returns.
         $accessibleSections = $this->setEnabledAndCompleteFlagOnSections(
             $this->getAccessibleSections(false),
             $applicationStatuses
@@ -149,13 +151,18 @@ trait ApplicationControllerTrait
             $statusIndex = lcfirst($filter->underscoreToCamel($section)) . 'Status';
 
             $class = '';
-            switch ($applicationStatuses[$statusIndex]) {
+            // Some sections (e.g. financial_evidence_assessment) have no completion column.
+            switch ($applicationStatuses[$statusIndex] ?? null) {
                 case RefData::APPLICATION_COMPLETION_STATUS_COMPLETE:
                     $class = 'complete';
                     break;
                 case RefData::APPLICATION_COMPLETION_STATUS_INCOMPLETE:
                     $class = 'incomplete';
                     break;
+            }
+
+            if ($section === 'financial_evidence_assessment') {
+                $class = 'complete';
             }
 
             $sections[$section] = array_merge(
@@ -170,6 +177,7 @@ trait ApplicationControllerTrait
 
         return $sections;
     }
+
 
     /**
      * Get application data

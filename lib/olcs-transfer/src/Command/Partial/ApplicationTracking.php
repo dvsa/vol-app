@@ -105,6 +105,13 @@ class ApplicationTracking extends AbstractCommand
      * @Transfer\Filter("Laminas\Filter\StringTrim")
      * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"0", "1", "2", "3"}})
      */
+    protected $knowledgeExperienceStatus;
+
+    /**
+     * @Transfer\Optional
+     * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"0", "1", "2", "3"}})
+     */
     protected $operatingCentresStatus;
 
     /**
@@ -346,6 +353,16 @@ class ApplicationTracking extends AbstractCommand
     public function getLicenceHistoryStatus()
     {
         return $this->licenceHistoryStatus;
+    }
+
+    /**
+     * Gets the value of knowledgeExperienceStatus.
+     *
+     * @return mixed
+     */
+    public function getKnowledgeExperienceStatus()
+    {
+        return $this->knowledgeExperienceStatus;
     }
 
     /**
