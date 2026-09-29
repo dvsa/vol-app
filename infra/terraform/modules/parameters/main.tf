@@ -8,8 +8,9 @@ data "aws_kms_alias" "ssm" {
 resource "aws_ssm_parameter" "application_parameters" {
   for_each = var.application_parameters
 
-  name   = "/applicationparams/${var.environment}/${each.key}"
-  type   = "SecureString"
-  value  = each.value
-  key_id = data.aws_kms_alias.ssm.target_key_arn
+  name             = "/applicationparams/${var.environment}/${each.key}"
+  type             = "SecureString"
+  value_wo         = each.value
+  value_wo_version = 1
+  key_id           = data.aws_kms_alias.ssm.target_key_arn
 }
