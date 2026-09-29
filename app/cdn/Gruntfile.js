@@ -122,7 +122,7 @@ var sass = require("sass");
       sass: {
         local: {
           options: {
-            outputStyle: "expanded",
+            style: "expanded",
             implementation: sass,
             sourceMap: true,
           },
@@ -130,7 +130,7 @@ var sass = require("sass");
         },
         dev: {
           options: {
-            outputStyle: "expanded",
+            style: "expanded",
             implementation: sass,
             sourceMap: true,
           },
@@ -138,7 +138,7 @@ var sass = require("sass");
         },
         prod: {
           options: {
-            outputStyle: "compressed",
+            style: "compressed",
             implementation: sass,
             sourceMap: false,
           },
