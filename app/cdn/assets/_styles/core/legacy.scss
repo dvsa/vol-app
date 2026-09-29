@@ -1,14 +1,16 @@
+@use "sass:math";
+
 $site-width: 1020px;
 $full-width: 100%;
-$one-quarter: $full-width / 4;
-$one-third: $full-width / 3;
-$half: $full-width / 2;
+$one-quarter: math.div($full-width, 4);
+$one-third: math.div($full-width, 3);
+$half: math.div($full-width, 2);
 $two-thirds: ($full-width) - ($one-third);
 $three-quarters: ($full-width) - ($one-quarter);
 
 $gutter: $govuk-gutter;
-$gutter-one-quarter: $gutter / 4;
-$gutter-one-third: $gutter / 3;
+$gutter-one-quarter: math.div($gutter, 4);
+$gutter-one-third: math.div($gutter, 3);
 $gutter-half: $govuk-gutter-half;
 $gutter-two-thirds: $gutter - $gutter-one-third;
 

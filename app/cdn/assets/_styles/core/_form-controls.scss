@@ -9,7 +9,6 @@ $radio-button-select-size: 18px; //should be an even number to avoid pixel round
 $advanced-top-size: 5px; //extra padding for advanced form control
 
 .form-control {
-
   &__container {
     &.field {
       margin-bottom: 15px;
@@ -31,12 +30,13 @@ $advanced-top-size: 5px; //extra padding for advanced form control
   clear: both;
   cursor: pointer;
 
-  &:before, &:after {
-    content: '';
+  &:before,
+  &:after {
+    content: "";
   }
 
   &:before {
-    @include js-enabled(){
+    @include js-enabled() {
       display: inline-block;
       vertical-align: middle;
       border: 2px solid;
@@ -55,7 +55,7 @@ $advanced-top-size: 5px; //extra padding for advanced form control
   }
 
   input {
-    @include js-enabled(){
+    @include js-enabled() {
       position: absolute;
       cursor: pointer;
       width: $form-control-size;
@@ -78,7 +78,9 @@ $advanced-top-size: 5px; //extra padding for advanced form control
     &:after {
       opacity: 0.5;
     }
-    &, &:before, input {
+    &,
+    &:before,
+    input {
       cursor: not-allowed;
     }
   }
@@ -91,18 +93,18 @@ $advanced-top-size: 5px; //extra padding for advanced form control
 
   &--radio {
     &:before {
-      @include js-enabled(){
+      @include js-enabled() {
         border-radius: 50%;
       }
     }
     &:after {
-      @include js-enabled(){
+      @include js-enabled() {
         position: absolute;
-        top: ($form-control-size - $radio-button-select-size) / 2 ;
-        left:($form-control-size - $radio-button-select-size) / 2 ;
+        top: ($form-control-size - $radio-button-select-size) * 0.5;
+        left: ($form-control-size - $radio-button-select-size) * 0.5;
         height: 0;
         width: 0;
-        border: $radio-button-select-size/2 solid $black;
+        border: $radio-button-select-size * 0.5 solid $black;
         border-radius: 50%;
       }
     }
@@ -110,7 +112,7 @@ $advanced-top-size: 5px; //extra padding for advanced form control
 
   &--checkbox {
     &:after {
-      @include js-enabled(){
+      @include js-enabled() {
         border: solid;
         border-color: $black;
         border-width: 0 0 ($form-control-size * 0.15) ($form-control-size * 0.15);
@@ -132,7 +134,7 @@ $advanced-top-size: 5px; //extra padding for advanced form control
 
   &--advanced {
     @extend #{$component}--confirm;
-    @include js-enabled(){
+    @include js-enabled() {
       padding-left: ($form-control-size + $gutter-half);
     }
     &:before {
@@ -148,7 +150,7 @@ $advanced-top-size: 5px; //extra padding for advanced form control
     }
     &#{$component}--radio {
       &:after {
-        top: ( ($form-control-size - $radio-button-select-size) / 2) + $advanced-top-size ;
+        top: (($form-control-size - $radio-button-select-size) * 0.5) + $advanced-top-size;
       }
     }
     strong {
@@ -171,5 +173,4 @@ $advanced-top-size: 5px; //extra padding for advanced form control
       margin-top: $gutter-one-third;
     }
   }
-
 }

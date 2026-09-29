@@ -25,7 +25,8 @@ $radio-button-select-size: 18px;
   margin-right: $gutter;
   cursor: pointer;
 
-  &:before, &:after {
+  &:before,
+  &:after {
     content: "";
     display: block;
     position: absolute;
@@ -46,15 +47,15 @@ $radio-button-select-size: 18px;
   opacity: 0.5;
   cursor: not-allowed;
 
-  &:before, &:after {
+  &:before,
+  &:after {
     cursor: not-allowed;
   }
 }
 
-
-input[type='radio']{
-  &.radio-button{
-    @if $app == 'selfserve' {
+input[type="radio"] {
+  &.radio-button {
+    @if $app == "selfserve" {
       @extend %input-base;
     }
   }
@@ -70,13 +71,12 @@ input[type='radio']{
   }
 
   &__label {
-
     &--multi-line {
       line-height: inherit;
     }
 
     display: inline-block;
-    @if $app == 'selfserve' {
+    @if $app == "selfserve" {
       @extend %label-base;
     }
 
@@ -93,7 +93,7 @@ input[type='radio']{
     }
   }
 
-  &:focus{
+  &:focus {
     + .radio-button__label:before {
       box-shadow: 0 0 0 ($radio-button-size * 0.12) $focus-colour;
     }
@@ -101,11 +101,11 @@ input[type='radio']{
 
   &:checked {
     + .radio-button__label:after {
-      top: ($radio-button-size - $radio-button-select-size) / 2 ;
-      left:($radio-button-size - $radio-button-select-size) / 2 ;
+      top: ($radio-button-size - $radio-button-select-size) * 0.5;
+      left: ($radio-button-size - $radio-button-select-size) * 0.5;
       height: 0;
       width: 0;
-      border: $radio-button-select-size/2 solid $black;
+      border: $radio-button-select-size * 0.5 solid $black;
       border-radius: 50%;
     }
 
@@ -132,13 +132,11 @@ input[type='radio']{
   }
 }
 
-
-
 //CHeckboxes
 
-input[type='checkbox']{
-  &.checkbox{
-    @if $app == 'selfserve' {
+input[type="checkbox"] {
+  &.checkbox {
+    @if $app == "selfserve" {
       @extend %input-base;
     }
   }
@@ -154,13 +152,12 @@ input[type='checkbox']{
   }
 
   &__label {
-
     &--multi-line {
       line-height: inherit;
     }
-    
+
     display: inline-block;
-    @if $app == 'selfserve' {
+    @if $app == "selfserve" {
       @extend %label-base;
     }
 
@@ -178,14 +175,13 @@ input[type='checkbox']{
     }
   }
 
-
   &[disabled] {
     + .checkbox__label {
       @extend %disabled;
     }
   }
 
-  &:focus{
+  &:focus {
     + .checkbox__label:before {
       box-shadow: 0 0 0 ($radio-button-size * 0.12) $focus-colour;
     }
@@ -193,13 +189,12 @@ input[type='checkbox']{
 
   &__hidden-content {
     display: block;
-    margin-bottom: $gutter ;
+    margin-bottom: $gutter;
   }
 
   ~ .checkbox__hidden-content {
     display: none;
     visibility: hidden;
-
   }
 
   &:checked {
@@ -217,11 +212,12 @@ input[type='checkbox']{
       -ms-transform: rotate(-45deg);
     }
 
-    + .checkbox__label--error{
+    + .checkbox__label--error {
       color: $black;
       font-weight: normal;
-      
-      &:after, &:before {
+
+      &:after,
+      &:before {
         border-color: $black;
       }
     }
@@ -230,18 +226,13 @@ input[type='checkbox']{
       display: block;
       visibility: visible;
       margin-bottom: $gutter;
-
     }
   }
 
   &--inline {
     display: inline;
   }
-
-  
 }
-
-
 
 .label {
   &--error {
@@ -254,7 +245,6 @@ input[type='checkbox']{
     border: 2px solid $error-colour;
   }
 }
-
 
 .error {
   &__wrapper {
