@@ -15,6 +15,7 @@ use Laminas\ServiceManager\ServiceManager;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
 use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 
@@ -44,8 +45,9 @@ final class SectionAccessServiceTest extends MockeryTestCase
 
         $this->sectionConfig = m::mock();
         $this->authService = m::mock(AuthorizationService::class);
-
         $this->toggleService = m::mock(ToggleService::class);
+        // Keep the wire value explicit so the test catches accidental changes to the toggle key.
+        $this->toggleService->shouldReceive('isDisabled')->with(FeatureToggle::IDP)->andReturn(true)->byDefault();
 
         $this->toggleService
             ->shouldReceive('isEnabled')
@@ -84,15 +86,19 @@ final class SectionAccessServiceTest extends MockeryTestCase
                 'restricted' => [
                     'no-access'
                 ]
-            ]
+            ],
+            'financial_evidence_assessment' => [],
         ];
 
         $this->sectionConfig->shouldReceive('getAll')
             ->andReturn($sections);
     }
 
-    public function testGetAccessibleSectionsApplication(): void
+    #[DataProvider('idpToggleProvider')]
+    public function testGetAccessibleSectionsApplication(bool $idpDisabled): void
     {
+        $this->toggleService->shouldReceive('isDisabled')->with('idp')->andReturn($idpDisabled);
+
         /** @var RefData|m\MockInterface $goodsOrPsv */
         $goodsOrPsv = m::mock(RefData::class)->makePartial();
         $goodsOrPsv->setId(Licence::LICENCE_CATEGORY_GOODS_VEHICLE);
@@ -153,7 +159,19 @@ final class SectionAccessServiceTest extends MockeryTestCase
             ],
         ];
 
+        if (!$idpDisabled) {
+            $expected['financial_evidence_assessment'] = [];
+        }
+
         $this->assertEquals($expected, $sections);
+    }
+
+    public static function idpToggleProvider(): array
+    {
+        return [
+            'IDP disabled hides assessment' => [true],
+            'IDP enabled retains assessment' => [false],
+        ];
     }
 
     public function testGetAccessibleSectionsVariation(): void
