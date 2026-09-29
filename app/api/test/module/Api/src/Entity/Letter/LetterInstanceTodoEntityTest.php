@@ -60,6 +60,30 @@ final class LetterInstanceTodoEntityTest extends EntityTester
         $this->assertSame($edited, $entity->getEffectiveDescription());
     }
 
+    public function testRequiresInputComesFromTheTodoVersion(): void
+    {
+        $version = new LetterTodoVersion();
+        $version->setRequiresInput(true);
+
+        $entity = new Entity();
+        $entity->setLetterTodoVersion($version);
+
+        $this->assertTrue($entity->requiresInput());
+    }
+
+    public function testRequiresInputIsFalseByDefault(): void
+    {
+        $entity = new Entity();
+        $entity->setLetterTodoVersion(new LetterTodoVersion());
+
+        $this->assertFalse($entity->requiresInput());
+    }
+
+    public function testRequiresInputIsFalseWithoutAVersion(): void
+    {
+        $this->assertFalse(new Entity()->requiresInput());
+    }
+
     public function testGeneratedContentDoesNotCountAsEdited(): void
     {
         $entity = $this->entityWithDefault(['blocks' => []]);

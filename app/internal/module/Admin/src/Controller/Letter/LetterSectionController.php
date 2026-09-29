@@ -30,6 +30,8 @@ use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 
 class LetterSectionController extends AbstractInternalController implements LeftViewProvider
 {
+    use LetterDeleteErrorTrait;
+
     protected $tableName = 'admin-letter-section';
     protected $defaultTableSortField = 'sectionKey';
     protected $defaultTableOrderField = 'ASC';

@@ -109,6 +109,7 @@ final class PrepareToSendTest extends MockeryTestCase
             $this->mockRequiresInputIssue('Financial evidence', true, false),
         ]));
         $letterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection());
+        $letterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
 
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -128,6 +129,7 @@ final class PrepareToSendTest extends MockeryTestCase
             $this->mockRequiresInputIssue('Adverts', false, false),
         ]));
         $letterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection());
+        $letterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
 
         $this->assertRequiredInput($letterInstance);
         $this->expectNotToPerformAssertions();
@@ -146,6 +148,7 @@ final class PrepareToSendTest extends MockeryTestCase
         $letterInstance = m::mock(LetterInstance::class);
         $letterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection());
         $letterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection([$section]));
+        $letterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
 
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -155,5 +158,76 @@ final class PrepareToSendTest extends MockeryTestCase
             $this->assertStringContainsString('Introductory wording', (string) json_encode($e->getMessages()));
             throw $e;
         }
+    }
+
+    private function mockRequiresInputTodo(?string $name, bool $requiresInput, bool $edited): m\MockInterface
+    {
+        $letterTodo = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterTodo::class);
+        $letterTodo->shouldReceive('getTodoKey')->andReturn('FI01');
+
+        $todoVersion = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion::class);
+        $todoVersion->shouldReceive('getName')->andReturn($name);
+        $todoVersion->shouldReceive('getLetterTodo')->andReturn($letterTodo);
+
+        $todo = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo::class);
+        $todo->shouldReceive('requiresInput')->andReturn($requiresInput);
+        $todo->shouldReceive('hasBeenEdited')->andReturn($edited);
+        $todo->shouldReceive('getLetterTodoVersion')->andReturn($todoVersion);
+
+        return $todo;
+    }
+
+    private function letterInstanceWithTodos(array $todos): m\MockInterface
+    {
+        $letterInstance = m::mock(LetterInstance::class);
+        $letterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection());
+        $letterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection());
+        $letterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection($todos));
+
+        return $letterInstance;
+    }
+
+    public function testPrepareToSendBlockedWhenRequiredInputTodoUnedited(): void
+    {
+        $letterInstance = $this->letterInstanceWithTodos([
+            $this->mockRequiresInputTodo('Upload bank statements', true, false),
+        ]);
+
+        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
+
+        try {
+            $this->assertRequiredInput($letterInstance);
+        } catch (\Dvsa\Olcs\Api\Domain\Exception\ValidationException $e) {
+            $this->assertArrayHasKey('requiresInput', $e->getMessages());
+            $this->assertStringContainsString('Upload bank statements', (string) json_encode($e->getMessages()));
+            throw $e;
+        }
+    }
+
+    public function testAnUnnamedTodoIsListedByItsKey(): void
+    {
+        $letterInstance = $this->letterInstanceWithTodos([
+            $this->mockRequiresInputTodo(null, true, false),
+        ]);
+
+        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
+
+        try {
+            $this->assertRequiredInput($letterInstance);
+        } catch (\Dvsa\Olcs\Api\Domain\Exception\ValidationException $e) {
+            $this->assertStringContainsString('FI01', (string) json_encode($e->getMessages()));
+            throw $e;
+        }
+    }
+
+    public function testPrepareToSendAllowedOnceRequiredInputTodoEdited(): void
+    {
+        $letterInstance = $this->letterInstanceWithTodos([
+            $this->mockRequiresInputTodo('Upload bank statements', true, true),
+            $this->mockRequiresInputTodo('Adverts', false, false),
+        ]);
+
+        $this->assertRequiredInput($letterInstance);
+        $this->expectNotToPerformAssertions();
     }
 }

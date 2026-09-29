@@ -168,10 +168,6 @@ final class TransportManagerLicenceTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * Both filters use where() rather than andWhere(), so the second replaces the first — only
-     * one of licence or transport manager can ever apply.
-     */
     #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
     public function testApplyListFilters(array $data, string $expectedWhere, string $parameter): void
     {
@@ -191,6 +187,24 @@ final class TransportManagerLicenceTest extends RepositoryTestCase
             'tml.transportManager = :transportManager',
             'transportManager',
         ];
+    }
+
+    public function testApplyListFiltersWithLicenceAndTransportManager(): void
+    {
+        $qb = $this->createRealQb();
+
+        $this->sut->applyListFilters(
+            $qb,
+            GetList::create(['licence' => 73, 'transportManager' => 42]),
+        );
+
+        $this->assertSame(
+            'SELECT tml' . self::FROM
+            . ' WHERE tml.licence = :licence AND tml.transportManager = :transportManager',
+            $qb->getDQL(),
+        );
+        $this->assertSame(73, $qb->getParameter('licence')->getValue());
+        $this->assertSame(42, $qb->getParameter('transportManager')->getValue());
     }
 
     private function expectSoftDeleteableDisabledFor(string $entityClass): void

@@ -80,6 +80,59 @@ class LetterSection extends AbstractVersionedRepository
     }
 
     /**
+     * Names of the letter types using the section
+     *
+     * @param int $id
+     * @return string[]
+     */
+    public function fetchLetterTypeNamesUsing(int $id): array
+    {
+        return $this->getEntityManager()->getConnection()->fetchFirstColumn(
+            'SELECT DISTINCT lt.name FROM letter_type lt ' .
+            'JOIN letter_type_section lts ON lts.letter_type_id = lt.id ' .
+            'WHERE lts.letter_section_id = :id ' .
+            'ORDER BY lt.name',
+            ['id' => $id]
+        );
+    }
+
+    /**
+     * Whether any generated letter uses a version of the section, from any variant including deleted ones
+     *
+     * @param int $id
+     * @return bool
+     */
+    public function isUsedByLetterInstances(int $id): bool
+    {
+        return $this->getEntityManager()->getConnection()->fetchOne(
+            'SELECT 1 FROM letter_instance_section lis ' .
+            'JOIN letter_section_version sv ON sv.id = lis.letter_section_version_id ' .
+            'JOIN letter_section_variant v ON v.id = sv.letter_section_variant_id ' .
+            'WHERE v.letter_section_id = :id LIMIT 1',
+            ['id' => $id]
+        ) !== false;
+    }
+
+    /**
+     * Delete the section with all its variants, including deleted ones, and their versions
+     *
+     * @param int $id
+     * @return void
+     */
+    public function hardDelete(int $id): void
+    {
+        $this->deleteRows($id, [
+            'UPDATE letter_section SET current_version_id = NULL WHERE id = :id',
+            'UPDATE letter_section_variant SET current_version_id = NULL WHERE letter_section_id = :id',
+            'DELETE sv FROM letter_section_version sv ' .
+            'JOIN letter_section_variant v ON v.id = sv.letter_section_variant_id ' .
+            'WHERE v.letter_section_id = :id',
+            'DELETE FROM letter_section_variant WHERE letter_section_id = :id',
+            'DELETE FROM letter_section WHERE id = :id',
+        ]);
+    }
+
+    /**
      * Get the list of fields that should trigger versioning when changed
      *
      * @return array

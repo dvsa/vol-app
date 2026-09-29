@@ -23,6 +23,7 @@ use Psr\Container\ContainerInterface;
 final class Generate extends AbstractCommandHandler implements AuthAwareInterface
 {
     use AuthAwareTrait;
+    use LetterContextTrait;
 
     protected $repoServiceName = 'LetterInstance';
 
@@ -83,8 +84,20 @@ final class Generate extends AbstractCommandHandler implements AuthAwareInterfac
         // Set optional relations (licence, application, case, etc.)
         $this->setOptionalRelations($letterInstance, $command);
 
+        // Drop choices that don't apply to the licence's Goods/PSV before they can steer variants
+        $goodsOrPsv = $this->goodsOrPsvAndNi($letterInstance)['goodsOrPsv'];
+        $selectedChoiceIds = [];
+        $letterChoices = [];
+        foreach ($command->getSelectedChoices() ?? [] as $choiceId) {
+            $letterChoice = $this->getRepo('LetterChoice')->fetchById($choiceId);
+            if ($letterChoice->appliesToGoodsOrPsv($goodsOrPsv)) {
+                $selectedChoiceIds[] = $choiceId;
+                $letterChoices[] = $letterChoice;
+            }
+        }
+
         // Build context for variant resolution
-        $context = $this->buildVariantContext($letterInstance, $command);
+        $context = $this->buildVariantContext($letterInstance, $selectedChoiceIds);
 
         // Populate instance sections from letter type assembly, resolving variants
         $resolution = $this->sectionVariantResolver->resolveForLetterType($letterType, $context);
@@ -108,11 +121,12 @@ final class Generate extends AbstractCommandHandler implements AuthAwareInterfac
             $this->result->setFlag('hasRequiredSectionWarnings', true);
         }
 
-        // Create instance issues from selected issues
+        // Create instance issues from selected issues. The screen only offers issues that
+        // match the licence's Goods/PSV, this catches anything posted that doesn't.
         $issueVersions = [];
         foreach ($command->getSelectedIssues() ?? [] as $issueId) {
             $issueVersion = $this->getRepo('LetterIssue')->fetchById($issueId)->getCurrentVersion();
-            if ($issueVersion) {
+            if ($issueVersion && ($goodsOrPsv === null || $issueVersion->appliesToType($goodsOrPsv))) {
                 $issueVersions[] = $issueVersion;
             }
         }
@@ -131,14 +145,11 @@ final class Generate extends AbstractCommandHandler implements AuthAwareInterfac
         $this->letterInstanceComposer->composeAppendices($letterInstance, $appendixVersions);
 
         // Record selected letter choices
-        if (!empty($command->getSelectedChoices())) {
-            foreach ($command->getSelectedChoices() as $choiceId) {
-                $letterChoice = $this->getRepo('LetterChoice')->fetchById($choiceId);
-                $instanceChoice = new LetterInstanceChoice();
-                $instanceChoice->setLetterInstance($letterInstance);
-                $instanceChoice->setLetterChoice($letterChoice);
-                $letterInstance->addLetterInstanceChoice($instanceChoice);
-            }
+        foreach ($letterChoices as $letterChoice) {
+            $instanceChoice = new LetterInstanceChoice();
+            $instanceChoice->setLetterInstance($letterInstance);
+            $instanceChoice->setLetterChoice($letterChoice);
+            $letterInstance->addLetterInstanceChoice($instanceChoice);
         }
 
         // Resolve grabs now so the caseworker edits real values, not [[TOKENS]]
@@ -157,143 +168,22 @@ final class Generate extends AbstractCommandHandler implements AuthAwareInterfac
      * Build context array for variant resolution
      *
      * @param LetterInstanceEntity $letterInstance
-     * @param Cmd $command
+     * @param array $selectedChoiceIds Choices that apply to this letter
      * @return array
      */
-    private function buildVariantContext(LetterInstanceEntity $letterInstance, Cmd $command): array
+    private function buildVariantContext(LetterInstanceEntity $letterInstance, array $selectedChoiceIds): array
     {
         $application = $letterInstance->getApplication();
-        $licence = $letterInstance->getLicence();
+        $goodsOrPsvAndNi = $this->goodsOrPsvAndNi($letterInstance);
 
         $organisation = $letterInstance->getOrganisation();
 
         return [
-            'goodsOrPsv' => $application?->getGoodsOrPsv()?->getId()
-                ?? $licence?->getGoodsOrPsv()?->getId(),
+            'goodsOrPsv' => $goodsOrPsvAndNi['goodsOrPsv'],
             'isVariation' => $application ? (bool) $application->getIsVariation() : null,
-            'isNi' => $licence ? $licence->isNi() : null,
+            'isNi' => $goodsOrPsvAndNi['isNi'],
             'organisationType' => $organisation?->getType()?->getId(),
-            'selectedChoiceIds' => $command->getSelectedChoices() ?? [],
+            'selectedChoiceIds' => $selectedChoiceIds,
         ];
-    }
-
-    /**
-     * Set optional relations on the letter instance
-     *
-     * @param LetterInstanceEntity $letterInstance
-     * @param Cmd $command
-     * @return void
-     */
-    private function setOptionalRelations(LetterInstanceEntity $letterInstance, Cmd $command): void
-    {
-        if ($command->getLicence() !== null) {
-            $licence = $this->getRepo('Licence')->fetchById($command->getLicence());
-            $letterInstance->setLicence($licence);
-
-            // Set recipient organisation from licence
-            $organisation = $licence->getOrganisation();
-            if ($organisation) {
-                $letterInstance->setOrganisation($organisation);
-            }
-        }
-
-        if ($command->getApplication() !== null) {
-            $application = $this->getRepo('Application')->fetchById($command->getApplication());
-            $letterInstance->setApplication($application);
-
-            // Set licence from application (if not already set by the licence block above)
-            $licence = $application->getLicence();
-            if ($licence) {
-                if ($letterInstance->getLicence() === null) {
-                    $letterInstance->setLicence($licence);
-                }
-
-                $organisation = $licence->getOrganisation();
-                if ($organisation) {
-                    $letterInstance->setOrganisation($organisation);
-                }
-            }
-        }
-
-        if ($command->getCase() !== null) {
-            $case = $this->getRepo('Cases')->fetchById($command->getCase());
-            $letterInstance->setCase($case);
-
-            // Set licence (and application) from case's relationships
-            $licence = $case->getLicence();
-            if ($licence) {
-                if ($letterInstance->getLicence() === null) {
-                    $letterInstance->setLicence($licence);
-                }
-
-                $organisation = $licence->getOrganisation();
-                if ($organisation) {
-                    $letterInstance->setOrganisation($organisation);
-                }
-            } elseif ($case->getApplication()) {
-                $application = $case->getApplication();
-                if ($letterInstance->getApplication() === null) {
-                    $letterInstance->setApplication($application);
-                }
-
-                $licence = $application->getLicence();
-                if ($licence) {
-                    if ($letterInstance->getLicence() === null) {
-                        $letterInstance->setLicence($licence);
-                    }
-
-                    $organisation = $licence->getOrganisation();
-                    if ($organisation) {
-                        $letterInstance->setOrganisation($organisation);
-                    }
-                }
-            }
-        }
-
-        if ($command->getBusReg() !== null) {
-            $busReg = $this->getRepo('BusReg')->fetchById($command->getBusReg());
-            $letterInstance->setBusReg($busReg);
-
-            // Set licence from bus registration
-            $licence = $busReg->getLicence();
-            if ($licence) {
-                if ($letterInstance->getLicence() === null) {
-                    $letterInstance->setLicence($licence);
-                }
-
-                $organisation = $licence->getOrganisation();
-                if ($organisation) {
-                    $letterInstance->setOrganisation($organisation);
-                }
-            }
-        }
-
-        if ($command->getTransportManager() !== null) {
-            $transportManager = $this->getRepo('TransportManager')->fetchById($command->getTransportManager());
-            $letterInstance->setTransportManager($transportManager);
-        }
-
-        if ($command->getIrhpApplication() !== null) {
-            $irhpApplication = $this->getRepo('IrhpApplication')->fetchById($command->getIrhpApplication());
-            $letterInstance->setIrhpApplication($irhpApplication);
-
-            // Set licence from IRHP application
-            $licence = $irhpApplication->getLicence();
-            if ($licence) {
-                if ($letterInstance->getLicence() === null) {
-                    $letterInstance->setLicence($licence);
-                }
-
-                $organisation = $licence->getOrganisation();
-                if ($organisation) {
-                    $letterInstance->setOrganisation($organisation);
-                }
-            }
-        }
-
-        if ($command->getIrfoOrganisation() !== null) {
-            $irfoOrganisation = $this->getRepo('Organisation')->fetchById($command->getIrfoOrganisation());
-            $letterInstance->setIrfoOrganisation($irfoOrganisation);
-        }
     }
 }

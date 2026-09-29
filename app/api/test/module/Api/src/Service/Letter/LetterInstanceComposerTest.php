@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSection;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion;
+use Dvsa\Olcs\Api\Entity\Letter\LetterTodo;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion;
 use Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer;
 use Dvsa\Olcs\Api\Service\Letter\Resolution\ResolvedSection;
@@ -56,6 +57,24 @@ class LetterInstanceComposerTest extends TestCase
         $todoVersion->setId($id);
 
         return $todoVersion;
+    }
+
+    private function todoVersionOf(LetterTodo $todo, int $versionId): LetterTodoVersion
+    {
+        $todoVersion = m::mock(LetterTodoVersion::class)->makePartial();
+        $todoVersion->setId($versionId);
+        $todoVersion->setLetterTodo($todo);
+
+        return $todoVersion;
+    }
+
+    private function todoWithCurrentVersion(int $todoId, int $currentVersionId): LetterTodo
+    {
+        $todo = m::mock(LetterTodo::class)->makePartial();
+        $todo->setId($todoId);
+        $todo->setCurrentVersion($this->todoVersionOf($todo, $currentVersionId));
+
+        return $todo;
     }
 
     /**
@@ -197,6 +216,38 @@ class LetterInstanceComposerTest extends TestCase
         $this->sut->composeTodos($letterInstance);
 
         $this->assertCount(3, $letterInstance->getLetterInstanceTodos());
+    }
+
+    /**
+     * VOL-7408: one issue links the to-do's current version, another still links an older one.
+     */
+    public function testTwoVersionsOfTheSameTodoAreOnlyAddedOnce(): void
+    {
+        $todo = $this->todoWithCurrentVersion(5, 32);
+
+        $letterInstance = new LetterInstance();
+        $this->sut->composeIssues($letterInstance, [
+            $this->issueVersionWithTodos([$todo->getCurrentVersion()]),
+            $this->issueVersionWithTodos([$this->todoVersionOf($todo, 27)]),
+        ]);
+
+        $this->sut->composeTodos($letterInstance);
+
+        $this->assertCount(1, $letterInstance->getLetterInstanceTodos());
+    }
+
+    public function testTheTodosCurrentVersionIsUsedEvenWhenTheIssueLinksAnOlderOne(): void
+    {
+        $todo = $this->todoWithCurrentVersion(5, 32);
+
+        $letterInstance = new LetterInstance();
+        $this->sut->composeIssues($letterInstance, [
+            $this->issueVersionWithTodos([$this->todoVersionOf($todo, 27)]),
+        ]);
+
+        $this->sut->composeTodos($letterInstance);
+
+        $this->assertSame(32, $letterInstance->getLetterInstanceTodos()->first()->getLetterTodoVersion()->getId());
     }
 
     public function testComposesAppendicesInOrder(): void

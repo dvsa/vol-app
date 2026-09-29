@@ -2,31 +2,42 @@
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterSection;
 
-use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractDeleteCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\AbstractDeleteLetterContent;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSection as LetterSectionEntity;
 
 /**
  * Delete LetterSection
  */
-final class Delete extends AbstractDeleteCommandHandler
+final class Delete extends AbstractDeleteLetterContent
 {
     protected $repoServiceName = 'LetterSection';
+    protected string $contentName = 'section';
 
     /**
      * The __ISSUES__ placeholder section is reserved by the letter assembler and must
      * never be removable via the admin UI.
      */
     #[\Override]
-    protected function checkDeletable($id, mixed $entity): void
+    protected function checkDeletable(mixed $entity): void
     {
         if (
             $entity instanceof LetterSectionEntity
             && $entity->getSectionKey() === '__ISSUES__'
         ) {
-            throw new ValidationException(['The __ISSUES__ placeholder section cannot be deleted']);
+            throw new ValidationException([self::ERROR_KEY => 'The __ISSUES__ placeholder section cannot be deleted']);
         }
+    }
 
-        parent::checkDeletable($id, $entity);
+    #[\Override]
+    protected function fetchUsedBy(int $id): array
+    {
+        return $this->getRepo()->fetchLetterTypeNamesUsing($id);
+    }
+
+    #[\Override]
+    protected function isReferenced(int $id): bool
+    {
+        return $this->getRepo()->isUsedByLetterInstances($id);
     }
 }
