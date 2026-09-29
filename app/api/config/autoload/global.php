@@ -86,7 +86,11 @@ return [
     ],
     'ebsr' => [
         'max_schema_errors' => 3, //maximum number of xml schema problems to return (prevents massive error messages)
-        'transxchange_schema_version' => 2.5 //validate against transxchange schema (2.1, 2.4 and 2.5 available)
+        //transxchange schema to validate against (2.1, 2.4, 2.5 and 2.5.2 available)
+        'transxchange_schema_version' => '2.5.2',
+        //xml failing the main schema is still accepted if it passes this one. 2.5.2 dropped five authority names
+        //(e.g. IsleOfAnglesey, NorthLincolnshire) that operators and local_authority.txc_name still use
+        'transxchange_fallback_schema_version' => '2.5',
     ],
     'nr' => [
         'max_schema_errors' => 10, //maximum number of xml schema problems to return (prevents massive error messages)
