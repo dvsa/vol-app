@@ -2136,6 +2136,11 @@ class Application extends AbstractApplication implements ContextProviderInterfac
                 && (int) $this->smallVehicleEvidenceUploaded !== self::FINANCIAL_EVIDENCE_UPLOAD_LATER,
             'PsvDocumentaryEvidenceLarge' => $this->occupationEvidenceUploaded !== null
                 && (int) $this->occupationEvidenceUploaded !== self::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            'KnowledgeExperience' => $this->knowledgeExperienceOlat === 'Y'
+                || ($this->knowledgeExperienceEvidenceUploaded !== null
+                && (int) $this->knowledgeExperienceEvidenceUploaded
+                !== self::FINANCIAL_EVIDENCE_UPLOAD_LATER
+                ),
             default => throw new \RuntimeException('There is no validation for this section: ' . $applicationSection),
         };
     }
@@ -2860,5 +2865,49 @@ class Application extends AbstractApplication implements ContextProviderInterfac
 
         //other checks passed - now depends on whether the app has TM changes
         return $this->hasUpdatedTransportManagers();
+    }
+
+    /**
+     * Whether this application requires knowledge/experience evidence
+     */
+    public function requiresKnowledgeExperience(): bool
+    {
+        if (!$this->isNew()) {
+            return false;
+        }
+
+        if ($this->isNi()) {
+            return false;
+        }
+
+        if ($this->isPsv() && $this->isRestricted()) {
+            return false;
+        }
+
+        if ($this->wasSubmittedBeforeKnowledgeExperience()) {
+            return false;
+        }
+
+        return $this->getPrevHasLicence() === 'N'
+            || $this->getPrevHadLicence() === 'N';
+    }
+
+    /**
+     * Selfserve can't submit while an accessible section is incomplete, so a selfserve application that was
+     * submitted without the knowledge/experience section ever being saved predates the section. Requiring it
+     * now would block grant (tracking must cover every accessible section) on an application the operator can
+     * no longer change. Internally created applications start under consideration, so they are not exempt.
+     */
+    private function wasSubmittedBeforeKnowledgeExperience(): bool
+    {
+        if ($this->isNotSubmitted()) {
+            return false;
+        }
+
+        if ((string) $this->getAppliedVia() !== self::APPLIED_VIA_SELFSERVE) {
+            return false;
+        }
+
+        return $this->getApplicationCompletion()?->getKnowledgeExperienceStatus() === null;
     }
 }
