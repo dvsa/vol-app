@@ -26,6 +26,8 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 
 class LetterAppendixController extends AbstractInternalController implements LeftViewProvider
 {
+    use LetterDeleteErrorTrait;
+
     public const ERR_UPLOAD_DEF = '4';
     public const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
 

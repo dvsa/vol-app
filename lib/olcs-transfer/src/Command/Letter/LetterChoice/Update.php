@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Transfer\Command\Letter\LetterChoice;
 
 use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
+use Dvsa\Olcs\Transfer\FieldType\Traits\GoodsOrPsvOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 
 /**
@@ -13,6 +14,7 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 final class Update extends AbstractCommand
 {
     use Identity;
+    use GoodsOrPsvOptional;
 
     /**
      * @var string

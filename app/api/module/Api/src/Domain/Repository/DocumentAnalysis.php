@@ -9,6 +9,9 @@ use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
+use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList as DocumentAnalysisListQuery;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
 /**
  * Status transitions are single atomic conditional UPDATEs: the sweeper and the result handler
@@ -73,6 +76,61 @@ class DocumentAnalysis extends AbstractRepository
             $qb->getQuery()->getArrayResult()
         );
     }
+
+    /**
+     * Joins for fetchList() and fetchCount().
+     *
+     * The document is fetch-joined because callers read it on every row (for example its
+     * issued date), which would otherwise be one lazy load per analysis.
+     */
+    #[\Override]
+    protected function applyListJoins(QueryBuilder $qb)
+    {
+        $qb->innerJoin($this->alias . '.document', 'd')
+            ->addSelect('d');
+    }
+
+    /**
+     * Filters for fetchList() and fetchCount(). Paging and ordering are applied by the base
+     * repository from the query's PagedTrait / OrderedTrait, so nothing here orders or limits.
+     *
+     * @param DocumentAnalysisListQuery $query
+     */
+    #[\Override]
+    protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
+    {
+        // Application and variation pages: that specific application only.
+        if ($query->getApplication() !== null) {
+            $qb->andWhere('IDENTITY(' . $this->alias . '.application) = :applicationId')
+                ->setParameter('applicationId', (int) $query->getApplication());
+        }
+
+        // Licence page: follow the analysed document's own licence link, as the documents tab
+        // does, or an application (new or variation) on the licence for documents linked only
+        // to the application. LEFT JOIN so rows whose application was deleted (SET NULL) can
+        // still match on the document's licence.
+        if ($query->getLicence() !== null) {
+            $qb->leftJoin($this->alias . '.application', 'a')
+                ->andWhere(
+                    $qb->expr()->orX(
+                        'IDENTITY(d.licence) = :licenceId',
+                        'IDENTITY(a.licence) = :licenceId'
+                    )
+                )
+                ->setParameter('licenceId', (int) $query->getLicence());
+        }
+
+        if ($query->getDocument() !== null) {
+            $qb->andWhere('IDENTITY(' . $this->alias . '.document) = :documentId')
+                ->setParameter('documentId', (int) $query->getDocument());
+        }
+
+        if ($query->getStatus() !== null) {
+            $qb->andWhere($qb->expr()->eq($this->alias . '.status', ':status'))
+                ->setParameter('status', $query->getStatus());
+        }
+    }
+
 
     /**
      * Resolve stale PENDING rows to TIMEOUT in one atomic statement.

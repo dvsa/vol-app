@@ -901,6 +901,7 @@ return [
             'Task' => Repository\Task::class,
             'User' => Repository\User::class,
             'Document' => Repository\Document::class,
+            'DocumentAnalysis' => Repository\DocumentAnalysis::class,
             'Cases' => Repository\Cases::class,
             'SystemParameter' => Repository\SystemParameter::class,
             'TaskAllocationRule' => Repository\TaskAllocationRule::class,

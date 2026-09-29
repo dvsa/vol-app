@@ -63,13 +63,15 @@ class LetterInstanceComposer
      * Materialise to-dos from the issues already attached, deduplicated across the whole letter.
      *
      * Two issues frequently link the same to-do; without this the operator is told to do the same
-     * thing twice (VOL-7280). Each unique to-do attaches to the FIRST issue in display order that
-     * brought it, which gives the renderer "appears under the first issue type it relates to"
-     * without the renderer needing to know anything about it.
+     * thing twice (VOL-7280). Issues can also link different versions of the same to-do, so this
+     * de-dupes per to-do rather than per version and always renders the to-do's current version
+     * (VOL-7408). Each unique to-do attaches to the FIRST issue in display order that brought it,
+     * which gives the renderer "appears under the first issue type it relates to" without the
+     * renderer needing to know anything about it.
      */
     public function composeTodos(LetterInstance $letterInstance): void
     {
-        $seenTodoVersionIds = [];
+        $seenTodos = [];
 
         foreach ($letterInstance->getLetterInstanceIssues() as $instanceIssue) {
             $issueVersion = $instanceIssue->getLetterIssueVersion();
@@ -83,16 +85,19 @@ class LetterInstanceComposer
                     continue;
                 }
 
-                $key = $todoVersion->getId();
-                if (isset($seenTodoVersionIds[$key])) {
+                $key = $todoVersion->getDedupeKey();
+                if (isset($seenTodos[$key])) {
                     continue;
                 }
-                $seenTodoVersionIds[$key] = true;
+                $seenTodos[$key] = true;
+
+                // always show the latest wording, not whichever version this issue happened to link
+                $renderVersion = $todoVersion->getLetterTodo()?->getCurrentVersion() ?? $todoVersion;
 
                 $instanceTodo = new LetterInstanceTodo();
                 $instanceTodo->setLetterInstance($letterInstance);
                 $instanceTodo->setLetterInstanceIssue($instanceIssue);
-                $instanceTodo->setLetterTodoVersion($todoVersion);
+                $instanceTodo->setLetterTodoVersion($renderVersion);
 
                 $letterInstance->addLetterInstanceTodo($instanceTodo);
             }

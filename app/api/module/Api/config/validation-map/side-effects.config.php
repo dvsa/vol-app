@@ -117,6 +117,7 @@ return [
     AppCompCommandHandler\UpdateVehiclesSizeStatus::class                             => IsSideEffect::class,
     AppCompCommandHandler\UpdatePsvDocumentaryEvidenceSmallStatus::class              => IsSideEffect::class,
     AppCompCommandHandler\UpdatePsvDocumentaryEvidenceLargeStatus::class              => IsSideEffect::class,
+    AppCompCommandHandler\UpdateKnowledgeExperienceStatus::class                      => IsSideEffect::class,
     AppCompCommandHandler\UpdatePsvMainOccupationUndertakingsStatus::class            => IsSideEffect::class,
     AppCompCommandHandler\UpdatePsvOperateLargeStatus::class                          => IsSideEffect::class,
     AppCompCommandHandler\UpdatePsvOperateSmallStatus::class                          => IsSideEffect::class,
