@@ -4,17 +4,18 @@
  * Used for Internal application sidebar navigation
  */
 
-@if $app == 'internal' {
+@use "sass:list";
 
+@if $app == "internal" {
   /**
    * Configuration
    */
 
   $mobile-statuses: (
-    'complete'   : 'internal-application-complete',
-    'edited'     : 'internal-application-edited',
-    'warn'       : 'internal-application-warning',
-    'incomplete' : 'internal-application-warning'
+    "complete": "internal-application-complete",
+    "edited": "internal-application-edited",
+    "warn": "internal-application-warning",
+    "incomplete": "internal-application-warning",
   );
 
   /**
@@ -22,7 +23,6 @@
    */
 
   .app-navigation {
-
     @extend %navigation;
     overflow: hidden;
     border-top: 0;
@@ -52,7 +52,7 @@
       text-align: left;
       position: relative;
       &:before {
-        content: '';
+        content: "";
         position: absolute;
         right: 0;
         top: 11px;
@@ -60,13 +60,11 @@
     }
 
     @each $status in $mobile-statuses {
-      .#{nth($status, 1)} {
+      .#{list.nth($status, 1)} {
         &:before {
-          @include svg(nth($status, 2));
+          @include svg(list.nth($status, 2));
         }
       }
     }
-
   } // .app-navigation
-
 } // @if $app

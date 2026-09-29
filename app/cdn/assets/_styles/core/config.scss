@@ -13,23 +13,26 @@
  * [7] - Internal only config
  */
 
+@use "sass:map";
+@use "sass:string";
+
 /**
  * [1] - Asset Path
  * The path to any assets used by the styles
  */
 
-$asset-path         : '../images';
+$asset-path: "../images";
 
 /**
  * [2] - Colours
  * Override/define OLCS specific colours
  */
 
-$primary-colour     : $department-for-transport;
-$dark-text          : #454a4c;
-$warning-background : #FEF7F7;
-$summary-border     : #CDD7DC;
-$summary-background : #E6EFF5;
+$primary-colour: $department-for-transport;
+$dark-text: #454a4c;
+$warning-background: #fef7f7;
+$summary-border: #cdd7dc;
+$summary-background: #e6eff5;
 $application-submit-background: #00703c;
 
 /**
@@ -37,11 +40,11 @@ $application-submit-background: #00703c;
  * Config for OLCS layout/skeleton
  */
 
-$base-width         : 1010px;
-$gutter-2x          : ($gutter * 2);
+$base-width: 1010px;
+$gutter-2x: ($gutter * 2);
 
 // Used by GDS toolkit
-$site-width         : $base-width;
+$site-width: $base-width;
 
 /**
  * [4] - Typography
@@ -50,29 +53,29 @@ $site-width         : $base-width;
 
 $is-print: false !default;
 
-$font--primary : $govuk-font-family;
+$font--primary: $govuk-font-family;
 // scss-lint:disable NameFormat
 $nta-light-tabular: $NTA-Light-Tabular;
 // scss-lint:enable NameFormat
 $core-sizes: (
-  'size-1' : 12,
-  'size-2' : 14,
-  'size-3' : 15,
-  'size-4' : 16,
-  'size-5' : 19,
-  'size-6' : 24,
-  'size-7' : 28,
-  'size-8' : 36,
-  'size-9' : 48,
+  "size-1": 12,
+  "size-2": 14,
+  "size-3": 15,
+  "size-4": 16,
+  "size-5": 19,
+  "size-6": 24,
+  "size-7": 28,
+  "size-8": 36,
+  "size-9": 48,
 );
 
 // Custom function to return font size
 @function font-size($size, $print: false) {
-  $size: map-get($core-sizes, 'size-#{$size}');
+  $size: map.get($core-sizes, "size-#{$size}");
   @if $print {
-    @return unquote(#{$size}) + 'pt';
+    @return string.unquote(#{$size}) + "pt";
   } @else {
-    @return unquote(#{$size}) + 'px';
+    @return string.unquote(#{$size}) + "px";
   }
 }
 
@@ -82,33 +85,36 @@ $core-sizes: (
  */
 
 $breakpoints: (
-  'break-1' : 460px,
-  'break-2' : 580px,
-  'break-3' : 640px,
-  'break-4' : 780px,
-  'break-5' : 880px,
-  'break-6' : 960px,
-  'break-7' : 1200px
+  "break-1": 460px,
+  "break-2": 580px,
+  "break-3": 640px,
+  "break-4": 780px,
+  "break-5": 880px,
+  "break-6": 960px,
+  "break-7": 1200px,
 );
 
 // Custom function to return breakpoint value
 @function breakpoint($breakpoint) {
-  @return map-get($breakpoints, $breakpoint);
+  @return map.get($breakpoints, $breakpoint);
 }
 
 // Set the default width for column stacking
-$mobile-column-stack: breakpoint('break-4');
+$mobile-column-stack: breakpoint("break-4");
 
 /**
  * [6] - Internal theme
  * Configuration for the Internal theme only
  */
 
-@if $app == 'internal' {
-  $col-gutter : 1.25%;
-  $core-sizes: map-merge($core-sizes, (
-    'size-5' : 18
-  ));
+@if $app == "internal" {
+  $col-gutter: 1.25%;
+  $core-sizes: map.merge(
+    $core-sizes,
+    (
+      "size-5": 18,
+    )
+  );
 }
 
 /**
@@ -116,6 +122,6 @@ $mobile-column-stack: breakpoint('break-4');
  * Configuration for the Selfserve theme only
  */
 
-@if $app == 'selfserve' {
-  $col-gutter : 2.5%;
+@if $app == "selfserve" {
+  $col-gutter: 2.5%;
 }

@@ -2,7 +2,9 @@
  * Verify
  */
 
-$verify-colour: #255AAA;
+@use "sass:color";
+
+$verify-colour: #255aaa;
 
 .verify {
   background: $verify-colour;
@@ -18,7 +20,7 @@ $verify-colour: #255AAA;
     width: 100%;
   }
   h3 {
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
   }
 }
 
@@ -29,5 +31,5 @@ $verify-colour: #255AAA;
   padding: 10px 20px;
   margin-right: 20px;
   font-weight: 700;
-  border-bottom: 2px solid darken($verify-colour, 20%);
+  border-bottom: 2px solid color.adjust($verify-colour, $lightness: -20%);
 }

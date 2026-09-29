@@ -3,9 +3,9 @@
 /// Styles to provide the foundation skeleton and grid system for the
 /// app. Uses vendor/govuk_frontend_toolkit to generate grid related styles.
 
-// The document/application wrapper which contains the entire app
 @use "sass:math";
 
+// The document/application wrapper which contains the entire app
 %page-wrapper,
 .page-wrapper {
   @extend %site-width-container;
@@ -29,11 +29,11 @@
   @if $mobile-first {
     @media (min-width: $full-width) {
       float: $float;
-      width: percentage($width);
+      width: math.percentage($width);
     }
   } @else {
     float: $float;
-    width: percentage($width);
+    width: math.percentage($width);
     @media (max-width: $full-width) {
       float: none;
       width: 100%;

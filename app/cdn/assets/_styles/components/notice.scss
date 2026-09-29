@@ -2,6 +2,8 @@
  * Notices
  */
 
+@use "sass:color";
+
 @if $app == "selfserve" {
   %notice {
     padding: 15px 15px 13px;
@@ -67,8 +69,8 @@
 }
 
 @mixin notice($color) {
-  $background: desaturate(lighten($color, 50%), 10%);
-  $border: desaturate(lighten($color, 30%), 10%);
+  $background: color.adjust($color, $lightness: 50%, $saturation: -10%);
+  $border: color.adjust($color, $lightness: 30%, $saturation: -10%);
 
   @extend %notice;
 

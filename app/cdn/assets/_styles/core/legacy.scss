@@ -1,4 +1,5 @@
 @use "sass:math";
+@use "sass:string";
 
 $site-width: 1020px;
 $full-width: 100%;
@@ -99,7 +100,7 @@ $NTA-Light-Tabular: $govuk-font-family;
 
 @mixin opacity($trans) {
   zoom: 1;
-  filter: unquote("alpha(opacity=" + ($trans * 100) + ")"); // IE6 to IE8
+  filter: string.unquote("alpha(opacity=" + ($trans * 100) + ")"); // IE6 to IE8
   opacity: $trans;
 }
 
