@@ -47,10 +47,6 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
         $this->assertSame(7, $qb->getParameter('applicationId')->getValue());
     }
 
-    /**
-     * joinTmContactDetails() calls with() without modifyQuery(); it works because the chain
-     * above it opened with modifyQuery($dqb) on the same shared helper.
-     */
     public function testFetchDetails(): void
     {
         $qb = $this->createRealQb()->willReturn(['RESULT']);
@@ -70,6 +66,21 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
         );
     }
 
+    public function testJoinTmContactDetailsBindsItsOwnQuery(): void
+    {
+        $qb = $this->createRealQb();
+        $previous = $this->newRealQb();
+        $previous->select('other')->from(Entity::class, 'other');
+        $this->queryBuilder->modifyQuery($previous);
+
+        $this->sut->joinTmContactDetails($qb);
+
+        $this->assertStringContainsString('LEFT JOIN tma.transportManager tm', $qb->getDQL());
+        $this->assertStringContainsString('LEFT JOIN tm.homeCd hcd', $qb->getDQL());
+        $this->assertStringContainsString('LEFT JOIN tm.workCd wcd', $qb->getDQL());
+        $this->assertSame('SELECT other FROM ' . Entity::class . ' other', $previous->getDQL());
+    }
+
     public function testFetchDetailsNotFound(): void
     {
         $this->createRealQb()->willReturn([]);
@@ -83,8 +94,9 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
     {
         $qb = $this->createRealQb();
 
-        // applyListJoins() omits modifyQuery(); fetchList() points the helper here first.
-        $this->queryBuilder->modifyQuery($qb);
+        $previous = $this->newRealQb();
+        $previous->select('other')->from(Entity::class, 'other');
+        $this->queryBuilder->modifyQuery($previous);
 
         $this->sut->applyListJoins($qb);
 
@@ -93,6 +105,7 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
             . ' LEFT JOIN tma.application a LEFT JOIN a.licence l',
             $qb->getDQL(),
         );
+        $this->assertSame('SELECT other FROM ' . Entity::class . ' other', $previous->getDQL());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
