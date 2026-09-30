@@ -62,10 +62,10 @@ final class ApplicationDocsControllerTest extends MockeryTestCase
         $controller = $this->sut;
 
         $controller->shouldReceive('getFromRoute')->with('application')->twice()->andReturn(123);
-        $controller->shouldReceive('getLicenceIdForApplication')->with(123)->once()->andReturn(456);
-        $controller->shouldReceive('getStatusForApplication')->with(123)->once()->andReturn(
-            RefData::APPLICATION_STATUS_NOT_SUBMITTED
-        );
+        $controller->shouldReceive('getApplication')->with(123)->once()->andReturn([
+            'licence' => ['id' => 456],
+            'status' => ['id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED],
+        ]);
 
         $expectedFilters = [
             'sort' => 'issuedDate',
@@ -94,10 +94,10 @@ final class ApplicationDocsControllerTest extends MockeryTestCase
         $controller = $this->sut;
 
         $controller->shouldReceive('getFromRoute')->with('application')->twice()->andReturn(123);
-        $controller->shouldReceive('getLicenceIdForApplication')->with(123)->once()->andReturn(456);
-        $controller->shouldReceive('getStatusForApplication')->with(123)->once()->andReturn(
-            RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
-        );
+        $controller->shouldReceive('getApplication')->with(123)->once()->andReturn([
+            'licence' => ['id' => 456],
+            'status' => ['id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION],
+        ]);
 
         $expectedFilters = [
             'sort' => 'issuedDate',

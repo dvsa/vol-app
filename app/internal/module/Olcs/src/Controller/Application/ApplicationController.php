@@ -244,25 +244,6 @@ class ApplicationController extends AbstractController implements ApplicationCon
     }
 
     /**
-     * Get the Status for Application
-     *
-     * @param int $applicationId applicationId
-     *
-     * @return mixed
-     */
-    protected function getStatusForApplication($applicationId = null)
-    {
-        if (is_null($applicationId)) {
-            $applicationId = $this->params()->fromRoute('application');
-        }
-
-        $response = $this->handleQuery(Application::create(['id' => $applicationId]));
-        $result = $response->getResult();
-
-        return $result['status']['id'];
-    }
-
-    /**
      * Action to handle an application change of entity request.
      *
      * @return string|\Laminas\Http\Response|ViewModel

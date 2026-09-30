@@ -101,8 +101,9 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     private function getDocumentFilters()
     {
         $appId = $this->getFromRoute('application');
-        $licence = $this->getLicenceIdForApplication($appId);
-        $status = $this->getStatusForApplication($appId);
+        $application = $this->getApplication($appId);
+        $licence = $application['licence']['id'];
+        $status = $application['status']['id'];
 
         return $this->mapDocumentFilters(
             [
