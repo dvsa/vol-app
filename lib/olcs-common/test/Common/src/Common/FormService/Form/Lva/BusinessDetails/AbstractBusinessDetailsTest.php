@@ -25,8 +25,10 @@ final class AbstractBusinessDetailsTest extends MockeryTestCase
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
 
-        $this->sut = m::mock(\Common\FormService\Form\Lva\BusinessDetails\AbstractBusinessDetails::class)->makePartial();
-        $this->sut->__construct($this->formHelper);
+        $this->sut = m::mock(
+            \Common\FormService\Form\Lva\BusinessDetails\AbstractBusinessDetails::class,
+            [$this->formHelper]
+        )->makePartial();
     }
 
     public function testAlterFormRegisteredCompany(): void

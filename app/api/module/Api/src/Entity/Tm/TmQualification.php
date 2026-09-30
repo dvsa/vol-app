@@ -32,8 +32,6 @@ class TmQualification extends AbstractTmQualification
     public const QUALIFICATION_TYPE_NIAR = 'tm_qt_niar';
     public const QUALIFICATION_TYPE_NICPCSI = 'tm_qt_nicpcsi';
     public const QUALIFICATION_TYPE_NIEXSI = 'tm_qt_niexsi';
-    public const QUALIFICATION_TYPE_LGVAR = 'tm_qt_lgvar';
-    public const QUALIFICATION_TYPE_NILGVAR = 'tm_qt_nilgvar';
 
     /**
      * Create TmQualification object

@@ -253,7 +253,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'version' => $transportManagerApplicationData['version'],
                             'email' => $data['details']['emailAddress'],
                             'placeOfBirth' => $data['details']['birthPlace'],
-                            'lgvAcquiredRightsReferenceNumber' => $data['details']['lgvAcquiredRightsReferenceNumber'] ?? null,
                             'hasUndertakenTraining' => $data['details']['hasUndertakenTraining'],
                             'homeAddress' => $data['homeAddress'],
                             'workAddress' => $data['workAddress'],
@@ -279,15 +278,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 /* @var $response \Common\Service\Cqrs\Response */
                 $response = $this->commandService->send($command);
                 if (!$response->isOk()) {
-                    $acquiredRightsError = $this->getAcquiredRightsErrorIfExists($response);
-                    if (!empty($acquiredRightsError)) {
-                        $form->setMessages([
-                            'details' => [
-                                'lgvAcquiredRightsReferenceNumber' => $acquiredRightsError,
-                            ],
-                        ]);
-                        return $this->renderWithForm($transportManagerApplicationData['application'], $form);
-                    }
                     $flashMessenger->addErrorMessage('unknown-error');
                     return $this->redirect()->refresh();
                 }
@@ -1038,31 +1028,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $this->formHelper->remove($form, 'responsibilities->tmApplicationStatus');
 
         if ($tma['application']['vehicleType']['id'] === RefData::APP_VEHICLE_TYPE_LGV) {
-            // LGV only
-            $detailsField = $form->get('details');
-
-            $detailsField->get('certificate')->setLabel('lva-tm-details-details-certificate-lgv-only');
-
-            if (!empty($tma['lgvAcquiredRightsReferenceNumber'])) {
-                // LGV Acquired Rights ref number already set
-                $lgvAcquiredRightsReferenceNumberField = $detailsField->get('lgvAcquiredRightsReferenceNumber');
-
-                // set value
-                $lgvAcquiredRightsReferenceNumberField ->setValue($tma['lgvAcquiredRightsReferenceNumber']);
-
-                // add padlock
-                $this->formHelper->lockElement(
-                    $lgvAcquiredRightsReferenceNumberField,
-                    'lva-tm-details-details-lgvAcquiredRightsReferenceNumber-locked'
-                );
-
-                // disable element
-                $this->formHelper->disableElement($form, 'details->lgvAcquiredRightsReferenceNumber');
-            }
+            $form->get('details')->get('certificate')
+                ->setLabel('lva-tm-details-details-certificate-lgv-only');
         } else {
             $this->formHelper->remove($form, 'details->certificateHtml');
-            $this->formHelper->remove($form, 'details->lgvAcquiredRightsHtml');
-            $this->formHelper->remove($form, 'details->lgvAcquiredRightsReferenceNumber');
         }
 
         /** @var \Laminas\Form\Fieldset $formActions */
@@ -1644,25 +1613,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $tma['tmApplicationStatus']['id'] = $status;
         return $tma;
-    }
-
-    /**
-     * @deprecated To be removed when LGV Acquired Rights is no longer allowed.
-     * @return false|mixed
-     */
-    private function getAcquiredRightsErrorIfExists(\Common\Service\Cqrs\Response $response)
-    {
-        try {
-            $errorArray = json_decode($response->getBody(), true);
-        } catch (\InvalidArgumentException) {
-            // do nothing, not valid JSON.
-            return false;
-        }
-        $lgvAcquiredRightsError = $errorArray['messages']['lgvAcquiredRightsReferenceNumber'] ?? null;
-        if (empty($lgvAcquiredRightsError)) {
-            return false;
-        }
-        return $lgvAcquiredRightsError;
     }
 
     /**
