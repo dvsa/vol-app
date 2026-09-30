@@ -35,6 +35,12 @@ class Subsidy extends AbstractFilter
 
         $value['subsidised'] = $this->map[$value['subsidised']];
 
+        if (isset($value['subsidyAuthorityNames'])) {
+            $value['subsidyDetail'] = implode("\n", $value['subsidyAuthorityNames']);
+        }
+
+        $value['subsidyAuthorityNames'] ??= [];
+
         return $value;
     }
 }
