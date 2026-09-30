@@ -42,6 +42,9 @@ class EditableTranslationsController extends AbstractInternalController implemen
     protected $locationsTablePlaceholderName = 'locationsTable';
     protected $translationsTableName = 'translation-key-texts';
     protected $detailsContentTitle = 'Editable Translations';
+    protected $resultsTableTitle = 'Editable Translations';
+    protected $translationRoute = 'admin-dashboard/admin-editable-translations';
+    protected $longTextMode = false;
 
     /**
      * @var array
@@ -72,8 +75,8 @@ class EditableTranslationsController extends AbstractInternalController implemen
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('translationSearch', urldecode((string) $this->params()->fromQuery('translationSearch')));
-        $this->placeholder()->setPlaceholder('resultsTableTitle', 'Editable Translations');
-        $this->placeholder()->setPlaceholder('jsonBaseUrl', $this->url()->fromRoute('admin-dashboard/admin-editable-translations'));
+        $this->placeholder()->setPlaceholder('resultsTableTitle', $this->resultsTableTitle);
+        $this->placeholder()->setPlaceholder('jsonBaseUrl', $this->url()->fromRoute($this->translationRoute));
         return parent::indexAction();
     }
 
@@ -90,7 +93,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
                     'page' => 1,
                     'sort' => 'id',
                     'translationSearch' => $this->params()->fromQuery('translationSearch'),
-                ]
+                ] + $this->getListFilters((bool) $this->params()->fromQuery('includeText'))
             )
         );
         return new JsonModel($response->getResult());
@@ -124,7 +127,12 @@ class EditableTranslationsController extends AbstractInternalController implemen
     protected function modifyListQueryParameters($parameters)
     {
         $parameters['translationSearch'] = urldecode((string) $this->params()->fromQuery('translationSearch'));
-        return $parameters;
+        return $parameters + $this->getListFilters();
+    }
+
+    protected function getListFilters(bool $includeText = false): array
+    {
+        return [];
     }
 
     /**
@@ -136,18 +144,25 @@ class EditableTranslationsController extends AbstractInternalController implemen
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $commandData = $this->mapperClass::mapFromForm((array)$request->getPost());
-            $cmdHandler = $addedit == 'edit' ? UpdateCommand::class : CreateCommand::class;
+            try {
+                $commandData = $this->mapperClass::mapFromForm((array)$request->getPost());
+            } catch (\InvalidArgumentException $exception) {
+                $this->flashMessengerHelperService->addErrorMessage($exception->getMessage());
+                $commandData = null;
+            }
 
-            $response = $this->handleCommand($cmdHandler::create($commandData));
+            if ($commandData !== null) {
+                $cmdHandler = $addedit == 'edit' ? UpdateCommand::class : CreateCommand::class;
+                $response = $this->handleCommand($cmdHandler::create($commandData));
 
-            $result = $response->getResult();
-            if ($response->isOk()) {
-                $this->flashMessengerHelperService->addSuccessMessage($this->editSuccessMessage);
-                return $this->redirectTo($response->getResult());
-            } else {
-                $message = isset($result['messages']) ? implode('<br />', $result['messages']) : 'Error saving translations';
-                $this->flashMessengerHelperService->addErrorMessage($message);
+                $result = $response->getResult();
+                if ($response->isOk()) {
+                    $this->flashMessengerHelperService->addSuccessMessage($this->editSuccessMessage);
+                    return $this->redirectTo($response->getResult());
+                } else {
+                    $message = isset($result['messages']) ? implode('<br />', $result['messages']) : 'Error saving translations';
+                    $this->flashMessengerHelperService->addErrorMessage($message);
+                }
             }
         }
 
@@ -169,7 +184,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
      * @param  $addEdit
      * @return mixed
      */
-    private function setupAddEditForm($addEdit)
+    protected function setupAddEditForm($addEdit)
     {
         $form = $this->getForm(TranslationKey::class);
         if ($addEdit == 'edit') {
@@ -179,15 +194,17 @@ class EditableTranslationsController extends AbstractInternalController implemen
         $form->get('jsonUrl')
             ->setValue(
                 $this->url()->fromRoute(
-                    'admin-dashboard/admin-editable-translations'
+                    $this->translationRoute
                 )
             );
 
         $form->get('resultsKey')->setValue('translationKeyTexts');
         $form->get('translationVar')->setValue('translatedText');
         $form->get('addedit')->setValue($addEdit);
+        $form->get('longTextMode')->setValue($this->longTextMode ? '1' : '0');
+        $form->get('fields')->get('format')->setValue($this->longTextMode && $addEdit == 'add' ? 'editorjs' : 'text');
 
-        $this->placeholder()->setPlaceholder('pageTitle', ucfirst((string) $addEdit) . ' Translation Key');
+        $this->placeholder()->setPlaceholder('pageTitle', ucfirst((string) $addEdit) . ($this->longTextMode ? ' Long Text' : ' Translation Key'));
 
         return $form;
     }
@@ -218,7 +235,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
                 $this->handleErrors($response->getResult());
             }
             return $this->redirect()->toRouteAjax(
-                'admin-dashboard/admin-editable-translations',
+                $this->translationRoute,
                 [
                     'action' => 'details',
                     'id' => $this->params()->fromRoute('id')
@@ -242,7 +259,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
             $postData = (array)$request->getPost();
             if ($postData['action'] == 'Edittexts') {
                 return $this->redirect()->toRoute(
-                    'admin-dashboard/admin-editable-translations',
+                    $this->translationRoute,
                     [
                         'action' => 'editkey',
                         'id' => $this->params()->fromRoute('id')
@@ -250,7 +267,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
                 );
             } elseif ($postData['action'] == 'DeleteText') {
                 return $this->redirect()->toRoute(
-                    'admin-dashboard/admin-editable-translations',
+                    $this->translationRoute,
                     [
                         'action' => 'subdelete',
                         'id' => $this->params()->fromRoute('id'),
@@ -261,6 +278,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
         }
 
         $this->placeholder()->setPlaceholder('contentTitle', $this->detailsContentTitle);
+        $this->placeholder()->setPlaceholder('translationRoute', $this->translationRoute);
         $query = $this->itemDto::create(['id' => $this->params()->fromRoute('id')]);
 
         $response = $this->handleQuery($query);
@@ -290,12 +308,12 @@ class EditableTranslationsController extends AbstractInternalController implemen
      */
     public function gettextAction()
     {
+        $query = ['id' => $this->params()->fromRoute('id')];
+        if ($this->params()->fromQuery('previewEditorJs')) {
+            $query['previewEditorJs'] = true;
+        }
         $response = $this->handleQuery(
-            ItemDTO::create(
-                [
-                    'id' => $this->params()->fromRoute('id'),
-                ]
-            )
+            ItemDTO::create($query)
         );
         return new JsonModel($response->getResult());
     }

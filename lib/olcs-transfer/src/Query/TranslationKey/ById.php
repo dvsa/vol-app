@@ -16,4 +16,12 @@ use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 class ById extends AbstractQuery
 {
     use Identity;
+
+    /** @Transfer\Optional */
+    protected $previewEditorJs;
+
+    public function getPreviewEditorJs(): bool
+    {
+        return filter_var($this->previewEditorJs, FILTER_VALIDATE_BOOLEAN);
+    }
 }

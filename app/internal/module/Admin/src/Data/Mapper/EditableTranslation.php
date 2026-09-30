@@ -34,10 +34,17 @@ class EditableTranslation implements MapperInterface
      */
     public static function mapFromForm(array $data): array
     {
+        $data['fields']['translationsArray'] ??= [];
         foreach ($data['fields']['translationsArray'] as $isoCode => $translation) {
             if (empty($translation)) {
                 unset($data['fields']['translationsArray'][$isoCode]);
             } else {
+                if (($data['fields']['format'] ?? 'text') === 'editorjs') {
+                    $content = json_decode((string) $translation, true);
+                    if (!is_array($content) || !isset($content['blocks']) || !is_array($content['blocks'])) {
+                        throw new \InvalidArgumentException('Rich translation content must be EditorJS JSON');
+                    }
+                }
                 $data['fields']['translationsArray'][$isoCode] = base64_encode((string) $data['fields']['translationsArray'][$isoCode]);
             }
         }

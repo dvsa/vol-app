@@ -21,6 +21,13 @@ final class Create extends AbstractCommand
     /** @var string */
     protected $translatedText;
 
+    protected ?array $contentJson = null;
+
+    public function getContentJson(): ?array
+    {
+        return $this->contentJson;
+    }
+
     /**
      * @return int
      */

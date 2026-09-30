@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'LongText' => 'System',
     'Application' => 'Application',
     'ApplicationCompletion' => 'Application',
     'ApplicationOperatingCentre' => 'Application',

@@ -10,13 +10,14 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\TranslationKey\Create as CreateTranslationKeyCmd;
 use Dvsa\Olcs\Transfer\Command\TranslationKey\Update as UpdateTranslationKeyCmd;
 use Dvsa\Olcs\Api\Domain\Command\Result;
+use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 
 /**
  * Create Translation key
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-final class Create extends AbstractCommandHandler
+final class Create extends AbstractCommandHandler implements TransactionedInterface
 {
     protected $repoServiceName = 'TranslationKey';
 
@@ -31,9 +32,17 @@ final class Create extends AbstractCommandHandler
         /**
          * @var CreateTranslationKeyCmd $command
          */
+        if ($command->getFormat() === 'editorjs' && Update::prepareTranslations($command->getTranslationsArray(), 'editorjs') === []) {
+            throw new ValidationException(['translationsArray' => 'At least one language is required']);
+        }
+
         $repo = $this->getRepo('TranslationKey');
 
-        $translationKey = TranslationKey::create($command->getTranslationKey(), $command->getDescription());
+        $translationKey = TranslationKey::create(
+            $command->getTranslationKey(),
+            (string) $command->getDescription(),
+            $command->getFormat() ?? 'text',
+        );
         try {
             $repo->save($translationKey);
         } catch (\Exception) {

@@ -20,8 +20,14 @@ class TranslationKey
     public $id = null;
 
     /**
+     * @Form\Type("Hidden")
+     * @Form\Attributes({"id":"format", "value":"text"})
+     */
+    public $format = null;
+
+    /**
      * @Form\Name("translationKey")
-     * @Form\Attributes({"id": "translationKey", "data-container-class":"translationKeyContainer js-hidden"})
+     * @Form\Attributes({"id": "translationKey", "data-container-class":"newTranslationKeyContainer js-hidden"})
      * @Form\Options({
      *      "label": "New Translation Key"
      * })
@@ -33,7 +39,7 @@ class TranslationKey
 
     /**
      * @Form\Name("description")
-     * @Form\Attributes({"id": "translationKey", "data-container-class":"translationKeyContainer js-hidden"})
+     * @Form\Attributes({"id": "description", "data-container-class":"translationDescriptionContainer js-hidden"})
      * @Form\Options({
      *      "label": "Description"
      * })
