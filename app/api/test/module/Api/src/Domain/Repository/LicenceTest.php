@@ -106,9 +106,9 @@ final class LicenceTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchWithAddressesUsingId($argument));
 
         $this->assertStringStartsWith(
-            'SELECT m, w0, w1, w2, w3, w4, c, c_a, c_a_cc, c_pc, w5, w6, c_p, c_p_pct, w7,'
+            'SELECT m, w0, w1, w2, w3, w4, c, c_a, c_a_cc, c_p, w5, c_p_pct,'
             . ' o, o_cd, o_cd_a, o_cd_a_cc, o_cd_pc, w8, w9, e, e_a, e_a_cc, e_pc, w10, w11,'
-            . ' t, t_a, t_a_cc, t_pc, w12, w13, t_p, t_p_pct, w14',
+            . ' t, t_a, t_a_cc, t_p, w12, t_p_pct',
             $qb->getDQL(),
         );
         $this->assertStringEndsWith(' WHERE m.id = :byId', $qb->getDQL());

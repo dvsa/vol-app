@@ -22,15 +22,18 @@ final class FeeTypeTest extends RepositoryTestCase
     private const string FROM = ' FROM ' . Entity::class . ' ft';
 
     /**
-     * withRefdata() joins five associations; ft.feeType is then joined a second time as ftft,
-     * which is the alias the list ordering needs. See the migration findings.
+     * withRefdata() joins the RefData associations using generated aliases.
      */
     private const string REFDATA_JOINS = ' LEFT JOIN ft.irfoFeeType w0 LEFT JOIN ft.feeType w1'
         . ' LEFT JOIN ft.accrualRule w2 LEFT JOIN ft.licenceType w3 LEFT JOIN ft.goodsOrPsv w4';
 
-    private const string LIST_SELECT = 'SELECT ft, w0, w1, w2, w3, w4, ftft';
+    /**
+     * List queries explicitly use ftft for feeType, replacing the generated w1 alias.
+     */
+    private const string LIST_JOINS = ' LEFT JOIN ft.irfoFeeType w0 LEFT JOIN ft.feeType ftft'
+        . ' LEFT JOIN ft.accrualRule w2 LEFT JOIN ft.licenceType w3 LEFT JOIN ft.goodsOrPsv w4';
 
-    private const string LIST_JOINS = self::REFDATA_JOINS . ' LEFT JOIN ft.feeType ftft';
+    private const string LIST_SELECT = 'SELECT ft, w0, ftft, w2, w3, w4';
 
     /** Every non-admin list ends the same way. */
     private const string LIST_TAIL = ' AND ft.effectiveFrom <= :effectiveFrom'

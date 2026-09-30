@@ -29,12 +29,11 @@ final class PhoneContactTest extends RepositoryTestCase
 
         $this->sut->buildDefaultListQuery($qb, m::mock(QueryInterface::class), []);
 
-        // phoneContactType is itself a RefData association, so withRefdata() joins it as w0
-        // and the explicit with() joins it a second time as pct. Redundant, but this is what
-        // the query does; see the note in the migration findings.
+        // The explicit pct alias replaces the automatically generated refdata alias,
+        // so phoneContactType is joined only once.
         $this->assertSame(
-            'SELECT pc, w0, pct, pct.displayOrder as HIDDEN _type FROM ' . Entity::class . ' pc'
-            . ' LEFT JOIN pc.phoneContactType w0 LEFT JOIN pc.phoneContactType pct',
+            'SELECT pc, pct, pct.displayOrder as HIDDEN _type FROM ' . Entity::class . ' pc'
+            . ' LEFT JOIN pc.phoneContactType pct',
             $qb->getDQL(),
         );
     }

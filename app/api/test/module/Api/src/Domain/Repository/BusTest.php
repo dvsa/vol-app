@@ -46,12 +46,12 @@ final class BusTest extends RepositoryTestCase
         $this->assertSame($result, $this->sut->fetchUsingId($query, Query::HYDRATE_OBJECT, 1));
 
         $this->assertSame(
-            'SELECT ' . self::REFDATA_SELECT . ', w5, w6, w7, w8, w9, w10'
+            'SELECT ' . self::REFDATA_SELECT . ', w5, w6, w7, w8, w10'
             . self::FROM . self::REFDATA_JOINS
-            // withRefdata() already joined subsidised; with('subsidised') joins it again as w9.
+            // withRefdata() already joins subsidised, so the duplicate join is not added.
             . ' LEFT JOIN m.busNoticePeriod w5 LEFT JOIN m.busServiceTypes w6'
             . ' LEFT JOIN m.trafficAreas w7 LEFT JOIN m.localAuthoritys w8'
-            . ' LEFT JOIN m.subsidised w9 LEFT JOIN m.otherServices w10'
+            . ' LEFT JOIN m.otherServices w10'
             . ' WHERE m.id = :byId',
             $qb->getDQL(),
         );
