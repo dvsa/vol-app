@@ -28,12 +28,11 @@ final class OppositionTest extends RepositoryTestCase
 
         $this->assertSame('result', $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT));
 
-        // m.grounds is joined twice (w3 from withRefdata, w4 from the explicit with) — see the
-        // migration findings.
+        // withRefdata() already joins grounds, so the explicit duplicate join is not added.
         $this->assertSame(
-            'SELECT m, w0, w1, w2, w3, o, w4, c, p, a, ct, pc FROM ' . Entity::class . ' m'
+            'SELECT m, w0, w1, w2, w3, o, c, p, a, ct, pc FROM ' . Entity::class . ' m'
             . ' LEFT JOIN m.oppositionType w0 LEFT JOIN m.status w1 LEFT JOIN m.isValid w2'
-            . ' LEFT JOIN m.grounds w3 LEFT JOIN m.opposer o LEFT JOIN m.grounds w4'
+            . ' LEFT JOIN m.grounds w3 LEFT JOIN m.opposer o'
             . ' LEFT JOIN o.contactDetails c LEFT JOIN c.person p LEFT JOIN c.address a'
             . ' LEFT JOIN c.contactType ct LEFT JOIN c.phoneContacts pc'
             . ' WHERE m.id = :byId',
