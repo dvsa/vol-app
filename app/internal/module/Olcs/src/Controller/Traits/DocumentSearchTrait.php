@@ -37,6 +37,8 @@ trait DocumentSearchTrait
             'showDocs' => $this->showDocsFilter,
         ];
 
+        $hideExternalDocuments = $extra['isExternal'] === 'internal' ?? false;
+
         $filters = array_merge(
             $defaults,
             $extra,
@@ -44,7 +46,9 @@ trait DocumentSearchTrait
         );
 
         if (isset($filters['isExternal'])) {
-            if ($filters['isExternal'] === 'external') {
+            if ($hideExternalDocuments) {
+                $filters['isExternal'] = 'N';
+            } elseif ($filters['isExternal'] === 'external') {
                 $filters['isExternal'] = 'Y';
             } elseif ($filters['isExternal'] === 'internal') {
                 $filters['isExternal'] = 'N';
