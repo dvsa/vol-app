@@ -1,5 +1,13 @@
 <ul id="languageTabs" class="horizontal-navigation" style="margin-bottom: 10px;">
 </ul>
+<p id="translationEditorError" class="govuk-error-message js-hidden"></p>
+<div id="existingMarkupPicker" class="js-hidden">
+    <label for="existingMarkupSearch">Use an existing markup key</label>
+    <input id="existingMarkupSearch" type="search" autocomplete="off" placeholder="Search existing markup keys">
+    <ul id="existingMarkupResults"></ul>
+    <p>Or create a new key below.</p>
+</div>
+<button id="promoteTranslation" type="button" class="govuk-button govuk-button--secondary js-hidden">Review and convert existing HTML to rich text</button>
 <div id="loading">
     Loading..
 </div>

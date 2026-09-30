@@ -10,6 +10,7 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\DescriptionOptional;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TranslationKey;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TranslationsArray;
+use Dvsa\Olcs\Transfer\FieldType\Traits\TranslationFormatOptional;
 use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 
 /**
@@ -21,4 +22,5 @@ final class Create extends AbstractCommand
     use TranslationKey;
     use TranslationsArray;
     use DescriptionOptional;
+    use TranslationFormatOptional;
 }

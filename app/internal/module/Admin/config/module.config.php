@@ -1041,9 +1041,9 @@ return [
                     'admin-long-text' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => 'long-text[/:action][/:id][/]',
+                            'route' => 'long-text[/:action][/:id][/][:subid]',
                             'constraints' => [
-                                'action' => '(index|add|edit)',
+                                'action' => '(index|add|editkey|details|languages|gettext|xhrsearch|subdelete|delete)',
                                 'id' => '[0-9]+',
                             ],
                             'defaults' => [

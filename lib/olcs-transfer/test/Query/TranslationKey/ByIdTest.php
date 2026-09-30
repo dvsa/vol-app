@@ -17,7 +17,16 @@ final class ByIdTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->assertEquals([
-        'id' => 2
+        'id' => 2,
+        'previewEditorJs' => null
         ], $sut->getArrayCopy());
+    }
+
+    public function testPreviewFlag(): void
+    {
+        $query = ById::create(['id' => 2, 'previewEditorJs' => true]);
+
+        $this->assertTrue($query->getPreviewEditorJs());
+        $this->assertTrue($query->getArrayCopy()['previewEditorJs']);
     }
 }

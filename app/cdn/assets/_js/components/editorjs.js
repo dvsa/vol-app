@@ -74,6 +74,9 @@ OLCS.editorjs = (function (document, $, undefined) {
             // a plain string comparison would think everything had changed.
             if (blocksChanged(hiddenInputs[name].value, outputData)) {
               hiddenInputs[name].value = JSON.stringify(outputData);
+              if (hiddenInputs[name].hasAttribute("data-enable-on-editor-change")) {
+                hiddenInputs[name].dispatchEvent(new Event("change", { bubbles: true }));
+              }
             }
           })
           .catch(function (error) {
@@ -224,6 +227,9 @@ OLCS.editorjs = (function (document, $, undefined) {
             .save()
             .then(function (outputData) {
               hiddenInput.value = JSON.stringify(outputData);
+              if (hiddenInput.hasAttribute("data-enable-on-editor-change")) {
+                hiddenInput.dispatchEvent(new Event("change", { bubbles: true }));
+              }
             })
             .catch(function (error) {
               if (typeof OLCS.logger !== "undefined") {

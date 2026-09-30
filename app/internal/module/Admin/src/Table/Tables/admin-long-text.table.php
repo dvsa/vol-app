@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
 
 return [
@@ -20,10 +20,6 @@ return [
         'crud' => [
             'actions' => [
                 'add' => ['class' => 'govuk-button', 'requireRows' => false],
-                'edit' => [
-                    'class' => 'govuk-button govuk-button--secondary js-require--one',
-                    'requireRows' => true,
-                ],
             ],
         ],
     ],
@@ -35,44 +31,30 @@ return [
             'sort' => 'id',
         ],
         [
-            // What a developer copies to place this content on a page.
-            'title' => 'UID',
-            'name' => 'referenceKey',
-            'sort' => 'referenceKey',
-            'formatter' => fn($row) => Escape::html($row['referenceKey'] ?? ''),
+            'title' => 'UID / Content key',
+            'name' => 'translationKey',
+            'sort' => 'translationKey',
+            'formatter' => fn($row) => Escape::html($row['translationKey']),
         ],
         [
-            'title' => 'Page name',
-            'name' => 'pageName',
-            'sort' => 'pageName',
-            'formatter' => fn($row) => Escape::html($row['pageName'] ?? ''),
-        ],
-        [
-            'title' => 'Description',
+            'title' => 'Page name / Description',
             'name' => 'description',
             'sort' => 'description',
             'formatter' => fn($row) => Escape::html($row['description'] ?? ''),
         ],
         [
-            'title' => 'Language',
-            'name' => 'locale',
-            'sort' => 'locale',
-            'formatter' => fn($row) => Escape::html($row['locale'] ?? ''),
-        ],
-        [
-            'title' => 'Last updated',
-            'name' => 'lastModifiedOn',
-            'sort' => 'lastModifiedOn',
-            'formatter' => function ($row, $column) {
-                $column['formatter'] = Date::class;
-
-                return empty($row['lastModifiedOn']) ? 'N/A' : (new Date())->format($row, $column);
+            'title' => '',
+            'formatter' => function ($row, $column = []) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $url = $this->urlHelper->fromRoute('admin-dashboard/admin-long-text', [
+                    'action' => 'details',
+                    'id' => $row['id'],
+                ]);
+                return sprintf('<a class="govuk-link" href="%s">%s</a>', $url, $this->translator->translate('view'));
             },
-        ],
-        [
-            'title' => 'markup-table-th-action',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}',
         ],
     ],
 ];
