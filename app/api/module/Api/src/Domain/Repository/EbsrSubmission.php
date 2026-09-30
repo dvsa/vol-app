@@ -49,7 +49,7 @@ class EbsrSubmission extends AbstractRepository
         }
 
         if (!empty($ebsrSubmissionStatus)) {
-            $qb->andWhere($qb->expr()->eq('e.ebsrSubmissionStatus', ':ebsrSubmissionStatus'))
+            $qb->andWhere($qb->expr()->eq($this->alias . '.ebsrSubmissionStatus', ':ebsrSubmissionStatus'))
                 ->setParameter('ebsrSubmissionStatus', $ebsrSubmissionStatus);
         }
 
