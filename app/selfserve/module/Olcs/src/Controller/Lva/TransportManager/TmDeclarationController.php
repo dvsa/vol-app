@@ -124,4 +124,10 @@ class TmDeclarationController extends AbstractDeclarationController
 
         return [$translated, $translated];
     }
+
+    #[\Override]
+    protected function getDeclarationMarkup(): string
+    {
+        return $this->tma['declaration'];
+    }
 }
