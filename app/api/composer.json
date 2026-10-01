@@ -44,7 +44,7 @@
     "caseyamcl/guzzle_retry_middleware": "^2.13",
     "doctrine/orm": "^3.6.7",
     "dvsa/authentication-cognito": "^4.1",
-    "dvsa/laminas-config-cloud-parameters": "^2.3",
+    "dvsa/laminas-config-cloud-parameters": "^2.4",
     "dvsa/php-govuk-account": "^4.0",
     "gedmo/doctrine-extensions": "^3.21",
     "guzzlehttp/guzzle": "^7.12.1",
@@ -143,6 +143,7 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit",
+    "test:parallel": "vendor/bin/paratest",
     "test:integration": "vendor/bin/phpunit -c phpunit-integration.xml",
     "phpcs": "vendor/bin/phpcs -d memory_limit=512M",
     "psalm": "vendor/bin/psalm",
@@ -163,6 +164,7 @@
     "dvsa/coding-standards": "^2.1",
     "phpstan/phpstan": "^2.0",
     "phpstan/phpstan-doctrine": "^2.0",
-    "vimeo/psalm": "^6.0"
+    "vimeo/psalm": "^6.0",
+    "brianium/paratest": "^7.24.1"
   }
 }

@@ -48,7 +48,7 @@
   "require": {
     "php": "~8.4.0",
     "ext-redis": "*",
-    "dvsa/laminas-config-cloud-parameters": "^2.3",
+    "dvsa/laminas-config-cloud-parameters": "^2.4",
     "laminas/laminas-authentication": "^2.19",
     "laminas/laminas-eventmanager": "^3.15",
     "laminas/laminas-filter": "^2.42",
@@ -85,7 +85,8 @@
     "rector/rector": "^2.3",
     "dvsa/coding-standards": "^2.1",
     "phpstan/phpstan": "^2.0",
-    "vimeo/psalm": "^6.0"
+    "vimeo/psalm": "^6.0",
+    "brianium/paratest": "^7.24.1"
   },
   "autoload": {
     "classmap": [
@@ -118,6 +119,7 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit",
+    "test:parallel": "vendor/bin/paratest",
     "phpcs": "vendor/bin/phpcs -d memory_limit=512M",
     "psalm": "vendor/bin/psalm",
     "phpstan": "vendor/bin/phpstan --memory-limit=1G",

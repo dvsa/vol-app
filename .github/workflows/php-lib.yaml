@@ -15,10 +15,19 @@ on:
         type: string
         required: false
         default: "8.4"
+      split:
+        description: "Run each check as its own job. Only worth it when the checks take long enough to outweigh the ~20s of setup each extra job repeats."
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   checks:
-    name: Checks
+    name: ${{ matrix.check }}
+    strategy:
+      fail-fast: false
+      matrix:
+        check: ${{ fromJSON(inputs.split && '["Test", "PHP CodeSniffer", "Psalm", "PHPStan"]' || '["Checks"]') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -52,5 +61,15 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-lib-${{ inputs.project }}-php${{ inputs.php-version }}-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist
-      - name: Test, phpcs, psalm, phpstan
-        run: composer run-script all
+      - name: ${{ matrix.check }}
+        env:
+          CHECK: ${{ matrix.check }}
+        run: |
+          case "$CHECK" in
+            Test) composer run-script test ;;
+            "PHP CodeSniffer") composer run-script phpcs ;;
+            # Psalm drops to a single thread for both scanning and analysis when it detects CI, unless told otherwise.
+            Psalm) composer run-script psalm -- --threads="$(nproc)" --scan-threads="$(nproc)" ;;
+            PHPStan) composer run-script phpstan ;;
+            *) composer run-script all ;;
+          esac

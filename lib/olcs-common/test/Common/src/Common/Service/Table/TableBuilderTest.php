@@ -1615,7 +1615,6 @@ final class TableBuilderTest extends MockeryTestCase
     /**
      * Test renderLimitOptions Without limit options
      */
-    #[\PHPUnit\Framework\Attributes\Depends('testRenderLimitOptionsIsDefined')]
     public function testRenderLimitOptionsWithoutLimitOptions(): void
     {
         $settings = [
@@ -1636,7 +1635,6 @@ final class TableBuilderTest extends MockeryTestCase
     /**
      * Test renderLimitOptions
      */
-    #[\PHPUnit\Framework\Attributes\Depends('testRenderLimitOptionsIsDefined')]
     public function testRenderLimitOptions(): void
     {
         $settings = [
@@ -1694,7 +1692,6 @@ final class TableBuilderTest extends MockeryTestCase
     /**
      * Test renderLimitOptions with query enabled
      */
-    #[\PHPUnit\Framework\Attributes\Depends('testRenderLimitOptionsIsDefined')]
     public function testRenderLimitOptionsWithQueryEnabled(): void
     {
         $settings = [
@@ -1762,7 +1759,6 @@ final class TableBuilderTest extends MockeryTestCase
         $this->assertEquals('', $table->renderLimitOptions());
     }
 
-    #[\PHPUnit\Framework\Attributes\Depends('renderPageOptionsIsDefined')]
     public function testRenderPageOptionsWithoutOptions(): void
     {
         $options = [
@@ -1786,7 +1782,6 @@ final class TableBuilderTest extends MockeryTestCase
         $this->assertEquals('', $table->renderPageOptions());
     }
 
-    #[\PHPUnit\Framework\Attributes\Depends('renderPageOptionsIsDefined')]
     public function testRenderPageOptions(): void
     {
         $options = [

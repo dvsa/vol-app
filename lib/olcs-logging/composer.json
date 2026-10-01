@@ -29,7 +29,8 @@
     "mockery/mockery": "^1.6",
     "bamarni/composer-bin-plugin": "^1.8.2",
     "phpstan/phpstan-mockery": "^2.0",
-    "rector/rector": "^2.3"
+    "rector/rector": "^2.3",
+    "brianium/paratest": "^7.24.1"
   },
   "config": {
     "allow-plugins": {
@@ -42,6 +43,7 @@
       "@composer bin all install"
     ],
     "test": "phpunit",
+    "test:parallel": "paratest",
     "phpcs": "phpcs",
     "psalm": "psalm",
     "phpstan": "phpstan --memory-limit=1G",

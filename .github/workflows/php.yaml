@@ -30,43 +30,9 @@ on:
         default: false
 
 jobs:
-  warm-cache:
-    name: Warm cache
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app/${{ inputs.project }}
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.ref || null }}
-          sparse-checkout: |
-            app/${{ inputs.project }}
-            lib
-          fetch-depth: ${{ !inputs.ref && 1 || 0 }}
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.4"
-          coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring, igbinary
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-      - name: Cache Composer packages
-        uses: actions/cache@v5
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
-          restore-keys: ${{ runner.os }}-composer-
-      - name: Install dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
-
   test:
     name: Test
     if: ${{ !inputs.skip-checks }}
-    needs:
-      - warm-cache
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -99,10 +65,20 @@ jobs:
         run: vendor/bin/phpunit
 
   static-analysis:
-    name: Static analysis
+    name: Static analysis (${{ matrix.tool }})
     if: ${{ !inputs.skip-checks }}
-    needs:
-      - warm-cache
+    # One job per tool so they run side by side rather than back to back.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - tool: PHPStan
+            command: composer run-script phpstan
+          - tool: PHP CodeSniffer
+            command: composer run-script phpcs
+          # Psalm drops to a single thread for both scanning and analysis when it detects CI, unless told otherwise.
+          - tool: Psalm
+            command: composer run-script psalm -- --threads=$(nproc) --scan-threads=$(nproc)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -131,12 +107,8 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
-      - name: PHPStan
-        run: composer run-script phpstan
-      - name: PHP CodeSniffer
-        run: composer run-script phpcs
-      - name: Psalm
-        run: composer run-script psalm
+      - name: ${{ matrix.tool }}
+        run: ${{ matrix.command }}
 
   package:
     name: Package
