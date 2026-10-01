@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "db688bd6211fcccc11e31f840966aa2c",
+  "content-hash": "ea319261204088a9007d3b8f16c58af5",
   "packages": [
     {
       "name": "alphagov/notifications-php-client",
@@ -1584,24 +1584,24 @@
     },
     {
       "name": "dvsa/laminas-config-cloud-parameters",
-      "version": "v2.3.0",
+      "version": "v2.4.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters.git",
-        "reference": "02e06fab7545f536d39f3565a208ebf94c171645"
+        "reference": "704cc253cb0460a7c82e96a08ef395a7b58e2937"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/02e06fab7545f536d39f3565a208ebf94c171645",
-        "reference": "02e06fab7545f536d39f3565a208ebf94c171645",
+        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/704cc253cb0460a7c82e96a08ef395a7b58e2937",
+        "reference": "704cc253cb0460a7c82e96a08ef395a7b58e2937",
         "shasum": ""
       },
       "require": {
         "ext-json": "*",
         "laminas/laminas-modulemanager": "^2.4",
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
-        "symfony/dependency-injection": "^5|^6|^7",
-        "symfony/property-access": "^5|^6|^7"
+        "symfony/dependency-injection": "^5|^6|^7|^8",
+        "symfony/property-access": "^5|^6|^7|^8"
       },
       "require-dev": {
         "aws/aws-sdk-php": "^3.281",
@@ -1628,9 +1628,9 @@
       "license": ["MIT"],
       "support": {
         "issues": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/issues",
-        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v2.3.0"
+        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v2.4.0"
       },
-      "time": "2026-09-09T15:04:17+00:00"
+      "time": "2026-09-24T14:38:52+00:00"
     },
     {
       "name": "dvsa/php-govuk-account",
@@ -7766,39 +7766,36 @@
     },
     {
       "name": "symfony/dependency-injection",
-      "version": "v7.4.16",
+      "version": "v8.1.8",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/dependency-injection.git",
-        "reference": "7f59a843c1fbcceafecdf6863d3e38ea6ecd5061"
+        "reference": "e375617d3f132059bd096f41951b527c2eb60cd0"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/7f59a843c1fbcceafecdf6863d3e38ea6ecd5061",
-        "reference": "7f59a843c1fbcceafecdf6863d3e38ea6ecd5061",
+        "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/e375617d3f132059bd096f41951b527c2eb60cd0",
+        "reference": "e375617d3f132059bd096f41951b527c2eb60cd0",
         "shasum": ""
       },
       "require": {
-        "php": ">=8.2",
+        "php": ">=8.4.1",
         "psr/container": "^1.1|^2.0",
         "symfony/deprecation-contracts": "^2.5|^3",
         "symfony/service-contracts": "^3.6",
-        "symfony/var-exporter": "^6.4.20|^7.2.5|^8.0"
+        "symfony/var-exporter": "^8.1"
       },
       "conflict": {
-        "ext-psr": "<1.1|>=2",
-        "symfony/config": "<6.4",
-        "symfony/finder": "<6.4",
-        "symfony/yaml": "<6.4"
+        "ext-psr": "<1.1|>=2"
       },
       "provide": {
         "psr/container-implementation": "1.1|2.0",
         "symfony/service-implementation": "1.1|2.0|3.0"
       },
       "require-dev": {
-        "symfony/config": "^6.4|^7.0|^8.0",
-        "symfony/expression-language": "^6.4|^7.0|^8.0",
-        "symfony/yaml": "^6.4|^7.0|^8.0"
+        "symfony/config": "^7.4|^8.0",
+        "symfony/expression-language": "^7.4|^8.0",
+        "symfony/yaml": "^7.4|^8.0"
       },
       "type": "library",
       "autoload": {
@@ -7822,7 +7819,7 @@
       "description": "Allows you to standardize and centralize the way objects are constructed in your application",
       "homepage": "https://symfony.com",
       "support": {
-        "source": "https://github.com/symfony/dependency-injection/tree/v7.4.16"
+        "source": "https://github.com/symfony/dependency-injection/tree/v8.1.8"
       },
       "funding": [
         {
@@ -7842,7 +7839,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-08-06T09:45:22+00:00"
+      "time": "2026-09-29T12:38:40+00:00"
     },
     {
       "name": "symfony/deprecation-contracts",
@@ -9249,25 +9246,25 @@
     },
     {
       "name": "symfony/property-access",
-      "version": "v7.4.16",
+      "version": "v8.1.4",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/property-access.git",
-        "reference": "c3dce76a6697c6428f7d80d5cd1cf0aa5d9679f3"
+        "reference": "1a41232c678972b93ce499a504e19ea09dfcd0b2"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/property-access/zipball/c3dce76a6697c6428f7d80d5cd1cf0aa5d9679f3",
-        "reference": "c3dce76a6697c6428f7d80d5cd1cf0aa5d9679f3",
+        "url": "https://api.github.com/repos/symfony/property-access/zipball/1a41232c678972b93ce499a504e19ea09dfcd0b2",
+        "reference": "1a41232c678972b93ce499a504e19ea09dfcd0b2",
         "shasum": ""
       },
       "require": {
-        "php": ">=8.2",
-        "symfony/property-info": "^6.4.32|~7.3.10|^7.4.4|^8.0.4"
+        "php": ">=8.4.1",
+        "symfony/property-info": "^7.4.4|^8.0.4"
       },
       "require-dev": {
-        "symfony/cache": "^6.4|^7.0|^8.0",
-        "symfony/var-exporter": "^6.4.1|^7.0.1|^8.0"
+        "symfony/cache": "^7.4|^8.0",
+        "symfony/var-exporter": "^7.4|^8.0"
       },
       "type": "library",
       "autoload": {
@@ -9302,7 +9299,7 @@
         "reflection"
       ],
       "support": {
-        "source": "https://github.com/symfony/property-access/tree/v7.4.16"
+        "source": "https://github.com/symfony/property-access/tree/v8.1.4"
       },
       "funding": [
         {
@@ -9322,7 +9319,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-07-30T12:37:26+00:00"
+      "time": "2026-07-30T12:40:56+00:00"
     },
     {
       "name": "symfony/property-info",
