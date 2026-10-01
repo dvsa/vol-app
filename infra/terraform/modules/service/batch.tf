@@ -265,8 +265,8 @@ locals {
       }
     }))
 
-    attempt_duration_seconds = job.timeout
-    retry_strategy           = local.default_retry_policy
+    timeout        = job.timeout == null ? null : { attempt_duration_seconds = job.timeout }
+    retry_strategy = local.default_retry_policy
   } }
 
   schedules = {
