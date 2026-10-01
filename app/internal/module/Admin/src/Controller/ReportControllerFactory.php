@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
@@ -18,12 +19,14 @@ class ReportControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $placeholder = $container->get('ViewHelperManager')->get(Placeholder::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new ReportController(
             $scriptFactory,
             $tableFactory,
             $formHelper,
-            $placeholder
+            $placeholder,
+            $flashMessengerHelper
         );
     }
 }

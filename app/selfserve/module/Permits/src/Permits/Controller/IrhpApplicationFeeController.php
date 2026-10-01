@@ -5,10 +5,10 @@ namespace Permits\Controller;
 use Common\Controller\Traits\GenericReceipt;
 use Common\RefData;
 use Common\Service\Cqrs\Response as CqrsResponse;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
-use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
@@ -32,7 +32,6 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
 {
     use ExternalControllerTrait;
     use GenericReceipt;
-    use FlashMessengerTrait;
 
     protected $lva;
 
@@ -90,8 +89,6 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
         ],
     ];
 
-    protected $currentMessages = [];
-
     /**
      * @param TranslationHelperService $translationHelper
      * @param FormHelperService $formHelper
@@ -102,23 +99,10 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
-        MapperManager $mapperManager
+        MapperManager $mapperManager,
+        protected FlashMessengerHelperService $flashMessengerHelper
     ) {
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
-    }
-
-    /**
-     * Attach messages to display in the current response
-     *
-     * @return void
-     */
-    protected function attachCurrentMessages()
-    {
-        foreach ($this->currentMessages as $namespace => $messages) {
-            foreach ($messages as $message) {
-                $this->addMessage($message, $namespace);
-            }
-        }
     }
 
     /**
@@ -155,7 +139,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
             }
         }
         if ($errorMessage !== '') {
-            $this->addErrorMessage($errorMessage);
+            $this->flashMessengerHelper->addErrorMessage($errorMessage);
             return $this->redirectOnError();
         }
 
@@ -235,7 +219,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
     protected function handlePaymentError(CqrsResponse $response): void
     {
         if (!$response->isOk()) {
-            $this->addErrorMessage('payment-failed');
+            $this->flashMessengerHelper->addErrorMessage('payment-failed');
         }
     }
 

@@ -8,10 +8,10 @@ use Common\Auth\Service\AuthenticationServiceInterface;
 use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Service\Auth\CookieService;
 use Psr\Container\ContainerInterface;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Layout;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -52,7 +52,7 @@ final class LoginControllerFactoryTest extends MockeryTestCase
             [InternalCommandAdapter::class, $this->createStub(InternalCommandAdapter::class)],
             [AuthenticationServiceInterface::class, $this->createStub(AuthenticationServiceInterface::class)],
             [CurrentUser::class, $this->createStub(CurrentUser::class)],
-            [FlashMessenger::class, $this->createStub(FlashMessenger::class)],
+            [LaminasSessionFlashMessenger::class, $this->createStub(LaminasSessionFlashMessenger::class)],
             [FormHelperService::class, $this->createStub(FormHelperService::class)],
             [Layout::class, $this->createStub(Layout::class)],
             [Redirect::class, $this->createStub(Redirect::class)],
@@ -79,7 +79,7 @@ final class LoginControllerFactoryTest extends MockeryTestCase
         $serviceManager->setService(AuthenticationServiceInterface::class, $this->createStub(AuthenticationServiceInterface::class));
         $serviceManager->setService('Auth\CookieService', $this->createStub(CookieService::class));
         $serviceManager->setService(CurrentUser::class, $this->createStub(CurrentUser::class));
-        $serviceManager->setService(FlashMessenger::class, $this->createStub(FlashMessenger::class));
+        $serviceManager->setService(LaminasSessionFlashMessenger::class, $this->createStub(LaminasSessionFlashMessenger::class));
         $serviceManager->setService(FormHelperService::class, $this->createStub(FormHelperService::class));
         $serviceManager->setService(Layout::class, $this->createStub(Layout::class));
         $serviceManager->setService(Redirect::class, $this->createStub(Redirect::class));

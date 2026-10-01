@@ -172,7 +172,7 @@ abstract class AbstractDeclarationController extends AbstractController
                 ]
             );
         } else {
-            $this->flashMessenger()->addErrorMessage('unknown-error');
+            $this->getFlashMessenger()->addErrorMessage('unknown-error');
             return $this->redirect()->refresh();
         }
     }

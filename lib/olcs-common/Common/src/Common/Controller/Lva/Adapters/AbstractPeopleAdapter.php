@@ -8,6 +8,8 @@ use Common\Controller\Plugin\HandleQuery;
 use Common\RefData;
 use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Cqrs\Response;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Licence\CreatePeople;
 use Dvsa\Olcs\Transfer\Command\Application\CreatePeople as CreatePeopleApplication;
@@ -20,7 +22,6 @@ use Dvsa\Olcs\Transfer\Query\Licence\People;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Psr\Container\ContainerInterface;
 use Laminas\Form\Form;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 
 abstract class AbstractPeopleAdapter extends AbstractControllerAwareAdapter implements PeopleAdapterInterface
 {
@@ -283,8 +284,8 @@ abstract class AbstractPeopleAdapter extends AbstractControllerAwareAdapter impl
 
     private function addNewStatuses(array $tableData)
     {
-        /** @var FlashMessenger $flashMessenger */
-        $flashMessenger = $this->container->get('ControllerPluginManager')->get(FlashMessenger::class);
+        /** @var FlashMessengerInterface $flashMessenger */
+        $flashMessenger = $this->container->get(LaminasSessionFlashMessenger::class);
         $newPersonIDs = $flashMessenger->getMessages(AbstractController::FLASH_MESSENGER_CREATED_PERSON_NAMESPACE);
 
         $newTableData = [];

@@ -131,12 +131,12 @@ class IrhpPermitController extends AbstractInternalController implements
         );
 
         if (!$updateCandidateChoicesCmd->isOk()) {
-            $this->flashMessenger()->addErrorMessage('An error occurred saving permit selections.');
+            $this->flashMessengerHelperService->addErrorMessage('An error occurred saving permit selections.');
             foreach ($updateCandidateChoicesCmd['messages'] as $message) {
-                $this->flashMessenger()->addErrorMessage($message);
+                $this->flashMessengerHelperService->addErrorMessage($message);
             }
         } else {
-            $this->flashMessenger()->addSuccessMessage('Permit selections saved successfully.');
+            $this->flashMessengerHelperService->addSuccessMessage('Permit selections saved successfully.');
         }
 
         return $this->redirect()->toRouteAjax(
@@ -248,12 +248,12 @@ class IrhpPermitController extends AbstractInternalController implements
         $result = $response->getResult();
         if (!$response->isOk()) {
             foreach ($result['messages'] as $message) {
-                $this->flashMessenger()->addErrorMessage($message);
+                $this->flashMessengerHelperService->addErrorMessage($message);
             }
             return false;
         } else {
             foreach ($result['messages'] as $message) {
-                $this->flashMessenger()->addSuccessMessage($message);
+                $this->flashMessengerHelperService->addSuccessMessage($message);
             }
             return true;
         }
@@ -312,12 +312,12 @@ class IrhpPermitController extends AbstractInternalController implements
 
         if (!$response->isOk()) {
             foreach ($result['messages'] as $message) {
-                $this->flashMessenger()->addErrorMessage($message);
+                $this->flashMessengerHelperService->addErrorMessage($message);
             }
             return false;
         }
 
-        $this->flashMessenger()->addSuccessMessage($result['messages'][0]);
+        $this->flashMessengerHelperService->addSuccessMessage($result['messages'][0]);
         return true;
     }
 }

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace CommonTest\Service\Helper;
 
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -36,7 +37,7 @@ final class FlashMessengerHelperServiceTest extends MockeryTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->mockFlashMessenger = m::mock(\Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger::class);
+        $this->mockFlashMessenger = m::mock(FlashMessengerInterface::class);
 
         $this->sut = new FlashMessengerHelperService($this->mockFlashMessenger);
     }

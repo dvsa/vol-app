@@ -82,7 +82,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
 
         if ($this->isButtonPressed('cancel')) {
             if ($tmId) {
-                $this->flashMessenger()->addSuccessMessage('Your changes have been discarded');
+                $this->flashMessengerHelperService->addSuccessMessage('Your changes have been discarded');
                 return $this->redirect()->toRouteAjax('transport-manager/details', ['transportManager' => $tmId]);
             } else {
                 return $this->redirect()->toRouteAjax('operators/operators-params');

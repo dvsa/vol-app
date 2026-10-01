@@ -17,7 +17,6 @@ parameters:
       - 'Common/src/Common/View/Model/'
       - 'Common/src/Common/Form/View/Model/FormRadioContentViewModel.php'
       - 'Common/src/Common/Util/LvaRoute.php'
-      - 'Common/src/Common/View/Helper/FlashMessenger.php'
    - # Laminas have added annotations to say classes we extend will be final in subsequent versions - we're overriding properties in those classes and can't easily fix this
     message: '#overrides @final property#'
     paths:
@@ -27,4 +26,3 @@ parameters:
       - 'Common/src/Common/Service/Qa/'
       - 'Common/src/Common/View/Model/'
       - 'Common/src/Common/Form/View/Model/FormRadioContentViewModel.php'
-      - 'Common/src/Common/View/Helper/FlashMessenger.php'

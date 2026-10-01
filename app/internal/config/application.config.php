@@ -9,7 +9,6 @@ $config = [
         'Laminas\Router',
         'Laminas\Navigation',
         'Laminas\I18n',
-        'Laminas\Mvc\Plugin\FlashMessenger',
         'Laminas\Filter',
         'Laminas\Validator',
         'Laminas\Form',

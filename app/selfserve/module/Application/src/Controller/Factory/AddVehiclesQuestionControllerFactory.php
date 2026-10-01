@@ -13,6 +13,7 @@ use Common\Data\Mapper\Lva\GoodsVehiclesVehicle;
 use Common\FeatureToggle;
 use Common\Form\FormValidator;
 use Common\FormService\FormServiceManager;
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
@@ -58,7 +59,7 @@ class AddVehiclesQuestionControllerFactory extends BinaryFeatureToggleAwareContr
             $urlHelper = $controllerPluginManager->get(Url::class),
             $redirectHelper = $controllerPluginManager->get(Redirect::class),
             $controllerPluginManager->get(HandleQuery::class),
-            $controllerPluginManager->get('FlashMessenger'),
+            $container->get(LaminasSessionFlashMessenger::class),
             $container->get(FormValidator::class),
             $commandHandler = $controllerPluginManager->get(HandleCommand::class)
         );

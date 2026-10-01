@@ -9,6 +9,7 @@ use Common\Controller\Plugin\Redirect;
 use Common\Form\Form;
 use Common\Form\FormValidator;
 use Common\Service\Cqrs\Response as QueryResponse;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\View\Helper\Panel;
@@ -19,7 +20,6 @@ use Laminas\Form\Annotation\AnnotationBuilder;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\PluginManager;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Router\Http\RouteMatch;
 use Laminas\Stdlib\Parameters;
@@ -36,7 +36,7 @@ final class SwitchBoardControllerTest extends MockeryTestCase
 {
     public $sut;
     /**
-     * @var FlashMessenger
+     * @var FlashMessengerInterface
      */
     private $flashMessengerMock;
 
@@ -453,7 +453,7 @@ final class SwitchBoardControllerTest extends MockeryTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->flashMessengerMock = m::mock(FlashMessenger::class);
+        $this->flashMessengerMock = m::mock(FlashMessengerInterface::class);
         $this->formHelperMock  = m::mock(FormHelperService::class);
         $this->queryHandlerMock  = m::mock(HandleQuery::class);
         $this->redirectHelperMock  = m::mock(Redirect::class);

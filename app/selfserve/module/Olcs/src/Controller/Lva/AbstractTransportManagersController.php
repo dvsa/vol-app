@@ -1375,7 +1375,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $translationHelper = $this->translationHelper;
         $params['content'] = $translationHelper->translateReplace($template, [$this->getViewTmUrl()]);
 
-        $this->flashMessenger()->addSuccessMessage('operator-approve-message');
+        $this->flashMessengerHelper->addSuccessMessage('operator-approve-message');
         return $this->renderTmAction('transport-manager-application.print-sign', null, $tma, $params);
     }
 

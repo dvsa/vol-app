@@ -6,8 +6,8 @@ use Common\Category;
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Traits\GenericMethods;
 use Common\Service\Helper\FileUploadHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
-use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\QueuePacks as QueuePacksCmd;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmission as EbsrSubmissionQry;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\OrganisationUnprocessedList;
@@ -22,13 +22,13 @@ use LmcRbacMvc\Service\AuthorizationService;
 class UploadsController extends AbstractController
 {
     use GenericMethods;
-    use FlashMessengerTrait;
 
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         protected FormHelperService $formHelper,
-        protected FileUploadHelperService $uploadHelper
+        protected FileUploadHelperService $uploadHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -80,11 +80,11 @@ class UploadsController extends AbstractController
             $response = $this->handleCommand(QueuePacksCmd::create($cmdData));
 
             if ($response->isOk()) {
-                $this->addSuccessMessage('ebsr-upload-success');
+                $this->flashMessengerHelper->addSuccessMessage('ebsr-upload-success');
                 return $this->redirect()->toRoute('bus-registration');
             }
 
-            $this->addErrorMessage('ebsr-upload-fail');
+            $this->flashMessengerHelper->addErrorMessage('ebsr-upload-fail');
         }
 
         return new ViewModel(['form' => $form]);
