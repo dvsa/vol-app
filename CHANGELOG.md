@@ -1,5 +1,22 @@
 # Changelog
 
+## [9.5.0](https://github.com/dvsa/vol-app/compare/v9.4.0...v9.5.0) (2026-10-01)
+
+
+### Features
+
+* vol 7319 financial evidence assessment page ([#1793](https://github.com/dvsa/vol-app/issues/1793)) ([9a5436e](https://github.com/dvsa/vol-app/commit/9a5436e08b7ca15bb557d373244d1df23beb691f))
+
+
+### Bug Fixes
+
+* 7589 CI security fixes 1 ([#1812](https://github.com/dvsa/vol-app/issues/1812)) ([07b7184](https://github.com/dvsa/vol-app/commit/07b7184022548c9dbeb6f91bd880202b2bbbbb95))
+* **api:** bind repository helpers to the correct query (vol-7599) ([#1807](https://github.com/dvsa/vol-app/issues/1807)) ([bf6e977](https://github.com/dvsa/vol-app/commit/bf6e9770c08490d33154754ef98331150680726f))
+* **api:** correct ebsr submission status filter ([#1799](https://github.com/dvsa/vol-app/issues/1799)) ([c90ccb1](https://github.com/dvsa/vol-app/commit/c90ccb196867c9c8a3fd3158f347230c3fb6d263))
+* **api:** preserve combined transport manager licence filters (vol-7600) ([#1805](https://github.com/dvsa/vol-app/issues/1805)) ([1169bde](https://github.com/dvsa/vol-app/commit/1169bde80a10367de75f8602c4facb5c726fce42))
+* **internal:** inject form helper into financial evidence assessment controller ([#1811](https://github.com/dvsa/vol-app/issues/1811)) ([dbff68e](https://github.com/dvsa/vol-app/commit/dbff68edbf263f187d12e2e4f0337630aeb0819a))
+* keep letter variant dropdowns selected when editing a section variant ([#1816](https://github.com/dvsa/vol-app/issues/1816)) ([aa89e15](https://github.com/dvsa/vol-app/commit/aa89e15374a113878d7b50f6580ed7c49ce87eec))
+
 ## [9.4.0](https://github.com/dvsa/vol-app/compare/v9.3.0...v9.4.0) (2026-09-28)
 
 
