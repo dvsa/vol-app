@@ -17,20 +17,17 @@ ALTER TABLE si_penalty_imposed_type CHANGE deleted_date deleted_date DATETIME DE
 ALTER TABLE sla_exception CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE transport_manager CHANGE merge_details merge_details JSON DEFAULT NULL
 
-# ---- inexpressible from mapping (74) ----
+# ---- inexpressible from mapping (57) ----
 # Differences on implicit ManyToMany join tables that no entity change can fix -
 # generated index names, and columns a JoinTable cannot carry. See classify().
 # Recorded and compared like any other statement, but not work anyone can pick up.
 
-ALTER TABLE bus_reg_bus_service_type DROP olbs_key
 ALTER TABLE bus_reg_bus_service_type RENAME INDEX fk_bus_reg_bus_serv_type_bus_service_type_id_bus_service_type_id TO IDX_CE30F69C4424474C
 ALTER TABLE bus_reg_bus_service_type RENAME INDEX ix_bus_reg_bus_service_type_bus_reg_id TO IDX_CE30F69C5327B2E3
-ALTER TABLE bus_reg_local_auth DROP olbs_key
 ALTER TABLE bus_reg_local_auth RENAME INDEX ix_bus_reg_local_auth_local_authority_id TO IDX_B1BB6E19B0E901C6
-ALTER TABLE bus_reg_traffic_area DROP olbs_key
 ALTER TABLE bus_reg_traffic_area RENAME INDEX ix_bus_reg_traffic_area_bus_reg_id TO IDX_B7B2BC105327B2E3
 ALTER TABLE bus_reg_traffic_area RENAME INDEX ix_bus_reg_traffic_area_traffic_area_id TO IDX_B7B2BC1018E0B1DB
-ALTER TABLE bus_reg_variation_reason DROP olbs_key, DROP olbs_key2
+ALTER TABLE bus_reg_variation_reason DROP olbs_key2
 ALTER TABLE bus_reg_variation_reason RENAME INDEX ix_bus_reg_variation_reason_bus_reg_id TO IDX_F841EA265327B2E3
 ALTER TABLE bus_reg_variation_reason RENAME INDEX ix_bus_reg_variation_reason_variation_reason_id TO IDX_F841EA264D98204B
 ALTER TABLE case_category RENAME INDEX ix_case_category_case_id TO IDX_913163BCCF10D4F5
@@ -51,13 +48,11 @@ ALTER TABLE irhp_permit_request_attribute RENAME INDEX ix_irhp_permit_request_at
 ALTER TABLE irhp_permit_request_attribute RENAME INDEX ix_irhp_permit_request_att_irhp_permit_request_id TO IDX_701A670F7613AFB4
 ALTER TABLE licence_status_decision RENAME INDEX ix_licence_status_decision_licence_id TO IDX_78887D6626EF07C9
 ALTER TABLE licence_status_decision RENAME INDEX ix_licence_status_decision_reason_id TO IDX_78887D66BDEE7539
-ALTER TABLE oc_complaint DROP olbs_key
 ALTER TABLE oc_complaint RENAME INDEX ix_oc_complaint_complaint_id TO IDX_19143EF1EDAE188E
 ALTER TABLE oc_complaint RENAME INDEX ix_oc_complaint_operating_centre_id TO IDX_19143EF135382CCB
-ALTER TABLE operating_centre_opposition DROP olbs_oc_id, DROP olbs_opp_id, DROP olbs_type
+ALTER TABLE operating_centre_opposition DROP olbs_oc_id, DROP olbs_opp_id
 ALTER TABLE operating_centre_opposition RENAME INDEX ix_operating_centre_opposition_operating_centre_id TO IDX_14273D7035382CCB
 ALTER TABLE operating_centre_opposition RENAME INDEX ix_operating_centre_opposition_opposition_id TO IDX_14273D70B4BE57B7
-ALTER TABLE opposition_grounds DROP olbs_key
 ALTER TABLE opposition_grounds RENAME INDEX ix_opposition_grounds_ground_id TO IDX_3591EE421D297B0A
 ALTER TABLE opposition_grounds RENAME INDEX ix_opposition_grounds_opposition_id TO IDX_3591EE42B4BE57B7
 ALTER TABLE pi_decision RENAME INDEX ix_pi_decision_decision_id TO IDX_F4322323BDEE7539
@@ -76,23 +71,11 @@ ALTER TABLE submission_action_reason RENAME INDEX ix_submission_action_reason_re
 ALTER TABLE submission_action_reason RENAME INDEX ix_submission_action_reason_submission_action_id TO IDX_C4ADC98D2D8DF481
 ALTER TABLE submission_action_type RENAME INDEX ix_submission_action_type_action_type TO IDX_7DFBF33DFA3FEC27
 ALTER TABLE submission_action_type RENAME INDEX ix_submission_action_type_submission_action_id TO IDX_7DFBF33D2D8DF481
-ALTER TABLE tm_case_decision_rehab DROP olbs_key
 ALTER TABLE tm_case_decision_rehab RENAME INDEX ix_tm_case_decision_rehab_rehab_measure_id TO IDX_353BF96738237A80
 ALTER TABLE tm_case_decision_rehab RENAME INDEX ix_tm_case_decision_rehab_tm_case_decision_id TO IDX_353BF9672543F459
-ALTER TABLE tm_case_decision_unfitness DROP olbs_key
 ALTER TABLE tm_case_decision_unfitness RENAME INDEX ix_tm_case_decision_unfitness_tm_case_decision_id TO IDX_659D1A272543F459
 ALTER TABLE tm_case_decision_unfitness RENAME INDEX ix_tm_case_decision_unfitness_unfitness_reason_id TO IDX_659D1A274942EB41
 ALTER TABLE user_role RENAME INDEX ix_user_role_role_id TO IDX_2DE8C6A3D60322AC
 ALTER TABLE user_role RENAME INDEX ix_user_role_user_id TO IDX_2DE8C6A3A76ED395
-DROP INDEX ix_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area
-DROP INDEX ix_bus_reg_variation_reason_olbs_key_olbs_key2 ON bus_reg_variation_reason
-DROP INDEX uk_bus_reg_bus_service_type_olbs_key_bus_service_type_id ON bus_reg_bus_service_type
-DROP INDEX uk_bus_reg_local_auth_olbs_key_local_authority_id ON bus_reg_local_auth
-DROP INDEX uk_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area
-DROP INDEX uk_oc_complaint_olbs_key ON oc_complaint
 DROP INDEX uk_oc_complaint_operating_centre_id_complaint_id ON oc_complaint
-DROP INDEX uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type ON operating_centre_opposition
-DROP INDEX uk_opposition_grounds_olbs_key ON opposition_grounds
 DROP INDEX uk_pi_type_pi_id_pi_type_id ON pi_type
-DROP INDEX uk_tm_case_decision_rehab_olbs_key ON tm_case_decision_rehab
-DROP INDEX uk_tm_case_decision_unfitness_olbs_key ON tm_case_decision_unfitness

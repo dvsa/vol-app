@@ -15,7 +15,6 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 #[ORM\Index(name: 'ix_conviction_case_id', columns: ['case_id'])]
 #[ORM\Index(name: 'ix_conviction_defendant_type', columns: ['defendant_type'])]
 #[ORM\Index(name: 'ix_conviction_conviction_category', columns: ['conviction_category'])]
-#[ORM\UniqueConstraint(name: 'uk_conviction_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class Conviction extends AbstractConviction
 {

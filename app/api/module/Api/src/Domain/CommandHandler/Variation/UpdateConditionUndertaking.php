@@ -39,8 +39,6 @@ final class UpdateConditionUndertaking extends AbstractCommandHandler implements
         if ($conditionUndertaking->getApplication() === null) {
             $deltaConditionUndertaking = clone $conditionUndertaking;
             $deltaConditionUndertaking
-                ->setOlbsType(null)
-                ->setOlbsKey(null)
                 ->setLastModifiedOn(null)
                 ->setAction('U')
                 ->setIsDraft('Y')
