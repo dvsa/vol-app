@@ -161,20 +161,38 @@ final class DocumentAnalysisTest extends RepositoryTestCase
     {
         yield 'success' => [
             'recordSuccess',
-            [5, ['checks' => ['passed' => true]], ['bucket' => 'b', 'key' => 'k']],
+            [5, ['analysis' => ['core_checks' => []]], ['version' => 1, 'rows' => []]],
             'UPDATE ' . Entity::class . ' da'
             . ' SET da.status = :success, da.result = :result,'
-            . ' da.resultMetadata = :metadata, da.completedAt = :now'
+            . ' da.resultNormalised = :resultNormalised, da.completedAt = :now'
             . self::PENDING_GUARD,
             [
                 'success' => Entity::STATUS_SUCCESS,
-                'result' => ['checks' => ['passed' => true]],
-                'metadata' => ['bucket' => 'b', 'key' => 'k'],
+                'result' => ['analysis' => ['core_checks' => []]],
+                'resultNormalised' => ['version' => 1, 'rows' => []],
                 'id' => 5,
                 'pending' => Entity::STATUS_PENDING,
             ],
             // The payloads are columns of JSON, not associations to be walked.
-            ['result' => Types::JSON, 'metadata' => Types::JSON],
+            ['result' => Types::JSON, 'resultNormalised' => Types::JSON],
+        ];
+        // A result the normaliser could not read is still a stored success, with nothing to show.
+        yield 'success without a normalised result' => [
+            'recordSuccess',
+            [6, ['unexpected' => 'shape'], null],
+            'UPDATE ' . Entity::class . ' da'
+            . ' SET da.status = :success, da.result = :result,'
+            . ' da.resultNormalised = :resultNormalised, da.completedAt = :now'
+            . self::PENDING_GUARD,
+            [
+                'success' => Entity::STATUS_SUCCESS,
+                'result' => ['unexpected' => 'shape'],
+                'resultNormalised' => null,
+                'id' => 6,
+                'pending' => Entity::STATUS_PENDING,
+            ],
+            // Typed as JSON so null binds as SQL NULL, not as the JSON literal "null".
+            ['result' => Types::JSON, 'resultNormalised' => Types::JSON],
         ];
         yield 'error' => [
             'recordError',

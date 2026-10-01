@@ -1,4 +1,10 @@
 <?php
+/**
+ * Financial evidence assessment: one tab per successful document analysis.
+ *
+ * Each tab's content comes ready to display from Olcs\Data\Mapper\FinancialEvidenceAssessmentTab.
+ * Remarks and values are model-generated text, so everything that came from the API is escaped here.
+ */
 $warningText = $hasDocuments
   ? $this->translate('lva-financial-evidence-assessment-statement-warning')
   : $this->translate('lva-financial-evidence-assessment-no-statements-warning');
@@ -27,11 +33,81 @@ $warningText = $hasDocuments
     <?php endforeach; ?>
   </ul>
 
-    <?php foreach ($tabs as $index => $tab) : ?>
-        <div class="govuk-tabs__panel<?php echo $index === 0 ? '' : ' govuk-tabs__panel--hidden'; ?>"
-             id="<?php echo $this->escapeHtmlAttr($tab['id']); ?>">
-            <p>Date: <?php echo $this->escapeHtml($tab['date'] ?? 'Unknown'); ?></p>
-            <p>Status: <?php echo $this->escapeHtml($tab['status'] ?? 'Unknown'); ?></p>
-        </div>
-    <?php endforeach; ?>
+  <?php foreach ($tabs as $index => $tab) : ?>
+    <div class="govuk-tabs__panel<?php echo $index === 0 ? '' : ' govuk-tabs__panel--hidden'; ?>"
+         id="<?php echo $this->escapeHtmlAttr($tab['id']); ?>">
+      <h2 class="govuk-heading-m">Financial evidence assessment</h2>
+
+      <?php if ($tab['document'] !== null) : ?>
+        <p class="govuk-body">
+          <strong>Filename:</strong>
+          <a class="govuk-link" href="<?php echo $this->url('getfile', ['identifier' => $tab['document']['id']]); ?>">
+            <?php echo $this->escapeHtml($tab['document']['name'] ?? 'Document'); ?>
+          </a>
+          <strong class="govuk-tag <?php echo $this->escapeHtmlAttr($tab['statusTag']); ?>">
+            <?php echo $this->escapeHtml($tab['status']); ?>
+          </strong>
+        </p>
+      <?php endif; ?>
+
+      <?php if (!$tab['hasAssessment']) : ?>
+        <p class="govuk-body">
+          The analysis of this document produced no assessment. Refer to the original document.
+        </p>
+      <?php else : ?>
+        <table class="govuk-table">
+          <caption class="govuk-table__caption govuk-visually-hidden">Assessment of the document</caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header govuk-!-width-one-half">Information</th>
+              <th scope="col" class="govuk-table__header">Flag</th>
+              <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Remark</span></th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <?php foreach ($tab['rows'] as $row) : ?>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  <?php echo $this->escapeHtml($row['label']); ?><?php if ($row['value'] !== null) : ?>:
+                    <span class="govuk-!-font-weight-regular"><?php echo $this->escapeHtml($row['value']); ?></span>
+                  <?php endif; ?>
+                </th>
+                <td class="govuk-table__cell">
+                  <?php if ($row['flag'] !== null) : ?>
+                    <strong class="govuk-tag <?php echo $this->escapeHtmlAttr($row['flagTag']); ?>">
+                      <?php echo $this->escapeHtml($row['flag']); ?>
+                    </strong>
+                  <?php endif; ?>
+                </td>
+                <td class="govuk-table__cell">
+                  <?php if ($row['remark'] !== null) : ?>
+                    <?php echo $this->escapeHtml($row['remark']); ?>
+                  <?php endif; ?>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+
+        <h3 class="govuk-heading-s">Summary</h3>
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Issues</dt>
+            <dd class="govuk-summary-list__value">
+              <?php
+              $issueCount = $tab['issueCount'];
+              echo $issueCount === 0
+                ? 'No issues found'
+                : sprintf('%d %s found', $issueCount, $issueCount === 1 ? 'issue' : 'issues');
+              ?>
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Status</dt>
+            <dd class="govuk-summary-list__value"><?php echo $this->escapeHtml($tab['status']); ?></dd>
+          </div>
+        </dl>
+      <?php endif; ?>
+    </div>
+  <?php endforeach; ?>
 </div>

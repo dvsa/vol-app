@@ -113,12 +113,12 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     protected $result;
 
     /**
-     * Provider metadata accompanying the analysis result
+     * Result mapped to the assessment payload; caseworker annotations overlay it at read time
      *
      * @var array|null
      */
-    #[ORM\Column(type: 'json', name: 'result_metadata', nullable: true)]
-    protected $resultMetadata;
+    #[ORM\Column(type: 'json', name: 'result_normalised', nullable: true)]
+    protected $resultNormalised;
 
     /**
      * Failure detail when the analysis ends in ERROR
@@ -370,27 +370,27 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     }
 
     /**
-     * Set the result metadata
+     * Set the result normalised
      *
-     * @param array $resultMetadata new value being set
+     * @param array $resultNormalised new value being set
      *
      * @return static
      */
-    public function setResultMetadata($resultMetadata)
+    public function setResultNormalised($resultNormalised)
     {
-        $this->resultMetadata = $resultMetadata;
+        $this->resultNormalised = $resultNormalised;
 
         return $this;
     }
 
     /**
-     * Get the result metadata
+     * Get the result normalised
      *
      * @return array
      */
-    public function getResultMetadata()
+    public function getResultNormalised()
     {
-        return $this->resultMetadata;
+        return $this->resultNormalised;
     }
 
     /**
