@@ -5,9 +5,7 @@ locals {
 module "ecr" {
   for_each = toset(local.repositories)
 
-  source  = "terraform-aws-modules/ecr/aws"
-  version = "~> 2.2"
-
+  source          = "git::https://github.com/terraform-aws-modules/terraform-aws-ecr.git?ref=f05e615fa452e813935986295e7770f8fa96948b"
   repository_name = "vol-app/${each.key}"
 
   repository_read_access_arns = concat(

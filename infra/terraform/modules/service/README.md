@@ -10,24 +10,24 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.66.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_acm"></a> [acm](#module\_acm) | terraform-aws-modules/acm/aws | ~> 5.0 |
-| <a name="module_batch"></a> [batch](#module\_batch) | terraform-aws-modules/batch/aws | ~> 3.0 |
-| <a name="module_cloudfront"></a> [cloudfront](#module\_cloudfront) | terraform-aws-modules/cloudfront/aws | ~> 3.4 |
-| <a name="module_cloudwatch_log-metric-filter"></a> [cloudwatch\_log-metric-filter](#module\_cloudwatch\_log-metric-filter) | terraform-aws-modules/cloudwatch/aws//modules/log-metric-filter | 5.7.0 |
-| <a name="module_ecs_cluster"></a> [ecs\_cluster](#module\_ecs\_cluster) | terraform-aws-modules/ecs/aws//modules/cluster | ~> 5.10 |
-| <a name="module_ecs_service"></a> [ecs\_service](#module\_ecs\_service) | terraform-aws-modules/ecs/aws//modules/service | < 6.1.0 |
-| <a name="module_eventbridge"></a> [eventbridge](#module\_eventbridge) | terraform-aws-modules/eventbridge/aws | ~> 3.7 |
-| <a name="module_eventbridge_sns"></a> [eventbridge\_sns](#module\_eventbridge\_sns) | terraform-aws-modules/eventbridge/aws | ~> 3.7 |
-| <a name="module_log_bucket"></a> [log\_bucket](#module\_log\_bucket) | terraform-aws-modules/s3-bucket/aws | ~> 4.0 |
-| <a name="module_records"></a> [records](#module\_records) | terraform-aws-modules/route53/aws//modules/records | ~> 4.0 |
-| <a name="module_route53_records"></a> [route53\_records](#module\_route53\_records) | terraform-aws-modules/acm/aws | ~> 5.0 |
-| <a name="module_sns_batch_failure"></a> [sns\_batch\_failure](#module\_sns\_batch\_failure) | terraform-aws-modules/sns/aws | ~> 6.1 |
+| <a name="module_acm"></a> [acm](#module\_acm) | git::https://github.com/terraform-aws-modules/terraform-aws-acm.git | aae84c011dd68ace1beb5d10e1feddfe9a334953 |
+| <a name="module_batch"></a> [batch](#module\_batch) | git::https://github.com/terraform-aws-modules/terraform-aws-batch.git | 93a3e2ec1ab003dde08e95b3da055ba040c04ca9 |
+| <a name="module_cloudfront"></a> [cloudfront](#module\_cloudfront) | git::https://github.com/terraform-aws-modules/terraform-aws-cloudfront.git | 5b9a0a480220b84f29f02d84ff71dd5340953f68 |
+| <a name="module_cloudwatch_log-metric-filter"></a> [cloudwatch\_log-metric-filter](#module\_cloudwatch\_log-metric-filter) | git::https://github.com/terraform-aws-modules/terraform-aws-cloudwatch.git//modules/log-metric-filter | 82e5143738712a283ab7a8cb4110e7a3e708a834 |
+| <a name="module_ecs_cluster"></a> [ecs\_cluster](#module\_ecs\_cluster) | git::https://github.com/terraform-aws-modules/terraform-aws-ecs.git//modules/cluster | 135c225c75c7f0044966329c55ad8d647b358a57 |
+| <a name="module_ecs_service"></a> [ecs\_service](#module\_ecs\_service) | git::https://github.com/terraform-aws-modules/terraform-aws-ecs.git//modules/service | 135c225c75c7f0044966329c55ad8d647b358a57 |
+| <a name="module_eventbridge"></a> [eventbridge](#module\_eventbridge) | git::https://github.com/terraform-aws-modules/terraform-aws-eventbridge.git | f9934726324c988f823682884b4fa003586a7b6f |
+| <a name="module_eventbridge_sns"></a> [eventbridge\_sns](#module\_eventbridge\_sns) | git::https://github.com/terraform-aws-modules/terraform-aws-eventbridge.git | f9934726324c988f823682884b4fa003586a7b6f |
+| <a name="module_log_bucket"></a> [log\_bucket](#module\_log\_bucket) | git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git | 5dc2f1f89743ab935114b0b039bc88044a672ca2 |
+| <a name="module_records"></a> [records](#module\_records) | git::https://github.com/terraform-aws-modules/terraform-aws-route53.git//modules/records | 883f987d6bb328c09bd4dfc5a04024534b371d59 |
+| <a name="module_route53_records"></a> [route53\_records](#module\_route53\_records) | git::https://github.com/terraform-aws-modules/terraform-aws-acm.git | aae84c011dd68ace1beb5d10e1feddfe9a334953 |
+| <a name="module_sns_batch_failure"></a> [sns\_batch\_failure](#module\_sns\_batch\_failure) | git::https://github.com/terraform-aws-modules/terraform-aws-sns.git | 61ac1dc530fd08965a0ce480352e554cc827ff05 |
 
 ## Resources
 
