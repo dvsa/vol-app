@@ -39,6 +39,16 @@ $(function () {
     $("#translationEditorError").text(message).removeClass("js-hidden");
   }
 
+  if (
+    typeof jsonBaseUrl !== "string" ||
+    !/^\/(?!\/)[^\\\s\u0000-\u001f\u007f?#]*\/(?![\s\S])/.test(jsonBaseUrl)
+  ) {
+    showError(
+      "The translation URL is invalid. The editor could not be loaded.",
+    );
+    return;
+  }
+
   function field(language) {
     return document.getElementById("input-" + language);
   }

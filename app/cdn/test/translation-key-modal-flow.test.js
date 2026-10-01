@@ -10,6 +10,7 @@ function setupModal({ baseUrl = "/keys/", addEdit = "edit", searchResults = [] }
   const handlers = {};
   const requests = [];
   const elements = [];
+  const errors = [];
   const languages = ["en_GB", "cy_GB"];
   const values = {
     "#addedit": addEdit,
@@ -66,7 +67,8 @@ function setupModal({ baseUrl = "/keys/", addEdit = "edit", searchResults = [] }
         attrs.class = value;
         return this;
       },
-      removeClass() {
+      removeClass(value) {
+        if (selector === "#translationEditorError" && value === "js-hidden") errors.push(this.textContent);
         return this;
       },
       text(value) {
@@ -135,6 +137,8 @@ function setupModal({ baseUrl = "/keys/", addEdit = "edit", searchResults = [] }
     changeHandlers,
     requests,
     elements,
+    errors,
+    handlers,
     search(term) {
       values["#existingMarkupSearch"] = term;
       handlers["#existingMarkupSearch:input"].call(wrapper("#existingMarkupSearch"));
@@ -142,7 +146,12 @@ function setupModal({ baseUrl = "/keys/", addEdit = "edit", searchResults = [] }
   };
 }
 
-for (const baseUrl of ["/admin/long-text/", "/tenant%20one/admin/long-text/"]) {
+for (const baseUrl of [
+  "/admin/long-text/",
+  "/admin/editable-translations/",
+  "/tenant%20one/admin/long-text/",
+  "/%/example.test/",
+]) {
   test("picker preserves the server route and uses text for labels: " + baseUrl, () => {
     const item = {
       id: 42,
@@ -160,6 +169,48 @@ for (const baseUrl of ["/admin/long-text/", "/tenant%20one/admin/long-text/"]) {
     assert.ok(modal.elements.every((element) => /^<\w+>$/.test(element.selector)));
   });
 }
+
+test("invalid base paths show an error and stop initialization before requests or links", () => {
+  for (const baseUrl of [
+    "javascript:alert(1)//",
+    "data:text/html,test/",
+    "https://example.test/admin/long-text/",
+    "//example.test/",
+    "/\\example.test/",
+    "/admin\\long-text/",
+    "admin/long-text/",
+    "",
+    null,
+    "/admin/long-text",
+    "/admin/long-text/?next=x",
+    "/admin/long-text/#fragment",
+    " /admin/long-text/",
+    "/admin/long text/",
+    "/admin/\tlong-text/",
+    "/admin/\u0000long-text/",
+    "/admin/\u007flong-text/",
+    "/admin/\u00a0long-text/",
+  ]) {
+    for (const addEdit of ["add", "edit"]) {
+      const modal = setupModal({ baseUrl, addEdit });
+      assert.deepEqual(modal.requests, [], JSON.stringify(baseUrl));
+      assert.deepEqual(modal.elements, []);
+      assert.deepEqual(modal.handlers, {});
+      assert.equal(modal.errors.length, 1);
+      assert.match(modal.errors[0], /translation URL is invalid/i);
+    }
+  }
+});
+
+test("a trailing newline cannot bypass the base path guard", () => {
+  for (const suffix of ["\n", "\r", "\r\n", "\u2028", "\u2029"]) {
+    const modal = setupModal({ baseUrl: "/admin/long-text/" + suffix, addEdit: "add" });
+    assert.deepEqual(modal.requests, [], JSON.stringify(suffix));
+    assert.deepEqual(modal.elements, []);
+    assert.deepEqual(modal.handlers, {});
+    assert.equal(modal.errors.length, 1);
+  }
+});
 
 test("editing rich content submits existing languages but omits absent languages", () => {
   const { inputs, changeHandlers } = setupModal();
