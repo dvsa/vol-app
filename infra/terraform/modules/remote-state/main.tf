@@ -45,6 +45,9 @@ module "dynamodb_table" {
   name     = "${local.identifier}-lock"
   hash_key = "LockID"
 
+  point_in_time_recovery_enabled        = true
+  point_in_time_recovery_period_in_days = 35
+
   attributes = [
     {
       name = "LockID"
