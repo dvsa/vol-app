@@ -142,7 +142,7 @@ locals {
         "rds:ModifyDBClusterSnapshotAttribute"
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:146997448015:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:prod-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
@@ -156,7 +156,7 @@ locals {
         "rds:DescribeDBClusters"
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:146997448015:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:prod-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
       ]
@@ -184,7 +184,8 @@ locals {
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*"
+        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*",
+        
       ]
     },
     {
