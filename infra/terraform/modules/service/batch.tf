@@ -297,7 +297,7 @@ locals {
 }
 
 module "batch" {
-  source                        = "git::https://github.com/terraform-aws-modules/terraform-aws-batch.git?ref=93a3e2ec1ab003dde08e95b3da055ba040c04ca9"
+  source                        = "git::https://github.com/terraform-aws-modules/terraform-aws-batch.git?ref=57ded354043005e2b0f8e67d85eaa39bedabd682"
   instance_iam_role_name        = "vol-app-${var.environment}-batch-instance"
   instance_iam_role_description = "Task execution role for vol-app-${var.environment}-batch"
 
@@ -380,7 +380,7 @@ module "batch" {
 }
 
 module "eventbridge" {
-  source     = "git::https://github.com/terraform-aws-modules/terraform-aws-eventbridge.git?ref=f9934726324c988f823682884b4fa003586a7b6f"
+  source     = "git::https://github.com/terraform-aws-modules/terraform-aws-eventbridge.git?ref=dd056522ea972140f57aed7e8f2e5491fc15e9d5"
   create_bus = false
 
   create_role              = true

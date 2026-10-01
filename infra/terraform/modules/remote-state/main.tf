@@ -8,7 +8,7 @@ locals {
 module "s3" {
   count = var.create_bucket ? 1 : 0
 
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=5dc2f1f89743ab935114b0b039bc88044a672ca2"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=fccafe509c9c9af4646a4bc45387f63d83c8a006"
   bucket = local.identifier
 
   attach_deny_insecure_transport_policy = true
@@ -59,7 +59,7 @@ module "dynamodb_table" {
 module "dynamodb_state_lock_policy" {
   count = var.create_dynamodb_policy ? 1 : 0
 
-  source      = "git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-policy?ref=55514b7873c411040395e024a422684998da77c2"
+  source      = "git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-policy?ref=2eb955d1e9dcbb471ee1635e25e9c0db55df105a"
   name        = "${local.identifier}-lock-policy"
   description = "Policy to allow access to the Terraform state lock"
 
@@ -83,7 +83,7 @@ module "dynamodb_state_lock_policy" {
 module "s3_state_policy" {
   count = var.create_bucket && var.create_bucket_policy ? 1 : 0
 
-  source      = "git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-policy?ref=55514b7873c411040395e024a422684998da77c2"
+  source      = "git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-policy?ref=2eb955d1e9dcbb471ee1635e25e9c0db55df105a"
   name        = "${local.identifier}-policy"
   description = "Policy to allow access to the Terraform state in S3"
 

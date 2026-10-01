@@ -10,14 +10,14 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.66.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_assets"></a> [assets](#module\_assets) | git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git | 5dc2f1f89743ab935114b0b039bc88044a672ca2 |
-| <a name="module_ecr"></a> [ecr](#module\_ecr) | git::https://github.com/terraform-aws-modules/terraform-aws-ecr.git | f05e615fa452e813935986295e7770f8fa96948b |
+| <a name="module_assets"></a> [assets](#module\_assets) | git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git | fccafe509c9c9af4646a4bc45387f63d83c8a006 |
+| <a name="module_ecr"></a> [ecr](#module\_ecr) | git::https://github.com/terraform-aws-modules/terraform-aws-ecr.git | 9daab0795f9759922a0664c8eca09ade5262cb3e |
 | <a name="module_github"></a> [github](#module\_github) | ../../modules/github | n/a |
 
 ## Resources

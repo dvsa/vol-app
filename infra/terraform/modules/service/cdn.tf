@@ -32,7 +32,7 @@ locals {
 }
 
 module "acm" {
-  source      = "git::https://github.com/terraform-aws-modules/terraform-aws-acm.git?ref=aae84c011dd68ace1beb5d10e1feddfe9a334953"
+  source      = "git::https://github.com/terraform-aws-modules/terraform-aws-acm.git?ref=f421377c87fe5207898adc0def87540fa07c2af4"
   domain_name = "${local.subdomain}.${local.domain_name}"
   zone_id     = data.aws_route53_zone.public.id
 
@@ -47,7 +47,7 @@ module "acm" {
 }
 
 module "route53_records" {
-  source                      = "git::https://github.com/terraform-aws-modules/terraform-aws-acm.git?ref=aae84c011dd68ace1beb5d10e1feddfe9a334953"
+  source                      = "git::https://github.com/terraform-aws-modules/terraform-aws-acm.git?ref=f421377c87fe5207898adc0def87540fa07c2af4"
   create_certificate          = false
   create_route53_records_only = true
 
@@ -64,7 +64,7 @@ locals {
 }
 
 module "cloudfront" {
-  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-cloudfront.git?ref=5b9a0a480220b84f29f02d84ff71dd5340953f68"
+  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-cloudfront.git?ref=f48225a64ad695e52684b58b854aee23d888c70f"
   aliases = ["${local.subdomain}.${local.domain_name}"]
 
   http_version    = "http2and3"
@@ -167,7 +167,7 @@ data "aws_canonical_user_id" "current" {}
 data "aws_cloudfront_log_delivery_canonical_user_id" "cloudfront" {}
 
 module "log_bucket" {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=5dc2f1f89743ab935114b0b039bc88044a672ca2"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=fccafe509c9c9af4646a4bc45387f63d83c8a006"
   bucket = "vol-app-${var.environment}-assets-logs"
 
   control_object_ownership = true
@@ -188,7 +188,7 @@ module "log_bucket" {
 }
 
 module "records" {
-  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-route53.git//modules/records?ref=883f987d6bb328c09bd4dfc5a04024534b371d59"
+  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-route53.git//modules/records?ref=90819a1cadd8f0ee38929a9a0453fe1693af3186"
   zone_id = data.aws_route53_zone.public.zone_id
 
   records = [
