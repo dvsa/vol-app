@@ -296,6 +296,7 @@ resource "aws_sfn_state_machine" "ai_analysis" {
   definition = templatefile("${path.module}/state-machines/ai-analysis.asl.json", {
     EXTRACT_S3_JSON_FIELD_LAMBDA_ARN = aws_lambda_function.extract_s3_json_field.arn
     BEDROCK_PROMPT_VERSION_ARN       = awscc_bedrock_prompt_version.bank_statement_check.arn
+    ANALYSIS_SCHEMA_VERSION          = local.analysis_schema_version
   })
 
   logging_configuration {
@@ -446,6 +447,13 @@ locals {
   bank_statement_checks = file("${path.module}/config/bank-statement-checks.json")
   tool_input_schema     = jsondecode(file("${path.module}/config/bank-statement-check-tool-schema.json"))
 
+  # Version of the tool output shape (config/bank-statement-check-tool-schema.json). It is stamped
+  # into every analysis report's metadata so a consumer can tell which shape a stored result has
+  # without sniffing its keys. Bump it whenever the schema changes shape.
+  #   1 = core_checks only (reports from before this stamp existed carry no schemaVersion)
+  #   2 = adds statement_details and category_remarks
+  analysis_schema_version = 2
+
   analysis_system_text = join("\n", [
     "You are a financial document validator for the UK DVSA (Driver and Vehicle Standards Agency) Vehicle Operator Licensing system. This is a DVSA digital service provided for the Office of the Traffic Commissioner (OTC). Your role is to perform official Bank Statement Quality Checks using VOL business rules and provide structured analysis for OTC caseworkers.",
     "",
@@ -476,7 +484,7 @@ locals {
     "{{extraction_context}}",
     "</extraction_context>",
     "",
-    "You are reviewing this bank statement for an OTC caseworker. Evaluate it against the rules and call submit_quality_check exactly once with results for all 11 checks (FI01-FI16). Follow the executionFlowOrder for sequencing and skip conditions. For skipped checks include the skip reason in remark. Show step-by-step reasoning for every check in workingOut. If extraction_context indicates the upload was a mixed/bundled document, add a remark noting that other segments were ignored and recommend the caseworker verify whether they need separate review.",
+    "You are reviewing this bank statement for an OTC caseworker. Evaluate it against the rules and call submit_quality_check exactly once with results for all 11 checks (FI01-FI16). Follow the executionFlowOrder for sequencing and skip conditions. For skipped checks include the skip reason in remark. Show step-by-step reasoning for every check in workingOut. Then complete statement_details and category_remarks as described in summaryCategories: one remark for each of the six categories, consistent with the results of its checks, and null for any statement detail the document does not show. If extraction_context indicates the upload was a mixed/bundled document, add a remark noting that other segments were ignored and recommend the caseworker verify whether they need separate review.",
   ])
 
   max_token_usage = 16000
@@ -523,7 +531,7 @@ resource "awscc_bedrock_prompt" "bank_statement_check" {
               {
                 tool_spec = {
                   name        = "submit_quality_check"
-                  description = "Submit the completed bank statement quality check results. Call exactly once with result, workingOut, and remark for every one of the 11 checks (FI01-FI16). Skipped checks must include the skip reason in remark."
+                  description = "Submit the completed bank statement quality check results. Call exactly once with result, workingOut, and remark for every one of the 11 checks (FI01-FI16), plus statement_details and one category_remarks entry for each of the six summary categories. Skipped checks must include the skip reason in remark."
                   input_schema = {
                     json = jsonencode(local.tool_input_schema)
                   }

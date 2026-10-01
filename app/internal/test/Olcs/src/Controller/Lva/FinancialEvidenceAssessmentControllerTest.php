@@ -105,6 +105,53 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->assertSame('02/02/2026', $tabs[0]['date']);
     }
 
+    /**
+     * Each tab carries its panel content from the mapper: the document link, the summary rows
+     * built from the API's normalised result, and the issue count. The mapper has its own tests;
+     * this proves the controller feeds it the analysis and keeps what it returns.
+     */
+    public function testTabsCarryTheMappedAssessmentContent(): void
+    {
+        $sut = $this->createSut(ApplicationController::class);
+        $sut->allows('getIdentifier')->andReturn(42);
+
+        $sut->expects('handleQuery')
+            ->once()
+            ->andReturn($this->okResponse([
+                [
+                    'id' => 2,
+                    'documentId' => 12,
+                    'documentDescription' => 'August statement',
+                    'documentFilename' => null,
+                    'documentDate' => '2026-02-02 00:00:00',
+                    'completedAt' => '2026-02-03 00:00:00',
+                    'resultNormalised' => [
+                        'version' => 1,
+                        'rows' => [
+                            'bank' => ['flag' => null, 'remark' => null, 'value' => 'Example Bank', 'checks' => []],
+                            'name' => ['flag' => 'fail', 'remark' => 'Wrong entity.', 'value' => 'Someone', 'checks' => []],
+                        ],
+                    ],
+                ],
+                // A stored report the API could not normalise still gets a tab.
+                ['id' => 1, 'documentId' => 11, 'documentDate' => null, 'completedAt' => '2026-01-03 00:00:00', 'resultNormalised' => null],
+            ]));
+
+        $sut->expects('render')->andReturnUsing(static fn(ViewModel $view) => $view);
+
+        $tabs = $sut->indexAction()->getVariable('tabs');
+
+        $this->assertSame(['id' => 12, 'name' => 'August statement'], $tabs[0]['document']);
+        $this->assertTrue($tabs[0]['hasAssessment']);
+        $this->assertCount(8, $tabs[0]['rows']);
+        $this->assertSame('Example Bank', $tabs[0]['rows'][0]['value']);
+        $this->assertSame('FAIL', $tabs[0]['rows'][3]['flag']);
+        $this->assertSame(1, $tabs[0]['issueCount']);
+
+        $this->assertFalse($tabs[1]['hasAssessment']);
+        $this->assertSame([], $tabs[1]['rows']);
+    }
+
     /** A failed API call shows no tabs rather than erroring the page. */
     public function testFailedAnalysisQueryShowsNoTabs(): void
     {

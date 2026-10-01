@@ -202,6 +202,8 @@ return [
             'FinancialStandingHelperService' => \Dvsa\Olcs\Api\Service\FinancialStandingHelperService::class,
             DvlaSearchService::class => DvlaSearchServiceFactory::class,
             ApiSrv\EventBridge\EventBridge::class => ApiSrv\EventBridge\EventBridgeFactory::class,
+            ApiSrv\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser::class
+                => ApiSrv\Idp\AnalysisResultNormaliser\AnalysisResultNormaliserFactory::class,
             ApiSrv\Idp\AnalysisTokenGenerator::class => Laminas\ServiceManager\Factory\InvokableFactory::class,
             ApiSrv\Idp\ApplicantProfileBuilder::class => ApiSrv\Idp\ApplicantProfileBuilderFactory::class,
 

@@ -661,12 +661,87 @@
     "Does NOT address back-to-back statements in separate documents",
     "Interim statements are NOT in scope for this validation"
   ],
+  "summaryCategories": {
+    "description": "The caseworker's summary page groups the checks into six categories. For each category, draft one remark (category_remarks) and report the facts shown beside the categories (statement_details). The outcome of a category is derived by the application from the results of its checks using outcomeRule. Do NOT return a category outcome; write each remark so that it is consistent with the outcome that rule produces.",
+    "outcomeRule": "A category is Fail if any of its checks is Fail. Otherwise it is Pass if at least one of its checks is Pass. Otherwise (every check Skipped) the category is Skipped.",
+    "remarkGuidance": [
+      "One concise, caseworker-facing sentence stating the key fact behind the category outcome.",
+      "If the category is Fail, state the requirement that was not satisfied and, where applicable, the actual value versus the required value.",
+      "If the category is Pass, state what was satisfied.",
+      "If the category is Skipped, state that it was not assessed and the reason.",
+      "The remark must be supported by the workingOut of the checks in the category and must not contradict their results.",
+      "Do not mention FI identifiers or internal field names (e.g. RequiredFunds, ApplicationDate, OperatorName). Use plain language such as 'the required funds' or 'the application date'."
+    ],
+    "statementDetailsGuidance": [
+      "Report each value as shown on the statement or as used by the checks. Use null when the statement does not show it or it could not be determined. Never guess.",
+      "account_holder_name is the name identified by the nameDiscoverySteps and assessed by the account name checks.",
+      "statement_issue_date is the issue date printed on the statement. It is not the statement period end date; use null if no issue date is printed.",
+      "average_funds is the 4-balance average from the average funds calculation, including any agreed overdraft added by that calculation. Use null if it could not be calculated or the check was skipped.",
+      "large_deposit_count is the number of individual deposits exceeding 25% of the required funds. Use 0 when there are none and null when the check was skipped."
+    ],
+    "categories": [
+      {
+        "key": "authenticity",
+        "heading": "Authenticity",
+        "checks": ["FI01", "FI03", "FI04"],
+        "definition": "The document is a genuine, complete bank statement issued by the bank. Financial evidence is present, it is not a screenshot, summary page or edited image, and nothing suggests it has been altered."
+      },
+      {
+        "key": "name",
+        "heading": "Name",
+        "checks": ["FI06", "FI07", "FI08"],
+        "definition": "The statement is in the right name. The account holder's full name is shown and matches the applicant, or, for a sole trader or partnership, a statutory declaration covers any mismatch."
+      },
+      {
+        "key": "statement_date",
+        "heading": "Statement Date",
+        "checks": ["FI10"],
+        "definition": "The statement is recent enough to rely on. Its closing date is within the accepted age limit at the point of assessment."
+      },
+      {
+        "key": "statement_period",
+        "heading": "Statement Period",
+        "checks": ["FI05"],
+        "definition": "The statement covers a long enough run of activity, at least 28 consecutive days, so that the funds position is representative rather than a snapshot."
+      },
+      {
+        "key": "average_funds",
+        "heading": "Average Funds",
+        "checks": ["FI09", "FI02"],
+        "definition": "The account genuinely holds the required funds. The average of the four balance points meets the required amount, and the requirement is not being met only by a closing balance that looks artificially topped up."
+      },
+      {
+        "key": "large_deposit",
+        "heading": "Large Deposit",
+        "checks": ["FI16"],
+        "definition": "No single deposit in the period is large enough (over 25% of the required funds) to suggest the balance has been temporarily inflated. Any such deposit needs an explanation."
+      }
+    ]
+  },
   "outputStructure": {
     "format": "JSON",
     "instructions": "Return ONLY valid JSON. Do not include markdown code blocks, explanatory text, or any content before/after the JSON. The JSON must be parseable directly. Use the positive check names (e.g., 'FinancialEvidencePresent', 'RequiredFundsAsClosingBalanceOnly') as labels. Result values must be: Pass, Fail, or Skipped. For EVERY rule evaluation, include a workingOut array that shows the evidence examined, calculations performed (if applicable), comparisons made, and the objective reason for the result. The remark must be a concise, caseworker-facing summary of the outcome. It must state the key evidence or fact that led to the result and must not introduce information, assumptions, or conclusions that are not supported by the evidence or the rule being evaluated. Do not repeat the full workingOut. Do not use subjective language, speculation, or recommendations. For Pass, state what requirement was satisfied. For Fail, state the specific requirement that was not satisfied and, where applicable, the relevant actual value versus required value. For Skipped, state that the check was not evaluated and give the specific skip condition that applied. Keep remarks to 1-2 concise sentences. Do not use a remark to override, reinterpret, or contradict the result value. FI check identifiers (e.g., FI01, FI02, FI03, FI09, FI16) are internal identifiers only. They MUST be retained where required by the JSON structure but MUST NOT be rendered, displayed, mentioned, or exposed in any user-facing text, including the summary, labels, remarks, or any other natural-language output. When referring to a check in user-facing text, use its human-readable label instead.",
     "schema": {
       "summary": "string - Brief overall assessment (1-4 sentences)",
       "detected_currency": "string - Currency detected (GBP/USD/EUR/etc).",
+      "statement_details": {
+        "bank_name": "string|null - Bank or building society name as shown on the statement",
+        "bank_address": "string|null - The bank's postal address as shown on the statement, on one line",
+        "account_holder_name": "string|null - Account holder name assessed by the account name checks",
+        "statement_issue_date": "string|null - Issue date printed on the statement (YYYY-MM-DD)",
+        "statement_period_start": "string|null - First day of the statement period (YYYY-MM-DD)",
+        "statement_period_end": "string|null - Last day of the statement period (YYYY-MM-DD)",
+        "average_funds": "number|null - 4-balance average from the average funds calculation",
+        "large_deposit_count": "integer|null - Number of deposits exceeding 25% of the required funds"
+      },
+      "category_remarks": {
+        "authenticity": "string - Remark for the Authenticity category (1 sentence)",
+        "name": "string - Remark for the Name category (1 sentence)",
+        "statement_date": "string - Remark for the Statement Date category (1 sentence)",
+        "statement_period": "string - Remark for the Statement Period category (1 sentence)",
+        "average_funds": "string - Remark for the Average Funds category (1 sentence)",
+        "large_deposit": "string - Remark for the Large Deposit category (1 sentence)"
+      },
       "core_checks": {
         "FI01": {
           "label": "FinancialEvidencePresent",
@@ -739,6 +814,24 @@
     "example": {
       "summary": "Bank statement meets all requirements with sufficient funds.",
       "detected_currency": "GBP",
+      "statement_details": {
+        "bank_name": "Example Bank",
+        "bank_address": "1 Example Street, Exampleton, EX1 1EX",
+        "account_holder_name": "Example Haulage Ltd",
+        "statement_issue_date": null,
+        "statement_period_start": "2026-08-01",
+        "statement_period_end": "2026-08-31",
+        "average_funds": 16845.0,
+        "large_deposit_count": 0
+      },
+      "category_remarks": {
+        "authenticity": "The statement is complete and its balances, account details and bank name are consistent.",
+        "name": "The account holder's full name is shown and matches the operator.",
+        "statement_date": "The statement ends 12 days before the application date, within the 58 day limit.",
+        "statement_period": "The statement covers 31 calendar days, more than the 28 required.",
+        "average_funds": "The 4-balance average of £16,845 exceeds the required funds of £15,845.",
+        "large_deposit": "No individual deposit exceeds 25% of the required funds."
+      },
       "core_checks": {
         "FI01": {
           "label": "FinancialEvidencePresent",

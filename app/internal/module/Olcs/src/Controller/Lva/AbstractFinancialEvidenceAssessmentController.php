@@ -15,13 +15,14 @@ use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
+use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
 
 /**
  * Financial evidence assessment page, shared by the licence, application and variation sections.
  *
  * Tabs are driven solely by successful document analyses. The concrete controllers only supply
  * the LVA context (via their trait and $lva), which decides whether analyses are scoped by
- * licence or by application.
+ * licence or by application. What each tab shows is decided by FinancialEvidenceAssessmentTab.
  */
 abstract class AbstractFinancialEvidenceAssessmentController extends AbstractController implements
     ToggleAwareInterface
@@ -98,7 +99,9 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     }
 
     /**
-     * One tab per successful analysis; the first (most recent) is labelled "Latest".
+     * One tab per successful analysis; the first (most recent) is labelled "Latest". The tab
+     * header (id, label, date, caseworker stamp) is built here; the panel content (document link,
+     * summary rows, issue count) comes from the mapper.
      */
     protected function getTabsFromAnalyses(array $analyses): array
     {
@@ -118,7 +121,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
                 'date'      => $date,
                 'status'    => $this->mapStatus($caseworkerStamp),
                 'statusTag' => $this->mapStatusTagClass($caseworkerStamp),
-            ];
+            ] + FinancialEvidenceAssessmentTab::mapFromAnalysis($analysis);
         }
 
         return $tabs;
