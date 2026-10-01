@@ -41,6 +41,17 @@ class FinancialEvidence extends AbstractLvaFormService
             ]
         );
         $evidenceFieldset->setOption('hint', $evidenceHint);
+        $evidenceFieldset->add(
+            [
+                'name' => 'evidenceStatementGuidance',
+                'type' => \Common\Form\Elements\Types\GuidanceTranslated::class,
+                'attributes' => [
+                    'value' => 'lva-financial-evidence-statement.hint',
+                    'data-container-class' => 'govuk-inset-text',
+                ],
+            ],
+            ['priority' => 1]
+        );
 
         $inputFilter = $form->getInputFilter();
 
