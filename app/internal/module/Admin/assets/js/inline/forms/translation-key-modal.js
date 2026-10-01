@@ -198,10 +198,10 @@ $(function () {
           (response.results || []).forEach(function (item) {
             results.append(
               $("<li>").append(
-                $("<a>", {
-                  class: "govuk-link js-modal-ajax",
-                  href: jsonBaseUrl + "editkey/" + item.id,
-                }).text(item.translationKey + " — " + (item.description || "")),
+                $("<a>")
+                  .addClass("govuk-link js-modal-ajax")
+                  .attr("href", jsonBaseUrl + "editkey/" + item.id)
+                  .text(item.translationKey + " — " + (item.description || "")),
               ),
             );
           });

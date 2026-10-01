@@ -4,13 +4,16 @@ const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
 
-function setupModal() {
+function setupModal({ baseUrl = "/keys/", addEdit = "edit", searchResults = [] } = {}) {
   const inputs = {};
   const changeHandlers = {};
+  const handlers = {};
+  const requests = [];
+  const elements = [];
   const languages = ["en_GB", "cy_GB"];
   const values = {
-    "#addedit": "edit",
-    "#jsonUrl": "/keys/",
+    "#addedit": addEdit,
+    "#jsonUrl": baseUrl,
     "#resultsKey": "translationKeyTexts",
     "#longTextMode": "1",
     "#format": "text",
@@ -20,6 +23,7 @@ function setupModal() {
     const object = {
       selector,
       attrs,
+      children: [],
       val(value) {
         if (arguments.length) {
           values[selector] = value;
@@ -28,6 +32,7 @@ function setupModal() {
         return values[selector];
       },
       on(events, handler) {
+        handlers[selector + ":" + events] = handler;
         if (attrs["data-element-name"] && events === "input change") {
           changeHandlers[attrs["data-element-name"]] = handler;
         }
@@ -37,6 +42,7 @@ function setupModal() {
         return this;
       },
       append(child) {
+        this.children.push(child);
         if (child && child.attrs && child.attrs.type === "hidden") inputs[child.attrs.name] = child.attrs;
         return this;
       },
@@ -56,13 +62,15 @@ function setupModal() {
       first() {
         return this;
       },
-      addClass() {
+      addClass(value) {
+        attrs.class = value;
         return this;
       },
       removeClass() {
         return this;
       },
-      text() {
+      text(value) {
+        this.textContent = value;
         return this;
       },
       prop() {
@@ -76,6 +84,7 @@ function setupModal() {
         return this;
       },
     };
+    if (selector.startsWith("<")) elements.push(object);
     return object;
   }
   const jquery = (selector, attrs) => {
@@ -85,9 +94,12 @@ function setupModal() {
     }
     return typeof selector === "object" ? selector : wrapper(selector, attrs);
   };
-  jquery.get = (url, callback) => {
-    if (url === "/keys/languages") callback({ languages: { en_GB: { label: "English" }, cy_GB: { label: "Welsh" } } });
-    if (url === "/keys/gettext/42")
+  jquery.get = (url, data, callback) => {
+    if (typeof data === "function") callback = data;
+    requests.push(url);
+    if (url.endsWith("languages")) callback({ languages: { en_GB: { label: "English" }, cy_GB: { label: "Welsh" } } });
+    if (url.endsWith("xhrsearch")) callback({ results: searchResults });
+    if (url === baseUrl + "gettext/42")
       callback({
         format: "editorjs",
         description: "Page",
@@ -118,7 +130,35 @@ function setupModal() {
     ),
     context,
   );
-  return { inputs, changeHandlers };
+  return {
+    inputs,
+    changeHandlers,
+    requests,
+    elements,
+    search(term) {
+      values["#existingMarkupSearch"] = term;
+      handlers["#existingMarkupSearch:input"].call(wrapper("#existingMarkupSearch"));
+    },
+  };
+}
+
+for (const baseUrl of ["/admin/long-text/", "/tenant%20one/admin/long-text/"]) {
+  test("picker preserves the server route and uses text for labels: " + baseUrl, () => {
+    const item = {
+      id: 42,
+      translationKey: "markup-<img src=x onerror=alert(1)>",
+      description: "<b>Page & description</b>",
+    };
+    const modal = setupModal({ baseUrl, addEdit: "add", searchResults: [item] });
+    modal.search("markup");
+    assert.deepEqual(modal.requests, [baseUrl + "languages", baseUrl + "xhrsearch"]);
+    const link = modal.elements.find((element) => element.attrs.class === "govuk-link js-modal-ajax");
+    assert.equal(link.selector, "<a>");
+    assert.equal(link.attrs.href, baseUrl + "editkey/42");
+    assert.equal(link.textContent, item.translationKey + " — " + item.description);
+    assert.deepEqual(link.children, []);
+    assert.ok(modal.elements.every((element) => /^<\w+>$/.test(element.selector)));
+  });
 }
 
 test("editing rich content submits existing languages but omits absent languages", () => {
