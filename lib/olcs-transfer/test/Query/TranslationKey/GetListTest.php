@@ -26,7 +26,17 @@ final class GetListTest extends \PHPUnit\Framework\TestCase
             'limit' => 10,
             'sort' => 'id',
             'order' => 'ASC',
-            'sortWhitelist' => []
+            'sortWhitelist' => [],
+            'markupOnly' => null,
+            'format' => null
         ], $sut->getArrayCopy());
+    }
+
+    public function testRichAndMarkupFilters(): void
+    {
+        $query = GetList::create(['format' => 'editorjs', 'markupOnly' => true]);
+
+        $this->assertSame('editorjs', $query->getFormat());
+        $this->assertTrue($query->getMarkupOnly());
     }
 }

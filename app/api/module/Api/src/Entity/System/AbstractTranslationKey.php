@@ -82,6 +82,20 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     #[ORM\Column(type: 'string', name: 'description', length: 512, nullable: true)]
     protected $description;
 
+    #[ORM\Column(type: 'string', name: 'format', length: 16, nullable: false, options: ['default' => 'text'])]
+    protected string $format = 'text';
+
+    public function getFormat(): string
+    {
+        return $this->format;
+    }
+
+    public function setFormat(string $format): static
+    {
+        $this->format = $format;
+        return $this;
+    }
+
     /**
      * Version
      *

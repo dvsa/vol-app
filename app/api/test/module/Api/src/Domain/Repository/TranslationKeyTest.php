@@ -30,6 +30,8 @@ final class TranslationKeyTest extends RepositoryTestCase
 
         $query = m::mock(GetList::class);
         $query->shouldReceive('getTranslationSearch')->andReturn('searchText');
+        $query->shouldReceive('getFormat')->andReturnNull();
+        $query->shouldReceive('getMarkupOnly')->andReturnFalse();
 
         $this->sut->applyListFilters($qb, $query);
 
@@ -54,6 +56,8 @@ final class TranslationKeyTest extends RepositoryTestCase
 
         if ($stubSearch) {
             $query->shouldReceive('getTranslationSearch')->andReturnNull();
+            $query->shouldReceive('getFormat')->andReturnNull();
+            $query->shouldReceive('getMarkupOnly')->andReturnFalse();
         }
 
         $this->assertNull($this->sut->applyListFilters($qb, $query));
@@ -65,5 +69,22 @@ final class TranslationKeyTest extends RepositoryTestCase
     {
         yield 'an empty search' => [GetList::class, true];
         yield 'another query type' => [QueryInterface::class, false];
+    }
+
+    public function testFormatAndMarkupFiltersConstrainSearchResults(): void
+    {
+        $qb = $this->createRealQb();
+        $query = m::mock(GetList::class);
+        $query->shouldReceive('getTranslationSearch')->andReturn('declaration');
+        $query->shouldReceive('getFormat')->andReturn('editorjs');
+        $query->shouldReceive('getMarkupOnly')->andReturn(true);
+
+        $this->sut->applyListFilters($qb, $query);
+
+        $this->assertStringContainsString('m.format = :format', $qb->getDQL());
+        $this->assertStringContainsString('m.translationKey LIKE :markupPrefix', $qb->getDQL());
+        $this->assertSame('editorjs', $qb->getParameter('format')->getValue());
+        $this->assertSame('markup-%', $qb->getParameter('markupPrefix')->getValue());
+        $this->assertStringContainsString('AND', $qb->getDQL());
     }
 }

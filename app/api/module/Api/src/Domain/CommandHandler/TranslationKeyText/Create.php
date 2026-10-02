@@ -48,6 +48,7 @@ final class Create extends AbstractCommandHandler
         $language = $languageRepo->fetchById($command->getLanguage());
 
         $newTranslationKeyText = TranslationKeyText::create($language, $translationKey, $command->getTranslatedText());
+        $newTranslationKeyText->setContentJson($command->getContentJson());
 
         $translationKeyTextRepo->save($newTranslationKeyText);
         $newId = $newTranslationKeyText->getId();

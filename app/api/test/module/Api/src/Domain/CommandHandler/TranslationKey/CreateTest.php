@@ -7,6 +7,7 @@ namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\TranslationKey;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Exception\Exception;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TranslationKey\Create as CreateHandler;
 use Dvsa\Olcs\Api\Domain\Repository\TranslationKey as TranslationKeyRepo;
@@ -113,6 +114,60 @@ final class CreateTest extends AbstractCommandHandlerTestCase
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('editable-translations-cant-save');
 
+        $this->sut->handleCommand($command);
+    }
+
+    public function testRichCreateKeepsExactMarkupKeyAndPassesFormatToUpdate(): void
+    {
+        $json = base64_encode('{"blocks":[{"type":"paragraph","data":{"text":"Valid content"}}]}');
+        $command = CreateCmd::create([
+            'translationKey' => 'markup-application_undertakings_GV79',
+            'description' => 'Application declaration',
+            'format' => 'editorjs',
+            'translationsArray' => ['en_GB' => $json],
+        ]);
+        $this->repoMap['TranslationKey']->shouldReceive('save')->once()->andReturnUsing(
+            function (TranslationKeyEntity $key): void {
+                $this->assertSame('markup-application_undertakings_GV79', $key->getTranslationKey());
+                $this->assertSame('editorjs', $key->getFormat());
+                $key->setId(20);
+            },
+        );
+        $this->expectedSideEffect(UpdateCmd::class, [
+            'id' => 20,
+            'translationsArray' => ['en_GB' => $json],
+            'description' => 'Application declaration',
+            'format' => 'editorjs',
+        ], new Result());
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testRichCreateWithoutMeaningfulLanguageDoesNotSaveKey(): void
+    {
+        $command = CreateCmd::create([
+            'translationKey' => 'markup-empty',
+            'description' => 'Empty',
+            'format' => 'editorjs',
+            'translationsArray' => ['en_GB' => base64_encode('{"blocks":[{"type":"paragraph","data":{"text":"   "}}]}')],
+        ]);
+        $this->repoMap['TranslationKey']->shouldNotReceive('save');
+
+        $this->expectException(ValidationException::class);
+        $this->sut->handleCommand($command);
+    }
+
+    public function testRichCreateWithoutLanguagesDoesNotSaveKey(): void
+    {
+        $command = CreateCmd::create([
+            'translationKey' => 'markup-empty',
+            'description' => 'Empty',
+            'format' => 'editorjs',
+            'translationsArray' => [],
+        ]);
+        $this->repoMap['TranslationKey']->shouldNotReceive('save');
+
+        $this->expectException(ValidationException::class);
         $this->sut->handleCommand($command);
     }
 }

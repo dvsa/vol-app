@@ -7,27 +7,35 @@ var OLCS = OLCS || {};
  * an OLCS.formHandler to it
  */
 
-OLCS.modalForm = (function(document, $, undefined) {
-
+OLCS.modalForm = (function (document, $, undefined) {
   "use strict";
 
-  return function init(options) {
+  var activeHandler;
+  var transformBound = false;
 
-    OLCS.eventEmitter.on("render", function transform() {
-      OLCS.transform({
+  return function init(options) {
+    if (!transformBound) {
+      OLCS.eventEmitter.on("render", function transform() {
+        OLCS.transform({
           selector: ".modal",
           replace: {
-              ".js-modal-alert": ".modal--alert"
-          }
-      });
+            ".js-modal-alert": ".modal--alert",
+          },
+        });
 
-      OLCS.transform({
-        selector: ".modal--alert",
-        replace: {
-          ".js-modal": ".modal"
-        }
+        OLCS.transform({
+          selector: ".modal--alert",
+          replace: {
+            ".js-modal": ".modal",
+          },
+        });
       });
-    });
+      transformBound = true;
+    }
+
+    if (activeHandler) {
+      activeHandler.unbind();
+    }
 
     // ... assume that the response we get back should be shown in
     // a modal
@@ -40,16 +48,19 @@ OLCS.modalForm = (function(document, $, undefined) {
       isModal: true,
       container: ".modal__content",
       onChange: false,
-      success: options.success
+      success: options.success,
     });
+    activeHandler = handler;
 
     // because handler uses event delegation, the listeners it sets
     // up will keep hanging around after the modal is closed, which
     // means if it's re-opened they'll rebind and trip each other up
     // As such, we need to manually unbind them each time.
     OLCS.eventEmitter.once("hide:modal", function unbind() {
-      handler.unbind();
+      if (activeHandler === handler) {
+        handler.unbind();
+        activeHandler = null;
+      }
     });
   };
-
-}(document, window.jQuery));
+})(document, window.jQuery);
