@@ -10,9 +10,10 @@
 # fallback --policy-path=website on the snyk test command.
 version: v1.25.0
 ignore:
-  # uri-js, percent-decoding and removeDotSegments infinite loop. 4.4.1 is the final release of an
-  # unmaintained package and both affect it. Reached only through ajv 6 inside schema-utils 3,
-  # which file-loader, url-loader and null-loader use to validate their own webpack options -
+  # uri-js, percent-decoding and removeDotSegments infinite loop, and an uncaught exception on
+  # malformed input. 4.4.1 is the final release of an unmaintained package and all three affect
+  # it. Reached only through ajv 6 inside schema-utils 3, which file-loader, url-loader and
+  # null-loader use to validate their own webpack options -
   # options written by Docusaurus and this repo's config, never a URI from outside. ajv 8 has
   # moved off uri-js; this goes away when Docusaurus drops the schema-utils 3 loaders.
   SNYK-JS-URIJS-19963961:
@@ -22,6 +23,12 @@ ignore:
           webpack loader options that come from Docusaurus and this repo's config.
         expires: 2026-11-25T00:00:00.000Z
   SNYK-JS-URIJS-19963963:
+    - "*":
+        reason: >-
+          No fixed release exists - uri-js is unmaintained. Build-time only, via ajv 6 validating
+          webpack loader options that come from Docusaurus and this repo's config.
+        expires: 2026-11-25T00:00:00.000Z
+  SNYK-JS-URIJS-20341609:
     - "*":
         reason: >-
           No fixed release exists - uri-js is unmaintained. Build-time only, via ajv 6 validating
