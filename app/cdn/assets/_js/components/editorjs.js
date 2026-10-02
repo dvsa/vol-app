@@ -123,11 +123,9 @@ OLCS.editorjs = (function (document, $, undefined) {
     var tools = {};
 
     if (toolsProfile === "govuk-long-text") {
-      if (typeof VolEditorJsGovuk === "undefined") {
         if (typeof OLCS.logger !== "undefined") {
-          OLCS.logger("GOV.UK EditorJS tools not available");
+          OLCS.logger.error("GOV.UK EditorJS tools not available");
         }
-        return;
       }
 
       tools = {
