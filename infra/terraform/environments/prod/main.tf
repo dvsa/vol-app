@@ -147,7 +147,7 @@ locals {
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-db-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*"
       ]
     },
     {
@@ -184,7 +184,7 @@ locals {
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*"
         
       ]
     },
