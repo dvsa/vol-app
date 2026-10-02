@@ -114,7 +114,7 @@ final class VariationFinancialEvidenceTest extends MockeryTestCase
                     ->shouldReceive('get')
                     ->with('uploadNowRadio')
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                             ->shouldReceive('setName')
                             ->with('uploadNow')
                             ->once()
