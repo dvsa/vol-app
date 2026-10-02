@@ -101,7 +101,16 @@ final class VariationFinancialEvidenceTest extends MockeryTestCase
         $mockForm->shouldReceive('get')
             ->with('evidence')
             ->andReturn(
-                m::mock(ElementInterface::class)
+                m::mock(\Laminas\Form\Fieldset::class)
+                    ->shouldReceive('add')
+                    ->with(
+                        m::subset([
+                            'name' => 'evidenceStatementGuidance',
+                            'type' => \Common\Form\Elements\Types\GuidanceTranslated::class,
+                        ]),
+                        ['priority' => 1]
+                    )
+                    ->once()
                     ->shouldReceive('get')
                     ->with('uploadNowRadio')
                     ->andReturn(
