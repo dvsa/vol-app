@@ -53,6 +53,10 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
         $translations = self::prepareTranslations($command->getTranslationsArray(), $format);
 
         if ($format === 'editorjs' && $translationKey->getFormat() !== 'editorjs') {
+            if ($translations === []) {
+                throw new ValidationException(['translationsArray' => 'At least one language is required']);
+            }
+
             foreach ($translationKey->getTranslationKeyTexts() as $existingText) {
                 $locale = $existingText->getLanguage()->getIsoCode();
                 if (!array_key_exists($locale, $command->getTranslationsArray())) {
