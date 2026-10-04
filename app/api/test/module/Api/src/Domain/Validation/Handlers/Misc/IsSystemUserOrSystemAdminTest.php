@@ -30,8 +30,7 @@ final class IsSystemUserOrSystemAdminTest extends AbstractHandlerTestCase
         $dto = m::mock(CommandInterface::class);
 
         $mockUser = $this->mockUser();
-        $mockUser->shouldReceive('isSystemUser')
-            ->once()
+        $mockUser->expects('isSystemUser')
             ->andReturn(true);
 
         $this->assertTrue($this->sut->isValid($dto));
@@ -43,8 +42,7 @@ final class IsSystemUserOrSystemAdminTest extends AbstractHandlerTestCase
         $dto = m::mock(CommandInterface::class);
 
         $mockUser = $this->mockUser();
-        $mockUser->shouldReceive('isSystemUser')
-            ->once()
+        $mockUser->expects('isSystemUser')
             ->andReturn(false);
 
         $this->setIsGranted(Permission::SYSTEM_ADMIN, true);
@@ -58,8 +56,7 @@ final class IsSystemUserOrSystemAdminTest extends AbstractHandlerTestCase
         $dto = m::mock(CommandInterface::class);
 
         $mockUser = $this->mockUser();
-        $mockUser->shouldReceive('isSystemUser')
-            ->once()
+        $mockUser->expects('isSystemUser')
             ->andReturn(false);
 
         $this->setIsGranted(Permission::SYSTEM_ADMIN, false);

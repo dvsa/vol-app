@@ -18,15 +18,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 #[CoversClass(Handler::class)]
 final class ClearTest extends AbstractCommandHandlerTestCase
 {
-    /**
-     * @var \Redis&m\MockInterface
-     */
-    private $redis;
+    private \Redis&m\MockInterface $redis;
 
-    /**
-     * @var User&m\MockInterface
-     */
-    private $currentUser;
+    private User&m\MockInterface $currentUser;
 
     #[\Override]
     public function setUp(): void
@@ -77,8 +71,7 @@ final class ClearTest extends AbstractCommandHandlerTestCase
     private function expectScanFor(string $pattern): void
     {
         $this->redis
-            ->shouldReceive('scan')
-            ->once()
+            ->expects('scan')
             ->withArgs(
                 static function (&$iterator, string $actualPattern, int $count) use ($pattern): bool {
                     $iterator = 0;
@@ -110,7 +103,6 @@ final class ClearTest extends AbstractCommandHandlerTestCase
 
         $this->redis
             ->expects('dbSize')
-            ->once()
             ->andReturn(75);
 
         $this->redis->shouldNotReceive('flushDB');
@@ -126,6 +118,7 @@ final class ClearTest extends AbstractCommandHandlerTestCase
             ['[DRY RUN] Would flush all Redis cache (75 keys)'],
             $result->toArray()['messages']
         );
+        self::assertSame(75, $result->toArray()['flags'][Command::RESULT_FLAG_KEYS_DELETED]);
     }
 
     public function testFlushAllClearsRedisAndReportsDeletedCount(): void
@@ -139,7 +132,6 @@ final class ClearTest extends AbstractCommandHandlerTestCase
 
         $this->redis
             ->expects('flushDB')
-            ->once()
             ->andReturnTrue();
 
         $command = Command::create([
@@ -221,7 +213,6 @@ final class ClearTest extends AbstractCommandHandlerTestCase
 
         $this->redis
             ->expects('dbSize')
-            ->once()
             ->andThrow(new \RuntimeException('Redis unavailable'));
 
         $this->expectException(\RuntimeException::class);
@@ -366,8 +357,8 @@ final class ClearTest extends AbstractCommandHandlerTestCase
             )
             ->andReturn(['key-a', 'key-b'], ['key-c']);
 
-        $this->redis->expects('del')->with(['key-a', 'key-b'])->once();
-        $this->redis->expects('del')->with(['key-c'])->once();
+        $this->redis->expects('del')->with(['key-a', 'key-b']);
+        $this->redis->expects('del')->with(['key-c']);
 
         $result = $this->sut->handleCommand(Command::create([
             'namespace' => 'translation_key, cqrs',
@@ -377,6 +368,79 @@ final class ClearTest extends AbstractCommandHandlerTestCase
         self::assertSame(['zfcache:translation_key*', 'zfcache:cqrs_*'], $patterns);
         self::assertContains('Total: deleted 3 keys', $result->toArray()['messages']);
         self::assertSame(3, $result->toArray()['flags'][Command::RESULT_FLAG_KEYS_DELETED]);
+    }
+
+    /**
+     * SCAN returns a cursor, not a complete answer: a non-zero cursor means there are more keys
+     * to fetch, and a page can come back empty while the cursor is still live. Every page has to
+     * be deleted, not just the first.
+     */
+    public function testScanFollowsTheCursorUntilRedisReportsCompletion(): void
+    {
+        $pages = [
+            [42, ['key-a', 'key-b']],
+            [97, []],
+            [0, ['key-c']],
+        ];
+        $call = 0;
+
+        $this->redis
+            ->expects('scan')
+            ->times(count($pages))
+            ->withArgs(
+                static function (&$iterator, string $pattern, int $count) use (&$call, $pages): bool {
+                    $iterator = $pages[$call][0];
+
+                    return $pattern === 'zfcache:sys_param*' && $count === 100;
+                }
+            )
+            ->andReturnUsing(static function () use (&$call, $pages): array {
+                return $pages[$call++][1];
+            });
+
+        $this->redis->expects('del')->with(['key-a', 'key-b']);
+        $this->redis->expects('del')->with(['key-c']);
+
+        $result = $this->sut->handleCommand(Command::create([
+            'namespace' => 'sys_param',
+            'dryRun' => false,
+        ]));
+
+        self::assertSame(3, $result->toArray()['flags'][Command::RESULT_FLAG_KEYS_DELETED]);
+    }
+
+    /**
+     * A dry run has to count what it would delete while leaving it in place. The other dry-run
+     * tests scan an empty keyspace, which cannot tell the two apart.
+     */
+    public function testDryRunCountsMatchingKeysWithoutDeletingThem(): void
+    {
+        $this->redis
+            ->expects('scan')
+            ->withArgs(
+                static function (&$iterator, string $pattern, int $count): bool {
+                    $iterator = 0;
+
+                    return $pattern === 'zfcache:cqrs_*' && $count === 100;
+                }
+            )
+            ->andReturn(['zfcache:cqrs_a', 'zfcache:cqrs_b']);
+
+        $this->redis->shouldNotReceive('del');
+
+        $result = $this->sut->handleCommand(Command::create([
+            'namespace' => 'cqrs',
+            'dryRun' => true,
+        ]));
+
+        self::assertSame(
+            [
+                '[DRY RUN] Would delete 2 keys from namespace "cqrs" (pattern: zfcache:cqrs_*)',
+                '[DRY RUN] Total: would delete 2 keys',
+            ],
+            $result->toArray()['messages']
+        );
+        self::assertSame(2, $result->toArray()['flags'][Command::RESULT_FLAG_KEYS_DELETED]);
     }
 
     /**
@@ -391,11 +455,7 @@ final class ClearTest extends AbstractCommandHandlerTestCase
         $config = require dirname(__DIR__, 7) . '/config/autoload/config.global.php';
 
         $defaultPrefix = $config['caches']['default-cache']['options']['namespace'];
-        $pools = (new \ReflectionClass(Handler::class))->getConstant('POOL_NAMESPACES');
-
-        self::assertNotEmpty($pools);
-
-        foreach ($pools as $namespace => $pool) {
+        foreach (Handler::POOL_NAMESPACES as $namespace => $pool) {
             self::assertArrayHasKey(
                 $pool,
                 $config['caches'],

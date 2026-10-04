@@ -35,7 +35,7 @@ class Clear extends AbstractCommandHandler implements
      * These pools share one Redis connection with the application cache and are kept apart only
      * by the prefix their adapter applies, so clearing one is a matter of scanning that prefix.
      */
-    private const array POOL_NAMESPACES = [
+    public const array POOL_NAMESPACES = [
         ClearCmd::NAMESPACE_DOCTRINE => 'doctrine-cache',
         ClearCmd::NAMESPACE_JWKS => 'jwks-cache',
     ];
@@ -57,13 +57,10 @@ class Clear extends AbstractCommandHandler implements
     ];
 
     /**
-     * Handle cache clear command
-     *
-     * @param CommandInterface|ClearCmd $command
-     * @return Result
+     * @param ClearCmd $command
      */
     #[\Override]
-    public function handleCommand(CommandInterface $command)
+    public function handleCommand(CommandInterface $command): Result
     {
         $dryRun = $command->getDryRun() ?? false;
 
@@ -107,12 +104,6 @@ class Clear extends AbstractCommandHandler implements
         );
     }
 
-    /**
-     * Flush all Redis cache
-     *
-     * @param bool $dryRun
-     * @return Result
-     */
     private function flushAll(bool $dryRun): Result
     {
         $redis = $this->getRedis();
@@ -123,6 +114,7 @@ class Clear extends AbstractCommandHandler implements
                 '[DRY RUN] Would flush all Redis cache (%d keys)',
                 $keyCount
             ));
+            $this->result->setFlag(ClearCmd::RESULT_FLAG_KEYS_DELETED, $keyCount);
             return $this->result;
         }
 
@@ -140,11 +132,7 @@ class Clear extends AbstractCommandHandler implements
     }
 
     /**
-     * Clear cache by namespace(s)
-     *
-     * @param string $namespaces Comma-separated list
-     * @param bool $dryRun
-     * @return Result
+     * @param string $namespaces comma-separated list
      * @throws BadRequestException
      */
     private function clearByNamespace(string $namespaces, bool $dryRun): Result
@@ -196,13 +184,6 @@ class Clear extends AbstractCommandHandler implements
         return $this->result;
     }
 
-    /**
-     * Clear cache by custom pattern
-     *
-     * @param string $pattern
-     * @param bool $dryRun
-     * @return Result
-     */
     private function clearByPattern(string $pattern, bool $dryRun): Result
     {
         $deleted = $this->deleteByPattern($pattern, $dryRun);
@@ -229,9 +210,7 @@ class Clear extends AbstractCommandHandler implements
     /**
      * Delete keys matching a pattern using SCAN
      *
-     * @param string $pattern
-     * @param bool $dryRun
-     * @return int Number of keys that would be/were deleted
+     * @return int number of keys that would be/were deleted
      */
     private function deleteByPattern(string $pattern, bool $dryRun): int
     {

@@ -7,10 +7,13 @@ namespace AdminTest\Controller;
 use Admin\Controller\CacheClearController;
 use Common\Controller\Plugin\Redirect;
 use Common\Form\Form;
+use Common\Service\Cqrs\Response;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Cache\Clear;
+use Admin\Form\Model\Form\CacheClear as CacheClearForm;
+use Laminas\Form\Annotation\AnnotationBuilder;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\FieldsetInterface;
 use Laminas\Http\Request;
@@ -24,30 +27,15 @@ final class CacheClearControllerTest extends MockeryTestCase
 {
     private const string ROUTE = 'admin-dashboard/admin-cache-clear';
 
-    /**
-     * @var CacheClearController&m\MockInterface
-     */
-    private $sut;
+    private CacheClearController&m\MockInterface $sut;
 
-    /**
-     * @var FlashMessengerHelperService&m\MockInterface
-     */
-    private $flashMessenger;
+    private FlashMessengerHelperService&m\MockInterface $flashMessenger;
 
-    /**
-     * @var Request&m\MockInterface
-     */
-    private $request;
+    private Request&m\MockInterface $request;
 
-    /**
-     * @var FormHelperService&m\MockInterface
-     */
-    private $formHelper;
+    private FormHelperService&m\MockInterface $formHelper;
 
-    /**
-     * @var Form&m\MockInterface
-     */
-    private $form;
+    private Form&m\MockInterface $form;
 
     public function setUp(): void
     {
@@ -154,7 +142,7 @@ final class CacheClearControllerTest extends MockeryTestCase
 
         $captured = '';
 
-        $response = m::mock();
+        $response = m::mock(Response::class);
         $response->expects('isOk')->andReturnTrue();
         $response->expects('getResult')->andReturn($result);
 
@@ -256,17 +244,69 @@ final class CacheClearControllerTest extends MockeryTestCase
     }
 
     /**
+     * A selection that maps to nothing must not reach the API: an empty namespace comes back as
+     * a 200 that cleared nothing, which the page would report as success.
+     */
+    public function testSelectionWithNoMappedNamespaceIsReportedAsAFailure(): void
+    {
+        $this->expectPageScaffolding();
+
+        $postData = [
+            'cacheTypes' => ['not_a_cache_type'],
+            'form-actions' => ['submit' => ''],
+            'security' => 'test-token',
+        ];
+
+        $this->request->expects('isPost')->andReturnTrue();
+        $this->request->expects('getPost')->andReturn($postData);
+
+        $this->form->expects('setData')->with($postData)->andReturnSelf();
+        $this->form->expects('isValid')->andReturnTrue();
+        $this->form->expects('getData')->andReturn(['cacheTypes' => ['not_a_cache_type']]);
+
+        $this->sut->shouldNotReceive('handleCommand');
+
+        $this->flashMessenger->expects('addErrorMessage')->with('Cache could not be cleared');
+        $this->flashMessenger->shouldNotReceive('addSuccessMessage');
+
+        $redirect = m::mock(Redirect::class);
+        $this->sut->expects('redirect')->andReturn($redirect);
+        $redirect->expects('toRoute')->with(self::ROUTE);
+
+        $this->sut->indexAction();
+    }
+
+    /**
+     * The checkboxes on the form and the controller's map are declared separately. A checkbox
+     * without a mapping would be dropped, and a mapping without a checkbox is unreachable, so
+     * the two lists have to be identical.
+     */
+    public function testFormOptionsMatchTheNamespaceMap(): void
+    {
+        $spec = (new AnnotationBuilder())->getFormSpecification(CacheClearForm::class);
+
+        $valueOptions = null;
+
+        foreach ($spec['elements'] as $element) {
+            if (($element['spec']['name'] ?? null) === 'cacheTypes') {
+                $valueOptions = $element['spec']['options']['value_options'];
+            }
+        }
+
+        self::assertIsArray($valueOptions, 'the CacheClear form has no cacheTypes element');
+        self::assertSame(
+            array_keys(CacheClearController::CACHE_NAMESPACE_MAP),
+            array_keys($valueOptions)
+        );
+    }
+
+    /**
      * Every namespace this page can send has to be one the API command accepts - otherwise the
      * clear fails with a 400 that only shows up at runtime.
      */
     public function testEveryMappedNamespaceIsAcceptedByTheCommand(): void
     {
-        $reflection = new \ReflectionClass(CacheClearController::class);
-        $map = $reflection->getConstant('CACHE_NAMESPACE_MAP');
-
-        self::assertNotEmpty($map);
-
-        foreach ($map as $cacheType => $namespaces) {
+        foreach (CacheClearController::CACHE_NAMESPACE_MAP as $cacheType => $namespaces) {
             foreach ($namespaces as $namespace) {
                 self::assertContains(
                     $namespace,
@@ -299,7 +339,7 @@ final class CacheClearControllerTest extends MockeryTestCase
         $this->form->expects('isValid')->andReturnTrue();
         $this->form->expects('getData')->andReturn(['cacheTypes' => ['cqrs']]);
 
-        $response = m::mock();
+        $response = m::mock(Response::class);
         $response->expects('isOk')->andReturnTrue();
         $response->expects('getResult')->andReturn($result);
 
@@ -344,10 +384,8 @@ final class CacheClearControllerTest extends MockeryTestCase
         $this->form->expects('isValid')->andReturnTrue();
         $this->form->expects('getData')->andReturn(['cacheTypes' => ['cqrs']]);
 
-        $response = m::mock();
+        $response = m::mock(Response::class);
         $response->expects('isOk')->andReturnFalse();
-        $response->expects('isClientError')->andReturnFalse();
-        $response->expects('isServerError')->andReturnTrue();
         $response->shouldNotReceive('getResult');
 
         $this->sut->expects('handleCommand')->andReturn($response);

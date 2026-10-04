@@ -20,9 +20,10 @@ class CacheClearController extends AbstractInternalController implements LeftVie
      * because "sys_param" means nothing to the person using this screen.
      *
      * Keys here must match the value_options on Admin\Form\Model\Form\CacheClear; values must be
-     * drawn from Clear::NAMESPACES, which is what the API command handler will accept.
+     * drawn from Clear::NAMESPACES, which is what the API command handler will accept. Both are
+     * enforced by CacheClearControllerTest.
      */
-    private const array CACHE_NAMESPACE_MAP = [
+    public const array CACHE_NAMESPACE_MAP = [
         'translations' => [
             CacheEncryption::TRANSLATION_KEY_IDENTIFIER,
             CacheEncryption::TRANSLATION_REPLACEMENT_IDENTIFIER,
@@ -83,20 +84,15 @@ class CacheClearController extends AbstractInternalController implements LeftVie
 
         if ($isPost && $form->isValid()) {
             $data = $form->getData();
+            $namespaces = $this->resolveNamespaces($data['cacheTypes'] ?? []);
 
-            $response = $this->handleCommand(
-                Clear::create([
-                    'namespace' => implode(',', $this->resolveNamespaces($data['cacheTypes'] ?? [])),
-                    'dryRun' => false,
-                ])
-            );
-
-            if ($response->isOk()) {
-                $this->flashMessengerHelperService
-                    ->addSuccessMessage($this->describeOutcome($response->getResult()));
-            } elseif ($response->isClientError() || $response->isServerError()) {
+            if ($namespaces === []) {
+                // Sending an empty namespace would come back as a 200 that cleared nothing,
+                // which would otherwise be reported as success
                 $this->flashMessengerHelperService
                     ->addErrorMessage('Cache could not be cleared');
+            } else {
+                $this->clearNamespaces($namespaces);
             }
 
             return $this->redirect()->toRoute(
@@ -111,6 +107,29 @@ class CacheClearController extends AbstractInternalController implements LeftVie
         $view->setTemplate('pages/form');
 
         return $view;
+    }
+
+    /**
+     * @param string[] $namespaces
+     */
+    private function clearNamespaces(array $namespaces): void
+    {
+        $response = $this->handleCommand(
+            Clear::create([
+                'namespace' => implode(',', $namespaces),
+                'dryRun' => false,
+            ])
+        );
+
+        if ($response->isOk()) {
+            $this->flashMessengerHelperService
+                ->addSuccessMessage($this->describeOutcome($response->getResult()));
+
+            return;
+        }
+
+        $this->flashMessengerHelperService
+            ->addErrorMessage('Cache could not be cleared');
     }
 
     /**
