@@ -49,7 +49,6 @@ class Clear extends AbstractCommand
         CacheEncryption::TRANSLATION_KEY_IDENTIFIER,
         CacheEncryption::TRANSLATION_REPLACEMENT_IDENTIFIER,
         CacheEncryption::GENERIC_STORAGE_IDENTIFIER,
-        CacheEncryption::SECRETS_MANAGER_IDENTIFIER,
         self::NAMESPACE_CQRS,
         self::NAMESPACE_DOCTRINE,
         self::NAMESPACE_JWKS,

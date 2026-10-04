@@ -35,8 +35,6 @@ class CacheEncryption
     public const string USER_ACCOUNT_IDENTIFIER = 'user_account';
     public const string GENERIC_STORAGE_IDENTIFIER = 'storage';
 
-    public const string SECRETS_MANAGER_IDENTIFIER = 'secretsmanager';
-
     /**
      * Key prefix applied to every generic CQRS query cached by CachingQueryService.
      *
@@ -86,11 +84,6 @@ class CacheEncryption
             'mode' => self::ENCRYPTION_MODE_SHARED,
             'ttl' => self::TTL_2_MINUTES,
         ],
-        self::SECRETS_MANAGER_IDENTIFIER => [
-            'mode' => self::ENCRYPTION_MODE_SHARED,
-            'ttl'  => self::TTL_20_DAYS
-        ]
-
     ];
 
     public function __construct(
