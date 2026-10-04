@@ -158,10 +158,12 @@ final class ContinuationDetailTest extends RepositoryTestCase
             $this->sut->fetchDetails(1, ['lsts_valid'], 'OB123', $method, Entity::STATUS_PRINTED),
         );
 
-        // m.status is joined twice — w0 by withRefdata and s explicitly.
+        // The explicit s alias replaces the automatically generated refdata alias,
+        // so status is joined only once.
         $this->assertSame(
-            'SELECT m, w0, w1, c, s, l, ls, lo, lt, lg' . self::FROM . self::REFDATA_JOINS
-            . ' LEFT JOIN m.continuation c LEFT JOIN m.status s LEFT JOIN m.licence l'
+            'SELECT m, s, w1, c, l, ls, lo, lt, lg' . self::FROM
+            . ' LEFT JOIN m.status s LEFT JOIN m.signatureType w1'
+            . ' LEFT JOIN m.continuation c LEFT JOIN m.licence l'
             . ' LEFT JOIN l.status ls LEFT JOIN l.organisation lo'
             . ' LEFT JOIN l.licenceType lt LEFT JOIN l.goodsOrPsv lg'
             . ' WHERE c.id = :continuationId AND l.status IN(:licenceStatuses)'
@@ -186,8 +188,9 @@ final class ContinuationDetailTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchWithLicence(1));
 
         $this->assertSame(
-            'SELECT m, w0, w1, s, l, lt, lg' . self::FROM . self::REFDATA_JOINS
-            . ' LEFT JOIN m.status s LEFT JOIN m.licence l'
+            'SELECT m, s, w1, l, lt, lg' . self::FROM
+            . ' LEFT JOIN m.status s LEFT JOIN m.signatureType w1'
+            . ' LEFT JOIN m.licence l'
             . ' LEFT JOIN l.licenceType lt LEFT JOIN l.goodsOrPsv lg'
             . ' WHERE m.id = :byId',
             $qb->getDQL(),

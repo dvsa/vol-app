@@ -23,6 +23,9 @@ final class CasesTest extends RepositoryTestCase
     private const string REFDATA = ' LEFT JOIN m.caseType w0 LEFT JOIN m.categorys w1'
         . ' LEFT JOIN m.outcomes w2';
 
+    private const string LIST_REFDATA = ' LEFT JOIN m.caseType ct LEFT JOIN m.categorys w1'
+        . ' LEFT JOIN m.outcomes w2';
+
     private const string HIDDEN_CASE_TYPE = 'CONCAT(ct.description, m.id) as HIDDEN caseType';
 
     #[\Override]
@@ -32,8 +35,8 @@ final class CasesTest extends RepositoryTestCase
     }
 
     /**
-     * m.caseType is joined twice: w0 by withRefdata and ct explicitly. The explicit alias is
-     * what the HIDDEN caseType select needs — see the migration findings.
+     * The explicit ct alias replaces the automatically generated refdata alias,
+     * so caseType is joined only once.
      */
     public function testBuildDefaultListQuery(): void
     {
@@ -42,8 +45,7 @@ final class CasesTest extends RepositoryTestCase
         $this->sut->buildDefaultListQuery($qb, m::mock(QueryInterface::class));
 
         $this->assertSame(
-            'SELECT m, w0, w1, w2, ct, ' . self::HIDDEN_CASE_TYPE . self::FROM . self::REFDATA
-            . ' LEFT JOIN m.caseType ct',
+            'SELECT m, ct, w1, w2, ' . self::HIDDEN_CASE_TYPE . self::FROM . self::LIST_REFDATA,
             $qb->getDQL(),
         );
     }
@@ -102,8 +104,8 @@ final class CasesTest extends RepositoryTestCase
         $this->assertSame(
             // buildDefaultListQuery() adds the HIDDEN select before applyListJoins() adds the
             // licence, application and traffic-area aliases.
-            'SELECT m, w0, w1, w2, ct, ' . self::HIDDEN_CASE_TYPE . ', l, a, ta' . self::FROM . self::REFDATA
-            . ' LEFT JOIN m.caseType ct LEFT JOIN m.licence l LEFT JOIN m.application a'
+            'SELECT m, ct, w1, w2, ' . self::HIDDEN_CASE_TYPE . ', l, a, ta' . self::FROM . self::LIST_REFDATA
+            . ' LEFT JOIN m.licence l LEFT JOIN m.application a'
             . ' LEFT JOIN l.trafficArea ta'
             . ' WHERE m.caseType = :CASE_TYPE AND m.closedDate IS NULL'
             . ' AND a.status = :APP_STATUS AND l.status = :LIC_STATUS'
@@ -208,8 +210,7 @@ final class CasesTest extends RepositoryTestCase
         $this->assertSame(['RESULTS'], $this->sut->fetchOpenCasesForSurrender($query));
 
         $this->assertSame(
-            'SELECT m, w0, w1, w2, ct, ' . self::HIDDEN_CASE_TYPE . self::FROM . self::REFDATA
-            . ' LEFT JOIN m.caseType ct'
+            'SELECT m, ct, w1, w2, ' . self::HIDDEN_CASE_TYPE . self::FROM . self::LIST_REFDATA
             . ' WHERE m.licence = :byLicence AND m.closedDate IS NULL',
             $qb->getDQL(),
         );

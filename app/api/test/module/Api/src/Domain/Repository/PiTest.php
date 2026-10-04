@@ -30,15 +30,14 @@ final class PiTest extends RepositoryTestCase
 
         $this->assertSame($pi, $this->sut->fetchUsingCase($command, Query::HYDRATE_OBJECT));
 
-        // withRefdata() joins the RefData associations as w0..w5 before the explicit with()
-        // calls. m.tmDecisions appears twice (w4 and w11) — see the migration findings.
+        // withRefdata() already joins tmDecisions, so the later duplicate join is not added.
         $this->assertSame(
-            'SELECT m, w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, c, w13, s, u, cd, p'
+            'SELECT m, w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w12, c, w13, s, u, cd, p'
             . ' FROM ' . Entity::class . ' m'
             . ' LEFT JOIN m.agreedByTcRole w0 LEFT JOIN m.decidedByTcRole w1 LEFT JOIN m.piStatus w2'
             . ' LEFT JOIN m.writtenOutcome w3 LEFT JOIN m.tmDecisions w4 LEFT JOIN m.piTypes w5'
             . ' LEFT JOIN m.agreedByTc w6 LEFT JOIN m.assignedTo w7 LEFT JOIN m.decidedByTc w8'
-            . ' LEFT JOIN m.reasons w9 LEFT JOIN m.decisions w10 LEFT JOIN m.tmDecisions w11'
+            . ' LEFT JOIN m.reasons w9 LEFT JOIN m.decisions w10'
             . ' LEFT JOIN m.piHearings w12 LEFT JOIN m.case c LEFT JOIN c.transportManager w13'
             . ' LEFT JOIN m.piSlaExceptions s LEFT JOIN m.createdBy u'
             . ' LEFT JOIN u.contactDetails cd LEFT JOIN cd.person p'
