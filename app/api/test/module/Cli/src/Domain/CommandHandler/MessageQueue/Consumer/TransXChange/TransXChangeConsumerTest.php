@@ -248,6 +248,7 @@ final class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
 
         $this->mockedSmServices[Queue::class]
             ->shouldReceive('changeMessageVisibility')
+            ->with('QUEUE_URI', '1234', 60)
             ->once();
 
         $this->repoMap['EbsrSubmission']
@@ -273,7 +274,8 @@ final class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
             ->andReturn($messages);
 
         $this->mockedSmServices[Queue::class]
-            ->expects('changeMessageVisibility');
+            ->expects('changeMessageVisibility')
+            ->with('QUEUE_URI', '1234', 60);
 
         $ebsrSubmission = m::mock(EbsrSubmissionEntity::class);
         $ebsrSubmission->shouldReceive('getBusReg')->andReturn(null);

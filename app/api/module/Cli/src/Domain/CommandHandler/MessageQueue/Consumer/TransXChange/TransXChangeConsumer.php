@@ -29,6 +29,8 @@ use Olcs\XmlTools\Validator\Xsd;
 
 class TransXChangeConsumer extends AbstractConsumer
 {
+    private const UNMATCHED_MESSAGE_BACKOFF_SECONDS = 60;
+
     public const TYPES = [
         'RouteMap' => 'RouteMap',
         'Timetable' => 'Timetable',
@@ -104,7 +106,7 @@ class TransXChangeConsumer extends AbstractConsumer
                 );
 
                 // This message is not for us, so don't delete it.
-                $this->setVisibilityTimeout($message, 0);
+                $this->setVisibilityTimeout($message, self::UNMATCHED_MESSAGE_BACKOFF_SECONDS);
 
                 continue;
             } catch (Exception $e) {
