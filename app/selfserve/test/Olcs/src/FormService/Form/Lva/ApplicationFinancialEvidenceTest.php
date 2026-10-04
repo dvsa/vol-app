@@ -129,6 +129,8 @@ final class ApplicationFinancialEvidenceTest extends MockeryTestCase
                     ->shouldReceive('setOption')
                     ->with('hint', 'BAR')
                     ->once()
+                    ->shouldReceive('add')
+                    ->once()
                     ->getMock()
             )
             ->once()
