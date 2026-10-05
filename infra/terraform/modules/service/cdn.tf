@@ -32,9 +32,7 @@ locals {
 }
 
 module "acm" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "~> 5.0"
-
+  source      = "git::https://github.com/terraform-aws-modules/terraform-aws-acm.git?ref=f421377c87fe5207898adc0def87540fa07c2af4"
   domain_name = "${local.subdomain}.${local.domain_name}"
   zone_id     = data.aws_route53_zone.public.id
 
@@ -49,9 +47,7 @@ module "acm" {
 }
 
 module "route53_records" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "~> 5.0"
-
+  source                      = "git::https://github.com/terraform-aws-modules/terraform-aws-acm.git?ref=f421377c87fe5207898adc0def87540fa07c2af4"
   create_certificate          = false
   create_route53_records_only = true
 
@@ -68,9 +64,7 @@ locals {
 }
 
 module "cloudfront" {
-  source  = "terraform-aws-modules/cloudfront/aws"
-  version = "~> 3.4"
-
+  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-cloudfront.git?ref=f48225a64ad695e52684b58b854aee23d888c70f"
   aliases = ["${local.subdomain}.${local.domain_name}"]
 
   http_version    = "http2and3"
@@ -173,9 +167,7 @@ data "aws_canonical_user_id" "current" {}
 data "aws_cloudfront_log_delivery_canonical_user_id" "cloudfront" {}
 
 module "log_bucket" {
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 4.0"
-
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=fccafe509c9c9af4646a4bc45387f63d83c8a006"
   bucket = "vol-app-${var.environment}-assets-logs"
 
   control_object_ownership = true
@@ -196,9 +188,7 @@ module "log_bucket" {
 }
 
 module "records" {
-  source  = "terraform-aws-modules/route53/aws//modules/records"
-  version = "~> 4.0"
-
+  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-route53.git//modules/records?ref=90819a1cadd8f0ee38929a9a0453fe1693af3186"
   zone_id = data.aws_route53_zone.public.zone_id
 
   records = [
