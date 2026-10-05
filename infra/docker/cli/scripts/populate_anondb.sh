@@ -41,6 +41,9 @@ anondb_snapshot_id="olcs-db-anon-${env}-${TS}"
 
 anondb_dump_dir="/mnt/data/anondump"
 anondb_tables="template template_test_data translation_key translation_key_text replacement public_holiday fee_type doc_template system_parameter feature_toggle financial_standing_rate"
+# Dumped as rows only, which replace the matching local rows: unlike anondb_tables the local table isn't dropped and
+# recreated, so it keeps its history triggers
+anondb_data_tables="local_authority"
 
 ###############################################
 # LOGGING HELPERS
@@ -250,6 +253,13 @@ mysqldump -h $endpoint -u master -p${pass} \
   OLCS_RDS_OLCSDB $anondb_tables \
   | sed 's/`OLCS_RDS_OLCSDB`[.]//g' \
   > $anondb_dump_dir/olcs-db-localdev-anon-$env-$DATE.sql
+
+log "Dumping localdev table data"
+mysqldump -h $endpoint -u master -p${pass} \
+  --skip-triggers --skip-routines --no-create-info --replace \
+  OLCS_RDS_OLCSDB $anondb_data_tables \
+  | sed 's/`OLCS_RDS_OLCSDB`[.]//g' \
+  >> $anondb_dump_dir/olcs-db-localdev-anon-$env-$DATE.sql
 
 gzip $anondb_dump_dir/olcs-db-localdev-anon-$env-$DATE.sql
 
