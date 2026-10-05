@@ -16,10 +16,10 @@
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_dynamodb_state_lock_policy"></a> [dynamodb\_state\_lock\_policy](#module\_dynamodb\_state\_lock\_policy) | terraform-aws-modules/iam/aws//modules/iam-policy | ~> 5.28 |
-| <a name="module_dynamodb_table"></a> [dynamodb\_table](#module\_dynamodb\_table) | terraform-aws-modules/dynamodb-table/aws | ~> 4.0 |
-| <a name="module_s3"></a> [s3](#module\_s3) | terraform-aws-modules/s3-bucket/aws | ~> 4.0 |
-| <a name="module_s3_state_policy"></a> [s3\_state\_policy](#module\_s3\_state\_policy) | terraform-aws-modules/iam/aws//modules/iam-policy | ~> 5.28 |
+| <a name="module_dynamodb_state_lock_policy"></a> [dynamodb\_state\_lock\_policy](#module\_dynamodb\_state\_lock\_policy) | git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-policy | 2eb955d1e9dcbb471ee1635e25e9c0db55df105a |
+| <a name="module_dynamodb_table"></a> [dynamodb\_table](#module\_dynamodb\_table) | git::https://github.com/terraform-aws-modules/terraform-aws-dynamodb-table.git | b6cc515760466a455ff0acb97b16151fdca4511e |
+| <a name="module_s3"></a> [s3](#module\_s3) | git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git | fccafe509c9c9af4646a4bc45387f63d83c8a006 |
+| <a name="module_s3_state_policy"></a> [s3\_state\_policy](#module\_s3\_state\_policy) | git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-policy | 2eb955d1e9dcbb471ee1635e25e9c0db55df105a |
 
 ## Resources
 

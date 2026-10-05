@@ -7,9 +7,7 @@ locals {
 module "assets" {
   count = var.create_assets_bucket ? 1 : 0
 
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 4.0"
-
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=fccafe509c9c9af4646a4bc45387f63d83c8a006"
   bucket = "${local.account_id}-vol-app-assets"
 }
 
