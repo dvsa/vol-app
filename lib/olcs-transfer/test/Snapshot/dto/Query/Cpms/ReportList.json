@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/cpms/report",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

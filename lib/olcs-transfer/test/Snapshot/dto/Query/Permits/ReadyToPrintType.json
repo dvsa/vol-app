@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/permits/ready-to-print-type",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}
