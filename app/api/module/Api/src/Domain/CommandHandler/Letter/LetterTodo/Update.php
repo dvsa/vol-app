@@ -30,6 +30,8 @@ final class Update extends AbstractCommandHandler
             $entity->setHelpText($command->getHelpText());
         }
 
+        $entity->setRequiresInput($command->getRequiresInput());
+
         $this->getRepo()->save($entity);
 
         $this->result->addId('letterTodo', $entity->getId());

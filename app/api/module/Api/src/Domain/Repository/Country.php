@@ -48,7 +48,7 @@ class Country extends AbstractRepository
         }
 
         if (method_exists($query, 'hasEcmtConstraints') && $query->hasEcmtConstraints()) {
-            $this->getQueryBuilder()->with('constraints', 'c');
+            $this->getQueryBuilder()->modifyQuery($qb)->with('constraints', 'c');
             $qb->andWhere($qb->expr()->isNotNull('c.id'));
             $qb->addOrderBy($this->alias . '.countryDesc', 'ASC');
         }

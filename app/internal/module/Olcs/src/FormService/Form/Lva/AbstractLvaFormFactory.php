@@ -63,6 +63,8 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
         'lva-variation-financial_evidence' => VariationFinancialEvidence::class,
         'lva-application-financial_evidence' => FinancialEvidence::class,
 
+        'lva-application-knowledge_experience' => KnowledgeExperience::class,
+
         'lva-variation-undertakings' => Undertakings::class,
         'lva-application-undertakings' => Undertakings::class,
 
@@ -205,6 +207,18 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
                 $urlHelper = $serviceLocator->get(UrlHelperService::class);
                 $validatorPluginManager = $serviceLocator->get('ValidatorManager');
                 return new FinancialEvidence($formHelper, $authService, $translator, $urlHelper, $validatorPluginManager);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-knowledge_experience']:
+                $authService = $serviceLocator->get(AuthorizationService::class);
+                $translator = $serviceLocator->get(TranslationHelperService::class);
+                $urlHelper = $serviceLocator->get(UrlHelperService::class);
+                $validatorPluginManager = $serviceLocator->get('ValidatorManager');
+                return new KnowledgeExperience(
+                    $formHelper,
+                    $authService,
+                    $translator,
+                    $urlHelper,
+                    $validatorPluginManager
+                );
             case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-financial_evidence']:
                 $authService = $serviceLocator->get(AuthorizationService::class);
                 $translator = $serviceLocator->get(TranslationHelperService::class);

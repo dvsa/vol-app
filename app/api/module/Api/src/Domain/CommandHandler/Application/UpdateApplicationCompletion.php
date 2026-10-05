@@ -44,6 +44,7 @@ final class UpdateApplicationCompletion extends AbstractCommandHandler implement
         'financialEvidence',
         'financialHistory',
         'licenceHistory',
+        'knowledgeExperience',
         'operatingCentres',
         'people',
         'safety',

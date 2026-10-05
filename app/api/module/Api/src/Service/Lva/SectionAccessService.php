@@ -6,8 +6,10 @@ use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Psr\Container\ContainerInterface;
@@ -33,6 +35,8 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
      */
     private $restrictionService;
 
+    private ToggleService $toggleService;
+
     /**
      * Get sections from section config
      *
@@ -42,6 +46,10 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
     {
         if ($this->sections === null) {
             $this->sections = $this->sectionConfig->getAll();
+        }
+
+        if ($this->toggleService->isDisabled(FeatureToggle::IDP)) {
+            unset($this->sections['financial_evidence_assessment']);
         }
 
         return $this->sections;
@@ -108,6 +116,18 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
             $vehicleType = $entity->getVehicleType()->getId();
         }
 
+        $knowledgeExperience = null;
+
+        if ($entity instanceof Application) {
+            $knowledgeExperienceRequired =
+                $this->toggleService->isEnabled(FeatureToggle::KNOWLEDGE_EXPERIENCE)
+                && $entity->requiresKnowledgeExperience();
+
+            $knowledgeExperience = $knowledgeExperienceRequired
+                ? 'knowledgeExperienceRequired'
+                : 'knowledgeExperienceNotRequired';
+        }
+
         $access = [
             $location,
             $lva,
@@ -116,6 +136,7 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
             $vehicleType,
             $vehicleSizes,
             $operatingSmallVehiclesSmallPart,
+            $knowledgeExperience,
             $hasConditions ? 'hasConditions' : 'noConditions'
         ];
 
@@ -161,6 +182,7 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
         $this->restrictionService = $container->get('RestrictionService');
         $this->sectionConfig = $container->get('SectionConfig');
         $this->setAuthService($container->get(AuthorizationService::class));
+        $this->toggleService = $container->get(ToggleService::class);
         return $this;
     }
 }
