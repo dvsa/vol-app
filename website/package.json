@@ -50,6 +50,11 @@
     },
     "webpack-bundle-analyzer": {
       "sirv": "^3.0.2"
+    },
+    "@docusaurus/theme-mermaid": {
+      "mermaid": {
+        "katex": "0.18.2"
+      }
     }
   },
   "browserslist": {
