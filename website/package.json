@@ -32,17 +32,31 @@
   },
   "//overrides": [
     "Build-time advisories that Docusaurus pins below their fixed release: serialize-javascript",
-    "(RCE/DoS, held at 6.x by copy-webpack-plugin and css-minimizer-webpack-plugin) and uuid",
-    "(bounds check, held at 8.x by sockjs under webpack-dev-server). Forcing the fixed version",
-    "is cheaper than carrying a scan exception. Drop an entry once Docusaurus resolves it itself.",
-    "image-size has no entry because no released version fixes it - overriding cannot help, so",
-    "it is excluded in .snyk instead, which is reserved for exactly that case."
+    "(RCE/DoS, held at 6.x by copy-webpack-plugin and css-minimizer-webpack-plugin), uuid (bounds",
+    "check, held at 8.x by sockjs under webpack-dev-server), shell-quote (command injection, via",
+    "launch-editor under webpack-dev-server) and brace-expansion 1.x (ReDoS/recursion, via",
+    "minimatch 3 under serve-handler; scoped to ^1 so the 2.x+ lines are untouched). Forcing the",
+    "fixed version is cheaper than carrying a scan exception. Drop an entry once Docusaurus",
+    "resolves it itself. image-size has no entry because no released version fixes it -",
+    "overriding cannot help, so it is excluded in .snyk instead, which is reserved for exactly",
+    "that case."
   ],
   "overrides": {
-    "serialize-javascript": "^7.1.0",
+    "brace-expansion@^1": "^1.1.21",
+    "serialize-javascript": "^7.1.2",
+    "shell-quote": "^1.11.0",
     "sockjs": {
       "uuid": "^11.1.1"
-    }
+    },
+    "webpack-bundle-analyzer": {
+      "sirv": "^3.0.2"
+    },
+    "@docusaurus/theme-mermaid": {
+      "mermaid": {
+        "katex": "0.18.2"
+      }
+    },
+    "postcss-selector-parser": "^7.1.6"
   },
   "browserslist": {
     "production": [

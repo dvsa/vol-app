@@ -52,4 +52,15 @@ class LetterTodo
      * @Form\Filter("Laminas\Filter\StringTrim")
      */
     public $helpText = null;
+
+    /**
+     * @Form\Options({
+     *     "label": "Requires Input",
+     *     "checked_value": "1",
+     *     "unchecked_value": "0"
+     * })
+     * @Form\Type("OlcsCheckbox")
+     * @Form\Attributes({"class":"", "id":"requiresInput"})
+     */
+    public $requiresInput = null;
 }

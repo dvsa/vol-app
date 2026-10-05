@@ -26,10 +26,14 @@ module "parameters" {
     ecs_api_hostname                             = "api.dev.olcs.dev-dvsacloud.uk"
     env                                          = "dev"
     erru_version                                 = "3.5"
+    # Uses the mock GOV.UK Sign In service (vol-terraform docker/mock-govuk-signin) instead
+    # of the real One Login integration tenant, so the functional test pack is not exposed
+    # to that third party's availability. The issuer must match the mock's ISSUER_URL
+    # exactly - no trailing slash - or coreIdentityJWT validation fails.
     govuk_account_client_id                      = "oLciSn5b6-cqcJjzgMMwCw1moD8"
-    govuk_account_core_identity_did_document_url = "https://identity.integration.account.gov.uk/.well-known/did.json"
-    govuk_account_discovery_endpoint             = "https://oidc.integration.account.gov.uk/.well-known/openid-configuration"
-    govuk_account_id_assurance_issuer            = "https://identity.integration.account.gov.uk/"
+    govuk_account_core_identity_did_document_url = "https://mocksignin.dev.olcs.dev-dvsacloud.uk/.well-known/did.json"
+    govuk_account_discovery_endpoint             = "https://mocksignin.dev.olcs.dev-dvsacloud.uk/.well-known/openid-configuration"
+    govuk_account_id_assurance_issuer            = "https://mocksignin.dev.olcs.dev-dvsacloud.uk"
     govuk_account_id_assurance_public_key        = " "
     govuk_account_private_key_algorithm          = "RS256"
     govuk_account_public_key                     = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUExZXJNSjAxclBJOEQrbnFvYUZaQQpHUVZkR3VTUm5mV2pqUHpOYWJQbFB5U3FaaVZCdGo3WTNnL3lEV1JoWUUzeTE3YTBaeExmd2FkTGZPbE5jczVxCkJ1M1BwSlNCUm5EVmVZMlhQdjdIaHE5b2tvbTFVMzgzekozVU5NSmNYTyt4UU9FMzB1cVh0OFQ3RFkrZ2F5VXoKcFFpYlUzNE1tQ21rR0JHT3dENDYrcWN3NUZWZ3FaZjJDUEdOdkEwenNyZ2g5cEIrWGtKbXpWdERFbVY3Sjh2bApnaDM2OWRRbHE5SHNNWE82Q1pXakI1bWUrU2NqY215WUNnSHZDT2ViNGVpL3p2TzIrNUhqMy8zZEFpTzZWa25kClozTENqelYvU1hPSHFmbVRmUHJVeUNLQ2lDMWxEMTRuSldDOWpQZk1xZk1CVlIrdGxubCtrb1o0blMwWkFrSGsKMndJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="

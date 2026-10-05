@@ -54,9 +54,9 @@ final class TmEmploymentTest extends RepositoryTestCase
     {
         $qb = $this->createRealQb();
 
-        // applyListJoins() omits modifyQuery(); fetchList() points the shared helper at $qb
-        // first via buildDefaultListQuery(), so reproduce that.
-        $this->queryBuilder->modifyQuery($qb);
+        $previous = $this->newRealQb();
+        $previous->select('other')->from(Entity::class, 'other');
+        $this->queryBuilder->modifyQuery($previous);
 
         $this->sut->applyListJoins($qb);
 
@@ -66,6 +66,7 @@ final class TmEmploymentTest extends RepositoryTestCase
             . ' LEFT JOIN add.countryCode w0',
             $qb->getDQL(),
         );
+        $this->assertSame('SELECT other FROM ' . Entity::class . ' other', $previous->getDQL());
     }
 
     public function testApplyListFilters(): void

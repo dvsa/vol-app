@@ -87,7 +87,8 @@
     <h4 class="title">Editable to-dos:</h4>
     <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
         <?php foreach ($todosList as $todo): ?>
-        <div class="govuk-checkboxes__item">
+        <div class="govuk-checkboxes__item"
+             <?= !empty($todo['inputPending']) ? 'data-input-pending="1" data-section-name="' . $this->escapeHtmlAttr($todo['name']) . '"' : '' ?>>
             <input class="govuk-checkboxes__input" type="checkbox"
                    id="todo-<?= $this->escapeHtmlAttr($todo['id']) ?>"
                    name="todos[]"
@@ -95,6 +96,9 @@
             <label class="govuk-label govuk-checkboxes__label"
                    for="todo-<?= $this->escapeHtmlAttr($todo['id']) ?>">
                 <?= $this->escapeHtml($todo['name']) ?>
+                <?php if (!empty($todo['inputPending'])): ?>
+                <strong class="govuk-tag govuk-tag--red">Input required</strong>
+                <?php endif; ?>
             </label>
         </div>
         <?php endforeach; ?>

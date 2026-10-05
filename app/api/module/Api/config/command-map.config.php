@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Queue as QueueCommandHandler;
 use Dvsa\Olcs\Cli\Domain\Command as CommandCli;
 use Dvsa\Olcs\Cli\Domain\CommandHandler as CommandHandlerCli;
 use Dvsa\Olcs\Transfer\Command as TransferCommand;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Cache as CacheCommandHandler;
 
 return [
     TransferCommand\LongText\Create::class => CommandHandler\LongText\Create::class,
@@ -65,6 +66,8 @@ return [
         CommandHandler\Application\UpdateVehicleSize::class,
     TransferCommand\Application\UpdateMainOccupationEvidence::class =>
         CommandHandler\Application\UpdateMainOccupationEvidence::class,
+    TransferCommand\Application\UpdateKnowledgeExperience::class =>
+        CommandHandler\Application\UpdateKnowledgeExperience::class,
     TransferCommand\Application\UpdateSmallVehicleEvidence::class =>
         CommandHandler\Application\UpdateSmallVehicleEvidence::class,
     TransferCommand\Application\UpdateMainOccupationUndertakings::class =>
@@ -152,6 +155,10 @@ return [
     Command\Task\CreateTranslateToWelshTask::class => CommandHandler\Task\CreateTranslateToWelshTask::class,
     TransferCommand\Application\UpdatePsvVehicles::class => CommandHandler\Application\UpdatePsvVehicles::class,
     TransferCommand\Application\CreatePsvVehicle::class => CommandHandler\Application\CreatePsvVehicle::class,
+
+    //Transfer - Cache
+    TransferCommand\Cache\Clear::class
+        => CacheCommandHandler\Clear::class,
 
     // Transfer - Workshop
     TransferCommand\Workshop\DeleteWorkshop::class => CommandHandler\Workshop\DeleteWorkshop::class,
@@ -744,6 +751,8 @@ return [
     => AppCompCommandHandler\UpdatePsvDocumentaryEvidenceLargeStatus::class,
     AppCompCommand\UpdatePsvMainOccupationUndertakingsStatus::class
     => AppCompCommandHandler\UpdatePsvMainOccupationUndertakingsStatus::class,
+    AppCompCommand\UpdateKnowledgeExperienceStatus::class
+    => AppCompCommandHandler\UpdateKnowledgeExperienceStatus::class,
     AppCompCommand\UpdatePsvOperateLargeStatus::class
     => AppCompCommandHandler\UpdatePsvOperateLargeStatus::class,
     AppCompCommand\UpdatePsvOperateSmallStatus::class
