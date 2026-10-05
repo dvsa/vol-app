@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  *
  * Partials (Command\Partial) are not built on their own: each one is captured inside the snapshot of
  * every DTO that uses it.
+ *
+ * See docs/app/testing.md ("API request validation snapshot") for reading a snapshot and handling failures.
  */
 #[CoversClass(AnnotationBuilder::class)]
 final class DtoSnapshotTest extends TestCase
