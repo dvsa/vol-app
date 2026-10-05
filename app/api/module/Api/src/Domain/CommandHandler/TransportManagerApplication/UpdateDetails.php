@@ -3,8 +3,6 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\TransportManagerApplication;
 
 use Doctrine\ORM\Query;
-use Dvsa\Olcs\AcquiredRights\Model\ApplicationReference;
-use Dvsa\Olcs\AcquiredRights\Service\AcquiredRightsService;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
@@ -16,11 +14,9 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Address;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Country;
-use Dvsa\Olcs\Api\Entity\Tm\TmQualification;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\UpdateDetails as UpdateDetailsCommand;
-use Olcs\Logging\Log\Logger;
 
 /**
  * UpdateDetails
@@ -35,14 +31,9 @@ final class UpdateDetails extends AbstractCommandHandler implements Transactione
         'ContactDetails',
         'Address',
         'TmEmployment',
-        'TmQualification',
         'OtherLicence',
         'PreviousConviction',
     ];
-
-    public function __construct(protected AcquiredRightsService $acquiredRightsService)
-    {
-    }
 
     /**
      * Handle query
@@ -75,49 +66,9 @@ final class UpdateDetails extends AbstractCommandHandler implements Transactione
             $command->getDob() ? new DateTime($command->getDob()) : null
         );
 
-        $this->maybeAddLgvAcquiredRightsQualification($tma, $command);
-
         $this->getRepo()->save($tma);
 
         return $this->result->addMessage("Transport Manager Application ID {$tma->getId()} updated");
-    }
-
-    /**
-     * Add LGV Acquired Rights qualification if reference number is provided and this TM doesn't have one already
-     *
-     *
-     * @return void
-     */
-    private function maybeAddLgvAcquiredRightsQualification(TransportManagerApplication $tma, UpdateDetailsCommand $command): void
-    {
-        if ($command->getLgvAcquiredRightsReferenceNumber() && !$tma->getTransportManager()->hasLgvAcquiredRightsQualification()) {
-            $qualificationType = $tma->getApplication()->isNi()
-                ? TmQualification::QUALIFICATION_TYPE_NILGVAR : TmQualification::QUALIFICATION_TYPE_LGVAR;
-
-            $acquiredRightsRecord = $this->validateAcquiredRightsReferenceNumber(
-                $command->getLgvAcquiredRightsReferenceNumber(),
-                $command->getDob(),
-            );
-
-            $tmQualification = TmQualification::create(
-                $tma->getTransportManager(),
-                $this->getRepo()->getReference(Country::class, Country::ID_UNITED_KINGDOM),
-                $this->getRepo()->getRefdataReference($qualificationType),
-                $command->getLgvAcquiredRightsReferenceNumber()
-            );
-
-            if (!is_null($acquiredRightsRecord) && !is_null($acquiredRightsRecord->getStatusUpdateAt())) {
-                $tmQualification->setIssuedDate(\DateTime::createFromImmutable($acquiredRightsRecord->getStatusUpdateAt()));
-            } elseif ($this->acquiredRightsService->isCheckEnabled() && !$this->acquiredRightsService->isAcquiredRightsExpired()) {
-                Logger::warn(sprintf(
-                    'Unable to set Issued Date for TM Qualification for TM (%d) from Acquired Rights record (Ref: %s): record does not contain statusUpdateAt.',
-                    $tma->getTransportManager()->getId(),
-                    $command->getLgvAcquiredRightsReferenceNumber()
-                ));
-            }
-
-            $this->getRepo('TmQualification')->save($tmQualification);
-        }
     }
 
     private function maybeDeleteAssociatedData(TransportManagerApplication $tma, UpdateDetailsCommand $command): void
@@ -298,32 +249,5 @@ final class UpdateDetails extends AbstractCommandHandler implements Transactione
                 ]
             );
         }
-    }
-
-    /**
-     * Ensures the Acquired Rights Reference Number meets the following conditions:
-     *  - Matches a valid pattern.
-     *  - The reference number is valid and refers to a real acquired rights application.
-     *  - The acquired rights application has been approved.
-     *
-     * @return void
-     * @throws ValidationException
-     */
-    protected function validateAcquiredRightsReferenceNumber(string $acquiredRightsReferenceNumber, string $dateOfBirth): ?ApplicationReference
-    {
-        if (!$this->acquiredRightsService->isCheckEnabled()) {
-            Logger::debug(
-                sprintf(
-                    'Acquired rights check is disabled; skipping verification of acquired rights reference: %s',
-                    $acquiredRightsReferenceNumber
-                )
-            );
-            return null;
-        }
-        return $this->acquiredRightsService->verifyAcquiredRightsByReference(
-            $acquiredRightsReferenceNumber,
-            new \DateTimeImmutable($dateOfBirth),
-            'lgvAcquiredRightsReferenceNumber'
-        );
     }
 }
