@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Qa;
 use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 use Dvsa\Olcs\Api\Domain\Repository\ApplicationStep as ApplicationStepRepo;
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationPath;
-use Dvsa\Olcs\APi\Entity\Generic\ApplicationStep;
+use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep;
 use Dvsa\Olcs\Api\Service\Qa\QaContext;
 use Dvsa\Olcs\Api\Service\Qa\QaContextFactory;
 use Dvsa\Olcs\Api\Service\Qa\QaContextGenerator;
