@@ -2,7 +2,7 @@
 
 namespace Dvsa\Olcs\Cli\Command\Batch;
 
-use Dvsa\Olcs\Cli\Domain\Command\CacheClear;
+use Dvsa\Olcs\Transfer\Command\Cache\Clear;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,19 +17,6 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class CacheClearCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:cache-clear';
-
-    /**
-     * Available cache namespaces from CacheEncryption service
-     */
-    private const array NAMESPACES = [
-        'user_account',
-        'sys_param',
-        'sys_param_list',
-        'translation_key',
-        'translation_replacement',
-        'storage',
-        'secretsmanager',
-    ];
 
     #[\Override]
     protected function configure(): void
@@ -46,7 +33,7 @@ class CacheClearCommand extends AbstractBatchCommand
                 'namespace',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Clear specific cache namespace(s) (comma-separated). Available: ' . implode(', ', self::NAMESPACES)
+                'Clear specific cache namespace(s) (comma-separated). Available: ' . implode(', ', Clear::NAMESPACES)
             )
             ->addOption(
                 'pattern',
@@ -89,12 +76,12 @@ class CacheClearCommand extends AbstractBatchCommand
         // Validate namespaces if provided
         if ($namespace) {
             $namespaces = array_map(trim(...), explode(',', (string) $namespace));
-            $invalid = array_diff($namespaces, self::NAMESPACES);
+            $invalid = array_diff($namespaces, Clear::NAMESPACES);
             if (!empty($invalid)) {
                 $output->writeln(sprintf(
                     '<error>Invalid namespace(s): %s. Available: %s</error>',
                     implode(', ', $invalid),
-                    implode(', ', self::NAMESPACES)
+                    implode(', ', Clear::NAMESPACES)
                 ));
                 return self::FAILURE;
             }
@@ -115,7 +102,7 @@ class CacheClearCommand extends AbstractBatchCommand
         }
 
         // Build command DTO
-        $command = CacheClear::create([
+        $command = Clear::create([
             'flushAll' => $flushAll,
             'namespace' => $namespace,
             'pattern' => $pattern,
