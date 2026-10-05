@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "4b8adb49e20f0c33eae5f91c4ddeb74e",
+  "content-hash": "0abe2604e032a1fbe81dcd4d7db06f37",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -3205,7 +3205,7 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-common",
-        "reference": "3d721b1d88e6e78694f4946457948f3940703cf8"
+        "reference": "ac76734e9ce59db0a7359406402182c7b819ad45"
       },
       "require": {
         "doctrine/annotations": "^2.0",
@@ -3242,7 +3242,7 @@
         "phpunit/phpunit": "^13.0",
         "rector/rector": "^2.3",
         "symfony/filesystem": "^8.1",
-        "symfony/lock": "^7.4"
+        "symfony/lock": "^8.1"
       },
       "type": "library",
       "extra": {

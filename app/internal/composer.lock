@@ -3274,7 +3274,7 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-common",
-        "reference": "3d721b1d88e6e78694f4946457948f3940703cf8"
+        "reference": "ac76734e9ce59db0a7359406402182c7b819ad45"
       },
       "require": {
         "doctrine/annotations": "^2.0",
@@ -3311,7 +3311,7 @@
         "phpunit/phpunit": "^13.0",
         "rector/rector": "^2.3",
         "symfony/filesystem": "^8.1",
-        "symfony/lock": "^7.4"
+        "symfony/lock": "^8.1"
       },
       "type": "library",
       "extra": {
