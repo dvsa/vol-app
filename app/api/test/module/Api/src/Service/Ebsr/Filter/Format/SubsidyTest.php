@@ -33,4 +33,21 @@ final class SubsidyTest extends TestCase
         yield ['bs_in_part', 'partial'];
         yield ['bs_no', null];
     }
+    public function testKeepsAllOriginalAuthorityNamesInComments(): void
+    {
+        $result = (new Subsidy())->filter([
+            'subsidised' => 'partial',
+            'subsidyAuthorityNames' => ['Milton Keynes Council', 'CPCA'],
+        ]);
+
+        $this->assertSame("Milton Keynes Council\nCPCA", $result['subsidyDetail'] ?? null);
+        $this->assertSame(['Milton Keynes Council', 'CPCA'], $result['subsidyAuthorityNames']);
+        $this->assertSame('bs_in_part', $result['subsidised']);
+    }
+    public function testNoSubsidyProvidesAnEmptyProviderList(): void
+    {
+        $result = (new Subsidy())->filter(['subsidised' => 'none']);
+        $this->assertSame([], $result['subsidyAuthorityNames'] ?? null);
+        $this->assertSame('bs_no', $result['subsidised']);
+    }
 }

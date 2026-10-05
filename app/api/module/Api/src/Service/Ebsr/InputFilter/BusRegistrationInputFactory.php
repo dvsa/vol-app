@@ -17,6 +17,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Dvsa\Olcs\Api\Service\InputFilter\Input;
 use Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\MiscSnJustification;
 use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\ServiceNo;
+use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\SubsidyDetail;
 use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\EndDate;
 use Psr\Container\ContainerInterface;
 
@@ -67,6 +68,7 @@ class BusRegistrationInputFactory implements FactoryInterface
             $validatorChain->attach($validatorManager->get(Licence::class));
             $validatorChain->attach($validatorManager->get(ServiceNo::class));
             $validatorChain->attach($validatorManager->get(EndDate::class));
+            $validatorChain->attach($validatorManager->get(SubsidyDetail::class));
         }
         return $service;
     }
