@@ -43,12 +43,47 @@ class ConverterService
         }
 
         try {
-            $parserResult = $this->parser->parse($jsonData);
+            $parserResult = $this->parser->parse($this->adaptGovukLongTextForParser($jsonData));
             $html = $this->renderer->render($parserResult);
             return $this->cleanOutputHtml($html, $allowInlineImages);
         } catch (\Exception $e) {
             throw new \RuntimeException('Failed to convert JSON to HTML: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * The shared GOV.UK Editor.js tool uses newer block names and list-style
+     * values than Setono's parser. Adapt those values at the conversion
+     * boundary, leaving stored JSON and existing EditorJS consumers unchanged.
+     */
+    private function adaptGovukLongTextForParser(string $jsonData): string
+    {
+        $data = json_decode($jsonData, true, flags: JSON_THROW_ON_ERROR);
+
+        if (!is_array($data) || !isset($data['blocks']) || !is_array($data['blocks'])) {
+            return $jsonData;
+        }
+
+        foreach ($data['blocks'] as $index => $block) {
+            if (!is_array($block)) {
+                continue;
+            }
+
+            if (($block['type'] ?? null) === 'heading') {
+                $data['blocks'][$index]['type'] = 'header';
+            }
+
+            if (($block['type'] ?? null) === 'list' && isset($block['data']) && is_array($block['data'])) {
+                $style = $block['data']['style'] ?? null;
+                if ($style === 'number') {
+                    $data['blocks'][$index]['data']['style'] = 'ordered';
+                } elseif ($style === 'bullet') {
+                    $data['blocks'][$index]['data']['style'] = 'unordered';
+                }
+            }
+        }
+
+        return json_encode($data, JSON_THROW_ON_ERROR);
     }
 
 

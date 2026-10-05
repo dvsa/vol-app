@@ -44,6 +44,11 @@ class TranslationKey
     public $addedit = null;
 
     /**
+     * @Form\Type("Hidden")
+     */
+    public $longTextMode = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"govuk-button-group"})
      * @Form\ComposedObject("Admin\Form\Model\Fieldset\TranslationKeyActions")

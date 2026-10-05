@@ -9,6 +9,8 @@ namespace Dvsa\Olcs\Transfer\Command\TranslationKey;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TranslationsArray;
+use Dvsa\Olcs\Transfer\FieldType\Traits\TranslationFormatOptional;
+use Dvsa\Olcs\Transfer\FieldType\Traits\DescriptionOptional;
 use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 
 /**
@@ -19,4 +21,6 @@ final class Update extends AbstractCommand
 {
     use Identity;
     use TranslationsArray;
+    use TranslationFormatOptional;
+    use DescriptionOptional;
 }

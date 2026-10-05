@@ -9,6 +9,7 @@
 namespace Dvsa\Olcs\Transfer\Query\TranslationKey;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\TranslationSearchOptional;
+use Dvsa\Olcs\Transfer\FieldType\Traits\TranslationFormatOptional;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
@@ -24,4 +25,13 @@ class GetList extends AbstractQuery implements OrderedQueryInterface, PagedQuery
     use PagedTrait;
     use OrderedTrait;
     use TranslationSearchOptional;
+    use TranslationFormatOptional;
+
+    /** @Transfer\Optional */
+    protected $markupOnly;
+
+    public function getMarkupOnly(): bool
+    {
+        return filter_var($this->markupOnly, FILTER_VALIDATE_BOOLEAN);
+    }
 }
