@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 /**
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
-class AbstractDownload extends AbstractQuery implements
+abstract class AbstractDownload extends AbstractQuery implements
     LoggerOmitResponseInterface,
     StreamInterface
 {
