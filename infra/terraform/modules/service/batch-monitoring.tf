@@ -83,9 +83,9 @@ locals {
 }
 
 module "cloudwatch_log-metric-filter" {
-  for_each                        = { for job in var.batch.jobs : job.name => job }
-  source                          = "terraform-aws-modules/cloudwatch/aws//modules/log-metric-filter"
-  version                         = "5.7.0"
+  for_each = { for job in var.batch.jobs : job.name => job }
+  source   = "git::https://github.com/terraform-aws-modules/terraform-aws-cloudwatch.git//modules/log-metric-filter?ref=e25b216b6c4dfc99eae158bdc6883bddacff9997"
+
   name                            = each.value.name
   pattern                         = "%ERROR%"
   log_group_name                  = "/aws/batch/vol-app-${var.environment}-${each.value.name}"
@@ -105,8 +105,7 @@ resource "aws_cloudwatch_dashboard" "this" {
 }
 
 module "eventbridge_sns" {
-  source  = "terraform-aws-modules/eventbridge/aws"
-  version = "~> 3.7"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-eventbridge.git?ref=dd056522ea972140f57aed7e8f2e5491fc15e9d5"
 
   create_bus  = false
   create_role = true
@@ -150,8 +149,7 @@ module "eventbridge_sns" {
 }
 
 module "sns_batch_failure" {
-  source  = "terraform-aws-modules/sns/aws"
-  version = "~> 6.1"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-sns.git?ref=49d85b8214fcc05db32c31ee9741f1250e6ad41a"
 
   name            = "vol-app-${var.environment}-batch-failure-topic"
   use_name_prefix = true
