@@ -229,17 +229,22 @@ locals {
       secrets = lookup(local.job_types, try(job.type, "default"), local.job_types.default).secrets != null ? lookup(local.job_types, try(job.type, "default"), local.job_types.default).secrets : null
 
       runtimePlatform = {
-        cpuArchitecture = "ARM64"
+        operatingSystemFamily = "LINUX",
+        cpuArchitecture       = "ARM64"
       }
+
+      fargatePlatformConfiguration = {
+        platformVersion = "LATEST"
+      },
 
       resourceRequirements = [
         {
-          type  = "MEMORY",
-          value = tostring(job.memory)
-        },
-        {
           type  = "VCPU",
           value = tostring(job.cpu),
+        },
+        {
+          type  = "MEMORY",
+          value = tostring(job.memory)
         },
       ],
 
