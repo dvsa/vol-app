@@ -83,6 +83,39 @@ class VariationUndertakingsReviewService extends AbstractReviewService
         return $this->getGv81($data);
     }
 
+    public function getLongTextMarkup(array $data): string
+    {
+        if ($this->isPsv($data)) {
+            return $this->translate(
+                $this->isStandard($data)
+                    ? 'markup-variation-declaration-psv-standard'
+                    : 'markup-variation-declaration-psv-restricted'
+            );
+        }
+
+        if ($this->isUpgrade($data)) {
+            return $this->translate(
+                ValueHelper::isOn($data['niFlag'])
+                    ? 'markup-variation-declaration-goods-ni-upgrade'
+                    : 'markup-variation-declaration-goods-gb-upgrade'
+            );
+        }
+
+        $region = ValueHelper::isOn($data['niFlag']) ? 'ni' : 'gb';
+        $type = match (true) {
+            $data['vehicleType']['id'] === RefData::APP_VEHICLE_TYPE_LGV => 'lgv',
+            $this->isStandard($data) => 'standard',
+            default => 'restricted',
+        };
+
+        return $this->translate(sprintf('markup-variation-declaration-goods-%s-%s', $region, $type));
+    }
+
+    public function getLongTextReviewMarkup(): string
+    {
+        return $this->translate('markup-review-text-variation');
+    }
+
     private function getGv81(array $data)
     {
         $isStandard = $this->isStandard($data);

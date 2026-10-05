@@ -227,10 +227,11 @@ final class DeclarationTest extends MockeryTestCase
         $form->shouldReceive('get')->with('version')->andReturn($versionElement);
         $versionElement->shouldReceive('setValue')->with(34)->once();
 
-        $contentElement->shouldReceive('get')->with('review')->andReturn(
-            m::mock()->shouldReceive('setTokens')->with(['application.review-declarations.review.business-owner'])
-                ->once()->getMock()
-        );
+        $reviewElement = m::mock();
+        $reviewElement->shouldReceive('setValue')->once()->with('REVIEW');
+        $reviewElement->shouldReceive('setTokens')
+            ->once()->with(['application.review-declarations.review.business-owner']);
+        $contentElement->shouldReceive('get')->with('review')->andReturn($reviewElement);
 
         $this->formHelper->shouldReceive('remove')->with($form, 'signatureDetails')->once();
         $this->scriptFactory->shouldReceive('loadFiles')->with(['continuation-declaration'])->once();
@@ -241,6 +242,7 @@ final class DeclarationTest extends MockeryTestCase
             'hasOutstandingContinuationFee' => true,
             'version' => 34,
             'organisationTypeId' => RefData::ORG_TYPE_SOLE_TRADER,
+            'reviewText' => 'REVIEW',
         ];
 
         $this->assertEquals($form, $this->sut->getForm($continuationDetailData));
@@ -273,10 +275,11 @@ final class DeclarationTest extends MockeryTestCase
         $form->shouldReceive('get')->with('version')->andReturn($versionElement);
         $versionElement->shouldReceive('setValue')->with(34)->once();
 
-        $contentElement->shouldReceive('get')->with('review')->andReturn(
-            m::mock()->shouldReceive('setTokens')->with(['application.review-declarations.review.business-owner'])
-                ->once()->getMock()
-        );
+        $reviewElement = m::mock();
+        $reviewElement->shouldReceive('setValue')->once()->with('REVIEW');
+        $reviewElement->shouldReceive('setTokens')
+            ->once()->with(['application.review-declarations.review.business-owner']);
+        $contentElement->shouldReceive('get')->with('review')->andReturn($reviewElement);
 
         $this->translator->shouldReceive('translateReplace')->with('undertakings_signed', ['NAME', '14/07/2017'])
             ->once()->andReturn('SIGNATURE_DETAILS');
@@ -295,6 +298,7 @@ final class DeclarationTest extends MockeryTestCase
             'hasOutstandingContinuationFee' => true,
             'version' => 34,
             'organisationTypeId' => RefData::ORG_TYPE_SOLE_TRADER,
+            'reviewText' => 'REVIEW',
             'signature' => ['name' => 'NAME', 'date' => '2017-07-14'],
             'signatureType' => ['id' => RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE]
         ];
