@@ -8,29 +8,24 @@
 
 namespace Dvsa\Olcs\Transfer\Query\Address;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as TransferAttribute;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\CacheableMediumTermQueryInterface;
 
-/**
- * @Transfer\RouteName("backend/address/list")
- */
+#[TransferAttribute\RouteName("backend/address/list")]
 final class GetList extends AbstractQuery implements CacheableMediumTermQueryInterface
 {
-    /**
-     * @var String
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"max":8})
-     */
-    protected $postcode;
+    #[TransferAttribute\Optional]
+    #[TransferAttribute\Filter("Laminas\Filter\StringTrim")]
+    #[TransferAttribute\Validator("Laminas\Validator\StringLength", options: ["max" => 8])]
+    protected string $postcode;
 
     /**
      * Get a postcode
      *
      * @return string
      */
-    public function getPostcode()
+    public function getPostcode(): string
     {
         return $this->postcode;
     }
