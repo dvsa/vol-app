@@ -75,6 +75,8 @@ final class DocumentAnalysisListTest extends QueryHandlerTestCase
                 'documentFilename' => 'documents/2026/statement.pdf',
                 'documentDate' => '2026-03-04 10:11:12',
                 'status' => DocumentAnalysis::STATUS_SUCCESS,
+                // Read from the assessment_status column.
+                'assessmentStatus' => 'APPROVED',
                 'resultNormalised' => self::CURRENT_PAYLOAD,
                 'errorDetail' => null,
                 'completedAt' => '2026-03-05 09:00:00',
@@ -138,6 +140,7 @@ final class DocumentAnalysisListTest extends QueryHandlerTestCase
         $analysis->allows('getId')->andReturn($id);
         $analysis->allows('getDocument')->andReturn($document);
         $analysis->allows('getStatus')->andReturn(DocumentAnalysis::STATUS_SUCCESS);
+        $analysis->allows('getAssessmentStatus')->andReturn('APPROVED');
         $analysis->allows('getResultNormalised')->andReturn(self::STORED_PAYLOAD);
         $analysis->allows('getErrorDetail')->andReturnNull();
         $analysis->allows('getCompletedAt')->with(true)->andReturn(new \DateTime('2026-03-05 09:00:00'));

@@ -57,6 +57,7 @@ class DocumentAnalysisList extends AbstractQueryHandler
                     'documentFilename' => $row->getDocument()->getFilename(),
                     'documentDate' => $row->getDocument()->getIssuedDate(true)?->format('Y-m-d H:i:s'),
                     'status'      => $row->getStatus(),
+                    'assessmentStatus' => $row->getAssessmentStatus(),
                     // Always at the current payload version, whatever version the row was written
                     // with. Null when the stored report held no analysis that could be normalised.
                     'resultNormalised' => $this->normaliser->fromStored($row->getResultNormalised())?->toArray(),

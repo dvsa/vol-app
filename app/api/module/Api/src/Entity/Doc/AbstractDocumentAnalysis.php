@@ -121,6 +121,14 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     protected $resultNormalised;
 
     /**
+     * Caseworker's approval decision for the analysis
+     *
+     * @var string|null
+     */
+    #[ORM\Column(type: 'string', name: 'assessment_status', nullable: true)]
+    protected $assessmentStatus;
+
+    /**
      * Failure detail when the analysis ends in ERROR
      *
      * @var string|null
@@ -391,6 +399,30 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     public function getResultNormalised()
     {
         return $this->resultNormalised;
+    }
+
+    /**
+     * Set the assessment status
+     *
+     * @param string $assessmentStatus new value being set
+     *
+     * @return static
+     */
+    public function setAssessmentStatus($assessmentStatus)
+    {
+        $this->assessmentStatus = $assessmentStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get the assessment status
+     *
+     * @return string
+     */
+    public function getAssessmentStatus()
+    {
+        return $this->assessmentStatus;
     }
 
     /**

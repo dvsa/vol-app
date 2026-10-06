@@ -9,11 +9,17 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
+use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentAnalysisAssessmentStatus;
+use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\Form;
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Http\Response;
+use Laminas\Mvc\Controller\Plugin\Redirect;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\Session\Container;
+use Laminas\Stdlib\Parameters;
 use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
@@ -23,6 +29,7 @@ use Olcs\Controller\Lva\Application\FinancialEvidenceAssessmentController as App
 use Olcs\Controller\Lva\Factory\Controller\FinancialEvidenceAssessmentControllerFactory;
 use Olcs\Controller\Lva\Licence\FinancialEvidenceAssessmentController as LicenceController;
 use Olcs\Controller\Lva\Variation\FinancialEvidenceAssessmentController as VariationController;
+use Olcs\Form\Model\Form\Lva\FinancialEvidenceAssessmentReview;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Container\ContainerInterface;
 
@@ -166,6 +173,133 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->assertSame([], $sut->indexAction()->getVariable('tabs'));
     }
 
+    /** The view renders the review form built by the form helper, CSRF element included. */
+    public function testViewCarriesTheReviewForm(): void
+    {
+        $reviewForm = m::mock(Form::class);
+
+        $sut = $this->createSut(ApplicationController::class, null, $reviewForm);
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->expects('handleQuery')->andReturn($this->okResponse([]));
+        $sut->expects('render')->andReturnUsing(static fn(ViewModel $view) => $view);
+
+        $this->assertSame($reviewForm, $sut->indexAction()->getVariable('reviewForm'));
+    }
+
+    public static function assessmentStatusProvider(): \Iterator
+    {
+        yield 'approved' => ['APPROVED', 'Approved', 'govuk-tag--green', true];
+        yield 'rejected' => ['REJECTED', 'Rejected', 'govuk-tag--red', false];
+        yield 'pending' => ['PENDING', 'Pending', 'govuk-tag--grey', false];
+        yield 'not reviewed' => [null, 'Unknown', 'govuk-tag--grey', false];
+        yield 'unrecognised' => ['SOMETHING_ELSE', 'Unknown', 'govuk-tag--grey', false];
+    }
+
+    #[DataProvider('assessmentStatusProvider')]
+    public function testTabsCarryTheCaseworkerReview(
+        ?string $assessmentStatus,
+        string $expectedStatus,
+        string $expectedTag,
+        bool $expectedApproved
+    ): void {
+        $sut = $this->createSut(ApplicationController::class);
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->expects('handleQuery')->andReturn($this->okResponse([
+            ['id' => 9, 'documentId' => 12, 'documentDate' => null, 'assessmentStatus' => $assessmentStatus],
+        ]));
+        $sut->expects('render')->andReturnUsing(static fn(ViewModel $view) => $view);
+
+        $tab = $sut->indexAction()->getVariable('tabs')[0];
+
+        $this->assertSame(9, $tab['analysisId']);
+        $this->assertSame($expectedStatus, $tab['status']);
+        $this->assertSame($expectedTag, $tab['statusTag']);
+        $this->assertSame($expectedApproved, $tab['isApproved']);
+    }
+
+    /**
+     * Approving sends the analysis id with the context from the route (never the form), so the
+     * API can refuse an analysis that belongs to another application or licence.
+     */
+    #[DataProvider('contextProvider')]
+    public function testApproveSendsTheCommandScopedToTheLvaContext(string $class, string $expectedKey): void
+    {
+        $flashMessenger = m::mock(FlashMessengerHelperService::class);
+        $flashMessenger->expects('addSuccessMessage')->with('Document review approved');
+
+        $post = [
+            'analysisId' => '9',
+            'review' => AbstractFinancialEvidenceAssessmentController::REVIEW_APPROVE,
+            // Anything posted for the context is ignored in favour of the route.
+            'application' => '666',
+            'licence' => '666',
+        ];
+
+        $sut = $this->createSut($class, $flashMessenger, $this->reviewForm($post, true));
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+
+        $sut->expects('handleCommand')
+            ->with(m::on(static function ($command) use ($expectedKey): bool {
+                $otherKey = $expectedKey === 'licence' ? 'application' : 'licence';
+
+                return $command instanceof UpdateDocumentAnalysisAssessmentStatus
+                    && (int)$command->getId() === 9
+                    && $command->getStatus() === AssessmentStatus::APPROVED->value
+                    && (int)$command->{'get' . ucfirst($expectedKey)}() === 42
+                    && $command->{'get' . ucfirst($otherKey)}() === null;
+            }))
+            ->andReturn($this->commandResponse(true));
+
+        $sut->shouldNotReceive('handleQuery');
+        $response = $this->expectRedirectToRefresh($sut);
+
+        $this->assertSame($response, $sut->indexAction());
+    }
+
+    public function testApproveFailureIsReported(): void
+    {
+        $flashMessenger = m::mock(FlashMessengerHelperService::class);
+        $flashMessenger->expects('addErrorMessage')->with('The document review could not be approved');
+
+        $post = [
+            'analysisId' => '9',
+            'review' => AbstractFinancialEvidenceAssessmentController::REVIEW_APPROVE,
+        ];
+
+        $sut = $this->createSut(ApplicationController::class, $flashMessenger, $this->reviewForm($post, true));
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')->andReturn($this->commandResponse(false));
+        $response = $this->expectRedirectToRefresh($sut);
+
+        $this->assertSame($response, $sut->indexAction());
+    }
+
+    public static function rejectedPostProvider(): \Iterator
+    {
+        // The form is valid, but the post asks for no review action, or one not supported yet.
+        yield 'no review action' => [['analysisId' => '9'], true];
+        yield 'unknown review action' => [['analysisId' => '9', 'review' => 'reject'], true];
+        // The form's validation (e.g. a missing or non-numeric analysis id) fails.
+        yield 'invalid form' => [['analysisId' => '9 OR 1=1', 'review' => 'approve'], false];
+    }
+
+    /** A post the page did not build sends nothing to the API. */
+    #[DataProvider('rejectedPostProvider')]
+    public function testRejectedPostSendsNoCommand(array $post, bool $formIsValid): void
+    {
+        $flashMessenger = m::mock(FlashMessengerHelperService::class);
+        $flashMessenger->expects('addUnknownError');
+
+        $sut = $this->createSut(ApplicationController::class, $flashMessenger, $this->reviewForm($post, $formIsValid));
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->shouldNotReceive('handleCommand');
+        $response = $this->expectRedirectToRefresh($sut);
+
+        $this->assertSame($response, $sut->indexAction());
+    }
+
     #[DataProvider('contextProvider')]
     public function testFactoryCreatesEachContext(string $class, string $scopeKey): void
     {
@@ -212,17 +346,73 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     /**
      * @param class-string<AbstractFinancialEvidenceAssessmentController> $class
      */
-    private function createSut(string $class): AbstractFinancialEvidenceAssessmentController|m\MockInterface
-    {
+    private function createSut(
+        string $class,
+        ?FlashMessengerHelperService $flashMessenger = null,
+        ?Form $reviewForm = null
+    ): AbstractFinancialEvidenceAssessmentController|m\MockInterface {
+        // The review form comes from the form helper, which adds its CSRF element.
+        $formHelper = m::mock(FormHelperService::class);
+        $formHelper->allows('createForm')
+            ->with(FinancialEvidenceAssessmentReview::class, true, false)
+            ->andReturn($reviewForm ?? m::mock(Form::class));
+
         return m::mock($class, [
             m::mock(NiTextTranslation::class),
             m::mock(AuthorizationService::class),
             new StringHelperService(),
             m::mock(RestrictionHelperService::class),
-            m::mock(FlashMessengerHelperService::class),
-            m::mock(FormHelperService::class),
+            $flashMessenger ?? m::mock(FlashMessengerHelperService::class),
+            $formHelper,
             [],
         ])->makePartial()->shouldAllowMockingProtectedMethods();
+    }
+
+    /**
+     * A review form that receives the post and reports the given validity.
+     *
+     * @param array<string, mixed> $post
+     */
+    private function reviewForm(array $post, bool $isValid): Form|m\MockInterface
+    {
+        $form = m::mock(Form::class);
+        $form->expects('setData')->with(m::on(
+            static fn($data): bool => $data instanceof Parameters && $data->toArray() === $post
+        ));
+        $form->allows('isValid')->andReturn($isValid);
+        $form->allows('getData')->andReturn($post);
+
+        return $form;
+    }
+
+    /**
+     * @param array<string, mixed> $post
+     */
+    private function postRequest(array $post): Request
+    {
+        $request = new Request();
+        $request->setMethod(Request::METHOD_POST);
+        $request->setPost(new Parameters($post));
+
+        return $request;
+    }
+
+    private function expectRedirectToRefresh(m\MockInterface $sut): Response
+    {
+        $response = new Response();
+        $redirect = m::mock(Redirect::class);
+        $redirect->expects('refresh')->andReturn($response);
+        $sut->expects('redirect')->andReturn($redirect);
+
+        return $response;
+    }
+
+    private function commandResponse(bool $isOk): CqrsResponse
+    {
+        $response = m::mock(CqrsResponse::class);
+        $response->allows('isOk')->andReturn($isOk);
+
+        return $response;
     }
 
     private function okResponse(array $analyses): CqrsResponse

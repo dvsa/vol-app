@@ -11,11 +11,15 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
+use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentAnalysisAssessmentStatus;
+use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\FormInterface;
 use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
+use Olcs\Form\Model\Form\Lva\FinancialEvidenceAssessmentReview;
 
 /**
  * Financial evidence assessment page, shared by the licence, application and variation sections.
@@ -23,6 +27,9 @@ use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
  * Tabs are driven solely by successful document analyses. The concrete controllers only supply
  * the LVA context (via their trait and $lva), which decides whether analyses are scoped by
  * licence or by application. What each tab shows is decided by FinancialEvidenceAssessmentTab.
+ *
+ * Each tab can be reviewed by the caseworker through the FinancialEvidenceAssessmentReview form,
+ * which posts back to this page. Its CSRF element is added by the form helper like any other form.
  */
 abstract class AbstractFinancialEvidenceAssessmentController extends AbstractController implements
     ToggleAwareInterface
@@ -36,6 +43,9 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
      */
     private const int ANALYSIS_PAGE_LIMIT = 100;
 
+    /** Posted as the value of the review form's button, so the review action is explicit. */
+    public const string REVIEW_APPROVE = 'approve';
+
     protected string $location = 'internal';
 
     protected $toggleConfig = [
@@ -48,7 +58,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         protected StringHelperService $stringHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        // The licence context uses this to build its header search form.
+        // Builds the review form; the licence context also uses it for its header search form.
         protected FormHelperService $formHelper,
         protected $navigation
     ) {
@@ -58,17 +68,66 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     #[\Override]
     public function indexAction()
     {
+        $reviewForm = $this->getReviewForm();
+
+        if ($this->getRequest()->isPost()) {
+            return $this->processReview($reviewForm);
+        }
+
         $analyses = $this->getSuccessfulAnalyses();
 
         $view = new ViewModel([
             'title'        => 'lva.section.title.financial_evidence_assessment',
             'hasDocuments' => $analyses !== [],
             'tabs'         => $this->getTabsFromAnalyses($analyses),
+            'reviewForm'   => $reviewForm,
         ]);
         $view->setTemplate('sections/lva/financial-evidence-assessment');
 
         return $this->render($view);
     }
+
+    protected function getReviewForm(): FormInterface
+    {
+        // No "continue" button: the form carries its own review action.
+        return $this->formHelper->createForm(FinancialEvidenceAssessmentReview::class, true, false);
+    }
+
+    /**
+     * Record the caseworker's review of one analysis, then redirect back to the page
+     * (post/redirect/get) so a refresh cannot resubmit it.
+     *
+     * The application or licence is taken from the route, never from the form, so the API can
+     * refuse an analysis id that does not belong to the page it was posted from.
+     */
+    protected function processReview(FormInterface $reviewForm)
+    {
+        $post = $this->getRequest()->getPost();
+        $reviewForm->setData($post);
+
+        if ($post->get('review') !== self::REVIEW_APPROVE || !$reviewForm->isValid()) {
+            $this->flashMessengerHelper->addUnknownError();
+
+            return $this->redirect()->refresh();
+        }
+
+        $response = $this->handleCommand(
+            UpdateDocumentAnalysisAssessmentStatus::create([
+                'id' => (int)$reviewForm->getData()['analysisId'],
+                'status' => AssessmentStatus::APPROVED->value,
+                $this->getIdentifierIndex() => $this->getIdentifier(),
+            ])
+        );
+
+        if ($response->isOk()) {
+            $this->flashMessengerHelper->addSuccessMessage('Document review approved');
+        } else {
+            $this->flashMessengerHelper->addErrorMessage('The document review could not be approved');
+        }
+
+        return $this->redirect()->refresh();
+    }
+
 
     /**
      * Successful analyses for the current LVA context, most recently completed first.
@@ -100,13 +159,11 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
     /**
      * One tab per successful analysis; the first (most recent) is labelled "Latest". The tab
-     * header (id, label, date, caseworker stamp) is built here; the panel content (document link,
+     * header (id, label, date, caseworker review) is built here; the panel content (document link,
      * summary rows, issue count) comes from the mapper.
      */
     protected function getTabsFromAnalyses(array $analyses): array
     {
-        // Temporary caseworker stamp until stamping is implemented; independent of processing status.
-        $caseworkerStamp = 'APPROVED';
         $tabs = [];
 
         foreach ($analyses as $analysis) {
@@ -115,34 +172,39 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
                 : null;
             $isLatest = $tabs === [];
 
+            // Null when the analysis has not been reviewed (or holds a value this app does not know).
+            $assessmentStatus = AssessmentStatus::tryFrom((string)($analysis['assessmentStatus'] ?? ''));
+
             $tabs[] = [
-                'id'        => $isLatest ? 'latest' : 'analysis-' . $analysis['id'],
-                'label'     => $isLatest ? 'Latest' : ($date ?? 'Unknown date'),
-                'date'      => $date,
-                'status'    => $this->mapStatus($caseworkerStamp),
-                'statusTag' => $this->mapStatusTagClass($caseworkerStamp),
+                'id'         => $isLatest ? 'latest' : 'analysis-' . $analysis['id'],
+                'analysisId' => $analysis['id'],
+                'label'      => $isLatest ? 'Latest' : ($date ?? 'Unknown date'),
+                'date'       => $date,
+                'status'     => $this->mapStatus($assessmentStatus),
+                'statusTag'  => $this->mapStatusTagClass($assessmentStatus),
+                'isApproved' => $assessmentStatus === AssessmentStatus::APPROVED,
             ] + FinancialEvidenceAssessmentTab::mapFromAnalysis($analysis);
         }
 
         return $tabs;
     }
 
-    protected function mapStatus(?string $caseworkerStamp): string
+    protected function mapStatus(?AssessmentStatus $assessmentStatus): string
     {
-        return match ($caseworkerStamp) {
-            'APPROVED' => 'Approved',
-            'REJECTED' => 'Rejected',
-            'PENDING'  => 'Pending',
-            default    => 'Unknown',
+        return match ($assessmentStatus) {
+            AssessmentStatus::APPROVED => 'Approved',
+            AssessmentStatus::REJECTED => 'Rejected',
+            AssessmentStatus::PENDING  => 'Pending',
+            null                       => 'Unknown',
         };
     }
 
-    protected function mapStatusTagClass(?string $caseworkerStamp): string
+    protected function mapStatusTagClass(?AssessmentStatus $assessmentStatus): string
     {
-        return match ($caseworkerStamp) {
-            'APPROVED' => 'govuk-tag--green',
-            'REJECTED' => 'govuk-tag--red',
-            default    => 'govuk-tag--grey',
+        return match ($assessmentStatus) {
+            AssessmentStatus::APPROVED      => 'govuk-tag--green',
+            AssessmentStatus::REJECTED      => 'govuk-tag--red',
+            AssessmentStatus::PENDING, null => 'govuk-tag--grey',
         };
     }
 }
