@@ -1,0 +1,706 @@
+{
+  "routeName": "backend/user/selfserve/single",
+  "method": "PUT",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter",
+    "inputs": {
+      "contactDetails": {
+        "class": "Dvsa\\Olcs\\Transfer\\Util\\StructuredInput",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "inputs": {
+          "address": {
+            "class": "Dvsa\\Olcs\\Transfer\\Util\\StructuredInput",
+            "allowEmpty": true,
+            "filterChain": {
+              "class": "Laminas\\Filter\\FilterChain",
+              "filters": [
+                {
+                  "class": "Laminas\\Filter\\StripTags"
+                }
+              ]
+            },
+            "required": false,
+            "validatorChain": {
+              "class": "Laminas\\Validator\\ValidatorChain",
+              "validators": []
+            },
+            "inputs": {
+              "addressLine1": {
+                "class": "Laminas\\InputFilter\\Input",
+                "allowEmpty": true,
+                "filterChain": {
+                  "class": "Laminas\\Filter\\FilterChain",
+                  "filters": [
+                    {
+                      "class": "Laminas\\Filter\\StripTags"
+                    },
+                    {
+                      "class": "Laminas\\Filter\\StringTrim"
+                    }
+                  ]
+                },
+                "required": false,
+                "validatorChain": {
+                  "class": "Laminas\\Validator\\ValidatorChain",
+                  "validators": [
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\StringLength",
+                        "options": {
+                          "min": 1,
+                          "max": 90,
+                          "encoding": "UTF-8",
+                          "length": 0
+                        }
+                      },
+                      "breakChainOnFailure": false
+                    }
+                  ]
+                },
+                "name": "addressLine1"
+              },
+              "addressLine2": {
+                "class": "Laminas\\InputFilter\\Input",
+                "allowEmpty": true,
+                "filterChain": {
+                  "class": "Laminas\\Filter\\FilterChain",
+                  "filters": [
+                    {
+                      "class": "Laminas\\Filter\\StripTags"
+                    },
+                    {
+                      "class": "Laminas\\Filter\\StringTrim"
+                    }
+                  ]
+                },
+                "required": false,
+                "validatorChain": {
+                  "class": "Laminas\\Validator\\ValidatorChain",
+                  "validators": [
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\StringLength",
+                        "options": {
+                          "min": 1,
+                          "max": 90,
+                          "encoding": "UTF-8",
+                          "length": 0
+                        }
+                      },
+                      "breakChainOnFailure": false
+                    }
+                  ]
+                },
+                "name": "addressLine2"
+              },
+              "addressLine3": {
+                "class": "Laminas\\InputFilter\\Input",
+                "allowEmpty": true,
+                "filterChain": {
+                  "class": "Laminas\\Filter\\FilterChain",
+                  "filters": [
+                    {
+                      "class": "Laminas\\Filter\\StripTags"
+                    },
+                    {
+                      "class": "Laminas\\Filter\\StringTrim"
+                    }
+                  ]
+                },
+                "required": false,
+                "validatorChain": {
+                  "class": "Laminas\\Validator\\ValidatorChain",
+                  "validators": [
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\StringLength",
+                        "options": {
+                          "min": 1,
+                          "max": 100,
+                          "encoding": "UTF-8",
+                          "length": 0
+                        }
+                      },
+                      "breakChainOnFailure": false
+                    }
+                  ]
+                },
+                "name": "addressLine3"
+              },
+              "addressLine4": {
+                "class": "Laminas\\InputFilter\\Input",
+                "allowEmpty": true,
+                "filterChain": {
+                  "class": "Laminas\\Filter\\FilterChain",
+                  "filters": [
+                    {
+                      "class": "Laminas\\Filter\\StripTags"
+                    },
+                    {
+                      "class": "Laminas\\Filter\\StringTrim"
+                    }
+                  ]
+                },
+                "required": false,
+                "validatorChain": {
+                  "class": "Laminas\\Validator\\ValidatorChain",
+                  "validators": [
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\StringLength",
+                        "options": {
+                          "min": 1,
+                          "max": 35,
+                          "encoding": "UTF-8",
+                          "length": 0
+                        }
+                      },
+                      "breakChainOnFailure": false
+                    }
+                  ]
+                },
+                "name": "addressLine4"
+              },
+              "countryCode": {
+                "class": "Laminas\\InputFilter\\Input",
+                "allowEmpty": true,
+                "filterChain": {
+                  "class": "Laminas\\Filter\\FilterChain",
+                  "filters": [
+                    {
+                      "class": "Laminas\\Filter\\StripTags"
+                    },
+                    {
+                      "class": "Laminas\\Filter\\StringTrim"
+                    },
+                    {
+                      "class": "Laminas\\Filter\\StringToUpper"
+                    }
+                  ]
+                },
+                "required": false,
+                "validatorChain": {
+                  "class": "Laminas\\Validator\\ValidatorChain",
+                  "validators": [
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\StringLength",
+                        "options": {
+                          "min": 0,
+                          "max": 2,
+                          "encoding": "UTF-8",
+                          "length": 0
+                        }
+                      },
+                      "breakChainOnFailure": false
+                    }
+                  ]
+                },
+                "name": "countryCode"
+              },
+              "id": {
+                "class": "Laminas\\InputFilter\\Input",
+                "allowEmpty": true,
+                "filterChain": {
+                  "class": "Laminas\\Filter\\FilterChain",
+                  "filters": [
+                    {
+                      "class": "Laminas\\Filter\\StripTags"
+                    },
+                    {
+                      "class": "Laminas\\Filter\\Digits"
+                    }
+                  ]
+                },
+                "required": false,
+                "validatorChain": {
+                  "class": "Laminas\\Validator\\ValidatorChain",
+                  "validators": [
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\Digits"
+                      },
+                      "breakChainOnFailure": false
+                    },
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\GreaterThan",
+                        "min": 0,
+                        "inclusive": false
+                      },
+                      "breakChainOnFailure": false
+                    }
+                  ]
+                },
+                "name": "id"
+              },
+              "postcode": {
+                "class": "Laminas\\InputFilter\\Input",
+                "allowEmpty": true,
+                "filterChain": {
+                  "class": "Laminas\\Filter\\FilterChain",
+                  "filters": [
+                    {
+                      "class": "Laminas\\Filter\\StripTags"
+                    },
+                    {
+                      "class": "Laminas\\Filter\\StringTrim"
+                    }
+                  ]
+                },
+                "required": false,
+                "validatorChain": {
+                  "class": "Laminas\\Validator\\ValidatorChain",
+                  "validators": [
+                    {
+                      "instance": {
+                        "class": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode"
+                      },
+                      "breakChainOnFailure": false
+                    }
+                  ]
+                },
+                "name": "postcode"
+              },
+              "town": {
+                "class": "Laminas\\InputFilter\\Input",
+                "allowEmpty": true,
+                "filterChain": {
+                  "class": "Laminas\\Filter\\FilterChain",
+                  "filters": [
+                    {
+                      "class": "Laminas\\Filter\\StripTags"
+                    },
+                    {
+                      "class": "Laminas\\Filter\\StringTrim"
+                    }
+                  ]
+                },
+                "required": false,
+                "validatorChain": {
+                  "class": "Laminas\\Validator\\ValidatorChain",
+                  "validators": [
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\StringLength",
+                        "options": {
+                          "min": 1,
+                          "max": 30,
+                          "encoding": "UTF-8",
+                          "length": 0
+                        }
+                      },
+                      "breakChainOnFailure": false
+                    }
+                  ]
+                },
+                "name": "town"
+              },
+              "version": {
+                "class": "Laminas\\InputFilter\\Input",
+                "allowEmpty": true,
+                "filterChain": {
+                  "class": "Laminas\\Filter\\FilterChain",
+                  "filters": [
+                    {
+                      "class": "Laminas\\Filter\\StripTags"
+                    },
+                    {
+                      "class": "Laminas\\Filter\\Digits"
+                    }
+                  ]
+                },
+                "required": false,
+                "validatorChain": {
+                  "class": "Laminas\\Validator\\ValidatorChain",
+                  "validators": [
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\Digits"
+                      },
+                      "breakChainOnFailure": false
+                    },
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\GreaterThan",
+                        "min": 0,
+                        "inclusive": false
+                      },
+                      "breakChainOnFailure": false
+                    }
+                  ]
+                },
+                "name": "version"
+              }
+            },
+            "name": "address"
+          },
+          "description": {
+            "class": "Laminas\\InputFilter\\Input",
+            "allowEmpty": true,
+            "filterChain": {
+              "class": "Laminas\\Filter\\FilterChain",
+              "filters": [
+                {
+                  "class": "Laminas\\Filter\\StripTags"
+                },
+                {
+                  "class": "Laminas\\Filter\\StringTrim"
+                }
+              ]
+            },
+            "required": false,
+            "validatorChain": {
+              "class": "Laminas\\Validator\\ValidatorChain",
+              "validators": [
+                {
+                  "instance": {
+                    "class": "Laminas\\Validator\\StringLength",
+                    "options": {
+                      "min": 5,
+                      "max": 255,
+                      "encoding": "UTF-8",
+                      "length": 0
+                    }
+                  },
+                  "breakChainOnFailure": false
+                }
+              ]
+            },
+            "name": "description"
+          },
+          "emailAddress": {
+            "class": "Laminas\\InputFilter\\Input",
+            "allowEmpty": true,
+            "filterChain": {
+              "class": "Laminas\\Filter\\FilterChain",
+              "filters": [
+                {
+                  "class": "Laminas\\Filter\\StripTags"
+                },
+                {
+                  "class": "Laminas\\Filter\\StringTrim"
+                }
+              ]
+            },
+            "required": false,
+            "validatorChain": {
+              "class": "Laminas\\Validator\\ValidatorChain",
+              "validators": [
+                {
+                  "instance": {
+                    "class": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+                  },
+                  "breakChainOnFailure": false
+                }
+              ]
+            },
+            "name": "emailAddress"
+          },
+          "fao": {
+            "class": "Laminas\\InputFilter\\Input",
+            "allowEmpty": true,
+            "filterChain": {
+              "class": "Laminas\\Filter\\FilterChain",
+              "filters": [
+                {
+                  "class": "Laminas\\Filter\\StripTags"
+                },
+                {
+                  "class": "Laminas\\Filter\\StringTrim"
+                }
+              ]
+            },
+            "required": false,
+            "validatorChain": {
+              "class": "Laminas\\Validator\\ValidatorChain",
+              "validators": [
+                {
+                  "instance": {
+                    "class": "Laminas\\Validator\\StringLength",
+                    "options": {
+                      "min": 1,
+                      "max": 90,
+                      "encoding": "UTF-8",
+                      "length": 0
+                    }
+                  },
+                  "breakChainOnFailure": false
+                }
+              ]
+            },
+            "name": "fao"
+          },
+          "id": {
+            "class": "Laminas\\InputFilter\\Input",
+            "allowEmpty": true,
+            "filterChain": {
+              "class": "Laminas\\Filter\\FilterChain",
+              "filters": [
+                {
+                  "class": "Laminas\\Filter\\StripTags"
+                },
+                {
+                  "class": "Laminas\\Filter\\Digits"
+                }
+              ]
+            },
+            "required": false,
+            "validatorChain": {
+              "class": "Laminas\\Validator\\ValidatorChain",
+              "validators": [
+                {
+                  "instance": {
+                    "class": "Laminas\\Validator\\Digits"
+                  },
+                  "breakChainOnFailure": false
+                },
+                {
+                  "instance": {
+                    "class": "Laminas\\Validator\\GreaterThan",
+                    "min": 0,
+                    "inclusive": false
+                  },
+                  "breakChainOnFailure": false
+                }
+              ]
+            },
+            "name": "id"
+          },
+          "person": {
+            "class": "Dvsa\\Olcs\\Transfer\\Util\\ArrayInput",
+            "arrayFilterChain": {
+              "class": "Laminas\\Filter\\FilterChain",
+              "filters": []
+            },
+            "arrayValidatorChain": {
+              "class": "Laminas\\Validator\\ValidatorChain",
+              "validators": []
+            },
+            "allowEmpty": true,
+            "filterChain": {
+              "class": "Laminas\\Filter\\FilterChain",
+              "filters": [
+                {
+                  "class": "Laminas\\Filter\\StripTags"
+                }
+              ]
+            },
+            "required": false,
+            "validatorChain": {
+              "class": "Laminas\\Validator\\ValidatorChain",
+              "validators": []
+            },
+            "name": "person"
+          },
+          "phoneContacts": {
+            "class": "Dvsa\\Olcs\\Transfer\\Util\\ArrayInput",
+            "arrayFilterChain": {
+              "class": "Laminas\\Filter\\FilterChain",
+              "filters": [
+                {
+                  "class": "Dvsa\\Olcs\\Transfer\\Filter\\FilterEmptyItems"
+                }
+              ]
+            },
+            "arrayValidatorChain": {
+              "class": "Laminas\\Validator\\ValidatorChain",
+              "validators": []
+            },
+            "allowEmpty": true,
+            "filterChain": {
+              "class": "Laminas\\Filter\\FilterChain",
+              "filters": [
+                {
+                  "class": "Laminas\\Filter\\StripTags"
+                }
+              ]
+            },
+            "required": false,
+            "validatorChain": {
+              "class": "Laminas\\Validator\\ValidatorChain",
+              "validators": []
+            },
+            "name": "phoneContacts"
+          },
+          "version": {
+            "class": "Laminas\\InputFilter\\Input",
+            "allowEmpty": true,
+            "filterChain": {
+              "class": "Laminas\\Filter\\FilterChain",
+              "filters": [
+                {
+                  "class": "Laminas\\Filter\\StripTags"
+                },
+                {
+                  "class": "Laminas\\Filter\\Digits"
+                }
+              ]
+            },
+            "required": false,
+            "validatorChain": {
+              "class": "Laminas\\Validator\\ValidatorChain",
+              "validators": [
+                {
+                  "instance": {
+                    "class": "Laminas\\Validator\\Digits"
+                  },
+                  "breakChainOnFailure": false
+                },
+                {
+                  "instance": {
+                    "class": "Laminas\\Validator\\GreaterThan",
+                    "min": 0,
+                    "inclusive": false
+                  },
+                  "breakChainOnFailure": false
+                }
+              ]
+            },
+            "name": "version"
+          }
+        },
+        "name": "contactDetails"
+      },
+      "id": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": false
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "id"
+      },
+      "permission": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\InArray",
+                "haystack": [
+                  "admin",
+                  "user",
+                  "tm",
+                  "tc"
+                ]
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "permission"
+      },
+      "translateToWelsh": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Dvsa\\Olcs\\Transfer\\Validators\\YesNo"
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "translateToWelsh"
+      },
+      "version": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": false
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "version"
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/irfo/gv-permit/type-list",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

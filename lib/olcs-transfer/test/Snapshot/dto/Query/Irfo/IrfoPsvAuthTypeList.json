@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/irfo/psv-auth/type-list",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

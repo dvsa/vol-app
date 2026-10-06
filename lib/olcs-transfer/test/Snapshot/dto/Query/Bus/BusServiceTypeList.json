@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/bus/service-type-list",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

@@ -30,6 +30,9 @@ class VehiclesReviewService extends AbstractReviewService
         $notRemovedCriteria->andWhere(
             $notRemovedCriteria->expr()->isNull('removalDate')
         );
+        $notRemovedCriteria->andWhere(
+            $notRemovedCriteria->expr()->neq('specifiedDate', null)
+        );
 
         $licenceVehicles = $continuationDetail->getLicence()->getLicenceVehicles()->matching($notRemovedCriteria);
         $isGoods =
