@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/bus/organisation-unprocessed-ebsr-list",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}
