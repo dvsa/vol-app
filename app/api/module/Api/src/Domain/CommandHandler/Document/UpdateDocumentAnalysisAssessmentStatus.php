@@ -53,4 +53,3 @@ final class UpdateDocumentAnalysisAssessmentStatus extends AbstractCommandHandle
         return $this->result;
     }
 }
-

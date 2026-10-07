@@ -39,5 +39,3 @@ class FinancialEvidenceAssessmentReview
      */
     public $review = null;
 }
-
-

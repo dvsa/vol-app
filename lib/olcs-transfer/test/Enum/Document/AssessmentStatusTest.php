@@ -24,4 +24,3 @@ final class AssessmentStatusTest extends TestCase
         $this->assertSame(['PENDING', 'APPROVED', 'REJECTED'], AssessmentStatus::VALUES);
     }
 }
-
