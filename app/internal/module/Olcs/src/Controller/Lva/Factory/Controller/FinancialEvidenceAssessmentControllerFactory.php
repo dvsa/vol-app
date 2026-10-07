@@ -13,7 +13,6 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Controller\Lva\AbstractFinancialEvidenceAssessmentController;
-use Olcs\Service\FinancialEvidence\FinancialEvidenceAssessmentService;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -46,8 +45,7 @@ class FinancialEvidenceAssessmentControllerFactory implements FactoryInterface
             $container->get(RestrictionHelperService::class),
             $container->get(FlashMessengerHelperService::class),
             $container->get(FormHelperService::class),
-            $container->get('navigation'),
-            $container->get(FinancialEvidenceAssessmentService::class)
+            $container->get('navigation')
         );
     }
 }

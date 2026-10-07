@@ -11,6 +11,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
+use Dvsa\Olcs\Transfer\Command\Document\AcceptDocumentAnalysisReview;
 use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -19,7 +20,6 @@ use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
 use Olcs\Form\Model\Form\Lva\FinancialEvidenceAssessmentReview;
-use Olcs\Service\FinancialEvidence\FinancialEvidenceAssessmentService;
 
 /**
  * Financial evidence assessment page, shared by the licence, application and variation sections.
@@ -30,8 +30,8 @@ use Olcs\Service\FinancialEvidence\FinancialEvidenceAssessmentService;
  *
  * Each tab can be reviewed by the caseworker through the FinancialEvidenceAssessmentReview form,
  * which posts back to this page. Its CSRF element is added by the form helper like any other form.
- * Accepting the review hands the analysis' flags to FinancialEvidenceAssessmentService, which
- * decides and records the outcome.
+ * Accepting the review sends AcceptDocumentAnalysisReview; the API decides and records the outcome
+ * from the stored result, like Application\Grant, and this page only reports it.
  */
 abstract class AbstractFinancialEvidenceAssessmentController extends AbstractController implements
     ToggleAwareInterface
@@ -62,8 +62,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         protected FlashMessengerHelperService $flashMessengerHelper,
         // Builds the review form; the licence context also uses it for its header search form.
         protected FormHelperService $formHelper,
-        protected $navigation,
-        protected FinancialEvidenceAssessmentService $assessmentService
+        protected $navigation
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -97,12 +96,12 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     }
 
     /**
-     * Assess one analysis from its flags and record the outcome, then redirect back to the page
+     * Send the accepted review to the API and report its outcome, then redirect back to the page
      * (post/redirect/get) so a refresh cannot resubmit it.
      *
-     * The analysis and its flags are re-read from the API for this page's application or licence,
-     * never taken from the form: a posted flag could be edited in the browser. That also means only
-     * an analysis shown on this page can be assessed.
+     * The posted analysis must be one this page lists for its application or licence. That is a
+     * guard against a stale or edited form, not authorisation: the API decides the outcome from
+     * its own stored result and accepts only successful analyses.
      */
     protected function processReview(FormInterface $reviewForm)
     {
@@ -124,20 +123,18 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             return $this->redirect()->refresh();
         }
 
-        $flags = FinancialEvidenceAssessmentTab::flagsFromAnalysis($analysis);
-
-        if ($flags === null) {
+        if (!FinancialEvidenceAssessmentTab::mapFromAnalysis($analysis)['hasAssessment']) {
             $this->flashMessengerHelper->addErrorMessage('This document has no assessment to review');
 
             return $this->redirect()->refresh();
         }
 
-        $outcome = $this->assessmentService->assess(
-            $analysisId,
-            $flags,
-            $this->getIdentifierIndex(),
-            (int)$this->getIdentifier()
-        );
+        $response = $this->handleCommand(AcceptDocumentAnalysisReview::create(['id' => $analysisId]));
+
+        // The API reports what it decided in the result's flags; anything else reads as not recorded.
+        $outcome = $response->isOk()
+            ? AssessmentStatus::tryFrom((string)($response->getResult()['flags']['assessmentStatus'] ?? ''))
+            : null;
 
         if ($outcome === AssessmentStatus::APPROVED) {
             $this->flashMessengerHelper->addSuccessMessage('Document review accepted: the document is approved');

@@ -21,7 +21,6 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Application\FinancialEvidenceAssessmentController;
-                                                                                                                                                               use Olcs\Service\FinancialEvidence\FinancialEvidenceAssessmentService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionMethod;
 
@@ -42,7 +41,6 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             m::mock(FlashMessengerHelperService::class),
             m::mock(FormHelperService::class),
             [],
-            m::mock(FinancialEvidenceAssessmentService::class),
         ])->makePartial()->shouldAllowMockingProtectedMethods();
     }
 

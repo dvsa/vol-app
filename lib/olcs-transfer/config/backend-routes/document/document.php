@@ -73,6 +73,14 @@ return [
                 [
                     'single' => RouteConfig::getSingleConfig(
                         [
+                            'accept-review' => RouteConfig::getRouteConfig(
+                                'accept-review',
+                                [
+                                    'PUT' => CommandConfig::getPutConfig(
+                                        Command\Document\AcceptDocumentAnalysisReview::class
+                                    ),
+                                ]
+                            ),
                             'assessment-status' => RouteConfig::getRouteConfig(
                                 'assessment-status',
                                 [

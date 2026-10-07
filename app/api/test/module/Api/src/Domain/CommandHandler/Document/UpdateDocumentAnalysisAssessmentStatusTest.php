@@ -46,7 +46,7 @@ final class UpdateDocumentAnalysisAssessmentStatusTest extends AbstractCommandHa
     #[DataProvider('statusProvider')]
     public function testHandleCommandRecordsTheReviewAsTheCurrentUser(AssessmentStatus $status): void
     {
-        $command = Cmd::create(['id' => 5, 'application' => 42, 'status' => $status->value]);
+        $command = Cmd::create(['id' => 5, 'status' => $status->value]);
 
         $this->repoMap['DocumentAnalysis']
             ->expects('recordAssessmentStatus')
@@ -83,5 +83,3 @@ final class UpdateDocumentAnalysisAssessmentStatusTest extends AbstractCommandHa
         $this->sut->handleCommand(Cmd::create(['id' => 5, 'status' => 'SUCCESS']));
     }
 }
-
-

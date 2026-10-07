@@ -36,6 +36,27 @@ Caseworker annotations (a later ticket) are stored separately and merged over th
 payload at read time, row by row, with the annotation winning. Nothing is ever written back
 into `result` or `result_normalised`.
 
+## Reviewing an analysis
+
+The page's "Accept document review" button sends `AcceptDocumentAnalysisReview { id }` and
+nothing else. As with `Application\Grant`, the command states the caseworker's intent and the
+API decides the consequence: the handler reads the stored normalised result, `AnalysisReviewOutcome`
+turns its flags into APPROVED (every flagged row is a pass) or REJECTED (any fail, or any skipped
+check, since a check that could not be made is not a pass), and `recordAssessmentStatus()` writes
+`assessment_status` and the reviewing user in one UPDATE guarded on `status = 'SUCCESS'`. The
+decided status comes back in the result's `assessmentStatus` flag, which is all the internal app
+uses to pick its message.
+
+Keeping the decision in the API means the rule holds whichever client sends the command, is made
+against the row as stored at that moment, and will see caseworker annotations once they are merged.
+The internal app checks only that the posted id is one of the analyses it listed; that guards
+against a stale form, not access, and the API does not rely on it.
+
+`UpdateDocumentAnalysisAssessmentStatus { id, status }` remains for the "Change document review"
+action, where a status is genuinely the caseworker's own input. Both commands are validated by
+`IsInternalUser`; the id alone identifies the analysis, and the handlers refuse anything that is
+not a successful analysis.
+
 ## The model's output
 
 The model is forced to call the `submit_quality_check` tool, whose schema lives in
@@ -98,6 +119,7 @@ existed carry no `schemaVersion` and have `core_checks` only; the normaliser rea
 | Normaliser | `app/api/module/Api/src/Service/Idp/AnalysisResultNormaliser/`: `AnalysisResultNormaliser` (entry point), `NormalisedResult` (the current shape, owns `VERSION`), `ReportMapper` (report to current shape), `Version/` (one mapper per superseded version) |
 | Storage | `app/api/module/Api/src/Domain/CommandHandler/Document/StoreDocumentAnalysisResult.php`, `Repository/DocumentAnalysis::recordSuccess()` |
 | Query | `app/api/module/Api/src/Domain/QueryHandler/Document/DocumentAnalysisList.php` |
+| Review | `app/api/module/Api/src/Domain/CommandHandler/Document/AcceptDocumentAnalysisReview.php`, `app/api/module/Api/src/Service/Idp/AnalysisReviewOutcome.php` |
 | Tab content | `app/internal/module/Olcs/src/Data/Mapper/FinancialEvidenceAssessmentTab.php`, `view/sections/lva/financial-evidence-assessment.phtml` |
 | Schema | `document_analysis` and `document_analysis_hist` in olcs-etl |
 

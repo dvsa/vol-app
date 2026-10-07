@@ -93,28 +93,6 @@ final class FinancialEvidenceAssessmentTab
     }
 
     /**
-     * The flags an assessment is decided on: one per flagged row (six), in display order.
-     * Null when the analysis has no assessment, so there is nothing to decide on.
-     *
-     * @param array $analysis one entry of DocumentAnalysisList's "analyses"
-     *
-     * @return list<string>|null FLAG_* values
-     */
-    public static function flagsFromAnalysis(array $analysis): ?array
-    {
-        $tab = self::mapFromAnalysis($analysis);
-
-        if (!$tab['hasAssessment']) {
-            return null;
-        }
-
-        return array_values(array_filter(
-            array_column($tab['rows'], 'flag'),
-            static fn(?string $flag): bool => $flag !== null
-        ));
-    }
-
-    /**
      * @param array{label: string, flagged: bool, hasValue: bool} $definition
      */
     private static function row(string $key, array $definition, mixed $payloadRow): array

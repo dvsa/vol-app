@@ -70,7 +70,7 @@ abstract class AbstractBelongsToValidator extends AbstractValidator implements R
     /**
      * Normalise an entity or scalar identifier to an integer id.
      */
-    protected function resolveId(object|int|string|null $value): ?int
+    private function resolveId(object|int|string|null $value): ?int
     {
         if (is_object($value)) {
             $value = $value->getId();

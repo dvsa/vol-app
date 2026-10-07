@@ -502,6 +502,8 @@ return [
         => CommandHandler\Document\SweepStaleDocumentAnalysis::class,
     Command\Document\StoreDocumentAnalysisResult::class
         => CommandHandler\Document\StoreDocumentAnalysisResultFactory::class,
+    TransferCommand\Document\AcceptDocumentAnalysisReview::class
+        => CommandHandler\Document\AcceptDocumentAnalysisReviewFactory::class,
     TransferCommand\Document\UpdateDocumentAnalysisAssessmentStatus::class
         => CommandHandler\Document\UpdateDocumentAnalysisAssessmentStatus::class,
 

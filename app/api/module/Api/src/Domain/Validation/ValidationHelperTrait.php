@@ -58,8 +58,6 @@ use Dvsa\Olcs\Api\Domain\ValidatorManager;
  * @method bool feeBelongsToLicence($fee, $licence)
  * @method bool feeBelongsToApplication($fee, $application)
  * @method bool feeBelongsToBusReg($fee, $busReg)
- * @method bool documentAnalysisBelongsToApplication($documentAnalysis, $application)
- * @method bool documentAnalysisBelongsToLicence($documentAnalysis, $licence)
  * @method bool seriousInfringementBelongsToCase($seriousInfringement, $case)
  * @method bool canAccessEbsrSubmission($entityId)
  * @method bool canAccessTxcInbox($entityId)

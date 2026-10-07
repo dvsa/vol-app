@@ -7,7 +7,6 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentWithId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanDeleteDocumentWithId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanOverwriteDocumentWithId;
-use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanUpdateDocumentAnalysisWithId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalUser;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemAdmin;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemUser;
@@ -31,7 +30,11 @@ return [
     CommandHandler\Document\SweepStaleDocumentAnalysis::class => IsSystemUser::class,
     CommandHandler\Document\StoreDocumentAnalysisResult::class => IsSystemUser::class,
     CommandHandler\Document\StoreDocumentAnalysisResultFactory::class => IsSystemUser::class,
-    CommandHandler\Document\UpdateDocumentAnalysisAssessmentStatus::class => CanUpdateDocumentAnalysisWithId::class,
+    // Reviewing an analysis is an internal action; the handlers refuse anything that is not a
+    // successful analysis, and the id alone identifies it.
+    CommandHandler\Document\AcceptDocumentAnalysisReview::class => IsInternalUser::class,
+    CommandHandler\Document\AcceptDocumentAnalysisReviewFactory::class => IsInternalUser::class,
+    CommandHandler\Document\UpdateDocumentAnalysisAssessmentStatus::class => IsInternalUser::class,
     CommandHandler\Document\OverwriteContent::class => CanOverwriteDocumentWithId::class,
     CommandHandler\Email\SendPsvOperatorListReport::class => CanAccessDocumentWithId::class,
     CommandHandler\Email\SendInternationalGoods::class => CanAccessDocumentWithId::class,

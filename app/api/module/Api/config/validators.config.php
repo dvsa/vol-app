@@ -45,8 +45,6 @@ return [
         'feeBelongsToLicence' => Validators\FeeBelongsToLicence::class,
         'feeBelongsToApplication' => Validators\FeeBelongsToApplication::class,
         'feeBelongsToBusReg' => Validators\FeeBelongsToBusReg::class,
-        'documentAnalysisBelongsToApplication' => Validators\DocumentAnalysisBelongsToApplication::class,
-        'documentAnalysisBelongsToLicence' => Validators\DocumentAnalysisBelongsToLicence::class,
         'seriousInfringementBelongsToCase' => Validators\SeriousInfringementBelongsToCase::class,
         'canAccessEbsrSubmission' => Validators\CanAccessEbsrSubmission::class,
         'canAccessTxcInbox' => Validators\CanAccessTxcInbox::class,
