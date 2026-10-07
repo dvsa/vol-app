@@ -21,6 +21,7 @@ class TransportManagers
 
     /**
      * @Form\Type("\Common\Form\Elements\Types\HtmlTranslated")
+     * @Form\Options({"render-container": false})
      * @Form\Flags({"priority": -20})
      */
     public $guidance;
