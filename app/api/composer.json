@@ -144,6 +144,7 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit",
+    "test:parallel": "vendor/bin/paratest",
     "test:integration": "vendor/bin/phpunit -c phpunit-integration.xml",
     "phpcs": "vendor/bin/phpcs -d memory_limit=512M",
     "psalm": "vendor/bin/psalm",
@@ -164,6 +165,7 @@
     "dvsa/coding-standards": "^2.1",
     "phpstan/phpstan": "^2.0",
     "phpstan/phpstan-doctrine": "^2.0",
-    "vimeo/psalm": "^6.0"
+    "vimeo/psalm": "^6.0",
+    "brianium/paratest": "^7.24.1"
   }
 }
