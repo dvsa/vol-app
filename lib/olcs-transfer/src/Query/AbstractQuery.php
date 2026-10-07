@@ -76,7 +76,13 @@ abstract class AbstractQuery implements QueryInterface
     private function doNotExchange($property)
     {
         $reflectionProperty = new ReflectionProperty(static::class, $property);
+
+        // TODO: remove this once annotation removed
         $docBlock = $reflectionProperty->getDocComment();
-        return str_contains($docBlock, '@Transfer\\DoNotExchange');
+        $hasDoNotExchangeAnnotation = str_contains($docBlock, '@Transfer\\DoNotExchange');
+
+        $hasDoNotExchangeAttribute = $reflectionProperty->getAttributes(\Dvsa\Olcs\Transfer\Util\Attribute\DoNotExchange::class) !== [];
+
+        return $hasDoNotExchangeAnnotation || $hasDoNotExchangeAttribute;
     }
 }
