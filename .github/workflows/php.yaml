@@ -61,6 +61,8 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
+      # Serial phpunit, not `composer test` (paratest): only phpunit shuffles the tests within a file,
+      # which is what catches one test leaking state into the next.
       - name: Test
         run: vendor/bin/phpunit
 

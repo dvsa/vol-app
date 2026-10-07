@@ -143,8 +143,8 @@
     }
   },
   "scripts": {
-    "test": "vendor/bin/phpunit",
-    "test:parallel": "vendor/bin/paratest",
+    "test": "vendor/bin/paratest",
+    "test:serial": "vendor/bin/phpunit",
     "test:integration": "vendor/bin/phpunit -c phpunit-integration.xml",
     "phpcs": "vendor/bin/phpcs -d memory_limit=512M",
     "psalm": "vendor/bin/psalm",
