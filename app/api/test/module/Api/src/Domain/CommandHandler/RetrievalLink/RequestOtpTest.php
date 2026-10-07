@@ -29,7 +29,8 @@ final class RequestOtpTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('RetrievalLinkEvent', RetrievalLinkEventRepo::class);
 
         $this->mockedSmServices = [
-            OtpService::class => new OtpService(),
+            // bcrypt's minimum cost; PHP's default takes about 0.25s per hash
+            OtpService::class => new OtpService(['cost' => 4]),
             TemplateRenderer::class => m::mock(TemplateRenderer::class),
         ];
 
