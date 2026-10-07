@@ -44,6 +44,7 @@ module "s3" {
   }
 }
 
+#checkov:skip=CKV_AWS_119: Terraform state lock tables intentionally use AWS-managed encryption and do not require a customer-managed KMS key.
 module "dynamodb_table" {
   source   = "git::https://github.com/terraform-aws-modules/terraform-aws-dynamodb-table.git?ref=b6cc515760466a455ff0acb97b16151fdca4511e"
   name     = "${local.identifier}-lock"
