@@ -24,7 +24,7 @@ $warningText = $hasDocuments
         <a class="govuk-tabs__tab" href="#<?php echo $this->escapeHtmlAttr($tab['id']); ?>">
           <?php echo $this->escapeHtml($tab['label']); ?>
           <?php if ($index > 0) : ?>
-            <strong class="govuk-tag <?php echo $this->escapeHtmlAttr($tab['statusTag']); ?>">
+            <strong class="govuk-tag govuk-!-margin-left-2 <?php echo $this->escapeHtmlAttr($tab['statusTag']); ?>">
               <?php echo $this->escapeHtml($tab['status']); ?>
             </strong>
           <?php endif; ?>
@@ -44,7 +44,7 @@ $warningText = $hasDocuments
           <a class="govuk-link" href="<?php echo $this->url('getfile', ['identifier' => $tab['document']['id']]); ?>">
             <?php echo $this->escapeHtml($tab['document']['name'] ?? 'Document'); ?>
           </a>
-          <strong class="govuk-tag <?php echo $this->escapeHtmlAttr($tab['statusTag']); ?>">
+          <strong class="govuk-tag govuk-!-margin-left-4 <?php echo $this->escapeHtmlAttr($tab['statusTag']); ?>">
             <?php echo $this->escapeHtml($tab['status']); ?>
           </strong>
         </p>
