@@ -26,47 +26,99 @@ Various tools run on CI to ensure the quality of the codebase:
 
 #### Testing
 
--   [PHPUnit](https://github.com/sebastianbergmann/phpunit)
+- [PHPUnit](https://github.com/sebastianbergmann/phpunit)
 
 #### Linting
 
--   [PHPStan](https://github.com/phpstan/phpstan)
--   [Psalm](https://github.com/vimeo/psalm)
--   [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer)
+- [PHPStan](https://github.com/phpstan/phpstan)
+- [Psalm](https://github.com/vimeo/psalm)
+- [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer)
 
 #### Security
 
--   [Snyk](https://snyk.io/)
+- [Snyk](https://snyk.io/)
 
 ### ![](./assets/languages/docker.svg) Docker
 
 #### Linting
 
--   [Hadolint](https://github.com/hadolint/hadolint)
+- [Hadolint](https://github.com/hadolint/hadolint)
 
 #### Testing
 
--   Docker build (`docker build`)
+- Docker build (`docker build`)
 
 #### Security
 
--   [Trivy](https://github.com/aquasecurity/trivy)
+- [Trivy](https://github.com/aquasecurity/trivy)
 
 ### ![](./assets/languages/terraform.svg) Terraform
 
 #### Linting
 
--   [TFLint](https://github.com/terraform-linters/tflint)
--   Terraform format (`terraform fmt`)
+- [TFLint](https://github.com/terraform-linters/tflint)
+- Terraform format (`terraform fmt`)
 
 #### Testing
 
--   Terraform validate (`terraform validate`)
--   Terraform plan (`terraform plan`)
+- Terraform validate (`terraform validate`)
+- Terraform plan (`terraform plan`)
 
 #### Security
 
--   [Trivy](https://github.com/aquasecurity/trivy)
+- [Trivy](https://github.com/aquasecurity/trivy)
+
+## PHP checks
+
+`php.yaml` (the apps) and `php-lib.yaml` (the libraries under `lib/`) run the
+unit tests, PHP_CodeSniffer, Psalm and PHPStan. CI, CD and branch deploys all
+call them, so the choices below apply to all three.
+
+### How the jobs are laid out
+
+Every job spends about 25 seconds on setup before it checks anything: checking
+out, installing PHP, restoring Composer's cache and installing dependencies. A
+check only gets a job of its own when it takes much longer than that. Otherwise
+the extra setup costs more than running the check alongside the others.
+
+| Project             | Jobs                                     | Why                                                                                                                                                                         |
+| ------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| api                 | Test · PHPStan · PHP CodeSniffer · Psalm | The tests, PHPStan and Psalm take 30–60s each. phpcs takes about 15s, but added to any of the other jobs it would make that job as long as Psalm's, the longest in the app. |
+| selfserve, internal | Checks                                   | Each check takes 2–20s.                                                                                                                                                     |
+| olcs-common         | Psalm · Test, PHP CodeSniffer, PHPStan   | Psalm takes about 45s; the others 3–10s each.                                                                                                                               |
+| Other libraries     | Checks                                   | All four checks together take under 30s, and under 10s for most.                                                                                                            |
+
+The workflow picks the layout from the project name, rather than the caller
+passing it in, so CI and CD cannot drift apart.
+
+Within a job, each check is its own step and runs even if an earlier one
+failed, so a failing test cannot hide a phpcs or Psalm failure.
+
+If a check in a shared job grows well past the setup time, give it a job of its
+own by changing that project's entry in the workflow's matrix. If a check in a
+job of its own shrinks to a few seconds, move it back in. Each job's step list
+on the Actions page shows how long every check took.
+
+There is no job that warms Composer's cache first. There used to be, and every
+check waited about 35s for it, but each job already restores the cache itself.
+
+### Parallelism within a check
+
+- **PHPStan** runs a worker per core by default.
+- **Psalm** uses every core locally but drops to one thread when it detects CI,
+  so the workflows pass `--threads` and `--scan-threads` with the runner's core
+  count. That took the api's Psalm from about 95s to about 60s.
+- **PHP_CodeSniffer** cannot detect the core count, so every ruleset sets
+  `<arg name="parallel" value="16"/>`. 16 was the fastest of 8, 10 and 16 on a
+  10-core laptop, and the extra processes cost nothing measurable on a 4-core
+  runner. It took the api's phpcs from about 48s to about 15s.
+- **Unit tests** run serially, in random order, on purpose. See
+  [why CI stays serial](./app/testing.md#why-ci-stays-serial).
+
+Only the bigger code bases gain from any of this. Measured on a laptop with 1
+and 4 workers, olcs-common's Psalm went from 95s to 29s and its PHPStan from 66s to
+14s, and olcs-transfer saved a few seconds. The four small libraries' checks
+take a few seconds whatever the worker count.
 
 ## Continuous Deployment (CD)
 
