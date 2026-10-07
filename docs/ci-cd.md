@@ -109,9 +109,18 @@ check waited about 35s for it, but each job already restores the cache itself.
   so the workflows pass `--threads` and `--scan-threads` with the runner's core
   count. That took the api's Psalm from about 95s to about 60s.
 - **PHP_CodeSniffer** cannot detect the core count, so every ruleset sets
-  `<arg name="parallel" value="16"/>`. 16 was the fastest of 8, 10 and 16 on a
-  10-core laptop, and the extra processes cost nothing measurable on a 4-core
-  runner. It took the api's phpcs from about 48s to about 15s.
+  `<arg name="parallel" value="16"/>`, deliberately more than most machines
+  have cores. phpcs splits the files into that many equal-sized batches up
+  front and waits for the slowest, rather than handing files out as workers
+  free up. Each batch has the same number of files but not the same amount of
+  work. With 10 batches of the api, the slowest took 7.4s and the quickest
+  1.1s, so most cores sat idle at the end. With 16, the slowest batch is 5.6s,
+  and the operating system gives the slow batches the cores the quick ones free
+  up. On a 10-core laptop the api took 11.5s with 10 workers and 9.7s with 16.
+  More workers gain a second or so (8.5s with 32), and on a 4-core CI runner
+  the cores are the limit anyway: about 44s of sniffing over 4 cores. Compared
+  with no parallelism, it took the api's phpcs in CI from about 48s to about
+  15s.
 - **Unit tests** run serially, in random order, on purpose. See
   [why CI stays serial](./app/testing.md#why-ci-stays-serial).
 

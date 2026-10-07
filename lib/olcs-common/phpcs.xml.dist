@@ -9,7 +9,11 @@
   <exclude-pattern>./Common/config/language/key-analysis/translation_key_report.php</exclude-pattern>
   <exclude-pattern>./Common/config/language/import/translations-import.php</exclude-pattern>
 
-  <!-- Sniff files in parallel worker processes -->
+  <!-- Sniff files in parallel. 16 is deliberately more than most machines have cores: phpcs
+       cannot detect the core count, and it splits the files into this many equal-sized batches
+       up front instead of handing them out as workers free up. A batch full of heavy files then
+       sets the pace while finished workers sit idle, so more, smaller batches keep the cores
+       busy. Measurements are under "PHP checks" in docs/ci-cd.md. -->
   <arg name="parallel" value="16"/>
 
   <rule ref="./vendor-bin/phpcs/vendor/dvsa/coding-standards/src/Profiles/DVSA/CS/ruleset.xml" />
