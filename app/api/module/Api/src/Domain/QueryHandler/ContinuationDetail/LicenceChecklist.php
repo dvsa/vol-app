@@ -46,6 +46,7 @@ class LicenceChecklist extends AbstractQueryHandler
         $licence = $continuationDetail->getLicence();
         $notRemoved = Criteria::create();
         $notRemoved->andWhere($notRemoved->expr()->isNull('removalDate'));
+        $notRemoved->andWhere($notRemoved->expr()->neq('specifiedDate', null));
 
         $sections = $this->sectionAccessService->getAccessibleSectionsForLicenceContinuation($licence);
         $sections = $this->alterSections(array_keys($sections), $licence);
