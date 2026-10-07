@@ -11,7 +11,6 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
-use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentAnalysisAssessmentStatus;
 use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -20,6 +19,7 @@ use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
 use Olcs\Form\Model\Form\Lva\FinancialEvidenceAssessmentReview;
+use Olcs\Service\FinancialEvidence\FinancialEvidenceAssessmentService;
 
 /**
  * Financial evidence assessment page, shared by the licence, application and variation sections.
@@ -30,6 +30,8 @@ use Olcs\Form\Model\Form\Lva\FinancialEvidenceAssessmentReview;
  *
  * Each tab can be reviewed by the caseworker through the FinancialEvidenceAssessmentReview form,
  * which posts back to this page. Its CSRF element is added by the form helper like any other form.
+ * Accepting the review hands the analysis' flags to FinancialEvidenceAssessmentService, which
+ * decides and records the outcome.
  */
 abstract class AbstractFinancialEvidenceAssessmentController extends AbstractController implements
     ToggleAwareInterface
@@ -44,7 +46,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     private const int ANALYSIS_PAGE_LIMIT = 100;
 
     /** Posted as the value of the review form's button, so the review action is explicit. */
-    public const string REVIEW_APPROVE = 'approve';
+    public const string REVIEW_ACCEPT = 'accept';
 
     protected string $location = 'internal';
 
@@ -60,7 +62,8 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         protected FlashMessengerHelperService $flashMessengerHelper,
         // Builds the review form; the licence context also uses it for its header search form.
         protected FormHelperService $formHelper,
-        protected $navigation
+        protected $navigation,
+        protected FinancialEvidenceAssessmentService $assessmentService
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -94,40 +97,75 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     }
 
     /**
-     * Record the caseworker's review of one analysis, then redirect back to the page
+     * Assess one analysis from its flags and record the outcome, then redirect back to the page
      * (post/redirect/get) so a refresh cannot resubmit it.
      *
-     * The application or licence is taken from the route, never from the form, so the API can
-     * refuse an analysis id that does not belong to the page it was posted from.
+     * The analysis and its flags are re-read from the API for this page's application or licence,
+     * never taken from the form: a posted flag could be edited in the browser. That also means only
+     * an analysis shown on this page can be assessed.
      */
     protected function processReview(FormInterface $reviewForm)
     {
         $post = $this->getRequest()->getPost();
         $reviewForm->setData($post);
 
-        if ($post->get('review') !== self::REVIEW_APPROVE || !$reviewForm->isValid()) {
+        if ($post->get('review') !== self::REVIEW_ACCEPT || !$reviewForm->isValid()) {
             $this->flashMessengerHelper->addUnknownError();
 
             return $this->redirect()->refresh();
         }
 
-        $response = $this->handleCommand(
-            UpdateDocumentAnalysisAssessmentStatus::create([
-                'id' => (int)$reviewForm->getData()['analysisId'],
-                'status' => AssessmentStatus::APPROVED->value,
-                $this->getIdentifierIndex() => $this->getIdentifier(),
-            ])
+        $analysisId = (int)$reviewForm->getData()['analysisId'];
+        $analysis = $this->findSuccessfulAnalysis($analysisId);
+
+        if ($analysis === null) {
+            $this->flashMessengerHelper->addUnknownError();
+
+            return $this->redirect()->refresh();
+        }
+
+        $flags = FinancialEvidenceAssessmentTab::flagsFromAnalysis($analysis);
+
+        if ($flags === null) {
+            $this->flashMessengerHelper->addErrorMessage('This document has no assessment to review');
+
+            return $this->redirect()->refresh();
+        }
+
+        $outcome = $this->assessmentService->assess(
+            $analysisId,
+            $flags,
+            $this->getIdentifierIndex(),
+            (int)$this->getIdentifier()
         );
 
-        if ($response->isOk()) {
-            $this->flashMessengerHelper->addSuccessMessage('Document review approved');
+        if ($outcome === AssessmentStatus::APPROVED) {
+            $this->flashMessengerHelper->addSuccessMessage('Document review accepted: the document is approved');
+        } elseif ($outcome === AssessmentStatus::REJECTED) {
+            $this->flashMessengerHelper->addWarningMessage(
+                'Document review accepted: the document is rejected because one or more checks did not pass'
+            );
         } else {
-            $this->flashMessengerHelper->addErrorMessage('The document review could not be approved');
+            $this->flashMessengerHelper->addErrorMessage('The document review could not be recorded');
         }
 
         return $this->redirect()->refresh();
     }
 
+    /**
+     * One of the analyses this page shows, or null if the id is not among them. There is no query
+     * for a single analysis, so this reuses the page's own, scoped to its application or licence.
+     */
+    protected function findSuccessfulAnalysis(int $analysisId): ?array
+    {
+        foreach ($this->getSuccessfulAnalyses() as $analysis) {
+            if ((int)($analysis['id'] ?? 0) === $analysisId) {
+                return $analysis;
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Successful analyses for the current LVA context, most recently completed first.
@@ -175,15 +213,21 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             // Null when the analysis has not been reviewed (or holds a value this app does not know).
             $assessmentStatus = AssessmentStatus::tryFrom((string)($analysis['assessmentStatus'] ?? ''));
 
-            $tabs[] = [
+            $tab = [
                 'id'         => $isLatest ? 'latest' : 'analysis-' . $analysis['id'],
                 'analysisId' => $analysis['id'],
                 'label'      => $isLatest ? 'Latest' : ($date ?? 'Unknown date'),
                 'date'       => $date,
                 'status'     => $this->mapStatus($assessmentStatus),
                 'statusTag'  => $this->mapStatusTagClass($assessmentStatus),
-                'isApproved' => $assessmentStatus === AssessmentStatus::APPROVED,
             ] + FinancialEvidenceAssessmentTab::mapFromAnalysis($analysis);
+
+            // A decided review cannot change (its flags cannot), and without an assessment there is
+            // nothing to decide on.
+            $tab['canReview'] = $tab['hasAssessment']
+                && !in_array($assessmentStatus, [AssessmentStatus::APPROVED, AssessmentStatus::REJECTED], true);
+
+            $tabs[] = $tab;
         }
 
         return $tabs;

@@ -9,7 +9,6 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
-use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentAnalysisAssessmentStatus;
 use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -30,6 +29,7 @@ use Olcs\Controller\Lva\Factory\Controller\FinancialEvidenceAssessmentController
 use Olcs\Controller\Lva\Licence\FinancialEvidenceAssessmentController as LicenceController;
 use Olcs\Controller\Lva\Variation\FinancialEvidenceAssessmentController as VariationController;
 use Olcs\Form\Model\Form\Lva\FinancialEvidenceAssessmentReview;
+use Olcs\Service\FinancialEvidence\FinancialEvidenceAssessmentService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Container\ContainerInterface;
 
@@ -188,11 +188,12 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
 
     public static function assessmentStatusProvider(): \Iterator
     {
-        yield 'approved' => ['APPROVED', 'Approved', 'govuk-tag--green', true];
+        // A decided review cannot be accepted again; anything undecided still can.
+        yield 'approved' => ['APPROVED', 'Approved', 'govuk-tag--green', false];
         yield 'rejected' => ['REJECTED', 'Rejected', 'govuk-tag--red', false];
-        yield 'pending' => ['PENDING', 'Pending', 'govuk-tag--grey', false];
-        yield 'not reviewed' => [null, 'Unknown', 'govuk-tag--grey', false];
-        yield 'unrecognised' => ['SOMETHING_ELSE', 'Unknown', 'govuk-tag--grey', false];
+        yield 'pending' => ['PENDING', 'Pending', 'govuk-tag--grey', true];
+        yield 'not reviewed' => [null, 'Unknown', 'govuk-tag--grey', true];
+        yield 'unrecognised' => ['SOMETHING_ELSE', 'Unknown', 'govuk-tag--grey', true];
     }
 
     #[DataProvider('assessmentStatusProvider')]
@@ -200,12 +201,12 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         ?string $assessmentStatus,
         string $expectedStatus,
         string $expectedTag,
-        bool $expectedApproved
+        bool $expectedCanReview
     ): void {
         $sut = $this->createSut(ApplicationController::class);
         $sut->allows('getIdentifier')->andReturn(42);
         $sut->expects('handleQuery')->andReturn($this->okResponse([
-            ['id' => 9, 'documentId' => 12, 'documentDate' => null, 'assessmentStatus' => $assessmentStatus],
+            $this->assessedAnalysis(9, 'pass', $assessmentStatus),
         ]));
         $sut->expects('render')->andReturnUsing(static fn(ViewModel $view) => $view);
 
@@ -214,63 +215,130 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->assertSame(9, $tab['analysisId']);
         $this->assertSame($expectedStatus, $tab['status']);
         $this->assertSame($expectedTag, $tab['statusTag']);
-        $this->assertSame($expectedApproved, $tab['isApproved']);
+        $this->assertSame($expectedCanReview, $tab['canReview']);
+    }
+
+    /** Without an assessment there is nothing to decide on, so the review is not offered. */
+    public function testTabWithoutAnAssessmentCannotBeReviewed(): void
+    {
+        $sut = $this->createSut(ApplicationController::class);
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->expects('handleQuery')->andReturn($this->okResponse([
+            ['id' => 9, 'documentId' => 12, 'documentDate' => null, 'resultNormalised' => null],
+        ]));
+        $sut->expects('render')->andReturnUsing(static fn(ViewModel $view) => $view);
+
+        $this->assertFalse($sut->indexAction()->getVariable('tabs')[0]['canReview']);
     }
 
     /**
-     * Approving sends the analysis id with the context from the route (never the form), so the
-     * API can refuse an analysis that belongs to another application or licence.
+     * Accepting hands the analysis' six flags, re-read from the API, to the assessment service with
+     * the context from the route. Nothing posted for the context or the flags is used.
      */
     #[DataProvider('contextProvider')]
-    public function testApproveSendsTheCommandScopedToTheLvaContext(string $class, string $expectedKey): void
+    public function testAcceptAssessesTheStoredFlagsScopedToTheLvaContext(string $class, string $expectedKey): void
     {
         $flashMessenger = m::mock(FlashMessengerHelperService::class);
-        $flashMessenger->expects('addSuccessMessage')->with('Document review approved');
+        $flashMessenger->expects('addSuccessMessage')->with('Document review accepted: the document is approved');
 
         $post = [
             'analysisId' => '9',
-            'review' => AbstractFinancialEvidenceAssessmentController::REVIEW_APPROVE,
-            // Anything posted for the context is ignored in favour of the route.
+            'review' => AbstractFinancialEvidenceAssessmentController::REVIEW_ACCEPT,
             'application' => '666',
             'licence' => '666',
+            'flags' => ['PASS', 'PASS', 'PASS', 'PASS', 'PASS', 'PASS'],
         ];
 
-        $sut = $this->createSut($class, $flashMessenger, $this->reviewForm($post, true));
+        $assessmentService = m::mock(FinancialEvidenceAssessmentService::class);
+        $assessmentService->expects('assess')
+            ->with(9, ['FAIL', 'FAIL', 'FAIL', 'FAIL', 'FAIL', 'FAIL'], $expectedKey, 42)
+            // The outcome is the service's call; the controller only reports it.
+            ->andReturn(AssessmentStatus::APPROVED);
+
+        $sut = $this->createSut($class, $flashMessenger, $this->reviewForm($post, true), $assessmentService);
         $sut->allows('getIdentifier')->andReturn(42);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
-
-        $sut->expects('handleCommand')
-            ->with(m::on(static function ($command) use ($expectedKey): bool {
-                $otherKey = $expectedKey === 'licence' ? 'application' : 'licence';
-
-                return $command instanceof UpdateDocumentAnalysisAssessmentStatus
-                    && (int)$command->getId() === 9
-                    && $command->getStatus() === AssessmentStatus::APPROVED->value
-                    && (int)$command->{'get' . ucfirst($expectedKey)}() === 42
-                    && $command->{'get' . ucfirst($otherKey)}() === null;
-            }))
-            ->andReturn($this->commandResponse(true));
-
-        $sut->shouldNotReceive('handleQuery');
+        $sut->expects('handleQuery')->andReturn($this->okResponse([
+            $this->assessedAnalysis(8, 'pass'),
+            $this->assessedAnalysis(9, 'fail'),
+        ]));
+        $sut->shouldNotReceive('handleCommand');
         $response = $this->expectRedirectToRefresh($sut);
 
         $this->assertSame($response, $sut->indexAction());
     }
 
-    public function testApproveFailureIsReported(): void
+    public static function outcomeProvider(): \Iterator
+    {
+        yield 'approved' => [
+            AssessmentStatus::APPROVED,
+            'addSuccessMessage',
+            'Document review accepted: the document is approved',
+        ];
+        yield 'rejected' => [
+            AssessmentStatus::REJECTED,
+            'addWarningMessage',
+            'Document review accepted: the document is rejected because one or more checks did not pass',
+        ];
+        yield 'not recorded' => [null, 'addErrorMessage', 'The document review could not be recorded'];
+    }
+
+    #[DataProvider('outcomeProvider')]
+    public function testAcceptReportsTheOutcome(?AssessmentStatus $outcome, string $flashMethod, string $message): void
     {
         $flashMessenger = m::mock(FlashMessengerHelperService::class);
-        $flashMessenger->expects('addErrorMessage')->with('The document review could not be approved');
+        $flashMessenger->expects($flashMethod)->with($message);
 
-        $post = [
-            'analysisId' => '9',
-            'review' => AbstractFinancialEvidenceAssessmentController::REVIEW_APPROVE,
-        ];
+        $post = ['analysisId' => '9', 'review' => AbstractFinancialEvidenceAssessmentController::REVIEW_ACCEPT];
 
-        $sut = $this->createSut(ApplicationController::class, $flashMessenger, $this->reviewForm($post, true));
+        $assessmentService = m::mock(FinancialEvidenceAssessmentService::class);
+        $assessmentService->expects('assess')->andReturn($outcome);
+
+        $sut = $this->createSut(ApplicationController::class, $flashMessenger, $this->reviewForm($post, true), $assessmentService);
         $sut->allows('getIdentifier')->andReturn(42);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
-        $sut->expects('handleCommand')->andReturn($this->commandResponse(false));
+        $sut->expects('handleQuery')->andReturn($this->okResponse([$this->assessedAnalysis(9, 'pass')]));
+        $response = $this->expectRedirectToRefresh($sut);
+
+        $this->assertSame($response, $sut->indexAction());
+    }
+
+    /** An analysis that is not on this page (another application's, or not successful) is not assessed. */
+    public function testAcceptForAnAnalysisNotOnThePageAssessesNothing(): void
+    {
+        $flashMessenger = m::mock(FlashMessengerHelperService::class);
+        $flashMessenger->expects('addUnknownError');
+
+        $post = ['analysisId' => '9', 'review' => AbstractFinancialEvidenceAssessmentController::REVIEW_ACCEPT];
+
+        $assessmentService = m::mock(FinancialEvidenceAssessmentService::class);
+        $assessmentService->shouldNotReceive('assess');
+
+        $sut = $this->createSut(ApplicationController::class, $flashMessenger, $this->reviewForm($post, true), $assessmentService);
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleQuery')->andReturn($this->okResponse([$this->assessedAnalysis(8, 'pass')]));
+        $response = $this->expectRedirectToRefresh($sut);
+
+        $this->assertSame($response, $sut->indexAction());
+    }
+
+    public function testAcceptWithoutAnAssessmentAssessesNothing(): void
+    {
+        $flashMessenger = m::mock(FlashMessengerHelperService::class);
+        $flashMessenger->expects('addErrorMessage')->with('This document has no assessment to review');
+
+        $post = ['analysisId' => '9', 'review' => AbstractFinancialEvidenceAssessmentController::REVIEW_ACCEPT];
+
+        $assessmentService = m::mock(FinancialEvidenceAssessmentService::class);
+        $assessmentService->shouldNotReceive('assess');
+
+        $sut = $this->createSut(ApplicationController::class, $flashMessenger, $this->reviewForm($post, true), $assessmentService);
+        $sut->allows('getIdentifier')->andReturn(42);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleQuery')->andReturn($this->okResponse([
+            ['id' => 9, 'documentId' => 12, 'documentDate' => null, 'resultNormalised' => null],
+        ]));
         $response = $this->expectRedirectToRefresh($sut);
 
         $this->assertSame($response, $sut->indexAction());
@@ -282,19 +350,27 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         yield 'no review action' => [['analysisId' => '9'], true];
         yield 'unknown review action' => [['analysisId' => '9', 'review' => 'reject'], true];
         // The form's validation (e.g. a missing or non-numeric analysis id) fails.
-        yield 'invalid form' => [['analysisId' => '9 OR 1=1', 'review' => 'approve'], false];
+        yield 'invalid form' => [['analysisId' => '9 OR 1=1', 'review' => 'accept'], false];
     }
 
-    /** A post the page did not build sends nothing to the API. */
+    /** A post the page did not build assesses nothing. */
     #[DataProvider('rejectedPostProvider')]
-    public function testRejectedPostSendsNoCommand(array $post, bool $formIsValid): void
+    public function testRejectedPostAssessesNothing(array $post, bool $formIsValid): void
     {
         $flashMessenger = m::mock(FlashMessengerHelperService::class);
         $flashMessenger->expects('addUnknownError');
 
-        $sut = $this->createSut(ApplicationController::class, $flashMessenger, $this->reviewForm($post, $formIsValid));
+        $assessmentService = m::mock(FinancialEvidenceAssessmentService::class);
+        $assessmentService->shouldNotReceive('assess');
+
+        $sut = $this->createSut(
+            ApplicationController::class,
+            $flashMessenger,
+            $this->reviewForm($post, $formIsValid),
+            $assessmentService
+        );
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
-        $sut->shouldNotReceive('handleCommand');
+        $sut->shouldNotReceive('handleQuery');
         $response = $this->expectRedirectToRefresh($sut);
 
         $this->assertSame($response, $sut->indexAction());
@@ -312,6 +388,8 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $container->allows('get')->with(FlashMessengerHelperService::class)->andReturn(m::mock(FlashMessengerHelperService::class));
         $container->expects('get')->with(FormHelperService::class)->andReturn($formHelper);
         $container->allows('get')->with('navigation')->andReturn([]);
+        $container->expects('get')->with(FinancialEvidenceAssessmentService::class)
+            ->andReturn(m::mock(FinancialEvidenceAssessmentService::class));
 
         $controller = (new FinancialEvidenceAssessmentControllerFactory())($container, $class);
 
@@ -349,7 +427,8 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     private function createSut(
         string $class,
         ?FlashMessengerHelperService $flashMessenger = null,
-        ?Form $reviewForm = null
+        ?Form $reviewForm = null,
+        ?FinancialEvidenceAssessmentService $assessmentService = null
     ): AbstractFinancialEvidenceAssessmentController|m\MockInterface {
         // The review form comes from the form helper, which adds its CSRF element.
         $formHelper = m::mock(FormHelperService::class);
@@ -365,7 +444,32 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             $flashMessenger ?? m::mock(FlashMessengerHelperService::class),
             $formHelper,
             [],
+            $assessmentService ?? m::mock(FinancialEvidenceAssessmentService::class),
         ])->makePartial()->shouldAllowMockingProtectedMethods();
+    }
+
+    /**
+     * A successful analysis as DocumentAnalysisList returns it, with a current normalised result
+     * whose six flagged rows all carry $flag (bank and bank address are never flagged).
+     */
+    private function assessedAnalysis(int $id, string $flag, ?string $assessmentStatus = null): array
+    {
+        $rows = [];
+
+        foreach (['authenticity', 'name', 'statementDate', 'statementPeriod', 'averageFunds', 'largeDeposit'] as $key) {
+            $rows[$key] = ['flag' => $flag, 'remark' => null, 'value' => null, 'checks' => []];
+        }
+
+        $rows['bank'] = ['flag' => null, 'remark' => null, 'value' => 'Example Bank', 'checks' => []];
+        $rows['bankAddress'] = ['flag' => null, 'remark' => null, 'value' => '1 Example Street', 'checks' => []];
+
+        return [
+            'id' => $id,
+            'documentId' => 100 + $id,
+            'documentDate' => null,
+            'assessmentStatus' => $assessmentStatus,
+            'resultNormalised' => ['version' => 1, 'rows' => $rows],
+        ];
     }
 
     /**
@@ -403,14 +507,6 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $redirect = m::mock(Redirect::class);
         $redirect->expects('refresh')->andReturn($response);
         $sut->expects('redirect')->andReturn($redirect);
-
-        return $response;
-    }
-
-    private function commandResponse(bool $isOk): CqrsResponse
-    {
-        $response = m::mock(CqrsResponse::class);
-        $response->allows('isOk')->andReturn($isOk);
 
         return $response;
     }

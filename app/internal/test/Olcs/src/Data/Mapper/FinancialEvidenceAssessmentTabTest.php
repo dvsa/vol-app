@@ -224,6 +224,42 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
         $this->assertSame(11, $tab['document']['id']);
     }
 
+    /** The six flags an assessment is decided on: the flagged rows only, in display order. */
+    public function testFlagsFromAnalysisAreTheSixFlaggedRows(): void
+    {
+        $this->assertSame(
+            ['PASS', 'PASS', 'FAIL', 'PASS', 'PASS', 'FAIL'],
+            FinancialEvidenceAssessmentTab::flagsFromAnalysis($this->givenAnalysis())
+        );
+    }
+
+    /** A row missing from the payload, or with an unknown flag, counts as not assessed. */
+    public function testFlagsFromAnalysisTreatMissingAndUnknownRowsAsSkipped(): void
+    {
+        $analysis = $this->givenAnalysis([
+            'authenticity' => ['flag' => 'maybe', 'remark' => null, 'value' => null, 'checks' => []],
+        ]);
+        unset($analysis['resultNormalised']['rows']['largeDeposit']);
+
+        $this->assertSame(
+            ['SKIPPED', 'PASS', 'FAIL', 'PASS', 'PASS', 'SKIPPED'],
+            FinancialEvidenceAssessmentTab::flagsFromAnalysis($analysis)
+        );
+    }
+
+    /** Without an assessment there is nothing to decide on. */
+    public function testFlagsFromAnalysisAreNullWithoutAnAssessment(): void
+    {
+        $missing = $this->givenAnalysis();
+        $missing['resultNormalised'] = null;
+
+        $unknownVersion = $this->givenAnalysis();
+        $unknownVersion['resultNormalised']['version'] = 2;
+
+        $this->assertNull(FinancialEvidenceAssessmentTab::flagsFromAnalysis($missing));
+        $this->assertNull(FinancialEvidenceAssessmentTab::flagsFromAnalysis($unknownVersion));
+    }
+
     private function row(array $tab, string $label): array
     {
         foreach ($tab['rows'] as $row) {

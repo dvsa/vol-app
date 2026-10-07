@@ -727,6 +727,8 @@ return [
         'factories' => [
             RouteParam\Licence::class => RouteParam\Licence::class,
             ProcessingService\CreateVariationProcessingService::class => ProcessingService\CreateVariationProcessingServiceFactory::class,
+            \Olcs\Service\FinancialEvidence\FinancialEvidenceAssessmentService::class =>
+                \Olcs\Service\FinancialEvidence\FinancialEvidenceAssessmentServiceFactory::class,
 
             DataService\AbstractPublicInquiryDataServices::class => DataService\AbstractPublicInquiryDataServicesFactory::class,
 

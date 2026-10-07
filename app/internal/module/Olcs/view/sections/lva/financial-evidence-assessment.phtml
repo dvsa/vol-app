@@ -113,16 +113,15 @@ $warningText = $hasDocuments
       // One review form serves every tab; only the analysis differs. The application or licence
       // comes from the route, not the form.
       $reviewForm->get('analysisId')->setValue((string)$tab['analysisId']);
-      $approveButton = clone $reviewForm->get('review');
-      if ($tab['isApproved']) {
-          $approveButton->setAttributes(['type' => 'button', 'disabled' => 'disabled', 'aria-disabled' => 'true']);
-      }
       ?>
       <form method="post" novalidate>
         <?php echo $this->formElement($reviewForm->get('security')); ?>
         <?php echo $this->formElement($reviewForm->get('analysisId')); ?>
         <div class="govuk-button-group">
-          <?php echo $this->formElement($approveButton); ?>
+          <?php // Only offered until a review is recorded, and only when there is an assessment to decide on. ?>
+          <?php if ($tab['canReview']) : ?>
+            <?php echo $this->formElement($reviewForm->get('review')); ?>
+          <?php endif; ?>
           <?php // Placeholder: not wired to any command yet. ?>
           <button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button">
             Change document review

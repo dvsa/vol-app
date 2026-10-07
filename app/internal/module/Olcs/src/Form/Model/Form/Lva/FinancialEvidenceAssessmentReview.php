@@ -26,17 +26,18 @@ class FinancialEvidenceAssessmentReview
     public $analysisId = null;
 
     /**
-     * Posted as review=approve, so the action is explicit when more review actions are added.
+     * Posted as review=accept, so the action is explicit when more review actions are added.
      *
      * @Form\Attributes({
      *     "data-module": "govuk-button",
      *     "type": "submit",
      *     "class": "govuk-button",
-     *     "value": "approve",
+     *     "value": "accept",
      * })
-     * @Form\Options({"label": "Approve document review"})
+     * @Form\Options({"label": "Accept document review"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $review = null;
 }
+
 
