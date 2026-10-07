@@ -73,6 +73,7 @@
     "olcs/olcs-utils": "*",
     "psr/container": "^1.1|^2",
     "aws/aws-sdk-php": "^3.385",
+    "guzzlehttp/guzzle": "^8.0",
     "symfony/filesystem": "^8.1",
     "psr/cache": "^3.0",
     "symfony/cache": "^8.1"
