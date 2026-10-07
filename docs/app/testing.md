@@ -34,7 +34,6 @@ what you are doing. Arguments go after `--`:
 
 ```bash
 composer test -- --filter LicenceVehicleTest
-composer test -- --processes=4
 composer test:serial -- --random-order-seed=<seed>
 ```
 
