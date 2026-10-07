@@ -14,9 +14,9 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_iam_github_oidc_provider"></a> [iam\_github\_oidc\_provider](#module\_iam\_github\_oidc\_provider) | terraform-aws-modules/iam/aws//modules/iam-github-oidc-provider | ~> 5.24 |
-| <a name="module_iam_github_oidc_readonly_role"></a> [iam\_github\_oidc\_readonly\_role](#module\_iam\_github\_oidc\_readonly\_role) | terraform-aws-modules/iam/aws//modules/iam-github-oidc-role | ~> 5.24 |
-| <a name="module_iam_github_oidc_role"></a> [iam\_github\_oidc\_role](#module\_iam\_github\_oidc\_role) | terraform-aws-modules/iam/aws//modules/iam-github-oidc-role | ~> 5.24 |
+| <a name="module_iam_github_oidc_provider"></a> [iam\_github\_oidc\_provider](#module\_iam\_github\_oidc\_provider) | git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-github-oidc-provider | f537b20bb4d31f014c1c63a5b4151177aed694e0 |
+| <a name="module_iam_github_oidc_readonly_role"></a> [iam\_github\_oidc\_readonly\_role](#module\_iam\_github\_oidc\_readonly\_role) | git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-github-oidc-role | f537b20bb4d31f014c1c63a5b4151177aed694e0 |
+| <a name="module_iam_github_oidc_role"></a> [iam\_github\_oidc\_role](#module\_iam\_github\_oidc\_role) | git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-github-oidc-role | f537b20bb4d31f014c1c63a5b4151177aed694e0 |
 
 ## Resources
 
