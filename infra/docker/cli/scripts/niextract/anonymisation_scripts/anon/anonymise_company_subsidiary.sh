@@ -101,7 +101,6 @@ LOAD DATA LOCAL INFILE '$ANON_DATA_DIR/$SUBSIDIARY_ANON_DATA_FILE' INTO table co
 ,@created_on
 ,@last_modified_on
 ,@version
-,@olbs_key
 ,@deleted_date)
 SET
 licence_id=NULLIF(@licence_id,'')
@@ -112,7 +111,6 @@ licence_id=NULLIF(@licence_id,'')
 ,created_on=NULLIF(@created_on,'')
 ,last_modified_on=now()
 ,version=NULLIF(@version,'')
-,olbs_key=NULLIF(@olbs_key,'')
 ,deleted_date=NULLIF(@deleted_date,'');
 
 -- Re-enable indexes cleanly in a single fast block operation after the data finishes writing.

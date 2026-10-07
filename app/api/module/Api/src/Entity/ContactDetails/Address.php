@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'ix_address_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_address_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_address_admin_area', columns: ['admin_area'])]
-#[ORM\UniqueConstraint(name: 'uk_address_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\Entity]
 class Address extends AbstractAddress
 {

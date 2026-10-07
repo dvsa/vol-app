@@ -3,23 +3,6 @@ SELECT 'DELIMITER $$' AS '';
 SELECT 'CREATE PROCEDURE sp_drop_indices()' AS '';
 SELECT 'BEGIN' AS '';
 
-# drop indices on olbs_key and olbs_type only
-
-SELECT CONCAT(
-    'IF EXISTS (SELECT 1 FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = \'', kcu.TABLE_NAME, '\' AND index_name = \'', kcu.CONSTRAINT_NAME, '\') THEN ',
-    'DROP INDEX ', kcu.CONSTRAINT_NAME, ' ON ', kcu.TABLE_NAME, '; END IF;'
-) AS ''
-FROM information_schema.KEY_COLUMN_USAGE kcu
-LEFT JOIN (
-    SELECT CONSTRAINT_SCHEMA, CONSTRAINT_NAME
-    FROM information_schema.KEY_COLUMN_USAGE
-    WHERE COLUMN_NAME NOT IN ('olbs_key', 'olbs_type')
-) sub ON kcu.CONSTRAINT_SCHEMA = sub.CONSTRAINT_SCHEMA AND kcu.CONSTRAINT_NAME = sub.CONSTRAINT_NAME
-WHERE kcu.CONSTRAINT_SCHEMA = DATABASE()
-  AND kcu.COLUMN_NAME IN ('olbs_key', 'olbs_type')
-  AND sub.CONSTRAINT_NAME IS NULL
-GROUP BY kcu.TABLE_NAME, kcu.CONSTRAINT_NAME;
-
 # drop indices referencing user and ref_data tables
 
 SELECT CONCAT(
@@ -50,17 +33,11 @@ SELECT CONCAT(
 FROM information_schema.statistics i
 WHERE i.TABLE_SCHEMA = DATABASE()
   AND i.INDEX_NAME IN (
-    'ix_cases_olbs_key_olbs_type', 'ix_cases_read_audit_created_on', 'ix_application_read_audit_created_on',
     'uk_bus_reg_reg_no_variation_no_deleted_date', 'ix_bus_reg_read_audit_created_on',
-    'uk_bus_reg_traffic_area_olbs_key_traffic_area_id', 'ix_bus_reg_traffic_area_olbs_key_traffic_area_id',
-    'ix_bus_reg_variation_reason_olbs_key_olbs_key2', 'uk_company_subsidiary_olbs_key_licence_id',
-    'ix_complaint_olbs_key', 'ix_continuation_traffic_area_id_year_month', 'ix_ebsr_route_reprint_olbs_key',
     'uk_event_history_type_event_code', 'ix_goods_disc_ceased_date', 'ix_goods_disc_issued_date',
     'ix_licence_read_audit_created_on', 'ix_licence_vehicle_vi_action',
-    'uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type', 'ix_organisation_name',
     'ix_organisation_read_audit_created_on', 'ix_person_family_name', 'ix_person_forename',
     'uk_postcode_enforcement_area_enforcement_area_id_postcode_id', 'uk_propose_to_revoke_case_id',
-    'uk_team_name', 'uk_ta_enforcement_area_traffic_area_id_enforcement_area_id', 'ix_txn_olbs_key',
     'uk_user_pid', 'uk_user_login_id', 'ix_user_team_id', 'ix_vehicle_vrm', 'ix_vehicle_vi_action'
   )
 GROUP BY i.TABLE_NAME, i.INDEX_NAME;

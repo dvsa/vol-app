@@ -11,7 +11,6 @@ use Dvsa\Olcs\Api\Domain\Exception;
 #[ORM\Table(name: 'recipient')]
 #[ORM\Index(name: 'ix_recipient_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_recipient_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_recipient_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class Recipient extends AbstractRecipient
 {
