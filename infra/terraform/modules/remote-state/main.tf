@@ -6,6 +6,7 @@ locals {
 }
 
 #checkov:skip=CKV_AWS_19: Encryption is configured via the module input, but Checkov does not resolve it through this external module.
+#checkov:skip=CKV_AWS_21: Versioning is configured via the module input, but Checkov does not resolve it through this external module.
 module "s3" {
   count = var.create_bucket ? 1 : 0
 
