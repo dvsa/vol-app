@@ -8,16 +8,16 @@
 
 namespace Dvsa\Olcs\Transfer\Query\Address;
 
-use Dvsa\Olcs\Transfer\Util\Attribute as TransferAttribute;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\CacheableMediumTermQueryInterface;
 
-#[TransferAttribute\RouteName("backend/address/list")]
+#[Transfer\RouteName("backend/address/list")]
 final class GetList extends AbstractQuery implements CacheableMediumTermQueryInterface
 {
-    #[TransferAttribute\Optional]
-    #[TransferAttribute\Filter("Laminas\Filter\StringTrim")]
-    #[TransferAttribute\Validator("Laminas\Validator\StringLength", options: ["max" => 8])]
+    #[Transfer\Optional]
+    #[Transfer\Filter("Laminas\Filter\StringTrim")]
+    #[Transfer\Validator("Laminas\Validator\StringLength", options: ["max" => 8])]
     protected string $postcode;
 
     /**

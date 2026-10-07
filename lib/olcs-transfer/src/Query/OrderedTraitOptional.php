@@ -2,37 +2,38 @@
 
 namespace Dvsa\Olcs\Transfer\Query;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 trait OrderedTraitOptional
 {
     /**
      * The field to sort by - must not be empty.
      *
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\NotEmpty")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\Sort")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\NotEmpty')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\Sort')]
     protected $sort = 'id';
 
     /**
      * Can only be one of ASC or DESC in upper case.
      *
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Filter("Laminas\Filter\StringToUpper")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\Order")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Filter('Laminas\Filter\StringToUpper')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\Order')]
     protected $order = 'ASC';
 
     /**
      * Set this property in you constructor to only enable specified values for $sort property
      *
      * @var array
-     * @Transfer\DoNotExchange
-     * @Transfer\Optional
      */
+    #[Transfer\DoNotExchange]
+    #[Transfer\Optional]
     protected $sortWhitelist = [];
 
     /**

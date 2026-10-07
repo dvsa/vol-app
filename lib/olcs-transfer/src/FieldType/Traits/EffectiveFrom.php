@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Effective From
  *
@@ -12,9 +13,9 @@ trait EffectiveFrom
 {
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $effectiveFrom;
 
     /**

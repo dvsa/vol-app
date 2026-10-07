@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Reason for permit app being withdrawn
  *
@@ -11,19 +12,9 @@ trait PermitAppWithdrawReason
 {
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *      options={
-     *          "haystack": {
-     *              "permits_app_withdraw_by_user",
-     *              "permits_app_withdraw_declined",
-     *              "permits_app_withdraw_not_paid",
-     *              "permits_app_withdraw_notsuccess",
-     *              "permits_app_withdraw_permits_rev"
-     *          }
-     *      }
-     * )
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['permits_app_withdraw_by_user', 'permits_app_withdraw_declined', 'permits_app_withdraw_not_paid', 'permits_app_withdraw_notsuccess', 'permits_app_withdraw_permits_rev']])]
     protected $reason;
 
     /**

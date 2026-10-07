@@ -10,14 +10,14 @@ namespace Dvsa\Olcs\Transfer\Query\Address;
 
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\CacheableMediumTermQueryInterface;
-use Dvsa\Olcs\Transfer\Util\Attribute as TransferAttribute;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-#[TransferAttribute\RouteName("backend/address/details")]
+#[Transfer\RouteName("backend/address/details")]
 final class GetAddress extends AbstractQuery implements CacheableMediumTermQueryInterface
 {
-    #[TransferAttribute\Filter("Laminas\Filter\Digits")]
-    #[TransferAttribute\Validator("Laminas\Validator\Digits")]
-    #[TransferAttribute\Validator("Laminas\Validator\GreaterThan", options: ["min" => 0])]
+    #[Transfer\Filter("Laminas\Filter\Digits")]
+    #[Transfer\Validator("Laminas\Validator\Digits")]
+    #[Transfer\Validator("Laminas\Validator\GreaterThan", options: ["min" => 0])]
     protected $uprn;
 
     /**

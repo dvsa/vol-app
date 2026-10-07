@@ -3,46 +3,36 @@
 namespace Dvsa\Olcs\Transfer\Command\System\PublicHoliday;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/public-holiday")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/public-holiday')]
+#[Transfer\Method('POST')]
 class Create extends AbstractCommand
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\YesNo")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\YesNo')]
+    #[Transfer\Optional]
     public $isEngland;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\YesNo")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\YesNo')]
+    #[Transfer\Optional]
     public $isWales;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\YesNo")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\YesNo')]
+    #[Transfer\Optional]
     public $isScotland;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\YesNo")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\YesNo')]
+    #[Transfer\Optional]
     public $isNi;
 
     /**
      * @var string
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
      */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $holidayDate;
 
     /**

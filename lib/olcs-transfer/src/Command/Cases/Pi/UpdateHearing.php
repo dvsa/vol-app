@@ -3,13 +3,11 @@
 namespace Dvsa\Olcs\Transfer\Command\Cases\Pi;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldType;
 
-/**
- * @Transfer\RouteName("backend/pi/hearing/single")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/pi/hearing/single')]
+#[Transfer\Method('PUT')]
 class UpdateHearing extends AbstractCommand
 {
     use FieldType\Identity;

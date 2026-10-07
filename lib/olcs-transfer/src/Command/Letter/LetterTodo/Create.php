@@ -2,49 +2,47 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Letter\LetterTodo;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
 // phpcs:disable Generic.Commenting.Todo.TaskFound
-/**
- * @Transfer\RouteName("backend/letter/letter-todo")
- * @Transfer\Method("POST")
- */
 // phpcs:enable Generic.Commenting.Todo.TaskFound
+#[Transfer\RouteName('backend/letter/letter-todo')]
+#[Transfer\Method('POST')]
 final class Create extends AbstractCommand
 {
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":100})
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 100])]
     protected $todoKey;
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\Escape(false)
      */
+    #[Transfer\Optional]
+    #[Transfer\Escape(false)]
     protected $description;
 
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $helpText;
 
     /**
      * @var bool
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $requiresInput = false;
 
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\DateTimeFormatter")
-     * @Transfer\Validator("Laminas\Validator\Date", options={"format": "Y-m-d H:i:s"})
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\DateTimeFormatter')]
+    #[Transfer\Validator('Laminas\Validator\Date', options: ['format' => 'Y-m-d H:i:s'])]
     protected $publishFrom;
 
     /**

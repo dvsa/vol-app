@@ -2,12 +2,13 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 trait NewPassword
 {
     /**
      * @var String
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":8,"max":160})
      */
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 8, 'max' => 160])]
     protected ?string $newPassword = null;
 
     /**

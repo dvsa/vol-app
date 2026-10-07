@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Translations Array
  *
@@ -10,9 +11,7 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait TranslationsArray
 {
-    /**
-     * @Transfer\ArrayInput
-     */
+    #[Transfer\ArrayInput]
     protected $translationsArray = [];
 
     /**

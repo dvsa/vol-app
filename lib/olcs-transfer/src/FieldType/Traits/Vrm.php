@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Vrm Trait
  *
@@ -12,10 +13,10 @@ trait Vrm
 {
     /**
      * @var String
-     * @Transfer\Optional
-     * @Transfer\Filter("\Dvsa\Olcs\Transfer\Filter\Vrm")
-     * @Transfer\Validator("\Dvsa\Olcs\Transfer\Validators\Vrm")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('\Dvsa\Olcs\Transfer\Filter\Vrm')]
+    #[Transfer\Validator('\Dvsa\Olcs\Transfer\Validators\Vrm')]
     protected $vrm = null;
 
     /**

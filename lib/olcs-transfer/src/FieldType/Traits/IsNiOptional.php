@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Is Ni Optional
  *
@@ -10,11 +11,9 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait IsNiOptional
 {
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\YesNo")
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\YesNo')]
     protected $isNi;
 
     /**

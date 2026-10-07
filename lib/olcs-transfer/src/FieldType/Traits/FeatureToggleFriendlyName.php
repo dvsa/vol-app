@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * FeatureToggleFriendlyName
  *
@@ -10,10 +11,8 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait FeatureToggleFriendlyName
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":1,"max":255})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
     protected $friendlyName;
 
     public function getFriendlyName(): string

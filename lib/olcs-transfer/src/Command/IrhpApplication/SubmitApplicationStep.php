@@ -13,12 +13,10 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\PostData;
 use Dvsa\Olcs\Transfer\FieldType\Traits\ApplicationStepSlug;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\FieldType\Traits\IrhpPermitApplicationOptional;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/irhp-application/submit-application-step")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/irhp-application/submit-application-step')]
+#[Transfer\Method('PUT')]
 class SubmitApplicationStep extends AbstractCommand
 {
     use Identity;

@@ -2,14 +2,12 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Cases\Pi;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldType;
 
-/**
- * @Transfer\RouteName("backend/pi/single/decision")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/pi/single/decision')]
+#[Transfer\Method('PUT')]
 class UpdateDecision extends AbstractCommand
 {
     use FieldType\Identity;
@@ -21,85 +19,65 @@ class UpdateDecision extends AbstractCommand
 
     /**
      * @var int
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $decidedByTc;
 
     /**
      * @var String
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *     options={
-     *          "haystack": {"tc_r_dhtru", "tc_r_dtc", "tc_r_htru", "tc_r_tc"}
-     *      }
-     * )
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['tc_r_dhtru', 'tc_r_dtc', 'tc_r_htru', 'tc_r_tc']])]
     protected $decidedByTcRole;
 
     /**
      * @var array
-     * @Transfer\ArrayInput
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\ArrayInput]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected array $decisions = [];
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
     protected $licenceRevokedAtPi;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
     protected $licenceSuspendedAtPi;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
     protected $licenceCurtailedAtPi;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $decisionDate;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $notificationDate;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":5,"max":4000})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 4000])]
     protected $decisionNotes;
 
-    /**
-     * @Transfer\ArrayInput
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\UniqueItems")
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":1,"max":32})
-     * @Transfer\Optional
-     */
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\UniqueItems')]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 32])]
+    #[Transfer\Optional]
     protected $tmDecisions = [];
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
     protected $tmCalledWithOperator;
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Trait StartDateOptional
  *
@@ -10,11 +11,9 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait StartDateOptional
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Optional]
     protected $startDate;
 
     /**

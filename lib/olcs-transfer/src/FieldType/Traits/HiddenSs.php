@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * HiddenSs (Hidden from Self Service)
  *
@@ -10,10 +12,8 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait HiddenSs
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
+    #[Transfer\Optional]
     protected $hiddenSs;
 
     /**

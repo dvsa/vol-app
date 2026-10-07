@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Trait Comment
  *
@@ -10,21 +11,15 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait MiscFeesDetails
 {
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $customerReference;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $customerName;
 
-    /**
-     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\AddressOptional")
-     */
+    #[Transfer\Partial('Dvsa\Olcs\Transfer\Command\Partial\AddressOptional')]
     protected $address;
 
     /**

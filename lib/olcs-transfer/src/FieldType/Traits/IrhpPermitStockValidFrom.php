@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Trait IRHP Permit Stock Valid Start
  *
@@ -9,11 +10,9 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait IrhpPermitStockValidFrom
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Optional]
     protected $validFrom;
 
     /**

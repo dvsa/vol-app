@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Trait DateReceived
  *
@@ -11,10 +12,10 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 trait DateReceived
 {
     /**
-     * @Transfer\Optional
      * @var \DateTime
-     * @Transfer\Validator("Laminas\Validator\Date", options={"format": "Y-m-d"})
      */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Laminas\Validator\Date', options: ['format' => 'Y-m-d'])]
     protected $dateReceived;
 
     /**

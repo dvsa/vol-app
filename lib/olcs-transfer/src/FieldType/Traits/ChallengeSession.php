@@ -2,12 +2,13 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 trait ChallengeSession
 {
     /**
      * @var String
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":20,"max":2048})
      */
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 20, 'max' => 2048])]
     protected ?string $challengeSession = null;
 
     /**

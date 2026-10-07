@@ -17,13 +17,11 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\SubCategoryOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\SuppressFromOp;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TemplateFolder;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TemplateSlugOptional;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/doc-template")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/doc-template')]
+#[Transfer\Method('POST')]
 final class Create extends AbstractCommand
 {
     use TemplateFolder;

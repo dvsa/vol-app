@@ -12,16 +12,16 @@ namespace Dvsa\Olcs\Transfer\Query\Permits;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\PublicQueryCacheInterface;
 use Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface;
-use Dvsa\Olcs\Transfer\Util\Attribute as TransferAttribute;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-#[TransferAttribute\RouteName("backend/permits/ecmt-permit-fees")]
+#[Transfer\RouteName("backend/permits/ecmt-permit-fees")]
 class EcmtPermitFees extends AbstractQuery implements CacheableLongTermQueryInterface, PublicQueryCacheInterface
 {
-    #[TransferAttribute\ArrayInput]
-    #[TransferAttribute\ArrayFilter("Dvsa\Olcs\Transfer\Filter\FilterEmptyItems")]
-    #[TransferAttribute\ArrayFilter("Dvsa\Olcs\Transfer\Filter\UniqueItems")]
-    #[TransferAttribute\Filter("Laminas\Filter\StringTrim")]
-    #[TransferAttribute\Validator("Laminas\Validator\StringLength", options: ["min" => 1])]
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\FilterEmptyItems")]
+    #[Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\UniqueItems")]
+    #[Transfer\Filter("Laminas\Filter\StringTrim")]
+    #[Transfer\Validator("Laminas\Validator\StringLength", options: ["min" => 1])]
     protected $productReferences;
 
     /**

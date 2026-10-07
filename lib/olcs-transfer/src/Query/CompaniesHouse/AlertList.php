@@ -9,12 +9,12 @@ use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTraitOptional;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTraitOptional;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * Class AlertList
- * @Transfer\RouteName("backend/companies-house-alert")
  */
+#[Transfer\RouteName('backend/companies-house-alert')]
 class AlertList extends AbstractQuery implements
     PagedQueryInterface,
     OrderedQueryInterface,
@@ -24,26 +24,12 @@ class AlertList extends AbstractQuery implements
     use OrderedTraitOptional;
     use TrafficAreasOptional;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
     protected $includeClosed = false;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *      options={
-     *          "haystack": {
-     *              "company_status_change",
-     *              "company_name_change",
-     *              "company_address_change",
-     *              "company_people_change",
-     *              "invalid_company_number"
-     *          }
-     *      }
-     * )
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['company_status_change', 'company_name_change', 'company_address_change', 'company_people_change', 'invalid_company_number']])]
     protected $typeOfChange;
 
     /**

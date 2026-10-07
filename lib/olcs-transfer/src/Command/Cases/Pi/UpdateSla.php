@@ -2,14 +2,12 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Cases\Pi;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldType;
 
-/**
- * @Transfer\RouteName("backend/pi/single/sla")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/pi/single/sla')]
+#[Transfer\Method('PUT')]
 class UpdateSla extends AbstractCommand
 {
     use FieldType\Identity;
@@ -17,56 +15,38 @@ class UpdateSla extends AbstractCommand
 
     /**
      * @var String
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *     options={
-     *          "haystack": {"piwo_verbal", "piwo_reason", "piwo_decision"}
-     *      }
-     * )
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['piwo_verbal', 'piwo_reason', 'piwo_decision']])]
     protected $writtenOutcome;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $callUpLetterDate;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $briefToTcDate;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $tcWrittenReasonDate;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $writtenReasonLetterDate;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $tcWrittenDecisionDate;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $decisionLetterSentDate;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $writtenDecisionLetterDate;
 
     /**

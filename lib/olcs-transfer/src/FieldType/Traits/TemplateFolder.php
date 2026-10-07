@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Trait TemplateFolder
  *
@@ -12,19 +13,9 @@ trait TemplateFolder
 {
     /**
      * @var String
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *     options={
-     *          "haystack": {
-     *              "root",
-     *              "gb",
-     *              "ni",
-     *              "image",
-     *              "guides"
-     *          }
-     *      }
-     * )
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['root', 'gb', 'ni', 'image', 'guides']])]
     protected $templateFolder;
 
     /**

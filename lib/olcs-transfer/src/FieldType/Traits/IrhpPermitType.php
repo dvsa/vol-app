@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * IRHP Permit Type Trait
  *
@@ -12,14 +13,9 @@ trait IrhpPermitType
 {
     /**
      * @var int
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\Between",
-     *      options={
-     *          "min": 0,
-     *          "max": 99999
-     *      }
-     * )
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\Between', options: ['min' => 0, 'max' => 99999])]
     protected $irhpPermitType;
 
     /**

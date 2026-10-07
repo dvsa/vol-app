@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Ebsr display status trait
  *
@@ -12,15 +13,10 @@ trait EbsrDisplayStatus
 {
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={
-     *          "haystack": {
-     *              "ebsrd_processing", "ebsrd_processed", "ebsrd_failed"
-     *          }
-     *      }
-     * )
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['ebsrd_processing', 'ebsrd_processed', 'ebsrd_failed']])]
     protected $status;
 
     /**

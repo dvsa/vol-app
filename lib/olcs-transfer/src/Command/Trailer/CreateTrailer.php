@@ -10,12 +10,10 @@ namespace Dvsa\Olcs\Transfer\Command\Trailer;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\IsLongerSemiTrailer;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/trailers")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/trailers')]
+#[Transfer\Method('POST')]
 final class CreateTrailer extends AbstractCommand
 {
     use IsLongerSemiTrailer;
@@ -27,16 +25,16 @@ final class CreateTrailer extends AbstractCommand
 
     /**
      * @var int
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $licence;
 
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $specifiedDate;
 
     /**

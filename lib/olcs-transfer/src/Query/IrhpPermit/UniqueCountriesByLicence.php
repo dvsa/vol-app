@@ -9,12 +9,10 @@
 namespace Dvsa\Olcs\Transfer\Query\IrhpPermit;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/irhp-permits/unique-countries-by-licence")
- */
+#[Transfer\RouteName('backend/irhp-permits/unique-countries-by-licence')]
 final class UniqueCountriesByLicence extends AbstractQuery
 {
     use Traits\Licence;

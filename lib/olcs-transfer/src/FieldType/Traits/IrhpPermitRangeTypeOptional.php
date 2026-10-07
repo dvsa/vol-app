@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * IRHP Permit Range Type
  *
@@ -11,10 +12,10 @@ trait IrhpPermitRangeTypeOptional
 {
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"standard.single", "standard.multiple", "cabotage.single", "cabotage.multiple"}})
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['standard.single', 'standard.multiple', 'cabotage.single', 'cabotage.multiple']])]
     protected $irhpPermitRangeType;
 
     /**

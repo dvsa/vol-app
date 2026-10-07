@@ -2,29 +2,25 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * @author Dmitry Golubev <dmitrij.golubev@valtech.com>
  */
 trait PrintOptional
 {
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\YesNo")
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\YesNo')]
     protected $isEnforcePrint;
 
     /**
      * @var int
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan",
-     *     options={
-     *          "min": 1,
-     *     },
-     * )
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 1])]
     protected $printCopiesCount;
 
     /**

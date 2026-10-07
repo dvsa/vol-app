@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Trait PostData
  *
@@ -10,9 +11,7 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait PostData
 {
-    /**
-     * @Transfer\ArrayInput
-     */
+    #[Transfer\ArrayInput]
     protected $postData;
 
     /**

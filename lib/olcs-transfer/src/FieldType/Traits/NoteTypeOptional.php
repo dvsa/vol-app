@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Trait NoteType
  *
@@ -12,23 +13,10 @@ trait NoteTypeOptional
 {
     /**
      * @var String
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *     options={
-     *          "haystack": {
-     *              "note_t_app",
-     *              "note_t_bus",
-     *              "note_t_case",
-     *              "note_t_lic",
-     *              "note_t_org",
-     *              "note_t_permit",
-     *              "note_t_person",
-     *              "note_t_tm"
-     *          }
-     *      }
-     * )
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['note_t_app', 'note_t_bus', 'note_t_case', 'note_t_lic', 'note_t_org', 'note_t_permit', 'note_t_person', 'note_t_tm']])]
     protected $noteType;
 
     /**

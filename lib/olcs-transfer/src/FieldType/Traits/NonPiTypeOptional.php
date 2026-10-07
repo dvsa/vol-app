@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Trait NonPiTypeOptional
  *
@@ -12,17 +13,10 @@ trait NonPiTypeOptional
 {
     /**
      * @var String
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *     options={
-     *          "haystack": {
-     *              "non_pi_type_off_proc",
-     *              "non_pi_type_in_cham"
-     *          }
-     *      }
-     * )
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['non_pi_type_off_proc', 'non_pi_type_in_cham']])]
     protected $nonPiType;
 
     /**

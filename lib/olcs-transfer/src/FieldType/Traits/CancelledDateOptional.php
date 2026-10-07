@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 /**
  * Cancelled Date
  *
@@ -12,9 +13,9 @@ trait CancelledDateOptional
 {
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
      */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $cancelledDate;
 
     /**

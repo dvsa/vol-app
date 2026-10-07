@@ -4,12 +4,12 @@ namespace Dvsa\Olcs\Transfer\Query\Cases\Hearing;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * Class StayList
- * @Transfer\RouteName("backend/stay")
  */
+#[Transfer\RouteName('backend/stay')]
 class StayList extends AbstractQuery
 {
     use Traits\Cases;
