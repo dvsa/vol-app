@@ -5,6 +5,7 @@ locals {
   identifier = var.environment != null ? "${var.identifier}-${local.account_id}-${var.environment}-terraform-state" : "${var.identifier}-${local.account_id}-terraform-state"
 }
 
+#checkov:skip=CKV_AWS_19: Encryption is configured via the module input, but Checkov does not resolve it through this external module.
 module "s3" {
   count = var.create_bucket ? 1 : 0
 
