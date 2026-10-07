@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "60c59a388d600feb73ece39046e1c15a",
+  "content-hash": "a243a8e2bbe014312ae4fb206b4ae4ec",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -6825,6 +6825,73 @@
         "source": "https://github.com/dvsa/php-coding-standards/tree/v2.1.0"
       },
       "time": "2026-07-10T09:36:51+00:00"
+    },
+    {
+      "name": "ergebnis/phpunit-slow-test-detector",
+      "version": "2.26.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/ergebnis/phpunit-slow-test-detector.git",
+        "reference": "5671b07904321b3fc40a1ca9bb7a4c685cfc1c35"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/ergebnis/phpunit-slow-test-detector/zipball/5671b07904321b3fc40a1ca9bb7a4c685cfc1c35",
+        "reference": "5671b07904321b3fc40a1ca9bb7a4c685cfc1c35",
+        "shasum": ""
+      },
+      "require": {
+        "ext-mbstring": "*",
+        "php": "~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0 || ~8.6.0",
+        "phpunit/phpunit": "^6.5.0 || ^7.5.0 || ^8.5.19 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0"
+      },
+      "require-dev": {
+        "ergebnis/composer-normalize": "^2.53.0",
+        "ergebnis/license": "^2.7.0",
+        "ergebnis/php-cs-fixer-config": "^6.63.2",
+        "ergebnis/rector-rules": "^1.18.3",
+        "fakerphp/faker": "~1.20.0",
+        "phpstan/extension-installer": "^1.4.3",
+        "phpstan/phpstan": "^2.1.54",
+        "phpstan/phpstan-deprecation-rules": "^2.0.5",
+        "phpstan/phpstan-phpunit": "^2.0.18",
+        "phpstan/phpstan-strict-rules": "^2.0.12",
+        "psr/container": "~1.0.0",
+        "rector/rector": "^2.6.6"
+      },
+      "type": "library",
+      "extra": {
+        "branch-alias": {
+          "dev-main": "2.26-dev"
+        },
+        "composer-normalize": {
+          "indent-size": 2,
+          "indent-style": "space"
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Ergebnis\\PHPUnit\\SlowTestDetector\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["MIT"],
+      "authors": [
+        {
+          "name": "Andreas Möller",
+          "email": "am@localheinz.com",
+          "homepage": "https://localheinz.com"
+        }
+      ],
+      "description": "Provides facilities for detecting slow tests in phpunit/phpunit.",
+      "homepage": "https://github.com/ergebnis/phpunit-slow-test-detector",
+      "keywords": ["detector", "extension", "phpunit", "slow", "test"],
+      "support": {
+        "issues": "https://github.com/ergebnis/phpunit-slow-test-detector/issues",
+        "security": "https://github.com/ergebnis/phpunit-slow-test-detector/blob/main/.github/SECURITY.md",
+        "source": "https://github.com/ergebnis/phpunit-slow-test-detector"
+      },
+      "time": "2026-09-24T19:43:37+00:00"
     },
     {
       "name": "felixfbecker/language-server-protocol",

@@ -91,7 +91,8 @@
     "dvsa/coding-standards": "^2.1",
     "phpstan/phpstan": "^2.0",
     "vimeo/psalm": "^6.0",
-    "brianium/paratest": "^7.24.1"
+    "brianium/paratest": "^7.24.1",
+    "ergebnis/phpunit-slow-test-detector": "^2.26"
   },
   "autoload": {
     "psr-4": {

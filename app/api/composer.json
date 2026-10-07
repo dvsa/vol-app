@@ -166,6 +166,7 @@
     "phpstan/phpstan": "^2.0",
     "phpstan/phpstan-doctrine": "^2.0",
     "vimeo/psalm": "^6.0",
-    "brianium/paratest": "^7.24.1"
+    "brianium/paratest": "^7.24.1",
+    "ergebnis/phpunit-slow-test-detector": "^2.26"
   }
 }

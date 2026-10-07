@@ -30,6 +30,17 @@
     <ini name="zend.exception_ignore_args" value="0"/>
     <ini name="memory_limit" value="4G"/>
   </php>
+  <extensions>
+    <!-- Lists up to 10 tests that took over 500ms, at the end of a serial run (CI, composer test:serial).
+         Report only: it never fails the run. paratest discards it, as it does all worker output.
+         A test that is slow on purpose can raise its own limit with
+         #[\Ergebnis\PHPUnit\SlowTestDetector\Attribute\MaximumDuration(milliseconds)].
+         See "Slow tests" in docs/app/testing.md. -->
+    <bootstrap class="Ergebnis\PHPUnit\SlowTestDetector\Extension">
+      <parameter name="maximum-count" value="10"/>
+      <parameter name="maximum-duration" value="500"/>
+    </bootstrap>
+  </extensions>
   <testsuites>
     <testsuite name="OLCS Selfserve Application">
       <directory>test</directory>

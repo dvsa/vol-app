@@ -13,11 +13,11 @@ The API has three layers of automated verification:
 | Functional (E2E) | WebDriver/Cucumber suites from `dvsa/vol-functional-tests`                                    | Post-deploy per environment (`cd.yaml`) |
 
 This page documents how to run the unit tests in parallel or one at a time, how
-repository unit tests assert against real Doctrine, the integration layer, the
-two baseline mechanisms that guard the Doctrine entity metadata, the Doctrine
-deprecation report both suites print, the three tests that guard output escaping
-in the table render pipeline, and the snapshot that guards how API requests are
-validated.
+slow tests are reported, how repository unit tests assert against real Doctrine,
+the integration layer, the two baseline mechanisms that guard the Doctrine
+entity metadata, the Doctrine deprecation report both suites print, the three
+tests that guard output escaping in the table render pipeline, and the snapshot
+that guards how API requests are validated.
 
 ## Running the tests
 
@@ -101,6 +101,50 @@ other. So:
 The table render snapshot (`UPDATE_TABLE_SNAPSHOTS`, below) is a single file in
 each app, so one worker owns all its writes, and it regenerates correctly either
 way.
+
+### Slow tests
+
+Each app's `phpunit.xml.dist` registers
+[phpunit-slow-test-detector](https://github.com/ergebnis/phpunit-slow-test-detector),
+which ends a serial run (CI, `composer test:serial`) with up to 10 tests that
+took over 500ms:
+
+```
+Detected 1 test where the duration exceeded the global maximum duration (0.500).
+
+# Duration Test
+-------------------------------------------------------
+1    0.617 OlcsTest\Example\ExampleTest::testSlow
+-------------------------------------------------------
+```
+
+It only reports, and never fails a run. paratest discards it along with the
+rest of its workers' output, so read it in CI's log or run
+`composer test:serial`.
+
+No test in the app suites takes over 500ms today, so anything listed is new.
+Run it again before acting on a local report: on a laptop, background work such
+as antivirus scanning can stall any single test for a second or more.
+
+A test that is slow on purpose declares its own limit, as the table render
+snapshot tests do, since each renders every table in its app:
+
+```php
+use Ergebnis\PHPUnit\SlowTestDetector\Attribute\MaximumDuration;
+
+#[MaximumDuration(5000)]
+public function testRenderedOutputHasNotChanged(): void
+```
+
+The one consistently slow group found when the detector was added was password
+hashing, just under the limit. `password_hash()` at PHP's default bcrypt cost
+takes about 0.25s per call, so
+`OtpService` takes its hash options in the constructor: production passes none,
+and its tests pass `['cost' => 4]`. Do the same for anything else that hashes
+passwords.
+
+The libraries do not have the detector. Their suites take seconds, and a dev
+dependency in a library changes the app lock files (see below).
 
 ### Why the libraries do not use paratest
 
