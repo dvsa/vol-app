@@ -184,6 +184,10 @@ module "log_bucket" {
     }
   }
 
+  versioning = {
+    enabled = true
+  }
+
   grant = [{
     type       = "CanonicalUser"
     permission = "FULL_CONTROL"

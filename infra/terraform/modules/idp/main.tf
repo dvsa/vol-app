@@ -181,6 +181,14 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "idp_output" {
   }
 }
 
+resource "aws_s3_bucket_versioning" "idp_output" {
+  bucket = aws_s3_bucket.idp_output.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 resource "aws_s3_bucket_lifecycle_configuration" "idp_output" {
   bucket = aws_s3_bucket.idp_output.id
 
@@ -190,6 +198,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "idp_output" {
 
     expiration {
       days = 30
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = 30
     }
   }
 }
