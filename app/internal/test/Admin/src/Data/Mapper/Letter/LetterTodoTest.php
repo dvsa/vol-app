@@ -12,6 +12,31 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 final class LetterTodoTest extends MockeryTestCase
 {
+    public function testMapFromResultReadsNameFromTheCurrentVersion(): void
+    {
+        $formData = LetterTodo::mapFromResult([
+            'id' => 5,
+            'todoKey' => 'FI01',
+            'currentVersion' => [
+                'name' => 'You need to upload bank statements',
+                'description' => ['blocks' => []],
+            ],
+        ]);
+
+        $this->assertSame('You need to upload bank statements', $formData['letterTodo']['name']);
+    }
+
+    public function testMapFromResultLeavesAnUnnamedTodoBlank(): void
+    {
+        $formData = LetterTodo::mapFromResult([
+            'id' => 5,
+            'todoKey' => 'FI01',
+            'currentVersion' => ['name' => null],
+        ]);
+
+        $this->assertNull($formData['letterTodo']['name']);
+    }
+
     public function testMapFromResultReadsRequiresInputFromTheCurrentVersion(): void
     {
         $formData = LetterTodo::mapFromResult([

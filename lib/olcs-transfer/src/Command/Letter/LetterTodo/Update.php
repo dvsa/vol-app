@@ -24,6 +24,13 @@ final class Update extends AbstractCommand
     protected $todoKey;
 
     /**
+     * @var string
+     * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
+     */
+    protected $name;
+
+    /**
      * @var array
      * @Transfer\Optional
      * @Transfer\Escape(false)
@@ -57,6 +64,14 @@ final class Update extends AbstractCommand
     public function getTodoKey()
     {
         return $this->todoKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**

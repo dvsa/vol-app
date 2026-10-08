@@ -18,6 +18,7 @@ class LetterTodo implements MapperInterface
             'letterTodo' => [
                 'id' => $data['id'] ?? null,
                 'todoKey' => $data['todoKey'] ?? null,
+                'name' => $currentVersion['name'] ?? $data['name'] ?? null,
                 'description' => $currentVersion['description'] ?? $data['description'] ?? null,
                 'helpText' => $currentVersion['helpText'] ?? $data['helpText'] ?? null,
                 'requiresInput' => $currentVersion['requiresInput'] ?? $data['requiresInput'] ?? false,
