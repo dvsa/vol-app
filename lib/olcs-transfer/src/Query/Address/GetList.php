@@ -18,7 +18,7 @@ final class GetList extends AbstractQuery implements CacheableMediumTermQueryInt
     #[Transfer\Optional]
     #[Transfer\Filter("Laminas\Filter\StringTrim")]
     #[Transfer\Validator("Laminas\Validator\StringLength", options: ["max" => 8])]
-    protected string $postcode;
+    protected string $postcode = '';
 
     /**
      * Get a postcode
