@@ -20,7 +20,7 @@ $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
   echo $this->headMeta()
     ->appendName('viewport', 'width=device-width, initial-scale=1, viewport-fit=cover')
     ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
-    ->appendName('theme-color', 'blue')
+    ->appendName('theme-color', '#1d70b8')
     ->appendProperty('og:image', $this->assetPath('assets/images/govuk-opengraph-image.png'));
 
   // Optional: session timeout meta if logged in
@@ -40,7 +40,7 @@ $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
   <!-- Favicons & Manifest -->
   <link rel="icon" sizes="48x48" href="<?php echo $this->assetPath('assets/images/favicon.ico'); ?>">
   <link rel="icon" sizes="any" href="<?php echo $this->assetPath('assets/images/favicon.svg'); ?>" type="image/svg+xml">
-  <link rel="mask-icon" href="<?php echo $this->assetPath('assets/images/govuk-icon-mask.svg'); ?>" color="blue">
+  <link rel="mask-icon" href="<?php echo $this->assetPath('assets/images/govuk-icon-mask.svg'); ?>" color="#1d70b8">
   <link rel="manifest" href="<?php echo $this->assetPath('assets/manifest.json'); ?>">
 
   <!-- Apple Touch Icons -->
@@ -68,6 +68,9 @@ $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
 </head>
 
 <body class="govuk-template__body app-body-class selfserve" id="<?php echo $this->pageId(); ?>">
+  <script>
+    document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
+  </script>
   <?php
       $userId = $currentUser->getUniqueId();
       if (!empty($userId)) {
@@ -83,9 +86,6 @@ $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
               $userType = 'Transport Manager';
           }
     ?>
-    <script>
-      document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
-    </script>
     <script type="text/javascript">
       var dataLayer = window.dataLayer = window.dataLayer || [];
       dataLayer.push({
@@ -98,9 +98,6 @@ $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
   <?php echo $this->partial('partials/google-tag-manager'); ?>
   <?php echo $this->version(); ?>
 
-  <script>
-    document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
-  </script>
   <script data-queueit-c='dvsavol' type='text/javascript' src='//static.queue-it.net/script/queueconfigloader.min.js'></script>
 
 
