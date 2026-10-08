@@ -205,6 +205,17 @@ resource "aws_s3_bucket_lifecycle_configuration" "idp_output" {
       noncurrent_days = 30
     }
   }
+
+  rule {
+    id     = "remove-expired-delete-markers"
+    status = "Enabled"
+
+    filter {}
+
+    expiration {
+      expired_object_delete_marker = true
+    }
+  }
 }
 
 # ============================================================
