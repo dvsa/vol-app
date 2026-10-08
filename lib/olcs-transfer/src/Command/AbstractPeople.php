@@ -8,7 +8,7 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 /**
  * @author Dmitry Golubev <dmitrij.golubev@valtech.com>
  */
-class AbstractPeople extends AbstractCommand
+abstract class AbstractPeople extends AbstractCommand
 {
     //  Identity is Licence id
     use Traits\Identity;

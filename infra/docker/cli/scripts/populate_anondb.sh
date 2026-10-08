@@ -222,7 +222,7 @@ aws rds wait db-cluster-snapshot-available \
 ###############################################
 # 4b. SHARE SNAPSHOT WITH DEV ACCOUNT (PROD ONLY)
 ###############################################
-if [[ "$env" == "prod" ]]; then
+if [[ "$env" == "APP" ]]; then
   log "Sharing anonymised snapshot with dev account"
 
   aws rds modify-db-cluster-snapshot-attribute \

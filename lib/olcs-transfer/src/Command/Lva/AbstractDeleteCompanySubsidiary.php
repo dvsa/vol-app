@@ -8,7 +8,7 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 /**
  * @author Dmitrij Golubev <dmitrij.golubev@valtech.co.uk>
  */
-class AbstractDeleteCompanySubsidiary extends AbstractCommand
+abstract class AbstractDeleteCompanySubsidiary extends AbstractCommand
 {
     /**
      * @Transfer\ArrayInput
