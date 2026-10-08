@@ -8,14 +8,24 @@ use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
+use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as DocumentAnalysisEntity;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisAnnotationOverlay;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisReviewOutcome;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentAnalysisAssessmentStatus as Cmd;
 use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 
 /**
  * Records a caseworker's review (approved, rejected or back to pending) of a successful
- * document analysis.
+ * document analysis: the "change document review" action on the automated analyser's verdict.
+ *
+ * Approval is only accepted when every check reads as a pass once the caseworker's changes
+ * (annotations) are laid over the analyser's result: each failed or skipped check must be
+ * changed, with a reason, before the evidence can be approved. Otherwise a ValidationException
+ * keyed ERR_UNCHANGED_ISSUES is thrown so the caller can explain it. Rejection needs no such check.
  *
  * Ownership of the analysis by the application or licence being viewed is checked by the
  * validation handler before this runs; this only performs the guarded write.
@@ -24,7 +34,16 @@ final class UpdateDocumentAnalysisAssessmentStatus extends AbstractCommandHandle
 {
     use AuthAwareTrait;
 
+    public const string ERR_UNCHANGED_ISSUES = 'ERR_DOCUMENT_ANALYSIS_UNCHANGED_ISSUES';
+
     protected $repoServiceName = 'DocumentAnalysis';
+
+    public function __construct(
+        private readonly AnalysisResultNormaliser $normaliser,
+        private readonly AnalysisAnnotationOverlay $overlay,
+        private readonly AnalysisReviewOutcome $outcome,
+    ) {
+    }
 
     /**
      * @param Cmd $command
@@ -39,6 +58,12 @@ final class UpdateDocumentAnalysisAssessmentStatus extends AbstractCommandHandle
         /** @var DocumentAnalysisRepo $repo */
         $repo = $this->getRepo();
 
+        if ($status === AssessmentStatus::APPROVED) {
+            /** @var DocumentAnalysisEntity $analysis */
+            $analysis = $repo->fetchUsingId($command);
+            $this->guardApproval($analysis);
+        }
+
         if ($repo->recordAssessmentStatus($analysisId, $status, $this->getCurrentUser()) === 0) {
             throw new NotFoundException(
                 sprintf('No successful document analysis %d to review', $analysisId)
@@ -51,5 +76,26 @@ final class UpdateDocumentAnalysisAssessmentStatus extends AbstractCommandHandle
         );
 
         return $this->result;
+    }
+
+    /**
+     * @throws ValidationException when any check still reads as a fail or skipped
+     */
+    private function guardApproval(DocumentAnalysisEntity $analysis): void
+    {
+        $normalised = $this->normaliser->fromStored($analysis->getResultNormalised());
+
+        // No assessment means nothing to check against, so approval rests on the caseworker alone.
+        if ($normalised === null) {
+            return;
+        }
+
+        $decision = $this->outcome->decide($this->overlay->apply($normalised, $analysis->getAnnotations()));
+
+        if ($decision !== null && $decision !== AssessmentStatus::APPROVED) {
+            throw new ValidationException([
+                self::ERR_UNCHANGED_ISSUES => 'You cannot change a fail to a pass while issues remain unchanged',
+            ]);
+        }
     }
 }

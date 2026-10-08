@@ -11,23 +11,27 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
 /**
- * AcceptDocumentAnalysisReview takes constructor arguments, so it cannot be mapped directly in
- * command-map.config.php - handlers mapped by class name are instantiated with no arguments.
+ * UpdateDocumentAnalysisAssessmentStatus takes constructor arguments, so it cannot be mapped
+ * directly in command-map.config.php - handlers mapped by class name are instantiated with no arguments.
  */
-class AcceptDocumentAnalysisReviewFactory implements FactoryInterface
+class UpdateDocumentAnalysisAssessmentStatusFactory implements FactoryInterface
 {
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AcceptDocumentAnalysisReview
-    {
-        $instance = new AcceptDocumentAnalysisReview(
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
+        ?array $options = null
+    ): UpdateDocumentAnalysisAssessmentStatus {
+        $instance = new UpdateDocumentAnalysisAssessmentStatus(
             $container->get(AnalysisResultNormaliser::class),
-            $container->get(AnalysisReviewOutcome::class),
             $container->get(AnalysisAnnotationOverlay::class),
+            $container->get(AnalysisReviewOutcome::class),
         );
 
         return $instance->__invoke($container, $requestedName, $options);
     }
 }
+

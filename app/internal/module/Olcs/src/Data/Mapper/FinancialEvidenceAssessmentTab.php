@@ -54,13 +54,25 @@ final class FinancialEvidenceAssessmentTab
         'skipped' => [self::FLAG_SKIPPED, 'govuk-tag--grey'],
     ];
 
+    /** A flag a caseworker has changed is greyed out, so the change reads as the one that counts. */
+    public const string FLAG_TAG_SUPERSEDED = 'govuk-tag--grey';
+
     /**
      * @param array $analysis one entry of DocumentAnalysisList's "analyses"
      *
      * @return array{
      *     document: array{id: int, name: string|null}|null,
      *     hasAssessment: bool,
-     *     rows: list<array{label: string, value: string|null, flag: string|null, flagTag: string|null, remark: string|null}>,
+     *     rows: list<array{
+     *         key: string,
+     *         flagged: bool,
+     *         label: string,
+     *         value: string|null,
+     *         flag: string|null,
+     *         flagTag: string|null,
+     *         remark: string|null,
+     *         override: array{originalFlag: string, comment: string|null, changedBy: string|null, changedOn: string|null}|null
+     *     }>,
      *     issueCount: int
      * }
      */
@@ -92,6 +104,18 @@ final class FinancialEvidenceAssessmentTab
         ];
     }
 
+    /** The tag colour for a flag label (PASS, FAIL or SKIPPED) as this mapper produces it. */
+    public static function flagTag(string $flag): string
+    {
+        foreach (self::FLAG_TAGS as [$label, $tag]) {
+            if ($label === $flag) {
+                return $tag;
+            }
+        }
+
+        return self::FLAG_TAGS['skipped'][1];
+    }
+
     /**
      * @param array{label: string, flagged: bool, hasValue: bool} $definition
      */
@@ -110,11 +134,40 @@ final class FinancialEvidenceAssessmentTab
         $remark = $payloadRow['remark'] ?? null;
 
         return [
+            'key' => $key,
+            'flagged' => $definition['flagged'],
             'label' => $definition['label'],
             'value' => $value,
             'flag' => $flag,
             'flagTag' => $flagTag,
             'remark' => is_string($remark) && $remark !== '' ? $remark : null,
+            'override' => $definition['flagged'] ? self::override($payloadRow['override'] ?? null) : null,
+        ];
+    }
+
+    /**
+     * A caseworker's change to the row, as the API lays it over the analyser's result: the flag
+     * it replaced and why. Null when the row is as the analyser left it.
+     *
+     * @return array{originalFlag: string, comment: string|null, changedBy: string|null, changedOn: string|null}|null
+     */
+    private static function override(mixed $override): ?array
+    {
+        if (!is_array($override)) {
+            return null;
+        }
+
+        [$originalFlag] = self::FLAG_TAGS[$override['originalFlag'] ?? null] ?? self::FLAG_TAGS['skipped'];
+
+        $text = static fn(mixed $value): ?string => is_string($value) && trim($value) !== '' ? trim($value) : null;
+        $changedOn = $text($override['changedOn'] ?? null);
+        $changedOnDate = $changedOn === null ? false : \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $changedOn);
+
+        return [
+            'originalFlag' => $originalFlag,
+            'comment' => $text($override['comment'] ?? null),
+            'changedBy' => $text($override['changedBy'] ?? null),
+            'changedOn' => $changedOnDate === false ? null : $changedOnDate->format('d/m/Y'),
         ];
     }
 

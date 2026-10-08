@@ -1,0 +1,104 @@
+<?php
+/**
+ * Change document review: the issues the automated analyser raised on one document, each with
+ * a form to change it to a pass, the caseworker's decision on the evidence, and the checks that
+ * passed.
+ *
+ * Issue and pass tables are built by the table helper from
+ * Olcs\Data\Mapper\FinancialEvidenceAssessmentReview; their formatters escape the content.
+ * Both forms post back to this page, which redirects after handling them.
+ */
+$issueCount = count($issues);
+?>
+<p class="govuk-body">
+  <a class="govuk-back-link" href="<?php echo $this->escapeHtmlAttr($backUrl); ?>">Back to financial evidence assessment</a>
+</p>
+
+<h2 class="govuk-heading-l">Financial evidence assessment</h2>
+
+<?php if ($document !== null) : ?>
+  <p class="govuk-body">
+    <strong>Financial Evidence:</strong>
+    <a class="govuk-link" href="<?php echo $this->url('getfile', ['identifier' => $document['id']]); ?>">
+      <?php echo $this->escapeHtml($document['name'] ?? 'Document'); ?>
+    </a>
+  </p>
+<?php endif; ?>
+
+<?php foreach ($issues as $issue) : ?>
+  <?php $key = $this->escapeHtmlAttr($issue['key']); ?>
+  <div class="govuk-!-margin-bottom-8">
+    <h3 class="govuk-heading-m">Issue</h3>
+    <?php echo $issue['table']->render(); ?>
+
+    <?php if (!$issue['changed']) : ?>
+      <?php
+      // One override form serves every issue; only the row differs. Values are reset so one
+      // issue's input never shows against another.
+      $overrideForm->get('analysisId')->setValue((string)$analysisId);
+      $overrideForm->get('row')->setValue($issue['key']);
+      $overrideForm->get('changeRecommendation')->setValue('N')->setAttribute('id', 'changeRecommendation-' . $issue['key']);
+      $overrideForm->get('comment')->setValue('')->setAttribute('id', 'comment-' . $issue['key']);
+      ?>
+      <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-<?php echo $key; ?>">
+        <div class="govuk-accordion__section">
+          <div class="govuk-accordion__section-header">
+            <h4 class="govuk-accordion__section-heading">
+              <span class="govuk-accordion__section-button" id="accordion-<?php echo $key; ?>-heading">
+                Do you want to change the recommendation above?
+              </span>
+            </h4>
+          </div>
+          <div id="accordion-<?php echo $key; ?>-content" class="govuk-accordion__section-content">
+            <form method="post" novalidate>
+              <?php echo $this->formElement($overrideForm->get('security')); ?>
+              <?php echo $this->formElement($overrideForm->get('analysisId')); ?>
+              <?php echo $this->formElement($overrideForm->get('row')); ?>
+              <?php echo $this->formRow($overrideForm->get('changeRecommendation')); ?>
+              <?php echo $this->formRow($overrideForm->get('comment')); ?>
+              <div class="govuk-button-group">
+                <?php echo $this->formElement($overrideForm->get('saveOverride')); ?>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    <?php endif; ?>
+  </div>
+<?php endforeach; ?>
+
+<?php if ($issueCount === 0) : ?>
+  <p class="govuk-body">No issues were found.</p>
+<?php endif; ?>
+
+<form method="post" novalidate class="govuk-!-margin-bottom-8">
+  <?php echo $this->formElement($decisionForm->get('security')); ?>
+  <?php echo $this->formElement($decisionForm->get('analysisId')); ?>
+  <?php echo $this->formRow($decisionForm->get('decision')); ?>
+  <div class="govuk-button-group">
+    <?php echo $this->formElement($decisionForm->get('saveDecision')); ?>
+  </div>
+</form>
+
+<h3 class="govuk-heading-m">Pass Issues</h3>
+<p class="govuk-body">
+  <?php
+  echo sprintf(
+      'There %s %d %s that %s as %s.',
+      $passCount === 1 ? 'is' : 'are',
+      $passCount,
+      $passCount === 1 ? 'issue' : 'issues',
+      $passCount === 1 ? 'shows' : 'show',
+      $passCount === 1 ? 'a pass' : 'passes'
+  );
+  ?>
+</p>
+<?php echo $passesTable->render(); ?>
+
+<h3 class="govuk-heading-s">Do you want to change any of the recommendations above?</h3>
+<?php // Placeholder: not wired to any command yet. ?>
+<button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Change and Review
+</button>
+
+

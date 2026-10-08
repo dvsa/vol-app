@@ -122,10 +122,14 @@ $warningText = $hasDocuments
           <?php if ($tab['canReview']) : ?>
             <?php echo $this->formElement($reviewForm->get('review')); ?>
           <?php endif; ?>
-          <?php // Placeholder: not wired to any command yet. ?>
-          <button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-            Change document review
-          </button>
+          <?php // Opens the change document review page; offered for any analysis with an assessment, decided or not. ?>
+          <?php if ($tab['changeReviewUrl'] !== null) : ?>
+            <a href="<?php echo $this->escapeHtmlAttr($tab['changeReviewUrl']); ?>"
+               role="button" draggable="false"
+               class="govuk-button govuk-button--secondary" data-module="govuk-button">
+              Change document review
+            </a>
+          <?php endif; ?>
         </div>
       </form>
     </div>

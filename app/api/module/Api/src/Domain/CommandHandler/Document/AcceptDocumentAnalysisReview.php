@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as DocumentAnalysisEntity;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisAnnotationOverlay;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisReviewOutcome;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -41,6 +42,7 @@ final class AcceptDocumentAnalysisReview extends AbstractCommandHandler implemen
     public function __construct(
         private readonly AnalysisResultNormaliser $normaliser,
         private readonly AnalysisReviewOutcome $outcome,
+        private readonly AnalysisAnnotationOverlay $overlay,
     ) {
     }
 
@@ -65,7 +67,10 @@ final class AcceptDocumentAnalysisReview extends AbstractCommandHandler implemen
         }
 
         $normalised = $this->normaliser->fromStored($analysis->getResultNormalised());
-        $status = $normalised === null ? null : $this->outcome->decide($normalised);
+        // Decided on the result as the caseworker left it: changed checks count as passes.
+        $status = $normalised === null
+            ? null
+            : $this->outcome->decide($this->overlay->apply($normalised, $analysis->getAnnotations()));
 
         if ($status === null) {
             throw new BadRequestException(

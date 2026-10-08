@@ -246,6 +246,44 @@ class DocumentAnalysis extends AbstractRepository
     }
 
     /**
+     * Record caseworker annotations on a successful analysis, whether or not it has been decided.
+     *
+     * Annotations are built from the ones read with the row, so the write is guarded on the
+     * version that was read: a concurrent change bumps it and this matches nothing rather than
+     * silently dropping the other caseworker's change. The version is bumped here because a bulk
+     * UPDATE bypasses the ORM's optimistic locking, as it bypasses Blameable.
+     *
+     * @param array<mixed> $annotations
+     *
+     * @return int rows affected (0 if the row changed or is not successful)
+     */
+    public function recordAnnotations(
+        int $analysisId,
+        array $annotations,
+        int $expectedVersion,
+        UserEntity $changedBy
+    ): int {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        return (int)$qb->update(Entity::class, $this->alias)
+            ->set($this->alias . '.annotations', ':annotations')
+            ->set($this->alias . '.version', $this->alias . '.version + 1')
+            ->set($this->alias . '.lastModifiedOn', ':now')
+            ->set($this->alias . '.lastModifiedBy', ':lastModifiedBy')
+            ->where($qb->expr()->eq($this->alias . '.id', ':id'))
+            ->andWhere($qb->expr()->eq($this->alias . '.status', ':success'))
+            ->andWhere($qb->expr()->eq($this->alias . '.version', ':version'))
+            ->setParameter('annotations', $annotations, Types::JSON)
+            ->setParameter('now', new \DateTime())
+            ->setParameter('lastModifiedBy', $changedBy->getId())
+            ->setParameter('id', $analysisId)
+            ->setParameter('success', Entity::STATUS_SUCCESS)
+            ->setParameter('version', $expectedVersion)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
      * Rows sweepStalePending() would resolve, so the caller can log them. Kept separate so
      * the write stays atomic.
      *
