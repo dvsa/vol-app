@@ -190,7 +190,8 @@ resource "aws_s3_bucket_versioning" "idp_output" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "idp_output" {
-  bucket = aws_s3_bucket.idp_output.id
+  bucket     = aws_s3_bucket.idp_output.id
+  depends_on = [aws_s3_bucket_versioning.idp_output]
 
   rule {
     id     = "delete-old-outputs"
