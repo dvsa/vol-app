@@ -19,6 +19,15 @@ module "assets" {
     }
   }
 
+  lifecycle_rule = [{
+    id     = "expire-noncurrent-versions"
+    status = "Enabled"
+
+    noncurrent_version_expiration = {
+      noncurrent_days = 30
+    }
+  }]
+
   versioning = {
     enabled = true
   }
