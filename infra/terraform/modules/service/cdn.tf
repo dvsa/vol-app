@@ -188,6 +188,19 @@ module "log_bucket" {
     enabled = true
   }
 
+  lifecycle_rule = [{
+    id      = "cloudfront-log-retention"
+    enabled = true
+
+    expiration = {
+      days = 90
+    }
+
+    noncurrent_version_expiration = {
+      days = 90
+    }
+  }]
+
   grant = [{
     type       = "CanonicalUser"
     permission = "FULL_CONTROL"
