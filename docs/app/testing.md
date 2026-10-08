@@ -14,8 +14,9 @@ The API has three layers of automated verification:
 
 This page documents how repository unit tests assert against real Doctrine, the
 integration layer, the two baseline mechanisms that guard the Doctrine entity
-metadata, the Doctrine deprecation report both suites print, and the three tests
-that guard output escaping in the table render pipeline.
+metadata, the Doctrine deprecation report both suites print, the three tests
+that guard output escaping in the table render pipeline, and the snapshot that
+guards how API requests are validated.
 
 ## Repository unit tests
 
@@ -717,6 +718,95 @@ looks like coverage and is not: `StackHelperService` was mocked that way, and
 `StackValue`, `NumberStackValue`, `UnlicensedVehicleWeight` and
 `FeeTransactionDate` all counted as exercised while formatting an empty string.
 Three live leaks were sitting behind it.
+
+## API request validation snapshot
+
+Every command and query the frontends send to the API is a DTO in
+`lib/olcs-transfer/src/Command` or `src/Query`, and its routing, filtering and
+validation rules are declared on the class. `DtoSnapshotTest`
+(`lib/olcs-transfer/test/Snapshot/`) builds each one through the real
+`AnnotationBuilder` and compares the result with a JSON snapshot committed for
+it under `test/Snapshot/dto/`, one file per DTO in a path matching its namespace.
+It runs with the rest of the olcs-transfer suite, through `php-lib.yaml`.
+
+A snapshot records the route name, the HTTP method (commands only) and every
+input: whether it is required or allowed empty, its filters and validators in
+the order they run, and their options. Partials (`Command\Partial`) are not
+snapshotted on their own; each is recorded inside every DTO that uses it.
+
+### Running it
+
+```bash
+cd lib/olcs-transfer
+vendor/bin/phpunit --filter DtoSnapshotTest
+```
+
+### Regenerating the snapshots
+
+Testing compares against the committed files and never writes them. Writing
+them is a separate, deliberate step:
+
+```bash
+cd lib/olcs-transfer
+UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --filter DtoSnapshotTest
+git diff --stat test/Snapshot/dto   # then read the diff itself
+```
+
+That rewrites every snapshot from the current code, creates one for any new
+DTO and deletes any whose DTO no longer exists. Commit the snapshot changes
+in the same PR as the DTO change that caused them, so the reviewer sees the
+rule change and its effect together.
+
+Do not edit a snapshot by hand: it is generated, and the next regeneration
+overwrites it. The folder is excluded from prettier for the same reason.
+
+### When it fails
+
+| Failure                    | Usually means                                                                    | Do                                                                    |
+| -------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `… has no snapshot`        | you added a command or query                                                     | regenerate, check the new file describes what you meant               |
+| `… no longer matches`      | you changed that DTO's rules, or a trait or partial it uses                      | if intended, regenerate and review the diff                           |
+| `… have no matching DTO`   | you deleted or renamed a DTO                                                     | regenerate (it deletes the orphans)                                   |
+| many DTOs fail at once     | a change to `AnnotationBuilder`, a shared trait or partial, or a Laminas release | find the cause before regenerating; this is what the test is here for |
+| `… does not autoload as …` | a file's class name does not match its path                                      | fix the class or file name                                            |
+
+Regenerate deliberately, and read the diff. Doing it reflexively to make a red
+build green defeats the point of the test. In particular, a change meant to
+leave behaviour alone, such as moving the DTOs from annotations to attributes
+(VOL-5245), must not touch any snapshot: a diff there is a behaviour change.
+
+olcs-transfer's `composer.lock` is not committed, so CI installs the newest
+compatible Laminas releases. A Laminas minor release that changes a filter's or
+validator's internal settings can therefore fail the snapshot on a PR that did
+not touch the DTOs. Check what the diff shows; if it is a harmless internal
+change, regenerate in a PR of its own.
+
+### Reading a snapshot
+
+Only settings that differ from the class's declared defaults are recorded, so a
+snapshot shows what the DTO and builder set rather than Laminas' stock error
+messages and empty runtime state. As a result:
+
+- an input with no `required` key is required (the Laminas default);
+  `@Transfer\Optional` shows as `"required": false` and `"allowEmpty": true`
+- `StripTags` first in an input's filters is the builder's default escaping;
+  `@Transfer\Escape(false)` removes it
+- inputs are sorted by name, because PHP versions differ in the order reflection
+  lists properties in and each input is validated independently; filter and
+  validator order **is** significant and is kept as declared
+- plugin managers, translators and other services are recorded by class name
+  only
+
+### What it does not cover
+
+`@Transfer\DoNotExchange` stops `AbstractQuery::exchangeArray()` setting a
+property from request data. It is read from the docblock as text, outside the
+builder, so the snapshot cannot see it; `test/Query/SortWhitelistTest.php`
+covers its one use, the sort whitelist.
+
+The test builds DTOs with plain Laminas plugin managers rather than the apps'
+configured ones, so a custom validator that needs services from its factory is
+recorded by class but not built the way production builds it.
 
 ## Adding integration tests
 

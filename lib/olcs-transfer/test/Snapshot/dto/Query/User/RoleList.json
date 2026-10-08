@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/user/roles",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}
