@@ -31,6 +31,17 @@ module "assets" {
   versioning = {
     enabled = true
   }
+
+  lifecycle_rule = [
+    {
+      id      = "expire-noncurrent-versions"
+      enabled = true
+
+      noncurrent_version_expiration = {
+        days = 30
+      }
+    }
+  ]
 }
 
 data "aws_iam_policy_document" "s3_policy" {
