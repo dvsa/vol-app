@@ -6,11 +6,11 @@ namespace Olcs\Data\Mapper;
 
 /**
  * Maps one row of DocumentAnalysisList onto the "change document review" page: the issues a
- * caseworker can change, each as the rows of its own small table, and the checks that passed.
+ * caseworker can change, each listed on its own, and the checks that passed.
  *
  * Built on FinancialEvidenceAssessmentTab, which owns labels, formatting and tag colours, so the
- * two pages always describe a check the same way. Like it, this returns plain text; the table
- * formatters escape it.
+ * two pages always describe a check the same way. Like it, this returns plain text; the view and
+ * the passes table formatters escape it.
  *
  * An issue is a check the analyser failed or skipped, whether or not a caseworker has since
  * changed it to a pass (the API lays that change over the result and says what it replaced).
@@ -18,12 +18,6 @@ namespace Olcs\Data\Mapper;
  */
 final class FinancialEvidenceAssessmentReview
 {
-    /** Row types of an issue table, read by its formatters. */
-    public const string ROW_VALUE = 'value';
-    public const string ROW_FLAG = 'flag';
-    public const string ROW_REMARK = 'remark';
-    public const string ROW_COMMENT = 'comment';
-
     /**
      * Values that name the infringing data. Large deposit holds only a count of deposits, and
      * Authenticity no value at all, so neither says what the check failed on.
@@ -39,7 +33,19 @@ final class FinancialEvidenceAssessmentReview
      * @return array{
      *     document: array{id: int, name: string|null}|null,
      *     hasAssessment: bool,
-     *     issues: list<array{key: string, label: string, changed: bool, tableRows: list<array>}>,
+     *     issues: list<array{
+     *         key: string,
+     *         label: string,
+     *         value: string|null,
+     *         flag: string,
+     *         flagTag: string,
+     *         remark: string|null,
+     *         comment: string|null,
+     *         changed: bool,
+     *         changedTo: string|null,
+     *         changedToTag: string|null,
+     *         changedBy: string|null
+     *     }>,
      *     passes: list<array{label: string, value: string|null, flag: string|null, flagTag: string|null, comment: string|null}>,
      *     passCount: int,
      *     unchangedIssueCount: int
@@ -77,50 +83,37 @@ final class FinancialEvidenceAssessmentReview
         ];
     }
 
+    /**
+     * One issue as the view lists it: the infringing value (null when there is none worth
+     * showing), the flag the analyser gave with its remark, and the caseworker's change.
+     *
+     * Once changed, the original flag is greyed out and the pass it was changed to is carried
+     * alongside, so the page shows both what the analyser said and what now counts.
+     */
     private static function issue(array $row): array
     {
         $override = $row['override'];
         $originalFlag = $override['originalFlag'] ?? (string)$row['flag'];
-
-        $tableRows = [];
-
-        if (
-            !in_array($row['key'], self::ROWS_WITHOUT_INFRINGING_VALUE, true)
+        $showValue = !in_array($row['key'], self::ROWS_WITHOUT_INFRINGING_VALUE, true)
             && $row['value'] !== null
-            && $row['value'] !== self::NO_VALUE
-        ) {
-            $tableRows[] = ['type' => self::ROW_VALUE, 'heading' => $row['label'], 'text' => $row['value']];
-        }
-
-        $tableRows[] = [
-            'type' => self::ROW_FLAG,
-            'heading' => 'Flag',
-            'flag' => $originalFlag,
-            'flagTag' => $override === null
-                ? FinancialEvidenceAssessmentTab::flagTag($originalFlag)
-                : FinancialEvidenceAssessmentTab::FLAG_TAG_SUPERSEDED,
-            'changedTo' => $override === null ? null : FinancialEvidenceAssessmentTab::FLAG_PASS,
-            'changedToTag' => $override === null ? null : FinancialEvidenceAssessmentTab::flagTag(FinancialEvidenceAssessmentTab::FLAG_PASS),
-            'changedBy' => $override['changedBy'] ?? null,
-        ];
-
-        $tableRows[] = ['type' => self::ROW_REMARK, 'heading' => 'Remark', 'text' => $row['remark']];
-
-        if ($override !== null) {
-            $tableRows[] = [
-                'type' => self::ROW_COMMENT,
-                'heading' => 'Comment',
-                'changedBy' => $override['changedBy'],
-                'text' => $override['comment'],
-            ];
-        }
+            && $row['value'] !== self::NO_VALUE;
 
         return [
             'key' => $row['key'],
             'label' => $row['label'],
+            'value' => $showValue ? $row['value'] : null,
+            'flag' => $originalFlag,
+            'flagTag' => $override === null
+                ? FinancialEvidenceAssessmentTab::flagTag($originalFlag)
+                : FinancialEvidenceAssessmentTab::FLAG_TAG_SUPERSEDED,
+            'remark' => $row['remark'],
+            'comment' => $override['comment'] ?? null,
             'changed' => $override !== null,
-            'tableRows' => $tableRows,
+            'changedTo' => $override === null ? null : FinancialEvidenceAssessmentTab::FLAG_PASS,
+            'changedToTag' => $override === null
+                ? null
+                : FinancialEvidenceAssessmentTab::flagTag(FinancialEvidenceAssessmentTab::FLAG_PASS),
+            'changedBy' => $override['changedBy'] ?? null,
         ];
     }
 }
-

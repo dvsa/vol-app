@@ -51,4 +51,3 @@ class FinancialEvidenceDecision
      */
     public $saveDecision = null;
 }
-

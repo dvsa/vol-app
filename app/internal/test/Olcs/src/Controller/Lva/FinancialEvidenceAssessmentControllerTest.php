@@ -9,7 +9,9 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Document\AcceptDocumentAnalysisReview;
+use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentAnalysisAssessmentStatus;
 use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -377,6 +379,46 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->assertSame($response, $sut->indexAction());
     }
 
+    /**
+     * The API's refusal to approve says what to do next; the page shows its words, so the two
+     * cannot drift apart. A refusal without usable text falls back to the same wording.
+     */
+    public static function approvalRefusalProvider(): \Iterator
+    {
+        yield 'api wording' => ['Wording from the API', 'Wording from the API'];
+        yield 'no usable wording' => [['unexpected' => 'shape'], AbstractFinancialEvidenceAssessmentController::MSG_UNCHANGED_ISSUES];
+    }
+
+    #[DataProvider('approvalRefusalProvider')]
+    public function testRefusedApprovalShowsWhatToDoNext(mixed $apiMessage, string $expected): void
+    {
+        $flashMessenger = m::mock(FlashMessengerHelperService::class);
+        $flashMessenger->expects('addErrorMessage')->with($expected);
+
+        $response = $this->decide(
+            $flashMessenger,
+            $this->refusal([AbstractFinancialEvidenceAssessmentController::ERR_UNCHANGED_ISSUES => $apiMessage])
+        );
+
+        $this->assertInstanceOf(Response::class, $response);
+    }
+
+    public function testOtherRefusalsReadAsNotRecorded(): void
+    {
+        $flashMessenger = m::mock(FlashMessengerHelperService::class);
+        $flashMessenger->expects('addErrorMessage')->with('The decision could not be recorded');
+
+        $this->decide($flashMessenger, $this->refusal(['SOMETHING_ELSE' => 'Not for the caseworker']));
+    }
+
+    public function testFallbackWordingTellsTheCaseworkerWhatToDo(): void
+    {
+        $this->assertSame(
+            'Change all failed and skipped checks to a pass before you accept the financial evidence',
+            AbstractFinancialEvidenceAssessmentController::MSG_UNCHANGED_ISSUES
+        );
+    }
+
     #[DataProvider('contextProvider')]
     public function testFactoryCreatesEachContext(string $class, string $scopeKey): void
     {
@@ -388,6 +430,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $container->allows('get')->with(RestrictionHelperService::class)->andReturn(m::mock(RestrictionHelperService::class));
         $container->allows('get')->with(FlashMessengerHelperService::class)->andReturn(m::mock(FlashMessengerHelperService::class));
         $container->expects('get')->with(FormHelperService::class)->andReturn($formHelper);
+        $container->allows('get')->with(TableFactory::class)->andReturn(m::mock(TableFactory::class));
         $container->allows('get')->with('navigation')->andReturn([]);
 
         $controller = (new FinancialEvidenceAssessmentControllerFactory())($container, $class);
@@ -434,15 +477,21 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             ->with(FinancialEvidenceAssessmentReview::class, true, false)
             ->andReturn($reviewForm ?? m::mock(Form::class));
 
-        return m::mock($class, [
+        $sut = m::mock($class, [
             m::mock(NiTextTranslation::class),
             m::mock(AuthorizationService::class),
             new StringHelperService(),
             m::mock(RestrictionHelperService::class),
             $flashMessenger ?? m::mock(FlashMessengerHelperService::class),
             $formHelper,
+            m::mock(TableFactory::class),
             [],
         ])->makePartial()->shouldAllowMockingProtectedMethods();
+
+        // Building the link needs the router, which a unit test has none of; the route is config.
+        $sut->allows('changeReviewUrl')->andReturnUsing(static fn(int $id): string => '/change-review/' . $id);
+
+        return $sut;
     }
 
     /**
@@ -527,6 +576,37 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $response = m::mock(CqrsResponse::class);
         $response->allows('isOk')->andReturnTrue();
         $response->allows('getResult')->andReturn(['analyses' => $analyses]);
+
+        return $response;
+    }
+
+    /**
+     * Post an approval for analysis 9 through processDecision and return its redirect.
+     */
+    private function decide(FlashMessengerHelperService $flashMessenger, CqrsResponse $apiResponse): Response
+    {
+        $post = ['analysisId' => '9', 'decision' => 'APPROVED', 'saveDecision' => 'decide'];
+
+        $sut = $this->createSut(ApplicationController::class, $flashMessenger);
+        $sut->allows('getRequest')->andReturn($this->postRequest($post));
+        $sut->expects('handleCommand')
+            ->with(m::on(static fn($command): bool => $command instanceof UpdateDocumentAnalysisAssessmentStatus
+                && (int)$command->getId() === 9 && $command->getStatus() === 'APPROVED'))
+            ->andReturn($apiResponse);
+        $redirectResponse = $this->expectRedirectToRefresh($sut);
+
+        $result = (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, true), 9);
+        $this->assertSame($redirectResponse, $result);
+
+        return $result;
+    }
+
+    /** A refused command, with the API's messages keyed as it sends them. */
+    private function refusal(array $messages): CqrsResponse
+    {
+        $response = m::mock(CqrsResponse::class);
+        $response->allows('isOk')->andReturnFalse();
+        $response->allows('getResult')->andReturn(['messages' => $messages]);
 
         return $response;
     }

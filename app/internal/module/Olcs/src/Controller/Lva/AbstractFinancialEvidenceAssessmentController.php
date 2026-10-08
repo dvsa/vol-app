@@ -72,6 +72,13 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
      */
     public const string ERR_UNCHANGED_ISSUES = 'ERR_DOCUMENT_ANALYSIS_UNCHANGED_ISSUES';
 
+    /**
+     * Shown only if that refusal arrives without usable text; the API's own wording is preferred
+     * so the two cannot drift. Says what to do next, not what is wrong.
+     */
+    public const string MSG_UNCHANGED_ISSUES =
+        'Change all failed and skipped checks to a pass before you accept the financial evidence';
+
     private const string SECTION_ROUTE = 'lva-%s/financial_evidence_assessment';
 
     protected string $location = 'internal';
@@ -306,18 +313,13 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
         $decisionForm->get('analysisId')->setValue((string)$analysisId);
 
-        $issues = array_map(
-            fn(array $issue): array => $issue + [
-                'table' => $this->tableFactory->prepareTable('financial-evidence-assessment-issue', $issue['tableRows']),
-            ],
-            $page['issues']
-        );
-
+        // Issues are short key/value lists rendered directly by the view; only the passes,
+        // which share columns, go through the table builder.
         $view = new ViewModel([
             'title'        => 'lva.section.title.financial_evidence_assessment',
             'analysisId'   => $analysisId,
             'document'     => $page['document'],
-            'issues'       => $issues,
+            'issues'       => $page['issues'],
             'passCount'    => $page['passCount'],
             'passesTable'  => $this->tableFactory->prepareTable('financial-evidence-assessment-passes', $page['passes']),
             'overrideForm' => $overrideForm,
@@ -419,10 +421,11 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
         if (!$response->isOk()) {
             $messages = $response->getResult()['messages'] ?? [];
+            $refusal = is_array($messages) ? ($messages[self::ERR_UNCHANGED_ISSUES] ?? null) : null;
 
-            if (is_array($messages) && isset($messages[self::ERR_UNCHANGED_ISSUES])) {
+            if ($refusal !== null) {
                 $this->flashMessengerHelper->addErrorMessage(
-                    'You cannot change a fail to a pass while issues remain unchanged'
+                    is_string($refusal) && trim($refusal) !== '' ? $refusal : self::MSG_UNCHANGED_ISSUES
                 );
             } else {
                 $this->flashMessengerHelper->addErrorMessage('The decision could not be recorded');

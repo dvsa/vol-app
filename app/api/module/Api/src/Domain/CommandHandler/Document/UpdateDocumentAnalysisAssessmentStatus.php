@@ -24,7 +24,7 @@ use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
  *
  * Approval is only accepted when every check reads as a pass once the caseworker's changes
  * (annotations) are laid over the analyser's result: each failed or skipped check must be
- * changed, with a reason, before the evidence can be approved. Otherwise a ValidationException
+ * changed to a pass before the evidence can be approved. Otherwise a ValidationException
  * keyed ERR_UNCHANGED_ISSUES is thrown so the caller can explain it. Rejection needs no such check.
  *
  * Ownership of the analysis by the application or licence being viewed is checked by the
@@ -35,6 +35,10 @@ final class UpdateDocumentAnalysisAssessmentStatus extends AbstractCommandHandle
     use AuthAwareTrait;
 
     public const string ERR_UNCHANGED_ISSUES = 'ERR_DOCUMENT_ANALYSIS_UNCHANGED_ISSUES';
+
+    /** Every flagged check must read as a pass: fails and skips both block approval. */
+    public const string MSG_UNCHANGED_ISSUES =
+        'Change all failed and skipped checks to a pass before you accept the financial evidence';
 
     protected $repoServiceName = 'DocumentAnalysis';
 
@@ -93,8 +97,9 @@ final class UpdateDocumentAnalysisAssessmentStatus extends AbstractCommandHandle
         $decision = $this->outcome->decide($this->overlay->apply($normalised, $analysis->getAnnotations()));
 
         if ($decision !== null && $decision !== AssessmentStatus::APPROVED) {
+            // Worded as what to do next, not what is wrong; the internal app shows it as given.
             throw new ValidationException([
-                self::ERR_UNCHANGED_ISSUES => 'You cannot change a fail to a pass while issues remain unchanged',
+                self::ERR_UNCHANGED_ISSUES => self::MSG_UNCHANGED_ISSUES,
             ]);
         }
     }

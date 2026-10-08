@@ -88,4 +88,3 @@ class FinancialEvidenceIssueOverride
      */
     public $saveOverride = null;
 }
-

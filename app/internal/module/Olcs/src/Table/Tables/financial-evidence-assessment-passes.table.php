@@ -35,8 +35,8 @@ return [
         ],
         [
             'title' => 'Comment',
-            'formatter' => static fn(array $row): string => Escape::html((string)($row['comment'] ?? '')),
+            // A dash, as on the issues above, so an empty cell reads as "no comment" not missing data.
+            'formatter' => static fn(array $row): string => Escape::html((string)($row['comment'] ?? '-')),
         ],
     ],
 ];
-
