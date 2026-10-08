@@ -192,10 +192,6 @@ module "log_bucket" {
     id      = "cloudfront-log-retention"
     enabled = true
 
-    expiration = {
-      days = 90
-    }
-
     noncurrent_version_expiration = {
       days = 90
     }
