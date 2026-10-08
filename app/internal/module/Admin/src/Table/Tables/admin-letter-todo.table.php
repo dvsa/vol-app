@@ -41,6 +41,11 @@ return [
             'formatter' => fn($row) => Escape::html($row['todoKey'] ?? ''),
         ],
         [
+            'title' => 'Name',
+            'name' => 'name',
+            'formatter' => fn($row) => Escape::html($row['currentVersion']['name'] ?? ''),
+        ],
+        [
             'title' => 'Description',
             'name' => 'description',
             'formatter' => function ($row) {
