@@ -8,6 +8,7 @@ namespace Dvsa\Olcs\Api\Domain\Command\Email;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\User;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * Send Tm User Created Email
@@ -16,11 +17,9 @@ final class SendTmUserCreated extends AbstractCommand
 {
     use User;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Filter("Laminas\Filter\Digits")]
+    #[Transfer\Validator("Laminas\Validator\Digits")]
+    #[Transfer\Validator("Laminas\Validator\GreaterThan", options: ["min" => 0])]
     protected $tma;
 
     /**

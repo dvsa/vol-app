@@ -10,6 +10,7 @@ namespace Dvsa\Olcs\Api\Domain\Command\BulkSend;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 class ProcessEmail extends AbstractCommand
 {
@@ -17,8 +18,8 @@ class ProcessEmail extends AbstractCommand
 
     /**
      * @var String
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Filter("Laminas\Filter\StringTrim")]
     protected $templateName;
 
     /**
