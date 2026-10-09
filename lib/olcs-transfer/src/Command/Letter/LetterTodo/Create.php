@@ -17,6 +17,14 @@ final class Create extends AbstractCommand
     #[Transfer\Filter('Laminas\Filter\StringTrim')]
     #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 100])]
     protected $todoKey;
+
+    /**
+     * @var string
+     * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
+     */
+    protected $name;
+
     /**
      * @var array
      */
@@ -51,6 +59,14 @@ final class Create extends AbstractCommand
     public function getTodoKey()
     {
         return $this->todoKey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
