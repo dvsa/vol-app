@@ -6,11 +6,9 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\Licence;
 use Dvsa\Olcs\Transfer\FieldType\Traits\RolesOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\User;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/messaging/messages/unread-count-by-licence-and-roles")
- */
+#[Transfer\RouteName('backend/messaging/messages/unread-count-by-licence-and-roles')]
 final class UnreadCountByLicenceAndRoles extends AbstractQuery
 {
     use Licence;

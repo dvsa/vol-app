@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * List document analyses, optionally scoped to an application (new or variation), a licence
@@ -22,9 +22,8 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
  *
  * Application and licence use the shared field traits so they are digit-validated the same
  * way as on DocumentList.
- *
- * @Transfer\RouteName("backend/document/analysis-list")
  */
+#[Transfer\RouteName('backend/document/analysis-list')]
 class DocumentAnalysisList extends AbstractQuery implements OrderedQueryInterface, PagedQueryInterface
 {
     use OrderedTrait;
@@ -32,14 +31,10 @@ class DocumentAnalysisList extends AbstractQuery implements OrderedQueryInterfac
     use ApplicationOptional;
     use LicenceOptional;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $document;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $status;
 
 

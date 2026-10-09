@@ -2,18 +2,18 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Countries
  */
 trait Countries
 {
-    /**
-     * @Transfer\ArrayInput
-     * @Transfer\ArrayValidator("Laminas\Validator\NotEmpty")
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\UniqueItems")
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":2,"max":2})
-     */
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayValidator('Laminas\Validator\NotEmpty')]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\UniqueItems')]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 2])]
     protected $countries = [];
 
     /**

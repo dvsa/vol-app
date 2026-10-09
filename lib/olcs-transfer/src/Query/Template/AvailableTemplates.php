@@ -14,11 +14,9 @@ use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/template/available-templates")
- */
+#[Transfer\RouteName('backend/template/available-templates')]
 class AvailableTemplates extends AbstractQuery implements PagedQueryInterface, OrderedQueryInterface
 {
     use PagedTrait;
@@ -28,9 +26,9 @@ class AvailableTemplates extends AbstractQuery implements PagedQueryInterface, O
     /**
      * Filter the list by template `format` column. Empty / unset = no filter.
      *
-     * @Transfer\Optional
      * @var string
      */
+    #[Transfer\Optional]
     protected $format = '';
 
     public function getFormat(): string

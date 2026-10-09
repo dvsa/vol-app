@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Vehicle Type
  *
@@ -9,13 +11,9 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait VehicleType
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator(
-     *     "Laminas\Validator\InArray", options={"haystack": {"app_veh_type_mixed","app_veh_type_lgv"}}
-     * )
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['app_veh_type_mixed', 'app_veh_type_lgv']])]
+    #[Transfer\Optional]
     protected $vehicleType;
 
     /**

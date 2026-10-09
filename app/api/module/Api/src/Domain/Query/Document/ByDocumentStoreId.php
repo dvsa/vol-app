@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Api\Domain\Query\Document;
 
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * Class ByDocumentStoreId
@@ -12,11 +12,8 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
  */
 class ByDocumentStoreId extends AbstractQuery
 {
-    /**
-     * @Transfer\String
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"max":1000})
-     */
+    #[Transfer\Filter("Laminas\Filter\StringTrim")]
+    #[Transfer\Validator("Laminas\Validator\StringLength", options: ["max" => 1000])]
     protected $documentStoreId = '';
 
     public function getDocumentStoreId(): string

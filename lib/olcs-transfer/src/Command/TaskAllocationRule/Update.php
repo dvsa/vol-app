@@ -11,13 +11,11 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\Team;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TrafficAreaOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\UserOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Version;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/task-allocation-rule/single")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/task-allocation-rule/single')]
+#[Transfer\Method('PUT')]
 final class Update extends AbstractCommand
 {
     use Identity;

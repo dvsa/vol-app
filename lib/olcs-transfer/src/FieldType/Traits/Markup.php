@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Markup trait
  *
@@ -13,9 +15,9 @@ trait Markup
 {
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Escape(false)
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Escape(false)]
     protected $markup;
 
     /**

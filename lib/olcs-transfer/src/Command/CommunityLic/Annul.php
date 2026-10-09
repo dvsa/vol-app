@@ -4,13 +4,11 @@ namespace Dvsa\Olcs\Transfer\Command\CommunityLic;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\ApplicationOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Licence;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/community-lic/annul")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/community-lic/annul')]
+#[Transfer\Method('POST')]
 final class Annul extends AbstractCommand
 {
     use ApplicationOptional;
@@ -18,16 +16,16 @@ final class Annul extends AbstractCommand
 
     /**
      * @var array
-     * @Transfer\ArrayInput
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\ArrayInput]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     public $communityLicenceIds = [];
 
     /**
      * @var boolean
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     public $checkOfficeCopy;
 
     /**

@@ -2,18 +2,18 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Country
  * @author Andy Newton <andy@vitri.ltd>
  */
 trait Country
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Filter("Laminas\Filter\StringToUpper")
-     * @Transfer\Validator("Laminas\I18n\Validator\Alpha")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":2,"max":2})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Filter('Laminas\Filter\StringToUpper')]
+    #[Transfer\Validator('Laminas\I18n\Validator\Alpha')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 2])]
     public $country;
 
     /**

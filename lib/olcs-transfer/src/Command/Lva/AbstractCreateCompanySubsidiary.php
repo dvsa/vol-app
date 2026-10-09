@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Transfer\Command\Lva;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * Save (Create/Update) Company Subsidiary
@@ -14,14 +14,14 @@ abstract class AbstractCreateCompanySubsidiary extends AbstractCommand
 {
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $name;
 
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $companyNo;
 
     /**

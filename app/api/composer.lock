@@ -511,77 +511,6 @@
       "time": "2024-07-08T12:26:09+00:00"
     },
     {
-      "name": "doctrine/annotations",
-      "version": "2.0.2",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/doctrine/annotations.git",
-        "reference": "901c2ee5d26eb64ff43c47976e114bf00843acf7"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/doctrine/annotations/zipball/901c2ee5d26eb64ff43c47976e114bf00843acf7",
-        "reference": "901c2ee5d26eb64ff43c47976e114bf00843acf7",
-        "shasum": ""
-      },
-      "require": {
-        "doctrine/lexer": "^2 || ^3",
-        "ext-tokenizer": "*",
-        "php": "^7.2 || ^8.0",
-        "psr/cache": "^1 || ^2 || ^3"
-      },
-      "require-dev": {
-        "doctrine/cache": "^2.0",
-        "doctrine/coding-standard": "^10",
-        "phpstan/phpstan": "^1.10.28",
-        "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
-        "symfony/cache": "^5.4 || ^6.4 || ^7",
-        "vimeo/psalm": "^4.30 || ^5.14"
-      },
-      "suggest": {
-        "php": "PHP 8.0 or higher comes with attributes, a native replacement for annotations"
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "Doctrine\\Common\\Annotations\\": "lib/Doctrine/Common/Annotations"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["MIT"],
-      "authors": [
-        {
-          "name": "Guilherme Blanco",
-          "email": "guilhermeblanco@gmail.com"
-        },
-        {
-          "name": "Roman Borschel",
-          "email": "roman@code-factory.org"
-        },
-        {
-          "name": "Benjamin Eberlei",
-          "email": "kontakt@beberlei.de"
-        },
-        {
-          "name": "Jonathan Wage",
-          "email": "jonwage@gmail.com"
-        },
-        {
-          "name": "Johannes Schmitt",
-          "email": "schmittjoh@gmail.com"
-        }
-      ],
-      "description": "Docblock Annotations Parser",
-      "homepage": "https://www.doctrine-project.org/projects/annotations.html",
-      "keywords": ["annotations", "docblock", "parser"],
-      "support": {
-        "issues": "https://github.com/doctrine/annotations/issues",
-        "source": "https://github.com/doctrine/annotations/tree/2.0.2"
-      },
-      "abandoned": true,
-      "time": "2024-09-05T10:17:24+00:00"
-    },
-    {
       "name": "doctrine/collections",
       "version": "2.6.0",
       "source": {
@@ -5246,15 +5175,15 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-transfer",
-        "reference": "2fd16525784b79e063d769f4c95fa86b2112944a"
+        "reference": "dc7743eb98db8e79a6805b1d2996f75f4fd51852"
       },
       "require": {
-        "doctrine/annotations": "^2.0",
         "ext-igbinary": "*",
         "ext-sodium": "*",
         "laminas/laminas-filter": "^2.41",
         "laminas/laminas-form": "^3.21",
         "laminas/laminas-http": "^2.15",
+        "laminas/laminas-i18n": "^2.32",
         "laminas/laminas-inputfilter": "^2.33",
         "laminas/laminas-router": "^3.14",
         "laminas/laminas-servicemanager": "^3.23",

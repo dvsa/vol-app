@@ -18,12 +18,10 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\IrhpPermitStockValidTo;
 use Dvsa\Olcs\Transfer\FieldType\Traits\IrhpPermitType;
 use Dvsa\Olcs\Transfer\FieldType\Traits\PeriodNameKeyOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\PermitCategoryOptional;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/irhp-permit-stock")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/irhp-permit-stock')]
+#[Transfer\Method('POST')]
 final class Create extends AbstractCommand
 {
     use IrhpPermitStockInitialStock;

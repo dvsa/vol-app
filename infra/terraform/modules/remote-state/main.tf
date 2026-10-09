@@ -5,6 +5,8 @@ locals {
   identifier = var.environment != null ? "${var.identifier}-${local.account_id}-${var.environment}-terraform-state" : "${var.identifier}-${local.account_id}-terraform-state"
 }
 
+#checkov:skip=CKV_AWS_19: Encryption is configured via the module input, but Checkov does not resolve it through this external module.
+#checkov:skip=CKV_AWS_21: Versioning is configured via the module input, but Checkov does not resolve it through this external module.
 module "s3" {
   count = var.create_bucket ? 1 : 0
 
@@ -42,6 +44,7 @@ module "s3" {
   }
 }
 
+#checkov:skip=CKV_AWS_119: Terraform state lock tables intentionally use AWS-managed encryption and do not require a customer-managed KMS key.
 module "dynamodb_table" {
   source   = "git::https://github.com/terraform-aws-modules/terraform-aws-dynamodb-table.git?ref=b6cc515760466a455ff0acb97b16151fdca4511e"
   name     = "${local.identifier}-lock"

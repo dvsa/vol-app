@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Dvsa\OlcsTest\Transfer\Util\Annotation;
+namespace Dvsa\OlcsTest\Transfer\Util\Attribute;
 
-use Dvsa\Olcs\Transfer\Util\Annotation\ContinueIfEmpty;
+use Dvsa\Olcs\Transfer\Util\Attribute\ArrayInput;
 
 /**
- * ContinueIfEmpty test
+ * ArrayInput test
  */
-final class ContinueIfEmptyTest extends \PHPUnit\Framework\TestCase
+final class ArrayInputTest extends \PHPUnit\Framework\TestCase
 {
     public function testInstantiationNoValue()
     {
-        $sut = new ContinueIfEmpty([]);
+        $sut = new ArrayInput();
 
-        $this->assertTrue($sut->getContinueIfEmpty());
+        $this->assertTrue($sut->getArrayInput());
     }
 
     /**
@@ -25,8 +25,8 @@ final class ContinueIfEmptyTest extends \PHPUnit\Framework\TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('valueProvider')]
     public function testInstantiationValue(mixed $value, $expected)
     {
-        $sut = new ContinueIfEmpty(['value' => $value]);
-        $this->assertSame($expected, $sut->getContinueIfEmpty());
+        $sut = new ArrayInput($value);
+        $this->assertSame($expected, $sut->getArrayInput());
     }
 
     /**
@@ -38,7 +38,7 @@ final class ContinueIfEmptyTest extends \PHPUnit\Framework\TestCase
             true, true,
         ];
         yield [
-            false, false, // in reality, we would just omit the annotation rather than pass false
+            false, false,
         ];
     }
 }

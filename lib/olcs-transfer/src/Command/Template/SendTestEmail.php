@@ -11,21 +11,19 @@ namespace Dvsa\Olcs\Transfer\Command\Template;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/template/send-test-email")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/template/send-test-email')]
+#[Transfer\Method('POST')]
 final class SendTestEmail extends AbstractCommand
 {
     use Identity;
 
     /**
-     * @Transfer\Validator("Laminas\Validator\EmailAddress")
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      * @var string
      */
+    #[Transfer\Validator('Laminas\Validator\EmailAddress')]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $recipient;
 
     public function getRecipient(): string

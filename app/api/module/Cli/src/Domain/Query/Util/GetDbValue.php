@@ -3,7 +3,6 @@
 namespace Dvsa\Olcs\Cli\Domain\Query\Util;
 
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 
 /**
  * Class GetDbValue

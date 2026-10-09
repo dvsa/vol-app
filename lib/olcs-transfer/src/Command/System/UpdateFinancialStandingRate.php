@@ -8,55 +8,41 @@
 
 namespace Dvsa\Olcs\Transfer\Command\System;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldTypeTraits;
 
-/**
- * @Transfer\RouteName("backend/financial-standing-rate/single")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/financial-standing-rate/single')]
+#[Transfer\Method('PUT')]
 final class UpdateFinancialStandingRate extends AbstractCommand
 {
     use FieldTypeTraits\Identity;
     use FieldTypeTraits\Version;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"lcat_gv", "lcat_psv"}})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['lcat_gv', 'lcat_psv']])]
+    #[Transfer\Optional]
     protected $goodsOrPsv;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"ltyp_r","ltyp_sn","ltyp_si","ltyp_sr"}})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['ltyp_r', 'ltyp_sn', 'ltyp_si', 'ltyp_sr']])]
+    #[Transfer\Optional]
     protected $licenceType;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"fin_sta_veh_typ_na","fin_sta_veh_typ_hgv","fin_sta_veh_typ_lgv"}})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['fin_sta_veh_typ_na', 'fin_sta_veh_typ_hgv', 'fin_sta_veh_typ_lgv']])]
+    #[Transfer\Optional]
     protected $vehicleType;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\Money")
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\Money')]
     protected $firstVehicleRate;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\Money")
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\Money')]
     protected $additionalVehicleRate;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $effectiveFrom;
 
     /**

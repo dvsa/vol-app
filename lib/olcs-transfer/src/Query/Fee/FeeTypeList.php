@@ -6,13 +6,13 @@ use Dvsa\Olcs\Transfer\FieldType;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldTypeTraits;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\PublicQueryCacheInterface;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface;
 
 /**
  * Class FeeTypeList
- * @Transfer\RouteName("backend/fee-type")
  */
+#[Transfer\RouteName('backend/fee-type')]
 class FeeTypeList extends AbstractQuery implements
     FieldType\ApplicationInterface,
     FieldType\BusRegInterface,
@@ -27,22 +27,16 @@ class FeeTypeList extends AbstractQuery implements
     use FieldTypeTraits\LicenceOptional;
     use FieldTypeTraits\OrganisationOptional;
 
-    /**
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\YesNo")
-     * @Transfer\Optional
-     */
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\YesNo')]
+    #[Transfer\Optional]
     protected $isMiscellaneous;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     * @Transfer\Optional
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Optional]
     protected $effectiveDate;
 
-    /**
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 1, "inclusive": true})
-     * @Transfer\Optional
-     */
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 1, 'inclusive' => true])]
+    #[Transfer\Optional]
     protected $currentFeeType;
 
     /**

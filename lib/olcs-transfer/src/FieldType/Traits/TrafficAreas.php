@@ -2,20 +2,18 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Traffic Areas
  */
 trait TrafficAreas
 {
-    /**
-     * @Transfer\ArrayInput
-     * @Transfer\ArrayValidator("Laminas\Validator\NotEmpty")
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\UniqueItems")
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={
-     *      "haystack": {"B","C","D","F","G","H","K","M","N"}
-     *  })
-     */
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayValidator('Laminas\Validator\NotEmpty')]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\UniqueItems')]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['B', 'C', 'D', 'F', 'G', 'H', 'K', 'M', 'N']])]
     protected $trafficAreas = [];
 
     /**

@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Business Process Optional
  *
@@ -10,11 +12,9 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait BusinessProcess
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":1,"max":32})
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"app_business_process_apg", "app_business_process_apgg", "app_business_process_apsg", "app_business_process_ag"}})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 32])]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['app_business_process_apg', 'app_business_process_apgg', 'app_business_process_apsg', 'app_business_process_ag']])]
     public $businessProcess;
 
     public function getBusinessProcess()
