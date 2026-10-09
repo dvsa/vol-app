@@ -191,6 +191,7 @@ module "sns_batch_failure" {
 
 }
 
+#checkov:skip=CKV_AWS_338: This transient alerting log group intentionally retains logs for 1 day.
 resource "aws_cloudwatch_log_group" "failures" {
   name              = "/aws/events/vol-app-${var.environment}-failures"
   retention_in_days = 1
