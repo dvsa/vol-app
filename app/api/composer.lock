@@ -5217,8 +5217,7 @@
       },
       "autoload-dev": {
         "psr-4": {
-          "Dvsa\\OlcsTest\\Transfer\\": "test/",
-          "Dvsa\\Olcs\\Transfer\\RectorRules\\": "rector-rules/src/"
+          "Dvsa\\OlcsTest\\Transfer\\": "test/"
         }
       },
       "scripts": {
