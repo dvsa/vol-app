@@ -23,9 +23,9 @@ final class Update extends AbstractCommand
 
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
     protected $name;
 
     /**
