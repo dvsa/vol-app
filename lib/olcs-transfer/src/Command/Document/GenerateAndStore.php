@@ -11,7 +11,7 @@
 namespace Dvsa\Olcs\Transfer\Command\Document;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\TrafficAreasOptional;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\ApplicationOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\BusRegOptional;
@@ -20,10 +20,8 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\IrfoOrganisationOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\LicenceOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TransportManagerOptional;
 
-/**
- * @Transfer\RouteName("backend/document/generate-and-store")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/document/generate-and-store')]
+#[Transfer\Method('POST')]
 class GenerateAndStore extends AbstractCommand
 {
     use ApplicationOptional;
@@ -38,9 +36,7 @@ class GenerateAndStore extends AbstractCommand
 
     protected $query = [];
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $knownValues = [];
 
     protected $category;
@@ -53,39 +49,25 @@ class GenerateAndStore extends AbstractCommand
 
     protected $isScan = 0;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $metadata;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $dispatch = false;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $submission;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $operatingCentre;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $opposition;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $issuedDate;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $disableBookmarks;
 
     /**

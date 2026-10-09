@@ -7,7 +7,6 @@
 namespace Dvsa\Olcs\Api\Domain\Command\Cases\ConditionUndertaking;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 
 /**
  * Class CreateConditionUndertaking

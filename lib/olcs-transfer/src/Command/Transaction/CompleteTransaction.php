@@ -8,42 +8,33 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Transaction;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/transaction/by-reference")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/transaction/by-reference')]
+#[Transfer\Method('POST')]
 class CompleteTransaction extends AbstractCommand
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1])]
     protected $reference;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"fpm_card_online", "fpm_card_offline"}})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['fpm_card_online', 'fpm_card_offline']])]
     protected $paymentMethod;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
-     */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $cpmsData = [];
 
     /**
      * If payment is for an application submission, supply the application id here
      * and it will be submitted if payment succeeds
-     *
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $submitApplicationId;
 
 

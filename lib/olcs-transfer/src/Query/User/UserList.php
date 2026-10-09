@@ -8,12 +8,10 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\RolesOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TeamOptional;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTraitOptional;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/user/internal")
- */
+#[Transfer\RouteName('backend/user/internal')]
 final class UserList extends AbstractQuery implements OrderedQueryInterface
 {
     use OrderedTraitOptional;

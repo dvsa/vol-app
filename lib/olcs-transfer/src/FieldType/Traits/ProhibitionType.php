@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait NoteType
  *
@@ -12,22 +14,9 @@ trait ProhibitionType
 {
     /**
      * @var String
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *     options={
-     *          "haystack": {
-     *              "pro_t_si",
-     *              "pro_t_sd",
-     *              "pro_t_sv",
-     *              "pro_t_i",
-     *              "pro_t_d",
-     *              "pro_t_v",
-     *              "pro_t_ro",
-     *              "pro_t_vr"
-     *          }
-     *      }
-     * )
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['pro_t_si', 'pro_t_sd', 'pro_t_sv', 'pro_t_i', 'pro_t_d', 'pro_t_v', 'pro_t_ro', 'pro_t_vr']])]
     protected $prohibitionType;
 
     /**

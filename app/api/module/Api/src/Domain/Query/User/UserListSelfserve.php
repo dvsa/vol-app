@@ -14,6 +14,7 @@ use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * User List Selfserve
@@ -26,20 +27,16 @@ final class UserListSelfserve extends AbstractQuery implements PagedQueryInterfa
     use OrganisationOptional;
     use LastLoggedInFromOptional;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter("Laminas\Filter\Digits")]
+    #[Transfer\Validator("Laminas\Validator\Digits")]
+    #[Transfer\Validator("Laminas\Validator\GreaterThan", options: ["min" => 0])]
+    #[Transfer\Optional]
     protected $localAuthority = null;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter("Laminas\Filter\Digits")]
+    #[Transfer\Validator("Laminas\Validator\Digits")]
+    #[Transfer\Validator("Laminas\Validator\GreaterThan", options: ["min" => 0])]
+    #[Transfer\Optional]
     protected $partnerContactDetails = null;
 
     /**

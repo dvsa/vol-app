@@ -7,11 +7,9 @@ use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/licence/single/goods-vehicles")
- */
+#[Transfer\RouteName('backend/licence/single/goods-vehicles')]
 class GoodsVehicles extends AbstractGoodsVehicles implements PagedQueryInterface, OrderedQueryInterface, FiltersByVehicleIdsInterface
 {
     use PagedTrait;
@@ -19,18 +17,9 @@ class GoodsVehicles extends AbstractGoodsVehicles implements PagedQueryInterface
 
     /**
      * @var array|null
-     * @Transfer\Validator("\Dvsa\Olcs\Transfer\Validators\ValidateEach",
-     *     options={
-     *         "min": 1,
-     *         "max": 100,
-     *         "children": {
-     *             {"name": "\Laminas\Validator\Digits", "options": {}},
-     *             {"name": "\Laminas\Validator\GreaterThan", "options": {"min": 0}}
-     *         },
-     *     }
-     * )
-     * @Transfer\Optional
      */
+    #[Transfer\Validator('\Dvsa\Olcs\Transfer\Validators\ValidateEach', options: ['min' => 1, 'max' => 100, 'children' => [['name' => '\Laminas\Validator\Digits', 'options' => []], ['name' => '\Laminas\Validator\GreaterThan', 'options' => ['min' => 0]]]])]
+    #[Transfer\Optional]
     protected $vehicleIds;
 
     /**

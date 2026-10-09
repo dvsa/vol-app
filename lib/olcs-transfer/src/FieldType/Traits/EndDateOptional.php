@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait EndDateOptional
  *
@@ -10,11 +12,9 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait EndDateOptional
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Optional]
     protected $endDate;
 
     /**

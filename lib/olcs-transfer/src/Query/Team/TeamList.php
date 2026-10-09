@@ -8,16 +8,14 @@
 
 namespace Dvsa\Olcs\Transfer\Query\Team;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 
-/**
- * @Transfer\RouteName("backend/team")
- */
+#[Transfer\RouteName('backend/team')]
 final class TeamList extends AbstractQuery implements
     PagedQueryInterface,
     OrderedQueryInterface

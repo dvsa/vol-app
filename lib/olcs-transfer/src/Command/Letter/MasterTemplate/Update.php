@@ -2,14 +2,12 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Letter\MasterTemplate;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 
-/**
- * @Transfer\RouteName("backend/letter/master-template/single")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/letter/master-template/single')]
+#[Transfer\Method('PUT')]
 final class Update extends AbstractCommand
 {
     use Identity;
@@ -17,22 +15,22 @@ final class Update extends AbstractCommand
 
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
     protected $name;
 
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Escape(false)
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Escape(false)]
     protected $templateContent;
 
     /**
      * @var bool
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $isDefault;
 
     /**
@@ -40,46 +38,46 @@ final class Update extends AbstractCommand
      * ISO codes, e.g. en_GB, en_NI, cy_GB, customN_GB (VOL-7305).
      *
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"max":20})
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['max' => 20])]
     protected $locale;
 
     /**
      * EditorJS JSON for the top-left header slot (VOL-7305).
      *
      * @var array
-     * @Transfer\Optional
-     * @Transfer\Escape(false)
      */
+    #[Transfer\Optional]
+    #[Transfer\Escape(false)]
     protected $headerLeftContent;
 
     /**
      * EditorJS JSON for the top-right header slot (VOL-7305).
      *
      * @var array
-     * @Transfer\Optional
-     * @Transfer\Escape(false)
      */
+    #[Transfer\Optional]
+    #[Transfer\Escape(false)]
     protected $headerRightContent;
 
     /**
      * EditorJS JSON for the signoff slot (VOL-7305).
      *
      * @var array
-     * @Transfer\Optional
-     * @Transfer\Escape(false)
      */
+    #[Transfer\Optional]
+    #[Transfer\Escape(false)]
     protected $signoffContent;
 
     /**
      * EditorJS JSON for the footer slot (VOL-7305).
      *
      * @var array
-     * @Transfer\Optional
-     * @Transfer\Escape(false)
      */
+    #[Transfer\Optional]
+    #[Transfer\Escape(false)]
     protected $footerContent;
 
 

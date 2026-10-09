@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait EmailTemplateCategory
  *
@@ -11,11 +13,11 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 trait EmailTemplateCategory
 {
     /**
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": -1})
-     * @Transfer\Optional
      * @var int
      */
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => -1])]
+    #[Transfer\Optional]
     protected $emailTemplateCategory;
 
     /**

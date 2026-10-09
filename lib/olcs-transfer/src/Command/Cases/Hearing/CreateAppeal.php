@@ -3,115 +3,79 @@
 namespace Dvsa\Olcs\Transfer\Command\Cases\Hearing;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/appeal")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/appeal')]
+#[Transfer\Method('POST')]
 class CreateAppeal extends AbstractCommand
 {
-    /**
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $case = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $deadlineDate = null;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $appealDate = null;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":2,"max":20})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 20])]
     protected $appealNo = null;
 
-    /**
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"appeal_r_app","appeal_r_lic_non_pi","appeal_r_lic_pi","appeal_r_tm_non_pi","appeal_r_tm_pi"}})
-     */
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['appeal_r_app', 'appeal_r_lic_non_pi', 'appeal_r_lic_pi', 'appeal_r_tm_non_pi', 'appeal_r_tm_pi']])]
     protected $reason = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":5,"max":4000})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 4000])]
     protected $outlineGround = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $hearingDate = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $decisionDate = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $papersDueDate = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $papersDueTcDate = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $papersSentDate = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $papersSentTcDate = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"appeal_o_dis","appeal_o_pas","appeal_o_ref","appeal_o_suc"}})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['appeal_o_dis', 'appeal_o_pas', 'appeal_o_ref', 'appeal_o_suc']])]
     protected $outcome = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":5,"max":4000})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 4000])]
     protected $comment = null;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
     protected $isWithdrawn = null;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $withdrawnDate = null;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
     protected $dvsaNotified = null;
 
     /**

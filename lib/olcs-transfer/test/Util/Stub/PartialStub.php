@@ -2,7 +2,7 @@
 
 namespace Dvsa\OlcsTest\Transfer\Util\Stub;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * Partial Stub
@@ -11,23 +11,17 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
  */
 class PartialStub
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Filter("Laminas\Filter\Digits")]
+    #[Transfer\Validator("Laminas\Validator\Digits")]
+    #[Transfer\Validator("Laminas\Validator\GreaterThan", options: ["min" => 0])]
     protected $id;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Filter("Laminas\Filter\Digits")]
+    #[Transfer\Validator("Laminas\Validator\Digits")]
+    #[Transfer\Validator("Laminas\Validator\GreaterThan", options: ["min" => 0])]
     protected $version;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Filter("Laminas\Filter\StringTrim")]
     public $foo;
 
     /**

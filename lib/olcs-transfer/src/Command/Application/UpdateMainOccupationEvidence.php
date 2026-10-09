@@ -6,12 +6,10 @@ namespace Dvsa\Olcs\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\AbstractIdWithVersionCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\EvidenceUploadType;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/application/single/main-occupation-evidence")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/application/single/main-occupation-evidence')]
+#[Transfer\Method('PUT')]
 final class UpdateMainOccupationEvidence extends AbstractIdWithVersionCommand
 {
     use EvidenceUploadType;

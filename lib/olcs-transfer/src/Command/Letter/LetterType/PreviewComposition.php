@@ -2,7 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Letter\LetterType;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
 /**
@@ -11,10 +11,9 @@ use Dvsa\Olcs\Transfer\Command\AbstractCommand;
  * A command rather than a query because the composition is too large to carry in a query string,
  * and every Query DTO in this library is a GET. Nothing is written -- the handler builds a
  * transient LetterInstance and discards it.
- *
- * @Transfer\RouteName("backend/letter/letter-type/preview-composition")
- * @Transfer\Method("POST")
  */
+#[Transfer\RouteName('backend/letter/letter-type/preview-composition')]
+#[Transfer\Method('POST')]
 final class PreviewComposition extends AbstractCommand
 {
     /**
@@ -22,9 +21,9 @@ final class PreviewComposition extends AbstractCommand
      * when the caller sends none.
      *
      * @var int
-     * @Transfer\Filter("Laminas\Filter\ToInt")
-     * @Transfer\Validator("Laminas\Validator\Digits")
      */
+    #[Transfer\Filter('Laminas\Filter\ToInt')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
     protected $letterType;
 
     /**
@@ -32,9 +31,9 @@ final class PreviewComposition extends AbstractCommand
      * LetterType\Update derives display_order from array position on save.
      *
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $sections;
 
     /**
@@ -42,25 +41,25 @@ final class PreviewComposition extends AbstractCommand
      * reported as blocking or advisory.
      *
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $sectionsRequired;
 
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $appendices;
 
     /**
      * Issue ids to include in the preview, so an admin can see how issue wording sits in the letter.
      *
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $issues;
 
     /**
@@ -68,16 +67,16 @@ final class PreviewComposition extends AbstractCommand
      * unresolvable bookmarks are reported.
      *
      * @var int
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\ToInt")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\ToInt')]
     protected $licence;
 
     /**
      * @var int
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\ToInt")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\ToInt')]
     protected $application;
 
     /**
@@ -85,8 +84,8 @@ final class PreviewComposition extends AbstractCommand
      * so an admin can exercise combinations no real record happens to cover.
      *
      * @var string
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $goodsOrPsv;
 
     /**
@@ -94,27 +93,27 @@ final class PreviewComposition extends AbstractCommand
      * variant pinning is_variation can never match one.
      *
      * @var bool
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $isVariation;
 
     /**
      * @var bool
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $isNi;
 
     /**
      * @var string
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $organisationType;
 
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $selectedChoiceIds;
 
 

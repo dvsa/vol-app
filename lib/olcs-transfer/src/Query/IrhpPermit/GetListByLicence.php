@@ -9,14 +9,12 @@
 namespace Dvsa\Olcs\Transfer\Query\IrhpPermit;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
 
-/**
- * @Transfer\RouteName("backend/irhp-permits/by-licence")
- */
+#[Transfer\RouteName('backend/irhp-permits/by-licence')]
 final class GetListByLicence extends AbstractQuery implements PagedQueryInterface
 {
     use PagedTrait;

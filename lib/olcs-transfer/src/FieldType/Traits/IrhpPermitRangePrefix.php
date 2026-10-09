@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * IrhpPermitRangePrefix
  *
@@ -11,12 +13,12 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 trait IrhpPermitRangePrefix
 {
     /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":1,"max":255})
-     * @Transfer\Optional
      *
      * @var string
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
+    #[Transfer\Optional]
     protected $prefix;
 
     /**

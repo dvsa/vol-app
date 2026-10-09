@@ -8,28 +8,22 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Licence;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType;
 
-/**
- * @Transfer\RouteName("backend/licence/single/decisions/curtail")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/licence/single/decisions/curtail')]
+#[Transfer\Method('POST')]
 final class CurtailLicence extends AbstractCommand
 {
     use FieldType\Traits\DecisionsOptional;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $id;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
     protected $deleteLicenceStatusRules = true;
 
 

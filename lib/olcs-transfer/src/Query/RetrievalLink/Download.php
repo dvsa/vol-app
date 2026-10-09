@@ -2,24 +2,22 @@
 
 namespace Dvsa\Olcs\Transfer\Query\RetrievalLink;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/retrieval-link/download")
- */
+#[Transfer\RouteName('backend/retrieval-link/download')]
 class Download extends AbstractQuery
 {
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $token;
 
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $memberRef;
 
     /**
@@ -27,9 +25,9 @@ class Download extends AbstractQuery
      * re-checks it as defence-in-depth against a download that bypasses the OTP step.
      *
      * @var string|null
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $grant;
 
     /**

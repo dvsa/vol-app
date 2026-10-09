@@ -12,14 +12,12 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\AnnualValue;
 use Dvsa\Olcs\Transfer\FieldType\Traits\EffectiveFrom;
 use Dvsa\Olcs\Transfer\FieldType\Traits\FiveYearValue;
 use Dvsa\Olcs\Transfer\FieldType\Traits\FixedValue;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 
-/**
- * @Transfer\RouteName("backend/fee-type/single")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/fee-type/single')]
+#[Transfer\Method('PUT')]
 final class Update extends AbstractCommand
 {
     use Identity;

@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait Irhp Permit Range Restricted Countries
  *
@@ -11,10 +13,9 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 trait IrhpPermitRangeRestrictedCountries
 {
     /**
-     * @Transfer\Optional
-     *
      * @var array
      */
+    #[Transfer\Optional]
     protected $countrys = [];
 
     /**

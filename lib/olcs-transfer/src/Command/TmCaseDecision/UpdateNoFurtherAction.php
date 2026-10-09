@@ -6,41 +6,31 @@
 
 namespace Dvsa\Olcs\Transfer\Command\TmCaseDecision;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldType;
 
-/**
- * @Transfer\RouteName("backend/tm-case-decision/single/no-further-action")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/tm-case-decision/single/no-further-action')]
+#[Transfer\Method('PUT')]
 final class UpdateNoFurtherAction extends AbstractCommand
 {
     use FieldType\Identity;
     use FieldType\Version;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
     protected $isMsi;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $decisionDate;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $notifiedDate = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"max":4000})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['max' => 4000])]
     protected $noFurtherActionReason = null;
 
     /**

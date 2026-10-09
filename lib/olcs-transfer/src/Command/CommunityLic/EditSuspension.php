@@ -8,50 +8,38 @@
 
 namespace Dvsa\Olcs\Transfer\Command\CommunityLic;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldTypeTraits;
 
-/**
- * @Transfer\RouteName("backend/community-lic/edit-suspension/single")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/community-lic/edit-suspension/single')]
+#[Transfer\Method('PUT')]
 final class EditSuspension extends AbstractCommand
 {
     use FieldTypeTraits\Identity;
     use FieldTypeTraits\Version;
 
-    /**
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $communityLicenceId;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"cl_sts_active", "cl_sts_suspended"}})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['cl_sts_active', 'cl_sts_suspended']])]
     protected $status;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     * @Transfer\Optional
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Optional]
     protected $startDate;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     * @Transfer\Optional
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Optional]
     protected $endDate;
 
-    /**
-     * @Transfer\ArrayInput
-     * @Transfer\ArrayValidator("Laminas\Validator\NotEmpty")
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\FilterEmptyItems")
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\UniqueItems")
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayValidator('Laminas\Validator\NotEmpty')]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\FilterEmptyItems')]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\UniqueItems')]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $reasons = [];
 
     /**

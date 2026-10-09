@@ -9,12 +9,10 @@
 namespace Dvsa\Olcs\Transfer\Query\Organisation;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/organisation/single/business-details")
- */
+#[Transfer\RouteName('backend/organisation/single/business-details')]
 class BusinessDetails extends AbstractQuery
 {
     use Identity;

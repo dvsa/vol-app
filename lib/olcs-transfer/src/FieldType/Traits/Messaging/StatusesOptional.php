@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits\Messaging;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait Conversation
  *
@@ -11,14 +13,10 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits\Messaging;
  */
 trait StatusesOptional
 {
-    /**
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={
-     *     "haystack": {"open", "closed"}
-     * })
-     */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['open', 'closed']])]
     protected array $statuses = [];
 
     public function getStatuses(): array

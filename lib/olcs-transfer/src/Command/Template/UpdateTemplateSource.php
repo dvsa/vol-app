@@ -10,13 +10,11 @@ namespace Dvsa\Olcs\Transfer\Command\Template;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TemplateSource;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/template/update-template-source")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/template/update-template-source')]
+#[Transfer\Method('PUT')]
 final class UpdateTemplateSource extends AbstractCommand
 {
     use Identity;

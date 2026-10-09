@@ -8,11 +8,9 @@ namespace Dvsa\Olcs\Transfer\Query\IrhpPermitStock;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Country;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/irhp-permit-stock/available-bilateral")
- */
+#[Transfer\RouteName('backend/irhp-permit-stock/available-bilateral')]
 class AvailableBilateral extends AbstractQuery
 {
     use Country;

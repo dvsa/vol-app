@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * UnvalidatedVrm Trait
  *
@@ -11,8 +13,8 @@ trait UnvalidatedVrm
 {
     /**
      * @var mixed
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $unvalidatedVrm = null;
 
     /**

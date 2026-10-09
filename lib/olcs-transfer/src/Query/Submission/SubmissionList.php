@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Transfer\Query\Submission;
 
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
@@ -11,8 +11,8 @@ use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 
 /**
  * Class SubmissionList
- * @Transfer\RouteName("backend/submission")
  */
+#[Transfer\RouteName('backend/submission')]
 class SubmissionList extends AbstractQuery implements PagedQueryInterface, OrderedQueryInterface
 {
     use PagedTrait;
@@ -20,10 +20,10 @@ class SubmissionList extends AbstractQuery implements PagedQueryInterface, Order
 
     /**
      * @var int
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $case;
 
     /**

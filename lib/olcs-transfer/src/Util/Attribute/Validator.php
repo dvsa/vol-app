@@ -1,19 +1,11 @@
 <?php
 
-/**
- * Validator
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+namespace Dvsa\Olcs\Transfer\Util\Attribute;
 
-namespace Dvsa\Olcs\Transfer\Util\Annotation;
-
+use Attribute;
 use Laminas\Form\Annotation\Validator as LaminasValidator;
 
-/**
- * @Annotation
- * @NamedArgumentConstructor
- */
+#[Attribute(Attribute::TARGET_ALL | Attribute::IS_REPEATABLE)]
 class Validator
 {
     protected LaminasValidator $validator;

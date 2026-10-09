@@ -10,11 +10,9 @@ namespace Dvsa\Olcs\Transfer\Query\IrhpPermitWindow;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\IrhpPermitType;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/irhp-permit-window/open-by-type")
- */
+#[Transfer\RouteName('backend/irhp-permit-window/open-by-type')]
 class OpenByType extends AbstractQuery
 {
     use IrhpPermitType;

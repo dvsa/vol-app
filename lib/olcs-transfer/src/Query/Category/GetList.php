@@ -3,13 +3,11 @@
 namespace Dvsa\Olcs\Transfer\Query\Category;
 
 use Dvsa\Olcs\Transfer\Query\PublicQueryCacheInterface;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface;
 
-/**
- * @Transfer\RouteName("backend/category")
- */
+#[Transfer\RouteName('backend/category')]
 class GetList extends AbstractQuery implements
     \Dvsa\Olcs\Transfer\Query\OrderedQueryInterface,
     CacheableLongTermQueryInterface,
@@ -19,30 +17,30 @@ class GetList extends AbstractQuery implements
 
     /**
      * @var string
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\YesNo")
-     * @Transfer\Optional
      */
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\YesNo')]
+    #[Transfer\Optional]
     protected $isTaskCategory;
 
     /**
      * @var string
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\YesNo")
-     * @Transfer\Optional
      */
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\YesNo')]
+    #[Transfer\Optional]
     protected $isDocCategory;
 
     /**
      * @var string
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\YesNo")
-     * @Transfer\Optional
      */
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\YesNo')]
+    #[Transfer\Optional]
     protected $isScanCategory;
 
     /**
      * @var string
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\YesNo")
-     * @Transfer\Optional
      */
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\YesNo')]
+    #[Transfer\Optional]
     protected $isOnlyWithItems;
 
     /**

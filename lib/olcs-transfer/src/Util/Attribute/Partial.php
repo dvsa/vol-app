@@ -1,21 +1,14 @@
 <?php
 
-/**
- * Partial
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+namespace Dvsa\Olcs\Transfer\Util\Attribute;
 
-namespace Dvsa\Olcs\Transfer\Util\Annotation;
-
+use Attribute;
 use Laminas\Form\Annotation\ComposedObject;
 
 /**
- * @Annotation
- * @NamedArgumentConstructor
- *
  * @mixin ComposedObject
  */
+#[Attribute(Attribute::TARGET_PROPERTY)]
 class Partial
 {
     protected ComposedObject $composedObject;

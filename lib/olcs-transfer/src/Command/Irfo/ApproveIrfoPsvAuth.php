@@ -6,12 +6,10 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Irfo;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/irfo/psv-auth/single/approve")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/irfo/psv-auth/single/approve')]
+#[Transfer\Method('PUT')]
 final class ApproveIrfoPsvAuth extends UpdateIrfoPsvAuth
 {
 }
