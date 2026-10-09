@@ -8,7 +8,6 @@
 
 namespace Dvsa\Olcs\Transfer\Util\Annotation;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use Dvsa\Olcs\Transfer\Query\QueryContainer;
 use Dvsa\Olcs\Transfer\Command\CommandContainer;
 use Dvsa\Olcs\Transfer\Util\StructuredInput;
@@ -58,24 +57,6 @@ class AnnotationBuilder
     public function setValidatorManager(mixed $validatorManager)
     {
         $this->validatorManager = $validatorManager;
-    }
-
-
-    /** @var AnnotationReader */
-    protected $reader;
-
-    public function setReader(AnnotationReader $reader)
-    {
-        $this->reader = $reader;
-    }
-
-    public function getReader(): AnnotationReader
-    {
-        if ($this->reader === null) {
-            $this->setReader(new AnnotationReader());
-        }
-
-        return $this->reader;
     }
 
     public function createQuery($dto)
