@@ -1,5 +1,37 @@
 # Changelog
 
+## [9.5.0](https://github.com/dvsa/vol-app/compare/v9.4.0...v9.5.0) (2026-10-09)
+
+
+### Features
+
+* add video to Financial evidence page (VOL-7458) ([#1838](https://github.com/dvsa/vol-app/issues/1838)) ([a163c1e](https://github.com/dvsa/vol-app/commit/a163c1e4b497902bc41ea4c8f038c5d090ba46c1))
+* added video to Transport Managers page (VOL-7459) ([#1832](https://github.com/dvsa/vol-app/issues/1832)) ([77735d5](https://github.com/dvsa/vol-app/commit/77735d535a97735d5a6ef78c90122bfa42c699dd))
+* **api:** validate EBSR submissions against TransXChange 2.5.2, falling back to 2.5 VOL-7152 ([#1830](https://github.com/dvsa/vol-app/issues/1830)) ([87f03fa](https://github.com/dvsa/vol-app/commit/87f03fa7fb47b7ed9ddd6cfc10643d02933442e0))
+* clear cache ability from internal app VOL-7099 ([#1692](https://github.com/dvsa/vol-app/issues/1692)) ([e8da4d0](https://github.com/dvsa/vol-app/commit/e8da4d02a9fee73621cac3ecb5c79cdf82470f19))
+* update anondb permissions ([#1822](https://github.com/dvsa/vol-app/issues/1822)) ([701e5b6](https://github.com/dvsa/vol-app/commit/701e5b6ac79e0bdd5f6b0ca6a8c38c0f2486ef72))
+* vol 7319 financial evidence assessment page ([#1793](https://github.com/dvsa/vol-app/issues/1793)) ([9a5436e](https://github.com/dvsa/vol-app/commit/9a5436e08b7ca15bb557d373244d1df23beb691f))
+
+
+### Bug Fixes
+
+* 7589 CI security fixes 1 ([#1812](https://github.com/dvsa/vol-app/issues/1812)) ([07b7184](https://github.com/dvsa/vol-app/commit/07b7184022548c9dbeb6f91bd880202b2bbbbb95))
+* 7589 various CI security fixes ([#1817](https://github.com/dvsa/vol-app/issues/1817)) ([bb9583d](https://github.com/dvsa/vol-app/commit/bb9583d396019373ef4e77eb3da06ae5d0ad5dd8))
+* **api:** bind repository helpers to the correct query (vol-7599) ([#1807](https://github.com/dvsa/vol-app/issues/1807)) ([bf6e977](https://github.com/dvsa/vol-app/commit/bf6e9770c08490d33154754ef98331150680726f))
+* **api:** correct ebsr submission status filter ([#1799](https://github.com/dvsa/vol-app/issues/1799)) ([c90ccb1](https://github.com/dvsa/vol-app/commit/c90ccb196867c9c8a3fd3158f347230c3fb6d263))
+* **api:** cover unspecified date exclusion , ([#1826](https://github.com/dvsa/vol-app/issues/1826)) ([d793370](https://github.com/dvsa/vol-app/commit/d7933704964e20e621cd778e264564e6fdff067f))
+* **api:** hide unspecified vehicles on the continuation summary VOL-1908 ([#1833](https://github.com/dvsa/vol-app/issues/1833)) ([678a372](https://github.com/dvsa/vol-app/commit/678a37279d571f0ef293a770d89f068174c9a971))
+* **api:** preserve combined transport manager licence filters (vol-7600) ([#1805](https://github.com/dvsa/vol-app/issues/1805)) ([1169bde](https://github.com/dvsa/vol-app/commit/1169bde80a10367de75f8602c4facb5c726fce42))
+* docs snyk vulnerabilities ([#1825](https://github.com/dvsa/vol-app/issues/1825)) ([7721035](https://github.com/dvsa/vol-app/commit/7721035b5b0270d8cc3a06bd15cdbe816e0b91b2))
+* ensure query params do not override hiding external docs ([1380ee5](https://github.com/dvsa/vol-app/commit/1380ee5183ac3ed5286ab328d7c23e7f71fdad1c))
+* hide external docs for unsubmitted applications ([4715922](https://github.com/dvsa/vol-app/commit/47159226f917c37aea3821e5ab395bc6ef1aa9cc))
+* hide idp guidance on unrelated upload forms ([#1823](https://github.com/dvsa/vol-app/issues/1823)) ([66c4e6c](https://github.com/dvsa/vol-app/commit/66c4e6c53ae6e3eb83703382fcdcd499dfd2e2b7))
+* **internal:** inject form helper into financial evidence assessment controller ([#1811](https://github.com/dvsa/vol-app/issues/1811)) ([dbff68e](https://github.com/dvsa/vol-app/commit/dbff68edbf263f187d12e2e4f0337630aeb0819a))
+* keep letter variant dropdowns selected when editing a section variant ([#1816](https://github.com/dvsa/vol-app/issues/1816)) ([aa89e15](https://github.com/dvsa/vol-app/commit/aa89e15374a113878d7b50f6580ed7c49ce87eec))
+* let admins name letter to-dos VOL-7649 ([#1836](https://github.com/dvsa/vol-app/issues/1836)) ([b28c97b](https://github.com/dvsa/vol-app/commit/b28c97b9ab5202221c28a297b49ea8f33a52468f))
+* retain supporting evidence after removing a document (vol-5605) ([#1818](https://github.com/dvsa/vol-app/issues/1818)) ([641c379](https://github.com/dvsa/vol-app/commit/641c37905091b5e1f5910b1e639a2dbaadcf0a43))
+* show knowledge and experience ([#1835](https://github.com/dvsa/vol-app/issues/1835)) ([61fb2c2](https://github.com/dvsa/vol-app/commit/61fb2c280851c23ec78a07c3fad3220d27e00907))
+
 ## [9.4.0](https://github.com/dvsa/vol-app/compare/v9.3.0...v9.4.0) (2026-09-28)
 
 
