@@ -1,0 +1,322 @@
+{
+  "name": "lva-type-of-licence",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "type-of-licence",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "operator-location",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "short-label": "short-label-tol-operator-location",
+                "fieldset-attributes": {
+                  "id": "operator-location"
+                },
+                "fieldset-data-group": "operator-location",
+                "label": "application_type-of-licence_operator-location.data.niFlag",
+                "label_attributes": {
+                  "class": "form-control form-control--radio"
+                },
+                "value_options": [
+                  {
+                    "value": "N",
+                    "label": "Great Britain"
+                  },
+                  {
+                    "value": "Y",
+                    "label": "Northern Ireland"
+                  }
+                ]
+              },
+              "type": "Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "operator-type",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "short-label": "short-label-tol-operator-type",
+                "error-message": "operator-type-error",
+                "fieldset-attributes": {
+                  "id": "operator-type"
+                },
+                "fieldset-data-group": "operator-type",
+                "label": "application_type-of-licence_operator-type.data.goodsOrPsv",
+                "label_attributes": {
+                  "class": "form-control form-control--radio"
+                },
+                "value_options": {
+                  "0": {
+                    "value": "lcat_gv",
+                    "label": "Goods vehicles"
+                  },
+                  "lcat_psv": "Public service vehicles"
+                }
+              },
+              "type": "Radio"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "licence-type",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "licence-type",
+                    "attributes": {
+                      "id": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\Radio",
+                    "options": {
+                      "short-label": "short-label-tol-licence-type",
+                      "error-message": "type-of-licence-error",
+                      "fieldset-attributes": {
+                        "id": "licence-type"
+                      },
+                      "fieldset-data-group": "licence-type",
+                      "label": "application_type-of-licence_licence-type.data.licenceType",
+                      "label_attributes": {
+                        "class": "form-control form-control--radio"
+                      },
+                      "value_options": {
+                        "ltyp_r": {
+                          "value": "ltyp_r",
+                          "label": "Restricted"
+                        },
+                        "ltyp_sn": "Standard National",
+                        "ltyp_si": {
+                          "value": "ltyp_si",
+                          "label": "Standard International"
+                        },
+                        "Special Restricted": {
+                          "value": "ltyp_sr",
+                          "label": "Special Restricted",
+                          "attributes": {
+                            "id": "ltyp_sr_radio"
+                          },
+                          "item_wrapper_attributes": {
+                            "id": "ltyp_sr_radio_group"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "ltyp_rContent",
+                    "attributes": {
+                      "value": "application_type-of-licence_licence-type.data.restrictedGuidance",
+                      "data-container-class": "typeOfLicence-guidance-restricted js-visible"
+                    },
+                    "options": {
+                      "tokens": [
+                        "application_type-of-licence_licence-type.data.restrictedGuidance"
+                      ]
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+                  }
+                }
+              ],
+              "fieldsets": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "ltyp_siContent",
+                    "attributes": [],
+                    "elements": [
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "vehicle-type",
+                          "options": {
+                            "error-message": "type-of-vehicle-error",
+                            "label": "application_type-of-licence_licence-type.data.vehicleType",
+                            "label_attributes": {
+                              "class": "form-control form-control--radio"
+                            },
+                            "hint": "application_type-of-licence_licence-type.data.vehicleType.hint",
+                            "value_options": {
+                              "app_veh_type_lgv": {
+                                "value": "app_veh_type_lgv",
+                                "label": "select-option-yes"
+                              },
+                              "app_veh_type_mixed": {
+                                "value": "app_veh_type_mixed",
+                                "label": "select-option-no"
+                              }
+                            }
+                          },
+                          "type": "\\Common\\Form\\Elements\\Types\\Radio"
+                        }
+                      }
+                    ],
+                    "fieldsets": [
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "lgv-declaration",
+                          "attributes": {
+                            "id": "lgv-declaration"
+                          },
+                          "elements": [
+                            {
+                              "flags": [],
+                              "spec": {
+                                "name": "lgv-declaration-confirmation",
+                                "attributes": {
+                                  "id": "lgv-declaration-confirmation",
+                                  "data-container-class": "lgv-declaration-confirmation"
+                                },
+                                "options": {
+                                  "checked_value": "1",
+                                  "unchecked_value": "0",
+                                  "label": "application_type-of-licence_licence-type.data.lgvDeclarationConfirmation",
+                                  "must_be_value": "1",
+                                  "not_checked_message": "lgv-undertakings.form.declaration.error",
+                                  "label_attributes": {
+                                    "class": "form-control form-control--checkbox form-control--advanced"
+                                  }
+                                },
+                                "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+                              }
+                            },
+                            {
+                              "flags": [],
+                              "spec": {
+                                "name": "lgvDeclarationWarning",
+                                "attributes": {
+                                  "value": "<p class='exclamation'>%s</p>"
+                                },
+                                "options": {
+                                  "tokens": [
+                                    "application_type-of-licence_licence-type.data.lgvDeclarationWarning"
+                                  ]
+                                },
+                                "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+                              }
+                            }
+                          ],
+                          "fieldsets": [],
+                          "type": "Laminas\\Form\\Fieldset",
+                          "options": {
+                            "label": "application_type-of-licence_licence-type.data.lgvDeclaration"
+                          }
+                        }
+                      }
+                    ],
+                    "type": "Laminas\\Form\\Fieldset",
+                    "options": []
+                  }
+                }
+              ],
+              "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+              "options": {
+                "radio-element": "licence-type",
+                "label": "short-label-tol-licence-type"
+              }
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "saveAndContinue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "save.continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

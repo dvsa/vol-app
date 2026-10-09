@@ -1,0 +1,107 @@
+{
+  "name": "continuation",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "details",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "type",
+              "attributes": {
+                "id": "generate-continuation-type",
+                "placeholder": "",
+                "value": "con_typ_operator"
+              },
+              "options": {
+                "label": "Type",
+                "value_options": {
+                  "operator": "Operator licences",
+                  "irfo": "IRFO PSV Authorisations"
+                }
+              },
+              "type": "Select"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "date",
+              "attributes": {
+                "id": "generate-continuation-date",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Date",
+                "min_year_delta": "-30",
+                "max_year_delta": "+10",
+                "default_date": "now"
+              },
+              "type": "MonthSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "trafficArea",
+              "attributes": {
+                "id": "generate-continuation-trafficArea",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Traffic area",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\TrafficArea"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "generate",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Generate"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

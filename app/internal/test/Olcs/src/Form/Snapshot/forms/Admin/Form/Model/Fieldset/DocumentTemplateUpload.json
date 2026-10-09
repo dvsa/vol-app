@@ -1,0 +1,207 @@
+{
+  "name": "DocumentTemplateUpload",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "templateFolder",
+        "attributes": {
+          "id": "templateFolder",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "label": "Template Folder",
+          "value_options": {
+            "root": "templates/",
+            "gb": "templates/GB",
+            "ni": "templates/NI",
+            "image": "templates/Image",
+            "guides": "guides/"
+          },
+          "empty_option": "Please select",
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "category",
+        "attributes": {
+          "id": "category",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "label": "Category",
+          "service_name": "Olcs\\Service\\Data\\Category"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "subCategory",
+        "attributes": {
+          "id": "subCategory",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Sub category",
+          "service_name": "Olcs\\Service\\Data\\SubCategory"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "options": {
+          "label": "Description"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "templateSlug",
+        "options": {
+          "label": "Template Slug Identifier (optional)"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "letterType",
+        "attributes": {
+          "id": "letterType",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Letter Type (optional)",
+          "service_name": "Olcs\\Service\\Data\\LetterType",
+          "empty_option": "None"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "file",
+        "options": {
+          "label": "File Upload"
+        },
+        "type": "\\Laminas\\Form\\Element\\File"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "suppressFromOp",
+        "attributes": {
+          "required": "required"
+        },
+        "type": "Radio",
+        "options": {
+          "label": "Supress From Op",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isNi",
+        "attributes": {
+          "required": "required"
+        },
+        "type": "Radio",
+        "options": {
+          "label": "Is this a Northern Ireland template?",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "templateFolder": {
+      "name": "templateFolder",
+      "required": true
+    },
+    "category": {
+      "name": "category",
+      "required": true
+    },
+    "subCategory": {
+      "name": "subCategory",
+      "required": false
+    },
+    "description": {
+      "name": "description",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "templateSlug": {
+      "name": "templateSlug",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 100
+          }
+        }
+      ],
+      "required": false
+    },
+    "letterType": {
+      "name": "letterType",
+      "required": false
+    },
+    "suppressFromOp": {
+      "name": "suppressFromOp",
+      "required": true
+    },
+    "isNi": {
+      "name": "isNi",
+      "required": true
+    }
+  }
+}

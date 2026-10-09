@@ -1,0 +1,75 @@
+{
+  "name": "note-filter",
+  "attributes": {
+    "method": "get",
+    "class": "filters form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "noteType",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "internal-licence-processing-notes.data.notetype",
+          "disable_inarray_validator": false,
+          "category": "note_type",
+          "empty_option": "All",
+          "exclude": [
+            "note_t_org"
+          ]
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "sort",
+        "attributes": {
+          "value": "priority"
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "order",
+        "attributes": {
+          "value": "DESC"
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "limit",
+        "attributes": {
+          "value": "10"
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "page",
+        "attributes": {
+          "value": "1"
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": []
+}

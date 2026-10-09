@@ -1,0 +1,341 @@
+{
+  "name": "lva-vehicles-declarations-evidence-large",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "largeEvidenceText",
+        "attributes": {
+          "value": "markup-psv-large-evidence-form"
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "evidence",
+        "attributes": {
+          "class": "last"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "uploadedFileCount",
+              "options": {
+                "fieldset-attributes": {
+                  "id": "files"
+                }
+              },
+              "attributes": {
+                "required": false,
+                "id": "uploadedFileCount"
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "evidenceStatementGuidance",
+              "attributes": {
+                "value": "lva-financial-evidence-statement.hint",
+                "data-container-class": "govuk-inset-text"
+              },
+              "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "uploadNowRadio",
+              "attributes": {
+                "id": "uploadNowRadio",
+                "allowWrap": true,
+                "data-container-class": "form-control__container"
+              },
+              "options": {
+                "label": "lva-financial-evidence-upload-now.label",
+                "label_attributes": {
+                  "class": "form-control form-control--radio"
+                },
+                "value_options": {
+                  "1": "lva-financial-evidence-upload-now.yes"
+                },
+                "error-message": "financialEvidence_uploadNow-error",
+                "single-radio": true
+              },
+              "type": "\\Laminas\\Form\\Element\\Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "uploadLaterRadio",
+              "attributes": {
+                "id": "uploadLaterRadio",
+                "allowWrap": true,
+                "data-container-class": "form-control__container"
+              },
+              "options": {
+                "label": "lva-financial-evidence-upload-now.label",
+                "label_attributes": {
+                  "class": "form-control form-control--radio"
+                },
+                "value_options": {
+                  "2": "lva-financial-evidence-upload-now.later"
+                },
+                "error-message": "financialEvidence_uploadNow-error",
+                "single-radio": true
+              },
+              "type": "\\Laminas\\Form\\Element\\Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "uploadLaterMessage",
+              "attributes": {
+                "id": "uploadLaterMessage",
+                "data-container-class": "upload-later last",
+                "value": "markup-financial-evidence-upload-later",
+                "class": "upload-later-message"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "files",
+              "attributes": {
+                "class": "file-uploader",
+                "id": "files"
+              },
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "fileCount",
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "file",
+                    "attributes": {
+                      "class": "js-visually-hidden"
+                    },
+                    "options": {
+                      "value": "common.file-upload.browse.title",
+                      "hint": "common.file-upload.browse.hint"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "__messages__",
+                    "attributes": [],
+                    "options": [],
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "upload",
+                    "attributes": {
+                      "data-module": "govuk-button",
+                      "type": "submit",
+                      "class": "inline-upload govuk-button js-upload"
+                    },
+                    "options": {
+                      "label": "Upload"
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+                  }
+                }
+              ],
+              "fieldsets": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "list",
+                    "attributes": {
+                      "class": "js-upload-list"
+                    },
+                    "options": {
+                      "preview_images": "true"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+                  }
+                }
+              ],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "lva-financial-evidence-evidence.label",
+          "hint": "lva-psv-evidence.hint"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "saveAndContinue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "save.continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "evidence": {
+      "uploadedFileCount": {
+        "name": "uploadedFileCount",
+        "allow_empty": true,
+        "type": "Common\\InputFilter\\ContinueIfEmptyInput",
+        "required": true,
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "uploadNowRadio",
+              "context_values": [
+                "1"
+              ],
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\FileUploadCount",
+                  "options": {
+                    "min": 1,
+                    "message": "lva-financial-evidence-upload.required"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "uploadNowRadio": {
+        "name": "uploadNowRadio",
+        "required": false
+      },
+      "files": {
+        "fileCount": {
+          "name": "fileCount",
+          "required": false,
+          "validators": [
+            {
+              "name": "Laminas\\Validator\\NotEmpty",
+              "options": [
+                "null"
+              ]
+            },
+            {
+              "name": "Common\\Validator\\FileUploadCountV2",
+              "options": {
+                "min": 1
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "uploadLaterRadio": {
+        "name": "uploadLaterRadio",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

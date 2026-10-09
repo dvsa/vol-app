@@ -1,0 +1,26 @@
+{
+  "name": "ChecklistReminderFilter",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "date",
+        "attributes": {
+          "id": "generate-continuation-date",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Date",
+          "min_year_delta": "-5",
+          "max_year_delta": "+5",
+          "default_date": "now"
+        },
+        "type": "MonthSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "input_filter": []
+}

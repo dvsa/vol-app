@@ -1,0 +1,106 @@
+{
+  "name": "opposerContact",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary",
+        "attributes": {
+          "id": "phone",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary_id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary_version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary",
+        "attributes": {
+          "id": "phone",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "secondary-contact-number-optional"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary_id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary_version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailAddress",
+        "type": "Text",
+        "attributes": {
+          "id": "email",
+          "placeholder": "",
+          "class": "medium",
+          "required": false
+        },
+        "options": {
+          "label": "Email"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "emailAddress": {
+      "name": "emailAddress",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        }
+      ]
+    }
+  }
+}

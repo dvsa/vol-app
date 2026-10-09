@@ -1,0 +1,72 @@
+{
+  "name": "CreateVariation",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "receivedDate",
+        "type": "DateSelect",
+        "options": {
+          "label": "create-variation-application-received-date"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "feeRequired",
+        "type": "Radio",
+        "options": {
+          "label": "create-variation-fee-required",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "appliedVia",
+        "type": "Radio",
+        "options": {
+          "label": "Method of application",
+          "value_options": {
+            "applied_via_post": "Post",
+            "applied_via_phone": "Phone"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "receivedDate": {
+      "name": "receivedDate",
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ]
+    }
+  }
+}

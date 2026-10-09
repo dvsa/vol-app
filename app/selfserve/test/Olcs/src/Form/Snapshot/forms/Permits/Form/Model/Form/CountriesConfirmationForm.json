@@ -1,0 +1,97 @@
+{
+  "name": "CountriesConfirmation",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "countries",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "removedCountries",
+              "type": "\\Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "confirmation",
+              "options": {
+                "checked_value": "1",
+                "unchecked_value": "0",
+                "label": "permits.page.bilateral.countries-confirmation.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--advanced"
+                },
+                "must_be_value": "1",
+                "not_checked_message": "permits.page.bilateral.countries-confirmation.error"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "Submit",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "AcceptAndContinueButton",
+              "attributes": {
+                "class": "govuk-button",
+                "data-module": "govuk-button",
+                "type": "submit"
+              },
+              "options": {
+                "label": "permits.button.accept-and-continue"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "CancelButton",
+              "attributes": {
+                "type": "submit",
+                "role": "link"
+              },
+              "options": {
+                "label": "permits.button.cancel-return-to-overview"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

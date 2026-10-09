@@ -1,0 +1,66 @@
+{
+  "name": "annual-test-history-fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "annualTestHistory",
+        "attributes": {
+          "id": "annualTestHistory",
+          "class": "extra-long",
+          "name": "annualTestHistory"
+        },
+        "options": {
+          "label": "",
+          "label_attributes": {
+            "class": ""
+          }
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": ""
+  },
+  "input_filter": {
+    "annualTestHistory": {
+      "name": "annualTestHistory",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 4000
+          }
+        }
+      ]
+    }
+  }
+}

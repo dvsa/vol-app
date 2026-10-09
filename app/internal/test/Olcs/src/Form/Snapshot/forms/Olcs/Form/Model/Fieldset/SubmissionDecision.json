@@ -1,0 +1,127 @@
+{
+  "name": "SubmissionDecision-fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "actionTypes",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "js-sub_st_rec",
+          "multiple": false
+        },
+        "options": {
+          "label": "Decision type",
+          "category": "sub_st_dec",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "reasons",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "chosen-select-medium js-sub-legislation",
+          "multiple": true
+        },
+        "options": {
+          "label": "Legislation",
+          "service_name": "Olcs\\Service\\Data\\SubmissionLegislation",
+          "disable_inarray_validator": false,
+          "use_groups": true
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "comment",
+        "attributes": {
+          "id": "",
+          "class": "extra-long",
+          "name": "comment",
+          "required": true
+        },
+        "options": {
+          "label": "Decision reason",
+          "label_attributes": {
+            "class": ""
+          },
+          "column-size": ""
+        },
+        "type": "EditorJs"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isDecision",
+        "attributes": {
+          "value": "Y"
+        },
+        "options": {
+          "value": "Y"
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submission",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "reasons": {
+      "name": "reasons",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "comment": {
+      "name": "comment",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

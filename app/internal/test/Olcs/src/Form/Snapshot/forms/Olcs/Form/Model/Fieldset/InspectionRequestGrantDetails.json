@@ -1,0 +1,61 @@
+{
+  "name": "inspection-request-grant-details",
+  "attributes": {
+    "class": "",
+    "id": "inspectionRequestGrantDetails"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "dueDate",
+        "attributes": {
+          "required": false
+        },
+        "type": "Radio",
+        "options": {
+          "label": "internal.inspection-request.form.due-date",
+          "value_options": {
+            "3": "internal.inspection-request.form.3-month",
+            "6": "internal.inspection-request.form.6-month",
+            "9": "internal.inspection-request.form.9-month",
+            "12": "internal.inspection-request.form.12-month"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "caseworkerNotes",
+        "attributes": {
+          "id": "caseworkerNotes",
+          "class": "long",
+          "name": "caseworkerNotes",
+          "required": false
+        },
+        "options": {
+          "label": "internal.inspection-request.form.caseworker-notes",
+          "label_attributes": {
+            "class": "long"
+          }
+        },
+        "type": "TextArea"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "dueDate": {
+      "name": "dueDate",
+      "required": true
+    },
+    "caseworkerNotes": {
+      "name": "caseworkerNotes",
+      "required": false
+    }
+  }
+}

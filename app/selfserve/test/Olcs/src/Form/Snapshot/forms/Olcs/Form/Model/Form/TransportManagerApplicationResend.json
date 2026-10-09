@@ -1,0 +1,40 @@
+{
+  "name": "transport-manager-application-resend",
+  "attributes": {
+    "method": "post",
+    "action": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "formName",
+        "attributes": {
+          "value": "transport-manager-application-resend"
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "aria-label": "Confirm resend link to Transport Manger"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton",
+        "options": {
+          "label": "resend-link"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "hydrator": {
+    "type": "Laminas\\Hydrator\\ArraySerializableHydrator"
+  },
+  "input_filter": []
+}

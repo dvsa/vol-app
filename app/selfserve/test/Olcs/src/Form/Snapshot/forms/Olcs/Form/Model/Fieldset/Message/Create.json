@@ -1,0 +1,266 @@
+{
+  "name": "Create",
+  "attributes": [],
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "inputs",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "messageSubject",
+              "options": {
+                "label": "messaging.subject",
+                "empty_option": "Please select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\MessagingSubject"
+              },
+              "attributes": {
+                "class": "govuk-select"
+              },
+              "type": "Common\\Form\\Element\\DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "appOrLicNo",
+              "options": {
+                "label": "messaging.app-or-lic-no",
+                "empty_option": "Please select",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\MessagingAppOrLicNo",
+                "use_groups": true
+              },
+              "attributes": {
+                "class": "govuk-select"
+              },
+              "type": "Common\\Form\\Element\\DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "messageContent",
+              "attributes": {
+                "class": "extra-long",
+                "required": "required"
+              },
+              "options": {
+                "label": "",
+                "hint": "You can enter up to 1000 characters"
+              },
+              "type": "Laminas\\Form\\Element\\Textarea"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "file",
+        "attributes": {
+          "class": "file-uploader"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "fileCount",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "file",
+              "attributes": {
+                "class": "js-visually-hidden"
+              },
+              "options": {
+                "value": "common.file-upload.browse.title",
+                "hint": "common.file-upload.browse.hint"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "__messages__",
+              "attributes": [],
+              "options": [],
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "upload",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "inline-upload govuk-button js-upload"
+              },
+              "options": {
+                "label": "Upload"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "list",
+              "attributes": {
+                "class": "js-upload-list"
+              },
+              "options": {
+                "preview_images": "true"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "actions",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "guidance",
+              "attributes": {
+                "value": "markup-messaging-new-conversation-timeframe",
+                "id": "guidance"
+              },
+              "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "send",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button govuk-button--default",
+                "id": "send"
+              },
+              "options": {
+                "label": "Send message"
+              },
+              "type": "Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "input_filter": {
+    "inputs": {
+      "messageSubject": {
+        "name": "messageSubject",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": {
+              "messages": {
+                "isEmpty": "messaging.form.message.subject.empty.error_message"
+              }
+            },
+            "break_chain_on_failure": true,
+            "priority": 100
+          }
+        ]
+      },
+      "appOrLicNo": {
+        "name": "appOrLicNo",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": {
+              "messages": {
+                "isEmpty": "messaging.form.message.app_or_lic_no.empty.error_message"
+              }
+            },
+            "break_chain_on_failure": true,
+            "priority": 100
+          }
+        ]
+      },
+      "messageContent": {
+        "name": "messageContent",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": {
+              "messages": {
+                "isEmpty": "messaging.form.message.content.empty.error_message"
+              }
+            },
+            "break_chain_on_failure": true
+          },
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 5,
+              "max": 1000,
+              "messages": {
+                "stringLengthTooShort": "messaging.form.message.content.too_short.error_message",
+                "stringLengthTooLong": "messaging.form.message.content.too_long.error_message"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "file": {
+      "fileCount": {
+        "name": "fileCount",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Common\\Validator\\FileUploadCountV2",
+            "options": {
+              "min": 1
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

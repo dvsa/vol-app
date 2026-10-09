@@ -1,0 +1,56 @@
+{
+  "name": "fee-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "waiveRemainder",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Waive fee remainder?"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "waiveReason",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "Waive note"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\FeeWaiveNote"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

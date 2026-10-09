@@ -1,0 +1,21 @@
+{
+  "name": "InsufficientFinancesSummary",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "financialOverview",
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated",
+        "attributes": {
+          "value": "markup-continuation-finances-overview"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "continuations.insufficient-finances-summary.label"
+  },
+  "input_filter": []
+}

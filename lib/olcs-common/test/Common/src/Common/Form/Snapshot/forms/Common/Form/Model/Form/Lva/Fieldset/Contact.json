@@ -1,0 +1,109 @@
+{
+  "name": "contact",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary",
+        "attributes": {
+          "class": "medium",
+          "id": "phone_primary"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\PhoneRequired"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary_id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary_version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary",
+        "attributes": {
+          "class": "medium",
+          "id": "$phone_secondary"
+        },
+        "options": {
+          "label": "secondary-contact-number-optional"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary_id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary_version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "email",
+        "attributes": {
+          "class": "long",
+          "id": "email"
+        },
+        "options": {
+          "label": "application_your-business_business-type.contact-details.email",
+          "label_attributes": {
+            "aria-label": "Business email address"
+          },
+          "error-message": "contact_email-error",
+          "hint": "application_your-business_business-type.contact-details.operator-email-hint"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "application_your-business_business-type.contact-details.label"
+  },
+  "input_filter": {
+    "email": {
+      "name": "email",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        }
+      ]
+    }
+  }
+}

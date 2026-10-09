@@ -1,3 +1,8 @@
 CHANGELOG.md
 # Generated DTO snapshots: written by DtoSnapshotTest, not formatted by hand
 lib/olcs-transfer/test/Snapshot/dto/
+# Generated form specification snapshots: written by FormSpecificationSnapshotTest, not formatted by hand
+lib/olcs-auth/test/Form/Snapshot/forms/
+lib/olcs-common/test/Common/src/Common/Form/Snapshot/forms/
+app/internal/test/Olcs/src/Form/Snapshot/forms/
+app/selfserve/test/Olcs/src/Form/Snapshot/forms/

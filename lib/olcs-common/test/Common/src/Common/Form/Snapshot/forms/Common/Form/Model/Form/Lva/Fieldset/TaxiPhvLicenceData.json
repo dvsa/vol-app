@@ -1,0 +1,44 @@
+{
+  "name": "data",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "privateHireLicenceNo",
+        "attributes": {
+          "class": "",
+          "id": ""
+        },
+        "options": {
+          "label": "application_taxi-phv_licence-sub-action.data.licNo"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "application_taxi-phv_licence-sub-action.data"
+  },
+  "input_filter": {
+    "privateHireLicenceNo": {
+      "name": "privateHireLicenceNo",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

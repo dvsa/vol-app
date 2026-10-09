@@ -1,0 +1,383 @@
+{
+  "name": "Register decision",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "decidedByTc",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "medium"
+              },
+              "options": {
+                "label": "Presiding TC/DTC/HTRU/DHTRU",
+                "service_name": "Olcs\\Service\\Data\\PresidingTc",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "decidedByTcRole",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "medium"
+              },
+              "options": {
+                "label": "Presiding TC/DTC/HTRU/DHTRU role",
+                "category": "tc_role",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "decisionDate",
+              "type": "DateSelect",
+              "attributes": {
+                "id": "decisionDate"
+              },
+              "options": {
+                "label": "Date of decision",
+                "create_empty_option": true,
+                "render_delimiters": true
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "decisions",
+              "attributes": {
+                "required": false,
+                "id": "decisions",
+                "class": "chosen-select-large",
+                "multiple": true
+              },
+              "type": "DynamicSelect",
+              "options": {
+                "label": "Decisions",
+                "service_name": "Olcs\\Service\\Data\\PublicInquiryDecision",
+                "disable_inarray_validator": false,
+                "use_groups": true
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "witnesses",
+              "type": "Text",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "small"
+              },
+              "options": {
+                "label": "Number of witnesses"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "notificationDate",
+              "type": "DateSelect",
+              "attributes": {
+                "id": "notificationDate"
+              },
+              "options": {
+                "label": "Date of notification",
+                "create_empty_option": true,
+                "render_delimiters": true
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "definition",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "definition",
+                "placeholder": "",
+                "class": "chosen-select-large js-definition-source"
+              },
+              "options": {
+                "label": "Definition",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\PublicInquiryDefinition",
+                "use_groups": true,
+                "empty_option": "Add definition option"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "decisionNotes",
+              "type": "TextArea",
+              "attributes": {
+                "id": "decisionNotes",
+                "class": "extra-long js-definition-target"
+              },
+              "options": {
+                "label": "Details to be published"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "pubType",
+              "type": "Select",
+              "options": {
+                "label": "Publication type",
+                "value_options": {
+                  "All": "All",
+                  "A&D": "A&D",
+                  "N&P": "N&P"
+                }
+              },
+              "attributes": {
+                "id": "pubType",
+                "value": "All"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "trafficAreas",
+              "type": "Select",
+              "attributes": {
+                "id": "trafficAreas",
+                "placeholder": "",
+                "multiple": true,
+                "value": "all",
+                "class": "chosen-select-large"
+              },
+              "options": {
+                "label": "Traffic areas",
+                "value_options": {
+                  "all": "All traffic areas",
+                  "B": "North East of England",
+                  "C": "North West of England",
+                  "D": "West Midlands",
+                  "F": "East of England",
+                  "G": "Wales",
+                  "H": "West of England",
+                  "K": "London and the South East of England",
+                  "M": "Scotland",
+                  "N": "Northern Ireland"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "case",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": ""
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "publish",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save & Publish"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "decisionDate": {
+        "name": "decisionDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "decisions": {
+        "name": "decisions",
+        "required": true
+      },
+      "witnesses": {
+        "name": "witnesses",
+        "validators": [
+          {
+            "name": "Digits"
+          }
+        ]
+      },
+      "notificationDate": {
+        "name": "notificationDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "definition": {
+        "name": "definition",
+        "required": false
+      },
+      "decisionNotes": {
+        "name": "decisionNotes",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 5,
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

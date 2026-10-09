@@ -1,0 +1,27 @@
+{
+  "name": "PermitsRequired",
+  "attributes": {
+    "id": "ecmt-number-of-permits"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "topLabel",
+        "type": "Laminas\\Form\\Element\\Hidden",
+        "options": {
+          "label": "permits.page.no-of-permits.for.year"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "combinedTotalChecker",
+        "type": "Common\\Form\\Elements\\Custom\\EcmtNoOfPermitsCombinedTotalElement"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

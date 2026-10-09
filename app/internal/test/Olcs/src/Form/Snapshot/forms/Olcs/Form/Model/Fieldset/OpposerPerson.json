@@ -1,0 +1,75 @@
+{
+  "name": "opposerPerson",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "forename",
+        "type": "Text",
+        "options": {
+          "label": "Contact first name"
+        },
+        "attributes": {
+          "id": "forename",
+          "placeholder": "",
+          "class": "medium",
+          "required": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "familyName",
+        "type": "Text",
+        "options": {
+          "label": "Contact family name"
+        },
+        "attributes": {
+          "id": "familyName",
+          "placeholder": "",
+          "class": "medium",
+          "required": false
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "forename": {
+      "name": "forename",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 35
+          }
+        }
+      ]
+    },
+    "familyName": {
+      "name": "familyName",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 35
+          }
+        }
+      ]
+    }
+  }
+}

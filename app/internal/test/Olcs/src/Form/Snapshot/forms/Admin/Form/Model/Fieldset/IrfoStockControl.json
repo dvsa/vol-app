@@ -1,0 +1,140 @@
+{
+  "name": "IrfoStockControl",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "irfoCountry",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Country",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\IrfoCountry"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "validForYear",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Year",
+          "empty_option": "Please Select",
+          "min_year_delta": "-40",
+          "max_year_delta": "+5"
+        },
+        "type": "YearSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Status",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "irfo_permit_stock_status"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "serialNoStart",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "small"
+        },
+        "options": {
+          "label": "Serial No - Start"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "serialNoEnd",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "small"
+        },
+        "options": {
+          "label": "Serial No - End"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "serialNoStart": {
+      "name": "serialNoStart",
+      "validators": [
+        {
+          "name": "Digits"
+        },
+        {
+          "name": "GreaterThan",
+          "options": {
+            "min": "0"
+          }
+        }
+      ]
+    },
+    "serialNoEnd": {
+      "name": "serialNoEnd",
+      "validators": [
+        {
+          "name": "Digits"
+        },
+        {
+          "name": "GreaterThan",
+          "options": {
+            "min": "0"
+          }
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "serialNoStart",
+            "context_values": [
+              ""
+            ],
+            "context_truth": false,
+            "allow_empty": true,
+            "validators": [
+              {
+                "name": "NumberCompare",
+                "options": {
+                  "compare_to": "serialNoStart",
+                  "operator": "gte",
+                  "compare_to_label": "Serial No - Start",
+                  "max_diff": "100"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

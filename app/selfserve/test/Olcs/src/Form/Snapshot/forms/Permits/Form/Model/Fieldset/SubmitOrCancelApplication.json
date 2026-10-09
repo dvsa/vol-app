@@ -1,0 +1,58 @@
+{
+  "name": "Submit",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "SubmitButton",
+        "attributes": {
+          "class": "govuk-button",
+          "data-module": "govuk-button",
+          "id": "submit-button",
+          "type": "submit"
+        },
+        "options": {
+          "label": "Save and continue"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "CancelButton",
+        "attributes": {
+          "id": "cancel-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "data-module": "govuk-button"
+        },
+        "options": {
+          "label": "permits.form.cancel_application.button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "SaveAndReturnButton",
+        "attributes": {
+          "id": "save-return-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "data-module": "govuk-button"
+        },
+        "options": {
+          "label": "Save and return to overview"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

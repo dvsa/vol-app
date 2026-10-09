@@ -1,0 +1,177 @@
+{
+  "name": "MyDetails",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "forename",
+        "attributes": {
+          "id": "forename",
+          "placeholder": "",
+          "class": "medium",
+          "required": false,
+          "disabled": "disabled"
+        },
+        "options": {
+          "label": "user-details.first-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "familyName",
+        "attributes": {
+          "id": "familyName",
+          "placeholder": "",
+          "class": "medium",
+          "required": false,
+          "disabled": "disabled"
+        },
+        "options": {
+          "label": "last-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailAddress",
+        "attributes": {
+          "class": "long"
+        },
+        "options": {
+          "label": "email-address",
+          "error-message": "myDetails_emailAddress-error"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailConfirm",
+        "attributes": {
+          "class": "long"
+        },
+        "options": {
+          "label": "confirm-email-address",
+          "error-message": "myDetails_emailConfirms-error"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "translateToWelsh",
+        "attributes": {
+          "id": "translateToWelsh",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "translate-to-welsh",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--confirm"
+          },
+          "checked_value": "Y",
+          "unchecked_value": "N"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": ""
+  },
+  "input_filter": {
+    "forename": {
+      "name": "forename",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 35
+          }
+        }
+      ]
+    },
+    "familyName": {
+      "name": "familyName",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 35
+          }
+        }
+      ]
+    },
+    "emailAddress": {
+      "name": "emailAddress",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        },
+        {
+          "name": "Common\\Form\\Elements\\Validators\\EmailConfirm",
+          "options": {
+            "token": "emailConfirm"
+          }
+        }
+      ]
+    },
+    "emailConfirm": {
+      "name": "emailConfirm",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

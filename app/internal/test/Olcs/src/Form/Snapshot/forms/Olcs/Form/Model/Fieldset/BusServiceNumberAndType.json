@@ -1,0 +1,511 @@
+{
+  "name": "bus-service-number-and-type",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": {
+        "priority": -10
+      },
+      "spec": {
+        "name": "serviceNo",
+        "attributes": {
+          "class": "",
+          "id": "serviceNo"
+        },
+        "options": {
+          "label": "Service number"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": {
+        "priority": -30
+      },
+      "spec": {
+        "name": "startPoint",
+        "attributes": {
+          "class": "medium",
+          "id": "startPoint"
+        },
+        "options": {
+          "label": "Start point"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": {
+        "priority": -40
+      },
+      "spec": {
+        "name": "finishPoint",
+        "attributes": {
+          "class": "medium",
+          "id": "finishPoint"
+        },
+        "options": {
+          "label": "Finish point"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": {
+        "priority": -50
+      },
+      "spec": {
+        "name": "via",
+        "attributes": {
+          "class": "medium",
+          "id": "via"
+        },
+        "options": {
+          "label": "Via"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": {
+        "priority": -60
+      },
+      "spec": {
+        "name": "busServiceTypes",
+        "attributes": {
+          "id": "busServiceTypes",
+          "placeholder": "",
+          "class": "chosen-select-medium",
+          "multiple": "multiple"
+        },
+        "options": {
+          "label": "Service type",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\BusServiceType",
+          "use_groups": "false"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": {
+        "priority": -70
+      },
+      "spec": {
+        "name": "otherDetails",
+        "attributes": {
+          "class": "extra-long",
+          "id": "otherDetails"
+        },
+        "options": {
+          "label": "Other N&P details"
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": {
+        "priority": -80
+      },
+      "spec": {
+        "name": "receivedDate",
+        "attributes": {
+          "id": "receivedDate"
+        },
+        "options": {
+          "label": "Date received",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": {
+        "priority": -90
+      },
+      "spec": {
+        "name": "effectiveDate",
+        "attributes": {
+          "id": "effectiveDate"
+        },
+        "options": {
+          "label": "Effective date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": {
+        "priority": -100
+      },
+      "spec": {
+        "name": "endDate",
+        "attributes": {
+          "id": "endDate"
+        },
+        "options": {
+          "label": "End date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": {
+        "priority": -100
+      },
+      "spec": {
+        "name": "applicationCompleteDate",
+        "attributes": {
+          "id": "applicationCompleteDate"
+        },
+        "options": {
+          "label": "Application complete date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": {
+        "priority": -110
+      },
+      "spec": {
+        "name": "busNoticePeriod",
+        "attributes": {
+          "id": "busNoticePeriod",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Rules",
+          "service_name": "Olcs\\Service\\Data\\BusNoticePeriod",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isTxcApp",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[isTxcApp]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isLatestVariation",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[isLatestVariation]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[status]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": {
+        "priority": -20
+      },
+      "spec": {
+        "name": "otherServices",
+        "attributes": {
+          "class": "add-another"
+        },
+        "type": "Laminas\\Form\\Element\\Collection",
+        "options": {
+          "count": 1,
+          "label": "Other Service numbers",
+          "hint": "markup-other-service-numbers-hint",
+          "hint_at_bottom": true,
+          "target_element": {
+            "name": "bus-service-other-services",
+            "attributes": [],
+            "elements": [
+              {
+                "flags": [],
+                "spec": {
+                  "name": "serviceNo",
+                  "attributes": {
+                    "class": "",
+                    "id": "serviceNo"
+                  },
+                  "type": "Text"
+                }
+              },
+              {
+                "flags": [],
+                "spec": {
+                  "name": "id",
+                  "attributes": {
+                    "value": ""
+                  },
+                  "type": "Hidden"
+                }
+              },
+              {
+                "flags": [],
+                "spec": {
+                  "name": "version",
+                  "attributes": {
+                    "value": ""
+                  },
+                  "type": "Hidden"
+                }
+              }
+            ],
+            "fieldsets": [],
+            "type": "Laminas\\Form\\InputFilterProviderFieldset",
+            "options": {
+              "input_filter_spec": {
+                "serviceNo": {
+                  "name": "serviceNo",
+                  "required": false,
+                  "filters": [
+                    {
+                      "name": "Laminas\\Filter\\StringTrim"
+                    }
+                  ],
+                  "validators": [
+                    {
+                      "name": "Laminas\\Validator\\StringLength",
+                      "options": {
+                        "min": 1,
+                        "max": 70
+                      }
+                    }
+                  ]
+                },
+                "type": "Laminas\\InputFilter\\InputFilter"
+              },
+              "target_type": "Olcs\\Form\\Model\\Fieldset\\BusReg\\OtherServices"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "input_filter": {
+    "serviceNo": {
+      "name": "serviceNo",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 70
+          }
+        }
+      ]
+    },
+    "startPoint": {
+      "name": "startPoint",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 100
+          }
+        }
+      ]
+    },
+    "finishPoint": {
+      "name": "finishPoint",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 100
+          }
+        }
+      ]
+    },
+    "via": {
+      "name": "via",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 255
+          }
+        }
+      ]
+    },
+    "busServiceTypes": {
+      "name": "busServiceTypes",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "otherDetails": {
+      "name": "otherDetails",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 800
+          }
+        }
+      ]
+    },
+    "receivedDate": {
+      "name": "receivedDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "effectiveDate": {
+      "name": "effectiveDate",
+      "required": false,
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ]
+    },
+    "endDate": {
+      "name": "endDate",
+      "required": false,
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ]
+    },
+    "applicationCompleteDate": {
+      "name": "applicationCompleteDate",
+      "required": false,
+      "validators": [
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ],
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ]
+    }
+  }
+}

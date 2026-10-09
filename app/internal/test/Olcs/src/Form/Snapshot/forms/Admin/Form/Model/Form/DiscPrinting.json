@@ -1,0 +1,296 @@
+{
+  "name": "admin_disc-printing",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "queueId",
+        "attributes": {
+          "id": "queueId"
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "operator-location",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "niFlag",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "fieldset-attributes": {
+                  "id": "operator-location",
+                  "class": "checkbox"
+                },
+                "fieldset-data-group": "operator-location",
+                "label": "Operator location",
+                "value_options": {
+                  "N": "Great Britain",
+                  "Y": "Northern Ireland"
+                }
+              },
+              "type": "Radio"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "operator-type",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "goodsOrPsv",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "fieldset-attributes": {
+                  "id": "operator-type",
+                  "class": "checkbox"
+                },
+                "fieldset-data-group": "operator-type",
+                "label": "Operator type",
+                "value_options": {
+                  "lcat_gv": "Goods",
+                  "lcat_psv": "PSV"
+                }
+              },
+              "type": "Radio"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licence-type",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "licenceType",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "short-label": "short-label-tol-licence-type",
+                "fieldset-attributes": {
+                  "id": "licence-type",
+                  "class": "checkbox"
+                },
+                "fieldset-data-group": "licence-type",
+                "label": "Licence type",
+                "value_options": {
+                  "ltyp_r": "Restricted",
+                  "ltyp_sn": "Standard National",
+                  "ltyp_si": "Standard International"
+                }
+              },
+              "type": "Radio"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "prefix",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "discSequence",
+              "attributes": {
+                "id": "discSequence"
+              },
+              "options": {
+                "empty_option": "Please Select"
+              },
+              "type": "Select"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "admin_disc-printing.discPrefix"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "discs-numbering",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "startNumber",
+              "options": {
+                "label": "admin_disc-printing.startNumber"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "maxPages",
+              "options": {
+                "label": "Max pages to print"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "endNumber",
+              "attributes": {
+                "disabled": true
+              },
+              "options": {
+                "label": "admin_disc-printing.endNumber"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "totalPages",
+              "attributes": {
+                "disabled": true
+              },
+              "options": {
+                "label": "admin_disc-printing.totalPages"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "originalEndNumber",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "endNumberIncreased",
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "admin_disc-printing.discNumbering"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "no-discs",
+        "attributes": {
+          "id": "noDiscs",
+          "keepEmptyFieldset": true
+        },
+        "elements": [],
+        "fieldsets": [],
+        "options": {
+          "label": "admin_disc-printing.noDiscs"
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "print",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Print discs"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "discs-numbering": {
+      "maxPages": {
+        "name": "maxPages",
+        "filters": [
+          {
+            "name": "Digits"
+          }
+        ],
+        "validators": [
+          {
+            "name": "GreaterThan",
+            "options": {
+              "min": 0
+            }
+          }
+        ],
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

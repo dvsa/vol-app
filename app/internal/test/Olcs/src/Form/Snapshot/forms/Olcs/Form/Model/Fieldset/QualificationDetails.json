@@ -1,0 +1,138 @@
+{
+  "name": "qualification-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "qualificationType",
+        "attributes": {
+          "id": "qualificationType",
+          "placeholder": "",
+          "class": "small"
+        },
+        "options": {
+          "label": "transport-manager.competences.form.qualification-type",
+          "disable_inarray_validator": false,
+          "category": "tm_qual_type"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "serialNo",
+        "attributes": {
+          "class": "long",
+          "id": "serialNo"
+        },
+        "options": {
+          "label": "transport-manager.competences.form.serial"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "issuedDate",
+        "attributes": {
+          "required": false,
+          "id": "issuedDate"
+        },
+        "options": {
+          "label": "transport-manager.competences.form.date-of-issue",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "countryCode",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "transport-manager.competences.form.country",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\Country"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "serialNo": {
+      "name": "serialNo",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 50
+          }
+        }
+      ]
+    },
+    "issuedDate": {
+      "name": "issuedDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Laminas\\Validator\\NotEmpty"
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    }
+  }
+}

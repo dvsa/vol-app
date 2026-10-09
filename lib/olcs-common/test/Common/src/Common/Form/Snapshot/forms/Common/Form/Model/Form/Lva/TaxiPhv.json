@@ -1,0 +1,213 @@
+{
+  "name": "lva-taxi-phv",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "table",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "required": "required",
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "dataTrafficArea",
+        "attributes": {
+          "class": "traffic-area"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "trafficArea",
+              "attributes": {
+                "id": "trafficArea",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "application_operating-centres_authorisation.dataTrafficArea.label.new",
+                "hint": "markup-traffic-area-help",
+                "value_options": [],
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false
+              },
+              "type": "\\Laminas\\Form\\Element\\Select"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "trafficAreaSet",
+              "type": "Common\\Form\\Elements\\Types\\TrafficAreaSet",
+              "options": {
+                "label": "application_operating-centres_authorisation.dataTrafficArea.label.new",
+                "label_attributes": {
+                  "class": "legend"
+                },
+                "hint": "markup-traffic-area-help",
+                "hint-position": "below"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "enforcementArea",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "application_operating-centres_authorisation.enforcementArea.label",
+                "value_options": [],
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false
+              },
+              "type": "\\Laminas\\Form\\Element\\Select"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "saveAndContinue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "save.continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "table": {
+      "rows": {
+        "name": "rows",
+        "required": true,
+        "validators": [
+          {
+            "name": "Common\\Form\\Elements\\Validators\\TableRequiredValidator",
+            "options": {
+              "label": "record"
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "dataTrafficArea": {
+      "enforcementArea": {
+        "name": "enforcementArea",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

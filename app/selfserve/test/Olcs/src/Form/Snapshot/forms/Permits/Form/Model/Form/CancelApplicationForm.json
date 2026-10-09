@@ -1,0 +1,83 @@
+{
+  "name": "CancelApplication",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "confirmCancel",
+              "attributes": {
+                "required": "required",
+                "class": "input--confirm-cancel",
+                "id": "ConfirmCancel"
+              },
+              "options": {
+                "checked_value": "1",
+                "unchecked_value": "0",
+                "label": "permits.form.cancel_application.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox"
+                },
+                "must_be_value": "1",
+                "not_checked_message": "permits.form.cancel_application.error_message"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "Submit",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "SubmitButton",
+              "attributes": {
+                "class": "govuk-button",
+                "data-module": "govuk-button",
+                "id": "cancelbutton",
+                "type": "submit"
+              },
+              "options": {
+                "label": "permits.form.cancel_application.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "fields": {
+      "confirmCancel": {
+        "name": "confirmCancel",
+        "required": true
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

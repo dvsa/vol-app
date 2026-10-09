@@ -1,0 +1,91 @@
+{
+  "name": "document-relink-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "relinkTo",
+        "attributes": {
+          "id": "idHtml",
+          "required": false,
+          "value": "<b>Relink to:</b>"
+        },
+        "type": "Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "type",
+        "attributes": {
+          "id": "relinkType",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Entity",
+          "disable_empty_option": false,
+          "disable_inarray_validator": false,
+          "value_options": {
+            "application": "Application",
+            "busReg": "Bus Registration",
+            "case": "Case",
+            "licence": "Licence",
+            "irfoOrganisation": "IRFO",
+            "irhpApplication": "Permit",
+            "transportManager": "Transport Manager"
+          }
+        },
+        "type": "Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "targetId",
+        "attributes": {
+          "id": "targetId",
+          "class": "medium",
+          "name": "targetId"
+        },
+        "options": {
+          "label": "Application ID"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "ids",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "relinkTo": {
+      "name": "relinkTo",
+      "required": false
+    },
+    "targetId": {
+      "name": "targetId",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 255
+          }
+        }
+      ]
+    }
+  }
+}

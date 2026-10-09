@@ -1,0 +1,82 @@
+{
+  "name": "bus-service-number-and-type",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "timetableAcceptable",
+        "type": "Radio",
+        "options": {
+          "label": "Timetable acceptable",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "id": "timetable[timetableAcceptable]",
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "mapSupplied",
+        "type": "Radio",
+        "options": {
+          "label": "Maps supplied",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "id": "mapSupplied",
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "routeDescription",
+        "attributes": {
+          "class": "extra-long",
+          "id": "timetable[routeDescription]"
+        },
+        "options": {
+          "label": "Route description"
+        },
+        "type": "TextArea"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "routeDescription": {
+      "name": "routeDescription",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 1000
+          }
+        }
+      ]
+    }
+  }
+}

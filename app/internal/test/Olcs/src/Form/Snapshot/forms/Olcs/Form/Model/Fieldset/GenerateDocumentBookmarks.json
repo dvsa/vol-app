@@ -1,0 +1,10 @@
+{
+  "name": "bookmarks",
+  "attributes": [],
+  "elements": [],
+  "fieldsets": [],
+  "options": {
+    "label": "documents.bookmarks"
+  },
+  "input_filter": []
+}

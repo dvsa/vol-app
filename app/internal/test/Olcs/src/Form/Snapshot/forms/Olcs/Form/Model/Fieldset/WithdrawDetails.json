@@ -1,0 +1,44 @@
+{
+  "name": "withdraw-details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "reason",
+        "type": "Radio",
+        "options": {
+          "label": "Withdraw reason",
+          "value_options": {
+            "withdrawn": "Withdrawn",
+            "reg_in_error": "Registered in error"
+          },
+          "fieldset-attributes": {
+            "class": "checkbox inline"
+          },
+          "disable_inarray_validator": true
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": ""
+  },
+  "input_filter": {
+    "reason": {
+      "name": "reason",
+      "type": "Common\\InputFilter\\ContinueIfEmptyInput",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "Please select a reason for withdrawing the application"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

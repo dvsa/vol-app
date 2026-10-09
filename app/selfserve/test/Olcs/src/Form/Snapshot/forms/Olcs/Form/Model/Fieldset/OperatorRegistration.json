@@ -1,0 +1,257 @@
+{
+  "name": "OperatorRegistration",
+  "attributes": {
+    "method": "post",
+    "label": "user-registration.form.label"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "loginId",
+        "options": {
+          "label": "user-name",
+          "hint": "user-registration.field.username.hint"
+        },
+        "attributes": {
+          "required": false,
+          "id": "username",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "forename",
+        "attributes": {
+          "id": "forename",
+          "placeholder": "",
+          "class": "medium",
+          "required": false
+        },
+        "options": {
+          "label": "first-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "familyName",
+        "attributes": {
+          "id": "familyName",
+          "placeholder": "",
+          "class": "medium",
+          "required": false
+        },
+        "options": {
+          "label": "last-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailAddress",
+        "attributes": {
+          "class": "long"
+        },
+        "options": {
+          "label": "email-address"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailConfirm",
+        "attributes": {
+          "class": "long"
+        },
+        "options": {
+          "label": "confirm-email-address"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "organisationName",
+        "attributes": {
+          "required": "required",
+          "class": "medium"
+        },
+        "type": "Text",
+        "options": {
+          "label": "user-registration.field.organisationName.label"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "businessType",
+        "attributes": {
+          "required": "required"
+        },
+        "type": "DynamicRadio",
+        "options": {
+          "fieldset-attributes": {
+            "id": "businessType"
+          },
+          "label": "user-registration.field.businessType.label",
+          "label_attributes": {
+            "class": "form-control form-control--radio"
+          },
+          "disable_inarray_validator": false,
+          "category": "org_type",
+          "exclude": [
+            "org_t_ir"
+          ]
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "translateToWelsh",
+        "attributes": {
+          "id": "translateToWelsh",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "translate-to-welsh",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--confirm"
+          },
+          "checked_value": "Y",
+          "unchecked_value": "N"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "termsAgreed",
+        "attributes": {
+          "id": "termsAgreed",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "user-registration.field.termsAgreed.label",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--confirm"
+          },
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "must_be_value": "Y"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "user-registration.form.label"
+  },
+  "input_filter": {
+    "loginId": {
+      "name": "loginId",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        },
+        {
+          "name": "Laminas\\Filter\\StringToLower"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\UsernameCreate"
+        }
+      ]
+    },
+    "forename": {
+      "name": "forename",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 35
+          }
+        }
+      ]
+    },
+    "familyName": {
+      "name": "familyName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 35
+          }
+        }
+      ]
+    },
+    "emailAddress": {
+      "name": "emailAddress",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        },
+        {
+          "name": "Common\\Form\\Elements\\Validators\\EmailConfirm",
+          "options": {
+            "token": "emailConfirm"
+          }
+        }
+      ]
+    },
+    "emailConfirm": {
+      "name": "emailConfirm",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "organisationName": {
+      "name": "organisationName",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "businessType": {
+      "name": "businessType",
+      "required": true
+    }
+  }
+}

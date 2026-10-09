@@ -1,0 +1,283 @@
+{
+  "name": "system-info-message",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "details",
+        "attributes": {
+          "class": "table__form"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "isInternal",
+              "type": "Laminas\\Form\\Element\\Radio",
+              "attributes": {
+                "required": true,
+                "value": "Y"
+              },
+              "options": {
+                "label": "Display to:",
+                "value_options": {
+                  "Y": "Internal",
+                  "N": "Self Serve"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "description",
+              "type": "TextArea",
+              "attributes": {
+                "required": "required",
+                "id": "description",
+                "placeholder": "write information message",
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Message"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "startDate",
+              "type": "DateTimeSelect",
+              "attributes": {
+                "required": "required"
+              },
+              "options": {
+                "label": "Start:",
+                "create_empty_option": true,
+                "max_year_delta": "+1",
+                "min_year_delta": "0"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "endDate",
+              "type": "DateTimeSelect",
+              "attributes": {
+                "required": "required"
+              },
+              "options": {
+                "label": "End:",
+                "create_empty_option": true,
+                "max_year_delta": "+10",
+                "min_year_delta": "0"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "details": {
+      "isInternal": {
+        "name": "isInternal",
+        "required": true,
+        "filters": [
+          {
+            "name": "StripTags"
+          }
+        ],
+        "validators": [
+          {
+            "name": "InArray",
+            "options": {
+              "haystack": [
+                "Y",
+                "N"
+              ]
+            }
+          }
+        ]
+      },
+      "description": {
+        "name": "description",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 1024
+            }
+          }
+        ]
+      },
+      "startDate": {
+        "name": "startDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateTimeSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d H:i:s",
+              "messages": {
+                "dateInvalidDate": "datetime.compare.validation.message.invalid"
+              }
+            }
+          }
+        ]
+      },
+      "endDate": {
+        "name": "endDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateTimeSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "endDate",
+              "context_values": [
+                "-- ::00"
+              ],
+              "context_truth": false,
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d H:i:s",
+                    "messages": {
+                      "dateInvalidDate": "datetime.compare.validation.message.invalid"
+                    }
+                  },
+                  "break_chain_on_failure": true
+                },
+                {
+                  "name": "DateCompare",
+                  "options": {
+                    "has_time": true,
+                    "compare_to": "startDate",
+                    "operator": "gt",
+                    "compare_to_label": "Start"
+                  }
+                },
+                {
+                  "name": "DateInFuture"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

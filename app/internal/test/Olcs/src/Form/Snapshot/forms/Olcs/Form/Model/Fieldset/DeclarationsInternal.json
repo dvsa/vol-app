@@ -1,0 +1,70 @@
+{
+  "name": "declarationsInternal",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "review",
+        "attributes": {
+          "value": "markup-review-text-internal"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "summaryDownload",
+        "type": "\\Common\\Form\\Elements\\Types\\Html",
+        "options": {
+          "disable_html_escape": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "heading",
+        "attributes": {
+          "value": "<h3>%s</h3>"
+        },
+        "options": {
+          "tokens": [
+            "section.name.undertakings"
+          ],
+          "disable_html_escape": true
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "verifySignatureText",
+        "type": "\\Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "declarationConfirmation",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "application.review-declarations.confirm-text-internal",
+          "short-label": "application.review-declarations.confirm-text-internal",
+          "label_attributes": {
+            "id": "label-declarationConfirmation"
+          }
+        },
+        "attributes": {
+          "data-container-class": "confirm"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

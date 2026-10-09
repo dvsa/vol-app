@@ -1,0 +1,70 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "case",
+        "attributes": {
+          "type": "hidden"
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "slaException",
+        "attributes": {
+          "id": "slaException",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "label": "SLA Exception",
+          "service_name": "Olcs\\Service\\Data\\SlaException",
+          "empty_option": "Please Select",
+          "use_groups": true,
+          "hint": "Please note, choose carefully; once an SLA exception is saved, you will not be able to edit or delete it."
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": ""
+  },
+  "input_filter": {
+    "slaException": {
+      "name": "slaException",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    }
+  }
+}

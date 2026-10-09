@@ -1,0 +1,707 @@
+{
+  "name": "responsibilities",
+  "attributes": {
+    "class": "table__form",
+    "id": "responsibilities"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": {
+        "priority": -10
+      },
+      "spec": {
+        "name": "tmType",
+        "options": {
+          "label": "transport-manager.responsibilities.tm-type",
+          "category": "tm_type",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          }
+        },
+        "type": "DynamicRadio"
+      }
+    },
+    {
+      "flags": {
+        "priority": -20
+      },
+      "spec": {
+        "name": "tmApplicationStatus",
+        "options": {
+          "label": "transport-manager.responsibilities.tm-app-status",
+          "disable_inarray_validator": false,
+          "category": "tmap_status"
+        },
+        "attributes": {
+          "required": false,
+          "id": "",
+          "placeholder": ""
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": {
+        "priority": -30
+      },
+      "spec": {
+        "name": "isOwner",
+        "options": {
+          "label": "transport-manager.responsibilities.is-owner",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "hint": "transport-manager.responsibilities.is-owner.no.hint",
+          "hint-position": "below",
+          "hint-class": "govuk-radios__conditional govuk-body hint hint__below hint__black hintNoOwner"
+        },
+        "type": "Radio"
+      }
+    },
+    {
+      "flags": {
+        "priority": -60
+      },
+      "spec": {
+        "name": "additionalInformation",
+        "type": "TextArea",
+        "attributes": {
+          "class": "long",
+          "label": "transport-manager.responsibilities.additional-information.title",
+          "autocomplete": "nope"
+        },
+        "options": {
+          "label": "transport-manager.responsibilities.additional-information",
+          "label_options": {
+            "disable_html_escape": "true"
+          },
+          "label_attributes": {
+            "id": "additionalInformation"
+          }
+        }
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": {
+        "priority": -40
+      },
+      "spec": {
+        "name": "hoursOfWeek",
+        "attributes": {
+          "id": "hoursOfWeek"
+        },
+        "elements": [],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "hoursPerWeekContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursMon",
+                    "type": "Text",
+                    "attributes": {
+                      "class": "short",
+                      "pattern": "\\d(\\.)*",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-mon",
+                      "label_attributes": {
+                        "aria-label": "Enter your working hours, Monday"
+                      }
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursTue",
+                    "attributes": {
+                      "class": "short",
+                      "pattern": "\\d(\\.)*",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-tue",
+                      "label_attributes": {
+                        "aria-label": "Tuesday"
+                      }
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursWed",
+                    "attributes": {
+                      "class": "short",
+                      "pattern": "\\d(\\.)*",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-wed",
+                      "label_attributes": {
+                        "aria-label": "Wednesday"
+                      }
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursThu",
+                    "attributes": {
+                      "class": "short",
+                      "pattern": "\\d(\\.)*",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-thu",
+                      "label_attributes": {
+                        "aria-label": "Thursday"
+                      }
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursFri",
+                    "attributes": {
+                      "class": "short",
+                      "pattern": "\\d(\\.)*",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-fri",
+                      "label_attributes": {
+                        "aria-label": "Friday"
+                      }
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursSat",
+                    "attributes": {
+                      "class": "short",
+                      "pattern": "\\d(\\.)*",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-sat",
+                      "label_attributes": {
+                        "aria-label": "Saturday"
+                      }
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursSun",
+                    "attributes": {
+                      "class": "short",
+                      "pattern": "\\d(\\.)*",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-sun",
+                      "label_attributes": {
+                        "aria-label": "Sunday"
+                      }
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": {
+                "label": "transport-manager.responsibilities.hours-per-week-subtitle",
+                "hint": "lva-tm-hours-per-week-hint"
+              }
+            }
+          }
+        ],
+        "type": "Common\\Form\\Elements\\Types\\HoursPerWeek",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -50
+      },
+      "spec": {
+        "name": "otherLicencesFieldset",
+        "attributes": {
+          "class": "table__form",
+          "id": "hasOtherLicences"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "hasOtherLicences",
+              "options": {
+                "label": "transport-manager.other-licence.form.radio.label",
+                "hint": "transport-manager.other-licence.form.radio.hint",
+                "hint-class": "",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                }
+              },
+              "type": "Radio"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "otherLicences",
+              "attributes": {
+                "id": "otherLicences",
+                "class": "help__text help__text--removePadding"
+              },
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "table",
+                    "options": {
+                      "label": "row"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\Table"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "action",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "rows",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "id",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -70
+      },
+      "spec": {
+        "name": "file",
+        "attributes": {
+          "class": "file-uploader"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "fileCount",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "file",
+              "attributes": {
+                "class": "js-visually-hidden"
+              },
+              "options": {
+                "value": "common.file-upload.browse.title",
+                "hint": "common.file-upload.browse.hint"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "__messages__",
+              "attributes": [],
+              "options": [],
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "upload",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "inline-upload govuk-button js-upload"
+              },
+              "options": {
+                "label": "Upload"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "list",
+              "attributes": {
+                "class": "js-upload-list"
+              },
+              "options": {
+                "preview_images": "true"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "input_filter": {
+    "tmType": {
+      "name": "tmType",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    },
+    "tmApplicationStatus": {
+      "name": "tmApplicationStatus",
+      "required": true
+    },
+    "hoursOfWeek": {
+      "hoursPerWeekContent": {
+        "hoursMon": {
+          "name": "hoursMon",
+          "filters": [
+            {
+              "name": "Common\\Filter\\NullToFloat"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Mon must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            },
+            {
+              "name": "Common\\Form\\Elements\\Validators\\SumContext",
+              "options": {
+                "min": 0.1,
+                "messages": {
+                  "belowMin": "transport-manager-hours-per-week-validation-message"
+                }
+              }
+            }
+          ]
+        },
+        "hoursTue": {
+          "name": "hoursTue",
+          "filters": [
+            {
+              "name": "Common\\Filter\\NullToFloat"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Tue must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "hoursWed": {
+          "name": "hoursWed",
+          "filters": [
+            {
+              "name": "Common\\Filter\\NullToFloat"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Wed must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "hoursThu": {
+          "name": "hoursThu",
+          "filters": [
+            {
+              "name": "Common\\Filter\\NullToFloat"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Thu must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "hoursFri": {
+          "name": "hoursFri",
+          "filters": [
+            {
+              "name": "Common\\Filter\\NullToFloat"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Fri must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "hoursSat": {
+          "name": "hoursSat",
+          "filters": [
+            {
+              "name": "Common\\Filter\\NullToFloat"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Sat must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "hoursSun": {
+          "name": "hoursSun",
+          "filters": [
+            {
+              "name": "Common\\Filter\\NullToFloat"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Sun must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "otherLicencesFieldset": {
+      "hasOtherLicences": {
+        "name": "hasOtherLicences",
+        "validators": [
+          {
+            "name": "Common\\Form\\Elements\\Validators\\YesNoTableRequiredValidator",
+            "options": {
+              "table": "otherLicences",
+              "message": "transport-manager-details.form.otherLicences.required"
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "additionalInformation": {
+      "name": "additionalInformation",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 4000
+          }
+        }
+      ]
+    },
+    "file": {
+      "fileCount": {
+        "name": "fileCount",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Common\\Validator\\FileUploadCountV2",
+            "options": {
+              "min": 1
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

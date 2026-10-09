@@ -1,0 +1,26 @@
+{
+  "name": "data_retention_assign_fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "assignedTo",
+        "attributes": {
+          "id": "assignedTo",
+          "placeholder": "",
+          "class": "chosen-select-large"
+        },
+        "options": {
+          "label": "Select a user",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\UserListInternal",
+          "use_groups": "false"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -1,0 +1,361 @@
+{
+  "name": "LetterIssue",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "issueKey",
+        "options": {
+          "label": "Issue Key"
+        },
+        "attributes": {
+          "required": true,
+          "class": "medium"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "modalLabel",
+        "options": {
+          "label": "Modal Label"
+        },
+        "type": "Text",
+        "attributes": {
+          "class": "medium"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "heading",
+        "options": {
+          "label": "Heading"
+        },
+        "attributes": {
+          "required": true,
+          "class": "long"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "letterIssueType",
+        "options": {
+          "label": "Issue Type",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\Letter\\LetterIssueType",
+          "empty_option": "Please Select"
+        },
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "letterIssueType",
+          "class": "medium"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "letterTodos",
+        "options": {
+          "label": "Linked To-dos",
+          "hint": "Optional. Select the to-dos that apply when a caseworker picks this issue. Same to-do on multiple issues will appear only once in the generated letter.",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\Letter\\LetterTodo",
+          "use_groups": false
+        },
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "letterTodos",
+          "class": "medium chosen-select-large",
+          "multiple": "multiple"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "category",
+        "options": {
+          "label": "Category",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\Category",
+          "empty_option": "Please Select"
+        },
+        "type": "DynamicSelect",
+        "attributes": {
+          "required": "required",
+          "id": "category",
+          "class": "medium"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "subCategory",
+        "options": {
+          "label": "Sub Category",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\SubCategory",
+          "empty_option": "Please Select"
+        },
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "subCategory",
+          "class": "medium"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "goodsOrPsv",
+        "options": {
+          "label": "Goods or PSV",
+          "disable_inarray_validator": false,
+          "empty_option": "Both",
+          "value_options": {
+            "lcat_gv": "Goods",
+            "lcat_psv": "PSV"
+          }
+        },
+        "type": "Select",
+        "attributes": {
+          "id": "goodsOrPsv",
+          "class": "medium"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "defaultBodyContent",
+        "options": {
+          "label": "Default Body Content",
+          "label_attributes": {
+            "class": ""
+          }
+        },
+        "type": "EditorJs",
+        "attributes": {
+          "id": "defaultBodyContent",
+          "class": "extra-long",
+          "name": "defaultBodyContent"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isNi",
+        "options": {
+          "label": "Northern Ireland Only",
+          "checked_value": "1",
+          "unchecked_value": "0"
+        },
+        "type": "OlcsCheckbox",
+        "attributes": {
+          "class": "",
+          "id": "isNi"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "requiresInput",
+        "options": {
+          "label": "Requires Input",
+          "checked_value": "1",
+          "unchecked_value": "0"
+        },
+        "type": "OlcsCheckbox",
+        "attributes": {
+          "class": "",
+          "id": "requiresInput"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "minLength",
+        "options": {
+          "label": "Minimum Length"
+        },
+        "type": "Number",
+        "attributes": {
+          "class": "short"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "maxLength",
+        "options": {
+          "label": "Maximum Length"
+        },
+        "type": "Number",
+        "attributes": {
+          "class": "short"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "helpText",
+        "options": {
+          "label": "Help Text",
+          "label_attributes": {
+            "class": ""
+          }
+        },
+        "type": "Textarea",
+        "attributes": {
+          "class": "extra-long",
+          "rows": 3
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "issueKey": {
+      "name": "issueKey",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 100
+          }
+        }
+      ]
+    },
+    "modalLabel": {
+      "name": "modalLabel",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 200
+          }
+        }
+      ]
+    },
+    "heading": {
+      "name": "heading",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 255
+          }
+        }
+      ]
+    },
+    "letterIssueType": {
+      "name": "letterIssueType",
+      "required": false
+    },
+    "letterTodos": {
+      "name": "letterTodos",
+      "required": false
+    },
+    "category": {
+      "name": "category",
+      "required": true
+    },
+    "subCategory": {
+      "name": "subCategory",
+      "required": false
+    },
+    "goodsOrPsv": {
+      "name": "goodsOrPsv",
+      "required": false
+    },
+    "defaultBodyContent": {
+      "name": "defaultBodyContent",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "minLength": {
+      "name": "minLength",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\Digits"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        }
+      ]
+    },
+    "maxLength": {
+      "name": "maxLength",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\Digits"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        }
+      ]
+    },
+    "helpText": {
+      "name": "helpText",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "DisableConversationsPopupText",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "text",
+        "type": "Common\\Form\\Elements\\Types\\PlainText",
+        "attributes": {
+          "value": "Messaging will be disabled for this operator."
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

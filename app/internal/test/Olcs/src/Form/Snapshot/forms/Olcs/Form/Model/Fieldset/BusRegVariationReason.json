@@ -1,0 +1,25 @@
+{
+  "name": "BusRegVariationReason",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "variationReasons",
+        "attributes": {
+          "id": "variationReasons",
+          "placeholder": "",
+          "multiple": "multiple",
+          "class": "chosen-select-large"
+        },
+        "options": {
+          "label": "Variation reason",
+          "category": "bus_reg_var_reason"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

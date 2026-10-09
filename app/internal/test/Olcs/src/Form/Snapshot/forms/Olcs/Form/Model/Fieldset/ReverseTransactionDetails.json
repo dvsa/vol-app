@@ -1,0 +1,87 @@
+{
+  "name": "details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "reason",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "Reason"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "customerReference",
+        "options": {
+          "short-label": "Customer reference",
+          "label": "Customer reference",
+          "label_attributes": {
+            "id": "label-customer-reference"
+          }
+        },
+        "attributes": {
+          "required": "required"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "customerName",
+        "options": {
+          "short-label": "Customer name",
+          "label": "Customer name",
+          "label_attributes": {
+            "id": "label-customer-name"
+          }
+        },
+        "attributes": {
+          "required": "required"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "customerReference": {
+      "name": "customerReference",
+      "required": true
+    },
+    "customerName": {
+      "name": "customerName",
+      "required": true
+    }
+  }
+}

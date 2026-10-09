@@ -1,0 +1,1975 @@
+{
+  "name": "lva-transport-manager-details",
+  "attributes": {
+    "method": "post",
+    "autocomplete": "off"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": {
+        "priority": -10
+      },
+      "spec": {
+        "name": "details",
+        "attributes": {
+          "id": "details"
+        },
+        "elements": [
+          {
+            "flags": {
+              "priority": -10
+            },
+            "spec": {
+              "name": "name",
+              "options": {
+                "label": "lva-tm-details-details-name"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement"
+            }
+          },
+          {
+            "flags": {
+              "priority": -20
+            },
+            "spec": {
+              "name": "birthDate",
+              "attributes": {
+                "required": "required",
+                "id": "dob"
+              },
+              "options": {
+                "label": "dob",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "fieldset_attributes": {
+                  "id": "details[birthDate]"
+                }
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": {
+              "priority": -30
+            },
+            "spec": {
+              "name": "emailAddress",
+              "attributes": {
+                "class": "extra-long",
+                "id": "emailAddress"
+              },
+              "options": {
+                "label": "lva-tm-details-details-email",
+                "short-label": "lva-tm-details-details-email",
+                "hint": "lva-tm-email-hint"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": {
+              "priority": -40
+            },
+            "spec": {
+              "name": "birthPlace",
+              "attributes": {
+                "id": "birthPlace",
+                "class": "medium"
+              },
+              "options": {
+                "label": "lva-tm-details-details-birthPlace",
+                "short-label": "lva-tm-details-details-birthPlace",
+                "label_attributes": {
+                  "aria-label": "Enter their place of birth"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": {
+              "priority": -50
+            },
+            "spec": {
+              "name": "certificateHtml",
+              "attributes": {
+                "value": "markup-lva-tm-details-details-certificateHtml"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          },
+          {
+            "flags": {
+              "priority": -70
+            },
+            "spec": {
+              "name": "lgvAcquiredRightsHtml",
+              "attributes": {
+                "value": "markup-lva-tm-details-details-lgvAcquiredRightsHtml"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          },
+          {
+            "flags": {
+              "priority": -80
+            },
+            "spec": {
+              "name": "lgvAcquiredRightsReferenceNumber",
+              "type": "Text",
+              "attributes": {
+                "id": "lgv-acquired-rights-ref-number",
+                "class": "medium"
+              },
+              "options": {
+                "label": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber",
+                "label_attributes": {
+                  "class": "legend"
+                },
+                "hint": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-hint"
+              }
+            }
+          },
+          {
+            "flags": {
+              "priority": -90
+            },
+            "spec": {
+              "name": "hasUndertakenTraining",
+              "options": {
+                "label": "tm-review-responsibility-training-undertaken",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                },
+                "hint": "tm-hint-responsibility-training-undertaken",
+                "hint-position": "below",
+                "hint-class": "govuk-radios__conditional govuk-body hint hint__below hint__black hintNoTraining"
+              },
+              "type": "Radio"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": {
+              "priority": -60
+            },
+            "spec": {
+              "name": "certificate",
+              "attributes": {
+                "class": "file-uploader"
+              },
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "fileCount",
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "file",
+                    "attributes": {
+                      "class": "js-visually-hidden"
+                    },
+                    "options": {
+                      "value": "common.file-upload.browse.title",
+                      "hint": "common.file-upload.browse.hint"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "__messages__",
+                    "attributes": [],
+                    "options": [],
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "upload",
+                    "attributes": {
+                      "data-module": "govuk-button",
+                      "type": "submit",
+                      "class": "inline-upload govuk-button js-upload"
+                    },
+                    "options": {
+                      "label": "Upload"
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+                  }
+                }
+              ],
+              "fieldsets": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "list",
+                    "attributes": {
+                      "class": "js-upload-list"
+                    },
+                    "options": {
+                      "preview_images": "true"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+                  }
+                }
+              ],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": {
+                "label": "lva-tm-details-details-certificate",
+                "hint": "markup-professional-competence-certificates-obtained-abroad.phtml",
+                "hint-position": "above",
+                "label_attributes": {
+                  "class": "legend",
+                  "aria-label": "Certificate of professional competence, attach file(s) for upload"
+                }
+              }
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -20
+      },
+      "spec": {
+        "name": "homeAddress",
+        "attributes": {
+          "class": "address js-postcode-search"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine1",
+              "attributes": {
+                "class": "long",
+                "id": "addressLine1",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLines",
+                "error-message": "address_addressLine1-error",
+                "label_attributes": {
+                  "aria-label": "Enter address manually. Address line one"
+                },
+                "short-label": "address_addressLine1"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine2",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine2",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine3",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine3",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine4",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_addressLine4",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "town",
+              "attributes": {
+                "class": "long",
+                "id": "addressTown"
+              },
+              "options": {
+                "label": "address_townCity",
+                "short-label": "address_townCity",
+                "label_attributes": {
+                  "aria-label": "address_townCity"
+                },
+                "error-message": "address_town-error"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "postcode",
+              "options": {
+                "label": "address_postcode",
+                "short-label": "address_postcode"
+              },
+              "type": "Text",
+              "attributes": {
+                "required": false,
+                "id": "postcode"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "countryCode",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "value": "GB"
+              },
+              "options": {
+                "label": "address_country",
+                "label_attributes": {
+                  "aria-label": "Choose country"
+                },
+                "error-message": "address_country-error",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\Country"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": {
+              "priority": 100
+            },
+            "spec": {
+              "name": "searchPostcode",
+              "options": {
+                "label": "Postcode search",
+                "label_attributes": {
+                  "class": "form-element__label"
+                }
+              },
+              "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\Address",
+        "options": {
+          "label": "lva-tm-details-details-homeAddress",
+          "label_attributes": {
+            "aria-label": "Postcode search, enter home postcode",
+            "id": "homeAddress"
+          }
+        }
+      }
+    },
+    {
+      "flags": {
+        "priority": -30
+      },
+      "spec": {
+        "name": "workAddress",
+        "attributes": {
+          "class": "address js-postcode-search"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine1",
+              "attributes": {
+                "class": "long",
+                "id": "addressLine1",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLines",
+                "error-message": "address_addressLine1-error",
+                "label_attributes": {
+                  "aria-label": "Enter address manually. Address line one"
+                },
+                "short-label": "address_addressLine1"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine2",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine2",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine3",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine3",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine4",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_addressLine4",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "town",
+              "attributes": {
+                "class": "long",
+                "id": "addressTown"
+              },
+              "options": {
+                "label": "address_townCity",
+                "short-label": "address_townCity",
+                "label_attributes": {
+                  "aria-label": "address_townCity"
+                },
+                "error-message": "address_town-error"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "postcode",
+              "options": {
+                "label": "address_postcode",
+                "short-label": "address_postcode"
+              },
+              "type": "Text",
+              "attributes": {
+                "required": false,
+                "id": "postcode"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "countryCode",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "value": "GB"
+              },
+              "options": {
+                "label": "address_country",
+                "label_attributes": {
+                  "aria-label": "Choose country"
+                },
+                "error-message": "address_country-error",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\Country"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": {
+              "priority": 100
+            },
+            "spec": {
+              "name": "searchPostcode",
+              "options": {
+                "label": "Postcode search",
+                "label_attributes": {
+                  "class": "form-element__label"
+                }
+              },
+              "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\Address",
+        "options": {
+          "label": "lva-tm-details-details-workAddress"
+        }
+      }
+    },
+    {
+      "flags": {
+        "priority": -40
+      },
+      "spec": {
+        "name": "responsibilities",
+        "attributes": {
+          "class": "table__form",
+          "id": "responsibilities"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": {
+              "priority": -10
+            },
+            "spec": {
+              "name": "tmType",
+              "options": {
+                "label": "transport-manager.responsibilities.tm-type",
+                "category": "tm_type",
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                }
+              },
+              "type": "DynamicRadio"
+            }
+          },
+          {
+            "flags": {
+              "priority": -20
+            },
+            "spec": {
+              "name": "tmApplicationStatus",
+              "options": {
+                "label": "transport-manager.responsibilities.tm-app-status",
+                "disable_inarray_validator": false,
+                "category": "tmap_status"
+              },
+              "attributes": {
+                "required": false,
+                "id": "",
+                "placeholder": ""
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": {
+              "priority": -30
+            },
+            "spec": {
+              "name": "isOwner",
+              "options": {
+                "label": "transport-manager.responsibilities.is-owner",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                },
+                "hint": "transport-manager.responsibilities.is-owner.no.hint",
+                "hint-position": "below",
+                "hint-class": "govuk-radios__conditional govuk-body hint hint__below hint__black hintNoOwner"
+              },
+              "type": "Radio"
+            }
+          },
+          {
+            "flags": {
+              "priority": -60
+            },
+            "spec": {
+              "name": "additionalInformation",
+              "type": "TextArea",
+              "attributes": {
+                "class": "long",
+                "label": "transport-manager.responsibilities.additional-information.title",
+                "autocomplete": "nope"
+              },
+              "options": {
+                "label": "transport-manager.responsibilities.additional-information",
+                "label_options": {
+                  "disable_html_escape": "true"
+                },
+                "label_attributes": {
+                  "id": "additionalInformation"
+                }
+              }
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": {
+              "priority": -40
+            },
+            "spec": {
+              "name": "hoursOfWeek",
+              "attributes": {
+                "id": "hoursOfWeek"
+              },
+              "elements": [],
+              "fieldsets": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursPerWeekContent",
+                    "attributes": [],
+                    "elements": [
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "hoursMon",
+                          "type": "Text",
+                          "attributes": {
+                            "class": "short",
+                            "pattern": "\\d(\\.)*",
+                            "data-container-class": "inline-text"
+                          },
+                          "options": {
+                            "label": "days-of-week-short-mon",
+                            "label_attributes": {
+                              "aria-label": "Enter your working hours, Monday"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "hoursTue",
+                          "attributes": {
+                            "class": "short",
+                            "pattern": "\\d(\\.)*",
+                            "data-container-class": "inline-text"
+                          },
+                          "options": {
+                            "label": "days-of-week-short-tue",
+                            "label_attributes": {
+                              "aria-label": "Tuesday"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "hoursWed",
+                          "attributes": {
+                            "class": "short",
+                            "pattern": "\\d(\\.)*",
+                            "data-container-class": "inline-text"
+                          },
+                          "options": {
+                            "label": "days-of-week-short-wed",
+                            "label_attributes": {
+                              "aria-label": "Wednesday"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "hoursThu",
+                          "attributes": {
+                            "class": "short",
+                            "pattern": "\\d(\\.)*",
+                            "data-container-class": "inline-text"
+                          },
+                          "options": {
+                            "label": "days-of-week-short-thu",
+                            "label_attributes": {
+                              "aria-label": "Thursday"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "hoursFri",
+                          "attributes": {
+                            "class": "short",
+                            "pattern": "\\d(\\.)*",
+                            "data-container-class": "inline-text"
+                          },
+                          "options": {
+                            "label": "days-of-week-short-fri",
+                            "label_attributes": {
+                              "aria-label": "Friday"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "hoursSat",
+                          "attributes": {
+                            "class": "short",
+                            "pattern": "\\d(\\.)*",
+                            "data-container-class": "inline-text"
+                          },
+                          "options": {
+                            "label": "days-of-week-short-sat",
+                            "label_attributes": {
+                              "aria-label": "Saturday"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "hoursSun",
+                          "attributes": {
+                            "class": "short",
+                            "pattern": "\\d(\\.)*",
+                            "data-container-class": "inline-text"
+                          },
+                          "options": {
+                            "label": "days-of-week-short-sun",
+                            "label_attributes": {
+                              "aria-label": "Sunday"
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "fieldsets": [],
+                    "type": "Laminas\\Form\\Fieldset",
+                    "options": {
+                      "label": "transport-manager.responsibilities.hours-per-week-subtitle",
+                      "hint": "lva-tm-hours-per-week-hint"
+                    }
+                  }
+                }
+              ],
+              "type": "Common\\Form\\Elements\\Types\\HoursPerWeek",
+              "options": []
+            }
+          },
+          {
+            "flags": {
+              "priority": -50
+            },
+            "spec": {
+              "name": "otherLicencesFieldset",
+              "attributes": {
+                "class": "table__form",
+                "id": "hasOtherLicences"
+              },
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hasOtherLicences",
+                    "options": {
+                      "label": "transport-manager.other-licence.form.radio.label",
+                      "hint": "transport-manager.other-licence.form.radio.hint",
+                      "hint-class": "",
+                      "value_options": {
+                        "Y": "Yes",
+                        "N": "No"
+                      },
+                      "label_attributes": {
+                        "class": "form-control form-control--radio form-control--inline"
+                      }
+                    },
+                    "type": "Radio"
+                  }
+                }
+              ],
+              "fieldsets": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "otherLicences",
+                    "attributes": {
+                      "id": "otherLicences",
+                      "class": "help__text help__text--removePadding"
+                    },
+                    "elements": [
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "table",
+                          "options": {
+                            "label": "row"
+                          },
+                          "type": "\\Common\\Form\\Elements\\Types\\Table"
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "action",
+                          "attributes": {
+                            "value": ""
+                          },
+                          "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "rows",
+                          "attributes": {
+                            "value": ""
+                          },
+                          "type": "Hidden"
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "id",
+                          "attributes": {
+                            "value": ""
+                          },
+                          "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                        }
+                      }
+                    ],
+                    "fieldsets": [],
+                    "type": "Laminas\\Form\\Fieldset",
+                    "options": []
+                  }
+                }
+              ],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          },
+          {
+            "flags": {
+              "priority": -70
+            },
+            "spec": {
+              "name": "file",
+              "attributes": {
+                "class": "file-uploader"
+              },
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "fileCount",
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "file",
+                    "attributes": {
+                      "class": "js-visually-hidden"
+                    },
+                    "options": {
+                      "value": "common.file-upload.browse.title",
+                      "hint": "common.file-upload.browse.hint"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "__messages__",
+                    "attributes": [],
+                    "options": [],
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "upload",
+                    "attributes": {
+                      "data-module": "govuk-button",
+                      "type": "submit",
+                      "class": "inline-upload govuk-button js-upload"
+                    },
+                    "options": {
+                      "label": "Upload"
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+                  }
+                }
+              ],
+              "fieldsets": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "list",
+                    "attributes": {
+                      "class": "js-upload-list"
+                    },
+                    "options": {
+                      "preview_images": "true"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+                  }
+                }
+              ],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "lva-tm-details-details-responsibilities"
+        }
+      }
+    },
+    {
+      "flags": {
+        "priority": -50
+      },
+      "spec": {
+        "name": "otherEmployments",
+        "attributes": {
+          "class": "table__form",
+          "id": "hasOtherEmployments"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "hasOtherEmployment",
+              "options": {
+                "label": "transport-manager.employment.form.radio.label",
+                "hint": "transport-manager.employment.form.radio.hint",
+                "hint-class": "",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                }
+              },
+              "type": "Radio"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "otherEmployment",
+              "attributes": {
+                "id": "otherEmployments",
+                "class": "help__text help__text--removePadding"
+              },
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "table",
+                    "options": {
+                      "label": "row"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\Table"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "action",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "rows",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "id",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -60
+      },
+      "spec": {
+        "name": "previousHistory",
+        "attributes": {
+          "class": "table__form",
+          "id": "previousHistory"
+        },
+        "elements": [
+          {
+            "flags": {
+              "priority": -10
+            },
+            "spec": {
+              "name": "hasConvictions",
+              "options": {
+                "label": "transport-manager.convictions-and-penalties.form.radio.label",
+                "hint": "transport-manager.convictions-and-penalties.form.radio.hint",
+                "hint-class": "",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                }
+              },
+              "type": "Radio"
+            }
+          },
+          {
+            "flags": {
+              "priority": -30
+            },
+            "spec": {
+              "name": "hasPreviousLicences",
+              "options": {
+                "label": "transport-manager.previous-licences.form.radio.label",
+                "hint": "transport-manager.previous-licences.form.radio.hint",
+                "hint-class": "",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                }
+              },
+              "type": "Radio"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": {
+              "priority": -20
+            },
+            "spec": {
+              "name": "convictions",
+              "attributes": {
+                "id": "previousConvictions",
+                "class": "help__text help__text--removePadding"
+              },
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "table",
+                    "options": {
+                      "label": "row"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\Table"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "action",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "rows",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "id",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          },
+          {
+            "flags": {
+              "priority": -40
+            },
+            "spec": {
+              "name": "previousLicences",
+              "attributes": {
+                "id": "previousLicences",
+                "class": "help__text help__text--removePadding"
+              },
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "table",
+                    "options": {
+                      "label": "row"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\Table"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "action",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "rows",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "id",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -70
+      },
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "tm-details-submit.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "tm-details-save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "details": {
+      "birthDate": {
+        "name": "birthDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "emailAddress": {
+        "name": "emailAddress",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+          }
+        ]
+      },
+      "birthPlace": {
+        "name": "birthPlace",
+        "validators": [
+          {
+            "name": "\\Laminas\\Validator\\NotEmpty"
+          }
+        ]
+      },
+      "certificate": {
+        "fileCount": {
+          "name": "fileCount",
+          "required": false,
+          "validators": [
+            {
+              "name": "Laminas\\Validator\\NotEmpty",
+              "options": [
+                "null"
+              ]
+            },
+            {
+              "name": "Common\\Validator\\FileUploadCountV2",
+              "options": {
+                "min": 1
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "lgvAcquiredRightsReferenceNumber": {
+        "name": "lgvAcquiredRightsReferenceNumber",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 7,
+              "max": 7,
+              "messages": {
+                "stringLengthInvalid": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length",
+                "stringLengthTooShort": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length",
+                "stringLengthTooLong": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "homeAddress": {
+      "searchPostcode": {
+        "name": "searchPostcode",
+        "required": false
+      },
+      "addressLine1": {
+        "name": "addressLine1",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 90
+            }
+          }
+        ]
+      },
+      "addressLine2": {
+        "name": "addressLine2",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 90
+            }
+          }
+        ]
+      },
+      "addressLine3": {
+        "name": "addressLine3",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 100
+            }
+          }
+        ]
+      },
+      "addressLine4": {
+        "name": "addressLine4",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 35
+            }
+          }
+        ]
+      },
+      "town": {
+        "name": "town",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 30
+            }
+          }
+        ]
+      },
+      "postcode": {
+        "name": "postcode",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "workAddress": {
+      "searchPostcode": {
+        "name": "searchPostcode",
+        "required": false
+      },
+      "addressLine1": {
+        "name": "addressLine1",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 90
+            }
+          }
+        ]
+      },
+      "addressLine2": {
+        "name": "addressLine2",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 90
+            }
+          }
+        ]
+      },
+      "addressLine3": {
+        "name": "addressLine3",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 100
+            }
+          }
+        ]
+      },
+      "addressLine4": {
+        "name": "addressLine4",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 35
+            }
+          }
+        ]
+      },
+      "town": {
+        "name": "town",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 30
+            }
+          }
+        ]
+      },
+      "postcode": {
+        "name": "postcode",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "responsibilities": {
+      "tmType": {
+        "name": "tmType",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty"
+          }
+        ]
+      },
+      "tmApplicationStatus": {
+        "name": "tmApplicationStatus",
+        "required": true
+      },
+      "hoursOfWeek": {
+        "hoursPerWeekContent": {
+          "hoursMon": {
+            "name": "hoursMon",
+            "filters": [
+              {
+                "name": "Common\\Filter\\NullToFloat"
+              }
+            ],
+            "validators": [
+              {
+                "name": "Laminas\\I18n\\Validator\\IsFloat",
+                "options": {
+                  "messages": {
+                    "notFloat": "Only numbers are allowed"
+                  }
+                }
+              },
+              {
+                "name": "Between",
+                "options": {
+                  "min": 0,
+                  "max": 24,
+                  "messages": {
+                    "notBetween": "Mon must be between '%min%' and '%max%', inclusively"
+                  }
+                }
+              },
+              {
+                "name": "Common\\Form\\Elements\\Validators\\SumContext",
+                "options": {
+                  "min": 0.1,
+                  "messages": {
+                    "belowMin": "transport-manager-hours-per-week-validation-message"
+                  }
+                }
+              }
+            ]
+          },
+          "hoursTue": {
+            "name": "hoursTue",
+            "filters": [
+              {
+                "name": "Common\\Filter\\NullToFloat"
+              }
+            ],
+            "validators": [
+              {
+                "name": "Laminas\\I18n\\Validator\\IsFloat",
+                "options": {
+                  "messages": {
+                    "notFloat": "Only numbers are allowed"
+                  }
+                }
+              },
+              {
+                "name": "Between",
+                "options": {
+                  "min": 0,
+                  "max": 24,
+                  "messages": {
+                    "notBetween": "Tue must be between '%min%' and '%max%', inclusively"
+                  }
+                }
+              }
+            ]
+          },
+          "hoursWed": {
+            "name": "hoursWed",
+            "filters": [
+              {
+                "name": "Common\\Filter\\NullToFloat"
+              }
+            ],
+            "validators": [
+              {
+                "name": "Laminas\\I18n\\Validator\\IsFloat",
+                "options": {
+                  "messages": {
+                    "notFloat": "Only numbers are allowed"
+                  }
+                }
+              },
+              {
+                "name": "Between",
+                "options": {
+                  "min": 0,
+                  "max": 24,
+                  "messages": {
+                    "notBetween": "Wed must be between '%min%' and '%max%', inclusively"
+                  }
+                }
+              }
+            ]
+          },
+          "hoursThu": {
+            "name": "hoursThu",
+            "filters": [
+              {
+                "name": "Common\\Filter\\NullToFloat"
+              }
+            ],
+            "validators": [
+              {
+                "name": "Laminas\\I18n\\Validator\\IsFloat",
+                "options": {
+                  "messages": {
+                    "notFloat": "Only numbers are allowed"
+                  }
+                }
+              },
+              {
+                "name": "Between",
+                "options": {
+                  "min": 0,
+                  "max": 24,
+                  "messages": {
+                    "notBetween": "Thu must be between '%min%' and '%max%', inclusively"
+                  }
+                }
+              }
+            ]
+          },
+          "hoursFri": {
+            "name": "hoursFri",
+            "filters": [
+              {
+                "name": "Common\\Filter\\NullToFloat"
+              }
+            ],
+            "validators": [
+              {
+                "name": "Laminas\\I18n\\Validator\\IsFloat",
+                "options": {
+                  "messages": {
+                    "notFloat": "Only numbers are allowed"
+                  }
+                }
+              },
+              {
+                "name": "Between",
+                "options": {
+                  "min": 0,
+                  "max": 24,
+                  "messages": {
+                    "notBetween": "Fri must be between '%min%' and '%max%', inclusively"
+                  }
+                }
+              }
+            ]
+          },
+          "hoursSat": {
+            "name": "hoursSat",
+            "filters": [
+              {
+                "name": "Common\\Filter\\NullToFloat"
+              }
+            ],
+            "validators": [
+              {
+                "name": "Laminas\\I18n\\Validator\\IsFloat",
+                "options": {
+                  "messages": {
+                    "notFloat": "Only numbers are allowed"
+                  }
+                }
+              },
+              {
+                "name": "Between",
+                "options": {
+                  "min": 0,
+                  "max": 24,
+                  "messages": {
+                    "notBetween": "Sat must be between '%min%' and '%max%', inclusively"
+                  }
+                }
+              }
+            ]
+          },
+          "hoursSun": {
+            "name": "hoursSun",
+            "filters": [
+              {
+                "name": "Common\\Filter\\NullToFloat"
+              }
+            ],
+            "validators": [
+              {
+                "name": "Laminas\\I18n\\Validator\\IsFloat",
+                "options": {
+                  "messages": {
+                    "notFloat": "Only numbers are allowed"
+                  }
+                }
+              },
+              {
+                "name": "Between",
+                "options": {
+                  "min": 0,
+                  "max": 24,
+                  "messages": {
+                    "notBetween": "Sun must be between '%min%' and '%max%', inclusively"
+                  }
+                }
+              }
+            ]
+          },
+          "type": "Laminas\\InputFilter\\InputFilter"
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "otherLicencesFieldset": {
+        "hasOtherLicences": {
+          "name": "hasOtherLicences",
+          "validators": [
+            {
+              "name": "Common\\Form\\Elements\\Validators\\YesNoTableRequiredValidator",
+              "options": {
+                "table": "otherLicences",
+                "message": "transport-manager-details.form.otherLicences.required"
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "additionalInformation": {
+        "name": "additionalInformation",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "file": {
+        "fileCount": {
+          "name": "fileCount",
+          "required": false,
+          "validators": [
+            {
+              "name": "Laminas\\Validator\\NotEmpty",
+              "options": [
+                "null"
+              ]
+            },
+            {
+              "name": "Common\\Validator\\FileUploadCountV2",
+              "options": {
+                "min": 1
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "otherEmployments": {
+      "hasOtherEmployment": {
+        "name": "hasOtherEmployment",
+        "validators": [
+          {
+            "name": "Common\\Form\\Elements\\Validators\\YesNoTableRequiredValidator",
+            "options": {
+              "table": "otherEmployment",
+              "message": "transport-manager-details.form.employment.required"
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "previousHistory": {
+      "hasConvictions": {
+        "name": "hasConvictions",
+        "validators": [
+          {
+            "name": "Common\\Form\\Elements\\Validators\\YesNoTableRequiredValidator",
+            "options": {
+              "table": "convictions",
+              "message": "transport-manager-details.form.convictions.required"
+            }
+          }
+        ]
+      },
+      "hasPreviousLicences": {
+        "name": "hasPreviousLicences",
+        "validators": [
+          {
+            "name": "Common\\Form\\Elements\\Validators\\YesNoTableRequiredValidator",
+            "options": {
+              "table": "previousLicences",
+              "message": "transport-manager-details.form.previouslicences.required"
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

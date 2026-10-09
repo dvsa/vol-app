@@ -1,0 +1,89 @@
+{
+  "name": "user-printer",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "user",
+        "attributes": {
+          "id": "user",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "User",
+          "service_name": "Olcs\\Service\\Data\\UserWithName",
+          "empty_option": "Default"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "categoryUser",
+        "attributes": {
+          "id": "categoryUser",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Category",
+          "service_name": "Olcs\\Service\\Data\\Category",
+          "empty_option": "Default setting"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "subCategoryUser",
+        "attributes": {
+          "id": "subCategoryUser",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Sub category",
+          "service_name": "Olcs\\Service\\Data\\SubCategory",
+          "empty_option": "Default setting"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "printer",
+        "attributes": {
+          "id": "printer",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "label": "Printer",
+          "service_name": "Olcs\\Service\\Data\\Printer"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "user": {
+      "name": "user",
+      "required": false
+    },
+    "categoryUser": {
+      "name": "categoryUser",
+      "required": false
+    },
+    "subCategoryUser": {
+      "name": "subCategoryUser",
+      "required": false
+    },
+    "printer": {
+      "name": "printer",
+      "required": true
+    }
+  }
+}

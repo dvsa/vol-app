@@ -1,0 +1,477 @@
+{
+  "name": "CurrentDiscs",
+  "attributes": {
+    "method": "post",
+    "class": "form",
+    "id": "surrender-current-discs"
+  },
+  "elements": [
+    {
+      "flags": {
+        "priority": -2
+      },
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "continue.button"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "headerSection",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "header",
+              "options": {
+                "hint": "Select all options that are relevant to your discs."
+              },
+              "attributes": {
+                "value": "markup-licence-surrender-current-disc-form-header"
+              },
+              "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "possessionSection",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "inPossession",
+              "type": "OlcsCheckbox",
+              "attributes": {
+                "class": "govuk-checkboxes__item"
+              },
+              "options": {
+                "label": "licence.surrender.current_discs.in_possession.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "checked_value": "Y",
+                "unchecked_value": "N"
+              }
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "info",
+              "attributes": {
+                "class": "govuk-checkboxes__conditional",
+                "id": "possessionInfo"
+              },
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "number",
+                    "attributes": {
+                      "required": "required",
+                      "class": "govuk-input govuk-!-width-one-third"
+                    },
+                    "options": {
+                      "label": "licence.surrender.current_discs.destroy.number.label"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "lostSection",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "lost",
+              "type": "OlcsCheckbox",
+              "attributes": {
+                "class": "govuk-checkboxes__item"
+              },
+              "options": {
+                "label": "licence.surrender.operator_licence.lost.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "checked_value": "Y",
+                "unchecked_value": "N"
+              }
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "info",
+              "attributes": {
+                "class": "govuk-checkboxes__conditional",
+                "id": "lostInfo"
+              },
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "number",
+                    "attributes": {
+                      "required": "required",
+                      "class": "govuk-input govuk-!-width-one-third"
+                    },
+                    "options": {
+                      "label": "licence.surrender.current_discs.lost.label"
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "details",
+                    "attributes": {
+                      "required": "required",
+                      "class": "govuk-textarea",
+                      "rows": "5"
+                    },
+                    "type": "textarea",
+                    "options": {
+                      "label": "licence.surrender.current_discs.lost.details.label",
+                      "hint": "licence.surrender.current_discs.lost.details.hint"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "stolenSection",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "stolen",
+              "type": "OlcsCheckbox",
+              "attributes": {
+                "class": "govuk-checkboxes__item"
+              },
+              "options": {
+                "label": "licence.surrender.operator_licence.stolen.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "checked_value": "Y",
+                "unchecked_value": "N"
+              }
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "info",
+              "attributes": {
+                "class": "govuk-checkboxes__conditional",
+                "id": "stolenInfo"
+              },
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "number",
+                    "attributes": {
+                      "required": "required",
+                      "class": "govuk-input govuk-!-width-one-third"
+                    },
+                    "options": {
+                      "label": "licence.surrender.current_discs.stolen.number.label"
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "details",
+                    "attributes": {
+                      "required": "required",
+                      "class": "govuk-textarea",
+                      "rows": "5"
+                    },
+                    "type": "textarea",
+                    "options": {
+                      "label": "licence.surrender.current_discs.stolen.details.label",
+                      "hint": "licence.surrender.current_discs.stolen.details.hint"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "\\Common\\Form\\Form",
+  "input_filter": {
+    "possessionSection": {
+      "info": {
+        "number": {
+          "name": "number",
+          "required": true,
+          "allow_empty": true,
+          "continue_if_empty": true,
+          "validators": [
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "inPossession",
+                "context_values": [
+                  "Y"
+                ],
+                "inject_post_data": "possessionSection->inPossession",
+                "validators": [
+                  {
+                    "name": "Digits",
+                    "options": {
+                      "break_chain_on_failure": true,
+                      "messages": {
+                        "digitsStringEmpty": "licence.surrender.current_discs.destroy.number.emptyMessage"
+                      }
+                    }
+                  },
+                  {
+                    "name": "GreaterThan",
+                    "options": {
+                      "min": 0,
+                      "messages": {
+                        "notGreaterThan": "licence.surrender.current_discs.number.greaterThanMessage"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "lostSection": {
+      "info": {
+        "number": {
+          "name": "number",
+          "required": true,
+          "allow_empty": true,
+          "continue_if_empty": true,
+          "validators": [
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "lost",
+                "context_values": [
+                  "Y"
+                ],
+                "inject_post_data": "lostSection->lost",
+                "validators": [
+                  {
+                    "name": "Digits",
+                    "options": {
+                      "break_chain_on_failure": true,
+                      "messages": {
+                        "digitsStringEmpty": "licence.surrender.current_discs.lost.number.emptyMessage"
+                      }
+                    }
+                  },
+                  {
+                    "name": "GreaterThan",
+                    "options": {
+                      "min": 0,
+                      "messages": {
+                        "notGreaterThan": "licence.surrender.current_discs.number.greaterThanMessage"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "details": {
+          "name": "details",
+          "required": true,
+          "allow_empty": true,
+          "continue_if_empty": true,
+          "filters": [
+            {
+              "name": "Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "lost",
+                "context_values": [
+                  "Y"
+                ],
+                "inject_post_data": "lostSection->lost",
+                "validators": [
+                  {
+                    "name": "Laminas\\Validator\\StringLength",
+                    "options": {
+                      "min": 1,
+                      "max": 500,
+                      "messages": {
+                        "stringLengthTooShort": "licence.surrender.current_discs.lost.details.stringLengthTooShort",
+                        "stringLengthTooLong": "licence.surrender.current_discs.details.stringLengthTooLong"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "stolenSection": {
+      "info": {
+        "number": {
+          "name": "number",
+          "required": true,
+          "continue_if_empty": true,
+          "validators": [
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "stolen",
+                "context_values": [
+                  "Y"
+                ],
+                "inject_post_data": "stolenSection->stolen",
+                "validators": [
+                  {
+                    "name": "NotEmpty",
+                    "options": {
+                      "messages": {
+                        "isEmpty": "Value is required and can't be empty"
+                      }
+                    }
+                  },
+                  {
+                    "name": "Digits",
+                    "options": {
+                      "break_chain_on_failure": true,
+                      "messages": {
+                        "digitsStringEmpty": "licence.surrender.current_discs.stolen.number.emptyMessage"
+                      }
+                    }
+                  },
+                  {
+                    "name": "GreaterThan",
+                    "options": {
+                      "min": 0,
+                      "messages": {
+                        "notGreaterThan": "licence.surrender.current_discs.number.greaterThanMessage"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "details": {
+          "name": "details",
+          "required": true,
+          "allow_empty": true,
+          "continue_if_empty": true,
+          "filters": [
+            {
+              "name": "Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "stolen",
+                "context_values": [
+                  "Y"
+                ],
+                "inject_post_data": "stolenSection->stolen",
+                "validators": [
+                  {
+                    "name": "Laminas\\Validator\\StringLength",
+                    "options": {
+                      "min": 1,
+                      "max": 500,
+                      "messages": {
+                        "stringLengthTooShort": "licence.surrender.current_discs.stolen.details.stringLengthTooShort",
+                        "stringLengthTooLong": "licence.surrender.current_discs.details.stringLengthTooLong"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

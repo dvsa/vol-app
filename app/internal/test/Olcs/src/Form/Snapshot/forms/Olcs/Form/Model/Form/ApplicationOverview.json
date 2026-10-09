@@ -1,0 +1,286 @@
+{
+  "name": "application-overview",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "details",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "leadTcArea",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Lead Traffic Commissioner",
+                "value_options": [],
+                "empty_option": "Not set",
+                "disable_inarray_validator": false
+              },
+              "type": "\\Laminas\\Form\\Element\\Select"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "receivedDate",
+              "type": "DateSelect",
+              "options": {
+                "label": "Application received date",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "required": false,
+                "max_year_delta": "+5",
+                "min_year_delta": "-5"
+              },
+              "attributes": {
+                "required": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "targetCompletionDate",
+              "type": "DateSelect",
+              "options": {
+                "label": "Target completion",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "required": false,
+                "max_year_delta": "+5",
+                "min_year_delta": "-5"
+              },
+              "attributes": {
+                "required": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "translateToWelsh",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "overview.fieldset.check.welsh"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "overrideOppositionDate",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "overview.fieldset.check.override-opposition-date"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "applicationReferredToPi",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "overview.fieldset.check.application-referred-to-pi"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "Details"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "tracking",
+        "attributes": {
+          "class": "tracking"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "Tracking"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "saveAndContinue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "save.continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "details": {
+      "leadTcArea": {
+        "name": "leadTcArea",
+        "required": false
+      },
+      "receivedDate": {
+        "name": "receivedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "\\Common\\Filter\\DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          }
+        ]
+      },
+      "targetCompletionDate": {
+        "name": "targetCompletionDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "\\Common\\Filter\\DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

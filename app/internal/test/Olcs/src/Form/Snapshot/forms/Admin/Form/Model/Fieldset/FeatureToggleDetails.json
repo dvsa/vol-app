@@ -1,0 +1,105 @@
+{
+  "name": "FeatureToggleDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "friendlyName",
+        "attributes": {
+          "placeholder": "",
+          "class": "medium",
+          "required": "required"
+        },
+        "options": {
+          "label": "Name of toggle"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "configName",
+        "attributes": {
+          "placeholder": "",
+          "class": "extra-long",
+          "required": "required"
+        },
+        "options": {
+          "label": "Config name (usually/ideally the FQDN of a handler)"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "options": {
+          "label": "Toggle status",
+          "category": "feature_toggle_status",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          }
+        },
+        "type": "DynamicRadio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "friendlyName": {
+      "name": "friendlyName",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 32
+          }
+        }
+      ]
+    },
+    "configName": {
+      "name": "configName",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "status": {
+      "name": "status",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "ConvictionsPenaltiesReadMoreLink",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "readMoreLink",
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionLink",
+        "attributes": {
+          "target": "_blank"
+        },
+        "options": {
+          "label": "Read more about convictions"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

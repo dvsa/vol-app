@@ -1,0 +1,145 @@
+{
+  "name": "condition-undertaking",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "type",
+        "attributes": {
+          "id": "type"
+        },
+        "options": {
+          "label": "Condition / Undertaking type",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "cond_type"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "conditionCategory",
+        "attributes": {
+          "id": "conditionCategory"
+        },
+        "options": {
+          "label": "Condition / Undertaking category",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "cu_category"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isDraft",
+        "attributes": {
+          "value": 0
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "notes",
+        "attributes": {
+          "id": "notes",
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Description"
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "fulfilled",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Fulfilled"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "attachedTo",
+        "attributes": {
+          "id": "attachedTo",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Attached to",
+          "value_options": [],
+          "empty_option": "Please Select",
+          "disable_inarray_validator": true
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "case",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "notes": {
+      "name": "notes",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": "8000"
+          }
+        }
+      ]
+    }
+  }
+}

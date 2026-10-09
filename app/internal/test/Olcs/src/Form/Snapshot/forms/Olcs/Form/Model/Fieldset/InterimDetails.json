@@ -1,0 +1,181 @@
+{
+  "name": "interim-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "interimReason",
+        "attributes": {
+          "id": "interimReason",
+          "class": "long",
+          "name": "interimReason"
+        },
+        "options": {
+          "label": "internal.interim.form.interim_reason",
+          "label_attributes": {
+            "class": "long"
+          }
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "interimStart",
+        "attributes": {
+          "id": "interimStart"
+        },
+        "options": {
+          "label": "internal.interim.form.interim_start",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "min_year_delta": "-5",
+          "max_year_delta": "+5"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "interimEnd",
+        "attributes": {
+          "id": "interimEnd"
+        },
+        "options": {
+          "label": "internal.interim.form.interim_end",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "min_year_delta": "-5",
+          "max_year_delta": "+5"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "interimAuthHgvVehicles",
+        "attributes": {
+          "class": "short",
+          "id": "interimAuthHgvVehicles"
+        },
+        "options": {
+          "label": "internal.interim.form.interim_auth_hgv_vehicles"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "interimAuthLgvVehicles",
+        "attributes": {
+          "class": "short",
+          "id": "interimAuthLgvVehicles"
+        },
+        "options": {
+          "label": "internal.interim.form.interim_auth_lgv_vehicles"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "interimAuthTrailers",
+        "attributes": {
+          "class": "short",
+          "id": "interimAuthTrailers"
+        },
+        "options": {
+          "label": "internal.interim.form.interim_auth_trailers"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "interimReason": {
+      "name": "interimReason",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "interimStart": {
+      "name": "interimStart",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "interimEnd": {
+      "name": "interimEnd",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "interimAuthHgvVehicles": {
+      "name": "interimAuthHgvVehicles",
+      "required": false,
+      "validators": [
+        {
+          "name": "Digits"
+        }
+      ]
+    },
+    "interimAuthLgvVehicles": {
+      "name": "interimAuthLgvVehicles",
+      "required": false,
+      "validators": [
+        {
+          "name": "Digits"
+        }
+      ]
+    },
+    "interimAuthTrailers": {
+      "name": "interimAuthTrailers",
+      "required": false,
+      "validators": [
+        {
+          "name": "Digits"
+        }
+      ]
+    }
+  }
+}

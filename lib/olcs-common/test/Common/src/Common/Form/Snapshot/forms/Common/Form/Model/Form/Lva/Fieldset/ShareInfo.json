@@ -1,0 +1,24 @@
+{
+  "name": "share-info",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "shareInfo",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "licence.vehicles-trailers.share-info",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced",
+            "id": "label-shareInfo"
+          }
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

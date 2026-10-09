@@ -1,0 +1,950 @@
+{
+  "name": "Opposition",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "type": "Hidden",
+              "attributes": {
+                "value": ""
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "oppositionType",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "oppositionType",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Opposition type",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "category": "obj_type"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "contactDetailsDescription",
+              "type": "Text",
+              "attributes": {
+                "id": "contactDetailsDescription",
+                "placeholder": "",
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Objector body"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "raisedDate",
+              "type": "DateSelect",
+              "attributes": {
+                "id": "raisedDate"
+              },
+              "options": {
+                "label": "Date received",
+                "create_empty_option": true,
+                "render_delimiters": true
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "outOfRepresentationDate",
+              "type": "Common\\Form\\Elements\\Types\\Html",
+              "attributes": {
+                "id": "outOfRepresentationDate",
+                "required": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "outOfObjectionDate",
+              "type": "Common\\Form\\Elements\\Types\\Html",
+              "attributes": {
+                "id": "outOfObjectionDate",
+                "required": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "opposerType",
+              "attributes": {
+                "required": false,
+                "id": "opposerType",
+                "placeholder": ""
+              },
+              "type": "DynamicSelect",
+              "options": {
+                "label": "Objector type",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "category": "opposer_type"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isValid",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "isValid",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Valid",
+                "disable_inarray_validator": false,
+                "category": "opposition_valid"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "validNotes",
+              "type": "TextArea",
+              "attributes": {
+                "class": "extra-long",
+                "id": "validNotes"
+              },
+              "options": {
+                "label": "Valid details"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isCopied",
+              "type": "OlcsCheckbox",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "Copied"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isWillingToAttendPi",
+              "type": "OlcsCheckbox",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "Willing to attend PI"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isInTime",
+              "type": "OlcsCheckbox",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "In time"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isWithdrawn",
+              "type": "OlcsCheckbox",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "Withdrawn"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "status",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "status",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Status",
+                "disable_inarray_validator": false,
+                "category": "opposition_status"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "licenceOperatingCentres",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "licenceOperatingCentres",
+                "placeholder": "",
+                "class": "chosen-select-medium",
+                "multiple": "multiple"
+              },
+              "options": {
+                "label": "Affected centre",
+                "context": "licence",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\OcContextListDataService",
+                "use_groups": "false"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "applicationOperatingCentres",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "applicationOperatingCentres",
+                "placeholder": "",
+                "class": "chosen-select-medium",
+                "multiple": "multiple"
+              },
+              "options": {
+                "label": "Affected centre",
+                "context": "application",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\OcContextListDataService",
+                "use_groups": "false"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "grounds",
+              "type": "DynamicSelect",
+              "options": {
+                "label": "Grounds",
+                "disable_inarray_validator": false,
+                "category": "obj_grounds"
+              },
+              "attributes": {
+                "id": "grounds",
+                "placeholder": "",
+                "class": "chosen-select-medium",
+                "required": false,
+                "multiple": "multiple"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "notes",
+              "type": "TextArea",
+              "attributes": {
+                "class": "extra-long",
+                "id": ""
+              },
+              "options": {
+                "label": "Notes"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "case",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "person",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "forename",
+              "type": "Text",
+              "options": {
+                "label": "Contact first name"
+              },
+              "attributes": {
+                "id": "forename",
+                "placeholder": "",
+                "class": "medium",
+                "required": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "familyName",
+              "type": "Text",
+              "options": {
+                "label": "Contact family name"
+              },
+              "attributes": {
+                "id": "familyName",
+                "placeholder": "",
+                "class": "medium",
+                "required": false
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "contact",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_primary",
+              "attributes": {
+                "id": "phone",
+                "placeholder": "",
+                "class": "medium"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_primary_id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_primary_version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_secondary",
+              "attributes": {
+                "id": "phone",
+                "placeholder": "",
+                "class": "medium"
+              },
+              "options": {
+                "label": "secondary-contact-number-optional"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_secondary_id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_secondary_version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailAddress",
+              "type": "Text",
+              "attributes": {
+                "id": "email",
+                "placeholder": "",
+                "class": "medium",
+                "required": false
+              },
+              "options": {
+                "label": "Email"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "address",
+        "attributes": {
+          "class": "address js-postcode-search"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine1",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLines",
+                "label_attributes": {
+                  "aria-label": "Enter address manually. Establishment address line 1"
+                },
+                "short-label": "address_addressLine1"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine2",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine2",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine3",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine3",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine4",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_addressLine4",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "town",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_townCity",
+                "label_attributes": {
+                  "aria-label": "Establishment town/city"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "postcode",
+              "options": {
+                "label": "address_postcode",
+                "label_attributes": {
+                  "aria-label": "Establishment postcode"
+                }
+              },
+              "type": "Text",
+              "attributes": {
+                "id": "postcodeOptional",
+                "required": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "countryCode",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "value": "GB"
+              },
+              "options": {
+                "label": "address_country",
+                "label_attributes": {
+                  "aria-label": "Choose establishment country"
+                },
+                "empty_option": "Please select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\Country"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": {
+              "priority": 100
+            },
+            "spec": {
+              "name": "searchPostcode",
+              "options": {
+                "label": "Postcode search",
+                "label_attributes": {
+                  "class": "form-element__label"
+                }
+              },
+              "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\Address",
+        "options": {
+          "label": "Opposer Address"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "oppositionType": {
+        "name": "oppositionType",
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "contactDetailsDescription": {
+        "name": "contactDetailsDescription",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 5,
+              "max": 255
+            }
+          }
+        ]
+      },
+      "raisedDate": {
+        "name": "raisedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "outOfRepresentationDate": {
+        "name": "outOfRepresentationDate",
+        "required": false
+      },
+      "outOfObjectionDate": {
+        "name": "outOfObjectionDate",
+        "required": false
+      },
+      "opposerType": {
+        "name": "opposerType",
+        "required": true,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "array"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "oppositionType",
+              "context_values": [
+                "otf_eob",
+                "otf_obj"
+              ],
+              "validators": [
+                {
+                  "name": "NotEmpty"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "isValid": {
+        "name": "isValid",
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "validNotes": {
+        "name": "validNotes",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "status": {
+        "name": "status",
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "licenceOperatingCentres": {
+        "name": "licenceOperatingCentres",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "applicationOperatingCentres": {
+        "name": "applicationOperatingCentres",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "grounds": {
+        "name": "grounds",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "notes": {
+        "name": "notes",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "person": {
+      "forename": {
+        "name": "forename",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 35
+            }
+          }
+        ]
+      },
+      "familyName": {
+        "name": "familyName",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 35
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "contact": {
+      "emailAddress": {
+        "name": "emailAddress",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "address": {
+      "searchPostcode": {
+        "name": "searchPostcode",
+        "required": false
+      },
+      "addressLine1": {
+        "name": "addressLine1",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "addressLine2": {
+        "name": "addressLine2",
+        "required": false
+      },
+      "addressLine3": {
+        "name": "addressLine3",
+        "required": false
+      },
+      "addressLine4": {
+        "name": "addressLine4",
+        "required": false
+      },
+      "town": {
+        "name": "town",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "postcode": {
+        "name": "postcode",
+        "required": false,
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode",
+            "options": {
+              "allow_empty": true
+            }
+          }
+        ]
+      },
+      "countryCode": {
+        "name": "countryCode",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

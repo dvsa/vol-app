@@ -1,0 +1,262 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "irfoGvPermitType",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Permit type",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\IrfoGvPermitType"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "yearRequired",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "Year",
+          "empty_option": "Please Select",
+          "max_year_delta": "+3",
+          "min_year_delta": "-40"
+        },
+        "type": "YearSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "inForceDate",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "In force date",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "max_year_delta": "+1",
+          "min_year_delta": "-40"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "expiryDate",
+        "attributes": {
+          "id": "expiryDate"
+        },
+        "options": {
+          "label": "Expiry date",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "max_year_delta": "+2",
+          "min_year_delta": "-40",
+          "hint": "The calculated expiry date is <span id=calculatedExpiryDateText>dd/mm/yyyy</span>"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isFeeExempt",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Fee exempt"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "exemptionDetails",
+        "attributes": {
+          "required": false,
+          "class": "extra-long",
+          "id": "exemptionDetails"
+        },
+        "type": "TextArea",
+        "options": {
+          "label": "Exemption reason"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "noOfCopies",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "small"
+        },
+        "options": {
+          "label": "No of copies required"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "organisation",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "yearRequired": {
+      "name": "yearRequired",
+      "validators": [
+        {
+          "name": "Digits"
+        }
+      ]
+    },
+    "inForceDate": {
+      "name": "inForceDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "expiryDate": {
+      "name": "expiryDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "expiryDate",
+            "context_values": [
+              "--"
+            ],
+            "context_truth": false,
+            "allow_empty": true,
+            "validators": [
+              {
+                "name": "\\Common\\Validator\\Date"
+              },
+              {
+                "name": "Date",
+                "options": {
+                  "format": "Y-m-d"
+                }
+              },
+              {
+                "name": "DateCompare",
+                "options": {
+                  "compare_to": "inForceDate",
+                  "compare_to_label": "In force date",
+                  "operator": "gte"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "exemptionDetails": {
+      "name": "exemptionDetails",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "isFeeExempt",
+            "context_values": [
+              "Y"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "Laminas\\Validator\\NotEmpty"
+              },
+              {
+                "name": "Laminas\\Validator\\StringLength",
+                "options": {
+                  "max": 255
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "noOfCopies": {
+      "name": "noOfCopies",
+      "validators": [
+        {
+          "name": "Digits"
+        }
+      ]
+    }
+  }
+}

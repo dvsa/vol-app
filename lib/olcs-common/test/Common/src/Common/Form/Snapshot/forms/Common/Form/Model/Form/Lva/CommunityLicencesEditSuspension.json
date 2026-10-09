@@ -1,0 +1,245 @@
+{
+  "name": "lva-community-licences-stop",
+  "attributes": {
+    "method": "post",
+    "class": "table__form"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "reasons",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "chosen-select-medium",
+                "multiple": true
+              },
+              "options": {
+                "label": "internal.community_licence.form.reasons",
+                "category": "com_lic_sw_reason"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "status",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "dates",
+        "attributes": {
+          "id": "dates"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "startDate",
+              "attributes": {
+                "required": "required"
+              },
+              "options": {
+                "label": "internal.community_licence.form.start_date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "endDate",
+              "options": {
+                "label": "internal.community_licence.form.end_date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "internal.community_licence.form_add.ok"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "internal.community_licence.form_add.cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "data": {
+      "reasons": {
+        "name": "reasons",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": {
+              "messages": {
+                "isEmpty": "internal.community_licence.form.licences_validation"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "dates": {
+      "startDate": {
+        "name": "startDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\DateInFuture",
+            "options": {
+              "include_today": true,
+              "use_time": false
+            }
+          }
+        ]
+      },
+      "endDate": {
+        "name": "endDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "DateCompare",
+            "options": {
+              "has_time": false,
+              "allow_empty": true,
+              "compare_to": "startDate",
+              "operator": "gt",
+              "compare_to_label": "Start date"
+            }
+          },
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\DateInFuture",
+            "options": {
+              "include_today": true,
+              "use_time": false,
+              "allow_empty": true
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

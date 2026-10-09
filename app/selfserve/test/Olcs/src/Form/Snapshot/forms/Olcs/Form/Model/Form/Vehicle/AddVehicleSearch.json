@@ -1,0 +1,23 @@
+{
+  "name": "AddVehicleSearch",
+  "attributes": {
+    "method": "post",
+    "id": "vehicle-add"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "vehicle-search",
+        "options": {
+          "label": "vrm.full",
+          "shouldEscapeMessages": false
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\DvlaVrmSearch"
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

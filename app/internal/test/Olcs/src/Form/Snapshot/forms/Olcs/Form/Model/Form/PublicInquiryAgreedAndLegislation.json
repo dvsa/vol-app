@@ -1,0 +1,336 @@
+{
+  "name": "traffic-commissioner-agreement-legislation",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "agreedDate",
+              "options": {
+                "label": "Agreed date",
+                "create_empty_option": false,
+                "render_delimiters": true
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "agreedByTc",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "medium"
+              },
+              "options": {
+                "label": "Agreed by",
+                "service_name": "Olcs\\Service\\Data\\PresidingTc",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "agreedByTcRole",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "medium"
+              },
+              "options": {
+                "label": "Agreed by role",
+                "category": "tc_role",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "assignedCaseworker",
+              "attributes": {
+                "id": "assignedCaseworker",
+                "class": "medium"
+              },
+              "options": {
+                "label": "Assigned caseworker",
+                "disable_inarray_validator": false,
+                "empty_option": "Please Select",
+                "service_name": "Olcs\\Service\\Data\\UserListInternal",
+                "use_groups": false
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isEcmsCase",
+              "attributes": {
+                "required": "required",
+                "id": "someClass",
+                "value": "N",
+                "class": "medium"
+              },
+              "type": "Select",
+              "options": {
+                "label": "Is this related to an ECMS case?",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "ecmsFirstReceivedDate",
+              "options": {
+                "label": "Date ECMS case first received by OTC",
+                "create_empty_option": false,
+                "render_delimiters": true,
+                "fieldsetClass": "pi_ecms_first_received_date"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "piTypes",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "chosen-select-medium",
+                "multiple": true
+              },
+              "options": {
+                "label": "Type of PI",
+                "category": "pi_type",
+                "disable_inarray_validator": false
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "reasons",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "chosen-select-medium",
+                "multiple": true
+              },
+              "options": {
+                "label": "Legislation",
+                "service_name": "Olcs\\Service\\Data\\PublicInquiryReason",
+                "disable_inarray_validator": false,
+                "use_groups": true
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "comment",
+              "attributes": {
+                "id": "",
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Comments"
+              },
+              "type": "TextArea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "case",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": ""
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "agreedDate": {
+        "name": "agreedDate",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "assignedCaseworker": {
+        "name": "assignedCaseworker",
+        "required": false
+      },
+      "isEcmsCase": {
+        "name": "isEcmsCase",
+        "required": true
+      },
+      "ecmsFirstReceivedDate": {
+        "name": "ecmsFirstReceivedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "piTypes": {
+        "name": "piTypes",
+        "validators": [
+          {
+            "name": "Olcs\\Validator\\TypeOfPI"
+          }
+        ]
+      },
+      "comment": {
+        "name": "comment",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 5,
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

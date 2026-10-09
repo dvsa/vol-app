@@ -1,0 +1,116 @@
+{
+  "name": "LicenceOverviewDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "continuationDate",
+        "type": "DateSelect",
+        "options": {
+          "label": "Continuation date",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "required": false,
+          "max_year_delta": "+10"
+        },
+        "attributes": {
+          "required": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "reviewDate",
+        "type": "DateSelect",
+        "options": {
+          "label": "Review Date",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "required": false,
+          "max_year_delta": "+10"
+        },
+        "attributes": {
+          "required": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "leadTcArea",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Lead Traffic Commissioner",
+          "value_options": [],
+          "empty_option": "Not set",
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "translateToWelsh",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "overview.fieldset.check.welsh"
+        },
+        "type": "OlcsCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "continuationDate": {
+      "name": "continuationDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "reviewDate": {
+      "name": "reviewDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "leadTcArea": {
+      "name": "leadTcArea",
+      "required": false
+    }
+  }
+}
