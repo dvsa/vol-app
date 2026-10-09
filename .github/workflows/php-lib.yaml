@@ -18,7 +18,15 @@ on:
 
 jobs:
   checks:
-    name: Checks
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Every job repeats ~25s of setup, so a check only gets a job of its own when it takes far
+        # longer than that: olcs-common's Psalm. Everything else in the libraries takes seconds and
+        # shares one job. Decided here rather than by the caller so CI and CD lay them out the same.
+        # See "PHP checks" in docs/ci-cd.md.
+        include: ${{ fromJSON(inputs.project == 'olcs-common' && '[{"name":"Psalm","psalm":true},{"name":"Test, PHP CodeSniffer, PHPStan","test":true,"phpcs":true,"phpstan":true}]' || '[{"name":"Checks","test":true,"phpcs":true,"psalm":true,"phpstan":true}]') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -51,6 +59,19 @@ jobs:
           key: ${{ runner.os }}-composer-lib-${{ inputs.project }}-php${{ inputs.php-version }}-${{ hashFiles(format('**/lib/{0}/composer.lock', inputs.project)) }}
           restore-keys: ${{ runner.os }}-composer-lib-${{ inputs.project }}-php${{ inputs.php-version }}-
       - name: Install dependencies
+        id: install
         run: composer install --no-progress --prefer-dist
-      - name: Test, phpcs, psalm, phpstan
-        run: composer run-script all
+      # One step per check, each run even if an earlier one failed, so one failure cannot hide another.
+      - name: Test
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && matrix.test }}
+        run: composer run-script test
+      - name: PHP CodeSniffer
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && matrix.phpcs }}
+        run: composer run-script phpcs
+      - name: Psalm
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && matrix.psalm }}
+        # Psalm drops to a single thread for both scanning and analysis when it detects CI, unless told otherwise.
+        run: composer run-script psalm -- --threads="$(nproc)" --scan-threads="$(nproc)"
+      - name: PHPStan
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && matrix.phpstan }}
+        run: composer run-script phpstan

@@ -86,7 +86,9 @@
     "rector/rector": "^2.3",
     "dvsa/coding-standards": "^2.1",
     "phpstan/phpstan": "^2.0",
-    "vimeo/psalm": "^6.0"
+    "vimeo/psalm": "^6.0",
+    "brianium/paratest": "^7.24.1",
+    "ergebnis/phpunit-slow-test-detector": "^2.26"
   },
   "autoload": {
     "classmap": [
@@ -118,7 +120,8 @@
     }
   },
   "scripts": {
-    "test": "vendor/bin/phpunit",
+    "test": "vendor/bin/paratest",
+    "test:serial": "vendor/bin/phpunit",
     "phpcs": "vendor/bin/phpcs -d memory_limit=512M",
     "psalm": "vendor/bin/psalm",
     "phpstan": "vendor/bin/phpstan --memory-limit=1G",

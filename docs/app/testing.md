@@ -12,11 +12,160 @@ The API has three layers of automated verification:
 | Integration      | Real repository queries executed against a local MySQL, plus schema checks                    | Locally via `composer test:integration` |
 | Functional (E2E) | WebDriver/Cucumber suites from `dvsa/vol-functional-tests`                                    | Post-deploy per environment (`cd.yaml`) |
 
-This page documents how repository unit tests assert against real Doctrine, the
-integration layer, the two baseline mechanisms that guard the Doctrine entity
-metadata, the Doctrine deprecation report both suites print, the three tests
-that guard output escaping in the table render pipeline, and the snapshot that
-guards how API requests are validated.
+This page documents how to run the unit tests in parallel or one at a time, how
+slow tests are reported, how repository unit tests assert against real Doctrine,
+the integration layer, the two baseline mechanisms that guard the Doctrine
+entity metadata, the Doctrine deprecation report both suites print, the three
+tests that guard output escaping in the table render pipeline, and the snapshot
+that guards how API requests are validated.
+
+## Running the tests
+
+Each app (`app/api`, `app/selfserve`, `app/internal`) has two commands, run
+from its own directory:
+
+```bash
+composer test          # in parallel: paratest, one worker process per CPU core
+composer test:serial   # one process: plain phpunit, as CI runs it
+```
+
+Both run the same tests from the same `phpunit.xml.dist`; pick whichever suits
+what you are doing. Arguments go after `--`:
+
+```bash
+composer test -- --filter LicenceVehicleTest
+composer test:serial -- --random-order-seed=<seed>
+```
+
+`composer test` uses [paratest](https://github.com/paratestphp/paratest), which
+hands whole test files to a pool of PHPUnit worker processes. The api suite is
+where that pays off: it runs in around a third of the time it takes serially.
+selfserve and internal finish in a few seconds either way, and use paratest too
+so that `composer test` means the same thing in every app.
+
+The libraries under `lib/` run plain phpunit with `composer test`, and have no
+paratest at all; see [why](#why-the-libraries-do-not-use-paratest).
+
+Running a single file or test with `vendor/bin/phpunit` directly, as the
+commands elsewhere on this page do, is still the quickest way to iterate on
+one test.
+
+### Use the serial run when
+
+- **CI failed and the parallel run passes.** CI prints a `Random Seed:` line;
+  `composer test:serial -- --random-order-seed=<seed>` repeats its order
+  exactly. See below for why the two can disagree.
+- **Step debugging.** Each worker is its own PHP process, so Xdebug opens a
+  session per worker.
+- **The integration suite.** `composer test:integration` stays serial: it waits
+  on the database rather than the CPU, so parallel gains nothing, and two
+  workers inserting fixtures at once could block each other. It does run under
+  paratest (`vendor/bin/paratest -c phpunit-integration.xml`).
+
+### Why CI stays serial
+
+CI runs plain phpunit: `vendor/bin/phpunit` for the apps (`php.yaml`) and
+`composer run-script test` for the libraries (`php-lib.yaml`). Every
+`phpunit.xml.dist` sets `executionOrder="random"`, and phpunit shuffles every
+test in the suite, including the tests inside one file. Paratest shuffles the
+order of the _files_ but runs the tests inside each file top to bottom. A test
+that leaks state (a static property, an unclosed Mockery container, a global)
+into the next test in the same class can therefore pass in parallel every time
+and only fail serially. CI stays serial so those leaks still fail a PR.
+
+A green `composer test` is good evidence, not proof. Before pushing a change to
+test infrastructure, or when chasing an order-dependent failure, run
+`composer test:serial` as well.
+
+### Writing tests that pass both ways
+
+In the apps, a paratest worker runs one whole file at a time, and many files
+one after another in the same PHP process. Workers run at the same time as each
+other. So:
+
+- **Tests in a file run in the order they are written.** A `#[Depends]` must
+  name a test declared _above_ it. phpunit reorders the file to run a dependency
+  declared below first; paratest does not, so the dependent test is skipped, and
+  `failOnSkipped` fails the run. Only `composer test` catches this, not CI.
+- **State left behind reaches whichever file the worker runs next.** Static
+  properties, `putenv()`, `ini_set()`, error handlers and the like carry over
+  between files in a worker just as they do in a serial run, only in a
+  different order. Restore anything you change, in `tearDown()`.
+- **Anything outside the process is shared between workers.** A file at a fixed
+  path, a database row, a port or a Redis key can be touched by two tests at
+  once. Unit tests should not need any of these. Where one must write a file,
+  give it a unique name (`tempnam()`, or include `getenv('TEST_TOKEN')`, which
+  paratest sets to the worker's number).
+
+The table render snapshot (`UPDATE_TABLE_SNAPSHOTS`, below) is a single file in
+each app, so one worker owns all its writes, and it regenerates correctly either
+way.
+
+### Slow tests
+
+Each app's `phpunit.xml.dist` registers
+[phpunit-slow-test-detector](https://github.com/ergebnis/phpunit-slow-test-detector),
+which ends a serial run (CI, `composer test:serial`) with up to 10 tests that
+took over 500ms:
+
+```
+Detected 1 test where the duration exceeded the global maximum duration (0.500).
+
+# Duration Test
+-------------------------------------------------------
+1    0.617 OlcsTest\Example\ExampleTest::testSlow
+-------------------------------------------------------
+```
+
+It only reports, and never fails a run. paratest discards it along with the
+rest of its workers' output, so read it in CI's log or run
+`composer test:serial`.
+
+No test in the app suites takes over 500ms today, so anything listed is new.
+Run it again before acting on a local report: on a laptop, background work such
+as antivirus scanning can stall any single test for a second or more.
+
+A test that is slow on purpose declares its own limit, as the table render
+snapshot tests do, since each renders every table in its app:
+
+```php
+use Ergebnis\PHPUnit\SlowTestDetector\Attribute\MaximumDuration;
+
+#[MaximumDuration(5000)]
+public function testRenderedOutputHasNotChanged(): void
+```
+
+The one consistently slow group found when the detector was added was password
+hashing, just under the limit. `password_hash()` at PHP's default bcrypt cost
+takes about 0.25s per call, so
+`OtpService` takes its hash options in the constructor: production passes none,
+and its tests pass `['cost' => 4]`. Do the same for anything else that hashes
+passwords.
+
+The libraries do not have the detector. Their suites take seconds, and a dev
+dependency in a library changes the app lock files (see below).
+
+### Why the libraries do not use paratest
+
+Do not add paratest to a library under `lib/`. It was tried in all six and taken
+out again:
+
+- **It makes most of them slower.** Their suites take seconds serially: olcs-common
+  about 3.5s, olcs-transfer about 6s, the rest under a second. Paratest starts a
+  worker per core and pays a cost for every file it hands out, which outweighs
+  tests this quick. olcs-common took about 5s in parallel, and the small
+  libraries got slower too; only olcs-transfer gained, by a second or so.
+- **CI would not use it.** Libraries are tested serially in CI for the same
+  reason as the apps, so it could only ever speed up local runs.
+- **It churns the app lock files.** The apps install the libraries from path
+  repositories, and Composer copies each library's `require-dev` and `scripts`
+  into the app's `composer.lock`. A dev tool added to a library therefore
+  changes up to three app lock files, and so does every later edit to its
+  scripts.
+- **The rules above would then apply to library tests too,** for no gain.
+
+If a library's suite grows to take tens of seconds, measure before revisiting
+this.
 
 ## Repository unit tests
 
@@ -183,6 +332,13 @@ unaffected. These are advance notice of the next major, not a broken build.
 The `DOCTRINE_DEPRECATIONS` environment variable cannot do this job. In `trigger`
 mode the library calls `@trigger_error()` — with the suppression operator — so
 PHPUnit's error handler discards it and nothing is displayed.
+
+**Under paratest** each worker records only the files it ran, and paratest
+throws away what a worker prints. So each worker writes its counts to a
+temporary directory instead, and paratest's own process prints the merged
+report as it exits. The list of deprecations matches a serial run. A few counts
+come out higher, because some are raised by one-off setup that every worker
+repeats.
 
 It is registered in **both** configs deliberately. CI runs bare
 `vendor/bin/phpunit` and nothing under `.github/` references the integration
