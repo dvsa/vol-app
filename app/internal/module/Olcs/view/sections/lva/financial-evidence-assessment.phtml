@@ -65,27 +65,39 @@ $warningText = $hasDocuments
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-            <?php foreach ($tab['rows'] as $row) : ?>
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">
-                  <?php echo $this->escapeHtml($row['label']); ?><?php if ($row['value'] !== null) : ?>:
-                    <span class="govuk-!-font-weight-regular"><?php echo $this->escapeHtml($row['value']); ?></span>
-                  <?php endif; ?>
-                </th>
-                <td class="govuk-table__cell">
-                  <?php if ($row['flag'] !== null) : ?>
-                    <strong class="govuk-tag <?php echo $this->escapeHtmlAttr($row['flagTag']); ?>">
-                      <?php echo $this->escapeHtml($row['flag']); ?>
-                    </strong>
-                  <?php endif; ?>
-                </td>
-                <td class="govuk-table__cell">
-                  <?php if ($row['remark'] !== null) : ?>
-                    <?php echo $this->escapeHtml($row['remark']); ?>
-                  <?php endif; ?>
-                </td>
-              </tr>
-            <?php endforeach; ?>
+          <?php foreach ($tab['rows'] as $row) : ?>
+            <?php
+            // Set only when a caseworker has changed this check to a pass. The remark is still the
+            // analyser's original one, so who changed it and why is shown on one line beneath it.
+            $override = $row['override'] ?? null;
+            $overrideComment = trim((string)($override['comment'] ?? ''));
+            ?>
+            <tr class="govuk-table__row">
+              <th scope="row" class="govuk-table__header">
+                <?php echo $this->escapeHtml($row['label']); ?><?php if ($row['value'] !== null) : ?>:
+                  <span class="govuk-!-font-weight-regular"><?php echo $this->escapeHtml($row['value']); ?></span>
+                <?php endif; ?>
+              </th>
+              <td class="govuk-table__cell">
+                <?php if ($row['flag'] !== null) : ?>
+                  <strong class="govuk-tag <?php echo $this->escapeHtmlAttr($row['flagTag']); ?>">
+                    <?php echo $this->escapeHtml($row['flag']); ?>
+                  </strong>
+                <?php endif; ?>
+              </td>
+              <td class="govuk-table__cell">
+                <?php if ($row['remark'] !== null) : ?>
+                  <?php echo $this->escapeHtml($row['remark']); ?>
+                <?php endif; ?>
+                <?php if ($override !== null) : ?>
+                  <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
+                    <strong><?php echo $this->escapeHtml($override['changedBy'] ?? 'Unknown user'); ?></strong>:
+                    <?php echo $this->escapeHtml($overrideComment !== '' ? $overrideComment : '-'); ?>
+                  </p>
+                <?php endif; ?>
+              </td>
+            </tr>
+          <?php endforeach; ?>
           </tbody>
         </table>
 
