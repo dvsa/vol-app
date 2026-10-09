@@ -242,13 +242,13 @@ final class LicenceChecklistTest extends QueryHandlerTestCase
     public function testHandleQueryOnlyIncludesSpecifiedVehicles(): void
     {
         $mockLicence = m::mock(LicenceEntity::class);
-        $mockLicence->shouldReceive('getConditionUndertakings')->andReturn([]);
-        $mockLicence->shouldReceive('getOcPendingChanges')->andReturn(1);
-        $mockLicence->shouldReceive('getTmPendingChanges')->andReturn(2);
-        $mockLicence->shouldReceive('getId')->andReturn(1);
-        $mockLicence->shouldReceive('canHaveTrailer')->andReturn(true);
-        $mockLicence->shouldReceive('getApplicableAuthProperties')->andReturn([]);
-        $mockLicence->shouldReceive('isVehicleTypeMixedWithLgv')->andReturn(false);
+        $mockLicence->shouldReceive('getConditionUndertakings')->once()->andReturn([]);
+        $mockLicence->shouldReceive('getOcPendingChanges')->once()->andReturn(1);
+        $mockLicence->shouldReceive('getTmPendingChanges')->once()->andReturn(2);
+        $mockLicence->shouldReceive('getId')->once()->andReturn(1);
+        $mockLicence->shouldReceive('canHaveTrailer')->once()->andReturn(true);
+        $mockLicence->shouldReceive('getApplicableAuthProperties')->once()->andReturn([]);
+        $mockLicence->shouldReceive('isVehicleTypeMixedWithLgv')->once()->andReturn(false);
 
         $specified = new LicenceVehicle($mockLicence, new Vehicle());
         $specified->setSpecifiedDate('2020-01-01');
@@ -261,8 +261,8 @@ final class LicenceChecklistTest extends QueryHandlerTestCase
 
         $matching = null;
         $mockContinuationDetail = m::mock(ContinuationDetailEntity::class);
-        $mockContinuationDetail->shouldReceive('getLicence')->andReturn($mockLicence);
-        $mockContinuationDetail->shouldReceive('serialize')->andReturnUsing(
+        $mockContinuationDetail->shouldReceive('getLicence')->once()->andReturn($mockLicence);
+        $mockContinuationDetail->shouldReceive('serialize')->once()->andReturnUsing(
             function (array $bundle) use ($specified, $unspecified, $removed, &$matching) {
                 $this->assertInstanceOf(Criteria::class, $bundle['licence']['licenceVehicles']['criteria']);
 
@@ -276,15 +276,19 @@ final class LicenceChecklistTest extends QueryHandlerTestCase
 
         $this->mockedSmServices['SectionAccessService']
             ->shouldReceive('getAccessibleSectionsForLicenceContinuation')
+            ->with($mockLicence)
+            ->once()
             ->andReturn([]);
 
         $this->repoMap['ContinuationDetail']->shouldReceive('fetchWithLicence')
             ->with(999)
+            ->once()
             ->andReturn($mockContinuationDetail);
 
         $this->repoMap['ConditionUndertaking']
             ->shouldReceive('fetchListForLicenceReadOnly')
             ->with(1)
+            ->once()
             ->andReturn([]);
 
         $this->sut->handleQuery(LicenceChecklistQry::create(['id' => 999]))->serialize();
