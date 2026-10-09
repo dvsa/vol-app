@@ -26,6 +26,16 @@ class LetterTodo
     public $todoKey = null;
 
     /**
+     * @Form\Options({"label": "Name"})
+     * @Form\Required(true)
+     * @Form\Type("Text")
+     * @Form\Attributes({"class":"long", "required": true})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
+     */
+    public $name = null;
+
+    /**
      * @Form\Options({
      *     "label": "Description",
      *     "label_attributes": {
