@@ -3,7 +3,6 @@
 namespace Dvsa\Olcs\Api\Domain\Command\Licence;
 
 use Dvsa\Olcs\Transfer\Command\AbstractSaveBusinessDetails;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 
 /**
  * Save (Create/Update) Business Details
