@@ -16,10 +16,7 @@ use Laminas\Filter\FilterPluginManager;
 use Laminas\Filter\StripTags as Escaper;
 use Laminas\InputFilter\Input;
 use Laminas\Validator\ValidatorPluginManager;
-use Dvsa\Olcs\Transfer\Util\Annotation\RouteName as AnnotationRouteName;
-use Dvsa\Olcs\Transfer\Util\Annotation\Filter as AnnotationFilter;
-use Dvsa\Olcs\Transfer\Util\Attribute\RouteName as AttributeRouteName;
-use Dvsa\Olcs\Transfer\Util\Attribute\Filter as AttributeFilter;
+use Dvsa\Olcs\Transfer\Util\Attribute;
 
 /**
  * Annotation Builder
@@ -85,32 +82,21 @@ class AnnotationBuilder
     {
         $reflectedDto = new \ReflectionClass($dto);
 
-        $classAnnotations = $this->getReader()->getClassAnnotations($reflectedDto);
-
-        $classAnnotations = array_merge($classAnnotations, array_map(
+        $classAnnotations = array_map(
             fn(\ReflectionAttribute $attr) => $attr->newInstance(),
             $reflectedDto->getAttributes()
-        ));
+        );
 
         $routeName = null;
 
         $inputFilterClass = \Laminas\InputFilter\InputFilter::class;
 
         foreach ($classAnnotations as $annotation) {
-            //TODO: Remove when we remove the annotation support
-            if ($annotation instanceof AnnotationRouteName) {
-                $routeName = $annotation->getRouteName();
-            }
-            //TODO: Remove when we remove the annotation support
-            if ($annotation instanceof AnnotationFilter) {
-                $inputFilterClass = $annotation->getName();
-            }
-
-            if ($annotation instanceof AttributeRouteName) {
+            if ($annotation instanceof Attribute\RouteName) {
                 $routeName = $annotation->getRouteName();
             }
 
-            if ($annotation instanceof AttributeFilter) {
+            if ($annotation instanceof Attribute\Filter) {
                 $inputFilterClass = $annotation->getName();
             }
         }
@@ -136,35 +122,25 @@ class AnnotationBuilder
     {
         $reflectedDto = new \ReflectionClass($dto);
 
-        $classAnnotations = $this->getReader()->getClassAnnotations($reflectedDto);
-
-        $classAnnotations = array_merge($classAnnotations, array_map(
+        $classAnnotations =  array_map(
             fn(\ReflectionAttribute $attr) => $attr->newInstance(),
             $reflectedDto->getAttributes()
-        ));
+        );
 
         $routeName = null;
         $method = null;
         $inputFilterClass = \Laminas\InputFilter\InputFilter::class;
 
         foreach ($classAnnotations as $annotation) {
-            if ($annotation instanceof RouteName) {
-                $routeName = $annotation->getRouteName();
-            }
-
-            if ($annotation instanceof Method || $annotation instanceof \Dvsa\Olcs\Transfer\Util\Attribute\Method) {
+            if ($annotation instanceof Attribute\Method) {
                 $method = $annotation->getMethod();
             }
 
-            if ($annotation instanceof Filter) {
-                $inputFilterClass = $annotation->getName();
-            }
-
-            if ($annotation instanceof AttributeRouteName) {
+            if ($annotation instanceof Attribute\RouteName) {
                 $routeName = $annotation->getRouteName();
             }
 
-            if ($annotation instanceof AttributeFilter) {
+            if ($annotation instanceof Attribute\Filter) {
                 $inputFilterClass = $annotation->getName();
             }
         }
@@ -201,7 +177,11 @@ class AnnotationBuilder
             $input->add($this->processProperty($property));
         }
 
-        $classAnnotations = $this->getReader()->getClassAnnotations($reflectedPartial);
+        $classAnnotations = array_map(
+            fn(\ReflectionAttribute $attr) => $attr->newInstance(),
+            $reflectedPartial->getAttributes()
+        );
+
         $this->attachFiltersAndValidators($classAnnotations, $filterChain, $validatorChain, $input);
 
         return $input;
@@ -209,11 +189,10 @@ class AnnotationBuilder
 
     protected function processProperty(\ReflectionProperty $property)
     {
-        $propertyAnnotations = $this->getReader()->getPropertyAnnotations($property);
-        $propertyAnnotations = array_merge($propertyAnnotations, array_map(
+        $propertyAnnotations = array_map(
             fn(\ReflectionAttribute $attr) => $attr->newInstance(),
             $property->getAttributes()
-        ));
+        );
 
         $isArrayInput = false;
         $input = null;
@@ -228,7 +207,7 @@ class AnnotationBuilder
 
         // Determine what type of input we have
         foreach ($propertyAnnotations as $annotation) {
-            if ($annotation instanceof ArrayInput || $annotation instanceof \Dvsa\Olcs\Transfer\Util\Attribute\ArrayInput) {
+            if ($annotation instanceof Attribute\ArrayInput) {
                 $isArrayInput = $annotation->getArrayInput();
 
                 $input = new \Dvsa\Olcs\Transfer\Util\ArrayInput($property->getName());
@@ -236,7 +215,7 @@ class AnnotationBuilder
                 break;
             }
 
-            if ($annotation instanceof Partial || $annotation instanceof \Dvsa\Olcs\Transfer\Util\Attribute\Partial) {
+            if ($annotation instanceof Attribute\Partial) {
                 $input = $this->createPartial(
                     $annotation->getComposedObject(),
                     $property->getName(),
@@ -246,7 +225,7 @@ class AnnotationBuilder
                 break;
             }
 
-            if ($annotation instanceof Escape || $annotation instanceof \Dvsa\Olcs\Transfer\Util\Attribute\Escape) {
+            if ($annotation instanceof Attribute\Escape) {
                 $escape = $annotation->getEscape();
             }
         }
@@ -257,12 +236,12 @@ class AnnotationBuilder
 
         if ($isArrayInput) {
             foreach ($propertyAnnotations as $annotation) {
-                if ($annotation instanceof ArrayFilter || $annotation instanceof \Dvsa\Olcs\Transfer\Util\Attribute\ArrayFilter) {
+                if ($annotation instanceof Attribute\ArrayFilter) {
                     $arrayFilterChain->attachByName($annotation->getName());
                     continue;
                 }
 
-                if ($annotation instanceof ArrayValidator || $annotation instanceof \Dvsa\Olcs\Transfer\Util\Attribute\ArrayValidator) {
+                if ($annotation instanceof Attribute\ArrayValidator) {
                     $arrayValidatorChain->attachByName($annotation->getName(), $annotation->getOptions());
                     continue;
                 }
@@ -288,12 +267,12 @@ class AnnotationBuilder
     protected function attachFiltersAndValidators($annotations, $filterChain, $validatorChain, $input)
     {
         foreach ($annotations as $annotation) {
-            if (!($annotation instanceof ArrayFilter || $annotation instanceof \Dvsa\Olcs\Transfer\Util\Attribute\ArrayFilter) && ($annotation instanceof AnnotationFilter || $annotation instanceof AttributeFilter)) {
+            if (!($annotation instanceof Attribute\ArrayFilter) && ($annotation instanceof Attribute\Filter)) {
                 $filterChain->attachByName($annotation->getName(), $annotation->getOptions());
                 continue;
             }
 
-            if (!($annotation instanceof ArrayValidator || $annotation instanceof \Dvsa\Olcs\Transfer\Util\Attribute\ArrayValidator) && ($annotation instanceof Validator || $annotation instanceof \Dvsa\Olcs\Transfer\Util\Attribute\Validator)) {
+            if (!($annotation instanceof Attribute\ArrayValidator) && ($annotation instanceof Attribute\Validator)) {
                 $options = $annotation->getOptions();
 
                 if (isset($options['usePluginManager']) && $options['usePluginManager']) {
@@ -305,13 +284,13 @@ class AnnotationBuilder
                 continue;
             }
 
-            if ($annotation instanceof Optional || $annotation instanceof \Dvsa\Olcs\Transfer\Util\Attribute\Optional) {
+            if ($annotation instanceof Attribute\Optional) {
                 $input->setRequired(false);
                 $input->setAllowEmpty(true);
                 continue;
             }
 
-            if ($annotation instanceof ContinueIfEmpty || $annotation instanceof \Dvsa\Olcs\Transfer\Util\Attribute\ContinueIfEmpty) {
+            if ($annotation instanceof Attribute\ContinueIfEmpty) {
                 $input->setRequired(true);
                 $input->setContinueIfEmpty(true);
                 continue;
