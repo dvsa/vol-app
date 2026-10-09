@@ -1,0 +1,121 @@
+{
+  "name": "interim-refund-report-filter",
+  "attributes": {
+    "method": "get",
+    "class": "filters form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "startDate",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "label": "Refunds after"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "endDate",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "label": "Refunds before"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficAreas",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Traffic Area",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\TrafficArea",
+          "other_option": false
+        },
+        "type": "DynamicMultiCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "filter-button"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "startDate": {
+      "name": "startDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "endDate": {
+      "name": "endDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "DateCompare",
+          "options": {
+            "has_time": false,
+            "compare_to": "startDate",
+            "operator": "gte",
+            "compare_to_label": "Refunds after"
+          }
+        }
+      ]
+    }
+  }
+}

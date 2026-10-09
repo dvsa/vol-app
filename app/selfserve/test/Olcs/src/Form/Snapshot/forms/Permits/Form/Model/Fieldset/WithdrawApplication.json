@@ -1,0 +1,35 @@
+{
+  "name": "WithdrawApplication",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "confirmWithdraw",
+        "attributes": {
+          "required": "required",
+          "class": "input--confirm-withdraw",
+          "id": "ConfirmWithdraw"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "permits.form.withdraw_application.label",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox"
+          },
+          "must_be_value": "1",
+          "not_checked_message": "permits.form.withdraw_application.error_message"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "confirmWithdraw": {
+      "name": "confirmWithdraw",
+      "required": true
+    }
+  }
+}

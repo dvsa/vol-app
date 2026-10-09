@@ -1,0 +1,540 @@
+{
+  "name": "lva-business-details",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "name",
+              "attributes": {
+                "class": "long"
+              },
+              "options": {
+                "label": "application_your-business_business-details.data.company_name",
+                "label_attributes": {
+                  "class": "form-element__question"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "natureOfBusiness",
+              "attributes": {
+                "id": "natureOfBusiness",
+                "placeholder": "",
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Nature of business",
+                "error-message": "businessDetails_natureOfBusiness-error",
+                "label_attributes": {
+                  "aria-label": "businessDetails_natureOfBusiness-error",
+                  "class": "form-element__question"
+                }
+              }
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "companyNumber",
+              "options": {
+                "label": "application_your-business_business-details.data.company_number"
+              },
+              "attributes": {
+                "id": "companyNumber"
+              },
+              "type": "Common\\Form\\Elements\\Types\\CompanyNumber"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "tradingNames",
+              "attributes": {
+                "class": "add-another"
+              },
+              "type": "Laminas\\Form\\Element\\Collection",
+              "options": {
+                "count": 1,
+                "label": "application_your-business_business-details.data.trading_names_optional",
+                "hint": "markup-trading-name-hint",
+                "hint-position": "below",
+                "target_element": {
+                  "name": "TradingNames",
+                  "attributes": [],
+                  "elements": [
+                    {
+                      "flags": [],
+                      "spec": {
+                        "name": "name",
+                        "attributes": {
+                          "class": "long",
+                          "id": ""
+                        },
+                        "type": "Text"
+                      }
+                    },
+                    {
+                      "flags": [],
+                      "spec": {
+                        "name": "id",
+                        "attributes": {
+                          "value": ""
+                        },
+                        "type": "Hidden"
+                      }
+                    },
+                    {
+                      "flags": [],
+                      "spec": {
+                        "name": "version",
+                        "attributes": {
+                          "value": ""
+                        },
+                        "type": "Hidden"
+                      }
+                    }
+                  ],
+                  "fieldsets": [],
+                  "type": "Laminas\\Form\\InputFilterProviderFieldset",
+                  "options": {
+                    "input_filter_spec": {
+                      "name": {
+                        "name": "name",
+                        "required": false,
+                        "filters": [
+                          {
+                            "name": "Laminas\\Filter\\StringTrim"
+                          }
+                        ],
+                        "validators": [
+                          {
+                            "name": "Laminas\\Validator\\StringLength",
+                            "options": {
+                              "min": 1,
+                              "max": 70
+                            }
+                          }
+                        ]
+                      },
+                      "type": "Laminas\\InputFilter\\InputFilter"
+                    },
+                    "target_type": "Common\\Form\\Model\\Form\\Lva\\Fieldset\\TradingNames"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "registeredAddress",
+        "attributes": {
+          "class": "address"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine1",
+              "attributes": {
+                "class": "long",
+                "id": "addressLine1",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLines",
+                "label_attributes": {
+                  "aria-label": "Enter address manually. Business address line one"
+                },
+                "error-message": "registeredAddress_addressLine1-error"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine2",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine2",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine3",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine3",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine4",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine4",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "town",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_townCity",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden",
+                  "aria-label": "Business town or city"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "postcode",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "address_postcode",
+                "label_attributes": {
+                  "aria-label": "Business Postcode"
+                }
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "\\Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "application_your-business_business-details.data.registered_address"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "table",
+        "attributes": {
+          "id": "table"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "saveAndContinue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "save.continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "data": {
+      "name": {
+        "name": "name",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 200
+            }
+          }
+        ]
+      },
+      "natureOfBusiness": {
+        "name": "natureOfBusiness",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 200
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "registeredAddress": {
+      "addressLine1": {
+        "name": "addressLine1",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 200
+            }
+          }
+        ]
+      },
+      "addressLine2": {
+        "name": "addressLine2",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 200
+            }
+          }
+        ]
+      },
+      "addressLine3": {
+        "name": "addressLine3",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 200
+            }
+          }
+        ]
+      },
+      "addressLine4": {
+        "name": "addressLine4",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 200
+            }
+          }
+        ]
+      },
+      "town": {
+        "name": "town",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 200
+            }
+          }
+        ]
+      },
+      "postcode": {
+        "name": "postcode",
+        "required": false,
+        "filters": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Filter\\Postcode"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

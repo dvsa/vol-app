@@ -1,0 +1,498 @@
+{
+  "name": "operator",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": {
+        "priority": -1
+      },
+      "spec": {
+        "name": "isExempt",
+        "attributes": {
+          "id": "is-exempt"
+        },
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "This is an Exemption approved by the Traffic Commissioner",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          }
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "operator-details",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "name",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "internal-operator-profile-name",
+                "short-label": "internal-operator-profile-name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "operatorType",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "fieldset-attributes": {
+                  "id": "operatorType",
+                  "class": "checkbox"
+                },
+                "fieldset-data-group": "operatorType",
+                "label": "Operator type",
+                "short-label": "Operator type",
+                "value_options": {
+                  "lcat_gv": "Goods",
+                  "lcat_psv": "PSV"
+                }
+              },
+              "type": "Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "trafficArea",
+              "attributes": {
+                "id": "trafficArea",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Traffic area",
+                "short-label": "Traffic area",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\TrafficArea"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "contactDetailsId",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "contactDetailsVersion",
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "correspondenceAddress",
+        "attributes": {
+          "class": "address"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine1",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "Address lines"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine2",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "Address line 2",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine3",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "Address line 3",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine4",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "Address line 4",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "town",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "Town/City",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "postcode",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Postcode"
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "\\Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "Correspondence address"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "contact",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_primary",
+              "attributes": {
+                "class": "medium",
+                "id": "tc_phone_primary"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_primary_id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_primary_version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_secondary",
+              "attributes": {
+                "class": "medium",
+                "id": "tc_phone_secondary"
+              },
+              "options": {
+                "label": "secondary-contact-number-optional"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_secondary_id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_secondary_version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "email",
+              "attributes": {
+                "class": "long"
+              },
+              "options": {
+                "label": "email-address-optional",
+                "error-message": "contactOptional_email-error"
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -2
+      },
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "operator-details": {
+      "name": {
+        "name": "name",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "correspondenceAddress": {
+      "addressLine1": {
+        "name": "addressLine1",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "addressLine2": {
+        "name": "addressLine2",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "addressLine3": {
+        "name": "addressLine3",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "addressLine4": {
+        "name": "addressLine4",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "town": {
+        "name": "town",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "postcode": {
+        "name": "postcode",
+        "required": false,
+        "filters": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Filter\\Postcode"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "contact": {
+      "email": {
+        "name": "email",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

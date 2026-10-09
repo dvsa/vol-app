@@ -1,0 +1,333 @@
+{
+  "name": "letter-type",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "letterType",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "name",
+              "options": {
+                "label": "Name"
+              },
+              "attributes": {
+                "required": true,
+                "class": "long"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "description",
+              "options": {
+                "label": "Description",
+                "label_attributes": {
+                  "class": ""
+                }
+              },
+              "type": "Textarea",
+              "attributes": {
+                "class": "extra-long",
+                "rows": 5
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isActive",
+              "options": {
+                "label": "Active",
+                "checked_value": "1",
+                "unchecked_value": "0"
+              },
+              "type": "OlcsCheckbox",
+              "attributes": {
+                "class": "",
+                "id": "isActive"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "masterTemplate",
+              "options": {
+                "label": "Master Template",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\Letter\\MasterTemplate",
+                "empty_option": "Please Select",
+                "use_groups": false
+              },
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "masterTemplate",
+                "class": "medium"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "category",
+              "options": {
+                "label": "Category",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\Category",
+                "context": {
+                  "isDocCategory": "Y"
+                },
+                "empty_option": "Please Select"
+              },
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "category",
+                "class": "medium"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "subCategory",
+              "options": {
+                "label": "Sub Category",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\SubCategory",
+                "context": {
+                  "isDocCategory": "Y"
+                },
+                "empty_option": "Please Select"
+              },
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "subCategory",
+                "class": "medium"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "sections",
+              "options": {
+                "label": "Sections",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\Letter\\LetterSection",
+                "use_groups": false
+              },
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "sections",
+                "class": "medium chosen-select-large",
+                "multiple": "multiple"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "sectionsOrder",
+              "type": "Hidden",
+              "attributes": {
+                "id": "sectionsOrder"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "sectionsRequired",
+              "type": "Hidden",
+              "attributes": {
+                "id": "sectionsRequired"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "choices",
+              "options": {
+                "label": "Letter Choices",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\Letter\\LetterChoice",
+                "use_groups": false
+              },
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "choices",
+                "class": "medium chosen-select-large",
+                "multiple": "multiple"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "appendices",
+              "options": {
+                "label": "Appendices",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\Letter\\LetterAppendix",
+                "use_groups": false
+              },
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "appendices",
+                "class": "medium chosen-select-large",
+                "multiple": "multiple"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button",
+                "aria-label": "Save and Continue"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel",
+                "keepForReadOnly": true
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addAnother",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "Save and add another"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "letterType": {
+      "name": {
+        "name": "name",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 255
+            }
+          }
+        ]
+      },
+      "description": {
+        "name": "description",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "masterTemplate": {
+        "name": "masterTemplate",
+        "required": false
+      },
+      "category": {
+        "name": "category",
+        "required": false
+      },
+      "subCategory": {
+        "name": "subCategory",
+        "required": false
+      },
+      "sections": {
+        "name": "sections",
+        "required": false
+      },
+      "sectionsOrder": {
+        "name": "sectionsOrder",
+        "required": false
+      },
+      "sectionsRequired": {
+        "name": "sectionsRequired",
+        "required": false
+      },
+      "choices": {
+        "name": "choices",
+        "required": false
+      },
+      "appendices": {
+        "name": "appendices",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

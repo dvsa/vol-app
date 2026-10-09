@@ -1,0 +1,61 @@
+{
+  "name": "GenerateContinuationDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "type",
+        "attributes": {
+          "id": "generate-continuation-type",
+          "placeholder": "",
+          "value": "con_typ_operator"
+        },
+        "options": {
+          "label": "Type",
+          "value_options": {
+            "operator": "Operator licences",
+            "irfo": "IRFO PSV Authorisations"
+          }
+        },
+        "type": "Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "date",
+        "attributes": {
+          "id": "generate-continuation-date",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Date",
+          "min_year_delta": "-30",
+          "max_year_delta": "+10",
+          "default_date": "now"
+        },
+        "type": "MonthSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficArea",
+        "attributes": {
+          "id": "generate-continuation-trafficArea",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Traffic area",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\TrafficArea"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "input_filter": []
+}

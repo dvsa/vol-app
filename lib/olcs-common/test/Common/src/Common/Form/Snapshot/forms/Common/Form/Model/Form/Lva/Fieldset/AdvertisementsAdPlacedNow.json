@@ -1,0 +1,172 @@
+{
+  "name": "AdvertisementsAdPlacedNow",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "adPlacedIn",
+        "attributes": {
+          "class": "long",
+          "id": "adPlacedIn"
+        },
+        "options": {
+          "label": "application_operating-centres_authorisation-sub-action.advertisements.adPlacedIn"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "adPlacedDate",
+        "attributes": {
+          "id": "adPlacedDate",
+          "data-container-class": "adPlacedDate"
+        },
+        "options": {
+          "label": "application_operating-centres_authorisation-sub-action.advertisements.adPlacedDate",
+          "legend-attributes": {
+            "class": "form-element__label"
+          },
+          "label_attributes": {
+            "class": "form-element__label"
+          },
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "fieldset-attributes": {
+            "id": "adPlacedDate_day"
+          }
+        },
+        "type": "DateSelect"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "file",
+        "attributes": {
+          "class": "file-uploader"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "fileCount",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "file",
+              "attributes": {
+                "class": "js-visually-hidden"
+              },
+              "options": {
+                "value": "common.file-upload.browse.title",
+                "hint": "common.file-upload.browse.hint"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "__messages__",
+              "attributes": [],
+              "options": [],
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "upload",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "inline-upload govuk-button js-upload"
+              },
+              "options": {
+                "label": "Upload"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "list",
+              "attributes": {
+                "class": "js-upload-list"
+              },
+              "options": {
+                "preview_images": "true"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "application_operating-centres_authorisation-sub-action.advertisements.file",
+          "label_attributes": {
+            "class": "form-element__label"
+          }
+        }
+      }
+    }
+  ],
+  "input_filter": {
+    "adPlacedIn": {
+      "name": "adPlacedIn",
+      "required": false
+    },
+    "adPlacedDate": {
+      "name": "adPlacedDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "file": {
+      "fileCount": {
+        "name": "fileCount",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Common\\Validator\\FileUploadCountV2",
+            "options": {
+              "min": 1
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

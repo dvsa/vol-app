@@ -1,0 +1,110 @@
+{
+  "name": "vehicle-filter",
+  "attributes": {
+    "method": "get",
+    "class": "filters form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "vrm",
+        "attributes": {
+          "id": "vrm",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "internal-vehicle-filter-vrm",
+          "value_options": [],
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "specified",
+        "attributes": {
+          "id": "specified",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "internal-vehicle-filter-specified",
+          "value_options": {
+            "A": "All",
+            "Y": "Yes",
+            "N": "No"
+          },
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "disc",
+        "attributes": {
+          "id": "disc",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "internal-vehicle-filter-disc",
+          "value_options": {
+            "A": "All",
+            "Y": "Yes",
+            "N": "No"
+          },
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "includeRemoved",
+        "attributes": {
+          "id": "includeRemoved",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "internal-vehicle-filter-include-removed",
+          "value_options": [],
+          "must_be_checked": true
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "data-container-class": "js-hidden"
+        },
+        "options": {
+          "label": "internal-vehicle-filter-filter"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "limit",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": []
+}

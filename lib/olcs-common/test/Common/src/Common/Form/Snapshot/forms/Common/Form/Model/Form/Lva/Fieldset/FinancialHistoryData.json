@@ -1,0 +1,374 @@
+{
+  "name": "data",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "financeHint",
+        "attributes": {
+          "value": "markup-application_previous-history_financial-history-finance-hint"
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hasAnyPerson",
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated",
+        "attributes": {
+          "value": "<h3 id=\"mainq\">%s</h3>"
+        },
+        "options": {
+          "tokens": [
+            "application_previous-history_financial-history.intro"
+          ]
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "bankrupt",
+        "options": {
+          "short-label": "short-label-financial-history-bankrupt",
+          "label": "application_previous-history_financial-history.finance.bankrupt",
+          "legend-attributes": {
+            "class": "form-element__label",
+            "aria-describedby": "mainq"
+          },
+          "error-message": "financialHistoryData_bankrupt-error",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "fieldset-attributes": {
+            "id": "bankrupt"
+          }
+        },
+        "type": "radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "liquidation",
+        "options": {
+          "short-label": "short-label-financial-history-liquidation",
+          "label": "application_previous-history_financial-history.finance.liquidation",
+          "legend-attributes": {
+            "class": "form-element__label",
+            "aria-describedby": "mainq"
+          },
+          "error-message": "financialHistoryData_liquidation-error",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "fieldset-attributes": {
+            "id": "liquidation"
+          }
+        },
+        "type": "radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "receivership",
+        "options": {
+          "short-label": "short-label-financial-history-receivership",
+          "label": "application_previous-history_financial-history.finance.receivership",
+          "legend-attributes": {
+            "class": "form-element__label",
+            "aria-describedby": "mainq"
+          },
+          "error-message": "financialHistoryData_receivership-error",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "fieldset-attributes": {
+            "id": "receiversip"
+          }
+        },
+        "type": "radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "administration",
+        "options": {
+          "short-label": "short-label-financial-history-administration",
+          "label": "application_previous-history_financial-history.finance.administration",
+          "legend-attributes": {
+            "class": "form-element__label",
+            "aria-describedby": "mainq"
+          },
+          "error-message": "financialHistoryData_administration-error",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "fieldset-attributes": {
+            "id": "administration"
+          }
+        },
+        "type": "radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "disqualified",
+        "options": {
+          "short-label": "short-label-financial-history-disqualified",
+          "fieldset-attributes": {
+            "id": "disqualified"
+          },
+          "legend-attributes": {
+            "class": "form-element__label",
+            "aria-describedby": "mainq"
+          },
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label": "application_previous-history_financial-history.finance.disqualified",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "error-message": "financialHistoryData_disqualified-error"
+        },
+        "type": "radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "additionalInfoLabel",
+        "attributes": {
+          "value": "markup-application_previous-history_financial-history-insolvencyDetails-hint"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "insolvencyDetails",
+        "attributes": {
+          "required": false,
+          "id": "",
+          "class": "long js-financial-history",
+          "placeholder": "application_previous-history_financial-history.insolvencyDetails.placeholder",
+          "x-js-hint-chars-count": "application_previous-history_financial-history.insolvencyDetails.count-hint"
+        },
+        "options": {
+          "short-label": "short-label-financial-history-additional-information",
+          "label": "short-label-financial-history-additional-information",
+          "error-message": "financialHistoryData_insolvencyDetails-error",
+          "label_attributes": {
+            "class": "govuk-visually-hidden",
+            "id": "additional-information"
+          }
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "niFlag",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "file",
+        "attributes": {
+          "class": "file-uploader",
+          "id": "file"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "fileCount",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "file",
+              "attributes": {
+                "class": "js-visually-hidden"
+              },
+              "options": {
+                "value": "common.file-upload.browse.title",
+                "hint": "common.file-upload.browse.hint"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "__messages__",
+              "attributes": [],
+              "options": [],
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "upload",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "inline-upload govuk-button js-upload"
+              },
+              "options": {
+                "label": "Upload"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "list",
+              "attributes": {
+                "class": "js-upload-list"
+              },
+              "options": {
+                "preview_images": "true"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "financialHistoryConfirmation",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "insolvencyConfirmation",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "short-label": "short-label-financial-history-insolvency",
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "application_previous-history_financial-history.insolvencyConfirmation.title",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--advanced",
+                  "id": "insolvency"
+                },
+                "must_be_value": "Y"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "application_previous-history_financial-history.confirmation"
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    }
+  ],
+  "input_filter": {
+    "insolvencyDetails": {
+      "name": "insolvencyDetails",
+      "allow_empty": true,
+      "type": "Common\\InputFilter\\ContinueIfEmptyInput",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\FhAdditionalInfo"
+        }
+      ]
+    },
+    "file": {
+      "fileCount": {
+        "name": "fileCount",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Common\\Validator\\FileUploadCountV2",
+            "options": {
+              "min": 1
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "name": "submission-decision",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "actionTypes",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "js-sub_st_rec",
+                "multiple": false
+              },
+              "options": {
+                "label": "Decision type",
+                "category": "sub_st_dec",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "reasons",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "chosen-select-medium js-sub-legislation",
+                "multiple": true
+              },
+              "options": {
+                "label": "Legislation",
+                "service_name": "Olcs\\Service\\Data\\SubmissionLegislation",
+                "disable_inarray_validator": false,
+                "use_groups": true
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "comment",
+              "attributes": {
+                "id": "",
+                "class": "extra-long",
+                "name": "comment",
+                "required": true
+              },
+              "options": {
+                "label": "Decision reason",
+                "label_attributes": {
+                  "class": ""
+                },
+                "column-size": ""
+              },
+              "type": "EditorJs"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isDecision",
+              "attributes": {
+                "value": "Y"
+              },
+              "options": {
+                "value": "Y"
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "submission",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "reasons": {
+        "name": "reasons",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "comment": {
+        "name": "comment",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

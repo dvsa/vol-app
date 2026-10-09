@@ -1,0 +1,192 @@
+{
+  "name": "fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "isMsi",
+        "type": "Radio",
+        "options": {
+          "label": "MSI",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "decisionDate",
+        "options": {
+          "label": "Date of decision",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "notifiedDate",
+        "attributes": {
+          "required": false
+        },
+        "type": "DateSelect",
+        "options": {
+          "label": "Date of notification (to TM)",
+          "create_empty_option": true,
+          "render_delimiters": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "reputeNotLostReason",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Reason why loss of good repute is disproportionate response"
+        },
+        "type": "Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "decision",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "case",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "decisionDate": {
+      "name": "decisionDate",
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ]
+    },
+    "notifiedDate": {
+      "name": "notifiedDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelect",
+          "options": {
+            "null_on_empty": true
+          }
+        }
+      ],
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": [
+            "array"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "decisionDate",
+            "context_values": [
+              "--"
+            ],
+            "context_truth": false,
+            "allow_empty": true,
+            "validators": [
+              {
+                "name": "\\Common\\Validator\\Date"
+              },
+              {
+                "name": "Date",
+                "options": {
+                  "format": "Y-m-d"
+                }
+              },
+              {
+                "name": "DateCompare",
+                "options": {
+                  "compare_to": "decisionDate",
+                  "compare_to_label": "Date of decision",
+                  "operator": "gte"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "reputeNotLostReason": {
+      "name": "reputeNotLostReason",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 500
+          }
+        }
+      ]
+    }
+  }
+}

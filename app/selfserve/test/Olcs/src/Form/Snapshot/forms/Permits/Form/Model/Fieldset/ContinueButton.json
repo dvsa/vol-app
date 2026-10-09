@@ -1,0 +1,26 @@
+{
+  "name": "ContinueButton",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "SubmitButton",
+        "attributes": {
+          "class": "govuk-button",
+          "type": "submit",
+          "data-module": "govuk-button",
+          "id": "submit-continue-button"
+        },
+        "options": {
+          "label": "permits.button.continue"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -1,0 +1,72 @@
+{
+  "name": "form-actions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "type": "submit",
+          "class": "govuk-button",
+          "aria-label": "Save and continue"
+        },
+        "options": {
+          "label": "Save"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "cancel",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "id": "cancel"
+        },
+        "options": {
+          "label": "cancel.button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "disqualify",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary js-modal-ajax",
+          "id": "disqualify"
+        },
+        "options": {
+          "label": "Disqualify person"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionLink"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "addAnother",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary"
+        },
+        "options": {
+          "label": "Save and add another"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

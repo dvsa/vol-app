@@ -1,0 +1,39 @@
+{
+  "name": "Actions",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "surrender",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--disabled js-approve-surrender"
+        },
+        "options": {
+          "label": "Surrender"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "withdraw",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary js-modal-ajax"
+        },
+        "options": {
+          "label": "Withdraw",
+          "route": "licence/surrender-details/withdraw/GET"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionLink"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

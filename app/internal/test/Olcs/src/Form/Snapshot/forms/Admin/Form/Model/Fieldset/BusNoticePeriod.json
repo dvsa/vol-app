@@ -1,0 +1,72 @@
+{
+  "name": "BusNoticePeriod",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "noticeArea",
+        "options": {
+          "label": "Rules"
+        },
+        "attributes": {
+          "required": "required",
+          "class": "medium"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "standardPeriod",
+        "options": {
+          "label": "Notice period"
+        },
+        "attributes": {
+          "required": "required",
+          "class": "small"
+        },
+        "type": "number"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "noticeArea": {
+      "name": "noticeArea",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 70
+          }
+        }
+      ]
+    },
+    "standardPeriod": {
+      "name": "standardPeriod",
+      "required": true,
+      "filters": [
+        {
+          "name": "Digits"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 999
+          }
+        }
+      ]
+    }
+  }
+}

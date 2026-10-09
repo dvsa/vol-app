@@ -1,0 +1,237 @@
+{
+  "name": "InsufficientFinances",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "insufficientFinancesSummary",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "financialOverview",
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated",
+              "attributes": {
+                "value": "markup-continuation-finances-overview"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "continuations.insufficient-finances-summary.label"
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "insufficientFinances",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "yesNo",
+              "type": "Common\\Form\\Elements\\Types\\RadioYesNo"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "noContent",
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated",
+              "attributes": {
+                "value": "markup-continuation-insufficient-finances"
+              }
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "yesContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "radio",
+                    "type": "Common\\Form\\Elements\\Types\\Radio",
+                    "options": {
+                      "value_options": {
+                        "upload": "lva-continuations-financial-evidence-upload-now.yes"
+                      }
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "submit",
+                    "attributes": {
+                      "data-module": "govuk-button",
+                      "type": "submit",
+                      "class": "govuk-button"
+                    },
+                    "options": {
+                      "label": "Continue"
+                    },
+                    "type": "\\Laminas\\Form\\Element\\Button"
+                  }
+                }
+              ],
+              "fieldsets": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "uploadContent",
+                    "attributes": {
+                      "class": "file-uploader"
+                    },
+                    "elements": [
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "fileCount",
+                          "type": "Hidden"
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "file",
+                          "attributes": {
+                            "class": "js-visually-hidden"
+                          },
+                          "options": {
+                            "value": "common.file-upload.browse.title",
+                            "hint": "common.file-upload.browse.hint"
+                          },
+                          "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "__messages__",
+                          "attributes": [],
+                          "options": [],
+                          "type": "Hidden"
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "upload",
+                          "attributes": {
+                            "data-module": "govuk-button",
+                            "type": "submit",
+                            "class": "inline-upload govuk-button js-upload"
+                          },
+                          "options": {
+                            "label": "Upload"
+                          },
+                          "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+                        }
+                      }
+                    ],
+                    "fieldsets": [
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "list",
+                          "attributes": {
+                            "class": "js-upload-list"
+                          },
+                          "options": {
+                            "preview_images": "true"
+                          },
+                          "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+                        }
+                      }
+                    ],
+                    "type": "Laminas\\Form\\Fieldset",
+                    "options": []
+                  }
+                }
+              ],
+              "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+              "options": {
+                "label": "continuations.financial-evidence-required.label",
+                "hint": "markup-continuation-financial-evidence-required-hint"
+              }
+            }
+          }
+        ],
+        "type": "Common\\Form\\Elements\\Types\\RadioHorizontal",
+        "options": {
+          "label": "continuations.insufficient-finances.label"
+        }
+      }
+    }
+  ],
+  "type": "Common\\Form\\InsufficientFinancesForm",
+  "input_filter": {
+    "insufficientFinances": {
+      "yesNo": {
+        "name": "yesNo",
+        "error_message": "continuations.insufficient-finances.error",
+        "validators": [
+          {
+            "name": "InArray",
+            "options": {
+              "haystack": [
+                "Y"
+              ]
+            }
+          }
+        ]
+      },
+      "yesContent": {
+        "radio": {
+          "name": "radio",
+          "error_message": "continuations.financial-evidence-required.error"
+        },
+        "uploadContent": {
+          "fileCount": {
+            "name": "fileCount",
+            "required": false,
+            "validators": [
+              {
+                "name": "Laminas\\Validator\\NotEmpty",
+                "options": [
+                  "null"
+                ]
+              },
+              {
+                "name": "Common\\Validator\\FileUploadCountV2",
+                "options": {
+                  "min": 1
+                }
+              }
+            ]
+          },
+          "type": "Laminas\\InputFilter\\InputFilter"
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

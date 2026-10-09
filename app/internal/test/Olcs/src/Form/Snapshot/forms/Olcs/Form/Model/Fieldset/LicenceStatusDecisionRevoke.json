@@ -1,0 +1,48 @@
+{
+  "name": "licence-decision-revoke",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "revokeFrom",
+        "type": "DateTimeSelect",
+        "attributes": {
+          "required": false
+        },
+        "options": {
+          "label": "licence-status.revocation.from",
+          "create_empty_option": true,
+          "max_year_delta": "+5",
+          "min_year_delta": "-5"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "revokeFrom": {
+      "name": "revokeFrom",
+      "filters": [
+        {
+          "name": "DateTimeSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d H:i:s",
+            "messages": {
+              "dateInvalidDate": "datetime.compare.validation.message.invalid"
+            }
+          }
+        }
+      ],
+      "required": true
+    }
+  }
+}

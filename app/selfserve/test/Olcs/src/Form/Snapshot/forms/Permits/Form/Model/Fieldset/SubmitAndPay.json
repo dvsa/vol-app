@@ -1,0 +1,26 @@
+{
+  "name": "SubmitAndPay",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "SubmitButton",
+        "attributes": {
+          "class": "govuk-button",
+          "data-module": "govuk-button",
+          "role": "button",
+          "type": "submit"
+        },
+        "options": {
+          "label": "permits.button.submit-and-pay"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

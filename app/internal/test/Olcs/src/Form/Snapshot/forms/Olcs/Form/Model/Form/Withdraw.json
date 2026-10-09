@@ -1,0 +1,108 @@
+{
+  "name": "Withdraw",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "withdraw-details",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "reason",
+              "type": "Radio",
+              "options": {
+                "label": "Withdraw reason",
+                "value_options": {
+                  "withdrawn": "Withdrawn",
+                  "reg_in_error": "Registered in error"
+                },
+                "fieldset-attributes": {
+                  "class": "checkbox inline"
+                },
+                "disable_inarray_validator": true
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": ""
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "confirm",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "transport-manager.responsibilities.continue"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "transport-manager.responsibilities.cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "label": ""
+  },
+  "input_filter": {
+    "withdraw-details": {
+      "reason": {
+        "name": "reason",
+        "type": "Common\\InputFilter\\ContinueIfEmptyInput",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": {
+              "messages": {
+                "isEmpty": "Please select a reason for withdrawing the application"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

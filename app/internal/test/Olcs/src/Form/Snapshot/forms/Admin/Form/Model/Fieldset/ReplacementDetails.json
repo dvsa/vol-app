@@ -1,0 +1,53 @@
+{
+  "name": "ReplacementDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "placeholder",
+        "type": "Text",
+        "attributes": {
+          "id": "placeholder",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Placeholder",
+          "required": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "replacementText",
+        "type": "Text",
+        "attributes": {
+          "id": "replacementText",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Replacement Text",
+          "required": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "replacementText": {
+      "name": "replacementText",
+      "required": false
+    }
+  }
+}

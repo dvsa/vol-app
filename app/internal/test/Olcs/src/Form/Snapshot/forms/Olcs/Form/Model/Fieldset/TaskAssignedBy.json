@@ -1,0 +1,21 @@
+{
+  "name": "assignedBy",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "assignedByUserName",
+        "type": "Common\\Form\\Elements\\Types\\Html",
+        "options": {
+          "label": "tasks.assignedBy.user"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "tasks.assignedBy"
+  },
+  "input_filter": []
+}

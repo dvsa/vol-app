@@ -1,0 +1,136 @@
+{
+  "name": "view-vehicle-switch-board-form",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "formActions",
+        "attributes": {
+          "id": "next",
+          "value": "licence.vehicle.view.switchboard.action.next.label",
+          "class": "govuk-button govuk-button--secondary",
+          "title": "licence.vehicle.view.switchboard.action.next.title"
+        },
+        "type": "Submit"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "optionsFieldset",
+        "attributes": {
+          "id": "radio"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "options",
+              "attributes": {
+                "radios_wrapper_attributes": {
+                  "class": "govuk-radios--conditional",
+                  "data-module": "radios"
+                }
+              },
+              "options": {
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--advanced"
+                },
+                "value_options": {
+                  "remove": {
+                    "label": "licence.vehicle.view.switchboard.option.remove.label",
+                    "value": "remove",
+                    "attributes": {
+                      "id": "remove-vehicle"
+                    }
+                  },
+                  "reprint": {
+                    "label": "licence.vehicle.view.switchboard.option.reprint.label",
+                    "value": "reprint",
+                    "attributes": {
+                      "id": "reprint-vehicle"
+                    }
+                  },
+                  "transfer": {
+                    "label": "licence.vehicle.view.switchboard.option.transfer.label",
+                    "value": "transfer",
+                    "attributes": {
+                      "id": "transfer-vehicle"
+                    }
+                  }
+                }
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "transferContent",
+              "options": {
+                "disable_inarray_validator": false,
+                "render-container": false,
+                "label": "licence.vehicle.view.switchboard.option.transfer.select.label.plural",
+                "label_attributes": {
+                  "class": "govuk-label"
+                }
+              },
+              "attributes": {
+                "id": "select-a-licence",
+                "class": "govuk-!-margin-right-2 govuk-select"
+              },
+              "type": "Select"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+        "options": {
+          "label": "licence.vehicle.view.switchboard.header",
+          "label_attributes": {
+            "class": "govuk-fieldset__legend govuk-fieldset__legend--l"
+          },
+          "radio-element": "options",
+          "hint": "licence.vehicle.view.switchboard.hint"
+        }
+      }
+    }
+  ],
+  "type": "\\Common\\Form\\Form",
+  "input_filter": {
+    "optionsFieldset": {
+      "options": {
+        "name": "options",
+        "validators": [
+          {
+            "name": "\\Laminas\\Validator\\NotEmpty",
+            "options": {
+              "messages": {
+                "isEmpty": "licence.vehicle.view.switchboard.error.is-empty"
+              }
+            }
+          }
+        ]
+      },
+      "transferContent": {
+        "name": "transferContent",
+        "required": false,
+        "validators": [
+          {
+            "name": "\\Laminas\\Validator\\Digits"
+          },
+          {
+            "name": "\\Laminas\\Validator\\GreaterThan",
+            "options": {
+              "min": 0
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

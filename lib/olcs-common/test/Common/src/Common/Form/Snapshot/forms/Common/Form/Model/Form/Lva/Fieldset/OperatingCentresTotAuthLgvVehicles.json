@@ -1,0 +1,55 @@
+{
+  "name": "OperatingCentresTotAuthLgvVehicles",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "totAuthLgvVehicles",
+        "attributes": {
+          "required": false,
+          "class": "short",
+          "id": "totAuthLgvVehicles",
+          "pattern": "\\d*"
+        },
+        "type": "Text",
+        "options": {
+          "label": "application_operating-centres_authorisation.data.totAuthLgvVehicles.label",
+          "hint": "application_operating-centres_authorisation.data.totAuthLgvVehicles.hint",
+          "hint-below-class": "govuk-hint govuk-body govuk-!-font-size-16 govuk-!-margin-top-2"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": [],
+  "input_filter": {
+    "totAuthLgvVehicles": {
+      "name": "totAuthLgvVehicles",
+      "required": true,
+      "validators": [
+        {
+          "name": "Digits",
+          "options": {
+            "break_chain_on_failure": true
+          }
+        },
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 5000
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "\\Laminas\\Filter\\ToNull",
+          "options": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  }
+}

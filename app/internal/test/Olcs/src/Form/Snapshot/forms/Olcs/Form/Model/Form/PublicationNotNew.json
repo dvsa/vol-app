@@ -1,0 +1,211 @@
+{
+  "name": "PublicationNotNew",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "readOnly",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "publicationNo",
+              "options": {
+                "label": "Publication No."
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "status",
+              "options": {
+                "label": "Status"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "publicationDate",
+              "options": {
+                "label": "Publication date"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "typeArea",
+              "options": {
+                "label": "Type/Area"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "section",
+              "options": {
+                "label": "Section"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "trafficArea",
+              "options": {
+                "label": "Traffic area"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "readonly": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "readOnlyText",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "text1",
+              "attributes": {
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Text 1"
+              },
+              "type": "Textarea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "text2",
+              "attributes": {
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Text 2"
+              },
+              "type": "Textarea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "text3",
+              "attributes": {
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Text 3"
+              },
+              "type": "Textarea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "readonly": true
+        }
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "Publication"
+  },
+  "input_filter": {
+    "readOnlyText": {
+      "text1": {
+        "name": "text1",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "text2": {
+        "name": "text2",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "text3": {
+        "name": "text3",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

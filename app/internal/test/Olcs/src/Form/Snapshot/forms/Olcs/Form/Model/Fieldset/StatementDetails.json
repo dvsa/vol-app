@@ -1,0 +1,411 @@
+{
+  "name": "details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "statementType",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Statement type",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "statement_type"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "assignedCaseworker",
+        "attributes": {
+          "id": "assignedCaseworker",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Assigned caseworker",
+          "disable_inarray_validator": false,
+          "empty_option": "Please Select",
+          "service_name": "Olcs\\Service\\Data\\UserListInternal",
+          "use_groups": false
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "vrm",
+        "options": {
+          "label": "Vehicle registration mark"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "requestorsForename",
+        "attributes": {
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Requestors first name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "requestorsFamilyName",
+        "attributes": {
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Requestors last name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "requestorsBody",
+        "attributes": {
+          "class": "",
+          "id": ""
+        },
+        "options": {
+          "label": "Requestor body"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "stoppedDate",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "Date stopped",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "requestedDate",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "Date requested",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "issuedDate",
+        "attributes": {
+          "id": "issuedDate"
+        },
+        "options": {
+          "label": "Issued date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "contactType",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Request mode",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "contact_method"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "contactDetailsType",
+        "attributes": {
+          "value": "ct_corr"
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "contactDetailsId",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "contactDetailsVersion",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "personId",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "personVersion",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "authorisersDecision",
+        "attributes": {
+          "id": "",
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Authorised decision",
+          "label_attributes": {
+            "class": ""
+          }
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "case",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "Statement Details"
+  },
+  "input_filter": {
+    "assignedCaseworker": {
+      "name": "assignedCaseworker",
+      "required": false
+    },
+    "requestorsForename": {
+      "name": "requestorsForename",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "requestorsFamilyName": {
+      "name": "requestorsFamilyName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "requestorsBody": {
+      "name": "requestorsBody",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 40
+          }
+        }
+      ]
+    },
+    "stoppedDate": {
+      "name": "stoppedDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        },
+        {
+          "name": "DateCompare",
+          "options": {
+            "compare_to": "requestedDate",
+            "compare_to_label": "Date requested",
+            "operator": "lte"
+          }
+        }
+      ]
+    },
+    "requestedDate": {
+      "name": "requestedDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "issuedDate": {
+      "name": "issuedDate",
+      "required": false,
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ]
+    },
+    "contactType": {
+      "name": "contactType",
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": [
+            "null"
+          ]
+        }
+      ]
+    },
+    "authorisersDecision": {
+      "name": "authorisersDecision",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 4000
+          }
+        }
+      ]
+    }
+  }
+}

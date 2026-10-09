@@ -1,0 +1,99 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "corCertificateNumber",
+        "attributes": {
+          "maxlength": "12"
+        },
+        "options": {
+          "label": "permits.form.cor-certificate-number.label"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "declaration",
+        "attributes": {
+          "class": "input--declaration",
+          "id": "declaration"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "permits.form.declaration.label",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "1"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "checked",
+        "attributes": {
+          "class": "input--checked",
+          "id": "checked"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "permits.form.checked.label",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "1"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "corCertificateNumber": {
+      "name": "corCertificateNumber",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "declaration": {
+      "name": "declaration",
+      "required": false
+    },
+    "checked": {
+      "name": "checked",
+      "required": false
+    }
+  }
+}

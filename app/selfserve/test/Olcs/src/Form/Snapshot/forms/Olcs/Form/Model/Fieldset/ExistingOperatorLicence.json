@@ -1,0 +1,100 @@
+{
+  "name": "existing-operator-licence",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "existingOperatorLicence",
+        "attributes": {
+          "radios_wrapper_attributes": {
+            "class": "govuk-radios",
+            "data-module": "govuk-radios"
+          },
+          "required": "required"
+        },
+        "options": {
+          "value_options": {
+            "NoLicence": {
+              "label": "select-option-no",
+              "value": "N"
+            },
+            "licence": {
+              "label": "select-option-yes",
+              "attributes": {
+                "data-aira-controls": "conditional-existingOperatorLicenceApplication"
+              },
+              "value": "Y"
+            }
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--advanced"
+          }
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Radio"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceContent",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "licenceNumber",
+              "type": "Text",
+              "options": {
+                "label": "user-registration.field.licenceNumber.label",
+                "id": "existingOperatorLicenceApplication"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+  "options": {
+    "radio-element": "existingOperatorLicence"
+  },
+  "input_filter": {
+    "existingOperatorLicence": {
+      "name": "existingOperatorLicence",
+      "required": true
+    },
+    "licenceContent": {
+      "licenceNumber": {
+        "name": "licenceNumber",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": "9",
+              "max": "9"
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

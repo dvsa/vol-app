@@ -1,0 +1,53 @@
+{
+  "name": "Submit",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "SubmitButton",
+        "attributes": {
+          "id": "submit-accept-button",
+          "type": "submit",
+          "class": "govuk-button govuk-!-margin-right-1"
+        },
+        "options": {
+          "label": "permits.page.accept.and.pay"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "RemoveUnwantedPermitButton",
+        "attributes": {
+          "id": "remove-unwanted-permit-button",
+          "type": "submit",
+          "class": "govuk-button govuk-!-margin-right-1"
+        },
+        "options": {
+          "label": "permits.page.remove.unwanted.permit"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "DeclineButton",
+        "attributes": {
+          "id": "submit-decline-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary"
+        },
+        "options": {
+          "label": "permits.page.decline.permits"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

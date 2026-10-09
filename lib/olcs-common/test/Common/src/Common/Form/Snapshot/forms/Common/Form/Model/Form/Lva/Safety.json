@@ -1,0 +1,412 @@
+{
+  "name": "lva-safety",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "licence",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "safetyInsVehicles",
+              "attributes": {
+                "class": "tiny",
+                "id": ""
+              },
+              "options": {
+                "label": "application_vehicle-safety_safety.licence.vehicleInspectionInterval",
+                "label_attributes": {
+                  "class": "legend"
+                },
+                "error-message": "safetyLicence_safetyInsVehicles-error"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "safetyInsTrailers",
+              "attributes": {
+                "class": "tiny",
+                "id": ""
+              },
+              "options": {
+                "label": "application_vehicle-safety_safety.licence.trailerInspectionInterval",
+                "label_attributes": {
+                  "class": "legend"
+                },
+                "error-message": "safetyLicence_safetyInsTrailers-error"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "safetyInsVaries",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "application_vehicle-safety_safety.licence.moreFrequentInspections",
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                },
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "hint": "application_vehicle-safety_safety.licence.moreFrequentInspectionsHint"
+              },
+              "type": "\\Laminas\\Form\\Element\\Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "tachographIns",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "error-message": "safetyLicence_tachographsIns-error",
+                "label": "application_vehicle-safety_safety.licence.tachographAnalyser",
+                "label_attributes": {
+                  "class": "form-control form-control--radio"
+                },
+                "value_options": [
+                  {
+                    "value": "tach_internal",
+                    "label": "tachograph_analyser.tach_internal"
+                  },
+                  {
+                    "value": "tach_external",
+                    "label": "tachograph_analyser.tach_external"
+                  },
+                  {
+                    "value": "tach_na",
+                    "label": "tachograph_analyser.tach_na"
+                  }
+                ],
+                "category": "tachograph_analyser",
+                "service_name": "StaticList"
+              },
+              "type": "DynamicRadio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "tachographInsName",
+              "attributes": {
+                "required": false,
+                "class": "medium",
+                "id": ""
+              },
+              "options": {
+                "label": "application_vehicle-safety_safety.licence.tachographAnalyserContractor",
+                "error-message": "You must add at least one safety inspector"
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "table",
+        "attributes": {
+          "id": "table"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "required": "required",
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "safety-inspection-providers.table.title",
+          "label_options": {
+            "disable_html_escape": "true"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "application",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isMaintenanceSuitable",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "application_vehicle-safety_safety.application.suitableMaintenance",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "label_attributes": {
+                  "class": "inline"
+                }
+              },
+              "type": "\\Laminas\\Form\\Element\\Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "safetyConfirmation",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "data-container-class": "confirm"
+              },
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "application_vehicle-safety_safety.application.safetyConfirmation",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--advanced"
+                },
+                "must_be_value": "Y"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "saveAndContinue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "save.continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "licence": {
+      "safetyInsVehicles": {
+        "name": "safetyInsVehicles",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Between",
+            "options": {
+              "min": 1,
+              "max": 13,
+              "messages": {
+                "notBetween": "safetyLicence_safetyInsBetween-error"
+              }
+            }
+          }
+        ]
+      },
+      "safetyInsTrailers": {
+        "name": "safetyInsTrailers",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Between",
+            "options": {
+              "min": 1,
+              "max": 13,
+              "messages": {
+                "notBetween": "safetyLicence_safetyInsBetween-error"
+              }
+            }
+          }
+        ]
+      },
+      "tachographInsName": {
+        "name": "tachographInsName",
+        "required": true,
+        "allow_empty": true,
+        "type": "\\Common\\InputFilter\\ContinueIfEmptyInput",
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "tachographIns",
+              "context_values": [
+                "tach_external"
+              ],
+              "validators": [
+                {
+                  "name": "StringLength",
+                  "options": {
+                    "min": "1",
+                    "max": 90
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "table": {
+      "rows": {
+        "name": "rows",
+        "required": true,
+        "validators": [
+          {
+            "name": "Common\\Form\\Elements\\Validators\\TableRequiredValidator",
+            "options": {
+              "label": "record"
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

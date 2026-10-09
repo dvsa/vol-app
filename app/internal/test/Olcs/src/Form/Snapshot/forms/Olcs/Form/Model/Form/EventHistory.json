@@ -1,0 +1,130 @@
+{
+  "name": "event-history",
+  "attributes": [],
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "event-history-details",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "table",
+                    "options": {
+                      "label": "row"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\Table"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "action",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "rows",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "id",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Close"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "action_lcfirst": true
+  },
+  "input_filter": []
+}

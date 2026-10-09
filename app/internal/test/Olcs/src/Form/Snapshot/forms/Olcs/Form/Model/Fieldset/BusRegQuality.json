@@ -1,0 +1,192 @@
+{
+  "name": "bus-reg-quality-fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "isQualityPartnership",
+        "type": "Radio",
+        "options": {
+          "label": "Operate on part of a Quality Partnership Scheme current or future",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "id": "isQualityPartnership"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "qualityPartnershipDetails",
+        "attributes": {
+          "id": "qualityPartnershipDetails",
+          "class": "extra-long",
+          "name": "qualityPartnershipDetails"
+        },
+        "options": {
+          "label": "Local transport authority or lead authority for Quality Partnership Scheme",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        },
+        "type": "Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "qualityPartnershipFacilitiesUsed",
+        "type": "Radio",
+        "options": {
+          "label": "Will Quality Partnership Scheme facilities be used",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "id": "qualityPartnershipFacilitiesUsed"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isQualityContract",
+        "type": "Radio",
+        "options": {
+          "label": "Operate on part of a Quality Contract Scheme current or future",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "id": "isQualityContract"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "qualityContractDetails",
+        "attributes": {
+          "id": "qualityContractDetails",
+          "class": "extra-long",
+          "name": "qualityContractDetails"
+        },
+        "options": {
+          "label": "Local transport authority or lead authority for Quality Contract Scheme",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        },
+        "type": "Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isTxcApp",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[isTxcApp]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isLatestVariation",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[isLatestVariation]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[status]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "qualityPartnershipDetails": {
+      "name": "qualityPartnershipDetails",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        },
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "required": false,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 4000
+          }
+        }
+      ]
+    },
+    "qualityContractDetails": {
+      "name": "qualityContractDetails",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 4000
+          }
+        }
+      ]
+    }
+  }
+}

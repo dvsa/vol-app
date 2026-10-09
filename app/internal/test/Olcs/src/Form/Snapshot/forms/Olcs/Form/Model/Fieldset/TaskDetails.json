@@ -1,0 +1,145 @@
+{
+  "name": "details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "link",
+        "type": "Common\\Form\\Elements\\Types\\Html",
+        "options": {
+          "label": "tasks.data.link",
+          "disable_html_escape": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "type": "Common\\Form\\Elements\\Types\\Html",
+        "options": {
+          "label": "tasks.data.status",
+          "disable_html_escape": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "actionDate",
+        "options": {
+          "label": "tasks.data.actionDate",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "required": true,
+          "min_year_delta": "-10",
+          "max_year_delta": "+10"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "urgent",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "tasks.data.urgent"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "category",
+        "attributes": {
+          "id": "category",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "tasks.data.category",
+          "service_name": "Olcs\\Service\\Data\\Category",
+          "context": {
+            "isTaskCategory": "Y"
+          },
+          "empty_option": "Please Select"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "subCategory",
+        "attributes": {
+          "id": "subCategory",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "tasks.data.sub_category",
+          "service_name": "Olcs\\Service\\Data\\SubCategory",
+          "context": {
+            "isTaskCategory": "Y"
+          },
+          "empty_option": "Please Select"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "attributes": {
+          "class": "medium"
+        },
+        "options": {
+          "label": "tasks.data.description"
+        },
+        "type": "TextArea"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "actionDate": {
+      "name": "actionDate",
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ]
+    },
+    "description": {
+      "name": "description",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 255
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "name": "AgreeTerms",
+  "attributes": {
+    "method": "post",
+    "label": "AgreeTerms"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": {
+          "method": "post",
+          "label": "operator-registration.form.labe"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "termsAgreed",
+              "attributes": {
+                "id": "termsAgreed",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "user-registration.field.termsAgreed.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "",
+          "prefer_form_input_filter": true
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button",
+                "id": "submit"
+              },
+              "options": {
+                "label": "Save and continue"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "signOut",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "signout"
+              },
+              "options": {
+                "label": "selfserve-dashboard-topnav-sign-out"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "AgreeTerms"
+  },
+  "input_filter": []
+}

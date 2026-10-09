@@ -1,0 +1,93 @@
+{
+  "name": "login-form",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "username",
+        "options": {
+          "label": "auth.login.username",
+          "short-label": "auth.login.username",
+          "label_attributes": {
+            "aria-label": "Enter your username"
+          }
+        },
+        "attributes": {
+          "id": "auth.login.username"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "password",
+        "options": {
+          "label": "auth.login.password",
+          "short-label": "auth.login.password",
+          "label_attributes": {
+            "aria-label": "Enter your password"
+          }
+        },
+        "attributes": {
+          "id": "auth.login.password"
+        },
+        "type": "Password"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "options": {
+          "label": "auth.login.button"
+        },
+        "attributes": {
+          "id": "auth.login.button",
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "type": "Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "username": {
+      "name": "username",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        },
+        {
+          "name": "Common\\Filter\\StripSpaces"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\Username"
+        }
+      ]
+    },
+    "password": {
+      "name": "password",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 8
+          }
+        }
+      ]
+    }
+  }
+}

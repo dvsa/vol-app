@@ -1,0 +1,20 @@
+{
+  "name": "operator-id",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "operator-id",
+        "options": {
+          "label": "internal-operator-id"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

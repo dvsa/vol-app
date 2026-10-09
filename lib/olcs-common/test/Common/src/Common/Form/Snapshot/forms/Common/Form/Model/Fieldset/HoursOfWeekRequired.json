@@ -1,0 +1,353 @@
+{
+  "name": "hoursOfWeek",
+  "attributes": [],
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "hoursPerWeekContent",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "hoursMon",
+              "type": "Text",
+              "attributes": {
+                "class": "short",
+                "pattern": "\\d(\\.)*",
+                "data-container-class": "inline-text"
+              },
+              "options": {
+                "label": "days-of-week-short-mon",
+                "label_attributes": {
+                  "aria-label": "Enter your working hours, Monday"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "hoursTue",
+              "attributes": {
+                "class": "short",
+                "pattern": "\\d(\\.)*",
+                "data-container-class": "inline-text"
+              },
+              "options": {
+                "label": "days-of-week-short-tue",
+                "label_attributes": {
+                  "aria-label": "Tuesday"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "hoursWed",
+              "attributes": {
+                "class": "short",
+                "pattern": "\\d(\\.)*",
+                "data-container-class": "inline-text"
+              },
+              "options": {
+                "label": "days-of-week-short-wed",
+                "label_attributes": {
+                  "aria-label": "Wednesday"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "hoursThu",
+              "attributes": {
+                "class": "short",
+                "pattern": "\\d(\\.)*",
+                "data-container-class": "inline-text"
+              },
+              "options": {
+                "label": "days-of-week-short-thu",
+                "label_attributes": {
+                  "aria-label": "Thursday"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "hoursFri",
+              "attributes": {
+                "class": "short",
+                "pattern": "\\d(\\.)*",
+                "data-container-class": "inline-text"
+              },
+              "options": {
+                "label": "days-of-week-short-fri",
+                "label_attributes": {
+                  "aria-label": "Friday"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "hoursSat",
+              "attributes": {
+                "class": "short",
+                "pattern": "\\d(\\.)*",
+                "data-container-class": "inline-text"
+              },
+              "options": {
+                "label": "days-of-week-short-sat",
+                "label_attributes": {
+                  "aria-label": "Saturday"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "hoursSun",
+              "attributes": {
+                "class": "short",
+                "pattern": "\\d(\\.)*",
+                "data-container-class": "inline-text"
+              },
+              "options": {
+                "label": "days-of-week-short-sun",
+                "label_attributes": {
+                  "aria-label": "Sunday"
+                }
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "transport-manager.responsibilities.hours-per-week-subtitle",
+          "hint": "lva-tm-hours-per-week-hint"
+        }
+      }
+    }
+  ],
+  "type": "Common\\Form\\Elements\\Types\\HoursPerWeek",
+  "input_filter": {
+    "hoursPerWeekContent": {
+      "hoursMon": {
+        "name": "hoursMon",
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToFloat"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\I18n\\Validator\\IsFloat",
+            "options": {
+              "messages": {
+                "notFloat": "Only numbers are allowed"
+              }
+            }
+          },
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 24,
+              "messages": {
+                "notBetween": "Mon must be between '%min%' and '%max%', inclusively"
+              }
+            }
+          },
+          {
+            "name": "Common\\Form\\Elements\\Validators\\SumContext",
+            "options": {
+              "min": 0.1,
+              "messages": {
+                "belowMin": "transport-manager-hours-per-week-validation-message"
+              }
+            }
+          }
+        ]
+      },
+      "hoursTue": {
+        "name": "hoursTue",
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToFloat"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\I18n\\Validator\\IsFloat",
+            "options": {
+              "messages": {
+                "notFloat": "Only numbers are allowed"
+              }
+            }
+          },
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 24,
+              "messages": {
+                "notBetween": "Tue must be between '%min%' and '%max%', inclusively"
+              }
+            }
+          }
+        ]
+      },
+      "hoursWed": {
+        "name": "hoursWed",
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToFloat"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\I18n\\Validator\\IsFloat",
+            "options": {
+              "messages": {
+                "notFloat": "Only numbers are allowed"
+              }
+            }
+          },
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 24,
+              "messages": {
+                "notBetween": "Wed must be between '%min%' and '%max%', inclusively"
+              }
+            }
+          }
+        ]
+      },
+      "hoursThu": {
+        "name": "hoursThu",
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToFloat"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\I18n\\Validator\\IsFloat",
+            "options": {
+              "messages": {
+                "notFloat": "Only numbers are allowed"
+              }
+            }
+          },
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 24,
+              "messages": {
+                "notBetween": "Thu must be between '%min%' and '%max%', inclusively"
+              }
+            }
+          }
+        ]
+      },
+      "hoursFri": {
+        "name": "hoursFri",
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToFloat"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\I18n\\Validator\\IsFloat",
+            "options": {
+              "messages": {
+                "notFloat": "Only numbers are allowed"
+              }
+            }
+          },
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 24,
+              "messages": {
+                "notBetween": "Fri must be between '%min%' and '%max%', inclusively"
+              }
+            }
+          }
+        ]
+      },
+      "hoursSat": {
+        "name": "hoursSat",
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToFloat"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\I18n\\Validator\\IsFloat",
+            "options": {
+              "messages": {
+                "notFloat": "Only numbers are allowed"
+              }
+            }
+          },
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 24,
+              "messages": {
+                "notBetween": "Sat must be between '%min%' and '%max%', inclusively"
+              }
+            }
+          }
+        ]
+      },
+      "hoursSun": {
+        "name": "hoursSun",
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToFloat"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\I18n\\Validator\\IsFloat",
+            "options": {
+              "messages": {
+                "notFloat": "Only numbers are allowed"
+              }
+            }
+          },
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 24,
+              "messages": {
+                "notBetween": "Sun must be between '%min%' and '%max%', inclusively"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "name": "Licence",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "licence",
+              "attributes": {
+                "id": "licence",
+                "radios_wrapper_attributes": {
+                  "class": "govuk-radios--conditional",
+                  "data-module": "radios"
+                }
+              },
+              "options": {
+                "label_attributes": {
+                  "class": "govuk-label govuk-radios__label govuk-label--s"
+                },
+                "input_class": "Common\\Form\\Input\\LicenceInput"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Radio"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+        "options": {
+          "label": "permits.page.licence.question",
+          "label_attributes": {
+            "class": "govuk-visually-hidden"
+          },
+          "radio-element": "licence"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "Submit",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "SubmitButton",
+              "attributes": {
+                "class": "govuk-button",
+                "data-module": "govuk-button",
+                "id": "submitbutton",
+                "type": "submit"
+              },
+              "options": {
+                "label": "Save and continue"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

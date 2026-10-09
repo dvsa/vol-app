@@ -1,0 +1,420 @@
+{
+  "name": "user-type",
+  "attributes": {
+    "id": "userType"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "userType",
+        "options": {
+          "label": "Type",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\UserTypesListDataService",
+          "use_groups": "false"
+        },
+        "type": "DynamicSelect",
+        "attributes": {
+          "required": false,
+          "id": "userType",
+          "placeholder": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "team",
+        "attributes": {
+          "required": false,
+          "id": "team",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Team",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\Team",
+          "use_groups": "false"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "currentTransportManagerHtml",
+        "attributes": {
+          "id": "currentTransportManagerHtml",
+          "required": false,
+          "data-container-class": "tm-current"
+        },
+        "options": {
+          "label": "Current Transport Manager"
+        },
+        "type": "Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "currentTransportManager",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "currentTransportManagerName",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "transportManager",
+        "attributes": {
+          "required": false,
+          "class": "medium",
+          "id": "transportManager"
+        },
+        "options": {
+          "label": "Transport manager",
+          "disable_inarray_validator": false,
+          "empty_option": "Please Select",
+          "use_groups": "false"
+        },
+        "type": "Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "localAuthority",
+        "attributes": {
+          "required": false,
+          "class": "medium",
+          "id": "localAuthority"
+        },
+        "options": {
+          "label": "Local authority",
+          "disable_inarray_validator": false,
+          "empty_option": "Please Select",
+          "service_name": "Common\\Service\\Data\\LocalAuthority",
+          "use_groups": "false"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "partnerContactDetails",
+        "attributes": {
+          "required": false,
+          "class": "medium",
+          "id": "partnerContactDetails"
+        },
+        "options": {
+          "label": "Partner",
+          "disable_inarray_validator": false,
+          "empty_option": "Please Select",
+          "service_name": "Common\\Service\\Data\\ContactDetails",
+          "context": "ct_partner",
+          "use_groups": false
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceNumber",
+        "attributes": {
+          "required": false,
+          "class": "medium",
+          "id": "licenceNumber"
+        },
+        "options": {
+          "label": "Licence number"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "role",
+        "options": {
+          "label": "Role",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\Role",
+          "use_groups": "false"
+        },
+        "type": "DynamicSelect",
+        "attributes": {
+          "required": false,
+          "id": "role",
+          "placeholder": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isLastOperatorAdmin",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "lastOperatorAdminText",
+        "options": {
+          "label": "Last operator admin?"
+        },
+        "attributes": {
+          "id": "lastOperatorAdminText",
+          "required": false
+        },
+        "type": "Common\\Form\\Elements\\Types\\ReadonlyElement"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "applicationTransportManagers",
+        "options": {
+          "label": "Application"
+        },
+        "attributes": {
+          "id": "applicationTransportManagers"
+        },
+        "type": "Common\\Form\\Elements\\Types\\ApplicationTransportManagers"
+      }
+    }
+  ],
+  "type": "Laminas\\Form\\Fieldset",
+  "input_filter": {
+    "userType": {
+      "name": "userType",
+      "required": true
+    },
+    "team": {
+      "name": "team",
+      "required": true,
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "userType",
+            "context_values": [
+              "internal"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "\\Laminas\\Validator\\NotEmpty"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "currentTransportManagerHtml": {
+      "name": "currentTransportManagerHtml",
+      "required": false
+    },
+    "applicationTransportManagers": {
+      "name": "applicationTransportManagers",
+      "required": false
+    },
+    "transportManager": {
+      "name": "transportManager",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "userType",
+            "context_values": [
+              "transport-manager"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "ValidateIf",
+                "options": {
+                  "context_field": "currentTransportManager",
+                  "context_values": [
+                    ""
+                  ],
+                  "allow_empty": false,
+                  "validators": [
+                    {
+                      "name": "\\Laminas\\Validator\\NotEmpty"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "localAuthority": {
+      "name": "localAuthority",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "userType",
+            "context_values": [
+              "local-authority"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "\\Laminas\\Validator\\NotEmpty"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "partnerContactDetails": {
+      "name": "partnerContactDetails",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "userType",
+            "context_values": [
+              "partner"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "\\Laminas\\Validator\\NotEmpty"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "licenceNumber": {
+      "name": "licenceNumber",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "userType",
+            "context_values": [
+              "operator"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "ValidateIf",
+                "options": {
+                  "context_field": "id",
+                  "context_values": [
+                    ""
+                  ],
+                  "allow_empty": false,
+                  "validators": [
+                    {
+                      "name": "\\Laminas\\Validator\\NotEmpty"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "role": {
+      "name": "role",
+      "required": true,
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "isLastOperatorAdmin",
+            "context_values": [
+              "1"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "\\Common\\Validator\\MustRemainOperatorAdmin"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "lastOperatorAdminText": {
+      "name": "lastOperatorAdminText",
+      "required": false
+    }
+  }
+}

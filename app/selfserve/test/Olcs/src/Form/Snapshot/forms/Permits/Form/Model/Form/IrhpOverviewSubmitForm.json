@@ -1,0 +1,41 @@
+{
+  "name": "IrhpOverviewSubmit",
+  "attributes": {
+    "method": "POST"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "Submit",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "SubmitButton",
+              "attributes": {
+                "class": "govuk-button",
+                "data-module": "govuk-button",
+                "id": "submitbutton",
+                "type": "submit"
+              },
+              "options": {
+                "label": "permits.button.submit-application"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

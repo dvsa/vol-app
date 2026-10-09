@@ -1,0 +1,49 @@
+{
+  "name": "is-longer-semi-trailer",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "isLongerSemiTrailer",
+        "options": {
+          "error-message": "is-longer-semi-trailer-error",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          }
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Radio"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "YContent",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "longerSemiTrailerWarning",
+              "attributes": {
+                "value": "markup-lva-trailers-longerSemiTrailersWarningHtml"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+  "options": {
+    "radio-element": "isLongerSemiTrailer"
+  },
+  "input_filter": []
+}

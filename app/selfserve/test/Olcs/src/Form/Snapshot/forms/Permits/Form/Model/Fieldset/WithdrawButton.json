@@ -1,0 +1,26 @@
+{
+  "name": "WithdrawButton",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "SubmitButton",
+        "attributes": {
+          "class": "govuk-button",
+          "data-module": "govuk-button",
+          "id": "withdrawbutton",
+          "type": "submit"
+        },
+        "options": {
+          "label": "permits.form.withdraw_application.button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

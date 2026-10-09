@@ -1,0 +1,277 @@
+{
+  "name": "MasterTemplate",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "masterTemplate",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "name",
+              "options": {
+                "label": "Name"
+              },
+              "attributes": {
+                "required": true,
+                "class": "long"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "templateContent",
+              "options": {
+                "label": "Page chrome HTML (advanced)",
+                "hint": "HTML shell with {{TOKENS}} placeholders. Rarely edited — the day-to-day chrome content lives in the slot fields below.",
+                "label_attributes": {
+                  "class": ""
+                }
+              },
+              "type": "Textarea",
+              "attributes": {
+                "id": "templateContent",
+                "class": "extra-long",
+                "rows": 12,
+                "name": "templateContent"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "headerLeftContent",
+              "options": {
+                "label": "Header (left)",
+                "hint": "Top-left of the letter — usually the agency logo. Use [[OTC_LOGO]] to embed the region-appropriate logo automatically."
+              },
+              "type": "EditorJs",
+              "attributes": {
+                "id": "headerLeftContent",
+                "class": "extra-long",
+                "name": "headerLeftContent"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "headerRightContent",
+              "options": {
+                "label": "Header (right)",
+                "hint": "Top-right of the letter — typically the sender address block. Vary per locale (en_GB / en_NI) for region-specific addresses."
+              },
+              "type": "EditorJs",
+              "attributes": {
+                "id": "headerRightContent",
+                "class": "extra-long",
+                "name": "headerRightContent"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "signoffContent",
+              "options": {
+                "label": "Signoff",
+                "hint": "Closing salutation and signature line. Use [[CASEWORKER_NAME]] to insert the issuing caseworker's name."
+              },
+              "type": "EditorJs",
+              "attributes": {
+                "id": "signoffContent",
+                "class": "extra-long",
+                "name": "signoffContent"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "footerContent",
+              "options": {
+                "label": "Footer",
+                "hint": "Single-line footer note that appears at the bottom of the letter."
+              },
+              "type": "EditorJs",
+              "attributes": {
+                "id": "footerContent",
+                "class": "extra-long",
+                "name": "footerContent"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isDefault",
+              "options": {
+                "label": "Is Default",
+                "checked_value": "1",
+                "unchecked_value": "0"
+              },
+              "type": "OlcsCheckbox",
+              "attributes": {
+                "class": "",
+                "id": "isDefault"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "locale",
+              "options": {
+                "label": "Locale",
+                "hint": "Chrome variant — en_GB (default), en_NI (NI letters), cy_GB (Welsh). Picked at letter-generation time by isNi.",
+                "empty_option": "Not set",
+                "value_options": {
+                  "en_GB": "en_GB — England, Scotland and Wales (default)",
+                  "en_NI": "en_NI — Northern Ireland",
+                  "cy_GB": "cy_GB — Welsh"
+                }
+              },
+              "type": "select",
+              "attributes": {
+                "class": "medium",
+                "id": "locale"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button",
+                "aria-label": "Save and Continue"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel",
+                "keepForReadOnly": true
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addAnother",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "Save and add another"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "masterTemplate": {
+      "name": {
+        "name": "name",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 255
+            }
+          }
+        ]
+      },
+      "templateContent": {
+        "name": "templateContent",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "headerLeftContent": {
+        "name": "headerLeftContent",
+        "required": false
+      },
+      "headerRightContent": {
+        "name": "headerRightContent",
+        "required": false
+      },
+      "signoffContent": {
+        "name": "signoffContent",
+        "required": false
+      },
+      "footerContent": {
+        "name": "footerContent",
+        "required": false
+      },
+      "locale": {
+        "name": "locale",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

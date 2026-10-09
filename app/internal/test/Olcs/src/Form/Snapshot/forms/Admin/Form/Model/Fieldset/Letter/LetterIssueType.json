@@ -1,0 +1,155 @@
+{
+  "name": "LetterIssueType",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "code",
+        "options": {
+          "label": "Code"
+        },
+        "attributes": {
+          "required": true,
+          "class": "short"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "name",
+        "options": {
+          "label": "Name"
+        },
+        "attributes": {
+          "required": true,
+          "class": "medium"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "options": {
+          "label": "Description"
+        },
+        "type": "Textarea",
+        "attributes": {
+          "class": "extra-long",
+          "rows": 3
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "displayOrder",
+        "options": {
+          "label": "Display Order"
+        },
+        "attributes": {
+          "required": true,
+          "class": "short"
+        },
+        "type": "Number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isActive",
+        "options": {
+          "label": "Active",
+          "checked_value": "1",
+          "unchecked_value": "0"
+        },
+        "type": "OlcsCheckbox",
+        "attributes": {
+          "class": "",
+          "id": "isActive"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "code": {
+      "name": "code",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 10
+          }
+        }
+      ]
+    },
+    "name": {
+      "name": "name",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 100
+          }
+        }
+      ]
+    },
+    "description": {
+      "name": "description",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "displayOrder": {
+      "name": "displayOrder",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\Digits"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        }
+      ]
+    }
+  }
+}

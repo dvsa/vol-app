@@ -1,0 +1,40 @@
+{
+  "name": "class Countries",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "countries",
+        "attributes": {
+          "id": "countries",
+          "class": "govuk-checkboxes__item"
+        },
+        "options": {
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--confirm govuk-!-padding-bottom-2"
+          }
+        },
+        "type": "DynamicMultiCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "countries": {
+      "name": "countries",
+      "required": false,
+      "continue_if_empty": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "error.messages.permits.countries"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

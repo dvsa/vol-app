@@ -1,0 +1,130 @@
+{
+  "name": "user-contact",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailAddress",
+        "attributes": {
+          "class": "medium"
+        },
+        "options": {
+          "label": "Email address"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailConfirm",
+        "attributes": {
+          "class": "medium"
+        },
+        "options": {
+          "label": "Confirm email address"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary",
+        "attributes": {
+          "class": "medium"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary_id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary_version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary",
+        "attributes": {
+          "class": "medium"
+        },
+        "options": {
+          "label": "secondary-contact-number-optional"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary_id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary_version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "Contact"
+  },
+  "input_filter": {
+    "emailAddress": {
+      "name": "emailAddress",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        },
+        {
+          "name": "Common\\Form\\Elements\\Validators\\EmailConfirm",
+          "options": {
+            "token": "emailConfirm"
+          }
+        }
+      ]
+    },
+    "emailConfirm": {
+      "name": "emailConfirm",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

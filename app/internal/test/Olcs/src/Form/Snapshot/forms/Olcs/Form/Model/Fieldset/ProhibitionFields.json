@@ -1,0 +1,214 @@
+{
+  "name": "fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "prohibitionDate",
+        "attributes": {
+          "id": "prohibitionDate"
+        },
+        "options": {
+          "label": "Prohibition date",
+          "create_empty_option": true,
+          "render_delimiters": true
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "vrm",
+        "attributes": {
+          "class": "",
+          "id": ""
+        },
+        "options": {
+          "label": "Vehicle registration mark"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isTrailer",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Trailer"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "prohibitionType",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Type",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "prohibition_type"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "clearedDate",
+        "attributes": {
+          "required": false,
+          "id": "clearedDate"
+        },
+        "options": {
+          "label": "Date cleared",
+          "create_empty_option": true,
+          "render_delimiters": true
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "imposedAt",
+        "attributes": {
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "Location prohibition issued"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "prohibitionDate": {
+      "name": "prohibitionDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "vrm": {
+      "name": "vrm",
+      "required": false
+    },
+    "clearedDate": {
+      "name": "clearedDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "prohibitionDate",
+            "context_values": [
+              "--"
+            ],
+            "context_truth": false,
+            "allow_empty": true,
+            "validators": [
+              {
+                "name": "\\Common\\Validator\\Date"
+              },
+              {
+                "name": "Date",
+                "options": {
+                  "format": "Y-m-d"
+                }
+              },
+              {
+                "name": "DateCompare",
+                "options": {
+                  "compare_to": "prohibitionDate",
+                  "compare_to_label": "Prohibition Date",
+                  "operator": "gte"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "imposedAt": {
+      "name": "imposedAt",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 255
+          }
+        }
+      ]
+    }
+  }
+}

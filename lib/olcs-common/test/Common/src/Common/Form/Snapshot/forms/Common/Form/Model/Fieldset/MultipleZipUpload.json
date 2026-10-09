@@ -1,0 +1,62 @@
+{
+  "name": "MultipleZipUpload",
+  "attributes": {
+    "class": "file-uploader"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "file",
+        "attributes": {
+          "class": "js-visually-hidden"
+        },
+        "options": {
+          "value": "Upload .Zip file(s)",
+          "hint": "Files must be a zip file"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "__messages__",
+        "attributes": [],
+        "options": [],
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "upload",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "inline-upload govuk-button js-upload"
+        },
+        "options": {
+          "label": "Submit"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "list",
+        "attributes": {
+          "class": "js-upload-list"
+        },
+        "options": {
+          "preview_images": "false"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+      }
+    }
+  ],
+  "input_filter": []
+}

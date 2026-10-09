@@ -1,0 +1,60 @@
+{
+  "name": "lva-safety-application",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isMaintenanceSuitable",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "application_vehicle-safety_safety.application.suitableMaintenance",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "inline"
+          }
+        },
+        "type": "\\Laminas\\Form\\Element\\Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "safetyConfirmation",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "data-container-class": "confirm"
+        },
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "application_vehicle-safety_safety.application.safetyConfirmation",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "Y"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

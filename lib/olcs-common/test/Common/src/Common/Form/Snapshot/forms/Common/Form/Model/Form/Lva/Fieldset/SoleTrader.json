@@ -1,0 +1,146 @@
+{
+  "name": "data",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "title",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "empty_option": "Please Select",
+          "label": "application_your-business_people-sub-action-formTitle",
+          "category": "person_title"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "forename",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "application_your-business_people-sub-action-formFirstName"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "familyName",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "application_your-business_people-sub-action-formSurname"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "otherName",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "application_your-business_people-sub-action-formOtherNames",
+          "hint": "application_your-business_people-sub-action-formOtherNames-hint"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "birthDate",
+        "attributes": {
+          "id": "dob"
+        },
+        "options": {
+          "label": "application_your-business_people-sub-action-formDateOfBirth",
+          "create_empty_option": false,
+          "render_delimiters": true
+        },
+        "type": "DateSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "title": {
+      "name": "title",
+      "required": false
+    },
+    "forename": {
+      "name": "forename",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "familyName": {
+      "name": "familyName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "otherName": {
+      "name": "otherName",
+      "required": false
+    },
+    "birthDate": {
+      "name": "birthDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    }
+  }
+}

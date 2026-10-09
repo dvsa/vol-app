@@ -1,0 +1,305 @@
+{
+  "name": "hoursOfWeekContent",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "hoursMon",
+        "attributes": {
+          "class": "short",
+          "data-container-class": "inline-text",
+          "id": "hoursMon"
+        },
+        "options": {
+          "label": "days-of-week-short-mon"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hoursTue",
+        "attributes": {
+          "class": "short",
+          "data-container-class": "inline-text"
+        },
+        "options": {
+          "label": "days-of-week-short-tue"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hoursWed",
+        "attributes": {
+          "class": "short",
+          "data-container-class": "inline-text"
+        },
+        "options": {
+          "label": "days-of-week-short-wed"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hoursThu",
+        "attributes": {
+          "class": "short",
+          "data-container-class": "inline-text"
+        },
+        "options": {
+          "label": "days-of-week-short-thu"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hoursFri",
+        "attributes": {
+          "class": "short",
+          "data-container-class": "inline-text"
+        },
+        "options": {
+          "label": "days-of-week-short-fri"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hoursSat",
+        "attributes": {
+          "class": "short",
+          "data-container-class": "inline-text"
+        },
+        "options": {
+          "label": "days-of-week-short-sat"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hoursSun",
+        "attributes": {
+          "class": "short",
+          "data-container-class": "inline-text"
+        },
+        "options": {
+          "label": "days-of-week-short-sun"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "input_filter": {
+    "hoursMon": {
+      "name": "hoursMon",
+      "required": false,
+      "filters": [
+        {
+          "name": "\\Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\I18n\\Validator\\IsFloat",
+          "options": {
+            "messages": {
+              "notFloat": "Only numbers are allowed"
+            }
+          }
+        },
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 24,
+            "messages": {
+              "notBetween": "Mon must be between '%min%' and '%max%', inclusively"
+            }
+          }
+        }
+      ]
+    },
+    "hoursTue": {
+      "name": "hoursTue",
+      "required": false,
+      "filters": [
+        {
+          "name": "\\Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\I18n\\Validator\\IsFloat",
+          "options": {
+            "messages": {
+              "notFloat": "Only numbers are allowed"
+            }
+          }
+        },
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 24,
+            "messages": {
+              "notBetween": "Tue must be between '%min%' and '%max%', inclusively"
+            }
+          }
+        }
+      ]
+    },
+    "hoursWed": {
+      "name": "hoursWed",
+      "required": false,
+      "filters": [
+        {
+          "name": "\\Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\I18n\\Validator\\IsFloat",
+          "options": {
+            "messages": {
+              "notFloat": "Only numbers are allowed"
+            }
+          }
+        },
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 24,
+            "messages": {
+              "notBetween": "Wed must be between '%min%' and '%max%', inclusively"
+            }
+          }
+        }
+      ]
+    },
+    "hoursThu": {
+      "name": "hoursThu",
+      "required": false,
+      "filters": [
+        {
+          "name": "\\Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\I18n\\Validator\\IsFloat",
+          "options": {
+            "messages": {
+              "notFloat": "Only numbers are allowed"
+            }
+          }
+        },
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 24,
+            "messages": {
+              "notBetween": "Thu must be between '%min%' and '%max%', inclusively"
+            }
+          }
+        }
+      ]
+    },
+    "hoursFri": {
+      "name": "hoursFri",
+      "required": false,
+      "filters": [
+        {
+          "name": "\\Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\I18n\\Validator\\IsFloat",
+          "options": {
+            "messages": {
+              "notFloat": "Only numbers are allowed"
+            }
+          }
+        },
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 24,
+            "messages": {
+              "notBetween": "Fri must be between '%min%' and '%max%', inclusively"
+            }
+          }
+        }
+      ]
+    },
+    "hoursSat": {
+      "name": "hoursSat",
+      "required": false,
+      "filters": [
+        {
+          "name": "\\Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\I18n\\Validator\\IsFloat",
+          "options": {
+            "messages": {
+              "notFloat": "Only numbers are allowed"
+            }
+          }
+        },
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 24,
+            "messages": {
+              "notBetween": "Sat must be between '%min%' and '%max%', inclusively"
+            }
+          }
+        }
+      ]
+    },
+    "hoursSun": {
+      "name": "hoursSun",
+      "required": false,
+      "filters": [
+        {
+          "name": "\\Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\I18n\\Validator\\IsFloat",
+          "options": {
+            "messages": {
+              "notFloat": "Only numbers are allowed"
+            }
+          }
+        },
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 24,
+            "messages": {
+              "notBetween": "Sun must be between '%min%' and '%max%', inclusively"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

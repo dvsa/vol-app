@@ -1,0 +1,61 @@
+{
+  "name": "ocrs-opt-in",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "ocrsCheckbox",
+        "type": "OlcsCheckbox",
+        "attributes": {
+          "class": "govuk-checkboxes__item"
+        },
+        "options": {
+          "label": "licence.vehicle.list.form.orcs.checkbox.label",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--confirm"
+          },
+          "checked_value": "Y",
+          "unchecked_value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary"
+        },
+        "options": {
+          "label": "licence.vehicle.list.form.orcs.submit.label"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "ocrsCheckbox": {
+      "name": "ocrsCheckbox",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\InArray",
+          "options": {
+            "haystack": [
+              "Y",
+              "N"
+            ],
+            "strict": true,
+            "messages": {
+              "notInArray": "licence.vehicle.list.form.orcs.checkbox.invalid-value"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

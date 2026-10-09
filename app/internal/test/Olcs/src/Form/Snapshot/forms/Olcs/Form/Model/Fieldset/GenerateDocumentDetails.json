@@ -1,0 +1,53 @@
+{
+  "name": "details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "category",
+        "attributes": {
+          "id": "category"
+        },
+        "options": {
+          "label": "documents.data.category",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\DocumentCategoryWithDocs"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "documentSubCategory",
+        "attributes": {
+          "id": "documentSubCategory"
+        },
+        "options": {
+          "label": "documents.data.sub_category",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\DocumentSubCategoryWithDocs",
+          "empty_option": "Please select"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "documentTemplate",
+        "attributes": {
+          "id": "documentTemplate"
+        },
+        "options": {
+          "label": "documents.data.template",
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -1,0 +1,108 @@
+{
+  "name": "data-retention-record-filter",
+  "attributes": {
+    "method": "GET",
+    "class": "filters form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "goodsOrPsv",
+        "attributes": {
+          "id": "goodsOrPsv",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Goods or PSV",
+          "value_options": {
+            "": "All",
+            "lcat_gv": "Goods",
+            "lcat_psv": "PSV"
+          },
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "nextReview",
+        "attributes": {
+          "id": "nextReview",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Next review",
+          "value_options": {
+            "": "All",
+            "pending": "Pending review",
+            "deferred": "Deferred review"
+          },
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "markedForDeletion",
+        "attributes": {
+          "id": "markedForDeletion",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Marked for deletion",
+          "value_options": {
+            "": "All",
+            "N": "No",
+            "Y": "Yes"
+          },
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "assignedToUser",
+        "attributes": {
+          "id": "assignedTo",
+          "placeholder": "",
+          "class": "chosen-select-large"
+        },
+        "options": {
+          "label": "Assigned to",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\AssignedToList",
+          "use_groups": false
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "filter-button"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": []
+}

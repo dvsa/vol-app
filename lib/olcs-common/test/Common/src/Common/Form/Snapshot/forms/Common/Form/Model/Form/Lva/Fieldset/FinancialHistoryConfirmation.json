@@ -1,0 +1,32 @@
+{
+  "name": "FinancialHistoryConfirmation",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "insolvencyConfirmation",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "short-label": "short-label-financial-history-insolvency",
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "application_previous-history_financial-history.insolvencyConfirmation.title",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced",
+            "id": "insolvency"
+          },
+          "must_be_value": "Y"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "application_previous-history_financial-history.confirmation"
+  },
+  "input_filter": []
+}

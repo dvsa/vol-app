@@ -1,0 +1,296 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "agreedByTcDate",
+        "attributes": {
+          "required": "required",
+          "id": "agreedByTcDate"
+        },
+        "type": "DateSelect",
+        "options": {
+          "label": "Agreed by TC/DTC/HTRU/DHTRU date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hearingType",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "hearingType",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Type",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "non_pi_type"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hearingDate",
+        "type": "DateTimeSelect",
+        "attributes": {
+          "id": "hearingDate"
+        },
+        "options": {
+          "label": "Meeting date",
+          "create_empty_option": true,
+          "render_delimiters": true,
+          "field": "hearingDate"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "venue",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "venue",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Meeting venue",
+          "service_name": "Common\\Service\\Data\\Venue",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "other_option": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "venueOther",
+        "type": "Text",
+        "attributes": {
+          "class": "medium",
+          "id": "venueOther",
+          "required": false
+        },
+        "options": {
+          "label": "Meeting venue other"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "witnessCount",
+        "type": "Text",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "small"
+        },
+        "options": {
+          "label": "Number of witnesses"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "presidingStaffName",
+        "type": "TextArea",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "Name of presiding staff member"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "outcome",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "outcome",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Outcome",
+          "empty_option": "Please Select",
+          "category": "non_pi_type_outcome",
+          "disable_inarray_validator": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "case",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "agreedByTcDate": {
+      "name": "agreedByTcDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "hearingDate": {
+      "name": "hearingDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateTimeSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d H:i:s"
+          }
+        }
+      ]
+    },
+    "venue": {
+      "name": "venue",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "venueOther": {
+      "name": "venueOther",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "venue",
+            "context_values": [
+              "other"
+            ],
+            "allow_empty": true,
+            "validators": [
+              {
+                "name": "Laminas\\Validator\\StringLength",
+                "options": {
+                  "max": 255
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "witnessCount": {
+      "name": "witnessCount",
+      "required": false,
+      "filters": [
+        {
+          "name": "Digits"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        },
+        {
+          "name": "Laminas\\Validator\\Between",
+          "options": {
+            "min": 0,
+            "max": 99,
+            "inclusive": true
+          }
+        }
+      ]
+    },
+    "presidingStaffName": {
+      "name": "presidingStaffName",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 0,
+            "max": 255
+          }
+        }
+      ]
+    },
+    "outcome": {
+      "name": "outcome",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    }
+  }
+}

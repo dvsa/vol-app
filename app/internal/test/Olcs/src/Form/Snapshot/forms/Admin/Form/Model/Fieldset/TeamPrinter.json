@@ -1,0 +1,68 @@
+{
+  "name": "team-printer",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "categoryTeam",
+        "attributes": {
+          "id": "categoryTeam",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "label": "Category",
+          "service_name": "Olcs\\Service\\Data\\Category"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "subCategoryTeam",
+        "attributes": {
+          "id": "subCategoryTeam",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "label": "Sub category",
+          "service_name": "Olcs\\Service\\Data\\SubCategory"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "printer",
+        "attributes": {
+          "id": "printer",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Printer",
+          "service_name": "Olcs\\Service\\Data\\Printer"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "categoryTeam": {
+      "name": "categoryTeam",
+      "required": true
+    },
+    "subCategoryTeam": {
+      "name": "subCategoryTeam",
+      "required": true
+    },
+    "printer": {
+      "name": "printer",
+      "required": false
+    }
+  }
+}

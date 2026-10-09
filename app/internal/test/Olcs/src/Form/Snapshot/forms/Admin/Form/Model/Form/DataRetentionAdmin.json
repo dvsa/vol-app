@@ -1,0 +1,179 @@
+{
+  "name": "data-retention-admin",
+  "attributes": [],
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "ruleDetails",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "type": "number",
+              "options": {
+                "label": "Rule id",
+                "readonly": true
+              },
+              "attributes": {
+                "readonly": "true"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "description",
+              "options": {
+                "label": "Description"
+              },
+              "attributes": {
+                "required": "required",
+                "class": "extra-long"
+              },
+              "type": "textarea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "retentionPeriod",
+              "options": {
+                "label": "Retention period"
+              },
+              "attributes": {
+                "required": "required",
+                "class": "small"
+              },
+              "type": "number"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "maxDataSet",
+              "options": {
+                "label": "Max data set"
+              },
+              "attributes": {
+                "required": "required",
+                "class": "small"
+              },
+              "type": "number"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isEnabled",
+              "attributes": {
+                "required": "required",
+                "value": "N",
+                "class": "inline"
+              },
+              "type": "Radio",
+              "options": {
+                "label": "isEnabled",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "actionType",
+              "type": "select",
+              "options": {
+                "label": "Action type",
+                "value_options": {
+                  "Automate": "Automate",
+                  "Review": "Review"
+                }
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel",
+                "keepForReadOnly": true
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "ruleDetails": {
+      "description": {
+        "name": "description",
+        "required": true
+      },
+      "retentionPeriod": {
+        "name": "retentionPeriod",
+        "required": true
+      },
+      "maxDataSet": {
+        "name": "maxDataSet",
+        "required": true
+      },
+      "isEnabled": {
+        "name": "isEnabled",
+        "required": true
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

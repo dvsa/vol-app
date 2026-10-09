@@ -1,0 +1,26 @@
+{
+  "name": "user-settings",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "translateToWelsh",
+        "attributes": {
+          "id": "translateToWelsh",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "translate-to-welsh",
+          "checked_value": "Y",
+          "unchecked_value": "N"
+        },
+        "type": "OlcsCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

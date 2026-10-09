@@ -1,0 +1,119 @@
+{
+  "name": "StolenInfo",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "number",
+        "attributes": {
+          "required": "required",
+          "class": "govuk-input govuk-!-width-one-third"
+        },
+        "options": {
+          "label": "licence.surrender.current_discs.stolen.number.label"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "details",
+        "attributes": {
+          "required": "required",
+          "class": "govuk-textarea",
+          "rows": "5"
+        },
+        "type": "textarea",
+        "options": {
+          "label": "licence.surrender.current_discs.stolen.details.label",
+          "hint": "licence.surrender.current_discs.stolen.details.hint"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "number": {
+      "name": "number",
+      "required": true,
+      "continue_if_empty": true,
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "stolen",
+            "context_values": [
+              "Y"
+            ],
+            "inject_post_data": "stolenSection->stolen",
+            "validators": [
+              {
+                "name": "NotEmpty",
+                "options": {
+                  "messages": {
+                    "isEmpty": "Value is required and can't be empty"
+                  }
+                }
+              },
+              {
+                "name": "Digits",
+                "options": {
+                  "break_chain_on_failure": true,
+                  "messages": {
+                    "digitsStringEmpty": "licence.surrender.current_discs.stolen.number.emptyMessage"
+                  }
+                }
+              },
+              {
+                "name": "GreaterThan",
+                "options": {
+                  "min": 0,
+                  "messages": {
+                    "notGreaterThan": "licence.surrender.current_discs.number.greaterThanMessage"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "details": {
+      "name": "details",
+      "required": true,
+      "allow_empty": true,
+      "continue_if_empty": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "stolen",
+            "context_values": [
+              "Y"
+            ],
+            "inject_post_data": "stolenSection->stolen",
+            "validators": [
+              {
+                "name": "Laminas\\Validator\\StringLength",
+                "options": {
+                  "min": 1,
+                  "max": 500,
+                  "messages": {
+                    "stringLengthTooShort": "licence.surrender.current_discs.stolen.details.stringLengthTooShort",
+                    "stringLengthTooLong": "licence.surrender.current_discs.details.stringLengthTooLong"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

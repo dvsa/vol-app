@@ -1,0 +1,101 @@
+{
+  "name": "update-continuation",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "received",
+        "type": "Radio",
+        "options": {
+          "label": "Checklist received",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "checklistStatus",
+        "options": {
+          "label": "Checklist status",
+          "category": "cont_d_status"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "totalVehicleAuthorisation",
+        "options": {
+          "label": "Total vehicle authorisation"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "numberOfDiscs",
+        "options": {
+          "label": "Number of discs"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "numberOfCommunityLicences",
+        "options": {
+          "label": "Number of community licences"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "message",
+        "attributes": {
+          "data-container-class": "govuk-inset-text govuk-!-padding-bottom-5"
+        },
+        "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "totalVehicleAuthorisation": {
+      "name": "totalVehicleAuthorisation",
+      "validators": [
+        {
+          "name": "Digits"
+        }
+      ]
+    },
+    "numberOfDiscs": {
+      "name": "numberOfDiscs",
+      "validators": [
+        {
+          "name": "Digits"
+        }
+      ]
+    },
+    "numberOfCommunityLicences": {
+      "name": "numberOfCommunityLicences",
+      "validators": [
+        {
+          "name": "Digits"
+        }
+      ]
+    }
+  }
+}

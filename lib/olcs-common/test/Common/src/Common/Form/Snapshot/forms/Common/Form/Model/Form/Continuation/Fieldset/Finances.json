@@ -1,0 +1,301 @@
+{
+  "name": "Finances",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "type": "hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "averageBalance",
+        "type": "Text",
+        "attributes": {
+          "id": "averageBalance"
+        },
+        "options": {
+          "label": "continuations.finances.averageBalance.label",
+          "hint": "continuations.finances.averageBalance.hint",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "hint-below": "markup-continuation-finances-average-balance"
+        }
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "overdraftFacility",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "yesNo",
+              "type": "Common\\Form\\Elements\\Types\\RadioYesNo",
+              "options": {
+                "label": "continuations.finances.overdraftFacility.label"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "yesContent",
+              "type": "Text",
+              "attributes": {
+                "id": "overDraftLimit",
+                "required": "required"
+              },
+              "options": {
+                "label": "continuations.finances.overdraftFacility.amount.label"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioHorizontal",
+        "options": {
+          "label": "continuations.finances.overdraftFacility.label"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "factoring",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "yesNo",
+              "type": "Common\\Form\\Elements\\Types\\RadioYesNo"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "yesContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "amount",
+                    "type": "Text",
+                    "attributes": {
+                      "id": "factoring_amount",
+                      "required": "required"
+                    },
+                    "options": {
+                      "label": "continuations.finances.factoring.amount.label",
+                      "hint": "continuations.finances.factoring.amount.hint"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioHorizontal",
+        "options": {
+          "label": "continuations.finances.factoring.label"
+        }
+      }
+    }
+  ],
+  "input_filter": {
+    "averageBalance": {
+      "name": "averageBalance",
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "continuations.finances.averageBalance.empty"
+            },
+            "break_chain_on_failure": true
+          }
+        },
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\Money",
+          "options": {
+            "allow_negative": true,
+            "messages": {
+              "invalid": "continuations.finances.averageBalance.notNumber"
+            }
+          }
+        },
+        {
+          "name": "GreaterThan",
+          "options": {
+            "min": -10000000000,
+            "messages": {
+              "notGreaterThan": "continuations.finances.averageBalance.notGreaterThan"
+            }
+          }
+        },
+        {
+          "name": "LessThan",
+          "options": {
+            "max": 10000000000,
+            "messages": {
+              "notLessThan": "continuations.finances.averageBalance.notLessThan"
+            }
+          }
+        }
+      ]
+    },
+    "overdraftFacility": {
+      "yesNo": {
+        "name": "yesNo",
+        "error_message": "continuations.finances.overdraftFacility.error"
+      },
+      "yesContent": {
+        "name": "yesContent",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "yesNo",
+              "context_values": [
+                "Y"
+              ],
+              "validators": [
+                {
+                  "name": "NotEmpty",
+                  "options": {
+                    "messages": {
+                      "isEmpty": "continuations.finances.overdraftFacility.amount.empty"
+                    },
+                    "break_chain_on_failure": true
+                  }
+                },
+                {
+                  "name": "Dvsa\\Olcs\\Transfer\\Validators\\Money",
+                  "options": {
+                    "messages": {
+                      "invalid": "continuations.finances.overdraftFacility.amount.notNumber"
+                    },
+                    "allow_negative": true,
+                    "break_chain_on_failure": true
+                  }
+                },
+                {
+                  "name": "GreaterThan",
+                  "options": {
+                    "min": 0,
+                    "messages": {
+                      "notGreaterThan": "continuations.finances.overdraftFacility.amount.notGreaterThan"
+                    }
+                  }
+                },
+                {
+                  "name": "LessThan",
+                  "options": {
+                    "max": 10000000000,
+                    "messages": {
+                      "notLessThan": "continuations.finances.overdraftFacility.amount.notLessThan"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "factoring": {
+      "yesNo": {
+        "name": "yesNo",
+        "error_message": "continuations.finances.factoring.error"
+      },
+      "yesContent": {
+        "amount": {
+          "name": "amount",
+          "required": true,
+          "validators": [
+            {
+              "name": "NotEmpty",
+              "options": [
+                "null"
+              ]
+            },
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "yesNo",
+                "context_values": [
+                  "Y"
+                ],
+                "inject_post_data": "finances->factoring->yesNo",
+                "validators": [
+                  {
+                    "name": "NotEmpty",
+                    "options": {
+                      "messages": {
+                        "isEmpty": "continuations.finances.factoring.amount.empty"
+                      },
+                      "break_chain_on_failure": true
+                    }
+                  },
+                  {
+                    "name": "Dvsa\\Olcs\\Transfer\\Validators\\Money",
+                    "options": {
+                      "messages": {
+                        "invalid": "continuations.finances.factoring.amount.notNumber"
+                      },
+                      "allow_negative": true,
+                      "break_chain_on_failure": true
+                    }
+                  },
+                  {
+                    "name": "GreaterThan",
+                    "options": {
+                      "min": 0,
+                      "messages": {
+                        "notGreaterThan": "continuations.finances.factoring.amount.notGreaterThan"
+                      }
+                    }
+                  },
+                  {
+                    "name": "LessThan",
+                    "options": {
+                      "max": 10000000000,
+                      "messages": {
+                        "notLessThan": "continuations.finances.factoring.amount.notLessThan"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

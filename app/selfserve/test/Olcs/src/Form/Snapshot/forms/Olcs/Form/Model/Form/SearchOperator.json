@@ -1,0 +1,88 @@
+{
+  "name": "search-operator",
+  "attributes": {
+    "method": "post",
+    "action": "",
+    "role": "search"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "searchBy",
+        "options": {
+          "label": "search.operator.field.searchBy.label",
+          "label_attributes": {
+            "class": "form-control form-control--radio"
+          },
+          "value_options": {
+            "address": "search.operator.field.searchBy.address.label",
+            "business": "search.operator.field.searchBy.business.label",
+            "licence": "search.operator.field.searchBy.licence.label",
+            "person": "search.operator.field.searchBy.person.label"
+          }
+        },
+        "attributes": {
+          "required": "required",
+          "id": "searchBy",
+          "placeholder": "",
+          "value": "address"
+        },
+        "type": "Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "search",
+        "attributes": {
+          "class": "long",
+          "placeholder": "",
+          "label": "some"
+        },
+        "type": "Text",
+        "options": {
+          "label": "search.operator.field.search.label",
+          "error-message": "simpleSearch_search-error"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "options": {
+          "label": "lookup-basic-search-submit"
+        },
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "type": "Button"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "index",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "searchBy": {
+      "name": "searchBy",
+      "required": true
+    },
+    "search": {
+      "name": "search",
+      "validators": [
+        {
+          "name": "NotEmpty"
+        }
+      ]
+    }
+  }
+}

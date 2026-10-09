@@ -1,0 +1,109 @@
+{
+  "name": "LocalAuthorityDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "naptanCode",
+        "attributes": {
+          "id": "naptanCode",
+          "readonly": "true",
+          "disabled": "disabled"
+        },
+        "options": {
+          "label": "NAPTAN Code (Ready only)"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "txcName",
+        "attributes": {
+          "id": "txcName",
+          "readonly": "true",
+          "disabled": "disabled"
+        },
+        "options": {
+          "label": "TXC Name (Ready only)"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailAddress",
+        "attributes": {
+          "required": false,
+          "id": "emailAddress",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Email Address"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "attributes": {
+          "placeholder": "",
+          "class": "medium",
+          "required": "required"
+        },
+        "options": {
+          "label": "LTA Descriptive Name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "emailAddress": {
+      "name": "emailAddress",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        }
+      ]
+    },
+    "description": {
+      "name": "description",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    }
+  }
+}

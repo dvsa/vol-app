@@ -1,0 +1,359 @@
+{
+  "name": "TmCaseRepute",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "isMsi",
+              "type": "Radio",
+              "options": {
+                "label": "MSI",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "decisionDate",
+              "type": "DateSelect",
+              "options": {
+                "label": "Date of decision",
+                "create_empty_option": true,
+                "render_delimiters": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "notifiedDate",
+              "attributes": {
+                "required": false
+              },
+              "type": "DateSelect",
+              "options": {
+                "label": "Date of notification (to TM)",
+                "create_empty_option": true,
+                "render_delimiters": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "unfitnessStartDate",
+              "type": "DateSelect",
+              "options": {
+                "label": "Unfitness start date",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "max_year_delta": "+3",
+                "min_year_delta": "-100"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "unfitnessEndDate",
+              "type": "DateSelect",
+              "options": {
+                "label": "Unfitness end date",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "max_year_delta": "+12",
+                "min_year_delta": "-100"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "unfitnessReasons",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "unfitnessReasons",
+                "class": "chosen-select-medium",
+                "multiple": "multiple"
+              },
+              "options": {
+                "label": "Reason for unfitness",
+                "disable_inarray_validator": false,
+                "category": "tm_unfit_reason"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rehabMeasures",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "rehabMeasures",
+                "class": "chosen-select-medium",
+                "multiple": "multiple"
+              },
+              "options": {
+                "label": "Rehabilitation measure",
+                "disable_inarray_validator": false,
+                "category": "tm_case_rehab"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "decision",
+              "type": "Hidden",
+              "attributes": {
+                "value": ""
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "case",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "decisionDate": {
+        "name": "decisionDate",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "notifiedDate": {
+        "name": "notifiedDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateSelect",
+            "options": {
+              "null_on_empty": true
+            }
+          }
+        ],
+        "validators": [
+          {
+            "name": "NotEmpty",
+            "options": [
+              "array"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "decisionDate",
+              "context_values": [
+                "--"
+              ],
+              "context_truth": false,
+              "allow_empty": true,
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d"
+                  }
+                },
+                {
+                  "name": "DateCompare",
+                  "options": {
+                    "compare_to": "decisionDate",
+                    "compare_to_label": "Date of decision",
+                    "operator": "gte"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "unfitnessStartDate": {
+        "name": "unfitnessStartDate",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "unfitnessEndDate": {
+        "name": "unfitnessEndDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "unfitnessEndDate",
+              "context_values": [
+                "--"
+              ],
+              "context_truth": false,
+              "allow_empty": true,
+              "validators": [
+                {
+                  "name": "DateCompare",
+                  "options": {
+                    "compare_to": "unfitnessStartDate",
+                    "operator": "gte",
+                    "compare_to_label": "Unfitness start date"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "rehabMeasures": {
+        "name": "rehabMeasures",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

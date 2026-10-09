@@ -1,0 +1,78 @@
+{
+  "name": "fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "organisationId",
+        "options": {
+          "label": "Organisation",
+          "empty_option": "All",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\BusRegSearchViewListDataService",
+          "category": "organisation"
+        },
+        "attributes": {
+          "id": "organisation",
+          "placeholder": ""
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "busRegStatus",
+        "options": {
+          "label": "Registration status",
+          "empty_option": "All",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\BusRegSearchViewListDataService",
+          "category": "busRegStatus"
+        },
+        "attributes": {
+          "id": "busRegStatus",
+          "placeholder": ""
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licId",
+        "options": {
+          "label": "Licence no",
+          "empty_option": "All",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\BusRegSearchViewListDataService",
+          "category": "licence"
+        },
+        "attributes": {
+          "id": "licId",
+          "placeholder": ""
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "Filters"
+  },
+  "input_filter": {
+    "organisationId": {
+      "name": "organisationId",
+      "required": false
+    },
+    "busRegStatus": {
+      "name": "busRegStatus",
+      "required": false
+    },
+    "licId": {
+      "name": "licId",
+      "required": false
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "name": "simple-search",
+  "attributes": {
+    "method": "post",
+    "action": "",
+    "role": "search"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "search",
+        "attributes": {
+          "class": "long",
+          "placeholder": "",
+          "label": "some"
+        },
+        "type": "Text",
+        "options": {
+          "label": "search.form.label",
+          "error-message": "simpleSearch_search-error"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "options": {
+          "label": "lookup-basic-search-submit"
+        },
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "type": "Button"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "index",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "hydrator": {
+    "type": "Laminas\\Hydrator\\ArraySerializableHydrator"
+  },
+  "input_filter": {
+    "search": {
+      "name": "search",
+      "validators": [
+        {
+          "name": "NotEmpty"
+        }
+      ]
+    }
+  }
+}

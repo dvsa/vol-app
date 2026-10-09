@@ -1,0 +1,58 @@
+{
+  "name": "BusRegDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "isTxcApp",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[isTxcApp]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isLatestVariation",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[isLatestVariation]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[status]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

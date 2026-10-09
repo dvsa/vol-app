@@ -1,0 +1,102 @@
+{
+  "name": "contact",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary",
+        "attributes": {
+          "class": "medium",
+          "id": "tc_phone_primary"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary_id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_primary_version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary",
+        "attributes": {
+          "class": "medium",
+          "id": "tc_phone_secondary"
+        },
+        "options": {
+          "label": "secondary-contact-number-optional"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary_id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phone_secondary_version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "email",
+        "attributes": {
+          "class": "long"
+        },
+        "options": {
+          "label": "email-address-optional",
+          "error-message": "contactOptional_email-error"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "email": {
+      "name": "email",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        }
+      ]
+    }
+  }
+}

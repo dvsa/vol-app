@@ -1,0 +1,56 @@
+{
+  "name": "doc-send-actions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "email",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "Send by email"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "printAndPost",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button govuk-button--secondary"
+        },
+        "options": {
+          "label": "Print and send by post"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "close",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button govuk-button--secondary",
+          "id": "close"
+        },
+        "options": {
+          "label": "Cancel"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

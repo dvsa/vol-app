@@ -1,0 +1,38 @@
+{
+  "name": "IrfoStockControlIssued",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "irfoGvPermitId",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "small"
+        },
+        "options": {
+          "label": "IRFO GV Permit No"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "irfoGvPermitId": {
+      "name": "irfoGvPermitId",
+      "validators": [
+        {
+          "name": "Digits"
+        },
+        {
+          "name": "GreaterThan",
+          "options": {
+            "min": "0"
+          }
+        }
+      ]
+    }
+  }
+}

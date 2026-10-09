@@ -1,0 +1,261 @@
+{
+  "name": "FeeRate",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "idReadOnly",
+              "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement",
+              "options": {
+                "label": "ID:"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "feeType",
+              "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement",
+              "options": {
+                "label": "Fee Type:"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "description",
+              "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement",
+              "options": {
+                "label": "Description:"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "effectiveFrom",
+              "options": {
+                "label": "Effective From:"
+              },
+              "attributes": {
+                "required": true
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "fixedValue",
+              "attributes": {
+                "required": true,
+                "min": 0,
+                "step": 1
+              },
+              "options": {
+                "label": "Fixed Value"
+              },
+              "type": "Laminas\\Form\\Element\\Number"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "annualValue",
+              "attributes": {
+                "required": true,
+                "min": 0,
+                "step": 1
+              },
+              "options": {
+                "label": "Annual Value"
+              },
+              "type": "Laminas\\Form\\Element\\Number"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "fiveYearValue",
+              "attributes": {
+                "required": true,
+                "min": 0,
+                "step": 1
+              },
+              "options": {
+                "label": "Five Year Value"
+              },
+              "type": "Laminas\\Form\\Element\\Number"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button",
+                "aria-label": "Save and Continue",
+                "id": "save"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel",
+                "keepForReadOnly": true
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "effectiveFrom": {
+        "name": "effectiveFrom",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\DateInFuture",
+            "options": {
+              "include_today": true,
+              "use_time": false
+            }
+          }
+        ]
+      },
+      "fixedValue": {
+        "name": "fixedValue",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\Between",
+            "options": {
+              "min": "0",
+              "max": "9999"
+            }
+          }
+        ]
+      },
+      "annualValue": {
+        "name": "annualValue",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\Digits"
+          },
+          {
+            "name": "Laminas\\Validator\\Between",
+            "options": {
+              "min": "0",
+              "max": "9999"
+            }
+          }
+        ]
+      },
+      "fiveYearValue": {
+        "name": "fiveYearValue",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\Digits"
+          },
+          {
+            "name": "Laminas\\Validator\\Between",
+            "options": {
+              "min": "0",
+              "max": "9999"
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

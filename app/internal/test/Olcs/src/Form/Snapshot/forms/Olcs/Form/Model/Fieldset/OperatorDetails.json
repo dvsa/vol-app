@@ -1,0 +1,173 @@
+{
+  "name": "operator-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "name",
+        "attributes": {
+          "class": "extra-long",
+          "id": ""
+        },
+        "options": {
+          "label": "internal-operator-profile-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "natureOfBusiness",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Nature of Business"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "information",
+        "type": "Common\\Form\\Elements\\Types\\Html",
+        "attributes": {
+          "value": "Please enter your business type. You can find a list of business types at Companies House\n     *      <a class=\"govuk-link\" rel=\"external noreferrer noopener\" href=\"https://www.gov.uk/government/publications/standard-industrial-classification-of-economic-activities-sic\" target=\"_blank\">here</a>"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "firstName",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "internal-operator-profile-first-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "lastName",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "internal-operator-profile-last-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isIrfo",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Is IRFO"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "allowEmail",
+        "type": "Radio",
+        "options": {
+          "label": "How would you like to receive your correspondence?",
+          "value_options": {
+            "N": "Post",
+            "Y": "Email"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "personId",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "personVersion",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "companyNumber",
+        "options": {
+          "label": "application_your-business_business-details.data.company_number"
+        },
+        "type": "Common\\Form\\Elements\\Types\\CompanyNumber"
+      }
+    }
+  ],
+  "input_filter": {
+    "name": {
+      "name": "name",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    },
+    "natureOfBusiness": {
+      "name": "natureOfBusiness",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    },
+    "lastName": {
+      "name": "lastName",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    }
+  }
+}

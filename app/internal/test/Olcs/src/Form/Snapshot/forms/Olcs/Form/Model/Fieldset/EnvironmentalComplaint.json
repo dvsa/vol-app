@@ -1,0 +1,225 @@
+{
+  "name": "environmental-complaint-fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "complaintDate",
+        "attributes": {
+          "id": "complaintDate"
+        },
+        "options": {
+          "label": "Complaint date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "options": {
+          "label": "Description",
+          "label_attributes": {
+            "class": ""
+          }
+        },
+        "type": "TextArea",
+        "attributes": {
+          "required": false,
+          "id": "description",
+          "class": "extra-long",
+          "name": "description"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "attributes": {
+          "id": "status",
+          "name": "status"
+        },
+        "options": {
+          "label": "Complaint status",
+          "disable_inarray_validator": false,
+          "category": "env_complaint_status"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "operatingCentres",
+        "attributes": {
+          "id": "operatingCentres",
+          "placeholder": "",
+          "class": "chosen-select-medium",
+          "multiple": "multiple"
+        },
+        "options": {
+          "label": "Affected centre",
+          "disable_inarray_validator": false,
+          "context": "operatingCentre",
+          "service_name": "Common\\Service\\Data\\LicenceOperatingCentre",
+          "use_groups": "false"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "complainantForename",
+        "attributes": {
+          "id": "complainantForename",
+          "class": "medium",
+          "name": "complainantForename"
+        },
+        "options": {
+          "label": "Complainant first name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "complainantFamilyName",
+        "attributes": {
+          "id": "complainantFamilyName",
+          "class": "medium",
+          "name": "complainantFamilyName"
+        },
+        "options": {
+          "label": "Complainant family name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "case",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "Environmental Complaint Details"
+  },
+  "input_filter": {
+    "complaintDate": {
+      "name": "complaintDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "description": {
+      "name": "description",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 4000
+          }
+        }
+      ]
+    },
+    "operatingCentres": {
+      "name": "operatingCentres",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "complainantForename": {
+      "name": "complainantForename",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "complainantFamilyName": {
+      "name": "complainantFamilyName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 35
+          }
+        }
+      ]
+    }
+  }
+}
