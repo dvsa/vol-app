@@ -16,8 +16,8 @@ This page documents how to run the unit tests in parallel or one at a time, how
 slow tests are reported, how repository unit tests assert against real Doctrine,
 the integration layer, the two baseline mechanisms that guard the Doctrine
 entity metadata, the Doctrine deprecation report both suites print, the three
-tests that guard output escaping in the table render pipeline, and the snapshot
-that guards how API requests are validated.
+tests that guard output escaping in the table render pipeline, and the snapshots
+that guard how API requests are validated and how forms are declared.
 
 ## Running the tests
 
@@ -963,6 +963,131 @@ covers its one use, the sort whitelist.
 The test builds DTOs with plain Laminas plugin managers rather than the apps'
 configured ones, so a custom validator that needs services from its factory is
 recorded by class but not built the way production builds it.
+
+## Form specification snapshot
+
+The frontends' forms and fieldsets are declared with annotations on model
+classes, mostly under `Form/Model/Form` and `Form/Model/Fieldset`, in four
+places: olcs-auth, olcs-common, internal and selfserve. Laminas reads those
+annotations into a form _specification_, a plain array that its form factory
+then builds the form from. Each of the four has a
+`FormSpecificationSnapshotTest` that reads every such class through the builder
+behind the `FormAnnotationBuilder` service (the one
+`FormHelperService::createForm()` and every other form consumer use) and
+compares the specification with a JSON snapshot committed for the class:
+
+| Package     | Test and snapshots (`forms/`)                           |
+| ----------- | ------------------------------------------------------- |
+| olcs-auth   | `lib/olcs-auth/test/Form/Snapshot/`                     |
+| olcs-common | `lib/olcs-common/test/Common/src/Common/Form/Snapshot/` |
+| internal    | `app/internal/test/Olcs/src/Form/Snapshot/`             |
+| selfserve   | `app/selfserve/test/Olcs/src/Form/Snapshot/`            |
+
+Snapshots sit under `forms/` in a path matching the class's namespace. The
+shared logic is `FormSpecificationSnapshotTestCase`, next to olcs-common's test.
+Each runs with its package's suite.
+
+A specification records the form's name, type, attributes and options; its
+elements and fieldsets in order, with every composed fieldset
+(`ComposedObject`) expanded in place; and its input filter: whether each input
+is required, and its filters and validators in the order they run, with their
+options.
+
+A class is snapshotted if its file refers to `Laminas\Form\Annotation` for
+anything other than a builder, wherever it sits in the package's source. That
+finds the same classes whether the annotations are docblocks or PHP attributes.
+Traits and abstract classes are not snapshotted on their own; each is recorded
+inside every class that uses or extends it.
+
+### Running it
+
+```bash
+# from lib/olcs-auth, lib/olcs-common, app/internal or app/selfserve
+vendor/bin/phpunit --filter FormSpecificationSnapshotTest
+```
+
+### Regenerating the snapshots
+
+As with the API snapshot, testing never writes the files. Writing them is a
+separate, deliberate step, run in the package whose forms changed. A change to
+an olcs-common fieldset also changes the snapshots of app forms that compose
+it, so regenerate those too:
+
+```bash
+UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --filter FormSpecificationSnapshotTest
+git status --short .   # new snapshots show as untracked; then read the diff itself
+```
+
+That rewrites every snapshot in the package, creates one for any new form or
+fieldset and deletes any whose class no longer exists. Commit the snapshot
+changes in the same PR as the form change that caused them. Do not edit a
+snapshot by hand; the folders are excluded from prettier.
+
+### When it fails
+
+| Failure                                      | Usually means                                                                              | Do                                                                    |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `… has no snapshot`                          | you added a form or fieldset                                                               | regenerate, check the new file describes what you meant               |
+| `… no longer matches`                        | you changed that class's annotations, or a fieldset, trait or parent class it uses         | if intended, regenerate and review the diff                           |
+| `… have no matching form`                    | you deleted or renamed a form or fieldset                                                  | regenerate (it deletes the orphans)                                   |
+| many forms fail at once                      | a change to a shared fieldset (`FormActions`, say), the builder or its factory, or Laminas | find the cause before regenerating; this is what the test is here for |
+| `… expects an object or valid class name`    | a `ComposedObject` names a class that does not exist                                       | fix the name; if nothing uses the form, delete it                     |
+| `… does not autoload` / `… autoloads from …` | a file's class name does not match its path, or two files declare the same class           | fix the class or file name                                            |
+| `testFieldOrderDoesNotDependOnThePhpVersion` | a form class gets properties both from a parent class and from a trait                     | declare the trait's properties in the class, or stop extending        |
+
+Regenerate deliberately, and read the diff. A change meant to leave behaviour
+alone, such as moving the forms from annotations to attributes (VOL-7038),
+must not touch any snapshot: a diff there is a behaviour change until shown
+otherwise. olcs-auth's and olcs-common's `composer.lock` files are not
+committed, so a laminas-form release that changes how annotations are read can
+fail their snapshots on an unrelated PR; check the diff, and regenerate in a PR
+of its own if it is harmless.
+
+The field order check exists because the builder adds elements in the order
+reflection lists a class's properties, and PHP 8.5 changed that order for a
+class with both inherited and trait properties. No form does that today, so
+every snapshot is the same on either side of the change. CI does not run every
+package on every PHP version (see the lib matrix in `ci.yaml`), so the check
+fails on any version instead.
+
+### Reading a snapshot
+
+The snapshot is the specification exactly as the builder returns it, with
+Laminas' array objects written as plain arrays:
+
+- `elements` and `fieldsets` are separate lists. The form factory adds every
+  element, then every fieldset, each list in declaration order unless
+  `flags.priority` says otherwise. That is the order fields appear in, so order
+  in these lists **is** significant
+- a composed fieldset's `spec` holds its own elements, fieldsets and options,
+  merged with those the parent declared on the property. Its input filter is
+  merged into the parent's `input_filter` under the fieldset's name or, for a
+  collection, sits in `options.target_element.options.input_filter_spec`
+- type, filter and validator names are recorded exactly as declared, because
+  the plugin managers that resolve them do not normalise them. A diff that only
+  adds or drops a leading backslash can change which factory builds the
+  element. For example, `Common\Form\Elements\Types\Table` is registered in
+  olcs-common's `form_elements` config with the element class as its own
+  factory, which is not callable, so only `\Common\Form\Elements\Types\Table`
+  builds. Check the plugin manager config before accepting such a diff
+- keys within `attributes` and `options` are recorded in the order the builder
+  set them. A diff that only reorders them is harmless, except in option lists
+  such as `value_options`, where key order is the order the options are shown in
+
+Many forms still pass an annotation's arguments as a single array
+(`@Form\Filter({"name": "…"})`). Laminas deprecates that syntax but reads it
+into the same specification as separate arguments. The test ignores that one
+deprecation and fails on any other.
+
+### What it does not cover
+
+The snapshot stops at the specification. It does not cover:
+
+- building the form from it: the form factory, the element manager and custom
+  elements' factories and `init()` methods. The test reads specifications with
+  plain plugin managers, which play no part in reading them
+- anything done to a form after it is built: form services, controllers
+  altering the form, elements added with `$form->add()`
 
 ## Adding integration tests
 
