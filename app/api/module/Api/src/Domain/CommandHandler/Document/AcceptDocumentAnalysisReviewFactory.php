@@ -4,28 +4,26 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Document;
 
-use Aws\S3\S3Client;
-use Aws\Sfn\SfnClient;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisReviewOutcome;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
 /**
- * StoreDocumentAnalysisResult takes constructor arguments, so it cannot be mapped directly in
+ * AcceptDocumentAnalysisReview takes constructor arguments, so it cannot be mapped directly in
  * command-map.config.php - handlers mapped by class name are instantiated with no arguments.
  */
-class StoreDocumentAnalysisResultFactory implements FactoryInterface
+class AcceptDocumentAnalysisReviewFactory implements FactoryInterface
 {
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): StoreDocumentAnalysisResult
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AcceptDocumentAnalysisReview
     {
-        $instance = new StoreDocumentAnalysisResult(
-            $container->get(SfnClient::class),
-            $container->get(S3Client::class),
+        $instance = new AcceptDocumentAnalysisReview(
             $container->get(AnalysisResultNormaliser::class),
+            $container->get(AnalysisReviewOutcome::class),
         );
 
         return $instance->__invoke($container, $requestedName, $options);
