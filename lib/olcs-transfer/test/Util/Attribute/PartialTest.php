@@ -19,4 +19,3 @@ final class PartialTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(\stdClass::class, $sut->getComposedObject());
     }
 }
-

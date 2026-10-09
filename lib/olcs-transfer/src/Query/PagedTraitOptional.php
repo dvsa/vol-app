@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Transfer\Query;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 trait PagedTraitOptional
 {
     /**

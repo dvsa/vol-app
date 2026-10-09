@@ -29,4 +29,3 @@ final class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($options, $sut->getOptions());
     }
 }
-

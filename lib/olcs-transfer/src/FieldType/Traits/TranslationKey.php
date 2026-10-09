@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * TranslationKey
  * @author Andy Newton <andy@vitri.ltd>

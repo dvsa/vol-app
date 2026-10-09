@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Is Longer Semi Trailer
  *

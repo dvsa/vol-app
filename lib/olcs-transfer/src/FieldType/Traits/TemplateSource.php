@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Template source trait
  *

@@ -20,4 +20,3 @@ final class ArrayFilterTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('StringTrim', $sut->getName());
     }
 }
-

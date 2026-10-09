@@ -42,4 +42,3 @@ final class EscapeTest extends \PHPUnit\Framework\TestCase
         ];
     }
 }
-

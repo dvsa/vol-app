@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Reason for permit app being withdrawn
  *

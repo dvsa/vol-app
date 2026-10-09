@@ -42,4 +42,3 @@ final class ArrayInputTest extends \PHPUnit\Framework\TestCase
         ];
     }
 }
-

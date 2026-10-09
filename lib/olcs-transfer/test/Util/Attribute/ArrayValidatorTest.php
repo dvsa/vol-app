@@ -20,4 +20,3 @@ final class ArrayValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('NotEmpty', $sut->getName());
     }
 }
-

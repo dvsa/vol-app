@@ -35,4 +35,3 @@ final class MethodTest extends \PHPUnit\Framework\TestCase
         ];
     }
 }
-

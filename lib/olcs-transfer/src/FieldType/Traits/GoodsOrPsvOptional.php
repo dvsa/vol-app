@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Goods or PSV Optional.
  * Null allowed as a string to prevent returning both goods AND psv options in filter

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Transfer\FieldType\Traits\Messaging;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait Conversation
  *

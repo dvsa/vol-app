@@ -35,4 +35,3 @@ final class RouteNameTest extends \PHPUnit\Framework\TestCase
         ];
     }
 }
-
