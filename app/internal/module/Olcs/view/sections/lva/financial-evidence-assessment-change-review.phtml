@@ -120,8 +120,9 @@
 <form method="post" novalidate class="govuk-!-margin-top-6">
   <?php echo $this->formElement($decisionForm->get('security')); ?>
   <?php echo $this->formElement($decisionForm->get('analysisId')); ?>
-  <?php echo $this->formRow($decisionForm->get('decision')); ?>
-  <div class="govuk-button-group">
+  <div class="govuk-form-group">
+    <?php echo $this->formRow($decisionForm->get('decision')); ?>
+  </div>  <div class="govuk-button-group">
     <?php echo $this->formElement($decisionForm->get('saveDecision')); ?>
   </div>
 </form>

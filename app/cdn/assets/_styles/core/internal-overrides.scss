@@ -1,5 +1,4 @@
 .govuk-radios {
-
   &__item {
     padding: 0;
     min-height: auto;
@@ -22,7 +21,7 @@
     padding: 0;
   }
 
-  &__conditional{
+  &__conditional {
     border-left: none;
     margin-left: 0;
     padding-left: 0;
@@ -44,14 +43,8 @@ dt.govuk-summary-list__key--weight-normal {
   font-weight: normal;
 }
 
-.govuk-radios__input + .govuk-radios__label::before,
-.govuk-radios__input + .govuk-radios__label::after,
-.govuk-radios__input:checked + .govuk-radios__label::after {
-  display: none;
-}
-
 // Fix for table width when table is included in internal form field Divs.
-div.field>div.table__wrapper {
+div.field > div.table__wrapper {
   max-width: 100%;
 }
 
@@ -83,10 +76,48 @@ pre.wordwrap {
 }
 
 form#irhpApplication fieldset legend {
-    font-weight: bold;
-    border-bottom: 1px solid #ccc;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
 }
 
 fieldset#bilateralContainer input[type="text"]:disabled {
-    background-color: #bfc1c3;
+  background-color: #bfc1c3;
+}
+
+// Opt-out for the compact radios above: restores standard GOV.UK radio sizing.
+// Add "govuk-radios--standard" via radios_wrapper_attributes on the element.
+.govuk-radios--standard {
+  .govuk-radios__item {
+    margin-bottom: 10px;
+
+    &:last-child,
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .govuk-label {
+      font-size: 19px;
+    }
+  }
+
+  .govuk-radios__input {
+    position: static;
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    opacity: 0;
+  }
+
+  .govuk-radios__label {
+    padding: 7px 15px;
+  }
+
+  .govuk-radios__input + .govuk-radios__label::before,
+  .govuk-radios__input + .govuk-radios__label::after {
+    display: block;
+  }
+
+  .govuk-radios__input:checked + .govuk-radios__label::after {
+    display: block;
+  }
 }

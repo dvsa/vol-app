@@ -28,9 +28,11 @@ class FinancialEvidenceDecision
     /**
      * @Form\Required(true)
      * @Form\Type("Radio")
+     * @Form\Attributes({"radios_wrapper_attributes": {"class": "govuk-radios--standard"}})
      * @Form\Options({
      *      "label": "Select your decision",
-     *      "label_attributes": {"class": "govuk-fieldset__legend--l"},
+     *      "fieldset-attributes": {"class": "govuk-fieldset govuk-! "},
+     *      "legend-attributes": {"class": "govuk-fieldset__legend govuk-fieldset__legend--l"},
      *      "value_options":{
      *          "APPROVED":"Accept financial evidence",
      *          "REJECTED":"Reject financial evidence"
