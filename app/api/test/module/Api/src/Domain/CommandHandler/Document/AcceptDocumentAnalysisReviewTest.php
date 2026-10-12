@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
 use Dvsa\Olcs\Api\Entity\User\User;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisAnnotationOverlay;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\NormalisedResult;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisReviewOutcome;
@@ -34,7 +35,11 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
     public function setUp(): void
     {
         $this->normaliser = m::mock(AnalysisResultNormaliser::class);
-        $this->sut = new AcceptDocumentAnalysisReview($this->normaliser, new AnalysisReviewOutcome());
+        $this->sut = new AcceptDocumentAnalysisReview(
+            $this->normaliser,
+            new AnalysisReviewOutcome(),
+            new AnalysisAnnotationOverlay()
+        );
         $this->mockRepo('DocumentAnalysis', DocumentAnalysisRepo::class);
 
         $this->user = m::mock(User::class);
@@ -149,6 +154,7 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
         $analysis = m::mock(Entity::class);
         $analysis->allows('getStatus')->andReturn($status);
         $analysis->allows('getResultNormalised')->andReturn(self::STORED);
+        $analysis->allows('getAnnotations')->andReturn(null);
 
         return $analysis;
     }

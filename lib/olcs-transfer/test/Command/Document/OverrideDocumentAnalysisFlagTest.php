@@ -56,4 +56,3 @@ final class OverrideDocumentAnalysisFlagTest extends TestCase
         ];
     }
 }
-
