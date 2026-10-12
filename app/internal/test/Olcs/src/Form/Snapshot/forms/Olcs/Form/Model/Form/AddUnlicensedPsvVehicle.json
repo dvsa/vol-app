@@ -1,0 +1,147 @@
+{
+  "name": "unlicensed-psv-vehicles-vehicle",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "organisation",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "vrm",
+              "attributes": {
+                "id": "vrm",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "application_vehicle-safety_vehicle-psv-sub-action.data.vrm",
+                "error-message": "vehicle.error.top.vrm"
+              },
+              "type": "\\Common\\Form\\Elements\\Custom\\VehicleVrmAny"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": [],
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button",
+                "aria-label": "Save and Continue"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel",
+                "keepForReadOnly": true
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addAnother",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "Save and add another"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "organisation": {
+      "name": "organisation",
+      "required": false
+    },
+    "data": {
+      "id": {
+        "name": "id",
+        "required": false
+      },
+      "version": {
+        "name": "version",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

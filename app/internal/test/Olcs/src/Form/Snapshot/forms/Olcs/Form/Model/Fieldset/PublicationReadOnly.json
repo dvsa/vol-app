@@ -1,0 +1,62 @@
+{
+  "name": "readOnly",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "publicationNo",
+        "options": {
+          "label": "Publication No."
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "options": {
+          "label": "Status"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "publicationDate",
+        "options": {
+          "label": "Publication date"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "typeArea",
+        "options": {
+          "label": "Type/Area"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "section",
+        "options": {
+          "label": "Section"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficArea",
+        "options": {
+          "label": "Traffic area"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

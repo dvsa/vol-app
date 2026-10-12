@@ -1,0 +1,44 @@
+{
+  "name": "defendant-details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "defendantType",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Defendant type",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "def_type"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "lookupTypeSubmit",
+        "attributes": {
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "value": "Select"
+        },
+        "options": {
+          "label": "Select"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "\\Common\\Form\\Elements\\Types\\EntitySearch",
+  "options": {
+    "label": "Defendant details"
+  },
+  "input_filter": []
+}

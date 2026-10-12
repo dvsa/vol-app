@@ -1,0 +1,117 @@
+{
+  "name": "DataRetentionRuleDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "type": "number",
+        "options": {
+          "label": "Rule id",
+          "readonly": true
+        },
+        "attributes": {
+          "readonly": "true"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "options": {
+          "label": "Description"
+        },
+        "attributes": {
+          "required": "required",
+          "class": "extra-long"
+        },
+        "type": "textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "retentionPeriod",
+        "options": {
+          "label": "Retention period"
+        },
+        "attributes": {
+          "required": "required",
+          "class": "small"
+        },
+        "type": "number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "maxDataSet",
+        "options": {
+          "label": "Max data set"
+        },
+        "attributes": {
+          "required": "required",
+          "class": "small"
+        },
+        "type": "number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isEnabled",
+        "attributes": {
+          "required": "required",
+          "value": "N",
+          "class": "inline"
+        },
+        "type": "Radio",
+        "options": {
+          "label": "isEnabled",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "actionType",
+        "type": "select",
+        "options": {
+          "label": "Action type",
+          "value_options": {
+            "Automate": "Automate",
+            "Review": "Review"
+          }
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "description": {
+      "name": "description",
+      "required": true
+    },
+    "retentionPeriod": {
+      "name": "retentionPeriod",
+      "required": true
+    },
+    "maxDataSet": {
+      "name": "maxDataSet",
+      "required": true
+    },
+    "isEnabled": {
+      "name": "isEnabled",
+      "required": true
+    }
+  }
+}

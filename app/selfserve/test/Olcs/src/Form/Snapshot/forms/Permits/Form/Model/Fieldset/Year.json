@@ -1,0 +1,23 @@
+{
+  "name": "Year",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "year",
+        "attributes": {
+          "radios_wrapper_attributes": {
+            "data-module": "radios"
+          }
+        },
+        "options": {
+          "input_class": "Common\\Form\\Input\\YearInput"
+        },
+        "type": "DynamicRadio"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -1,0 +1,33 @@
+{
+  "name": "fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "options": {
+          "label": "selfserve-ebsr-busreg-status-filter",
+          "empty_option": "All",
+          "disable_inarray_validator": false,
+          "category": "bus_reg_status"
+        },
+        "attributes": {
+          "id": "status",
+          "placeholder": ""
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "Filters"
+  },
+  "input_filter": {
+    "status": {
+      "name": "status",
+      "required": false
+    }
+  }
+}

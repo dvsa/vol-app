@@ -1,0 +1,95 @@
+{
+  "name": "irhp-permit-filter",
+  "attributes": {
+    "method": "get",
+    "class": "filters form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "irhpPermitType",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "permits.irhp.permit.filter.type",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\IrhpPermitType",
+          "extra_option": {
+            "": "All"
+          },
+          "exclude": [
+            "6",
+            "7"
+          ]
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "country",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "permits.irhp.permit.filter.country",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\Country",
+          "category": "isPermitState",
+          "extra_option": {
+            "": "All"
+          }
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "permits.irhp.permit.filter.status",
+          "disable_inarray_validator": false,
+          "category": "irhp_permit_status",
+          "empty_option": "All"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "limit",
+        "attributes": {
+          "value": "10"
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "page",
+        "attributes": {
+          "value": "1"
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": []
+}

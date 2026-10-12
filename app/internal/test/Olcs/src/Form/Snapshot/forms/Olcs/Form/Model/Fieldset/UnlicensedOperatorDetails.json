@@ -1,0 +1,108 @@
+{
+  "name": "operator-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "name",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "internal-operator-profile-name",
+          "short-label": "internal-operator-profile-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "operatorType",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "fieldset-attributes": {
+            "id": "operatorType",
+            "class": "checkbox"
+          },
+          "fieldset-data-group": "operatorType",
+          "label": "Operator type",
+          "short-label": "Operator type",
+          "value_options": {
+            "lcat_gv": "Goods",
+            "lcat_psv": "PSV"
+          }
+        },
+        "type": "Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficArea",
+        "attributes": {
+          "id": "trafficArea",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Traffic area",
+          "short-label": "Traffic area",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\TrafficArea"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "contactDetailsId",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "contactDetailsVersion",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "name": {
+      "name": "name",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "name": "licence-vehicle",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "receivedDate",
+        "attributes": [],
+        "options": {
+          "label": "application_vehicle-safety_vehicle-sub-action.licence-vehicle.receivedDate",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "default_date": "now"
+        },
+        "type": "Common\\Form\\Elements\\Custom\\DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "specifiedDate",
+        "type": "DateTimeSelect",
+        "attributes": {
+          "id": "specifiedDate"
+        },
+        "options": {
+          "label": "application_vehicle-safety_vehicle-sub-action.licence-vehicle.specifiedDate",
+          "create_empty_option": false,
+          "render_delimiters": true,
+          "field": "specifiedDate",
+          "month_attributes": {
+            "disabled": "disabled"
+          },
+          "year_attributes": {
+            "disabled": "disabled"
+          },
+          "day_attributes": {
+            "disabled": "disabled"
+          },
+          "hour_attributes": {
+            "disabled": "disabled"
+          },
+          "minute_attributes": {
+            "disabled": "disabled"
+          },
+          "display_every_minute": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "removalDate",
+        "attributes": [],
+        "options": {
+          "label": "application_vehicle-safety_vehicle-sub-action.licence-vehicle.removalDate",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "month_attributes": {
+            "disabled": "disabled"
+          },
+          "year_attributes": {
+            "disabled": "disabled"
+          },
+          "day_attributes": {
+            "disabled": "disabled"
+          }
+        },
+        "type": "Common\\Form\\Elements\\Custom\\DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "discNo",
+        "attributes": {
+          "disabled": "disabled"
+        },
+        "options": {
+          "label": "application_vehicle-safety_vehicle-sub-action.licence-vehicle.discNo"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "receivedDate": {
+      "name": "receivedDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "specifiedDate": {
+      "name": "specifiedDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateTimeSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d H:i:s"
+          }
+        }
+      ]
+    },
+    "removalDate": {
+      "name": "removalDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "discNo": {
+      "name": "discNo",
+      "required": false
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "name": "RetrieveOtp",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "code",
+        "type": "Text",
+        "options": {
+          "label": "retrieve-document.otp.code.label",
+          "hint": "retrieve-document.otp.code.hint"
+        },
+        "attributes": {
+          "class": "govuk-input govuk-input--width-5",
+          "inputmode": "numeric",
+          "autocomplete": "one-time-code",
+          "pattern": "[0-9]*",
+          "maxlength": 6,
+          "id": "code"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "code": {
+      "name": "code",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "retrieve-document.otp.code.error.required"
+            }
+          }
+        },
+        {
+          "name": "Laminas\\Validator\\Digits",
+          "options": {
+            "messages": {
+              "notDigits": "retrieve-document.otp.code.error.format"
+            }
+          }
+        },
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 6,
+            "max": 6,
+            "messages": {
+              "stringLengthTooShort": "retrieve-document.otp.code.error.format",
+              "stringLengthTooLong": "retrieve-document.otp.code.error.format"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

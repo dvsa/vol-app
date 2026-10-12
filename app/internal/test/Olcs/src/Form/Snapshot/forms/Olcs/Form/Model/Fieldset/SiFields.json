@@ -1,0 +1,220 @@
+{
+  "name": "fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "notificationNumber",
+        "attributes": {
+          "id": "notificationNumber"
+        },
+        "options": {
+          "label": "Notification Number"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "siCategoryType",
+        "attributes": {
+          "id": "siCategoryType",
+          "class": "chosen-select-medium",
+          "required": "required"
+        },
+        "options": {
+          "label": "Type",
+          "empty_option": "",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\SiCategoryType"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "infringementDate",
+        "attributes": {
+          "id": "infringementDate",
+          "required": "required"
+        },
+        "options": {
+          "label": "Date of infringement"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "checkDate",
+        "attributes": {
+          "id": "checkDate",
+          "required": "required"
+        },
+        "options": {
+          "label": "Date of check"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "memberStateCode",
+        "attributes": {
+          "id": "memberStateCode",
+          "class": "chosen-select-medium",
+          "required": "required"
+        },
+        "options": {
+          "label": "Member state",
+          "empty_option": "",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\Country",
+          "category": "isMemberState",
+          "use_groups": false
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "reason",
+        "attributes": {
+          "id": "reason",
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Reason"
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "case",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "notificationNumber": {
+      "name": "notificationNumber",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 36
+          }
+        }
+      ]
+    },
+    "siCategoryType": {
+      "name": "siCategoryType",
+      "required": true
+    },
+    "infringementDate": {
+      "name": "infringementDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "checkDate": {
+      "name": "checkDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "memberStateCode": {
+      "name": "memberStateCode",
+      "required": true
+    },
+    "reason": {
+      "name": "reason",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 5000
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "licenceChecklistConfirmationNo",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "checklistDeclineText",
+        "attributes": {
+          "value": "markup-continuation-licence-checklist-confirmation-no"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "backToLicence",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary"
+        },
+        "options": {
+          "label": "continuations.checklist.confirmation.no-button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionLink"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -1,0 +1,93 @@
+{
+  "name": "tm-employment-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "position",
+        "attributes": {
+          "class": "long",
+          "id": "position"
+        },
+        "options": {
+          "label": "transport-manager.employment.form.position"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hoursPerWeek",
+        "attributes": {
+          "class": "long",
+          "id": "hoursPerWeek"
+        },
+        "options": {
+          "label": "transport-manager.employment.form.hoursPerWeek"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "position": {
+      "name": "position",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 45
+          }
+        }
+      ]
+    },
+    "hoursPerWeek": {
+      "name": "hoursPerWeek",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 100
+          }
+        }
+      ]
+    }
+  }
+}

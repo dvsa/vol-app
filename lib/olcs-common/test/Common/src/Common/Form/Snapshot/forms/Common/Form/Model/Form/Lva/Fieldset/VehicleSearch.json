@@ -1,0 +1,56 @@
+{
+  "name": "VehicleSearch",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "vrm",
+        "attributes": {
+          "id": "vrm",
+          "required": "required"
+        },
+        "type": "\\Laminas\\Form\\Element\\Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "vehicle-search-search"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "clearSearch",
+        "attributes": {
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "id": "clearSearch"
+        },
+        "options": {
+          "label": "vehicle-search-clear-search"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "vehicle-search-vrm"
+  },
+  "input_filter": {
+    "vrm": {
+      "name": "vrm",
+      "required": true
+    }
+  }
+}

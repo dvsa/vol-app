@@ -1,0 +1,44 @@
+{
+  "name": "DiscsNumbering",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "startNumber",
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "endNumber",
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "totalPages",
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "originalEndNumber",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "endNumberIncreased",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "input_filter": []
+}

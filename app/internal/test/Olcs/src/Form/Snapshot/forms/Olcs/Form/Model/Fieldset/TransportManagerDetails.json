@@ -1,0 +1,305 @@
+{
+  "name": "transport-manager-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "transport-manager-id",
+        "options": {
+          "label": "internal-transport-manager-id"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "title",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "empty_option": "Please Select",
+          "label": "transport-manager-details-title",
+          "category": "person_title",
+          "disable_inarray_validator": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "firstName",
+        "attributes": {
+          "class": "medium"
+        },
+        "options": {
+          "label": "transport-manager-details-first-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "lastName",
+        "attributes": {
+          "class": "medium"
+        },
+        "options": {
+          "label": "transport-manager-details-last-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailAddress",
+        "attributes": {
+          "class": "medium"
+        },
+        "options": {
+          "label": "transport-manager-details-email"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "birthDate",
+        "attributes": {
+          "required": false,
+          "id": "dob"
+        },
+        "options": {
+          "label": "transport-manager-details-dob",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "birthPlace",
+        "attributes": {
+          "id": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "transport-manager-details-place-of-birth"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "type",
+        "options": {
+          "label": "transport-manager-details-type",
+          "category": "tm_type"
+        },
+        "type": "DynamicRadio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "homeCdId",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "homeCdVersion",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "workCdId",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "workCdVersion",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "personId",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "personVersion",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "title": {
+      "name": "title",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "firstName": {
+      "name": "firstName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Laminas\\Validator\\NotEmpty"
+        },
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "lastName": {
+      "name": "lastName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Laminas\\Validator\\NotEmpty"
+        },
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "emailAddress": {
+      "name": "emailAddress",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        }
+      ]
+    },
+    "birthDate": {
+      "name": "birthDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Laminas\\Validator\\NotEmpty"
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "birthPlace": {
+      "name": "birthPlace",
+      "validators": [
+        {
+          "name": "\\Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    }
+  }
+}

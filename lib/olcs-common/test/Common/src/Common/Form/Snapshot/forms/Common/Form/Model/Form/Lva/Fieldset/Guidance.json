@@ -1,0 +1,23 @@
+{
+  "name": "guidance",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "guidance",
+        "attributes": {
+          "value": "<div class=guidance>%s</div>"
+        },
+        "options": {
+          "tokens": [
+            "selfserve-app-subSection-your-business-people-guidance"
+          ]
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

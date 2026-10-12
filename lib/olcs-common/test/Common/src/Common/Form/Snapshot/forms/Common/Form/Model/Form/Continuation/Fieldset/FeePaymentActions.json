@@ -1,0 +1,26 @@
+{
+  "name": "fee-payment-actions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "pay",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "id": "submitAndPay"
+        },
+        "options": {
+          "label": "continuation.payment.pay-and-submit"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

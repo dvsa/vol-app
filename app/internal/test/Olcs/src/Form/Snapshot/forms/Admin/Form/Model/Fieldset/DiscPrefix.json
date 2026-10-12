@@ -1,0 +1,25 @@
+{
+  "name": "DiscPrefix",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "discSequence",
+        "attributes": {
+          "id": "discSequence"
+        },
+        "options": {
+          "empty_option": "Please Select"
+        },
+        "type": "Select"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "options": {
+    "label": "admin_disc-printing.discPrefix"
+  },
+  "input_filter": []
+}

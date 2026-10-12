@@ -1,0 +1,297 @@
+{
+  "name": "bus-reg-stop-fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "useAllStops",
+        "type": "Radio",
+        "options": {
+          "label": "Use all bus stops",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hasManoeuvre",
+        "type": "Radio",
+        "options": {
+          "label": "Manoeuvres",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "manoeuvreDetail",
+        "attributes": {
+          "id": "manoeuvreDetail",
+          "class": "extra-long",
+          "name": "manoeuvreDetail"
+        },
+        "options": {
+          "label": "Manoeuvres comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "needNewStop",
+        "type": "Radio",
+        "options": {
+          "label": "Need new bus stops",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "newStopDetail",
+        "attributes": {
+          "id": "newStopDetail",
+          "class": "extra-long",
+          "name": "newStopDetail"
+        },
+        "options": {
+          "label": "Need new bus stops comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hasNotFixedStop",
+        "type": "Radio",
+        "options": {
+          "label": "No fixed stopping points",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "notFixedStopDetail",
+        "attributes": {
+          "id": "notFixedStopDetail",
+          "class": "extra-long",
+          "name": "notFixedStopDetail"
+        },
+        "options": {
+          "label": "No fixed stopping points comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "subsidised",
+        "attributes": {
+          "id": "subsidised",
+          "placeholder": "",
+          "class": "small",
+          "value": "bs_no"
+        },
+        "options": {
+          "label": "Supported by subsidies",
+          "disable_inarray_validator": false,
+          "category": "bus_subsidy"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "subsidyDetail",
+        "attributes": {
+          "id": "subsidyDetail",
+          "class": "extra-long",
+          "name": "subsidyDetail"
+        },
+        "options": {
+          "label": "Supported by subsidies comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isTxcApp",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[isTxcApp]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isLatestVariation",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[isLatestVariation]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[status]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "manoeuvreDetail": {
+      "name": "manoeuvreDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "newStopDetail": {
+      "name": "newStopDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "notFixedStopDetail": {
+      "name": "notFixedStopDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "subsidyDetail": {
+      "name": "subsidyDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    }
+  }
+}
