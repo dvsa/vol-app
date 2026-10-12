@@ -6,7 +6,7 @@ namespace Dvsa\Olcs\Transfer\Command\Document;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * A caseworker changes one failed or skipped check of an automated document analysis to a pass,
@@ -16,10 +16,9 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
  * anything that cannot be changed (an analysis that is not successful or is already decided, or a
  * row that is not currently a fail or skipped). Deciding the review itself is
  * UpdateDocumentAnalysisAssessmentStatus.
- *
- * @Transfer\RouteName("backend/document/document_analysis/single/override-flag")
- * @Transfer\Method("PUT")
  */
+#[Transfer\RouteName('backend/document/document_analysis/single/override-flag')]
+#[Transfer\Method('PUT')]
 final class OverrideDocumentAnalysisFlag extends AbstractCommand
 {
     use Identity;
@@ -36,20 +35,15 @@ final class OverrideDocumentAnalysisFlag extends AbstractCommand
 
     /**
      * @var string
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *     options={
-     *          "haystack": \Dvsa\Olcs\Transfer\Command\Document\OverrideDocumentAnalysisFlag::ROWS,
-     *          "strict": true
-     *     }
-     * )
      */
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => self::ROWS, 'strict' => true])]
     protected $row;
 
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min": 1, "max": 1000})
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 1000])]
     protected $comment;
 
     /**

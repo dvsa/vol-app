@@ -210,4 +210,3 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         return NormalisedResult::fromRows($rows);
     }
 }
-

@@ -34,4 +34,3 @@ class UpdateDocumentAnalysisAssessmentStatusFactory implements FactoryInterface
         return $instance->__invoke($container, $requestedName, $options);
     }
 }
-
