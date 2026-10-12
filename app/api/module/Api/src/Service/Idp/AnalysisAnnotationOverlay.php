@@ -111,4 +111,3 @@ class AnalysisAnnotationOverlay
         return $annotations;
     }
 }
-
