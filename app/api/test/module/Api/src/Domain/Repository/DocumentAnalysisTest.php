@@ -294,6 +294,46 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $this->assertSame(0, $this->sut->recordAssessmentStatus(5, AssessmentStatus::REJECTED, $user));
     }
 
+    /** One conditional UPDATE guarded on SUCCESS and the version that was read; it bumps the version itself. */
+    public function testRecordAnnotations(): void
+    {
+        $user = m::mock(User::class);
+        $user->allows('getId')->andReturn(99);
+        $annotations = ['rows' => ['name' => ['flag' => 'pass']]];
+
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(1);
+
+        $this->assertSame(1, $this->sut->recordAnnotations(5, $annotations, 3, $user));
+
+        $this->assertSame(
+            'UPDATE ' . Entity::class . ' da'
+            . ' SET da.annotations = :annotations, da.version = da.version + 1,'
+            . ' da.lastModifiedOn = :now, da.lastModifiedBy = :lastModifiedBy'
+            . ' WHERE da.id = :id AND da.status = :success AND da.version = :version',
+            $qb->getDQL(),
+        );
+        $this->assertSame($annotations, $qb->getParameter('annotations')->getValue());
+        $this->assertSame(Types::JSON, $qb->getParameter('annotations')->getType());
+        $this->assertSame(99, $qb->getParameter('lastModifiedBy')->getValue());
+        $this->assertSame(5, $qb->getParameter('id')->getValue());
+        $this->assertSame(3, $qb->getParameter('version')->getValue());
+        $this->assertSame(Entity::STATUS_SUCCESS, $qb->getParameter('success')->getValue());
+        $this->assertInstanceOf(\DateTime::class, $qb->getParameter('now')->getValue());
+    }
+
+    /** A stale version, or a row that is not successful, matches nothing. */
+    public function testRecordAnnotationsReturnsZeroWhenTheVersionHasMovedOn(): void
+    {
+        $user = m::mock(User::class);
+        $user->allows('getId')->andReturn(99);
+
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(0);
+
+        $this->assertSame(0, $this->sut->recordAnnotations(5, [], 2, $user));
+    }
+
     private function expectEntityManagerQb(): TestQueryBuilder
     {
         $qb = $this->newRealQb();
