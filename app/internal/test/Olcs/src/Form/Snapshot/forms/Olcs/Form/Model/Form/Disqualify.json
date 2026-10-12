@@ -1,0 +1,200 @@
+{
+  "name": "disqualify",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "name",
+        "attributes": {
+          "id": "name",
+          "class": "extra-long",
+          "readonly": "true"
+        },
+        "options": {
+          "label": "form.disqualify.name"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isDisqualified",
+        "attributes": {
+          "id": "isDisqualified"
+        },
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "form.disqualify.is-disqualified",
+          "short-label": "form.disqualify.is-disqualified"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "startDate",
+        "attributes": {
+          "id": "startDate",
+          "required": "required"
+        },
+        "options": {
+          "label": "form.disqualify.start-date",
+          "short-label": "form.disqualify.start-date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "period",
+        "attributes": {
+          "id": "period"
+        },
+        "options": {
+          "label": "form.disqualify.period"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "notes",
+        "attributes": {
+          "id": "notes",
+          "class": "extra-long"
+        },
+        "type": "TextArea",
+        "options": {
+          "label": "form.disqualify.notes"
+        }
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "startDate": {
+      "name": "startDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ],
+      "required": true
+    },
+    "period": {
+      "name": "period",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        }
+      ],
+      "required": false
+    },
+    "notes": {
+      "name": "notes",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 4000
+          }
+        }
+      ],
+      "required": false
+    }
+  }
+}

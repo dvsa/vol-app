@@ -1,0 +1,18 @@
+{
+  "name": "lastModifiedBy",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "lastModifiedByDetails",
+        "type": "Common\\Form\\Elements\\Types\\Html"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "tasks.lastModifiedBy"
+  },
+  "input_filter": []
+}

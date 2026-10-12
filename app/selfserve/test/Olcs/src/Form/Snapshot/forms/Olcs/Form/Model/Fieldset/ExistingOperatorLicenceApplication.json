@@ -1,0 +1,44 @@
+{
+  "name": "existingOperatorLicenceApplication",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceNumber",
+        "type": "Text",
+        "options": {
+          "label": "user-registration.field.licenceNumber.label",
+          "id": "existingOperatorLicenceApplication"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "licenceNumber": {
+      "name": "licenceNumber",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": "9",
+            "max": "9"
+          }
+        }
+      ]
+    }
+  }
+}

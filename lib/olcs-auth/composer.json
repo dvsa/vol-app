@@ -68,7 +68,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Dvsa\\OlcsTest\\Auth\\": "test/"
+      "Dvsa\\OlcsTest\\Auth\\": "test/",
+      "CommonTest\\": "vendor/olcs/olcs-common/test/Common/src/"
     }
   },
   "config": {

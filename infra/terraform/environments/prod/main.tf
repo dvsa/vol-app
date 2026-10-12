@@ -185,7 +185,7 @@ locals {
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*"
-        
+
       ]
     },
     {

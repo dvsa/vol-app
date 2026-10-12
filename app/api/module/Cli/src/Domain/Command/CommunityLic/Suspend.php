@@ -2,7 +2,6 @@
 
 namespace Dvsa\Olcs\Cli\Domain\Command\CommunityLic;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
 /**

@@ -1,0 +1,124 @@
+{
+  "name": "DataRetentionExport",
+  "attributes": [],
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "exportOptions",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "rule",
+              "type": "Select",
+              "options": {
+                "label": "Rule"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "startDate",
+              "options": {
+                "label": "Date from"
+              },
+              "attributes": {
+                "required": "required"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "endDate",
+              "options": {
+                "label": "Date to"
+              },
+              "attributes": {
+                "required": "required"
+              },
+              "type": "DateSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "generate",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button",
+                "id": "submit"
+              },
+              "options": {
+                "label": "Generate"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "exportOptions": {
+      "startDate": {
+        "name": "startDate",
+        "required": true,
+        "validators": [
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "endDate": {
+        "name": "endDate",
+        "required": true,
+        "validators": [
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "DateCompare",
+            "options": {
+              "has_time": false,
+              "compare_to": "startDate",
+              "operator": "gte",
+              "compare_to_label": "Start date"
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

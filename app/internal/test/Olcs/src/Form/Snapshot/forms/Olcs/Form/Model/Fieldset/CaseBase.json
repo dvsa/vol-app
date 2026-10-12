@@ -1,0 +1,40 @@
+{
+  "name": "case-base",
+  "attributes": {
+    "class": "govuk-visually-hidden"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "case",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

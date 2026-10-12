@@ -1,0 +1,74 @@
+{
+  "name": "SubsidiaryCompany",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "name",
+        "attributes": {
+          "class": "long",
+          "id": "name"
+        },
+        "options": {
+          "label": "application_your-business_business-details-formName",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "error-message": "subsidiary-company-name-error"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "companyNo",
+        "attributes": {
+          "class": "long",
+          "id": "companyNo",
+          "pattern": "\\d*"
+        },
+        "options": {
+          "label": "application_your-business_business-details-formCompanyNo",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "error-message": "subsidiary-company-number-error"
+        },
+        "type": "Common\\Form\\Elements\\InputFilters\\CompanyNumber"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "name": {
+      "name": "name",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

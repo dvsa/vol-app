@@ -15,21 +15,17 @@ namespace Dvsa\Olcs\Transfer\Query\Cache;
 use Dvsa\Olcs\Transfer\FieldType\Traits\IdentityString;
 use Dvsa\Olcs\Transfer\FieldType\Traits\UniqueIdStringOptional;
 use Dvsa\Olcs\Transfer\Query\CacheableShortTermQueryInterface;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/cache")
- */
+#[Transfer\RouteName('backend/cache')]
 class ById extends AbstractQuery implements CacheableShortTermQueryInterface
 {
     use IdentityString;
     use UniqueIdStringOptional;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
+    #[Transfer\Optional]
     protected $shouldRegen = false;
 
     /**

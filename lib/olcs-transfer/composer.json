@@ -14,7 +14,6 @@
     "laminas/laminas-inputfilter": "^2.33",
     "laminas/laminas-form": "^3.21",
     "paragonie/halite": "^5",
-    "doctrine/annotations": "^2.0",
     "psr/cache": "^3.0",
     "symfony/cache": "^8.1",
     "laminas/laminas-xml": "^1.7.0",

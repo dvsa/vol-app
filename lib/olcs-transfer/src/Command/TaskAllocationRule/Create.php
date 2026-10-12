@@ -9,13 +9,11 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\SubCategoryOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Team;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TrafficAreaOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\UserOptional;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/task-allocation-rule")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/task-allocation-rule')]
+#[Transfer\Method('POST')]
 final class Create extends AbstractCommand
 {
     use Category;

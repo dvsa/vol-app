@@ -12,11 +12,160 @@ The API has three layers of automated verification:
 | Integration      | Real repository queries executed against a local MySQL, plus schema checks                    | Locally via `composer test:integration` |
 | Functional (E2E) | WebDriver/Cucumber suites from `dvsa/vol-functional-tests`                                    | Post-deploy per environment (`cd.yaml`) |
 
-This page documents how repository unit tests assert against real Doctrine, the
-integration layer, the two baseline mechanisms that guard the Doctrine entity
-metadata, the Doctrine deprecation report both suites print, the three tests
-that guard output escaping in the table render pipeline, and the snapshot that
-guards how API requests are validated.
+This page documents how to run the unit tests in parallel or one at a time, how
+slow tests are reported, how repository unit tests assert against real Doctrine,
+the integration layer, the two baseline mechanisms that guard the Doctrine
+entity metadata, the Doctrine deprecation report both suites print, the three
+tests that guard output escaping in the table render pipeline, and the snapshots
+that guard how API requests are validated and how forms are declared.
+
+## Running the tests
+
+Each app (`app/api`, `app/selfserve`, `app/internal`) has two commands, run
+from its own directory:
+
+```bash
+composer test          # in parallel: paratest, one worker process per CPU core
+composer test:serial   # one process: plain phpunit, as CI runs it
+```
+
+Both run the same tests from the same `phpunit.xml.dist`; pick whichever suits
+what you are doing. Arguments go after `--`:
+
+```bash
+composer test -- --filter LicenceVehicleTest
+composer test:serial -- --random-order-seed=<seed>
+```
+
+`composer test` uses [paratest](https://github.com/paratestphp/paratest), which
+hands whole test files to a pool of PHPUnit worker processes. The api suite is
+where that pays off: it runs in around a third of the time it takes serially.
+selfserve and internal finish in a few seconds either way, and use paratest too
+so that `composer test` means the same thing in every app.
+
+The libraries under `lib/` run plain phpunit with `composer test`, and have no
+paratest at all; see [why](#why-the-libraries-do-not-use-paratest).
+
+Running a single file or test with `vendor/bin/phpunit` directly, as the
+commands elsewhere on this page do, is still the quickest way to iterate on
+one test.
+
+### Use the serial run when
+
+- **CI failed and the parallel run passes.** CI prints a `Random Seed:` line;
+  `composer test:serial -- --random-order-seed=<seed>` repeats its order
+  exactly. See below for why the two can disagree.
+- **Step debugging.** Each worker is its own PHP process, so Xdebug opens a
+  session per worker.
+- **The integration suite.** `composer test:integration` stays serial: it waits
+  on the database rather than the CPU, so parallel gains nothing, and two
+  workers inserting fixtures at once could block each other. It does run under
+  paratest (`vendor/bin/paratest -c phpunit-integration.xml`).
+
+### Why CI stays serial
+
+CI runs plain phpunit: `vendor/bin/phpunit` for the apps (`php.yaml`) and
+`composer run-script test` for the libraries (`php-lib.yaml`). Every
+`phpunit.xml.dist` sets `executionOrder="random"`, and phpunit shuffles every
+test in the suite, including the tests inside one file. Paratest shuffles the
+order of the _files_ but runs the tests inside each file top to bottom. A test
+that leaks state (a static property, an unclosed Mockery container, a global)
+into the next test in the same class can therefore pass in parallel every time
+and only fail serially. CI stays serial so those leaks still fail a PR.
+
+A green `composer test` is good evidence, not proof. Before pushing a change to
+test infrastructure, or when chasing an order-dependent failure, run
+`composer test:serial` as well.
+
+### Writing tests that pass both ways
+
+In the apps, a paratest worker runs one whole file at a time, and many files
+one after another in the same PHP process. Workers run at the same time as each
+other. So:
+
+- **Tests in a file run in the order they are written.** A `#[Depends]` must
+  name a test declared _above_ it. phpunit reorders the file to run a dependency
+  declared below first; paratest does not, so the dependent test is skipped, and
+  `failOnSkipped` fails the run. Only `composer test` catches this, not CI.
+- **State left behind reaches whichever file the worker runs next.** Static
+  properties, `putenv()`, `ini_set()`, error handlers and the like carry over
+  between files in a worker just as they do in a serial run, only in a
+  different order. Restore anything you change, in `tearDown()`.
+- **Anything outside the process is shared between workers.** A file at a fixed
+  path, a database row, a port or a Redis key can be touched by two tests at
+  once. Unit tests should not need any of these. Where one must write a file,
+  give it a unique name (`tempnam()`, or include `getenv('TEST_TOKEN')`, which
+  paratest sets to the worker's number).
+
+The table render snapshot (`UPDATE_TABLE_SNAPSHOTS`, below) is a single file in
+each app, so one worker owns all its writes, and it regenerates correctly either
+way.
+
+### Slow tests
+
+Each app's `phpunit.xml.dist` registers
+[phpunit-slow-test-detector](https://github.com/ergebnis/phpunit-slow-test-detector),
+which ends a serial run (CI, `composer test:serial`) with up to 10 tests that
+took over 500ms:
+
+```
+Detected 1 test where the duration exceeded the global maximum duration (0.500).
+
+# Duration Test
+-------------------------------------------------------
+1    0.617 OlcsTest\Example\ExampleTest::testSlow
+-------------------------------------------------------
+```
+
+It only reports, and never fails a run. paratest discards it along with the
+rest of its workers' output, so read it in CI's log or run
+`composer test:serial`.
+
+No test in the app suites takes over 500ms today, so anything listed is new.
+Run it again before acting on a local report: on a laptop, background work such
+as antivirus scanning can stall any single test for a second or more.
+
+A test that is slow on purpose declares its own limit, as the table render
+snapshot tests do, since each renders every table in its app:
+
+```php
+use Ergebnis\PHPUnit\SlowTestDetector\Attribute\MaximumDuration;
+
+#[MaximumDuration(5000)]
+public function testRenderedOutputHasNotChanged(): void
+```
+
+The one consistently slow group found when the detector was added was password
+hashing, just under the limit. `password_hash()` at PHP's default bcrypt cost
+takes about 0.25s per call, so
+`OtpService` takes its hash options in the constructor: production passes none,
+and its tests pass `['cost' => 4]`. Do the same for anything else that hashes
+passwords.
+
+The libraries do not have the detector. Their suites take seconds, and a dev
+dependency in a library changes the app lock files (see below).
+
+### Why the libraries do not use paratest
+
+Do not add paratest to a library under `lib/`. It was tried in all six and taken
+out again:
+
+- **It makes most of them slower.** Their suites take seconds serially: olcs-common
+  about 3.5s, olcs-transfer about 6s, the rest under a second. Paratest starts a
+  worker per core and pays a cost for every file it hands out, which outweighs
+  tests this quick. olcs-common took about 5s in parallel, and the small
+  libraries got slower too; only olcs-transfer gained, by a second or so.
+- **CI would not use it.** Libraries are tested serially in CI for the same
+  reason as the apps, so it could only ever speed up local runs.
+- **It churns the app lock files.** The apps install the libraries from path
+  repositories, and Composer copies each library's `require-dev` and `scripts`
+  into the app's `composer.lock`. A dev tool added to a library therefore
+  changes up to three app lock files, and so does every later edit to its
+  scripts.
+- **The rules above would then apply to library tests too,** for no gain.
+
+If a library's suite grows to take tens of seconds, measure before revisiting
+this.
 
 ## Repository unit tests
 
@@ -183,6 +332,13 @@ unaffected. These are advance notice of the next major, not a broken build.
 The `DOCTRINE_DEPRECATIONS` environment variable cannot do this job. In `trigger`
 mode the library calls `@trigger_error()` — with the suppression operator — so
 PHPUnit's error handler discards it and nothing is displayed.
+
+**Under paratest** each worker records only the files it ran, and paratest
+throws away what a worker prints. So each worker writes its counts to a
+temporary directory instead, and paratest's own process prints the merged
+report as it exits. The list of deprecations matches a serial run. A few counts
+come out higher, because some are raised by one-off setup that every worker
+repeats.
 
 It is registered in **both** configs deliberately. CI runs bare
 `vendor/bin/phpunit` and nothing under `.github/` references the integration
@@ -807,6 +963,131 @@ covers its one use, the sort whitelist.
 The test builds DTOs with plain Laminas plugin managers rather than the apps'
 configured ones, so a custom validator that needs services from its factory is
 recorded by class but not built the way production builds it.
+
+## Form specification snapshot
+
+The frontends' forms and fieldsets are declared with annotations on model
+classes, mostly under `Form/Model/Form` and `Form/Model/Fieldset`, in four
+places: olcs-auth, olcs-common, internal and selfserve. Laminas reads those
+annotations into a form _specification_, a plain array that its form factory
+then builds the form from. Each of the four has a
+`FormSpecificationSnapshotTest` that reads every such class through the builder
+behind the `FormAnnotationBuilder` service (the one
+`FormHelperService::createForm()` and every other form consumer use) and
+compares the specification with a JSON snapshot committed for the class:
+
+| Package     | Test and snapshots (`forms/`)                           |
+| ----------- | ------------------------------------------------------- |
+| olcs-auth   | `lib/olcs-auth/test/Form/Snapshot/`                     |
+| olcs-common | `lib/olcs-common/test/Common/src/Common/Form/Snapshot/` |
+| internal    | `app/internal/test/Olcs/src/Form/Snapshot/`             |
+| selfserve   | `app/selfserve/test/Olcs/src/Form/Snapshot/`            |
+
+Snapshots sit under `forms/` in a path matching the class's namespace. The
+shared logic is `FormSpecificationSnapshotTestCase`, next to olcs-common's test.
+Each runs with its package's suite.
+
+A specification records the form's name, type, attributes and options; its
+elements and fieldsets in order, with every composed fieldset
+(`ComposedObject`) expanded in place; and its input filter: whether each input
+is required, and its filters and validators in the order they run, with their
+options.
+
+A class is snapshotted if its file refers to `Laminas\Form\Annotation` for
+anything other than a builder, wherever it sits in the package's source. That
+finds the same classes whether the annotations are docblocks or PHP attributes.
+Traits and abstract classes are not snapshotted on their own; each is recorded
+inside every class that uses or extends it.
+
+### Running it
+
+```bash
+# from lib/olcs-auth, lib/olcs-common, app/internal or app/selfserve
+vendor/bin/phpunit --filter FormSpecificationSnapshotTest
+```
+
+### Regenerating the snapshots
+
+As with the API snapshot, testing never writes the files. Writing them is a
+separate, deliberate step, run in the package whose forms changed. A change to
+an olcs-common fieldset also changes the snapshots of app forms that compose
+it, so regenerate those too:
+
+```bash
+UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --filter FormSpecificationSnapshotTest
+git status --short .   # new snapshots show as untracked; then read the diff itself
+```
+
+That rewrites every snapshot in the package, creates one for any new form or
+fieldset and deletes any whose class no longer exists. Commit the snapshot
+changes in the same PR as the form change that caused them. Do not edit a
+snapshot by hand; the folders are excluded from prettier.
+
+### When it fails
+
+| Failure                                      | Usually means                                                                              | Do                                                                    |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `… has no snapshot`                          | you added a form or fieldset                                                               | regenerate, check the new file describes what you meant               |
+| `… no longer matches`                        | you changed that class's annotations, or a fieldset, trait or parent class it uses         | if intended, regenerate and review the diff                           |
+| `… have no matching form`                    | you deleted or renamed a form or fieldset                                                  | regenerate (it deletes the orphans)                                   |
+| many forms fail at once                      | a change to a shared fieldset (`FormActions`, say), the builder or its factory, or Laminas | find the cause before regenerating; this is what the test is here for |
+| `… expects an object or valid class name`    | a `ComposedObject` names a class that does not exist                                       | fix the name; if nothing uses the form, delete it                     |
+| `… does not autoload` / `… autoloads from …` | a file's class name does not match its path, or two files declare the same class           | fix the class or file name                                            |
+| `testFieldOrderDoesNotDependOnThePhpVersion` | a form class gets properties both from a parent class and from a trait                     | declare the trait's properties in the class, or stop extending        |
+
+Regenerate deliberately, and read the diff. A change meant to leave behaviour
+alone, such as moving the forms from annotations to attributes (VOL-7038),
+must not touch any snapshot: a diff there is a behaviour change until shown
+otherwise. olcs-auth's and olcs-common's `composer.lock` files are not
+committed, so a laminas-form release that changes how annotations are read can
+fail their snapshots on an unrelated PR; check the diff, and regenerate in a PR
+of its own if it is harmless.
+
+The field order check exists because the builder adds elements in the order
+reflection lists a class's properties, and PHP 8.5 changed that order for a
+class with both inherited and trait properties. No form does that today, so
+every snapshot is the same on either side of the change. CI does not run every
+package on every PHP version (see the lib matrix in `ci.yaml`), so the check
+fails on any version instead.
+
+### Reading a snapshot
+
+The snapshot is the specification exactly as the builder returns it, with
+Laminas' array objects written as plain arrays:
+
+- `elements` and `fieldsets` are separate lists. The form factory adds every
+  element, then every fieldset, each list in declaration order unless
+  `flags.priority` says otherwise. That is the order fields appear in, so order
+  in these lists **is** significant
+- a composed fieldset's `spec` holds its own elements, fieldsets and options,
+  merged with those the parent declared on the property. Its input filter is
+  merged into the parent's `input_filter` under the fieldset's name or, for a
+  collection, sits in `options.target_element.options.input_filter_spec`
+- type, filter and validator names are recorded exactly as declared, because
+  the plugin managers that resolve them do not normalise them. A diff that only
+  adds or drops a leading backslash can change which factory builds the
+  element. For example, `Common\Form\Elements\Types\Table` is registered in
+  olcs-common's `form_elements` config with the element class as its own
+  factory, which is not callable, so only `\Common\Form\Elements\Types\Table`
+  builds. Check the plugin manager config before accepting such a diff
+- keys within `attributes` and `options` are recorded in the order the builder
+  set them. A diff that only reorders them is harmless, except in option lists
+  such as `value_options`, where key order is the order the options are shown in
+
+Many forms still pass an annotation's arguments as a single array
+(`@Form\Filter({"name": "…"})`). Laminas deprecates that syntax but reads it
+into the same specification as separate arguments. The test ignores that one
+deprecation and fails on any other.
+
+### What it does not cover
+
+The snapshot stops at the specification. It does not cover:
+
+- building the form from it: the form factory, the element manager and custom
+  elements' factories and `init()` methods. The test reads specifications with
+  plain plugin managers, which play no part in reading them
+- anything done to a form after it is built: form services, controllers
+  altering the form, elements added with `$form->add()`
 
 ## Adding integration tests
 

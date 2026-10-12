@@ -1,0 +1,86 @@
+{
+  "name": "details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "category",
+        "attributes": {
+          "id": "category",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "documents.data.category",
+          "service_name": "Olcs\\Service\\Data\\DocumentCategory"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "documentSubCategory",
+        "attributes": {
+          "id": "documentSubCategory",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "documents.data.sub_category",
+          "service_name": "Olcs\\Service\\Data\\DocumentSubCategory",
+          "empty_option": "Please Select"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "attributes": {
+          "required": "required",
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "documents.data.description"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "file",
+        "options": {
+          "label": "documents.data.file"
+        },
+        "type": "\\Laminas\\Form\\Element\\File"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "documents.details"
+  },
+  "input_filter": {
+    "description": {
+      "name": "description",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 255
+          }
+        }
+      ]
+    }
+  }
+}

@@ -61,6 +61,13 @@ class XmlStructureInputFactory implements FactoryInterface
             /** @var Xsd $xsdValidator */
             $xsdValidator = $validatorManager->get(Xsd::class);
             $xsdValidator->setXsd(sprintf(self::XSD_PATH, $config['ebsr']['transxchange_schema_version']));
+
+            if (isset($config['ebsr']['transxchange_fallback_schema_version'])) {
+                $xsdValidator->setFallbackXsd(
+                    sprintf(self::XSD_PATH, $config['ebsr']['transxchange_fallback_schema_version'])
+                );
+            }
+
             $xsdValidator->setMaxErrors($config['ebsr']['max_schema_errors']);
             $xsdValidator->setXmlMessageExclude($config['xml_valid_message_exclude']);
 

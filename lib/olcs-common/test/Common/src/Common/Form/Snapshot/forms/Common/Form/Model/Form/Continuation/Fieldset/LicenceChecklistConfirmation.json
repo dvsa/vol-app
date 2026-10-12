@@ -1,0 +1,96 @@
+{
+  "name": "LicenceChecklistConfirmation",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "yesNo",
+        "type": "Common\\Form\\Elements\\Types\\RadioYesNo"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "yesContent",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "checklistConfirmText",
+              "attributes": {
+                "value": "markup-continuation-licence-checklist-confirmation-yes"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "continuations.checklist.confirmation.yes-button"
+              },
+              "type": "\\Laminas\\Form\\Element\\Button"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "noContent",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "checklistDeclineText",
+              "attributes": {
+                "value": "markup-continuation-licence-checklist-confirmation-no"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "backToLicence",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "continuations.checklist.confirmation.no-button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionLink"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "\\Common\\Form\\Elements\\Types\\RadioHorizontal",
+  "input_filter": {
+    "yesNo": {
+      "name": "yesNo",
+      "error_message": "continuations.checklist.confirmation.error"
+    }
+  }
+}

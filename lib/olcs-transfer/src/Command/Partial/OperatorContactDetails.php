@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Transfer\Command\Partial;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * Operator Contact Details partial
@@ -12,41 +12,31 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
  */
 class OperatorContactDetails extends AbstractCommand
 {
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $id;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $version;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\EmailAddress")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\EmailAddress')]
+    #[Transfer\Optional]
     public $emailAddress;
 
-    /**
-     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\AddressOptional")
-     * @Transfer\Optional
-     */
+    #[Transfer\Partial('Dvsa\Olcs\Transfer\Command\Partial\AddressOptional')]
+    #[Transfer\Optional]
     protected $address;
 
-    /**
-     * @Transfer\ArrayInput
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\FilterEmptyItems")
-     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\PhoneContact")
-     * @Transfer\Optional
-     */
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\FilterEmptyItems')]
+    #[Transfer\Partial('Dvsa\Olcs\Transfer\Command\Partial\PhoneContact')]
+    #[Transfer\Optional]
     protected $phoneContacts = [];
 
     /**

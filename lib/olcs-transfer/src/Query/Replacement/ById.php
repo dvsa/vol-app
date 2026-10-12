@@ -10,11 +10,9 @@ namespace Dvsa\Olcs\Transfer\Query\Replacement;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/replacement/single")
- */
+#[Transfer\RouteName('backend/replacement/single')]
 class ById extends AbstractQuery
 {
     use Identity;

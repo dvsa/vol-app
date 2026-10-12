@@ -10,6 +10,7 @@ use Olcs\FormService\Form\Lva\TransportManager\ApplicationTransportManager as Su
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\Service\Helper\FormHelperService;
 use Common\FormService\FormServiceManager;
+use Laminas\Form\ElementInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 
 /**
@@ -42,6 +43,17 @@ final class ApplicationTransportManagerTest extends MockeryTestCase
         $this->formHelper->shouldReceive('createForm')->once()
             ->with('Lva\TransportManagers')
             ->andReturn($form);
+
+        $form->shouldReceive('get')
+            ->with('guidance')
+            ->once()
+            ->andReturn(
+                m::mock(ElementInterface::class)
+                    ->shouldReceive('setValue')
+                    ->with('markup-lva-tm-video-guidance')
+                    ->once()
+                    ->getMock()
+            );
 
         $this->mockAlterButtons($form, $this->formHelper);
 

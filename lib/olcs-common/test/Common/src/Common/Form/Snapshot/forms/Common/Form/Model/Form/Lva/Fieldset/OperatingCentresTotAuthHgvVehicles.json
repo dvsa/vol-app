@@ -1,0 +1,54 @@
+{
+  "name": "OperatingCentresTotAuthHgvVehicles",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "totAuthHgvVehicles",
+        "attributes": {
+          "required": false,
+          "class": "short",
+          "id": "totAuthHgvVehicles",
+          "pattern": "\\d*"
+        },
+        "type": "Text",
+        "options": {
+          "label": "application_operating-centres_authorisation.data.totAuthHgvVehicles.hgvs-label",
+          "hint-below-class": "govuk-hint govuk-body govuk-!-font-size-16 govuk-!-margin-top-2"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": [],
+  "input_filter": {
+    "totAuthHgvVehicles": {
+      "name": "totAuthHgvVehicles",
+      "required": true,
+      "validators": [
+        {
+          "name": "Digits",
+          "options": {
+            "break_chain_on_failure": true
+          }
+        },
+        {
+          "name": "Between",
+          "options": {
+            "min": 1,
+            "max": 5000
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "\\Laminas\\Filter\\ToNull",
+          "options": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  }
+}

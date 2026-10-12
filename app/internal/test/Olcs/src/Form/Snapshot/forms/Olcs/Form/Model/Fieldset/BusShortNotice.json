@@ -1,0 +1,526 @@
+{
+  "name": "bus-short-notice-fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "bankHolidayChange",
+        "type": "Radio",
+        "options": {
+          "label": "Bank holiday change",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "unforseenChange",
+        "type": "Radio",
+        "options": {
+          "label": "Unforseen circumstances",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "unforseenDetail",
+        "type": "TextArea",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Unforeseen circumstances comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "timetableChange",
+        "type": "Radio",
+        "options": {
+          "label": "Timetable change (< 10 minutes +/- originally registered service)",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "timetableDetail",
+        "type": "TextArea",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Timetable change (< 10 minutes +/- originally registered service) comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "replacementChange",
+        "type": "Radio",
+        "options": {
+          "label": "Service to replace substantially similar service run by another operator",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "replacementDetail",
+        "type": "TextArea",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Service to replace substantially similar service run by another operator comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "notAvailableChange",
+        "type": "Radio",
+        "options": {
+          "label": "Service not available to/used by general public",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "notAvailableDetail",
+        "type": "TextArea",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Service not available to/used by general public comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "specialOccasionChange",
+        "type": "Radio",
+        "options": {
+          "label": "Cater for additional demands for special occasions / events",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "specialOccasionDetail",
+        "type": "TextArea",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Cater for additional demands for special occasions / events comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "connectionChange",
+        "type": "Radio",
+        "options": {
+          "label": "Change to match changed connecting rail/ferry/air service",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "connectionDetail",
+        "type": "TextArea",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Change to match changed connecting rail/ferry/air service comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "holidayChange",
+        "type": "Radio",
+        "options": {
+          "label": "Change <= 14 days to match local public holiday or widely observed local holiday",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "holidayDetail",
+        "type": "TextArea",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Change <= 14 days to match local public holiday or widely observed local holiday comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trcChange",
+        "type": "Radio",
+        "options": {
+          "label": "To comply with TRC",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trcDetail",
+        "type": "TextArea",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "To comply with TRC comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "policeChange",
+        "type": "Radio",
+        "options": {
+          "label": "Police / Traffic Authority requires change for road safety reasons",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "policeDetail",
+        "type": "TextArea",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Police / Traffic Authority requires change for road safety reasons comments",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "unforseenDetail": {
+      "name": "unforseenDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "timetableDetail": {
+      "name": "timetableDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "replacementDetail": {
+      "name": "replacementDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "notAvailableDetail": {
+      "name": "notAvailableDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "specialOccasionDetail": {
+      "name": "specialOccasionDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "connectionDetail": {
+      "name": "connectionDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "holidayDetail": {
+      "name": "holidayDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "trcDetail": {
+      "name": "trcDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "policeDetail": {
+      "name": "policeDetail",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    }
+  }
+}

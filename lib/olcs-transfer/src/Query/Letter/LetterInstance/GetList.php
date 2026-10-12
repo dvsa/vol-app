@@ -2,7 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\Query\Letter\LetterInstance;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
@@ -13,9 +13,7 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\LicenceOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\ApplicationOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\CasesOptional;
 
-/**
- * @Transfer\RouteName("backend/letter/letter-instance")
- */
+#[Transfer\RouteName('backend/letter/letter-instance')]
 final class GetList extends AbstractQuery implements PagedQueryInterface, OrderedQueryInterface
 {
     use PagedTrait;
@@ -27,9 +25,9 @@ final class GetList extends AbstractQuery implements PagedQueryInterface, Ordere
 
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $status;
 
     /**

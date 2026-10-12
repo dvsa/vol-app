@@ -1,0 +1,217 @@
+{
+  "name": "Grant",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "grant-authority",
+        "attributes": {
+          "required": "required"
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "messages",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "message",
+              "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "inspection-request-confirm",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "createInspectionRequest",
+              "attributes": {
+                "required": "required",
+                "value": "Y"
+              },
+              "type": "Radio",
+              "options": {
+                "label": "internal.inspection-request.form.create-inspection-request",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "inspection-request-grant-details",
+        "attributes": {
+          "class": "",
+          "id": "inspectionRequestGrantDetails"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "dueDate",
+              "attributes": {
+                "required": false
+              },
+              "type": "Radio",
+              "options": {
+                "label": "internal.inspection-request.form.due-date",
+                "value_options": {
+                  "3": "internal.inspection-request.form.3-month",
+                  "6": "internal.inspection-request.form.6-month",
+                  "9": "internal.inspection-request.form.9-month",
+                  "12": "internal.inspection-request.form.12-month"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "caseworkerNotes",
+              "attributes": {
+                "id": "caseworkerNotes",
+                "class": "long",
+                "name": "caseworkerNotes",
+                "required": false
+              },
+              "options": {
+                "label": "internal.inspection-request.form.caseworker-notes",
+                "label_attributes": {
+                  "class": "long"
+                }
+              },
+              "type": "TextArea"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "grant",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Grant"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "overview",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Go to overview"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "label": ""
+  },
+  "input_filter": {
+    "inspection-request-confirm": {
+      "createInspectionRequest": {
+        "name": "createInspectionRequest",
+        "required": true
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "inspection-request-grant-details": {
+      "dueDate": {
+        "name": "dueDate",
+        "required": true
+      },
+      "caseworkerNotes": {
+        "name": "caseworkerNotes",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "grant-authority": {
+      "name": "grant-authority",
+      "required": true
+    }
+  }
+}

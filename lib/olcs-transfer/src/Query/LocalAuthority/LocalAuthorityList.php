@@ -7,12 +7,12 @@ use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTraitOptional;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTraitOptional;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * Class LocalAuthorityList
- * @Transfer\RouteName("backend/local-authority")
  */
+#[Transfer\RouteName('backend/local-authority')]
 class LocalAuthorityList extends AbstractQuery implements PagedQueryInterface, OrderedQueryInterface
 {
     use PagedTraitOptional;

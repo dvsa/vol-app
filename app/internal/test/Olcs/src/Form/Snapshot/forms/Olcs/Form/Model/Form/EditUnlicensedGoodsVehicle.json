@@ -1,0 +1,136 @@
+{
+  "name": "unlicensed-goods-vehicles-vehicle",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "vrm",
+              "attributes": {
+                "class": "medium",
+                "id": "vrm",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "application_vehicle-safety_vehicle-sub-action.data.vrm",
+                "error-message": "vehicle.error.top.vrm"
+              },
+              "type": "\\Common\\Form\\Elements\\Custom\\VehicleVrmAny"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "platedWeight",
+              "attributes": {
+                "class": "small",
+                "id": "plated_weight",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "application_vehicle-safety_vehicle-sub-action.data.weight",
+                "error-message": "vehicle.error.top.platedWeight",
+                "allow_empty": true
+              },
+              "type": "\\Common\\Form\\Elements\\Custom\\VehiclePlatedWeight"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "data": {
+      "id": {
+        "name": "id",
+        "required": false
+      },
+      "version": {
+        "name": "version",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

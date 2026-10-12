@@ -1,0 +1,55 @@
+{
+  "name": "ReplyInput",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "reply",
+        "attributes": {
+          "class": "extra-long",
+          "required": "required"
+        },
+        "options": {
+          "label": "",
+          "hint": "You can enter up to 1000 characters"
+        },
+        "type": "Laminas\\Form\\Element\\Textarea"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "reply": {
+      "name": "reply",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "messaging.form.message.content.empty.error_message"
+            }
+          },
+          "break_chain_on_failure": true
+        },
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 1000,
+            "messages": {
+              "stringLengthTooShort": "messaging.form.message.content.too_short.error_message",
+              "stringLengthTooLong": "messaging.form.message.content.too_long.error_message"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "form-actions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "action",
+        "attributes": {
+          "id": "action-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "data-module": "govuk-button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "cancel",
+        "attributes": {
+          "id": "cancel-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary"
+        },
+        "options": {
+          "label": "cancel.button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

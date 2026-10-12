@@ -1,0 +1,54 @@
+{
+  "name": "contactDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "application_taxi-phv_licence-sub-action.contactDetails.description"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "application_taxi-phv_licence-sub-action.contactDetails"
+  },
+  "input_filter": {
+    "description": {
+      "name": "description",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

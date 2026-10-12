@@ -1,0 +1,44 @@
+{
+  "name": "Cpid-filter",
+  "attributes": {
+    "method": "get",
+    "class": "form__filter filters"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "internal-licence-fees-status",
+          "disable_inarray_validator": false,
+          "empty_option": "Not set",
+          "category": "operator_cpid"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "tasks.submit.filter"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

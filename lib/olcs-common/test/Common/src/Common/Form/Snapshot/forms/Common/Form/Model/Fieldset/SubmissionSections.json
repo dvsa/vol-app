@@ -1,0 +1,92 @@
+{
+  "name": "submissionSections",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "compliance",
+        "attributes": [],
+        "options": {
+          "label": "Compliance",
+          "category": "case_categories_compliance"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "tm",
+        "attributes": [],
+        "options": {
+          "label": "TM",
+          "category": "case_categories_tm"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "app",
+        "attributes": [],
+        "options": {
+          "label": "Licensing application",
+          "category": "case_categories_app"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "referral",
+        "attributes": [],
+        "options": {
+          "label": "Licence referral",
+          "category": "case_categories_referral"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "bus",
+        "attributes": [],
+        "options": {
+          "label": "Bus registration",
+          "category": "case_categories_bus"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "Select one or more categories"
+  },
+  "input_filter": {
+    "compliance": {
+      "name": "compliance",
+      "required": false
+    },
+    "tm": {
+      "name": "tm",
+      "required": false
+    },
+    "app": {
+      "name": "app",
+      "required": false
+    },
+    "referral": {
+      "name": "referral",
+      "required": false
+    },
+    "bus": {
+      "name": "bus",
+      "required": false
+    }
+  }
+}

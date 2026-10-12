@@ -1,0 +1,104 @@
+{
+  "name": "options",
+  "attributes": {
+    "id": "radio"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "options",
+        "attributes": {
+          "radios_wrapper_attributes": {
+            "class": "govuk-radios--conditional",
+            "data-module": "radios"
+          }
+        },
+        "options": {
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--advanced"
+          },
+          "value_options": {
+            "remove": {
+              "label": "licence.vehicle.view.switchboard.option.remove.label",
+              "value": "remove",
+              "attributes": {
+                "id": "remove-vehicle"
+              }
+            },
+            "reprint": {
+              "label": "licence.vehicle.view.switchboard.option.reprint.label",
+              "value": "reprint",
+              "attributes": {
+                "id": "reprint-vehicle"
+              }
+            },
+            "transfer": {
+              "label": "licence.vehicle.view.switchboard.option.transfer.label",
+              "value": "transfer",
+              "attributes": {
+                "id": "transfer-vehicle"
+              }
+            }
+          }
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "transferContent",
+        "options": {
+          "disable_inarray_validator": false,
+          "render-container": false,
+          "label": "licence.vehicle.view.switchboard.option.transfer.select.label.plural",
+          "label_attributes": {
+            "class": "govuk-label"
+          }
+        },
+        "attributes": {
+          "id": "select-a-licence",
+          "class": "govuk-!-margin-right-2 govuk-select"
+        },
+        "type": "Select"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+  "options": {
+    "radio-element": "options",
+    "hint": "licence.vehicle.view.switchboard.hint"
+  },
+  "input_filter": {
+    "options": {
+      "name": "options",
+      "validators": [
+        {
+          "name": "\\Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "licence.vehicle.view.switchboard.error.is-empty"
+            }
+          }
+        }
+      ]
+    },
+    "transferContent": {
+      "name": "transferContent",
+      "required": false,
+      "validators": [
+        {
+          "name": "\\Laminas\\Validator\\Digits"
+        },
+        {
+          "name": "\\Laminas\\Validator\\GreaterThan",
+          "options": {
+            "min": 0
+          }
+        }
+      ]
+    }
+  }
+}

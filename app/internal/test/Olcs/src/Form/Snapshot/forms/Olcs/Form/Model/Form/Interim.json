@@ -1,0 +1,484 @@
+{
+  "name": "interim",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "requested",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "interimRequested",
+              "attributes": {
+                "required": "required"
+              },
+              "type": "Radio",
+              "options": {
+                "label": "internal.interim.form.interim_requested",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "",
+          "class": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "interimReason",
+              "attributes": {
+                "id": "interimReason",
+                "class": "long",
+                "name": "interimReason"
+              },
+              "options": {
+                "label": "internal.interim.form.interim_reason",
+                "label_attributes": {
+                  "class": "long"
+                }
+              },
+              "type": "TextArea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "interimStart",
+              "attributes": {
+                "id": "interimStart"
+              },
+              "options": {
+                "label": "internal.interim.form.interim_start",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "min_year_delta": "-5",
+                "max_year_delta": "+5"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "interimEnd",
+              "attributes": {
+                "id": "interimEnd"
+              },
+              "options": {
+                "label": "internal.interim.form.interim_end",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "min_year_delta": "-5",
+                "max_year_delta": "+5"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "interimAuthHgvVehicles",
+              "attributes": {
+                "class": "short",
+                "id": "interimAuthHgvVehicles"
+              },
+              "options": {
+                "label": "internal.interim.form.interim_auth_hgv_vehicles"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "interimAuthLgvVehicles",
+              "attributes": {
+                "class": "short",
+                "id": "interimAuthLgvVehicles"
+              },
+              "options": {
+                "label": "internal.interim.form.interim_auth_lgv_vehicles"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "interimAuthTrailers",
+              "attributes": {
+                "class": "short",
+                "id": "interimAuthTrailers"
+              },
+              "options": {
+                "label": "internal.interim.form.interim_auth_trailers"
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "",
+          "class": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "operatingCentres",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "vehicles",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "interimStatus",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "status",
+              "options": {
+                "label": "internal.interim.form.interim_status",
+                "category": "interim_status"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "",
+          "class": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "internal.interim.form.interim_save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "grant",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "grant"
+              },
+              "options": {
+                "label": "internal.interim.form.interim_grant"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "refuse",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "refuse"
+              },
+              "options": {
+                "label": "internal.interim.form.interim_refuse"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "internal.interim.form.interim_cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "reprint",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "reprint"
+              },
+              "options": {
+                "label": "internal.interim.form.interim_reprint"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "requested": {
+      "interimRequested": {
+        "name": "interimRequested",
+        "required": true
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "data": {
+      "interimReason": {
+        "name": "interimReason",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "interimStart": {
+        "name": "interimStart",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "interimEnd": {
+        "name": "interimEnd",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "interimAuthHgvVehicles": {
+        "name": "interimAuthHgvVehicles",
+        "required": false,
+        "validators": [
+          {
+            "name": "Digits"
+          }
+        ]
+      },
+      "interimAuthLgvVehicles": {
+        "name": "interimAuthLgvVehicles",
+        "required": false,
+        "validators": [
+          {
+            "name": "Digits"
+          }
+        ]
+      },
+      "interimAuthTrailers": {
+        "name": "interimAuthTrailers",
+        "required": false,
+        "validators": [
+          {
+            "name": "Digits"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

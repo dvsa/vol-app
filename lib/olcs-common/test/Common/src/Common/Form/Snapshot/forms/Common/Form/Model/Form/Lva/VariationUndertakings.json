@@ -1,0 +1,289 @@
+{
+  "name": "lva-undertakings",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "declarationsAndUndertakings",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "review",
+              "attributes": {
+                "value": "markup-review-text-variation"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "summaryDownload",
+              "type": "\\Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "declarationConfirmation",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y",
+                "label": "variation.review-declarations.confirm-text",
+                "short-label": "variation.review-declarations.confirm-short-label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--advanced",
+                  "id": "label-declarationConfirmation"
+                }
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "noTmConfirmation",
+              "type": "Radio",
+              "options": {
+                "label": "variation.review-notransportmanager.confirm-text",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "N/A"
+                },
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--advanced",
+                  "id": "label-noTmConfirmation"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "interim",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "goodsApplicationInterim",
+              "attributes": {
+                "id": "interim[goodsApplicationInterim]",
+                "placeholder": "",
+                "value": "N"
+              },
+              "options": {
+                "label": "interim.application.undertakings.form.checkbox.label",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                }
+              },
+              "type": "\\Laminas\\Form\\Element\\Radio"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "YContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "interimGuidanceText",
+                    "attributes": {
+                      "value": "interim.application.undertakings.form.textarea.placeholder",
+                      "data-container-class": "typeOfLicence-guidance-restricted js-visible",
+                      "id": "application-interim-reason"
+                    },
+                    "options": {
+                      "tokens": [
+                        "application_type-of-licence_licence-type.data.restrictedGuidance"
+                      ]
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "goodsApplicationInterimReason",
+                    "attributes": {
+                      "required": false,
+                      "id": "applicationInterimReason",
+                      "class": "long js-interim-reason",
+                      "data-container-class": "interimFee"
+                    },
+                    "type": "TextArea"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "interimFee",
+                    "attributes": {
+                      "value": "markup-interim-fee",
+                      "data-container-class": "interimFee",
+                      "id": "interimFee"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\GuidanceTranslated"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+        "options": {
+          "radio-element": "goodsApplicationInterim"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "saveAndContinue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "save.continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "interim": {
+      "YContent": {
+        "goodsApplicationInterimReason": {
+          "name": "goodsApplicationInterimReason",
+          "required": true,
+          "type": "Common\\InputFilter\\ContinueIfEmptyInput",
+          "allow_empty": true,
+          "filters": [
+            {
+              "name": "Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "goodsApplicationInterim",
+                "context_values": [
+                  "Y"
+                ],
+                "inject_post_data": "interim->goodsApplicationInterim",
+                "validators": [
+                  {
+                    "name": "NotEmpty",
+                    "options": {
+                      "messages": {
+                        "isEmpty": "Value is required and can't be empty"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

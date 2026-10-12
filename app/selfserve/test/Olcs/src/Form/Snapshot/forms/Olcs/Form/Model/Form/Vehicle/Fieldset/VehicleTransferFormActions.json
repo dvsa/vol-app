@@ -1,0 +1,60 @@
+{
+  "name": "VehicleTransferFormActions",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "licence",
+        "options": {
+          "disable_inarray_validator": false,
+          "render-container": false,
+          "label": "licence.vehicle.transfer.select.licence.label",
+          "label_attributes": {
+            "class": "govuk-label govuk-!-padding-top-3 govuk-!-margin-bottom-4"
+          }
+        },
+        "attributes": {
+          "id": "select-a-licence",
+          "class": "govuk-!-margin-right-2 govuk-select"
+        },
+        "type": "Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "action",
+        "attributes": {
+          "id": "action-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "data-module": "govuk-button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "cancel",
+        "attributes": {
+          "id": "cancel-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary"
+        },
+        "options": {
+          "label": "cancel.button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "licence": {
+      "name": "licence",
+      "required": false
+    }
+  }
+}

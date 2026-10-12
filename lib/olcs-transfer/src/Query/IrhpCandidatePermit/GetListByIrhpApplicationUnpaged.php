@@ -11,11 +11,9 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\IsPreGrant;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/irhp-candidate-permits/by-irhp-application/unpaged")
- */
+#[Transfer\RouteName('backend/irhp-candidate-permits/by-irhp-application/unpaged')]
 class GetListByIrhpApplicationUnpaged extends AbstractQuery implements OrderedQueryInterface
 {
     use IrhpApplication;
@@ -24,8 +22,8 @@ class GetListByIrhpApplicationUnpaged extends AbstractQuery implements OrderedQu
 
     /**
      * @var bool
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $wantedOnly = false;
 
     /**

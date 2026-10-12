@@ -4,55 +4,41 @@ namespace Dvsa\Olcs\Transfer\Command\Cases\Si;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldType;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/case-si/single")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/case-si/single')]
+#[Transfer\Method('PUT')]
 class UpdateSi extends AbstractCommand
 {
     use FieldType\Identity;
     use FieldType\Version;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"max":36})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['max' => 36])]
+    #[Transfer\Optional]
     protected $notificationNumber = null;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $siCategoryType;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     * @Transfer\Validator("\Dvsa\Olcs\Transfer\Validators\DateNotInFuture")
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Validator('\Dvsa\Olcs\Transfer\Validators\DateNotInFuture')]
     protected $infringementDate;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     * @Transfer\Validator("\Dvsa\Olcs\Transfer\Validators\DateNotInFuture")
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Validator('\Dvsa\Olcs\Transfer\Validators\DateNotInFuture')]
     protected $checkDate;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Filter("Laminas\Filter\StringToUpper")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":2,"max":2})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Filter('Laminas\Filter\StringToUpper')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 2])]
     protected $memberStateCode;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"max":5000})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['max' => 5000])]
+    #[Transfer\Optional]
     protected $reason = null;
 
     /**

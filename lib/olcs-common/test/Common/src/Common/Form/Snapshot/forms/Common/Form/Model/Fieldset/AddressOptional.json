@@ -1,0 +1,226 @@
+{
+  "name": "address",
+  "attributes": {
+    "class": "address js-postcode-search",
+    "aria-live": "assertive"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "addressLine1",
+        "attributes": {
+          "class": "long",
+          "id": "",
+          "data-container-class": "compound"
+        },
+        "options": {
+          "label": "address_addressLines",
+          "label_attributes": {
+            "aria-label": "Enter address manually. Establishment address line 1"
+          },
+          "short-label": "address_addressLine1"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "addressLine2",
+        "attributes": {
+          "class": "long",
+          "id": "",
+          "data-container-class": "compound"
+        },
+        "options": {
+          "label": "address_addressLine2",
+          "label_attributes": {
+            "class": "govuk-visually-hidden"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "addressLine3",
+        "attributes": {
+          "class": "long",
+          "id": "",
+          "data-container-class": "compound"
+        },
+        "options": {
+          "label": "address_addressLine3",
+          "label_attributes": {
+            "class": "govuk-visually-hidden"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "addressLine4",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "address_addressLine4",
+          "label_attributes": {
+            "class": "govuk-visually-hidden"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "town",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "address_townCity",
+          "label_attributes": {
+            "aria-label": "Establishment town/city"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "postcode",
+        "options": {
+          "label": "address_postcode",
+          "label_attributes": {
+            "aria-label": "Establishment postcode"
+          }
+        },
+        "type": "Text",
+        "attributes": {
+          "id": "postcodeOptional",
+          "required": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "countryCode",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "value": "GB"
+        },
+        "options": {
+          "label": "address_country",
+          "label_attributes": {
+            "aria-label": "Choose establishment country"
+          },
+          "empty_option": "Please select",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\Country"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": {
+        "priority": 100
+      },
+      "spec": {
+        "name": "searchPostcode",
+        "options": {
+          "label": "Postcode search",
+          "label_attributes": {
+            "class": "form-element__label"
+          }
+        },
+        "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
+      }
+    }
+  ],
+  "type": "\\Common\\Form\\Elements\\Types\\Address",
+  "input_filter": {
+    "searchPostcode": {
+      "name": "searchPostcode",
+      "required": false
+    },
+    "addressLine1": {
+      "name": "addressLine1",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "addressLine2": {
+      "name": "addressLine2",
+      "required": false
+    },
+    "addressLine3": {
+      "name": "addressLine3",
+      "required": false
+    },
+    "addressLine4": {
+      "name": "addressLine4",
+      "required": false
+    },
+    "town": {
+      "name": "town",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "postcode": {
+      "name": "postcode",
+      "required": false,
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode",
+          "options": {
+            "allow_empty": true
+          }
+        }
+      ]
+    },
+    "countryCode": {
+      "name": "countryCode",
+      "required": false
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "name": "FeeRateDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "idReadOnly",
+        "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement",
+        "options": {
+          "label": "ID:"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "feeType",
+        "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement",
+        "options": {
+          "label": "Fee Type:"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement",
+        "options": {
+          "label": "Description:"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "effectiveFrom",
+        "options": {
+          "label": "Effective From:"
+        },
+        "attributes": {
+          "required": true
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "fixedValue",
+        "attributes": {
+          "required": true,
+          "min": 0,
+          "step": 1
+        },
+        "options": {
+          "label": "Fixed Value"
+        },
+        "type": "Laminas\\Form\\Element\\Number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "annualValue",
+        "attributes": {
+          "required": true,
+          "min": 0,
+          "step": 1
+        },
+        "options": {
+          "label": "Annual Value"
+        },
+        "type": "Laminas\\Form\\Element\\Number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "fiveYearValue",
+        "attributes": {
+          "required": true,
+          "min": 0,
+          "step": 1
+        },
+        "options": {
+          "label": "Five Year Value"
+        },
+        "type": "Laminas\\Form\\Element\\Number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "effectiveFrom": {
+      "name": "effectiveFrom",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\DateInFuture",
+          "options": {
+            "include_today": true,
+            "use_time": false
+          }
+        }
+      ]
+    },
+    "fixedValue": {
+      "name": "fixedValue",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Between",
+          "options": {
+            "min": "0",
+            "max": "9999"
+          }
+        }
+      ]
+    },
+    "annualValue": {
+      "name": "annualValue",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        },
+        {
+          "name": "Laminas\\Validator\\Between",
+          "options": {
+            "min": "0",
+            "max": "9999"
+          }
+        }
+      ]
+    },
+    "fiveYearValue": {
+      "name": "fiveYearValue",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        },
+        {
+          "name": "Laminas\\Validator\\Between",
+          "options": {
+            "min": "0",
+            "max": "9999"
+          }
+        }
+      ]
+    }
+  }
+}

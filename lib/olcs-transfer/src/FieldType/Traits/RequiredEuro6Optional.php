@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * PermitsRequired Euro 6
  */
@@ -9,11 +11,11 @@ trait RequiredEuro6Optional
 {
     /**
      * @var int
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Optional
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": -1})
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Optional]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => -1])]
     public $requiredEuro6;
 
     /**

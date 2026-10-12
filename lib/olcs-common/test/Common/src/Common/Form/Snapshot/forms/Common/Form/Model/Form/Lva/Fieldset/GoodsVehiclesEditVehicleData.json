@@ -1,0 +1,61 @@
+{
+  "name": "data",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "vrm",
+        "attributes": {
+          "class": "medium",
+          "id": "vrm",
+          "placeholder": "",
+          "disabled": "disabled"
+        },
+        "options": {
+          "label": "application_vehicle-safety_vehicle-sub-action.data.vrm"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "platedWeight",
+        "attributes": {
+          "class": "small",
+          "id": "plated_weight",
+          "placeholder": "",
+          "pattern": "\\d"
+        },
+        "options": {
+          "label": "application_vehicle-safety_vehicle-sub-action.data.weight",
+          "error-message": "vehicle.error.top.platedWeight"
+        },
+        "type": "\\Common\\Form\\Elements\\Custom\\VehiclePlatedWeight"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

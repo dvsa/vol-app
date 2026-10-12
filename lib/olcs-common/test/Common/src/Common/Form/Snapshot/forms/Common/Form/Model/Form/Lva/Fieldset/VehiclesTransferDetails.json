@@ -1,0 +1,42 @@
+{
+  "name": "VehiclesTransferDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "licence",
+        "attributes": {
+          "required": false,
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "licence.vehicles_transfer.form.licence",
+          "empty_option": "Please select"
+        },
+        "type": "Select"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": ""
+  },
+  "input_filter": {
+    "licence": {
+      "name": "licence",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "licence.vehicles_transfer.form.message_empty"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -6,11 +6,13 @@
 
 namespace Dvsa\Olcs\Api\Domain\Query\Bus;
 
+use Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * EbsrSubmissionList
@@ -20,34 +22,26 @@ final class EbsrSubmissionList extends AbstractQuery implements PagedQueryInterf
     use PagedTrait;
     use OrderedTrait;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter("Laminas\Filter\Digits")]
+    #[Transfer\Validator("Laminas\Validator\Digits")]
+    #[Transfer\Validator("Laminas\Validator\GreaterThan", options: ["min" => 0])]
+    #[Transfer\Optional]
     protected $organisation = null;
 
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *      options={
-     *          "haystack": {
-     *              "ebsrt_new", "ebsrt_refresh"
-     *          }
-     *      }
-     * )
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter("Laminas\Filter\StringTrim")]
+    #[Transfer\Validator("Laminas\Validator\InArray", options: ["haystack" => [EbsrSubmission::NEW_SUBMISSION_TYPE, EbsrSubmission::DATA_REFRESH_SUBMISSION_TYPE]])]
     protected $subType;
 
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\EbsrSubmissionStatus")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter("Laminas\Filter\StringTrim")]
+    #[Transfer\Validator("Dvsa\Olcs\Transfer\Validators\EbsrSubmissionStatus")]
     protected $status;
 
     /**

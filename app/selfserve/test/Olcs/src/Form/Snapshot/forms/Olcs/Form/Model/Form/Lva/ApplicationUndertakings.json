@@ -1,0 +1,398 @@
+{
+  "name": "lva-undertakings",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "declarationsAndUndertakings",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "review",
+              "attributes": {
+                "value": "markup-review-text"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "declaration",
+              "attributes": {
+                "value": "markup-declaration-text"
+              },
+              "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "signatureOptions",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "application.signature.options.label",
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--advanced"
+                },
+                "value_options": {
+                  "Y": "application.signature.options.verify",
+                  "N": "application.signature.options.sign"
+                },
+                "label_options": {
+                  "disable_html_escape": "true"
+                }
+              },
+              "type": "\\Laminas\\Form\\Element\\Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "signatureVerifyMandate",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--advanced"
+                },
+                "value_options": {
+                  "Y": "application.signature.options.verify"
+                },
+                "label_options": {
+                  "disable_html_escape": "true"
+                }
+              },
+              "type": "\\Laminas\\Form\\Element\\Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "disabledReview",
+              "attributes": {
+                "value": "markup-signature-disabled-text"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "declarationDownload",
+              "attributes": {
+                "id": "declarationDownload"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "declarationForVerify",
+              "attributes": {
+                "value": "markup-declaration-for-verify",
+                "data-container-class": "declarationForVerify"
+              },
+              "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "interim",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "goodsApplicationInterim",
+              "attributes": {
+                "id": "interim[goodsApplicationInterim]",
+                "placeholder": "",
+                "value": "N"
+              },
+              "options": {
+                "label": "interim.application.undertakings.form.checkbox.label",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                }
+              },
+              "type": "\\Laminas\\Form\\Element\\Radio"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "YContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "interimGuidanceText",
+                    "attributes": {
+                      "value": "interim.application.undertakings.form.textarea.placeholder",
+                      "data-container-class": "typeOfLicence-guidance-restricted js-visible",
+                      "id": "application-interim-reason"
+                    },
+                    "options": {
+                      "tokens": [
+                        "application_type-of-licence_licence-type.data.restrictedGuidance"
+                      ]
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "goodsApplicationInterimReason",
+                    "attributes": {
+                      "required": false,
+                      "id": "applicationInterimReason",
+                      "class": "long js-interim-reason",
+                      "data-container-class": "interimFee"
+                    },
+                    "type": "TextArea"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "interimFee",
+                    "attributes": {
+                      "value": "markup-interim-fee",
+                      "data-container-class": "interimFee",
+                      "id": "interimFee"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\GuidanceTranslated"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+        "options": {
+          "radio-element": "goodsApplicationInterim",
+          "label": "interim.application.undertakings.form.checkbox.label"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "sign",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button",
+                "id": "sign"
+              },
+              "options": {
+                "label": "application.review-declarations.sign-button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "submitAndPay",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button",
+                "id": "submitAndPay"
+              },
+              "options": {
+                "label": "submitandpay.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button",
+                "id": "submit"
+              },
+              "options": {
+                "label": "submitapplication.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "change",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "change"
+              },
+              "options": {
+                "label": "change.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "saveAndContinue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "save.continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "interim": {
+      "YContent": {
+        "goodsApplicationInterimReason": {
+          "name": "goodsApplicationInterimReason",
+          "required": true,
+          "type": "Common\\InputFilter\\ContinueIfEmptyInput",
+          "allow_empty": true,
+          "filters": [
+            {
+              "name": "Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "goodsApplicationInterim",
+                "context_values": [
+                  "Y"
+                ],
+                "inject_post_data": "interim->goodsApplicationInterim",
+                "validators": [
+                  {
+                    "name": "NotEmpty",
+                    "options": {
+                      "messages": {
+                        "isEmpty": "Value is required and can't be empty"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

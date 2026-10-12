@@ -1,0 +1,252 @@
+{
+  "name": "PermitRangeDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "stockId",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "journey",
+        "attributes": {
+          "id": "journey",
+          "required": "required"
+        },
+        "options": {
+          "label": "Journey type",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "journey"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emissionsCategory",
+        "attributes": {
+          "id": "emissionsCategory",
+          "required": "required"
+        },
+        "options": {
+          "label": "Emissions category question",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "emissions_category",
+          "exclude": [
+            "emissions_cat_na"
+          ]
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "prefix",
+        "attributes": {
+          "id": "prefix"
+        },
+        "options": {
+          "label": "Permit Prefix",
+          "required": "false"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "fromNo",
+        "attributes": {
+          "id": "fromNo",
+          "requried": true
+        },
+        "options": {
+          "label": "Permit Number Range From"
+        },
+        "type": "Laminas\\Form\\Element\\Number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "toNo",
+        "attributes": {
+          "id": "toNo",
+          "required": true
+        },
+        "options": {
+          "label": "Permit Number Range To"
+        },
+        "type": "Laminas\\Form\\Element\\Number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "cabotage",
+        "attributes": {
+          "id": "cabotage"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "Cabotage",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "Yes"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "ssReserve",
+        "attributes": {
+          "id": "reserve"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "Reserve",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "Yes"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "lostReplacement",
+        "attributes": {
+          "id": "lostReplacement"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "Lost and Replacement",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "Yes"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "countrys",
+        "attributes": {
+          "class": "chosen-select-large",
+          "id": "countrys",
+          "allowWrap": true,
+          "multiple": "multiple",
+          "empty": "Select options if applicable",
+          "data-container-class": "form-control__container"
+        },
+        "options": {
+          "label": "Restricted Countries",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\Country",
+          "required": "false"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "journey": {
+      "name": "journey",
+      "required": true
+    },
+    "emissionsCategory": {
+      "name": "emissionsCategory",
+      "required": true
+    },
+    "prefix": {
+      "name": "prefix",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 7
+          }
+        }
+      ],
+      "required": false
+    },
+    "fromNo": {
+      "name": "fromNo",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        },
+        {
+          "name": "Laminas\\Validator\\GreaterThan",
+          "options": {
+            "min": "0"
+          }
+        }
+      ]
+    },
+    "toNo": {
+      "name": "toNo",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        },
+        {
+          "name": "Laminas\\Validator\\GreaterThan",
+          "options": {
+            "min": "0"
+          }
+        }
+      ]
+    },
+    "cabotage": {
+      "name": "cabotage",
+      "required": false
+    },
+    "ssReserve": {
+      "name": "ssReserve",
+      "required": false
+    },
+    "lostReplacement": {
+      "name": "lostReplacement",
+      "required": false
+    },
+    "countrys": {
+      "name": "countrys",
+      "required": false
+    }
+  }
+}

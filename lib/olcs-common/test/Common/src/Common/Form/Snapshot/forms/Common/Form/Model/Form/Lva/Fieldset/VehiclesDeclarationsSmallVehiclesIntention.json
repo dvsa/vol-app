@@ -1,0 +1,66 @@
+{
+  "name": "smallVehiclesIntention",
+  "attributes": {
+    "class": "psv-show-small psv-show-both"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvSmallVhlScotland",
+        "attributes": {
+          "id": "",
+          "value": "markup-application_vehicle-safety_undertakings-smallVehiclesUndertakingsScotland"
+        },
+        "options": {
+          "label": "application_vehicle-safety_undertakings.smallVehiclesUndertakingsScotland.title"
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvSmallVhlUndertakings",
+        "attributes": {
+          "value": "markup-application_vehicle-safety_undertakings-smallVehiclesUndertakings"
+        },
+        "options": {
+          "label": "application_vehicle-safety_undertakings.smallVehiclesUndertakings.title"
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvSmallVhlConfirmation",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "application_vehicle-safety_undertakings.smallVehiclesConfirmation",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "checked_value": "Y",
+          "unchecked_value": "N"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "application_vehicle-safety_undertakings-smallVehiclesUndertakings"
+  },
+  "input_filter": {
+    "psvSmallVhlConfirmation": {
+      "name": "psvSmallVhlConfirmation",
+      "required": false,
+      "allow_empty": true,
+      "type": "Common\\InputFilter\\ContinueIfEmptyInput"
+    }
+  }
+}
