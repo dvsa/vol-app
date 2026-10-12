@@ -112,5 +112,3 @@ final class OverrideDocumentAnalysisFlag extends AbstractCommandHandler implemen
         return is_string($name) && $name !== '' ? $name : (string)$user->getLoginId();
     }
 }
-
-
