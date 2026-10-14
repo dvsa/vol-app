@@ -72,11 +72,13 @@ final class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHan
     public function testDocumentsAreNotCarriedOverBetweenCalls(): void
     {
         $licence = m::mock(LicenceEntity::class);
+        // three reads per call: null check, address null check, then the address itself
         $licence->shouldReceive('getCorrespondenceCd')
             ->withNoArgs()
+            ->times(6)
             ->andReturn($this->addressProvider('correspondenceAddress')['correspondenceAddress']);
 
-        $this->repoMap['Licence']->expects('fetchWithAddressesUsingId')->twice()->with(1)->andReturn($licence);
+        $this->repoMap['Licence']->shouldReceive('fetchWithAddressesUsingId')->with(1)->twice()->andReturn($licence);
 
         $command = Cmd::create([
             'generateCommandData' => ['description' => 'Reg 31', 'licence' => 1],

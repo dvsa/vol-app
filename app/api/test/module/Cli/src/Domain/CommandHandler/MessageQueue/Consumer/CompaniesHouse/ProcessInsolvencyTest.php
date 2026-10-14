@@ -283,7 +283,7 @@ final class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
             ]);
 
         $team = m::mock(TeamEntity::class);
-        $team->shouldReceive('getId')->withNoArgs()->andReturn(1);
+        $team->shouldReceive('getId')->withNoArgs()->twice()->andReturn(1);
         $this->repoMap['Team']->expects('fetchOneByName')->with(ProcessInsolvency::GB_TEAMLEADER_TASK)->andReturn($team);
         $this->repoMap['Team']->expects('fetchOneByName')->with(ProcessInsolvency::NI_TEAMLEADER_TASK)->andReturn($team);
 
@@ -348,7 +348,7 @@ final class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
             ]);
 
         $team = m::mock(TeamEntity::class);
-        $team->shouldReceive('getId')->withNoArgs()->andReturn(1);
+        $team->expects('getId')->withNoArgs()->andReturn(1);
         $this->repoMap['Team']->expects('fetchOneByName')->with(ProcessInsolvency::GB_TEAMLEADER_TASK)->andReturn($team);
 
         // one letter leaves 'documents' as a bare id rather than a list
@@ -373,29 +373,30 @@ final class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
     public function testEachMessageStartsWithAFreshResult(): void
     {
         $queueService = m::mock(Queue::class);
-        $queueService->expects('fetchMessages')
-            ->twice()
+        $queueService->shouldReceive('fetchMessages')
             ->with('process_insolvency_queue_url', 1, 1)
+            ->twice()
             ->andReturn(
                 [['Body' => '1234', 'ReceiptHandle' => 1]],
                 [['Body' => '5678', 'ReceiptHandle' => 2]]
             );
-        $queueService->expects('deleteMessage')->with('process_insolvency_queue_url', 1);
-        $queueService->expects('deleteMessage')->with('process_insolvency_queue_url', 2);
+        $queueService->expects('deleteMessage')->with('process_insolvency_queue_url', 1)->andReturn([]);
+        $queueService->expects('deleteMessage')->with('process_insolvency_queue_url', 2)->andReturn([]);
 
         $companiesHouseClient = m::mock(CompaniesHouseClient::class);
 
         foreach (['1234', '5678'] as $companyNumber) {
             $company = m::mock(CHCompanyEntity::class);
-            $company->shouldReceive('getCompanyNumber')->withNoArgs()->andReturn($companyNumber);
-            $company->expects('setInsolvencyPractitioners')->with(m::type(ArrayCollection::class));
-            $company->expects('setInsolvencyProcessed')->with(true);
+            // insolvency lookup, result message, organisation lookup
+            $company->shouldReceive('getCompanyNumber')->withNoArgs()->times(3)->andReturn($companyNumber);
+            $company->expects('setInsolvencyPractitioners')->with(m::type(ArrayCollection::class))->andReturnSelf();
+            $company->expects('setInsolvencyProcessed')->with(true)->andReturnSelf();
 
             $this->repoMap['CompaniesHouseCompany']
                 ->expects('getLatestByCompanyNumber')
                 ->with($companyNumber)
                 ->andReturn($company);
-            $this->repoMap['CompaniesHouseCompany']->expects('save')->twice()->with($company);
+            $this->repoMap['CompaniesHouseCompany']->shouldReceive('save')->with($company)->twice()->andReturnNull();
             $this->repoMap['Organisation']->expects('getByCompanyOrLlpNo')->with($companyNumber)->andReturn([]);
 
             $companiesHouseClient->expects('getInsolvencyDetails')
