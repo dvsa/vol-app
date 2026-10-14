@@ -14,6 +14,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Cache\Clear;
 use Admin\Form\Model\Form\CacheClear as CacheClearForm;
 use Laminas\Form\Annotation\AnnotationBuilder;
+use Laminas\Form\Annotation\AttributeBuilder;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\FieldsetInterface;
 use Laminas\Http\Request;
@@ -283,7 +284,7 @@ final class CacheClearControllerTest extends MockeryTestCase
      */
     public function testFormOptionsMatchTheNamespaceMap(): void
     {
-        $spec = (new AnnotationBuilder())->getFormSpecification(CacheClearForm::class);
+        $spec = (new AttributeBuilder())->getFormSpecification(CacheClearForm::class);
 
         $valueOptions = null;
 

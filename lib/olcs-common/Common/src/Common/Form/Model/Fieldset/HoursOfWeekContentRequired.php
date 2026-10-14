@@ -14,7 +14,7 @@ class HoursOfWeekContentRequired
     #[Form\Options(['label' => 'days-of-week-short-mon', 'label_attributes' => ['aria-label' => 'Enter your working hours, Monday']])]
     #[Form\Validator('Laminas\I18n\Validator\IsFloat', options: ['messages' => ['notFloat' => 'Only numbers are allowed']])]
     #[Form\Validator('Between', options: ['min' => 0, 'max' => 24, 'messages' => ['notBetween' => "Mon must be between '%min%' and '%max%', inclusively"]])]
-    #[Form\Validator('Common\Form\Elements\Validators\SumContext', options: ['min' => '0.1', 'messages' => ['belowMin' => 'transport-manager-hours-per-week-validation-message']])]
+    #[Form\Validator('Common\Form\Elements\Validators\SumContext', options: ['min' => 0.1, 'messages' => ['belowMin' => 'transport-manager-hours-per-week-validation-message']])]
     public $hoursMon;
 
     #[Form\Filter('Common\Filter\NullToFloat')]

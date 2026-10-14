@@ -36,8 +36,7 @@ class OperatorDetails
     public $natureOfBusiness = null;
 
     #[Form\Type('Common\Form\Elements\Types\Html')]
-    #[Form\Attributes(['value' => 'Please enter your business type. You can find a list of business types at Companies House
-      <a class="govuk-link" rel="external noreferrer noopener" href="https://www.gov.uk/government/publications/standard-industrial-classification-of-economic-activities-sic" target="_blank">here</a>'])]
+    #[Form\Attributes(['value' => 'Please enter your business type. You can find a list of business types at Companies House <a class="govuk-link" rel="external noreferrer noopener" href="https://www.gov.uk/government/publications/standard-industrial-classification-of-economic-activities-sic" target="_blank">here</a>'])]
     public $information = null;
 
     #[Form\Attributes(['class' => 'long', 'id' => ''])]

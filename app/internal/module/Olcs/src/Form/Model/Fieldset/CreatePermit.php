@@ -32,7 +32,6 @@ class CreatePermit extends Base
     #[Form\Attributes(['id' => 'numVehicles'])]
     public $numVehicles;
 
-    #[Form\Type('Laminas\Form\Element\Hidden')]
     #[Form\Type('\Common\Form\Elements\Types\ReadonlyElement')]
     #[Form\Options(['label' => 'Current total vehicle authorization'])]
     public $numVehiclesLabel;

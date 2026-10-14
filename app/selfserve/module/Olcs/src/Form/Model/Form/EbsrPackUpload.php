@@ -8,10 +8,9 @@ use Laminas\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  */
 #[Form\Name('ebsr-pack-upload')]
-#[Form\Options(['label' => 'Ebsr Pack Upload'])]
 #[Form\Attributes(['method' => 'post'])]
-#[Form\Type('Common\Form\Form')]
 #[Form\Options(['prefer_form_input_filter' => true])]
+#[Form\Type('Common\Form\Form')]
 class EbsrPackUpload
 {
     #[Form\Name('fields')]

@@ -12,6 +12,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
 use Laminas\Form\Annotation\AnnotationBuilder;
+use Laminas\Form\Annotation\AttributeBuilder;
 use Laminas\Form\Element\DateSelect;
 use Laminas\Form\Element\DateTimeSelect;
 use Laminas\Form\ElementInterface;
@@ -39,7 +40,7 @@ final class FormHelperServiceTest extends MockeryTestCase
     /** @var AuthorizationService | m\MockInterface */
     private $mockAuthSrv;
 
-    /** @var AnnotationBuilder | m\MockInterface */
+    /** @var AttributeBuilder | m\MockInterface */
     private $mockBuilder;
 
     /** @var  AddressHelperService | m\MockInterface */
@@ -60,7 +61,7 @@ final class FormHelperServiceTest extends MockeryTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->mockBuilder = new AnnotationBuilder();
+        $this->mockBuilder = new AttributeBuilder();
         $this->mockAuthSrv = m::mock(AuthorizationService::class);
 
         $this->mockTransSrv = m::mock(TranslationHelperService::class);
@@ -144,7 +145,7 @@ final class FormHelperServiceTest extends MockeryTestCase
         ];
 
         $sut = new FormHelperService(
-            new AnnotationBuilder(),
+            new AttributeBuilder(),
             $config,
             $this->mockAuthSrv,
             $this->mockRenderer,

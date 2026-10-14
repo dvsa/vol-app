@@ -26,7 +26,7 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
     public $id = null;
 
     #[Form\Type('Common\Form\Elements\Types\Html')]
-    #[Form\Attributes(['value' => '<a id='])]
+    #[Form\Attributes(['value' => '<a id="addOrRemoveCountriesButton" class="govuk-button govuk-button--secondary" role="button" data-module="govuk-button">Add or remove countries</a>'])]
     public $addOrRemoveCountriesButton = null;
 
     #[Form\Attributes(['id' => 'dateReceived'])]
@@ -51,7 +51,6 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
     #[Form\Type('Laminas\Form\Element\Hidden')]
     public $licence;
 
-    #[Form\Type('Laminas\Form\Element\Hidden')]
     #[Form\Type('\Common\Form\Elements\Types\ReadonlyElement')]
     #[Form\Options(['label' => 'Current total vehicle authorization'])]
     public $numVehiclesLabel;

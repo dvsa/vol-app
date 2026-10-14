@@ -75,6 +75,5 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     #[Form\Type('Select')]
     #[Form\Attributes(['id' => 'trafficAreas', 'placeholder' => '', 'multiple' => true, 'value' => 'all', 'class' => 'chosen-select-large'])]
     #[Form\Options(['label' => 'Traffic areas', 'value_options' => ['all' => 'All traffic areas', 'B' => 'North East of England', 'C' => 'North West of England', 'D' => 'West Midlands', 'F' => 'East of England', 'G' => 'Wales', 'H' => 'West of England', 'K' => 'London and the South East of England', 'M' => 'Scotland', 'N' => 'Northern Ireland']])]
-    #[Form\Attributes(['id' => 'trafficAreas'])]
     public $trafficAreas;
 }

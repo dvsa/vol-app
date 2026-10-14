@@ -2,6 +2,7 @@
 
 namespace Admin\Form\Model\Fieldset;
 
+use Common\RefData;
 use Laminas\Form\Annotation as Form;
 
 #[Form\Attributes(['id' => 'userType'])]
@@ -18,7 +19,6 @@ class UserType
     #[Form\Required(true)]
     #[Form\Attributes(['id' => 'team', 'placeholder' => '', 'required' => false])]
     #[Form\Options(['label' => 'Team', 'empty_option' => 'Please Select', 'disable_inarray_validator' => false, 'service_name' => 'Olcs\Service\Data\Team', 'use_groups' => 'false'])]
-    #[Form\Attributes(['id' => 'team', 'placeholder' => '', 'required' => false])]
     #[Form\Type('DynamicSelect')]
     #[Form\Validator('NotEmpty', options: ['null'])]
     #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'userType', 'context_values' => ['internal'], 'allow_empty' => false, 'validators' => [['name' => '\Laminas\Validator\NotEmpty']]]])]
@@ -62,7 +62,7 @@ class UserType
 
     #[Form\Required(true)]
     #[Form\Attributes(['class' => 'medium', 'id' => 'partnerContactDetails', 'required' => false])]
-    #[Form\Options(['label' => 'Partner', 'disable_inarray_validator' => false, 'empty_option' => 'Please Select', 'service_name' => 'Common\Service\Data\ContactDetails', 'context' => Common\RefData::CONTACT_TYPE_PARTNER, 'use_groups' => false])]
+    #[Form\Options(['label' => 'Partner', 'disable_inarray_validator' => false, 'empty_option' => 'Please Select', 'service_name' => 'Common\Service\Data\ContactDetails', 'context' => RefData::CONTACT_TYPE_PARTNER, 'use_groups' => false])]
     #[Form\Type('DynamicSelect')]
     #[Form\Validator(['name' => 'Laminas\Validator\NotEmpty', 'options' => ['null']])]
     #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'userType', 'context_values' => ['partner'], 'allow_empty' => false, 'validators' => [['name' => '\Laminas\Validator\NotEmpty']]]])]

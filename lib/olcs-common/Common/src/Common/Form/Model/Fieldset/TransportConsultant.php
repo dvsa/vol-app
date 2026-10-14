@@ -9,9 +9,8 @@ use Laminas\Form\Annotation as Form;
 class TransportConsultant
 {
     #[Form\Name('add-transport-consultant')]
-    #[Form\Attributes(['id' => '', 'placeholder' => ''])]
+    #[Form\Attributes(['id' => '', 'placeholder' => '', 'value' => 'N'])]
     #[Form\Options(['label' => 'application_your-business_business-type.add-transport-consultant.label', 'legend-attributes' => ['class' => 'form-element__label'], 'value_options' => ['Y' => 'Yes', 'N' => 'No'], 'label_attributes' => ['class' => 'form-control form-control--radio form-control--inline']])]
-    #[Form\Attributes(['value' => 'N'])]
     #[Form\Type('\Laminas\Form\Element\Radio')]
     public $addTransportConsultant;
 

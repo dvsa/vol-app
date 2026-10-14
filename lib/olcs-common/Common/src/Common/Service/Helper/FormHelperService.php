@@ -5,6 +5,7 @@ namespace Common\Service\Helper;
 use Laminas\Form\Annotation\AnnotationBuilder;
 use Common\Form\Elements\Types\Address;
 use Common\Service\Data\AddressDataService;
+use Laminas\Form\Annotation\AttributeBuilder;
 use Laminas\Form\Element;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Form\Element\DateSelect;
@@ -37,7 +38,7 @@ class FormHelperService
 
     public const ALTER_LABEL_PREPEND = 2;
 
-    public function __construct(private AnnotationBuilder $formAnnotationBuilder, private array $config, private AuthorizationService $authorizationService, private RendererInterface $viewRenderer, private AddressDataService $addressData, private AddressHelperService $addressHelper, private DateHelperService $dateHelper, private TranslationHelperService $translationHelper)
+    public function __construct(private AttributeBuilder $formAnnotationBuilder, private array $config, private AuthorizationService $authorizationService, private RendererInterface $viewRenderer, private AddressDataService $addressData, private AddressHelperService $addressHelper, private DateHelperService $dateHelper, private TranslationHelperService $translationHelper)
     {
     }
 

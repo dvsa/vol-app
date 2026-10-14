@@ -59,11 +59,10 @@ class LetterIssue
     #[Form\Attributes(['id' => 'subCategory', 'class' => 'medium'])]
     public $subCategory = null;
 
-    #[Form\Options(['label' => 'Goods or PSV', 'disable_inarray_validator' => false, 'empty_option' => 'Both'])]
+    #[Form\Options(['label' => 'Goods or PSV', 'disable_inarray_validator' => false, 'empty_option' => 'Both', 'value_options' => ['lcat_gv' => 'Goods', 'lcat_psv' => 'PSV']])]
     #[Form\Type('Select')]
     #[Form\Required(false)]
     #[Form\Attributes(['id' => 'goodsOrPsv', 'class' => 'medium'])]
-    #[Form\Options(['value_options' => ['lcat_gv' => 'Goods', 'lcat_psv' => 'PSV']])]
     public $goodsOrPsv = null;
 
     #[Form\Options(['label' => 'Default Body Content', 'label_attributes' => ['class' => '']])]

@@ -34,7 +34,7 @@ class SelectPermitType
     public $stock = null;
 
     #[Form\Name('bilateralCountries')]
-    #[Form\Attributes(['value' => '<div id='])]
+    #[Form\Attributes(['value' => '<div id="bilateralCountries"></div>'])]
     #[Form\Type('Common\Form\Elements\Types\Html')]
     public $bilateralCountries = null;
 

@@ -9,9 +9,8 @@ namespace Olcs\Form\Model\Form;
 use Laminas\Form\Annotation as Form;
 
 #[Form\Name('GracePeriod')]
-#[Form\Options(['label' => ''])]
-#[Form\Attributes(['method' => 'post'])]
 #[Form\Options(['prefer_form_input_filter' => true])]
+#[Form\Attributes(['method' => 'post'])]
 class GracePeriod
 {
     #[Form\Name('details')]

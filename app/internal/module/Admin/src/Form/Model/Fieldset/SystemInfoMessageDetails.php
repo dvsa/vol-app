@@ -18,8 +18,8 @@ class SystemInfoMessageDetails
     #[Form\Required(true)]
     #[Form\Options(['label' => 'Display to:', 'value_options' => ['Y' => 'Internal', 'N' => 'Self Serve']])]
     #[Form\Attributes(['value' => 'Y', 'required' => true])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StripTags'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\InArray', 'options' => ['haystack' => ['Y', 'N']]])]
+    #[Form\Filter(['name' => 'StripTags'])]
+    #[Form\Validator(['name' => 'InArray', 'options' => ['haystack' => ['Y', 'N']]])]
     public $isInternal;
 
     #[Form\Type('TextArea')]

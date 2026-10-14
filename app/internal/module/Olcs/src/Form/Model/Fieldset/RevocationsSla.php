@@ -17,7 +17,6 @@ class RevocationsSla
     public $isSubmissionRequiredForApproval;
 
     #[Form\Attributes(['id' => ''])]
-    #[Form\Required(false)]
     #[Form\Options(['label' => 'Date approval submission issued', 'create_empty_option' => true, 'render_delimiters' => false, 'fieldsetClass' => '__ptr-yes'])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]

@@ -20,7 +20,7 @@ class FinancialHistoryData
     public $financeHint;
 
     #[Form\Type('\Common\Form\Elements\Types\HtmlTranslated')]
-    #[Form\Attributes(['value' => '<h3 id='])]
+    #[Form\Attributes(['value' => '<h3 id="mainq">%s</h3>'])]
     #[Form\Options(['tokens' => ['application_previous-history_financial-history.intro']])]
     public $hasAnyPerson;
 

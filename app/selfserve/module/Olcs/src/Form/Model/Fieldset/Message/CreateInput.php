@@ -21,19 +21,10 @@ class CreateInput
     #[Form\Validator(NotEmpty::class, options: ['messages' => [NotEmpty::IS_EMPTY => 'messaging.form.message.subject.empty.error_message']], breakChainOnFailure: true, priority: 100)]
     public ?DynamicSelect $messageSubject = null;
 
-    //TODO: why this one not work?
-    /**
-     * @Form\Validator(NotEmpty::class,
-     *      options={
-     *          "messages":{NotEmpty::IS_EMPTY:"messaging.form.message.app_or_lic_no.empty.error_message"},
-     *      },
-     *      breakChainOnFailure=true,
-     *      priority=100,
-     * )
-     */
     #[Form\Options(['label' => 'messaging.app-or-lic-no', 'empty_option' => 'Please select', 'disable_inarray_validator' => false, 'service_name' => MessagingAppOrLicNo::class, 'use_groups' => true])]
     #[Form\Attributes(['class' => 'govuk-select'])]
     #[Form\Type(DynamicSelect::class)]
+    #[Form\Validator(NotEmpty::class, options: ['messages' => [NotEmpty::IS_EMPTY => 'messaging.form.message.app_or_lic_no.empty.error_message']], breakChainOnFailure: true, priority: 100)]
     public ?DynamicSelect $appOrLicNo = null;
 
     #[Form\Attributes(['class' => 'extra-long'])]

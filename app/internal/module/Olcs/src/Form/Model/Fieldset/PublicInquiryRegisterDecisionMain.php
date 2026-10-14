@@ -49,7 +49,6 @@ class PublicInquiryRegisterDecisionMain
     #[Form\Attributes(['id' => '', 'placeholder' => '', 'class' => 'chosen-select-large', 'multiple' => true, 'required' => false])]
     #[Form\AllowEmpty(true)]
     #[Form\Input('\Common\InputFilter\ContinueIfEmptyInput')]
-    #[Form\Required(false)]
     #[Form\Options(['label' => 'TM decision', 'disable_inarray_validator' => false, 'category' => 'pi_tm_decision'])]
     #[Form\Filter('Common\Filter\NullToArray')]
     public $tmDecisions = [];

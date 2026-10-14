@@ -55,7 +55,7 @@ class TmOtherLicenceDetails
 
     #[Form\Attributes(['class' => 'short', 'pattern' => '\d(\.)*', 'id' => 'hoursPerWeek'])]
     #[Form\Options(['label' => 'transport-manager.other-licence.form.hours-per-week'])]
-    #[Form\Validator('Laminas\Validator\LessThan', options: ['max' => '99.9', 'inclusive' => true])]
+    #[Form\Validator('Laminas\Validator\LessThan', options: ['max' => 99.9, 'inclusive' => true])]
     #[Form\Validator('Laminas\I18n\Validator\IsFloat', options: ['allow_empty' => false, 'messages' => ['notFloat' => 'transport-manager.other-licence.form.hours-per-week.error_msg']])]
     #[Form\Type('Text')]
     public $hoursPerWeek;
