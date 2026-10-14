@@ -264,6 +264,173 @@ final class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
+    public function testEachLicencePrintsAndAttachesOnlyItsOwnLetters(): void
+    {
+        $this->setupStandardService();
+        $this->setupMockCHRepo();
+
+        $licences = self::getMockLicences();
+
+        $this->repoMap['Organisation']
+            ->expects('getByCompanyOrLlpNo')
+            ->with('1234')
+            ->andReturn([
+                m::mock(Organisation::class)
+                    ->expects('getActiveLicences')
+                    ->withNoArgs()
+                    ->andReturn(new ArrayCollection([$licences[0], $licences[1]]))
+                    ->getMock()
+            ]);
+
+        $team = m::mock(TeamEntity::class);
+        $team->shouldReceive('getId')->withNoArgs()->andReturn(1);
+        $this->repoMap['Team']->expects('fetchOneByName')->with(ProcessInsolvency::GB_TEAMLEADER_TASK)->andReturn($team);
+        $this->repoMap['Team']->expects('fetchOneByName')->with(ProcessInsolvency::NI_TEAMLEADER_TASK)->andReturn($team);
+
+        // first licence: a correspondence address letter and two insolvency practitioner letters
+        $this->expectedSideEffect(
+            GenerateAndStoreWithMultipleAddresses::class,
+            [],
+            (new Result())
+                ->addId('documents', 1, true)
+                ->addId('documents', 2, true)
+                ->addId('documents', 3, true)
+                ->addId('correspondenceAddress', 1)
+        );
+        // second licence: practitioner letters only, so there's no correspondence address letter to attach
+        $this->expectedSideEffect(
+            GenerateAndStoreWithMultipleAddresses::class,
+            [],
+            (new Result())->addId('documents', 4, true)->addId('documents', 5, true)
+        );
+        $this->expectedSideEffect(PrintLetter::class, [], new Result(), 5);
+        // per licence: correspondence email, an email to each of the two admin users, and the follow-up task
+        $this->expectedSideEffect(CreateQueue::class, [], new Result(), 8);
+
+        $this->sut->handleCommand(ProcessInsolvencyCmd::create([]));
+
+        $printed = array_map(
+            static fn (PrintLetter $printLetter) => $printLetter->getId(),
+            $this->recordedCommands(PrintLetter::class)
+        );
+        $this->assertSame([1, 2, 3, 4, 5], $printed);
+
+        $attached = [];
+        foreach ($this->recordedCommands(CreateQueue::class) as $createQueue) {
+            $emailData = json_decode((string) $createQueue->getOptions(), true)['commandData'] ?? [];
+            if (array_key_exists('docs', $emailData)) {
+                $attached[$emailData['emailAddress']] = $emailData['docs'];
+            }
+        }
+        $this->assertSame(
+            [
+                'gbcorrespondenceemail@example.com' => [1],
+                'nicorrespondenceemail@example.com' => [],
+            ],
+            $attached
+        );
+    }
+
+    public function testLicenceWithASingleLetterHasItPrinted(): void
+    {
+        $this->setupStandardService();
+        $this->setupMockCHRepo();
+
+        $this->repoMap['Organisation']
+            ->expects('getByCompanyOrLlpNo')
+            ->with('1234')
+            ->andReturn([
+                m::mock(Organisation::class)
+                    ->expects('getActiveLicences')
+                    ->withNoArgs()
+                    ->andReturn(new ArrayCollection([self::getMockLicences()[0]]))
+                    ->getMock()
+            ]);
+
+        $team = m::mock(TeamEntity::class);
+        $team->shouldReceive('getId')->withNoArgs()->andReturn(1);
+        $this->repoMap['Team']->expects('fetchOneByName')->with(ProcessInsolvency::GB_TEAMLEADER_TASK)->andReturn($team);
+
+        // one letter leaves 'documents' as a bare id rather than a list
+        $this->expectedSideEffect(
+            GenerateAndStoreWithMultipleAddresses::class,
+            [],
+            (new Result())->addId('documents', 7, true)->addId('correspondenceAddress', 7)
+        );
+        $this->expectedSideEffect(
+            PrintLetter::class,
+            ['id' => 7, 'method' => PrintLetter::METHOD_PRINT_AND_POST],
+            new Result()
+        );
+        $this->expectedSideEffect(CreateQueue::class, [], new Result(), 4);
+
+        $this->sut->handleCommand(ProcessInsolvencyCmd::create([]));
+    }
+
+    /**
+     * queue:process-insolvency handles every message in its run with this one instance
+     */
+    public function testEachMessageStartsWithAFreshResult(): void
+    {
+        $queueService = m::mock(Queue::class);
+        $queueService->expects('fetchMessages')
+            ->twice()
+            ->with('process_insolvency_queue_url', 1, 1)
+            ->andReturn(
+                [['Body' => '1234', 'ReceiptHandle' => 1]],
+                [['Body' => '5678', 'ReceiptHandle' => 2]]
+            );
+        $queueService->expects('deleteMessage')->with('process_insolvency_queue_url', 1);
+        $queueService->expects('deleteMessage')->with('process_insolvency_queue_url', 2);
+
+        $companiesHouseClient = m::mock(CompaniesHouseClient::class);
+
+        foreach (['1234', '5678'] as $companyNumber) {
+            $company = m::mock(CHCompanyEntity::class);
+            $company->shouldReceive('getCompanyNumber')->withNoArgs()->andReturn($companyNumber);
+            $company->expects('setInsolvencyPractitioners')->with(m::type(ArrayCollection::class));
+            $company->expects('setInsolvencyProcessed')->with(true);
+
+            $this->repoMap['CompaniesHouseCompany']
+                ->expects('getLatestByCompanyNumber')
+                ->with($companyNumber)
+                ->andReturn($company);
+            $this->repoMap['CompaniesHouseCompany']->expects('save')->twice()->with($company);
+            $this->repoMap['Organisation']->expects('getByCompanyOrLlpNo')->with($companyNumber)->andReturn([]);
+
+            $companiesHouseClient->expects('getInsolvencyDetails')
+                ->with($companyNumber)
+                ->andReturn($this->mockInsolvencyDataResponse());
+        }
+
+        $this->mockedSmServices = [
+            CompaniesHouseClient::class => $companiesHouseClient,
+            Queue::class => $queueService,
+            MessageBuilder::class => m::mock(MessageBuilder::class),
+            'config' => $this->config
+        ];
+        $this->setupService();
+
+        $first = $this->sut->handleCommand(ProcessInsolvencyCmd::create([]));
+        $second = $this->sut->handleCommand(ProcessInsolvencyCmd::create([]));
+
+        $this->assertSame(['3 insolvency practitioners added for company 1234'], $first->getMessages());
+        $this->assertSame(['3 insolvency practitioners added for company 5678'], $second->getMessages());
+    }
+
+    /**
+     * @template T of object
+     * @param class-string<T> $class
+     * @return list<T>
+     */
+    private function recordedCommands(string $class): array
+    {
+        return array_values(array_map(
+            static fn (array $recorded) => $recorded[0],
+            array_filter($this->commands, static fn (array $recorded) => $recorded[0] instanceof $class)
+        ));
+    }
+
     protected function getMockQueueService(): mixed
     {
         $queueService = m::mock(Queue::class);

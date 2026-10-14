@@ -15,6 +15,7 @@ use Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseInsolvencyPractitioner;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Address;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Country;
+use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceOperatingCentre;
 use Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
@@ -62,6 +63,36 @@ final class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHan
         }
 
         $this->sut->handleCommand($mockCommand);
+    }
+
+    /**
+     * Handler instances are shared, so the insolvency queue worker calls this same object for every licence it
+     * processes. Each call must report only its own letters, or the caller prints the earlier licences' letters again.
+     */
+    public function testDocumentsAreNotCarriedOverBetweenCalls(): void
+    {
+        $licence = m::mock(LicenceEntity::class);
+        $licence->shouldReceive('getCorrespondenceCd')
+            ->withNoArgs()
+            ->andReturn($this->addressProvider('correspondenceAddress')['correspondenceAddress']);
+
+        $this->repoMap['Licence']->expects('fetchWithAddressesUsingId')->twice()->with(1)->andReturn($licence);
+
+        $command = Cmd::create([
+            'generateCommandData' => ['description' => 'Reg 31', 'licence' => 1],
+            'addressBookmark' => 'licence_holder_address',
+            'bookmarkBundle' => ['correspondenceCd' => ['address']],
+            'sendToAddresses' => ['correspondenceAddress' => true],
+        ]);
+
+        $this->expectedSideEffect(GenerateAndStore::class, [], (new Result())->addId('document', 101));
+        $first = $this->sut->handleCommand($command);
+
+        $this->expectedSideEffect(GenerateAndStore::class, [], (new Result())->addId('document', 102));
+        $second = $this->sut->handleCommand($command);
+
+        $this->assertSame(['documents' => 101, 'correspondenceAddress' => 101], $first->getIds());
+        $this->assertSame(['documents' => 102, 'correspondenceAddress' => 102], $second->getIds());
     }
 
     protected function getAddresses(): mixed
