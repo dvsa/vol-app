@@ -18,7 +18,7 @@ use Olcs\Form\Model\Fieldset\Conversation as ConversationFieldset;
 class Conversation
 {
     #[Form\Name('fields')]
-    #[Form\ComposedObject(ConversationFieldset::Class)]
+    #[Form\ComposedObject(ConversationFieldset::class)]
     public ?ConversationFieldset $fields = null;
 
     #[Form\Name('form-actions')]

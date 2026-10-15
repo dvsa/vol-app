@@ -7,7 +7,7 @@ use Laminas\Form\Annotation as Form;
 #[Form\Name('existingOperatorLicenceApplication')]
 class ExistingOperatorLicenceApplication
 {
-#[Form\Required(false)]
+    #[Form\Required(false)]
     #[Form\Type('Text')]
     #[Form\Options(['label' => 'user-registration.field.licenceNumber.label', 'id' => 'existingOperatorLicenceApplication'])]
     #[Form\Filter('Laminas\Filter\StringTrim')]
