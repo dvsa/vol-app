@@ -100,7 +100,10 @@ final class FinancialEvidenceAssessmentTab
             'document' => self::document($analysis),
             'hasAssessment' => true,
             'rows' => $rows,
-            'issueCount' => count(array_filter($rows, static fn(array $row): bool => $row['flag'] === self::FLAG_FAIL)),
+            'issueCount' => count(array_filter(
+                $rows,
+                static fn(array $row): bool => $row['flagged'] && $row['flag'] !== self::FLAG_PASS
+            )),
         ];
     }
 
