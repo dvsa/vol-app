@@ -1,0 +1,118 @@
+{
+  "name": "RetrieveOtp",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "code",
+              "type": "Text",
+              "options": {
+                "label": "retrieve-document.otp.code.label",
+                "hint": "retrieve-document.otp.code.hint"
+              },
+              "attributes": {
+                "class": "govuk-input govuk-input--width-5",
+                "inputmode": "numeric",
+                "autocomplete": "one-time-code",
+                "pattern": "[0-9]*",
+                "maxlength": 6,
+                "id": "code"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "",
+          "prefer_form_input_filter": true
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "retrieve-document.otp.verify.label"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "code": {
+        "name": "code",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": {
+              "messages": {
+                "isEmpty": "retrieve-document.otp.code.error.required"
+              }
+            }
+          },
+          {
+            "name": "Laminas\\Validator\\Digits",
+            "options": {
+              "messages": {
+                "notDigits": "retrieve-document.otp.code.error.format"
+              }
+            }
+          },
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 6,
+              "max": 6,
+              "messages": {
+                "stringLengthTooShort": "retrieve-document.otp.code.error.format",
+                "stringLengthTooLong": "retrieve-document.otp.code.error.format"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

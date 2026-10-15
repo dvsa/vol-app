@@ -7,34 +7,26 @@
 namespace Dvsa\Olcs\Transfer\Command\MyAccount;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\TranslateToWelshOptional;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/my-account/selfserve/single")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/my-account/selfserve/single')]
+#[Transfer\Method('PUT')]
 final class UpdateMyAccountSelfserve extends AbstractCommand
 {
     use TranslateToWelshOptional;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $id;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $version;
 
-    /**
-     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\ContactDetails")
-     */
+    #[Transfer\Partial('Dvsa\Olcs\Transfer\Command\Partial\ContactDetails')]
     protected $contactDetails;
 
     /**

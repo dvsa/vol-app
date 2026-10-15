@@ -320,7 +320,7 @@ final class SectionAccessServiceTest extends MockeryTestCase
         $application->setLicence($licence);
 
         $application->setPrevHasLicence('N');
-        $application->setPrevHadLicence('Y');
+        $application->setPrevHadLicence('N');
 
         $this->authService->shouldReceive('isGranted')
             ->with(Permission::INTERNAL_USER, null)
@@ -378,7 +378,7 @@ final class SectionAccessServiceTest extends MockeryTestCase
 
         // Application itself requires the new section.
         $application->setPrevHasLicence('N');
-        $application->setPrevHadLicence('Y');
+        $application->setPrevHadLicence('N');
 
         // But the feature is switched off.
         $this->toggleService

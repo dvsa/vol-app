@@ -8,59 +8,41 @@
 
 namespace Dvsa\Olcs\Transfer\Command\OtherLicence;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/other-licence")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/other-licence')]
+#[Transfer\Method('POST')]
 final class CreateOtherLicence extends AbstractCommand
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     public $licNo;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     public $application;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     public $holderName;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
+    #[Transfer\Optional]
     public $willSurrender;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Optional]
     public $previousLicenceType;
 
-    /**
-     * @Transfer\Validator("Date",options={"format":"Y-m-d"})
-     * @Transfer\Optional
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Optional]
     public $disqualificationDate;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Optional]
     public $disqualificationLength;
 
-    /**
-     * @Transfer\Validator("Date",options={"format":"Y-m-d"})
-     * @Transfer\Optional
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Optional]
     public $purchaseDate;
 
     public function getApplication()

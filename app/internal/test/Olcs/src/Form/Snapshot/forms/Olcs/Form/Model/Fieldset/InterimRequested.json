@@ -1,0 +1,35 @@
+{
+  "name": "form-actions",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "interimRequested",
+        "attributes": {
+          "required": "required"
+        },
+        "type": "Radio",
+        "options": {
+          "label": "internal.interim.form.interim_requested",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "interimRequested": {
+      "name": "interimRequested",
+      "required": true
+    }
+  }
+}

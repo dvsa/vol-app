@@ -9,12 +9,10 @@
 namespace Dvsa\Olcs\Transfer\Query\TransportManagerApplication;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/tm-responsibilities/transport-manager-application/single")
- */
+#[Transfer\RouteName('backend/tm-responsibilities/transport-manager-application/single')]
 class GetForResponsibilities extends AbstractQuery
 {
     use Identity;

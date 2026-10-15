@@ -1,0 +1,36 @@
+{
+  "name": "operator-cpid",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "type",
+        "attributes": {
+          "id": "cpid",
+          "class": "inline"
+        },
+        "options": {
+          "label": "internal-operator-profile-cpid",
+          "empty_option": "Not set",
+          "value": "defendant_type.operator",
+          "disable_inarray_validator": false,
+          "category": "operator_cpid"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": [
+    {
+      "name": "type",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    }
+  ]
+}

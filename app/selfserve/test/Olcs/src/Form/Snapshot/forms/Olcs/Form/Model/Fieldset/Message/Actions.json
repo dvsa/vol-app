@@ -1,0 +1,35 @@
+{
+  "name": "Actions",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "guidance",
+        "attributes": {
+          "value": "markup-messaging-new-conversation-timeframe",
+          "id": "guidance"
+        },
+        "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "send",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button govuk-button--default",
+          "id": "send"
+        },
+        "options": {
+          "label": "Send message"
+        },
+        "type": "Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

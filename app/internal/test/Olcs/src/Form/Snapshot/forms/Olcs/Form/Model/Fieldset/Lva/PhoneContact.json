@@ -1,0 +1,81 @@
+{
+  "name": "phone-contact-details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "phoneContactType",
+        "attributes": {
+          "required": "required",
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "lva.contact-details.phone-contact.form.type.title",
+          "disable_inarray_validator": false,
+          "category": "phone_contact_type",
+          "exclude": [
+            "phone_t_gtn"
+          ]
+        },
+        "type": "DynamicRadio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "phoneNumber",
+        "attributes": {
+          "required": true,
+          "id": "number",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "lva.contact-details.phone-contact.form.number.title"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "contactDetailsId",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "phoneContactType": {
+      "name": "phoneContactType",
+      "required": true
+    },
+    "phoneNumber": {
+      "name": "phoneNumber",
+      "required": true,
+      "type": "Common\\InputFilter\\ContinueIfEmptyInput"
+    }
+  }
+}

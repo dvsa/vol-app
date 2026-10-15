@@ -11,13 +11,11 @@ namespace Dvsa\Olcs\Transfer\Command\IrhpApplication;
 use Dvsa\Olcs\Transfer\Command\WithdrawApplicationInterface;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\FieldType\Traits\PermitAppWithdrawReason;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/irhp-application/withdraw")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/irhp-application/withdraw')]
+#[Transfer\Method('POST')]
 final class Withdraw extends AbstractCommand implements WithdrawApplicationInterface
 {
     use Identity;

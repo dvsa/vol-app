@@ -1,0 +1,18 @@
+{
+  "name": "EnableFileUploadPopupText",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "text",
+        "type": "Common\\Form\\Elements\\Types\\PlainText",
+        "attributes": {
+          "value": "Are you sure you want to enable file uploads?"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

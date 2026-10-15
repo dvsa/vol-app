@@ -1,0 +1,27 @@
+{
+  "name": "licence-decision-legislation",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "decisions",
+        "attributes": {
+          "id": "reasons",
+          "placeholder": "",
+          "class": "chosen-select-medium",
+          "multiple": true
+        },
+        "options": {
+          "label": "Legislation",
+          "service_name": "Olcs\\Service\\Data\\LicenceDecisionLegislation",
+          "disable_inarray_validator": false,
+          "use_groups": true
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

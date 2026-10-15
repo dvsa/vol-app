@@ -1,0 +1,23 @@
+{
+  "name": "Stock",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "stock",
+        "attributes": {
+          "radios_wrapper_attributes": {
+            "data-module": "radios"
+          }
+        },
+        "options": {
+          "input_class": "Common\\Form\\Input\\StockInput"
+        },
+        "type": "DynamicRadio"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

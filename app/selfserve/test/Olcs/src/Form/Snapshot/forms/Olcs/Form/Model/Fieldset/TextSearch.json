@@ -1,0 +1,25 @@
+{
+  "name": "text-search",
+  "attributes": {
+    "class": "",
+    "legend": "Filter By:"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "search",
+        "attributes": {
+          "value": "",
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "search.form.label"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

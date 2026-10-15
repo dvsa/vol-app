@@ -1,0 +1,280 @@
+{
+  "name": "fee-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "createdDate",
+        "options": {
+          "short-label": "fees.created_date",
+          "label": "fees.created_date",
+          "label_attributes": {
+            "id": "label-createdDate"
+          },
+          "create_empty_option": true
+        },
+        "attributes": {
+          "required": false,
+          "id": "createdDate"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "feeType",
+        "attributes": {
+          "id": "feeType"
+        },
+        "options": {
+          "label": "fees.type",
+          "short-label": "fees.type",
+          "label_attributes": {
+            "id": "label-type"
+          },
+          "empty_option": "Please select"
+        },
+        "type": "Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "irfoGvPermit",
+        "attributes": {
+          "required": false,
+          "id": "irfoGvPermit"
+        },
+        "options": {
+          "label": "fees.irfoGvPermit",
+          "short-label": "fees.irfoGvPermit",
+          "label_attributes": {
+            "id": "label-type"
+          },
+          "empty_option": "Please select"
+        },
+        "type": "Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "irfoPsvAuth",
+        "attributes": {
+          "required": false,
+          "id": "irfoPsvAuth"
+        },
+        "options": {
+          "label": "fees.irfoPsvAuth",
+          "short-label": "fees.irfoPsvAuth",
+          "label_attributes": {
+            "id": "label-type"
+          },
+          "empty_option": "Please select"
+        },
+        "type": "Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "quantity",
+        "options": {
+          "label": "Quantity"
+        },
+        "type": "Text",
+        "attributes": {
+          "id": "quantity"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "amount",
+        "options": {
+          "short-label": "fees.amount",
+          "label": "fees.amount",
+          "label_attributes": {
+            "id": "label-amount"
+          }
+        },
+        "type": "Text",
+        "attributes": {
+          "required": false,
+          "id": "amount"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "vatRate",
+        "options": {
+          "short-label": "fees.vat_rate",
+          "label": "fees.vat_rate",
+          "label_attributes": {
+            "id": "label-vat_rate"
+          }
+        },
+        "type": "Text",
+        "attributes": {
+          "disabled": "disabled",
+          "id": "vat-rate"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "createdDate": {
+      "name": "createdDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "feeType": {
+      "name": "feeType",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    },
+    "irfoGvPermit": {
+      "name": "irfoGvPermit",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "irfoPsvAuth",
+            "context_values": [
+              ""
+            ],
+            "context_truth": true,
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "Laminas\\Validator\\NotEmpty",
+                "options": {
+                  "messages": {
+                    "isEmpty": "internal.create-fee.irfo-required"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "irfoPsvAuth": {
+      "name": "irfoPsvAuth",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "irfoGvPermit",
+            "context_values": [
+              ""
+            ],
+            "context_truth": true,
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "Laminas\\Validator\\NotEmpty",
+                "options": {
+                  "messages": {
+                    "isEmpty": "internal.create-fee.irfo-required"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "quantity": {
+      "name": "quantity",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\GreaterThan",
+          "options": {
+            "min": 1,
+            "inclusive": true,
+            "messages": {
+              "notGreaterThanInclusive": "You must enter %min% or above"
+            }
+          }
+        }
+      ]
+    },
+    "amount": {
+      "name": "amount",
+      "required": true,
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\Money"
+        }
+      ]
+    },
+    "vatRate": {
+      "name": "vatRate",
+      "required": false
+    }
+  }
+}

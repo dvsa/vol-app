@@ -1,0 +1,75 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "irhpPermitRange",
+        "type": "Select",
+        "attributes": {
+          "id": "irhpPermitRange",
+          "class": "medium",
+          "data-container-class": "js-hidden rangeSelectBox"
+        },
+        "options": {
+          "label": "Range",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "permitAppId",
+        "attributes": {
+          "id": "permitAppId"
+        },
+        "type": "Laminas\\Form\\Element\\Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "rangesUrl",
+        "attributes": {
+          "id": "rangesUrl"
+        },
+        "type": "Laminas\\Form\\Element\\Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "irhpPermitRangeSelected",
+        "attributes": {
+          "id": "irhpPermitRangeSelected"
+        },
+        "type": "Laminas\\Form\\Element\\Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -10,13 +10,11 @@ namespace Dvsa\Olcs\Transfer\Command\Licence;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Ids;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Licence;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/licence/named-single/operating-centre")
- * @Transfer\Method("DELETE")
- */
+#[Transfer\RouteName('backend/licence/named-single/operating-centre')]
+#[Transfer\Method('DELETE')]
 final class DeleteOperatingCentres extends AbstractCommand
 {
     use Ids;

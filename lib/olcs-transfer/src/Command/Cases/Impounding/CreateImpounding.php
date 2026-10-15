@@ -3,88 +3,64 @@
 namespace Dvsa\Olcs\Transfer\Command\Cases\Impounding;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldType;
 
-/**
- * @Transfer\RouteName("backend/impounding")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/impounding')]
+#[Transfer\Method('POST')]
 class CreateImpounding extends AbstractCommand
 {
     use FieldType\Publish;
 
     /**
      * @var int
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $case = null;
 
-    /**
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"impt_hearing","impt_paper"}})
-     */
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['impt_hearing', 'impt_paper']])]
     protected $impoundingType = null;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $applicationReceiptDate = null;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":1,"max":20})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 20])]
     protected $vrm = null;
 
-    /**
-     * @Transfer\ArrayInput
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":1,"max":32})
-     */
+    #[Transfer\ArrayInput]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 32])]
     protected $impoundingLegislationTypes = [];
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Filter("Laminas\Filter\DateTimeFormatter")
-     * @Transfer\Validator("Date", options={"format": \DateTime::ISO8601})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\DateTimeFormatter')]
+    #[Transfer\Validator('Date', options: ['format' => \DateTime::ISO8601])]
     protected $hearingDate = null;
 
-    /**
-     * @Transfer\Optional()
-     */
+    #[Transfer\Optional]
     protected $venue = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $venueOther = null;
 
-    /**
-     * @Transfer\Optional()
-     */
+    #[Transfer\Optional]
     protected $presidingTc = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"impo_not","impo_returned","impo_wd"}})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['impo_not', 'impo_returned', 'impo_wd']])]
     protected $outcome = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $outcomeSentDate = null;
 
-    /**
-     * @Transfer\Optional()
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":5,"max":4000})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 4000])]
     protected $notes = null;
 
     /**

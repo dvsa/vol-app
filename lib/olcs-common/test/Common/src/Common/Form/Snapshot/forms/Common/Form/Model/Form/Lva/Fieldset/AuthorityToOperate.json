@@ -1,0 +1,84 @@
+{
+  "name": "AuthorityToOperate",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "interimGuidanceText",
+        "attributes": {
+          "value": "interim.application.undertakings.form.textarea.placeholder",
+          "data-container-class": "typeOfLicence-guidance-restricted js-visible",
+          "id": "application-interim-reason"
+        },
+        "options": {
+          "tokens": [
+            "application_type-of-licence_licence-type.data.restrictedGuidance"
+          ]
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "goodsApplicationInterimReason",
+        "attributes": {
+          "required": false,
+          "id": "applicationInterimReason",
+          "class": "long js-interim-reason",
+          "data-container-class": "interimFee"
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "interimFee",
+        "attributes": {
+          "value": "markup-interim-fee",
+          "data-container-class": "interimFee",
+          "id": "interimFee"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\GuidanceTranslated"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "goodsApplicationInterimReason": {
+      "name": "goodsApplicationInterimReason",
+      "required": true,
+      "type": "Common\\InputFilter\\ContinueIfEmptyInput",
+      "allow_empty": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "goodsApplicationInterim",
+            "context_values": [
+              "Y"
+            ],
+            "inject_post_data": "interim->goodsApplicationInterim",
+            "validators": [
+              {
+                "name": "NotEmpty",
+                "options": {
+                  "messages": {
+                    "isEmpty": "Value is required and can't be empty"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

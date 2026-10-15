@@ -1,0 +1,26 @@
+{
+  "name": "fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "file",
+        "options": {
+          "label": "Replacement file"
+        },
+        "type": "\\Laminas\\Form\\Element\\File",
+        "attributes": {
+          "required": "required"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "file": {
+      "name": "file",
+      "required": true
+    }
+  }
+}

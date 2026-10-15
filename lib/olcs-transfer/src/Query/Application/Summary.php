@@ -9,12 +9,10 @@
 namespace Dvsa\Olcs\Transfer\Query\Application;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/application/single/summary")
- */
+#[Transfer\RouteName('backend/application/single/summary')]
 class Summary extends AbstractQuery
 {
     use Identity;

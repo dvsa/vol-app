@@ -1,0 +1,189 @@
+{
+  "name": "registered-address",
+  "attributes": {
+    "class": "address"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "addressLine1",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "Address lines"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "addressLine2",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "Address line 2",
+          "label_attributes": {
+            "class": "govuk-visually-hidden"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "addressLine3",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "Address line 3",
+          "label_attributes": {
+            "class": "govuk-visually-hidden"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "addressLine4",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "Address line 4",
+          "label_attributes": {
+            "class": "govuk-visually-hidden"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "town",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "Town/City",
+          "label_attributes": {
+            "class": "govuk-visually-hidden"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "postcode",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "Postcode"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "\\Laminas\\Form\\Fieldset",
+  "options": {
+    "label": "Registered address"
+  },
+  "input_filter": {
+    "addressLine1": {
+      "name": "addressLine1",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "addressLine2": {
+      "name": "addressLine2",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "addressLine3": {
+      "name": "addressLine3",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "addressLine4": {
+      "name": "addressLine4",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "town": {
+      "name": "town",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "postcode": {
+      "name": "postcode",
+      "required": false,
+      "filters": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Filter\\Postcode"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode"
+        }
+      ]
+    }
+  }
+}

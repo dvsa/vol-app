@@ -1,0 +1,248 @@
+{
+  "name": "UserDetails",
+  "attributes": {
+    "method": "post",
+    "label": "User details"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "loginId",
+        "options": {
+          "label": "user-name"
+        },
+        "attributes": {
+          "required": false,
+          "id": "username",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "forename",
+        "attributes": {
+          "id": "forename",
+          "placeholder": "",
+          "class": "medium",
+          "required": false
+        },
+        "options": {
+          "label": "user-details.first-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "familyName",
+        "attributes": {
+          "id": "familyName",
+          "placeholder": "",
+          "class": "medium",
+          "required": false
+        },
+        "options": {
+          "label": "last-name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailAddress",
+        "attributes": {
+          "class": "long"
+        },
+        "options": {
+          "label": "email-address",
+          "error-message": "userDetails_emailAddress-error"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailConfirm",
+        "attributes": {
+          "class": "long"
+        },
+        "options": {
+          "label": "confirm-email-address",
+          "error-message": "userDetails_emailConfirm-error"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "permission",
+        "options": {
+          "label": "manage-users.field.permission.label",
+          "label_options": {
+            "disable_html_escape": "true"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--advanced"
+          },
+          "value_options": {
+            "tm": "manage-users.field.permission.tm.label",
+            "user": "manage-users.field.permission.user.label",
+            "admin": "manage-users.field.permission.admin.label",
+            "tc": "manage-users.field.permission.tc.label"
+          }
+        },
+        "attributes": {
+          "required": "required",
+          "id": "permission",
+          "placeholder": "",
+          "value": "user"
+        },
+        "type": "Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "translateToWelsh",
+        "attributes": {
+          "id": "translateToWelsh",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "translate-to-welsh",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--confirm"
+          },
+          "checked_value": "Y",
+          "unchecked_value": "N"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "currentPermission",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "loginId": {
+      "name": "loginId",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        },
+        {
+          "name": "Laminas\\Filter\\StringToLower"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\UsernameCreate"
+        }
+      ]
+    },
+    "forename": {
+      "name": "forename",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 35
+          }
+        }
+      ]
+    },
+    "familyName": {
+      "name": "familyName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 35
+          }
+        }
+      ]
+    },
+    "emailAddress": {
+      "name": "emailAddress",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        },
+        {
+          "name": "Common\\Form\\Elements\\Validators\\EmailConfirm",
+          "options": {
+            "token": "emailConfirm"
+          }
+        }
+      ]
+    },
+    "emailConfirm": {
+      "name": "emailConfirm",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "permission": {
+      "name": "permission",
+      "required": true
+    }
+  }
+}

@@ -5,7 +5,7 @@ namespace Dvsa\Olcs\Transfer\Query\Document;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\LoggerOmitResponseInterface;
 use Dvsa\Olcs\Transfer\Query\StreamInterface;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
@@ -16,9 +16,9 @@ abstract class AbstractDownload extends AbstractQuery implements
 {
     /**
      * @var  bool
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Boolean")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
     protected $isInline;
 
     /**

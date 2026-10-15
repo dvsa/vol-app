@@ -1,0 +1,85 @@
+{
+  "name": "assignment",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "assignedToTeam",
+        "attributes": {
+          "required": "required",
+          "id": "assignedToTeam",
+          "placeholder": ""
+        },
+        "type": "DynamicSelect",
+        "options": {
+          "label": "tasks.data.team",
+          "service_name": "Olcs\\Service\\Data\\Team",
+          "empty_option": "please-select",
+          "error-message": "Team and/or owner must be selected"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "assignedToUser",
+        "attributes": {
+          "required": "required",
+          "id": "assignedToUser",
+          "placeholder": ""
+        },
+        "type": "DynamicSelect",
+        "options": {
+          "label": "tasks.data.owner",
+          "service_name": "Olcs\\Service\\Data\\UserListInternalExcludingLimitedReadOnlyUsers",
+          "empty_option": "Unassigned"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "tasks.assignment"
+  },
+  "input_filter": {
+    "assignedToTeam": {
+      "name": "assignedToTeam",
+      "required": true,
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "assignedToUser",
+            "context_values": [
+              ""
+            ],
+            "validators": [
+              {
+                "name": "Laminas\\Validator\\NotEmpty"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "assignedToUser": {
+      "name": "assignedToUser",
+      "required": true,
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": [
+            "null"
+          ]
+        }
+      ]
+    }
+  }
+}

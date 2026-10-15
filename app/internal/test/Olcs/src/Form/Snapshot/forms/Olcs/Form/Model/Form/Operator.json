@@ -1,0 +1,534 @@
+{
+  "name": "operator",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "operator-id",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "operator-id",
+              "options": {
+                "label": "internal-operator-id"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "operator-business-type",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "type",
+              "attributes": {
+                "id": "businessType",
+                "class": "inline"
+              },
+              "options": {
+                "label": "internal-operator-profile-business-type",
+                "value": "defendant_type.operator",
+                "disable_inarray_validator": false,
+                "category": "org_type"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "refresh",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary js-hidden",
+                "id": "refresh"
+              },
+              "options": {
+                "label": "internal-operator-profile-business-type-refresh"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "operator-details",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "name",
+              "attributes": {
+                "class": "extra-long",
+                "id": ""
+              },
+              "options": {
+                "label": "internal-operator-profile-name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "natureOfBusiness",
+              "attributes": {
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Nature of Business"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "information",
+              "type": "Common\\Form\\Elements\\Types\\Html",
+              "attributes": {
+                "value": "Please enter your business type. You can find a list of business types at Companies House\n     *      <a class=\"govuk-link\" rel=\"external noreferrer noopener\" href=\"https://www.gov.uk/government/publications/standard-industrial-classification-of-economic-activities-sic\" target=\"_blank\">here</a>"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "firstName",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "internal-operator-profile-first-name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "lastName",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "internal-operator-profile-last-name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isIrfo",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "Is IRFO"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "allowEmail",
+              "type": "Radio",
+              "options": {
+                "label": "How would you like to receive your correspondence?",
+                "value_options": {
+                  "N": "Post",
+                  "Y": "Email"
+                }
+              },
+              "attributes": {
+                "value": "N"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "personId",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "personVersion",
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "companyNumber",
+              "options": {
+                "label": "application_your-business_business-details.data.company_number"
+              },
+              "type": "Common\\Form\\Elements\\Types\\CompanyNumber"
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "registeredAddress",
+        "attributes": {
+          "class": "address"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine1",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLines"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine2",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine2",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine3",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine3",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine4",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine4",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "town",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_townCity",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "postcode",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "address_postcode"
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "\\Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "Registered address"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "operator-cpid",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "type",
+              "attributes": {
+                "id": "cpid",
+                "class": "inline"
+              },
+              "options": {
+                "label": "internal-operator-profile-cpid",
+                "empty_option": "Not set",
+                "value": "defendant_type.operator",
+                "disable_inarray_validator": false,
+                "category": "operator_cpid"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "operator-business-type": {
+      "0": {
+        "name": "type",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "operator-details": {
+      "name": {
+        "name": "name",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty"
+          }
+        ]
+      },
+      "natureOfBusiness": {
+        "name": "natureOfBusiness",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty"
+          }
+        ]
+      },
+      "lastName": {
+        "name": "lastName",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "registeredAddress": {
+      "addressLine1": {
+        "name": "addressLine1",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "addressLine2": {
+        "name": "addressLine2",
+        "required": false
+      },
+      "addressLine3": {
+        "name": "addressLine3",
+        "required": false
+      },
+      "addressLine4": {
+        "name": "addressLine4",
+        "required": false
+      },
+      "town": {
+        "name": "town",
+        "required": false
+      },
+      "postcode": {
+        "name": "postcode",
+        "filters": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Filter\\Postcode"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "operator-cpid": {
+      "0": {
+        "name": "type",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

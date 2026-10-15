@@ -1,0 +1,35 @@
+{
+  "name": "bus-request-map-fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "scale",
+        "type": "Radio",
+        "options": {
+          "label": "Scale",
+          "value_options": {
+            "small": "1:50000",
+            "large": "1:10000"
+          }
+        },
+        "attributes": {
+          "value": "small"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

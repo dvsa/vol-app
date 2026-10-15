@@ -1,0 +1,339 @@
+{
+  "name": "revoke",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "entityTypeHtml",
+              "attributes": {
+                "id": "entityTypeHtml",
+                "required": false
+              },
+              "options": {
+                "label": "Document:"
+              },
+              "type": "Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "entityId",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "entityType",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "agreedDate",
+              "options": {
+                "label": "Received/Agreed date",
+                "create_empty_option": false,
+                "render_delimiters": true
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "sentDate",
+              "attributes": {
+                "id": "sentDate"
+              },
+              "options": {
+                "label": "Sent date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "targetDate",
+              "attributes": {
+                "id": "targetDate"
+              },
+              "options": {
+                "label": "Target date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "underDelegation",
+              "type": "Radio",
+              "options": {
+                "label": "Under delegation?",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              },
+              "attributes": {
+                "value": "N"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "notes",
+              "attributes": {
+                "class": "extra-long",
+                "id": ""
+              },
+              "options": {
+                "label": "Notes"
+              },
+              "type": "TextArea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "entityTypeHtml": {
+        "name": "entityTypeHtml",
+        "required": false
+      },
+      "agreedDate": {
+        "name": "agreedDate",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "sentDate": {
+        "name": "sentDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "agreedDate",
+              "context_values": [
+                "--"
+              ],
+              "context_truth": false,
+              "allow_empty": true,
+              "validators": [
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d"
+                  }
+                },
+                {
+                  "name": "DateCompare",
+                  "options": {
+                    "compare_to": "agreedDate",
+                    "compare_to_label": "Agreed date",
+                    "operator": "gte"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "targetDate": {
+        "name": "targetDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "agreedDate",
+              "context_values": [
+                "--"
+              ],
+              "context_truth": false,
+              "allow_empty": true,
+              "validators": [
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d"
+                  }
+                },
+                {
+                  "name": "DateCompareWithInterval",
+                  "options": {
+                    "compare_to": "agreedDate",
+                    "compare_to_label": "Agreed date",
+                    "interval_label": "5 working days",
+                    "date_interval": "P5D",
+                    "operator": "gt"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "notes": {
+        "name": "notes",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 5,
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

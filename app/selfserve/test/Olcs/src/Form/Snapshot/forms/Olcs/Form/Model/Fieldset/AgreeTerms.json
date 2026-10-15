@@ -1,0 +1,35 @@
+{
+  "name": "AgreeTerms",
+  "attributes": {
+    "method": "post",
+    "label": "operator-registration.form.labe"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "termsAgreed",
+        "attributes": {
+          "id": "termsAgreed",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "user-registration.field.termsAgreed.label",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--confirm"
+          },
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "must_be_value": "Y"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": ""
+  },
+  "input_filter": []
+}

@@ -1,0 +1,151 @@
+{
+  "name": "ExistingOperatorLicence",
+  "attributes": {
+    "method": "post",
+    "label": "user-registration.form.label"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "existingOperatorLicence",
+              "attributes": {
+                "radios_wrapper_attributes": {
+                  "class": "govuk-radios",
+                  "data-module": "govuk-radios"
+                },
+                "required": "required"
+              },
+              "options": {
+                "value_options": {
+                  "NoLicence": {
+                    "label": "select-option-no",
+                    "value": "N"
+                  },
+                  "licence": {
+                    "label": "select-option-yes",
+                    "attributes": {
+                      "data-aira-controls": "conditional-existingOperatorLicenceApplication"
+                    },
+                    "value": "Y"
+                  }
+                },
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--advanced"
+                }
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Radio"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "licenceContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "licenceNumber",
+                    "type": "Text",
+                    "options": {
+                      "label": "user-registration.field.licenceNumber.label",
+                      "id": "existingOperatorLicenceApplication"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+        "options": {
+          "label": "user-registration.field.existing-operator-licence.label",
+          "hint": "user-registration.field.existing-operator-licence.hint",
+          "radio-element": "existingOperatorLicence"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "user-registration.form-actions.continue.label"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "existingOperatorLicence": {
+        "name": "existingOperatorLicence",
+        "required": true
+      },
+      "licenceContent": {
+        "licenceNumber": {
+          "name": "licenceNumber",
+          "required": false,
+          "filters": [
+            {
+              "name": "Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\Validator\\NotEmpty",
+              "options": [
+                "null"
+              ]
+            },
+            {
+              "name": "Laminas\\Validator\\StringLength",
+              "options": {
+                "min": "9",
+                "max": "9"
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}
