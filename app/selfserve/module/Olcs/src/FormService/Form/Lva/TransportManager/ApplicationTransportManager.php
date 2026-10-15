@@ -47,6 +47,8 @@ class ApplicationTransportManager extends AbstractLvaFormService
     {
         $this->alterButtons($form);
 
+        $form->get('guidance')->setValue('markup-lva-tm-video-guidance');
+
         return $form;
     }
 }

@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/irhp-permit-type",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

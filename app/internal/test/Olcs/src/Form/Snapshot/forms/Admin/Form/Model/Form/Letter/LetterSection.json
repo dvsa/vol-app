@@ -1,0 +1,269 @@
+{
+  "name": "letter-section",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "letterSection",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "sectionKey",
+              "options": {
+                "label": "Section Key"
+              },
+              "attributes": {
+                "required": true,
+                "class": "medium"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "name",
+              "options": {
+                "label": "Name"
+              },
+              "attributes": {
+                "required": true,
+                "class": "long"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "defaultContent",
+              "options": {
+                "label": "Default Content",
+                "label_attributes": {
+                  "class": ""
+                }
+              },
+              "type": "EditorJs",
+              "attributes": {
+                "id": "defaultContent",
+                "class": "extra-long",
+                "name": "defaultContent"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "requiresInput",
+              "options": {
+                "label": "Requires Input",
+                "checked_value": "1",
+                "unchecked_value": "0"
+              },
+              "type": "OlcsCheckbox",
+              "attributes": {
+                "class": "",
+                "id": "requiresInput"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "minLength",
+              "options": {
+                "label": "Minimum Length"
+              },
+              "type": "Number",
+              "attributes": {
+                "class": "short"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "maxLength",
+              "options": {
+                "label": "Maximum Length"
+              },
+              "type": "Number",
+              "attributes": {
+                "class": "short"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "helpText",
+              "options": {
+                "label": "Help Text",
+                "label_attributes": {
+                  "class": ""
+                }
+              },
+              "type": "Textarea",
+              "attributes": {
+                "class": "extra-long",
+                "rows": 3
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "letterSection": {
+      "sectionKey": {
+        "name": "sectionKey",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 1,
+              "max": 100
+            }
+          }
+        ]
+      },
+      "name": {
+        "name": "name",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 1,
+              "max": 255
+            }
+          }
+        ]
+      },
+      "defaultContent": {
+        "name": "defaultContent",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "minLength": {
+        "name": "minLength",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\Digits"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\Digits"
+          }
+        ]
+      },
+      "maxLength": {
+        "name": "maxLength",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\Digits"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\Digits"
+          }
+        ]
+      },
+      "helpText": {
+        "name": "helpText",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

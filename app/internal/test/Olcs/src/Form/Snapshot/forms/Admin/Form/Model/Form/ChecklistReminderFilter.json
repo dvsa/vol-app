@@ -1,0 +1,61 @@
+{
+  "name": "continuation-detail-filter",
+  "attributes": {
+    "method": "get",
+    "class": "filters form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "data-container-class": "js-hidden"
+        },
+        "options": {
+          "label": "filter-button"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "filters",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "date",
+              "attributes": {
+                "id": "generate-continuation-date",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Date",
+                "min_year_delta": "-5",
+                "max_year_delta": "+5",
+                "default_date": "now"
+              },
+              "type": "MonthSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": []
+}

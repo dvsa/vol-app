@@ -9,22 +9,20 @@
 namespace Dvsa\Olcs\Transfer\Command\IrhpPermit;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/irhp-permits/single/replace")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/irhp-permits/single/replace')]
+#[Transfer\Method('POST')]
 final class Replace extends AbstractCommand
 {
     use Identity;
 
     /**
      * @var int
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $replacementIrhpPermit;
 
     /**

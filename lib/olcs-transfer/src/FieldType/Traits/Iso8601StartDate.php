@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait StartDate ISO8601 format
  *
@@ -11,9 +13,9 @@ trait Iso8601StartDate
 {
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\DateTimeFormatter")
-     * @Transfer\Validator("Date", options={"format": \DateTime::ISO8601})
      */
+    #[Transfer\Filter('Laminas\Filter\DateTimeFormatter')]
+    #[Transfer\Validator('Date', options: ['format' => \DateTime::ISO8601])]
     protected $startDate;
 
     /**

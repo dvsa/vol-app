@@ -1,0 +1,819 @@
+{
+  "name": "fee_payment",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "details",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "backToFee",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "maxAmount",
+              "type": "Common\\Form\\Elements\\Types\\Html",
+              "options": {
+                "label": "fees.max_amount"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "minAmountForValidator",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "maxAmountForValidator",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "paymentType",
+              "options": {
+                "label": "fees.payment_method",
+                "service_name": "Olcs\\Service\\Data\\PaymentType"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "received",
+              "options": {
+                "short-label": "fees.received",
+                "label": "fees.received",
+                "label_attributes": {
+                  "id": "label-received"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "receiptDate",
+              "attributes": {
+                "required": false
+              },
+              "type": "DateSelect",
+              "options": {
+                "short-label": "fees.receipt_date",
+                "label": "fees.receipt_date",
+                "label_attributes": {
+                  "id": "label-receiptDate"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "payer",
+              "attributes": {
+                "required": false
+              },
+              "type": "Text",
+              "options": {
+                "short-label": "fees.payer",
+                "label": "fees.payer",
+                "label_attributes": {
+                  "id": "label-payer"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "slipNo",
+              "options": {
+                "short-label": "fees.slip",
+                "label": "fees.slip",
+                "label_attributes": {
+                  "id": "label-slipNo"
+                }
+              },
+              "attributes": {
+                "required": false
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "chequeNo",
+              "attributes": {
+                "required": false
+              },
+              "options": {
+                "short-label": "fees.cheque",
+                "label": "fees.cheque",
+                "label_attributes": {
+                  "id": "label-chequeNo"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "chequeDate",
+              "attributes": {
+                "required": false
+              },
+              "options": {
+                "short-label": "fees.cheque_date",
+                "label": "fees.cheque_date",
+                "label_attributes": {
+                  "id": "label-chequeDate"
+                },
+                "render_delimiters": false,
+                "create_empty_option": true,
+                "required": true,
+                "max_year_delta": "+1",
+                "min_year_delta": "-1"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "poNo",
+              "options": {
+                "short-label": "fees.po",
+                "label": "fees.po",
+                "label_attributes": {
+                  "id": "label-payer"
+                }
+              },
+              "attributes": {
+                "required": false
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "customerReference",
+              "options": {
+                "short-label": "Customer reference",
+                "label": "Customer reference",
+                "label_attributes": {
+                  "id": "label-customer-reference"
+                }
+              },
+              "attributes": {
+                "required": "required"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "customerName",
+              "options": {
+                "short-label": "Customer name",
+                "label": "Customer name",
+                "label_attributes": {
+                  "id": "label-customer-name"
+                }
+              },
+              "attributes": {
+                "required": "required"
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "address",
+        "attributes": {
+          "class": "address js-postcode-search"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine1",
+              "attributes": {
+                "class": "long",
+                "id": "addressLine1",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLines",
+                "error-message": "address_addressLine1-error",
+                "label_attributes": {
+                  "aria-label": "Enter address manually. Address line one"
+                },
+                "short-label": "address_addressLine1"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine2",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine2",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine3",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine3",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine4",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_addressLine4",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "town",
+              "attributes": {
+                "class": "long",
+                "id": "addressTown"
+              },
+              "options": {
+                "label": "address_townCity",
+                "short-label": "address_townCity",
+                "label_attributes": {
+                  "aria-label": "address_townCity"
+                },
+                "error-message": "address_town-error"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "postcode",
+              "options": {
+                "label": "address_postcode",
+                "short-label": "address_postcode"
+              },
+              "type": "Text",
+              "attributes": {
+                "required": false,
+                "id": "postcode"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "countryCode",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "value": "GB"
+              },
+              "options": {
+                "label": "address_country",
+                "label_attributes": {
+                  "aria-label": "Choose country"
+                },
+                "error-message": "address_country-error",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\Country"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": {
+              "priority": 100
+            },
+            "spec": {
+              "name": "searchPostcode",
+              "options": {
+                "label": "Postcode search",
+                "label_attributes": {
+                  "class": "form-element__label"
+                }
+              },
+              "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\Address",
+        "options": {
+          "label": "address"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "pay",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Make payment"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "details": {
+      "paymentType": {
+        "name": "paymentType",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty"
+          }
+        ]
+      },
+      "received": {
+        "name": "received",
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "paymentType",
+              "context_values": [
+                "fpm_card_offline"
+              ],
+              "context_truth": false,
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "Laminas\\Validator\\GreaterThan",
+                  "options": {
+                    "min": 0,
+                    "messages": {
+                      "notGreaterThan": "The payment amount must be greater than %min%"
+                    }
+                  },
+                  "break_chain_on_failure": true
+                },
+                {
+                  "name": "\\Common\\Form\\Elements\\Validators\\ReceivedAmount"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "receiptDate": {
+        "name": "receiptDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateSelect",
+            "options": {
+              "null_on_empty": true
+            }
+          }
+        ],
+        "validators": [
+          {
+            "name": "NotEmpty",
+            "options": [
+              "array"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "paymentType",
+              "context_values": [
+                "fpm_card_offline"
+              ],
+              "context_truth": false,
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "NotEmpty"
+                },
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d"
+                  }
+                },
+                {
+                  "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "payer": {
+        "name": "payer",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "paymentType",
+              "context_values": [
+                "fpm_card_offline"
+              ],
+              "context_truth": false,
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "Laminas\\Validator\\NotEmpty"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "slipNo": {
+        "name": "slipNo",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "paymentType",
+              "context_values": [
+                "fpm_card_offline"
+              ],
+              "context_truth": false,
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "Digits",
+                  "options": {
+                    "messages": {
+                      "digitsStringEmpty": "value is required"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "chequeNo": {
+        "name": "chequeNo",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "paymentType",
+              "context_values": [
+                "fpm_cheque"
+              ],
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "Laminas\\Validator\\NotEmpty"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "chequeDate": {
+        "name": "chequeDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateSelect",
+            "options": {
+              "null_on_empty": true
+            }
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "array"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "paymentType",
+              "context_values": [
+                "fpm_cheque"
+              ],
+              "context_truth": true,
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "NotEmpty"
+                },
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d"
+                  }
+                },
+                {
+                  "name": "\\Common\\Form\\Elements\\Validators\\ChequeDate"
+                },
+                {
+                  "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture",
+                  "options": {
+                    "messageTemplates": {
+                      "inFuture": "Cheque date cannot be in the future"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "poNo": {
+        "name": "poNo",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "paymentType",
+              "context_values": [
+                "fpm_po"
+              ],
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "Digits",
+                  "options": {
+                    "messages": {
+                      "digitsStringEmpty": "value is required"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "customerReference": {
+        "name": "customerReference",
+        "required": true
+      },
+      "customerName": {
+        "name": "customerName",
+        "required": true
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "address": {
+      "searchPostcode": {
+        "name": "searchPostcode",
+        "required": false
+      },
+      "addressLine1": {
+        "name": "addressLine1",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 90
+            }
+          }
+        ]
+      },
+      "addressLine2": {
+        "name": "addressLine2",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 90
+            }
+          }
+        ]
+      },
+      "addressLine3": {
+        "name": "addressLine3",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 100
+            }
+          }
+        ]
+      },
+      "addressLine4": {
+        "name": "addressLine4",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 35
+            }
+          }
+        ]
+      },
+      "town": {
+        "name": "town",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 30
+            }
+          }
+        ]
+      },
+      "postcode": {
+        "name": "postcode",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

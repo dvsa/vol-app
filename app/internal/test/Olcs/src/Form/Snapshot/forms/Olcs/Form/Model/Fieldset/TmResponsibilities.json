@@ -1,0 +1,634 @@
+{
+  "name": "details",
+  "attributes": {
+    "class": "table__form"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": {
+        "priority": -10
+      },
+      "spec": {
+        "name": "tmType",
+        "options": {
+          "label": "transport-manager.responsibilities.tm-type",
+          "category": "tm_type",
+          "fieldset-attributes": {
+            "class": "checkbox inline"
+          }
+        },
+        "type": "DynamicRadio"
+      }
+    },
+    {
+      "flags": {
+        "priority": -20
+      },
+      "spec": {
+        "name": "tmApplicationStatus",
+        "options": {
+          "label": "transport-manager.responsibilities.tm-app-status",
+          "disable_inarray_validator": false,
+          "category": "tmap_status"
+        },
+        "attributes": {
+          "required": false,
+          "id": "",
+          "placeholder": ""
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": {
+        "priority": -30
+      },
+      "spec": {
+        "name": "isOwner",
+        "options": {
+          "label": "transport-manager.responsibilities.is-owner",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "fieldset-attributes": {
+            "class": "checkbox inline"
+          }
+        },
+        "type": "Radio"
+      }
+    },
+    {
+      "flags": {
+        "priority": -60
+      },
+      "spec": {
+        "name": "additionalInformation",
+        "type": "TextArea",
+        "attributes": {
+          "class": "long"
+        },
+        "options": {
+          "label": "transport-manager.responsibilities.additional-information",
+          "label_options": {
+            "disable_html_escape": "true"
+          }
+        }
+      }
+    },
+    {
+      "flags": {
+        "priority": -80
+      },
+      "spec": {
+        "name": "hasUndertakenTraining",
+        "options": {
+          "label": "tm-review-responsibility-training-undertaken",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "fieldset-attributes": {
+            "class": "checkbox inline"
+          }
+        },
+        "type": "Radio"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": {
+        "priority": -40
+      },
+      "spec": {
+        "name": "hoursOfWeek",
+        "attributes": [],
+        "elements": [],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "hoursPerWeekContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursMon",
+                    "attributes": {
+                      "class": "short",
+                      "data-container-class": "inline-text",
+                      "id": "hoursMon"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-mon"
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursTue",
+                    "attributes": {
+                      "class": "short",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-tue"
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursWed",
+                    "attributes": {
+                      "class": "short",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-wed"
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursThu",
+                    "attributes": {
+                      "class": "short",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-thu"
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursFri",
+                    "attributes": {
+                      "class": "short",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-fri"
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursSat",
+                    "attributes": {
+                      "class": "short",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-sat"
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "hoursSun",
+                    "attributes": {
+                      "class": "short",
+                      "data-container-class": "inline-text"
+                    },
+                    "options": {
+                      "label": "days-of-week-short-sun"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": {
+                "label": "transport-manager.responsibilities.hours-per-week-subtitle"
+              }
+            }
+          }
+        ],
+        "type": "Common\\Form\\Elements\\Types\\HoursPerWeek",
+        "options": {
+          "label": "transport-manager.responsibilities.hours-per-week"
+        }
+      }
+    },
+    {
+      "flags": {
+        "priority": -50
+      },
+      "spec": {
+        "name": "otherLicences",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -70
+      },
+      "spec": {
+        "name": "file",
+        "attributes": {
+          "class": "file-uploader"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "fileCount",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "file",
+              "attributes": {
+                "class": "js-visually-hidden"
+              },
+              "options": {
+                "value": "common.file-upload.browse.title",
+                "hint": "common.file-upload.browse.hint"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "__messages__",
+              "attributes": [],
+              "options": [],
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "upload",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "inline-upload govuk-button js-upload"
+              },
+              "options": {
+                "label": "Upload"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "list",
+              "attributes": {
+                "class": "js-upload-list"
+              },
+              "options": {
+                "preview_images": "true"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "input_filter": {
+    "tmType": {
+      "name": "tmType",
+      "required": false,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    },
+    "tmApplicationStatus": {
+      "name": "tmApplicationStatus",
+      "required": true
+    },
+    "hoursOfWeek": {
+      "hoursPerWeekContent": {
+        "hoursMon": {
+          "name": "hoursMon",
+          "required": false,
+          "filters": [
+            {
+              "name": "\\Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Mon must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "hoursTue": {
+          "name": "hoursTue",
+          "required": false,
+          "filters": [
+            {
+              "name": "\\Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Tue must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "hoursWed": {
+          "name": "hoursWed",
+          "required": false,
+          "filters": [
+            {
+              "name": "\\Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Wed must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "hoursThu": {
+          "name": "hoursThu",
+          "required": false,
+          "filters": [
+            {
+              "name": "\\Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Thu must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "hoursFri": {
+          "name": "hoursFri",
+          "required": false,
+          "filters": [
+            {
+              "name": "\\Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Fri must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "hoursSat": {
+          "name": "hoursSat",
+          "required": false,
+          "filters": [
+            {
+              "name": "\\Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Sat must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "hoursSun": {
+          "name": "hoursSun",
+          "required": false,
+          "filters": [
+            {
+              "name": "\\Laminas\\Filter\\StringTrim"
+            }
+          ],
+          "validators": [
+            {
+              "name": "Laminas\\I18n\\Validator\\IsFloat",
+              "options": {
+                "messages": {
+                  "notFloat": "Only numbers are allowed"
+                }
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 24,
+                "messages": {
+                  "notBetween": "Sun must be between '%min%' and '%max%', inclusively"
+                }
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "additionalInformation": {
+      "name": "additionalInformation",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 4000
+          }
+        }
+      ]
+    },
+    "file": {
+      "fileCount": {
+        "name": "fileCount",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Common\\Validator\\FileUploadCountV2",
+            "options": {
+              "min": 1
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

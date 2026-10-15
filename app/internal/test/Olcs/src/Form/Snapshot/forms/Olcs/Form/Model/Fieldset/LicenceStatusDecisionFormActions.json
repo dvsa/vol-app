@@ -1,0 +1,74 @@
+{
+  "name": "form-actions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "affectImmediate",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button",
+          "id": "affect-immediate"
+        },
+        "options": {
+          "label": "Affect now"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button",
+          "id": "submit"
+        },
+        "options": {
+          "label": "Save"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "cancel",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "id": "cancel"
+        },
+        "options": {
+          "label": "Cancel"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "remove",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button",
+          "id": "remove"
+        },
+        "options": {
+          "label": "licence-status.remove"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

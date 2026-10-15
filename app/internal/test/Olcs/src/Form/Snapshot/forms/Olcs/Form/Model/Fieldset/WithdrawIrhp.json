@@ -1,0 +1,28 @@
+{
+  "name": "withdraw-details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "reason",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Withdraw Reason",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "permit_app_withdraw_reason"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": ""
+  },
+  "input_filter": []
+}

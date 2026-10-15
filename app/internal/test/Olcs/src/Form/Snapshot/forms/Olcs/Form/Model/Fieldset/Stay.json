@@ -1,0 +1,283 @@
+{
+  "name": "fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "stayType",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "requestDate",
+        "attributes": {
+          "id": "",
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Date of request",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "decisionDate",
+        "type": "DateSelect",
+        "attributes": {
+          "id": "decisionDate",
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Date of decision",
+          "create_empty_option": true,
+          "render_delimiters": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "dvsaNotified",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "DVSA/DVA notified?"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "outcome",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Outcome",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "stay_status"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "notes",
+        "attributes": {
+          "id": "",
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Notes"
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isWithdrawn",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Cancelled / Withdrawn?"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "withdrawnDate",
+        "attributes": {
+          "required": false,
+          "id": "withdrawnDate"
+        },
+        "type": "DateSelect",
+        "options": {
+          "label": "Withdrawn date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "case",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "requestDate": {
+      "name": "requestDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "decisionDate": {
+      "name": "decisionDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "requestDate",
+            "context_values": [
+              "--"
+            ],
+            "context_truth": false,
+            "allow_empty": true,
+            "validators": [
+              {
+                "name": "Date",
+                "options": {
+                  "format": "Y-m-d"
+                }
+              },
+              {
+                "name": "DateCompare",
+                "options": {
+                  "compare_to": "requestDate",
+                  "compare_to_label": "Date of request",
+                  "operator": "gte"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "outcome": {
+      "name": "outcome",
+      "required": false
+    },
+    "notes": {
+      "name": "notes",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 4000
+          }
+        }
+      ]
+    },
+    "withdrawnDate": {
+      "name": "withdrawnDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelect",
+          "options": {
+            "null_on_empty": true
+          }
+        }
+      ],
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": [
+            "array"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "isWithdrawn",
+            "context_values": [
+              "Y"
+            ],
+            "validators": [
+              {
+                "name": "NotEmpty"
+              },
+              {
+                "name": "\\Common\\Validator\\Date"
+              },
+              {
+                "name": "Date",
+                "options": {
+                  "format": "Y-m-d"
+                }
+              },
+              {
+                "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

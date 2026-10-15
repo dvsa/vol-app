@@ -1,0 +1,118 @@
+{
+  "name": "CreateInput",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "messageSubject",
+        "options": {
+          "label": "messaging.subject",
+          "empty_option": "Please select",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\MessagingSubject"
+        },
+        "attributes": {
+          "class": "govuk-select"
+        },
+        "type": "Common\\Form\\Element\\DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "appOrLicNo",
+        "options": {
+          "label": "messaging.app-or-lic-no",
+          "empty_option": "Please select",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\MessagingAppOrLicNo",
+          "use_groups": true
+        },
+        "attributes": {
+          "class": "govuk-select"
+        },
+        "type": "Common\\Form\\Element\\DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "messageContent",
+        "attributes": {
+          "class": "extra-long",
+          "required": "required"
+        },
+        "options": {
+          "label": "",
+          "hint": "You can enter up to 1000 characters"
+        },
+        "type": "Laminas\\Form\\Element\\Textarea"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "messageSubject": {
+      "name": "messageSubject",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "messaging.form.message.subject.empty.error_message"
+            }
+          },
+          "break_chain_on_failure": true,
+          "priority": 100
+        }
+      ]
+    },
+    "appOrLicNo": {
+      "name": "appOrLicNo",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "messaging.form.message.app_or_lic_no.empty.error_message"
+            }
+          },
+          "break_chain_on_failure": true,
+          "priority": 100
+        }
+      ]
+    },
+    "messageContent": {
+      "name": "messageContent",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "messaging.form.message.content.empty.error_message"
+            }
+          },
+          "break_chain_on_failure": true
+        },
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 1000,
+            "messages": {
+              "stringLengthTooShort": "messaging.form.message.content.too_short.error_message",
+              "stringLengthTooLong": "messaging.form.message.content.too_long.error_message"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

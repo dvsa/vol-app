@@ -1,0 +1,15 @@
+{
+  "name": "finance",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "requiredFinance",
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

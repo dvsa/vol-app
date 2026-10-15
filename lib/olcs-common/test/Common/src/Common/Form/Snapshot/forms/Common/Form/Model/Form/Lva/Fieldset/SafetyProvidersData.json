@@ -1,0 +1,39 @@
+{
+  "name": "lva-safety-providers-data",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isExternal",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "application_vehicle-safety_safety-sub-action.data.isExternal",
+          "label_attributes": {
+            "class": "form-control form-control--radio"
+          },
+          "value_options": {
+            "N": "application_vehicle-safety_safety-sub-action.data.isExternal.option.no",
+            "Y": "application_vehicle-safety_safety-sub-action.data.isExternal.option.yes"
+          }
+        },
+        "type": "\\Laminas\\Form\\Element\\Radio"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

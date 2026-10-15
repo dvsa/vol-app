@@ -1,0 +1,112 @@
+{
+  "name": "limousinesNoveltyVehicles",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvLimousines",
+        "options": {
+          "label": "application_vehicle-safety_undertakings.limousinesApplication.yesNo",
+          "legend-attributes": {
+            "class": "form-element__label"
+          },
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          }
+        },
+        "type": "\\Laminas\\Form\\Element\\Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvNoLimousineConfirmationLabel",
+        "options": {
+          "label": "application_vehicle-safety_undertakings.limousinesApplication.agreement.label"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvNoLimousineConfirmation",
+        "options": {
+          "label": "application_vehicle-safety_undertakings.limousinesApplication.agreement",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "checked_value": "Y",
+          "unchecked_value": "N"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvOnlyLimousinesConfirmationLabel",
+        "options": {
+          "label": "application_vehicle-safety_undertakings.limousinesNine.agreement.label"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvOnlyLimousinesConfirmation",
+        "options": {
+          "label": "application_vehicle-safety_undertakings.limousinesNine.agreement",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "checked_value": "Y",
+          "unchecked_value": "N"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "size",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "application_vehicle-safety_undertakings-limousines"
+  },
+  "input_filter": {
+    "psvNoLimousineConfirmation": {
+      "name": "psvNoLimousineConfirmation",
+      "type": "Common\\InputFilter\\ContinueIfEmptyInput",
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\VehicleUndertakingsNoLimousineConfirmationValidator",
+          "options": {
+            "required_context_value": "N"
+          }
+        }
+      ]
+    },
+    "psvOnlyLimousinesConfirmation": {
+      "name": "psvOnlyLimousinesConfirmation",
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\VehicleUndertakingsOnlyLimousineConfirmationValidator",
+          "options": {
+            "required_context_value": "Y"
+          }
+        }
+      ]
+    }
+  }
+}

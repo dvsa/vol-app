@@ -1,0 +1,54 @@
+{
+  "name": "search",
+  "attributes": {
+    "method": "GET",
+    "action": "/search"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "search",
+        "attributes": {
+          "class": "search__input",
+          "placeholder": "Search"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "index",
+        "attributes": {
+          "id": "search-select"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "class": "search__button"
+        },
+        "type": "Submit"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "hydrator": {
+    "type": "Laminas\\Hydrator\\ArraySerializable"
+  },
+  "input_filter": {
+    "search": {
+      "name": "search",
+      "validators": [
+        {
+          "name": "NotEmpty"
+        }
+      ]
+    }
+  }
+}

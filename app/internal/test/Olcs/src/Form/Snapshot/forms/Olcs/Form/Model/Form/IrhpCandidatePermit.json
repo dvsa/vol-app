@@ -1,0 +1,141 @@
+{
+  "name": "irhpApplication",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "irhpPermitRange",
+              "type": "Select",
+              "attributes": {
+                "id": "irhpPermitRange",
+                "class": "medium",
+                "data-container-class": "js-hidden rangeSelectBox"
+              },
+              "options": {
+                "label": "Range",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": true
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "permitAppId",
+              "attributes": {
+                "id": "permitAppId"
+              },
+              "type": "Laminas\\Form\\Element\\Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rangesUrl",
+              "attributes": {
+                "id": "rangesUrl"
+              },
+              "type": "Laminas\\Form\\Element\\Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "irhpPermitRangeSelected",
+              "attributes": {
+                "id": "irhpPermitRangeSelected"
+              },
+              "type": "Laminas\\Form\\Element\\Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -3
+      },
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button",
+                "id": "saveIrhpPermitApplication"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "back",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "closeModal"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\BaseQaForm",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": []
+}

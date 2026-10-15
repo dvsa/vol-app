@@ -1,0 +1,59 @@
+{
+  "name": "submission-section-comment-fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "comment",
+        "attributes": {
+          "id": "",
+          "class": "extra-long",
+          "name": "comment"
+        },
+        "options": {
+          "label": "",
+          "label_attributes": {
+            "class": ""
+          }
+        },
+        "type": "EditorJs"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": ""
+  },
+  "input_filter": {
+    "comment": {
+      "name": "comment",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

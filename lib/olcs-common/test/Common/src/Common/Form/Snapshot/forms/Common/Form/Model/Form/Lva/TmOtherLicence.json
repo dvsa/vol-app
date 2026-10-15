@@ -1,0 +1,277 @@
+{
+  "name": "tm-other-licence",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "redirectAction",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "redirectId",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "licNo",
+              "attributes": {
+                "class": "medium",
+                "id": "licNo",
+                "required": "required"
+              },
+              "options": {
+                "label": "transport-manager.other-licence.form.lic-no"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "role",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "transport-manager.other-licence.form.role",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "category": "other_lic_role"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "operatingCentres",
+              "attributes": {
+                "class": "long",
+                "id": "operatingCentres",
+                "required": "required"
+              },
+              "options": {
+                "label": "transport-manager.other-licence.form.operating-centres"
+              },
+              "type": "Textarea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "totalAuthVehicles",
+              "attributes": {
+                "class": "short",
+                "pattern": "\\d*",
+                "id": "totalAuthVehicles"
+              },
+              "options": {
+                "label": "transport-manager.other-licence.form.total-auth-vehicles"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "hoursPerWeek",
+              "attributes": {
+                "class": "short",
+                "pattern": "\\d(\\.)*",
+                "id": "hoursPerWeek"
+              },
+              "options": {
+                "label": "transport-manager.other-licence.form.hours-per-week"
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button",
+                "aria-label": "Save and Continue"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel",
+                "keepForReadOnly": true
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addAnother",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "Save and add another"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "action_lcfirst": true
+  },
+  "input_filter": {
+    "data": {
+      "licNo": {
+        "name": "licNo",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 18
+            }
+          }
+        ]
+      },
+      "role": {
+        "name": "role",
+        "required": false
+      },
+      "operatingCentres": {
+        "name": "operatingCentres",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 255
+            }
+          }
+        ]
+      },
+      "totalAuthVehicles": {
+        "name": "totalAuthVehicles",
+        "required": false,
+        "validators": [
+          {
+            "name": "Digits"
+          }
+        ]
+      },
+      "hoursPerWeek": {
+        "name": "hoursPerWeek",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\LessThan",
+            "options": {
+              "max": 99.9,
+              "inclusive": true
+            }
+          },
+          {
+            "name": "Laminas\\I18n\\Validator\\IsFloat",
+            "options": {
+              "allow_empty": false,
+              "messages": {
+                "notFloat": "transport-manager.other-licence.form.hours-per-week.error_msg"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

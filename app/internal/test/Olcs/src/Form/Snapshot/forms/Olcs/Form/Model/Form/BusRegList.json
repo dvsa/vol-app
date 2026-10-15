@@ -1,0 +1,89 @@
+{
+  "name": "bus-reg-list",
+  "attributes": {
+    "method": "get",
+    "class": "form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "internal-licence-bus.data.status",
+          "disable_inarray_validator": false,
+          "category": "bus_reg_status",
+          "empty_option": "All"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "internal-licence-bus.submit.filter"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "sort",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "order",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "limit",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "page",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "Bus Registration List",
+    "bypass_auth": true
+  },
+  "input_filter": []
+}

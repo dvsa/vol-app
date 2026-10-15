@@ -9,16 +9,14 @@
 namespace Dvsa\Olcs\Transfer\Query\IrhpPermit;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\IrhpApplication;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 
-/**
- * @Transfer\RouteName("backend/irhp-permits/by-irhp-id")
- */
+#[Transfer\RouteName('backend/irhp-permits/by-irhp-id')]
 final class GetListByIrhpId extends AbstractQuery implements PagedQueryInterface, OrderedQueryInterface
 {
     use PagedTrait;

@@ -1,0 +1,487 @@
+{
+  "name": "inspection-request",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "reportType",
+              "options": {
+                "label": "Report type",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "category": "insp_report_type"
+              },
+              "attributes": {
+                "required": false,
+                "id": "",
+                "placeholder": ""
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "operatingCentre",
+              "attributes": {
+                "id": "operatingCentre",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Operating centre",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\OperatingCentresForInspectionRequest",
+                "create_empty_option": false,
+                "use_groups": "false"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "inspectorName",
+              "attributes": {
+                "class": "",
+                "id": "inspectorName"
+              },
+              "options": {
+                "label": "Inspector name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "requestType",
+              "options": {
+                "label": "Request type",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "category": "insp_request_type"
+              },
+              "attributes": {
+                "required": false,
+                "id": "",
+                "placeholder": ""
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "requestDate",
+              "attributes": {
+                "id": "requestDate",
+                "required": "required"
+              },
+              "options": {
+                "label": "Request date",
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "dueDate",
+              "attributes": {
+                "id": "dueDate",
+                "required": "required"
+              },
+              "options": {
+                "label": "Due date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "returnDate",
+              "attributes": {
+                "id": "returnDate"
+              },
+              "options": {
+                "label": "Return date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "resultType",
+              "options": {
+                "label": "Result",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "category": "insp_result_type"
+              },
+              "attributes": {
+                "required": false,
+                "id": "",
+                "placeholder": ""
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "fromDate",
+              "attributes": {
+                "id": "fromDate"
+              },
+              "options": {
+                "label": "Investigation from",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "toDate",
+              "attributes": {
+                "id": "fromDate"
+              },
+              "options": {
+                "label": "Investigation to",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "vehiclesExaminedNo",
+              "attributes": {
+                "class": "",
+                "id": "vehiclesExaminedNo"
+              },
+              "options": {
+                "label": "Vehicles"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "trailersExaminedNo",
+              "attributes": {
+                "class": "",
+                "id": "trailersExaminedNo"
+              },
+              "options": {
+                "label": "Trailers"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "requestorNotes",
+              "attributes": {
+                "class": "long",
+                "id": "requestorNotes"
+              },
+              "options": {
+                "label": "Caseworker comments"
+              },
+              "type": "TextArea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "inspectorNotes",
+              "attributes": {
+                "class": "long",
+                "id": "inspectorNotes"
+              },
+              "options": {
+                "label": "Examiner comments"
+              },
+              "type": "TextArea"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "data": {
+      "reportType": {
+        "name": "reportType",
+        "required": true
+      },
+      "operatingCentre": {
+        "name": "operatingCentre",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "inspectorName": {
+        "name": "inspectorName",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "requestType": {
+        "name": "requestType",
+        "required": true
+      },
+      "requestDate": {
+        "name": "requestDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "dueDate": {
+        "name": "dueDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "Common\\Form\\Elements\\Validators\\InspectionRequestDueDate"
+          }
+        ]
+      },
+      "returnDate": {
+        "name": "returnDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "resultType": {
+        "name": "resultType",
+        "required": true
+      },
+      "fromDate": {
+        "name": "fromDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "toDate": {
+        "name": "toDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "vehiclesExaminedNo": {
+        "name": "vehiclesExaminedNo",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "trailersExaminedNo": {
+        "name": "trailersExaminedNo",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "requestorNotes": {
+        "name": "requestorNotes",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "inspectorNotes": {
+        "name": "inspectorNotes",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

@@ -49,12 +49,14 @@ final class CreateTest extends AbstractCommandHandlerTestCase
 
         $saved = $this->saveAndCapture(Cmd::create([
             'todoKey' => 'FI01',
+            'name' => 'You need to upload bank statements',
             'description' => $description,
             'helpText' => 'Last three months',
             'requiresInput' => true,
         ]));
 
         $this->assertSame('FI01', $saved->getTodoKey());
+        $this->assertSame('You need to upload bank statements', $saved->getName());
         $this->assertSame($description, $saved->getDescription());
         $this->assertSame('Last three months', $saved->getHelpText());
         $this->assertTrue($saved->getRequiresInput());

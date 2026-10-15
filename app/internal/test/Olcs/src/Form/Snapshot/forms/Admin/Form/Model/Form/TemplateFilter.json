@@ -1,0 +1,56 @@
+{
+  "name": "Cpid-filter",
+  "attributes": {
+    "method": "get",
+    "class": "form__filter filters"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailTemplateCategory",
+        "options": {
+          "label": "documents-home.data.category",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\EmailTemplateCategory",
+          "empty_option": "All"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "format",
+        "options": {
+          "label": "Format",
+          "empty_option": "All",
+          "value_options": {
+            "html": "HTML",
+            "plain": "Plain Text",
+            "md": "Markdown"
+          }
+        },
+        "type": "Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "tasks.submit.filter"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

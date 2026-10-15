@@ -9,11 +9,9 @@
 namespace Dvsa\Olcs\Transfer\Query\Template;
 
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/template/template-categories")
- */
+#[Transfer\RouteName('backend/template/template-categories')]
 class TemplateCategories extends AbstractQuery
 {
 }

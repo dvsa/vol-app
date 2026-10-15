@@ -22,6 +22,7 @@ data "aws_s3_bucket" "documents" {
 # Created before the Lambda so Terraform controls retention
 # rather than letting Lambda auto-create it with no expiry.
 # ============================================================
+#checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "classify_document" {
   name              = "/aws/lambda/${local.name_prefix}-classify-document"
   retention_in_days = 30
@@ -65,6 +66,7 @@ resource "aws_lambda_function" "classify_document" {
 # Must be under /aws/vendedlogs/states/ so Step Functions has
 # the resource-policy permissions it needs to write to it.
 # ============================================================
+#checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "classification_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-classification"
   retention_in_days = 30
@@ -181,8 +183,17 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "idp_output" {
   }
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "idp_output" {
+resource "aws_s3_bucket_versioning" "idp_output" {
   bucket = aws_s3_bucket.idp_output.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "idp_output" {
+  bucket     = aws_s3_bucket.idp_output.id
+  depends_on = [aws_s3_bucket_versioning.idp_output]
 
   rule {
     id     = "delete-old-outputs"
@@ -191,12 +202,28 @@ resource "aws_s3_bucket_lifecycle_configuration" "idp_output" {
     expiration {
       days = 30
     }
+
+    noncurrent_version_expiration {
+      noncurrent_days = 30
+    }
+  }
+
+  rule {
+    id     = "remove-expired-delete-markers"
+    status = "Enabled"
+
+    filter {}
+
+    expiration {
+      expired_object_delete_marker = true
+    }
   }
 }
 
 # ============================================================
 # CloudWatch — Extraction SM Log Group
 # ============================================================
+#checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "extraction_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-extraction"
   retention_in_days = 30
@@ -239,6 +266,7 @@ resource "aws_sfn_state_machine" "extraction" {
 # Used by the AI Analysis SM to fetch inference_result and the
 # document markdown without loading the full result.json.
 # ============================================================
+#checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "extract_s3_json_field" {
   name              = "/aws/lambda/${local.name_prefix}-extract-s3-json-field"
   retention_in_days = 30
@@ -274,6 +302,7 @@ resource "aws_lambda_function" "extract_s3_json_field" {
 # ============================================================
 # CloudWatch — AI Analysis SM Log Group
 # ============================================================
+#checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "ai_analysis_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-ai-analysis"
   retention_in_days = 30
@@ -317,6 +346,7 @@ resource "aws_sfn_state_machine" "ai_analysis" {
 # Orchestrates the full IDP pipeline: check/run classification,
 # run extraction, run AI analysis, emit FinancialDocumentAnalysed.
 # ============================================================
+#checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "analyse_financial_document_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-analyse-financial-document"
   retention_in_days = 30

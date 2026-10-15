@@ -1,0 +1,146 @@
+{
+  "name": "grace-period-details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "startDate",
+        "attributes": {
+          "required": "required",
+          "id": "startDate"
+        },
+        "options": {
+          "label": "internal-licence-grace-periods-period-details-startDate",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "max_year_delta": "+5",
+          "min_year_delta": "-5"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "endDate",
+        "attributes": {
+          "required": "required",
+          "id": "endDate"
+        },
+        "options": {
+          "label": "internal-licence-grace-periods-period-details-endDate",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "max_year_delta": "+5",
+          "min_year_delta": "-5"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "attributes": {
+          "class": "extra-long",
+          "id": ""
+        },
+        "options": {
+          "label": "internal-licence-grace-periods-period-details-description"
+        },
+        "type": "TextArea"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "startDate": {
+      "name": "startDate",
+      "required": true,
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d",
+            "messages": {
+              "dateInvalidDate": "datetime.compare.validation.message.invalid"
+            }
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ]
+    },
+    "endDate": {
+      "name": "endDate",
+      "required": true,
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "startDate",
+            "context_values": [
+              "--"
+            ],
+            "context_truth": false,
+            "allow_empty": true,
+            "validators": [
+              {
+                "name": "\\Common\\Validator\\Date"
+              },
+              {
+                "name": "Date",
+                "options": {
+                  "format": "Y-m-d",
+                  "messages": {
+                    "dateInvalidDate": "datetime.compare.validation.message.invalid"
+                  }
+                },
+                "break_chain_on_failure": true
+              },
+              {
+                "name": "DateCompare",
+                "options": {
+                  "has_time": false,
+                  "compare_to": "startDate",
+                  "operator": "gt",
+                  "compare_to_label": "start date"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ]
+    },
+    "description": {
+      "name": "description",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 90
+          }
+        }
+      ]
+    }
+  }
+}

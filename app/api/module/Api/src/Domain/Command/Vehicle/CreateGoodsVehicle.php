@@ -10,7 +10,6 @@ namespace Dvsa\Olcs\Api\Domain\Command\Vehicle;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Licence;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Vrm;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
 /**

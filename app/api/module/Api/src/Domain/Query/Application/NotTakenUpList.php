@@ -8,7 +8,6 @@
 
 namespace Dvsa\Olcs\Api\Domain\Query\Application;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
 /**

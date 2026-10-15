@@ -1,0 +1,209 @@
+{
+  "name": "SubmissionSendTo-fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "tcOrOther",
+        "attributes": {
+          "id": "tcOrOther",
+          "required": true
+        },
+        "options": {
+          "label": "Assign to:",
+          "fieldset-attributes": {
+            "id": "fieldset-tc-or-other",
+            "class": "checkbox"
+          },
+          "fieldset-data-group": "operator-type",
+          "value_options": {
+            "tc": "TC/DTC",
+            "other": "Other User"
+          }
+        },
+        "type": "Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "presidingTcUser",
+        "attributes": {
+          "id": "presidingTcUser",
+          "data-container-class": "tcUser js-hidden",
+          "placeholder": "",
+          "class": "chosen-select-medium js-sub-user",
+          "required": false
+        },
+        "type": "DynamicSelect",
+        "options": {
+          "label": "TC/DTC",
+          "disable_inarray_validator": true,
+          "use_groups": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "recipientUser",
+        "attributes": {
+          "id": "recipientUser",
+          "data-container-class": "otherUser js-hidden",
+          "placeholder": "",
+          "class": "chosen-select-medium js-sub-user",
+          "required": false
+        },
+        "type": "DynamicSelect",
+        "options": {
+          "label": "Other User",
+          "service_name": "Olcs\\Service\\Data\\UserListInternalExcludingLimitedReadOnlyUsersSorted",
+          "disable_inarray_validator": true,
+          "use_groups": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "senderUser",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "informationCompleteDate",
+        "attributes": {
+          "value": "",
+          "class": "govuk-visually-hidden",
+          "readonly": "true"
+        },
+        "options": {
+          "label": "Information Complete Date",
+          "create_empty_option": false,
+          "render_delimiters": true
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "assignedDate",
+        "attributes": {
+          "id": "assignedDate"
+        },
+        "options": {
+          "label": "Date first assigned to TC/DTC/TR",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "max_year_delta": "+5",
+          "min_year_delta": "-5"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "urgent",
+        "type": "Radio",
+        "options": {
+          "label": "Urgent?",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "presidingTcUser": {
+      "name": "presidingTcUser",
+      "required": false
+    },
+    "recipientUser": {
+      "name": "recipientUser",
+      "required": false
+    },
+    "assignedDate": {
+      "name": "assignedDate",
+      "required": false,
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "informationCompleteDate",
+            "context_values": [
+              "--"
+            ],
+            "context_truth": false,
+            "allow_empty": true,
+            "validators": [
+              {
+                "name": "\\Common\\Validator\\Date"
+              },
+              {
+                "name": "Date",
+                "options": {
+                  "format": "Y-m-d",
+                  "messages": {
+                    "dateInvalidDate": "Invalid Date"
+                  }
+                },
+                "break_chain_on_failure": true
+              },
+              {
+                "name": "DateCompare",
+                "options": {
+                  "has_time": false,
+                  "compare_to": "informationCompleteDate",
+                  "operator": "gte",
+                  "compare_to_label": "Information Complete Date"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ]
+    }
+  }
+}

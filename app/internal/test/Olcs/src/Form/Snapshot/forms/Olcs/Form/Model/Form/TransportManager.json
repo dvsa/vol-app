@@ -1,0 +1,839 @@
+{
+  "name": "transport-manager",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "transport-manager-details",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "transport-manager-id",
+              "options": {
+                "label": "internal-transport-manager-id"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "title",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "empty_option": "Please Select",
+                "label": "transport-manager-details-title",
+                "category": "person_title",
+                "disable_inarray_validator": true
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "firstName",
+              "attributes": {
+                "class": "medium"
+              },
+              "options": {
+                "label": "transport-manager-details-first-name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "lastName",
+              "attributes": {
+                "class": "medium"
+              },
+              "options": {
+                "label": "transport-manager-details-last-name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailAddress",
+              "attributes": {
+                "class": "medium"
+              },
+              "options": {
+                "label": "transport-manager-details-email"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "birthDate",
+              "attributes": {
+                "required": false,
+                "id": "dob"
+              },
+              "options": {
+                "label": "transport-manager-details-dob",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "birthPlace",
+              "attributes": {
+                "id": "",
+                "class": "medium"
+              },
+              "options": {
+                "label": "transport-manager-details-place-of-birth"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "type",
+              "options": {
+                "label": "transport-manager-details-type",
+                "category": "tm_type"
+              },
+              "type": "DynamicRadio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "homeCdId",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "homeCdVersion",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "workCdId",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "workCdVersion",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "personId",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "personVersion",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "status",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "home-address",
+        "attributes": {
+          "class": "address js-postcode-search",
+          "aria-live": "assertive"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine1",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLines",
+                "label_attributes": {
+                  "aria-label": "Enter address manually. Establishment address line 1"
+                },
+                "short-label": "address_addressLine1"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine2",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine2",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine3",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine3",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine4",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_addressLine4",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "town",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_townCity",
+                "label_attributes": {
+                  "aria-label": "Establishment town/city"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "postcode",
+              "options": {
+                "label": "address_postcode",
+                "label_attributes": {
+                  "aria-label": "Establishment postcode"
+                }
+              },
+              "type": "Text",
+              "attributes": {
+                "id": "postcodeOptional",
+                "required": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "countryCode",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "value": "GB"
+              },
+              "options": {
+                "label": "address_country",
+                "label_attributes": {
+                  "aria-label": "Choose establishment country"
+                },
+                "empty_option": "Please select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\Country"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": {
+              "priority": 100
+            },
+            "spec": {
+              "name": "searchPostcode",
+              "options": {
+                "label": "Postcode search",
+                "label_attributes": {
+                  "class": "form-element__label"
+                }
+              },
+              "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\Address",
+        "options": {
+          "label": "transport-manager-details-home-address"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "work-address",
+        "attributes": {
+          "class": "address js-postcode-search",
+          "aria-live": "assertive"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine1",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLines",
+                "label_attributes": {
+                  "aria-label": "Enter address manually. Establishment address line 1"
+                },
+                "short-label": "address_addressLine1"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine2",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine2",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine3",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine3",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine4",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_addressLine4",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "town",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_townCity",
+                "label_attributes": {
+                  "aria-label": "Establishment town/city"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "postcode",
+              "options": {
+                "label": "address_postcode",
+                "label_attributes": {
+                  "aria-label": "Establishment postcode"
+                }
+              },
+              "type": "Text",
+              "attributes": {
+                "id": "postcodeOptional",
+                "required": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "countryCode",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "value": "GB"
+              },
+              "options": {
+                "label": "address_country",
+                "label_attributes": {
+                  "aria-label": "Choose establishment country"
+                },
+                "empty_option": "Please select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\Country"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": {
+              "priority": 100
+            },
+            "spec": {
+              "name": "searchPostcode",
+              "options": {
+                "label": "Postcode search",
+                "label_attributes": {
+                  "class": "form-element__label"
+                }
+              },
+              "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\Address",
+        "options": {
+          "label": "transport-manager-details-work-address"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "transport-manager-details-save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "transport-manager-details-cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "Transport Manager",
+    "action_lcfirst": false
+  },
+  "input_filter": {
+    "transport-manager-details": {
+      "title": {
+        "name": "title",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "firstName": {
+        "name": "firstName",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Laminas\\Validator\\NotEmpty"
+          },
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 2,
+              "max": 35
+            }
+          }
+        ]
+      },
+      "lastName": {
+        "name": "lastName",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Laminas\\Validator\\NotEmpty"
+          },
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 2,
+              "max": 35
+            }
+          }
+        ]
+      },
+      "emailAddress": {
+        "name": "emailAddress",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+          }
+        ]
+      },
+      "birthDate": {
+        "name": "birthDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Laminas\\Validator\\NotEmpty"
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "birthPlace": {
+        "name": "birthPlace",
+        "validators": [
+          {
+            "name": "\\Laminas\\Validator\\NotEmpty"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "home-address": {
+      "searchPostcode": {
+        "name": "searchPostcode",
+        "required": false
+      },
+      "addressLine1": {
+        "name": "addressLine1",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "addressLine2": {
+        "name": "addressLine2",
+        "required": false
+      },
+      "addressLine3": {
+        "name": "addressLine3",
+        "required": false
+      },
+      "addressLine4": {
+        "name": "addressLine4",
+        "required": false
+      },
+      "town": {
+        "name": "town",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "postcode": {
+        "name": "postcode",
+        "required": false,
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode",
+            "options": {
+              "allow_empty": true
+            }
+          }
+        ]
+      },
+      "countryCode": {
+        "name": "countryCode",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "work-address": {
+      "searchPostcode": {
+        "name": "searchPostcode",
+        "required": false
+      },
+      "addressLine1": {
+        "name": "addressLine1",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "addressLine2": {
+        "name": "addressLine2",
+        "required": false
+      },
+      "addressLine3": {
+        "name": "addressLine3",
+        "required": false
+      },
+      "addressLine4": {
+        "name": "addressLine4",
+        "required": false
+      },
+      "town": {
+        "name": "town",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "postcode": {
+        "name": "postcode",
+        "required": false,
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode",
+            "options": {
+              "allow_empty": true
+            }
+          }
+        ]
+      },
+      "countryCode": {
+        "name": "countryCode",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "name": "UserForgotUsername",
+  "attributes": {
+    "method": "post",
+    "label": "user-forgot-username.form.label"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceNumber",
+        "type": "Text",
+        "options": {
+          "label": "user-forgot-username.field.licenceNumber.label",
+          "label_attributes": {
+            "aria-label": "Enter your licence number"
+          }
+        },
+        "attributes": {
+          "class": "medium"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emailAddress",
+        "type": "Text",
+        "options": {
+          "label": "user-forgot-username.field.emailAddress.label",
+          "label_attributes": {
+            "aria-label": "Enter your email address"
+          }
+        },
+        "attributes": {
+          "class": "long"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "user-forgot-username.form.label"
+  },
+  "input_filter": {
+    "licenceNumber": {
+      "name": "licenceNumber",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 18
+          }
+        }
+      ]
+    },
+    "emailAddress": {
+      "name": "emailAddress",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        }
+      ]
+    }
+  }
+}

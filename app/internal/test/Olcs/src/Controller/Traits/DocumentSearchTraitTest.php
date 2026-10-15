@@ -206,4 +206,46 @@ final class DocumentSearchTraitTest extends MockeryTestCase
 
         $this->assertSame([], $this->sut->getDocumentsExtensionList($filters));
     }
+
+    public function testInternalOverridesQueryWhenPassedAsExtraParameter(): void
+    {
+        $query = ['isExternal' => 'external'];
+        $overrides = ['isExternal' => 'internal'];
+
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
+        $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn($query);
+        $this->sut->shouldReceive('getRequest')->once()->andReturn($mockRequest);
+
+        $filters = $this->sut->traitMapDocumentFilters($overrides);
+
+        $this->assertSame('N', $filters['isExternal']);
+    }
+
+    public function testNullIsExternalDoesNotOverrideQueryWhenPassedAsExtraParameter(): void
+    {
+        $query = ['isExternal' => 'external'];
+        $overrides = ['isExternal' => null];
+
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
+        $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn($query);
+        $this->sut->shouldReceive('getRequest')->once()->andReturn($mockRequest);
+
+        $filters = $this->sut->traitMapDocumentFilters($overrides);
+
+        $this->assertSame('Y', $filters['isExternal']);
+    }
+
+    public function testExternalDoesNotOverrideQueryWhenPassedAsExtraParameter(): void
+    {
+        $query = ['isExternal' => 'internal'];
+        $overrides = ['isExternal' => 'external'];
+
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
+        $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn($query);
+        $this->sut->shouldReceive('getRequest')->once()->andReturn($mockRequest);
+
+        $filters = $this->sut->traitMapDocumentFilters($overrides);
+
+        $this->assertSame('N', $filters['isExternal']);
+    }
 }

@@ -1,0 +1,92 @@
+{
+  "name": "fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "attributes": {
+          "id": "",
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Case summary"
+        },
+        "type": "\\Laminas\\Form\\Element\\Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "ecmsNo",
+        "attributes": {
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "ECMS number"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licence",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": [],
+  "input_filter": {
+    "description": {
+      "name": "description",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        },
+        {
+          "name": "Laminas\\Filter\\StringToLower"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 10,
+            "max": 100
+          }
+        }
+      ]
+    },
+    "ecmsNo": {
+      "name": "ecmsNo",
+      "required": false
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "event-history-actions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "cancel",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button",
+          "id": "cancel"
+        },
+        "options": {
+          "label": "Close"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

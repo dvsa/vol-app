@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits\Messaging;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait Conversation
  *
@@ -9,10 +11,8 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits\Messaging;
  */
 trait MessageContent
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"max":3000})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['max' => 3000])]
     protected $messageContent;
 
     public function getMessageContent()

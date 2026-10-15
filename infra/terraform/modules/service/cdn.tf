@@ -166,12 +166,36 @@ EOF
 data "aws_canonical_user_id" "current" {}
 data "aws_cloudfront_log_delivery_canonical_user_id" "cloudfront" {}
 
+#checkov:skip=CKV_AWS_19: Encryption is configured via the module input, but Checkov does not resolve it through this external module.
+#checkov:skip=CKV_AWS_144: This bucket stores CloudFront access logs and is intentionally not replicated cross-region.
+#checkov:skip=CKV2_AWS_65: CloudFront standard logging to S3 requires ACLs, so this log bucket cannot use BucketOwnerEnforced ownership.
 module "log_bucket" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=fccafe509c9c9af4646a4bc45387f63d83c8a006"
   bucket = "vol-app-${var.environment}-assets-logs"
 
   control_object_ownership = true
   object_ownership         = "ObjectWriter"
+
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  versioning = {
+    enabled = true
+  }
+
+  lifecycle_rule = [{
+    id      = "cloudfront-log-retention"
+    enabled = true
+
+    noncurrent_version_expiration = {
+      days = 90
+    }
+  }]
 
   grant = [{
     type       = "CanonicalUser"

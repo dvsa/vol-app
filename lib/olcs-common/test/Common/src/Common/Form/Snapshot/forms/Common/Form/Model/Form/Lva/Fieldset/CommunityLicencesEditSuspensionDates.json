@@ -1,0 +1,103 @@
+{
+  "name": "community-licences-edit-suspension-dates",
+  "attributes": {
+    "id": "dates"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "startDate",
+        "attributes": {
+          "required": "required"
+        },
+        "options": {
+          "label": "internal.community_licence.form.start_date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "endDate",
+        "options": {
+          "label": "internal.community_licence.form.end_date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "startDate": {
+      "name": "startDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\DateInFuture",
+          "options": {
+            "include_today": true,
+            "use_time": false
+          }
+        }
+      ]
+    },
+    "endDate": {
+      "name": "endDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "DateCompare",
+          "options": {
+            "has_time": false,
+            "allow_empty": true,
+            "compare_to": "startDate",
+            "operator": "gt",
+            "compare_to_label": "Start date"
+          }
+        },
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\DateInFuture",
+          "options": {
+            "include_today": true,
+            "use_time": false,
+            "allow_empty": true
+          }
+        }
+      ]
+    }
+  }
+}

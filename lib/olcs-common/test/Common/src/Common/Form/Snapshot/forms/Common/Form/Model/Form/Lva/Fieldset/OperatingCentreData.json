@@ -1,0 +1,104 @@
+{
+  "name": "OperatingCentreData",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "noOfVehiclesRequired",
+        "attributes": {
+          "class": "tiny",
+          "pattern": "\\d*",
+          "id": "noOfVehiclesRequired"
+        },
+        "options": {
+          "label": "application_operating-centres_authorisation-sub-action.data.noOfVehiclesRequired"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "noOfTrailersRequired",
+        "attributes": {
+          "class": "tiny",
+          "pattern": "\\d*",
+          "id": "noOfTrailersRequired"
+        },
+        "options": {
+          "label": "application_operating-centres_authorisation-sub-action.data.noOfTrailersRequired",
+          "error-message": "Your total number of trailers"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "guidance",
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "permission",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "permission",
+              "attributes": {
+                "id": "permission",
+                "placeholder": ""
+              },
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "application_operating-centres_authorisation-sub-action.data.permission",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--advanced"
+                },
+                "must_be_value": "Y"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "lva-operating-centre-newspaper-permission"
+        }
+      }
+    }
+  ],
+  "input_filter": {
+    "noOfVehiclesRequired": {
+      "name": "noOfVehiclesRequired",
+      "validators": [
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 1000000
+          }
+        }
+      ]
+    },
+    "noOfTrailersRequired": {
+      "name": "noOfTrailersRequired",
+      "validators": [
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 1000000
+          }
+        }
+      ]
+    }
+  }
+}

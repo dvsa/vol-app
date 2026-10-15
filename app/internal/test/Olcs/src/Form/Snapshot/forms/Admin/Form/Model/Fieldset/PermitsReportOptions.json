@@ -1,0 +1,103 @@
+{
+  "name": "reportOptions",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "type": "Select",
+        "attributes": {
+          "id": "id"
+        },
+        "options": {
+          "label": "Report type"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "startDate",
+        "options": {
+          "label": "Start date",
+          "short-label": "Start date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "attributes": {
+          "required": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "endDate",
+        "options": {
+          "label": "End date",
+          "short-label": "End date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "attributes": {
+          "required": false
+        },
+        "type": "DateSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "startDate": {
+      "name": "startDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "endDate": {
+      "name": "endDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        },
+        {
+          "name": "DateCompare",
+          "options": {
+            "has_time": false,
+            "compare_to": "startDate",
+            "operator": "gte",
+            "compare_to_label": "Start date"
+          }
+        }
+      ]
+    }
+  }
+}

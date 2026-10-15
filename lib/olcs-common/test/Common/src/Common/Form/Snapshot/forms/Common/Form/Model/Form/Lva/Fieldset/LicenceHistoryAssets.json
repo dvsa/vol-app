@@ -1,0 +1,100 @@
+{
+  "name": "LicenceHistoryAssets",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "prevPurchasedAssets",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "application_previous-history_licence-history_prevPurchasedAssets",
+          "error-message": "licenceHistoryAssets_prevPurchasedAssets-error",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "legend-attributes": {
+            "class": "form-element__label"
+          },
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          }
+        },
+        "type": "radio"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "prevPurchasedAssets-table",
+        "attributes": {
+          "id": "prevPurchasedAssets",
+          "class": "help__text help__text--removePadding"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "input_filter": {
+    "prevPurchasedAssets": {
+      "name": "prevPurchasedAssets",
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\LicenceHistoryLicenceValidator",
+          "options": {
+            "table": "prevPurchasedAssets-table"
+          }
+        }
+      ]
+    }
+  }
+}

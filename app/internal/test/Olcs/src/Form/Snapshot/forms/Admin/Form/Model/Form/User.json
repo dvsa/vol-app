@@ -1,0 +1,1199 @@
+{
+  "name": "User",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "userType",
+        "attributes": {
+          "id": "userType"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "userType",
+              "options": {
+                "label": "Type",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\UserTypesListDataService",
+                "use_groups": "false"
+              },
+              "type": "DynamicSelect",
+              "attributes": {
+                "required": false,
+                "id": "userType",
+                "placeholder": ""
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "team",
+              "attributes": {
+                "required": false,
+                "id": "team",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Team",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\Team",
+                "use_groups": "false"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "currentTransportManagerHtml",
+              "attributes": {
+                "id": "currentTransportManagerHtml",
+                "required": false,
+                "data-container-class": "tm-current"
+              },
+              "options": {
+                "label": "Current Transport Manager"
+              },
+              "type": "Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "currentTransportManager",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "currentTransportManagerName",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "transportManager",
+              "attributes": {
+                "required": false,
+                "class": "medium",
+                "id": "transportManager"
+              },
+              "options": {
+                "label": "Transport manager",
+                "disable_inarray_validator": false,
+                "empty_option": "Please Select",
+                "use_groups": "false"
+              },
+              "type": "Select"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "localAuthority",
+              "attributes": {
+                "required": false,
+                "class": "medium",
+                "id": "localAuthority"
+              },
+              "options": {
+                "label": "Local authority",
+                "disable_inarray_validator": false,
+                "empty_option": "Please Select",
+                "service_name": "Common\\Service\\Data\\LocalAuthority",
+                "use_groups": "false"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "partnerContactDetails",
+              "attributes": {
+                "required": false,
+                "class": "medium",
+                "id": "partnerContactDetails"
+              },
+              "options": {
+                "label": "Partner",
+                "disable_inarray_validator": false,
+                "empty_option": "Please Select",
+                "service_name": "Common\\Service\\Data\\ContactDetails",
+                "context": "ct_partner",
+                "use_groups": false
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "licenceNumber",
+              "attributes": {
+                "required": false,
+                "class": "medium",
+                "id": "licenceNumber"
+              },
+              "options": {
+                "label": "Licence number"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "role",
+              "options": {
+                "label": "Role",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\Role",
+                "use_groups": "false"
+              },
+              "type": "DynamicSelect",
+              "attributes": {
+                "required": false,
+                "id": "role",
+                "placeholder": ""
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isLastOperatorAdmin",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "lastOperatorAdminText",
+              "options": {
+                "label": "Last operator admin?"
+              },
+              "attributes": {
+                "id": "lastOperatorAdminText",
+                "required": false
+              },
+              "type": "Common\\Form\\Elements\\Types\\ReadonlyElement"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "applicationTransportManagers",
+              "options": {
+                "label": "Application"
+              },
+              "attributes": {
+                "id": "applicationTransportManagers"
+              },
+              "type": "Common\\Form\\Elements\\Types\\ApplicationTransportManagers"
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "userPersonal",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "forename",
+              "attributes": {
+                "id": "forename",
+                "placeholder": "",
+                "class": "medium",
+                "required": false
+              },
+              "options": {
+                "label": "First name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "familyName",
+              "attributes": {
+                "id": "familyName",
+                "placeholder": "",
+                "class": "medium",
+                "required": false
+              },
+              "options": {
+                "label": "Last name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "birthDate",
+              "attributes": {
+                "id": "dob"
+              },
+              "options": {
+                "label": "Birth date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "Personal"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "userContactDetails",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailAddress",
+              "attributes": {
+                "class": "medium"
+              },
+              "options": {
+                "label": "Email address"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailConfirm",
+              "attributes": {
+                "class": "medium"
+              },
+              "options": {
+                "label": "Confirm email address"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_primary",
+              "attributes": {
+                "class": "medium",
+                "id": "primary"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_primary_id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_primary_version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_secondary",
+              "attributes": {
+                "class": "medium",
+                "id": "secondary"
+              },
+              "options": {
+                "label": "secondary-contact-number-optional"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_secondary_id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_secondary_version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "Contact"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "address",
+        "attributes": {
+          "class": "address js-postcode-search",
+          "aria-live": "assertive"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine1",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLines",
+                "label_attributes": {
+                  "aria-label": "Enter address manually. Establishment address line 1"
+                },
+                "short-label": "address_addressLine1"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine2",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine2",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine3",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine3",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine4",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_addressLine4",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "town",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_townCity",
+                "label_attributes": {
+                  "aria-label": "Establishment town/city"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "postcode",
+              "options": {
+                "label": "address_postcode",
+                "label_attributes": {
+                  "aria-label": "Establishment postcode"
+                }
+              },
+              "type": "Text",
+              "attributes": {
+                "id": "postcodeOptional",
+                "required": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "countryCode",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "value": "GB"
+              },
+              "options": {
+                "label": "address_country",
+                "label_attributes": {
+                  "aria-label": "Choose establishment country"
+                },
+                "empty_option": "Please select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\Country"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": {
+              "priority": 100
+            },
+            "spec": {
+              "name": "searchPostcode",
+              "options": {
+                "label": "Postcode search",
+                "label_attributes": {
+                  "class": "form-element__label"
+                }
+              },
+              "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\Address",
+        "options": {
+          "label": "Address"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "userLoginSecurity",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "loginId",
+              "options": {
+                "label": "Username"
+              },
+              "attributes": {
+                "id": "username",
+                "placeholder": "",
+                "class": "medium",
+                "required": false
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "createdOn",
+              "options": {
+                "label": "Created on"
+              },
+              "attributes": {
+                "id": "createdOn",
+                "required": false
+              },
+              "type": "Common\\Form\\Elements\\Types\\HtmlDateTime"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "lastLoggedInOn",
+              "options": {
+                "label": "Last logged in on"
+              },
+              "attributes": {
+                "id": "lastLoginOn",
+                "required": false
+              },
+              "type": "Common\\Form\\Elements\\Types\\HtmlDateTime"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "locked",
+              "options": {
+                "label": "Account locked"
+              },
+              "attributes": {
+                "id": "locked",
+                "required": false
+              },
+              "type": "Common\\Form\\Elements\\Types\\ReadonlyElement"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "passwordLastReset",
+              "options": {
+                "label": "Password last reset"
+              },
+              "attributes": {
+                "id": "passwordLastReset",
+                "required": false
+              },
+              "type": "Common\\Form\\Elements\\Types\\ReadonlyElement"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "resetPassword",
+              "type": "Radio",
+              "options": {
+                "label": "Reset password / Unlock account",
+                "value_options": {
+                  "": "N/A",
+                  "post": "By post",
+                  "email": "By email"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              },
+              "attributes": {
+                "value": ""
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "accountDisabled",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "Disable account"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "disabledDate",
+              "options": {
+                "label": "Account disabled"
+              },
+              "attributes": {
+                "id": "disabledDate",
+                "required": false
+              },
+              "type": "Common\\Form\\Elements\\Types\\HtmlDateTime"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "Login"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "userSettings",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "translateToWelsh",
+              "attributes": {
+                "id": "translateToWelsh",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "translate-to-welsh",
+                "checked_value": "Y",
+                "unchecked_value": "N"
+              },
+              "type": "OlcsCheckbox"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "userType": {
+      "userType": {
+        "name": "userType",
+        "required": true
+      },
+      "team": {
+        "name": "team",
+        "required": true,
+        "validators": [
+          {
+            "name": "NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "userType",
+              "context_values": [
+                "internal"
+              ],
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "\\Laminas\\Validator\\NotEmpty"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "currentTransportManagerHtml": {
+        "name": "currentTransportManagerHtml",
+        "required": false
+      },
+      "applicationTransportManagers": {
+        "name": "applicationTransportManagers",
+        "required": false
+      },
+      "transportManager": {
+        "name": "transportManager",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "userType",
+              "context_values": [
+                "transport-manager"
+              ],
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "ValidateIf",
+                  "options": {
+                    "context_field": "currentTransportManager",
+                    "context_values": [
+                      ""
+                    ],
+                    "allow_empty": false,
+                    "validators": [
+                      {
+                        "name": "\\Laminas\\Validator\\NotEmpty"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "localAuthority": {
+        "name": "localAuthority",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "userType",
+              "context_values": [
+                "local-authority"
+              ],
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "\\Laminas\\Validator\\NotEmpty"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "partnerContactDetails": {
+        "name": "partnerContactDetails",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "userType",
+              "context_values": [
+                "partner"
+              ],
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "\\Laminas\\Validator\\NotEmpty"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "licenceNumber": {
+        "name": "licenceNumber",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "userType",
+              "context_values": [
+                "operator"
+              ],
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "ValidateIf",
+                  "options": {
+                    "context_field": "id",
+                    "context_values": [
+                      ""
+                    ],
+                    "allow_empty": false,
+                    "validators": [
+                      {
+                        "name": "\\Laminas\\Validator\\NotEmpty"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "role": {
+        "name": "role",
+        "required": true,
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "isLastOperatorAdmin",
+              "context_values": [
+                "1"
+              ],
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\MustRemainOperatorAdmin"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "lastOperatorAdminText": {
+        "name": "lastOperatorAdminText",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "userPersonal": {
+      "forename": {
+        "name": "forename",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 35
+            }
+          }
+        ]
+      },
+      "familyName": {
+        "name": "familyName",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 35
+            }
+          }
+        ]
+      },
+      "birthDate": {
+        "name": "birthDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "userContactDetails": {
+      "emailAddress": {
+        "name": "emailAddress",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+          },
+          {
+            "name": "Common\\Form\\Elements\\Validators\\EmailConfirm",
+            "options": {
+              "token": "emailConfirm"
+            }
+          }
+        ]
+      },
+      "emailConfirm": {
+        "name": "emailConfirm",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "address": {
+      "searchPostcode": {
+        "name": "searchPostcode",
+        "required": false
+      },
+      "addressLine1": {
+        "name": "addressLine1",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "addressLine2": {
+        "name": "addressLine2",
+        "required": false
+      },
+      "addressLine3": {
+        "name": "addressLine3",
+        "required": false
+      },
+      "addressLine4": {
+        "name": "addressLine4",
+        "required": false
+      },
+      "town": {
+        "name": "town",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "postcode": {
+        "name": "postcode",
+        "required": false,
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode",
+            "options": {
+              "allow_empty": true
+            }
+          }
+        ]
+      },
+      "countryCode": {
+        "name": "countryCode",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "userLoginSecurity": {
+      "loginId": {
+        "name": "loginId",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          },
+          {
+            "name": "Laminas\\Filter\\StringToLower"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\UsernameCreate"
+          }
+        ]
+      },
+      "createdOn": {
+        "name": "createdOn",
+        "required": false
+      },
+      "lastLoggedInOn": {
+        "name": "lastLoggedInOn",
+        "required": false
+      },
+      "locked": {
+        "name": "locked",
+        "required": false
+      },
+      "passwordLastReset": {
+        "name": "passwordLastReset",
+        "required": false
+      },
+      "resetPassword": {
+        "name": "resetPassword",
+        "required": false
+      },
+      "disabledDate": {
+        "name": "disabledDate",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Licence",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "licence",
+        "attributes": {
+          "id": "licence",
+          "radios_wrapper_attributes": {
+            "class": "govuk-radios--conditional",
+            "data-module": "radios"
+          }
+        },
+        "options": {
+          "label_attributes": {
+            "class": "govuk-label govuk-radios__label govuk-label--s"
+          },
+          "input_class": "Common\\Form\\Input\\LicenceInput"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Radio"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+  "options": {
+    "radio-element": "licence"
+  },
+  "input_filter": []
+}
