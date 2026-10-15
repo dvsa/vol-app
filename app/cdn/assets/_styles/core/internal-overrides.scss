@@ -43,6 +43,12 @@ dt.govuk-summary-list__key--weight-normal {
   font-weight: normal;
 }
 
+.govuk-radios__input + .govuk-radios__label::before,
+.govuk-radios__input + .govuk-radios__label::after,
+.govuk-radios__input:checked + .govuk-radios__label::after {
+  display: none;
+}
+
 // Fix for table width when table is included in internal form field Divs.
 div.field > div.table__wrapper {
   max-width: 100%;
