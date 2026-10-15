@@ -113,20 +113,12 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     protected $result;
 
     /**
-     * Result mapped to the assessment payload; caseworker annotations overlay it at read time
+     * Provider metadata accompanying the analysis result
      *
      * @var array|null
      */
-    #[ORM\Column(type: 'json', name: 'result_normalised', nullable: true)]
-    protected $resultNormalised;
-
-    /**
-     * Caseworker's approval decision for the analysis
-     *
-     * @var string|null
-     */
-    #[ORM\Column(type: 'string', name: 'assessment_status', nullable: true)]
-    protected $assessmentStatus;
+    #[ORM\Column(type: 'json', name: 'result_metadata', nullable: true)]
+    protected $resultMetadata;
 
     /**
      * Failure detail when the analysis ends in ERROR
@@ -378,51 +370,27 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     }
 
     /**
-     * Set the result normalised
+     * Set the result metadata
      *
-     * @param array $resultNormalised new value being set
+     * @param array $resultMetadata new value being set
      *
      * @return static
      */
-    public function setResultNormalised($resultNormalised)
+    public function setResultMetadata($resultMetadata)
     {
-        $this->resultNormalised = $resultNormalised;
+        $this->resultMetadata = $resultMetadata;
 
         return $this;
     }
 
     /**
-     * Get the result normalised
+     * Get the result metadata
      *
      * @return array
      */
-    public function getResultNormalised()
+    public function getResultMetadata()
     {
-        return $this->resultNormalised;
-    }
-
-    /**
-     * Set the assessment status
-     *
-     * @param string $assessmentStatus new value being set
-     *
-     * @return static
-     */
-    public function setAssessmentStatus($assessmentStatus)
-    {
-        $this->assessmentStatus = $assessmentStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get the assessment status
-     *
-     * @return string
-     */
-    public function getAssessmentStatus()
-    {
-        return $this->assessmentStatus;
+        return $this->resultMetadata;
     }
 
     /**
