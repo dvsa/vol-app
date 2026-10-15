@@ -11,7 +11,6 @@ use Common\Service\Helper\DateHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
-use Laminas\Form\Annotation\AnnotationBuilder;
 use Laminas\Form\Annotation\AttributeBuilder;
 use Laminas\Form\Element\DateSelect;
 use Laminas\Form\Element\DateTimeSelect;
