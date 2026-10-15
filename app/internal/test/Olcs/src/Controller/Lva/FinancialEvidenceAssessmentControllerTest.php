@@ -145,6 +145,12 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
                         'rows' => [
                             'bank' => ['flag' => null, 'remark' => null, 'value' => 'Example Bank', 'checks' => []],
                             'name' => ['flag' => 'fail', 'remark' => 'Wrong entity.', 'value' => 'Someone', 'checks' => []],
+                            // A flagged row missing from the payload reads as skipped (an issue), so the rest pass.
+                            'authenticity' => ['flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => []],
+                            'statementDate' => ['flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => []],
+                            'statementPeriod' => ['flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => []],
+                            'averageFunds' => ['flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => []],
+                            'largeDeposit' => ['flag' => 'pass', 'remark' => null, 'value' => null, 'checks' => []],
                         ],
                     ],
                 ],
