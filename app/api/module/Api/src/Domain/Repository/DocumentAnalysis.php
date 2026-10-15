@@ -9,7 +9,9 @@ use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
+use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList as DocumentAnalysisListQuery;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
@@ -159,25 +161,29 @@ class DocumentAnalysis extends AbstractRepository
      * conditional UPDATE pattern as sweepStalePending() so a row already resolved by the
      * sweeper (or a concurrent/duplicate invocation) cannot be overwritten.
      *
-     * @param array<mixed> $result
-     * @param array<mixed> $metadata
+     * Both columns are written in the one UPDATE so a row can never hold a result without the
+     * normalised form that was derived from it.
+     *
+     * @param array<mixed> $result the analysis report exactly as the pipeline produced it
+     * @param array<mixed>|null $resultNormalised the report mapped to the assessment payload, or
+     *                                            null when it held nothing that could be mapped
      *
      * @return int rows affected (0 if the row was no longer PENDING)
      */
-    public function recordSuccess(int $analysisId, array $result, array $metadata): int
+    public function recordSuccess(int $analysisId, array $result, ?array $resultNormalised): int
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         return (int)$qb->update(Entity::class, $this->alias)
             ->set($this->alias . '.status', ':success')
             ->set($this->alias . '.result', ':result')
-            ->set($this->alias . '.resultMetadata', ':metadata')
+            ->set($this->alias . '.resultNormalised', ':resultNormalised')
             ->set($this->alias . '.completedAt', ':now')
             ->where($qb->expr()->eq($this->alias . '.id', ':id'))
             ->andWhere($qb->expr()->eq($this->alias . '.status', ':pending'))
             ->setParameter('success', Entity::STATUS_SUCCESS)
             ->setParameter('result', $result, Types::JSON)
-            ->setParameter('metadata', $metadata, Types::JSON)
+            ->setParameter('resultNormalised', $resultNormalised, Types::JSON)
             ->setParameter('now', new \DateTime())
             ->setParameter('id', $analysisId)
             ->setParameter('pending', Entity::STATUS_PENDING)
@@ -206,6 +212,35 @@ class DocumentAnalysis extends AbstractRepository
             ->setParameter('now', new \DateTime())
             ->setParameter('id', $analysisId)
             ->setParameter('pending', Entity::STATUS_PENDING)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
+     * Record a caseworker's review of a successful analysis, as one conditional UPDATE like the
+     * status transitions above. Only SUCCESS rows can be reviewed; anything else (still pending,
+     * failed, timed out, or no such row) matches nothing.
+     *
+     * A bulk UPDATE bypasses the ORM's lifecycle and Blameable listeners, so the audit columns
+     * are set here explicitly, as User::updateLastLogin() does.
+     *
+     * @return int rows affected (0 if no successful analysis has that id)
+     */
+    public function recordAssessmentStatus(int $analysisId, AssessmentStatus $status, UserEntity $reviewedBy): int
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        return (int)$qb->update(Entity::class, $this->alias)
+            ->set($this->alias . '.assessmentStatus', ':assessmentStatus')
+            ->set($this->alias . '.lastModifiedOn', ':now')
+            ->set($this->alias . '.lastModifiedBy', ':lastModifiedBy')
+            ->where($qb->expr()->eq($this->alias . '.id', ':id'))
+            ->andWhere($qb->expr()->eq($this->alias . '.status', ':success'))
+            ->setParameter('assessmentStatus', $status->value)
+            ->setParameter('now', new \DateTime())
+            ->setParameter('lastModifiedBy', $reviewedBy->getId())
+            ->setParameter('id', $analysisId)
+            ->setParameter('success', Entity::STATUS_SUCCESS)
             ->getQuery()
             ->execute();
     }
