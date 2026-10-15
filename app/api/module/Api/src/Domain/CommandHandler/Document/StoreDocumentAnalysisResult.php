@@ -13,7 +13,6 @@ use Dvsa\Olcs\Api\Domain\Command\Document\StoreDocumentAnalysisResult as Cmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Domain\Repository;
-use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Olcs\Logging\Log\Logger;
 use Symfony\Component\Uid\Uuid;
@@ -23,12 +22,10 @@ use Symfony\Component\Uid\UuidV7;
  * Retrieves the document analysis bucket and key from Step Functions execution output,
  * then transitions the document_analysis row from PENDING to SUCCESS or ERROR.
  *
- * The S3 analysis report has the shape {"metadata": {...}, "applicantProfile": {...},
- * "analysis": {...}}. It is stored verbatim in result, metadata included, so the column is an
- * exact copy of what the pipeline produced and describes itself (classification, provenance).
- * The form the assessment tab renders is derived from it by AnalysisResultNormaliser and stored
- * beside it in result_normalised. A report the normaliser cannot read is still a successful
- * analysis: the raw result is kept and result_normalised is left null.
+ * The S3 result payload has the shape {"metadata": {...}, "applicantProfile": {...},
+ * "analysis": {...}}. The "metadata" key (pipeline/provider facts such as bucket,
+ * executionId, classification) is stored in result_metadata; everything else
+ * (applicantProfile, analysis) is stored as-is in result.
  *
  * All failures will retry at least once, which is globally set in terraform for all AWS Batch Jobs.
  *
@@ -42,7 +39,6 @@ final class StoreDocumentAnalysisResult extends AbstractCommandHandler
     public function __construct(
         private readonly SfnClient $sfnClient,
         private readonly S3Client $s3Client,
-        private readonly AnalysisResultNormaliser $normaliser,
     ) {
     }
 
@@ -100,20 +96,16 @@ final class StoreDocumentAnalysisResult extends AbstractCommandHandler
             );
         }
 
-        $normalised = $this->normaliser->normalise($decoded);
+        $metadata = $decoded['metadata'] ?? [];
 
-        if ($normalised === null) {
-            // Not an error: the pipeline succeeded and the report is kept. It does mean the
-            // assessment tab will have nothing to show for this document, so make it findable.
-            Logger::warn('IDP store-document-analysis-result: report has no analysis to normalise', [
-                'analysis_token' => $tokenString,
-                'analysis_id'    => $analysisId,
-                'application_id' => $applicationId,
-                'execution_arn'  => $executionArn,
-            ]);
+        if (!is_array($metadata)) {
+            $metadata = [];
         }
 
-        $affected = $repo->recordSuccess($analysisId, $decoded, $normalised?->toArray());
+        $result = $decoded;
+        unset($result['metadata']);
+
+        $affected = $repo->recordSuccess($analysisId, $result, $metadata);
 
         if ($affected === 0) {
             Logger::info('IDP store-document-analysis-result: already terminal, skipping', [
