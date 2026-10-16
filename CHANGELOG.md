@@ -10,7 +10,6 @@
 * added video to Transport Managers page (VOL-7459) ([#1832](https://github.com/dvsa/vol-app/issues/1832)) ([77735d5](https://github.com/dvsa/vol-app/commit/77735d535a97735d5a6ef78c90122bfa42c699dd))
 * **api:** validate EBSR submissions against TransXChange 2.5.2, falling back to 2.5 VOL-7152 ([#1830](https://github.com/dvsa/vol-app/issues/1830)) ([87f03fa](https://github.com/dvsa/vol-app/commit/87f03fa7fb47b7ed9ddd6cfc10643d02933442e0))
 * clear cache ability from internal app VOL-7099 ([#1692](https://github.com/dvsa/vol-app/issues/1692)) ([e8da4d0](https://github.com/dvsa/vol-app/commit/e8da4d02a9fee73621cac3ecb5c79cdf82470f19))
-* financial evidence assessment tab content (VOL-7321) ([#1819](https://github.com/dvsa/vol-app/issues/1819)) ([5f73094](https://github.com/dvsa/vol-app/commit/5f73094fe4567ed20f697946f736261f496352bd))
 * update anondb permissions ([#1822](https://github.com/dvsa/vol-app/issues/1822)) ([701e5b6](https://github.com/dvsa/vol-app/commit/701e5b6ac79e0bdd5f6b0ca6a8c38c0f2486ef72))
 * vol 7319 financial evidence assessment page ([#1793](https://github.com/dvsa/vol-app/issues/1793)) ([9a5436e](https://github.com/dvsa/vol-app/commit/9a5436e08b7ca15bb557d373244d1df23beb691f))
 
