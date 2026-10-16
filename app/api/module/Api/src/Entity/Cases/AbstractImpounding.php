@@ -71,7 +71,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Foreign Key to presiding_tc
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc|null
      */
     #[ORM\JoinColumn(name: 'presiding_tc_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
@@ -80,7 +80,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Vehicle(s) returned or not returned
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'outcome', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Foreign Key to venue
      *
-     * @var \Dvsa\Olcs\Api\Entity\Venue
+     * @var \Dvsa\Olcs\Api\Entity\Venue|null
      */
     #[ORM\JoinColumn(name: 'venue_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Venue::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -108,7 +108,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -118,7 +118,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Hearing date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'hearing_date', nullable: true)]
     protected $hearingDate;
@@ -126,7 +126,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Application receipt date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'application_receipt_date', nullable: true)]
     protected $applicationReceiptDate;
@@ -134,7 +134,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Outcome sent date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'outcome_sent_date', nullable: true)]
     protected $outcomeSentDate;
@@ -142,7 +142,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Notes
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
@@ -150,7 +150,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Close date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'close_date', nullable: true)]
     protected $closeDate;
@@ -158,7 +158,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Venue other
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'venue_other', length: 255, nullable: true)]
     protected $venueOther;
@@ -166,7 +166,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Vrm
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;
@@ -183,7 +183,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * ImpoundingLegislationTypes
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\RefData>
      */
     #[ORM\JoinTable(name: 'impounding_legislation_type')]
     #[ORM\JoinColumn(name: 'impounding_id', referencedColumnName: 'id')]

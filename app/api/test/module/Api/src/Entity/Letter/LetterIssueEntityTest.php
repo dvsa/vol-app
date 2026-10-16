@@ -7,8 +7,11 @@ namespace Dvsa\OlcsTest\Api\Entity\Letter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssue as Entity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueTodo;
+use Dvsa\Olcs\Api\Entity\Letter\LetterIssueType;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion;
+use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Entity\System\SubCategory;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 
 /**
@@ -72,5 +75,47 @@ final class LetterIssueEntityTest extends EntityTester
 
         // Original junctions on the previous version must remain (we're creating new rows, not moving)
         $this->assertCount(2, $currentVersion->getLetterIssueTodos());
+    }
+
+    public static function nullableVersionedFieldProvider(): array
+    {
+        return [
+            'subCategory' => ['SubCategory', new SubCategory()],
+            'goodsOrPsv' => ['GoodsOrPsv', new RefData('lcat_gv')],
+            'letterIssueType' => ['LetterIssueType', new LetterIssueType()],
+        ];
+    }
+
+    public function testBodyContentSetToNullKeepsTheCurrentVersionsContent(): void
+    {
+        $content = ['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Your adverts']]]];
+        $currentVersion = new LetterIssueVersion();
+        $currentVersion->setDefaultBodyContent($content);
+
+        $issue = new Entity();
+        $issue->setCurrentVersion($currentVersion);
+        $issue->setDefaultBodyContent(null);
+
+        $this->assertSame($content, $issue->getDefaultBodyContent());
+    }
+
+    /**
+     * Setting a field back to empty (e.g. Goods/PSV back to "Both") has to read as a change,
+     * not fall through to the current version's value, or no new version gets made.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('nullableVersionedFieldProvider')]
+    public function testNullableFieldCanBeClearedOverTheCurrentVersion(string $field, mixed $currentValue): void
+    {
+        $currentVersion = new LetterIssueVersion();
+        $currentVersion->{'set' . $field}($currentValue);
+
+        $issue = new Entity();
+        $issue->setCurrentVersion($currentVersion);
+
+        $this->assertSame($currentValue, $issue->{'get' . $field}(), 'Untouched fields read through to the current version');
+
+        $issue->{'set' . $field}(null);
+
+        $this->assertNull($issue->{'get' . $field}());
     }
 }

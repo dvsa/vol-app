@@ -16,13 +16,14 @@ These applications are supported by several shared libraries that live **in-tree
 
 Previously published as standalone `dvsa/olcs-*` packages, these libraries have been consolidated into vol-app. Each keeps its own `composer.json` (and its own test suite and tooling) and is consumed by the applications via relative path repositories, which Composer symlinks into each app's `vendor/olcs/*`.
 
-| Library         | Description                              | Location             |
-| --------------- | ---------------------------------------- | -------------------- |
-| `olcs-logging`  | Logging utilities                        | `lib/olcs-logging/`  |
-| `olcs-utils`    | Shared utility functions                 | `lib/olcs-utils/`    |
-| `olcs-transfer` | Data Transfer Objects (DTOs) and routing | `lib/olcs-transfer/` |
-| `olcs-common`   | Shared code for frontend applications    | `lib/olcs-common/`   |
-| `olcs-auth`     | Authentication management                | `lib/olcs-auth/`     |
+| Library           | Description                              | Location               |
+| ----------------- | ---------------------------------------- | ---------------------- |
+| `olcs-logging`    | Logging utilities                        | `lib/olcs-logging/`    |
+| `vol-logging-mvc` | Laminas MVC bindings for `olcs-logging`  | `lib/vol-logging-mvc/` |
+| `olcs-utils`      | Shared utility functions                 | `lib/olcs-utils/`      |
+| `olcs-transfer`   | Data Transfer Objects (DTOs) and routing | `lib/olcs-transfer/`   |
+| `olcs-common`     | Shared code for frontend applications    | `lib/olcs-common/`     |
+| `olcs-auth`       | Authentication management                | `lib/olcs-auth/`       |
 
 `olcs-xmltools` was also absorbed, but — being API-only — it is fully inlined as an API module at `app/api/module/XmlTools/` rather than a path-repository library.
 
@@ -48,6 +49,7 @@ flowchart LR
     api["API"]
 
     api --> `olcs-logging`
+    api --> `vol-logging-mvc`
     api --> `olcs-utils`
     api --> `olcs-transfer`
     api --> `php-govuk-account`
@@ -64,6 +66,7 @@ flowchart LR
 
     frontend --> `olcs-common`
     frontend --> `olcs-logging`
+    frontend --> `vol-logging-mvc`
     frontend --> `olcs-auth`
     frontend --> `olcs-transfer`
     frontend --> `olcs-utils`

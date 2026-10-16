@@ -1,0 +1,114 @@
+{
+  "name": "bus-service-number-and-type",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "trcConditionChecked",
+        "type": "Radio",
+        "options": {
+          "label": "TRC's / Conditions satisfactory",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "id": "conditions[trcConditionChecked]",
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trcNotes",
+        "attributes": {
+          "class": "extra-long",
+          "id": "conditions[trcNotes]"
+        },
+        "options": {
+          "label": "Notes"
+        },
+        "type": "TextArea"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "table",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "input_filter": {
+    "trcNotes": {
+      "name": "trcNotes",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    }
+  }
+}

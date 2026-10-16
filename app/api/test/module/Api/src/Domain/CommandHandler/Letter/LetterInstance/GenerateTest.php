@@ -30,11 +30,14 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection as LetterTypeSectionEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer;
+use Dvsa\Olcs\Api\Service\Letter\LetterInstanceGrabSnapshotter;
 use Dvsa\Olcs\Api\Service\Letter\Resolution\VariantResolution;
 use Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
 /**
@@ -42,6 +45,10 @@ use Mockery as m;
  */
 final class GenerateTest extends AbstractCommandHandlerTestCase
 {
+    private m\MockInterface $mockAuthService;
+
+    private m\MockInterface $mockSnapshotter;
+
     /**
      * Wrap a variant in the resolution the section now hands back.
      *
@@ -58,9 +65,17 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
     {
         // The resolver is pure (no repos, no persistence), so the handler is exercised
         // against the real one — a mock here would let Generate drift from the shared path.
+        $this->mockAuthService = m::mock(AuthorizationService::class);
+        $this->mockAuthService->shouldReceive('getIdentity')->andReturnNull()->byDefault();
+
+        $this->mockSnapshotter = m::mock(LetterInstanceGrabSnapshotter::class);
+        $this->mockSnapshotter->shouldReceive('snapshot')->byDefault();
+
         $this->mockedSmServices = [
             SectionVariantResolver::class => new SectionVariantResolver(),
             LetterInstanceComposer::class => new LetterInstanceComposer(),
+            LetterInstanceGrabSnapshotter::class => $this->mockSnapshotter,
+            AuthorizationService::class => $this->mockAuthService,
         ];
 
         $this->sut = new CommandHandler();
@@ -1057,6 +1072,132 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertCount(1, $letterInstance->getLetterInstanceSections());
     }
 
+    private function refData(string $id): RefData
+    {
+        $refData = m::mock(RefData::class)->makePartial();
+        $refData->setId($id);
+
+        return $refData;
+    }
+
+    private function expectLetterTypeAndLicence(int $letterTypeId, int $licenceId, string $goodsOrPsv): m\MockInterface
+    {
+        $letterType = m::mock(LetterTypeEntity::class)->makePartial();
+        $letterType->setId($letterTypeId);
+
+        $this->repoMap['LetterType']->shouldReceive('fetchById')
+            ->with($letterTypeId)
+            ->once()
+            ->andReturn($letterType);
+
+        $licence = m::mock(LicenceEntity::class)->makePartial();
+        $licence->setId($licenceId);
+        $licence->shouldReceive('getOrganisation')->andReturnNull();
+        $licence->shouldReceive('getGoodsOrPsv')->andReturn($this->refData($goodsOrPsv));
+        $licence->shouldReceive('isNi')->andReturn(false);
+
+        $this->repoMap['Licence']->shouldReceive('fetchById')
+            ->with($licenceId)
+            ->once()
+            ->andReturn($licence);
+
+        return $letterType;
+    }
+
+    private function captureSavedInstance(?LetterInstanceEntity &$letterInstance): void
+    {
+        $this->repoMap['LetterInstance']->shouldReceive('save')
+            ->with(m::type(LetterInstanceEntity::class))
+            ->once()
+            ->andReturnUsing(
+                function (LetterInstanceEntity $entity) use (&$letterInstance) {
+                    $letterInstance = $entity;
+                    $entity->setId(999);
+                }
+            );
+    }
+
+    public function testHandleCommandSkipsIssuesForTheOtherLicenceType(): void
+    {
+        $command = Cmd::create([
+            'letterType' => 123,
+            'licence' => 456,
+            'selectedIssues' => [1, 2],
+        ]);
+
+        $this->expectLetterTypeAndLicence(123, 456, 'lcat_psv');
+
+        $goodsOnlyVersion = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $goodsOnlyVersion->setGoodsOrPsv($this->refData('lcat_gv'));
+
+        $anyVersion = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $anyVersion->setGoodsOrPsv(null);
+
+        foreach ([1 => $goodsOnlyVersion, 2 => $anyVersion] as $issueId => $version) {
+            $issue = m::mock(LetterIssueEntity::class)->makePartial();
+            $issue->shouldReceive('getCurrentVersion')->andReturn($version);
+
+            $this->repoMap['LetterIssue']->shouldReceive('fetchById')
+                ->with($issueId)
+                ->once()
+                ->andReturn($issue);
+        }
+
+        $letterInstance = null;
+        $this->captureSavedInstance($letterInstance);
+
+        $this->sut->handleCommand($command);
+
+        $issues = $letterInstance->getLetterInstanceIssues();
+        $this->assertCount(1, $issues);
+        $this->assertSame($anyVersion, $issues->first()->getLetterIssueVersion());
+    }
+
+    public function testHandleCommandDropsChoicesForTheOtherLicenceType(): void
+    {
+        $command = Cmd::create([
+            'letterType' => 123,
+            'licence' => 456,
+            'selectedIssues' => [],
+            'selectedChoices' => [1, 2],
+        ]);
+
+        $letterType = $this->expectLetterTypeAndLicence(123, 456, 'lcat_psv');
+
+        $goodsOnlyChoice = m::mock(LetterChoiceEntity::class)->makePartial();
+        $goodsOnlyChoice->setId(1);
+        $goodsOnlyChoice->setGoodsOrPsv($this->refData('lcat_gv'));
+
+        $anyChoice = m::mock(LetterChoiceEntity::class)->makePartial();
+        $anyChoice->setId(2);
+
+        $this->repoMap['LetterChoice']->shouldReceive('fetchById')->with(1)->once()->andReturn($goodsOnlyChoice);
+        $this->repoMap['LetterChoice']->shouldReceive('fetchById')->with(2)->once()->andReturn($anyChoice);
+
+        // A dropped choice must not steer section variants either
+        $section = m::mock(LetterSectionEntity::class)->makePartial();
+        $section->shouldReceive('explainVariantForContext')
+            ->with(m::on(fn($context) => $context['selectedChoiceIds'] === [2]))
+            ->once()
+            ->andReturn($this->variantResolution(null));
+
+        $typeSection = m::mock(LetterTypeSectionEntity::class)->makePartial();
+        $typeSection->shouldReceive('getLetterSection')->andReturn($section);
+        $typeSection->shouldReceive('getDisplayOrder')->andReturn(0);
+
+        $letterType->shouldReceive('getLetterTypeSections')
+            ->andReturn(new ArrayCollection([$typeSection]));
+
+        $letterInstance = null;
+        $this->captureSavedInstance($letterInstance);
+
+        $this->sut->handleCommand($command);
+
+        $choices = $letterInstance->getLetterInstanceChoices();
+        $this->assertCount(1, $choices);
+        $this->assertSame($anyChoice, $choices->first()->getLetterChoice());
+    }
+
     /**
      * VOL-7280: when two selected issues link to the same LetterTodoVersion, exactly one
      * LetterInstanceTodo should be created and attached to the FIRST issue in display order.
@@ -1143,5 +1284,63 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
             'Deduped to-do should attach to the first issue in display order'
         );
         $this->assertSame($letterInstance, $instanceTodo->getLetterInstance());
+    }
+
+    public function testHandleCommandStampsCurrentUserAndSnapshotsGrabsBeforeSaving(): void
+    {
+        $user = m::mock(UserEntity::class);
+        $user->shouldReceive('isAnonymous')->andReturn(false);
+        $identity = m::mock();
+        $identity->shouldReceive('getUser')->andReturn($user);
+        $this->mockAuthService->shouldReceive('getIdentity')->andReturn($identity);
+
+        $letterType = m::mock(LetterTypeEntity::class)->makePartial();
+        $letterType->setId(123);
+        $this->repoMap['LetterType']->shouldReceive('fetchById')->with(123)->andReturn($letterType);
+
+        $order = [];
+
+        $this->mockSnapshotter->shouldReceive('snapshot')
+            ->once()
+            ->with(m::type(LetterInstanceEntity::class))
+            ->andReturnUsing(function (LetterInstanceEntity $entity) use (&$order, $user) {
+                $order[] = 'snapshot';
+                $this->assertSame($user, $entity->getCreatedBy(), 'createdBy must be set before grabs resolve');
+            });
+
+        $this->repoMap['LetterInstance']->shouldReceive('save')
+            ->once()
+            ->andReturnUsing(function (LetterInstanceEntity $entity) use (&$order) {
+                $order[] = 'save';
+                $entity->setId(999);
+            });
+
+        $this->sut->handleCommand(Cmd::create(['letterType' => 123, 'selectedIssues' => []]));
+
+        $this->assertSame(['snapshot', 'save'], $order);
+    }
+
+    public function testHandleCommandDoesNotStampAnAnonymousUser(): void
+    {
+        // same rule as OlcsBlameableListener: anon is transient and must never be persisted
+        $identity = m::mock();
+        $identity->shouldReceive('getUser')->andReturn(UserEntity::anon());
+        $this->mockAuthService->shouldReceive('getIdentity')->andReturn($identity);
+
+        $letterType = m::mock(LetterTypeEntity::class)->makePartial();
+        $letterType->setId(123);
+        $this->repoMap['LetterType']->shouldReceive('fetchById')->with(123)->andReturn($letterType);
+
+        $saved = null;
+        $this->repoMap['LetterInstance']->shouldReceive('save')
+            ->once()
+            ->andReturnUsing(function (LetterInstanceEntity $entity) use (&$saved) {
+                $saved = $entity;
+                $entity->setId(999);
+            });
+
+        $this->sut->handleCommand(Cmd::create(['letterType' => 123, 'selectedIssues' => []]));
+
+        $this->assertNull($saved->getCreatedBy());
     }
 }

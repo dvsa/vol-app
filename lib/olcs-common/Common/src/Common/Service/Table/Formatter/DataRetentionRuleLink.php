@@ -3,6 +3,7 @@
 namespace Common\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
+use Common\Util\Escape;
 
 /**
  * Data Retention Rule link formatter
@@ -30,7 +31,7 @@ class DataRetentionRuleLink implements FormatterPluginManagerInterface
         );
 
         return '<a class="govuk-link" href="' . $url . '" target="_self">' .
-            ucwords($data['description']) .
+            Escape::html(ucwords($data['description'])) .
             '</a>';
     }
 }

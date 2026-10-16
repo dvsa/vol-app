@@ -53,7 +53,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Replaces
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit|null
      */
     #[ORM\JoinColumn(name: 'replaces_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit::class, fetch: 'LAZY')]
@@ -80,7 +80,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * IrhpCandidatePermit
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit|null
      */
     #[ORM\JoinColumn(name: 'irhp_candidate_permit_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit::class, inversedBy: 'irhpPermits', fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -108,7 +108,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -118,7 +118,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Permit number
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'permit_number', nullable: true, options: ['unsigned' => true])]
     protected $permitNumber;
@@ -126,7 +126,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Issue date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'issue_date', nullable: true)]
     protected $issueDate;
@@ -134,7 +134,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Expiry date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
@@ -142,7 +142,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
     /**
      * Permit properties
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'permit_properties', nullable: true)]
     protected $permitProperties;

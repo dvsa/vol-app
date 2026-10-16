@@ -1,0 +1,54 @@
+{
+  "name": "organisation-details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "name",
+        "attributes": {
+          "class": "medium"
+        },
+        "options": {
+          "label": "Operator name"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "Operator details",
+    "class": "extra-long"
+  },
+  "input_filter": {
+    "name": {
+      "name": "name",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

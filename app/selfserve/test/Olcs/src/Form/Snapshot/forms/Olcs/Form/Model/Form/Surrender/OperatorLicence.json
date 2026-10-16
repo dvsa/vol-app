@@ -1,0 +1,316 @@
+{
+  "name": "operator-licence",
+  "attributes": [],
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "operatorLicenceDocument",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "operatorLicenceDocument",
+              "attributes": {
+                "radios_wrapper_attributes": {
+                  "class": "govuk-radios--conditional",
+                  "data-module": "radios"
+                }
+              },
+              "options": {
+                "label": "",
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--advanced"
+                },
+                "value_options": {
+                  "possession": {
+                    "label": "licence.surrender.operator_licence.possession.label",
+                    "value": "possession",
+                    "attributes": {
+                      "data-aria-controls": "conditional-surrender-licence-possession",
+                      "id": "surrender-licence-possession"
+                    }
+                  },
+                  "lost": {
+                    "label": "licence.surrender.operator_licence.lost.label",
+                    "value": "lost",
+                    "attributes": {
+                      "data-aria-controls": "conditional-surrender-licence-lost",
+                      "id": "surrender-licence-lost"
+                    }
+                  },
+                  "stolen": {
+                    "label": "licence.surrender.operator_licence.stolen.label",
+                    "value": "stolen",
+                    "attributes": {
+                      "data-aria-controls": "conditional-surrender-licence-stolen",
+                      "id": "surrender-licence-stolen"
+                    }
+                  }
+                }
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Radio"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "possessionContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "notice",
+                    "options": {
+                      "label": "licence.surrender.operator_licence.possession.note"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "lostContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "notice",
+                    "options": {
+                      "label": "licence.surrender.operator_licence.lost.note"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "details",
+                    "type": "\\Laminas\\Form\\Element\\Textarea",
+                    "attributes": {
+                      "class": "govuk-textarea",
+                      "rows": "5"
+                    },
+                    "options": {
+                      "hint": "licence.surrender.document.lost.details.hint"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "stolenContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "notice",
+                    "options": {
+                      "label": "licence.surrender.licence.stolen.note"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "details",
+                    "type": "\\Laminas\\Form\\Element\\Textarea",
+                    "attributes": {
+                      "class": "govuk-textarea",
+                      "rows": "5"
+                    },
+                    "options": {
+                      "hint": "licence.surrender.operator_licence_stolen.text_area.hint"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+        "options": {
+          "radio-element": "operatorLicenceDocument"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "\\Common\\Form\\Form",
+  "input_filter": {
+    "operatorLicenceDocument": {
+      "possessionContent": {
+        "notice": {
+          "name": "notice",
+          "allow_empty": true,
+          "continue_if_empty": true,
+          "validators": [
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "operatorLicenceDocument",
+                "context_values": [
+                  "possession"
+                ],
+                "inject_post_data": "operatorLicenceDocument->operatorLicenceDocument",
+                "validators": [
+                  {
+                    "name": "NotEmpty"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "lostContent": {
+        "details": {
+          "name": "details",
+          "allow_empty": true,
+          "continue_if_empty": true,
+          "validators": [
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "operatorLicenceDocument",
+                "context_values": [
+                  "lost"
+                ],
+                "inject_post_data": "operatorLicenceDocument->operatorLicenceDocument",
+                "validators": [
+                  {
+                    "name": "StringLength",
+                    "options": {
+                      "min": 0,
+                      "max": 500,
+                      "break_chain_on_failure": true,
+                      "messages": {
+                        "stringLengthTooShort": "licence.surrender.operator_licence_lost.text_area.stringLengthTooShort",
+                        "stringLengthTooLong": "licence.surrender.operator_licence_lost.text_area.stringLengthTooLong",
+                        "stringLengthInvalid": "licence.surrender.operator_licence_lost.text_area.stringLengthToShort"
+                      }
+                    }
+                  },
+                  {
+                    "name": "NotEmpty",
+                    "options": {
+                      "messages": {
+                        "isEmpty": "licence.surrender.operator_licence_lost.text_area.empty"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "filters": [
+            {
+              "name": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "stolenContent": {
+        "details": {
+          "name": "details",
+          "allow_empty": true,
+          "continue_if_empty": true,
+          "validators": [
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "operatorLicenceDocument",
+                "context_values": [
+                  "stolen"
+                ],
+                "inject_post_data": "operatorLicenceDocument->operatorLicenceDocument",
+                "validators": [
+                  {
+                    "name": "StringLength",
+                    "options": {
+                      "min": 0,
+                      "max": 500,
+                      "messages": {
+                        "stringLengthTooShort": "licence.surrender.operator_licence_stolen.text_area.stringLengthTooShort",
+                        "stringLengthTooLong": "licence.surrender.operator_licence_stolen.text_area.stringLengthTooLong",
+                        "stringLengthInvalid": "licence.surrender.operator_licence_stolen.text_area.stringLengthTooShort"
+                      }
+                    }
+                  },
+                  {
+                    "name": "NotEmpty",
+                    "options": {
+                      "messages": {
+                        "isEmpty": "licence.surrender.operator_licence_stolen.text_area.empty"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "filters": [
+            {
+              "name": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

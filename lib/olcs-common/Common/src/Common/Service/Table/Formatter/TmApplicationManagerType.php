@@ -8,6 +8,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Laminas\Mvc\Application;
@@ -49,7 +50,10 @@ class TmApplicationManagerType implements FormatterPluginManagerInterface
             default => '',
         };
 
-        return $row['action'] === 'D' ? trim($row['tmType']['description']  . ' ' . $status) :
-            '<a class="govuk-link" href="' . $url . '">' . trim($row['tmType']['description']  . ' ' . $status) . '</a>';
+        // $status is a translation of a fixed key, so it stays raw; the description is row data.
+        $description = Escape::html($row['tmType']['description']);
+
+        return $row['action'] === 'D' ? trim($description . ' ' . $status) :
+            '<a class="govuk-link" href="' . $url . '">' . trim($description . ' ' . $status) . '</a>';
     }
 }

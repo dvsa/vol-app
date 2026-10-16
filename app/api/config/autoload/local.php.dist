@@ -55,6 +55,10 @@ return [
   'companies_house_connection' => [
     'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
   ],
+  'idp' => [
+      'sweeper_threshold_minutes' => 60,
+      'dedupe_success_window_hours' => 24,
+  ],
   'document_share' => [
     'client' => [
       'webdav_baseuri' => 'http://webdav.dev.olcs.dev-dvsacloud.uk:8080/documents/',
@@ -97,6 +101,28 @@ return [
         'domain' => "api.accept.dev.cpms.dvsacloud.uk",
       ],
     ],
+    // CPMS Hybrid Gateway (VOL-7496). Overrides the %olcs_cpms_gateway_*%
+    // placeholders, which are only resolved in deployed environments. Populate the
+    // oauth2 block with real Entra values to exercise the gateway for real; leaving
+    // one blank throws a RuntimeException naming it as soon as the
+    // cpms_hybrid_gateway toggle is switched on. Local egress is direct, so the
+    // proxy keys are removed.
+    //
+    // 'scope' must be the bare "<client-id>/.default". The conventional
+    // "api://<client-id>/.default" spelling — used by every other Entra integration
+    // in this repo — is rejected by Entra with AADSTS500011, because the CPMS app
+    // registration does not set an Application ID URI.
+    'gateway' => [
+      'domain' => "https://gw.accept.dev.cpms.dvsacloud.uk",
+      'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+      'oauth2' => [
+        'client_id' => "",
+        'client_secret' => "",
+        'token_url' => "",
+        'scope' => "",
+        'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+      ],
+    ],
   ],
   'cpms_credentials' => [
     'client_id' => "OLCS",
@@ -129,6 +155,12 @@ return [
     ],
   ],
   'awsOptions'=>[
+    // config.global.php routes AWS calls that have no VPC endpoint through the shared egress
+    // proxy. There is no proxy locally, and its array_filter cannot drop the entry because
+    // %shd_proxy% is still an unresolved placeholder at that point, not an empty string - so
+    // without this the parameter resolver aborts container startup with
+    // "You have requested a non-existent parameter shd_proxy".
+    'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
     'region' => 'eu-west-1',
     'version' => 'latest',
     'useEnvCredentials' => true,

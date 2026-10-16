@@ -5,64 +5,51 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\TranslationKeyText as Repo;
+use Dvsa\Olcs\Api\Entity\System\TranslationKeyText as Entity;
 
-/**
- * TranslationKeyTextTest
- *
- * @author Andy Newton <andy@vitri.ltd>
- */
 final class TranslationKeyTextTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class);
     }
 
     public function testFetchByParentLanguage(): void
     {
-        $queryBuilder = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getOneOrNullResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($queryBuilder);
+        $this->assertSame(['RESULTS'], $this->sut->fetchByParentLanguage(1, 2));
 
-        $queryBuilder->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getOneOrNullResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m'
+            . ' WHERE m.translationKey = :translationKey AND m.language = :language',
+            $qb->getDQL(),
         );
-
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByParentLanguage(1, 2));
-
-        $expectedQuery = 'BLAH '
-            . 'AND m.translationKey = [[1]] '
-            . 'AND m.language = [[2]]';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(1, $qb->getParameter('translationKey')->getValue());
+        $this->assertSame(2, $qb->getParameter('language')->getValue());
     }
 
-    public function testFetchAll(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchAllProvider')]
+    public function testFetchAll(?string $locale, string $expectedWhere): void
     {
-        $locale = 'en_GB';
-        $hydrationMode = Query::HYDRATE_ARRAY;
-        $queryResult = ['RESULTS'];
-        $expectedQuery = 'initial select AND l.isoCode = [[' . $locale . ']]';
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
 
-        $doctrineQuery = m::mock();
-        $doctrineQuery->expects('getResult')->with($hydrationMode)->andReturn($queryResult);
+        $this->assertSame(['RESULTS'], $this->sut->fetchAll($locale, Query::HYDRATE_ARRAY));
 
-        $mockQb = $this->createMockQb('initial select');
-        $mockQb->expects('getQuery')->andReturn($doctrineQuery);
+        $this->assertSame(
+            'SELECT m, t, l FROM ' . Entity::class . ' m'
+            . ' LEFT JOIN m.translationKey t LEFT JOIN m.language l' . $expectedWhere,
+            $qb->getDQL(),
+        );
+    }
 
-        $this->mockCreateQueryBuilder($mockQb);
-
-        $this->queryBuilder->expects('with')->with('translationKey', 't')->andReturnSelf();
-        $this->queryBuilder->expects('with')->with('language', 'l')->andReturnSelf();
-        $this->queryBuilder->expects('modifyQuery')->with($mockQb)->andReturnSelf();
-
-        $this->assertEquals(['RESULTS'], $this->sut->fetchAll($locale, $hydrationMode));
-        $this->assertEquals($expectedQuery, $this->query);
+    public static function fetchAllProvider(): \Iterator
+    {
+        yield 'with a locale' => ['en_GB', ' WHERE l.isoCode = :locale'];
+        yield 'without a locale' => [null, ''];
     }
 }

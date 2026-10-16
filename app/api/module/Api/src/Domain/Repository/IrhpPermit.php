@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Api\Domain\Repository;
 
 use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository\Query\Permits\ExpireIrhpPermits as ExpireIrhpPermitsQuery;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit as Entity;
@@ -15,7 +15,6 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByLicence;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrint;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintConfirm;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use PDO;
 
 /**
  * IRHP Permit
@@ -272,8 +271,8 @@ class IrhpPermit extends AbstractRepository
                 $licenceId
             ],
             [
-                Types::STRING,
-                PDO::PARAM_INT
+                ArrayParameterType::STRING,
+                ParameterType::INTEGER
             ]
         );
 

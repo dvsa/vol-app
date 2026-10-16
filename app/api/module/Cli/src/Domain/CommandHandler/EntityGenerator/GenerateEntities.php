@@ -189,6 +189,13 @@ class GenerateEntities extends AbstractCommandHandler
             ? $this->getEntityPath()
             : $config['outputPath'];
 
+        // Tests follow the entities. Without this they were always written to the
+        // real test tree, so `--output-path` only isolated half the output and a
+        // scratch run still dropped *EntityTest.php files into the repository.
+        $testBasePath = $config['replace']
+            ? $this->getTestPath()
+            : $outputPath . '/test';
+
         // Create output directories
         $this->createDirectories($outputPath);
 
@@ -199,11 +206,11 @@ class GenerateEntities extends AbstractCommandHandler
             if (empty($namespaceFolder) || $namespaceFolder === 'Entity') {
                 // For root entities, write directly to output path
                 $namespacePath = $outputPath;
-                $testNamespacePath = $this->getTestPath();
+                $testNamespacePath = $testBasePath;
             } else {
                 // For namespaced entities, create subdirectory
                 $namespacePath = $outputPath . '/' . $namespaceFolder;
-                $testNamespacePath = $this->getTestPath() . '/' . $namespaceFolder;
+                $testNamespacePath = $testBasePath . '/' . $namespaceFolder;
             }
 
             // Create directories if they don't exist

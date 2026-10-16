@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Api\Service\AccessToken;
 
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericProvider;
-use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
 
 class ProviderFactory implements FactoryInterface
 {
-    public const MSG_ERROR = 'Failed to retrieve access token for %s: %s';
-
     #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Provider
     {
@@ -29,15 +25,10 @@ class ProviderFactory implements FactoryInterface
             $providerConfig['proxy'] = $options['proxy'];
         }
 
-        $provider = new GenericProvider($providerConfig);
-
-        try {
-            $accessToken = $provider->getAccessToken('client_credentials', ['scope' => $options['scope']]);
-            return new Provider($accessToken);
-        } catch (IdentityProviderException $e) {
-            $message = sprintf(self::MSG_ERROR, $options['service_name'], $e->getMessage());
-            Logger::err($message);
-            throw $e;
-        }
+        return new Provider(
+            new GenericProvider($providerConfig),
+            $options['scope'],
+            $options['service_name'] ?? ''
+        );
     }
 }

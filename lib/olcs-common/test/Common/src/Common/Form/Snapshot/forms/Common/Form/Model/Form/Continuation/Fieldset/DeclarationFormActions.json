@@ -1,0 +1,58 @@
+{
+  "name": "DeclarationFormActions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "sign",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "id": "sign"
+        },
+        "options": {
+          "label": "application.review-declarations.sign-button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submitAndPay",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "id": "submitAndPay"
+        },
+        "options": {
+          "label": "continue-to-payment.button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "id": "submit"
+        },
+        "options": {
+          "label": "continue.button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

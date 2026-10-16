@@ -52,7 +52,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -62,7 +62,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -104,7 +104,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
     /**
      * Importance
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'importance', nullable: true, options: ['unsigned' => true])]
     protected $importance;

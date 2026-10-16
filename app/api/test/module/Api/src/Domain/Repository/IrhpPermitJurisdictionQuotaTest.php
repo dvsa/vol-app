@@ -4,113 +4,50 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitJurisdictionQuota;
-use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitJurisdictionQuota as IrhpPermitJurisdictionQuotaEntity;
-use Mockery as m;
+use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitJurisdictionQuota as Repo;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitJurisdictionQuota as Entity;
 
-/**
- * IRHP Permit Jurisdiction Quota test
- *
- * @author Jonathan Thomas <jonathan@opalise.co.uk>
- */
 final class IrhpPermitJurisdictionQuotaTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(IrhpPermitJurisdictionQuota::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
+    /**
+     * Scoring only cares about jurisdictions that actually have permits, so a zero quota is
+     * excluded rather than returned as a zero.
+     */
     public function testFetchByNonZeroQuota(): void
     {
-        $expectedResult = [
-            'jurisdictionId' => 8,
-            'quotaNumber' => 320
-        ];
-        $stockId = 5;
+        $quotas = [['jurisdictionId' => 8, 'quotaNumber' => 320]];
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getScalarResult')->withNoArgs()->andReturn($quotas);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $queryBuilder->shouldReceive('select')
-            ->with('IDENTITY(ipjq.trafficArea) as jurisdictionId, ipjq.quotaNumber')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitJurisdictionQuotaEntity::class, 'ipjq')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('ipjq.quotaNumber > 0')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('IDENTITY(ipjq.irhpPermitStock) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $stockId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getScalarResult')
-            ->once()
-            ->andReturn($expectedResult);
+        $this->assertSame($quotas, $this->sut->fetchByNonZeroQuota(5));
 
-        $this->assertEquals(
-            $expectedResult,
-            $this->sut->fetchByNonZeroQuota($stockId)
+        $this->assertSame(
+            'SELECT IDENTITY(ipjq.trafficArea) as jurisdictionId, ipjq.quotaNumber'
+            . ' FROM ' . Entity::class . ' ipjq'
+            . ' WHERE ipjq.quotaNumber > 0 AND IDENTITY(ipjq.irhpPermitStock) = ?1',
+            $qb->getDQL(),
         );
+        $this->assertSame(5, $qb->getParameter(1)->getValue());
     }
 
-    public function testFetchByPermitStockId(): void
+    public function testFetchByIrhpPermitStockId(): void
     {
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $mockJurisdictionQuotaRepo = m::mock();
+        $this->assertSame(['RESULTS'], $this->sut->fetchByIrhpPermitStockId(1));
 
-        $this->em
-            ->shouldReceive('getRepository')
-            ->andReturn($mockJurisdictionQuotaRepo);
-
-        $mockJurisdictionQuotaRepo
-            ->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $where = m::mock();
-
-        $qb
-            ->shouldReceive('andWhere')
-            ->once()
-            ->with($where)
-            ->andReturnSelf();
-
-        $qb
-            ->shouldReceive('expr->eq')
-            ->once()
-            ->with('m.irhpPermitStock', ':irhpPermitStock')
-            ->andReturn($where);
-
-        $qb
-            ->shouldReceive('setParameter')
-            ->once()
-            ->with('irhpPermitStock', '1')
-            ->andReturnSelf();
-
-        $result = [
-            'jurisdictionId' => 8,
-            'quotaNumber' => 320
-        ];
-
-        $qb
-            ->shouldReceive('getQuery->getResult')
-            ->once()
-            ->andReturn($result);
-
-        $this->assertEquals(
-            $result,
-            $this->sut->fetchByIrhpPermitStockId(1)
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.irhpPermitStock = :irhpPermitStock',
+            $qb->getDQL(),
         );
+        $this->assertSame(1, $qb->getParameter('irhpPermitStock')->getValue());
     }
 }

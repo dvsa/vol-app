@@ -3,6 +3,7 @@
 namespace Common\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
+use Common\Util\Escape;
 
 /**
  *
@@ -27,6 +28,6 @@ class SearchApplicationLicenceNo implements FormatterPluginManagerInterface
     public function format($data, $column = [])
     {
         $url = $this->urlHelper->fromRoute('licence', ['licence' => $data['licId']]);
-        return '<a class="govuk-link" href="' . $url . '">' . $data['licNo'] . '</a>';
+        return '<a class="govuk-link" href="' . $url . '">' . Escape::html($data['licNo']) . '</a>';
     }
 }

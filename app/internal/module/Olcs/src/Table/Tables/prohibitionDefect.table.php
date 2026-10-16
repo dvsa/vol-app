@@ -43,7 +43,7 @@ return [
                     ],
                     'case_prohibition_defect',
                     true
-                ) . '" class="govuk-link js-modal-ajax">' . $data['defectType'] . '</a>'
+                ) . '" class="govuk-link js-modal-ajax">' . \Common\Util\Escape::html($data['defectType']) . '</a>'
         ],
         [
             'title' => 'Notes',

@@ -67,7 +67,7 @@ return [
                         ['licence' => $data['licenceId']],
                         'licence_case_list/pagination',
                         false
-                    ) . '">' . $data['caseCount'] . '</a>';
+                    ) . '">' . \Common\Util\Escape::html($data['caseCount']) . '</a>';
                 }
                 /**
                  * @var TableBuilder $this

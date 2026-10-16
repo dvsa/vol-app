@@ -32,7 +32,7 @@ return [
     'columns' => [
         [
             'title' => 'Opposition type',
-            'formatter' => fn($data) => $data['oppositionType'],
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['oppositionType']),
         ],
         [
             'title' => 'Date received',
@@ -46,15 +46,19 @@ return [
                     ['action' => 'edit', 'opposition' => $data['id']],
                     'case_opposition',
                     true
-                ) . '">' . $data['dateReceived'] . '</a>',
+                ) . '">' . \Common\Util\Escape::html($data['dateReceived']) . '</a>',
         ],
         [
             'title' => 'Contact name',
-            'formatter' => fn($data) => $data['contactName']['forename'] . ' ' . $data['contactName']['familyName']
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['contactName']['forename'])
+                . ' ' . \Common\Util\Escape::html($data['contactName']['familyName'])
         ],
         [
             'title' => 'Grounds',
-            'formatter' => fn($data) => implode(', ', $data['grounds'])
+            'formatter' => fn($data) => implode(
+                ', ',
+                array_map(\Common\Util\Escape::html(...), $data['grounds'])
+            )
         ],
         [
             'title' => 'Valid',

@@ -3,33 +3,25 @@
 namespace Dvsa\Olcs\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/application/single/upload-evidence")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/application/single/upload-evidence')]
+#[Transfer\Method('PUT')]
 final class UploadEvidence extends AbstractCommand
 {
     use Identity;
 
-    /**
-     * @Transfer\ArrayInput
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\FilterEmptyItems")
-     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\OperatingCentreEvidence")
-     * @Transfer\Optional
-     */
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\FilterEmptyItems')]
+    #[Transfer\Partial('Dvsa\Olcs\Transfer\Command\Partial\OperatingCentreEvidence')]
+    #[Transfer\Optional]
     protected $operatingCentres = [];
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $financialEvidence;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $supportingEvidence;
 
     /**

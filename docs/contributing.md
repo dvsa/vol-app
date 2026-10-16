@@ -80,6 +80,14 @@ Do not mark your commits as breaking changes. This is not appropriate for a non-
 
 :::
 
+### Jira Integration
+
+Our internal Jira platform is integrated with GitHub.
+
+When working from a Jira ticket, the ticket number can be appended/prepended to a commit message in order to automatically link the respective builds to the ticket. This also includes the PR title for when merging to another branch.
+
+Ensure it is in the correct format including the dash, e.g. `ABC-1234`.
+
 ## Git workflow
 
 We use the [GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow) for our Git workflow. This means that we use feature branches and pull requests to manage changes to the codebase.

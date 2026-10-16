@@ -57,7 +57,7 @@ return [
                         'operator/irfo/gv-permits',
                         false
                     ),
-                    $data['irfoGvPermit']['id']
+                    \Common\Util\Escape::html($data['irfoGvPermit']['id'])
                 );
             }
         ],
@@ -81,13 +81,13 @@ return [
                         'operator/irfo/gv-permits',
                         false
                     ),
-                    $data['irfoGvPermit']['organisation']['name']
+                    \Common\Util\Escape::html($data['irfoGvPermit']['organisation']['name'])
                 );
             }
         ],
         [
             'title' => 'Status',
-            'formatter' => fn($data) => $data['status']['description']
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['status']['description'])
         ],
         [
             'type' => 'Checkbox',

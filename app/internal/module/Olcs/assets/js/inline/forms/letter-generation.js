@@ -6,7 +6,9 @@ OLCS.ready(function () {
     e.preventDefault();
     var $section = $(this).closest(".letter-section");
     var $content = $section.find(".letter-section__content");
-    var $button = $(this).find(".letter-section__toggle");
+    // Only the words change: writing to the whole toggle would replace the arrow
+    // beside them, which never came back.
+    var $button = $(this).find(".letter-section__show-hide");
 
     if ($content.is(":visible")) {
       $content.hide();
@@ -29,12 +31,12 @@ OLCS.ready(function () {
 
     if (allVisible) {
       $allContent.hide();
-      $(".letter-section__toggle").text("Show");
+      $(".letter-section__show-hide").text("Show");
       $allSections.removeClass("letter-section--expanded");
       $(this).text("Show All Sections");
     } else {
       $allContent.show();
-      $(".letter-section__toggle").text("Hide");
+      $(".letter-section__show-hide").text("Hide");
       $allSections.addClass("letter-section--expanded");
       $(this).text("Hide All Sections");
     }

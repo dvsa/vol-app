@@ -50,7 +50,7 @@ abstract class AbstractLetterTodo implements BundleSerializableInterface, JsonSe
     /**
      * Points to latest version
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion|null
      */
     #[ORM\JoinColumn(name: 'current_version_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion::class, fetch: 'LAZY')]
@@ -59,7 +59,7 @@ abstract class AbstractLetterTodo implements BundleSerializableInterface, JsonSe
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractLetterTodo implements BundleSerializableInterface, JsonSe
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -83,6 +83,14 @@ abstract class AbstractLetterTodo implements BundleSerializableInterface, JsonSe
      */
     #[ORM\Column(type: 'string', name: 'todo_key', length: 100, nullable: false)]
     protected $todoKey = '';
+
+    /**
+     * Deleted in admin but kept for generated letters
+     *
+     * @var \DateTime|null
+     */
+    #[ORM\Column(type: 'datetime', name: 'deleted_on', nullable: true)]
+    protected $deletedOn;
 
     /**
      * Version
@@ -227,6 +235,36 @@ abstract class AbstractLetterTodo implements BundleSerializableInterface, JsonSe
     public function getTodoKey()
     {
         return $this->todoKey;
+    }
+
+    /**
+     * Set the deleted on
+     *
+     * @param \DateTime $deletedOn new value being set
+     *
+     * @return static
+     */
+    public function setDeletedOn($deletedOn)
+    {
+        $this->deletedOn = $deletedOn;
+
+        return $this;
+    }
+
+    /**
+     * Get the deleted on
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getDeletedOn($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->deletedOn);
+        }
+
+        return $this->deletedOn;
     }
 
     /**

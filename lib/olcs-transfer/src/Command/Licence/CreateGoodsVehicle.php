@@ -11,42 +11,32 @@ namespace Dvsa\Olcs\Transfer\Command\Licence;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\FieldType\Traits\UnvalidatedVrm;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Vrm;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/licence/single/goods-vehicles")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/licence/single/goods-vehicles')]
+#[Transfer\Method('POST')]
 final class CreateGoodsVehicle extends AbstractCommand
 {
     use Identity;
     use Vrm;
     use UnvalidatedVrm;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\Between", options={"min": 0, "max": 999999})
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Between', options: ['min' => 0, 'max' => 999999])]
     protected $platedWeight;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $receivedDate;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\DateTimeFormatter")
-     * @Transfer\Validator("Date", options={"format": \DateTime::ISO8601})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\DateTimeFormatter')]
+    #[Transfer\Validator('Date', options: ['format' => \DateTime::ISO8601])]
     protected $specifiedDate;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
+    #[Transfer\Optional]
     protected $confirm;
 
     /**

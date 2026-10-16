@@ -11,15 +11,14 @@ namespace Dvsa\Olcs\Api\Domain\Command\CommunityLic;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Licence;
 use Dvsa\Olcs\Transfer\FieldType\Traits\User;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 class ValidatingReprintCaller extends AbstractCommand
 {
     use Licence;
     use User;
 
-    /**
-     * @Transfer\ArrayInput
-     */
+    #[Transfer\ArrayInput]
     protected $communityLicences;
 
     /**

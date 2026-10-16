@@ -54,7 +54,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Foreign Key to category
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\Category
+     * @var \Dvsa\Olcs\Api\Entity\System\Category|null
      */
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
@@ -63,7 +63,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * SubCategory
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
+     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory|null
      */
     #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Foreign Key to user
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -90,7 +90,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * GoodsOrPsv
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -99,7 +99,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Foreign Key to traffic_area
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea|null
      */
     #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
@@ -108,7 +108,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -118,7 +118,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -128,7 +128,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * Is mlh
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'is_mlh', nullable: true)]
     protected $isMlh;
@@ -145,7 +145,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
     /**
      * TaskAlphaSplits
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Task\TaskAlphaSplit>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\TaskAlphaSplit::class, mappedBy: 'taskAllocationRule')]
     protected $taskAlphaSplits;

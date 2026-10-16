@@ -72,6 +72,7 @@ return [
     TransferQuery\Application\Documents::class => QueryHandler\Application\Documents::class,
     TransferQuery\Application\FinancialHistory::class => QueryHandler\Application\FinancialHistory::class,
     TransferQuery\Application\FinancialEvidence::class => QueryHandler\Application\FinancialEvidence::class,
+    TransferQuery\Application\KnowledgeExperience::class => QueryHandler\Application\KnowledgeExperience::class,
     TransferQuery\Application\PreviousConvictions::class => QueryHandler\Application\PreviousConvictions::class,
     TransferQuery\Application\Safety::class => QueryHandler\Application\Safety::class,
     TransferQuery\Application\Declaration::class => QueryHandler\Application\Declaration::class,
@@ -697,6 +698,7 @@ return [
 
     // Document Internal
     Query\Document\ByDocumentStoreId::class => QueryHandler\Document\ByDocumentStoreId::class,
+    TransferQuery\Document\DocumentAnalysisList::class => QueryHandler\Document\DocumentAnalysisList::class,
 
     // Templates
     TransferQuery\Template\AvailableTemplates::class => QueryHandler\Template\AvailableTemplates::class,
@@ -741,6 +743,7 @@ return [
 
     // Letter
     TransferQuery\Letter\LetterType\Get::class => QueryHandler\Letter\LetterType\Get::class,
+    TransferQuery\Letter\PreviewRecord\Lookup::class => QueryHandler\Letter\PreviewRecord\Lookup::class,
     TransferQuery\Letter\LetterType\GetList::class => QueryHandler\Letter\LetterType\GetList::class,
     TransferQuery\Letter\LetterSection\Get::class => QueryHandler\Letter\LetterSection\Get::class,
     TransferQuery\Letter\LetterSection\GetList::class => QueryHandler\Letter\LetterSection\GetList::class,
@@ -755,6 +758,7 @@ return [
     TransferQuery\Letter\LetterInstance\Get::class => QueryHandler\Letter\LetterInstance\Get::class,
     TransferQuery\Letter\LetterInstance\GetList::class => QueryHandler\Letter\LetterInstance\GetList::class,
     TransferQuery\Letter\LetterInstance\Preview::class => QueryHandler\Letter\LetterInstance\Preview::class,
+    TransferQuery\Letter\LetterInstance\GenerationContext::class => QueryHandler\Letter\LetterInstance\GenerationContext::class,
     TransferQuery\Letter\MasterTemplate\Get::class => QueryHandler\Letter\MasterTemplate\Get::class,
     TransferQuery\Letter\MasterTemplate\GetList::class => QueryHandler\Letter\MasterTemplate\GetList::class,
     TransferQuery\Letter\LetterTestData\Get::class => QueryHandler\Letter\LetterTestData\Get::class,

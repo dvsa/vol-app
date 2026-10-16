@@ -80,7 +80,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * JourneyFrequency
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'journey_frequency', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * WithdrawnReason
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'withdrawn_reason', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -108,7 +108,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -118,7 +118,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Exemption details
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'exemption_details', length: 255, nullable: true)]
     protected $exemptionDetails;
@@ -126,7 +126,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Expiry date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
@@ -150,7 +150,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * In force date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'in_force_date', nullable: true)]
     protected $inForceDate;
@@ -158,7 +158,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Irfo fee id
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'irfo_fee_id', length: 10, nullable: true)]
     protected $irfoFeeId;
@@ -206,7 +206,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Last date copies req
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'last_date_copies_req', nullable: true)]
     protected $lastDateCopiesReq;
@@ -214,7 +214,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Renewal date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'renewal_date', nullable: true)]
     protected $renewalDate;
@@ -246,7 +246,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Authorisation must be reviewed within x days of this date for approval.  sla related.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'application_sent_date', nullable: true)]
     protected $applicationSentDate;
@@ -263,7 +263,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Countrys
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\ContactDetails\Country>
      */
     #[ORM\JoinTable(name: 'irfo_psv_auth_country')]
     #[ORM\JoinColumn(name: 'irfo_psv_auth_id', referencedColumnName: 'id')]
@@ -274,7 +274,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * IrfoPsvAuthNumbers
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthNumber::class, mappedBy: 'irfoPsvAuth', cascade: ['persist'])]
     protected $irfoPsvAuthNumbers;

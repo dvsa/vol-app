@@ -8,6 +8,7 @@ use Dvsa\Authentication\Cognito\Client;
 use Dvsa\Olcs\Auth\Client\CognitoClientFactory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Psr\Cache\CacheItemPoolInterface;
 use Dvsa\OlcsTest\MocksServicesTrait;
 
 /**
@@ -32,6 +33,8 @@ final class CognitoClientFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
+    protected CacheItemPoolInterface $jwksCache;
+
     #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
@@ -55,6 +58,25 @@ final class CognitoClientFactoryTest extends MockeryTestCase
 
         // Assert
         $this->assertInstanceOf(Client::class, $result);
+    }
+
+    /**
+     * Without a cache pool the client re-downloads the JWKS from Cognito on every decoded
+     * token, so this asserts the wiring rather than the library's own caching behaviour.
+     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeGivesTheClientTheJwksCachePool(): void
+    {
+        // Setup
+        $this->setUpSut();
+        $this->configService(static::CONFIG_WITH_WITH_VALID_SETTINGS);
+
+        // Execute
+        $result = $this->sut->__invoke($this->serviceManager(), null);
+
+        // Assert
+        $this->assertSame($this->jwksCache, $result->getCache());
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
@@ -94,6 +116,9 @@ final class CognitoClientFactoryTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->setUpServiceManager();
+
+        $this->jwksCache = m::mock(CacheItemPoolInterface::class);
+        $this->serviceManager->setService(CognitoClientFactory::JWKS_CACHE_SERVICE, $this->jwksCache);
     }
 
     protected function setUpSut(): void
@@ -101,38 +126,43 @@ final class CognitoClientFactoryTest extends MockeryTestCase
         $this->sut = new CognitoClientFactory();
     }
 
+    /**
+     * Each case is the cognito adapter config with one required key withheld. The array is
+     * yielded positionally: a string key here is read by PHPUnit as a *named* argument, which
+     * is what previously errored every case with "Unknown named parameter $cognito".
+     */
     public static function incorrectSettingsProvider(): \Iterator
     {
         yield 'Missing clientId' => [
-            CognitoClientFactory::CONFIG_ADAPTER => [
+            [
                 CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
                 CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
                 CognitoClientFactory::CONFIG_REGION => 'region',
             ]
         ];
         yield 'Missing clientSecret' => [
-            CognitoClientFactory::CONFIG_ADAPTER => [
+            [
                 CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
                 CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
                 CognitoClientFactory::CONFIG_REGION => 'region',
             ]
         ];
         yield 'Missing poolId' => [
-            CognitoClientFactory::CONFIG_ADAPTER => [
+            [
                 CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
                 CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
                 CognitoClientFactory::CONFIG_REGION => 'region',
             ]
         ];
         yield 'Missing region' => [
-            CognitoClientFactory::CONFIG_ADAPTER => [
+            [
                 CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
                 CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
                 CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
             ]
         ];
         yield 'Missing http' => [
-            CognitoClientFactory::CONFIG_ADAPTER => [
+            [
                 CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
                 CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
                 CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',

@@ -68,7 +68,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -88,10 +88,18 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
     /**
      * User edits to default content
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'edited_content', nullable: true)]
     protected $editedContent;
+
+    /**
+     * Default content with grabs resolved at generation
+     *
+     * @var array|null
+     */
+    #[ORM\Column(type: 'json', name: 'generated_content', nullable: true)]
+    protected $generatedContent;
 
     /**
      * Display order
@@ -268,6 +276,30 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
     public function getEditedContent()
     {
         return $this->editedContent;
+    }
+
+    /**
+     * Set the generated content
+     *
+     * @param array $generatedContent new value being set
+     *
+     * @return static
+     */
+    public function setGeneratedContent($generatedContent)
+    {
+        $this->generatedContent = $generatedContent;
+
+        return $this;
+    }
+
+    /**
+     * Get the generated content
+     *
+     * @return array
+     */
+    public function getGeneratedContent()
+    {
+        return $this->generatedContent;
     }
 
     /**

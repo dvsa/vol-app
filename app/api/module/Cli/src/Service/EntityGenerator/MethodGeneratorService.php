@@ -68,8 +68,15 @@ final readonly class MethodGeneratorService
     public function getPhpTypeFromType(string $type): string
     {
         // Handle array types for collections
-        if (str_starts_with($type, 'ArrayCollection') || str_starts_with($type, \Doctrine\Common\Collections\ArrayCollection::class)) {
-            return '\\' . \Doctrine\Common\Collections\ArrayCollection::class;
+        $normalizedType = ltrim($type, '\\');
+
+        if (
+            str_starts_with($normalizedType, 'ArrayCollection') ||
+            str_starts_with($normalizedType, \Doctrine\Common\Collections\ArrayCollection::class) ||
+            str_starts_with($normalizedType, 'Collection') ||
+            str_starts_with($normalizedType, \Doctrine\Common\Collections\Collection::class)
+        ) {
+            return '\\' . \Doctrine\Common\Collections\Collection::class;
         }
 
         // Handle entity types (anything starting with uppercase or backslash)
@@ -89,6 +96,9 @@ final readonly class MethodGeneratorService
             'datetime', 'date', 'time', 'timestamp' => '\\DateTime',
             'decimal', 'float', 'double' => 'float',
             'array' => 'array',
+            // DBAL hydrates binary/blob columns into a stream, so accessors have to
+            // accept and return both forms
+            'binary', 'blob', 'string|resource' => 'string|resource',
             default => 'mixed'
         };
     }

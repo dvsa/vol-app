@@ -8,6 +8,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 
 /**
@@ -80,6 +81,6 @@ class TaskIdentifier implements FormatterPluginManagerInterface
                 break;
         }
 
-        return '<a class="govuk-link" href="' . $url . '">' . $data['linkDisplay'] . '</a>';
+        return '<a class="govuk-link" href="' . $url . '">' . Escape::html($data['linkDisplay']) . '</a>';
     }
 }

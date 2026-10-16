@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 
@@ -55,8 +56,9 @@ class AccessedCorrespondence implements FormatterPluginManagerInterface
         return sprintf(
             '<a class="govuk-link" href="%s" target="_blank"><b>%s%s</b></a>%s',
             $url,
-            $data['correspondence']['document']['description'],
-            $extension,
+            Escape::html($data['correspondence']['document']['description']),
+            Escape::html($extension),
+            // $title is markup this method built above, from a translation key — not row data.
             $title
         );
     }

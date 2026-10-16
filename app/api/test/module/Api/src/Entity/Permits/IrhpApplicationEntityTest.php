@@ -654,8 +654,11 @@ final class IrhpApplicationEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpWithdraw')]
-    public function testWithdraw(mixed $withdrawReason, mixed $checkReasonAgainstStatus, mixed $expectedValidationWithdrawReason): void
+    public function testWithdraw(mixed $checkReasonAgainstStatus, bool $expectValidationWithReason): void
     {
+        $withdrawReason = m::mock(RefData::class);
+        $expectedValidationWithdrawReason = $expectValidationWithReason ? $withdrawReason : null;
+
         $withdrawStatus = m::mock(RefData::class);
 
         $this->sut->shouldReceive('canBeWithdrawn')
@@ -686,9 +689,8 @@ final class IrhpApplicationEntityTest extends EntityTester
 
     public static function dpWithdraw(): \Iterator
     {
-        $withdrawReason = m::mock(RefData::class);
-        yield [$withdrawReason, true, $withdrawReason];
-        yield [$withdrawReason, false, null];
+        yield [true, true];
+        yield [false, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpWithdrawException')]
@@ -934,13 +936,13 @@ final class IrhpApplicationEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsOverviewAccessibleBilateral')]
-    public function testIsOverviewAccessibleBilateral(mixed $isNotYetSubmitted, mixed $countries, mixed $expected): void
+    public function testIsOverviewAccessibleBilateral(mixed $isNotYetSubmitted, \Closure $createCountries, mixed $expected): void
     {
         $this->sut->shouldReceive('isBilateral')
             ->withNoArgs()
             ->andReturnTrue();
 
-        $this->sut->setCountrys($countries);
+        $this->sut->setCountrys($createCountries());
 
         $this->sut->shouldReceive('isNotYetSubmitted')
             ->withNoArgs()
@@ -954,9 +956,9 @@ final class IrhpApplicationEntityTest extends EntityTester
 
     public static function dpIsOverviewAccessibleBilateral(): \Iterator
     {
-        $emptyCountries = new ArrayCollection();
+        $emptyCountries = static fn () => new ArrayCollection();
 
-        $populatedCountries = new ArrayCollection(
+        $populatedCountries = static fn () => new ArrayCollection(
             [
                 m::mock(Country::class),
                 m::mock(Country::class)
@@ -1201,7 +1203,7 @@ final class IrhpApplicationEntityTest extends EntityTester
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsReadyForNoOfPermits')]
     public function testIsReadyForNoOfPermits(
         mixed $canBeUpdated,
-        mixed $irhpPermitApplications,
+        \Closure $createIrhpPermitApplications,
         mixed $expectedIsReadyForNoOfPermits
     ): void {
         $irhpApplication = m::mock(Entity::class)->makePartial();
@@ -1210,7 +1212,7 @@ final class IrhpApplicationEntityTest extends EntityTester
             ->andReturn($canBeUpdated);
 
         $irhpApplication->setIrhpPermitApplications(
-            new ArrayCollection($irhpPermitApplications)
+            new ArrayCollection($createIrhpPermitApplications())
         );
 
         $this->assertEquals(
@@ -1221,24 +1223,30 @@ final class IrhpApplicationEntityTest extends EntityTester
 
     public static function dpIsReadyForNoOfPermits(): \Iterator
     {
+        $twoIrhpPermitApplications = static fn () => [
+            m::mock(IrhpPermitApplication::class),
+            m::mock(IrhpPermitApplication::class),
+        ];
+        $noIrhpPermitApplications = static fn () => [];
+
         yield [
             true,
-            [m::mock(IrhpPermitApplication::class), m::mock(IrhpPermitApplication::class)],
+            $twoIrhpPermitApplications,
             true
         ];
         yield [
             true,
-            [],
+            $noIrhpPermitApplications,
             false
         ];
         yield [
             false,
-            [m::mock(IrhpPermitApplication::class), m::mock(IrhpPermitApplication::class)],
+            $twoIrhpPermitApplications,
             false
         ];
         yield [
             false,
-            [],
+            $noIrhpPermitApplications,
             false
         ];
     }
@@ -1800,8 +1808,10 @@ final class IrhpApplicationEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetSectionCompletionMultilateral')]
-    public function testGetSectionCompletionMultilateral(mixed $data, mixed $expected): void
+    public function testGetSectionCompletionMultilateral(\Closure $createData, mixed $expected): void
     {
+        $data = $createData();
+
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
         $irhpPermitType->setId(IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL);
 
@@ -1815,14 +1825,18 @@ final class IrhpApplicationEntityTest extends EntityTester
 
     public static function dpTestGetSectionCompletionMultilateral(): array
     {
-        $irhpPermitAppWithoutPermits = m::mock(IrhpPermitApplication::class)->makePartial();
+        $irhpPermitAppWithoutPermits = static fn () => m::mock(IrhpPermitApplication::class)->makePartial();
 
-        $irhpPermitAppWithPermits = m::mock(IrhpPermitApplication::class)->makePartial();
-        $irhpPermitAppWithPermits->setPermitsRequired(10);
+        $irhpPermitAppWithPermits = static function () {
+            $irhpPermitApplication = m::mock(IrhpPermitApplication::class)->makePartial();
+            $irhpPermitApplication->setPermitsRequired(10);
+
+            return $irhpPermitApplication;
+        };
 
         return [
             'No data set' => [
-                'data' => [
+                'createData' => static fn () => [
                     'irhpPermitApplications' => new ArrayCollection(),
                     'checkedAnswers' => false,
                     'declaration' => false,
@@ -1837,11 +1851,11 @@ final class IrhpApplicationEntityTest extends EntityTester
                 ],
             ],
             'IRHP permit apps with all apps without permits required set' => [
-                'data' => [
+                'createData' => static fn () => [
                     'irhpPermitApplications' => new ArrayCollection(
                         [
-                            $irhpPermitAppWithoutPermits,
-                            $irhpPermitAppWithoutPermits
+                            $irhpPermitAppWithoutPermits(),
+                            $irhpPermitAppWithoutPermits()
                         ]
                     ),
                     'checkedAnswers' => false,
@@ -1857,11 +1871,11 @@ final class IrhpApplicationEntityTest extends EntityTester
                 ],
             ],
             'IRHP permit apps with one app without permits required set' => [
-                'data' => [
+                'createData' => static fn () => [
                     'irhpPermitApplications' => new ArrayCollection(
                         [
-                            $irhpPermitAppWithPermits,
-                            $irhpPermitAppWithoutPermits
+                            $irhpPermitAppWithPermits(),
+                            $irhpPermitAppWithoutPermits()
                         ]
                     ),
                     'checkedAnswers' => false,
@@ -1877,11 +1891,11 @@ final class IrhpApplicationEntityTest extends EntityTester
                 ],
             ],
             'IRHP permit apps with all apps with permits required set' => [
-                'data' => [
+                'createData' => static fn () => [
                     'irhpPermitApplications' => new ArrayCollection(
                         [
-                            $irhpPermitAppWithPermits,
-                            $irhpPermitAppWithPermits
+                            $irhpPermitAppWithPermits(),
+                            $irhpPermitAppWithPermits()
                         ]
                     ),
                     'checkedAnswers' => false,
@@ -1897,11 +1911,11 @@ final class IrhpApplicationEntityTest extends EntityTester
                 ],
             ],
             'Checked answers set' => [
-                'data' => [
+                'createData' => static fn () => [
                     'irhpPermitApplications' => new ArrayCollection(
                         [
-                            $irhpPermitAppWithPermits,
-                            $irhpPermitAppWithPermits
+                            $irhpPermitAppWithPermits(),
+                            $irhpPermitAppWithPermits()
                         ]
                     ),
                     'checkedAnswers' => true,
@@ -1917,11 +1931,11 @@ final class IrhpApplicationEntityTest extends EntityTester
                 ],
             ],
             'Declaration set' => [
-                'data' => [
+                'createData' => static fn () => [
                     'irhpPermitApplications' => new ArrayCollection(
                         [
-                            $irhpPermitAppWithPermits,
-                            $irhpPermitAppWithPermits
+                            $irhpPermitAppWithPermits(),
+                            $irhpPermitAppWithPermits()
                         ]
                     ),
                     'checkedAnswers' => true,
@@ -2634,8 +2648,23 @@ final class IrhpApplicationEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dptestGetPermitsRequired')]
-    public function testGetPermitsRequired(mixed $irhpPermitApplications, mixed $expected): void
+    /**
+     * @param int[] $permitsRequiredPerApplication permits required by each IRHP permit application
+     */
+    public function testGetPermitsRequired(array $permitsRequiredPerApplication, mixed $expected): void
     {
+        $irhpPermitApplications = array_map(
+            static function (int $permitsRequired) {
+                $irhpPermitApplication = m::mock(IrhpPermitApplication::class);
+                $irhpPermitApplication->shouldReceive('countPermitsRequired')
+                    ->withNoArgs()
+                    ->andReturn($permitsRequired);
+
+                return $irhpPermitApplication;
+            },
+            $permitsRequiredPerApplication
+        );
+
         $irhpApplication = m::mock(Entity::class)->makePartial();
 
         $irhpApplication->setIrhpPermitApplications(
@@ -2647,31 +2676,21 @@ final class IrhpApplicationEntityTest extends EntityTester
 
     public static function dpTestGetPermitsRequired(): array
     {
-        $irhpPermitAppWithoutPermits = m::mock(IrhpPermitApplication::class);
-        $irhpPermitAppWithoutPermits->shouldReceive('countPermitsRequired')
-            ->withNoArgs()
-            ->andReturn(0);
-
-        $irhpPermitAppWithPermits = m::mock(IrhpPermitApplication::class);
-        $irhpPermitAppWithPermits->shouldReceive('countPermitsRequired')
-            ->withNoArgs()
-            ->andReturn(10);
-
         return [
             'One Irhp Permit Application, 0 permits required' => [
-                [$irhpPermitAppWithoutPermits],
+                [0],
                 0
             ],
             'One Irhp Permit Application, 10 permits required' => [
-                [$irhpPermitAppWithPermits],
+                [10],
                 10
             ],
             'Two Irhp Permit Applications, 10 permits required on one and 0 on the other' => [
-                [$irhpPermitAppWithPermits, $irhpPermitAppWithoutPermits],
+                [10, 0],
                 10
             ],
             'Two Irhp Permit Applications, 10 permits required on both' => [
-                [$irhpPermitAppWithPermits, $irhpPermitAppWithPermits],
+                [10, 10],
                 20
             ]
         ];
@@ -3385,10 +3404,30 @@ final class IrhpApplicationEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetQuestionAnswerDataWithActiveApplicationPath')]
-    public function testGetQuestionAnswerDataWithActiveApplicationPath(mixed $data, mixed $applicationSteps, mixed $expected): void
-    {
+    /**
+     * @param int[] $answeredQuestionTextIds ids (1 or 2) of the question texts that have an answer
+     */
+    public function testGetQuestionAnswerDataWithActiveApplicationPath(
+        array $answeredQuestionTextIds,
+        int $checkedAnswers,
+        int $declaration,
+        array $expected
+    ): void {
+        $createdOn = new DateTime();
+
+        $applicationSteps = [];
+        $answers = [];
+        foreach ([1 => 'q1', 2 => 'q2'] as $questionTextId => $prefix) {
+            [$step, $answer] = $this->createApplicationStepAndAnswer($questionTextId, $prefix, $createdOn);
+            $applicationSteps[] = $step;
+            if (in_array($questionTextId, $answeredQuestionTextIds, true)) {
+                $answers[$questionTextId] = $answer;
+            }
+        }
+
         $applicationPath = m::mock(ApplicationPath::class);
-        $applicationPath->shouldReceive('getApplicationSteps')->once()->withNoArgs()->andReturn($applicationSteps);
+        $applicationPath->shouldReceive('getApplicationSteps')->once()->withNoArgs()
+            ->andReturn(new ArrayCollection($applicationSteps));
 
         $irhpPermitApplication = m::mock(IrhpPermitApplication::class);
         $irhpPermitApplication->shouldReceive('getActiveApplicationPath')
@@ -3402,69 +3441,48 @@ final class IrhpApplicationEntityTest extends EntityTester
 
         $entity = $this->createNewEntity(null, null, $irhpPermitType);
         $entity->addIrhpPermitApplications($irhpPermitApplication);
-        $entity->setAnswers($data['answers']);
-        $entity->setCreatedOn($data['createdOn']);
-        $entity->setCheckedAnswers($data['checkedAnswers']);
-        $entity->setDeclaration($data['declaration']);
+        $entity->setAnswers(new ArrayCollection($answers));
+        $entity->setCreatedOn($createdOn);
+        $entity->setCheckedAnswers($checkedAnswers);
+        $entity->setDeclaration($declaration);
 
         $this->assertEquals($expected, $entity->getQuestionAnswerData());
     }
 
+    /**
+     * @return array{ApplicationStep, Answer} an application step for a question and an answer to it
+     */
+    private function createApplicationStepAndAnswer(int $questionTextId, string $prefix, DateTime $createdOn): array
+    {
+        $questionText = m::mock(QuestionText::class);
+        $questionText->shouldReceive('getId')->withNoArgs()->andReturn($questionTextId);
+        $questionText->shouldReceive('getQuestionShortKey')->withNoArgs()->andReturn($prefix . '-short-key');
+        $questionText->shouldReceive('getTranslationKeyFromQuestionKey')->withNoArgs()->andReturn($prefix . '-key');
+        $questionText->shouldReceive('getQuestion->getQuestionType->getId')->withNoArgs()->andReturn($prefix . '-type');
+
+        $question = m::mock(Question::class)->makePartial();
+        $question->shouldReceive('getQuestion')->withNoArgs()->andReturn($question);
+        $question->shouldReceive('getActiveQuestionText')->with($createdOn)->andReturn($questionText);
+        $question->shouldReceive('getSlug')->withNoArgs()->andReturn($prefix . '-slug');
+        $question->shouldReceive('isCustom')->withNoArgs()->andReturn(false);
+
+        $step = m::mock(ApplicationStep::class);
+        $step->shouldReceive('getQuestion')->withNoArgs()->andReturn($question);
+
+        $answer = m::mock(Answer::class);
+        $answer->shouldReceive('getQuestionText')->withNoArgs()->andReturn($questionText);
+        $answer->shouldReceive('getValue')->withNoArgs()->andReturn($prefix . '-answer');
+
+        return [$step, $answer];
+    }
+
     public static function dpGetQuestionAnswerDataWithActiveApplicationPath(): array
     {
-        $createdOn = new DateTime();
-
-        // q1
-        $question1TextId = 1;
-        $question1Text = m::mock(QuestionText::class);
-        $question1Text->shouldReceive('getId')->withNoArgs()->andReturn($question1TextId);
-        $question1Text->shouldReceive('getQuestionShortKey')->withNoArgs()->andReturn('q1-short-key');
-        $question1Text->shouldReceive('getTranslationKeyFromQuestionKey')->withNoArgs()->andReturn('q1-key');
-        $question1Text->shouldReceive('getQuestion->getQuestionType->getId')->withNoArgs()->andReturn('q1-type');
-
-        $question1 = m::mock(Question::class)->makePartial();
-        $question1->shouldReceive('getQuestion')->withNoArgs()->andReturn($question1);
-        $question1->shouldReceive('getActiveQuestionText')->with($createdOn)->andReturn($question1Text);
-        $question1->shouldReceive('getSlug')->withNoArgs()->andReturn('q1-slug');
-        $question1->shouldReceive('isCustom')->withNoArgs()->andReturn(false);
-
-        $step1 = m::mock(ApplicationStep::class);
-        $step1->shouldReceive('getQuestion')->withNoArgs()->andReturn($question1);
-
-        $answer1 = m::mock(Answer::class);
-        $answer1->shouldReceive('getQuestionText')->withNoArgs()->andReturn($question1Text);
-        $answer1->shouldReceive('getValue')->withNoArgs()->andReturn('q1-answer');
-
-        // q2
-        $question2TextId = 2;
-        $question2Text = m::mock(QuestionText::class);
-        $question2Text->shouldReceive('getId')->withNoArgs()->andReturn($question2TextId);
-        $question2Text->shouldReceive('getQuestionShortKey')->withNoArgs()->andReturn('q2-short-key');
-        $question2Text->shouldReceive('getTranslationKeyFromQuestionKey')->withNoArgs()->andReturn('q2-key');
-        $question2Text->shouldReceive('getQuestion->getQuestionType->getId')->withNoArgs()->andReturn('q2-type');
-
-        $question2 = m::mock(Question::class)->makePartial();
-        $question2->shouldReceive('getQuestion')->withNoArgs()->andReturn($question2);
-        $question2->shouldReceive('getActiveQuestionText')->with($createdOn)->andReturn($question2Text);
-        $question2->shouldReceive('getSlug')->withNoArgs()->andReturn('q2-slug');
-        $question2->shouldReceive('isCustom')->withNoArgs()->andReturn(false);
-
-        $step2 = m::mock(ApplicationStep::class);
-        $step2->shouldReceive('getQuestion')->withNoArgs()->andReturn($question2);
-
-        $answer2 = m::mock(Answer::class);
-        $answer2->shouldReceive('getQuestionText')->withNoArgs()->andReturn($question2Text);
-        $answer2->shouldReceive('getValue')->withNoArgs()->andReturn('q2-answer');
-
         return [
            'q1 not answered' => [
-                'data' => [
-                    'answers' => new ArrayCollection([]),
-                    'checkedAnswers' => 0,
-                    'declaration' => 0,
-                    'createdOn' => $createdOn,
-                ],
-                'applicationSteps' => new ArrayCollection([$step1, $step2]),
+                'answeredQuestionTextIds' => [],
+                'checkedAnswers' => 0,
+                'declaration' => 0,
                 'expected' => [
                     'q1-slug' => [
                         'section' => 'q1-slug',
@@ -3503,13 +3521,9 @@ final class IrhpApplicationEntityTest extends EntityTester
                 ],
             ],
             'q1 answered' => [
-                'data' => [
-                    'answers' => new ArrayCollection([$question1TextId => $answer1]),
-                    'checkedAnswers' => 0,
-                    'declaration' => 0,
-                    'createdOn' => $createdOn,
-                ],
-                'applicationSteps' => new ArrayCollection([$step1, $step2]),
+                'answeredQuestionTextIds' => [1],
+                'checkedAnswers' => 0,
+                'declaration' => 0,
                 'expected' => [
                     'q1-slug' => [
                         'section' => 'q1-slug',
@@ -3548,13 +3562,9 @@ final class IrhpApplicationEntityTest extends EntityTester
                 ],
             ],
             'q2 answered' => [
-                'data' => [
-                    'answers' => new ArrayCollection([$question1TextId => $answer1, $question2TextId => $answer2]),
-                    'checkedAnswers' => 0,
-                    'declaration' => 0,
-                    'createdOn' => $createdOn,
-                ],
-                'applicationSteps' => new ArrayCollection([$step1, $step2]),
+                'answeredQuestionTextIds' => [1, 2],
+                'checkedAnswers' => 0,
+                'declaration' => 0,
                 'expected' => [
                     'q1-slug' => [
                         'section' => 'q1-slug',
@@ -3593,13 +3603,9 @@ final class IrhpApplicationEntityTest extends EntityTester
                 ],
             ],
             'answers checked' => [
-                'data' => [
-                    'answers' => new ArrayCollection([$question1TextId => $answer1, $question2TextId => $answer2]),
-                    'checkedAnswers' => 1,
-                    'declaration' => 0,
-                    'createdOn' => $createdOn,
-                ],
-                'applicationSteps' => new ArrayCollection([$step1, $step2]),
+                'answeredQuestionTextIds' => [1, 2],
+                'checkedAnswers' => 1,
+                'declaration' => 0,
                 'expected' => [
                     'q1-slug' => [
                         'section' => 'q1-slug',
@@ -3638,13 +3644,9 @@ final class IrhpApplicationEntityTest extends EntityTester
                 ],
             ],
             'declaration set' => [
-                'data' => [
-                    'answers' => new ArrayCollection([$question1TextId => $answer1, $question2TextId => $answer2]),
-                    'checkedAnswers' => 1,
-                    'declaration' => 1,
-                    'createdOn' => $createdOn,
-                ],
-                'applicationSteps' => new ArrayCollection([$step1, $step2]),
+                'answeredQuestionTextIds' => [1, 2],
+                'checkedAnswers' => 1,
+                'declaration' => 1,
                 'expected' => [
                     'q1-slug' => [
                         'section' => 'q1-slug',
@@ -3823,7 +3825,7 @@ final class IrhpApplicationEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetAnswerForCustomEcmtSectors')]
-    public function testGetAnswerForCustomEcmtSectors(mixed $sectorsEntity, mixed $expectedAnswer): void
+    public function testGetAnswerForCustomEcmtSectors(\Closure $createSectorsEntity, mixed $expectedAnswer): void
     {
         $question = m::mock(Question::class);
         $question->shouldReceive('isCustom')->withNoArgs()->once()->andReturn(true);
@@ -3835,7 +3837,7 @@ final class IrhpApplicationEntityTest extends EntityTester
         $step->shouldReceive('getQuestion')->withNoArgs()->once()->andReturn($question);
 
         $entity = $this->createNewEntity();
-        $entity->setSectors($sectorsEntity);
+        $entity->setSectors($createSectorsEntity());
 
         $this->assertEquals(
             $expectedAnswer,
@@ -3847,13 +3849,17 @@ final class IrhpApplicationEntityTest extends EntityTester
     {
         $sectorId = 7;
 
-        $sectors = m::mock(Sectors::class);
-        $sectors->shouldReceive('getId')
-            ->andReturn($sectorId);
+        $createSectors = static function () use ($sectorId) {
+            $sectors = m::mock(Sectors::class);
+            $sectors->shouldReceive('getId')
+                ->andReturn($sectorId);
+
+            return $sectors;
+        };
 
         return [
-            [$sectors, $sectorId],
-            [null, null],
+            [$createSectors, $sectorId],
+            [static fn () => null, null],
         ];
     }
 
@@ -6302,8 +6308,25 @@ final class IrhpApplicationEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetIrhpPermitApplicationsByCountryName')]
-    public function testGetIrhpPermitApplicationsByCountryName(mixed $irhpPermitApplications, mixed $expected): void
+    /**
+     * @param string[] $countryDescs country description of each permit application, in the stored order
+     * @param string[] $expectedCountryDescs country description of each permit application, in the expected order
+     */
+    public function testGetIrhpPermitApplicationsByCountryName(array $countryDescs, array $expectedCountryDescs): void
     {
+        $irhpPermitApplicationsByCountryDesc = [];
+        foreach (array_unique($countryDescs) as $countryDesc) {
+            $irhpPermitApplication = m::mock(IrhpPermitApplication::class);
+            $irhpPermitApplication->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getCountry->getCountryDesc')
+                ->withNoArgs()
+                ->andReturn($countryDesc);
+            $irhpPermitApplicationsByCountryDesc[$countryDesc] = $irhpPermitApplication;
+        }
+
+        $toIrhpPermitApplication = static fn (string $countryDesc) => $irhpPermitApplicationsByCountryDesc[$countryDesc];
+        $irhpPermitApplications = new ArrayCollection(array_map($toIrhpPermitApplication, $countryDescs));
+        $expected = new ArrayCollection(array_map($toIrhpPermitApplication, $expectedCountryDescs));
+
         $irhpPermitType = m::mock(IrhpPermitType::class);
         $irhpPermitType->shouldReceive('isBilateral')->once()->withNoArgs()->andReturnTrue();
 
@@ -6315,29 +6338,14 @@ final class IrhpApplicationEntityTest extends EntityTester
 
     public static function dpGetIrhpPermitApplicationsByCountryName(): array
     {
-        $irhpPermitApplicationA = m::mock(IrhpPermitApplication::class);
-        $irhpPermitApplicationA->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getCountry->getCountryDesc')
-            ->withNoArgs()
-            ->andReturn('A');
-
-        $irhpPermitApplicationB = m::mock(IrhpPermitApplication::class);
-        $irhpPermitApplicationB->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getCountry->getCountryDesc')
-            ->withNoArgs()
-            ->andReturn('B');
-
-        $irhpPermitApplicationC = m::mock(IrhpPermitApplication::class);
-        $irhpPermitApplicationC->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getCountry->getCountryDesc')
-            ->withNoArgs()
-            ->andReturn('C');
-
         return [
             [
-                new ArrayCollection([$irhpPermitApplicationA, $irhpPermitApplicationB, $irhpPermitApplicationB, $irhpPermitApplicationC]),
-                new ArrayCollection([$irhpPermitApplicationA, $irhpPermitApplicationB, $irhpPermitApplicationB, $irhpPermitApplicationC])
+                ['A', 'B', 'B', 'C'],
+                ['A', 'B', 'B', 'C'],
             ],
             [
-                new ArrayCollection([$irhpPermitApplicationC, $irhpPermitApplicationB, $irhpPermitApplicationB, $irhpPermitApplicationA]),
-                new ArrayCollection([$irhpPermitApplicationA, $irhpPermitApplicationB, $irhpPermitApplicationB, $irhpPermitApplicationC])
+                ['C', 'B', 'B', 'A'],
+                ['A', 'B', 'B', 'C'],
             ],
         ];
     }
@@ -6406,47 +6414,36 @@ final class IrhpApplicationEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetIrhpPermitApplicationByStockCountryId')]
-    public function testGetIrhpPermitApplicationByStockCountryId(mixed $irhpPermitApplications, mixed $countryId, mixed $expected): void
+    /**
+     * @param string|null $expectedCountryId stock country id of the permit application expected back, or null for none
+     */
+    public function testGetIrhpPermitApplicationByStockCountryId(mixed $countryId, ?string $expectedCountryId): void
     {
+        $irhpPermitApplicationsByCountryId = [];
+        foreach (['FR', 'DE', 'CH'] as $stockCountryId) {
+            $irhpPermitApplication = m::mock(IrhpPermitApplication::class);
+            $irhpPermitApplication->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getCountry->getId')
+                ->withNoArgs()
+                ->andReturn($stockCountryId);
+            $irhpPermitApplicationsByCountryId[$stockCountryId] = $irhpPermitApplication;
+        }
+
         $entity = $this->createNewEntity();
-        $entity->setIrhpPermitApplications($irhpPermitApplications);
+        $entity->setIrhpPermitApplications(new ArrayCollection(array_values($irhpPermitApplicationsByCountryId)));
 
         $this->assertSame(
-            $expected,
+            $expectedCountryId === null ? null : $irhpPermitApplicationsByCountryId[$expectedCountryId],
             $entity->getIrhpPermitApplicationByStockCountryId($countryId)
         );
     }
 
     public static function dpGetIrhpPermitApplicationByStockCountryId(): array
     {
-        $irhpPermitApplication1 = m::mock(IrhpPermitApplication::class);
-        $irhpPermitApplication1->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getCountry->getId')
-            ->withNoArgs()
-            ->andReturn('FR');
-
-        $irhpPermitApplication2 = m::mock(IrhpPermitApplication::class);
-        $irhpPermitApplication2->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getCountry->getId')
-            ->withNoArgs()
-            ->andReturn('DE');
-
-        $irhpPermitApplication3 = m::mock(IrhpPermitApplication::class);
-        $irhpPermitApplication3->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getCountry->getId')
-            ->withNoArgs()
-            ->andReturn('CH');
-
-        $irhpPermitApplications = new ArrayCollection(
-            [
-                $irhpPermitApplication1,
-                $irhpPermitApplication2,
-                $irhpPermitApplication3
-            ]
-        );
-
         return [
-            [$irhpPermitApplications, 'FR', $irhpPermitApplication1],
-            [$irhpPermitApplications, 'DE', $irhpPermitApplication2],
-            [$irhpPermitApplications, 'CH', $irhpPermitApplication3],
-            [$irhpPermitApplications, 'NO', null],
+            ['FR', 'FR'],
+            ['DE', 'DE'],
+            ['CH', 'CH'],
+            ['NO', null],
         ];
     }
 
@@ -6571,10 +6568,12 @@ final class IrhpApplicationEntityTest extends EntityTester
     public function testIsUnderConsiderationOrAwaitingFeeAndAssociatedWithStock(
         mixed $isUnderConsideration,
         mixed $isAwaitingFee,
-        mixed $irhpApplicationStock,
-        mixed $paramStock,
+        bool $paramStockIsAssociatedStock,
         mixed $expected
     ): void {
+        $irhpApplicationStock = m::mock(IrhpPermitStock::class);
+        $paramStock = $paramStockIsAssociatedStock ? $irhpApplicationStock : m::mock(IrhpPermitStock::class);
+
         $this->sut->shouldReceive('isUnderConsideration')
             ->withNoArgs()
             ->andReturn($isUnderConsideration);
@@ -6595,14 +6594,12 @@ final class IrhpApplicationEntityTest extends EntityTester
 
     public static function dpIsUnderConsiderationOrAwaitingFeeAndAssociatedWithStock(): \Iterator
     {
-        $irhpPermitStock1 = m::mock(IrhpPermitStock::class);
-        $irhpPermitStock2 = m::mock(IrhpPermitStock::class);
-        yield [false, false, $irhpPermitStock1, $irhpPermitStock2, false];
-        yield [true, false, $irhpPermitStock1, $irhpPermitStock2, false];
-        yield [false, true, $irhpPermitStock1, $irhpPermitStock2, false];
-        yield [false, false, $irhpPermitStock1, $irhpPermitStock1, false];
-        yield [true, false, $irhpPermitStock1, $irhpPermitStock1, true];
-        yield [false, true, $irhpPermitStock1, $irhpPermitStock1, true];
+        yield [false, false, false, false];
+        yield [true, false, false, false];
+        yield [false, true, false, false];
+        yield [false, false, true, false];
+        yield [true, false, true, true];
+        yield [false, true, true, true];
     }
 
     public function testUpdateCorCertificateNumber(): void

@@ -181,7 +181,8 @@ trait VariationControllerTrait
             $statusIndex = lcfirst($filter->underscoreToCamel($section)) . 'Status';
 
             $class = '';
-            switch ($variationStatuses[$statusIndex]) {
+            // Some sections (e.g. financial_evidence_assessment) have no completion column.
+            switch ($variationStatuses[$statusIndex] ?? null) {
                 case RefData::VARIATION_STATUS_UPDATED:
                     $class = 'edited';
                     break;

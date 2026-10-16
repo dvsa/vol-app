@@ -9,12 +9,11 @@
 namespace Dvsa\Olcs\Api\Domain\Query\Permits;
 
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 class DeviationData extends AbstractQuery
 {
-    /**
-     * @Transfer\ArrayInput
-     */
+    #[Transfer\ArrayInput]
     protected $sourceValues;
 
     /**

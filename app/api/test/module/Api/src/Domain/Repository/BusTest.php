@@ -2,449 +2,243 @@
 
 declare(strict_types=1);
 
-/**
- * Bus test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Result;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\DBAL\LockMode;
-use Dvsa\Olcs\Api\Entity\Bus\BusReg;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
+use Dvsa\Olcs\Api\Domain\Query\Bus\ByLicenceRoute;
+use Dvsa\Olcs\Api\Domain\Query\Bus\PreviousVariationByRouteNo;
+use Dvsa\Olcs\Api\Domain\Repository\Bus as Repo;
+use Dvsa\Olcs\Api\Domain\Repository\Query\Bus\Expire as ExpireQuery;
+use Dvsa\Olcs\Api\Entity\Bus\BusReg as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\Bus as BusRepo;
-use Doctrine\ORM\EntityRepository;
-use Dvsa\Olcs\Api\Domain\Query\Bus\PreviousVariationByRouteNo;
-use Dvsa\Olcs\Api\Domain\Query\Bus\ByLicenceRoute;
-use Dvsa\Olcs\Api\Domain\Repository\Query\Bus\Expire as ExpireQuery;
-use Hamcrest\Text\MatchesPattern;
 
-/**
- * Bus test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 final class BusTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
+    private const string REFDATA_SELECT = 'm, w0, w1, w2, w3, w4';
+
+    private const string REFDATA_JOINS = ' LEFT JOIN m.status w0 LEFT JOIN m.revertStatus w1'
+        . ' LEFT JOIN m.subsidised w2 LEFT JOIN m.withdrawnReason w3'
+        . ' LEFT JOIN m.variationReasons w4';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(BusRepo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testFetchUsingId(): void
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
+        $result = m::mock(Entity::class);
 
-        $busRegId = 15;
-        $version = 1;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([$result]);
+        $this->em->expects('lock')->with($result, LockMode::OPTIMISTIC, 1);
 
-        $command = $this->getCommandWithId($busRegId);
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getId')->andReturn(15);
 
-        /** @var QueryBuilder $qb */
-        $qb = $this->getMockFetchByIdQueryBuilder(null);
+        $this->assertSame($result, $this->sut->fetchUsingId($query, Query::HYDRATE_OBJECT, 1));
 
-        $this->getFetchByIdQueryBuilder($qb, $busRegId);
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(BusReg::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, $version);
+        $this->assertSame(
+            'SELECT ' . self::REFDATA_SELECT . ', w5, w6, w7, w8, w9, w10'
+            . self::FROM . self::REFDATA_JOINS
+            // withRefdata() already joined subsidised; with('subsidised') joins it again as w9.
+            . ' LEFT JOIN m.busNoticePeriod w5 LEFT JOIN m.busServiceTypes w6'
+            . ' LEFT JOIN m.trafficAreas w7 LEFT JOIN m.localAuthoritys w8'
+            . ' LEFT JOIN m.subsidised w9 LEFT JOIN m.otherServices w10'
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(15, $qb->getParameter('byId')->getValue());
     }
 
-    public function testFetchUsingIdWithResults(): void
+    public function testFetchUsingIdNotFound(): void
     {
-        $busRegId = 15;
-        $version = 1;
+        $this->createRealQb()->stubbedQuery()->expects('getResult')->andReturn([]);
 
-        $command = $this->getCommandWithId($busRegId);
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getId')->andReturn(15);
 
-        $result = m::mock(BusReg::class);
-        $results = [$result];
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('Resource not found');
 
-        /** @var QueryBuilder $qb */
-        $qb = $this->getMockFetchByIdQueryBuilder($results);
-
-        $this->getFetchByIdQueryBuilder($qb, $busRegId);
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(BusReg::class)
-            ->andReturn($repo)
-            ->shouldReceive('lock')
-            ->with($result, LockMode::OPTIMISTIC, $version);
-
-        $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, $version);
+        $this->sut->fetchUsingId($query);
     }
 
     /**
-     * @param $qb
-     * @return m\MockInterface
+     * An array-hydrated read is never locked: there is no entity to attach the version to.
      */
-    public function getMockRepo(mixed $qb): mixed
+    public function testFetchUsingIdDoesNotLockAnArrayResult(): void
     {
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->andReturn($qb);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn([['id' => 15]]);
+        $this->em->shouldReceive('lock')->never();
 
-        return $repo;
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getId')->andReturn(15);
+
+        $this->assertSame(['id' => 15], $this->sut->fetchUsingId($query, Query::HYDRATE_ARRAY, 1));
     }
 
     /**
-     * @return m\MockInterface
+     * The inbox rows are restricted in the join condition rather than the WHERE: a LEFT JOIN
+     * filtered in the WHERE would drop registrations that have no inbox row at all.
      */
-    public function getMockFetchByIdQueryBuilder(mixed $results): mixed
-    {
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($results);
+    #[\PHPUnit\Framework\Attributes\DataProvider('txcInboxProvider')]
+    public function testFetchWithTxcInboxList(
+        string $method,
+        mixed $owner,
+        string $expectedJoinCondition,
+        ?string $expectedParameter,
+    ): void {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULT']);
 
-        return $qb;
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getId')->andReturn(15);
+
+        $this->assertSame('RESULT', $this->sut->{$method}($query, $owner));
+
+        $this->assertSame(
+            'SELECT ' . self::REFDATA_SELECT . ', t' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.txcInboxs t WITH ' . $expectedJoinCondition
+            . ' WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
+
+        if ($expectedParameter !== null) {
+            $this->assertSame($owner, $qb->getParameter($expectedParameter)->getValue());
+        }
+    }
+
+    public static function txcInboxProvider(): \Iterator
+    {
+        // An operator only sees its own rows, which are the ones with no local authority.
+        yield 'an organisation' => [
+            'fetchWithTxcInboxListForOrganisation',
+            7,
+            't.localAuthority IS NULL AND t.organisation = :organisation',
+            'organisation',
+        ];
+        yield 'a local authority' => [
+            'fetchWithTxcInboxListForLocalAuthority',
+            3,
+            't.localAuthority = :localAuthority',
+            'localAuthority',
+        ];
+        // No local authority falls back to the same unowned rows an operator sees.
+        yield 'no local authority' => [
+            'fetchWithTxcInboxListForLocalAuthority',
+            null,
+            't.localAuthority IS NULL',
+            null,
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('txcInboxMethodProvider')]
+    public function testFetchWithTxcInboxListNotFound(string $method): void
+    {
+        $this->createRealQb()->stubbedQuery()->expects('getResult')->andReturn([]);
+
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getId')->andReturn(15);
+
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('Resource not found');
+
+        $this->sut->{$method}($query, 7);
+    }
+
+    public static function txcInboxMethodProvider(): \Iterator
+    {
+        yield 'an organisation' => ['fetchWithTxcInboxListForOrganisation'];
+        yield 'a local authority' => ['fetchWithTxcInboxListForLocalAuthority'];
     }
 
     /**
-     * @param int $busRegId
-     * @return m\MockInterface
+     * The filters are keyed off what the query class can answer, so each query type produces a
+     * different WHERE from the same method.
      */
-    public function getCommandWithId(mixed $busRegId): mixed
-    {
-        $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getId')
-            ->andReturn($busRegId);
+    #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
+    public function testApplyListFilters(
+        string $queryClass,
+        array $stubs,
+        string $expectedWhere,
+        array $expectedParameters,
+    ): void {
+        $qb = $this->createRealQb();
 
-        return $command;
+        $query = m::mock($queryClass);
+
+        foreach ($stubs as $method => $value) {
+            $query->shouldReceive($method)->andReturn($value);
+        }
+
+        $this->sut->applyListFilters($qb, $query);
+
+        $this->assertSame('SELECT m' . self::FROM . ' WHERE ' . $expectedWhere, $qb->getDQL());
+
+        foreach ($expectedParameters as $name => $expected) {
+            $this->assertSame($expected, $qb->getParameter($name)->getValue(), sprintf('parameter %s', $name));
+        }
     }
 
-    /**
-     * @param $qb
-     * @param int $busRegId
-     */
-    public function getFetchByIdQueryBuilder(mixed $qb, mixed $busRegId): void
+    public static function listFilterProvider(): \Iterator
     {
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('busNoticePeriod')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('busServiceTypes')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('trafficAreas')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('localAuthoritys')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('subsidised')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('otherServices')
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with($busRegId);
+        yield 'the previous variation on a route' => [
+            PreviousVariationByRouteNo::class,
+            ['getRouteNo' => 22, 'getVariationNo' => 11, 'getLicenceId' => 33],
+            'm.routeNo = :byRouteNo AND m.variationNo < :byVariationNo AND m.licence = :byLicence',
+            ['byRouteNo' => 22, 'byVariationNo' => 11, 'byLicence' => 33],
+        ];
+        yield 'a route on a licence, in given statuses' => [
+            ByLicenceRoute::class,
+            ['getRouteNo' => 22, 'getLicenceId' => 11, 'getBusRegStatus' => ['status', 'status2']],
+            'm.routeNo = :byRouteNo AND m.licence = :byLicence AND m.status IN(:byStatus)',
+            ['byRouteNo' => 22, 'byLicence' => 11, 'byStatus' => ['status', 'status2']],
+        ];
+        // An empty status list means every status, not none.
+        yield 'a route on a licence, any status' => [
+            ByLicenceRoute::class,
+            ['getRouteNo' => 22, 'getLicenceId' => 11, 'getBusRegStatus' => []],
+            'm.routeNo = :byRouteNo AND m.licence = :byLicence',
+            ['byRouteNo' => 22, 'byLicence' => 11],
+        ];
+        // A query that declares neither only filters on the route number.
+        yield 'a query with no variation or licence' => [
+            QueryInterface::class,
+            ['getRouteNo' => 22],
+            'm.routeNo = :byRouteNo',
+            ['byRouteNo' => 22],
+        ];
     }
 
-    public function testApplyListFiltersPrevVariation(): void
-    {
-        $sut = m::mock(BusRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $variationNo = 11;
-        $routeNo = 22;
-        $licenceId = 33;
-
-        $mockQuery = m::mock(PreviousVariationByRouteNo::class);
-        $mockQuery->shouldReceive('getRouteNo')->andReturn($routeNo)->once();
-        $mockQuery->shouldReceive('getVariationNo') ->andReturn($variationNo)->once();
-        $mockQuery->shouldReceive('getLicenceId')->andReturn($licenceId)->once();
-        $mockQuery->shouldReceive('getBusRegStatus')->never();
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->lt')->with('m.variationNo', ':byVariationNo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byVariationNo', $variationNo)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.routeNo', ':byRouteNo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byRouteNo', $routeNo)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':byLicence')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byLicence', $licenceId)->once()->andReturnSelf();
-
-        $sut->applyListFilters($mockQb, $mockQuery);
-    }
-
-    public function testApplyListFiltersLicenceRoute(): void
-    {
-        $sut = m::mock(BusRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $licenceId = 11;
-        $routeNo = 22;
-        $busStatus = ['status', 'status2'];
-
-        $mockQuery = m::mock(ByLicenceRoute::class);
-        $mockQuery->shouldReceive('getRouteNo')->andReturn($routeNo)->once();
-        $mockQuery->shouldReceive('getLicenceId')->andReturn($licenceId)->once();
-        $mockQuery->shouldReceive('getBusRegStatus')->andReturn($busStatus)->twice();
-        $mockQuery->shouldReceive('getVariationNo')->never();
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':byLicence')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byLicence', $licenceId)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.routeNo', ':byRouteNo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byRouteNo', $routeNo)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->in')->with('m.status', ':byStatus')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byStatus', $busStatus)->once()->andReturnSelf();
-
-        $sut->applyListFilters($mockQb, $mockQuery);
-    }
-
-    public function testApplyListFiltersLicenceRouteWithEmptyBusRegStatus(): void
-    {
-        $sut = m::mock(BusRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $licenceId = 11;
-        $routeNo = 22;
-        $busStatus = [];
-
-        $mockQuery = m::mock(ByLicenceRoute::class);
-        $mockQuery->shouldReceive('getRouteNo')->andReturn($routeNo)->once();
-        $mockQuery->shouldReceive('getLicenceId')->andReturn($licenceId)->once();
-        $mockQuery->shouldReceive('getBusRegStatus')->andReturn($busStatus)->once();
-        $mockQuery->shouldReceive('getVariationNo')->never();
-
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':byLicence')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byLicence', $licenceId)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.routeNo', ':byRouteNo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('byRouteNo', $routeNo)->once()->andReturnSelf();
-
-        $sut->applyListFilters($mockQb, $mockQuery);
-    }
-
-    /**
-     * Tests applyListJoins
-     */
     public function testApplyListJoins(): void
     {
-        // mock SUT to allow testing the protected method
-        $sut = m::mock(BusRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(QueryBuilder::class);
+        $this->sut->applyListJoins($qb);
 
-        $mockQb->shouldReceive('modifyQuery')->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('busNoticePeriod')->once()->andReturnSelf();
-        $mockQb->shouldReceive('with')->with('status')->once()->andReturnSelf();
-        $sut->shouldReceive('getQueryBuilder')->with()->andReturn($mockQb);
-
-        $sut->applyListJoins($mockQb);
+        $this->assertSame(
+            'SELECT m, w0, w1' . self::FROM
+            . ' LEFT JOIN m.busNoticePeriod w0 LEFT JOIN m.status w1',
+            $qb->getDQL(),
+        );
     }
 
-    /**
-     * Test fetchWithTxcInboxListForOrganisation
-     */
-    public function testFetchWithTxcInboxListForOrganisation(): void
+    public function testExpireRegistrations(): void
     {
-        $busRegId = 15;
+        $result = m::mock(Result::class);
+        $result->expects('rowCount')->withNoArgs()->andReturn(555);
 
-        $query = m::mock(QueryInterface::class);
-        $query->shouldReceive('getId')
-            ->andReturn($busRegId);
+        $this->expectQueryWithData(ExpireQuery::class, [], [], $result);
 
-        $results = 'results';
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($results);
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($qb);
-        $this->em->shouldReceive('getRepository')
-            ->with(BusReg::class)
-            ->andReturn($repo);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->with($busRegId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once();
-
-        $qb->shouldReceive('addSelect');
-        $qb->shouldReceive('leftJoin')
-        ->with(
-            m::type('string'),
-            m::type('string'),
-            'WITH',
-            MatchesPattern::matchesPattern('/localAuthority IS NULL AND t.organisation =/')
-        )->andReturnSelf()
-         ->shouldReceive('setParameter')->with('organisation', 1);
-
-        $this->sut->fetchWithTxcInboxListForOrganisation($query, Query::HYDRATE_OBJECT);
-    }
-
-    /**
-     * Test fetchWithTxcInboxListForLocalAuthority where LA exists
-     */
-    public function testFetchWithTxcInboxListForLocalAuthority(): void
-    {
-        $busRegId = 15;
-
-        $query = m::mock(QueryInterface::class);
-        $query->shouldReceive('getId')
-            ->andReturn($busRegId);
-
-        $results = 'results';
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($results);
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($qb);
-        $this->em->shouldReceive('getRepository')
-            ->with(BusReg::class)
-            ->andReturn($repo);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->with($busRegId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once();
-
-        $qb->shouldReceive('addSelect');
-        $qb->shouldReceive('expr')->andReturnSelf()->shouldReceive('eq')->andReturn('t.localAuthority = 1');
-        $qb->shouldReceive('leftJoin')
-            ->with(
-                m::type('string'),
-                m::type('string'),
-                'WITH',
-                MatchesPattern::matchesPattern('/localAuthority = 1/')
-            )
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')->with('localAuthority', 1);
-
-        $this->sut->fetchWithTxcInboxListForLocalAuthority($query, 1, Query::HYDRATE_OBJECT);
-    }
-
-    /**
-     * Test fetchWithTxcInboxListForLocalAuthority where empty LA
-     */
-    public function testFetchWithTxcInboxListForEmptyLocalAuthority(): void
-    {
-        $busRegId = 15;
-
-        $query = m::mock(QueryInterface::class);
-        $query->shouldReceive('getId')
-            ->andReturn($busRegId);
-
-        $results = 'results';
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn($results);
-
-        /** @var EntityRepository $repo */
-        $repo = $this->getMockRepo($qb);
-        $this->em->shouldReceive('getRepository')
-            ->with(BusReg::class)
-            ->andReturn($repo);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->with($busRegId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once();
-
-        $qb->shouldReceive('addSelect');
-        $qb->shouldReceive('expr')->andReturnSelf()->shouldReceive('isNull')->andReturn('t.localAuthority IS NULL');
-        $qb->shouldReceive('leftJoin')
-            ->with(
-                m::type('string'),
-                m::type('string'),
-                'WITH',
-                MatchesPattern::matchesPattern('/localAuthority IS NULL/')
-            )
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')->with('localAuthority', 1);
-
-        $this->sut->fetchWithTxcInboxListForLocalAuthority($query, null, Query::HYDRATE_OBJECT);
-    }
-
-    /**
-     * data provider for testLatestUsingRegNo
-     *
-     * @return array
-     */
-    public function dpLatestUsingRegNoProvider(): array
-    {
-        $withResult = [
-            0 => m::mock(BusReg::class)
-        ];
-
-        return [
-            [$withResult, $withResult[0]],
-            [[], []]
-        ];
-    }
-
-    public function testExpireBusRegistrations(): void
-    {
-        $rowCount = 555;
-        $mockResult = m::mock(Result::class);
-        $mockResult->expects('rowCount')->withNoArgs()->andReturn($rowCount);
-
-        $this->expectQueryWithData(ExpireQuery::class, [], [], $mockResult);
-        $this->assertEquals($rowCount, $this->sut->expireRegistrations());
+        $this->assertSame(555, $this->sut->expireRegistrations());
     }
 }

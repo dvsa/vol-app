@@ -45,12 +45,15 @@ class VolGrabReplacementService
     /**
      * Replace VOL grabs in EditorJS JSON content
      *
-     * @param string $editorJsJson EditorJS JSON content as string
-     * @param array  $context      Entity context (licence, application, user, etc.)
+     * @param string $editorJsJson    EditorJS JSON content as string
+     * @param array  $context         Entity context (licence, application, user, etc.)
+     * @param bool   $stripUnresolved Drop tokens that could not be resolved. Pass false when the
+     *                                content will be rendered again later, so a later pass gets
+     *                                another go at them.
      *
      * @return string Updated EditorJS JSON content with placeholders replaced
      */
-    public function replaceGrabs(string $editorJsJson, array $context): string
+    public function replaceGrabs(string $editorJsJson, array $context, bool $stripUnresolved = true): string
     {
         if (empty($editorJsJson)) {
             return $editorJsJson;
@@ -76,14 +79,56 @@ class VolGrabReplacementService
             // Step 4: Render bookmarks to get values
             $populatedData = $this->renderBookmarks($bookmarks, $queryResults);
 
+            $this->recordOutcomes($context, $tokens, $bookmarks, $populatedData);
+
             // Step 5: Replace in JSON, then strip anything that couldn't be resolved
             // (unknown bookmark, or a dynamic bookmark whose query produced nothing)
             // so literal [[TOKEN]] text never reaches a letter sent to an operator.
-            return $this->stripUnresolvedTokens($parser->replace($editorJsJson, $populatedData));
+            $replaced = $parser->replace($editorJsJson, $populatedData);
+
+            return $stripUnresolved ? $this->stripUnresolvedTokens($replaced) : $replaced;
         } catch (\Exception $e) {
             // Log error but return original content to avoid breaking letters
             Logger::err('VOL Grab replacement failed: ' . $e->getMessage());
             return $editorJsJson;
+        }
+    }
+
+    /**
+     * Tell the collector, when the caller sent one, what became of each token. Anything that is
+     * about to be stripped -- an unknown bookmark, or one whose render came back blank -- would
+     * otherwise vanish without trace, leaving the preview looking cleaner than the real letter.
+     *
+     * @param array<string, mixed> $populatedData rendered values keyed by token
+     */
+    private function recordOutcomes(array $context, array $tokens, array $bookmarks, array $populatedData): void
+    {
+        $collector = $context[GrabOutcomeCollector::CONTEXT_KEY] ?? null;
+
+        if (!$collector instanceof GrabOutcomeCollector) {
+            return;
+        }
+
+        foreach ($tokens as $token) {
+            if (!isset($bookmarks[$token])) {
+                $collector->record($token, GrabOutcomeCollector::UNKNOWN);
+                continue;
+            }
+
+            $value = $populatedData[$token] ?? null;
+
+            // EditorJS renders produce ['content' => ..., 'preformatted' => ...] structures;
+            // the emptiness check must look at the content, not the wrapper
+            if (is_array($value)) {
+                $value = $value['content'] ?? null;
+            }
+
+            $collector->record(
+                $token,
+                ($value === null || trim((string) $value) === '')
+                    ? GrabOutcomeCollector::EMPTY
+                    : GrabOutcomeCollector::RESOLVED
+            );
         }
     }
 
@@ -212,7 +257,8 @@ class VolGrabReplacementService
 
                 if ($result !== null) {
                     if ($forHtml) {
-                        $populated[$token] = nl2br($result, false);
+                        // spliced straight into HTML, after the purifier, so escape it here
+                        $populated[$token] = nl2br(htmlspecialchars((string) $result, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), false);
                     } else {
                         // EditorJS: Return structured data for parser
                         $populated[$token] = [

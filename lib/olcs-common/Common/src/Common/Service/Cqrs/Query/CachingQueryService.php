@@ -240,6 +240,9 @@ class CachingQueryService implements QueryServiceInterface, \Psr\Log\LoggerAware
     private function handlePersistentCache(QueryContainerInterface $query)
     {
         $cacheIdentifier = $query->getCacheIdentifier();
+        $persistentCacheIdentifier =
+            CacheEncryptionService::CQRS_CACHE_PREFIX . $cacheIdentifier;
+
         $dtoClassName = $query->getDtoClassName();
 
         //check the local cache first
@@ -254,7 +257,10 @@ class CachingQueryService implements QueryServiceInterface, \Psr\Log\LoggerAware
          * see if the cache has the item
          * additionally checks if the information is available to the node where the cache is running
          */
-        $success = $this->cacheService->hasItem($cacheIdentifier, $encryptionMode);
+        $success = $this->cacheService->hasItem(
+            $persistentCacheIdentifier,
+            $encryptionMode
+        );
 
         if (!$success) {
             $result = $this->queryService->send($query);
@@ -271,11 +277,19 @@ class CachingQueryService implements QueryServiceInterface, \Psr\Log\LoggerAware
 
                 $this->logMessage(sprintf(self::CACHE_PERSISTENT_SAVE_MSG, $ttl, $dtoClassName));
 
-                $this->cacheService->setItem($cacheIdentifier, $encryptionMode, $result, $ttl);
+                $this->cacheService->setItem(
+                    $persistentCacheIdentifier,
+                    $encryptionMode,
+                    $result,
+                    $ttl
+                );
             }
         } else {
             $this->logMessage(sprintf(self::CACHE_PERSISTENT_RETRIEVE_MSG, $dtoClassName));
-            $result = $this->cacheService->getItem($cacheIdentifier, $encryptionMode);
+            $result = $this->cacheService->getItem(
+                $persistentCacheIdentifier,
+                $encryptionMode
+            );
 
             //add the result to the local cache to avoid future trips on the same request
             $this->storeLocalCache($cacheIdentifier, $dtoClassName, $result);

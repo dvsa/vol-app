@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Witnesses
  *
@@ -12,9 +14,9 @@ trait Witnesses
 {
     /**
      * @var int
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
     protected $witnesses;
 
     /**

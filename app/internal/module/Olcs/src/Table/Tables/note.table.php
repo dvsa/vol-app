@@ -55,26 +55,26 @@ return [
                  * @see https://jira.i-env.net/browse/OLCS-10256
                  */
 
+                $description = \Common\Util\Escape::html($data['noteType']['description']);
+
                 switch ($data['noteType']['id']) {
                     case 'note_t_lic':
                     case 'note_t_tm':
                     case 'note_t_org':
-                        return $data['noteType']['description'];
+                        return $description;
                     case 'note_t_permit':
-                        $desc = $data['noteType']['description'];
-
                         if (isset($data['irhpApplication']['id'])) {
-                            $desc .= ' ' . $data['irhpApplication']['id'];
+                            $description .= ' ' . \Common\Util\Escape::html($data['irhpApplication']['id']);
                         }
 
-                        return $desc;
+                        return $description;
                     case 'note_t_app':
-                        return $data['noteType']['description'] . ' ' . $data['application']['id'];
+                        return $description . ' ' . \Common\Util\Escape::html($data['application']['id']);
                     case 'note_t_case':
-                        return $data['noteType']['description'] . ' ' . $data['case']['id'];
+                        return $description . ' ' . \Common\Util\Escape::html($data['case']['id']);
                 }
 
-                return 'BR ' . $data['busReg']['regNo'];
+                return 'BR ' . \Common\Util\Escape::html($data['busReg']['regNo']);
             }
         ],
         [

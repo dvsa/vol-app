@@ -20,6 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Email\Domain\Command\ProcessInspectionRequestEmail as Cmd;
 use Olcs\Logging\Log\Logger;
 use Olcs\Logging\Test\RecordingLogger;
+use Psr\Log\NullLogger;
 
 /**
  * Process Inspection Request Email Test
@@ -46,6 +47,17 @@ final class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTest
 
         $this->logRecorder = new RecordingLogger();
         Logger::setLogger($this->logRecorder);
+    }
+
+    /**
+     * Restores the static Logger facade. Without this, the mock this test installs stays
+     * installed for whatever test runs next, which then fails on log calls it never made.
+     */
+    protected function tearDown(): void
+    {
+        Logger::setLogger(new NullLogger());
+
+        parent::tearDown();
     }
 
     public function testHandleCommand(): void

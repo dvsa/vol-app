@@ -59,7 +59,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Registered office details
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails|null
      */
     #[ORM\JoinColumn(name: 'contact_details_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Separate contact details for IRFO info.
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails|null
      */
     #[ORM\JoinColumn(name: 'irfo_contact_details_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY', cascade: ['persist'])]
@@ -86,7 +86,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * ISO country code of organisations nationality for International Road Freight.
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country|null
      */
     #[ORM\JoinColumn(name: 'irfo_nationality', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, fetch: 'LAZY')]
@@ -95,7 +95,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * For multi licence organisations the lead traffic area.  The one that will deal with the organisation.
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea|null
      */
     #[ORM\JoinColumn(name: 'lead_tc_area_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
@@ -104,7 +104,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Cpid
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'cpid', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -113,7 +113,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -123,7 +123,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -133,7 +133,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Registered company number if applicable
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'company_or_llp_no', length: 20, nullable: true)]
     protected $companyOrLlpNo;
@@ -141,7 +141,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Organisatin name.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'name', length: 160, nullable: true)]
     protected $name;
@@ -197,7 +197,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Nature of business
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'nature_of_business', length: 255, nullable: true)]
     protected $natureOfBusiness;
@@ -213,7 +213,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Is messaging file upload enabled
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'is_messaging_file_upload_enabled', nullable: true, options: ['default' => 1])]
     protected $isMessagingFileUploadEnabled = 1;
@@ -230,7 +230,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Disqualifications
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Organisation\Disqualification>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Disqualification::class, mappedBy: 'organisation')]
     protected $disqualifications;
@@ -238,7 +238,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * IrfoPartners
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner::class, mappedBy: 'organisation', cascade: ['persist'])]
     protected $irfoPartners;
@@ -246,7 +246,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Licences
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\Licence>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, mappedBy: 'organisation')]
     protected $licences;
@@ -254,7 +254,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * OrganisationPersons
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson::class, mappedBy: 'organisation')]
     protected $organisationPersons;
@@ -262,7 +262,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * ReadAudits
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Organisation\OrganisationReadAudit>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\OrganisationReadAudit::class, mappedBy: 'organisation')]
     protected $readAudits;
@@ -270,7 +270,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * OrganisationUsers
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser::class, mappedBy: 'organisation')]
     protected $organisationUsers;
@@ -278,7 +278,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * TradingNames
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Organisation\TradingName>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\TradingName::class, mappedBy: 'organisation')]
     protected $tradingNames;

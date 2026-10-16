@@ -61,7 +61,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Exception name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'exception_name', length: 45, nullable: true)]
     protected $exceptionName;
@@ -77,7 +77,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Published timestamp
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'published_timestamp', nullable: true)]
     protected $publishedTimestamp;
@@ -93,7 +93,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;

@@ -5,204 +5,96 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use DateTime;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitStock;
+use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitStock as Repo;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Country;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit as IrhpPermitEntity;
-use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock as IrhpPermitStockEntity;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock as Entity;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType as IrhpPermitTypeEntity;
-use Mockery as m;
 
-/**
- * IRHP Permit Stock test
- *
- * @author Jason de Jonge <jason.de-jonge@capgemini.co.uk>
- */
 final class IrhpPermitStockTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' ips';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(IrhpPermitStock::class);
+        $this->setUpRealSut(Repo::class);
     }
 
-    public function testFetchReadyToPrint(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('readyToPrintProvider')]
+    public function testFetchReadyToPrint(?int $countryId, string $expectedExtra): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchReadyToPrint(IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT));
-
-        $expectedQuery = 'BLAH '
-            . 'SELECT ips DISTINCT '
-            . 'INNER JOIN ips.irhpPermitRanges ipr '
-            . 'INNER JOIN ipr.irhpPermits ip '
-            . 'AND ip.status IN [[['
-                . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
-                . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]] '
-            . 'AND ips.irhpPermitType = [[' . IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT . ']] '
-            . 'ORDER BY ips.validFrom DESC';
-
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchReadyToPrintBilateral(): void
-    {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(
+        $this->assertSame(
             ['RESULTS'],
-            $this->sut->fetchReadyToPrint(IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL, 'DE')
+            $this->sut->fetchReadyToPrint(IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL, $countryId),
         );
 
-        $expectedQuery = 'BLAH '
-            . 'SELECT ips DISTINCT '
-            . 'INNER JOIN ips.irhpPermitRanges ipr '
-            . 'INNER JOIN ipr.irhpPermits ip '
-            . 'AND ip.status IN [[['
-                . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
-                . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
-                . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]] '
-            . 'AND ips.irhpPermitType = [[' . IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
-            . 'AND ips.country = [[DE]] '
-            . 'ORDER BY ips.validFrom DESC';
+        $this->assertSame(
+            'SELECT DISTINCT ips' . self::FROM
+            . ' INNER JOIN ips.irhpPermitRanges ipr INNER JOIN ipr.irhpPermits ip'
+            . ' WHERE ip.status IN(:statuses) AND ips.irhpPermitType = :irhpPermitTypeId'
+            . $expectedExtra
+            . ' ORDER BY ips.validFrom DESC',
+            $qb->getDQL(),
+        );
+        $this->assertSame(IrhpPermitEntity::$readyToPrintStatuses, $qb->getParameter('statuses')->getValue());
+    }
 
-        $this->assertEquals($expectedQuery, $this->query);
+    public static function readyToPrintProvider(): \Iterator
+    {
+        yield 'any country' => [null, ''];
+        yield 'one country' => [1, ' AND ips.country = :countryId'];
     }
 
     public function testFetchAll(): void
     {
-        $irhpPermitStocks = [
-            m::mock(IrhpPermitStockEntity::class),
-            m::mock(IrhpPermitStockEntity::class),
-        ];
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $queryBuilder->shouldReceive('getQuery->getResult')
-            ->andReturn($irhpPermitStocks);
+        $this->assertSame(['RESULTS'], $this->sut->fetchAll());
 
-        $this->mockCreateQueryBuilder($queryBuilder);
+        $this->assertSame('SELECT ips' . self::FROM, $qb->getDQL());
+    }
 
-        $this->assertEquals(
-            $irhpPermitStocks,
-            $this->sut->fetchAll()
+    /**
+     * Morocco additionally orders by permit category, which requires a join the other countries
+     * do not take.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('openBilateralProvider')]
+    public function testFetchOpenBilateralStocksByCountry(string $country, string $expectedExtra): void
+    {
+        $now = new DateTime('2019-01-01');
+
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('setHint')->with(Query::HINT_INCLUDE_META_COLUMNS, true)->andReturnSelf();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchOpenBilateralStocksByCountry($country, $now));
+
+        $this->assertSame(
+            'SELECT ips' . self::FROM
+            . ' INNER JOIN ips.irhpPermitType ipt INNER JOIN ips.irhpPermitWindows ipw'
+            . ' INNER JOIN ips.country c'
+            . $expectedExtra
+            . ' WHERE ips.country = :country AND ipw.startDate <= :now AND ipw.endDate > :now'
+            . ' AND ipt.id = :type'
+            . ($expectedExtra === '' ? '' : ' ORDER BY r.displayOrder ASC, ips.validTo ASC'),
+            $qb->getDQL(),
+        );
+        $this->assertSame($country, $qb->getParameter('country')->getValue());
+        $this->assertSame($now, $qb->getParameter('now')->getValue());
+        $this->assertSame(
+            IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL,
+            $qb->getParameter('type')->getValue(),
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchOpenBilateralStocksByCountryNotMorocco')]
-    public function testFetchOpenBilateralStocksByCountryNotMorocco(mixed $countryId): void
+    public static function openBilateralProvider(): \Iterator
     {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $query = m::mock(AbstractQuery::class);
-        $query->shouldReceive('setHint')
-            ->with(Query::HINT_INCLUDE_META_COLUMNS, true)
-            ->once()
-            ->ordered()
-            ->andReturnSelf()
-            ->shouldReceive('getResult')
-            ->with(Query::HYDRATE_ARRAY)
-            ->once()
-            ->ordered()
-            ->andReturn(['RESULTS']);
-
-        $qb->shouldReceive('getQuery')
-            ->withNoArgs()
-            ->andReturn($query);
-
-        $now = new DateTime();
-
-        $this->assertEquals(
-            ['RESULTS'],
-            $this->sut->fetchOpenBilateralStocksByCountry($countryId, $now)
-        );
-
-        $iso8601String = $now->format(DateTime::W3C);
-
-        $expectedQuery = 'BLAH ' .
-        'SELECT ips ' .
-        'INNER JOIN ips.irhpPermitType ipt ' .
-        'INNER JOIN ips.irhpPermitWindows ipw ' .
-        'INNER JOIN ips.country c ' .
-        "AND ips.country = [[$countryId]] " .
-        "AND ipw.startDate <= [[$iso8601String]] " .
-        "AND ipw.endDate > [[$iso8601String]] AND ipt.id = [[4]]";
-
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public static function dpFetchOpenBilateralStocksByCountryNotMorocco(): \Iterator
-    {
-        yield [Country::ID_NORWAY];
-        yield [Country::ID_BELARUS];
-        yield [Country::ID_GEORGIA];
-    }
-
-    public function testFetchOpenBilateralStocksByCountryMorocco(): void
-    {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $query = m::mock(AbstractQuery::class);
-        $query->shouldReceive('setHint')
-            ->with(Query::HINT_INCLUDE_META_COLUMNS, true)
-            ->once()
-            ->ordered()
-            ->andReturnSelf()
-            ->shouldReceive('getResult')
-            ->with(Query::HYDRATE_ARRAY)
-            ->once()
-            ->ordered()
-            ->andReturn(['RESULTS']);
-
-        $qb->shouldReceive('getQuery')
-            ->withNoArgs()
-            ->andReturn($query);
-
-        $now = new DateTime();
-
-        $this->assertEquals(
-            ['RESULTS'],
-            $this->sut->fetchOpenBilateralStocksByCountry(Country::ID_MOROCCO, $now)
-        );
-
-        $iso8601String = $now->format(DateTime::W3C);
-
-        $expectedQuery = 'BLAH ' .
-        'SELECT ips ' .
-        'INNER JOIN ips.irhpPermitType ipt ' .
-        'INNER JOIN ips.irhpPermitWindows ipw ' .
-        'INNER JOIN ips.country c ' .
-        'AND ips.country = [[MA]] ' .
-        "AND ipw.startDate <= [[$iso8601String]] " .
-        "AND ipw.endDate > [[$iso8601String]] AND ipt.id = [[4]]" .
-        " INNER JOIN ips.permitCategory r ORDER BY r.displayOrder ASC ORDER BY ips.validTo ASC";
-
-        $this->assertEquals($expectedQuery, $this->query);
+        yield 'not morocco' => ['FR', ''];
+        yield 'morocco' => [Country::ID_MOROCCO, ' INNER JOIN ips.permitCategory r'];
     }
 }

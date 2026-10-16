@@ -237,11 +237,11 @@ final class TableBuilderTest extends MockeryTestCase
     {
         $table = m::mock(TableBuilder::class)->makePartial();
 
-        $table->expects('loadConfig');
-        $table->expects('loadData');
-        $table->expects('loadParams');
-        $table->expects('setupAction');
-        $table->expects('render')->andReturn('SomeHTML');
+        $table->expects('loadConfig')->with('test');
+        $table->expects('loadData')->with([]);
+        $table->expects('loadParams')->with([]);
+        $table->expects('setupAction')->withNoArgs();
+        $table->expects('render')->withNoArgs()->andReturn('SomeHTML');
 
         $this->assertEquals('SomeHTML', $table->buildTable('test'));
     }
@@ -253,10 +253,10 @@ final class TableBuilderTest extends MockeryTestCase
     {
         $table = m::mock(TableBuilder::class)->makePartial();
 
-        $table->expects('loadConfig');
-        $table->expects('loadData');
-        $table->expects('loadParams');
-        $table->expects('setupAction');
+        $table->expects('loadConfig')->with('test');
+        $table->expects('loadData')->with([]);
+        $table->expects('loadParams')->with([]);
+        $table->expects('setupAction')->withNoArgs();
 
         $this->assertEquals($table, $table->buildTable('test', [], [], false));
     }
@@ -1014,8 +1014,8 @@ final class TableBuilderTest extends MockeryTestCase
 
         $table = m::mock(TableBuilder::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
-        $table->expects('getContentHelper')->andReturn($mockContentHelper);
-        $table->expects('shouldPaginate')->andReturnFalse();
+        $table->expects('getContentHelper')->withNoArgs()->andReturn($mockContentHelper);
+        $table->expects('shouldPaginate')->withNoArgs()->andReturnFalse();
         $table->expects('getSetting')->with('overrideTotal', false)->andReturnFalse();
         $table->expects('getSetting')->with('showTotal', false)->andReturnTrue();
 
@@ -2462,6 +2462,39 @@ final class TableBuilderTest extends MockeryTestCase
     }
 
     /**
+     * A column naming a to-many field renders an empty cell, not the word "Array"
+     *
+     * The report tables name collection fields directly — admin-cases-open-report's Outcome column
+     * is `outcomes` — and rely on a formatter to flatten them. RefData returns '' for an empty
+     * collection, which counts as no content and drops the raw array through to here. Escaping it
+     * would stringify it, and (string)[] is "Array".
+     */
+    public function testRenderBodyColumnWithNameHoldingAnArray(): void
+    {
+        $row = [
+            'outcomes' => []
+        ];
+
+        $column = [
+            'name' => 'outcomes'
+        ];
+
+        $mockContentHelper = $this->createPartialMock(ContentHelper::class, ['replaceContent']);
+
+        $mockContentHelper->expects($this->once())
+            ->method('replaceContent')
+            ->with('{{[elements/td]}}', ['content' => '', 'attrs' => ' class="' . TableBuilder::CLASS_TABLE_CELL . '"']);
+
+        $table = $this->getMockTableBuilder(['getContentHelper']);
+
+        $table
+            ->method('getContentHelper')
+            ->willReturn($mockContentHelper);
+
+        $table->renderBodyColumn($row, $column);
+    }
+
+    /**
      * Test renderBodyColumn With Align
      */
     public function testRenderBodyColumnWithAlign(): void
@@ -2559,6 +2592,77 @@ final class TableBuilderTest extends MockeryTestCase
     }
 
     /**
+     * A CSV export is assembled by a CSV writer, not by the markup pipeline.
+     *
+     * Asserts the composition rather than the quoting rules — the rules belong to league/csv and
+     * are its tests' job. What is ours is that the CSV path goes through the writer at all, and
+     * that it no longer runs the finished file back through replaceContent(): a cell containing
+     * "{{title}}" used to be silently blanked, which is data loss that no amount of per-field
+     * encoding can reach.
+     */
+    public function testRenderCsvIsWellFormedAndDoesNotRetemplateValues(): void
+    {
+        $mockContentHelper = $this->createPartialMock(ContentHelper::class, ['replaceContent']);
+
+        // The CSV element partials are bare "{{content}}" and "{{title}}", so returning the value
+        // is what they do.
+        $mockContentHelper->method('replaceContent')->willReturnCallback(
+            static fn(string $wrapper, array $replacements): string
+                => (string)($replacements['content'] ?? $replacements['title'] ?? '')
+        );
+
+        $table = $this->getMockTableBuilder(['getContentHelper']);
+        $table->method('getContentHelper')->willReturn($mockContentHelper);
+
+        $table->setContentType(TableBuilder::CONTENT_TYPE_CSV);
+        $table->setColumns([['title' => 'VRM', 'name' => 'vrm'], ['title' => 'Notes', 'name' => 'notes']]);
+        $table->setRows([
+            ['vrm' => 'AB12 CDE', 'notes' => 'comma, inside'],
+            ['vrm' => "quote \" inside", 'notes' => "newline\ninside"],
+            ['vrm' => '=cmd|\' /c calc\'!A1', 'notes' => 'formula'],
+            ['vrm' => 'has {{title}} token', 'notes' => 'not a template'],
+        ]);
+
+        $records = $this->parseCsv($table->render());
+
+        $this->assertCount(5, $records, 'One header and four rows: a comma or a newline in a value must not start a new field or record.');
+
+        foreach ($records as $record) {
+            $this->assertCount(2, $record, 'Every record has exactly the two columns declared.');
+        }
+
+        // The mock translator prefixes what it is given, which is how the header proves it went
+        // through renderHeaderColumn rather than being written out raw.
+        $this->assertSame(['_TRSLTD_VRM', '_TRSLTD_Notes'], $records[0]);
+        $this->assertSame(['AB12 CDE', 'comma, inside'], $records[1]);
+        $this->assertSame(['quote " inside', "newline\ninside"], $records[2]);
+        $this->assertSame('\'=cmd|\' /c calc\'!A1', $records[3][0], 'EscapeFormula prefixes a formula-leading value.');
+        $this->assertSame('has {{title}} token', $records[4][0], 'A value that looks like a template token survives untouched.');
+    }
+
+    /**
+     * Read a CSV back the way a spreadsheet would.
+     *
+     * @return array<int, array<int, string|null>>
+     */
+    private function parseCsv(string $csv): array
+    {
+        $handle = fopen('php://memory', 'r+');
+        fwrite($handle, $csv);
+        rewind($handle);
+
+        $records = [];
+
+        while (($record = fgetcsv($handle, 0, ',', '"', '')) !== false) {
+            $records[] = $record;
+        }
+
+        fclose($handle);
+
+        return $records;
+    }
+
+    /**
      * Test renderBodyColumn Custom Wrapper
      */
     public function testRenderBodyColumnCustomWrapper(): void
@@ -2597,8 +2701,10 @@ final class TableBuilderTest extends MockeryTestCase
 
         $mockContentHelper = m::mock(ContentHelper::class)->makePartial();
 
+        // Third argument true: a 'format' template is developer markup with row data substituted
+        // into it, so the values are escaped while the template is left raw.
         $mockContentHelper->expects('replaceContent')
-            ->with('FOO', $row)
+            ->with('FOO', $row, true)
             ->andReturn('FOOBAR');
 
         $table = $this->getMockTableBuilder(['getContentHelper']);
@@ -2677,9 +2783,6 @@ final class TableBuilderTest extends MockeryTestCase
         $table
             ->method('getContentHelper')
             ->willReturn($mockContentHelper);
-
-        $mockFormatterPluginManager = m::mock(FormatterPluginManager::class);
-        $mockFormatterPluginManager->shouldReceive('has')->andReturn(true);
 
         $this->mockFormatterPluginManager->shouldReceive('has')->with(Date::class)->andReturn(true);
         $mockDateFormatter = m::mock(Date::class)->makePartial();

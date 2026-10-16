@@ -10,6 +10,7 @@ use Common\Service\Table\TableFactory;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Permits\Data\Mapper\MapperManager;
+use Olcs\Service\GovUkAccount\CallbackReplayStore;
 
 class SignatureVerificationControllerFactory implements FactoryInterface
 {
@@ -27,6 +28,14 @@ class SignatureVerificationControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $tableBuilder = $container->get(TableFactory::class);
         $mapperManager = $container->get(MapperManager::class);
-        return new SignatureVerificationController($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+        $replayStore = $container->get(CallbackReplayStore::class);
+
+        return new SignatureVerificationController(
+            $translationHelper,
+            $formHelper,
+            $tableBuilder,
+            $mapperManager,
+            $replayStore
+        );
     }
 }

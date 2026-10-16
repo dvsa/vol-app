@@ -6,50 +6,35 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Repository;
-use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
+use Dvsa\Olcs\Api\Entity\System\SystemInfoMessage as Entity;
 use Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetListActive as Qry;
-use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\SystemInfoMessage::class)]
 final class SystemInfoMessageTest extends RepositoryTestCase
 {
-    /** @var  Repository\SystemInfoMessage */
     protected $sut;
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repository\SystemInfoMessage::class);
+        $this->setUpRealSut(Repository\SystemInfoMessage::class);
     }
 
     public function testListActive(): void
     {
-        $expect = ['RESULTS'];
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
 
-        $isInternal = true;
-        $qry = Qry::create(['isInternal' => $isInternal]);
+        $this->assertSame(['RESULTS'], $this->sut->fetchListActive(Qry::create(['isInternal' => true])));
 
-        $qb = $this->createMockQb('{QUERY}');
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_ARRAY)
-            ->once()
-            ->andReturn($expect);
-
-        $this->mockCreateQueryBuilder($qb);
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->once()->with($qb)->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->with()->andReturnSelf();
-
-        $this->assertEquals($expect, $this->sut->fetchListActive($qry));
-
-        $now = new DateTime()->format(DateTime::ATOM);
-
-        $expectedQuery = '{QUERY} ' .
-            'SELECT partial m.{id, description} ' .
-            'AND m.isInternal = [[1]] ' .
-            'AND m.startDate <= [[' . $now . ']] ' .
-            'AND m.endDate >= [[' . $now . ']]';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        // The partial select() replaces whatever withRefdata() added; SystemInfoMessage has no
+        // RefData associations, so there is nothing joined either way.
+        $this->assertSame(
+            'SELECT partial m.{id, description} FROM ' . Entity::class . ' m'
+            . ' WHERE m.isInternal = :IS_INTERNAL AND m.startDate <= :NOW AND m.endDate >= :NOW',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('IS_INTERNAL')->getValue());
+        $this->assertInstanceOf(\DateTimeInterface::class, $qb->getParameter('NOW')->getValue());
     }
 }

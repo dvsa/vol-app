@@ -13,7 +13,6 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Discs;
 use Dvsa\Olcs\Api\Domain\Repository\Query\Discs\PsvDiscsSetIsPrintingOffAndDiscNo;
 use Dvsa\Olcs\Api\Entity\Licence\PsvDisc;
 use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
-use Doctrine\DBAL\Connection;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
 /**
@@ -55,16 +54,16 @@ final class PsvDiscsSetIsPrintingOffAndDiscNoTest extends AbstractDbQueryTestCas
         $today = new DateTime();
         yield [
             ['ids' => [1,2], 'startNumber' => 1],
-            ['ids' => Connection::PARAM_INT_ARRAY, 'startNumber' => \PDO::PARAM_INT],
+            ['ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER, 'startNumber' => \Doctrine\DBAL\ParameterType::INTEGER],
             [
                 'issuedDate' => $today->format('Y-m-d H:i:s'),
                 'ids' => [1,2],
                 'startNumber' => 1
             ],
             [
-                'issuedDate' => \PDO::PARAM_STR,
-                'ids' => Connection::PARAM_INT_ARRAY,
-                'startNumber' => \PDO::PARAM_INT]
+                'issuedDate' => \Doctrine\DBAL\ParameterType::STRING,
+                'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER,
+                'startNumber' => \Doctrine\DBAL\ParameterType::INTEGER]
         ];
     }
 

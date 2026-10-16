@@ -13,7 +13,7 @@ class CompaniesHouseVsOlcsDiffsExportCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:companies-house-vs-olcs-diffs-export';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Find differences between Companies House and OLCS data and export them.')

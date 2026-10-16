@@ -1,7 +1,7 @@
 {
   "Comment": "Document Classification using a cheap Claude model on Bedrock (replaces Textract Lending Analysis). A single Lambda (classify-document) does GetObject -> base64 -> Bedrock InvokeModel -> forced-tool classification, because Bedrock requires inline base64 PDFs which exceed the Step Functions 256KB state limit. The Lambda returns the same verdict shape the old Textract JSONata produced (dominant classified type + confidence + pageBreakdown), so the DocumentProcessing-Classified event and all downstream routing are unchanged.",
   "StartAt": "FilterByCurrentYearMonth",
-  "TimeoutSeconds": 900,
+  "TimeoutSeconds": 300,
   "States": {
     "FilterByCurrentYearMonth": {
       "Type": "Choice",
@@ -167,6 +167,7 @@
     "EmitClassifiedEvent": {
       "Type": "Task",
       "Resource": "arn:aws:states:::events:putEvents",
+      "ResultPath": null,
       "Parameters": {
         "Entries": [
           {
@@ -189,6 +190,26 @@
           }
         ]
       },
+      "Next": "ClassificationSucceeded"
+    },
+    "ClassificationSucceeded": {
+      "Type": "Pass",
+      "Comment": "Returns classification result as SM output for orchestrator callers using startExecution.sync:2.",
+      "Parameters": {
+        "status": "SUCCEEDED",
+        "bucket.$": "$.bucket",
+        "key.$": "$.key",
+        "object.$": "$.object",
+        "config.$": "$.config",
+        "classification.$": "$.classification",
+        "classificationConfidence.$": "$.classificationConfidence",
+        "totalPages.$": "$.totalPages",
+        "classifiedPages.$": "$.classifiedPages",
+        "dominantTypePages.$": "$.dominantTypePages",
+        "pageBreakdown.$": "$.pageBreakdown",
+        "documentSizeBytes.$": "$.documentSizeBytes",
+        "modelId.$": "$.modelId"
+      },
       "End": true
     },
     "EmitUnsupportedEvent": {
@@ -210,6 +231,14 @@
           }
         ]
       },
+      "Next": "ClassificationSkipped"
+    },
+    "ClassificationSkipped": {
+      "Type": "Pass",
+      "Parameters": {
+        "status": "SKIPPED",
+        "reason": "Unsupported content type"
+      },
       "End": true
     },
     "EmitClassificationFailedEvent": {
@@ -229,6 +258,14 @@
             "Source": "custom.documentProcessing"
           }
         ]
+      },
+      "Next": "ClassificationFailed"
+    },
+    "ClassificationFailed": {
+      "Type": "Pass",
+      "Parameters": {
+        "status": "FAILED",
+        "reason": "Classification processing failed"
       },
       "End": true
     }

@@ -38,7 +38,14 @@ class BrowserController extends AbstractInternalController implements LeftViewPr
     ];
 
     /** Only these headers from the API stream response are passed through to the browser. */
-    private const ALLOWED_DOWNLOAD_HEADERS = ['Content-Disposition', 'Content-Encoding', 'Content-Type', 'Content-Length', 'X-Content-Type-Options'];
+    private const ALLOWED_DOWNLOAD_HEADERS = [
+        'Content-Disposition',
+        'Content-Encoding',
+        'Content-Type',
+        'Content-Length',
+        'X-Content-Type-Options',
+        'Content-Security-Policy',
+    ];
 
     public function __construct(
         TranslationHelperService $translationHelper,

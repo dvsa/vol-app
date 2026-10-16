@@ -15,11 +15,9 @@ use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/template/available-template-groups")
- */
+#[Transfer\RouteName('backend/template/available-template-groups')]
 class AvailableTemplateGroups extends AbstractQuery implements PagedQueryInterface, OrderedQueryInterface
 {
     use PagedTrait;
@@ -29,9 +27,9 @@ class AvailableTemplateGroups extends AbstractQuery implements PagedQueryInterfa
     /**
      * Filter to names that have at least one variant in the given format. Empty = no filter.
      *
-     * @Transfer\Optional
      * @var string
      */
+    #[Transfer\Optional]
     protected $format = '';
 
     public function getFormat(): string

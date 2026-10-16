@@ -27,6 +27,7 @@ services:
       # symlink can't resolve when only app/api is mounted, so bind-mount the real
       # source over the vendor path (keeps live edits working host + container).
       - ./lib/olcs-logging:/var/www/html/vendor/olcs/olcs-logging
+      - ./lib/vol-logging-mvc:/var/www/html/vendor/olcs/vol-logging-mvc
       - ./lib/olcs-utils:/var/www/html/vendor/olcs/olcs-utils
       - ./lib/olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer
     environment:
@@ -48,6 +49,7 @@ services:
       # symlink can't resolve when only app/api is mounted, so bind-mount the real
       # source over the vendor path (keeps live edits working host + container).
       - ./lib/olcs-logging:/var/www/html/vendor/olcs/olcs-logging
+      - ./lib/vol-logging-mvc:/var/www/html/vendor/olcs/vol-logging-mvc
       - ./lib/olcs-utils:/var/www/html/vendor/olcs/olcs-utils
       - ./lib/olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer
     environment:
@@ -65,6 +67,7 @@ services:
     volumes:
       - ./app/selfserve:/var/www/html
       - ./lib/olcs-logging:/var/www/html/vendor/olcs/olcs-logging
+      - ./lib/vol-logging-mvc:/var/www/html/vendor/olcs/vol-logging-mvc
       - ./lib/olcs-utils:/var/www/html/vendor/olcs/olcs-utils
       - ./lib/olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer
       - ./lib/olcs-common:/var/www/html/vendor/olcs/olcs-common
@@ -87,6 +90,7 @@ services:
     volumes:
       - ./app/internal:/var/www/html
       - ./lib/olcs-logging:/var/www/html/vendor/olcs/olcs-logging
+      - ./lib/vol-logging-mvc:/var/www/html/vendor/olcs/vol-logging-mvc
       - ./lib/olcs-utils:/var/www/html/vendor/olcs/olcs-utils
       - ./lib/olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer
       - ./lib/olcs-common:/var/www/html/vendor/olcs/olcs-common

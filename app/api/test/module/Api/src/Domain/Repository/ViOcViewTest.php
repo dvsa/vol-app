@@ -2,83 +2,58 @@
 
 declare(strict_types=1);
 
-/**
- * VI O/C view test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\ViOcView as ViOcViewRepo;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
+use Dvsa\Olcs\Api\Domain\Repository\ViOcView as Repo;
+use Dvsa\Olcs\Api\Entity\View\ViOcView as Entity;
 
-/**
- * VI O/C view test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class ViOcViewTest extends RepositoryTestCase
 {
+    private const string PROCEDURE = 'ViStoredProcedures\\ViOcComplete';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(ViOcViewRepo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testFetchDiscsToPrint(): void
+    /**
+     * The export is a scalar projection of the pre-rendered VI line plus the ids the caller needs
+     * to clear the indicators afterwards.
+     */
+    public function testFetchForExport(): void
     {
-        $mockQb = m::mock(QueryBuilder::class)
-            ->shouldReceive('select')
-            ->with('m.placeholder as line')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('addSelect')
-            ->with('m.ocId')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('getQuery')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getResult')
-                ->with(Query::HYDRATE_ARRAY)
-                ->once()
-                ->andReturn(['result'])
-                ->getMock()
-            )
-            ->getMock();
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['result']);
 
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->once()
-            ->andReturn($mockQb);
+        $this->assertSame(['result'], $this->sut->fetchForExport());
 
-        $this->assertEquals(['result'], $this->sut->fetchForExport());
+        $this->assertSame(
+            'SELECT m.placeholder as line, m.ocId FROM ' . Entity::class . ' m',
+            $qb->getDQL(),
+        );
     }
 
-    public function testClearOcViIndicators(): void
+    /** One stored-procedure call per record: the ids are not batched. */
+    public function testclearOcViIndicators(): void
     {
-        $params = [['ocId' => 1]];
+        $this->expectQueryWithData(self::PROCEDURE, ['operatingCentreId' => 1]);
 
-        $this->expectQueryWithData('ViStoredProcedures\ViOcComplete', ['operatingCentreId' => 1]);
-        $this->sut->clearOcViIndicators($params);
+        $this->sut->clearOcViIndicators([['ocId' => 1]]);
     }
 
-    public function testClearOcViIndicatorsException(): void
+    /** Any failure is reported as one message; the individual cause is not surfaced. */
+    public function testclearOcViIndicatorsException(): void
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
-
-        $params = [['ocId' => 1]];
-
         $this->dbQueryService->shouldReceive('get')
-            ->with('ViStoredProcedures\ViOcComplete')
+            ->with(self::PROCEDURE)
             ->andThrow(new RuntimeException('foo'));
 
-        $this->sut->clearOcViIndicators($params);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Error clearing VI flags for Operating Centres');
+
+        $this->sut->clearOcViIndicators([['ocId' => 1]]);
     }
 }

@@ -11,6 +11,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\RefData;
 
 /**
@@ -43,6 +44,6 @@ class ConvictionDescription implements FormatterPluginManagerInterface
         $categoryText = $data['categoryText'];
 
         $append = strlen($categoryText) > 30 ? '...' : '';
-        return nl2br(substr($categoryText, 0, 30)) . $append;
+        return nl2br(Escape::html(substr($categoryText, 0, 30))) . $append;
     }
 }

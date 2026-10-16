@@ -5,9 +5,7 @@ locals {
 module "ecr" {
   for_each = toset(local.repositories)
 
-  source  = "terraform-aws-modules/ecr/aws"
-  version = "~> 2.2"
-
+  source          = "git::https://github.com/terraform-aws-modules/terraform-aws-ecr.git?ref=9daab0795f9759922a0664c8eca09ade5262cb3e"
   repository_name = "vol-app/${each.key}"
 
   repository_read_access_arns = concat(
@@ -28,7 +26,23 @@ module "ecr" {
 
   create_lifecycle_policy = true
   repository_lifecycle_policy = jsonencode({
-    rules = [
+    rules = concat(each.key == "liquibase" ? [
+      {
+        # Liquibase release images are referenced by prep/prod job definitions and by rollbacks;
+        # keep effectively all of them. Must stay a lower rulePriority than the catch-all.
+        rulePriority = 5,
+        description  = "Keep release-tagged liquibase images",
+        selection = {
+          tagStatus      = "tagged",
+          tagPatternList = ["release-*"],
+          countType      = "imageCountMoreThan",
+          countNumber    = 500
+        },
+        action = {
+          type = "expire"
+        }
+      },
+      ] : [], [
       {
         rulePriority = 10,
         description  = "Keep last 20 release images",
@@ -73,7 +87,7 @@ module "ecr" {
           type = "expire"
         }
       },
-    ]
+    ])
   })
 
   manage_registry_scanning_configuration = true

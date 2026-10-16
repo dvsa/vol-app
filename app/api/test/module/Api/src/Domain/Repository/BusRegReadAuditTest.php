@@ -27,7 +27,7 @@ final class BusRegReadAuditTest extends AbstractReadAuditTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(BusRegReadAudit::class, true);
+        $this->setUpRealSut(BusRegReadAudit::class, true);
     }
 
     public function testFetchOneOrMore(): void
@@ -39,7 +39,7 @@ final class BusRegReadAuditTest extends AbstractReadAuditTestCase
     {
         parent::commonTestFetchList(
             ReadBusReg::create(['id' => 111]),
-            ' AND m.busReg = [[111]]'
+            'busReg'
         );
     }
 

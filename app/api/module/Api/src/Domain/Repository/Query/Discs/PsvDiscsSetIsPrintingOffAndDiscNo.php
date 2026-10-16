@@ -48,7 +48,7 @@ class PsvDiscsSetIsPrintingOffAndDiscNo extends AbstractRawQuery
     protected function getParamTypes()
     {
         return [
-            'issuedDate' => \PDO::PARAM_STR
+            'issuedDate' => \Doctrine\DBAL\ParameterType::STRING
         ];
     }
 }

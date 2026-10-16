@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Traits;
 
 use Dvsa\Olcs\Transfer\Query as TranferQry;
+use Olcs\Controller\Document\NewLetterTemplateOption;
 
 /**
  * Class ListDataTrait
@@ -14,7 +15,7 @@ trait ListDataTrait
      *
      * @param int         $categoryId    Category to filter by
      * @param int         $subCategoryId Sub category to filter by
-     * @param ?string $firstOption   First Option
+     * @param ?string     $firstOption   First Option
      *
      * @return array
      */
@@ -46,17 +47,22 @@ trait ListDataTrait
             $options[''] = $firstOption;
         }
 
-        // Build options array with [New] prefix for new templates
-        foreach ($response->getResult()['results'] as $item) {
-            $key = $item['id'];
-            $value = $item['description'];
+        $results = $response->getResult()['results'];
 
-            // Add [New] prefix for templates with letterType when feature is enabled
-            if ($isFeatureEnabled && !empty($item['letterType'])) {
-                $value = '[New] ' . $value;
+        // Old and new letters run side by side. Every template keeps its old letter entry, and
+        // each letter type gets one [New] entry, since several templates can share a type.
+        $seenLetterTypes = [];
+        foreach ($results as $item) {
+            $options[$item['id']] = $item['description'];
+
+            $letterTypeId = $item['letterType']['id'] ?? null;
+            if (!$isFeatureEnabled || $letterTypeId === null || isset($seenLetterTypes[$letterTypeId])) {
+                continue;
             }
+            $seenLetterTypes[$letterTypeId] = true;
 
-            $options[$key] = $value;
+            $newValue = NewLetterTemplateOption::valueFor($item['id']);
+            $options[$newValue] = '[New] ' . ($item['letterType']['name'] ?? $item['description']);
         }
 
         // Sort array to put [New] templates first, then alphabetically within each group

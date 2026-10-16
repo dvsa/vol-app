@@ -41,7 +41,7 @@ return [
         ],
         [
             'title' => 'email-address',
-            'formatter' => fn($row) => $row['contactDetails']['emailAddress']
+            'formatter' => fn($row) => \Common\Util\Escape::html($row['contactDetails']['emailAddress'])
         ],
         [
             'title' => 'manage-users.table.column.permission.title',
@@ -53,7 +53,9 @@ return [
                          * @var TableBuilder $this
                          * @psalm-scope-this TableBuilder
                          */
-                        $this->translator->translate('role.' . $role['role']),
+                        // translate() returns its argument unchanged when the catalogue has no
+                        // entry, so the row value can pass straight through it.
+                        \Common\Util\Escape::html($this->translator->translate('role.' . $role['role'])),
                     $row['roles']
                 )
             )

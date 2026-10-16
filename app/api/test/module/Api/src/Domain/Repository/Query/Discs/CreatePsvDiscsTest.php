@@ -64,9 +64,8 @@ final class CreatePsvDiscsTest extends BaseAbstractDbQueryTestCase
             'VALUES (\'1102\', \'0\', NOW(), 1, NOW(), 1), (\'1102\', \'0\', NOW(), 1, NOW(), 1), ' .
             '(\'1102\', \'0\', NOW(), 1, NOW(), 1), (\'1102\', \'0\', NOW(), 1, NOW(), 1)';
 
-        $this->connection->shouldReceive('executeUpdate')
+        $this->connection->expects('executeStatement')
             ->with($sql)
-            ->once()
             ->andReturn(100);
 
         $this->assertEquals(100, $this->sut->executeInsert(1102, 4, false));
@@ -89,9 +88,8 @@ final class CreatePsvDiscsTest extends BaseAbstractDbQueryTestCase
             'VALUES (\'1102\', \'0\', NOW(), 1, NOW(), 1), (\'1102\', \'0\', NOW(), 1, NOW(), 1), ' .
             '(\'1102\', \'0\', NOW(), 1, NOW(), 1), (\'1102\', \'0\', NOW(), 1, NOW(), 1)';
 
-        $this->connection->shouldReceive('executeUpdate')
+        $this->connection->expects('executeStatement')
             ->with($sql)
-            ->once()
             ->andThrow(new \Exception());
 
         $this->assertEquals('result', $this->sut->executeInsert(1102, 4, false));

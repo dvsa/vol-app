@@ -47,7 +47,7 @@ return [
                         'operator/irfo/psv-authorisations',
                         false
                     ),
-                    $data['id']
+                    \Common\Util\Escape::html($data['id'])
                 )
         ],
         [
@@ -64,7 +64,7 @@ return [
                         'operator/irfo/details',
                         false
                     ),
-                    $data['organisation']['name']
+                    \Common\Util\Escape::html($data['organisation']['name'])
                 )
         ],
         [
@@ -79,11 +79,11 @@ return [
         ],
         [
             'title' => 'Status',
-            'formatter' => fn($data) => $data['status']['description']
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['status']['description'])
         ],
         [
             'title' => 'Type',
-            'formatter' => fn($data) => $data['irfoPsvAuthType']['description']
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['irfoPsvAuthType']['description'])
         ],
         [
             'type' => 'Checkbox',

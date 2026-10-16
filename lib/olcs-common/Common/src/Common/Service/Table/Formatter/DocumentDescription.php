@@ -3,6 +3,7 @@
 namespace Common\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
+use Common\Util\Escape;
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 
 /**
@@ -44,7 +45,10 @@ class DocumentDescription implements FormatterPluginManagerInterface
             $attr = 'target="_blank"';
         }
 
-        return '<a class="govuk-link" href="' . $url . '" ' . $attr . '>' . $this->getAnchor($data, $this->translator) . '</a>';
+        // $url is assembled by the router, which percent-encodes its parameters, so no quote can
+        // reach here. Escaping it again would only render every document link as &#x2F;-noise.
+        return '<a class="govuk-link" href="' . $url . '" ' . $attr . '>'
+            . $this->getAnchor($data, $this->translator) . '</a>';
     }
 
     /**
@@ -57,13 +61,15 @@ class DocumentDescription implements FormatterPluginManagerInterface
     private function getAnchor($data, $translator)
     {
         if (isset($data['description'])) {
-            return $data['description'];
+            return Escape::html($data['description']);
         }
 
         if (isset($data['filename'])) {
-            return basename($data['filename']);
+            return Escape::html(basename($data['filename']));
         }
 
+        // Not escaped: a fixed translation key, not row data. Translation strings are permitted to
+        // carry markup and are handled separately.
         return $translator->translate('internal.document-description.formatter.no-description');
     }
 }

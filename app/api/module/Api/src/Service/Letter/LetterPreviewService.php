@@ -23,11 +23,34 @@ class LetterPreviewService
     private const string OTC_LOGO_SLUG_NI = 'otclogo-letters-ni';
     private const string OTC_LOGO_TOKEN = '[[OTC_LOGO]]';
 
+    /**
+     * Collector for the current render, when the caller wants grab outcomes reported.
+     * Held as state because the vol-grab context is built in several private renderers;
+     * set on entry to renderPreview and cleared on exit.
+     */
+    private ?GrabOutcomeCollector $grabOutcomes = null;
+
+    /**
+     * When true, each section's rendered HTML is wrapped in a data-preview-section marker so the
+     * builder can scroll its diagnostics to the paragraph they describe. Never set on the paths
+     * that feed the PDF: the markers are a UI affordance, not letter content.
+     */
+    private bool $annotateSections = false;
+
+    /**
+     * The effective NI status for the current render when the caller has overridden it (the
+     * builder's Region control). Null means derive it from the licence as usual. Must reach
+     * every grab context built during the render, not just the master template resolver, or
+     * an NI-override preview renders NI chrome with the GB OTC logo and GB-context grabs.
+     */
+    private ?bool $isNiOverride = null;
+
     public function __construct(
         private readonly SectionRendererPluginManager $rendererManager,
         private $contentStore,
         private $docTemplateRepo,
         private readonly VolGrabReplacementService $volGrabReplacementService,
+        private readonly VolGrabContextBuilder $contextBuilder,
         private readonly ?ConverterService $converterService = null
     ) {
     }
@@ -39,7 +62,22 @@ class LetterPreviewService
      * @param MasterTemplate|null $masterTemplate The master template to use (null for basic rendering)
      * @return string Complete HTML for the letter preview
      */
-    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false): string
+    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false, ?GrabOutcomeCollector $grabOutcomes = null, bool $annotateSections = false, ?bool $isNiOverride = null): string
+    {
+        $this->grabOutcomes = $grabOutcomes;
+        $this->annotateSections = $annotateSections;
+        $this->isNiOverride = $isNiOverride;
+
+        try {
+            return $this->doRenderPreview($letterInstance, $masterTemplate, $excludePdfAppendices);
+        } finally {
+            $this->grabOutcomes = null;
+            $this->annotateSections = false;
+            $this->isNiOverride = null;
+        }
+    }
+
+    private function doRenderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate, bool $excludePdfAppendices): string
     {
         // Render assembled content (sections + issues interleaved by display order)
         $assembledHtml = $this->renderAssembledContent($letterInstance);
@@ -101,7 +139,7 @@ class LetterPreviewService
                 $html .= $this->renderIssues($letterInstance);
                 $issuesRendered = true;
             } else {
-                $html .= $sectionRenderer->render($section, $context);
+                $html .= $this->annotate($sectionRenderer->render($section, $context), $parentSection);
             }
         }
 
@@ -265,7 +303,7 @@ class LetterPreviewService
         return [
             '{{LOGO_IMAGE}}' => $this->buildLogoImage(),
             '{{LETTER_REFERENCE}}' => htmlspecialchars($letterInstance->getReference() ?? ''),
-            '{{LETTER_DATE}}' => date('jS F Y'),
+            '{{LETTER_DATE}}' => $this->buildLetterDate($letterInstance),
             '{{SECTIONS_CONTENT}}' => $sectionsHtml,
             '{{ISSUES_CONTENT}}' => $issuesHtml,
             '{{CLOSING_CONTENT}}' => $closingHtml,
@@ -444,6 +482,17 @@ class LetterPreviewService
     }
 
     /**
+     * The letter is dated when it was generated, matching the deadline grabs resolved at the
+     * same moment. Unsaved instances (builder previews) have no createdOn, so use today.
+     */
+    private function buildLetterDate(LetterInstance $letterInstance): string
+    {
+        $createdOn = $letterInstance->getCreatedOn(true);
+
+        return ($createdOn instanceof \DateTimeInterface ? $createdOn : new \DateTime())->format('jS F Y');
+    }
+
+    /**
      * Build caseworker name from the user who created the letter instance
      *
      * @param LetterInstance $letterInstance
@@ -554,26 +603,29 @@ class LetterPreviewService
     }
 
     /**
-     * Build context array for vol-grab replacement
-     *
-     * @param LetterInstance $letterInstance
-     * @return array Context containing entity IDs for bookmark resolution
+     * Wraps a section's HTML in a locator the builder's diagnostics can scroll to.
+     * A no-op unless this render asked for annotation, so letters and caseworker
+     * previews are byte-identical to before.
+     */
+    private function annotate(string $html, ?\Dvsa\Olcs\Api\Entity\Letter\LetterSection $section): string
+    {
+        if (!$this->annotateSections || $section === null || $html === '') {
+            return $html;
+        }
+
+        return sprintf('<div data-preview-section="%d">%s</div>', $section->getId(), $html);
+    }
+
+    /**
+     * Context for vol-grab replacement, plus the outcome collector when this render has one.
      */
     private function buildVolGrabContext(LetterInstance $letterInstance): array
     {
-        $context = array_filter([
-            'licence' => $letterInstance->getLicence()?->getId(),
-            'application' => $letterInstance->getApplication()?->getId(),
-            'user' => $letterInstance->getCreatedBy()?->getId(),
-            'case' => $letterInstance->getCase()?->getId(),
-            'busRegId' => $letterInstance->getBusReg()?->getId(),
-            'organisation' => $letterInstance->getOrganisation()?->getId(),
-        ]);
+        $context = $this->contextBuilder->build($letterInstance, $this->isNiOverride);
 
-        // VOL-7305: isNi is needed by the OTC_LOGO token resolver and is a useful
-        // signal for any future region-aware bookmark. Added outside the array_filter
-        // because false is a meaningful value (GB letter) that should survive.
-        $context['isNi'] = (bool) ($letterInstance->getLicence()?->isNi() ?? false);
+        if ($this->grabOutcomes !== null) {
+            $context[GrabOutcomeCollector::CONTEXT_KEY] = $this->grabOutcomes;
+        }
 
         return $context;
     }

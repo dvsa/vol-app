@@ -70,7 +70,7 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
@@ -78,7 +78,7 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
     /**
      * Version
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]

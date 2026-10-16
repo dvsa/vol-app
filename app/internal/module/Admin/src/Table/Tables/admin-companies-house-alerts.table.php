@@ -35,7 +35,7 @@ return [
             'title' => 'Licence No.',
             'name' => 'licNo',
             'sort' => 'cha_o_ls.licNo',
-            'formatter' => fn($row) => $row['licence']['licNo']
+            'formatter' => fn($row) => \Common\Util\Escape::html($row['licence']['licNo'])
         ],
         [
             'title' => 'Licence Type.',
@@ -61,7 +61,7 @@ return [
                 return implode(
                     ', ',
                     array_map(
-                        fn($reason) => $reason['reasonType']['description'],
+                        fn($reason) => \Common\Util\Escape::html($reason['reasonType']['description']),
                         $row['reasons']
                     )
                 );

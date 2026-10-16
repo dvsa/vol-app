@@ -58,6 +58,15 @@ return [
             'formatter' => fn($row) => Escape::html($row['inputType'] ?? ''),
         ],
         [
+            'title' => 'Goods or PSV',
+            'name' => 'goodsOrPsv',
+            'formatter' => fn($row) => match ($row['goodsOrPsv']['id'] ?? null) {
+                'lcat_gv' => 'Goods',
+                'lcat_psv' => 'PSV',
+                default => 'Both',
+            },
+        ],
+        [
             'title' => 'Active',
             'name' => 'isActive',
             'formatter' => function ($row) {

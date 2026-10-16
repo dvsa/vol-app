@@ -101,7 +101,7 @@ final class DocumentDescriptionTest extends MockeryTestCase
         $column = [];
 
         $this->translator
-            ->shouldReceive('translate')
+            ->expects('translate')
             ->with('internal.document-description.formatter.no-description')
             ->andReturn('File description missing')
             ->once()
@@ -127,5 +127,36 @@ final class DocumentDescriptionTest extends MockeryTestCase
 
         $expected = '<a class="govuk-link" href="URL" target="_blank">Foo file</a>';
         $this->assertEquals($expected, $this->sut->format($data, $column));
+    }
+
+    public function testDescriptionIsEscaped(): void
+    {
+        $data = [
+            'documentStoreIdentifier' => 'olbs/foo.rtf',
+            'description' => '<script>alert(document.domain)</script>',
+            'id' => 666,
+        ];
+
+        $this->urlHelper->shouldReceive('fromRoute')
+            ->with('getfile', ['identifier' => 666])
+            ->andReturn('URL');
+
+        $expected = '<a class="govuk-link" href="URL" >&lt;script&gt;alert(document.domain)&lt;/script&gt;</a>';
+        $this->assertEquals($expected, $this->sut->format($data, []));
+    }
+
+    public function testFilenameIsEscaped(): void
+    {
+        // A slash-free payload: basename() truncates at the last '/', so a payload containing one is
+        // incidentally mangled. This one reaches the output intact and must be escaped.
+        $data = [
+            'description' => null,
+            'filename' => '/bar/cake/<img src=x onerror=alert(1)>.txt',
+        ];
+
+        $result = $this->sut->format($data, []);
+
+        $this->assertStringNotContainsString('<img', $result);
+        $this->assertStringContainsString('&lt;img', $result);
     }
 }

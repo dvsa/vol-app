@@ -676,9 +676,10 @@ abstract class AbstractReadonlyRepository implements ReadonlyRepositoryInterface
                 throw new \Exception("The 'sort' value is not valid.");
             }
             if (!empty($query->getSort())) {
-                // allow ordering by multiple columns
-                $sortColumns = explode(',', $query->getSort());
-                $orderColumns = explode(',', $query->getOrder());
+                // allow ordering by multiple columns; trim each element because the transfer validators accept
+                // whitespace after the comma (e.g. 'ASC, ASC') but Doctrine ORM 3 rejects ' ASC' as a sort direction
+                $sortColumns = array_map('trim', explode(',', $query->getSort()));
+                $orderColumns = array_map('trim', explode(',', $query->getOrder()));
 
                 foreach ($sortColumns as $i => $column) {
                     // if multiple order value doesn't exist then use the first one

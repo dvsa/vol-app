@@ -12,7 +12,7 @@ class DataGovUkExportCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:data-gov-uk-export';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Export to csv for data.gov.uk')

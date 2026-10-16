@@ -15,7 +15,7 @@ class ProcessNtuCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:process-ntu';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Process Not Taken Up Applications.');

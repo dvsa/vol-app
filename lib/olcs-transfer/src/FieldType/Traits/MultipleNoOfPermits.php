@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait MultipleNoOfPermits
  *
@@ -10,9 +12,7 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait MultipleNoOfPermits
 {
-    /**
-     * @Transfer\ArrayInput
-     */
+    #[Transfer\ArrayInput]
     protected $permitsRequired;
 
     /**

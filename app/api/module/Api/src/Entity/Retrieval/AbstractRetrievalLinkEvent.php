@@ -9,7 +9,7 @@ use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
-use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
+use Dvsa\Olcs\Api\Entity\Traits\CreatedOnNotNullTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -31,7 +31,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     use BundleSerializableTrait;
     use ProcessDateTrait;
     use ClearPropertiesWithCollectionsTrait;
-    use CreatedOnTrait;
+    use CreatedOnNotNullTrait;
 
     /**
      * Primary key.  Auto incremented if numeric.
@@ -39,23 +39,23 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'bigint', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to retrieval_link
      *
-     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
+     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink|null
      */
-    #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class, fetch: 'LAZY')]
     protected $retrievalLink;
 
     /**
      * Source context
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'source_context', length: 255, nullable: true)]
     protected $sourceContext;
@@ -71,7 +71,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     /**
      * Member ref
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'member_ref', length: 64, nullable: true)]
     protected $memberRef;
@@ -79,7 +79,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     /**
      * Ip
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'ip', length: 45, nullable: true)]
     protected $ip;
@@ -87,7 +87,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     /**
      * User agent
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'user_agent', length: 255, nullable: true)]
     protected $userAgent;
@@ -95,7 +95,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     /**
      * Detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'detail', length: 255, nullable: true)]
     protected $detail;

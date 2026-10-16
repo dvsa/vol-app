@@ -1,0 +1,26 @@
+{
+  "name": "Type",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "type",
+        "attributes": {
+          "radios_wrapper_attributes": {
+            "data-module": "radios"
+          }
+        },
+        "options": {
+          "label_attributes": {
+            "class": "govuk-label govuk-radios__label govuk-label--s"
+          },
+          "input_class": "Common\\Form\\Input\\TypeInput"
+        },
+        "type": "DynamicRadio"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -59,7 +59,13 @@ return [
      * Configure the location of the application log
      */
     'log' => [
-        'allowPasswordLogging' => true,
+        // 'allowPasswordLogging' => true,
+        //
+        // Uncomment only while actively debugging an authentication problem with a password
+        // you typed yourself, and comment it out again afterwards. Setting it does not relax
+        // redaction — it removes the HidePassword processor from the logger entirely, so every
+        // password flowing through the app is written in clear. It has no effect on the
+        // HideCredentials processor, which is always attached.
         'Logger' => [
             'writers' => [
                 'full' => [

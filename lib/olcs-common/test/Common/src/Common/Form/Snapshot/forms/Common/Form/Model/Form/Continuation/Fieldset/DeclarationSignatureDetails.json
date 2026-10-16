@@ -1,0 +1,18 @@
+{
+  "name": "DeclarationSignatureDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "signature",
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated",
+        "attributes": {
+          "data-container-class": "verify"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

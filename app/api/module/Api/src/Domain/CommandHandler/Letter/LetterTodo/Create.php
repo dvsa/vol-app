@@ -24,8 +24,10 @@ final class Create extends AbstractCommandHandler
 
         // Set working properties - versioning will be handled by repository
         $entity->setTodoKey($command->getTodoKey());
+        $entity->setName($command->getName());
         $entity->setDescription($command->getDescription());
         $entity->setHelpText($command->getHelpText());
+        $entity->setRequiresInput($command->getRequiresInput());
 
         $this->getRepo()->save($entity);
 

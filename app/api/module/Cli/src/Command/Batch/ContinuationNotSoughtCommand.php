@@ -15,7 +15,7 @@ class ContinuationNotSoughtCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:continuation-not-sought';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Process licences for Continuation Not Sought (CNS).')

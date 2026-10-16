@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\Hearing as Repo;
+use Dvsa\Olcs\Api\Entity\Cases\Hearing as Entity;
+use Mockery as m;
 
 /**
  * HearingTest
@@ -20,35 +21,24 @@ final class HearingTest extends RepositoryTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class);
     }
 
     public function testFetchOneByCase(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn('RESULT', 'getSingleResult');
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getSingleResult')
-                ->andReturn('RESULT')
-                ->getMock()
+        $this->assertSame('RESULT', $this->sut->fetchOneByCase(123));
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.case = 123',
+            $qb->getDQL(),
         );
-        $this->assertEquals('RESULT', $this->sut->fetchOneByCase(123));
-
-        $expectedQuery = 'BLAH AND m.case = 123';
-
-        $this->assertEquals($expectedQuery, $this->query);
     }
 
     public function testFetchOneByCaseNull(): void
     {
-        $qb = $this->createMockQb('BLAH');
-
-        $this->mockCreateQueryBuilder($qb);
-
         $this->expectException(NotFoundException::class);
+
         $this->sut->fetchOneByCase(null);
     }
 }

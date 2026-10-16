@@ -95,7 +95,7 @@ final class ByNumberTest extends TestCase
     protected function getFilterTransformations()
     {
         return [
-            'companyNumber' => ['a1b2c3 ', 'a1b2c3']
+            'companyNumber' => [['a1b2c3 ', 'a1b2c3']]
         ];
     }
 }

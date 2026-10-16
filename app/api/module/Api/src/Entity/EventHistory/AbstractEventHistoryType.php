@@ -39,7 +39,7 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
     /**
      * Event code
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'event_code', length: 3, nullable: true)]
     protected $eventCode;

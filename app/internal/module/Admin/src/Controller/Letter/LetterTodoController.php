@@ -17,6 +17,8 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 
 class LetterTodoController extends AbstractInternalController implements LeftViewProvider
 {
+    use LetterDeleteErrorTrait;
+
     protected $tableName = 'admin-letter-todo';
     protected $defaultTableSortField = 'todoKey';
     protected $defaultTableOrderField = 'ASC';

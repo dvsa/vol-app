@@ -41,6 +41,13 @@ final class Update extends AbstractCommandHandler
             $letterChoice->setIsActive($command->getIsActive());
         }
 
+        // Empty is "Both", so it has to clear any earlier setting
+        if ($command->getGoodsOrPsv()) {
+            $letterChoice->setGoodsOrPsv($this->getRepo()->getRefdataReference($command->getGoodsOrPsv()));
+        } else {
+            $letterChoice->setGoodsOrPsv(null);
+        }
+
         $this->getRepo()->save($letterChoice);
 
         $this->result->addId('letterChoice', $letterChoice->getId());

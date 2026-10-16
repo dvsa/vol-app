@@ -66,9 +66,9 @@ final class FeeEntityTest extends EntityTester
      * @param boolean         $expected
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('outstandingPaymentProvider')]
-    public function testHadOutstandingPayment(mixed $feeTransactions, mixed $expected): void
+    public function testHadOutstandingPayment(\Closure $createFeeTransactions, mixed $expected): void
     {
-        $this->sut->setFeeTransactions($feeTransactions);
+        $this->sut->setFeeTransactions($createFeeTransactions());
 
         $this->assertEquals($expected, $this->sut->hasOutstandingPayment());
     }
@@ -76,11 +76,11 @@ final class FeeEntityTest extends EntityTester
     public static function outstandingPaymentProvider(): \Iterator
     {
         yield 'no fee payments' => [
-            [],
+            static fn () => [],
             false,
         ];
         yield 'one outstanding' => [
-            [
+            static fn () => [
                 m::mock()
                     ->shouldReceive('getTransaction')
                     ->andReturn(
@@ -198,8 +198,15 @@ final class FeeEntityTest extends EntityTester
      * @param DateTime $expected
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('ruleStartDateProvider')]
-    public function testGetRuleStartDate(mixed $accrualRuleId, mixed $licence, mixed $irhpApplication, mixed $expected): void
-    {
+    public function testGetRuleStartDate(
+        mixed $accrualRuleId,
+        \Closure $createLicence,
+        \Closure $createIrhpApplication,
+        mixed $expected
+    ): void {
+        $licence = $createLicence();
+        $irhpApplication = $createIrhpApplication();
+
         $feeType = m::mock()
             ->shouldReceive('getAccrualRule')
             ->andReturn(new RefData()->setId($accrualRuleId))
@@ -224,121 +231,127 @@ final class FeeEntityTest extends EntityTester
 
         $irhpPermitStartDate = new DateTime('2015-04-04');
 
-        $irhpApplication = m::mock(IrhpApplication::class);
-        $irhpApplication
-            ->shouldReceive('getIrhpPermitApplications->first->getIrhpPermitWindow->getIrhpPermitStock->getValidFrom')
-            ->with(true)
-            ->andReturn($irhpPermitStartDate);
+        $none = static fn () => null;
 
-        $irhpApplicationWithoutIrhpPermitApp = m::mock(IrhpApplication::class);
-        $irhpApplicationWithoutIrhpPermitApp
-            ->shouldReceive('getIrhpPermitApplications->first')
-            ->andReturn(null);
+        $licenceInForceFrom = static fn (?string $inForceDate) => static fn () => m::mock()
+            ->shouldReceive('getInForceDate')
+            ->andReturn($inForceDate)
+            ->getMock();
+
+        $licenceExpiring = static fn (?string $expiryDate) => static fn () => m::mock()
+            ->shouldReceive('getExpiryDate')
+            ->andReturn($expiryDate)
+            ->getMock();
+
+        // getMock() on a demeter-chain expectation returns the last mock in the chain, so return the root explicitly
+        $irhpApplication = static function () use ($irhpPermitStartDate) {
+            $irhpApplication = m::mock(IrhpApplication::class);
+            $irhpApplication
+                ->shouldReceive('getIrhpPermitApplications->first->getIrhpPermitWindow->getIrhpPermitStock->getValidFrom')
+                ->with(true)
+                ->andReturn($irhpPermitStartDate);
+
+            return $irhpApplication;
+        };
+
+        $irhpApplicationWithoutIrhpPermitApp = static function () {
+            $irhpApplication = m::mock(IrhpApplication::class);
+            $irhpApplication
+                ->shouldReceive('getIrhpPermitApplications->first')
+                ->andReturn(null);
+
+            return $irhpApplication;
+        };
 
         return [
             'immediate' => [
                 Entity::ACCRUAL_RULE_IMMEDIATE,
-                null,
-                null,
+                $none,
+                $none,
                 $now,
             ],
             'licence start' => [
                 Entity::ACCRUAL_RULE_LICENCE_START,
-                m::mock()
-                    ->shouldReceive('getInForceDate')
-                    ->andReturn('2015-04-03')
-                    ->getMock(),
-                null,
+                $licenceInForceFrom('2015-04-03'),
+                $none,
                 new DateTime('2015-04-03'),
             ],
             'licence start date missing' => [
                 Entity::ACCRUAL_RULE_LICENCE_START,
-                m::mock()
-                    ->shouldReceive('getInForceDate')
-                    ->andReturn(null)
-                    ->getMock(),
-                null,
+                $licenceInForceFrom(null),
+                $none,
                 null,
             ],
             'continuation' => [
                 Entity::ACCRUAL_RULE_CONTINUATION,
-                m::mock()
-                    ->shouldReceive('getExpiryDate')
-                    ->andReturn('2015-04-03')
-                    ->getMock(),
-                null,
+                $licenceExpiring('2015-04-03'),
+                $none,
                 new DateTime('2010-04-04'),
             ],
             'continuation date more than 4 year in future' => [
                 Entity::ACCRUAL_RULE_CONTINUATION,
-                m::mock()
-                    ->shouldReceive('getExpiryDate')
-                    ->andReturn($futureContinuationDate->format('Y-m-d'))
-                    ->getMock(),
-                null,
+                $licenceExpiring($futureContinuationDate->format('Y-m-d')),
+                $none,
                 $futureContinuationDate->sub(new \DateInterval('P5Y'))->add(new \DateInterval('P1D')),
             ],
             'continuation date missing' => [
                 Entity::ACCRUAL_RULE_CONTINUATION,
-                m::mock()
-                    ->shouldReceive('getExpiryDate')
-                    ->andReturn(null)
-                    ->getMock(),
-                null,
+                $licenceExpiring(null),
+                $none,
                 null,
             ],
             'IRHP permit - 3 months - no application' => [
                 Entity::ACCRUAL_RULE_IRHP_PERMIT_3_MONTHS,
-                null,
+                $none,
                 $irhpApplicationWithoutIrhpPermitApp,
                 null,
             ],
             'IRHP permit - 3 months - valid from date' => [
                 Entity::ACCRUAL_RULE_IRHP_PERMIT_3_MONTHS,
-                null,
+                $none,
                 $irhpApplication,
                 $irhpPermitStartDate,
             ],
             'IRHP permit - 6 months - no application' => [
                 Entity::ACCRUAL_RULE_IRHP_PERMIT_6_MONTHS,
-                null,
+                $none,
                 $irhpApplicationWithoutIrhpPermitApp,
                 null,
             ],
             'IRHP permit - 6 months - valid from date' => [
                 Entity::ACCRUAL_RULE_IRHP_PERMIT_6_MONTHS,
-                null,
+                $none,
                 $irhpApplication,
                 $irhpPermitStartDate,
             ],
             'IRHP permit - 9 months - no application' => [
                 Entity::ACCRUAL_RULE_IRHP_PERMIT_9_MONTHS,
-                null,
+                $none,
                 $irhpApplicationWithoutIrhpPermitApp,
                 null,
             ],
             'IRHP permit - 9 months - valid from date' => [
                 Entity::ACCRUAL_RULE_IRHP_PERMIT_9_MONTHS,
-                null,
+                $none,
                 $irhpApplication,
                 $irhpPermitStartDate,
             ],
             'IRHP permit - 12 months - no application' => [
                 Entity::ACCRUAL_RULE_IRHP_PERMIT_12_MONTHS,
-                null,
+                $none,
                 $irhpApplicationWithoutIrhpPermitApp,
                 null,
             ],
             'IRHP permit - 12 months - valid from date' => [
                 Entity::ACCRUAL_RULE_IRHP_PERMIT_12_MONTHS,
-                null,
+                $none,
                 $irhpApplication,
                 $irhpPermitStartDate,
             ],
             'invalid' => [
                 'foo',
-                null,
-                null,
+                $none,
+                $none,
                 null,
             ],
         ];
@@ -518,8 +531,13 @@ final class FeeEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('outstandingWaiveTransactionProvider')]
-    public function testGetOutstandingWaiveTransaction(array $feeTransactions, mixed $expected): void
+    /**
+     * @param \Closure $createCase returns [fee transactions, expected outstanding waive transaction]
+     */
+    public function testGetOutstandingWaiveTransaction(\Closure $createCase): void
     {
+        [$feeTransactions, $expected] = $createCase();
+
         $this->sut->setFeeTransactions(new ArrayCollection($feeTransactions));
 
         $this->assertEquals($expected, $this->sut->getOutstandingWaiveTransaction());
@@ -527,35 +545,35 @@ final class FeeEntityTest extends EntityTester
 
     public static function outstandingWaiveTransactionProvider(): array
     {
-        $transaction1 = m::mock(Transaction::class);
-        $transaction1->shouldReceive('isOutstanding')
-            ->andReturn(false);
-        $transaction1->shouldReceive('getType->getId')
-            ->andReturn(Transaction::TYPE_WAIVE);
-
-        $transaction2 = m::mock(Transaction::class);
-        $transaction2->shouldReceive('isOutstanding')
-            ->andReturn(true);
-        $transaction2->shouldReceive('getType->getId')
-            ->andReturn(Transaction::TYPE_WAIVE);
-
-        $feeTransaction1 = m::mock(FeeTransaction::class)
-            ->shouldReceive('getTransaction')
-            ->andReturn($transaction1)
-            ->getMock();
-        $feeTransaction2 = m::mock(FeeTransaction::class)
-            ->shouldReceive('getTransaction')
-            ->andReturn($transaction2)
-            ->getMock();
-
         return [
             'none' => [
-                [],
-                null,
+                static fn () => [[], null],
             ],
             'valid' => [
-                [$feeTransaction1, $feeTransaction2],
-                $transaction2,
+                static function () {
+                    $transaction1 = m::mock(Transaction::class);
+                    $transaction1->shouldReceive('isOutstanding')
+                        ->andReturn(false);
+                    $transaction1->shouldReceive('getType->getId')
+                        ->andReturn(Transaction::TYPE_WAIVE);
+
+                    $transaction2 = m::mock(Transaction::class);
+                    $transaction2->shouldReceive('isOutstanding')
+                        ->andReturn(true);
+                    $transaction2->shouldReceive('getType->getId')
+                        ->andReturn(Transaction::TYPE_WAIVE);
+
+                    $feeTransaction1 = m::mock(FeeTransaction::class)
+                        ->shouldReceive('getTransaction')
+                        ->andReturn($transaction1)
+                        ->getMock();
+                    $feeTransaction2 = m::mock(FeeTransaction::class)
+                        ->shouldReceive('getTransaction')
+                        ->andReturn($transaction2)
+                        ->getMock();
+
+                    return [[$feeTransaction1, $feeTransaction2], $transaction2];
+                },
             ],
         ];
     }
@@ -778,8 +796,13 @@ final class FeeEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getOrganisationProvider')]
-    public function testGetOrganisation(mixed $licence, mixed $irfoGvPermit, mixed $irfoPsvAuth, mixed $expected): void
+    /**
+     * @param \Closure $createCase returns [licence, irfo gv permit, irfo psv auth, expected organisation]
+     */
+    public function testGetOrganisation(\Closure $createCase): void
     {
+        [$licence, $irfoGvPermit, $irfoPsvAuth, $expected] = $createCase();
+
         $this->sut->setLicence($licence);
         $this->sut->setIrfoGvPermit($irfoGvPermit);
         $this->sut->setIrfoPsvAuth($irfoPsvAuth);
@@ -788,70 +811,90 @@ final class FeeEntityTest extends EntityTester
 
     public static function getOrganisationProvider(): \Iterator
     {
-        $organisation = m::mock(Organisation::class);
         yield 'licence' => [
-            m::mock(Licence::class)->makePartial()->setOrganisation($organisation),
-            null,
-            null,
-            $organisation,
+            static function () {
+                $organisation = m::mock(Organisation::class);
+
+                return [
+                    m::mock(Licence::class)->makePartial()->setOrganisation($organisation),
+                    null,
+                    null,
+                    $organisation,
+                ];
+            },
         ];
         yield 'irfo gv permit' => [
-            null,
-            m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($organisation),
-            null,
-            $organisation,
+            static function () {
+                $organisation = m::mock(Organisation::class);
+
+                return [
+                    null,
+                    m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($organisation),
+                    null,
+                    $organisation,
+                ];
+            },
         ];
         yield 'irfo psv auth' => [
-            null,
-            null,
-            m::mock(IrfoPsvAuth::class)->makePartial()->setOrganisation($organisation),
-            $organisation,
+            static function () {
+                $organisation = m::mock(Organisation::class);
+
+                return [
+                    null,
+                    null,
+                    m::mock(IrfoPsvAuth::class)->makePartial()->setOrganisation($organisation),
+                    $organisation,
+                ];
+            },
         ];
         yield 'neither' => [
-            null,
-            null,
-            null,
-            null,
+            static fn () => [null, null, null, null],
         ];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getCustomerNameProvider')]
-    public function testGetCustomerNameForInvoice(mixed $licence, mixed $irfoGvPermit, mixed $expected): void
+    public function testGetCustomerNameForInvoice(\Closure $createLicence, \Closure $createIrfoGvPermit, mixed $expected): void
     {
-        $this->sut->setLicence($licence);
-        $this->sut->setIrfoGvPermit($irfoGvPermit);
+        $this->sut->setLicence($createLicence());
+        $this->sut->setIrfoGvPermit($createIrfoGvPermit());
         $this->assertEquals($expected, $this->sut->getCustomerNameForInvoice());
     }
 
     public static function getCustomerNameProvider(): \Iterator
     {
-        $organisation = m::mock(Organisation::class)
+        $none = static fn () => null;
+        $createOrganisation = static fn () => m::mock(Organisation::class)
             ->shouldReceive('getName')
             ->andReturn('Foo')
             ->getMock();
+
         yield 'licence' => [
-            m::mock(Licence::class)->makePartial()->setOrganisation($organisation),
-            null,
+            static fn () => m::mock(Licence::class)->makePartial()->setOrganisation($createOrganisation()),
+            $none,
             'Foo',
         ];
         yield 'irfo' => [
-            null,
-            m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($organisation),
+            $none,
+            static fn () => m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($createOrganisation()),
             'Foo',
         ];
         yield 'neither' => [
-            null,
-            null,
+            $none,
+            $none,
             null,
         ];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getCustomerAddressProvider')]
-    public function testGetCustomerAddressForInvoice(mixed $licence, mixed $irfoGvPermit, mixed $irfoPsvAuth, mixed $expected): void
-    {
-        $this->sut->setLicence($licence);
-        $this->sut->setIrfoGvPermit($irfoGvPermit);
-        $this->sut->setIrfoPsvAuth($irfoPsvAuth);
+    public function testGetCustomerAddressForInvoice(
+        \Closure $createLicence,
+        \Closure $createIrfoGvPermit,
+        \Closure $createIrfoPsvAuth,
+        mixed $expected
+    ): void {
+        $this->sut->setLicence($createLicence());
+        $this->sut->setIrfoGvPermit($createIrfoGvPermit());
+        $this->sut->setIrfoPsvAuth($createIrfoPsvAuth());
 
         $actual = $this->sut->getCustomerAddressForInvoice();
         $this->assertEquals($expected, ($actual ? $actual->toArray() : $actual));
@@ -864,34 +907,39 @@ final class FeeEntityTest extends EntityTester
 
     public static function getCustomerAddressProvider(): \Iterator
     {
-        $address = m::mock(Address::class)
-            ->shouldReceive('toArray')
-            ->andReturn(
-                [
-                    'addressLine1' => 'Foo1',
-                    'addressLine2' => 'Foo2',
-                    'addressLine3' => 'Foo3',
-                    'addressLine4' => 'Foo4',
-                    'town' => 'FooTown',
-                    'postcode' => 'FooPostcode',
-                    'countryCode' => 'FooCountry',
-                ]
-            )
-            ->getMock();
+        $none = static fn () => null;
 
-        $contactDetails = m::mock(ContactDetails::class)
-            ->shouldReceive('getAddress')
-            ->andReturn($address)
-            ->getMock();
+        $createContactDetails = static function () {
+            $address = m::mock(Address::class)
+                ->shouldReceive('toArray')
+                ->andReturn(
+                    [
+                        'addressLine1' => 'Foo1',
+                        'addressLine2' => 'Foo2',
+                        'addressLine3' => 'Foo3',
+                        'addressLine4' => 'Foo4',
+                        'town' => 'FooTown',
+                        'postcode' => 'FooPostcode',
+                        'countryCode' => 'FooCountry',
+                    ]
+                )
+                ->getMock();
 
-        $organisation = m::mock(Organisation::class)
+            return m::mock(ContactDetails::class)
+                ->shouldReceive('getAddress')
+                ->andReturn($address)
+                ->getMock();
+        };
+
+        $createOrganisation = static fn () => m::mock(Organisation::class)
             ->shouldReceive('getIrfoContactDetails')
-            ->andReturn($contactDetails)
+            ->andReturn($createContactDetails())
             ->getMock();
+
         yield 'licence' => [
-            m::mock(Licence::class)->makePartial()->setCorrespondenceCd($contactDetails),
-            null,
-            null,
+            static fn () => m::mock(Licence::class)->makePartial()->setCorrespondenceCd($createContactDetails()),
+            $none,
+            $none,
             [
                 'addressLine1' => 'Foo1',
                 'addressLine2' => 'Foo2',
@@ -903,9 +951,9 @@ final class FeeEntityTest extends EntityTester
             ],
         ];
         yield 'irfo gv permit' => [
-            null,
-            m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($organisation),
-            null,
+            $none,
+            static fn () => m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($createOrganisation()),
+            $none,
             [
                 'addressLine1' => 'Foo1',
                 'addressLine2' => 'Foo2',
@@ -917,9 +965,9 @@ final class FeeEntityTest extends EntityTester
             ],
         ];
         yield 'irfo psv auth' => [
-            null,
-            null,
-            m::mock(IrfoPsvAuth::class)->makePartial()->setOrganisation($organisation),
+            $none,
+            $none,
+            static fn () => m::mock(IrfoPsvAuth::class)->makePartial()->setOrganisation($createOrganisation()),
             [
                 'addressLine1' => 'Foo1',
                 'addressLine2' => 'Foo2',
@@ -932,9 +980,9 @@ final class FeeEntityTest extends EntityTester
         ];
         //  licence and organisation - have not corr details
         yield [
-            'licence' => m::mock(Licence::class)->makePartial(),
-            'irfoGvPermit' => null,
-            'irfoPsvAuth' => new IrfoPsvAuth(
+            'createLicence' => static fn () => m::mock(Licence::class)->makePartial(),
+            'createIrfoGvPermit' => $none,
+            'createIrfoPsvAuth' => static fn () => new IrfoPsvAuth(
                 new Organisation(),
                 new Entities\Irfo\IrfoPsvAuthType(),
                 new RefData()
@@ -1010,10 +1058,14 @@ final class FeeEntityTest extends EntityTester
      * @param boolean $expected
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('isFullyOutstandingProvider')]
-    public function testIsFullyOutstanding(mixed $feeAmount, mixed $status, mixed $feeTransactions, mixed $expected): void
-    {
+    public function testIsFullyOutstanding(
+        mixed $feeAmount,
+        mixed $status,
+        \Closure $createFeeTransactions,
+        mixed $expected
+    ): void {
         $this->sut->setFeeStatus(new RefData($status));
-        $this->sut->setFeeTransactions(new ArrayCollection($feeTransactions));
+        $this->sut->setFeeTransactions(new ArrayCollection($createFeeTransactions()));
         $this->sut->setGrossAmount($feeAmount);
 
         $this->assertEquals($expected, $this->sut->isFullyOutstanding());
@@ -1021,25 +1073,27 @@ final class FeeEntityTest extends EntityTester
 
     public static function isFullyOutstandingProvider(): array
     {
-        $paid10 = m::mock(FeeTransaction::class);
-        $paid10->shouldReceive('getTransaction->isComplete')
-            ->andReturn(true);
-        $paid10->shouldReceive('getAmount')
-            ->andReturn('10.00');
+        $createFeeTransaction = static function (bool $isComplete) {
+            $feeTransaction = m::mock(FeeTransaction::class);
+            $feeTransaction->shouldReceive('getTransaction->isComplete')
+                ->andReturn($isComplete);
+            $feeTransaction->shouldReceive('getAmount')
+                ->andReturn('10.00');
 
-        $pending10 = m::mock(FeeTransaction::class);
-        $pending10->shouldReceive('getTransaction->isComplete')
-            ->andReturn(false);
-        $pending10->shouldReceive('getAmount')
-            ->andReturn('10.00');
+            return $feeTransaction;
+        };
+
+        $noFeeTransactions = static fn () => [];
+        $paid10 = static fn () => [$createFeeTransaction(true)];
+        $pending10 = static fn () => [$createFeeTransaction(false)];
 
         return [
-            ['10.00', Entity::STATUS_PAID, [], false],
-            ['10.00', Entity::STATUS_CANCELLED, [], false],
-            ['10.00', Entity::STATUS_OUTSTANDING, [], true],
-            ['10.00', Entity::STATUS_PAID, [$paid10], false],
-            ['20.00', Entity::STATUS_OUTSTANDING, [$paid10], false],
-            ['10.00', Entity::STATUS_OUTSTANDING, [$pending10], true],
+            ['10.00', Entity::STATUS_PAID, $noFeeTransactions, false],
+            ['10.00', Entity::STATUS_CANCELLED, $noFeeTransactions, false],
+            ['10.00', Entity::STATUS_OUTSTANDING, $noFeeTransactions, true],
+            ['10.00', Entity::STATUS_PAID, $paid10, false],
+            ['20.00', Entity::STATUS_OUTSTANDING, $paid10, false],
+            ['10.00', Entity::STATUS_OUTSTANDING, $pending10, true],
         ];
     }
 
@@ -1244,12 +1298,16 @@ final class FeeEntityTest extends EntityTester
      * @param bool $expected
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('canRefundProvider')]
-    public function testCanRefund(mixed $feeType, mixed $feeStatus, mixed $feeTransactions, mixed $expected): void
-    {
+    public function testCanRefund(
+        \Closure $createFeeType,
+        mixed $feeStatus,
+        \Closure $createFeeTransactions,
+        mixed $expected
+    ): void {
         $this->sut
-            ->setFeeType($feeType)
+            ->setFeeType($createFeeType())
             ->setFeeStatus($feeStatus)
-            ->setFeeTransactions(new ArrayCollection($feeTransactions));
+            ->setFeeTransactions(new ArrayCollection($createFeeTransactions()));
 
         $this->assertSame($expected, $this->sut->canRefund());
     }
@@ -1259,11 +1317,11 @@ final class FeeEntityTest extends EntityTester
      */
     public static function canRefundProvider(): array
     {
-        $nonMiscFeeType = m::mock(FeeType::class)
+        $nonMiscFeeType = static fn () => m::mock(FeeType::class)
             ->shouldReceive('isMiscellaneous')
             ->andReturn(false)
             ->getMock();
-        $miscFeeType = m::mock(FeeType::class)
+        $miscFeeType = static fn () => m::mock(FeeType::class)
             ->shouldReceive('isMiscellaneous')
             ->andReturn(true)
             ->getMock();
@@ -1272,57 +1330,37 @@ final class FeeEntityTest extends EntityTester
         $paid        = new RefData(Entity::STATUS_PAID);
         $cancelled   = new RefData(Entity::STATUS_CANCELLED);
 
-        // Not migrated
-        $txn1 = m::mock(Transaction::class);
-        // Migrated
-        $txn2 = m::mock(Transaction::class);
-        // Refunded
-        $txn3 = m::mock(Transaction::class);
+        $createFeeTransaction = static function (bool $isMigrated, bool $isRefundedOrReversed) {
+            $transaction = m::mock(Transaction::class);
+            $transaction->shouldReceive('isCompletePaymentOrAdjustment')
+                ->andReturn(true)
+                ->shouldReceive('isMigrated')
+                ->andReturn($isMigrated);
 
-        $nonRefundedFeeTransaction = m::mock(FeeTransaction::class);
-        $nonRefundedFeeTransaction->shouldReceive('getTransaction')->andReturn($txn1);
+            $feeTransaction = m::mock(FeeTransaction::class);
+            $feeTransaction->shouldReceive('getTransaction')->andReturn($transaction);
+            $feeTransaction
+                ->shouldReceive('isRefundedOrReversed')
+                ->andReturn($isRefundedOrReversed);
 
-        $txn1->shouldReceive('isCompletePaymentOrAdjustment')
-            ->andReturn(true)
-            ->shouldReceive('isMigrated')
-            ->andReturn(false);
+            return $feeTransaction;
+        };
 
-        $nonRefundedFeeTransaction
-            ->shouldReceive('isRefundedOrReversed')
-            ->andReturn(false);
-
-        $migratedTransaction = m::mock(FeeTransaction::class);
-        $migratedTransaction->shouldReceive('getTransaction')->andReturn($txn2);
-        $txn2->shouldReceive('isCompletePaymentOrAdjustment')
-            ->andReturn(true)
-            ->shouldReceive('isMigrated')
-            ->andReturn(true);
-
-        $migratedTransaction
-            ->shouldReceive('isRefundedOrReversed')
-            ->andReturn(false);
-
-        $refundedFeeTransaction = m::mock(FeeTransaction::class);
-        $refundedFeeTransaction->shouldReceive('getTransaction')->andReturn($txn3);
-        $txn3->shouldReceive('isCompletePaymentOrAdjustment')
-            ->andReturn(true)
-            ->shouldReceive('isMigrated')
-            ->andReturn(false);
-
-        $refundedFeeTransaction
-            ->shouldReceive('isRefundedOrReversed')
-            ->andReturn(true);
+        $noFeeTransactions = static fn () => [];
+        $nonRefundedFeeTransaction = static fn () => [$createFeeTransaction(false, false)];
+        $migratedTransaction = static fn () => [$createFeeTransaction(true, false)];
+        $refundedFeeTransaction = static fn () => [$createFeeTransaction(false, true)];
 
         return [
-            'std outstanding'  => [$nonMiscFeeType, $outstanding, [], false],
-            'std paid'         => [$nonMiscFeeType, $paid, [], false],
-            'std cancelled'    => [$nonMiscFeeType, $cancelled, [], false],
-            'misc outstanding' => [$miscFeeType, $outstanding, [], false],
-            'misc paid'        => [$miscFeeType, $paid, [$nonRefundedFeeTransaction], true],
-            'misc cancelled'   => [$miscFeeType, $cancelled, [], false],
-            'std not refunded' => [$nonMiscFeeType, $paid, [$nonRefundedFeeTransaction], true],
-            'migrated'         => [$nonMiscFeeType, $paid, [$migratedTransaction], false],
-            'std refunded'     => [$nonMiscFeeType, $paid, [$refundedFeeTransaction], false],
+            'std outstanding'  => [$nonMiscFeeType, $outstanding, $noFeeTransactions, false],
+            'std paid'         => [$nonMiscFeeType, $paid, $noFeeTransactions, false],
+            'std cancelled'    => [$nonMiscFeeType, $cancelled, $noFeeTransactions, false],
+            'misc outstanding' => [$miscFeeType, $outstanding, $noFeeTransactions, false],
+            'misc paid'        => [$miscFeeType, $paid, $nonRefundedFeeTransaction, true],
+            'misc cancelled'   => [$miscFeeType, $cancelled, $noFeeTransactions, false],
+            'std not refunded' => [$nonMiscFeeType, $paid, $nonRefundedFeeTransaction, true],
+            'migrated'         => [$nonMiscFeeType, $paid, $migratedTransaction, false],
+            'std refunded'     => [$nonMiscFeeType, $paid, $refundedFeeTransaction, false],
         ];
     }
 
@@ -1564,50 +1602,51 @@ final class FeeEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRelatedOrganisation')]
-    public function testGetRelatedOrganisation(Entity $sut, mixed $expect): void
-    {
-        $this->assertSame($expect, $sut->getRelatedOrganisation());
-    }
-
-    public static function dpTestGetRelatedOrganisation(): \Iterator
+    /**
+     * @param \Closure $createSut given the related organisation and a ref data mock, returns the fee under test
+     */
+    public function testGetRelatedOrganisation(\Closure $createSut, bool $expectOrganisation): void
     {
         /** @var Organisation $mockOrg */
         $mockOrg = m::mock(Organisation::class);
         /** @var RefData $mockRef */
         $mockRef = m::mock(RefData::class);
 
-        $licence = new Licence($mockOrg, $mockRef);
-        yield [
-            'sut' => self::instantiate(Entity::class)->setApplication(
-                new Entities\Application\Application($licence, $mockRef, false)
-            ),
-            'expect' => $mockOrg,
+        $sut = $createSut($mockOrg, $mockRef);
+
+        $this->assertSame($expectOrganisation ? $mockOrg : null, $sut->getRelatedOrganisation());
+    }
+
+    public static function dpTestGetRelatedOrganisation(): \Iterator
+    {
+        yield 'application' => [
+            'createSut' => static fn (Organisation $org, RefData $ref) => self::instantiate(Entity::class)
+                ->setApplication(new Entities\Application\Application(new Licence($org, $ref), $ref, false)),
+            'expectOrganisation' => true,
         ];
-        yield [
-            'sut' => self::instantiate(Entity::class)->setBusReg(
-                new Entities\Bus\BusReg()->setLicence($licence)
-            ),
-            'expect' => $mockOrg,
+        yield 'bus reg' => [
+            'createSut' => static fn (Organisation $org, RefData $ref) => self::instantiate(Entity::class)
+                ->setBusReg(new Entities\Bus\BusReg()->setLicence(new Licence($org, $ref))),
+            'expectOrganisation' => true,
         ];
-        yield [
-            'sut' => self::instantiate(Entity::class)->setLicence($licence),
-            'expect' => $mockOrg,
+        yield 'licence' => [
+            'createSut' => static fn (Organisation $org, RefData $ref) => self::instantiate(Entity::class)
+                ->setLicence(new Licence($org, $ref)),
+            'expectOrganisation' => true,
         ];
-        yield [
-            'sut' => self::instantiate(Entity::class)->setIrfoGvPermit(
-                new IrfoGvPermit($mockOrg, new Entities\Irfo\IrfoGvPermitType(), $mockRef)
-            ),
-            'expect' => $mockOrg,
+        yield 'irfo gv permit' => [
+            'createSut' => static fn (Organisation $org, RefData $ref) => self::instantiate(Entity::class)
+                ->setIrfoGvPermit(new IrfoGvPermit($org, new Entities\Irfo\IrfoGvPermitType(), $ref)),
+            'expectOrganisation' => true,
         ];
-        yield [
-            'sut' => self::instantiate(Entity::class)->setIrfoPsvAuth(
-                new IrfoPsvAuth($mockOrg, new Entities\Irfo\IrfoPsvAuthType(), $mockRef)
-            ),
-            'expect' => $mockOrg,
+        yield 'irfo psv auth' => [
+            'createSut' => static fn (Organisation $org, RefData $ref) => self::instantiate(Entity::class)
+                ->setIrfoPsvAuth(new IrfoPsvAuth($org, new Entities\Irfo\IrfoPsvAuthType(), $ref)),
+            'expectOrganisation' => true,
         ];
-        yield [
-            'sut' => self::instantiate(Entity::class),
-            'expect' => null,
+        yield 'none' => [
+            'createSut' => static fn (Organisation $org, RefData $ref) => self::instantiate(Entity::class),
+            'expectOrganisation' => false,
         ];
     }
 

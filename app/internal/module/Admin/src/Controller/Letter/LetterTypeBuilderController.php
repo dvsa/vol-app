@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Admin\Controller\Letter;
 
 use Dvsa\Olcs\Transfer\Command\Letter\LetterType\PreviewComposition as PreviewCompositionDTO;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterType\SuggestPreviewRecords as SuggestRecordsDTO;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterType\Update as UpdateDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterAppendix\GetList as AppendixListDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterChoice\GetList as ChoiceListDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterSection\GetList as SectionListDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterType\Get as LetterTypeDTO;
+use Dvsa\Olcs\Transfer\Query\Letter\PreviewRecord\Lookup as RecordLookupDTO;
 use Laminas\Http\Response;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
@@ -128,6 +130,55 @@ class LetterTypeBuilderController extends AbstractInternalController implements 
                 $this->fetchList(SectionListDTO::class)
             ),
         ]);
+    }
+
+    /**
+     * One example record per context combination the on-screen composition branches on.
+     * "None found" rows are kept: they tell the admin that branch is only reachable
+     * through the manual overrides.
+     */
+    public function suggestAction(): JsonModel
+    {
+        $payload = json_decode((string) $this->getRequest()->getContent(), true);
+
+        if (!is_array($payload) || empty($payload['letterType'])) {
+            return new JsonModel(['status' => 400, 'message' => 'A letter type is required']);
+        }
+
+        $response = $this->handleCommand(SuggestRecordsDTO::create([
+            'letterType' => (int) $payload['letterType'],
+            'sections' => array_map('intval', $payload['sections'] ?? []),
+        ]));
+
+        if (!$response->isOk()) {
+            return new JsonModel(['status' => 400, 'message' => 'Could not suggest records']);
+        }
+
+        return new JsonModel([
+            'status' => 200,
+            'suggestions' => $response->getResult()['flags']['suggestions'] ?? [],
+        ]);
+    }
+
+    /**
+     * Resolve a licence number or id to a record for the preview context. Backs the
+     * picker's typeahead, so a miss is a normal answer rather than an error.
+     */
+    public function recordAction(): JsonModel
+    {
+        $term = trim((string) $this->params()->fromQuery('term', ''));
+
+        if ($term === '') {
+            return new JsonModel(['status' => 200, 'found' => false]);
+        }
+
+        $response = $this->handleQuery(RecordLookupDTO::create(['term' => $term]));
+
+        if (!$response->isOk()) {
+            return new JsonModel(['status' => 200, 'found' => false]);
+        }
+
+        return new JsonModel(['status' => 200] + $response->getResult());
     }
 
     private function fetchLetterType(int $id): ?array

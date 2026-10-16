@@ -28,9 +28,12 @@ class MasterTemplateResolver
 
     /**
      * @param LetterInstance $letterInstance
+     * @param bool|null $isNiOverride effective isNi where the caller lets it be overridden
+     *                                independently of the licence (the builder preview);
+     *                                null defers to the licence
      * @return MasterTemplate|null
      */
-    public function resolve(LetterInstance $letterInstance): ?MasterTemplate
+    public function resolve(LetterInstance $letterInstance, ?bool $isNiOverride = null): ?MasterTemplate
     {
         // Letter types without their own template fall back to the default chrome —
         // parity with the pre-resolver behaviour; a null here would silently render
@@ -41,7 +44,7 @@ class MasterTemplateResolver
             return null;
         }
 
-        $preferredLocale = $this->preferredLocaleFor($letterInstance);
+        $preferredLocale = $this->preferredLocaleFor($letterInstance, $isNiOverride);
 
         if ($base->getLocale() === $preferredLocale) {
             return $base;
@@ -59,11 +62,14 @@ class MasterTemplateResolver
      * extension points, not in scope for VOL-7305.
      *
      * @param LetterInstance $letter
+     * @param bool|null $isNiOverride
      * @return string
      */
-    private function preferredLocaleFor(LetterInstance $letter): string
+    private function preferredLocaleFor(LetterInstance $letter, ?bool $isNiOverride = null): string
     {
-        $isNi = $letter->getLicence()?->isNi() ?? false;
+        // The builder preview lets Region be overridden without an NI licence in hand;
+        // the real generation paths pass nothing and the licence stays the truth.
+        $isNi = $isNiOverride ?? $letter->getLicence()?->isNi() ?? false;
 
         // future: read a per-LetterType chrome override here, or a Welsh-language
         //         flag carried in the LetterInstance, to pick cy_GB or customN_*.

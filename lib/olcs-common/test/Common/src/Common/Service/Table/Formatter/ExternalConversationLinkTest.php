@@ -32,6 +32,10 @@ final class ExternalConversationLinkTest extends MockeryTestCase
     #[\Override]
     protected function tearDown(): void
     {
+        // Restored to the timezone phpunit.xml.dist declares. Leaving a foreign one behind
+        // makes any later test that computes a relative date order-dependent — the provider and
+        // the assertion end up on opposite sides of midnight.
+        date_default_timezone_set(ini_get('date.timezone') ?: 'UTC');
         m::close();
     }
 
@@ -66,5 +70,29 @@ final class ExternalConversationLinkTest extends MockeryTestCase
 
         // Then assert the formatted datetime is included
         $this->assertStringContainsString($expectedFormattedDate, $formattedDateString);
+    }
+
+    public function testSubjectIsEscaped(): void
+    {
+        $payload = '<script>alert(document.domain)</script>';
+
+        $row = [
+            'id' => 1,
+            'userContextStatus' => 'NEW_MESSAGE',
+            'createdOn' => '2025-05-09T09:36:02+0000',
+            'subject' => $payload,
+            'task' => [
+                'licence' => ['licNo' => 'AB123'],
+            ],
+        ];
+
+        $this->urlHelper->expects('fromRoute')
+            ->with('conversations/view', ['conversationId' => 1])
+            ->andReturns('conversations/view');
+
+        $result = $this->sut->format($row);
+
+        $this->assertStringNotContainsString($payload, $result);
+        $this->assertStringContainsString('&lt;script&gt;', $result);
     }
 }

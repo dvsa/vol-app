@@ -52,9 +52,8 @@ Test the application licence cancelled filter')]
      */
     public static function provideTestProvider(): \Iterator
     {
-        $sut = new LicenceCancelled(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
-        yield [PublicationSectionEntity::LIC_SURRENDERED_SECTION, $sut::LIC_SURRENDERED];
-        yield [PublicationSectionEntity::LIC_TERMINATED_SECTION, $sut::LIC_TERMINATED];
-        yield [PublicationSectionEntity::LIC_CNS_SECTION, $sut::LIC_CNS];
+        yield [PublicationSectionEntity::LIC_SURRENDERED_SECTION, LicenceCancelled::LIC_SURRENDERED];
+        yield [PublicationSectionEntity::LIC_TERMINATED_SECTION, LicenceCancelled::LIC_TERMINATED];
+        yield [PublicationSectionEntity::LIC_CNS_SECTION, LicenceCancelled::LIC_CNS];
     }
 }

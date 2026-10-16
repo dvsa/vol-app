@@ -189,6 +189,32 @@
             "type": "parameter"
           },
           {
+            "configPath": ["cpms_api", "gateway", "domain"],
+            "awsPath": "/applicationparams/{env}/olcs_cpms_gateway_host",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["cpms_api", "gateway", "oauth2", "client_id"],
+            "awsPath": "/applicationparams/{env}/olcs_cpms_gateway_client_id",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["cpms_api", "gateway", "oauth2", "client_secret"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_cpms_gateway_client_secret"
+          },
+          {
+            "configPath": ["cpms_api", "gateway", "oauth2", "token_url"],
+            "awsPath": "/applicationparams/{env}/olcs_cpms_gateway_token_url",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["cpms_api", "gateway", "oauth2", "scope"],
+            "awsPath": "/applicationparams/{env}/olcs_cpms_gateway_scope",
+            "type": "parameter"
+          },
+          {
             "configPath": ["companies_house", "auth", "username"],
             "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
             "type": "secret",
@@ -210,6 +236,16 @@
             "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
             "type": "secret",
             "secretKey": "olcs_companieshousexmlpassword"
+          },
+          {
+            "configPath": ["idp", "sweeper_threshold_minutes"],
+            "awsPath": "/applicationparams/{env}/idp_sweeper_threshold_minutes",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["idp", "dedupe_success_window_hours"],
+            "awsPath": "/applicationparams/{env}/idp_dedupe_success_window_hours",
+            "type": "parameter"
           },
           {
             "configPath": ["document_share", "client", "webdav_baseuri"],

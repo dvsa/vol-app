@@ -102,8 +102,9 @@ final class IrhpPermitRangeEntityTest extends EntityTester
      * Test the canDelete method
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
-    public function testCanDelete(mixed $data, mixed $expected): void
+    public function testCanDelete(\Closure $createData, mixed $expected): void
     {
+        $data = $createData();
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
         $prefix = "UK";
         $fromNo = "1";
@@ -139,7 +140,7 @@ final class IrhpPermitRangeEntityTest extends EntityTester
     public static function provider(): \Iterator
     {
         yield 'valid delete' => [
-            [
+            static fn () => [
                 'irhpCandidatePermits' => [],
                 'countrys' => [],
                 'irhpPermits' => []
@@ -147,7 +148,7 @@ final class IrhpPermitRangeEntityTest extends EntityTester
             true,
         ];
         yield 'existing candidate permits' => [
-            [
+            static fn () => [
                 'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
                 'countrys' => [],
                 'irhpPermits' => []
@@ -155,7 +156,7 @@ final class IrhpPermitRangeEntityTest extends EntityTester
             false
         ];
         yield 'existing countries' => [
-            [
+            static fn () => [
                 'irhpCandidatePermits' => [],
                 'countrys' => [m::mock(Country::class)],
                 'irhpPermits' => []
@@ -163,7 +164,7 @@ final class IrhpPermitRangeEntityTest extends EntityTester
             false
         ];
         yield 'existing irhp permits' => [
-            [
+            static fn () => [
                 'irhpCandidatePermits' => [],
                 'countrys' => [],
                 'irhpPermits' => [m::mock(IrhpPermit::class)]
@@ -171,7 +172,7 @@ final class IrhpPermitRangeEntityTest extends EntityTester
             false
         ];
         yield 'candidate permits and countries' => [
-            [
+            static fn () => [
                 'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
                 'countrys' => [m::mock(Country::class)],
                 'irhpPermits' => []
@@ -179,7 +180,7 @@ final class IrhpPermitRangeEntityTest extends EntityTester
             false
         ];
         yield 'candidate permits and irhp permits' => [
-            [
+            static fn () => [
                 'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
                 'countrys' => [],
                 'irhpPermits' => [m::mock(IrhpPermit::class)]
@@ -187,7 +188,7 @@ final class IrhpPermitRangeEntityTest extends EntityTester
             false
         ];
         yield 'countries and irhp permits' => [
-            [
+            static fn () => [
                 'irhpCandidatePermits' => [],
                 'countrys' => [m::mock(Country::class)],
                 'irhpPermits' => [m::mock(IrhpPermit::class)]
@@ -195,7 +196,7 @@ final class IrhpPermitRangeEntityTest extends EntityTester
             false
         ];
         yield 'candidate permits, countries and irhp permits' => [
-            [
+            static fn () => [
                 'irhpCandidatePermits' => [m::mock(IrhpCandidatePermit::class)],
                 'countrys' => [m::mock(Country::class)],
                 'irhpPermits' => [m::mock(IrhpPermit::class)]
@@ -234,10 +235,10 @@ final class IrhpPermitRangeEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasCountries')]
-    public function testHasCountries(array $countries, mixed $expectedHasCountries): void
+    public function testHasCountries(\Closure $createCountries, mixed $expectedHasCountries): void
     {
         $entity = m::mock(Entity::class)->makePartial();
-        $entity->setCountrys(new ArrayCollection($countries));
+        $entity->setCountrys(new ArrayCollection($createCountries()));
 
         $this->assertEquals(
             $expectedHasCountries,
@@ -248,15 +249,15 @@ final class IrhpPermitRangeEntityTest extends EntityTester
     public static function dpHasCountries(): \Iterator
     {
         yield [
-            [],
+            static fn () => [],
             false
         ];
         yield [
-            [m::mock(Country::class)],
+            static fn () => [m::mock(Country::class)],
             true
         ];
         yield [
-            [m::mock(Country::class), m::mock(Country::class)],
+            static fn () => [m::mock(Country::class), m::mock(Country::class)],
             true
         ];
     }

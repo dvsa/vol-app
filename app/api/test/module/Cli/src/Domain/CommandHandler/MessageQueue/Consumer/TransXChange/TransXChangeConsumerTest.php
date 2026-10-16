@@ -299,6 +299,8 @@ final class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
 
         $this->repoMap['EbsrSubmission']->expects('fetchById')->andThrow(RuntimeException::class);
 
+        $this->mockedSmServices[Queue::class]->expects('changeMessageVisibility');
+
         $command = TransXChangeConsumerCmd::create([]);
 
         // Exception will be caught, logged, and visibility reset, then rethrown.

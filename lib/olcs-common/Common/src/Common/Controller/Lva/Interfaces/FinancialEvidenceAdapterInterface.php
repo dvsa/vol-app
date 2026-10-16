@@ -17,7 +17,7 @@ interface FinancialEvidenceAdapterInterface extends AdapterInterface
 {
     public function getData($id);
 
-    public function getDocuments($id);
+    public function getDocuments($id, $showAnalysisStatus = false);
 
     public function getUploadMetaData($file, $id);
 

@@ -11,7 +11,7 @@ class LastTmLetterCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:last-tm-letter';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Send Last TM letters.');
     }

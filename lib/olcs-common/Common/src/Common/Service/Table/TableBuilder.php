@@ -8,6 +8,8 @@ use Common\Service\Table\Exception\MissingFormatterException;
 use Common\Service\Table\Formatter\FormatterPluginManager;
 use Psr\Container\ContainerInterface;
 use Laminas\I18n\Translator\TranslatorInterface as Translator;
+use League\Csv\EscapeFormula;
+use League\Csv\Writer;
 use LmcRbacMvc\Service\AuthorizationService;
 
 /**
@@ -968,7 +970,81 @@ class TableBuilder implements \Stringable
      */
     public function render()
     {
+        if ($this->contentType === self::CONTENT_TYPE_CSV) {
+            return $this->renderCsv();
+        }
+
         return $this->replaceContent($this->renderTable(), $this->getVariables());
+    }
+
+    /**
+     * Render the table as a CSV file.
+     *
+     * Deliberately not a layout. Everything else here is produced by rendering a .phtml and running
+     * str_replace over the result, and a CSV is not markup — treating it as markup produced three
+     * separate bugs, none of which a template can fix because they are all properties of the file
+     * format rather than of any one cell:
+     *
+     *   framing   fields were joined with ", " and never quoted, so a comma inside a value became
+     *             a column boundary and a newline became a row boundary
+     *   formulas  a cell beginning "=", "-", "+", "@", tab or CR is executed by Excel, LibreOffice
+     *             and Sheets, and Excel's DDE syntax reaches outside the document
+     *   variables the finished string was passed back through replaceContent() with the table's
+     *             variables, so a cell containing "{{title}}" was silently blanked
+     *
+     * League\Csv\Writer wraps fputcsv and handles the first, EscapeFormula handles the second, and
+     * the third goes away by not being a template. None of that is worth reimplementing here: the
+     * quoting rules are RFC 4180 and the formula-starting characters are a published list, so a
+     * hand-written version is a maintained copy of someone else's better-tested one.
+     *
+     * The per-cell rendering above is still used, and has to be — it is what applies formatters,
+     * column types, and the CSV element partials (a link column renders its label rather than an
+     * anchor). Only the assembly changes.
+     *
+     * @return string
+     */
+    private function renderCsv()
+    {
+        $this->setType($this->whichType());
+
+        $writer = Writer::fromString();
+
+        // RFC 4180 has no escape character — a quote is escaped by doubling it, which the enclosure
+        // handling already does. Leaving fputcsv's legacy backslash in place means a value ending
+        // in a backslash escapes the closing quote and swallows the next field.
+        $writer->setEscape('');
+
+        // escapeRecord(...) rather than the formatter object: passing the object makes the writer
+        // call __invoke(), which league/csv deprecated in 9.11.
+        $writer->addFormatter(new EscapeFormula()->escapeRecord(...));
+
+        $columns = $this->getColumns();
+
+        $writer->insertOne($this->csvRecord(
+            array_map(fn(array $column): mixed => $this->renderHeaderColumn($column), $columns)
+        ));
+
+        foreach ($this->getRows() as $row) {
+            $writer->insertOne($this->csvRecord(
+                array_map(fn(array $column): mixed => $this->renderBodyColumn($row, $column), $columns)
+            ));
+        }
+
+        return $writer->toString();
+    }
+
+    /**
+     * One record's worth of cells, as strings.
+     *
+     * A hidden column renders as null from both header and body, and becomes an empty field rather
+     * than being dropped, so the two stay aligned — which is what the layouts this replaces did.
+     *
+     * @param array<int, mixed> $cells
+     * @return string[]
+     */
+    private function csvRecord(array $cells): array
+    {
+        return array_map(static fn(mixed $cell): string => (string)$cell, $cells);
     }
 
     /**
@@ -1552,12 +1628,34 @@ class TableBuilder implements \Stringable
         }
 
         if (isset($column['format'])) {
-            $content = $this->replaceContent($column['format'], $row);
+            // The format string is developer-authored markup and $row is data, so the values are
+            // escaped on the way in and the template itself is left alone.
+            $content = $this->replaceContentEscapingValues($column['format'], $row);
         }
 
         if (!isset($content) || (empty($content) && !in_array($content, [0, 0.0, '0']))) {
-            $content =  isset($column['name']) && isset($row[$column['name']]) ?
-                $row[$column['name']] : '';
+            // Nothing produced content, so this column is a bare row value going straight into the
+            // cell. There is no formatter or type involved that could have escaped it, and no
+            // markup here to damage — escaping is unambiguously correct.
+            //
+            // Only for a value that has a string form, though. A column naming a to-many field
+            // holds an array here, and escaping converts it to the literal "Array": the open cases
+            // report reached this line with `outcomes` for every case with no outcome, because
+            // RefData returns '' for an empty collection and an empty string sends us down this
+            // branch. replaceContent() used to absorb that by dropping the value and sweeping the
+            // placeholder away; escaping ahead of the substitution took away its chance to.
+            $value = isset($column['name']) ? ($row[$column['name']] ?? null) : null;
+
+            $content = ContentHelper::hasStringForm($value) ? ContentHelper::escapeValue($value) : '';
+        }
+
+        // Escaping in this pipeline happens at the source — formatters and closures escape the row
+        // values they interpolate — which is right for HTML and wrong for anything else. CSV is not
+        // HTML: nothing downstream will decode entities, so an operator called "Smith & Sons Ltd"
+        // reaches the spreadsheet as "Smith &amp; Sons Ltd". Undo it here, at the renderer, which
+        // is the only place that knows the output format.
+        if ($this->contentType === self::CONTENT_TYPE_CSV) {
+            $content = html_entity_decode((string)$content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         }
 
         $replacements = [
@@ -1607,7 +1705,7 @@ class TableBuilder implements \Stringable
                 continue;
             }
 
-            $plainAttributes .= ' ' . $attribute . '="' . $value . '"';
+            $plainAttributes .= ' ' . $attribute . '="' . ContentHelper::escapeAttributeValue($value) . '"';
         }
 
         return $plainAttributes;
@@ -1730,6 +1828,23 @@ class TableBuilder implements \Stringable
     public function replaceContent($content, $vars = [])
     {
         return $this->getContentHelper()->replaceContent($content, $vars);
+    }
+
+    /**
+     * Substitute row data into a developer-authored template, escaping the values.
+     *
+     * Use this wherever $content is markup written by us and $vars are row data. Named rather than
+     * a boolean argument on replaceContent() because the distinction it encodes — who authored the
+     * markup versus who authored the values — is the whole basis of the escaping contract, and
+     * reads better at the call site than a bare `true`.
+     *
+     * @param string $content
+     * @param array $vars
+     * @return string
+     */
+    public function replaceContentEscapingValues($content, $vars = [])
+    {
+        return $this->getContentHelper()->replaceContent($content, $vars, true);
     }
 
     /**
@@ -2042,7 +2157,7 @@ class TableBuilder implements \Stringable
         if (isset($this->variables['dataAttributes']) && is_array($this->variables['dataAttributes'])) {
             $attrs = [];
             foreach ($this->variables['dataAttributes'] as $attribute => $value) {
-                $attrs[] = $attribute . '="' . $value . '"';
+                $attrs[] = $attribute . '="' . ContentHelper::escapeAttributeValue($value) . '"';
             }
 
             $this->variables['dataAttributes'] = implode(' ', $attrs);

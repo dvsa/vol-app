@@ -1,0 +1,248 @@
+{
+  "name": "IrhpPermitWindow",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "permitWindowDetails",
+        "attributes": {
+          "class": "table__form"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "stockId",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "startDate",
+              "type": "DateTimeSelect",
+              "attributes": {
+                "required": "required",
+                "id": "startDate"
+              },
+              "options": {
+                "label": "internal.community_licence.form.start_date",
+                "create_empty_option": true,
+                "max_year_delta": "+1",
+                "min_year_delta": "0",
+                "display_every_minute": true,
+                "render_delimiters": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "endDate",
+              "type": "DateTimeSelect",
+              "attributes": {
+                "required": "required",
+                "id": "endDate"
+              },
+              "options": {
+                "label": "internal.community_licence.form.end_date",
+                "create_empty_option": true,
+                "max_year_delta": "+10",
+                "min_year_delta": "0",
+                "display_every_minute": true,
+                "render_delimiters": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "permitWindowDetails": {
+      "startDate": {
+        "name": "startDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateTimeSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "startDate",
+              "context_values": [
+                "-- ::00"
+              ],
+              "context_truth": false,
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d H:i:s",
+                    "messages": {
+                      "dateInvalidDate": "datetime.compare.validation.message.invalid"
+                    }
+                  },
+                  "break_chain_on_failure": true
+                },
+                {
+                  "name": "DateCompare",
+                  "options": {
+                    "has_time": true,
+                    "compare_to": "endDate",
+                    "operator": "lt",
+                    "compare_to_label": "End date"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "endDate": {
+        "name": "endDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateTimeSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "endDate",
+              "context_values": [
+                "-- ::00"
+              ],
+              "context_truth": false,
+              "allow_empty": false,
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d H:i:s",
+                    "messages": {
+                      "dateInvalidDate": "datetime.compare.validation.message.invalid"
+                    }
+                  },
+                  "break_chain_on_failure": true
+                },
+                {
+                  "name": "DateCompare",
+                  "options": {
+                    "has_time": true,
+                    "compare_to": "startDate",
+                    "operator": "gt",
+                    "compare_to_label": "Start date"
+                  }
+                },
+                {
+                  "name": "DateInFuture"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

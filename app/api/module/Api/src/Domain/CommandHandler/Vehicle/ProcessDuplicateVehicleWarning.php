@@ -9,7 +9,7 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Vehicle;
 
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore;
-use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue;
+use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
@@ -24,6 +24,8 @@ use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
  */
 final class ProcessDuplicateVehicleWarning extends AbstractCommandHandler implements TransactionedInterface
 {
+    public const TEMPLATE_ID_GB = 1064;
+    public const TEMPLATE_ID_NI = 1065;
     protected $repoServiceName = 'LicenceVehicle';
 
     #[\Override]
@@ -38,8 +40,17 @@ final class ProcessDuplicateVehicleWarning extends AbstractCommandHandler implem
         $data = [
             'documentId' => $documentId,
             'jobName' => $description
+
         ];
-        $this->result->merge($this->handleSideEffect(Enqueue::create($data)));
+        $correspondenceEmail = $licenceVehicle->getLicence()->getCorrespondenceCd()->getEmailAddress();
+        $method = !empty($correspondenceEmail)
+            ? PrintLetter::METHOD_EMAIL
+            : PrintLetter::METHOD_PRINT_AND_POST;
+
+        $this->result->merge($this->handleSideEffect(PrintLetter::create([
+            'id' => $documentId,
+            'method' => $method
+        ])));
 
         $licenceVehicle->setWarningLetterSentDate(new DateTime());
         $this->getRepo()->save($licenceVehicle);
@@ -61,7 +72,17 @@ final class ProcessDuplicateVehicleWarning extends AbstractCommandHandler implem
             'licence'     => $licenceVehicle->getLicence()->getId(),
             'category'    => Category::CATEGORY_LICENSING,
             'subCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
-            'isExternal'  => false
+            'isExternal'  => false,
+            'dispatch' => true,
+            'metadata' => json_encode([
+                'details' => [
+                    'category'            => Category::CATEGORY_LICENSING,
+                    'documentSubCategory' => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
+                    'documentTemplate'    => $licenceVehicle->getLicence()->getNiFlag() === 'Y'
+                        ? self::TEMPLATE_ID_NI
+                        : self::TEMPLATE_ID_GB,
+                    'allowEmail'          => $licenceVehicle->getLicence()->getOrganisation()->getAllowEmail(),
+                ]]),
         ];
 
         $result = $this->handleSideEffect(GenerateAndStore::create($dtoData));

@@ -178,6 +178,7 @@ return [
             // Controller LVA Adapters
             'ApplicationConditionsUndertakingsAdapter' => \Common\Controller\Lva\Adapters\ApplicationConditionsUndertakingsAdapter::class,
             'ApplicationFinancialEvidenceAdapter' => Common\Controller\Lva\Adapters\ApplicationFinancialEvidenceAdapter::class,
+            'ApplicationKnowledgeExperienceAdapter' => Common\Controller\Lva\Adapters\ApplicationKnowledgeExperienceAdapter::class,
             'ApplicationLvaAdapter' => \Common\Controller\Lva\Adapters\ApplicationLvaAdapter::class,
             'ApplicationPeopleAdapter' => Common\Controller\Lva\Adapters\ApplicationPeopleAdapter::class,
             'ApplicationTransportManagerAdapter' => Common\Controller\Lva\Adapters\ApplicationTransportManagerAdapter::class,
@@ -428,6 +429,7 @@ return [
 
             // Controller LVA Adapters
             \Common\Controller\Lva\Adapters\ApplicationConditionsUndertakingsAdapter::class => \Common\Controller\Lva\Factories\Adapter\ApplicationConditionsUndertakingsAdapterFactory::class,
+            \Common\Controller\Lva\Adapters\ApplicationKnowledgeExperienceAdapter::class => \Common\Controller\Lva\Factories\Adapter\ApplicationKnowledgeExperienceAdapterFactory::class,
             \Common\Controller\Lva\Adapters\ApplicationFinancialEvidenceAdapter::class => \Common\Controller\Lva\Factories\Adapter\ApplicationFinancialEvidenceAdapterFactory::class,
             \Common\Controller\Lva\Adapters\ApplicationLvaAdapter::class => \Common\Controller\Lva\Factories\Adapter\ApplicationLvaAdapterFactory::class,
             \Common\Controller\Lva\Adapters\ApplicationPeopleAdapter::class => \Common\Controller\Lva\Factories\Adapter\ApplicationPeopleAdapterFactory::class,

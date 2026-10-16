@@ -21,7 +21,8 @@ final readonly class VariantResolution
      * @param int                       $conditionedCount   Live conditioned variants on this section
      * @param LetterSectionVariant[]    $liveDefaults       Non-deleted default variants; more than one is a config fault
      * @param LetterSectionVariant[]    $deleted            Soft-deleted variants, excluded from matching
-     * @param array<int, string[]>      $rejections         Failing dimensions per rejected variant, keyed by spl_object_id
+     * @param array<int, array{variant: LetterSectionVariant, failed: string[]}> $rejections
+     *        Each rejected variant with the dimensions that blocked it, keyed by spl_object_id
      */
     public function __construct(
         public ?LetterSectionVariant $chosen,
@@ -51,6 +52,27 @@ final readonly class VariantResolution
     public function hasDuplicateDefaults(): bool
     {
         return count($this->liveDefaults) > 1;
+    }
+
+    /**
+     * The rejected variant nearest to matching: fewest failing dimensions, first wins a tie.
+     *
+     * This is what turns "none match" into an instruction -- its pinned dimensions ARE the
+     * context an admin needs to set to see it.
+     *
+     * @return array{variant: LetterSectionVariant, failed: string[]}|null
+     */
+    public function closestRejection(): ?array
+    {
+        $closest = null;
+
+        foreach ($this->rejections as $rejection) {
+            if ($closest === null || count($rejection['failed']) < count($closest['failed'])) {
+                $closest = $rejection;
+            }
+        }
+
+        return $closest;
     }
 
     /**

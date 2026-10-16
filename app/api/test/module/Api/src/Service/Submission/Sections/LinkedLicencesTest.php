@@ -51,7 +51,7 @@ final class LinkedLicencesTest extends AbstractSubmissionSectionTestCase
      */
     public static function sectionTestProvider(): \Iterator
     {
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
         yield [$case, static::EXPECTED_RESULT];
     }

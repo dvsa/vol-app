@@ -11,7 +11,7 @@ class CompanyProfileDlqSQSQueueCommand extends AbstractSQSCommand
     protected static $defaultName = 'queue:company-profile-dlq';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Processes the Company Profile DLQ (Dead Letter Queue) items.')
             ->setHelp('This command allows you to process items in the Company Profile Dead Letter Queue...');

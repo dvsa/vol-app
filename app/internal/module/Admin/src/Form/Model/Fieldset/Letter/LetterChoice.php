@@ -62,6 +62,25 @@ class LetterChoice
     public $inputType = null;
 
     /**
+     * @Form\Options({
+     *     "label": "Goods or PSV",
+     *     "hint": "Only offer this choice on letters for this type of licence. Both offers it on every letter.",
+     *     "disable_inarray_validator": false,
+     *     "empty_option": "Both"
+     * })
+     * @Form\Type("Select")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"goodsOrPsv","class":"medium"})
+     * @Form\Options({
+     *     "value_options": {
+     *         "lcat_gv": "Goods",
+     *         "lcat_psv": "PSV"
+     *     }
+     * })
+     */
+    public $goodsOrPsv = null;
+
+    /**
      * @Form\Options({"label": "Display Order"})
      * @Form\Required(false)
      * @Form\Type("Number")

@@ -5,6 +5,8 @@ locals {
 
   supporting_service_names = ["liquibase"]
 
+  application_parameters_arn = "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+
   task_exec_iam_role_statements = [
     {
       effect = "Allow"
@@ -34,7 +36,32 @@ locals {
         "ssm:GetParametersByPath"
       ]
       resources = [
-        "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+        local.application_parameters_arn
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "kms:Decrypt"
+      ]
+      resources = [
+        data.aws_kms_alias.ssm.target_key_arn
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "events:PutEvents"
+      ]
+      resources = [
+        "arn:aws:events:eu-west-1:054614622558:event-bus/default"
+      ]
+      conditions = [
+        {
+          test     = "StringEquals"
+          variable = "events:source"
+          values   = ["vol.api"]
+        }
       ]
     },
     {
@@ -183,6 +210,27 @@ locals {
         "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
         "arn:aws:rds:eu-west-1:054614622558:db:ni-extract-*"
       ]
+    },
+    # idp-store-document-analysis-result Batch job needs to retrieve the
+    # analysis result S3 location from the AnalyseFinancialDocument SM execution output,
+    # and fetch the result JSON from the IDP output bucket.
+    {
+      effect  = "Allow"
+      actions = ["states:DescribeExecution"]
+      resources = [
+        "arn:aws:states:eu-west-1:054614622558:execution:vol-idp-dev-analyse-financial-document:*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "s3:ListBucket",
+        "s3:GetObject",
+      ]
+      resources = [
+        "arn:aws:s3:::vol-idp-dev-output",
+        "arn:aws:s3:::vol-idp-dev-output/*"
+      ]
     }
 
   ]
@@ -231,6 +279,10 @@ data "aws_secretsmanager_secret" "this" {
 
 data "aws_secretsmanager_secret" "infra" {
   name = "DEVAPPDEV-BASE-SM-INFRA"
+}
+
+data "aws_kms_alias" "ssm" {
+  name = "alias/aws/ssm"
 }
 
 data "aws_cognito_user_pools" "this" {
@@ -333,7 +385,16 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+            local.application_parameters_arn
+          ]
+        },
+        {
+          effect = "Allow"
+          actions = [
+            "kms:Decrypt"
+          ]
+          resources = [
+            data.aws_kms_alias.ssm.target_key_arn
           ]
         },
       ]
@@ -375,7 +436,16 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+            local.application_parameters_arn
+          ]
+        },
+        {
+          effect = "Allow"
+          actions = [
+            "kms:Decrypt"
+          ]
+          resources = [
+            data.aws_kms_alias.ssm.target_key_arn
           ]
         },
       ]
@@ -422,6 +492,8 @@ module "service" {
   batch = {
 
     cli_version = var.cli_image_tag
+
+    liquibase_version = var.liquibase_image_tag
 
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
@@ -603,6 +675,21 @@ module "service" {
         commands = ["batch:system-parameter"],
       },
       {
+        name     = "idp-sweep-stale-document-analysis",
+        commands = ["idp:sweep-stale-document-analysis"],
+        timeout  = 300,
+        schedule = ["cron(15 * * * ? *)"],
+      },
+      {
+        name = "idp-store-document-analysis-result",
+        commands = [
+          "idp:store-document-analysis-result",
+          "--analysis-token", "Ref::analysis_token",
+          "--execution-arn", "Ref::execution_arn",
+        ],
+        timeout = 300,
+      },
+      {
         name     = "cancel-unsubmitted-bilateral",
         commands = ["permits:cancel-unsubmitted-bilateral"],
       },
@@ -736,7 +823,7 @@ module "service" {
         type     = "scripts"
         cpu      = 2,
         memory   = 8192,
-      },
+      }
     ]
   }
 }
@@ -754,6 +841,7 @@ resource "null_resource" "deployed_versions" {
     deployed_internal_image_tag  = var.internal_image_tag
     deployed_selfserve_image_tag = var.selfserve_image_tag
     deployed_cli_image_tag       = var.cli_image_tag
+    deployed_liquibase_image_tag = var.liquibase_image_tag
     deployed_assets_version      = var.assets_version
   }
 }

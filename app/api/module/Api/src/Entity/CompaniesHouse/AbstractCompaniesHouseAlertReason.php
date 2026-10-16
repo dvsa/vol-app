@@ -51,7 +51,7 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
     /**
      * ReasonType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'reason_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]

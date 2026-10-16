@@ -63,7 +63,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * ApplicationPathGroup
      *
-     * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup
+     * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup|null
      */
     #[ORM\JoinColumn(name: 'application_path_group_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup::class, fetch: 'LAZY')]
@@ -72,7 +72,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * BusinessProcess
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'business_process', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Country
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country|null
      */
     #[ORM\JoinColumn(name: 'country_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, inversedBy: 'irhpPermitStocks', fetch: 'LAZY')]
@@ -90,7 +90,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * PermitCategory
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'permit_category', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -99,7 +99,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Status
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -108,7 +108,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -118,7 +118,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -128,7 +128,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Period name key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'period_name_key', length: 512, nullable: true)]
     protected $periodNameKey;
@@ -136,7 +136,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Valid from
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'valid_from', nullable: true)]
     protected $validFrom;
@@ -144,7 +144,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Valid to
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'valid_to', nullable: true)]
     protected $validTo;
@@ -152,7 +152,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * Initial stock
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'initial_stock', nullable: true)]
     protected $initialStock;
@@ -177,7 +177,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * IrhpPermitJurisdictionQuotas
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitJurisdictionQuota>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitJurisdictionQuota::class, mappedBy: 'irhpPermitStock')]
     protected $irhpPermitJurisdictionQuotas;
@@ -185,7 +185,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * IrhpPermitRanges
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange::class, mappedBy: 'irhpPermitStock')]
     protected $irhpPermitRanges;
@@ -193,7 +193,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * IrhpPermitSectorQuotas
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitSectorQuota>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitSectorQuota::class, mappedBy: 'irhpPermitStock')]
     protected $irhpPermitSectorQuotas;
@@ -201,7 +201,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
     /**
      * IrhpPermitWindows
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow::class, mappedBy: 'irhpPermitStock')]
     protected $irhpPermitWindows;

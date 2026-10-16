@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\Surrender;
-use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Entity\Surrender as Entity;
 
 final class SurrenderTest extends RepositoryTestCase
 {
@@ -17,26 +16,21 @@ final class SurrenderTest extends RepositoryTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Surrender::class);
+        $this->setUpRealSut(Surrender::class);
     }
 
     public function testFetchByLicenceId(): void
     {
         $licenceId = 1;
 
-        $qb = $this->createMockQb('{QUERY}');
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['Result']);
 
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->once()
-            ->andReturn(['Result']);
+        $this->assertSame(['Result'], $this->sut->fetchByLicenceId($licenceId));
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->sut->fetchByLicenceId($licenceId);
-
-        $expectedQuery = '{QUERY} AND m.licence = ' . $licenceId;
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.licence = ' . $licenceId,
+            $qb->getDQL(),
+        );
     }
 }

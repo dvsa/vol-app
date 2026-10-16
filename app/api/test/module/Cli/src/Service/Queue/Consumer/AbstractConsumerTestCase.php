@@ -110,7 +110,15 @@ abstract class AbstractConsumerTestCase extends MockeryTestCase
         int $retryAfter = 900,
         bool $validate = true
     ): void {
-        $exception = new $exceptionClass($exceptionMsg);
+        if ($exceptionClass === \Doctrine\ORM\Exception\ORMException::class) {
+            $exception = new class ($exceptionMsg) extends \RuntimeException implements \Doctrine\ORM\Exception\ORMException {
+            };
+        } elseif ($exceptionClass === \Doctrine\DBAL\Exception::class) {
+            $exception = new class ($exceptionMsg) extends \RuntimeException implements \Doctrine\DBAL\Exception {
+            };
+        } else {
+            $exception = new $exceptionClass($exceptionMsg);
+        }
 
         //it's a pain that we have two ways to set retry after - this deals with those that are set on the exception
         if (method_exists($exceptionClass, 'setRetryAfter')) {

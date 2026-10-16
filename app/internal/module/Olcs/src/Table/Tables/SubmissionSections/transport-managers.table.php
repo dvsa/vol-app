@@ -26,7 +26,9 @@ return [
     'columns' => [
         [
             'title' => 'Name',
-            'formatter' => fn($data) => $data['title'] . ' ' . $data['forename'] . ' ' . $data['familyName']
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['title'])
+                . ' ' . \Common\Util\Escape::html($data['forename'])
+                . ' ' . \Common\Util\Escape::html($data['familyName'])
         ],
         [
             'title' => 'DOB',
@@ -37,8 +39,10 @@ return [
             'formatter' => function ($data) {
                 $returnString = '';
                 foreach ($data['otherLicences'] as $other) {
-                    $returnString .= $other['licNo'];
-                    $returnString .= $other['applicationId'] ? ' / ' . $other['applicationId'] : '';
+                    $returnString .= \Common\Util\Escape::html($other['licNo']);
+                    $returnString .= $other['applicationId']
+                        ? ' / ' . \Common\Util\Escape::html($other['applicationId'])
+                        : '';
                     $returnString .= "<br />";
                 }
                 return $returnString;
@@ -46,7 +50,10 @@ return [
         ],
         [
             'title' => 'Qualifications',
-            'formatter' => fn($data) => implode(', ', $data['qualifications'])
+            'formatter' => fn($data) => implode(
+                ', ',
+                array_map(\Common\Util\Escape::html(...), $data['qualifications'])
+            )
         ],
         [
             'title' => 'Type',

@@ -31,7 +31,7 @@ return [
                     'case_pi_hearing',
                     true
                 );
-                return '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . $date . '</a>';
+                return '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . \Common\Util\Escape::html($date) . '</a>';
             },
             'name' => 'id'
         ],

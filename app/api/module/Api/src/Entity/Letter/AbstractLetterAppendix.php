@@ -50,7 +50,7 @@ abstract class AbstractLetterAppendix implements BundleSerializableInterface, Js
     /**
      * Points to latest version
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion|null
      */
     #[ORM\JoinColumn(name: 'current_version_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion::class, fetch: 'LAZY')]
@@ -59,7 +59,7 @@ abstract class AbstractLetterAppendix implements BundleSerializableInterface, Js
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractLetterAppendix implements BundleSerializableInterface, Js
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -83,6 +83,14 @@ abstract class AbstractLetterAppendix implements BundleSerializableInterface, Js
      */
     #[ORM\Column(type: 'string', name: 'appendix_key', length: 100, nullable: false)]
     protected $appendixKey = '';
+
+    /**
+     * Deleted in admin but kept for generated letters
+     *
+     * @var \DateTime|null
+     */
+    #[ORM\Column(type: 'datetime', name: 'deleted_on', nullable: true)]
+    protected $deletedOn;
 
     /**
      * Version
@@ -227,6 +235,36 @@ abstract class AbstractLetterAppendix implements BundleSerializableInterface, Js
     public function getAppendixKey()
     {
         return $this->appendixKey;
+    }
+
+    /**
+     * Set the deleted on
+     *
+     * @param \DateTime $deletedOn new value being set
+     *
+     * @return static
+     */
+    public function setDeletedOn($deletedOn)
+    {
+        $this->deletedOn = $deletedOn;
+
+        return $this;
+    }
+
+    /**
+     * Get the deleted on
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime
+     */
+    public function getDeletedOn($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->deletedOn);
+        }
+
+        return $this->deletedOn;
     }
 
     /**

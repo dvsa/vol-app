@@ -49,7 +49,7 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -59,7 +59,7 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -77,7 +77,7 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
     /**
      * isEngland
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_england', nullable: true)]
     protected $isEngland;
@@ -85,7 +85,7 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
     /**
      * isWales
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_wales', nullable: true)]
     protected $isWales;
@@ -93,7 +93,7 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
     /**
      * isScotland
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_scotland', nullable: true)]
     protected $isScotland;
@@ -101,7 +101,7 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
     /**
      * isNi
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_ni', nullable: true)]
     protected $isNi;

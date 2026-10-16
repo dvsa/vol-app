@@ -386,7 +386,7 @@ class LetterSection extends AbstractLetterSection
 
             $failed = $variant->explainMatch($context);
             if ($failed !== []) {
-                $rejections[spl_object_id($variant)] = $failed;
+                $rejections[spl_object_id($variant)] = ['variant' => $variant, 'failed' => $failed];
                 continue;
             }
 

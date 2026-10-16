@@ -11,7 +11,7 @@ class ProcessInsolvencySQSQueueCommand extends AbstractSQSCommand
     protected static $defaultName = 'queue:process-insolvency';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Processes the Process Insolvency queue items.')
             ->setHelp('This command allows you to process items in the Process Insolvency queue...');

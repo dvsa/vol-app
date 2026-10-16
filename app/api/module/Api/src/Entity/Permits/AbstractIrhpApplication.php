@@ -66,7 +66,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * InternationalJourneys
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'international_journeys', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -93,7 +93,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Sectors
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\Sectors
+     * @var \Dvsa\Olcs\Api\Entity\Permits\Sectors|null
      */
     #[ORM\JoinColumn(name: 'sectors_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\Sectors::class, fetch: 'LAZY')]
@@ -111,7 +111,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * WithdrawReason
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'withdraw_reason', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -120,7 +120,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -130,7 +130,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -140,7 +140,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * In scope
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'in_scope', nullable: true, options: ['default' => 0])]
     protected $inScope = 0;
@@ -172,7 +172,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Cancellation date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'cancellation_date', nullable: true)]
     protected $cancellationDate;
@@ -180,7 +180,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Withdrawn date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'withdrawn_date', nullable: true)]
     protected $withdrawnDate;
@@ -188,7 +188,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Expiry date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
@@ -196,7 +196,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Checked
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'checked', nullable: true)]
     protected $checked;
@@ -204,7 +204,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Cor certificate number
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'cor_certificate_number', length: 12, nullable: true)]
     protected $corCertificateNumber;
@@ -221,7 +221,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Countrys
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\ContactDetails\Country>
      */
     #[ORM\JoinTable(name: 'irhp_application_country_link')]
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id')]
@@ -232,7 +232,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Answers
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Generic\Answer>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Answer::class, mappedBy: 'irhpApplication', indexBy: 'question_text_id')]
     protected $answers;
@@ -240,7 +240,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Documents
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Doc\Document>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'irhpApplication')]
     protected $documents;
@@ -248,7 +248,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Fees
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Fee\Fee>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'irhpApplication')]
     protected $fees;
@@ -256,7 +256,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * IrhpPermitApplications
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, mappedBy: 'irhpApplication')]
     protected $irhpPermitApplications;
@@ -264,7 +264,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * IrhpPermitRequests
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest::class, mappedBy: 'irhpApplication')]
     protected $irhpPermitRequests;
@@ -272,7 +272,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Notes
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Note\Note>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Note\Note::class, mappedBy: 'irhpApplication', cascade: ['persist'])]
     protected $notes;
@@ -280,7 +280,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
     /**
      * Tasks
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Task\Task>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, mappedBy: 'irhpApplication')]
     protected $tasks;

@@ -59,7 +59,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
     /**
      * Foreign Key to irfo_country
      *
-     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry
+     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry|null
      */
     #[ORM\JoinColumn(name: 'irfo_country_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -96,7 +96,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
     /**
      * Display until
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'display_until', nullable: true)]
     protected $displayUntil;

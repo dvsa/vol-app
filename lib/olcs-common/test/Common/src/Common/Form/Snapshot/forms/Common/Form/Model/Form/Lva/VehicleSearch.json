@@ -1,0 +1,92 @@
+{
+  "name": "vehicle-search",
+  "attributes": {
+    "method": "get",
+    "class": "filters form__search"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "limit",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "includeRemoved",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "vehicleSearch",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "vrm",
+              "attributes": {
+                "id": "vrm",
+                "required": "required"
+              },
+              "type": "\\Laminas\\Form\\Element\\Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "filter",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "vehicle-search-search"
+              },
+              "type": "\\Laminas\\Form\\Element\\Button"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "clearSearch",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "clearSearch"
+              },
+              "options": {
+                "label": "vehicle-search-clear-search"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "vehicle-search-vrm"
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "vehicleSearch": {
+      "vrm": {
+        "name": "vrm",
+        "required": true
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

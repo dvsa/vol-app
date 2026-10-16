@@ -14,6 +14,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
 use org\bovigo\vfs\vfsStream;
+use Psr\Log\NullLogger;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\DocumentShare\Service\WebDavClient::class)]
 final class WebDavClientTest extends MockeryTestCase
@@ -39,6 +40,17 @@ final class WebDavClientTest extends MockeryTestCase
         $logger = m::mock(\Psr\Log\LoggerInterface::class)->shouldIgnoreMissing();
 
         Logger::setLogger($logger);
+    }
+
+    /**
+     * Restores the static Logger facade. Without this, the mock this test installs stays
+     * installed for whatever test runs next, which then fails on log calls it never made.
+     */
+    protected function tearDown(): void
+    {
+        Logger::setLogger(new NullLogger());
+
+        parent::tearDown();
     }
 
     public function testReadSuccess(): void

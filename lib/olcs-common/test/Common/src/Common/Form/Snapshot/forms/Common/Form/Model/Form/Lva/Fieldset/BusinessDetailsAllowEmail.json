@@ -1,0 +1,30 @@
+{
+  "name": "BusinessDetailsAllowEmail",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "allowEmail",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "js-enabled"
+        },
+        "options": {
+          "label": "application_business-details_allow-email.label",
+          "value_options": {
+            "N": "Post",
+            "Y": "Email"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          }
+        },
+        "type": "\\Laminas\\Form\\Element\\Radio"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

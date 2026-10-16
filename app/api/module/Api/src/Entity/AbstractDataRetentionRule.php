@@ -60,7 +60,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -70,7 +70,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -96,7 +96,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * max rows of population dataset.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'max_data_set', nullable: true, options: ['unsigned' => true])]
     protected $maxDataSet;
@@ -128,7 +128,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
     /**
      * Custom procedure
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'custom_procedure', length: 64, nullable: true)]
     protected $customProcedure;

@@ -136,7 +136,9 @@ class TemplateRenderer
             $propertyName = $field['property']['name'] ?? '';
 
             match ($propertyName) {
-                'createdOn' => $traits[] = 'CreatedOnTrait',
+                'createdOn' => $traits[] = ($field['property']['nullable'] ?? true) === false
+                    ? 'CreatedOnNotNullTrait'
+                    : 'CreatedOnTrait',
                 'lastModifiedOn' => $traits[] = 'ModifiedOnTrait',
                 default => null
             };

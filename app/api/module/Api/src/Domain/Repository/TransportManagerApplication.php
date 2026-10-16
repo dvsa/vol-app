@@ -65,7 +65,7 @@ class TransportManagerApplication extends AbstractRepository
             ->with('a.status')
             ->byId($tmaId);
 
-        $this->joinTmContactDetails();
+        $this->joinTmContactDetails($dqb);
 
         $results = $dqb->getQuery()->getResult();
 
@@ -79,11 +79,13 @@ class TransportManagerApplication extends AbstractRepository
     /**
      * Join Trasport Manager, Contact Details and Person entities to the query
      *
+     * @param \Doctrine\ORM\QueryBuilder $qb Doctrine query builder
+     *
      * @return void
      */
-    protected function joinTmContactDetails()
+    protected function joinTmContactDetails(\Doctrine\ORM\QueryBuilder $qb)
     {
-        $this->getQueryBuilder()->with($this->alias . '.transportManager', 'tm')
+        $this->getQueryBuilder()->modifyQuery($qb)->with($this->alias . '.transportManager', 'tm')
             ->with('tm.homeCd', 'hcd')
             ->with('hcd.address', 'hadd')
             ->with('hadd.countryCode')
@@ -147,6 +149,7 @@ class TransportManagerApplication extends AbstractRepository
     protected function applyListJoins(\Doctrine\ORM\QueryBuilder $qb)
     {
         $this->getQueryBuilder()
+            ->modifyQuery($qb)
             ->with('application', 'a')
             ->with('a.licence', 'l');
     }

@@ -36,7 +36,9 @@ class Sla extends AbstractRepository
             $qb->expr()->eq($this->alias . '.field', ':field'),
             $qb->expr()->eq($this->alias . '.compareTo', ':compareTo')
         );
-        $qb->setParameters(compact('category', 'field', 'compareTo'));
+        $qb->setParameter('category', $category)
+            ->setParameter('field', $field)
+            ->setParameter('compareTo', $compareTo);
 
         return $qb->getQuery()->getSingleResult();
     }

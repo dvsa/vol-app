@@ -51,7 +51,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * GoodsOrPsv
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -60,7 +60,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -70,7 +70,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -137,7 +137,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * Pis
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Pi\Pi>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, mappedBy: 'reasons', fetch: 'LAZY')]
     protected $pis;
@@ -145,7 +145,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * ProposeToRevokes
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke::class, mappedBy: 'reasons', fetch: 'LAZY')]
     protected $proposeToRevokes;
@@ -153,7 +153,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
     /**
      * SubmissionActions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Submission\SubmissionAction>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\SubmissionAction::class, mappedBy: 'reasons', fetch: 'LAZY')]
     protected $submissionActions;

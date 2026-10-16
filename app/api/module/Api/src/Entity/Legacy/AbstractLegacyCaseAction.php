@@ -37,7 +37,7 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
     /**
      * Examples, No Action, Warning, Interview
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 45, nullable: true)]
     protected $description;

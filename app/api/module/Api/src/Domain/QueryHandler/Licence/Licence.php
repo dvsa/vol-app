@@ -54,8 +54,11 @@ class Licence extends AbstractQueryHandler
             null;
         $latestNote = $this->getRepo('Note')->fetchForOverview($query->getId());
 
+        $hasQueuedRevocation = $licence->hasQueuedRevocation();
+
         $isLicenceSurrenderAllowed = $this->doesLicenceApplicationsHaveCorrectStatusForSurrender($query)
-            && $this->isLicenceStatusSurrenderable($licence);
+            && $this->isLicenceStatusSurrenderable($licence)
+            && !$hasQueuedRevocation;
 
         $showExpiryWarning = $continuationDetail !== null
             && $licence->isExpiring()
@@ -110,6 +113,7 @@ class Licence extends AbstractQueryHandler
                 'canHaveInspectionRequest' => !$licence->isSpecialRestricted(),
                 'showExpiryWarning' => $showExpiryWarning,
                 'isLicenceSurrenderAllowed' => $isLicenceSurrenderAllowed,
+                'hasQueuedRevocation' => $hasQueuedRevocation,
                 'activeVehicleCount' => $activeVehicleCount,
                 'totalVehicleCount' => $totalVehicleCount,
             ]

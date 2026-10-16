@@ -73,8 +73,10 @@ class Get extends AbstractQueryByIdHandler
         $data = $result->serialize();
 
         foreach ($data['letterInstanceTodos'] ?? [] as $index => $todo) {
-            $versionId = $todo['letterTodoVersion']['id'] ?? null;
-            $data['letterInstanceTodos'][$index]['requiringIssueCount'] = $counts[$versionId] ?? 1;
+            // same key as LetterTodoVersion::getDedupeKey, built from the serialised row
+            $todoId = $todo['letterTodoVersion']['letterTodo']['id'] ?? null;
+            $key = $todoId !== null ? 'todo-' . $todoId : 'version-' . ($todo['letterTodoVersion']['id'] ?? '');
+            $data['letterInstanceTodos'][$index]['requiringIssueCount'] = $counts[$key] ?? 1;
         }
 
         return $data;

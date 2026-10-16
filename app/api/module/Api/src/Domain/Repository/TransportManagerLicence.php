@@ -185,7 +185,7 @@ class TransportManagerLicence extends AbstractRepository
         }
 
         if (method_exists($query, 'getTransportManager') && $query->getTransportManager()) {
-            $qb->where($qb->expr()->eq('tml.transportManager', ':transportManager'))
+            $qb->andWhere($qb->expr()->eq('tml.transportManager', ':transportManager'))
                 ->setParameter('transportManager', $query->getTransportManager());
         }
     }

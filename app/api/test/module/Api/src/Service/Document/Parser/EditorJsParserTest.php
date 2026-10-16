@@ -276,6 +276,44 @@ final class EditorJsParserTest extends TestCase
         $this->assertEquals('Line 1<br>Line 2<br>Line 3', $decoded['blocks'][0]['data']['text']);
     }
 
+    public function testReplaceTokensEscapesHtmlInValues(): void
+    {
+        // Block text is HTML to EditorJS, so a value containing markup must arrive as literal text.
+        $json = json_encode([
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => 'Dear [[OP_NAME]]']],
+                ['type' => 'list', 'data' => ['items' => ['[[OP_NAME]]']]],
+            ]
+        ]);
+
+        $data = [
+            'OP_NAME' => ['content' => 'Acme <img src=x onerror=alert(1)> & "Sons"', 'preformatted' => false]
+        ];
+
+        $decoded = json_decode($this->parser->replace($json, $data), true);
+
+        $expected = 'Acme &lt;img src=x onerror=alert(1)&gt; &amp; &quot;Sons&quot;';
+        $this->assertSame('Dear ' . $expected, $decoded['blocks'][0]['data']['text']);
+        $this->assertSame($expected, $decoded['blocks'][1]['data']['items'][0]);
+    }
+
+    public function testReplaceTokensEscapesBeforeAddingLineBreaks(): void
+    {
+        $json = json_encode([
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => '[[ADDRESS]]']]
+            ]
+        ]);
+
+        $data = [
+            'ADDRESS' => ['content' => "1 <High> St\nLeeds", 'preformatted' => false]
+        ];
+
+        $decoded = json_decode($this->parser->replace($json, $data), true);
+
+        $this->assertSame('1 &lt;High&gt; St<br>Leeds', $decoded['blocks'][0]['data']['text']);
+    }
+
     public function testReplaceTokensPreservesPreformattedNewlines(): void
     {
         $json = json_encode([

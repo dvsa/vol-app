@@ -2,7 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Letter\LetterInstance;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\LetterType;
 use Dvsa\Olcs\Transfer\FieldType\Traits\LicenceOptional;
@@ -14,10 +14,8 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\IrhpApplicationOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\IrfoOrganisationOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\LetterTestDataOptional;
 
-/**
- * @Transfer\RouteName("backend/letter/letter-instance/generate")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/letter/letter-instance/generate')]
+#[Transfer\Method('POST')]
 final class Generate extends AbstractCommand
 {
     use LetterType;
@@ -37,12 +35,11 @@ final class Generate extends AbstractCommand
     //  * @Transfer\ArrayInput
     //  */
     // protected $selectedSections;
-
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $selectedIssues;
 
     // selectedTodos removed temporarily - will be added back in future tickets
@@ -52,24 +49,23 @@ final class Generate extends AbstractCommand
     //  * @Transfer\ArrayInput
     //  */
     // protected $selectedTodos;
-
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $selectedAppendices;
 
     /**
      * @var array
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $selectedChoices;
 
     /**
      * @var array
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $additionalData;
 
     // Getter removed temporarily - will be added back in future tickets

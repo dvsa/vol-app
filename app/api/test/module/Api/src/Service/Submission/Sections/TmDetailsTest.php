@@ -45,7 +45,7 @@ final class TmDetailsTest extends AbstractSubmissionSectionTestCase
             ]
         ];
 
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
         yield [$case, $expectedResult];
     }

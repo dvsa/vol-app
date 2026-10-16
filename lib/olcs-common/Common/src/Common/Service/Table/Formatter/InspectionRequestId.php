@@ -8,6 +8,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 use Laminas\Http\Request;
 use Laminas\Router\Http\TreeRouteStack;
@@ -64,7 +65,7 @@ class InspectionRequestId implements FormatterPluginManagerInterface
         return '<a href="'
             . $url
             . '" class="govuk-link js-modal-ajax">'
-            . $data['id']
+            . Escape::html($data['id'])
             . '</a>';
     }
 }

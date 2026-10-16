@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace OlcsTest;
 
 use Laminas\View\Model\ViewModel;
-use PHPUnit\Framework\TestCase;
 use Olcs\Controller\ConsultantRegistrationController;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-final class ConsultantRegistrationControllerTest extends TestCase
+final class ConsultantRegistrationControllerTest extends MockeryTestCase
 {
     protected $sut;
 

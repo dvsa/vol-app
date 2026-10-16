@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Cpms\Service;
 
 use Dvsa\Olcs\Cpms\Authenticate\CpmsIdentityProvider;
 use Dvsa\Olcs\Cpms\Authenticate\CpmsIdentityProviderFactory;
+use Dvsa\Olcs\Cpms\Authenticate\GatewayTokenProviderInterface;
 use Dvsa\Olcs\Cpms\Client\ClientOptions;
 use Dvsa\Olcs\Cpms\Client\HttpClient;
 use Dvsa\Olcs\Cpms\Client\HttpClientFactory;
@@ -18,6 +19,7 @@ class ApiServiceFactory
         private array $config,
         private readonly string $userId,
         private readonly LoggerInterface $logger,
+        private readonly ?GatewayTokenProviderInterface $gatewayTokenProvider = null,
     ) {
     }
 
@@ -62,10 +64,11 @@ class ApiServiceFactory
             $options['grant_type'],
             $options['timeout'],
             $options['domain'],
-            $options['headers']
+            $options['headers'],
+            $options['proxy'] ?? null
         );
 
-        $httpClientFactory = new HttpClientFactory($clientOptions, $this->logger);
+        $httpClientFactory = new HttpClientFactory($clientOptions, $this->logger, $this->gatewayTokenProvider);
         return $httpClientFactory->createHttpClient();
     }
 }

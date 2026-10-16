@@ -81,4 +81,54 @@ final class ListDataTraitTest extends MockeryTestCase
             'unit_Id1' => 'unit_Val1',
         ], $actual);
     }
+
+    /**
+     * Old and new letters run side by side: every template keeps its own old letter entry, and
+     * each letter type gets one [New] entry at the top.
+     */
+    public function testLinkedTemplatesListBothOldLettersAndOneNewEntryPerLetterType(): void
+    {
+        $this->mockResponse->shouldReceive('getResult')->andReturn(
+            ['isEnabled' => true],
+            ['results' => [
+                ['id' => 7, 'description' => 'GV - 1st request for supporting docs',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+                ['id' => 8, 'description' => 'GV - final request for supporting docs',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+                ['id' => 12, 'description' => 'A legacy RTF template'],
+            ]]
+        );
+        $this->mockResponse->shouldReceive('isOk')->andReturn(true);
+
+        $result = $this->sut->getListDataDocTemplates(9, 31, 'Please select');
+
+        $this->assertSame(
+            [
+                '' => 'Please select',
+                'new-7' => '[New] First and Finals GB',
+                12 => 'A legacy RTF template',
+                7 => 'GV - 1st request for supporting docs',
+                8 => 'GV - final request for supporting docs',
+            ],
+            $result
+        );
+    }
+
+    public function testDocTemplatesAreUntouchedWhenTheFeatureIsOff(): void
+    {
+        $this->mockResponse->shouldReceive('getResult')->andReturn(
+            ['isEnabled' => false],
+            ['results' => [
+                ['id' => 7, 'description' => 'GV - 1st request',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+                ['id' => 8, 'description' => 'GV - final request',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+            ]]
+        );
+        $this->mockResponse->shouldReceive('isOk')->andReturn(true);
+
+        $result = $this->sut->getListDataDocTemplates(9, 31);
+
+        $this->assertSame([7 => 'GV - 1st request', 8 => 'GV - final request'], $result);
+    }
 }

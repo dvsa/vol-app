@@ -2,51 +2,42 @@
 
 declare(strict_types=1);
 
-/**
- * VenueTest
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\Venue as Repo;
+use Dvsa\Olcs\Api\Entity\Venue as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-/**
- * Venue Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class VenueTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
+    /**
+     * A venue with no end date is open indefinitely; one with an end date drops out of the list on
+     * the day it closes.
+     */
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getTrafficArea')->andReturn('B');
 
-        $mockQ = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
-        $mockQ->shouldReceive('getTrafficArea')->andReturn('B');
+        $this->sut->applyListFilters($qb, $query);
 
-        $mockQb->shouldReceive('expr->eq')->with('m.trafficArea', ':trafficArea')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('trafficArea', 'B')->once();
-
-        $mockQb->shouldReceive('expr->isNull')->with('m.endDate')->once()->andReturn('C1');
-        $mockQb->shouldReceive('expr->gt')->with('m.endDate', ':today')->once()->andReturn('C2');
-        $mockQb->shouldReceive('expr->orX')->with('C1', 'C2')->once()->andReturn('C1C2');
-        $mockQb->shouldReceive('andWhere')->with('C1C2')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('today', m::type(\DateTime::class))->once();
-
-        $mockQb->shouldReceive('orderBy')->with('m.name', 'ASC')->once()->andReturnSelf();
-
-        $this->sut->applyListFilters($mockQb, $mockQ);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m'
+            . ' WHERE m.trafficArea = :trafficArea'
+            . ' AND (m.endDate IS NULL OR m.endDate > :today)'
+            . ' ORDER BY m.name ASC',
+            $qb->getDQL(),
+        );
+        $this->assertSame('B', $qb->getParameter('trafficArea')->getValue());
+        $this->assertInstanceOf(\DateTime::class, $qb->getParameter('today')->getValue());
     }
 }

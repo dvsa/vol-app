@@ -5,117 +5,60 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
-use Dvsa\Olcs\Api\Domain\Repository\ApplicationStep;
-use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep as ApplicationStepEntity;
+use Dvsa\Olcs\Api\Domain\Repository\ApplicationStep as Repo;
+use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep as Entity;
+use Dvsa\OlcsTest\Support\TestQueryBuilder;
 use Mockery as m;
 
-/**
- * Application step test
- *
- * @author Jonathan Thomas <jonathan@opalise.co.uk>
- */
 final class ApplicationStepTest extends RepositoryTestCase
 {
+    private const string DQL = 'SELECT ast FROM ' . Entity::class . ' ast'
+        . ' INNER JOIN ast.question q'
+        . ' WHERE IDENTITY(ast.applicationPath) = ?1 AND q.slug = ?2';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(ApplicationStep::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testFetchByApplicationPathIdAndSlug(): void
     {
-        $applicationPathId = 22;
-        $slug = 'removals-eligibility';
-        $applicationStepEntity = m::mock(ApplicationStepEntity::class);
+        $applicationStep = m::mock(Entity::class);
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
-
-        $queryBuilder->shouldReceive('select')
-            ->with('ast')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(ApplicationStepEntity::class, 'ast')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ast.question', 'q')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('IDENTITY(ast.applicationPath) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('q.slug = ?2')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $applicationPathId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, $slug)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getSingleResult')
-            ->once()
-            ->andReturn($applicationStepEntity);
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->withNoArgs()->andReturn($applicationStep);
 
         $this->assertSame(
-            $applicationStepEntity,
-            $this->sut->fetchByApplicationPathIdAndSlug($applicationPathId, $slug)
+            $applicationStep,
+            $this->sut->fetchByApplicationPathIdAndSlug(22, 'removals-eligibility'),
         );
+
+        $this->assertSame(self::DQL, $qb->getDQL());
+        $this->assertSame(22, $qb->getParameter(1)->getValue());
+        $this->assertSame('removals-eligibility', $qb->getParameter(2)->getValue());
     }
 
     public function testFetchByApplicationPathIdAndSlugNotFound(): void
     {
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->withNoArgs()->andThrow(new NoResultException());
+
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage(
-            'Unable to find application step with path id 22 and slug removals-eligibility'
+            'Unable to find application step with path id 22 and slug removals-eligibility',
         );
 
-        $applicationPathId = 22;
-        $slug = 'removals-eligibility';
+        $this->sut->fetchByApplicationPathIdAndSlug(22, 'removals-eligibility');
+    }
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+    private function expectEntityManagerQb(): TestQueryBuilder
+    {
+        $qb = $this->newRealQb();
 
-        $queryBuilder->shouldReceive('select')
-            ->with('ast')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(ApplicationStepEntity::class, 'ast')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('innerJoin')
-            ->with('ast.question', 'q')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('IDENTITY(ast.applicationPath) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('q.slug = ?2')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $applicationPathId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(2, $slug)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getSingleResult')
-            ->once()
-            ->andThrow(new NoResultException());
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $this->sut->fetchByApplicationPathIdAndSlug($applicationPathId, $slug);
+        return $qb;
     }
 }

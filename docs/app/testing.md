@@ -6,14 +6,264 @@ sidebar_position: 30
 
 The API has three layers of automated verification:
 
-| Layer            | What runs                                                        | When                                    |
-| ---------------- | ---------------------------------------------------------------- | --------------------------------------- |
-| Unit + static    | PHPUnit (mocked), phpcs, psalm, phpstan (incl. phpstan-doctrine) | Every PR (`php.yaml`)                   |
-| Integration      | Real repository queries and schema checks against a local MySQL  | Locally via `composer test:integration` |
-| Functional (E2E) | WebDriver/Cucumber suites from `dvsa/vol-functional-tests`       | Post-deploy per environment (`cd.yaml`) |
+| Layer            | What runs                                                                                     | When                                    |
+| ---------------- | --------------------------------------------------------------------------------------------- | --------------------------------------- |
+| Unit + static    | PHPUnit (real Doctrine metadata, no database), phpcs, psalm, phpstan (incl. phpstan-doctrine) | Every PR (`php.yaml`)                   |
+| Integration      | Real repository queries executed against a local MySQL, plus schema checks                    | Locally via `composer test:integration` |
+| Functional (E2E) | WebDriver/Cucumber suites from `dvsa/vol-functional-tests`                                    | Post-deploy per environment (`cd.yaml`) |
 
-This page documents the integration layer and the two baseline mechanisms that
-guard the Doctrine entity metadata.
+This page documents how to run the unit tests in parallel or one at a time, how
+slow tests are reported, how repository unit tests assert against real Doctrine,
+the integration layer, the two baseline mechanisms that guard the Doctrine
+entity metadata, the Doctrine deprecation report both suites print, the three
+tests that guard output escaping in the table render pipeline, and the snapshots
+that guard how API requests are validated and how forms are declared.
+
+## Running the tests
+
+Each app (`app/api`, `app/selfserve`, `app/internal`) has two commands, run
+from its own directory:
+
+```bash
+composer test          # in parallel: paratest, one worker process per CPU core
+composer test:serial   # one process: plain phpunit, as CI runs it
+```
+
+Both run the same tests from the same `phpunit.xml.dist`; pick whichever suits
+what you are doing. Arguments go after `--`:
+
+```bash
+composer test -- --filter LicenceVehicleTest
+composer test:serial -- --random-order-seed=<seed>
+```
+
+`composer test` uses [paratest](https://github.com/paratestphp/paratest), which
+hands whole test files to a pool of PHPUnit worker processes. The api suite is
+where that pays off: it runs in around a third of the time it takes serially.
+selfserve and internal finish in a few seconds either way, and use paratest too
+so that `composer test` means the same thing in every app.
+
+The libraries under `lib/` run plain phpunit with `composer test`, and have no
+paratest at all; see [why](#why-the-libraries-do-not-use-paratest).
+
+Running a single file or test with `vendor/bin/phpunit` directly, as the
+commands elsewhere on this page do, is still the quickest way to iterate on
+one test.
+
+### Use the serial run when
+
+- **CI failed and the parallel run passes.** CI prints a `Random Seed:` line;
+  `composer test:serial -- --random-order-seed=<seed>` repeats its order
+  exactly. See below for why the two can disagree.
+- **Step debugging.** Each worker is its own PHP process, so Xdebug opens a
+  session per worker.
+- **The integration suite.** `composer test:integration` stays serial: it waits
+  on the database rather than the CPU, so parallel gains nothing, and two
+  workers inserting fixtures at once could block each other. It does run under
+  paratest (`vendor/bin/paratest -c phpunit-integration.xml`).
+
+### Why CI stays serial
+
+CI runs plain phpunit: `vendor/bin/phpunit` for the apps (`php.yaml`) and
+`composer run-script test` for the libraries (`php-lib.yaml`). Every
+`phpunit.xml.dist` sets `executionOrder="random"`, and phpunit shuffles every
+test in the suite, including the tests inside one file. Paratest shuffles the
+order of the _files_ but runs the tests inside each file top to bottom. A test
+that leaks state (a static property, an unclosed Mockery container, a global)
+into the next test in the same class can therefore pass in parallel every time
+and only fail serially. CI stays serial so those leaks still fail a PR.
+
+A green `composer test` is good evidence, not proof. Before pushing a change to
+test infrastructure, or when chasing an order-dependent failure, run
+`composer test:serial` as well.
+
+### Writing tests that pass both ways
+
+In the apps, a paratest worker runs one whole file at a time, and many files
+one after another in the same PHP process. Workers run at the same time as each
+other. So:
+
+- **Tests in a file run in the order they are written.** A `#[Depends]` must
+  name a test declared _above_ it. phpunit reorders the file to run a dependency
+  declared below first; paratest does not, so the dependent test is skipped, and
+  `failOnSkipped` fails the run. Only `composer test` catches this, not CI.
+- **State left behind reaches whichever file the worker runs next.** Static
+  properties, `putenv()`, `ini_set()`, error handlers and the like carry over
+  between files in a worker just as they do in a serial run, only in a
+  different order. Restore anything you change, in `tearDown()`.
+- **Anything outside the process is shared between workers.** A file at a fixed
+  path, a database row, a port or a Redis key can be touched by two tests at
+  once. Unit tests should not need any of these. Where one must write a file,
+  give it a unique name (`tempnam()`, or include `getenv('TEST_TOKEN')`, which
+  paratest sets to the worker's number).
+
+The table render snapshot (`UPDATE_TABLE_SNAPSHOTS`, below) is a single file in
+each app, so one worker owns all its writes, and it regenerates correctly either
+way.
+
+### Slow tests
+
+Each app's `phpunit.xml.dist` registers
+[phpunit-slow-test-detector](https://github.com/ergebnis/phpunit-slow-test-detector),
+which ends a serial run (CI, `composer test:serial`) with up to 10 tests that
+took over 500ms:
+
+```
+Detected 1 test where the duration exceeded the global maximum duration (0.500).
+
+# Duration Test
+-------------------------------------------------------
+1    0.617 OlcsTest\Example\ExampleTest::testSlow
+-------------------------------------------------------
+```
+
+It only reports, and never fails a run. paratest discards it along with the
+rest of its workers' output, so read it in CI's log or run
+`composer test:serial`.
+
+No test in the app suites takes over 500ms today, so anything listed is new.
+Run it again before acting on a local report: on a laptop, background work such
+as antivirus scanning can stall any single test for a second or more.
+
+A test that is slow on purpose declares its own limit, as the table render
+snapshot tests do, since each renders every table in its app:
+
+```php
+use Ergebnis\PHPUnit\SlowTestDetector\Attribute\MaximumDuration;
+
+#[MaximumDuration(5000)]
+public function testRenderedOutputHasNotChanged(): void
+```
+
+The one consistently slow group found when the detector was added was password
+hashing, just under the limit. `password_hash()` at PHP's default bcrypt cost
+takes about 0.25s per call, so
+`OtpService` takes its hash options in the constructor: production passes none,
+and its tests pass `['cost' => 4]`. Do the same for anything else that hashes
+passwords.
+
+The libraries do not have the detector. Their suites take seconds, and a dev
+dependency in a library changes the app lock files (see below).
+
+### Why the libraries do not use paratest
+
+Do not add paratest to a library under `lib/`. It was tried in all six and taken
+out again:
+
+- **It makes most of them slower.** Their suites take seconds serially: olcs-common
+  about 3.5s, olcs-transfer about 6s, the rest under a second. Paratest starts a
+  worker per core and pays a cost for every file it hands out, which outweighs
+  tests this quick. olcs-common took about 5s in parallel, and the small
+  libraries got slower too; only olcs-transfer gained, by a second or so.
+- **CI would not use it.** Libraries are tested serially in CI for the same
+  reason as the apps, so it could only ever speed up local runs.
+- **It churns the app lock files.** The apps install the libraries from path
+  repositories, and Composer copies each library's `require-dev` and `scripts`
+  into the app's `composer.lock`. A dev tool added to a library therefore
+  changes up to three app lock files, and so does every later edit to its
+  scripts.
+- **The rules above would then apply to library tests too,** for no gain.
+
+If a library's suite grows to take tens of seconds, measure before revisiting
+this.
+
+## Repository unit tests
+
+Location: `app/api/test/module/Api/src/Domain/Repository/`, base class
+`RepositoryTestCase`. They run in the normal unit suite on every PR.
+
+These tests assert on the DQL a repository actually builds, using a **real**
+Doctrine `QueryBuilder` rooted in the **real** entity metadata. Nothing opens a
+database connection.
+
+### Why not a query builder double
+
+They used to assert against `RepositoryTestCase::createMockQb()`, a hand-rolled
+double whose `mockOrderBy()` was `$sort . ' ' . $order` — a verbatim
+reimplementation of ORM 2's `Expr\OrderBy::add()`. That double did not stub
+Doctrine, it forked it, so the suite went on asserting ORM 2 semantics after the
+ORM 3.7 upgrade and could not notice the library changing underneath it. That is
+how the `' ASC'` sort direction bug (#1785) reached production with 887
+repository tests green.
+
+With a real builder, a mistyped field or a join to an association that does not
+exist fails the test where production would fail, and `getDQL()` is the query the
+repository really asked for.
+
+### The helpers
+
+| Helper                                           | What it gives you                                                                                                                                                              |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `setUpRealSut($class, $mockSut = false)`         | The repository wired to a real `QueryBuilder` service and the application's own query partials. Use it instead of `setUpSut()` for anything that builds a query.               |
+| `createRealQb()`                                 | A real builder rooted on the repository's own entity and alias, wired in as the one `createQueryBuilder()` hands back. Assert on `$qb->getDQL()` and `$qb->getParameter(...)`. |
+| `createRealQbs([Entity::class => 'alias', ...])` | One distinct builder per entity/alias, keyed by alias, for methods that build more than one query — a shared builder would let a sub-select write into the outer query.        |
+| `newRealQb()`                                    | A bare real builder, nothing selected and no wiring, for repositories that build off the EntityManager rather than through `createQueryBuilder()`.                             |
+| `compileDql($dql)`                               | Runs DQL through the real parser and returns the SQL, to assert a query is genuinely valid — or, for a pinned defect, that it is not.                                          |
+| `$qb->willReturn($rows)`                         | Declares the rows the query returns. Shorthand for `$qb->stubbedQuery()->shouldReceive('getResult')->andReturn($rows)`; pass a second argument for a different result method.  |
+
+Two things stay mocked, and only two:
+
+- **`getQuery()` on the builder.** Repositories build and execute in a single
+  call, so the seam has to be inside the builder rather than around it. It
+  returns a mock of the concrete `Doctrine\ORM\Query`, which keeps Doctrine's
+  real parameter types — that is how the unit lane now rejects the null
+  hydration mode that shipped in #1787, where the old
+  `shouldReceive('getQuery->getResult')` chain built an anonymous mock whose
+  untyped `__call` swallowed it.
+- **The `EntityManager` the repository holds**, because it is used only to hand
+  out repositories and to persist. The metadata EntityManager the builders and
+  partials read from is a separate, real one, and neither path connects.
+
+A worked example, from `ReasonTest`:
+
+```php
+final class ReasonTest extends RepositoryTestCase
+{
+    public function setUp(): void
+    {
+        $this->setUpRealSut(Repo::class, true);
+    }
+
+    public function testApplyListFilters(): void
+    {
+        $qb = $this->createRealQb();
+
+        $this->sut->applyListFilters($qb, ReasonList::create(['isNi' => 'Y']));
+
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m'
+            . ' WHERE m.isNi = :isNi AND m.isVisibleInInternal = :isVisibleInInternal',
+            $qb->getDQL(),
+        );
+        $this->assertTrue($qb->getParameter('isNi')->getValue());
+    }
+}
+```
+
+### What it costs
+
+`Support\DoctrineMetadata` reuses `phpstan-object-manager.php` — the same loader
+PHPStan and the integration suite build on, with `serverVersion` pinned so DBAL
+never opens a connection. It is the third consumer of that file, and the only one
+that needs it exactly as-is. Metadata parses once per process (~200 ms) and the
+DQL parser caches, so each query after that costs well under a millisecond; the
+943 repository tests run in about 30 seconds.
+
+`Support\QueryPartials` builds a real `QueryPartialServiceManager` from the
+application's own `module/Api/config/module.config.php` rather than a restatement
+of it, so the partials a test exercises cannot drift from the ones production
+wires.
+
+### What it still cannot catch
+
+The query is built and compiled, never executed. Anything that depends on
+actually running it — hydration, streaming, the schema the DQL lands on —
+belongs in the integration suite below.
+
+A few repositories have no query builder to make real: `DataGovUk`, `DataDvaNi`
+and `CompaniesHouseVsOlcsDiffs` go straight to a DBAL connection with native SQL
+or a stored procedure, and `PostcodeEnforcementArea` uses `findOneBy()`. Those
+tests keep `setUpSut()` and `expectQueryWithData()`.
 
 ## Integration test suite
 
@@ -51,10 +301,66 @@ managers wired exactly as the production `RepositoryFactory` expects.
 `tearDown()`, so tests may insert whatever fixture data they need.
 
 Repository tests fetch repositories by their production short name
-(`$this->repo('LicenceVehicle')`) and run real DQL against the real schema —
-the class of bug that mocked-query-builder unit tests cannot catch (see
-VOL-7445, where `iterate()` → `toIterable()` broke three CSV exports that all
-had green unit tests).
+(`$this->repo('LicenceVehicle')`) and **execute** real DQL against the real
+schema. That is what separates them from the repository unit tests above, which
+build and compile the same queries but never run one: VOL-7445, where
+`iterate()` → `toIterable()` broke three CSV exports that all had green unit
+tests, would still pass a compiled-DQL assertion today.
+
+## Doctrine deprecation report
+
+Both PHPUnit configs register `Support\DoctrineDeprecations` as a bootstrap
+extension, so every run ends with the Doctrine deprecations it triggered:
+
+```
+5 distinct Doctrine deprecations (248 occurrences):
+  207x https://github.com/doctrine/orm/issues/11313
+  34x https://github.com/doctrine/collections/pull/472
+  4x https://github.com/doctrine/collections/pull/389
+  2x https://github.com/doctrine/orm/issues/12192
+  1x https://github.com/doctrine/orm/pull/12005
+```
+
+Each line is the link Doctrine documents that deprecation under, and how many
+times it was reached — which is why a schema comparison shows thousands of one
+and a single figure of another.
+
+**Reported, never fatal.** The extension uses Doctrine's _tracking_ mode, which
+records deprecations without raising an error, so `failOnDeprecation` is
+unaffected. These are advance notice of the next major, not a broken build.
+
+The `DOCTRINE_DEPRECATIONS` environment variable cannot do this job. In `trigger`
+mode the library calls `@trigger_error()` — with the suppression operator — so
+PHPUnit's error handler discards it and nothing is displayed.
+
+**Under paratest** each worker records only the files it ran, and paratest
+throws away what a worker prints. So each worker writes its counts to a
+temporary directory instead, and paratest's own process prints the merged
+report as it exits. The list of deprecations matches a serial run. A few counts
+come out higher, because some are raised by one-off setup that every worker
+repeats.
+
+It is registered in **both** configs deliberately. CI runs bare
+`vendor/bin/phpunit` and nothing under `.github/` references the integration
+config, so the unit suite is the only place the report is visible there; it has
+something to report because the repository tests build real queries against real
+entity metadata. The integration suite adds whatever a real connection and the
+schema comparison reach.
+
+Turning the report on surfaced three first-party problems:
+
+- Both metadata EntityManagers pinned `serverVersion` to `'8.0'`, which
+  `version_compare` puts _below_ `'8.0.0'`, so DBAL resolved the legacy
+  `MySQLPlatform` rather than `MySQL80Platform`. PHPStan and the schema drift
+  comparison had been reading the wrong platform. Fixed in both loaders; the
+  drift baseline does not move.
+- `SchemaDriftTest` called `Table::removeForeignKey()`, deprecated in favour of
+  `dropForeignKey()` — 2138 of the occurrences reported. Fixed.
+- 19 entity `OrderBy` attributes pass `'ASC'` / `'DESC'` as strings where ORM 4
+  will require a `SortDirection` instance. Left alone: five sit in generated
+  abstracts, so they are [entity generator](../entity-generator.md) work rather
+  than an edit to make by hand, and the nine hand-written `Letter*` entities
+  should move with them.
 
 ## The two metadata baselines
 
@@ -83,36 +389,742 @@ against the real, Liquibase-migrated schema — the sync-check half of
 records the known, triaged disagreements; the test fails only on **new** drift:
 an entity change with no matching olcs-etl migration, or vice versa.
 
-The comparison deliberately normalises what can never round-trip through ORM 2
-metadata, so the baseline only contains real disagreements:
+The comparison is faithful by default. It makes three deliberate reductions in
+fidelity, each named and pinned by `SchemaComparisonTest` so none can quietly
+widen:
 
-- **Comments** (column and table) are excluded — they are owned by olcs-etl
-  DDL, and ORM 2's `JoinColumn` cannot carry options. Revisit on ORM 3.
-- **Custom DBAL types** (`yesno`, `yesnonull`, `encrypted_string`) are
-  compared by their storage type, so Doctrine's `DC2Type` comment hints —
-  which the Liquibase DDL never carries — cannot diff.
+- **Comments** are silenced _only where the mapping declares none of its own_.
+  The database carries comments on 2081 columns and 136 tables; the entity
+  metadata models none, because the generator turns a column comment into the
+  property's PHP docblock rather than an `ORM\Column` options entry. Comparing
+  them would report every commented column, truthfully and uselessly. The rule
+  is conditional rather than blanket so the blind spot shrinks by itself: a
+  column that does declare `options: ['comment' => ...]` is compared like any
+  other. (ORM 2's `JoinColumn` had no options, which used to be the stated
+  reason; ORM 3's does, so that reasoning is spent.)
+- **`yesno` / `yesnonull`** are compared by their storage type.
+  `YesNoType::getSqlDeclaration()` hardcodes the whole string
+  `tinyint(1) NOT NULL COMMENT '(DC2Type:yesno)'`, so it can never match the
+  column it maps however that column is declared. (`encrypted_string` needed
+  the same treatment under DBAL 3, which appended `DC2Type` comment hints to
+  custom types. DBAL 4 dropped that mechanism, so the normalisation was removed
+  — measured, it changes no statement.)
 - **Foreign key constraint names** are compared structurally (olcs-etl uses
   semantic names, Doctrine generates hashed ones).
-- **View-backed entities** (`Entity\View`) and tables with no entity mapping
-  (audit `*_hist` tables, ETL working tables, Liquibase bookkeeping) are
-  excluded — neither can ever match by construction.
 
-Everything left in the baseline is a genuine entity-vs-schema disagreement
-(wrong lengths, precision, signedness, index differences) awaiting a decision:
-fix the entity metadata, or fix the schema in olcs-etl. Shrinking it is welcome;
-adding to it should be a conscious, reviewed act:
+**View-backed entities** (`Entity\View`) and tables the entity side knows
+nothing about (audit `*_hist` tables, ETL working tables, Liquibase bookkeeping)
+are dropped from the output entirely — neither can match by construction. Note
+that this covers the `ALTER TABLE ... DROP FOREIGN KEY` statements Doctrine
+emits for such tables as well as the `DROP TABLE` itself; missing that is how
+four stale `document_analysis` lines survived in the baseline after the table
+gained an entity.
+
+### Reading the baseline
+
+The file is grouped under two headings carrying a count. Grouping is
+presentational — every statement is still compared, and the headings are
+comments the parser ignores:
+
+- **actionable** — a real disagreement between an entity and the schema. Fix
+  the mapping, or add a Liquibase migration in olcs-etl.
+- **inexpressible from mapping** — differences on implicit ManyToMany join
+  tables that no entity change can resolve. Those tables have no entity to
+  carry an `#[ORM\Index]`, and ORM 3's `JoinTable` attribute takes only `name`,
+  `schema`, `joinColumns`, `inverseJoinColumns` and `options` — no way to name
+  an index, declare a unique constraint, or map an extra column. `SchemaTool`
+  builds their indexes with no name, so DBAL falls through to
+  `_generateIdentifierName()` and produces `IDX_<hash>`, which the Liquibase DDL
+  will never match.
+
+A join table's own columns are the exception: their declarations derive from the
+referenced entities' primary keys, so a `CHANGE` is fixable there as anywhere
+else, and a compound statement carrying both is filed as actionable so the half
+that can be fixed stays visible.
+
+Normalising those generated names away, as the comparison already does for
+foreign key names, was considered and rejected. It trades a real difference for
+a quieter file, and the cost is not hypothetical: DBAL's existing rename
+detection had been masking a redundant index on `application_tracking`, which
+surfaced only when an unrelated attribute beside it was removed.
+
+Shrinking the actionable section is welcome; adding to it should be a conscious,
+reviewed act:
 
 ```bash
 REGENERATE_SCHEMA_DRIFT_BASELINE=1 vendor/bin/phpunit \
   -c phpunit-integration.xml --filter SchemaDriftTest
 ```
 
+## Table output escaping
+
+The table render pipeline does not escape. `ContentHelper::replaceContent()` is a
+raw `str_replace` into `<td>{{content}}</td>`, so whether a column is safe
+depends on whether something upstream escaped it. Three tests guard that, and no
+one of them subsumes another — the first two catch **opposite** mistakes, and the
+third reaches code the first two structurally cannot.
+
+| Test                             | Catches                                                | Visible to users?                     |
+| -------------------------------- | ------------------------------------------------------ | ------------------------------------- |
+| `TableEscapingInvariantTest`     | a row value reaching the output unescaped              | No — it is an XSS hole                |
+| `TableRenderSnapshotTest`        | something that was **not** a row value getting escaped | Yes — literal `&lt;b&gt;` on the page |
+| `FormatterEscapingInvariantTest` | a formatter leaking, whatever any table does           | No — it is an XSS hole                |
+
+`TableRenderSnapshotTest` also carries the two checks that are about the **other**
+output format, both asserted absolutely rather than against the snapshot: a table
+whose CSV export still contains HTML entities, and one whose CSV export contains a
+live formula. See [CSV exports](#csv-exports).
+
+The first two exist three times, once per table location, all sharing one harness
+in olcs-common (`test/Common/src/Common/Service/Table/Harness/`): `app/internal`,
+`app/selfserve` and olcs-common's own `Common/src/Common/Table/Tables`. The third
+exists once, because formatters all live in olcs-common behind a single plugin
+config. All run on every PR — the apps via `php.yaml`, olcs-common via
+`php-lib.yaml`.
+
+### Running them
+
+Nothing here needs a database, a container or a network. All three are ordinary
+PHPUnit tests and run as part of the normal suite; these are the commands for
+running them alone.
+
+```bash
+# all three, for one location
+cd lib/olcs-common   # or app/internal, or app/selfserve
+vendor/bin/phpunit --filter 'Escaping|RenderSnapshot'
+
+# one at a time
+cd lib/olcs-common
+vendor/bin/phpunit --filter TableEscapingInvariantTest
+vendor/bin/phpunit --filter TableRenderSnapshotTest
+vendor/bin/phpunit --filter FormatterEscapingInvariantTest   # olcs-common only
+```
+
+`FormatterEscapingInvariantTest` lives only in olcs-common. The other two need
+running in **all three** locations, because each has its own table directory and
+its own baseline — a change in olcs-common can move a digest in `app/selfserve`,
+so a green lib is not evidence on its own.
+
+Regenerating the snapshot is the one thing that is not just "run the test":
+
+```bash
+UPDATE_TABLE_SNAPSHOTS=1 vendor/bin/phpunit --filter TableRenderSnapshotTest
+```
+
+### CSV exports
+
+Escaping happens at the **source** here — a formatter escapes the row value it
+interpolates — which is right for HTML and wrong for everything else. Six
+controllers export a table as CSV (`ResponseHelperService::tableToCsv`), and a CSV
+is neither HTML nor a passive document. Three things follow, all handled by the
+renderer rather than the formatter, because the formatter has no idea which format
+it is feeding.
+
+**Entities.** Nothing downstream decodes them, so an operator called
+"Smith & Sons Ltd" would reach the spreadsheet as `Smith &amp; Sons Ltd`.
+`TableBuilder::renderBodyColumn()` decodes when the content type is CSV.
+
+**Formulas.** Excel, LibreOffice and Sheets evaluate a cell beginning `=`, `-`,
+`+`, `@`, tab or CR, and Excel's DDE syntax reaches outside the document — a
+vehicle marked `=cmd|' /c calc'!A1` is code that runs on the caseworker's machine
+when they open the export. `League\Csv\EscapeFormula` prefixes such a value with
+an apostrophe.
+
+**Framing.** Fields are quoted, internal quotes doubled, and embedded newlines
+kept inside the field. Not merely tidiness — it is what makes the formula handling
+work. Unquoted, a value of `x,=cmd|...` arrives as _two_ fields, and the second
+starts with `=` having never passed through any neutralisation.
+
+None of that is hand-written, and that is the point. `TableBuilder::renderCsv()`
+assembles the file with `League\Csv\Writer` — which wraps `fputcsv` — instead of
+rendering a `.phtml` layout and joining with `implode`. The quoting rules are
+RFC 4180 and the formula-starting characters are a published list; a local
+implementation of either is a maintained copy of someone else's better-tested one.
+
+Bypassing the template also fixes a third bug that no per-field encoding could
+reach: `render()` used to pass the finished CSV back through `replaceContent()`
+with the table's variables, so a cell containing `{{title}}` was silently blanked.
+
+One consequence worth knowing: `EscapeFormula` escapes **every** value starting
+with `-`, including `-100.50`, which a spreadsheet would otherwise read as a
+negative number. None of the six exports is a money table, so this costs nothing
+today; if one ever is, that is a decision to take deliberately rather than a
+default to drift into.
+
+`TableRenderSnapshotTest` asserts the entity and formula properties absolutely,
+with no baseline: there is no legitimate reason for either to appear in an export
+of licence data. The formula probe is `=1+1,=2+2` and the output is parsed back
+with a real CSV reader rather than split on commas, because splitting on commas is
+precisely the mistake being tested for. Its idea of "a formula" comes from
+`EscapeFormula::FORMULA_STARTING_CHARS` rather than being written out again, so
+the guard cannot drift from the code it guards.
+
+### The escaping contract
+
+Escape by **provenance**, not by what the value looks like:
+
+| Where the value came from        | What to do                                                                              |
+| -------------------------------- | --------------------------------------------------------------------------------------- |
+| Row data                         | Escape, always, whatever it looks like                                                  |
+| Developer-authored markup        | Leave raw; escape the values you interpolate into it                                    |
+| Another formatter's return value | Leave raw — escaping it double-escapes, and escaping its values is that formatter's job |
+
+`TableBuilder::replaceContentEscapingValues()` exists for the middle case and is
+greppable. The third case is the one that catches people out: wrapping
+`$this->callFormatter(...)` in an escape call is always wrong.
+
+### When the invariant test fails
+
+A table you touched now emits a row value raw. Escape the value at the point it
+is interpolated. The baseline (`table-escaping-baseline.txt` beside each test)
+lists tables that are known exceptions and are exempt; it should only ever
+shrink, and a listed table that stops leaking also fails, so the list cannot rot.
+Tables the synthetic probe cannot drive are reported as **skipped**, which means
+"not covered here", never "safe".
+
+Adding a table to the baseline is not the fix, and neither is regenerating
+anything — the baseline only shrinks.
+
+**Every table definition in the repository renders.** There is no skip list: all
+233 are driven against a hostile row, and a table that stops rendering fails the
+build rather than quietly dropping out of the count. `FormatterEscapingInvariantTest`
+still earns its place — `lva-psv-vehicles-readonly` renders with no data rows at
+all, so its `StackValue` columns are exercised only there.
+
+### When a type rejects the probe
+
+`RecursiveProbe` answers any key to any depth with itself, which is what lets one
+value drive every table without knowing their shapes. What it cannot do is
+satisfy a **type**: `number_format()` wants a float, `new DateTime()` wants
+something parseable. Rather than record those tables as undrivable, both
+harnesses learn the constraint from the failure and retry — see
+`RowProbeAdaptation`, which they share.
+
+Two things make this honest rather than convenient:
+
+- The substitution is learned, never declared. Nothing is replaced until the code
+  actually rejects the probe, so the adaptation disappears by itself when the
+  constraint does. A hand-maintained "these keys are numeric" map would rot the
+  way a skip list does.
+- Substitutions that **lose the payload** are recorded, and then proved. A string
+  or an array of probes still carries the marker, so the assertion is unweakened;
+  a number or a date cannot, so each of those goes through the isolation pass
+  below, which ends with it either escaped or rejected by its own type. Both are
+  proofs, so neither is recorded — see
+  [Putting the payload back](#putting-the-payload-back).
+
+Table-level adaptation substitutes at a **dotted path**, not a root key:
+`publication.pubDate` can be a real date while
+`publication.pubStatus.description` stays a probe. Replacing the whole
+`publication` key instead would de-probe every sibling column to fix one, which
+is the difference between "this value cannot carry a payload" and "this table is
+no longer tested".
+
+### Putting the payload back
+
+A substituted value is not tested, and "not tested" is where a leak hides. Worse,
+the substitution lands in the row **every column shares**: if one column parses
+`createdOn` as a date and another interpolates it into markup, the date that
+satisfies the first is what the second emits — so the substitution masks the leak
+it should have found. The more constrained a value is, the better it is hidden.
+
+So every payload-losing value is put back. One at a time, the marker is restored
+at exactly that path while the rest of the row stays as the settled render left
+it, and the render runs once more with **no adaptation** — recovering from the
+constraint is what the pass exists to avoid.
+
+**The outcome is binary: the value is safe, or it is not.** There is no third
+category and no list of values that are "safe for a different reason" — that
+distinction is real but it is not actionable, and a reader who has just written a
+table cannot do anything with it.
+
+Safe arrives two ways, and neither is weaker, so neither is recorded anywhere:
+
+| Safe            | Meaning                                                                            |
+| --------------- | ---------------------------------------------------------------------------------- |
+| **escaped**     | The render survived and the payload came out escaped.                              |
+| **constrained** | The value's own type rejected the payload before anything was written to the page. |
+
+Calling the second one safe is a complete argument, not a lenient one, and it is
+worth spelling out because it looks like a let-off. The type partitions every
+possible value: one that **satisfies** it is a number or a strict date, neither of
+which can contain `<`, `>`, `&` or a quote — and the output is derived from the
+parsed value rather than copied from the input. One that **does not** is rejected
+before a byte is written; in production that input is a 500, not a payload on a
+page. There is no third case, so there is nothing left to test.
+
+Not safe also arrives two ways, and both fail the build:
+
+| Not safe     | Meaning                                                                                                                         |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| **leaking**  | The payload reached the output raw — a real leak nothing else could see, because the ordinary run substitutes this value first. |
+| **unproven** | The render failed for a reason that is **not** its type rejecting it, so nothing was established either way.                    |
+
+`unproven` is the one that keeps the argument above honest. "It threw, so it
+cannot get out" only holds when the throw _is_ the type rejecting the payload —
+an exception from anywhere else (a missing service, a formatter broken by an
+unrelated change) would otherwise read as proof of safety, and go on reading that
+way for as long as the breakage lasted. So the exception is checked against the
+same question the adaptation loop asks to learn a constraint, and anything it does
+not recognise is reported by name. There is no baseline section for it: it is
+empty today, and an entry means someone has to look.
+
+Reading the output buffer **even when the render throws** matters for the same
+reason. A value echoed by one column and only later rejected by another is
+already on the page; the throw does not retract it.
+
+One path at a time, never in a batch. `AbstractConversationMessage::getFirstReadBy()`
+returns early when `createdBy.id` equals the read's `user.id`, so restoring the
+payload to both at once would skip the branch and report "no leak" about code
+that never ran. Isolated, both render and come out escaped.
+
+Attributing a failure to the right value is most of the work, and it is done in
+four ways, narrowest first: the failing line, the statement below it (a
+multi-line call puts its arguments there), a local alias of the row resolved back
+to its path (`$licence = $data['licence']` … `$licence['goodsOrPsv']['id']`), and
+the column config the formatter was handed, read out of the exception trace. Only
+if all four come back empty does it widen — and only for strings, because `MARKER`
+_is_ a string, so a widened substitution keeps its payload. Numeric and date
+never widen; they would silently de-probe the row.
+
+Two consequences worth knowing:
+
+- The harness reads exception trace arguments, so `zend.exception_ignore_args` is
+  pinned to `0` in all three `phpunit.xml.dist` files. With args stripped, the
+  column config is invisible and those tables stop rendering.
+- The row is harvested from the definition **and** from the formatter classes it
+  names. A key only a formatter reads would otherwise arrive as `null`, which
+  makes `isset()` false and skips the very branch that leaks.
+
+### Keys the harvest cannot see
+
+That last point has a sharper edge than it reads. The harvest looks for
+`$row['literal']`, so a key read through a **variable** is invisible to it — and
+the miss is silent in the worst possible way. A key the row does not carry is
+absent, `isset()` on it is false, the branch that would have interpolated it never
+runs, and the table renders clean. Green, and nothing tested.
+
+`Formatter\Address` was the worked example. Its field names live in a class
+property, not in a subscript:
+
+```php
+protected $formats = ['FULL' => ['addressLine1', 'addressLine2', 'town', ...]];
+
+foreach ($fields as $item) {
+    if (!isset($data[$item])) { continue; }   // always true, so...
+    $parts[] = $data[$item];
+}
+return implode(', ', array_map(fn($p) => Escape::html($p), $parts));  // ...never ran
+```
+
+Nothing reads `$data['addressLine1']`, so the harvest never added it, so every
+iteration hit the `continue` and `$parts` came back empty. The formatter counted
+as exercised while the only line that matters had never executed.
+
+`DynamicRowKeys` closes it: where a file reads the row through a variable, the
+quoted identifier lists in that same file are taken as candidate keys. It is a
+heuristic and deliberately a narrow one — only files that actually do dynamic row
+access contribute (19 of 149 formatters, and only a handful have a list to find),
+and only identifier-shaped strings in comma-separated array literals count, so a
+lone `'FULL'` or a CSS class does not become a row key.
+
+Guessing is justified because the costs are asymmetric. An extra key the code
+never reads is an unused probe and changes nothing. A missing key is a branch that
+silently stops being tested. And the failure direction is loud: a value the row
+should not have had reaching the output is reported as a leak for a human to
+judge, rather than passing quietly.
+
+`$column` is excluded from "dynamic", because `$data[$column['name']]` is resolved
+properly elsewhere from the column config the formatter was actually handed.
+
+One mechanism is worth knowing about, because it is not about probe data at all:
+**shadowing**. Definitions resolve by bare name against a list of directories, so
+two files sharing a basename cannot both be reached through one builder — the
+first hit wins. Two pairs exist today in `app/internal`: `conditions.table.php`
+(in `Bus/` and in `SubmissionSections/`) and `environmental-complaints.table.php`
+(in the table root and in `SubmissionSections/`). The loser used to vanish from
+the report entirely, which read as full coverage; it now gets a builder of its
+own, with its directory ordered to win. Keys carry their directory prefix
+(`SubmissionSections/conditions.table.php`) so the two stay distinguishable.
+
+### When the snapshot test fails
+
+Rendered output moved. If you meant it — a column added, a label reworded —
+regenerate; if you did not, you have probably escaped developer markup, another
+formatter's output, or a value that was already escaped where it was assigned.
+
+```bash
+# from the app or lib directory that failed
+UPDATE_TABLE_SNAPSHOTS=1 vendor/bin/phpunit path/to/TableRenderSnapshotTest.php
+```
+
+Regenerate deliberately, and read the diff. Doing it reflexively to make a red
+build green defeats the entire point of the test.
+
+The snapshot stores a digest per table rather than the rendered HTML, because 185
+tables of markup would be unreviewable. It renders against benign data
+containing an ampersand — a value of plain alphanumerics would be unchanged by
+escaping, so escaping it twice would be invisible. The per-render CSRF token is
+normalised out; anything else non-deterministic in a render will make the digest
+unstable and needs normalising in `TableEscapingHarness::normalise()`.
+
+### The third test: formatters, directly
+
+`FormatterEscapingInvariantTest` (olcs-common only — formatters all live there and
+share one plugin config) calls every formatter directly with a hostile row.
+
+It exists because driving formatters _through_ a table leaves two blind spots:
+
+- a formatter reachable only from a table the probe cannot render never runs at all
+- `TableEscapingHarness` builds its row by harvesting `['literal']` subscripts from
+  the table **definition**, so a key read only inside a formatter class is absent
+  from the row and arrives as `null` — the formatter runs, but its leaking branch
+  does not
+
+`Formatter\PrinterDocumentCategory` is the worked example: it interpolates
+`$row['subCategory']['category']['description']` into an `<a>`, but
+`admin-printers-exceptions.table.php` never names `subCategory`, so `isset()` is
+false, the `'Default setting'` branch is taken, and the table-level test passes a
+formatter that leaks in production.
+
+This harness harvests keys from the formatter's own source (and its parents), so
+that cannot happen here by construction. Neither test subsumes the other — the
+table-level one still owns inline closures, cell attributes and wrapping.
+
+All **149** formatters are driven, none leaks, and none is skipped. Keeping it
+that way is the point of the baseline below.
+
+### How the probe works
+
+Worth understanding before you change a formatter's signature, because that is
+what usually makes one of these tests go red for a reason that is not escaping.
+
+`RecursiveProbe` is a row stand-in that answers **any** key, to **any** depth,
+with itself, and stringifies to `<script>xss-probe</script>`. That is what lets
+one object drive a hundred formatters without anyone writing a fixture per table:
+whatever a formatter reaches for, it gets the marker, and the harness then asks
+whether the marker reached the output unescaped.
+
+A probe cannot satisfy a **type**, though. A formatter that calls
+`number_format()` or parses a date rejects it outright. So the harness does not
+declare types up front — it **learns them from the failure**:
+
+1. call the formatter; if it returns, check the output for the marker
+2. if it throws, read the engine's own wording to decide what the value has to be
+   (`must be of type int|float` → numeric, `Failed to parse time string` → date…)
+3. find which row key the failing expression touched, from the failing line first
+   and the whole statement second
+4. substitute a value of that type into that key, and go round again
+
+Learning rather than declaring matters: a hand-maintained "these keys are
+numeric" map would rot exactly the way a skip list does, whereas an adaptation
+disappears by itself the moment the constraint does.
+
+Most substitutions keep the payload — a string **is** the marker, and an array
+holds probes. Numbers and dates cannot, so each of those is put back on its own
+and proved rather than quietly counted as covered (see
+[Putting the payload back](#putting-the-payload-back)).
+
+Two formatters need more than this. `RecursiveProbe` cannot satisfy a type at
+**depth** — `getSenderName(): string` returns `$row['createdBy'][…]['forename']`,
+and substituting at the root only moves the failure to the next subscript. The
+two conversation _message_ formatters therefore get a hand-written row from
+`FormatterEscapingHarness::fixtures()`. A fixture is merged **over** the
+generated row, so a key the formatter starts reading tomorrow still arrives as a
+probe rather than missing.
+
+### The two baseline sections
+
+`formatter-escaping-baseline.txt`. Both are asserted, so neither can rot:
+
+| Section     | Fails when                                                      |
+| ----------- | --------------------------------------------------------------- |
+| `[leaking]` | a formatter starts leaking, or a listed one stops (stale entry) |
+| `[skipped]` | a formatter becomes undrivable, **or becomes drivable**         |
+
+Asserting `[skipped]` matters more than it looks. A skip is not "safe" — it is
+"unknown", and without this it would stay unknown long after the reason for it
+disappeared. If a formatter is skipped because `number_format()` rejects the probe,
+and someone later drops that call, the value starts flowing raw; comparing the set
+means that shows up as a failure rather than sitting unnoticed behind a stale entry.
+
+There is deliberately **no section for values a type constraint keeps off the
+page**, and there used to be. Listing them said "safe, but for a different
+reason", which is true and useless: nobody reading it for the first time can act
+on it. Those values are safe outright — see
+[Putting the payload back](#putting-the-payload-back) for why the argument is
+complete rather than lenient — so they are proved on every run and not recorded.
+A value that can be proved neither way fails the build by name instead.
+
+### When a formatter's constructor or signature changes
+
+The most common way to make this test red without touching escaping:
+
+| Symptom in the failure                   | Usually means                                                                                  |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `unresolvable: …` in the skipped list    | the factory is broken, or a new dependency is missing from `HarnessContainer`                  |
+| a formatter moved into `[skipped]`       | a new type constraint the probe cannot satisfy — add the service, or a fixture if it is nested |
+| a formatter moved **out** of `[skipped]` | good news; delete the entry                                                                    |
+| an `unproven` value in the failure       | the formatter throws before reaching the value, for a reason unrelated to the value's type     |
+
+If you add a formatter dependency, add it to `HarnessContainer` as the **real**
+class wherever the real thing does not need the world. A mock that answers
+everything with `''` will let the formatter run while feeding it nothing, which
+looks like coverage and is not: `StackHelperService` was mocked that way, and
+`StackValue`, `NumberStackValue`, `UnlicensedVehicleWeight` and
+`FeeTransactionDate` all counted as exercised while formatting an empty string.
+Three live leaks were sitting behind it.
+
+## API request validation snapshot
+
+Every command and query the frontends send to the API is a DTO in
+`lib/olcs-transfer/src/Command` or `src/Query`, and its routing, filtering and
+validation rules are declared on the class. `DtoSnapshotTest`
+(`lib/olcs-transfer/test/Snapshot/`) builds each one through the real
+`AnnotationBuilder` and compares the result with a JSON snapshot committed for
+it under `test/Snapshot/dto/`, one file per DTO in a path matching its namespace.
+It runs with the rest of the olcs-transfer suite, through `php-lib.yaml`.
+
+A snapshot records the route name, the HTTP method (commands only) and every
+input: whether it is required or allowed empty, its filters and validators in
+the order they run, and their options. Partials (`Command\Partial`) are not
+snapshotted on their own; each is recorded inside every DTO that uses it.
+
+### Running it
+
+```bash
+cd lib/olcs-transfer
+vendor/bin/phpunit --filter DtoSnapshotTest
+```
+
+### Regenerating the snapshots
+
+Testing compares against the committed files and never writes them. Writing
+them is a separate, deliberate step:
+
+```bash
+cd lib/olcs-transfer
+UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --filter DtoSnapshotTest
+git diff --stat test/Snapshot/dto   # then read the diff itself
+```
+
+`npm run refresh` from the repo root does the same: answer yes to "Update the
+DTO test snapshots". It runs that command on your machine (not in Docker) and
+then lists the snapshot files it changed, created or deleted.
+
+Either way, the snapshots are built with the packages already in
+`lib/olcs-transfer/vendor`. olcs-transfer commits no `composer.lock`, so CI
+installs the newest compatible Laminas releases, and a `vendor` folder that has
+not been updated for a while can write snapshots that match an older release
+and fail in CI. Refresh's Composer step does not install the libraries, so run
+`composer update` in `lib/olcs-transfer` first. The refresh step reminds you of
+this and asks before it goes ahead.
+
+That rewrites every snapshot from the current code, creates one for any new
+DTO and deletes any whose DTO no longer exists. Commit the snapshot changes
+in the same PR as the DTO change that caused them, so the reviewer sees the
+rule change and its effect together.
+
+Do not edit a snapshot by hand: it is generated, and the next regeneration
+overwrites it. The folder is excluded from prettier for the same reason.
+
+### When it fails
+
+| Failure                    | Usually means                                                                    | Do                                                                    |
+| -------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `… has no snapshot`        | you added a command or query                                                     | regenerate, check the new file describes what you meant               |
+| `… no longer matches`      | you changed that DTO's rules, or a trait or partial it uses                      | if intended, regenerate and review the diff                           |
+| `… have no matching DTO`   | you deleted or renamed a DTO                                                     | regenerate (it deletes the orphans)                                   |
+| many DTOs fail at once     | a change to `AnnotationBuilder`, a shared trait or partial, or a Laminas release | find the cause before regenerating; this is what the test is here for |
+| `… does not autoload as …` | a file's class name does not match its path                                      | fix the class or file name                                            |
+
+Regenerate deliberately, and read the diff. Doing it reflexively to make a red
+build green defeats the point of the test. In particular, a change meant to
+leave behaviour alone, such as moving the DTOs from annotations to attributes
+(VOL-5245), must not touch any snapshot: a diff there is a behaviour change.
+
+olcs-transfer's `composer.lock` is not committed, so CI installs the newest
+compatible Laminas releases. A Laminas minor release that changes a filter's or
+validator's internal settings can therefore fail the snapshot on a PR that did
+not touch the DTOs. Check what the diff shows; if it is a harmless internal
+change, regenerate in a PR of its own.
+
+### Reading a snapshot
+
+Only settings that differ from the class's declared defaults are recorded, so a
+snapshot shows what the DTO and builder set rather than Laminas' stock error
+messages and empty runtime state. As a result:
+
+- an input with no `required` key is required (the Laminas default);
+  `@Transfer\Optional` shows as `"required": false` and `"allowEmpty": true`
+- `StripTags` first in an input's filters is the builder's default escaping;
+  `@Transfer\Escape(false)` removes it
+- inputs are sorted by name, because PHP versions differ in the order reflection
+  lists properties in and each input is validated independently; filter and
+  validator order **is** significant and is kept as declared
+- plugin managers, translators and other services are recorded by class name
+  only
+
+### What it does not cover
+
+`@Transfer\DoNotExchange` stops `AbstractQuery::exchangeArray()` setting a
+property from request data. It is read from the docblock as text, outside the
+builder, so the snapshot cannot see it; `test/Query/SortWhitelistTest.php`
+covers its one use, the sort whitelist.
+
+The test builds DTOs with plain Laminas plugin managers rather than the apps'
+configured ones, so a custom validator that needs services from its factory is
+recorded by class but not built the way production builds it.
+
+## Form specification snapshot
+
+The frontends' forms and fieldsets are declared with annotations on model
+classes, mostly under `Form/Model/Form` and `Form/Model/Fieldset`, in four
+places: olcs-auth, olcs-common, internal and selfserve. Laminas reads those
+annotations into a form _specification_, a plain array that its form factory
+then builds the form from. Each of the four has a
+`FormSpecificationSnapshotTest` that reads every such class through the builder
+behind the `FormAnnotationBuilder` service (the one
+`FormHelperService::createForm()` and every other form consumer use) and
+compares the specification with a JSON snapshot committed for the class:
+
+| Package     | Test and snapshots (`forms/`)                           |
+| ----------- | ------------------------------------------------------- |
+| olcs-auth   | `lib/olcs-auth/test/Form/Snapshot/`                     |
+| olcs-common | `lib/olcs-common/test/Common/src/Common/Form/Snapshot/` |
+| internal    | `app/internal/test/Olcs/src/Form/Snapshot/`             |
+| selfserve   | `app/selfserve/test/Olcs/src/Form/Snapshot/`            |
+
+Snapshots sit under `forms/` in a path matching the class's namespace. The
+shared logic is `FormSpecificationSnapshotTestCase`, next to olcs-common's test.
+Each runs with its package's suite.
+
+A specification records the form's name, type, attributes and options; its
+elements and fieldsets in order, with every composed fieldset
+(`ComposedObject`) expanded in place; and its input filter: whether each input
+is required, and its filters and validators in the order they run, with their
+options.
+
+A class is snapshotted if its file refers to `Laminas\Form\Annotation` for
+anything other than a builder, wherever it sits in the package's source. That
+finds the same classes whether the annotations are docblocks or PHP attributes.
+Traits and abstract classes are not snapshotted on their own; each is recorded
+inside every class that uses or extends it.
+
+### Running it
+
+```bash
+# from lib/olcs-auth, lib/olcs-common, app/internal or app/selfserve
+vendor/bin/phpunit --filter FormSpecificationSnapshotTest
+```
+
+### Regenerating the snapshots
+
+As with the API snapshot, testing never writes the files. Writing them is a
+separate, deliberate step, run in the package whose forms changed. A change to
+an olcs-common fieldset also changes the snapshots of app forms that compose
+it, so regenerate those too:
+
+```bash
+UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --filter FormSpecificationSnapshotTest
+git status --short .   # new snapshots show as untracked; then read the diff itself
+```
+
+To do all four packages in one go, run `npm run refresh` from the repo root and
+answer yes to "Update the form test snapshots". It runs that command in
+olcs-auth, olcs-common, internal and selfserve on your machine (not in Docker),
+then lists every snapshot file it changed, created or deleted. Running it in
+every package is the safe default: a package whose forms did not change keeps
+its snapshots as they are.
+
+Either way, the snapshots are built with the packages already in each
+package's `vendor` folder. internal and selfserve commit their `composer.lock`,
+so `composer install` there matches CI. olcs-auth and olcs-common do not, so CI
+installs the newest compatible Laminas releases, and a `vendor` folder that has
+not been updated for a while can write snapshots that match an older release
+and fail in CI. Refresh's Composer step does not install the libraries, so run
+`composer update` in `lib/olcs-auth` and `lib/olcs-common` first. The refresh
+step reminds you of this and asks before it goes ahead.
+
+That rewrites every snapshot in the package, creates one for any new form or
+fieldset and deletes any whose class no longer exists. Commit the snapshot
+changes in the same PR as the form change that caused them. Do not edit a
+snapshot by hand; the folders are excluded from prettier.
+
+### When it fails
+
+| Failure                                      | Usually means                                                                              | Do                                                                    |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `… has no snapshot`                          | you added a form or fieldset                                                               | regenerate, check the new file describes what you meant               |
+| `… no longer matches`                        | you changed that class's annotations, or a fieldset, trait or parent class it uses         | if intended, regenerate and review the diff                           |
+| `… have no matching form`                    | you deleted or renamed a form or fieldset                                                  | regenerate (it deletes the orphans)                                   |
+| many forms fail at once                      | a change to a shared fieldset (`FormActions`, say), the builder or its factory, or Laminas | find the cause before regenerating; this is what the test is here for |
+| `… expects an object or valid class name`    | a `ComposedObject` names a class that does not exist                                       | fix the name; if nothing uses the form, delete it                     |
+| `… does not autoload` / `… autoloads from …` | a file's class name does not match its path, or two files declare the same class           | fix the class or file name                                            |
+| `testFieldOrderDoesNotDependOnThePhpVersion` | a form class gets properties both from a parent class and from a trait                     | declare the trait's properties in the class, or stop extending        |
+
+Regenerate deliberately, and read the diff. A change meant to leave behaviour
+alone, such as moving the forms from annotations to attributes (VOL-7038),
+must not touch any snapshot: a diff there is a behaviour change until shown
+otherwise. olcs-auth's and olcs-common's `composer.lock` files are not
+committed, so a laminas-form release that changes how annotations are read can
+fail their snapshots on an unrelated PR; check the diff, and regenerate in a PR
+of its own if it is harmless.
+
+The field order check exists because the builder adds elements in the order
+reflection lists a class's properties, and PHP 8.5 changed that order for a
+class with both inherited and trait properties. No form does that today, so
+every snapshot is the same on either side of the change. CI does not run every
+package on every PHP version (see the lib matrix in `ci.yaml`), so the check
+fails on any version instead.
+
+### Reading a snapshot
+
+The snapshot is the specification exactly as the builder returns it, with
+Laminas' array objects written as plain arrays:
+
+- `elements` and `fieldsets` are separate lists. The form factory adds every
+  element, then every fieldset, each list in declaration order unless
+  `flags.priority` says otherwise. That is the order fields appear in, so order
+  in these lists **is** significant
+- a composed fieldset's `spec` holds its own elements, fieldsets and options,
+  merged with those the parent declared on the property. Its input filter is
+  merged into the parent's `input_filter` under the fieldset's name or, for a
+  collection, sits in `options.target_element.options.input_filter_spec`
+- type, filter and validator names are recorded exactly as declared, because
+  the plugin managers that resolve them do not normalise them. A diff that only
+  adds or drops a leading backslash can change which factory builds the
+  element. For example, `Common\Form\Elements\Types\Table` is registered in
+  olcs-common's `form_elements` config with the element class as its own
+  factory, which is not callable, so only `\Common\Form\Elements\Types\Table`
+  builds. Check the plugin manager config before accepting such a diff
+- keys within `attributes` and `options` are recorded in the order the builder
+  set them. A diff that only reorders them is harmless, except in option lists
+  such as `value_options`, where key order is the order the options are shown in
+
+Many forms still pass an annotation's arguments as a single array
+(`@Form\Filter({"name": "…"})`). Laminas deprecates that syntax but reads it
+into the same specification as separate arguments. The test ignores that one
+deprecation and fails on any other.
+
+### What it does not cover
+
+The snapshot stops at the specification. It does not cover:
+
+- building the form from it: the form factory, the element manager and custom
+  elements' factories and `init()` methods. The test reads specifications with
+  plain plugin managers, which play no part in reading them
+- anything done to a form after it is built: form services, controllers
+  altering the form, elements added with `$form->add()`
+
 ## Adding integration tests
 
 Extend `Dvsa\OlcsTest\Integration\IntegrationTestCase` and use `$this->repo()`
-/ `$this->em()`. Good candidates are repository methods with non-trivial DQL
-(joins, subqueries, streaming via `toIterable()`), anything that regressed in
-production despite green unit tests, and query paths against database views.
+/ `$this->em()`. Reach for this layer when the answer depends on _running_ the
+query: streaming via `toIterable()`, hydration, stored procedures, and query
+paths against database views. Whether the query is well-formed — its joins,
+field names, predicates and ordering — is settled faster and without Docker by a
+[repository unit test](#repository-unit-tests).
 Prefer selecting fixture rows from the seeded test data over hardcoding ids;
 insert your own rows where the dataset is not enough — the per-test transaction
 rolls them back.

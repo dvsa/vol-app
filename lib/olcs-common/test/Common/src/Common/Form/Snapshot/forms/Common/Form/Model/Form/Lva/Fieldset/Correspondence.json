@@ -1,0 +1,62 @@
+{
+  "name": "Correspondence",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "fao",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "application_your-business_fao.label",
+          "label_attributes": {
+            "aria-label": "application_your-business_fao.label"
+          }
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "application_your-business_business-type.correspondence.label"
+  },
+  "input_filter": {
+    "fao": {
+      "name": "fao",
+      "required": false,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 0,
+            "max": 90
+          }
+        }
+      ]
+    }
+  }
+}

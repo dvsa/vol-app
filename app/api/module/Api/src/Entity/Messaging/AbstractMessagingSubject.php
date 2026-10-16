@@ -59,7 +59,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * SubCategory
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
+     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory|null
      */
     #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -105,9 +105,9 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Is active
      *
-     * @var int
+     * @var bool|null
      */
-    #[ORM\Column(type: 'smallint', name: 'is_active', nullable: true, options: ['default' => 1])]
+    #[ORM\Column(type: 'boolean', name: 'is_active', nullable: true, options: ['default' => 1])]
     protected $isActive = 1;
 
     /**
@@ -297,7 +297,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Set the is active
      *
-     * @param int $isActive new value being set
+     * @param bool $isActive new value being set
      *
      * @return static
      */
@@ -311,7 +311,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get the is active
      *
-     * @return int
+     * @return bool
      */
     public function getIsActive()
     {

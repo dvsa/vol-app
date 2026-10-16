@@ -16,6 +16,7 @@ on:
         description: "Environment to target"
         type: choice
         options:
+          - reg
           - dev
           - int
           - prep
@@ -33,7 +34,9 @@ on:
           - translation_key
           - translation_replacement
           - storage
-          - secretsmanager
+          - cqrs
+          - doctrine
+          - jwks
           - custom-pattern
         default: user_account
       custom_pattern:

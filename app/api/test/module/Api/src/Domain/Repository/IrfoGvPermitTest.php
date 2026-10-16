@@ -2,41 +2,29 @@
 
 declare(strict_types=1);
 
-/**
- * IrfoGvPermit Repo test
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\IrfoGvPermit as Repo;
+use Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit as Entity;
 
-/**
- * IrfoGvPermit Repo test
- */
 final class IrfoGvPermitTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class);
     }
 
     public function testFetchByOrganisation(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchByOrganisation('ORG1'));
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.organisation = :organisation',
+            $qb->getDQL(),
         );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchByOrganisation('ORG1'));
-
-        $expectedQuery = 'BLAH AND m.organisation = [[ORG1]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame('ORG1', $qb->getParameter('organisation')->getValue());
     }
 }

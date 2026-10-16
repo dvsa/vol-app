@@ -20,6 +20,20 @@ For each database table, the generator creates:
 - `{Namespace}/{EntityName}.php` - Concrete class for custom logic (only created if it doesn't exist)
 - Test stub in `test/module/Api/src/Entity/{Namespace}/{EntityName}EntityTest.php`
 
+The concrete class is yours to edit; the abstract is not. One trap is worth
+calling out: **do not declare table-level `#[ORM\Index]` or
+`#[ORM\UniqueConstraint]` attributes on the concrete for columns the abstract
+already covers.** Doctrine unions the two sets rather than letting the concrete
+override, so a differently-named duplicate makes the metadata claim an index the
+database has never had. Sixty-four such attributes were removed across 34
+entities under VOL-7070; between them they accounted for the entire
+`CREATE INDEX` section of the schema drift baseline.
+
+They are easy to miss, because DBAL's comparator pairs indexes by shape as well
+as by name — a duplicate can sit invisible until an unrelated one beside it is
+removed. Match on **columns, not names**: a concrete declaration whose columns
+are already covered by its abstract is redundant whatever it is called.
+
 The namespace is determined by `namespace.config.php` which maps entity names to subdirectories. For example:
 
 - `Application` entity → `Application/AbstractApplication.php` and `Application/Application.php`
@@ -60,6 +74,32 @@ schema-drift baseline (see [Testing](app/testing.md)) to move.
   attribute's `options` array. Foreign key columns don't need them: Doctrine
   derives a join column's type (including unsignedness) from the referenced
   identifier.
+- **Binary columns map to Doctrine's `binary` type, with an explicit `length`.**
+  Mapping them as `string` would declare the column as `CHAR`/`VARCHAR` (a
+  `binary(16)` came out as `CHAR(16)`), so the bytes would round-trip through the
+  connection's character set and the schema-drift check would report the column
+  as drifted. `length` is emitted because DBAL falls back to 255 without it, and
+  `fixed` is what separates `BINARY(16)` from `VARBINARY(16)`:
+
+    ```php
+    // cf. Doc\DocumentAnalysis::$token
+    #[ORM\Column(type: 'binary', name: 'token', length: 16, nullable: false, options: ['fixed' => true])]
+    ```
+
+    The generated property is documented as `@var string|resource`, not `string`:
+    DBAL's `BinaryType::convertToPHPValue()` always returns a `php://temp` stream,
+    so a concrete entity reading one has to handle both forms. Anchor the read at
+    offset 0 (`stream_get_contents($value, -1, 0)`); reading a stream consumes it,
+    so an unanchored second read returns an empty string. `blob` columns behave the
+    same way.
+
+- **MySQL `ENUM` columns are introspected as `string`.** DBAL has no ENUM
+  mapping, and a column it cannot type aborts the whole run with `Unknown
+database type enum requested`, not just the table that owns it. The
+  introspector registers `enum => string` so it degrades to the way these
+  columns are already modelled (a string property with class constants). No
+  `length` is emitted for them, because MySQL reports an enum's length as 0 and
+  `length: 0` would declare `VARCHAR(0)`.
 - **Column comments are not emitted.** They are owned by the database DDL in
   olcs-etl, and ORM 2's `JoinColumn` cannot carry options at all, so comments
   can never round-trip through entity metadata. The schema-drift comparison
@@ -211,6 +251,10 @@ entity:generate -o /tmp/review-entities
 # Then compare with existing:
 diff -r /tmp/review-entities app/api/module/Api/src/Entity
 ```
+
+A run with `-o` writes everything under that path and nothing into the repository,
+including the generated `*EntityTest.php` stubs, which land in `<output-path>/tests`.
+Only `--replace` writes into the tree.
 
 ### Output Example
 

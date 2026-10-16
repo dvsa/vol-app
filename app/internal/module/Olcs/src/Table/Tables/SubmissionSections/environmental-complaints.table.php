@@ -33,8 +33,9 @@ return [
         ],
         [
             'title' => 'Complainant',
-            'formatter' => fn($data, $column) => $data['complainantForename'] . ' ' .
-            $data['complainantFamilyName']
+            'formatter' => fn($data, $column) =>
+                \Common\Util\Escape::html($data['complainantForename']) . ' ' .
+                \Common\Util\Escape::html($data['complainantFamilyName'])
         ],
         [
             'title' => 'OC Address',

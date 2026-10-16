@@ -2,106 +2,73 @@
 
 declare(strict_types=1);
 
-/**
- * Financial Standing Rate test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\FinancialStandingRate as RateRepo;
-use Dvsa\Olcs\Api\Entity\System\FinancialStandingRate;
+use Dvsa\Olcs\Api\Entity\Cases\Cases;
+use Dvsa\Olcs\Api\Entity\System\FinancialStandingRate as Entity;
 
-/**
- * Financial Standing Rate test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 final class FinancialStandingRateTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(RateRepo::class);
+        $this->setUpRealSut(RateRepo::class);
     }
 
-    public function testFetchRatesInEffect(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('priorQueryProvider')]
+    public function testFetchRatesInEffect(bool $previouslyBound): void
     {
         $date = new \DateTime();
+        if ($previouslyBound) {
+            $previous = $this->newRealQb();
+            $previous->select('c')->from(Cases::class, 'c');
+            $this->queryBuilder->modifyQuery($previous);
+        }
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $where1 = m::mock();
-        $where2 = m::mock();
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn('RESULT');
 
-        $qb->shouldReceive('expr->isNull')
-            ->with('fsr.deletedDate')
-            ->andReturn($where1);
+        $this->assertSame('RESULT', $this->sut->fetchRatesInEffect($date));
 
-        $qb->shouldReceive('expr->lte')
-            ->with('fsr.effectiveFrom', ':effectiveFrom')
-            ->andReturn($where2);
+        $this->assertSame(
+            'SELECT fsr, w0, w1, w2 FROM ' . Entity::class . ' fsr'
+            . ' LEFT JOIN fsr.licenceType w0 LEFT JOIN fsr.goodsOrPsv w1'
+            . ' LEFT JOIN fsr.vehicleType w2'
+            . ' WHERE fsr.deletedDate IS NULL AND fsr.effectiveFrom <= :effectiveFrom'
+            . ' ORDER BY fsr.effectiveFrom DESC',
+            $qb->getDQL(),
+        );
+        $this->assertSame($date, $qb->getParameter('effectiveFrom')->getValue());
+        if ($previouslyBound) {
+            $this->assertSame('SELECT c FROM ' . Cases::class . ' c', $previous->getDQL());
+        }
+    }
 
-        $qb
-            ->shouldReceive('andWhere')
-            ->with($where1)
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with($where2)
-            ->andReturnSelf()
-            ->shouldReceive('addOrderBy')
-            ->with('fsr.effectiveFrom', 'DESC')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('effectiveFrom', $date)
-            ->shouldReceive('getQuery->execute')
-            ->andReturn('RESULT');
-
-        $this->queryBuilder
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(FinancialStandingRate::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchRatesInEffect($date);
-
-        $this->assertEquals('RESULT', $result);
+    public static function priorQueryProvider(): \Iterator
+    {
+        yield 'first use' => [false];
+        yield 'after another query' => [true];
     }
 
     public function testFetchByCategoryTypeAndDate(): void
     {
-        $qb = $this->createMockQb('BLAH');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            ['RESULTS'],
+            $this->sut->fetchByCategoryTypeAndDate('lcat_gv', 'ltyp_sn', 'fin_sta_veh_typ_hgv', '2015-09-28'),
         );
 
-        $results = $this->sut->fetchByCategoryTypeAndDate('lcat_gv', 'ltyp_sn', 'fin_sta_veh_typ_hgv', '2015-09-28');
-
-        $this->assertEquals(['RESULTS'], $results);
-
-        $expectedQuery = 'BLAH AND fsr.goodsOrPsv = [[lcat_gv]] AND '
-            . 'fsr.licenceType = [[ltyp_sn]] AND fsr.vehicleType = [[fin_sta_veh_typ_hgv]] AND '
-            . 'fsr.effectiveFrom = [[2015-09-28]]';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT fsr FROM ' . Entity::class . ' fsr'
+            . ' WHERE fsr.goodsOrPsv = :goodsOrPsv AND fsr.licenceType = :licenceType'
+            . ' AND fsr.vehicleType = :vehicleType AND fsr.effectiveFrom = :date',
+            $qb->getDQL(),
+        );
+        $this->assertSame('lcat_gv', $qb->getParameter('goodsOrPsv')->getValue());
+        $this->assertSame('ltyp_sn', $qb->getParameter('licenceType')->getValue());
+        $this->assertSame('fin_sta_veh_typ_hgv', $qb->getParameter('vehicleType')->getValue());
+        $this->assertSame('2015-09-28', $qb->getParameter('date')->getValue());
     }
 }

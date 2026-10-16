@@ -41,6 +41,11 @@ return [
             'formatter' => fn($row) => Escape::html($row['todoKey'] ?? ''),
         ],
         [
+            'title' => 'Name',
+            'name' => 'name',
+            'formatter' => fn($row) => Escape::html($row['currentVersion']['name'] ?? ''),
+        ],
+        [
             'title' => 'Description',
             'name' => 'description',
             'formatter' => function ($row) {
@@ -70,6 +75,14 @@ return [
                     $text = substr($text, 0, 80) . '...';
                 }
                 return Escape::html($text);
+            },
+        ],
+        [
+            'title' => 'Requires Input',
+            'name' => 'requiresInput',
+            'formatter' => function ($row) {
+                $requiresInput = $row['currentVersion']['requiresInput'] ?? $row['requiresInput'] ?? false;
+                return $requiresInput ? '<span class="govuk-tag govuk-tag--green">Yes</span>' : '<span class="govuk-tag govuk-tag--grey">No</span>';
             },
         ],
         [

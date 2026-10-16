@@ -2,75 +2,46 @@
 
 declare(strict_types=1);
 
-/**
- * Printer test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Entity\PrintScan\Printer as PrinterEntity;
-use Dvsa\Olcs\Transfer\Query\Printer\PrinterList as PrinterListQry;
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\Printer as PrinterRepo;
+use Dvsa\Olcs\Api\Domain\Repository\Printer as Repo;
+use Dvsa\Olcs\Api\Entity\PrintScan\Printer as Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
-/**
- * Printer test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class PrinterTest extends RepositoryTestCase
 {
+    private const string FROM = ' FROM ' . Entity::class . ' m';
+
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(PrinterRepo::class, true);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testFetchWithTeams(): void
     {
-        $id = 1;
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleResult')->withNoArgs()->andReturn(['result']);
 
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
+        $this->assertSame(['result'], $this->sut->fetchWithTeams(1));
 
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->once()
-            ->andReturn($mockQb);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($mockQb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->with($id)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('teamPrinters')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('getQuery->getSingleResult')->andReturn(['result']);
-
-        $this->assertSame(['result'], $this->sut->fetchWithTeams($id));
+        $this->assertSame(
+            'SELECT m, w0' . self::FROM . ' LEFT JOIN m.teamPrinters w0 WHERE m.id = :byId',
+            $qb->getDQL(),
+        );
+        $this->assertSame(1, $qb->getParameter('byId')->getValue());
     }
 
     public function testApplyListFilters(): void
     {
-        $query = m::mock(QueryInterface::class);
+        $qb = $this->createRealQb();
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('orderBy')->with('m.printerName', 'ASC')->once()->andReturnSelf();
+        $this->assertNull($this->sut->applyListFilters($qb, m::mock(QueryInterface::class)));
 
-        $this->assertNull($this->sut->applyListFilters($qb, $query));
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' ORDER BY m.printerName ASC',
+            $qb->getDQL(),
+        );
     }
 }

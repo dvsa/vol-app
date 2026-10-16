@@ -211,6 +211,21 @@ $routes = [
                                     ),
                                 ]
                             ],
+                            'knowledge-experience' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'knowledge-experience[/]',
+                                ],
+                                'may_terminate' => false,
+                                'child_routes' => [
+                                    'GET' => QueryConfig::getConfig(
+                                        Query\Application\KnowledgeExperience::class
+                                    ),
+                                    'PUT' => CommandConfig::getPutConfig(
+                                        Command\Application\UpdateKnowledgeExperience::class
+                                    ),
+                                ]
+                            ],
                             'financial-history' => [
                                 'type' => 'Segment',
                                 'options' => [

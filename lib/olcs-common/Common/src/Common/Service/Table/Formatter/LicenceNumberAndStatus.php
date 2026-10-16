@@ -33,19 +33,20 @@ class LicenceNumberAndStatus implements FormatterPluginManagerInterface
         $escapedLicNo = Escape::html($row['licNo']);
 
         if ($activeLink) {
-            return self::markupWithLink($row);
+            return $this->markupWithLink($row, $escapedLicNo);
         }
 
         return $escapedLicNo;
     }
 
-    private function markupWithLink($row): string
+    private function markupWithLink($row, string $escapedLicNo): string
     {
         return vsprintf(
             '<a class="govuk-link" href="%s">%s</a>',
             [
                 $this->urlHelper->fromRoute('lva-licence', ['licence' => $row['id']]),
-                $row['licNo'],
+                // The non-link branch above already escaped this; the link branch did not.
+                $escapedLicNo,
             ]
         );
     }

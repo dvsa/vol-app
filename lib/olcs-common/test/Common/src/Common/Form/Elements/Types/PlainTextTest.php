@@ -10,8 +10,9 @@ use Common\Form\View\Helper\FormElement;
 use Common\Form\View\Helper\FormPlainText;
 use Mockery;
 use Laminas\View\Renderer\PhpRenderer;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-final class PlainTextTest extends \PHPUnit\Framework\TestCase
+final class PlainTextTest extends MockeryTestCase
 {
     public const string INITIAL_TEXT_PAYLOAD = 'TEST';
 

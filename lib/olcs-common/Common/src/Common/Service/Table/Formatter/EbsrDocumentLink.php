@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 
 /**
@@ -40,6 +41,6 @@ class EbsrDocumentLink implements FormatterPluginManagerInterface
             ]
         );
 
-        return sprintf(self::LINK_PATTERN, $url, $data['document']['description']);
+        return sprintf(self::LINK_PATTERN, $url, Escape::html($data['document']['description']));
     }
 }

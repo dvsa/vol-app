@@ -1,0 +1,37 @@
+<?php
+$warningText = $hasDocuments
+  ? $this->translate('lva-financial-evidence-assessment-statement-warning')
+  : $this->translate('lva-financial-evidence-assessment-no-statements-warning');
+?>
+<div class="govuk-warning-text">
+  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+  <strong class="govuk-warning-text__text">
+    <span class="govuk-visually-hidden">Warning</span>
+    <?php echo $warningText; ?>
+  </strong>
+</div>
+
+<div class="govuk-tabs" data-module="govuk-tabs">
+  <ul class="govuk-tabs__list">
+    <?php foreach ($tabs as $index => $tab) : ?>
+      <li class="govuk-tabs__list-item<?php echo $index === 0 ? ' govuk-tabs__list-item--selected' : ''; ?>">
+        <a class="govuk-tabs__tab" href="#<?php echo $this->escapeHtmlAttr($tab['id']); ?>">
+          <?php echo $this->escapeHtml($tab['label']); ?>
+          <?php if ($index > 0) : ?>
+            <strong class="govuk-tag <?php echo $this->escapeHtmlAttr($tab['statusTag']); ?>">
+              <?php echo $this->escapeHtml($tab['status']); ?>
+            </strong>
+          <?php endif; ?>
+        </a>
+      </li>
+    <?php endforeach; ?>
+  </ul>
+
+    <?php foreach ($tabs as $index => $tab) : ?>
+        <div class="govuk-tabs__panel<?php echo $index === 0 ? '' : ' govuk-tabs__panel--hidden'; ?>"
+             id="<?php echo $this->escapeHtmlAttr($tab['id']); ?>">
+            <p>Date: <?php echo $this->escapeHtml($tab['date'] ?? 'Unknown'); ?></p>
+            <p>Status: <?php echo $this->escapeHtml($tab['status'] ?? 'Unknown'); ?></p>
+        </div>
+    <?php endforeach; ?>
+</div>

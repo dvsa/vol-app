@@ -23,8 +23,6 @@ class SubmissionAction extends AbstractRepository
     #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
-        parent::buildDefaultQuery($qb, $id);
-
-        return $this->getQueryBuilder()->with('reasons');
+        return parent::buildDefaultQuery($qb, $id)->with('reasons');
     }
 }

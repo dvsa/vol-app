@@ -2,6 +2,8 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
+
 class SearchPeopleName implements FormatterPluginManagerInterface
 {
     /**
@@ -14,6 +16,6 @@ class SearchPeopleName implements FormatterPluginManagerInterface
     #[\Override]
     public function format($data, $column = [])
     {
-        return $data['personFullname'];
+        return Escape::html($data['personFullname']);
     }
 }

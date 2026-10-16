@@ -6,6 +6,8 @@ locals {
 
   supporting_service_names = ["liquibase"]
 
+  application_parameters_arn = "arn:aws:ssm:eu-west-1:146997448015:parameter/applicationparams/app/*"
+
   task_exec_iam_role_statements = [
     {
       effect = "Allow"
@@ -35,7 +37,32 @@ locals {
         "ssm:GetParametersByPath"
       ]
       resources = [
-        "arn:aws:ssm:eu-west-1:146997448015:parameter/applicationparams/app/*"
+        local.application_parameters_arn
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "kms:Decrypt"
+      ]
+      resources = [
+        data.aws_kms_alias.ssm.target_key_arn
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "events:PutEvents"
+      ]
+      resources = [
+        "arn:aws:events:eu-west-1:146997448015:event-bus/default"
+      ]
+      conditions = [
+        {
+          test     = "StringEquals"
+          variable = "events:source"
+          values   = ["vol.api"]
+        }
       ]
     },
     {
@@ -115,23 +142,21 @@ locals {
         "rds:ModifyDBClusterSnapshotAttribute"
       ]
       resources = [
-
-        "arn:aws:rds:eu-west-1:146997448015:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:prod-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-db-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*",
-        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
-
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*"
       ]
     },
     {
       effect = "Allow"
       actions = [
-        "rds:DescribeDBClusters",
+        "rds:DescribeDBClusters"
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:146997448015:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:prod-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
       ]
@@ -140,49 +165,49 @@ locals {
       effect = "Allow"
       actions = [
         "rds:RestoreDBClusterFromSnapshot",
-        "rds:AddTagsToResource",
+        "rds:AddTagsToResource"
       ]
       resources = [
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:subgrp:app-olcs-rds-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
-        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*"
+        "arn:aws:rds:eu-west-1:146997448015:subgrp:app-olcs-rds-*"
       ]
     },
     {
       effect = "Allow"
       actions = [
-        "rds:CreateDBInstance",
-        "rds:DescribeDBInstances",
+        "rds:CreateDBInstance"
       ]
       resources = [
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*",
-        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
+        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*"
+
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBInstances"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:db:*",
       ]
     },
     {
       effect = "Allow"
       actions = [
         "rds:DeleteDBInstance",
-        "rds:DeleteDBCluster",
+        "rds:DeleteDBCluster"
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*",
-        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
-      ]
-    },
-    {
-      effect = "Allow"
-      actions = [
-        "rds:ModifyDBClusterSnapshotAttribute"
-      ]
-      resources = [
-        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*"
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*"
       ]
     },
     {
@@ -194,7 +219,13 @@ locals {
       ]
       resources = [
         "arn:aws:s3:::app-olcs-pri-integration-dva-s3",
-        "arn:aws:s3:::app-olcs-pri-integration-dva-s3/*"
+        "arn:aws:s3:::app-olcs-pri-integration-dva-s3/*",
+        "arn:aws:s3:::app-olcs-pri-integration-reporting-s3",
+        "arn:aws:s3:::app-olcs-pri-integration-reporting-s3/*",
+        "arn:aws:s3:::app-mc-pri-integration-data-s3",
+        "arn:aws:s3:::app-mc-pri-integration-data-s3/*",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
       ]
     }
   ]
@@ -243,6 +274,10 @@ data "aws_secretsmanager_secret" "this" {
 
 data "aws_secretsmanager_secret" "infra" {
   name = "APP-BASE-SM-INFRA"
+}
+
+data "aws_kms_alias" "ssm" {
+  name = "alias/aws/ssm"
 }
 
 data "aws_cognito_user_pools" "this" {
@@ -358,7 +393,16 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:146997448015:parameter/applicationparams/app/*"
+            local.application_parameters_arn
+          ]
+        },
+        {
+          effect = "Allow"
+          actions = [
+            "kms:Decrypt"
+          ]
+          resources = [
+            data.aws_kms_alias.ssm.target_key_arn
           ]
         },
       ]
@@ -404,7 +448,16 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:146997448015:parameter/applicationparams/app/*"
+            local.application_parameters_arn
+          ]
+        },
+        {
+          effect = "Allow"
+          actions = [
+            "kms:Decrypt"
+          ]
+          resources = [
+            data.aws_kms_alias.ssm.target_key_arn
           ]
         },
       ]
@@ -449,6 +502,8 @@ module "service" {
   }
   batch = {
     cli_version = var.cli_image_tag
+
+    liquibase_version = var.liquibase_image_tag
 
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
@@ -623,7 +678,7 @@ module "service" {
         name     = "process-inbox",
         commands = ["batch:process-inbox"],
         timeout  = 43200,
-        schedule = ["cron(45 01 * * ? *)"],
+        schedule = ["cron(0 07 * * ? *)"],
       },
       {
         name     = "process-ntu",
@@ -753,10 +808,11 @@ module "service" {
         queue = "liquibase"
       },
       {
-        name     = "sas-mi-extract",
-        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
-        type     = "scripts",
-        schedule = ["cron(00 01 * * ? *)"],
+        name              = "sas-mi-extract",
+        commands          = ["/mnt/data/scripts/sas_mi_extract.sh"],
+        type              = "scripts",
+        ephemeral_storage = 50,
+        schedule          = ["cron(00 01 * * ? *)"],
       },
       {
         name     = "import-anondb",
@@ -771,16 +827,19 @@ module "service" {
         type     = "scripts"
       },
       {
-        name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
-        type     = "scripts"
+        name              = "ni-compliance",
+        commands          = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
+        ephemeral_storage = 50,
+        type              = "scripts",
+        schedule          = ["cron(00 01 * * ? *)"]
+        timeout           = 86400,
       },
       {
         name     = "first-tm-letter",
         commands = ["batch:first-tm-letter", "-v"],
         timeout  = 43200,
         schedule = ["cron(30 6 ? * 2-7 *)"],
-      },
+      }
     ]
   }
 }
@@ -791,6 +850,7 @@ resource "null_resource" "deployed_versions" {
     deployed_internal_image_tag  = var.internal_image_tag
     deployed_selfserve_image_tag = var.selfserve_image_tag
     deployed_cli_image_tag       = var.cli_image_tag
+    deployed_liquibase_image_tag = var.liquibase_image_tag
     deployed_assets_version      = var.assets_version
   }
 }

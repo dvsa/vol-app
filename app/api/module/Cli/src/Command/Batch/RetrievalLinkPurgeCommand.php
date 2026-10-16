@@ -12,7 +12,7 @@ class RetrievalLinkPurgeCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:retrieval-link-purge';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Delete expired Retrieve-via-Link links (members + OTP codes cascade; audit events retained).');
     }

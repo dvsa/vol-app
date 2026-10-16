@@ -17,6 +17,6 @@ class FeeTransactionDateFactory implements FactoryInterface
     {
         $dateFormatter = $container->get(Date::class);
         $stackValueFormatter = $container->get(StackValue::class);
-        return new FeeTransactionDate($dateFormatter, $stackValueFormatter);
+        return new FeeTransactionDate($stackValueFormatter, $dateFormatter);
     }
 }

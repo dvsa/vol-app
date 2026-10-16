@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Queue as QueueCommandHandler;
 use Dvsa\Olcs\Cli\Domain\Command as CommandCli;
 use Dvsa\Olcs\Cli\Domain\CommandHandler as CommandHandlerCli;
 use Dvsa\Olcs\Transfer\Command as TransferCommand;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Cache as CacheCommandHandler;
 
 return [
     // Transfer - Auth
@@ -63,6 +64,8 @@ return [
         CommandHandler\Application\UpdateVehicleSize::class,
     TransferCommand\Application\UpdateMainOccupationEvidence::class =>
         CommandHandler\Application\UpdateMainOccupationEvidence::class,
+    TransferCommand\Application\UpdateKnowledgeExperience::class =>
+        CommandHandler\Application\UpdateKnowledgeExperience::class,
     TransferCommand\Application\UpdateSmallVehicleEvidence::class =>
         CommandHandler\Application\UpdateSmallVehicleEvidence::class,
     TransferCommand\Application\UpdateMainOccupationUndertakings::class =>
@@ -150,6 +153,10 @@ return [
     Command\Task\CreateTranslateToWelshTask::class => CommandHandler\Task\CreateTranslateToWelshTask::class,
     TransferCommand\Application\UpdatePsvVehicles::class => CommandHandler\Application\UpdatePsvVehicles::class,
     TransferCommand\Application\CreatePsvVehicle::class => CommandHandler\Application\CreatePsvVehicle::class,
+
+    //Transfer - Cache
+    TransferCommand\Cache\Clear::class
+        => CacheCommandHandler\Clear::class,
 
     // Transfer - Workshop
     TransferCommand\Workshop\DeleteWorkshop::class => CommandHandler\Workshop\DeleteWorkshop::class,
@@ -494,6 +501,12 @@ return [
     TransferCommand\Document\PrintLetters::class => CommandHandler\Document\PrintLetters::class,
     Command\Document\RemoveDeletedDocuments::class => CommandHandler\Document\RemoveDeletedDocuments::class,
     TransferCommand\Document\OverwriteContent::class => CommandHandler\Document\OverwriteContent::class,
+    Command\Document\AnalyseFinancialEvidence::class
+        => CommandHandler\Document\AnalyseDocument\FinancialEvidenceFactory::class,
+    Command\Document\SweepStaleDocumentAnalysis::class
+        => CommandHandler\Document\SweepStaleDocumentAnalysis::class,
+    Command\Document\StoreDocumentAnalysisResult::class
+        => CommandHandler\Document\StoreDocumentAnalysisResultFactory::class,
 
     // Transfer - DocumentTemplate
     TransferCommand\DocTemplate\Create::class => CommandHandler\DocTemplate\Create::class,
@@ -736,6 +749,8 @@ return [
     => AppCompCommandHandler\UpdatePsvDocumentaryEvidenceLargeStatus::class,
     AppCompCommand\UpdatePsvMainOccupationUndertakingsStatus::class
     => AppCompCommandHandler\UpdatePsvMainOccupationUndertakingsStatus::class,
+    AppCompCommand\UpdateKnowledgeExperienceStatus::class
+    => AppCompCommandHandler\UpdateKnowledgeExperienceStatus::class,
     AppCompCommand\UpdatePsvOperateLargeStatus::class
     => AppCompCommandHandler\UpdatePsvOperateLargeStatus::class,
     AppCompCommand\UpdatePsvOperateSmallStatus::class
@@ -1357,6 +1372,7 @@ return [
     TransferCommand\Letter\LetterType\Update::class => CommandHandler\Letter\LetterType\Update::class,
     TransferCommand\Letter\LetterType\Delete::class => CommandHandler\Letter\LetterType\Delete::class,
     TransferCommand\Letter\LetterType\PreviewComposition::class => CommandHandler\Letter\LetterType\PreviewComposition::class,
+    TransferCommand\Letter\LetterType\SuggestPreviewRecords::class => CommandHandler\Letter\LetterType\SuggestPreviewRecords::class,
     TransferCommand\Letter\LetterSection\Create::class => CommandHandler\Letter\LetterSection\Create::class,
     TransferCommand\Letter\LetterSection\Update::class => CommandHandler\Letter\LetterSection\Update::class,
     TransferCommand\Letter\LetterSection\Delete::class => CommandHandler\Letter\LetterSection\Delete::class,

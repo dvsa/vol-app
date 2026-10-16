@@ -2,6 +2,8 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
+
 /**
  * @author Dmitry Golubev <d.e.golubev@gmail.com>
  */
@@ -26,18 +28,20 @@ class CaseEntityName implements FormatterPluginManagerInterface
             $person = $data['transportManager']['homeCd']['person'];
             $title = ($person['title'] ?? null);
 
-            return implode(
-                ' ',
-                array_filter(
-                    [
-                        $title ? $title['description'] : null,
-                        $person['forename'],
-                        $person['familyName'],
-                    ]
+            return Escape::html(
+                implode(
+                    ' ',
+                    array_filter(
+                        [
+                            $title ? $title['description'] : null,
+                            $person['forename'],
+                            $person['familyName'],
+                        ]
+                    )
                 )
             );
         }
 
-        return $data['licence']['organisation']['name'];
+        return Escape::html($data['licence']['organisation']['name']);
     }
 }

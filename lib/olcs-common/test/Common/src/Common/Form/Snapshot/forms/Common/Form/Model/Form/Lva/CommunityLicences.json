@@ -1,0 +1,155 @@
+{
+  "name": "lva-community-licences",
+  "attributes": {
+    "method": "post",
+    "class": "table__form"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "totalActiveCommunityLicences",
+              "attributes": {
+                "class": "short",
+                "id": "",
+                "disabled": "disabled"
+              },
+              "options": {
+                "label": "application_community_licence_total_community_licences"
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": ""
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "table",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "saveAndContinue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "save.continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

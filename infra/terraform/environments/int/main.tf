@@ -5,6 +5,8 @@ locals {
 
   supporting_service_names = ["liquibase"]
 
+  application_parameters_arn = "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/qa/*"
+
   task_exec_iam_role_statements = [
     {
       effect = "Allow"
@@ -33,7 +35,32 @@ locals {
         "ssm:GetParametersByPath"
       ]
       resources = [
-        "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/qa/*"
+        local.application_parameters_arn
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "kms:Decrypt"
+      ]
+      resources = [
+        data.aws_kms_alias.ssm.target_key_arn
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "events:PutEvents"
+      ]
+      resources = [
+        "arn:aws:events:eu-west-1:054614622558:event-bus/default"
+      ]
+      conditions = [
+        {
+          test     = "StringEquals"
+          variable = "events:source"
+          values   = ["vol.api"]
+        }
       ]
     },
     {
@@ -232,6 +259,10 @@ data "aws_secretsmanager_secret" "infra" {
   name = "DEVAPPQA-BASE-SM-INFRA"
 }
 
+data "aws_kms_alias" "ssm" {
+  name = "alias/aws/ssm"
+}
+
 data "aws_cognito_user_pools" "this" {
   name = "DVSA-DEVAPPQA-COGNITO-USERS"
 }
@@ -332,7 +363,16 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/qa/*"
+            local.application_parameters_arn
+          ]
+        },
+        {
+          effect = "Allow"
+          actions = [
+            "kms:Decrypt"
+          ]
+          resources = [
+            data.aws_kms_alias.ssm.target_key_arn
           ]
         },
       ]
@@ -374,7 +414,16 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/qa/*"
+            local.application_parameters_arn
+          ]
+        },
+        {
+          effect = "Allow"
+          actions = [
+            "kms:Decrypt"
+          ]
+          resources = [
+            data.aws_kms_alias.ssm.target_key_arn
           ]
         },
       ]
@@ -419,6 +468,8 @@ module "service" {
   batch = {
 
     cli_version = var.cli_image_tag
+
+    liquibase_version = var.liquibase_image_tag
 
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
@@ -752,6 +803,7 @@ resource "null_resource" "deployed_versions" {
     deployed_internal_image_tag  = var.internal_image_tag
     deployed_selfserve_image_tag = var.selfserve_image_tag
     deployed_cli_image_tag       = var.cli_image_tag
+    deployed_liquibase_image_tag = var.liquibase_image_tag
     deployed_assets_version      = var.assets_version
   }
 }

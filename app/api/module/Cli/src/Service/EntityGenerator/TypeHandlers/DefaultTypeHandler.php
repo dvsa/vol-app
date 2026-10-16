@@ -11,14 +11,24 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
  */
 class DefaultTypeHandler extends AbstractTypeHandler
 {
+    /**
+     * Database type => [PHP type for docblocks, Doctrine mapping type].
+     *
+     * `binary`/`blob` carry `string|resource` because DBAL's BinaryType and BlobType always
+     * hydrate into a php://temp stream, however they were written; a bare `string` here
+     * would make correct is_resource() handling in a concrete entity look like a type error.
+     */
     private const array TYPE_MAPPING = [
         'bigint' => ['int', 'integer'],
-        'binary' => ['string', 'string'],
-        'blob' => ['string', 'string'],
+        'binary' => ['string|resource', 'binary'],
+        'blob' => ['string|resource', 'blob'],
         'boolean' => ['bool', 'boolean'],
         'date' => ['\\DateTime', 'date'],
         'datetime' => ['\\DateTime', 'datetime'],
         'decimal' => ['string', 'decimal'],
+        // DBAL 4 maps MySQL's ENUM to its own EnumType; the entities model these columns
+        // as a string property with class constants, so it is flattened back to a string.
+        'enum' => ['string', 'string'],
         'float' => ['float', 'float'],
         'integer' => ['int', 'integer'],
         'json' => ['array', 'json'],
@@ -29,6 +39,18 @@ class DefaultTypeHandler extends AbstractTypeHandler
         'timestamp' => ['\\DateTime', 'datetime'],
         'tinyint' => ['int', 'boolean'], // tinyint(1) is typically boolean
     ];
+
+    /**
+     * Types whose declaration is length-bearing. Without an explicit length DBAL falls back
+     * to 255 for string and binary - so a BINARY(16) would be reported as drifted and rebuilt
+     * at the wrong width - and to the largest width for text, turning every TEXT and
+     * MEDIUMTEXT column into a LONGTEXT.
+     *
+     * DBAL introspects the text widths as tinytext 255, text 65535, mediumtext 16777215 and
+     * longtext null, so the `> 0` guard below leaves longtext unlengthed, which is what
+     * renders it back as LONGTEXT.
+     */
+    private const array LENGTH_BEARING_TYPES = ['string', 'binary', 'text'];
 
     #[\Override]
     public function supports(ColumnMetadata $column, array $config = []): bool
@@ -50,8 +72,10 @@ class DefaultTypeHandler extends AbstractTypeHandler
         // Add name
         $options[] = "name: '" . $column->getName() . "'";
 
-        // Add length for string types
-        if (in_array($type, ['string']) && $column->getLength() !== null) {
+        // Add length for length-bearing types. A zero length is meaningless and is what
+        // MySQL reports for types that carry no character length of their own (an ENUM
+        // mapped to string, for one); emitting it would declare VARCHAR(0).
+        if (in_array($type, self::LENGTH_BEARING_TYPES, true) && $column->getLength() > 0) {
             $options[] = 'length: ' . $column->getLength();
         }
 

@@ -1,0 +1,90 @@
+{
+  "name": "lva-transport-manager-declarations",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "bySubmitted",
+        "attributes": {
+          "value": "<strong>%s</strong>"
+        },
+        "options": {
+          "tokens": [
+            "lva-tm-details-details-declarations-by-submitting"
+          ]
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "internalHeader",
+        "attributes": {
+          "value": "<strong>%s</strong>",
+          "data-container-class": "js-hidden"
+        },
+        "options": {
+          "tokens": [
+            "lva-tm-details-details-declarations-internal-header"
+          ]
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "internal",
+        "attributes": {
+          "data-container-class": "tm-details-declaration-internal"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "externalHeader",
+        "attributes": {
+          "value": "<strong>%s</strong>",
+          "data-container-class": "js-hidden"
+        },
+        "options": {
+          "tokens": [
+            "lva-tm-details-details-declarations-external-header"
+          ]
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "external",
+        "attributes": {
+          "data-container-class": "tm-details-declaration-external"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "confirmation",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "must_be_value": "Y"
+        },
+        "attributes": {
+          "data-container-class": "confirm checkbox"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

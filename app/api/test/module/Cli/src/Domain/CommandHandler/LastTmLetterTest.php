@@ -199,7 +199,7 @@ final class LastTmLetterTest extends AbstractCommandHandlerTestCase
                     'contactDetails ' => [
                         'address' => '12 Food Road'
                     ],
-                    'fetchFirstByEmailOrFalse' => m::mock(UserEntity::class)
+                    'fetchFirstByEmailOrFalse' => static fn () => m::mock(UserEntity::class)
                 ],
                 'sideEffectResults' => $sideEffectResultsWithAllowEmail
 
@@ -393,6 +393,11 @@ final class LastTmLetterTest extends AbstractCommandHandlerTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand(mixed $dataProvider, mixed $expectedResult): void
     {
+        // The provider supplies the fetched user as a closure so the mock is built inside this test.
+        if (($dataProvider['user']['fetchFirstByEmailOrFalse'] ?? null) instanceof \Closure) {
+            $dataProvider['user']['fetchFirstByEmailOrFalse'] = $dataProvider['user']['fetchFirstByEmailOrFalse']();
+        }
+
         $licenceRepo = $this->repoMap['Licence'];
 
         $licence = empty($dataProvider['licence']) ? null : m::mock(LicenceEntity::class);

@@ -21,15 +21,24 @@ class ClientOptions
     protected $domain;
     /** @var array */
     protected $headers = [];
+    /** @var string|null */
+    protected $proxy = null;
 
 
-    public function __construct(?int $version, string $grantType, float $timeout, string $domain, array $headers = [])
-    {
+    public function __construct(
+        ?int $version,
+        string $grantType,
+        float $timeout,
+        string $domain,
+        array $headers = [],
+        ?string $proxy = null
+    ) {
         $this->version = $version;
         $this->grantType = $grantType;
         $this->timeout = $timeout;
         $this->domain = $domain;
         $this->headers = $headers;
+        $this->proxy = $proxy;
     }
 
     public function setTimeout(float $timeout): ClientOptions
@@ -81,6 +90,18 @@ class ClientOptions
     public function getHeaders(): array
     {
         return $this->headers;
+    }
+
+    public function setProxy(?string $proxy): ClientOptions
+    {
+        $this->proxy = $proxy;
+
+        return $this;
+    }
+
+    public function getProxy(): ?string
+    {
+        return $this->proxy;
     }
 
     public function setVersion(?int $version): void

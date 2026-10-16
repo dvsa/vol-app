@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
+
 class ExternalConversationStatus implements FormatterPluginManagerInterface
 {
     /**
@@ -27,7 +29,7 @@ class ExternalConversationStatus implements FormatterPluginManagerInterface
         return sprintf(
             '<strong class="govuk-tag %s">%s</strong>',
             $tagColor,
-            ucfirst(strtolower(str_replace('_', ' ', $row['userContextStatus']))),
+            Escape::html(ucfirst(strtolower(str_replace('_', ' ', $row['userContextStatus'])))),
         );
     }
 }

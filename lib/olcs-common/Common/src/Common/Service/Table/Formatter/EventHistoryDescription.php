@@ -8,6 +8,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 use Laminas\Http\Request;
 use Laminas\Router\Http\TreeRouteStack;
@@ -58,7 +59,7 @@ class EventHistoryDescription implements FormatterPluginManagerInterface
             true
         );
 
-        $text = $data['eventHistoryType']['description'] ?? '';
+        $text = Escape::html($data['eventHistoryType']['description'] ?? '');
 
         return sprintf(
             '<a class="govuk-link js-modal-ajax" href="%s">%s</a>',

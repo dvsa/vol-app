@@ -31,7 +31,7 @@ final class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
 
     #[\PHPUnit\Framework\Attributes\DataProvider('scenariosProvider')]
     public function testHandleQuery(
-        mixed $lastOpenWindow,
+        bool $hasOpenWindow,
         mixed $applicationIds,
         mixed $combinedRangeSize,
         mixed $permitCount,
@@ -39,6 +39,7 @@ final class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
         mixed $expectedMessage
     ): void {
         $stockId = 25;
+        $lastOpenWindow = $hasOpenWindow ? m::mock(IrhpPermitWindow::class) : null;
 
         if (is_null($lastOpenWindow)) {
             $this->repoMap['IrhpPermitWindow']->shouldReceive('fetchLastOpenWindowByStockId')
@@ -78,7 +79,7 @@ final class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
     public static function scenariosProvider(): \Iterator
     {
         yield [
-            null,
+            false,
             [1, 2, 3],
             50,
             25,
@@ -86,7 +87,7 @@ final class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
             'Prerequisites passed'
         ];
         yield [
-            m::mock(IrhpPermitWindow::class),
+            true,
             [1, 2, 3],
             50,
             25,
@@ -94,7 +95,7 @@ final class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
             'A window is currently open within the stock'
         ];
         yield [
-            null,
+            false,
             [],
             50,
             25,
@@ -102,7 +103,7 @@ final class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
             'No under consideration applications available'
         ];
         yield [
-            null,
+            false,
             [1, 2, 3],
             null,
             0,
@@ -110,7 +111,7 @@ final class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
             'No ranges available in this stock'
         ];
         yield [
-            null,
+            false,
             [1, 2, 3],
             25,
             25,

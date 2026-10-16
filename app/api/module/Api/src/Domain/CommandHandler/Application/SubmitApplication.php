@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Domain\CacheAwareTrait;
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\AutoGrant;
 use Dvsa\Olcs\Api\Domain\Command\ConditionUndertaking\CreateLightGoodsVehicleCondition
     as CreateLightGoodsVehicleConditionCmd;
+use Dvsa\Olcs\Api\Domain\Command\Document\AnalyseFinancialEvidence as AnalyseFinancialEvidenceCmd;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask as CreateTaskCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
@@ -102,7 +103,49 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
             $this->result->merge($this->createTexTask($application));
         }
 
+        $this->analyseFinancialEvidence($application);
+
         return $this->result;
+    }
+
+    /**
+     * Request analysis of the application's financial evidence.
+     *
+     * Deliberately non-fatal - analysis is an aid to caseworker triage, so a failure here must
+     * never stop an operator submitting. The catch only works because the handler is not
+     * TransactionedInterface; a nested rollback would fail our own commit regardless.
+     *
+     * @param ApplicationEntity $application Application
+     *
+     * @return void
+     */
+    private function analyseFinancialEvidence(ApplicationEntity $application)
+    {
+        try {
+            $this->result->merge(
+                $this->handleSideEffect(
+                    AnalyseFinancialEvidenceCmd::create(['application' => $application->getId()])
+                )
+            );
+        } catch (Exception\NotFoundException) {
+            // Expected for applications that don't require financial evidence.
+            Logger::info(
+                'No financial evidence to analyse on application submit',
+                ['application_id' => $application->getId()]
+            );
+        } catch (\Exception $e) {
+            Logger::err(
+                'Failed to raise financial evidence analysis event on application submit',
+                [
+                    'application_id' => $application->getId(),
+                    'exception' => [
+                        'class' => $e::class,
+                        'message' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString(),
+                    ],
+                ]
+            );
+        }
     }
 
     /**

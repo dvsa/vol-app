@@ -1,0 +1,46 @@
+{
+  "name": "fields",
+  "attributes": {
+    "class": "table__form"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "nextReviewDate",
+        "type": "DateSelect",
+        "attributes": {
+          "id": "nextReviewDate",
+          "data-container-class": "nextReviewDate"
+        },
+        "options": {
+          "label": "Next review date:",
+          "create_empty_option": true
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "nextReviewDate": {
+      "name": "nextReviewDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    }
+  }
+}

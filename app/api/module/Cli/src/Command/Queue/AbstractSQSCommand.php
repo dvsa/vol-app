@@ -22,7 +22,7 @@ abstract class AbstractSQSCommand extends AbstractOlcsCommand
     }
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->addOption(

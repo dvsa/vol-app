@@ -1,0 +1,161 @@
+{
+  "name": "IrhpPermitPrint",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "irhpPermitType",
+              "attributes": {
+                "id": "irhpPermitType",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Permit type",
+                "empty_option": "Please select",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\IrhpPermitPrintType"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "irhpPermitTypeForCountry",
+              "attributes": {
+                "id": "irhpPermitTypeForCountry",
+                "placeholder": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "irhpPermitTypeForStock",
+              "attributes": {
+                "id": "irhpPermitTypeForStock",
+                "placeholder": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "country",
+              "attributes": {
+                "id": "country",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Country",
+                "empty_option": "Please select",
+                "disable_inarray_validator": true
+              },
+              "type": "Select"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "irhpPermitStock",
+              "attributes": {
+                "id": "irhpPermitStock",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Validity dates / Stock",
+                "empty_option": "Please select",
+                "disable_inarray_validator": true
+              },
+              "type": "Select"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "irhpPermitStockForRangeType",
+              "attributes": {
+                "id": "irhpPermitStockForRangeType",
+                "placeholder": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "irhpPermitRangeType",
+              "attributes": {
+                "id": "irhpPermitRangeType",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Bilateral permit category",
+                "empty_option": "Please select",
+                "disable_inarray_validator": true
+              },
+              "type": "Select"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "search",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Search"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "fields": {
+      "country": {
+        "name": "country",
+        "required": false
+      },
+      "irhpPermitRangeType": {
+        "name": "irhpPermitRangeType",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

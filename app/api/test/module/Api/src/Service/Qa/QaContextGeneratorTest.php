@@ -59,8 +59,10 @@ final class QaContextGeneratorTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
-    public function testGenerate(mixed $previousApplicationStep, mixed $qaEntityAnswer): void
+    public function testGenerate(bool $hasPreviousApplicationStep, mixed $qaEntityAnswer): void
     {
+        $previousApplicationStep = $hasPreviousApplicationStep ? m::mock(ApplicationStep::class) : null;
+
         $applicationPathId = 44;
 
         $applicationPath = m::mock(ApplicationPath::class);
@@ -106,8 +108,8 @@ final class QaContextGeneratorTest extends MockeryTestCase
 
     public static function dpTestGenerate(): \Iterator
     {
-        yield [null, null];
-        yield [m::mock(ApplicationStep::class), '128'];
+        yield [false, null];
+        yield [true, '128'];
     }
 
     public function testExceptionOnApplicationPathNotEnabled(): void

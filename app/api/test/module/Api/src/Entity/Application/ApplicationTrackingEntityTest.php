@@ -67,25 +67,26 @@ final class ApplicationTrackingEntityTest extends EntityTester
             'financialEvidenceStatus' => 8,
             'financialHistoryStatus' => 9,
             'licenceHistoryStatus' => 10,
-            'operatingCentresStatus' => 11,
-            'peopleStatus' => 12,
-            'safetyStatus' => 13,
-            'taxiPhvStatus' => 14,
-            'transportManagersStatus' => 15,
-            'typeOfLicenceStatus' => 16,
-            'declarationsInternalStatus' => 17,
-            'vehiclesDeclarationsStatus' => 18,
-            'vehiclesPsvStatus' => 19,
-            'vehiclesStatus' => 20,
-            'vehiclesSizeStatus' => 21,
-            'psvOperateSmallStatus' => 22,
-            'psvOperateLargeStatus' => 23,
-            'psvSmallConditionsStatus' => 24,
-            'psvOperateNoveltyStatus' => 25,
-            'psvSmallPartWrittenStatus' => 26,
-            'psvDocumentaryEvidenceSmallStatus' => 27,
-            'psvDocumentaryEvidenceLargeStatus' => 28,
-            'psvMainOccupationUndertakingsStatus' => 29,
+            'knowledgeExperienceStatus' => 11,
+            'operatingCentresStatus' => 12,
+            'peopleStatus' => 13,
+            'safetyStatus' => 14,
+            'taxiPhvStatus' => 15,
+            'transportManagersStatus' => 16,
+            'typeOfLicenceStatus' => 17,
+            'declarationsInternalStatus' => 18,
+            'vehiclesDeclarationsStatus' => 19,
+            'vehiclesPsvStatus' => 20,
+            'vehiclesStatus' => 21,
+            'vehiclesSizeStatus' => 22,
+            'psvOperateSmallStatus' => 23,
+            'psvOperateLargeStatus' => 24,
+            'psvSmallConditionsStatus' => 25,
+            'psvOperateNoveltyStatus' => 26,
+            'psvSmallPartWrittenStatus' => 27,
+            'psvDocumentaryEvidenceSmallStatus' => 28,
+            'psvDocumentaryEvidenceLargeStatus' => 29,
+            'psvMainOccupationUndertakingsStatus' => 30,
         ];
 
         $sut->exchangeStatusArray($data);
@@ -100,25 +101,26 @@ final class ApplicationTrackingEntityTest extends EntityTester
         $this->assertEquals(8, $sut->getFinancialEvidenceStatus());
         $this->assertEquals(9, $sut->getFinancialHistoryStatus());
         $this->assertEquals(10, $sut->getLicenceHistoryStatus());
-        $this->assertEquals(11, $sut->getOperatingCentresStatus());
-        $this->assertEquals(12, $sut->getPeopleStatus());
-        $this->assertEquals(13, $sut->getSafetyStatus());
-        $this->assertEquals(14, $sut->getTaxiPhvStatus());
-        $this->assertEquals(15, $sut->getTransportManagersStatus());
-        $this->assertEquals(16, $sut->getTypeOfLicenceStatus());
-        $this->assertEquals(17, $sut->getDeclarationsInternalStatus());
-        $this->assertEquals(18, $sut->getVehiclesDeclarationsStatus());
-        $this->assertEquals(19, $sut->getVehiclesPsvStatus());
-        $this->assertEquals(20, $sut->getVehiclesStatus());
-        $this->assertEquals(21, $sut->getVehiclesSizeStatus());
-        $this->assertEquals(22, $sut->getPsvOperateSmallStatus());
-        $this->assertEquals(23, $sut->getPsvOperateLargeStatus());
-        $this->assertEquals(24, $sut->getPsvSmallConditionsStatus());
-        $this->assertEquals(25, $sut->getPsvOperateNoveltyStatus());
-        $this->assertEquals(26, $sut->getPsvSmallPartWrittenStatus());
-        $this->assertEquals(27, $sut->getPsvDocumentaryEvidenceSmallStatus());
-        $this->assertEquals(28, $sut->getPsvDocumentaryEvidenceLargeStatus());
-        $this->assertEquals(29, $sut->getPsvMainOccupationUndertakingsStatus());
+        $this->assertEquals(11, $sut->getKnowledgeExperienceStatus());
+        $this->assertEquals(12, $sut->getOperatingCentresStatus());
+        $this->assertEquals(13, $sut->getPeopleStatus());
+        $this->assertEquals(14, $sut->getSafetyStatus());
+        $this->assertEquals(15, $sut->getTaxiPhvStatus());
+        $this->assertEquals(16, $sut->getTransportManagersStatus());
+        $this->assertEquals(17, $sut->getTypeOfLicenceStatus());
+        $this->assertEquals(18, $sut->getDeclarationsInternalStatus());
+        $this->assertEquals(19, $sut->getVehiclesDeclarationsStatus());
+        $this->assertEquals(20, $sut->getVehiclesPsvStatus());
+        $this->assertEquals(21, $sut->getVehiclesStatus());
+        $this->assertEquals(22, $sut->getVehiclesSizeStatus());
+        $this->assertEquals(23, $sut->getPsvOperateSmallStatus());
+        $this->assertEquals(24, $sut->getPsvOperateLargeStatus());
+        $this->assertEquals(25, $sut->getPsvSmallConditionsStatus());
+        $this->assertEquals(26, $sut->getPsvOperateNoveltyStatus());
+        $this->assertEquals(27, $sut->getPsvSmallPartWrittenStatus());
+        $this->assertEquals(28, $sut->getPsvDocumentaryEvidenceSmallStatus());
+        $this->assertEquals(29, $sut->getPsvDocumentaryEvidenceLargeStatus());
+        $this->assertEquals(30, $sut->getPsvMainOccupationUndertakingsStatus());
     }
 
     public function testIsValidEmpty(): void

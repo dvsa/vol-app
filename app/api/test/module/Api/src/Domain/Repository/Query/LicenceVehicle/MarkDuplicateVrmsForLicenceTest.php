@@ -92,8 +92,8 @@ final class MarkDuplicateVrmsForLicenceTest extends AbstractDbQueryTestCase
                 'licence' => 402,
             ],
             [
-                'vrms' => \Doctrine\DBAL\Connection::PARAM_STR_ARRAY,
-                'licenceStatuses' => \Doctrine\DBAL\Connection::PARAM_STR_ARRAY
+                'vrms' => \Doctrine\DBAL\ArrayParameterType::STRING,
+                'licenceStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING
             ]
         ];
     }

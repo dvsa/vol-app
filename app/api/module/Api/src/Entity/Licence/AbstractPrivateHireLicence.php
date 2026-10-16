@@ -72,7 +72,7 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -82,7 +82,7 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -109,7 +109,7 @@ abstract class AbstractPrivateHireLicence implements BundleSerializableInterface
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;

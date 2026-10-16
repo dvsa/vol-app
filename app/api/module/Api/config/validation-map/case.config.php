@@ -6,6 +6,7 @@
 
 use Dvsa\Olcs\Api\Domain\QueryHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler;
+use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessSiWithId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalUser;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemAdmin;
 
@@ -109,7 +110,7 @@ return [
     QueryHandler\Cases\Statement\StatementList::class                       => IsInternalUser::class,
     QueryHandler\Organisation\UnlicensedCases::class                        => IsInternalUser::class,
     QueryHandler\Cases\Si\Applied\Penalty::class                            => IsInternalUser::class,
-    QueryHandler\Cases\Si\Si::class                                         => IsInternalUser::class,
+    QueryHandler\Cases\Si\Si::class                                         => CanAccessSiWithId::class,
     QueryHandler\Cases\Si\SiList::class                                     => IsInternalUser::class,
     QueryHandler\Cases\PresidingTc\GetList::class                           => IsInternalUser::class,
     QueryHandler\Cases\PresidingTc\ById::class                              => IsSystemAdmin::class,

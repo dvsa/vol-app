@@ -6,17 +6,14 @@ locals {
 module "iam_github_oidc_provider" {
   count = var.create_oidc_provider ? 1 : 0
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-provider"
-  version = "~> 5.24"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-github-oidc-provider?ref=f537b20bb4d31f014c1c63a5b4151177aed694e0"
 }
 
 module "iam_github_oidc_role" {
   count = var.create_oidc_role ? 1 : 0
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
-  version = "~> 5.24"
-
-  name = local.oidc_role_name
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-github-oidc-role?ref=f537b20bb4d31f014c1c63a5b4151177aed694e0"
+  name   = local.oidc_role_name
 
   subjects                 = var.oidc_subjects
   permissions_boundary_arn = var.oidc_role_permissions_boundary_arn
@@ -29,10 +26,8 @@ module "iam_github_oidc_role" {
 module "iam_github_oidc_readonly_role" {
   count = var.create_oidc_readonly_role ? 1 : 0
 
-  source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
-  version = "~> 5.24"
-
-  name = local.oidc_readonly_role_name
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-github-oidc-role?ref=f537b20bb4d31f014c1c63a5b4151177aed694e0"
+  name   = local.oidc_readonly_role_name
 
   subjects                 = var.oidc_readonly_subjects
   permissions_boundary_arn = var.oidc_role_permissions_boundary_arn

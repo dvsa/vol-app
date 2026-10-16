@@ -1,0 +1,5 @@
+{
+  "require-dev": {
+    "dvsa/coding-standards": "^2.1"
+  }
+}

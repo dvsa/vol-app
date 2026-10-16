@@ -73,9 +73,9 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     public function indexAction()
     {
         $form = $this->getForm();
-        $form->get('correlationId')->setValue($this->startTime);
-
         $request = $this->getRequest();
+        $form->get('correlationId')->setValue($request->getPost('correlationId', $this->startTime));
+
         if ($request->isPost() && $request->getPost('saveAndContinue') !== null) {
             $form->setData((array) $request->getPost());
 

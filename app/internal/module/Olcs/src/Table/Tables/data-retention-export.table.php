@@ -15,10 +15,10 @@ return [
             'title' => 'Description',
             'formatter' => fn($row) => sprintf(
                 '%s %s [%s] [%s]',
-                $row['organisationName'],
-                $row['licNo'],
-                $row['entityName'],
-                $row['entityPk']
+                \Common\Util\Escape::html($row['organisationName']),
+                \Common\Util\Escape::html($row['licNo']),
+                \Common\Util\Escape::html($row['entityName']),
+                \Common\Util\Escape::html($row['entityPk'])
             ),
         ],
         [

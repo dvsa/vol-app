@@ -544,6 +544,25 @@ return [
                         ],
                     ],
                 ],
+                'knowledge_experience' => [
+                    'type' => LvaRoute::class,
+                    'options' => [
+                        'route' => 'knowledge-experience[/]',
+                        'defaults' => [
+                            'controller' => 'Application/KnowledgeExperience',
+                            'action' => 'index',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'action' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':action[/:child_id][/]',
+                            ],
+                        ],
+                    ],
+                ],
                 'convictions_penalties' => [
                     'type' => LvaRoute::class,
                     'options' => [

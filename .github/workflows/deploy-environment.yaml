@@ -37,6 +37,10 @@ on:
         description: "Assets version"
         type: string
         required: true
+      liquibase-image-tag:
+        description: "Liquibase image tag (olcs-etl short sha)"
+        type: string
+        required: true
       apply:
         type: boolean
         required: true
@@ -74,6 +78,10 @@ on:
       assets-version:
         type: string
         required: true
+      liquibase-image-tag:
+        description: "Liquibase image tag (olcs-etl short sha)"
+        type: string
+        required: true
       apply:
         type: boolean
         default: false
@@ -105,6 +113,9 @@ on:
       previous_assets_version:
         description: "Previous Assets version"
         value: ${{ jobs.deploy.outputs.previous_assets_version }}
+      previous_liquibase_image_tag:
+        description: "Previous Liquibase image tag"
+        value: ${{ jobs.deploy.outputs.previous_liquibase_image_tag }}
 
 permissions:
   contents: read
@@ -130,6 +141,7 @@ jobs:
       previous_selfserve_image_tag: ${{ steps.get_current_versions.outputs.selfserve_image_tag }}
       previous_internal_image_tag: ${{ steps.get_current_versions.outputs.internal_image_tag }}
       previous_assets_version: ${{ steps.get_current_versions.outputs.assets_version }}
+      previous_liquibase_image_tag: ${{ steps.get_current_versions.outputs.liquibase_image_tag }}
     env:
       WORKING_DIR: infra/terraform/environments/${{ inputs.environment }}
       AWS_OIDC_ROLE: ${{ vars[format('ENV_{0}_TF_OIDC_ROLE', inputs.environment)] || vars[(inputs.environment == 'prep' || inputs.environment == 'prod') && 'ACCOUNT_PROD_TF_OIDC_ROLE' || 'ACCOUNT_NONPROD_TF_OIDC_ROLE'] }}
@@ -185,6 +197,7 @@ jobs:
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
+          TF_VAR_liquibase_image_tag: ${{ inputs.liquibase-image-tag }}
         run: terraform plan -parallelism=80 ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }}
 
       - name: Get plan changes
@@ -297,6 +310,7 @@ jobs:
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
+          TF_VAR_liquibase_image_tag: ${{ inputs.liquibase-image-tag }}
         run: terraform apply -parallelism=80 ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
 
       - name: Delete workspace

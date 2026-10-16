@@ -4,62 +4,34 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitSectorQuota;
-use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitSectorQuota as IrhpPermitSectorQuotaEntity;
-use Mockery as m;
+use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitSectorQuota as Repo;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitSectorQuota as Entity;
 
-/**
- * IRHP Permit Sector Quota test
- *
- * @author Jonathan Thomas <jonathan@opalise.co.uk>
- */
 final class IrhpPermitSectorQuotaTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(IrhpPermitSectorQuota::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
+    /** A sector with no permits is excluded rather than returned as a zero. */
     public function testFetchByNonZeroQuota(): void
     {
-        $expectedResult = [
-            'sectorId' => 4,
-            'quotaNumber' => 160
-        ];
-        $stockId = 5;
+        $quotas = [['sectorId' => 4, 'quotaNumber' => 160]];
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getScalarResult')->withNoArgs()->andReturn($quotas);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $queryBuilder->shouldReceive('select')
-            ->with('IDENTITY(ipsq.sector) as sectorId, ipsq.quotaNumber')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('from')
-            ->with(IrhpPermitSectorQuotaEntity::class, 'ipsq')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('where')
-            ->with('ipsq.quotaNumber > 0')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with('IDENTITY(ipsq.irhpPermitStock) = ?1')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with(1, $stockId)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('getQuery->getScalarResult')
-            ->once()
-            ->andReturn($expectedResult);
+        $this->assertSame($quotas, $this->sut->fetchByNonZeroQuota(5));
 
-        $this->assertEquals(
-            $expectedResult,
-            $this->sut->fetchByNonZeroQuota($stockId)
+        $this->assertSame(
+            'SELECT IDENTITY(ipsq.sector) as sectorId, ipsq.quotaNumber'
+            . ' FROM ' . Entity::class . ' ipsq'
+            . ' WHERE ipsq.quotaNumber > 0 AND IDENTITY(ipsq.irhpPermitStock) = ?1',
+            $qb->getDQL(),
         );
+        $this->assertSame(5, $qb->getParameter(1)->getValue());
     }
 }

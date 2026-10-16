@@ -6,6 +6,8 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
+
 /**
  * Hide If Closed Radio formatter
  */
@@ -25,6 +27,6 @@ class HideIfClosedRadio implements FormatterPluginManagerInterface
             return '';
         }
 
-        return '<input type="radio" value="' . $data['id'] . '" name="id">';
+        return '<input type="radio" value="' . Escape::html($data['id']) . '" name="id">';
     }
 }

@@ -12,7 +12,7 @@ class ImportUsersFromCsvCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:import-users-from-csv';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Import user from csv file')

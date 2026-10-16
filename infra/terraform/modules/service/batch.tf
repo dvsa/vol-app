@@ -47,7 +47,7 @@ locals {
       secrets = null
     }
     liquibase = {
-      image = "${var.batch.liquibase_repository}:latest"
+      image = "${var.batch.liquibase_repository}:${var.batch.liquibase_version}"
 
       environment = [
         {
@@ -115,10 +115,6 @@ locals {
         {
           name  = "APP_VERSION"
           value = var.batch.cli_version
-        },
-        {
-          name  = "READDB_HOST"
-          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
         },
         {
           name  = "DVA_REPORT_BUCKET"
@@ -218,7 +214,7 @@ locals {
     propagate_tags        = true
     platform_capabilities = ["FARGATE"]
 
-    container_properties = jsonencode({
+    container_properties = jsonencode(merge({
 
       command = (try(job.type, "default") == "default" ? concat([
         "/var/www/html/vendor/bin/laminas",
@@ -263,8 +259,11 @@ locals {
           awslogs-stream-prefix = job.name
         }
       }
+      }, try(job.ephemeral_storage, null) == null ? {} : {
+      ephemeralStorage = {
+        sizeInGiB = job.ephemeral_storage
       }
-    )
+    }))
 
     attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy
@@ -298,9 +297,7 @@ locals {
 }
 
 module "batch" {
-  source  = "terraform-aws-modules/batch/aws"
-  version = "~> 3.0"
-
+  source                        = "git::https://github.com/terraform-aws-modules/terraform-aws-batch.git?ref=57ded354043005e2b0f8e67d85eaa39bedabd682"
   instance_iam_role_name        = "vol-app-${var.environment}-batch-instance"
   instance_iam_role_description = "Task execution role for vol-app-${var.environment}-batch"
 
@@ -356,15 +353,34 @@ module "batch" {
         JobQueue = "vol-app-${var.environment}-liquibase"
       }
     },
+    idp_events = {
+      name     = "vol-app-${var.environment}-idp-events"
+      state    = "ENABLED"
+      priority = 1
+
+      # EventBridge Batch targets can't pass shareIdentifier, and Batch rejects
+      # SubmitJob without one on a fair-share queue. Event-driven IDP jobs use
+      # this queue with no scheduling policy instead of the default queue.
+      create_scheduling_policy = false
+
+      compute_environment_order = {
+        first = {
+          order                   = 1
+          compute_environment_key = "fargate"
+        }
+      }
+
+      tags = {
+        JobQueue = "vol-app-${var.environment}-idp-events"
+      }
+    },
   }
 
   job_definitions = local.jobs
 }
 
 module "eventbridge" {
-  source  = "terraform-aws-modules/eventbridge/aws"
-  version = "~> 3.7"
-
+  source     = "git::https://github.com/terraform-aws-modules/terraform-aws-eventbridge.git?ref=dd056522ea972140f57aed7e8f2e5491fc15e9d5"
   create_bus = false
 
   create_role              = true
@@ -387,9 +403,10 @@ module "eventbridge" {
 
 }
 
+#checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "this" {
   for_each = { for job in var.batch.jobs : job.name => job }
 
   name              = "/aws/batch/vol-app-${var.environment}-${each.value.name}"
-  retention_in_days = 1
+  retention_in_days = 30
 }

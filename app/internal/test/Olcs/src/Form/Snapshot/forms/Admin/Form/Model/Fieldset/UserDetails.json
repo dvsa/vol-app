@@ -1,0 +1,28 @@
+{
+  "name": "user-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "team",
+        "attributes": {
+          "id": "team",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Team",
+          "service_name": "Olcs\\Service\\Data\\Team",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

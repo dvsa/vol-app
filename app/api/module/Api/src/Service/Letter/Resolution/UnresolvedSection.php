@@ -20,7 +20,8 @@ final readonly class UnresolvedSection
         public LetterSection $section,
         public int $displayOrder,
         public bool $isRequired,
-        public string $reason
+        public string $reason,
+        public ?VariantResolution $variantResolution = null
     ) {
     }
 

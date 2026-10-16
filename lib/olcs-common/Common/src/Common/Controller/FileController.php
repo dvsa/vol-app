@@ -14,7 +14,19 @@ use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionCont
  */
 class FileController extends LaminasAbstractActionController
 {
-    private static $allowedHeaders = ['Content-Disposition', 'Content-Encoding', 'Content-Type', 'Content-Length'];
+    /**
+     * Response headers forwarded from the API to the browser. Anything absent here is dropped, so
+     * the two security headers the API sets on document responses have to be listed explicitly —
+     * without them a stored .html document renders unsandboxed on the app's own origin.
+     */
+    private static $allowedHeaders = [
+        'Content-Disposition',
+        'Content-Encoding',
+        'Content-Type',
+        'Content-Length',
+        'X-Content-Type-Options',
+        'Content-Security-Policy',
+    ];
 
     /**
      * Download a file

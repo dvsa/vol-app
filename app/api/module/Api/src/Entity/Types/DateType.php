@@ -2,8 +2,8 @@
 
 namespace Dvsa\Olcs\Api\Entity\Types;
 
-use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\DateType as DoctrineDateType;
+use Doctrine\DBAL\Types\Exception\InvalidFormat;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DateType extends DoctrineDateType
+class DateType extends Type
 {
     /**
      * Convert to PHP Value
@@ -21,12 +21,14 @@ class DateType extends DoctrineDateType
      * @param AbstractPlatform $platform The currently used database platform.
      *
      * @return string|null
-     * @throws ConversionException
+     * @throws InvalidFormat
      * @inheritdoc
      */
     #[\Override]
-    public function convertToPHPValue($value, AbstractPlatform $platform)
-    {
+    public function convertToPHPValue(
+        mixed $value,
+        AbstractPlatform $platform
+    ): mixed {
         if ($value === null) {
             return $value;
         }
@@ -35,15 +37,15 @@ class DateType extends DoctrineDateType
             return $value->format('Y-m-d');
         }
 
-        $val = \DateTime::createFromFormat('!' . $platform->getDateFormatString(), $value);
+        $val = \DateTime::createFromFormat('!Y-m-d', $value);
         if ($val instanceof \DateTime) {
             return $val->format('Y-m-d');
         }
 
-        throw ConversionException::conversionFailedFormat(
+        throw InvalidFormat::new(
             $value,
-            $this->getName(),
-            $platform->getDateFormatString()
+            'date',
+            'Y-m-d'
         );
     }
 
@@ -57,13 +59,23 @@ class DateType extends DoctrineDateType
      * @inheritdoc
      */
     #[\Override]
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
-    {
+    public function convertToDatabaseValue(
+        mixed $value,
+        AbstractPlatform $platform
+    ): mixed {
         if ($value !== null && !($value instanceof \DateTime)) {
             $value = new DateTime($value);
         }
 
         return ($value !== null)
-            ? $value->format($platform->getDateFormatString()) : null;
+            ? $value->format('Y-m-d') : null;
+    }
+
+    #[\Override]
+    public function getSQLDeclaration(
+        array $column,
+        AbstractPlatform $platform
+    ): string {
+        return $platform->getDateTypeDeclarationSQL($column);
     }
 }

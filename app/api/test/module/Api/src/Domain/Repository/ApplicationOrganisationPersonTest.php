@@ -2,175 +2,89 @@
 
 declare(strict_types=1);
 
-/**
- * ApplicationOrganisationPersonTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Mockery as m;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Repository\ApplicationOrganisationPerson as Repo;
+use Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson as Entity;
+use Dvsa\Olcs\Api\Entity\Person\Person;
+use Mockery as m;
 
-/**
- * ApplicationOrganisationPersonTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 final class ApplicationOrganisationPersonTest extends RepositoryTestCase
 {
-    /**
-     * @var Repo
-     */
+    private const string SELECT = 'SELECT m, p, w0 FROM ' . Entity::class . ' m'
+        . ' LEFT JOIN m.person p LEFT JOIN p.title w0';
+
     protected $sut;
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class);
     }
 
-    public function testFetchListForOrganisation(): void
+    public function testFetchListForApplication(): void
     {
-        $qb = $this->createMockQb('[QUERY]');
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['RESULTS'], $this->sut->fetchListForApplication(34));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('person', 'p')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-        $this->assertEquals(['RESULTS'], $this->sut->fetchListForApplication(34));
-
-        $expectedQuery = '[QUERY] AND m.application = [[34]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(self::SELECT . ' WHERE m.application = :applicationId', $qb->getDQL());
+        $this->assertSame(34, $qb->getParameter('applicationId')->getValue());
     }
 
-    public function testFetchForApplicationAndPerson(): void
+    /**
+     * The two lookups differ only in which person column they match, so a replaced person can
+     * still be found by the person they replaced.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('personLookupProvider')]
+    public function testFetchForApplicationAndPerson(string $method, string $column): void
     {
-        $qb = $this->createMockQb('[QUERY]');
+        $qb = $this->createRealQb()->willReturn(['RESULT']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame('RESULT', $this->sut->{$method}(34, 76));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('person', 'p')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
+        $this->assertSame(
+            self::SELECT . ' WHERE m.application = :applicationId AND m.' . $column . ' = :personId',
+            $qb->getDQL(),
         );
-
-        $this->assertEquals('RESULTS', $this->sut->fetchForApplicationAndPerson(34, 76));
-
-        $expectedQuery = '[QUERY] AND m.application = [[34]] AND m.person = [[76]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(34, $qb->getParameter('applicationId')->getValue());
+        $this->assertSame(76, $qb->getParameter('personId')->getValue());
     }
 
-    public function testFetchForApplicationAndPersonNotFound(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('personLookupProvider')]
+    public function testFetchForApplicationAndPersonNotFound(string $method, string $column): void
     {
-        $qb = $this->createMockQb('[QUERY]');
+        $this->createRealQb()->willReturn([]);
 
-        $this->mockCreateQueryBuilder($qb);
+        // $column is unused here; the provider is shared with the success case above.
+        unset($column);
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('person', 'p')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
+        $this->expectException(NotFoundException::class);
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn([])
-                ->getMock()
-        );
-
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
-
-        $this->sut->fetchForApplicationAndPerson(34, 76);
+        $this->sut->{$method}(34, 76);
     }
 
-    public function testFetchForApplicationAndOriginalPerson(): void
+    public static function personLookupProvider(): \Iterator
     {
-        $qb = $this->createMockQb('[QUERY]');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('person', 'p')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
-
-        $this->assertEquals('RESULTS', $this->sut->fetchForApplicationAndOriginalPerson(34, 76));
-
-        $expectedQuery = '[QUERY] AND m.application = [[34]] AND m.originalPerson = [[76]]';
-        $this->assertEquals($expectedQuery, $this->query);
-    }
-
-    public function testFetchForApplicationAndOriginalPersonNotFound(): void
-    {
-        $qb = $this->createMockQb('[QUERY]');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->with()->once()->andReturnSelf()
-            ->shouldReceive('with')->with('person', 'p')->once()->andReturnSelf()
-            ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
-
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn([])
-                ->getMock()
-        );
-
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
-
-        $this->sut->fetchForApplicationAndOriginalPerson(34, 76);
+        yield 'current person' => ['fetchForApplicationAndPerson', 'person'];
+        yield 'original person' => ['fetchForApplicationAndOriginalPerson', 'originalPerson'];
     }
 
     public function testDeleteForPerson(): void
     {
-        $qb = $this->createMockQb('[DELETE]');
+        $person = m::mock(Person::class);
 
-        $this->mockCreateQueryBuilder($qb);
-
-        $qb->shouldReceive('delete')->with(\Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson::class, 'm')
-            ->once()->andReturnSelf();
-        $qb->shouldReceive('getQuery->execute')->with()->once();
-
-        $person = new \Dvsa\Olcs\Api\Entity\Person\Person();
-        $person->setId(99);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs();
 
         $this->sut->deleteForPerson($person);
 
-        $expectedQuery = '[DELETE] ' .
-            'AND m.person = [[Dvsa\Olcs\Api\Entity\Person\Person]] ' .
-            'OR m.originalPerson = [[Dvsa\Olcs\Api\Entity\Person\Person]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'DELETE ' . Entity::class . ' m'
+            . ' WHERE m.person = :person OR m.originalPerson = :person',
+            $qb->getDQL(),
+        );
+        $this->assertSame($person, $qb->getParameter('person')->getValue());
     }
 }

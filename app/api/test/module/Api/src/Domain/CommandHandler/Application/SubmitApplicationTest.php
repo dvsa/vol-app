@@ -8,6 +8,7 @@ use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\ConditionUndertaking\CreateLightGoodsVehicleCondition
     as CreateLightGoodsVehicleConditionCmd;
+use Dvsa\Olcs\Api\Domain\Command\Document\AnalyseFinancialEvidence as AnalyseFinancialEvidenceCmd;
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask as CreateTaskCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Application\SubmitApplication;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -123,6 +124,19 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         ];
 
         parent::initReferences();
+    }
+
+    /**
+     * An empty Result is returned so the merge leaves the assertions on the submission
+     * result untouched.
+     */
+    private function expectedAnalyseFinancialEvidenceSideEffect(): void
+    {
+        $this->expectedSideEffect(
+            AnalyseFinancialEvidenceCmd::class,
+            ['application' => self::APP_ID],
+            new Result()
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
@@ -255,6 +269,8 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         }
 
         $this->expectedLicenceCacheClear($this->mockLic);
+
+        $this->expectedAnalyseFinancialEvidenceSideEffect();
 
         $result = $this->sut->handleCommand($command);
 
@@ -459,6 +475,8 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             $result1
         );
 
+        $this->expectedAnalyseFinancialEvidenceSideEffect();
+
         $result = $this->sut->handleCommand($command);
 
         $this->assertEquals($expectedTargetCompletionDate, $application->getTargetCompletionDate());
@@ -588,6 +606,8 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             $result1
         );
 
+        $this->expectedAnalyseFinancialEvidenceSideEffect();
+
         $result = $this->sut->handleCommand($command);
 
         $this->assertEquals($expectedTargetCompletionDate, $application->getTargetCompletionDate());
@@ -689,6 +709,8 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             ['id' => self::APP_ID, 'event' => CreateSnapshot::ON_SUBMIT],
             $result1
         );
+
+        $this->expectedAnalyseFinancialEvidenceSideEffect();
 
         $this->sut->handleCommand($command);
 
@@ -964,6 +986,8 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         );
 
         $this->expectedLicenceCacheClear($this->mockLic);
+
+        $this->expectedAnalyseFinancialEvidenceSideEffect();
 
         $result = $this->sut->handleCommand($command);
 

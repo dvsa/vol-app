@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Api\Service\Letter;
 
 use Dvsa\Olcs\Api\Service\EditorJs\ConverterService;
 use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager;
+use Dvsa\Olcs\Api\Service\Letter\VolGrabContextBuilder;
 use Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
@@ -33,6 +34,7 @@ class LetterPreviewServiceFactory implements FactoryInterface
             $container->get('ContentStore'),
             $repoManager->get('DocTemplate'),
             $container->get(VolGrabReplacementService::class),
+            $container->get(VolGrabContextBuilder::class),
             $container->get(ConverterService::class)
         );
     }

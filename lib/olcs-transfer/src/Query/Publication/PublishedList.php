@@ -4,15 +4,13 @@ namespace Dvsa\Olcs\Transfer\Query\Publication;
 
 use DateTime;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 
-/**
- * @Transfer\RouteName("backend/publication/published-list")
- */
+#[Transfer\RouteName('backend/publication/published-list')]
 class PublishedList extends AbstractQuery implements PagedQueryInterface, OrderedQueryInterface
 {
     use PagedTrait;
@@ -20,34 +18,30 @@ class PublishedList extends AbstractQuery implements PagedQueryInterface, Ordere
 
     /**
      * @var string
-     *
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Optional()
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"A&D", "N&P"}})
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Optional]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['A&D', 'N&P']])]
     protected $pubType;
 
     /**
      * @var DateTime|string in format "D-m-y H:i:s"
-     *
-     * @Transfer\Validator("Laminas\Validator\Date", options={"format": "Y-m-d H:i:s"})
      */
+    #[Transfer\Validator('Laminas\Validator\Date', options: ['format' => 'Y-m-d H:i:s'])]
     protected $pubDateFrom;
 
     /**
      * @var DateTime|string in format "D-m-y H:i:s"
-     *
-     * @Transfer\Validator("Laminas\Validator\Date", options={"format": "Y-m-d H:i:s"})
      */
+    #[Transfer\Validator('Laminas\Validator\Date', options: ['format' => 'Y-m-d H:i:s'])]
     protected $pubDateTo;
 
     /**
      * @var int|string
-     *
-     * @Transfer\Optional()
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"B","C","D","F","G","H","K","M","N"}})
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['B', 'C', 'D', 'F', 'G', 'H', 'K', 'M', 'N']])]
     protected $trafficArea;
 
     /**

@@ -113,7 +113,7 @@ final class OlcsEntityListenerTest extends MockeryTestCase
 
         $this->mockAuth->shouldReceive('getIdentity->getUser')->andReturn(m::mock());
 
-        $mockProperty = m::mock()
+        $mockProperty = m::mock(\ReflectionProperty::class)
             ->shouldReceive('getValue')->once()->with($mockEntity)->andReturn('unit_OldVal')
             ->shouldReceive('setValue')->once()->with($mockEntity, null)
             ->getMock();
@@ -151,7 +151,7 @@ final class OlcsEntityListenerTest extends MockeryTestCase
         $field = 'lastModifiedBy';
         $oldValue = 'unit_OldVal';
 
-        $mockPropery = m::mock()
+        $mockPropery = m::mock(\ReflectionProperty::class)
             ->shouldReceive('getValue')->once()->with($mockEntity)->andReturn($oldValue)
             ->shouldReceive('setValue')->once()->with($mockEntity, $expect)
             ->getMock();
@@ -221,7 +221,7 @@ final class OlcsEntityListenerTest extends MockeryTestCase
         $field = 'lastModifiedBy';
         $oldValue = 'unit_OldVal';
 
-        $mockPropery = m::mock()
+        $mockPropery = m::mock(\ReflectionProperty::class)
             ->shouldReceive('getValue')->once()->with($mockEntity)->andReturn($oldValue)
             ->shouldReceive('setValue')->once()->with($mockEntity, $user)
             ->getMock();

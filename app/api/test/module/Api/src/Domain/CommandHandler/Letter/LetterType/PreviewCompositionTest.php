@@ -27,7 +27,9 @@ use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
 use Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver;
 use Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterType\PreviewComposition as Cmd;
+use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
 /**
@@ -41,11 +43,14 @@ final class PreviewCompositionTest extends AbstractCommandHandlerTestCase
 {
     private $mockPreviewService;
     private $mockMasterTemplateResolver;
+    private $mockAuthService;
 
     public function setUp(): void
     {
         $this->mockPreviewService = m::mock(LetterPreviewService::class);
         $this->mockMasterTemplateResolver = m::mock(MasterTemplateResolver::class);
+        $this->mockAuthService = m::mock(AuthorizationService::class);
+        $this->mockAuthService->shouldReceive('getIdentity')->andReturnNull()->byDefault();
 
         // The resolver, composer and diagnostics are pure and are the whole point of the shared
         // path -- mocking them here would let the preview drift from real generation, which is
@@ -56,6 +61,7 @@ final class PreviewCompositionTest extends AbstractCommandHandlerTestCase
             CompositionDiagnostics::class => new CompositionDiagnostics(),
             LetterPreviewService::class => $this->mockPreviewService,
             MasterTemplateResolver::class => $this->mockMasterTemplateResolver,
+            AuthorizationService::class => $this->mockAuthService,
         ];
 
         $this->sut = new CommandHandler();
@@ -272,6 +278,29 @@ final class PreviewCompositionTest extends AbstractCommandHandlerTestCase
         $this->assertSame([2], $context['selectedChoiceIds']);
     }
 
+    /**
+     * The overrides arrive over HTTP as strings. Variant matching compares with !== against
+     * Doctrine booleans, so an un-normalised '1' never matches a variant pinning isVariation --
+     * it silently falls back to the default wording, which is exactly the wrong behaviour for a
+     * screen whose purpose is showing what a context would produce.
+     */
+    public function testStringBooleanOverridesAreNormalisedToRealBooleans(): void
+    {
+        $this->repoMap['LetterType']->shouldReceive('fetchById')->andReturn($this->letterType(7));
+        $this->expectRender();
+
+        $result = $this->sut->handleCommand(Cmd::create([
+            'letterType' => 7,
+            'isVariation' => '1',
+            'isNi' => '0',
+        ]));
+
+        $context = $result->getFlag('context');
+
+        $this->assertTrue($context['isVariation']);
+        $this->assertFalse($context['isNi']);
+    }
+
 
     /**
      * The letter is always rendered through the master template. Without it the renderer returns
@@ -284,9 +313,52 @@ final class PreviewCompositionTest extends AbstractCommandHandlerTestCase
         $this->repoMap['LetterType']->shouldReceive('fetchById')->andReturn($this->letterType(7));
         $this->mockMasterTemplateResolver->shouldReceive('resolve')->once()->andReturn($masterTemplate);
         $this->mockPreviewService->shouldReceive('renderPreview')->once()
-            ->with(m::any(), $masterTemplate)->andReturn('');
+            ->with(m::any(), $masterTemplate, m::any(), m::any(), m::any(), m::any())->andReturn('');
 
         $this->sut->handleCommand(Cmd::create(['letterType' => 7]));
+    }
+
+    /**
+     * The Region override must reach the renderer's grab context, not just the master template
+     * resolver -- otherwise an NI-override preview renders NI wording and chrome around the GB
+     * OTC logo and GB-context grabs.
+     */
+    public function testRegionOverrideReachesTheRenderer(): void
+    {
+        $this->repoMap['LetterType']->shouldReceive('fetchById')->andReturn($this->letterType(7));
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')->andReturn(null);
+        $this->mockPreviewService->shouldReceive('renderPreview')->once()
+            ->with(m::any(), m::any(), m::any(), m::any(), m::any(), true)
+            ->andReturn('');
+
+        $this->sut->handleCommand(Cmd::create(['letterType' => 7, 'isNi' => '1']));
+    }
+
+    /**
+     * The preview instance is never persisted, so Blameable never stamps createdBy. Without an
+     * explicit stamp the caseworker grabs ([[CASEWORKER_NAME]]) report EMPTY on every preview,
+     * raising a warning that blames the chosen record for data no record can carry.
+     */
+    public function testPreviewInstanceCarriesTheCurrentUserForCaseworkerGrabs(): void
+    {
+        $user = m::mock(UserEntity::class);
+        $identity = m::mock();
+        $identity->shouldReceive('getUser')->andReturn($user);
+        $this->mockAuthService->shouldReceive('getIdentity')->andReturn($identity);
+
+        $this->repoMap['LetterType']->shouldReceive('fetchById')->andReturn($this->letterType(7));
+
+        $captured = null;
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')->andReturn(null);
+        $this->mockPreviewService->shouldReceive('renderPreview')->once()
+            ->andReturnUsing(function ($letterInstance) use (&$captured) {
+                $captured = $letterInstance;
+                return '';
+            });
+
+        $this->sut->handleCommand(Cmd::create(['letterType' => 7]));
+
+        $this->assertSame($user, $captured->getCreatedBy());
     }
 
     /**

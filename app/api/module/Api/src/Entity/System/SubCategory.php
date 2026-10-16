@@ -30,6 +30,8 @@ class SubCategory extends AbstractSubCategory
     public const DOC_SUB_CATEGORY_MAINT_OTHER_DIGITAL = 190;
     public const DOC_SUB_CATEGORY_PSV_CERTIFIED_COPY = 207;
 
+    public const DOC_SUB_CATEGORY_KNOWLEDGE_EXPERIENCE_EVIDENCE_DIGITAL = 218;
+
     public const DOC_SUB_CATEGORY_IRFO_CONTINUATIONS_AND_RENEWALS = 69;
 
     public const DOC_SUB_CATEGORY_PERMIT = 197;

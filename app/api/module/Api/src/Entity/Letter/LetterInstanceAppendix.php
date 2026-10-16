@@ -28,6 +28,10 @@ class LetterInstanceAppendix extends AbstractLetterInstanceAppendix
             return $this->editedContent;
         }
 
+        if (!empty($this->generatedContent) && is_array($this->generatedContent)) {
+            return $this->generatedContent;
+        }
+
         $version = $this->getLetterAppendixVersion();
         if ($version !== null) {
             return $version->getDefaultContentAsArray();

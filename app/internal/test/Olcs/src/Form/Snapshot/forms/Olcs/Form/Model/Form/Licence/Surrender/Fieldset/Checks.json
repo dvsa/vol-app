@@ -1,0 +1,117 @@
+{
+  "name": "Checks",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "openCases",
+        "type": "Checkbox",
+        "attributes": {
+          "class": "surrenderChecks__checkbox js-surrender-checks-openCases",
+          "disabled": true,
+          "checked": true
+        },
+        "options": {
+          "label": "There are no open cases associated with this licence",
+          "label_options": {
+            "label_position": "append"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "busRegistrations",
+        "type": "Checkbox",
+        "attributes": {
+          "class": "surrenderChecks__checkbox js-surrender-checks-busRegistrations",
+          "disabled": true,
+          "checked": true
+        },
+        "options": {
+          "label": "There are no active bus registrations associated with this licence",
+          "label_options": {
+            "label_position": "append"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "digitalSignature",
+        "type": "Checkbox",
+        "attributes": {
+          "class": "surrenderChecks__checkbox js-surrender-checks-digitalSignature",
+          "required": "required"
+        },
+        "options": {
+          "label": "Digital signature has been checked",
+          "label_options": {
+            "label_position": "append"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "ecms",
+        "type": "Checkbox",
+        "attributes": {
+          "class": "surrenderChecks__checkbox js-surrender-checks-ecms",
+          "required": "required"
+        },
+        "options": {
+          "label": "ECMS has been checked",
+          "label_options": {
+            "label_position": "append"
+          }
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "openCases": {
+      "name": "openCases",
+      "required": false
+    },
+    "busRegistrations": {
+      "name": "busRegistrations",
+      "required": false
+    },
+    "digitalSignature": {
+      "name": "digitalSignature",
+      "required": true,
+      "validators": [
+        {
+          "name": "GreaterThan",
+          "options": {
+            "min": 0,
+            "messages": {
+              "notGreaterThan": "You must confirm the digital signature has been checked"
+            }
+          }
+        }
+      ]
+    },
+    "ecms": {
+      "name": "ecms",
+      "required": true,
+      "validators": [
+        {
+          "name": "GreaterThan",
+          "options": {
+            "min": 0,
+            "messages": {
+              "notGreaterThan": "You must confirm ECMS has been checked"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -9,7 +9,7 @@ use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
-use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
+use Dvsa\Olcs\Api\Entity\Traits\CreatedOnNotNullTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,7 +33,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     use BundleSerializableTrait;
     use ProcessDateTrait;
     use ClearPropertiesWithCollectionsTrait;
-    use CreatedOnTrait;
+    use CreatedOnNotNullTrait;
     use ModifiedOnTrait;
 
     /**
@@ -58,7 +58,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,15 +78,15 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Display name
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: true, options: ['charset' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci'])]
     protected $name;
 
     /**
      * EditorJS format
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'description', nullable: true)]
     protected $description;
@@ -94,9 +94,9 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     /**
      * Help text for users
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'help_text', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'help_text', length: 65535, nullable: true)]
     protected $helpText;
 
     /**
@@ -108,9 +108,17 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     protected $isLocked = 0;
 
     /**
+     * To-do has placeholders that must be edited
+     *
+     * @var bool
+     */
+    #[ORM\Column(type: 'boolean', name: 'requires_input', nullable: false, options: ['default' => 0])]
+    protected $requiresInput = 0;
+
+    /**
      * Embargo until this date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'publish_from', nullable: true)]
     protected $publishFrom;
@@ -338,6 +346,30 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     public function getIsLocked()
     {
         return $this->isLocked;
+    }
+
+    /**
+     * Set the requires input
+     *
+     * @param bool $requiresInput new value being set
+     *
+     * @return static
+     */
+    public function setRequiresInput($requiresInput)
+    {
+        $this->requiresInput = $requiresInput;
+
+        return $this;
+    }
+
+    /**
+     * Get the requires input
+     *
+     * @return bool
+     */
+    public function getRequiresInput()
+    {
+        return $this->requiresInput;
     }
 
     /**

@@ -8,6 +8,8 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
+
 /**
  * Document subcategory formatter
  *
@@ -25,7 +27,7 @@ class DocumentSubcategory implements FormatterPluginManagerInterface
     #[\Override]
     public function format($data, $column = [])
     {
-        $str = $data['documentSubCategoryName'];
+        $str = Escape::html($data['documentSubCategoryName']);
         if ($data['isExternal']) {
             $str .= ' (selfserve)';
         }

@@ -11,7 +11,7 @@ class ProcessInboxDocumentsCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:process-inbox-documents';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Process inbox documents.');
     }

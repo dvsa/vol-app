@@ -1,0 +1,198 @@
+{
+  "name": "tasks-home",
+  "attributes": {
+    "method": "get",
+    "class": "filters form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "assignedToTeam",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "tasks.data.team",
+          "value_options": [],
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "assignedToUser",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "tasks.data.owner",
+          "value_options": [],
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "category",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "tasks.data.category",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\TaskCategory",
+          "empty_option": "All"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "taskSubCategory",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "tasks.data.sub_category",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\TaskSubCategory",
+          "empty_option": "All"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "date",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "tasks.data.date",
+          "disable_inarray_validator": false,
+          "category": "task_date_types"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "tasks.data.status",
+          "disable_inarray_validator": false,
+          "category": "task_status_types"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "showTasks",
+        "options": {
+          "label": "documents.filter.show-tasks.title",
+          "value_options": [],
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "messaging",
+        "options": {
+          "label": "tasks.data.messages",
+          "must_be_checked": true
+        },
+        "type": "Common\\Form\\Elements\\InputFilters\\Checkbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "urgent",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "tasks.data.urgent",
+          "value_options": [],
+          "must_be_checked": true
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\Checkbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "tasks.submit.filter"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "sort",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "order",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "limit",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "bypass_auth": true
+  },
+  "input_filter": []
+}

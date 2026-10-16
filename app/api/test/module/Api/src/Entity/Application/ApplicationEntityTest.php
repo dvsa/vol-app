@@ -939,6 +939,54 @@ final class ApplicationEntityTest extends EntityTester
         ];
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestKnowledgeExperienceSectionCompleted')]
+    public function testKnowledgeExperienceSectionCompleted(
+        bool $isCompleted,
+        mixed $evidenceUploaded,
+        ?string $olat
+    ): void {
+        $this->entity->setKnowledgeExperienceEvidenceUploaded($evidenceUploaded);
+        $this->entity->setKnowledgeExperienceOlat($olat);
+
+        $this->assertEquals(
+            $isCompleted,
+            $this->entity->isSectionCompleted('KnowledgeExperience')
+        );
+    }
+
+    public static function dpTestKnowledgeExperienceSectionCompleted(): \Iterator
+    {
+        yield 'nothing selected' => [
+            false,
+            null,
+            null,
+        ];
+
+        yield 'upload now' => [
+            true,
+            Entity::FINANCIAL_EVIDENCE_UPLOADED,
+            'N',
+        ];
+
+        yield 'upload later' => [
+            false,
+            Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            'N',
+        ];
+
+        yield 'olat selected' => [
+            true,
+            null,
+            'Y',
+        ];
+
+        yield 'olat selected even when upload later' => [
+            true,
+            Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            'Y',
+        ];
+    }
+
     public function testOperateLargeVehiclesSectionCompleted(): void
     {
         $this->assertFalse($this->entity->isSectionCompleted('PsvOperateLarge'));
@@ -4445,8 +4493,9 @@ final class ApplicationEntityTest extends EntityTester
      * @param bool $expected
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('hasApplicationFeeProvider')]
-    public function testHasApplicationFee(mixed $fee, mixed $expected): void
+    public function testHasApplicationFee(\Closure $createFee, mixed $expected): void
     {
+        $fee = $createFee();
         $application = $this->instantiate(Entity::class);
 
         $this->assertFalse($application->hasApplicationFee());
@@ -4461,11 +4510,11 @@ final class ApplicationEntityTest extends EntityTester
     public static function hasApplicationFeeProvider(): \Iterator
     {
         yield 'no fee' => [
-            null,
+            static fn () => null,
             false,
         ];
         yield 'cancelled fee' => [
-            m::mock()
+            static fn () => m::mock()
                 ->shouldReceive('isNewApplicationFee')
                 ->andReturn(true)
                 ->shouldReceive('isVariationFee')
@@ -4476,7 +4525,7 @@ final class ApplicationEntityTest extends EntityTester
             false,
         ];
         yield 'new app fee' => [
-            m::mock()
+            static fn () => m::mock()
                 ->shouldReceive('isNewApplicationFee')
                 ->andReturn(true)
                 ->shouldReceive('isVariationFee')
@@ -4487,7 +4536,7 @@ final class ApplicationEntityTest extends EntityTester
             true,
         ];
         yield 'variation fee' => [
-            m::mock()
+            static fn () => m::mock()
                 ->shouldReceive('isNewApplicationFee')
                 ->andReturn(false)
                 ->shouldReceive('isVariationFee')
@@ -5662,5 +5711,226 @@ final class ApplicationEntityTest extends EntityTester
         $tmApplications = new ArrayCollection([$tmApplication]);
         $application->setTransportManagers($tmApplications);
         $this->assertTrue($application->showPeriodOfGraceQuestion());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRequiresKnowledgeExperience')]
+    public function testRequiresKnowledgeExperience(
+        bool $isVariation,
+        string $niFlag,
+        string $goodsOrPsv,
+        string $licenceType,
+        ?string $prevHasLicence,
+        ?string $prevHadLicence,
+        bool $expected
+    ): void {
+        /** @var RefData $goodsOrPsvRefData */
+        $goodsOrPsvRefData = m::mock(RefData::class)->makePartial();
+        $goodsOrPsvRefData->setId($goodsOrPsv);
+
+        /** @var RefData $licenceTypeRefData */
+        $licenceTypeRefData = m::mock(RefData::class)->makePartial();
+        $licenceTypeRefData->setId($licenceType);
+
+        /** @var Entity $application */
+        $application = $this->instantiate(Entity::class);
+
+        $application->setIsVariation($isVariation);
+        $application->setNiFlag($niFlag);
+        $application->setGoodsOrPsv($goodsOrPsvRefData);
+        $application->setLicenceType($licenceTypeRefData);
+        $application->setPrevHasLicence($prevHasLicence);
+        $application->setPrevHadLicence($prevHadLicence);
+
+        $this->assertEquals(
+            $expected,
+            $application->requiresKnowledgeExperience()
+        );
+    }
+
+    public static function dpRequiresKnowledgeExperience(): \Iterator
+    {
+        yield 'yes yes' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'Y',
+            'Y',
+            false,
+        ];
+
+        yield 'yes no' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'Y',
+            'N',
+            false,
+        ];
+
+        yield 'no yes' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            'Y',
+            false,
+        ];
+
+        yield 'no no' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            'N',
+            true,
+        ];
+
+        yield 'NI application' => [
+            false,
+            'Y',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            'N',
+            false,
+        ];
+
+        yield 'restricted PSV' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            'N',
+            'N',
+            true,
+        ];
+
+        yield 'restricted PSV with a previous licence' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            'Y',
+            'N',
+            false,
+        ];
+
+        yield 'standard national PSV' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            'N',
+            true,
+        ];
+
+        yield 'restricted goods' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            'N',
+            'N',
+            true,
+        ];
+
+        yield 'no, answer not given' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            null,
+            false,
+        ];
+
+        yield 'answer not given, no' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            null,
+            'N',
+            false,
+        ];
+
+        yield 'variation' => [
+            true,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            'N',
+            false,
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRequiresKnowledgeExperienceBySubmission')]
+    public function testRequiresKnowledgeExperienceBySubmission(
+        string $status,
+        string $appliedVia,
+        ?int $knowledgeExperienceStatus,
+        bool $expected
+    ): void {
+        /** @var Entity $application */
+        $application = $this->instantiate(Entity::class);
+
+        $application->setIsVariation(false);
+        $application->setNiFlag('N');
+        $application->setGoodsOrPsv(new RefData(Licence::LICENCE_CATEGORY_GOODS_VEHICLE));
+        $application->setLicenceType(new RefData(Licence::LICENCE_TYPE_STANDARD_NATIONAL));
+        $application->setPrevHasLicence('N');
+        $application->setPrevHadLicence('N');
+        $application->setStatus(new RefData($status));
+        $application->setAppliedVia(new RefData($appliedVia));
+
+        $completion = new ApplicationCompletion($application);
+        $completion->setKnowledgeExperienceStatus($knowledgeExperienceStatus);
+        $application->setApplicationCompletion($completion);
+
+        $this->assertSame($expected, $application->requiresKnowledgeExperience());
+    }
+
+    public static function dpRequiresKnowledgeExperienceBySubmission(): \Iterator
+    {
+        yield 'not submitted, section not started' => [
+            Entity::APPLICATION_STATUS_NOT_SUBMITTED,
+            Entity::APPLIED_VIA_SELFSERVE,
+            null,
+            true,
+        ];
+
+        yield 'selfserve submitted before the section existed' => [
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Entity::APPLIED_VIA_SELFSERVE,
+            null,
+            false,
+        ];
+
+        yield 'selfserve submitted with the section completed' => [
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Entity::APPLIED_VIA_SELFSERVE,
+            ApplicationCompletion::STATUS_COMPLETE,
+            true,
+        ];
+
+        yield 'selfserve granted before the section existed' => [
+            Entity::APPLICATION_STATUS_VALID,
+            Entity::APPLIED_VIA_SELFSERVE,
+            null,
+            false,
+        ];
+
+        yield 'internally created, section not started' => [
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Entity::APPLIED_VIA_POST,
+            null,
+            true,
+        ];
     }
 }

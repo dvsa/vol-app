@@ -2,6 +2,7 @@
 
 namespace Common\Controller\Lva;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Controller\Traits\GenericUpload;
 use Common\Exception\ResourceConflictException;
 use Common\RefData;
@@ -24,6 +25,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @method \Common\Service\Cqrs\Response handleQuery(\Dvsa\Olcs\Transfer\Query\QueryInterface $query)
  * @method \Common\Service\Cqrs\Response handleCommand(\Dvsa\Olcs\Transfer\Command\CommandInterface $query)
+ * @method bool featuresEnabled(array $toggleConfig, MvcEvent $e)
  * @method \Common\Service\Cqrs\Response handleCancelRedirect($lvaId)
  * @method \Laminas\Http\Response handlePostSave($prefix = null)
  * @method \Common\Controller\Plugin\Redirect redirect()
@@ -67,6 +69,14 @@ abstract class AbstractController extends AbstractActionController
     protected string $baseRoute;
 
     /**
+     * Action/default feature requirements, enforced only for ToggleAwareInterface controllers.
+     * Empty configuration denies access for controllers that opt in.
+     *
+     * @var array
+     */
+    protected $toggleConfig = [];
+
+    /**
      * Current messages
      */
     protected array $currentMessages = [
@@ -100,6 +110,14 @@ abstract class AbstractController extends AbstractActionController
         $routeMatch = $e->getRouteMatch();
         if (!$routeMatch) {
             throw new Exception\DomainException('Missing route matches; unsure how to retrieve action');
+        }
+
+        // Feature gates must run before application queries and cannot be bypassed by skipPreDispatch.
+        if ($this instanceof ToggleAwareInterface && !$this->featuresEnabled($this->toggleConfig, $e)) {
+            $result = $this->notFoundAction();
+            $e->setResult($result);
+
+            return $result;
         }
 
         $this->maybeTranslateForNi();

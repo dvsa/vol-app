@@ -23,7 +23,7 @@ return [
                 '<a class="govuk-link" href="' . $this->generateUrl(
                     ['licence' => $row['id']],
                     'licence'
-                ) . '">' . $row['licNo'] . '</a>'
+                ) . '">' . \Common\Util\Escape::html($row['licNo']) . '</a>'
         ],
         [
             'title' => 'Type',

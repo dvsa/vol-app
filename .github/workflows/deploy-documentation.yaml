@@ -38,11 +38,30 @@ jobs:
           cache-dependency-path: website/package-lock.json
       - run: npm ci
       - run: npm run build
+      # Docusaurus moves this: 3.9 wrote the site to build/<baseUrl>/, 3.10 writes it to build/.
+      # A hardcoded path is therefore invalidated by an ordinary minor bump, and because the
+      # upload below only runs on a real deploy, CI stayed green while the deploy broke. So
+      # resolve the root from the build rather than assuming it, and run ungated so a PR that
+      # changes the layout fails here instead. 404.html is emitted exactly once, at the site
+      # root, which makes it the marker - and a count other than one means the assumption no
+      # longer holds, which is worth failing on rather than guessing past.
+      - name: Resolve site root
+        id: site
+        run: |
+          count=$(find build -name 404.html | wc -l)
+          if [ "$count" -ne 1 ]; then
+            echo "::error::Expected exactly one 404.html under website/build, found $count. The Docusaurus build output layout has changed - update the deploy artefact path."
+            find build -name 404.html
+            exit 1
+          fi
+          dir=$(dirname "$(find build -name 404.html)")
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+          echo "Site root: website/$dir" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload pages artefact
         if: ${{ inputs.deploy }}
         uses: actions/upload-pages-artifact@v4
         with:
-          path: website/build/vol-app
+          path: website/${{ steps.site.outputs.dir }}
 
   deploy:
     name: Deploy

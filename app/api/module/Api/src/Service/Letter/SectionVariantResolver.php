@@ -49,7 +49,8 @@ class SectionVariantResolver
                     $section,
                     $candidate->displayOrder,
                     $candidate->isRequired,
-                    UnresolvedSection::REASON_NO_MATCHING_VARIANT
+                    UnresolvedSection::REASON_NO_MATCHING_VARIANT,
+                    $variantResolution
                 );
                 continue;
             }
@@ -60,7 +61,8 @@ class SectionVariantResolver
                     $section,
                     $candidate->displayOrder,
                     $candidate->isRequired,
-                    UnresolvedSection::REASON_NO_CURRENT_VERSION
+                    UnresolvedSection::REASON_NO_CURRENT_VERSION,
+                    $variantResolution
                 );
                 continue;
             }

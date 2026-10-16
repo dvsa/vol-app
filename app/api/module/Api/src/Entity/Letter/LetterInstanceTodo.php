@@ -39,7 +39,16 @@ class LetterInstanceTodo extends AbstractLetterInstanceTodo
             return is_array($description) ? $description : [];
         }
 
+        if (!empty($this->generatedDescription) && is_array($this->generatedDescription)) {
+            return $this->generatedDescription;
+        }
+
         return $this->letterTodoVersion?->getDescriptionAsArray() ?? [];
+    }
+
+    public function requiresInput(): bool
+    {
+        return (bool) $this->letterTodoVersion?->getRequiresInput();
     }
 
     public function hasBeenEdited(): bool

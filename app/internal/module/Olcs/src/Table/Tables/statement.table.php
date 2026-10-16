@@ -47,12 +47,13 @@ return [
         ],
         [
             'title' => 'Requested by',
-            'formatter' => fn($data, $column) => $data['requestorsContactDetails']['person']['forename'] . ' ' .
-                $data['requestorsContactDetails']['person']['familyName']
+            'formatter' => fn($data, $column) =>
+                \Common\Util\Escape::html($data['requestorsContactDetails']['person']['forename']) . ' ' .
+                \Common\Util\Escape::html($data['requestorsContactDetails']['person']['familyName'])
         ],
         [
             'title' => 'Statement type',
-            'formatter' => fn($data, $column) => $data['statementType']['description'],
+            'formatter' => fn($data, $column) => \Common\Util\Escape::html($data['statementType']['description']),
         ],
         [
             'title' => 'Date stopped',

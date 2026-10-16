@@ -38,6 +38,8 @@ return [
                 }
 
                 $column['formatter'] = Date::class;
+                // Not escaped: this is another formatter's rendered output, which may legitimately
+                // be markup. Escaping its own values is that formatter's responsibility.
                 return '<a href="' . $url . '" class="' . $class . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'offenceDate'

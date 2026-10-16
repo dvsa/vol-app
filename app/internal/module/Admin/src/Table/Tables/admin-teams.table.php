@@ -37,7 +37,7 @@ return [
                 $routeParams = ['team' => $row['id'], 'action' => 'edit'];
                 $route = 'admin-dashboard/admin-team-management';
                 $url = $this->generateUrl($routeParams, $route);
-                return '<a class="govuk-link" href="' . $url . '">' . $row['name'] . '</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . \Common\Util\Escape::html($row['name']) . '</a>';
             },
         ],
         [

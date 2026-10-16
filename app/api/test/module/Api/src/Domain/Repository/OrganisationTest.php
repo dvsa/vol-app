@@ -4,526 +4,220 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
+use Dvsa\Olcs\Api\Domain\Repository\Organisation as Repo;
 use Dvsa\Olcs\Api\Domain\Repository\Query\Organisation\FixIsIrfo;
 use Dvsa\Olcs\Api\Domain\Repository\Query\Organisation\FixIsUnlicenced;
-use Dvsa\Olcs\Transfer\Query\Organisation\CpidOrganisation;
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\Organisation as Repo;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\EntityRepository;
-use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
-use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
+use Dvsa\Olcs\Api\Entity\Organisation\Organisation as Entity;
+use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Transfer\Query\Organisation\CpidOrganisation;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Organisation::class)]
-#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 final class OrganisationTest extends RepositoryTestCase
 {
-    /**
-     * @var Repo
-     */
+    private const string FROM = ' FROM ' . Entity::class . ' o';
+
+    /** withRefdata() on Organisation joins type and cpid. */
+    private const string REFDATA = ' LEFT JOIN o.type w0 LEFT JOIN o.cpid w1';
+
     protected $sut;
 
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $this->setUpRealSut(Repo::class, true);
+    }
+
+    public function testFetchBusinessDetailsById(): void
+    {
+        $command = m::mock(QueryInterface::class);
+        $command->shouldReceive('getId')->andReturn(111);
+
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn([['foo' => 'bar']]);
+
+        $this->assertSame(['foo' => 'bar'], $this->sut->fetchBusinessDetailsUsingId($command));
+
+        $this->assertSame(
+            'SELECT o, w0, w1, o_cd, o_cd_a, o_cd_a_cc, o_cd_pc, w2, w3' . self::FROM . self::REFDATA
+            . ' LEFT JOIN o.contactDetails o_cd LEFT JOIN o_cd.address o_cd_a'
+            . ' LEFT JOIN o_cd_a.countryCode o_cd_a_cc LEFT JOIN o_cd.phoneContacts o_cd_pc'
+            . ' LEFT JOIN o_cd.contactType w2 LEFT JOIN o_cd_pc.phoneContactType w3'
+            . ' WHERE o.id = :byId',
+            $qb->getDQL(),
+        );
     }
 
     public function testFetchBusinessDetailsByIdNotFound(): void
     {
         $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getId')
-            ->andReturn(111);
+        $command->shouldReceive('getId')->andReturn(111);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn(null);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with(111)
-            ->andReturnSelf()
-            ->shouldReceive('withContactDetails')
-            ->once()
-            ->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('o')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Organisation::class)
-            ->andReturn($repo);
+        $this->createRealQb()->stubbedQuery()->expects('getResult')->andReturn(null);
 
         $this->expectException(NotFoundException::class);
 
         $this->sut->fetchBusinessDetailsUsingId($command);
     }
 
-    public function testFetchBusinessDetailsById(): void
-    {
-        $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getId')
-            ->andReturn(111);
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn(
-                [
-                    [
-                        'foo' => 'bar'
-                    ]
-                ]
-            );
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with(111)
-            ->andReturnSelf()
-            ->shouldReceive('withContactDetails')
-            ->once()
-            ->andReturnSelf();
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('o')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Organisation::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchBusinessDetailsUsingId($command);
-
-        $this->assertEquals(['foo' => 'bar'], $result);
-    }
-
+    /**
+     * The IRFO view hangs its contact details off irfoContactDetails rather than the default
+     * contactDetails association.
+     */
     public function testFetchIrfoDetailsById(): void
     {
-        $command = m::mock(QueryInterface::class);
-        $command->shouldReceive('getId')
-            ->andReturn(111);
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['result']);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('getQuery->getResult')
-            ->with(Query::HYDRATE_OBJECT)
-            ->andReturn(
-                [
-                    [
-                        'foo' => 'bar'
-                    ]
-                ]
-            );
+        $this->assertSame('result', $this->sut->fetchIrfoDetailsById(111));
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('irfoNationality')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('irfoPartners')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->once()
-            ->with('tradingNames', 'tn')
-            ->andReturnSelf()
-            ->shouldReceive('withContactDetails')
-            ->once()
-            ->with('irfoContactDetails')
-            ->andReturnSelf()
-            ->shouldReceive('byId')
-            ->once()
-            ->with(111);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('o')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Organisation::class)
-            ->andReturn($repo);
-
-        $result = $this->sut->fetchIrfoDetailsUsingId($command);
-
-        $this->assertEquals(['foo' => 'bar'], $result);
+        $this->assertSame(
+            'SELECT o, w0, w1, w2, w3, tn, o_cd, o_cd_a, o_cd_a_cc, o_cd_pc, w4, w5'
+            . self::FROM . self::REFDATA
+            . ' LEFT JOIN o.irfoNationality w2 LEFT JOIN o.irfoPartners w3'
+            . ' LEFT JOIN o.tradingNames tn LEFT JOIN o.irfoContactDetails o_cd'
+            . ' LEFT JOIN o_cd.address o_cd_a LEFT JOIN o_cd_a.countryCode o_cd_a_cc'
+            . ' LEFT JOIN o_cd.phoneContacts o_cd_pc LEFT JOIN o_cd.contactType w4'
+            . ' LEFT JOIN o_cd_pc.phoneContactType w5'
+            . ' WHERE o.id = :byId',
+            $qb->getDQL(),
+        );
     }
 
+    /**
+     * The status filter is applied in PHP after the query, not in DQL — the query fetches every
+     * organisation with the company number and the licences are sifted in a loop.
+     */
     public function testGetByCompanyOrLlpNo(): void
     {
-        $companyNumber = '01234567';
+        $licence = m::mock();
+        $licence->shouldReceive('getStatus->getId')->andReturn(LicenceEntity::LICENCE_STATUS_VALID);
 
-        $licences1 = new ArrayCollection();
-        $lic1 = m::mock(LicenceEntity::class)
-            ->shouldReceive('getStatus')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('getId')
-                ->andReturn(LicenceEntity::LICENCE_STATUS_VALID)
-                ->once()
-                ->getMock()
-            )
-            ->once()
-            ->getMock();
-        $licences1->add($lic1);
+        $organisation = m::mock(Entity::class);
+        $organisation->shouldReceive('getLicences')->andReturn([$licence]);
 
-        $licences2 = new ArrayCollection();
-        $lic2 = m::mock(LicenceEntity::class)
-            ->shouldReceive('getStatus')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getId')
-                    ->andReturn(LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION)
-                    ->once()
-                    ->getMock()
-            )
-            ->once()
-            ->getMock();
-        $licences2->add($lic2);
+        $qb = $this->createRealQb()->willReturn([$organisation]);
 
-        $org1 = m::mock(Organisation::class)
-            ->shouldReceive('getLicences')
-            ->andReturn($licences1)
-            ->once()
-            ->getMock();
+        $this->assertSame([$organisation], $this->sut->getByCompanyOrLlpNo('01234567'));
 
-        $org2 = m::mock(Organisation::class)
-            ->shouldReceive('getLicences')
-            ->andReturn($licences2)
-            ->once()
-            ->getMock();
-
-        $results = [$org1, $org2];
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->with($qb)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('licences')
-            ->once()
-            ->andReturnSelf();
-
-        $where = m::mock();
-        $qb->shouldReceive('expr->eq')
-            ->with('o.companyOrLlpNo', ':companyNumber')
-            ->andReturn($where);
-        $qb
-            ->shouldReceive('andWhere')
-            ->with($where)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('companyNumber', $companyNumber)
-            ->once()
-            ->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->once()
-            ->with($qb)
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->once()
-            ->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getResult')
-            ->andReturn($results);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Organisation::class)
-            ->andReturn($repo);
-
-        $this->sut->getByCompanyOrLlpNo($companyNumber);
+        $this->assertSame(
+            'SELECT o, w0, w1, w2' . self::FROM . self::REFDATA . ' LEFT JOIN o.licences w2'
+            . ' WHERE o.companyOrLlpNo = :companyNumber',
+            $qb->getDQL(),
+        );
+        $this->assertSame('01234567', $qb->getParameter('companyNumber')->getValue());
     }
 
-    public function testGetByCompanyOrLlpNoNotFound(): void
+    public function testGetByCompanyOrLlpNoNotFoundWhenNoLicenceHasAnActiveStatus(): void
     {
-        $companyNumber = '01234567';
+        $licence = m::mock();
+        $licence->shouldReceive('getStatus->getId')->andReturn(LicenceEntity::LICENCE_STATUS_REVOKED);
 
-        $licences1 = new ArrayCollection();
-        $lic1 = m::mock(LicenceEntity::class)
-            ->shouldReceive('getStatus')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getId')
-                    ->andReturn(LicenceEntity::LICENCE_STATUS_NOT_SUBMITTED)
-                    ->once()
-                    ->getMock()
-            )
-            ->once()
-            ->getMock();
-        $licences1->add($lic1);
+        $organisation = m::mock(Entity::class);
+        $organisation->shouldReceive('getLicences')->andReturn([$licence]);
 
-        $org1 = m::mock(Organisation::class)
-            ->shouldReceive('getLicences')
-            ->andReturn($licences1)
-            ->once()
-            ->getMock();
-
-        $results = [$org1];
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->with($qb)
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->with('licences')
-            ->once()
-            ->andReturnSelf();
-
-        $qb->shouldReceive('expr->eq');
-        $qb
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->andReturnSelf();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->andReturnSelf();
-
-        $qb->shouldReceive('getQuery->getResult')
-            ->andReturn($results);
-
-        /** @var EntityRepository $repo */
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Organisation::class)
-            ->andReturn($repo);
+        $this->createRealQb()->willReturn([$organisation]);
 
         $this->expectException(NotFoundException::class);
 
-        $this->sut->getByCompanyOrLlpNo($companyNumber);
+        $this->sut->getByCompanyOrLlpNo('01234567');
     }
 
-    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
-    public function testFetchByStatusPaginatedWithNullStatus(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('cpidProvider')]
+    public function testFetchByStatusPaginated(?string $cpid, string $expectedWhere): void
     {
+        $qb = $this->createRealQb();
+
+        // A non-null cpid is resolved to a RefData reference before being bound.
+        $this->em->shouldReceive('getReference')->andReturn(m::mock(RefData::class));
+
         $query = m::mock(CpidOrganisation::class)->makePartial();
+        $query->shouldReceive('getCpid')->andReturn($cpid);
+        $query->shouldReceive('getPage')->andReturn(1);
+        $query->shouldReceive('getLimit')->andReturn(10);
 
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
+        $this->sut->expects('fetchPaginatedList')->with($qb, Query::HYDRATE_OBJECT)->andReturn(['foo']);
+        $this->sut->expects('fetchPaginatedCount')->with($qb)->andReturn(1);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->andReturnSelf()
-            ->shouldReceive('paginate')
-            ->andReturnSelf();
+        $this->assertSame(['result' => ['foo'], 'count' => 1], $this->sut->fetchByStatusPaginated($query));
 
-        $qb->shouldReceive('where');
-        $qb->shouldReceive('expr->isNull');
-
-        $this->sut->shouldReceive('fetchPaginatedList');
-        $this->sut->shouldReceive('fetchPaginatedCount');
-
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Organisation::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchByStatusPaginated($query);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
-    public function testFetchByStatusPaginatedWithStatus(): void
-    {
-        $query = m::mock(CpidOrganisation::class)
-            ->makePartial()
-            ->shouldReceive('getCpid')
-            ->andReturn('op_cpid_central_government');
-
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('withRefdata')
-            ->andReturnSelf()
-            ->shouldReceive('order')
-            ->andReturnSelf()
-            ->shouldReceive('paginate')
-            ->andReturnSelf();
-
-        $this->sut->shouldReceive('getRefdataReference');
-
-        $qb->shouldReceive('where');
-        $qb->shouldReceive('expr->eq');
-
-        $qb->shouldReceive('setParameter');
-
-        $this->sut->shouldReceive('fetchPaginatedList');
-        $this->sut->shouldReceive('fetchPaginatedCount');
-
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Organisation::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchByStatusPaginated($query->getMock());
-    }
-
-    public function testFetchAllByStatusForCpidExportWithStatus(): void
-    {
-        /** @var m\MockInterface $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->andReturnSelf();
-
-        $qb->shouldReceive('where');
-        $qb->shouldReceive('expr->eq');
-
-        $qb->shouldReceive('setParameter');
-
-        $qb->shouldReceive('select')
-            ->with('o.id', 'o.name', 'r.id AS cpid');
-
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn(m::mock()->shouldReceive('toIterable')->getMock());
-
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Organisation::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchAllByStatusForCpidExport('op_cpid_central_government');
-    }
-
-    public function testFetchAllByStatusForCpidExportWithNullStatus(): void
-    {
-        /** @var QueryBuilder $qb */
-        $qb = m::mock(QueryBuilder::class);
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->andReturnSelf()
-            ->shouldReceive('with')
-            ->andReturnSelf();
-
-        $qb->shouldReceive('where');
-        $qb->shouldReceive('expr->isNull');
-
-        $qb->shouldReceive('select')
-            ->with('o.id', 'o.name', 'r.id AS cpid');
-
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn(m::mock()->shouldReceive('toIterable')->getMock());
-
-        $repo = m::mock(EntityRepository::class);
-        $repo->shouldReceive('createQueryBuilder')
-            ->andReturn($qb);
-
-        $this->em->shouldReceive('getRepository')
-            ->with(Organisation::class)
-            ->andReturn($repo);
-
-        $this->sut->fetchAllByStatusForCpidExport(null);
-    }
-
-    public function testFixIsIrfo(): void
-    {
-        $this->dbQueryService->shouldReceive('get')->with(FixIsIrfo::class)->once()->andReturn(
-            m::mock()->shouldReceive('execute')->with()->once()->andReturn(
-                m::mock()->shouldReceive('rowCount')->with()->once()->andReturn(52)->getMock()
-            )->getMock()
+        $this->assertSame(
+            'SELECT o, w0, w1' . self::FROM . self::REFDATA . $expectedWhere . ' ORDER BY o.name ASC',
+            $qb->getDQL(),
         );
-
-        $result = $this->sut->fixIsIrfo();
-
-        $this->assertSame(52, $result);
     }
 
-    public function testFixIsUnlicenced(): void
+    public static function cpidProvider(): \Iterator
     {
-        $this->dbQueryService->shouldReceive('get')->with(FixIsUnlicenced::class)->once()->andReturn(
-            m::mock()->shouldReceive('execute')->with()->once()->andReturn(
-                m::mock()->shouldReceive('rowCount')->with()->once()->andReturn(12)->getMock()
-            )->getMock()
+        yield 'no cpid means unassigned only' => [null, ' WHERE o.cpid IS NULL'];
+        yield 'a cpid filters on it' => ['cpid_1', ' WHERE o.cpid = :cpid'];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('cpidProvider')]
+    public function testFetchAllByStatusForCpidExport(?string $status, string $expectedWhere): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('toIterable')->andReturn(['RESULTS']);
+
+        $this->assertSame(['RESULTS'], $this->sut->fetchAllByStatusForCpidExport($status));
+
+        // The explicit select() runs last and replaces the joined entity select list.
+        $this->assertSame(
+            'SELECT o.id, o.name, r.id AS cpid' . self::FROM . ' LEFT JOIN o.cpid r' . $expectedWhere,
+            $qb->getDQL(),
         );
+    }
 
-        $result = $this->sut->fixIsUnlicenced();
+    #[\PHPUnit\Framework\Attributes\DataProvider('fixProvider')]
+    public function testFixQueries(string $method, string $queryClass, int $rowCount): void
+    {
+        $statement = m::mock();
+        $statement->expects('rowCount')->withNoArgs()->andReturn($rowCount);
 
-        $this->assertSame(12, $result);
+        $query = m::mock();
+        $query->expects('execute')->withNoArgs()->andReturn($statement);
+
+        $this->dbQueryService->expects('get')->with($queryClass)->andReturn($query);
+
+        $this->assertSame($rowCount, $this->sut->{$method}());
+    }
+
+    public static function fixProvider(): \Iterator
+    {
+        yield 'isIrfo' => ['fixIsIrfo', FixIsIrfo::class, 52];
+        yield 'isUnlicenced' => ['fixIsUnlicenced', FixIsUnlicenced::class, 12];
     }
 
     public function testGetAllOrganisationsForCompaniesHouse(): void
     {
-        $qb = $this->createMockQb('[QUERY]');
-        $this->mockCreateQueryBuilder($qb);
+        $qb = $this->createRealQb()->willReturn(['RESULTS']);
 
-        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
+        $this->assertSame(['RESULTS'], $this->sut->getAllOrganisationsForCompaniesHouse());
 
-        $this->sut->getAllOrganisationsForCompaniesHouse();
-
-        $expectedQuery = '[QUERY] SELECT o.companyOrLlpNo DISTINCT INNER JOIN Dvsa\Olcs\Api\Entity\Licence\Licence l ' .
-        'WITH l.organisation = o.id ' .
-        'AND l.status IN [[["lsts_consideration","lsts_suspended","lsts_valid","lsts_curtailed","lsts_granted"]]] ' .
-        'AND o.companyOrLlpNo IS NOT NULL AND o.type IN [[["org_t_rc","org_t_llp"]]]';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT DISTINCT o.companyOrLlpNo' . self::FROM
+            . ' INNER JOIN ' . LicenceEntity::class . ' l WITH l.organisation = o.id'
+            . ' WHERE l.status IN(:licenceStatuses) AND o.companyOrLlpNo IS NOT NULL'
+            . ' AND o.type IN(:orgTypes)',
+            $qb->getDQL(),
+        );
+        $this->assertSame(
+            [
+                LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION,
+                LicenceEntity::LICENCE_STATUS_SUSPENDED,
+                LicenceEntity::LICENCE_STATUS_VALID,
+                LicenceEntity::LICENCE_STATUS_CURTAILED,
+                LicenceEntity::LICENCE_STATUS_GRANTED,
+            ],
+            $qb->getParameter('licenceStatuses')->getValue(),
+        );
+        $this->assertSame(
+            [Entity::ORG_TYPE_REGISTERED_COMPANY, Entity::ORG_TYPE_LLP],
+            $qb->getParameter('orgTypes')->getValue(),
+        );
     }
 }

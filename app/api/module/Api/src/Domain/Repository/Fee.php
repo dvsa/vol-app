@@ -481,7 +481,7 @@ class Fee extends AbstractRepository
     private function getQueryByApplicationFeeTypeFeeType($applicationId, $feeTypeFeeType)
     {
         $doctrineQb = $this->createQueryBuilder();
-        $this->getQueryBuilder()->withRefdata()->order('invoicedDate', 'ASC');
+        $this->getQueryBuilder()->modifyQuery($doctrineQb)->withRefdata()->order('invoicedDate', 'ASC');
 
         $doctrineQb->join($this->alias . '.feeType', 'ft')
             ->andWhere($doctrineQb->expr()->eq('ft.feeType', ':feeTypeFeeType'))
@@ -611,7 +611,8 @@ class Fee extends AbstractRepository
     #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
-        $this->getQueryBuilder()
+        $queryBuilder = $this->getQueryBuilder()->modifyQuery($qb);
+        $queryBuilder
             ->filterByLicence($query->getLicence())
             ->filterByApplication($query->getApplication())
             ->filterByIds(!empty($query->getIds()) ? $query->getIds() : null);
@@ -686,7 +687,7 @@ class Fee extends AbstractRepository
             $this->filterByStatus($qb, $query->getStatus());
         }
 
-        $this->getQueryBuilder()->modifyQuery($qb)->withCreatedBy();
+        $queryBuilder->withCreatedBy();
     }
 
     /**

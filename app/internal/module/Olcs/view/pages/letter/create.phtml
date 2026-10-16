@@ -15,16 +15,16 @@
     <?php foreach ($accordionData as $section): ?>
         <?php if (empty($section['issues'])): continue; endif; ?>
         <div class="letter-section">
-            <div class="letter-section__header" style="cursor: pointer; border-bottom: 1px solid #b1b4b6; padding: 10px 0;">
-                <h3 class="letter-section__title govuk-heading-s" style="display: inline-block; margin: 0;">
+            <div class="letter-section__header">
+                <h3 class="letter-section__title govuk-heading-s">
                     <?= $this->escapeHtml($section['issueType']['name']) ?>
                 </h3>
-                <span class="letter-section__toggle govuk-link" style="float: right; font-size: 14px;">
+                <span class="letter-section__toggle govuk-link">
                     <span class="letter-section__show-hide">Show</span>
-                    <span class="letter-section__icon" style="display: inline-block; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 4px solid #1d70b8; margin-left: 5px; vertical-align: middle;"></span>
+                    <span class="letter-section__icon"></span>
                 </span>
             </div>
-            <div class="letter-section__content" style="display: none; padding: 15px 0; border-bottom: 1px solid #b1b4b6;">
+            <div class="letter-section__content" style="display: none;">
                 <?php if (!empty($section['issues'])): ?>
                     <div class="govuk-checkboxes govuk-checkboxes--small">
                         <?php foreach ($section['issues'] as $issue): ?>
@@ -51,8 +51,11 @@
 </div>
 
 <?php if (!empty($appendicesData)): ?>
-<div class="letter-appendices" style="margin-top: 2rem;">
-    <h3 class="govuk-heading-s">Appendices</h3>
+<div class="letter-appendices letter-group">
+    <div class="letter-group__header">
+        <h3 class="letter-group__title govuk-heading-s">Appendices</h3>
+    </div>
+    <div class="letter-group__content">
     <div class="govuk-checkboxes govuk-checkboxes--small">
         <?php foreach ($appendicesData as $appendix): ?>
             <div class="govuk-checkboxes__item">
@@ -70,11 +73,12 @@
             </div>
         <?php endforeach; ?>
     </div>
+    </div>
 </div>
 <?php endif; ?>
 
 <?php if (!empty($letterChoicesData)): ?>
-<div class="letter-choices" style="margin-top: 2rem;">
+<div class="letter-choices">
     <?php
     // Group choices by groupLabel
     $groupedChoices = [];
@@ -88,8 +92,11 @@
         <?php $isRadioGroup = (($choices[0]['inputType'] ?? 'checkbox') === 'radio'); ?>
         <?php if ($isRadioGroup): ?>
             <?php // Radio "pick one" group: shared name, no default selected, must pick exactly one. ?>
-            <div class="govuk-form-group" data-required-radio-group>
-                <h3 class="govuk-heading-s govuk-!-margin-bottom-1"><?= $this->escapeHtml($groupLabel) ?></h3>
+            <div class="govuk-form-group letter-group" data-required-radio-group>
+                <div class="letter-group__header">
+                    <h3 class="letter-group__title govuk-heading-s"><?= $this->escapeHtml($groupLabel) ?></h3>
+                </div>
+                <div class="letter-group__content">
                 <p class="govuk-hint govuk-!-margin-bottom-1">Select one</p>
                 <p class="govuk-error-message letter-choice-group-error" style="display: none;">
                     <span class="govuk-visually-hidden">Error:</span> Select <?= $this->escapeHtml($groupLabel) ?>
@@ -107,21 +114,28 @@
                         </div>
                     <?php endforeach; ?>
                 </div>
+                </div>
             </div>
         <?php else: ?>
-            <h3 class="govuk-heading-s"><?= $this->escapeHtml($groupLabel) ?></h3>
-            <div class="govuk-checkboxes govuk-checkboxes--small">
-                <?php foreach ($choices as $choice): ?>
-                    <div class="govuk-checkboxes__item">
-                        <input class="govuk-checkboxes__input" name="letterChoices[]"
-                               type="checkbox"
-                               value="<?= $choice['id'] ?>"
-                               id="letter-choice-<?= $choice['id'] ?>">
-                        <label class="govuk-label govuk-checkboxes__label" for="letter-choice-<?= $choice['id'] ?>">
-                            <?= $this->escapeHtml($choice['label']) ?>
-                        </label>
+            <div class="letter-group">
+                <div class="letter-group__header">
+                    <h3 class="letter-group__title govuk-heading-s"><?= $this->escapeHtml($groupLabel) ?></h3>
+                </div>
+                <div class="letter-group__content">
+                    <div class="govuk-checkboxes govuk-checkboxes--small">
+                        <?php foreach ($choices as $choice): ?>
+                            <div class="govuk-checkboxes__item">
+                                <input class="govuk-checkboxes__input" name="letterChoices[]"
+                                       type="checkbox"
+                                       value="<?= $choice['id'] ?>"
+                                       id="letter-choice-<?= $choice['id'] ?>">
+                                <label class="govuk-label govuk-checkboxes__label" for="letter-choice-<?= $choice['id'] ?>">
+                                    <?= $this->escapeHtml($choice['label']) ?>
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
+                </div>
             </div>
         <?php endif; ?>
         <?php $groupIndex++; ?>

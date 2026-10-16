@@ -90,7 +90,7 @@ final class EnvironmentalComplaintsTest extends AbstractSubmissionSectionTestCas
             ]
         ];
 
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
         yield [$case, $expectedResult];
     }

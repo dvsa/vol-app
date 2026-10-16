@@ -28,7 +28,7 @@ return [
                 '<a class="govuk-link" href="' . $this->generateUrl(
                     ['application' => $row['id']],
                     'lva-application'
-                ) . '">' . $row['licence']['licNo'] . '/' . $row['id'] . '</a>'
+                ) . '">' . \Common\Util\Escape::html($row['licence']['licNo'] . '/' . $row['id']) . '</a>'
         ],
         [
             'title' => 'Type',

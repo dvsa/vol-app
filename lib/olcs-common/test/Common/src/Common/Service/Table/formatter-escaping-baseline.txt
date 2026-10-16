@@ -1,0 +1,43 @@
+# Formatters not yet covered by the table escaping contract.
+#
+# FormatterEscapingInvariantTest calls every formatter directly with a hostile row and
+# asserts the value reaches the output escaped. Both sections are asserted, so neither can
+# rot: a formatter that starts leaking fails, one that stops leaking fails as a stale entry,
+# and anything moving into or out of [skipped] fails too.
+#
+# 149 exercised, 0 leaking, 0 could not be driven. 149 formatters in total.
+#
+# The leaking list is a to-do list, not a permission slip. It should only ever shrink.
+
+[leaking]
+
+# Formatters that cannot be driven at all. A skip means "unknown", never "safe". Empty, and
+# worth keeping that way: every formatter in the library now runs against a hostile row.
+[skipped]
+
+# There is no third section, and there used to be.
+#
+# Some values cannot carry the payload at all, because the formatter requires a number or a
+# parseable date and neither can contain "<script>". Those were listed, on the grounds that
+# they rendered without being asserted. That was the wrong shape for the information: a value
+# is either safe or it is not, and a list of "safe, but for a different reason" is a category
+# nobody reading it for the first time can act on.
+#
+# They are safe, and the argument is complete rather than lenient. The type partitions every
+# possible value: one that satisfies it is a number or a strict ATOM date, neither of which
+# can contain "<", ">", "&" or a quote, and the output is derived from the parsed value
+# rather than copied from the input. One that does not satisfy it is rejected before a byte
+# is written — in production that input is a 500, not a payload on a page. No third case, so
+# nothing left to test and nothing to keep a list of.
+#
+# That is established by driving the formatter, not by argument. Each such value is put back
+# on its own — the payload restored at exactly that path, the rest of the row untouched — and
+# the result is checked, including anything written before an exception, since output already
+# emitted is not retracted by a later throw. One path at a time, never in a batch:
+# getFirstReadBy() returns early when createdBy.id equals the read's user.id, so restoring
+# both at once would skip the branch and prove nothing about it.
+#
+# Whether the throw was the *type* rejecting the value is checked too, not assumed. An
+# exception from anywhere else — a missing service, an unrelated breakage — establishes
+# nothing, and would otherwise read as proof of safety for as long as the breakage lasted.
+# That case fails the test by name, with no section here to absorb it.

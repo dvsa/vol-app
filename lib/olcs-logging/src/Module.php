@@ -2,14 +2,13 @@
 
 namespace Olcs\Logging;
 
-use Laminas\EventManager\EventInterface;
-use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Monolog\ErrorHandler;
 use Olcs\Logging\Log\Formatter\Standard;
 use Olcs\Logging\Log\Formatter\StandardFactory;
 use Olcs\Logging\Log\Logger as StaticLogger;
 use Olcs\Logging\Log\LoggerFactory;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LogLevel;
 
 class Module
@@ -28,16 +27,10 @@ class Module
         ];
 
         return [
-            'listeners' => [
-                Listener\LogRequest::class,
-                Listener\LogError::class,
-            ],
             'service_manager' => [
                 'factories' => [
                     'Logger' => LoggerFactory::class,
                     'ExceptionLogger' => LoggerFactory::class,
-                    Listener\LogRequest::class => Listener\LogRequest::class,
-                    Listener\LogError::class => Listener\LogError::class,
                     Helper\LogException::class => Helper\LogException::class,
                     Helper\LogError::class => Helper\LogError::class,
                     Standard::class => StandardFactory::class,
@@ -47,6 +40,7 @@ class Module
                     Log\Processor\RemoteIp::class => InvokableFactory::class,
                     Log\Processor\RequestId::class => InvokableFactory::class,
                     Log\Processor\HidePassword::class => InvokableFactory::class,
+                    Log\Processor\HideCredentials::class => InvokableFactory::class,
                     Log\Processor\CorrelationId::class => Log\Processor\CorrelationIdFactory::class,
                 ],
             ],
@@ -75,15 +69,26 @@ class Module
         ];
     }
 
-    public function onBootstrap(EventInterface $event): void
+    /**
+     * Install the logger's global side effects: credential-hiding processors, Monolog's
+     * error/exception handlers, and the static Logger facade.
+     *
+     * Takes a PSR-11 container and the merged config rather than an MvcEvent, so the
+     * package carries no framework coupling. The MVC entry point lives in
+     * olcs/vol-logging-mvc, whose Module::onBootstrap() delegates here; a PSR-15
+     * middleware can call it the same way.
+     */
+    public function bootstrapLogger(ContainerInterface $container, array $config): void
     {
-        /** @var MvcEvent $event */
-        $serviceManager = $event->getApplication()->getServiceManager();
-        $logger = $serviceManager->get('Logger');
-        $config = $serviceManager->get('Config');
+        $logger = $container->get('Logger');
+
+        // Unconditional, and deliberately not behind allowPasswordLogging. That flag exists
+        // so a developer can see a password they typed themselves; it is not a licence to
+        // emit bearer tokens and session ids, which are live credentials for other people.
+        $logger->pushProcessor($container->get(Log\Processor\HideCredentials::class));
 
         if (empty($config['log']['allowPasswordLogging'])) {
-            $hidePassword = $serviceManager->get(Log\Processor\HidePassword::class);
+            $hidePassword = $container->get(Log\Processor\HidePassword::class);
             $logger->pushProcessor($hidePassword);
         }
 

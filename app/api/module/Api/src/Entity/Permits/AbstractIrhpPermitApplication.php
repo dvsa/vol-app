@@ -62,7 +62,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Licence
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence|null
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
@@ -71,7 +71,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * IrhpApplication
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication|null
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'irhpPermitApplications', fetch: 'LAZY')]
@@ -80,7 +80,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Sectors
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\Sectors
+     * @var \Dvsa\Olcs\Api\Entity\Permits\Sectors|null
      */
     #[ORM\JoinColumn(name: 'sectors_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\Sectors::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Status
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -108,7 +108,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -118,7 +118,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Start date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'start_date', nullable: true)]
     protected $startDate;
@@ -134,7 +134,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Permits required
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'permits_required', nullable: true)]
     protected $permitsRequired;
@@ -142,7 +142,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Required euro5
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'required_euro5', nullable: true, options: ['unsigned' => true])]
     protected $requiredEuro5;
@@ -150,7 +150,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Required euro6
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'required_euro6', nullable: true, options: ['unsigned' => true])]
     protected $requiredEuro6;
@@ -158,7 +158,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Required standard
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'required_standard', nullable: true, options: ['unsigned' => true])]
     protected $requiredStandard;
@@ -166,7 +166,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Required cabotage
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'required_cabotage', nullable: true, options: ['unsigned' => true])]
     protected $requiredCabotage;
@@ -174,7 +174,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Properties
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'properties', nullable: true)]
     protected $properties;
@@ -191,7 +191,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Answers
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Generic\Answer>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Answer::class, mappedBy: 'irhpPermitApplication', indexBy: 'question_text_id')]
     protected $answers;
@@ -199,7 +199,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Fees
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Fee\Fee>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'irhpPermitApplication')]
     protected $fees;
@@ -207,7 +207,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * IrhpCandidatePermits
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit::class, mappedBy: 'irhpPermitApplication')]
     protected $irhpCandidatePermits;
@@ -215,7 +215,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * IrhpPermits
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit::class, mappedBy: 'irhpPermitApplication')]
     protected $irhpPermits;
@@ -223,7 +223,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * IrhpPermitRequests
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRequest::class, mappedBy: 'irhpPermitApplication')]
     protected $irhpPermitRequests;

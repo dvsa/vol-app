@@ -51,7 +51,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Foreign Key to application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 's4s', fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Outcome
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'outcome', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Agreed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'agreed_date', nullable: true)]
     protected $agreedDate;
@@ -139,7 +139,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
     /**
      * Aocs
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class, mappedBy: 's4')]
     protected $aocs;

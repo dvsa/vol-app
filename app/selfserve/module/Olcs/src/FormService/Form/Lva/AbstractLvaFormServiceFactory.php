@@ -112,6 +112,7 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         'lva-application-safety' => ApplicationSafety::class,
         'lva-application-financial_history' => ApplicationFinancialHistory::class,
         'lva-application-licence_history' => ApplicationLicenceHistory::class,
+        'lva-application-knowledge_experience' => ApplicationKnowledgeExperience::class,
         'lva-application-convictions_penalties' => ApplicationConvictionsPenalties::class,
         'lva-licence-convictions_penalties' => ConvictionsPenalties::class,
 
@@ -311,6 +312,18 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
                 return new ApplicationFinancialHistory($formHelper, $translator);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-licence_history']:
                 return new ApplicationLicenceHistory($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-knowledge_experience']:
+                $authService = $serviceLocator->get(AuthorizationService::class);
+                $translator = $serviceLocator->get(TranslationHelperService::class);
+                $urlHelper = $serviceLocator->get(UrlHelperService::class);
+                $validatorPluginManager = $serviceLocator->get('ValidatorManager');
+                return new ApplicationKnowledgeExperience(
+                    $formHelper,
+                    $authService,
+                    $translator,
+                    $urlHelper,
+                    $validatorPluginManager
+                );
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-convictions_penalties']:
                 $translator = $serviceLocator->get(TranslationHelperService::class);
                 $urlHelper = $serviceLocator->get(UrlHelperService::class);

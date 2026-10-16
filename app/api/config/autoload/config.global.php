@@ -30,9 +30,10 @@ return [
         ]
     ],
 
-    // Elastic search
+    // OpenSearch (config keys kept as-is so local.php overrides carry on working).
+    // In-VPC endpoint reached directly: deliberately NOT routed via the shared squid proxy.
     'elastic_search' => [
-        // Hostname e.g. elasticsearch-dev.olcs.mgt.mtpdvsa *Environment specific*
+        // Hostname e.g. searchv6.dev.olcs.dev-dvsacloud.uk *Environment specific*
         'host' => 'searchv6.%domain%',
         // Port, e.g. 9200
         'port' => '443',
@@ -50,6 +51,7 @@ return [
             'orm_default' => [
                 'connection' => 'orm_default',
                 'configuration' => 'orm_default',
+                'event_manager' => 'orm_default',
             ],
         ],
         'cache' => [
@@ -77,14 +79,9 @@ return [
         'configuration' => [
             'orm_default' => [
                 'metadata_cache' => 'redis',
-                'auto_generate_proxy_classes' => true,
                 'query_cache'       => 'redis',
                 'result_cache'      => 'redis',
                 'hydration_cache'   => 'redis',
-
-
-                // Log SQL queries to the OLCS application log file
-                //'sql_logger' => 'DoctrineLogger',
             ]
         ],
         'migrations' => [
@@ -115,6 +112,16 @@ return [
     ],
 
     // Document service
+    // Intelligent Document Processing.
+    'idp' => [
+        // Age in minutes beyond which a PENDING document_analysis row is swept to TIMEOUT.
+        // Must stay above the analysis timeout plus result-processing latency, or the sweeper
+        // produces false TIMEOUTs.
+        'sweeper_threshold_minutes' => '%idp_sweeper_threshold_minutes%',
+        // How long a successful analysis suppresses re-analysis of the same document when an
+        // application is resubmitted.
+        'dedupe_success_window_hours' => '%idp_dedupe_success_window_hours%',
+    ],
     'document_share' => [
         // Document store backend selector: 'webdav' | 's3'. Resolved per environment from
         // SSM / Secrets Manager; any value other than 's3' (including an unresolved placeholder)
@@ -264,6 +271,22 @@ return [
                 ],
             ],
         ],
+        // CPMS Hybrid Gateway (VOL-7496) — used instead of rest_client domain when the
+        // cpms_hybrid_gateway feature toggle is enabled. The oauth2 block is the standard
+        // Entra client-credentials shape consumed by AccessToken\ProviderFactory.
+        'gateway' => [
+            // Gateway hostname e.g. 'https://gw.accept.dev.cpms.dvsacloud.uk' *Environment specific*
+            'domain' => "%olcs_cpms_gateway_host%",
+            'proxy' => 'http://%shd_proxy%',
+            'oauth2' => [
+                'client_id' => "%olcs_cpms_gateway_client_id%",
+                'client_secret' => "%olcs_cpms_gateway_client_secret%", // secret
+                'token_url' => "%olcs_cpms_gateway_token_url%",
+                'scope' => "%olcs_cpms_gateway_scope%",
+                'proxy' => 'http://%shd_proxy%',
+                'service_name' => 'CPMS Hybrid Gateway',
+            ],
+        ],
     ],
 
     // CPMS service authentication - used by CpmsIdentityProvider service
@@ -316,6 +339,10 @@ return [
     'awsOptions' => array_filter([
         'region' => '%olcs_aws_region%',
         'version' => '%olcs_aws_version%',
+        // Egress proxy for AWS API calls that have no VPC endpoint. array_filter drops this when
+        // the token resolves empty, so local development is left without a proxy rather than a
+        // broken one. *Environment specific*
+        'proxy' => 'http://%shd_proxy%',
         's3' => [
             'use_path_style_endpoint' => false,
         ],
@@ -569,7 +596,17 @@ return [
         'doctrine-cache' => [
             'options' => [
                 'ttl' => 3600,
-                'namespace' => 'doctrine',
+                'namespace' => 'doctrine-orm3',
+            ]
+        ],
+        // Backs the Cognito JWKS cache. Its own namespace so a key rotation can be forced
+        // through by clearing just this pool, without discarding the rest of the app cache.
+        // The ttl matches Client::DEFAULT_JWKS_CACHE_TTL — the client sets its own expiry on
+        // the item, so this is the backstop rather than the primary control.
+        'jwks-cache' => [
+            'options' => [
+                'ttl' => 3600,
+                'namespace' => 'jwks',
             ]
         ],
     ],

@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BookmarkFactory;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DynamicBookmark;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Base\StaticBookmark;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Interfaces\DateHelperAwareInterface;
+use Dvsa\Olcs\Api\Service\Letter\GrabOutcomeCollector;
 use Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService;
 use Dvsa\Olcs\Api\Domain\TranslatorAwareInterface;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
@@ -511,6 +512,25 @@ final class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('Line 1<br>' . "\n" . 'Line 2<br>' . "\n" . 'Line 3', $result);
     }
 
+    public function testReplaceGrabsInHtmlEscapesMarkupInValues(): void
+    {
+        // This pass runs after the purifier, so a value with markup must land as literal text.
+        $html = '<p>Dear [[OP_NAME]]</p>';
+
+        $mockBookmark = m::mock(StaticBookmark::class);
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn("Acme <img src=x onerror=alert(1)>\n& Sons");
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('OP_NAME')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        $this->assertSame('<p>Dear Acme &lt;img src=x onerror=alert(1)&gt;<br>' . "\n" . '&amp; Sons</p>', $result);
+    }
+
     public function testReplaceGrabsStripsUnresolvableTokensInsteadOfLeakingThem(): void
     {
         // A token no bookmark can serve (unknown class, or a dynamic bookmark whose
@@ -530,6 +550,92 @@ final class VolGrabReplacementServiceTest extends MockeryTestCase
 
         $this->assertStringNotContainsString('NO_SUCH_GRAB', $result);
         $this->assertStringContainsString('Signed: ', $result);
+    }
+
+    public function testReplaceGrabsCanLeaveUnresolvableTokensInPlace(): void
+    {
+        // Generation-time resolution keeps unknown tokens so the render pass can try again.
+        $json = json_encode([
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => '[[GOOD_TOKEN]] and [[BAD_TOKEN]]']],
+            ],
+        ]);
+
+        $mockGoodBookmark = m::mock(StaticBookmark::class);
+        $mockGoodBookmark->shouldReceive('setParser')->once();
+        $mockGoodBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockGoodBookmark->shouldReceive('render')->andReturn('SUCCESS');
+        $mockGoodBookmark->shouldReceive('isPreformatted')->andReturn(false);
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('GOOD_TOKEN')
+            ->once()
+            ->andReturn($mockGoodBookmark);
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('BAD_TOKEN')
+            ->once()
+            ->andThrow(new \Exception('Bad token'));
+
+        $result = $this->service->replaceGrabs($json, [], false);
+        $decoded = json_decode($result, true);
+
+        $this->assertSame('SUCCESS and [[BAD_TOKEN]]', $decoded['blocks'][0]['data']['text']);
+    }
+
+    public function testReplaceGrabsRecordsEmptyOutcomeWhenRenderProducesNothing(): void
+    {
+        // EditorJS render values are ['content' => ..., 'preformatted' => ...] structures;
+        // a bookmark that renders to '' (e.g. TradingNames with no trading names) must be
+        // recorded EMPTY, not RESOLVED, or the grabEmpty diagnostic never fires.
+        $json = json_encode([
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => 'Trading as: [[TRADING_NAMES]]']],
+            ],
+        ]);
+
+        $mockBookmark = m::mock(StaticBookmark::class);
+        $mockBookmark->shouldReceive('setParser')->once();
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn('');
+        $mockBookmark->shouldReceive('isPreformatted')->andReturn(false);
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('TRADING_NAMES')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $collector = new GrabOutcomeCollector();
+        $this->service->replaceGrabs($json, [GrabOutcomeCollector::CONTEXT_KEY => $collector]);
+
+        $this->assertSame(['TRADING_NAMES'], $collector->tokensWith(GrabOutcomeCollector::EMPTY));
+        $this->assertSame([], $collector->tokensWith(GrabOutcomeCollector::RESOLVED));
+    }
+
+    public function testReplaceGrabsRecordsResolvedOutcomeWhenRenderProducesContent(): void
+    {
+        $json = json_encode([
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => 'Operator: [[OP_NAME]]']],
+            ],
+        ]);
+
+        $mockBookmark = m::mock(StaticBookmark::class);
+        $mockBookmark->shouldReceive('setParser')->once();
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn('ACME Ltd');
+        $mockBookmark->shouldReceive('isPreformatted')->andReturn(false);
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('OP_NAME')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $collector = new GrabOutcomeCollector();
+        $this->service->replaceGrabs($json, [GrabOutcomeCollector::CONTEXT_KEY => $collector]);
+
+        $this->assertSame(['OP_NAME'], $collector->tokensWith(GrabOutcomeCollector::RESOLVED));
+        $this->assertSame([], $collector->tokensWith(GrabOutcomeCollector::EMPTY));
     }
 
     public function testReplaceGrabsInHtmlStripsUnresolvableTokens(): void

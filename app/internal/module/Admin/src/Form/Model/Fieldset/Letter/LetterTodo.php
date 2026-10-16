@@ -26,6 +26,16 @@ class LetterTodo
     public $todoKey = null;
 
     /**
+     * @Form\Options({"label": "Name"})
+     * @Form\Required(true)
+     * @Form\Type("Text")
+     * @Form\Attributes({"class":"long", "required": true})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
+     */
+    public $name = null;
+
+    /**
      * @Form\Options({
      *     "label": "Description",
      *     "label_attributes": {
@@ -52,4 +62,15 @@ class LetterTodo
      * @Form\Filter("Laminas\Filter\StringTrim")
      */
     public $helpText = null;
+
+    /**
+     * @Form\Options({
+     *     "label": "Requires Input",
+     *     "checked_value": "1",
+     *     "unchecked_value": "0"
+     * })
+     * @Form\Type("OlcsCheckbox")
+     * @Form\Attributes({"class":"", "id":"requiresInput"})
+     */
+    public $requiresInput = null;
 }

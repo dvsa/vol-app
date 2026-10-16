@@ -4,65 +4,35 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-/**
- * SubCategoryDescriptionTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
+use Dvsa\Olcs\Api\Domain\Repository\SubCategoryDescription as Repo;
+use Dvsa\Olcs\Api\Entity\System\SubCategoryDescription as Entity;
+use Dvsa\Olcs\Transfer\Query\SubCategoryDescription\GetList;
+
 final class SubCategoryDescriptionTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(\Dvsa\Olcs\Api\Domain\Repository\SubCategoryDescription::class, true);
+        $this->setUpRealSut(Repo::class, true);
     }
 
-    public function testApplyListFiltersNoFilters(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
+    public function testApplyListFilters(array $data, string $expectedWhere): void
     {
-        $qb = $this->createMockQb('QUERY');
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn('RESULTS');
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame('RESULTS', $this->sut->fetchList(GetList::create($data)));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('order')->with('id', 'ASC', [])->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf();
-
-        $dto = \Dvsa\Olcs\Transfer\Query\SubCategoryDescription\GetList::create(
-            []
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m' . $expectedWhere . ' ORDER BY m.id ASC',
+            $qb->getDQL(),
         );
-        $this->sut->shouldReceive('fetchPaginatedList')
-            ->andReturn('RESULTS');
-
-        $this->assertEquals('RESULTS', $this->sut->fetchList($dto));
-
-        $expectedQuery = 'QUERY';
-
-        $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testApplyListFiltersAllN(): void
+    public static function listFilterProvider(): \Iterator
     {
-        $qb = $this->createMockQb('QUERY');
-
-        $this->mockCreateQueryBuilder($qb);
-
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('order')->with('id', 'ASC', [])->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf();
-
-        $dto = \Dvsa\Olcs\Transfer\Query\SubCategoryDescription\GetList::create(
-            [
-                'subCategory' => '212',
-            ]
-        );
-        $this->sut->shouldReceive('fetchPaginatedList')
-            ->andReturn('RESULTS');
-
-        $this->assertEquals('RESULTS', $this->sut->fetchList($dto));
-
-        $expectedQuery = 'QUERY AND m.subCategory = [[212]]';
-        $this->assertEquals($expectedQuery, $this->query);
+        yield 'no filters' => [[], ''];
+        yield 'by subCategory' => [['subCategory' => '212'], ' WHERE m.subCategory = :subCategory'];
     }
 }

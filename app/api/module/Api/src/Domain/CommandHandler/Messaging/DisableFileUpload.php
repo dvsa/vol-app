@@ -53,7 +53,7 @@ final class DisableFileUpload extends AbstractCommandHandler implements ToggleRe
 
         $result = new Result();
         $result->addId('organisation', $organisation->getId());
-        $result->addMessage('File upload enabled');
+        $result->addMessage('File upload disabled');
 
         return $result;
     }

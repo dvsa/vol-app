@@ -49,6 +49,8 @@ return [
                 }
 
                 $column['formatter'] = Date::class;
+                // Not escaped: this is another formatter's rendered output, which may legitimately
+                // be markup. Escaping its own values is that formatter's responsibility.
                 return '<a href="' . $url . '" class="' . $class . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'convictionDate'
@@ -65,10 +67,15 @@ return [
                  * @var TableBuilder $this
                  * @psalm-scope-this TableBuilder
                  */
-                $person = $data['personFirstname'] . ' ' . $data['personLastname'];
-                $organisationName = $data['operatorName'];
+                $person = \Common\Util\Escape::html($data['personFirstname']) . ' '
+                        . \Common\Util\Escape::html($data['personLastname']);
+                $organisationName = \Common\Util\Escape::html($data['operatorName']);
+                // translate() returns its argument unchanged when the catalogue has no entry, so
+                // the row value can pass straight through it.
                 $name = ($organisationName == '' ? $person : $organisationName) . ' <br /> '
-                      . $this->translator->translate($data['defendantType']['description']);
+                      . \Common\Util\Escape::html(
+                          $this->translator->translate($data['defendantType']['description'])
+                      );
 
                 return $name;
             }

@@ -1,0 +1,113 @@
+{
+  "name": "FinancesFactoring",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "yesNo",
+        "type": "Common\\Form\\Elements\\Types\\RadioYesNo"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "yesContent",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "amount",
+              "type": "Text",
+              "attributes": {
+                "id": "factoring_amount",
+                "required": "required"
+              },
+              "options": {
+                "label": "continuations.finances.factoring.amount.label",
+                "hint": "continuations.finances.factoring.amount.hint"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "\\Common\\Form\\Elements\\Types\\RadioHorizontal",
+  "input_filter": {
+    "yesNo": {
+      "name": "yesNo",
+      "error_message": "continuations.finances.factoring.error"
+    },
+    "yesContent": {
+      "amount": {
+        "name": "amount",
+        "required": true,
+        "validators": [
+          {
+            "name": "NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "yesNo",
+              "context_values": [
+                "Y"
+              ],
+              "inject_post_data": "finances->factoring->yesNo",
+              "validators": [
+                {
+                  "name": "NotEmpty",
+                  "options": {
+                    "messages": {
+                      "isEmpty": "continuations.finances.factoring.amount.empty"
+                    },
+                    "break_chain_on_failure": true
+                  }
+                },
+                {
+                  "name": "Dvsa\\Olcs\\Transfer\\Validators\\Money",
+                  "options": {
+                    "messages": {
+                      "invalid": "continuations.finances.factoring.amount.notNumber"
+                    },
+                    "allow_negative": true,
+                    "break_chain_on_failure": true
+                  }
+                },
+                {
+                  "name": "GreaterThan",
+                  "options": {
+                    "min": 0,
+                    "messages": {
+                      "notGreaterThan": "continuations.finances.factoring.amount.notGreaterThan"
+                    }
+                  }
+                },
+                {
+                  "name": "LessThan",
+                  "options": {
+                    "max": 10000000000,
+                    "messages": {
+                      "notLessThan": "continuations.finances.factoring.amount.notLessThan"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

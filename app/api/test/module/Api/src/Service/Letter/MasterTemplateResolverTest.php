@@ -140,6 +140,53 @@ final class MasterTemplateResolverTest extends MockeryTestCase
 
     // ----- helpers -----
 
+    public function testNiOverridePivotsToNiSiblingDespiteGbLicence(): void
+    {
+        // The builder preview lets Region be overridden without an NI licence in hand.
+        // Wording already followed the override; the chrome must too, or an NI preview
+        // renders under a GB letterhead.
+        $base = $this->makeMasterTemplate('OTC Letter Chrome', MasterTemplate::LOCALE_EN_GB);
+        $niSibling = $this->makeMasterTemplate('OTC Letter Chrome', MasterTemplate::LOCALE_EN_NI);
+
+        $letterType = $this->makeLetterType($base);
+        $letter = $this->makeLetter($letterType, isNi: false);
+
+        $this->mockRepo->shouldReceive('findByNameAndLocale')
+            ->with('OTC Letter Chrome', MasterTemplate::LOCALE_EN_NI)
+            ->once()
+            ->andReturn($niSibling);
+
+        $this->assertSame($niSibling, $this->sut->resolve($letter, isNiOverride: true));
+    }
+
+    public function testGbOverrideBeatsAnNiLicence(): void
+    {
+        $base = $this->makeMasterTemplate('OTC Letter Chrome', MasterTemplate::LOCALE_EN_GB);
+        $letterType = $this->makeLetterType($base);
+        $letter = $this->makeLetter($letterType, isNi: true);
+
+        // Overridden back to GB: the base already matches, so no sibling lookup happens
+        $this->mockRepo->shouldNotReceive('findByNameAndLocale');
+
+        $this->assertSame($base, $this->sut->resolve($letter, isNiOverride: false));
+    }
+
+    public function testNullOverrideDefersToTheLicence(): void
+    {
+        $base = $this->makeMasterTemplate('OTC Letter Chrome', MasterTemplate::LOCALE_EN_GB);
+        $niSibling = $this->makeMasterTemplate('OTC Letter Chrome', MasterTemplate::LOCALE_EN_NI);
+
+        $letterType = $this->makeLetterType($base);
+        $letter = $this->makeLetter($letterType, isNi: true);
+
+        $this->mockRepo->shouldReceive('findByNameAndLocale')
+            ->with('OTC Letter Chrome', MasterTemplate::LOCALE_EN_NI)
+            ->once()
+            ->andReturn($niSibling);
+
+        $this->assertSame($niSibling, $this->sut->resolve($letter, isNiOverride: null));
+    }
+
     private function makeMasterTemplate(string $name, string $locale): MasterTemplate
     {
         $mt = new MasterTemplate();

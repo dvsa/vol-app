@@ -13,7 +13,9 @@ use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 <?php else: ?>
 use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
 <?php endif; ?>
-<?php if ($hasCreatedOn): ?>
+<?php if ($hasCreatedOn && $createdOnNotNull): ?>
+use Dvsa\Olcs\Api\Entity\Traits\CreatedOnNotNullTrait;
+<?php elseif ($hasCreatedOn): ?>
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 <?php endif; ?>
 <?php if ($hasModifiedOn): ?>
@@ -65,7 +67,9 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
 <?php else: ?>
     use ClearPropertiesTrait;
 <?php endif; ?>
-<?php if ($hasCreatedOn): ?>
+<?php if ($hasCreatedOn && $createdOnNotNull): ?>
+    use CreatedOnNotNullTrait;
+<?php elseif ($hasCreatedOn): ?>
     use CreatedOnTrait;
 <?php endif; ?>
 <?php if ($hasModifiedOn): ?>
@@ -81,7 +85,7 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
      * <?php echo $field['property']['docBlock']; ?>
 
      *
-     * @var <?php echo $field['property']['type']; ?>
+     * @var <?php echo $field['property']['type']; ?><?php if (($field['property']['nullable'] ?? false) && !($field['isCollection'] ?? false)): ?>|null<?php endif; ?>
 
      */
     <?php echo $field['annotation'] . "\n"; ?>

@@ -1,0 +1,40 @@
+{
+  "name": "InformationChanged",
+  "attributes": {
+    "id": "surrender-information-changed"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "startAgain",
+        "attributes": {
+          "type": "submit",
+          "class": "govuk-button govuk-button--start"
+        },
+        "options": {
+          "label": "licence.surrender.information_changed.start_again"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "reviewAndContinue",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "licence.surrender.information_changed.review_continue"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

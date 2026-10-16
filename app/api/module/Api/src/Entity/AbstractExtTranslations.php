@@ -72,7 +72,7 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
     /**
      * Content
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'content', nullable: true)]
     protected $content;

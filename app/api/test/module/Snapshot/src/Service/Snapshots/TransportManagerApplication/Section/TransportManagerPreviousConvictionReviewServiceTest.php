@@ -48,8 +48,10 @@ final class TransportManagerPreviousConvictionReviewServiceTest extends MockeryT
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
-    public function testGetConfig(mixed $tma, mixed $expected): void
+    public function testGetConfig(string $tmaKey, mixed $expected): void
     {
+        $tma = self::createTransportManagerApplications()[$tmaKey];
+
         $this->mockTranslator->shouldReceive('translate')
             ->andReturnUsing(
                 fn($string) => $string . '-translated'
@@ -60,45 +62,9 @@ final class TransportManagerPreviousConvictionReviewServiceTest extends MockeryT
 
     public static function provider(): array
     {
-        /** @var Entity\Tm\TransportManager $tm1 */
-        $tm1 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
-        $tm1->setPreviousConvictions(new ArrayCollection());
-
-        /** @var Entity\Tm\TransportManagerApplication $tma1 */
-        $tma1 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
-        $tma1->setTransportManager($tm1);
-
-        /** @var Entity\Application\PreviousConviction $conviction1 */
-        $conviction1 = m::mock(Entity\Application\PreviousConviction::class)->makePartial();
-        $conviction1->setCategoryText('Some conviction');
-        $conviction1->setConvictionDate(new DateTime('2014-10-01'));
-        $conviction1->setNotes('Conviction notes');
-        $conviction1->setCourtFpn('Some court name');
-        $conviction1->setPenalty('Some penalty');
-
-        /** @var Entity\Application\PreviousConviction $conviction2 */
-        $conviction2 = m::mock(Entity\Application\PreviousConviction::class)->makePartial();
-        $conviction2->setCategoryText('Some other conviction');
-        $conviction2->setConvictionDate(new DateTime('2014-10-02'));
-        $conviction2->setNotes('More conviction notes');
-        $conviction2->setCourtFpn('Some other court name');
-        $conviction2->setPenalty('Some other penalty');
-
-        $convictions = new ArrayCollection();
-        $convictions->add($conviction1);
-        $convictions->add($conviction2);
-
-        /** @var Entity\Tm\TransportManager $tm2 */
-        $tm2 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
-        $tm2->setPreviousConvictions($convictions);
-
-        /** @var Entity\Tm\TransportManagerApplication $tma2 */
-        $tma2 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
-        $tma2->setTransportManager($tm2);
-
         return [
             [
-                $tma1,
+                'noConvictions',
                 [
                     'subSections' => [
                         [
@@ -112,7 +78,7 @@ final class TransportManagerPreviousConvictionReviewServiceTest extends MockeryT
                 ]
             ],
             [
-                $tma2,
+                'withConvictions',
                 [
                     'subSections' => [
                         [
@@ -176,6 +142,55 @@ final class TransportManagerPreviousConvictionReviewServiceTest extends MockeryT
                     ]
                 ]
             ]
+        ];
+    }
+
+    /**
+     * Built per test rather than in the provider, so the mocks belong to the running test's Mockery container.
+     *
+     * @return array<string, \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication>
+     */
+    private static function createTransportManagerApplications(): array
+    {
+        /** @var Entity\Tm\TransportManager $tm1 */
+        $tm1 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
+        $tm1->setPreviousConvictions(new ArrayCollection());
+
+        /** @var Entity\Tm\TransportManagerApplication $tma1 */
+        $tma1 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
+        $tma1->setTransportManager($tm1);
+
+        /** @var Entity\Application\PreviousConviction $conviction1 */
+        $conviction1 = m::mock(Entity\Application\PreviousConviction::class)->makePartial();
+        $conviction1->setCategoryText('Some conviction');
+        $conviction1->setConvictionDate(new DateTime('2014-10-01'));
+        $conviction1->setNotes('Conviction notes');
+        $conviction1->setCourtFpn('Some court name');
+        $conviction1->setPenalty('Some penalty');
+
+        /** @var Entity\Application\PreviousConviction $conviction2 */
+        $conviction2 = m::mock(Entity\Application\PreviousConviction::class)->makePartial();
+        $conviction2->setCategoryText('Some other conviction');
+        $conviction2->setConvictionDate(new DateTime('2014-10-02'));
+        $conviction2->setNotes('More conviction notes');
+        $conviction2->setCourtFpn('Some other court name');
+        $conviction2->setPenalty('Some other penalty');
+
+        $convictions = new ArrayCollection();
+        $convictions->add($conviction1);
+        $convictions->add($conviction2);
+
+        /** @var Entity\Tm\TransportManager $tm2 */
+        $tm2 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
+        $tm2->setPreviousConvictions($convictions);
+
+        /** @var Entity\Tm\TransportManagerApplication $tma2 */
+        $tma2 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
+        $tma2->setTransportManager($tm2);
+
+        return [
+            'noConvictions' => $tma1,
+            'withConvictions' => $tma2,
         ];
     }
 }

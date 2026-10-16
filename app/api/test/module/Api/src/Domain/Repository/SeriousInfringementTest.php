@@ -5,38 +5,28 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\SeriousInfringement as SiRepo;
+use Dvsa\Olcs\Api\Entity\Si\SeriousInfringement as Entity;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\SiList as SiListQry;
 
-/**
- * SeriousInfringementTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 final class SeriousInfringementTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(SiRepo::class, true);
+        $this->setUpRealSut(SiRepo::class, true);
     }
 
     public function testApplyListFilters(): void
     {
-        $qb = $this->createMockQb('QUERY');
+        $qb = $this->createRealQb();
+        $this->sut->expects('fetchPaginatedList')->andReturn('RESULTS');
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame('RESULTS', $this->sut->fetchList(SiListQry::create(['case' => 812])));
 
-        $this->queryBuilder
-            ->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf()
-            ->shouldReceive('withRefdata')->once()->andReturnSelf();
-
-        $dto = SiListQry::create(['case' => 812]);
-        $this->sut->shouldReceive('fetchPaginatedList')->andReturn('RESULTS');
-
-        $this->assertEquals('RESULTS', $this->sut->fetchList($dto));
-
-        $expectedQuery = 'QUERY AND m.case = [[812]]';
-
-        $this->assertEquals($expectedQuery, $this->query);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.case = :case',
+            $qb->getDQL(),
+        );
+        $this->assertSame(812, $qb->getParameter('case')->getValue());
     }
 }

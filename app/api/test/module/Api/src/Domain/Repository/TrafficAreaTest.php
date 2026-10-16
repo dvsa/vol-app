@@ -2,155 +2,69 @@
 
 declare(strict_types=1);
 
-/**
- * TrafficArea test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
-
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
-use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
-use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\TrafficArea as TrafficAreaRepo;
+use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
+use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea as Entity;
+use Mockery as m;
 
-/**
- * TrafficArea test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 final class TrafficAreaTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(TrafficAreaRepo::class);
+        $this->setUpRealSut(TrafficAreaRepo::class);
     }
 
-    public function testGetValueOptionsWhereAllowedTrafficAreasUnspecified(): void
+    /**
+     * Every location but NI restricts to isNi = 0; NI itself is unrestricted.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('valueOptionsProvider')]
+    public function testGetValueOptions(?string $allowedOperatorLocation, string $expectedWhere): void
     {
-        $mockQb = $this->createMockQueryBuilder();
+        $qb = $this->createRealQb()->willReturn([
+            $this->trafficArea('A', 'Area A'),
+            $this->trafficArea('B', 'Area B'),
+        ]);
 
-        $this->expectWhereNiOnly($mockQb);
-        $this->expectOrderByName($mockQb);
+        $this->assertSame(
+            ['A' => 'Area A', 'B' => 'Area B'],
+            $this->sut->getValueOptions(...($allowedOperatorLocation === null ? [] : [$allowedOperatorLocation])),
+        );
 
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->andReturn([$this->createMockTrafficArea('A', 'Area A'), $this->createMockTrafficArea('B', 'Area B')]);
-
-        $valueOptions = $this->sut->getValueOptions();
-
-        $this->assertEquals(
-            [
-                'A' => 'Area A',
-                'B' => 'Area B',
-            ],
-            $valueOptions
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m' . $expectedWhere . ' ORDER BY m.name ASC',
+            $qb->getDQL(),
         );
     }
 
-    public function testGetValueOptionsWhereAllowedTrafficAreaGb(): void
+    public static function valueOptionsProvider(): \Iterator
     {
-        $mockQb = $this->createMockQueryBuilder();
-
-        $this->expectWhereNiOnly($mockQb);
-        $this->expectOrderByName($mockQb);
-
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->andReturn([$this->createMockTrafficArea('A', 'Area A'), $this->createMockTrafficArea('B', 'Area B')]);
-
-        $valueOptions = $this->sut->getValueOptions(Organisation::ALLOWED_OPERATOR_LOCATION_GB);
-
-        $this->assertEquals(
-            [
-                'A' => 'Area A',
-                'B' => 'Area B',
-            ],
-            $valueOptions
-        );
-    }
-
-    public function testGetValueOptionsWhereAllowedTrafficAreaNi(): void
-    {
-        $mockQb = $this->createMockQueryBuilder();
-
-        $this->expectOrderByName($mockQb);
-
-        $mockQb->shouldReceive('getQuery->getResult')
-            ->andReturn([$this->createMockTrafficArea('A', 'Area A'), $this->createMockTrafficArea('B', 'Area B')]);
-
-        $valueOptions = $this->sut->getValueOptions(Organisation::ALLOWED_OPERATOR_LOCATION_NI);
-
-        $this->assertEquals(
-            [
-                'A' => 'Area A',
-                'B' => 'Area B',
-            ],
-            $valueOptions
-        );
+        yield 'unspecified' => [null, ' WHERE m.isNi = :isNi'];
+        yield 'GB' => [Organisation::ALLOWED_OPERATOR_LOCATION_GB, ' WHERE m.isNi = :isNi'];
+        yield 'NI' => [Organisation::ALLOWED_OPERATOR_LOCATION_NI, ''];
     }
 
     public function testFetchListForNewApplication(): void
     {
-        $mockQb = $this->createMockQueryBuilder();
+        $qb = $this->createRealQb()->willReturn('results');
 
-        $mockQb->shouldReceive('expr->eq')->with('m.isNi', ':isNi')->andReturn('expr')->once();
-        $mockQb->shouldReceive('andWhere')->with('expr')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('isNi', 0)->once()->andReturnSelf();
+        $this->assertSame('results', $this->sut->fetchListForNewApplication('GB'));
 
-        $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('results')->getMock();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once();
-
-        $this->assertEquals('results', $this->sut->fetchListForNewApplication('GB'));
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m WHERE m.isNi = :isNi',
+            $qb->getDQL(),
+        );
+        $this->assertSame('0', $qb->getParameter('isNi')->getValue());
     }
 
-
-    /**
-     * @return m\MockInterface|QueryBuilder
-     */
-    protected function createMockQueryBuilder(): m\MockInterface
+    private function trafficArea(string $id, string $name): m\MockInterface
     {
-        /** @var QueryBuilder $qb */
-        $mockQb = m::mock(QueryBuilder::class);
-
-        $this->em
-            ->shouldReceive('getRepository->createQueryBuilder')
-            ->once()
-            ->andReturn($mockQb);
-        return $mockQb;
-    }
-
-    /**
-     * @param m\MockInterface $mockQb
-     */
-    protected function expectWhereNiOnly(mixed $mockQb): void
-    {
-        $mockQb->shouldReceive('expr->eq')->with('m.isNi', ':isNi')->andReturn('DUMMY_WHERE_EXPR');
-        $mockQb->shouldReceive('andWhere')->with('DUMMY_WHERE_EXPR')->once(1)->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('isNi', 0)->once(1)->andReturnSelf();
-    }
-
-    /**
-     * @param m\MockInterface $mockQb
-     */
-    private function expectOrderByName(mixed $mockQb): void
-    {
-        $mockQb->shouldReceive('orderBy')->with('m.name')->atLeast(1)->andReturnSelf();
-    }
-
-    /**
-     * @param $id
-     * @param $name
-     *
-     * @return m\MockInterface|TrafficArea
-     */
-    protected function createMockTrafficArea(mixed $id, mixed $name): mixed
-    {
-        $ta = m::mock(TrafficArea::class);
+        $ta = m::mock(Entity::class);
         $ta->shouldReceive('getId')->andReturn($id);
         $ta->shouldReceive('getName')->andReturn($name);
+
         return $ta;
     }
 }

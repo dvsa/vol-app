@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Cpms\Client;
 
+use Dvsa\Olcs\Cpms\Authenticate\GatewayTokenProviderInterface;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface as Logger;
@@ -31,8 +32,12 @@ class HttpClient
 
     protected $logger;
 
-    public function __construct(Client $client, ClientOptions $clientOptions, Logger $logger)
-    {
+    public function __construct(
+        Client $client,
+        ClientOptions $clientOptions,
+        Logger $logger,
+        private readonly ?GatewayTokenProviderInterface $gatewayTokenProvider = null
+    ) {
         $this->client = $client;
         $this->clientOptions = $clientOptions;
         $this->logger = $logger;
@@ -68,22 +73,15 @@ class HttpClient
         return $this->decodeResponse($response);
     }
 
-    public function resetHeaders(): void
-    {
-        $headers = $this->clientOptions->getHeaders();
-
-        if (isset($headers['Authorization'])) {
-            unset($headers['Authorization']);
-        }
-
-        $this->clientOptions->setHeaders($headers);
-    }
-
     public function getClientOptions(): ClientOptions
     {
         return $this->clientOptions;
     }
 
+    public function hasGatewayTokenProvider(): bool
+    {
+        return $this->gatewayTokenProvider !== null;
+    }
 
     /**
      * @return mixed
@@ -162,7 +160,13 @@ class HttpClient
 
     protected function buildHeaders(): array
     {
-        return $this->clientOptions->getHeaders();
+        $headers = $this->clientOptions->getHeaders();
+
+        if ($this->gatewayTokenProvider !== null) {
+            $headers['Authorization'] = 'Bearer ' . $this->gatewayTokenProvider->getToken();
+        }
+
+        return $headers;
     }
 
     protected function buildURI(string $endpoint): string

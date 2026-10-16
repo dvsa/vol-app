@@ -19,7 +19,7 @@ final class IrhpApplicationReadAuditTest extends AbstractReadAuditTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(IrhpApplicationReadAudit::class, true);
+        $this->setUpRealSut(IrhpApplicationReadAudit::class, true);
     }
 
     public function testFetchOneOrMore(): void
@@ -31,7 +31,7 @@ final class IrhpApplicationReadAuditTest extends AbstractReadAuditTestCase
     {
         parent::commonTestFetchList(
             ReadIrhpApplication::create(['id' => 111]),
-            ' AND m.irhpApplication = [[111]]'
+            'irhpApplication'
         );
     }
 

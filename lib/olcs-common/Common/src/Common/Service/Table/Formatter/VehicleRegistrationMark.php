@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 
 /**
@@ -27,7 +28,9 @@ class VehicleRegistrationMark implements FormatterPluginManagerInterface
     #[\Override]
     public function format($data, $column = [])
     {
-        $vrm = $data['vehicle']['vrm'];
+        // This formatter's output is interpolated into an Action button, which leaves already
+        // formatted content alone. Nothing here is markup, so escaping at source is safe.
+        $vrm = Escape::html($data['vehicle']['vrm']);
         return empty($data['interimApplication'])
             ? $vrm
             : self::formatInterimValue($vrm);

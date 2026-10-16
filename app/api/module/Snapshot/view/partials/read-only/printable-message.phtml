@@ -17,8 +17,10 @@
             }
             return $createdBy->getLoginId();
           }
-        );
-        echo $sender;
+        } else {
+          $sender = $message->getCreatedBy()->getLoginId();
+        }
+        echo $this->escapeHtml($sender);
         ?>
       </h2>
       <h2 class="govuk-summary-card__title govuk-summary-card__date">
@@ -31,44 +33,41 @@
     </div>
     <div class="govuk-summary-card__content">
       <p class="govuk-body">
-        <?php echo nl2br($message->getMessagingContent()->getText()); ?>
-        <?php if ($createdBy !== null && $createdBy->getTeam() !== null): ?>
-      <p class="govuk-caption-m">
-        <?php echo $sender; ?>
-        <br/>
-        Caseworker Team
-      </p>
-      <?php endif; ?>
-      <?php if ($enhanced): ?>
-        <hr/>
-        <?php foreach ($message->getUserMessageReads() as $messageRead): /** @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingUserMessageRead $messageRead */ ?>
-          <p>
-            <em>
-              <?php
-              $readBy = $this->safeUser(
-                $messageRead->getUser(),
-                function ($readByUser) {
-                  if ($readByUser->getContactDetails() && $readByUser->getContactDetails()->getPerson()) {
-                    return $readByUser->getContactDetails()->getPerson()->getFullName();
-                  }
-                  if ($readByUser->getContactDetails() && $readByUser->getContactDetails()->getEmailAddress()) {
-                    return $readByUser->getContactDetails()->getEmailAddress();
-                  }
-                  return $readByUser->getLoginId();
+        <?php /* Escape first, then nl2br — the reverse escapes the <br /> tags nl2br just inserted. */ ?>
+        <?php echo nl2br($this->escapeHtml($message->getMessagingContent()->getText())); ?>
+        <?php if ($message->getCreatedBy()->getTeam() !== null): ?>
+          <p class="govuk-caption-m">
+            <?php echo $this->escapeHtml($sender); ?>
+            <br/>
+            Caseworker Team
+          </p>
+        <?php endif; ?>
+        <?php if ($enhanced): ?>
+          <hr/>
+          <?php foreach ($message->getUserMessageReads() as $messageRead): /** @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingUserMessageRead $messageRead */ ?>
+            <p>
+              <em>
+                <?php
+                if ($messageRead->getUser()->getContactDetails() && $messageRead->getUser()->getContactDetails()->getPerson()) {
+                  $readBy = $messageRead->getUser()->getContactDetails()->getPerson()->getFullName();
+                } elseif ($messageRead->getUser()->getContactDetails() && $messageRead->getUser()->getContactDetails()->getEmailAddress()) {
+                  $readBy = $messageRead->getUser()->getContactDetails()->getEmailAddress();
+                } else {
+                  $readBy = $messageRead->getUser()->getLoginId();
                 }
               );
 
-              $createdOn = $messageRead->getCreatedOn(true);
-              $createdOn->setTimezone(new \DateTimeZone('Europe/London'));
-              echo sprintf(
-                'Read by %s on %s',
-                $readBy,
-                $createdOn->format('l j F Y \a\t H:ia')
-              ); ?>
-            </em>
-          </p>
-        <?php endforeach; ?>
-      <?php endif; ?>
+                $createdOn = $messageRead->getCreatedOn(true);
+                $createdOn->setTimezone(new \DateTimeZone('Europe/London'));
+                echo sprintf(
+                  'Read by %s on %s',
+                  $this->escapeHtml($readBy),
+                  $createdOn->format('l j F Y \a\t H:ia')
+                ); ?>
+              </em>
+            </p>
+          <?php endforeach; ?>
+        <?php endif; ?>
       </p>
     </div>
   </div>

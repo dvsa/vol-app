@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Lgv Declaration Confirmation
  *
@@ -9,11 +11,9 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait LgvDeclarationConfirmation
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"0","1"}})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['0', '1']])]
+    #[Transfer\Optional]
     protected $lgvDeclarationConfirmation;
 
     /**

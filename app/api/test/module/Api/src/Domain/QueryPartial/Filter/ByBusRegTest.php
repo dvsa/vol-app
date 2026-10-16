@@ -32,7 +32,7 @@ final class ByBusRegTest extends QueryPartialTestCase
     {
         $busRegId = 69;
 
-        $expr = m::mock();
+        $expr = m::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
 
         $this->qb->shouldReceive('getRootAliases')
             ->andReturn(['a'])

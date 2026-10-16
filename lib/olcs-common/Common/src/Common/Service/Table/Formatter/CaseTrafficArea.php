@@ -2,6 +2,8 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
+
 /**
  * @author Dmitry Golubev <d.e.golubev@gmail.com>
  */
@@ -25,6 +27,6 @@ class CaseTrafficArea implements FormatterPluginManagerInterface
             self::NOT_APPLICABLE,
         ];
 
-        return current(array_filter($taData));
+        return Escape::html(current(array_filter($taData)));
     }
 }

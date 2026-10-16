@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Cpms\Service;
 
 use Dvsa\Olcs\Cpms\Authenticate\CpmsIdentityProvider;
 use Dvsa\Olcs\Cpms\Authenticate\CpmsIdentityProviderFactory;
+use Dvsa\Olcs\Cpms\Authenticate\GatewayTokenProviderInterface;
 use Dvsa\Olcs\Cpms\Client\HttpClient;
 use Dvsa\Olcs\Cpms\Service\ApiService;
 use Dvsa\OlcsTest\Cpms\Client\ClientOptionsTestTrait;
@@ -41,6 +42,8 @@ final class ApiServiceTest extends TestCase
      */
     private $accessTokenResponse;
 
+    private array $requestHistory = [];
+
     #[\Override]
     public function setUp(): void
     {
@@ -71,6 +74,84 @@ final class ApiServiceTest extends TestCase
             "scope" => "QUERY_TXN",
             "sales_reference" => "LOCAL-76"
         ]);
+    }
+
+    private function setUpGatewayModeSut(): void
+    {
+        $tokenProvider = m::mock(GatewayTokenProviderInterface::class);
+        $tokenProvider->shouldReceive('getToken')->andReturn('an-entra-jwt');
+
+        $this->requestHistory = [];
+
+        $httpClient = new HttpClient(
+            $this->setUpMockClient($this->requestHistory),
+            $this->getClientOptions(),
+            $this->logger,
+            $tokenProvider
+        );
+
+        $this->sut = new ApiService($httpClient, $this->identity, $this->logger);
+    }
+
+    public function testGatewayModeSetsJwtAndCpmsTokenOnCorrectHeaders(): void
+    {
+        $this->setUpGatewayModeSut();
+
+        $this->appendToHandler(200, [], $this->accessTokenResponse);
+        $this->appendToHandler(200, [], json_encode(['payment_status' => 'success']));
+
+        $this->sut->get('/api/payment', ApiService::SCOPE_QUERY_TXN);
+
+        $tokenRequest = $this->requestHistory[0]['request'];
+        // note: the test domain has no scheme, so the URI path includes it — assert on the suffix
+        $this->assertStringEndsWith('/api/token', (string)$tokenRequest->getUri());
+        $this->assertEquals(['Bearer an-entra-jwt'], $tokenRequest->getHeader('Authorization'));
+        $this->assertSame([], $tokenRequest->getHeader('X-Authorization'));
+
+        $apiRequest = $this->requestHistory[1]['request'];
+        $this->assertEquals(['Bearer an-entra-jwt'], $apiRequest->getHeader('Authorization'));
+        $this->assertEquals(['Bearer LKAJDA01KDJKDK32AJNDK212AJ'], $apiRequest->getHeader('X-Authorization'));
+    }
+
+    public function testGatewayModeStripsPersistedCpmsTokenFromTokenRequests(): void
+    {
+        $this->setUpGatewayModeSut();
+
+        // two full request cycles: token + api, token + api
+        $this->appendToHandler(200, [], $this->accessTokenResponse);
+        $this->appendToHandler(200, [], json_encode(['payment_status' => 'success']));
+        $this->appendToHandler(200, [], $this->accessTokenResponse);
+        $this->appendToHandler(200, [], json_encode(['payment_status' => 'success']));
+
+        $this->sut->get('/api/payment', ApiService::SCOPE_QUERY_TXN);
+        $this->sut->get('/api/payment', ApiService::SCOPE_QUERY_TXN);
+
+        // the second token POST would inherit X-Authorization from the first cycle without the strip
+        $secondTokenRequest = $this->requestHistory[2]['request'];
+        $this->assertStringEndsWith('/api/token', (string)$secondTokenRequest->getUri());
+        $this->assertSame([], $secondTokenRequest->getHeader('X-Authorization'));
+        $this->assertEquals(['Bearer an-entra-jwt'], $secondTokenRequest->getHeader('Authorization'));
+    }
+
+    public function testLegacyModeSendsNoGatewayHeaders(): void
+    {
+        $this->requestHistory = [];
+
+        $httpClient = new HttpClient(
+            $this->setUpMockClient($this->requestHistory),
+            $this->getClientOptions(),
+            $this->logger
+        );
+        $this->sut = new ApiService($httpClient, $this->identity, $this->logger);
+
+        $this->appendToHandler(200, [], $this->accessTokenResponse);
+        $this->appendToHandler(200, [], json_encode(['payment_status' => 'success']));
+
+        $this->sut->get('/api/payment', ApiService::SCOPE_QUERY_TXN);
+
+        $apiRequest = $this->requestHistory[1]['request'];
+        $this->assertEquals(['Bearer LKAJDA01KDJKDK32AJNDK212AJ'], $apiRequest->getHeader('Authorization'));
+        $this->assertSame([], $apiRequest->getHeader('X-Authorization'));
     }
 
     public function testGet(): void
@@ -214,6 +295,7 @@ final class ApiServiceTest extends TestCase
     {
         $mockHttpClient = m::mock(HttpClient::class);
         $mockHttpClient->shouldReceive('getClientOptions')->andReturn($this->getClientOptions());
+        $mockHttpClient->shouldReceive('hasGatewayTokenProvider')->andReturn(false);
         $mockHttpClient->shouldReceive('post')->andThrow(\Exception::class, 'This is a non-guzzle exception');
 
         $sut = new ApiService(

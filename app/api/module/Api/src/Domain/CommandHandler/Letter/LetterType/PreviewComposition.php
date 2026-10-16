@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterType;
 
+use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
+use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterType as LetterTypeEntity;
 use Dvsa\Olcs\Api\Service\Letter\CompositionDiagnostics;
+use Dvsa\Olcs\Api\Service\Letter\GrabOutcomeCollector;
 use Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
 use Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver;
@@ -31,8 +34,10 @@ use Psr\Container\ContainerInterface;
  * and flushing anywhere later in the request would delete the saved composition. The proposed
  * composition is therefore assembled from ids into fresh objects, never by editing the entity.
  */
-final class PreviewComposition extends AbstractCommandHandler
+final class PreviewComposition extends AbstractCommandHandler implements AuthAwareInterface
 {
+    use AuthAwareTrait;
+
     protected $repoServiceName = 'LetterType';
 
     protected $extraRepos = [
@@ -76,6 +81,16 @@ final class PreviewComposition extends AbstractCommandHandler
         // preview shows a bare "Our ref:", which reads as a fault in the letter rather than an
         // artefact of previewing it.
         $letterInstance->setReference(LetterInstanceEntity::generateReference());
+
+        // Real generation persists the instance, so Blameable stamps createdBy and the caseworker
+        // grabs ([[CASEWORKER_NAME]]) resolve from it. This instance never is, so stamp the
+        // previewing user explicitly -- otherwise those grabs report EMPTY on every preview,
+        // blaming the chosen record for data no record can carry.
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser !== null) {
+            $letterInstance->setCreatedBy($currentUser);
+        }
+
         $this->attachContextRecords($letterInstance, $command);
 
         $context = $this->buildContext($letterInstance, $command);
@@ -97,12 +112,27 @@ final class PreviewComposition extends AbstractCommandHandler
         // with no A4 page, stylesheet or letterhead, which is not a letter and so not a preview.
         // Measured on a warm local stack the chrome costs ~119ms of a ~1s round trip, which is
         // well inside the debounce and nowhere near the cost the design assumed.
-        $masterTemplate = $this->masterTemplateResolver->resolve($letterInstance);
+        //
+        // The effective isNi is passed through so a Region override picks the matching locale's
+        // chrome too -- otherwise an NI preview renders NI wording under a GB letterhead.
+        $masterTemplate = $this->masterTemplateResolver->resolve($letterInstance, $context['isNi']);
 
-        $html = $this->previewService->renderPreview($letterInstance, $masterTemplate);
+        // Collecting grab outcomes is what lets the diagnostics flag a token that rendered to
+        // nothing -- invisible in the HTML precisely because it was stripped.
+        $grabOutcomes = new GrabOutcomeCollector();
+
+        // The effective isNi goes to the renderer too, so an overridden Region reaches the
+        // grab context (OTC logo, region-aware bookmarks) and not just the chrome choice.
+        $html = $this->previewService->renderPreview(
+            $letterInstance,
+            $masterTemplate,
+            grabOutcomes: $grabOutcomes,
+            annotateSections: true,
+            isNiOverride: $context['isNi']
+        );
 
         $this->result->setFlag('html', $html);
-        $this->result->setFlag('diagnostics', $this->diagnostics->forResolution($resolution, $html));
+        $this->result->setFlag('diagnostics', $this->diagnostics->forResolution($resolution, $html, $grabOutcomes));
         $this->result->setFlag('context', $context);
 
         return $this->result;
@@ -195,6 +225,15 @@ final class PreviewComposition extends AbstractCommandHandler
         foreach ($overrides as $key => $value) {
             if ($value !== null) {
                 $derived[$key] = $value;
+            }
+        }
+
+        // Overrides arrive over HTTP as strings ('1'/'0'), but variant matching compares with
+        // !== against Doctrine booleans -- so an un-normalised override never matches a variant
+        // that pins isVariation or isNi, it just silently falls back to the default wording.
+        foreach (['isVariation', 'isNi'] as $flag) {
+            if ($derived[$flag] !== null) {
+                $derived[$flag] = filter_var($derived[$flag], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
             }
         }
 

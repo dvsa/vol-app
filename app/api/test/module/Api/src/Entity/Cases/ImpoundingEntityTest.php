@@ -83,15 +83,15 @@ final class ImpoundingEntityTest extends EntityTester
     }
 
     /**
-     *
-     * @param $inputVenue
+     * @param \Closure $createVenues returns [input venue, venue expected to be saved]
      * @param $inputOther
-     * @param $savedVenue
      * @param $savedOther
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('updateHearingProvider')]
-    public function testUpdateHearing(mixed $inputVenue, mixed $inputOther, mixed $savedVenue, mixed $savedOther): void
+    public function testUpdateHearing(\Closure $createVenues, mixed $inputOther, mixed $savedOther): void
     {
+        [$inputVenue, $savedVenue] = $createVenues();
+
         $impoundingType = m::mock(RefDataEntity::class);
         $impoundingType->shouldReceive('getId')->once()->andReturn(Entity::TYPE_HEARING);
         $impoundingLegislationTypes = m::mock(ArrayCollection::class);
@@ -133,9 +133,16 @@ final class ImpoundingEntityTest extends EntityTester
 
     public static function updateHearingProvider(): \Iterator
     {
-        $mockVenue = m::mock(Venue::class);
-        yield [$mockVenue, 'other venue', $mockVenue, null];
-        yield [Entity::VENUE_OTHER, 'other venue', null, 'other venue'];
-        yield [null, 'other venue', null, null];
+        yield [
+            static function () {
+                $mockVenue = m::mock(Venue::class);
+
+                return [$mockVenue, $mockVenue];
+            },
+            'other venue',
+            null,
+        ];
+        yield [static fn () => [Entity::VENUE_OTHER, null], 'other venue', 'other venue'];
+        yield [static fn () => [null, null], 'other venue', null];
     }
 }

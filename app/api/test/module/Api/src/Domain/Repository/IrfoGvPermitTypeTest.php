@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrfoGvPermitType as Repo;
+use Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType as Entity;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
 /**
@@ -23,37 +25,32 @@ final class IrfoGvPermitTypeTest extends RepositoryTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(Repo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testApplyListFilters(): void
     {
-        $this->setUpSut(Repo::class, true);
+        $qb = $this->createRealQb();
 
-        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockQ = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
-        $mockQb->shouldReceive('orderBy')->with('m.description', 'ASC')->once()->andReturnSelf();
+        $this->sut->applyListFilters($qb, m::mock(QueryInterface::class));
 
-        $this->sut->applyListFilters($mockQb, $mockQ);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m ORDER BY m.description ASC',
+            $qb->getDQL(),
+        );
     }
 
     public function testFetchActiveRecords(): void
     {
-        $qb = $this->createMockQb('QRYSTART');
+        $qb = $this->createRealQb()->willReturn(['Mocked Result']);
 
-        $this->mockCreateQueryBuilder($qb);
+        $this->assertSame(['Mocked Result'], $this->sut->fetchActiveRecords());
 
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn(m::mock(\Doctrine\ORM\AbstractQuery::class)->shouldReceive('getResult')
-                ->once()
-                ->andReturn(['Mocked Result'])
-                ->getMock());
-
-        $this->assertEquals(['Mocked Result'], $this->sut->fetchActiveRecords('ORG1'));
-
-        $actualQuery = $this->query;
-        $expectedPattern = '/QRYSTART AND \(m\.displayUntil IS NULL OR m\.displayUntil >= \[\[.*\]\]\) ORDER BY m\.description ASC/';
-        $this->assertMatchesRegularExpression($expectedPattern, $actualQuery);
+        $this->assertSame(
+            'SELECT m FROM ' . Entity::class . ' m'
+            . ' WHERE m.displayUntil IS NULL OR m.displayUntil >= :today'
+            . ' ORDER BY m.description ASC',
+            $qb->getDQL(),
+        );
     }
 }

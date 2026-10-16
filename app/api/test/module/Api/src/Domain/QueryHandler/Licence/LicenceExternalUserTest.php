@@ -28,7 +28,7 @@ final class LicenceExternalUserTest extends QueryHandlerTestCase
         $this->mockRepo('ContinuationDetail', Repository\ContinuationDetail::class);
         $this->mockRepo('Note', Repository\Note::class);
         $this->mockRepo('SystemParameter', Repository\SystemParameter::class);
-        $this->mockRepo('Application', Repository\SystemParameter::class);
+        $this->mockRepo('Application', Repository\Application::class);
 
         /** @var UserEntity $currentUser */
         $currentUser = m::mock(UserEntity::class)->makePartial();
@@ -53,7 +53,7 @@ final class LicenceExternalUserTest extends QueryHandlerTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
-    public function testHandleQueryExternalUser(mixed $isLicenceSurrenderAllowed, mixed $openApplicationsForLicence): void
+    public function testHandleQueryExternalUser(mixed $isLicenceSurrenderAllowed, mixed $openApplicationsForLicence, mixed $hasQueuedRevocation): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -62,21 +62,31 @@ final class LicenceExternalUserTest extends QueryHandlerTestCase
         $licence->setId(111);
 
         $licence->shouldReceive('serialize')
-            ->andReturn(['foo' => 'bar'])
-            ->shouldReceive('getNiFlag')
-            ->andReturn('N')
+            ->andReturn(['foo' => 'bar']);
+
+        $licence->shouldReceive('getNiFlag')
             ->once()
-            ->getMock()
-            ->shouldReceive('getOrganisation')->andReturn(
-                m::mock(Organisation::class)->shouldReceive('isMlh')->once()
+            ->andReturn('N');
+
+        $licence->shouldReceive('getOrganisation')
+            ->andReturn(
+                m::mock(Organisation::class)
+                    ->shouldReceive('isMlh')
+                    ->once()
                     ->andReturn(true)
                     ->getMock()
-            )
-            ->shouldReceive('isSpecialRestricted')
-            ->andReturn(false)
+            );
+
+        $licence->shouldReceive('isSpecialRestricted')
             ->once()
-            ->shouldReceive('getStatus->getId')
+            ->andReturn(false);
+
+        $licence->shouldReceive('getStatus->getId')
             ->andReturn(LicenceEntity::LICENCE_STATUS_VALID);
+
+        $licence->shouldReceive('hasQueuedRevocation')
+            ->once()
+            ->andReturn($hasQueuedRevocation);
 
         $mockContinuationDetail = m::mock(\Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail::class)
             ->shouldReceive('serialize')->with(['continuation', 'licence'])->once()->andReturn(['CD'])
@@ -126,6 +136,7 @@ final class LicenceExternalUserTest extends QueryHandlerTestCase
             'isLicenceSurrenderAllowed' => $isLicenceSurrenderAllowed,
             'activeVehicleCount' => 1,
             'totalVehicleCount' => 1,
+            'hasQueuedRevocation' => $hasQueuedRevocation,
         ];
 
         $this->assertEquals($expected, $result->serialize());
@@ -155,14 +166,21 @@ final class LicenceExternalUserTest extends QueryHandlerTestCase
     public static function dptestHandleQuery(): array
     {
         return [
-            [
+            'surrender allowed when no open applications and no queued revocation' => [
                 'isLicenceSurrenderAllowed' => true,
-                'openApplicationsForLicence' => []
+                'openApplicationsForLicence' => [],
+                'hasQueuedRevocation' => false,
             ],
-            [
+            'surrender not allowed when open applications exist' => [
                 'isLicenceSurrenderAllowed' => false,
-                'openApplicationsForLicence' => ['some data']
-            ]
+                'openApplicationsForLicence' => ['some data'],
+                'hasQueuedRevocation' => false,
+            ],
+            'surrender not allowed when queued revocation exists' => [
+                'isLicenceSurrenderAllowed' => false,
+                'openApplicationsForLicence' => [],
+                'hasQueuedRevocation' => true,
+            ],
         ];
     }
 }

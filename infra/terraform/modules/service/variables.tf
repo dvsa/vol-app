@@ -42,6 +42,11 @@ variable "services" {
       effect    = string
       actions   = list(string)
       resources = list(string)
+      conditions = optional(list(object({
+        test     = string
+        values   = list(string)
+        variable = string
+      })), [])
     }))
     task_exec_iam_role_statements = optional(list(object({
       effect    = string
@@ -73,6 +78,7 @@ variable "batch" {
   description = "Configuration for the batch process"
   type = object({
     cli_version          = string
+    liquibase_version    = string
     cli_repository       = string
     liquibase_repository = string
     api_secret_file      = string
@@ -82,16 +88,22 @@ variable "batch" {
       effect    = string
       actions   = list(string)
       resources = list(string)
+      conditions = optional(list(object({
+        test     = string
+        values   = list(string)
+        variable = string
+      })), [])
     }))
     jobs = list(object({
-      name     = string
-      type     = optional(string, "default")
-      queue    = optional(string, "default")
-      commands = optional(list(string))
-      cpu      = optional(number, 1)
-      memory   = optional(number, 4096)
-      timeout  = optional(number, 300)
-      schedule = optional(list(string), [])
+      name              = string
+      type              = optional(string, "default")
+      queue             = optional(string, "default")
+      commands          = optional(list(string))
+      cpu               = optional(number, 1)
+      memory            = optional(number, 4096)
+      timeout           = optional(number, 300)
+      ephemeral_storage = optional(number)
+      schedule          = optional(list(string), [])
     }))
   })
 }

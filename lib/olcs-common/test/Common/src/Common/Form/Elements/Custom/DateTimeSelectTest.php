@@ -23,6 +23,15 @@ final class DateTimeSelectTest extends \PHPUnit\Framework\TestCase
         date_default_timezone_set('UTC');
     }
 
+    #[\Override]
+    protected function tearDown(): void
+    {
+        // Restored to the timezone phpunit.xml.dist declares. Leaving a foreign one behind
+        // makes any later test that computes a relative date order-dependent — the provider and
+        // the assertion end up on opposite sides of midnight.
+        date_default_timezone_set(ini_get('date.timezone') ?: 'UTC');
+    }
+
     public function testSetValueNull(): void
     {
         $this->sut->setValue(null);

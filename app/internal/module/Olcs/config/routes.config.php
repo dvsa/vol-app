@@ -298,7 +298,8 @@ $routes = [
         'options' => [
             'route' => '/list-template-bookmarks/:id[/]',
             'constraints' => [
-                'id' => '[0-9]+'
+                // new-<id> is the [New] letters entry for a template
+                'id' => '(new-)?[0-9]+'
             ],
             'defaults' => [
                 'type' => 'licence',

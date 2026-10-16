@@ -4,6 +4,7 @@ namespace Common\Service\Table\Formatter;
 
 use Common\RefData;
 use Common\Service\Helper\UrlHelperService;
+use Common\Util\Escape;
 
 /**
  * Dashboard Application Link
@@ -45,7 +46,7 @@ class DashboardApplicationLink implements FormatterPluginManagerInterface
             '<a class="govuk-link" href="%s">%s</a>',
             [
                 $url,
-                isset($data['licNo']) ? $data['licNo'] . '/' . $data['id'] : $data['id'],
+                Escape::html(isset($data['licNo']) ? $data['licNo'] . '/' . $data['id'] : $data['id']),
             ]
         );
     }

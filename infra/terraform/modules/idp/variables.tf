@@ -56,9 +56,9 @@ variable "bda_project_stage" {
 
 # ============================================================
 # Extraction SM — Routing policy thresholds
+# Applied in the orchestrator after classification to gate
+# whether a document proceeds to extraction and analysis.
 # Mirror the values in vol-idp-poc/config/routing-policy.json.
-# Documents that do not satisfy ALL conditions are not forwarded
-# to the Extraction SM (filtered by the EventBridge rule).
 # ============================================================
 
 variable "extraction_classifications" {
@@ -83,4 +83,14 @@ variable "classification_max_bytes" {
   type        = number
   description = "Maximum document size in bytes for BDA extraction (default 200 MB)."
   default     = 209715200
+}
+
+# ============================================================
+# AI Analysis SM — Bedrock managed prompt
+# ============================================================
+
+variable "analysis_model_id" {
+  type        = string
+  description = "Bedrock foundation model ID for AI analysis. Combined with bedrock_region_prefix to form the cross-region inference profile ARN passed to the managed prompt."
+  default     = "anthropic.claude-opus-4-7"
 }

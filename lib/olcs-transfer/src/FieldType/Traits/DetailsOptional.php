@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait Optional Details
  *
@@ -12,10 +14,10 @@ trait DetailsOptional
 {
     /**
      * @var String
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":5,"max":4000})
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 4000])]
     protected $details;
 
     /**

@@ -62,7 +62,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -72,7 +72,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -82,7 +82,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'name', length: 70, nullable: true)]
     protected $name;
@@ -90,7 +90,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Company no
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'company_no', length: 12, nullable: true)]
     protected $companyNo;
@@ -107,7 +107,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;

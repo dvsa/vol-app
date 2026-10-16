@@ -1,0 +1,178 @@
+{
+  "name": "tm-previous-licences",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "tm-previous-licences-details",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "licNo",
+              "attributes": {
+                "class": "long",
+                "id": "lic-no",
+                "required": "required"
+              },
+              "options": {
+                "label": "transport-manager.previous-licences.form.lic-no"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "holderName",
+              "attributes": {
+                "class": "long",
+                "id": "holderName",
+                "required": "required"
+              },
+              "options": {
+                "label": "transport-manager.previous-licences.form.holder-name"
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button",
+                "aria-label": "Save and Continue"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel",
+                "keepForReadOnly": true
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addAnother",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "Save and add another"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "action_lcfirst": true
+  },
+  "input_filter": {
+    "tm-previous-licences-details": {
+      "licNo": {
+        "name": "licNo",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 1,
+              "max": 18
+            }
+          }
+        ]
+      },
+      "holderName": {
+        "name": "holderName",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 1,
+              "max": 90
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

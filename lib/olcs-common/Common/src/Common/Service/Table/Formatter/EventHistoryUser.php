@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 
 /**
@@ -31,16 +32,16 @@ class EventHistoryUser implements FormatterPluginManagerInterface
             : '';
 
         if ($data['changeMadeBy'] !== null) {
-            return $data['changeMadeBy'] . $internalMarker;
+            return Escape::html($data['changeMadeBy']) . $internalMarker;
         }
 
         if (isset($data['user']['contactDetails']['person'])) {
             $person = $data['user']['contactDetails']['person'];
             if (!empty($person['forename']) && !empty($person['familyName'])) {
-                return $person['forename'] . ' ' . $person['familyName'] . $internalMarker;
+                return Escape::html($person['forename'] . ' ' . $person['familyName']) . $internalMarker;
             }
         }
 
-        return $data['user']['loginId'] . $internalMarker;
+        return Escape::html($data['user']['loginId']) . $internalMarker;
     }
 }

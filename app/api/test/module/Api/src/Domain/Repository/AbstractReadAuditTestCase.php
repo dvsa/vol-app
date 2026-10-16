@@ -5,87 +5,65 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
-use Dvsa\Olcs\Api\Domain\Repository\AbstractReadAudit;
 use Mockery as m;
 
 /**
- * Class with common functionality for testing Read Audit functionality
- *
- * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
+ * Shared coverage for the read-audit repositories, which differ only in the entity they audit
+ * and the property naming it.
  */
 abstract class AbstractReadAuditTestCase extends RepositoryTestCase
 {
-    /** @var AbstractReadAudit|m\MockInterface */
     protected $sut;
 
-    protected function commonTestFetchOneOrMore(mixed $entityProperty): void
+    /**
+     * The supplied date bounds a whole day: from midnight to one second before the next.
+     */
+    protected function commonTestFetchOneOrMore(string $entityProperty): void
     {
-        $userId = 111;
-        $entityId = 222;
         $date = new \DateTime('2013-12-11 10:09:08');
 
-        $qb = $this->createMockQb('{{QUERY}}');
-        $this->mockCreateQueryBuilder($qb);
+        $qb = $this->createRealQb()->willReturn(['foo']);
 
-        $qb->shouldReceive('getQuery->getResult')->andReturn(['foo']);
+        $this->assertSame(['foo'], $this->sut->fetchOneOrMore(111, 222, $date));
 
-        $this->assertEquals(['foo'], $this->sut->fetchOneOrMore($userId, $entityId, $date));
-
-        $expected = '{{QUERY}} AND m.user = [[111]]' .
-            ' AND m.' . $entityProperty . ' = [[222]]' .
-            ' AND m.createdOn >= [[2013-12-11T00:00:00+00:00]]' .
-            ' AND m.createdOn <= [[2013-12-11T23:59:59+00:00]]';
-
-        $this->assertEquals($expected, $this->query);
+        $this->assertStringEndsWith(
+            ' WHERE m.user = :user AND m.' . $entityProperty . ' = :entityId'
+            . ' AND m.createdOn >= :dateFrom AND m.createdOn <= :dateTo',
+            $qb->getDQL(),
+        );
+        $this->assertSame(111, $qb->getParameter('user')->getValue());
+        $this->assertSame(222, $qb->getParameter('entityId')->getValue());
+        $this->assertSame('2013-12-11 00:00:00', $qb->getParameter('dateFrom')->getValue()->format('Y-m-d H:i:s'));
+        $this->assertSame('2013-12-11 23:59:59', $qb->getParameter('dateTo')->getValue()->format('Y-m-d H:i:s'));
     }
 
-    protected function commonTestDeleteOlderThan(mixed $entityClass): void
+    protected function commonTestDeleteOlderThan(string $entityClass): void
     {
-        $query = m::mock()
-            ->shouldReceive('setParameter')
-            ->once()
-            ->with('oldestDate', '2015-01-01')
-            //
-            ->shouldReceive('execute')
-            ->once()
-            ->andReturn(10)
-            ->getMock();
+        $query = m::mock(Query::class);
+        $query->expects('setParameter')->with('oldestDate', '2015-01-01');
+        $query->expects('execute')->andReturn(10);
 
-        $this->em->shouldReceive('createQuery')
-            ->once()
+        $this->em->expects('createQuery')
             ->with('DELETE FROM ' . $entityClass . ' e WHERE e.createdOn <= :oldestDate')
             ->andReturn($query);
 
-        $result = $this->sut->deleteOlderThan('2015-01-01');
-
-        $this->assertEquals(10, $result);
+        $this->assertSame(10, $this->sut->deleteOlderThan('2015-01-01'));
     }
 
-    protected function commonTestFetchList(mixed $queryDto, mixed $whereClause): void
+    protected function commonTestFetchList(mixed $queryDto, string $entityProperty): void
     {
-        $this->sut->shouldReceive('fetchPaginatedList')
-            ->andReturn(['result']);
+        $qb = $this->createRealQb();
 
-        $this->mockCreateQueryBuilder(
-            $this->createMockQb('{{QUERY}}')
+        $this->sut->expects('fetchPaginatedList')->andReturn(['result']);
+
+        $this->assertSame(['result'], $this->sut->fetchList($queryDto, Query::HYDRATE_OBJECT));
+
+        $this->assertStringEndsWith(
+            ' INNER JOIN m.user u INNER JOIN u.contactDetails cd INNER JOIN cd.person p'
+            . ' WHERE m.' . $entityProperty . ' = :byEntity'
+            . ' ORDER BY m.createdOn DESC',
+            $qb->getDQL(),
         );
-
-        $qbHelper = m::mock();
-        $qbHelper->shouldReceive('withRefdata')->once();
-        $qbHelper->shouldReceive('paginate')->once();
-
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->andReturn($qbHelper);
-
-        $this->assertEquals(['result'], $this->sut->fetchList($queryDto, Query::HYDRATE_OBJECT));
-
-        $expected = '{{QUERY}}' .
-            ' INNER JOIN m.user u' .
-            ' INNER JOIN u.contactDetails cd' .
-            ' INNER JOIN cd.person p' .
-            $whereClause .
-            ' ORDER BY m.createdOn DESC';
-
-        $this->assertEquals($expected, $this->query);
+        $this->assertSame(111, $qb->getParameter('byEntity')->getValue());
     }
 }

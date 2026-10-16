@@ -1,0 +1,158 @@
+{
+  "name": "lva-phone-contact",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "details",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "phoneContactType",
+              "attributes": {
+                "required": "required",
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "lva.contact-details.phone-contact.form.type.title",
+                "disable_inarray_validator": false,
+                "category": "phone_contact_type",
+                "exclude": [
+                  "phone_t_gtn"
+                ]
+              },
+              "type": "DynamicRadio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phoneNumber",
+              "attributes": {
+                "required": true,
+                "id": "number",
+                "placeholder": "",
+                "class": "medium"
+              },
+              "options": {
+                "label": "lva.contact-details.phone-contact.form.number.title"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\Phone"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "contactDetailsId",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button",
+                "aria-label": "Save and Continue"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel",
+                "keepForReadOnly": true
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addAnother",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "Save and add another"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "details": {
+      "phoneContactType": {
+        "name": "phoneContactType",
+        "required": true
+      },
+      "phoneNumber": {
+        "name": "phoneNumber",
+        "required": true,
+        "type": "Common\\InputFilter\\ContinueIfEmptyInput"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

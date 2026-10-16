@@ -87,15 +87,17 @@ final class GetTest extends QueryHandlerTestCase
         $serialized = [
             'id' => 123,
             'letterInstanceTodos' => [
-                ['id' => 1, 'letterTodoVersion' => ['id' => 27]],
-                ['id' => 2, 'letterTodoVersion' => ['id' => 33]],
-                ['id' => 3, 'letterTodoVersion' => ['id' => 99]],
+                ['id' => 1, 'letterTodoVersion' => ['id' => 32, 'letterTodo' => ['id' => 5]]],
+                ['id' => 2, 'letterTodoVersion' => ['id' => 33, 'letterTodo' => ['id' => 6]]],
+                ['id' => 3, 'letterTodoVersion' => ['id' => 99, 'letterTodo' => ['id' => 7]]],
             ],
         ];
 
         $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
-        $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->once()->andReturn([27 => 4, 33 => 1]);
+        // counts are per to-do, so version 32 picks up issues that linked older versions of to-do 5
+        $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->once()
+            ->andReturn(['todo-5' => 4, 'todo-6' => 1]);
 
         $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')->with($query)->once()
             ->andReturn($mockLetterInstance);
@@ -107,5 +109,28 @@ final class GetTest extends QueryHandlerTestCase
         // A to-do the map does not mention falls back to 1, so the hint stays hidden rather
         // than the view erroring on a missing key.
         $this->assertSame(1, $result['letterInstanceTodos'][2]['requiringIssueCount']);
+    }
+
+    public function testATodoVersionWithoutAParentIsCountedByVersion(): void
+    {
+        $query = Qry::create(['id' => 123]);
+
+        $serialized = [
+            'id' => 123,
+            'letterInstanceTodos' => [
+                ['id' => 1, 'letterTodoVersion' => ['id' => 27]],
+            ],
+        ];
+
+        $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
+        $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
+        $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->once()->andReturn(['version-27' => 3]);
+
+        $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')->with($query)->once()
+            ->andReturn($mockLetterInstance);
+
+        $result = $this->sut->handleQuery($query);
+
+        $this->assertSame(3, $result['letterInstanceTodos'][0]['requiringIssueCount']);
     }
 }

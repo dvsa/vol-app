@@ -30,7 +30,9 @@ class Get extends AbstractQueryByIdHandler
             ]
         ],
         'letterTypeChoices' => [
-            'letterChoice',
+            'letterChoice' => [
+                'goodsOrPsv',
+            ],
         ],
     ];
 }

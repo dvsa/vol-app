@@ -7,6 +7,7 @@
 namespace Common\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
+use Common\Util\Escape;
 
 /**
  * Case Link
@@ -42,7 +43,7 @@ class CaseLink implements FormatterPluginManagerInterface
                     'case' => $data['id']
                 ]
             ),
-            $data['id']
+            Escape::html($data['id'])
         );
     }
 }

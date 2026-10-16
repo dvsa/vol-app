@@ -5,37 +5,25 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
-use Dvsa\Olcs\Api\Entity\System\Replacement as ReplacementEntity;
-use Mockery as m;
-use Dvsa\Olcs\Api\Domain\Repository\Replacement as ReplacementRepo;
+use Dvsa\Olcs\Api\Domain\Repository\Replacement as Repo;
+use Dvsa\Olcs\Api\Entity\System\Replacement as Entity;
 
-/**
- * ReplacementTest
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 final class ReplacementTest extends RepositoryTestCase
 {
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(ReplacementRepo::class);
+        $this->setUpRealSut(Repo::class, true);
     }
 
     public function testFetchAll(): void
     {
-        $hydrationMode = Query::HYDRATE_ARRAY;
-        $alias = 'r';
-        $queryResult = ['RESULTS'];
+        $qb = $this->newRealQb();
+        $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_ARRAY)->andReturn(['RESULTS']);
+        $this->em->expects('createQueryBuilder')->withNoArgs()->andReturn($qb);
 
-        $queryBuilder = m::mock(QueryBuilder::class);
-        $queryBuilder->expects('select')->with($alias)->andReturnSelf();
-        $queryBuilder->expects('from')->with(ReplacementEntity::class, $alias)->andReturnSelf();
-        $queryBuilder->expects('getQuery->getResult')->with($hydrationMode)->andReturn($queryResult);
+        $this->assertSame(['RESULTS'], $this->sut->fetchAll(Query::HYDRATE_ARRAY));
 
-        $this->em->expects('createQueryBuilder')->andReturn($queryBuilder);
-
-        $this->assertEquals($queryResult, $this->sut->fetchAll($hydrationMode));
+        $this->assertSame('SELECT r FROM ' . Entity::class . ' r', $qb->getDQL());
     }
 }

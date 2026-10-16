@@ -71,7 +71,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Position
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'position', length: 45, nullable: true)]
     protected $position;
@@ -99,7 +99,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Employer name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'employer_name', length: 90, nullable: true)]
     protected $employerName;
@@ -107,7 +107,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Hours per week
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'hours_per_week', length: 300, nullable: true)]
     protected $hoursPerWeek;

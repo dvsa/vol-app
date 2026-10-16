@@ -131,4 +131,31 @@ final class TranslationHelperServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('WELSH*this foo is baring awesome*', $response);
     }
+
+    public function testFormatReplaceEscapesArguments(): void
+    {
+        $response = $this->sut->translateReplace('%s', ['<script>alert(1)</script>']);
+
+        $this->assertStringNotContainsString('<script>', $response);
+        $this->assertStringContainsString('&lt;script&gt;', $response);
+    }
+
+    public function testFormatReplaceEscapesQuotesSoArgumentsCannotBreakOutOfAnAttribute(): void
+    {
+        // Translation strings routinely wrap their arguments in markup, e.g. <a href="%s">, so an
+        // argument carrying a quote would otherwise escape the attribute.
+        $response = $this->sut->translateReplace('%s', ['x" onmouseover="alert(1)']);
+
+        $this->assertStringNotContainsString('onmouseover="alert(1)"', $response);
+        $this->assertStringContainsString('&quot;', $response);
+    }
+
+    public function testFormatReplaceLeavesOrdinaryValuesIntact(): void
+    {
+        // Route-generated URLs and plain scalars must survive unchanged.
+        $response = $this->sut->translateReplace('%s %s', ['/licence/1/variation', 42]);
+
+        $this->assertStringContainsString('/licence/1/variation', $response);
+        $this->assertStringContainsString('42', $response);
+    }
 }

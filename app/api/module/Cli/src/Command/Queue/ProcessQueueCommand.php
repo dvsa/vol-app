@@ -34,7 +34,7 @@ class ProcessQueueCommand extends AbstractOlcsCommand
      * @return void
      */
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Processes queue items.')

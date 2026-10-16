@@ -1,0 +1,68 @@
+{
+  "name": "permits-home",
+  "attributes": {
+    "method": "get",
+    "class": "filters  form__filter",
+    "id": "permitHomeForm"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "title",
+        "options": {
+          "label": "<h4>Filter Applications by:</h4>",
+          "label_options": {
+            "disable_html_escape": "true"
+          }
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "attributes": {
+          "id": "status"
+        },
+        "options": {
+          "label": "Status",
+          "fieldset-attributes": {
+            "id": "ecmt-status"
+          },
+          "category": "permit_application_status",
+          "empty_option": "All"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "Filter"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "bypass_auth": true
+  },
+  "input_filter": {
+    "status": {
+      "name": "status",
+      "required": false
+    }
+  }
+}

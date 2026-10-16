@@ -179,8 +179,13 @@ final class FeeTypeListTest extends QueryHandlerTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestFilter')]
-    public function testFilter(array $fees, mixed $mockTrafficArea, mixed $expect): void
+    public function testFilter(array $fees, ?string $trafficAreaKey, mixed $expect): void
     {
+        // The provider refers to traffic areas by key; they are built here so the fees and the query
+        // share the same mock instance.
+        $trafficAreas = ['A' => m::mock(TrafficArea::class)];
+        $mockTrafficArea = $trafficAreaKey === null ? null : $trafficAreas[$trafficAreaKey];
+
         $query = Qry::create([]);
 
         $mockList = new \ArrayObject();
@@ -189,7 +194,7 @@ final class FeeTypeListTest extends QueryHandlerTestCase
                 $this->getMockFeeType(
                     $fee['id'],
                     $fee['effectiveFrom'],
-                    $fee['trafficArea'],
+                    $fee['trafficArea'] === null ? null : $trafficAreas[$fee['trafficArea']],
                     $fee['irfoFeeTypeRefId'],
                     $fee['feeTypeRefId']
                 )
@@ -228,7 +233,6 @@ final class FeeTypeListTest extends QueryHandlerTestCase
 
     public static function dataProviderTestFilter(): \Iterator
     {
-        $mockTrafficAreaA = m::mock(TrafficArea::class);
         //  test effective data and few diff Fee ref types
         yield [
             'fees' => [
@@ -254,7 +258,7 @@ final class FeeTypeListTest extends QueryHandlerTestCase
                     'effectiveFrom' => '2015-01-01',
                 ],
             ],
-            'mockTrafficArea' => null,
+            'trafficAreaKey' => null,
             'expect' => [
                 'result' => [
                     ['id' => 24],
@@ -278,7 +282,7 @@ final class FeeTypeListTest extends QueryHandlerTestCase
                 ],
                 [
                     'id' => 25,
-                    'trafficArea' => $mockTrafficAreaA,
+                    'trafficArea' => 'A',
                     'irfoFeeTypeRefId' => null,
                     'feeTypeRefId' => self::FEE_REF_1_ID,
                     'effectiveFrom' => '2015-01-01',
@@ -291,7 +295,7 @@ final class FeeTypeListTest extends QueryHandlerTestCase
                     'effectiveFrom' => '2015-01-01',
                 ],
             ],
-            'mockTrafficArea' => $mockTrafficAreaA,
+            'trafficAreaKey' => 'A',
             'expect' => [
                 'result' => [
                     ['id' => 25],
@@ -328,7 +332,7 @@ final class FeeTypeListTest extends QueryHandlerTestCase
                     'effectiveFrom' => '2015-01-01',
                 ],
             ],
-            'mockTrafficArea' => $mockTrafficAreaA,
+            'trafficAreaKey' => 'A',
             'expect' => [
                 'result' => [
                     ['id' => 25],

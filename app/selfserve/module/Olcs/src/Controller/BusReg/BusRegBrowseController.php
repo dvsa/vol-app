@@ -106,7 +106,16 @@ class BusRegBrowseController extends AbstractController
 
                 // but make sure we only return allowed headers
                 $headers = new \Laminas\Http\Headers();
-                $allowedHeaders = ['Content-Disposition', 'Content-Encoding', 'Content-Type', 'Content-Length'];
+                $allowedHeaders = [
+                    'Content-Disposition',
+                    'Content-Encoding',
+                    'Content-Type',
+                    'Content-Length',
+                    // Dropping these would strip the sandbox and nosniff protections the API sets
+                    // on document responses.
+                    'X-Content-Type-Options',
+                    'Content-Security-Policy',
+                ];
 
                 foreach ($httpResponse->getHeaders() as $header) {
                     if (in_array($header->getFieldName(), $allowedHeaders)) {

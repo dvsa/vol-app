@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 
 class EbsrRegNumberLink implements FormatterPluginManagerInterface
@@ -42,6 +43,6 @@ class EbsrRegNumberLink implements FormatterPluginManagerInterface
             ]
         );
 
-        return sprintf(self::LINK_PATTERN, $url, $data['regNo']);
+        return sprintf(self::LINK_PATTERN, $url, Escape::html($data['regNo']));
     }
 }

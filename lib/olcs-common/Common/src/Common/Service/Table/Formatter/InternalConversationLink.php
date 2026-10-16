@@ -116,9 +116,11 @@ class InternalConversationLink implements FormatterPluginManagerInterface
             $statusCSS,
             $this->urlHelper->fromRoute($route, $params),
             $idMatrix,
-            $row["subject"],
+            Escape::html($row["subject"]),
             $tagColor,
-            ucfirst(strtolower(str_replace('_', ' ', $row['userContextStatus']))),
+            // Row data, so escaped. $tagColor and $statusCSS above are not: both are chosen by the
+            // switch from a fixed set of literals, and never carry the row value through.
+            Escape::html(ucfirst(strtolower(str_replace('_', ' ', $row['userContextStatus'])))),
             $dtOutput,
         );
     }

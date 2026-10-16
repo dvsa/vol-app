@@ -57,7 +57,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -67,7 +67,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -77,7 +77,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Definition
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'definition', length: 1000, nullable: true)]
     protected $definition;
@@ -85,7 +85,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * isTrailer
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_trailer', nullable: true)]
     protected $isTrailer;
@@ -93,7 +93,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Notes
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
@@ -101,7 +101,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Num of offences
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'num_of_offences', nullable: true, options: ['unsigned' => true])]
     protected $numOfOffences;
@@ -109,7 +109,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Offence authority
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'offence_authority', length: 100, nullable: true)]
     protected $offenceAuthority;
@@ -117,7 +117,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Offence date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'offence_date', nullable: true)]
     protected $offenceDate;
@@ -125,7 +125,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Offence to date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'offence_to_date', nullable: true)]
     protected $offenceToDate;
@@ -133,7 +133,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Offender name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'offender_name', length: 100, nullable: true)]
     protected $offenderName;
@@ -141,7 +141,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Points
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'points', nullable: true, options: ['unsigned' => true])]
     protected $points;
@@ -149,7 +149,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Position
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'position', length: 100, nullable: true)]
     protected $position;
@@ -157,7 +157,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Offence type
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'offence_type', length: 100, nullable: true)]
     protected $offenceType;
@@ -165,7 +165,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Vrm
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;

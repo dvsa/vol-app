@@ -21,7 +21,7 @@ final class TransportManagerReadAuditTest extends AbstractReadAuditTestCase
     #[\Override]
     public function setUp(): void
     {
-        $this->setUpSut(TransportManagerReadAudit::class, true);
+        $this->setUpRealSut(TransportManagerReadAudit::class, true);
     }
 
     public function testFetchOneOrMore(): void
@@ -33,7 +33,7 @@ final class TransportManagerReadAuditTest extends AbstractReadAuditTestCase
     {
         parent::commonTestFetchList(
             ReadTransportManager::create(['id' => 111]),
-            ' AND m.transportManager = [[111]]'
+            'transportManager'
         );
     }
 
