@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.5.1](https://github.com/dvsa/vol-app/compare/v9.5.0...v9.5.1) (2026-10-16)
+
+
+### Miscellaneous Chores
+
+* re-release after int batch test failure ([#1849](https://github.com/dvsa/vol-app/issues/1849)) ([2560ab1](https://github.com/dvsa/vol-app/commit/2560ab18191720f887548437ba9ba6de0373f525))
+
 ## [9.5.0](https://github.com/dvsa/vol-app/compare/v9.4.0...v9.5.0) (2026-10-15)
 
 
