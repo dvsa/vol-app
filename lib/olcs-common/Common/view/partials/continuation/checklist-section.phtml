@@ -1,24 +1,17 @@
-<table  class="checklist-table">
-    <tbody>
-        <?php
-            foreach ($this->data as $line) {
-                echo '<tr>';
-                foreach ($line as $key => $cell) {
-                    $class = '';
-                    if ($key === (count($line) - 1) && count($line) !== 1) {
-                        $class = 'class="td--right-aligned"';
-                    }
-                    if (isset($cell['header']) && $cell['header']) {
-                        $openTag = '<th ' . $class . '><h4>';
-                        $closeTag = '</h4></th>';
-                    } else {
-                        $openTag = '<td ' . $class . '>';
-                        $closeTag = '</td>';
-                    }
-                    echo $openTag . $cell['value'] . $closeTag;
-                }
-                echo '</tr>';
-            }
-        ?>
-    </tbody>
+<table class="govuk-table checklist-table">
+  <tbody class="govuk-table__body">
+  <?php foreach ($this->data as $line) : ?>
+    <tr class="govuk-table__row">
+      <?php foreach ($line as $key => $cell) :
+        $isLast = $key === (count($line) - 1) && count($line) !== 1;
+        $class = 'govuk-table__cell' . ($isLast ? ' td--right-aligned' : '');
+        if (isset($cell['header']) && $cell['header']) : ?>
+          <th class="govuk-table__header <?php echo $class; ?>"><h4><?php echo $cell['value']; ?></h4></th>
+        <?php else : ?>
+          <td class="<?php echo $class; ?>"><?php echo $cell['value']; ?></td>
+        <?php endif;
+      endforeach; ?>
+    </tr>
+  <?php endforeach; ?>
+  </tbody>
 </table>
