@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'ix_vehicle_vrm', columns: ['vrm'])]
 #[ORM\Index(name: 'ix_vehicle_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_vehicle_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_vehicle_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class Vehicle extends AbstractVehicle
 {
