@@ -222,38 +222,6 @@ class TransportManager extends AbstractTransportManager implements
     }
 
     /**
-     * Get LGV Acquired Rights qualification, if this Transport Manager has one
-     *
-     * @return TmQualification|null
-     */
-    public function getLgvAcquiredRightsQualification(): ?TmQualification
-    {
-        $validQuals = [
-            TmQualification::QUALIFICATION_TYPE_LGVAR,
-            TmQualification::QUALIFICATION_TYPE_NILGVAR,
-        ];
-
-        /* @var $qualification TmQualification */
-        foreach ($this->getQualifications() as $qualification) {
-            if (in_array($qualification->getQualificationType()->getId(), $validQuals)) {
-                return $qualification;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Has this Transport Manager got LGV Acquired Rights qualification
-     *
-     * @return boolean
-     */
-    public function hasLgvAcquiredRightsQualification(): bool
-    {
-        return $this->getLgvAcquiredRightsQualification() !== null;
-    }
-
-    /**
      * Is an SI Qualification required for this TM
      *
      * @param string $niFlag 'N' = GB, 'Y' = NI

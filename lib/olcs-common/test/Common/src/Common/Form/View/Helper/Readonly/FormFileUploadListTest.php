@@ -12,10 +12,22 @@ use Common\Form\View\Helper\Readonly\FormFileUploadList;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Element;
+use Laminas\Form\FieldsetInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\View\Helper\Readonly\FormFileUploadList::class)]
 final class FormFileUploadListTest extends MockeryTestCase
 {
+    public function testRenderInvalidElement(): void
+    {
+        $element = m::mock(FieldsetInterface::class);
+        $element->shouldReceive('count')->andThrow(new \DomainException('invalid element'));
+
+        $this->expectException(\DomainException::class);
+
+        $sut = new FormFileUploadList();
+        $sut->render($element);
+    }
+
     /**
      * Nothing uploaded yet: the list has no items, so the helper renders nothing at all rather
      * than an empty container with a "File name" heading above it.
