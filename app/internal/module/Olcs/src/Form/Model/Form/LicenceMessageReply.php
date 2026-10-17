@@ -10,28 +10,22 @@ use Olcs\Form\Model\Fieldset\LicenceMessageReply as LicenceMessageReplyFieldset;
 
 /**
  * @codeCoverageIgnore No methods
- * @Form\Name("licence_message_reply")
- * @Form\Attributes({"method": "post"})
- * @Form\Type(\Common\Form\Form::class)
- * @Form\Options({"prefer_form_input_filter": true})
  */
+#[Form\Name('licence_message_reply')]
+#[Form\Attributes(['method' => 'post'])]
+#[Form\Type(\Common\Form\Form::class)]
+#[Form\Options(['prefer_form_input_filter' => true])]
 class LicenceMessageReply
 {
-    /**
-     * @Form\Attributes({"value": ""})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type('Hidden')]
     public ?Hidden $id = null;
 
-    /**
-     * @Form\Attributes({"value": "reply"})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => 'reply'])]
+    #[Form\Type('Hidden')]
     public ?Hidden $action = null;
 
-    /**
-     * @Form\Name("form-actions")
-     * @Form\ComposedObject(\Olcs\Form\Model\Fieldset\LicenceMessageReply::class)
-     */
+    #[Form\Name('form-actions')]
+    #[Form\ComposedObject(\Olcs\Form\Model\Fieldset\LicenceMessageReply::class)]
     public ?LicenceMessageReplyFieldset $formActions = null;
 }

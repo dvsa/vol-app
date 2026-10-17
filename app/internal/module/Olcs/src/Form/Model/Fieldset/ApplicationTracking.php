@@ -10,13 +10,9 @@ use Laminas\Form\Annotation as Form;
  */
 class ApplicationTracking
 {
-    /**
-     * @Form\Type("Hidden")
-     */
+    #[Form\Type('Hidden')]
     public $version = null;
 
-    /**
-     * @Form\Type("Hidden")
-     */
+    #[Form\Type('Hidden')]
     public $id = null;
 }

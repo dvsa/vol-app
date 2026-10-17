@@ -15,7 +15,7 @@ use Common\View\Helper\Panel;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Hamcrest\Core\IsInstanceOf;
 use Interop\Container\Containerinterface;
-use Laminas\Form\Annotation\AnnotationBuilder;
+use Laminas\Form\Annotation\AttributeBuilder;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\PluginManager;
@@ -493,7 +493,7 @@ final class SwitchBoardControllerTest extends MockeryTestCase
     protected function formHelper(): void
     {
         $this->formHelperMock->shouldReceive('createForm')->andReturnUsing(function () {
-            $annotationBuilder = new AnnotationBuilder();
+            $annotationBuilder = new AttributeBuilder();
             return $annotationBuilder->createForm(SwitchBoard::class);
         })->byDefault();
     }

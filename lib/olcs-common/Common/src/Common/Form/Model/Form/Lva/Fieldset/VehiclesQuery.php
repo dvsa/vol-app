@@ -9,21 +9,15 @@ use Laminas\Form\Annotation as Form;
  */
 class VehiclesQuery
 {
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type('Hidden')]
     public $vrm;
 
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type('Hidden')]
     public $disc;
 
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type('Hidden')]
     public $includeRemoved;
 }

@@ -11,21 +11,15 @@ namespace Olcs\Form\Model\Form\Surrender;
 
 use Laminas\Form\Annotation as Form;
 
-/**
- * @Form\Name("community-licence")
- * @Form\Type("\Common\Form\Form")
- */
+#[Form\Name('community-licence')]
+#[Form\Type('\Common\Form\Form')]
 class CommunityLicence
 {
-    /**
-     * @Form\ComposedObject("Olcs\Form\Model\Form\Surrender\Fieldset\CommunityLicenceDocument")
-     */
+    #[Form\ComposedObject('Olcs\Form\Model\Form\Surrender\Fieldset\CommunityLicenceDocument')]
     public $communityLicenceDocument = null;
 
-    /**
-     * @Form\Name("form-actions")
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\SaveButton")
-     * @Form\Attributes({"class":"govuk-button-group"})
-     */
+    #[Form\Name('form-actions')]
+    #[Form\ComposedObject('Common\Form\Model\Fieldset\SaveButton')]
+    #[Form\Attributes(['class' => 'govuk-button-group'])]
     public $formActions = null;
 }
