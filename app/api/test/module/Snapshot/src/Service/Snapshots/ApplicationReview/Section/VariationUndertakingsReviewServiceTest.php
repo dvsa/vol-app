@@ -43,6 +43,50 @@ final class VariationUndertakingsReviewServiceTest extends MockeryTestCase
         $this->sut = new VariationUndertakingsReviewService($abstractReviewServiceServices);
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerLongTextMarkup')]
+    public function testGetLongTextMarkup(array $data, string $key): void
+    {
+        $this->mockTranslator->shouldReceive('translate')
+            ->once()
+            ->with($key)
+            ->andReturn('managed wording');
+
+        self::assertSame('managed wording', $this->sut->getLongTextMarkup($data));
+    }
+
+    public static function providerLongTextMarkup(): \Iterator
+    {
+        yield 'goods GB standard' => [
+            [
+                'isGoods' => true,
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
+                'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_HGV],
+                'licence' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL]],
+                'niFlag' => 'N',
+            ],
+            'markup-variation-declaration-goods-gb-standard',
+        ];
+
+        yield 'goods NI upgrade' => [
+            [
+                'isGoods' => true,
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
+                'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_HGV],
+                'licence' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED]],
+                'niFlag' => 'Y',
+            ],
+            'markup-variation-declaration-goods-ni-upgrade',
+        ];
+
+        yield 'PSV restricted' => [
+            [
+                'isGoods' => false,
+                'licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED],
+            ],
+            'markup-variation-declaration-psv-restricted',
+        ];
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
     public function testGetConfigFromData(mixed $data, mixed $expected): void
     {

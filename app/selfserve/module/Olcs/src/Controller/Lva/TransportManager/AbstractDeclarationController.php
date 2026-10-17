@@ -77,7 +77,7 @@ abstract class AbstractDeclarationController extends AbstractController
 
         $params = [
             'content' => $translationHelper->translateReplace(
-                $this->declarationMarkup,
+                $this->getDeclarationMarkup(),
                 $this->getTranslatedDeclarationMarkupParams($translationHelper)
             ),
             'tmFullName' => $this->getTmName(),
@@ -122,6 +122,11 @@ abstract class AbstractDeclarationController extends AbstractController
     protected function getTranslatedDeclarationMarkupParams(TranslationHelperService $translator)
     {
         return [];
+    }
+
+    protected function getDeclarationMarkup(): string
+    {
+        return $this->declarationMarkup;
     }
 
     protected function digitalSignatureAction(): \Laminas\Http\Response

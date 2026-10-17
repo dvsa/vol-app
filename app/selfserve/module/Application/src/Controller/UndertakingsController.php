@@ -181,7 +181,7 @@ class UndertakingsController extends AbstractUndertakingsController
 
         $reviewElement = $fieldset->get('review');
         $reviewText = $translator->translateReplace(
-            'markup-review-text',
+            $applicationData['reviewText'],
             [
                 $translator->translate($person),
                 $this->url()->fromRoute('lva-' . $this->lva . '/review', [], [], true)

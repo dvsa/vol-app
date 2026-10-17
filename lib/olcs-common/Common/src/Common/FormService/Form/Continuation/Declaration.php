@@ -125,6 +125,10 @@ class Declaration
      */
     private function updateReviewElement(): void
     {
+        if (isset($this->continuationDetailData['reviewText'])) {
+            $this->form->get('content')->get('review')->setValue($this->continuationDetailData['reviewText']);
+        }
+
         if (!isset($this->continuationDetailData['organisationTypeId'])) {
             return;
         }

@@ -12,6 +12,8 @@ use Dvsa\Olcs\Transfer\Command as TransferCommand;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Cache as CacheCommandHandler;
 
 return [
+    TransferCommand\LongText\Create::class => CommandHandler\LongText\Create::class,
+    TransferCommand\LongText\Update::class => CommandHandler\LongText\Update::class,
     // Transfer - Auth
     TransferCommand\Auth\Login::class => CommandHandler\Auth\LoginFactory::class,
     TransferCommand\Auth\ChangePassword::class => CommandHandler\Auth\ChangePasswordFactory::class,

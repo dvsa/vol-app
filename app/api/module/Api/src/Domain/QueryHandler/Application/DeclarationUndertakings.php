@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Application;
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\ApplicationUndertakingsReviewService;
+use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\VariationUndertakingsReviewService;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
@@ -22,7 +23,9 @@ class DeclarationUndertakings extends AbstractQueryHandler
     /**
      * @var ApplicationUndertakingsReviewService
      */
-    protected $reviewService;
+    private ApplicationUndertakingsReviewService $applicationReviewService;
+
+    private VariationUndertakingsReviewService $variationReviewService;
 
     #[\Override]
     public function handleQuery(QueryInterface $query)
@@ -51,7 +54,11 @@ class DeclarationUndertakings extends AbstractQueryHandler
         $data['isGoods'] = $application->isGoods();
         $data['isInternal'] = false;
 
-        return $this->reviewService->getMarkup($data);
+        $reviewService = $application->isVariation()
+            ? $this->variationReviewService
+            : $this->applicationReviewService;
+
+        return $reviewService->getLongTextMarkup($data);
     }
 
     /**
@@ -67,7 +74,8 @@ class DeclarationUndertakings extends AbstractQueryHandler
     {
         $fullContainer = $container;
 
-        $this->reviewService = $container->get('Review\ApplicationUndertakings');
+        $this->applicationReviewService = $container->get('Review\ApplicationUndertakings');
+        $this->variationReviewService = $container->get('Review\VariationUndertakings');
         return parent::__invoke($fullContainer, $requestedName, $options);
     }
 }
