@@ -790,9 +790,10 @@ module "service" {
         schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
-        name  = "liquibase",
-        type  = "liquibase",
-        queue = "liquibase"
+        name    = "liquibase",
+        type    = "liquibase",
+        queue   = "liquibase",
+        timeout = 7200, # 120 minutes: long-running patches
       },
       {
         name     = "sas-mi-extract",

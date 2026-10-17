@@ -101,7 +101,7 @@ variable "batch" {
       commands          = optional(list(string))
       cpu               = optional(number, 1)
       memory            = optional(number, 4096)
-      timeout           = optional(number, 300)
+      timeout           = optional(number)
       ephemeral_storage = optional(number)
       schedule          = optional(list(string), [])
     }))
