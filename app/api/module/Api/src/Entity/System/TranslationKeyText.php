@@ -32,9 +32,10 @@ class TranslationKeyText extends AbstractTranslationKeyText implements Deletable
     /**
      * @return $this
      */
-    public function update(string $translatedText)
+    public function update(string $translatedText, ?array $contentJson = null)
     {
         $this->translatedText = $translatedText;
+        $this->contentJson = $contentJson;
         return $this;
     }
 

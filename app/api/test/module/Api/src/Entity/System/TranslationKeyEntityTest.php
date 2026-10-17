@@ -52,4 +52,15 @@ final class TranslationKeyEntityTest extends EntityTester
         $this->assertEquals('transKey', $entity->getTranslationKey());
         $this->assertEquals('description', $entity->getDescription());
     }
+
+    public function testRichFormatCanBeSetWithoutChangingTheKey(): void
+    {
+        $entity = Entity::create('markup-example', 'Example');
+
+        $this->assertTrue(method_exists($entity, 'setFormat'));
+        $entity->setFormat('editorjs');
+
+        $this->assertSame('markup-example', $entity->getTranslationKey());
+        $this->assertSame('editorjs', $entity->getFormat());
+    }
 }

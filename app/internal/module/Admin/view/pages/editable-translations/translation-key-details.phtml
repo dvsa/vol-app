@@ -16,6 +16,6 @@ $translationsTable = $this->placeholder('translationsTable')->getValue();
        id="filter"
        role="button"
        draggable="false"
-       href="<?php echo $this->url('admin-dashboard/admin-editable-translations', ['action' => 'index']); ?>"
+       href="<?php echo $this->url($this->placeholder('translationRoute')->getValue(), ['action' => 'index']); ?>"
     >New search</a>
 </div>
