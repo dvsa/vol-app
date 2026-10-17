@@ -91,6 +91,7 @@ final class VariationFinancialEvidenceTest extends MockeryTestCase
         $evidenceFieldset->expects('get')->with('uploadNowRadio')->andReturn($uploadNowRadioElement);
         $evidenceFieldset->expects('get')->with('uploadLaterRadio')->andReturn($uploadLaterRadioElement);
         $evidenceFieldset->expects('setOption')->with('hint', 'BAR');
+        $evidenceFieldset->expects('add');
 
         $validateIfValidator = m::mock(ValidateIf::class);
         $validateIfValidator->expects('setOptions')->with(m::type('array'));
