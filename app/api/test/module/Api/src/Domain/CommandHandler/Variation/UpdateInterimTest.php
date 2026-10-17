@@ -16,10 +16,13 @@ use Mockery as m;
 
 final class UpdateInterimTest extends AbstractCommandHandlerTestCase
 {
+    use \Dvsa\OlcsTest\Api\Domain\CommandHandler\Traits\InterimCommunityLicencesTestTrait;
+
     public function setUp(): void
     {
         $this->sut = new UpdateInterim();
         $this->mockRepo('Application', ApplicationRepo::class);
+        $this->mockRepo('CommunityLic', \Dvsa\Olcs\Api\Domain\Repository\CommunityLic::class);
 
         parent::setUp();
     }
