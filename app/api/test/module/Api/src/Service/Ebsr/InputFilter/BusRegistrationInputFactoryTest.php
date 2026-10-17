@@ -18,6 +18,7 @@ use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\EffectiveDate;
 use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\EndDate;
 use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\Licence;
 use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\ServiceNo;
+use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\SubsidyDetail;
 use Dvsa\Olcs\Api\Service\InputFilter\Input;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -60,6 +61,7 @@ final class BusRegistrationInputFactoryTest extends TestCase
         $mockSl->shouldReceive('get')->with(Licence::class)->andReturn($mockValidator);
         $mockSl->shouldReceive('get')->with(ServiceNo::class)->andReturn($mockValidator);
         $mockSl->shouldReceive('get')->with(EndDate::class)->andReturn($mockValidator);
+        $mockSl->shouldReceive('get')->with(SubsidyDetail::class)->once()->andReturn($mockValidator);
 
         $sut = new BusRegistrationInputFactory();
         /** @var Input $service */
@@ -67,7 +69,7 @@ final class BusRegistrationInputFactoryTest extends TestCase
 
         $this->assertInstanceOf(Input::class, $service);
         $this->assertCount(9, $service->getFilterChain());
-        $this->assertCount(5, $service->getValidatorChain());
+        $this->assertCount(6, $service->getValidatorChain());
 
         foreach ($service->getValidatorChain()->getValidators() as $validator) {
             if ($validator['instance'] === $mockBreakValidator) {

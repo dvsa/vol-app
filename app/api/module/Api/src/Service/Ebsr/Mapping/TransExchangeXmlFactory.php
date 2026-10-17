@@ -106,7 +106,7 @@ class TransExchangeXmlFactory implements FactoryInterface
 
         $subsidy = [
             'SubsidyType' => new NodeValue('subsidised'),
-            'SubsidisingAuthority' => new NodeValue('subsidyDetail')
+            'SubsidisingAuthority' => new MultiNodeValue('subsidyAuthorityNames')
         ];
 
         $contractedService = [

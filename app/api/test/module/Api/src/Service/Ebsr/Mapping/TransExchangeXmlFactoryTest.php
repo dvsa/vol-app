@@ -65,4 +65,22 @@ XML;
 
         $this->assertSame('Darlington - Stockton - Middlesbrough', $result['routeDescription']);
     }
+    public function testRetainsEverySubsidisingAuthority(): void
+    {
+        $mapping = (new TransExchangeXmlFactory())(m::mock(ContainerInterface::class), null);
+        $xml = new \DOMDocument();
+        $xml->loadXML('<TransXChange><Registrations><Registration><SubsidyDetails><Subsidy>'
+            . '<SubsidyType>partial</SubsidyType>'
+            . '<SubsidisingAuthority>Milton Keynes Council</SubsidisingAuthority>'
+            . '<SubsidisingAuthority>Unknown Council</SubsidisingAuthority>'
+            . '</Subsidy></SubsidyDetails></Registration></Registrations></TransXChange>');
+
+        $result = $mapping->apply($xml->documentElement);
+
+        $this->assertSame(
+            ['Milton Keynes Council', 'Unknown Council'],
+            $result['subsidyAuthorityNames'] ?? []
+        );
+        $this->assertSame('partial', $result['subsidised']);
+    }
 }
