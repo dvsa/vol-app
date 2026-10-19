@@ -37,6 +37,7 @@ final class VariationAddressesTest extends MockeryTestCase
     public function testAlterForm(): void
     {
         $mockForm = m::mock(Form::class);
+        $mockForm->expects('has')->with('establishment_address')->andReturn(false);
 
         $this->fh->shouldReceive('createForm')
             ->once()

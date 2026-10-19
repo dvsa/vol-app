@@ -41,6 +41,8 @@ final class LicenceAddressesTest extends MockeryTestCase
             ->getMock();
 
         $mockForm = m::mock(Form::class);
+        // the establishment address labels are covered by the common Addresses test
+        $mockForm->expects('has')->with('establishment_address')->andReturn(false);
         $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
