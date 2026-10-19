@@ -275,7 +275,7 @@ $pageLang = strtok($this->plugin('translate')->getTranslator()->getLocale(), '_'
           <?php else: ?>
             <?php echo $this->currentUser()->getFullName() ?>,
           <?php endif;?>
-          <b><?php echo $this->currentUser()->getOrganisationName() ?></b>
+          <b><?php echo $this->escapeHtml($this->currentUser()->getOrganisationName()); ?></b>
         </li>
       </ul>
     </div>
