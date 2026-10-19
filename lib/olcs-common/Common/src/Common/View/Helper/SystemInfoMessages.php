@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Common\View\Helper;
 
 use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetListActive;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Laminas\View\Helper\AbstractHelper;
@@ -17,7 +18,7 @@ class SystemInfoMessages extends AbstractHelper
     public const string HTML_BLOCK = '<div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
   <div class="govuk-notification-banner__header">
     <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-      Important
+      %s
     </h2>
   </div>
   <div class="govuk-notification-banner__content">
@@ -29,7 +30,8 @@ class SystemInfoMessages extends AbstractHelper
 
     public function __construct(
         private readonly AnnotationBuilder $annotationBuilder,
-        private readonly QueryService $queryService
+        private readonly QueryService $queryService,
+        private readonly TranslationHelperService $translator
     ) {
     }
 
@@ -51,7 +53,11 @@ class SystemInfoMessages extends AbstractHelper
             $items[] = sprintf(self::HTML_ITEM, htmlspecialchars($msg['description']));
         }
 
-        return sprintf(self::HTML_BLOCK, implode('', $items));
+        return sprintf(
+            self::HTML_BLOCK,
+            htmlspecialchars($this->translator->translate('lva-summary-important')),
+            implode('', $items)
+        );
     }
 
     private function getData(bool $isInternal): static
