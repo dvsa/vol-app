@@ -7,50 +7,48 @@ var OLCS = OLCS || {};
  * the name and ID if needed and appends it to the end
  * of the fieldset.
  */
-OLCS.addAnother = (function(document, $, undefined) {
-
-  'use strict';
+OLCS.addAnother = (function (document, $, undefined) {
+  "use strict";
 
   return function init(custom) {
+    var options = $.extend(
+      {
+        container: ".add-another",
+        triggerSelector: '.hint input[type="submit"]',
+        targetSelector: "fieldset",
+      },
+      custom,
+    );
 
-    var options = $.extend({
-      container       : '.add-another',
-      triggerSelector : '.hint input[type="submit"]',
-      targetSelector  : 'fieldset',
-    }, custom);
-
-    OLCS.eventEmitter.on('render', function() {
-
+    OLCS.eventEmitter.on("render", function () {
       // Run the plugin on each container
-      $(options.container).each(function() {
-
+      $(options.container).each(function () {
         var container = $(this);
         var triggerSelector = container.find(options.triggerSelector);
 
         function incrementString(string) {
-          string = string || '';
-          var newString = string.replace(/\[(\d+)\]/, function(match, number) {
-            return '[' + (parseInt(number, 10) + 1) + ']';
+          string = string || "";
+          var newString = string.replace(/\[(\d+)\]/, function (match, number) {
+            return "[" + (parseInt(number, 10) + 1) + "]";
           });
           return newString;
         }
 
         function updateValues(element) {
           var field = $(element);
-          var input = field.find('input');
+          var input = field.find("input");
 
           field.attr({
-            'data-group': incrementString(field.data('group'))
+            "data-group": incrementString(field.data("group")),
           });
 
           for (var i = 0; i < input.length; i++) {
-            var name = incrementString(input[i].getAttribute('name'));
+            var name = incrementString(input[i].getAttribute("name"));
             var id = incrementString(input[i].id);
-            input[i].setAttribute('name', name);
+            input[i].setAttribute("name", name);
             input[i].id = id;
-            input[i].value = '';
+            input[i].value = "";
           }
-
 
           return field;
         }
@@ -58,26 +56,26 @@ OLCS.addAnother = (function(document, $, undefined) {
         // Replace the trigger element to prevent it from submitting the form
         if (triggerSelector.is('input[type="submit"]')) {
           var value = triggerSelector.val();
-          triggerSelector.parent().html('<a href="#" class="add-another-trigger govuk-link">' + value + '</a>');
-          triggerSelector = container.find('.add-another-trigger');
+          triggerSelector.parent().html('<a href="#" class="add-another-trigger govuk-link">' + value + "</a>");
+          triggerSelector = container.find(".add-another-trigger");
         }
 
-        triggerSelector.on('click', function(e) {
+        triggerSelector.on("click", function (e) {
           e.preventDefault();
 
           var lastField = container.find(options.targetSelector).last().clone();
-          var newField  = updateValues(lastField);
+          var newField = updateValues(lastField);
 
           // remove any error messages
-          $(newField).find('ul').remove();
+          $(newField).find("ul").remove();
 
-          $(newField).insertBefore(container.find('.hint'));
+          $(newField).insertBefore(container.find(".hint"));
+
+          // Move focus to the new input so keyboard and screen reader users know it has appeared.
+          // Without JS the trigger is a submit button and the server adds the input instead.
+          $(newField).find("input").first().focus();
         });
-
       });
-
     });
-
   };
-
-}(document, window.jQuery));
+})(document, window.jQuery);
