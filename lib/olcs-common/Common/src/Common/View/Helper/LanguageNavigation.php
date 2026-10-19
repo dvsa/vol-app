@@ -43,9 +43,7 @@ class LanguageNavigation extends AbstractHelper
 
     public function __invoke(): string
     {
-        $current = $this->languagePref->getPreference() === Language::OPTION_CY
-            ? Language::OPTION_CY
-            : Language::OPTION_EN;
+        $current = $this->currentLanguage();
 
         $items = '';
         foreach (self::NAMES as $lang => $name) {
@@ -53,5 +51,16 @@ class LanguageNavigation extends AbstractHelper
         }
 
         return sprintf(self::HTML_NAV, self::LABELS[$current], $items);
+    }
+
+    /**
+     * The language of the current page, for the navigation and the layouts' <html lang>. The
+     * preference comes from an unvalidated cookie, so anything other than Welsh is English.
+     */
+    public function currentLanguage(): string
+    {
+        return $this->languagePref->getPreference() === Language::OPTION_CY
+            ? Language::OPTION_CY
+            : Language::OPTION_EN;
     }
 }

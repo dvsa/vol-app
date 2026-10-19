@@ -4,8 +4,7 @@
 $currentUser = $this->currentUser();
 $isLoggedIn = $currentUser->isLoggedIn();
 $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
-// en_GB, cy_GB, en_NI or cy_NI, as set from the language preference
-$pageLang = strtok($this->plugin('translate')->getTranslator()->getLocale(), '_');
+$pageLang = $this->plugin('languageNavigation')->currentLanguage();
 
 ?>
 <?php echo $this->doctype(); ?>
