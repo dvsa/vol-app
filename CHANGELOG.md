@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.5.2](https://github.com/dvsa/vol-app/compare/v9.5.1...v9.5.2) (2026-10-19)
+
+
+### Miscellaneous Chores
+
+* release letters data seed ([#1853](https://github.com/dvsa/vol-app/issues/1853)) ([2f7ae2b](https://github.com/dvsa/vol-app/commit/2f7ae2b156807fec81861611eaf057394468c78d))
+
 ## [9.5.1](https://github.com/dvsa/vol-app/compare/v9.5.0...v9.5.1) (2026-10-16)
 
 
