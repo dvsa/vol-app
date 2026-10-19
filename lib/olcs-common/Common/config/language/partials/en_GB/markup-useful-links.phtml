@@ -47,7 +47,7 @@
         <?php if (!$this->niFlag && ($this->numberOfLicences >= 1 || $this->numberOfApplications >= 1)): ?>
         <li>
             <a class="govuk-link" href="{{OTC_NEWS_ALERTS}}" target="_blank" rel="external noreferrer noopener">
-                <?php echo $this->escapeHtml($this->translate('Office of the Traffic Commissioner news alerts')); ?>
+                <?php echo $this->escapeHtml($this->translate('Office of the Traffic Commissioner news alerts')); ?><?php echo $this->partial('partials/opens-new-window-hidden-text'); ?>
             </a>
         </li>
         <?php endif; ?>
