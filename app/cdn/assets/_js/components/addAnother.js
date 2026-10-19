@@ -11,14 +11,12 @@ OLCS.addAnother = (function (document, $, undefined) {
   "use strict";
 
   return function init(custom) {
-    var options = $.extend(
-      {
-        container: ".add-another",
-        triggerSelector: '.hint input[type="submit"]',
-        targetSelector: "fieldset",
-      },
-      custom,
-    );
+    var defaults = {
+      container: ".add-another",
+      triggerSelector: ".hint input[type=submit]",
+      targetSelector: "fieldset",
+    };
+    var options = $.extend(defaults, custom);
 
     OLCS.eventEmitter.on("render", function () {
       // Run the plugin on each container
@@ -54,9 +52,9 @@ OLCS.addAnother = (function (document, $, undefined) {
         }
 
         // Replace the trigger element to prevent it from submitting the form
-        if (triggerSelector.is('input[type="submit"]')) {
+        if (triggerSelector.is("input[type=submit]")) {
           var value = triggerSelector.val();
-          triggerSelector.parent().html('<a href="#" class="add-another-trigger govuk-link">' + value + "</a>");
+          triggerSelector.parent().html("<a href='#' class='add-another-trigger govuk-link'>" + value + "</a>");
           triggerSelector = container.find(".add-another-trigger");
         }
 
