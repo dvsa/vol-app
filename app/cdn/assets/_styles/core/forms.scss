@@ -87,9 +87,10 @@ fieldset,
   }
   &.inline-text {
     display: inline-block;
+    // On the field rather than the input, so labels wider than the input (TM hours) keep a gap too
+    margin-right: 10px;
     margin-bottom: 0;
     input {
-      margin-right: 10px;
       width: 4.2em;
     }
   }
