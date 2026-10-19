@@ -13,7 +13,7 @@
           "data-container-class": "inline-text"
         },
         "options": {
-          "label": "days-of-week-short-mon"
+          "label": "tm-review-responsibility-mon"
         }
       }
     },
@@ -27,7 +27,7 @@
           "data-container-class": "inline-text"
         },
         "options": {
-          "label": "days-of-week-short-tue"
+          "label": "tm-review-responsibility-tue"
         }
       }
     },
@@ -41,7 +41,7 @@
           "data-container-class": "inline-text"
         },
         "options": {
-          "label": "days-of-week-short-wed"
+          "label": "tm-review-responsibility-wed"
         }
       }
     },
@@ -55,7 +55,7 @@
           "data-container-class": "inline-text"
         },
         "options": {
-          "label": "days-of-week-short-thu"
+          "label": "tm-review-responsibility-thu"
         }
       }
     },
@@ -69,7 +69,7 @@
           "data-container-class": "inline-text"
         },
         "options": {
-          "label": "days-of-week-short-fri"
+          "label": "tm-review-responsibility-fri"
         }
       }
     },
@@ -83,7 +83,7 @@
           "data-container-class": "inline-text"
         },
         "options": {
-          "label": "days-of-week-short-sat"
+          "label": "tm-review-responsibility-sat"
         }
       }
     },
@@ -97,7 +97,7 @@
           "data-container-class": "inline-text"
         },
         "options": {
-          "label": "days-of-week-short-sun"
+          "label": "tm-review-responsibility-sun"
         }
       }
     }
