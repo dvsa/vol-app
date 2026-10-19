@@ -27,7 +27,9 @@ class InfoIconAdder
     {
         $markup = sprintf(
             '<p class="govuk-!-margin-top-7 info-box__icon-wrapper info-box__text">' .
-            '<i class="info-box__icon selfserve-important"></i>%s</p>',
+            '<i class="info-box__icon selfserve-important"></i>' .
+            '<span class="govuk-visually-hidden">%s: </span>%s</p>',
+            $this->translator->translate('lva-summary-important'),
             $this->translator->translate($translationKey)
         );
 
