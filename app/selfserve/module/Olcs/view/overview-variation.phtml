@@ -46,7 +46,7 @@
 
       <div class="info-box info-box--grey">
         <h2 class="info-box__heading"><?php echo $this->translate('application.status'); ?></h2>
-        <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><span class="govuk-visually-hidden"><?php echo $this->escapeHtml($this->translate('lva-summary-important')); ?>: </span><?php echo $this->translate($status); ?></p>
+        <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->importantPrefix(); ?><?php echo $this->translate($status); ?></p>
         <?php if ($canCancel): ?>
           <ul class="govuk-list">
             <li>
