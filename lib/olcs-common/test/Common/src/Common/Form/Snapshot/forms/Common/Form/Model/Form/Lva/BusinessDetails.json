@@ -193,7 +193,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine1",
+                "label": "lva.registered-address.address-line-1",
                 "error-message": "registeredAddress_addressLine1-error"
               },
               "type": "Text"
@@ -209,7 +209,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine2"
+                "label": "lva.registered-address.address-line-2"
               },
               "type": "Text"
             }
@@ -224,7 +224,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine3"
+                "label": "lva.registered-address.address-line-3"
               },
               "type": "Text"
             }
@@ -239,7 +239,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine4"
+                "label": "lva.registered-address.address-line-4"
               },
               "type": "Text"
             }
@@ -253,7 +253,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_townCity"
+                "label": "lva.registered-address.town-city"
               },
               "type": "Text"
             }
@@ -266,7 +266,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_postcode"
+                "label": "lva.registered-address.postcode"
               },
               "type": "Text"
             }

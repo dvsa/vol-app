@@ -37,6 +37,7 @@ final class ApplicationAddressesTest extends MockeryTestCase
     public function testAlterForm(): void
     {
         $mockForm = m::mock(Form::class);
+        $mockForm->expects('has')->with('establishment_address')->andReturn(false);
         $this->mockAlterButtons($mockForm, $this->fh);
 
         $this->fh->shouldReceive('createForm')
