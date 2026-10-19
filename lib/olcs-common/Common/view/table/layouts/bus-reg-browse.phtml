@@ -22,7 +22,7 @@ $urlHlp = $sl->get('Helper\Url');
     <?php foreach ($this->object->getRows() as $row): ?>
     <li class="search-result">
         <div class="search-result__header">
-            <h4>
+            <h2 class="h4">
                 <a class="govuk-link" href="<?php echo $urlHlp->fromRoute('search-bus/details', ['busRegId' => $row['id']]); ?>">
                     <?php echo Escape::html($row['regNo']); ?>
                 </a>
@@ -30,7 +30,7 @@ $urlHlp = $sl->get('Helper\Url');
                 <?php if (!empty($row['isShortNotice'])) { ?>
                     (<?php echo $this->translate('selfserve.search.busreg.browse.result.short-notice');?>)
                 <?php } ?>
-            </h4>
+            </h2>
             <p><?php echo Escape::html($row['name']); ?></p>
         </div>
         <div class="search-result__meta">
