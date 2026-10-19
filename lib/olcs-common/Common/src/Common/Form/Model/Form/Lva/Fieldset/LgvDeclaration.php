@@ -14,8 +14,8 @@ class LgvDeclaration
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $lgvDeclarationConfirmation;
 
-    #[Form\Attributes(['value' => "<p class='exclamation'>%s</p>"])]
-    #[Form\Options(['tokens' => ['application_type-of-licence_licence-type.data.lgvDeclarationWarning']])]
+    #[Form\Attributes(['value' => "<p class='exclamation'><span class='govuk-visually-hidden'>%s: </span>%s</p>"])]
+    #[Form\Options(['tokens' => ['lva-summary-important', 'application_type-of-licence_licence-type.data.lgvDeclarationWarning']])]
     #[Form\Type('\Common\Form\Elements\Types\HtmlTranslated')]
     public $lgvDeclarationWarning;
 }

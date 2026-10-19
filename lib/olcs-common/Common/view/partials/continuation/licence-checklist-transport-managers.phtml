@@ -1,6 +1,6 @@
 <?php $tmChanges = $this->data['transportManagers']['tmChanges']; ?>
 <?php if ($tmChanges > 0): ?>
-    <p class="important">
+    <p class="important"><span class="govuk-visually-hidden"><?php echo $this->escapeHtml($this->translate('lva-summary-important')); ?>: </span>
         <strong>
             <?php
             echo $tmChanges
