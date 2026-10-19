@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CommonTest\View\Helper;
 
 use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
+use Common\Service\Helper\TranslationHelperService;
 use Common\View\Helper\SystemInfoMessages;
 use Dvsa\Olcs\Transfer\Query\QueryContainerInterface;
 use Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetListActive;
@@ -59,7 +60,13 @@ final class SystemInfoMessagesTest extends MockeryTestCase
             ->with($mockQryCntr)
             ->andReturn($mockResp);
 
-        $invoke = new SystemInfoMessages($this->mockAnnotationBuilder, $this->mockQuerySrv);
+        $translator = m::mock(TranslationHelperService::class);
+        $translator->shouldReceive('translate')
+            ->with('lva-summary-important')
+            ->times($expect === null ? 0 : 1)
+            ->andReturn('Important');
+
+        $invoke = new SystemInfoMessages($this->mockAnnotationBuilder, $this->mockQuerySrv, $translator);
         $actual = $invoke(true); // __invoke
 
         $this->assertEquals($expect, $actual);
