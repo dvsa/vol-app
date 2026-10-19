@@ -46,10 +46,6 @@ class TableBuilder implements \Stringable
 
     public const CONTENT_TYPE_CSV = 'csv';
 
-    public const ARIA_SORT_ASC = 'sort-in-ascending-order';
-
-    public const ARIA_SORT_DESC = 'sort-in-descending-order';
-
     public const CLASS_TABLE = 'govuk-table';
 
     public const CLASS_TABLE_CELL = 'govuk-table__cell';
@@ -1551,20 +1547,18 @@ class TableBuilder implements \Stringable
         if (isset($column['sort'])) {
             $column['class'] .= ' sortable';
             $column['order'] = 'ASC';
-            $sortAria = self::ARIA_SORT_ASC;
 
+            // aria-sort announces how the table is sorted now; the link text stays the column title
             if ($column['sort'] === $this->getSort()) {
                 if ($this->getOrder() === 'ASC') {
                     $column['order'] = 'DESC';
-                    $sortAria = self::ARIA_SORT_DESC;
-
                     $column['class'] .= ' ascending';
+                    $column['ariaSort'] = ' aria-sort="ascending"';
                 } else {
                     $column['class'] .= ' descending';
+                    $column['ariaSort'] = ' aria-sort="descending"';
                 }
             }
-
-            $column['aria'] = $this->translator->translate($sortAria);
 
             $column['link'] = $this->generatePaginationUrl(
                 [
