@@ -280,7 +280,6 @@ $pageLang = strtok($this->plugin('translate')->getTranslator()->getLocale(), '_'
       </ul>
     </div>
     <?php endif;?>
-    <?php echo $this->translate('markup-alpha-banner'); ?>
 
     <?php if (! $this->currentUser()->isLoggedIn()) : ?>
       <div class="govuk-width-container">
@@ -296,6 +295,7 @@ $pageLang = strtok($this->plugin('translate')->getTranslator()->getLocale(), '_'
   </div>
 
   <footer class="govuk-template__footer">
+    <?php echo $this->translate('markup-feedback'); ?>
     <div class="govuk-footer">
     <div class="govuk-width-container">
       <svg
