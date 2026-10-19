@@ -6,7 +6,7 @@ use Laminas\Form\Annotation as Form;
 
 #[Form\Options(['prefer_form_input_filter' => true])]
 #[Form\Name('lva-transport-manager-details')]
-#[Form\Attributes(['method' => 'post', 'autocomplete' => 'off'])]
+#[Form\Attributes(['method' => 'post'])]
 #[Form\Type('Common\Form\Form')]
 class TransportManagerDetails
 {
