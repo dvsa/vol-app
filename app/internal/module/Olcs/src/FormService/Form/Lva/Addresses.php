@@ -33,6 +33,7 @@ class Addresses extends CommonAddresses
         $form->get('form-actions')->get('save')->setLabel('internal.save.button');
 
         $this->removeEstablishment($form, $params['typeOfLicence']['licenceType']);
+        $this->labelEstablishmentAddress($form);
 
         $contact = $form->getInputFilter()->get('contact');
 
