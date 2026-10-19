@@ -1,8 +1,7 @@
 {
   "name": "lva-transport-manager-details",
   "attributes": {
-    "method": "post",
-    "autocomplete": "off"
+    "method": "post"
   },
   "elements": [],
   "fieldsets": [
