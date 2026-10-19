@@ -38,15 +38,15 @@
   <div class="one-third">
     <div class="sidebar" role="complementary">
       <div class="info-box info-box--grey">
-        <h3 class="info-box__heading"><?php echo $this->translate('progress'); ?></h3>
-        <h4 class="info-box__heading"><?php echo sprintf($this->translate('application.progress'), $progressX, $progressY); ?></h4>
+        <h2 class="info-box__heading"><?php echo $this->translate('progress'); ?></h2>
+        <h3 class="info-box__heading"><?php echo sprintf($this->translate('application.progress'), $progressX, $progressY); ?></h3>
         <?php if (isset($submissionForm)): ?>
           <?php echo $this->form($submissionForm); ?>
         <?php endif ?>
       </div>
 
       <div class="info-box info-box--grey">
-        <h3 class="info-box__heading"><?php echo $this->translate('application.status'); ?></h3>
+        <h2 class="info-box__heading"><?php echo $this->translate('application.status'); ?></h2>
         <p class="info-box__icon-wrapper info-box__text"><i class="info-box__icon selfserve-important"></i><?php echo $this->translate($status); ?></p>
         <?php if ($canCancel): ?>
           <ul class="govuk-list">
@@ -61,7 +61,7 @@
 
       <?php if ($this->receivedDate || $this->completionDate): ?>
         <div class="info-box info-box--blue">
-            <h3 class="info-box__heading"><?php echo $this->translate('summary'); ?></h3>
+            <h2 class="info-box__heading"><?php echo $this->translate('summary'); ?></h2>
             <dl class="meta">
               <?php if ($this->receivedDate): ?>
                 <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
