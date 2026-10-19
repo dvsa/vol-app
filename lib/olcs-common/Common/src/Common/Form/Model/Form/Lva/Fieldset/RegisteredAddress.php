@@ -19,7 +19,7 @@ class RegisteredAddress
     public $version;
 
     #[Form\Attributes(['class' => 'long', 'id' => 'addressLine1', 'data-container-class' => 'compound'])]
-    #[Form\Options(['label' => 'address_addressLines', 'label_attributes' => ['aria-label' => 'Enter address manually. Business address line one'], 'error-message' => 'registeredAddress_addressLine1-error'])]
+    #[Form\Options(['label' => 'address_addressLines', 'error-message' => 'registeredAddress_addressLine1-error'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 200])]
@@ -47,14 +47,14 @@ class RegisteredAddress
     public $addressLine4;
 
     #[Form\Attributes(['class' => 'long', 'id' => ''])]
-    #[Form\Options(['label' => 'address_townCity', 'label_attributes' => ['class' => 'govuk-visually-hidden', 'aria-label' => 'Business town or city']])]
+    #[Form\Options(['label' => 'address_townCity', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 200])]
     public $town;
 
     #[Form\Attributes(['id' => ''])]
-    #[Form\Options(['label' => 'address_postcode', 'label_attributes' => ['aria-label' => 'Business Postcode']])]
+    #[Form\Options(['label' => 'address_postcode'])]
     #[Form\Type('Text')]
     #[Form\Required(false)]
     #[Form\Filter('Dvsa\Olcs\Transfer\Filter\Postcode')]

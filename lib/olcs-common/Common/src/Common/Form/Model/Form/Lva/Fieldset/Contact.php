@@ -34,7 +34,7 @@ class Contact
     public $phone_secondary_version;
 
     #[Form\Attributes(['class' => 'long', 'id' => 'email'])]
-    #[Form\Options(['label' => 'application_your-business_business-type.contact-details.email', 'label_attributes' => ['aria-label' => 'Business email address'], 'error-message' => 'contact_email-error', 'hint' => 'application_your-business_business-type.contact-details.operator-email-hint'])]
+    #[Form\Options(['label' => 'application_your-business_business-type.contact-details.email', 'error-message' => 'contact_email-error', 'hint' => 'application_your-business_business-type.contact-details.operator-email-hint'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Dvsa\Olcs\Transfer\Validators\EmailAddress')]

@@ -25,7 +25,7 @@ class Address
     public $searchPostcode;
 
     #[Form\Attributes(['class' => 'long', 'id' => 'addressLine1', 'data-container-class' => 'compound'])]
-    #[Form\Options(['label' => 'address_addressLines', 'error-message' => 'address_addressLine1-error', 'label_attributes' => ['aria-label' => 'Enter address manually. Address line one'], 'short-label' => 'address_addressLine1'])]
+    #[Form\Options(['label' => 'address_addressLines', 'error-message' => 'address_addressLine1-error', 'short-label' => 'address_addressLine1'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 90])]
@@ -53,7 +53,7 @@ class Address
     public $addressLine4;
 
     #[Form\Attributes(['class' => 'long', 'id' => 'addressTown'])]
-    #[Form\Options(['label' => 'address_townCity', 'short-label' => 'address_townCity', 'label_attributes' => ['aria-label' => 'address_townCity'], 'error-message' => 'address_town-error'])]
+    #[Form\Options(['label' => 'address_townCity', 'short-label' => 'address_townCity', 'error-message' => 'address_town-error'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 30])]
@@ -68,7 +68,7 @@ class Address
     public $postcode;
 
     #[Form\Attributes(['id' => '', 'placeholder' => '', 'value' => 'GB'])]
-    #[Form\Options(['label' => 'address_country', 'label_attributes' => ['aria-label' => 'Choose country'], 'error-message' => 'address_country-error', 'empty_option' => 'Please Select', 'disable_inarray_validator' => false, 'service_name' => 'Common\Service\Data\Country'])]
+    #[Form\Options(['label' => 'address_country', 'error-message' => 'address_country-error', 'empty_option' => 'Please Select', 'disable_inarray_validator' => false, 'service_name' => 'Common\Service\Data\Country'])]
     #[Form\Type('DynamicSelect')]
     public $countryCode;
 }

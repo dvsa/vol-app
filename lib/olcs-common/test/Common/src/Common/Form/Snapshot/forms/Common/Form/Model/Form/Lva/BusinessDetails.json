@@ -51,7 +51,6 @@
                 "label": "Nature of business",
                 "error-message": "businessDetails_natureOfBusiness-error",
                 "label_attributes": {
-                  "aria-label": "businessDetails_natureOfBusiness-error",
                   "class": "form-element__question"
                 }
               }
@@ -195,9 +194,6 @@
               },
               "options": {
                 "label": "address_addressLines",
-                "label_attributes": {
-                  "aria-label": "Enter address manually. Business address line one"
-                },
                 "error-message": "registeredAddress_addressLine1-error"
               },
               "type": "Text"
@@ -268,8 +264,7 @@
               "options": {
                 "label": "address_townCity",
                 "label_attributes": {
-                  "class": "govuk-visually-hidden",
-                  "aria-label": "Business town or city"
+                  "class": "govuk-visually-hidden"
                 }
               },
               "type": "Text"
@@ -283,10 +278,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_postcode",
-                "label_attributes": {
-                  "aria-label": "Business Postcode"
-                }
+                "label": "address_postcode"
               },
               "type": "Text"
             }
