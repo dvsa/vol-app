@@ -710,8 +710,7 @@
               "type": "TextArea",
               "attributes": {
                 "class": "long",
-                "label": "transport-manager.responsibilities.additional-information.title",
-                "autocomplete": "nope"
+                "label": "transport-manager.responsibilities.additional-information.title"
               },
               "options": {
                 "label": "transport-manager.responsibilities.additional-information",
