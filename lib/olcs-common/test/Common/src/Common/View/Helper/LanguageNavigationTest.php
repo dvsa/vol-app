@@ -45,6 +45,25 @@ final class LanguageNavigationTest extends MockeryTestCase
         $this->assertSame($expected, (new LanguageNavigation($languagePref))->__invoke());
     }
 
+    #[DataProvider('dpCurrentLanguage')]
+    public function testCurrentLanguage(mixed $preference, string $expected): void
+    {
+        $languagePref = m::mock(Language::class);
+        $languagePref->expects('getPreference')->withNoArgs()->andReturn($preference);
+
+        $this->assertSame($expected, (new LanguageNavigation($languagePref))->currentLanguage());
+    }
+
+    /**
+     * @return \Iterator<string, array{mixed, string}>
+     */
+    public static function dpCurrentLanguage(): \Iterator
+    {
+        yield 'English' => [Language::OPTION_EN, 'en'];
+        yield 'Welsh' => [Language::OPTION_CY, 'cy'];
+        yield 'unsupported' => ['fr', 'en'];
+    }
+
     /**
      * @return \Iterator<string, array{mixed, string}>
      */
