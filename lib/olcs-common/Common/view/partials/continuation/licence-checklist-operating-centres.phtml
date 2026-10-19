@@ -30,10 +30,9 @@
             'continuation/checklist/operating-centres', ['continuationDetailId' => $this->data['continuationDetailId']])
         ; ?>"
         class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false">
-        <?php echo $this->escapeHtml($this->translate('continuations.operating-centres.button-label')); ?>
+        <?php echo $this->escapeHtml($this->translate('continuations.operating-centres.button-label')); ?> <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
         </a>
         </p>
-        <p><?php echo $this->escapeHtml($this->translate('continuations.checklist.section.opens_in_a_new_window')); ?></p>
     <?php endif; ?>
 </div>
 <?php endif; ?>

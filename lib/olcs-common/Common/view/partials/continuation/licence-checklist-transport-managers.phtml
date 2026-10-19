@@ -34,9 +34,8 @@ if (count($this->data['transportManagers']['transportManagers']) > 0) {
             ['continuationDetailId' => $this->data['continuationDetailId']])
         ; ?>"
         class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false">
-        <?php echo $this->translate('continuations.transport-managers.button-label'); ?>
+        <?php echo $this->translate('continuations.transport-managers.button-label'); ?> <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
     </a>
     </p>
-    <p><?php echo $this->translate('continuations.checklist.section.opens_in_a_new_window'); ?></p>
 <?php endif; ?>
 

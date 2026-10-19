@@ -23,10 +23,9 @@
             'continuation/checklist/safety-inspectors', ['continuationDetailId' => $this->data['continuationDetailId']])
         ; ?>"
         class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false">
-        <?php echo $this->translate('continuations.safety-inspectors.button-label'); ?>
+        <?php echo $this->translate('continuations.safety-inspectors.button-label'); ?> <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
         </a>
         </p>
-        <p><?php echo $this->translate('continuations.checklist.section.opens_in_a_new_window'); ?></p>
     <?php endif; ?>
 </div>
 <h2 class="h3"><?php echo $this->translate('continuations.safety-details.label'); ?></h2>
