@@ -99,9 +99,9 @@ final class SystemInfoMessagesTest extends MockeryTestCase
             ],
             'expect' =>
                 '<div class="govuk-notification-banner" role="region" ' .
-                'aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">' . "\n" .
+                'aria-labelledby="system-info-messages-title" data-module="govuk-notification-banner">' . "\n" .
                 '  <div class="govuk-notification-banner__header">' . "\n" .
-                '    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">' . "\n" .
+                '    <h2 class="govuk-notification-banner__title" id="system-info-messages-title">' . "\n" .
                 '      Important' . "\n" .
                 '    </h2>' . "\n" .
                 '  </div>' . "\n" .
