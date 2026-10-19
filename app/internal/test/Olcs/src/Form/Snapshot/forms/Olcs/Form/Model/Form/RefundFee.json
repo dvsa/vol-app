@@ -112,9 +112,6 @@
               "options": {
                 "label": "address_addressLines",
                 "error-message": "address_addressLine1-error",
-                "label_attributes": {
-                  "aria-label": "Enter address manually. Address line one"
-                },
                 "short-label": "address_addressLine1"
               },
               "type": "Text"
@@ -184,9 +181,6 @@
               "options": {
                 "label": "address_townCity",
                 "short-label": "address_townCity",
-                "label_attributes": {
-                  "aria-label": "address_townCity"
-                },
                 "error-message": "address_town-error"
               },
               "type": "Text"
@@ -218,9 +212,6 @@
               },
               "options": {
                 "label": "address_country",
-                "label_attributes": {
-                  "aria-label": "Choose country"
-                },
                 "error-message": "address_country-error",
                 "empty_option": "Please Select",
                 "disable_inarray_validator": false,

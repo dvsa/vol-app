@@ -10,10 +10,7 @@
         "name": "username",
         "options": {
           "label": "auth.login.username",
-          "short-label": "auth.login.username",
-          "label_attributes": {
-            "aria-label": "Enter your username"
-          }
+          "short-label": "auth.login.username"
         },
         "attributes": {
           "id": "auth.login.username"
@@ -27,10 +24,7 @@
         "name": "password",
         "options": {
           "label": "auth.login.password",
-          "short-label": "auth.login.password",
-          "label_attributes": {
-            "aria-label": "Enter your password"
-          }
+          "short-label": "auth.login.password"
         },
         "attributes": {
           "id": "auth.login.password"
