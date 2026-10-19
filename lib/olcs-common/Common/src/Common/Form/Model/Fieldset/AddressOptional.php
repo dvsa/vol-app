@@ -24,26 +24,26 @@ class AddressOptional
     public $searchPostcode;
 
     #[Form\Attributes(['class' => 'long', 'id' => '', 'data-container-class' => 'compound'])]
-    #[Form\Options(['label' => 'address_addressLines', 'short-label' => 'address_addressLine1'])]
+    #[Form\Options(['label' => 'address_addressLine1', 'short-label' => 'address_addressLine1'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     public $addressLine1;
 
     #[Form\Attributes(['class' => 'long', 'id' => '', 'data-container-class' => 'compound'])]
-    #[Form\Options(['label' => 'address_addressLine2', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
+    #[Form\Options(['label' => 'address_addressLine2'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
     public $addressLine2;
 
     #[Form\Attributes(['class' => 'long', 'id' => '', 'data-container-class' => 'compound'])]
-    #[Form\Options(['label' => 'address_addressLine3', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
+    #[Form\Options(['label' => 'address_addressLine3'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
     public $addressLine3;
 
     #[Form\Attributes(['class' => 'long', 'id' => ''])]
-    #[Form\Options(['label' => 'address_addressLine4', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
+    #[Form\Options(['label' => 'address_addressLine4'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
     public $addressLine4;

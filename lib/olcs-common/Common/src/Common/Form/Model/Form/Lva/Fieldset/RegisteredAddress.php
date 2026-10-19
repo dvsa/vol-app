@@ -19,35 +19,35 @@ class RegisteredAddress
     public $version;
 
     #[Form\Attributes(['class' => 'long', 'id' => 'addressLine1', 'data-container-class' => 'compound'])]
-    #[Form\Options(['label' => 'address_addressLines', 'error-message' => 'registeredAddress_addressLine1-error'])]
+    #[Form\Options(['label' => 'address_addressLine1', 'error-message' => 'registeredAddress_addressLine1-error'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 200])]
     public $addressLine1;
 
     #[Form\Attributes(['class' => 'long', 'id' => '', 'data-container-class' => 'compound'])]
-    #[Form\Options(['label' => 'address_addressLine2', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
+    #[Form\Options(['label' => 'address_addressLine2'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 200])]
     public $addressLine2;
 
     #[Form\Attributes(['class' => 'long', 'id' => '', 'data-container-class' => 'compound'])]
-    #[Form\Options(['label' => 'address_addressLine3', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
+    #[Form\Options(['label' => 'address_addressLine3'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 200])]
     public $addressLine3;
 
     #[Form\Attributes(['class' => 'long', 'id' => '', 'data-container-class' => 'compound'])]
-    #[Form\Options(['label' => 'address_addressLine4', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
+    #[Form\Options(['label' => 'address_addressLine4'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 200])]
     public $addressLine4;
 
     #[Form\Attributes(['class' => 'long', 'id' => ''])]
-    #[Form\Options(['label' => 'address_townCity', 'label_attributes' => ['class' => 'govuk-visually-hidden']])]
+    #[Form\Options(['label' => 'address_townCity'])]
     #[Form\Required(false)]
     #[Form\Type('Text')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 0, 'max' => 200])]

@@ -278,7 +278,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLines",
+                "label": "address_addressLine1",
                 "error-message": "address_addressLine1-error",
                 "short-label": "address_addressLine1"
               },
@@ -295,10 +295,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine2",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine2"
               },
               "type": "Text"
             }
@@ -313,10 +310,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine3",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine3"
               },
               "type": "Text"
             }
@@ -330,10 +324,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_addressLine4",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine4"
               },
               "type": "Text"
             }
@@ -455,7 +446,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLines",
+                "label": "address_addressLine1",
                 "error-message": "address_addressLine1-error",
                 "short-label": "address_addressLine1"
               },
@@ -472,10 +463,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine2",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine2"
               },
               "type": "Text"
             }
@@ -490,10 +478,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine3",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine3"
               },
               "type": "Text"
             }
@@ -507,10 +492,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_addressLine4",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine4"
               },
               "type": "Text"
             }
@@ -729,7 +711,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-mon"
+                            "label": "tm-review-responsibility-mon"
                           }
                         }
                       },
@@ -743,7 +725,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-tue"
+                            "label": "tm-review-responsibility-tue"
                           }
                         }
                       },
@@ -757,7 +739,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-wed"
+                            "label": "tm-review-responsibility-wed"
                           }
                         }
                       },
@@ -771,7 +753,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-thu"
+                            "label": "tm-review-responsibility-thu"
                           }
                         }
                       },
@@ -785,7 +767,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-fri"
+                            "label": "tm-review-responsibility-fri"
                           }
                         }
                       },
@@ -799,7 +781,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-sat"
+                            "label": "tm-review-responsibility-sat"
                           }
                         }
                       },
@@ -813,7 +795,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-sun"
+                            "label": "tm-review-responsibility-sun"
                           }
                         }
                       }

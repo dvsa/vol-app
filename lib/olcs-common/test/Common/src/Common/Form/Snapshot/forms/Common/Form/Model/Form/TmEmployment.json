@@ -72,7 +72,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLines",
+                "label": "address_addressLine1",
                 "error-message": "address_addressLine1-error",
                 "short-label": "address_addressLine1"
               },
@@ -89,10 +89,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine2",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine2"
               },
               "type": "Text"
             }
@@ -107,10 +104,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine3",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine3"
               },
               "type": "Text"
             }
@@ -124,10 +118,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_addressLine4",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine4"
               },
               "type": "Text"
             }
