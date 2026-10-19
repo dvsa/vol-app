@@ -36,7 +36,7 @@
 
             <?php if ($this->showExpiryWarning === true): ?>
             <div class="info-box info-box--pink">
-                <h2 class="exclamation info-box__heading info-box__heading--icon"><span class="govuk-visually-hidden"><?php echo $this->escapeHtml($this->translate('lva-summary-important')); ?>: </span>
+                <h2 class="exclamation info-box__heading info-box__heading--icon"><?php echo $this->importantPrefix(); ?>
                     <?php printf($this->translate('This licence is due to expire on %s'), $this->date(strtotime($this->expiryDate))); ?>
                 </h2>
                 <p class="info-box__text"><?php echo $this->translate('The licence will automatically end after the expiry date.') ?></p>
@@ -48,7 +48,7 @@
 
             <?php if ($this->isExpired === true): ?>
             <div class="info-box info-box--pink">
-                <h2 class="exclamation info-box__heading info-box__heading--icon"><span class="govuk-visually-hidden"><?php echo $this->escapeHtml($this->translate('lva-summary-important')); ?>: </span>
+                <h2 class="exclamation info-box__heading info-box__heading--icon"><?php echo $this->importantPrefix(); ?>
                     <?php echo $this->translate('This licence has expired'); ?>
                 </h2>
                 <p class="info-box__text"><?php echo $this->translate('If you need to continue this licence you should contact the central licensing office as a matter of urgency.'); ?></p>
@@ -58,7 +58,7 @@
 
             <div class="info-box info-box--grey">
                 <h2 class="info-box__heading"><?php echo $this->translate('licence-status'); ?></h2>
-                <p class="info-box__icon-wrapper info-box__text"><i class="info-box__icon selfserve-important"></i><span class="govuk-visually-hidden"><?php echo $this->escapeHtml($this->translate('lva-summary-important')); ?>: </span><?php echo $this->translate($status); ?></p>
+                <p class="info-box__icon-wrapper info-box__text"><i class="info-box__icon selfserve-important"></i><?php echo $this->importantPrefix(); ?><?php echo $this->translate($status); ?></p>
                 <?php foreach ($infoBoxLinks as $link): ?>
                 <ul class="govuk-list">
                     <li>
