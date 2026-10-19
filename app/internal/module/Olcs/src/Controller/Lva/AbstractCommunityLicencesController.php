@@ -1,7 +1,9 @@
 <?php
 
-namespace Common\Controller\Lva;
+namespace Olcs\Controller\Lva;
 
+use Common\Controller\Lva\AbstractController;
+use Common\Controller\Lva\Traits;
 use Common\Data\Mapper\Lva\CommunityLicence as CommunityLicMapper;
 use Common\Form\Form;
 use Common\FormService\FormServiceManager;
@@ -282,10 +284,6 @@ abstract class AbstractCommunityLicencesController extends AbstractController
      */
     private function getTableData()
     {
-        /**
-         * @VOL GenericList lives in olcs-internal so shouldn't be used here, ticket to fix VOL-5194
-         * @phpstan-ignore-next-line
-         */
         $paramProvider = new GenericList(['licence']);
         $paramProvider->setParams($this->plugin('params'));
 
