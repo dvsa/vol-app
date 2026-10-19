@@ -4,6 +4,7 @@ namespace Common\Service\Qa\Custom\Ecmt;
 
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Qa\Custom\Common\HtmlAdder;
+use Common\View\Helper\ImportantPrefix;
 use Laminas\Form\Fieldset;
 
 class InfoIconAdder
@@ -28,7 +29,7 @@ class InfoIconAdder
         $markup = sprintf(
             '<p class="govuk-!-margin-top-7 info-box__icon-wrapper info-box__text">' .
             '<i class="info-box__icon selfserve-important"></i>' .
-            '<span class="govuk-visually-hidden">%s: </span>%s</p>',
+            ImportantPrefix::HTML . '%s</p>',
             $this->translator->translate('lva-summary-important'),
             $this->translator->translate($translationKey)
         );
