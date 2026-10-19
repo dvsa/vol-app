@@ -134,10 +134,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-mon",
-                      "label_attributes": {
-                        "aria-label": "Enter your working hours, Monday"
-                      }
+                      "label": "days-of-week-short-mon"
                     }
                   }
                 },
@@ -151,10 +148,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-tue",
-                      "label_attributes": {
-                        "aria-label": "Tuesday"
-                      }
+                      "label": "days-of-week-short-tue"
                     }
                   }
                 },
@@ -168,10 +162,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-wed",
-                      "label_attributes": {
-                        "aria-label": "Wednesday"
-                      }
+                      "label": "days-of-week-short-wed"
                     }
                   }
                 },
@@ -185,10 +176,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-thu",
-                      "label_attributes": {
-                        "aria-label": "Thursday"
-                      }
+                      "label": "days-of-week-short-thu"
                     }
                   }
                 },
@@ -202,10 +190,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-fri",
-                      "label_attributes": {
-                        "aria-label": "Friday"
-                      }
+                      "label": "days-of-week-short-fri"
                     }
                   }
                 },
@@ -219,10 +204,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-sat",
-                      "label_attributes": {
-                        "aria-label": "Saturday"
-                      }
+                      "label": "days-of-week-short-sat"
                     }
                   }
                 },
@@ -236,10 +218,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-sun",
-                      "label_attributes": {
-                        "aria-label": "Sunday"
-                      }
+                      "label": "days-of-week-short-sun"
                     }
                   }
                 }

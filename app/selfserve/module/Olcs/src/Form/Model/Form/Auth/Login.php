@@ -8,7 +8,7 @@ use Laminas\Form\Annotation as Form;
 #[Form\Attributes(['method' => 'post'])]
 class Login
 {
-    #[Form\Options(['label' => 'auth.login.username', 'short-label' => 'auth.login.username', 'label_attributes' => ['aria-label' => 'Enter your username']])]
+    #[Form\Options(['label' => 'auth.login.username', 'short-label' => 'auth.login.username'])]
     #[Form\Attributes(['id' => 'auth.login.username'])]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Filter('Common\Filter\StripSpaces')]
@@ -16,7 +16,7 @@ class Login
     #[Form\Type('Text')]
     public $username = null;
 
-    #[Form\Options(['label' => 'auth.login.password', 'short-label' => 'auth.login.password', 'label_attributes' => ['aria-label' => 'Enter your password']])]
+    #[Form\Options(['label' => 'auth.login.password', 'short-label' => 'auth.login.password'])]
     #[Form\Attributes(['id' => 'auth.login.password'])]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 8])]

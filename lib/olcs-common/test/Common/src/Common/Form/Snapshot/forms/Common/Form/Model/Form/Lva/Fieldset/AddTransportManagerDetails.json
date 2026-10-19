@@ -56,10 +56,7 @@
           "disabled": "disabled"
         },
         "options": {
-          "label": "lva-tm-details-email",
-          "label_attributes": {
-            "aria-label": "Enter their email address"
-          }
+          "label": "lva-tm-details-email"
         },
         "type": "Text"
       }
