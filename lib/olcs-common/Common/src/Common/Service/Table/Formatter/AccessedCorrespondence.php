@@ -4,6 +4,7 @@ namespace Common\Service\Table\Formatter;
 
 use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
+use Common\View\Helper\LinkNewWindow;
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 
 /**
@@ -54,10 +55,11 @@ class AccessedCorrespondence implements FormatterPluginManagerInterface
         }
 
         return sprintf(
-            '<a class="govuk-link" href="%s" target="_blank"><b>%s%s</b></a>%s',
+            '<a class="govuk-link" href="%s" target="_blank"><b>%s%s</b> %s</a>%s',
             $url,
             Escape::html($data['correspondence']['document']['description']),
             Escape::html($extension),
+            Escape::html($this->translator->translate(LinkNewWindow::NEW_TAB_MESSAGE)),
             // $title is markup this method built above, from a translation key — not row data.
             $title
         );
