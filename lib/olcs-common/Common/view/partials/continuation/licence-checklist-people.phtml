@@ -16,12 +16,12 @@ if (count($this->data['people']['persons']) > 0) {
         href="<?php echo $this->url(
             'continuation/checklist/people', ['continuationDetailId' => $this->data['continuationDetailId']])
         ; ?>"
-        class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false">
+        class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false" data-module="govuk-button">
         <?php
             echo $this->translate(
                 'continuations.people.button-label.'. $this->data['businessType']['typeOfBusinessId']
             );
-        ?> <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+        ?><span class="govuk-visually-hidden"> <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?></span>
     </a>
     </p>
 <?php endif; ?>
