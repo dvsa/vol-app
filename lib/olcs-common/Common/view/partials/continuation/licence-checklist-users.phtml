@@ -16,8 +16,8 @@ if (count($this->data['users']['users']) > 0) {
         href="<?php echo $this->url(
             'continuation/checklist/users', ['continuationDetailId' => $this->data['continuationDetailId']])
         ; ?>"
-        class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false">
-        <?php echo $this->translate('continuations.users.button-label'); ?> <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+        class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false" data-module="govuk-button">
+        <?php echo $this->translate('continuations.users.button-label'); ?><span class="govuk-visually-hidden"> <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?></span>
     </a>
     </p>
 <?php endif; ?>
