@@ -7,11 +7,13 @@
           <h2><?php echo $this->escapeHtml($licNo); ?></h2>
           <?php if ($paymentRef): ?>
               <p>
-                  <a
-                      href="<?php echo $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]);?>"
-                      target="blank">
-                      <?php echo $this->translate('continuation.success.confirmation.view-print-receipt'); ?>
-                  </a>
+                  <?php
+                    echo $this->linkNewWindow(
+                        $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]),
+                        'continuation.success.confirmation.view-print-receipt',
+                        'govuk-link govuk-link--inverse'
+                    );
+                  ?>
               </p>
           <?php endif; ?>
       </div>
