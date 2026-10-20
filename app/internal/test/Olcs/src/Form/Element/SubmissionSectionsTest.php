@@ -57,6 +57,33 @@ final class SubmissionSectionsTest extends TestCase
         $this->assertNotEmpty($sut->getSections());
     }
 
+    public function testSetValueBusRegPreselectedSections(): void
+    {
+        $sut = new SubmissionSections();
+
+        $mockSelect = m::mock(\Laminas\Form\Element\Select::class);
+        $mockSelect->shouldReceive('setValue')->once()->with('submission_type_o_bus_reg');
+        $sut->setSubmissionType($mockSelect);
+
+        $mockMultiCheckbox = m::mock(\Laminas\Form\Element\MultiCheckbox::class);
+        $mockMultiCheckbox->shouldReceive('setValue')->once()->with(
+            [
+                'case-summary',
+                'case-outline',
+                'people',
+                'outstanding-applications',
+                'case-outline',
+                'people',
+                'annex',
+                'bus-reg-app-details',
+                'transport-authority-comments',
+            ]
+        );
+        $sut->setSections($mockMultiCheckbox);
+
+        $sut->setValue(['submissionType' => 'submission_type_o_bus_reg']);
+    }
+
     /**
      * Tests prepare submissionSections element for Non-TM
      */
