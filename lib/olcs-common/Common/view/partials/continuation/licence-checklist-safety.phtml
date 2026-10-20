@@ -22,8 +22,8 @@
         href="<?php echo $this->url(
             'continuation/checklist/safety-inspectors', ['continuationDetailId' => $this->data['continuationDetailId']])
         ; ?>"
-        class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false">
-        <?php echo $this->translate('continuations.safety-inspectors.button-label'); ?> <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+        class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false" data-module="govuk-button">
+        <?php echo $this->translate('continuations.safety-inspectors.button-label'); ?><span class="govuk-visually-hidden"> <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?></span>
         </a>
         </p>
     <?php endif; ?>
