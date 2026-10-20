@@ -7,9 +7,10 @@ namespace Dvsa\OlcsTest\DocumentShare\Service;
 use Dvsa\Olcs\DocumentShare\Data\Object\File as DsFile;
 use Dvsa\Olcs\DocumentShare\Service\WebDavClient as Client;
 use Hamcrest\Core\IsTypeOf;
-use League\Flysystem\FileExistsException;
-use League\Flysystem\FileNotFoundException;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToWriteFile;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
@@ -25,13 +26,13 @@ final class WebDavClientTest extends MockeryTestCase
     /** @var  Client */
     protected $sut;
 
-    /** @var  m\MockInterface | FilesystemInterface */
+    /** @var  m\MockInterface | FilesystemOperator */
     private $mockFileSystem;
 
     #[\Override]
     public function setUp(): void
     {
-        $this->mockFileSystem = m::mock(FilesystemInterface::class);
+        $this->mockFileSystem = m::mock(FilesystemOperator::class);
 
         $this->sut = new Client($this->mockFileSystem, $this->createStub(\Psr\Log\LoggerInterface::class));
 
@@ -82,7 +83,7 @@ final class WebDavClientTest extends MockeryTestCase
     {
         $testPath = 'test';
 
-        $this->mockFileSystem->expects('readStream')->with($testPath)->andThrow(new FileNotFoundException($testPath));
+        $this->mockFileSystem->expects('readStream')->with($testPath)->andThrow(new UnableToReadFile($testPath));
 
         $actual = $this->sut->read($testPath);
         $this->assertEquals(false, $actual);
@@ -125,30 +126,8 @@ final class WebDavClientTest extends MockeryTestCase
             ->shouldReceive('getResource')->andReturn($res)
             ->getMock();
 
-        $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andReturn(false);
-
-        $actual = $this->sut->write($expectPath, $mockFile);
-
-        $this->assertEquals(false, $actual->isSuccess());
-    }
-
-    public function testWriteFileAlreadyExists(): void
-    {
-        $expectPath = 'unit_Path';
-        $expectContent = 'unit_ABCDE123';
-
-        $res = vfsStream::newFile('res')
-            ->withContent($expectContent)
-            ->at(vfsStream::setup('temp'))
-            ->url();
-
-        /** @var DsFile $mockFile */
-        $mockFile = m::mock(DsFile::class)
-            ->shouldReceive('getResource')->andReturn($res)
-            ->getMock();
-
         $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andThrow(
-            new FileExistsException($expectPath)
+            new UnableToWriteFile($expectPath)
         );
 
         $actual = $this->sut->write($expectPath, $mockFile);
@@ -170,7 +149,7 @@ final class WebDavClientTest extends MockeryTestCase
             ->shouldReceive('getResource')->andReturn($res)
             ->getMock();
 
-        $this->mockFileSystem->expects('updateStream')->with($expectPath, new IsTypeOf('resource'))->andReturn(true);
+        $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andReturn(true);
 
         $actual = $this->sut->update($expectPath, $mockFile);
 
@@ -191,7 +170,9 @@ final class WebDavClientTest extends MockeryTestCase
             ->shouldReceive('getResource')->andReturn($res)
             ->getMock();
 
-        $this->mockFileSystem->expects('updateStream')->with($expectPath, new IsTypeOf('resource'))->andReturn(false);
+        $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andThrow(
+            new UnableToReadFile($expectPath)
+        );
 
         $actual = $this->sut->update($expectPath, $mockFile);
 
@@ -212,8 +193,8 @@ final class WebDavClientTest extends MockeryTestCase
             ->shouldReceive('getResource')->andReturn($res)
             ->getMock();
 
-        $this->mockFileSystem->expects('updateStream')->with($expectPath, new IsTypeOf('resource'))->andThrow(
-            new FileNotFoundException($expectPath)
+        $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andThrow(
+            new UnableToReadFile($expectPath)
         );
 
         $actual = $this->sut->update($expectPath, $mockFile);
@@ -233,7 +214,9 @@ final class WebDavClientTest extends MockeryTestCase
 
     public function testRemoveFail(): void
     {
-        $this->mockFileSystem->expects('delete')->with('testFileToUnlink')->andReturn(false);
+        $this->mockFileSystem->expects('delete')->with('testFileToUnlink')->andThrow(
+            new UnableToDeleteFile('testFileToUnlink')
+        );
 
         $result = $this->sut->remove('testFileToUnlink');
 
@@ -244,7 +227,7 @@ final class WebDavClientTest extends MockeryTestCase
     public function testRemoveFileNotFound(): void
     {
         $this->mockFileSystem->expects('delete')->with('testFileToUnlink')->andThrow(
-            new FileNotFoundException('test')
+            new UnableToReadFile('testFileToUnlink')
         );
 
         $result = $this->sut->remove('testFileToUnlink');
