@@ -3,12 +3,12 @@
 namespace Dvsa\Olcs\Api\Domain\Exception;
 
 /**
- * File Already Exists Exception
+ * File Exists Exception
  */
-class FileAlreadyExistsException extends Exception
+class FileExistsException extends Exception
 {
     /**
-     * FileAlreadyExistsException constructor.
+     * FileExistsException constructor.
      *
      * @param null $message Exception message text
      *

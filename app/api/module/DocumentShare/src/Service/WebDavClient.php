@@ -2,7 +2,7 @@
 
 namespace Dvsa\Olcs\DocumentShare\Service;
 
-use Dvsa\Olcs\Api\Domain\Exception\FileAlreadyExistsException;
+use Dvsa\Olcs\Api\Domain\Exception\FileExistsException;
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
 use Laminas\Http\Response;
 use League\Flysystem\FilesystemException;
@@ -135,13 +135,13 @@ class WebDavClient implements DocumentStoreInterface
                 $response->setResponse(false);
             } else {
                 if ($this->filesystem->fileExists($path)) {
-                    throw new FileAlreadyExistsException($path);
+                    throw new FileExistsException($path);
                 }
 
                 $this->filesystem->writeStream($path, $fh);
                 $response->setResponse(true);
             }
-        } catch (FileAlreadyExistsException | UnableToWriteFile) {
+        } catch (FileExistsException | UnableToWriteFile) {
             $response->setResponse(false);
         } finally {
             if (is_resource($fh)) {
