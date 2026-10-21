@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.5.3](https://github.com/dvsa/vol-app/compare/v9.5.2...v9.5.3) (2026-10-21)
+
+
+### Miscellaneous Chores
+
+* release 9.5.3 ([19a19cb](https://github.com/dvsa/vol-app/commit/19a19cb7be064b949dd2d377317f63f965e37046))
+
 ## [9.5.2](https://github.com/dvsa/vol-app/compare/v9.5.1...v9.5.2) (2026-10-19)
 
 
