@@ -513,6 +513,8 @@ return [
         => CommandHandler\Document\UpdateDocumentAnalysisAssessmentStatusFactory::class,
     TransferCommand\Document\OverrideDocumentAnalysisFlag::class
         => CommandHandler\Document\OverrideDocumentAnalysisFlagFactory::class,
+    TransferCommand\Document\OverridePassedDocumentAnalysisFlag::class
+        => CommandHandler\Document\OverridePassedDocumentAnalysisFlagFactory::class,
 
     // Transfer - DocumentTemplate
     TransferCommand\DocTemplate\Create::class => CommandHandler\DocTemplate\Create::class,

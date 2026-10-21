@@ -30,6 +30,25 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
         $this->assertSame(2, $page['unchangedIssueCount']);
     }
 
+    /**
+     * Passes carry their row key, remark and whether they are a flagged check, so the change
+     * document review page can offer a pass-to-fail form for the flagged ones (not bank/bank
+     * address, which are reference-only).
+     */
+    public function testPassesCarryTheirKeyRemarkAndFlaggedStateForChangingToAFail(): void
+    {
+        $page = FinancialEvidenceAssessmentReview::mapFromAnalysis($this->givenAnalysis([
+            'authenticity' => ['flag' => 'pass', 'remark' => 'Looks genuine', 'value' => null],
+        ]));
+
+        $authenticity = array_values(array_filter($page['passes'], static fn(array $pass): bool => $pass['key'] === 'authenticity'))[0];
+        $bank = array_values(array_filter($page['passes'], static fn(array $pass): bool => $pass['key'] === 'bank'))[0];
+
+        $this->assertTrue($authenticity['flagged']);
+        $this->assertSame('Looks genuine', $authenticity['remark']);
+        $this->assertFalse($bank['flagged']);
+    }
+
     public function testAnUnchangedIssueShowsItsValueFlagRemarkAndNoComment(): void
     {
         $page = FinancialEvidenceAssessmentReview::mapFromAnalysis($this->givenAnalysis([
@@ -46,6 +65,7 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
                 'remark' => 'Statement is over 2 months old',
                 'comment' => null,
                 'changed' => false,
+                'kept' => false,
                 'changedTo' => null,
                 'changedToTag' => null,
                 'changedBy' => null,
@@ -92,6 +112,97 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
 
         // Authenticity has no value, large deposit only a count, and a missing value shows nothing.
         $this->assertSame([null, null, null], array_column($page['issues'], 'value'));
+    }
+
+    /**
+     * A genuine pass changed to a fail shows the fail it was changed to, not a pass regardless of
+     * direction: changedTo must follow the row's own flag, not be fixed to one value.
+     */
+    public function testAPassChangedToAFailShowsTheFailItWasChangedToNotAlwaysPass(): void
+    {
+        $page = FinancialEvidenceAssessmentReview::mapFromAnalysis($this->givenAnalysis([
+            'authenticity' => [
+                'flag' => 'fail',
+                'remark' => 'Possible tampering',
+                'value' => null,
+                'override' => [
+                    'originalFlag' => 'pass',
+                    'comment' => 'Reconsidered after a second look',
+                    'changedBy' => 'Sam Taylor',
+                    'changedOn' => '2026-10-08 10:00:00',
+                ],
+            ],
+        ]));
+
+        $issue = $page['issues'][0];
+
+        $this->assertSame('PASS', $issue['flag']);
+        $this->assertSame('govuk-tag--grey', $issue['flagTag']);
+        $this->assertTrue($issue['changed']);
+        $this->assertSame('FAIL', $issue['changedTo']);
+        $this->assertSame('govuk-tag--red', $issue['changedToTag']);
+        $this->assertSame('Sam Taylor', $issue['changedBy']);
+        $this->assertSame('Reconsidered after a second look', $issue['comment']);
+    }
+
+    /**
+     * An override that leaves the row's own flag unchanged (a note - "No, but here is why") stays
+     * a pass, carrying its comment, rather than being promoted to an issue.
+     */
+    public function testAPassWithOnlyANoteStaysAPassAndCarriesItsComment(): void
+    {
+        $page = FinancialEvidenceAssessmentReview::mapFromAnalysis($this->givenAnalysis([
+            'statementDate' => [
+                'flag' => 'pass',
+                'remark' => null,
+                'value' => '2026-09-30',
+                'override' => [
+                    'originalFlag' => 'pass',
+                    'comment' => 'Looks fine, checked again',
+                    'changedBy' => 'Jo Bloggs',
+                    'changedOn' => '2026-10-08 10:00:00',
+                ],
+            ],
+        ]));
+
+        $this->assertNotContains('statementDate', array_column($page['issues'], 'key'));
+
+        $pass = array_values(array_filter($page['passes'], static fn(array $pass): bool => $pass['key'] === 'statementDate'))[0];
+
+        $this->assertSame('PASS', $pass['flag']);
+        $this->assertSame('Looks fine, checked again', $pass['comment']);
+    }
+
+    /**
+     * A note left on an unresolved issue (flag unchanged) says the flag was kept, by whom - not
+     * silence, and not a false claim that it changed.
+     */
+    public function testANoteOnAnUnresolvedIssueShowsItWasKept(): void
+    {
+        $page = FinancialEvidenceAssessmentReview::mapFromAnalysis($this->givenAnalysis([
+            'statementDate' => [
+                'flag' => 'fail',
+                'remark' => 'Statement is over 2 months old',
+                'value' => '2025-12-29',
+                'override' => [
+                    'originalFlag' => 'fail',
+                    'comment' => 'Checked with the bank directly, still a genuine fail',
+                    'changedBy' => 'Ashley Young',
+                    'changedOn' => '2026-10-08 10:00:00',
+                ],
+            ],
+        ]));
+
+        $issue = $page['issues'][0];
+
+        $this->assertFalse($issue['changed']);
+        $this->assertTrue($issue['kept']);
+        $this->assertSame('FAIL', $issue['changedTo']);
+        $this->assertSame('govuk-tag--red', $issue['changedToTag']);
+        $this->assertSame('Ashley Young', $issue['changedBy']);
+        $this->assertSame('Checked with the bank directly, still a genuine fail', $issue['comment']);
+        // Still unresolved: a note does not count as the issue having been fixed.
+        $this->assertSame(1, $page['unchangedIssueCount']);
     }
 
     /**

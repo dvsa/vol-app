@@ -4,6 +4,34 @@
   "inputFilter": {
     "class": "Laminas\\InputFilter\\InputFilter",
     "inputs": {
+      "changeRecommendation": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\InArray",
+                "haystack": [
+                  "Y",
+                  "N"
+                ],
+                "strict": 1
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "changeRecommendation"
+      },
       "comment": {
         "class": "Laminas\\InputFilter\\Input",
         "filterChain": {
@@ -24,7 +52,7 @@
               "instance": {
                 "class": "Laminas\\Validator\\StringLength",
                 "options": {
-                  "min": 1,
+                  "min": 0,
                   "max": 1000,
                   "encoding": "UTF-8",
                   "length": 0

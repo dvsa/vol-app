@@ -49,13 +49,12 @@
       "flags": [],
       "spec": {
         "name": "comment",
-        "attributes": {
-          "required": false,
-          "class": "extra-long"
-        },
         "type": "TextArea",
         "options": {
           "label": "Reason for the change"
+        },
+        "attributes": {
+          "class": "extra-long"
         }
       }
     },
@@ -117,7 +116,6 @@
     },
     "comment": {
       "name": "comment",
-      "required": true,
       "filters": [
         {
           "name": "Laminas\\Filter\\StringTrim"
@@ -125,30 +123,9 @@
       ],
       "validators": [
         {
-          "name": "Laminas\\Validator\\NotEmpty",
-          "options": [
-            "null"
-          ]
-        },
-        {
-          "name": "ValidateIf",
+          "name": "Laminas\\Validator\\StringLength",
           "options": {
-            "context_field": "changeRecommendation",
-            "context_values": [
-              "Y"
-            ],
-            "allow_empty": false,
-            "validators": [
-              {
-                "name": "Laminas\\Validator\\NotEmpty"
-              },
-              {
-                "name": "Laminas\\Validator\\StringLength",
-                "options": {
-                  "max": 1000
-                }
-              }
-            ]
+            "max": 1000
           }
         }
       ]

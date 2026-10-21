@@ -14,6 +14,7 @@ use Common\Service\Helper\StringHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Document\AcceptDocumentAnalysisReview;
 use Dvsa\Olcs\Transfer\Command\Document\OverrideDocumentAnalysisFlag;
+use Dvsa\Olcs\Transfer\Command\Document\OverridePassedDocumentAnalysisFlag;
 use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentAnalysisAssessmentStatus;
 use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
@@ -26,6 +27,7 @@ use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
 use Olcs\Form\Model\Form\Lva\FinancialEvidenceAssessmentReview;
 use Olcs\Form\Model\Form\Lva\FinancialEvidenceDecision;
 use Olcs\Form\Model\Form\Lva\FinancialEvidenceIssueOverride;
+use Olcs\Form\Model\Form\Lva\FinancialEvidencePassOverride;
 
 /**
  * Financial evidence assessment page, shared by the licence, application and variation sections.
@@ -40,8 +42,11 @@ use Olcs\Form\Model\Form\Lva\FinancialEvidenceIssueOverride;
  * from the stored result, like Application\Grant, and this page only reports it.
  *
  * "Change document review" opens changeReviewAction() on the section's action route. There the
- * caseworker can change failed or skipped checks to passes (OverrideDocumentAnalysisFlag) and
- * decide the evidence (UpdateDocumentAnalysisAssessmentStatus). The section's own route always
+ * caseworker can change failed or skipped checks to passes (OverrideDocumentAnalysisFlag),
+ * change passes back to fails (OverridePassedDocumentAnalysisFlag, shown via the ?view=passes
+ * query flag rather than a route segment, since the LVA section route is shared by every
+ * section and a new path segment there would change every section's URL shape), and decide
+ * the evidence (UpdateDocumentAnalysisAssessmentStatus). The section's own route always
  * lands on indexAction, so leaving the change page and coming back shows the tabs again.
  */
 abstract class AbstractFinancialEvidenceAssessmentController extends AbstractController implements
@@ -61,10 +66,18 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
     /** Posted as the values of the change page's buttons, so each form's action is explicit. */
     public const string CHANGE_OVERRIDE = 'override';
+    public const string CHANGE_OVERRIDE_PASS = 'override-fail';
     public const string CHANGE_DECIDE = 'decide';
 
     /** The action route segment for the change document review page. */
     public const string ACTION_CHANGE_REVIEW = 'change-review';
+
+    /**
+     * The query flag that switches the change page to showing the passed checks, each with a
+     * form to change it to a fail, instead of the read-only passes table.
+     */
+    public const string QUERY_VIEW = 'view';
+    public const string VIEW_PASSES = 'passes';
 
     /**
      * The key the API gives the refusal to approve while issues remain unchanged
@@ -268,10 +281,11 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
     /**
      * The change document review page for one analysis: each failed or skipped check with a form
-     * to change it to a pass, the decision on the evidence, and the checks that passed.
+     * to change it to a pass, the decision on the evidence, and the checks that passed - or, with
+     * ?view=passes, each passed check with a form to change it to a fail instead.
      *
      * Only an analysis this page lists, with an assessment and not yet decided, can be changed;
-     * anything else goes back to the tabs. Both forms post back here and redirect (post/redirect/get).
+     * anything else goes back to the tabs. All forms post back here and redirect (post/redirect/get).
      */
     public function changeReviewAction()
     {
@@ -293,6 +307,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         }
 
         $overrideForm = $this->formHelper->createForm(FinancialEvidenceIssueOverride::class, true, false);
+        $passOverrideForm = $this->formHelper->createForm(FinancialEvidencePassOverride::class, true, false);
         $decisionForm = $this->formHelper->createForm(FinancialEvidenceDecision::class, true, false);
 
         if ($this->getRequest()->isPost()) {
@@ -300,6 +315,10 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
             if ($post->get('saveOverride') === self::CHANGE_OVERRIDE) {
                 return $this->processOverride($overrideForm, $analysisId, $page);
+            }
+
+            if ($post->get('savePassOverride') === self::CHANGE_OVERRIDE_PASS) {
+                return $this->processPassOverride($passOverrideForm, $analysisId, $page);
             }
 
             if ($post->get('saveDecision') === self::CHANGE_DECIDE) {
@@ -313,18 +332,21 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
         $decisionForm->get('analysisId')->setValue((string)$analysisId);
 
-        // Issues are short key/value lists rendered directly by the view; only the passes,
-        // which share columns, go through the table builder.
+        // Issues and passes are short key/value lists rendered directly by the view; only the
+        // read-only passes table (shown unless ?view=passes) shares columns with the table builder.
         $view = new ViewModel([
-            'title'        => 'lva.section.title.financial_evidence_assessment',
-            'analysisId'   => $analysisId,
-            'document'     => $page['document'],
-            'issues'       => $page['issues'],
-            'passCount'    => $page['passCount'],
-            'passesTable'  => $this->tableFactory->prepareTable('financial-evidence-assessment-passes', $page['passes']),
-            'overrideForm' => $overrideForm,
-            'decisionForm' => $decisionForm,
-            'backUrl'      => $this->url()->fromRoute($this->sectionRoute(), [], [], true),
+            'title'            => 'lva.section.title.financial_evidence_assessment',
+            'analysisId'       => $analysisId,
+            'document'         => $page['document'],
+            'issues'           => $page['issues'],
+            'passes'           => $page['passes'],
+            'passCount'        => $page['passCount'],
+            'passesTable'      => $this->tableFactory->prepareTable('financial-evidence-assessment-passes', $page['passes']),
+            'showPassOverride' => $this->getRequest()->getQuery(self::QUERY_VIEW) === self::VIEW_PASSES,
+            'overrideForm'     => $overrideForm,
+            'passOverrideForm' => $passOverrideForm,
+            'decisionForm'     => $decisionForm,
+            'backUrl'          => $this->url()->fromRoute($this->sectionRoute(), [], [], true),
         ]);
         $view->setTemplate('sections/lva/financial-evidence-assessment-change-review');
 
@@ -332,8 +354,12 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     }
 
     /**
-     * Change one issue to a pass. "No" changes nothing; "Yes" needs a reason, and the API refuses
-     * a row that is not currently a fail or skipped, or an analysis already decided.
+     * Change one issue to a pass, or leave a note on it without changing its flag.
+     *
+     * "Yes" changes the row; a genuine fail always needs a reason, a skipped check does not.
+     * "No" with nothing to say changes nothing; "No" with a reason is saved as a note, the flag
+     * left as it is. The API refuses a row that is not currently a fail or skipped, or an
+     * analysis already decided.
      */
     protected function processOverride(FormInterface $form, int $analysisId, array $page)
     {
@@ -341,11 +367,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         $form->setData($post);
 
         if (!$form->isValid()) {
-            if ($post->get('changeRecommendation') === 'Y') {
-                $this->flashMessengerHelper->addErrorMessage('Enter a reason for changing the recommendation');
-            } else {
-                $this->flashMessengerHelper->addUnknownError();
-            }
+            $this->flashMessengerHelper->addUnknownError();
 
             return $this->redirect()->refresh();
         }
@@ -358,18 +380,26 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             return $this->redirect()->refresh();
         }
 
-        if ($data['changeRecommendation'] !== 'Y') {
+        $issue = self::findByKey($page['issues'], (string)$data['row']);
+
+        if ($issue === null || $issue['changed']) {
+            $this->flashMessengerHelper->addErrorMessage('This recommendation has already been changed');
+
             return $this->redirect()->refresh();
         }
 
-        $changeable = array_column(
-            array_filter($page['issues'], static fn(array $issue): bool => !$issue['changed']),
-            'key'
-        );
+        $comment = trim((string)$data['comment']);
+        $changeToPass = $data['changeRecommendation'] === 'Y';
 
-        if (!in_array($data['row'], $changeable, true)) {
-            $this->flashMessengerHelper->addErrorMessage('This recommendation has already been changed');
+        // A genuine fail always needs a reason to change; a skipped check does not.
+        if ($changeToPass && $comment === '' && $issue['flag'] === FinancialEvidenceAssessmentTab::FLAG_FAIL) {
+            $this->flashMessengerHelper->addErrorMessage('Enter a reason for changing the recommendation');
 
+            return $this->redirect()->refresh();
+        }
+
+        if (!$changeToPass && $comment === '') {
+            // Nothing to change and nothing to say.
             return $this->redirect()->refresh();
         }
 
@@ -377,12 +407,84 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             OverrideDocumentAnalysisFlag::create([
                 'id' => $analysisId,
                 'row' => $data['row'],
-                'comment' => $data['comment'],
+                'comment' => $comment,
+                'changeRecommendation' => $data['changeRecommendation'],
             ])
         );
 
         if ($response->isOk()) {
-            $this->flashMessengerHelper->addSuccessMessage('The recommendation has been changed to a pass');
+            $this->flashMessengerHelper->addSuccessMessage(
+                $changeToPass ? 'The recommendation has been changed to a pass' : 'Your comment has been saved'
+            );
+        } else {
+            $this->flashMessengerHelper->addErrorMessage('The change to the recommendation could not be recorded');
+        }
+
+        return $this->redirect()->refresh();
+    }
+
+    /**
+     * Change one passed check to a fail, or leave a note on it without changing its flag.
+     *
+     * Every row here is a genuine pass, so "Yes" always needs a reason. "No" with nothing to say
+     * changes nothing; "No" with a reason is saved as a note, the flag left as it is. The API
+     * refuses a row that is not currently a pass, or an analysis already decided.
+     */
+    protected function processPassOverride(FormInterface $form, int $analysisId, array $page)
+    {
+        $post = $this->getRequest()->getPost();
+        $form->setData($post);
+
+        if (!$form->isValid()) {
+            $this->flashMessengerHelper->addUnknownError();
+
+            return $this->redirect()->refresh();
+        }
+
+        $data = $form->getData();
+
+        if ((int)$data['analysisId'] !== $analysisId) {
+            $this->flashMessengerHelper->addUnknownError();
+
+            return $this->redirect()->refresh();
+        }
+
+        $pass = self::findByKey($page['passes'], (string)$data['row']);
+
+        if ($pass === null || !$pass['flagged']) {
+            $this->flashMessengerHelper->addErrorMessage('This recommendation has already been changed');
+
+            return $this->redirect()->refresh();
+        }
+
+        $comment = trim((string)$data['comment']);
+        $changeToFail = $data['changeRecommendation'] === 'Y';
+
+        // Every row here is a genuine pass, so changing it always needs a reason.
+        if ($changeToFail && $comment === '') {
+            $this->flashMessengerHelper->addErrorMessage('Enter more detail about the change');
+
+            return $this->redirect()->refresh();
+        }
+
+        if (!$changeToFail && $comment === '') {
+            // Nothing to change and nothing to say.
+            return $this->redirect()->refresh();
+        }
+
+        $response = $this->handleCommand(
+            OverridePassedDocumentAnalysisFlag::create([
+                'id' => $analysisId,
+                'row' => $data['row'],
+                'comment' => $comment,
+                'changeRecommendation' => $data['changeRecommendation'],
+            ])
+        );
+
+        if ($response->isOk()) {
+            $this->flashMessengerHelper->addSuccessMessage(
+                $changeToFail ? 'The recommendation has been changed to a fail' : 'Your comment has been saved'
+            );
         } else {
             $this->flashMessengerHelper->addErrorMessage('The change to the recommendation could not be recorded');
         }
@@ -441,6 +543,18 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         );
 
         return $this->redirectToIndex();
+    }
+
+    /** The entry of $list (one of the mapper's issues or passes) whose 'key' matches, or null. */
+    private static function findByKey(array $list, string $key): ?array
+    {
+        foreach ($list as $item) {
+            if (($item['key'] ?? null) === $key) {
+                return $item;
+            }
+        }
+
+        return null;
     }
 
     protected function sectionRoute(): string

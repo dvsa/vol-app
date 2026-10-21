@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as DocumentAnalysisEntity;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisAnnotationOverlay;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\NormalisedResult;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Document\OverrideDocumentAnalysisFlag as Cmd;
 
@@ -71,7 +72,7 @@ final class OverrideDocumentAnalysisFlag extends AbstractCommandHandler implemen
         $annotations = $analysis->getAnnotations();
         $currentFlag = $this->overlay->apply($normalised, $annotations)->rows()[$rowKey]['flag'] ?? null;
 
-        if (!in_array($currentFlag, AnalysisAnnotationOverlay::OVERRIDABLE_FLAGS, true)) {
+        if (!in_array($currentFlag, AnalysisAnnotationOverlay::OVERRIDABLE_TO_PASS_FLAGS, true)) {
             throw new BadRequestException(
                 sprintf('Check %s of document analysis %d is not a fail or skipped, so cannot be changed', $rowKey, $analysisId)
             );
@@ -80,9 +81,15 @@ final class OverrideDocumentAnalysisFlag extends AbstractCommandHandler implemen
         /** @var UserEntity $user */
         $user = $this->getCurrentUser();
 
+        // "Y" changes the row to a pass; "N" with a comment leaves the flag as it is and only
+        // records the comment as a note (withOverride still needs a target flag to store).
+        $changeToPass = (string)$command->getChangeRecommendation() === 'Y';
+        $toFlag = $changeToPass ? NormalisedResult::FLAG_PASS : $currentFlag;
+
         $updated = $this->overlay->withOverride(
             $annotations,
             $rowKey,
+            $toFlag,
             $currentFlag,
             (string)$command->getComment(),
             (int)$user->getId(),
@@ -98,7 +105,9 @@ final class OverrideDocumentAnalysisFlag extends AbstractCommandHandler implemen
 
         $this->result->addId('documentAnalysis', $analysisId);
         $this->result->addMessage(
-            sprintf('Document analysis %d check %s changed to pass', $analysisId, $rowKey)
+            $changeToPass
+                ? sprintf('Document analysis %d check %s changed to pass', $analysisId, $rowKey)
+                : sprintf('Document analysis %d check %s comment saved', $analysisId, $rowKey)
         );
 
         return $this->result;

@@ -38,6 +38,8 @@ return [
     CommandHandler\Document\UpdateDocumentAnalysisAssessmentStatusFactory::class => IsInternalUser::class,
     CommandHandler\Document\OverrideDocumentAnalysisFlag::class => IsInternalUser::class,
     CommandHandler\Document\OverrideDocumentAnalysisFlagFactory::class => IsInternalUser::class,
+    CommandHandler\Document\OverridePassedDocumentAnalysisFlag::class => IsInternalUser::class,
+    CommandHandler\Document\OverridePassedDocumentAnalysisFlagFactory::class => IsInternalUser::class,
     CommandHandler\Document\OverwriteContent::class => CanOverwriteDocumentWithId::class,
     CommandHandler\Email\SendPsvOperatorListReport::class => CanAccessDocumentWithId::class,
     CommandHandler\Email\SendInternationalGoods::class => CanAccessDocumentWithId::class,

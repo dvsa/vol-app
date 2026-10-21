@@ -9,7 +9,8 @@ use Laminas\Form\Annotation as Form;
  *
  * Built through FormHelperService::createForm(), which adds the CSRF ("security") element.
  * One instance serves every issue: the view sets analysisId and row per issue before rendering it.
- * The comment is required only when the caseworker chooses to change the recommendation.
+ * Whether the comment is required depends on the issue's own flag (a fail always needs a reason;
+ * a skipped check does not), which the form cannot know, so that is enforced by the controller.
  *
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("financial-evidence-issue-override")
@@ -56,23 +57,11 @@ class FinancialEvidenceIssueOverride
     public $changeRecommendation = null;
 
     /**
-     * @Form\Required(true)
      * @Form\Type("TextArea")
      * @Form\Options({"label":"Reason for the change"})
-     * @Form\Attributes({"class":"extra-long", "required":false})
+     * @Form\Attributes({"class":"extra-long"})
      * @Form\Filter("Laminas\Filter\StringTrim")
-     * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
-     *          "context_field": "changeRecommendation",
-     *          "context_values": {"Y"},
-     *          "allow_empty": false,
-     *          "validators": {
-     *              {"name":"Laminas\Validator\NotEmpty"},
-     *              {"name":"Laminas\Validator\StringLength","options":{"max":1000}}
-     *          }
-     *      }
-     * })
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":1000})
      */
     public $comment = null;
 

@@ -53,7 +53,7 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
     #[DataProvider('overridableProvider')]
     public function testRecordsTheChangeAsAnAnnotationAndLeavesTheResultAlone(string $flag): void
     {
-        $command = Cmd::create(['id' => 5, 'row' => 'largeDeposit', 'comment' => 'Checked by hand']);
+        $command = Cmd::create(['id' => 5, 'row' => 'largeDeposit', 'comment' => 'Checked by hand', 'changeRecommendation' => 'Y']);
 
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->with($command)
             ->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 3));
@@ -76,9 +76,36 @@ final class OverrideDocumentAnalysisFlagTest extends AbstractCommandHandlerTestC
         $this->assertSame(['Document analysis 5 check largeDeposit changed to pass'], $result->getMessages());
     }
 
+    /**
+     * changeRecommendation "N" with a comment still given is saved as a note: the annotation's
+     * flag is the row's own current flag, so the row is not promoted to a pass.
+     */
+    public function testANoteWithoutChangingTheFlagRecordsTheCommentOnly(): void
+    {
+        $command = Cmd::create(['id' => 5, 'row' => 'largeDeposit', 'comment' => 'Just a note', 'changeRecommendation' => 'N']);
+
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->with($command)
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, null, 3));
+        $this->normaliser->expects('fromStored')->with(self::STORED)->andReturn($this->normalisedResult('fail'));
+        $this->repoMap['DocumentAnalysis']->expects('recordAnnotations')
+            ->with(5, m::on(static function (array $annotations): bool {
+                $row = $annotations['rows']['largeDeposit'] ?? null;
+
+                return $row !== null
+                    && $row['flag'] === 'fail'
+                    && $row['originalFlag'] === 'fail'
+                    && $row['comment'] === 'Just a note';
+            }), 3, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertSame(['Document analysis 5 check largeDeposit comment saved'], $result->getMessages());
+    }
+
     public function testKeepsEarlierAnnotationsOnOtherRows(): void
     {
-        $command = Cmd::create(['id' => 5, 'row' => 'largeDeposit', 'comment' => 'Because']);
+        $command = Cmd::create(['id' => 5, 'row' => 'largeDeposit', 'comment' => 'Because', 'changeRecommendation' => 'Y']);
 
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
             ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $this->earlierAnnotationOnName(), 4));
