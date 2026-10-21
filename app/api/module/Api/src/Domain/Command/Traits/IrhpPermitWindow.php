@@ -1,13 +1,13 @@
 <?php
 
-namespace Dvsa\Olcs\Transfer\FieldType\Traits;
+namespace Dvsa\Olcs\Api\Domain\Command\Traits;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * IRHP Permit Window
  *
- * @package Dvsa\Olcs\Transfer\FieldType\Traits
+ * @package Dvsa\Olcs\Api\Domain\Command\Traits
  * @author Andy Newton <andy@vitri.ltd>
  */
 trait IrhpPermitWindow
