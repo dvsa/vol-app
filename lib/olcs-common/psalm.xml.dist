@@ -19,8 +19,6 @@
       <errorLevel type="suppress">
         <!-- see ticket VOL-5194 -->
         <file name="Common/src/Common/Controller/Lva/AbstractCommunityLicencesController.php" />
-        <!-- see ticket VOL-5191 -->
-        <file name="Common/src/Common/Controller/Lva/Traits/CrudTableTrait.php" />
       </errorLevel>
     </UndefinedClass>
     <InvalidExtendClass>
