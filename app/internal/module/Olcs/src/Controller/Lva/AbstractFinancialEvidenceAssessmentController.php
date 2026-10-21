@@ -11,17 +11,27 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
+use Dvsa\Olcs\Transfer\Command\Document\AcceptDocumentAnalysisReview;
+use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\FormInterface;
 use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
+use Olcs\Data\Mapper\FinancialEvidenceAssessmentTab;
+use Olcs\Form\Model\Form\Lva\FinancialEvidenceAssessmentReview;
 
 /**
  * Financial evidence assessment page, shared by the licence, application and variation sections.
  *
  * Tabs are driven solely by successful document analyses. The concrete controllers only supply
  * the LVA context (via their trait and $lva), which decides whether analyses are scoped by
- * licence or by application.
+ * licence or by application. What each tab shows is decided by FinancialEvidenceAssessmentTab.
+ *
+ * Each tab can be reviewed by the caseworker through the FinancialEvidenceAssessmentReview form,
+ * which posts back to this page. Its CSRF element is added by the form helper like any other form.
+ * Accepting the review sends AcceptDocumentAnalysisReview; the API decides and records the outcome
+ * from the stored result, like Application\Grant, and this page only reports it.
  */
 abstract class AbstractFinancialEvidenceAssessmentController extends AbstractController implements
     ToggleAwareInterface
@@ -35,6 +45,9 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
      */
     private const int ANALYSIS_PAGE_LIMIT = 100;
 
+    /** Posted as the value of the review form's button, so the review action is explicit. */
+    public const string REVIEW_ACCEPT = 'accept';
+
     protected string $location = 'internal';
 
     protected $toggleConfig = [
@@ -47,7 +60,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         protected StringHelperService $stringHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        // The licence context uses this to build its header search form.
+        // Builds the review form; the licence context also uses it for its header search form.
         protected FormHelperService $formHelper,
         protected $navigation
     ) {
@@ -57,16 +70,98 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     #[\Override]
     public function indexAction()
     {
+        $reviewForm = $this->getReviewForm();
+
+        if ($this->getRequest()->isPost()) {
+            return $this->processReview($reviewForm);
+        }
+
         $analyses = $this->getSuccessfulAnalyses();
 
         $view = new ViewModel([
             'title'        => 'lva.section.title.financial_evidence_assessment',
             'hasDocuments' => $analyses !== [],
             'tabs'         => $this->getTabsFromAnalyses($analyses),
+            'reviewForm'   => $reviewForm,
         ]);
         $view->setTemplate('sections/lva/financial-evidence-assessment');
 
         return $this->render($view);
+    }
+
+    protected function getReviewForm(): FormInterface
+    {
+        // No "continue" button: the form carries its own review action.
+        return $this->formHelper->createForm(FinancialEvidenceAssessmentReview::class, true, false);
+    }
+
+    /**
+     * Send the accepted review to the API and report its outcome, then redirect back to the page
+     * (post/redirect/get) so a refresh cannot resubmit it.
+     *
+     * The posted analysis must be one this page lists for its application or licence. That is a
+     * guard against a stale or edited form, not authorisation: the API decides the outcome from
+     * its own stored result and accepts only successful analyses.
+     */
+    protected function processReview(FormInterface $reviewForm)
+    {
+        $post = $this->getRequest()->getPost();
+        $reviewForm->setData($post);
+
+        if ($post->get('review') !== self::REVIEW_ACCEPT || !$reviewForm->isValid()) {
+            $this->flashMessengerHelper->addUnknownError();
+
+            return $this->redirect()->refresh();
+        }
+
+        $analysisId = (int)$reviewForm->getData()['analysisId'];
+        $analysis = $this->findSuccessfulAnalysis($analysisId);
+
+        if ($analysis === null) {
+            $this->flashMessengerHelper->addUnknownError();
+
+            return $this->redirect()->refresh();
+        }
+
+        if (!FinancialEvidenceAssessmentTab::mapFromAnalysis($analysis)['hasAssessment']) {
+            $this->flashMessengerHelper->addErrorMessage('This document has no assessment to review');
+
+            return $this->redirect()->refresh();
+        }
+
+        $response = $this->handleCommand(AcceptDocumentAnalysisReview::create(['id' => $analysisId]));
+
+        // The API reports what it decided in the result's flags; anything else reads as not recorded.
+        $outcome = $response->isOk()
+            ? AssessmentStatus::tryFrom((string)($response->getResult()['flags']['assessmentStatus'] ?? ''))
+            : null;
+
+        if ($outcome === AssessmentStatus::APPROVED) {
+            $this->flashMessengerHelper->addSuccessMessage('Document review accepted: the document is approved');
+        } elseif ($outcome === AssessmentStatus::REJECTED) {
+            $this->flashMessengerHelper->addWarningMessage(
+                'Document review accepted: the document is rejected because one or more checks did not pass'
+            );
+        } else {
+            $this->flashMessengerHelper->addErrorMessage('The document review could not be recorded');
+        }
+
+        return $this->redirect()->refresh();
+    }
+
+    /**
+     * One of the analyses this page shows, or null if the id is not among them. There is no query
+     * for a single analysis, so this reuses the page's own, scoped to its application or licence.
+     */
+    protected function findSuccessfulAnalysis(int $analysisId): ?array
+    {
+        foreach ($this->getSuccessfulAnalyses() as $analysis) {
+            if ((int)($analysis['id'] ?? 0) === $analysisId) {
+                return $analysis;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -98,12 +193,12 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
     }
 
     /**
-     * One tab per successful analysis; the first (most recent) is labelled "Latest".
+     * One tab per successful analysis; the first (most recent) is labelled "Latest". The tab
+     * header (id, label, date, caseworker review) is built here; the panel content (document link,
+     * summary rows, issue count) comes from the mapper.
      */
     protected function getTabsFromAnalyses(array $analyses): array
     {
-        // Temporary caseworker stamp until stamping is implemented; independent of processing status.
-        $caseworkerStamp = 'APPROVED';
         $tabs = [];
 
         foreach ($analyses as $analysis) {
@@ -112,34 +207,45 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
                 : null;
             $isLatest = $tabs === [];
 
-            $tabs[] = [
-                'id'        => $isLatest ? 'latest' : 'analysis-' . $analysis['id'],
-                'label'     => $isLatest ? 'Latest' : ($date ?? 'Unknown date'),
-                'date'      => $date,
-                'status'    => $this->mapStatus($caseworkerStamp),
-                'statusTag' => $this->mapStatusTagClass($caseworkerStamp),
-            ];
+            // Null when the analysis has not been reviewed (or holds a value this app does not know).
+            $assessmentStatus = AssessmentStatus::tryFrom((string)($analysis['assessmentStatus'] ?? ''));
+
+            $tab = [
+                'id'         => $isLatest ? 'latest' : 'analysis-' . $analysis['id'],
+                'analysisId' => $analysis['id'],
+                'label'      => $isLatest ? 'Latest' : ($date ?? 'Unknown date'),
+                'date'       => $date,
+                'status'     => $this->mapStatus($assessmentStatus),
+                'statusTag'  => $this->mapStatusTagClass($assessmentStatus),
+            ] + FinancialEvidenceAssessmentTab::mapFromAnalysis($analysis);
+
+            // A decided review cannot change (its flags cannot), and without an assessment there is
+            // nothing to decide on.
+            $tab['canReview'] = $tab['hasAssessment']
+                && !in_array($assessmentStatus, [AssessmentStatus::APPROVED, AssessmentStatus::REJECTED], true);
+
+            $tabs[] = $tab;
         }
 
         return $tabs;
     }
 
-    protected function mapStatus(?string $caseworkerStamp): string
+    protected function mapStatus(?AssessmentStatus $assessmentStatus): string
     {
-        return match ($caseworkerStamp) {
-            'APPROVED' => 'Approved',
-            'REJECTED' => 'Rejected',
-            'PENDING'  => 'Pending',
-            default    => 'Unknown',
+        return match ($assessmentStatus) {
+            AssessmentStatus::APPROVED => 'Approved',
+            AssessmentStatus::REJECTED => 'Rejected',
+            AssessmentStatus::PENDING  => 'Pending',
+            null                       => 'Unknown',
         };
     }
 
-    protected function mapStatusTagClass(?string $caseworkerStamp): string
+    protected function mapStatusTagClass(?AssessmentStatus $assessmentStatus): string
     {
-        return match ($caseworkerStamp) {
-            'APPROVED' => 'govuk-tag--green',
-            'REJECTED' => 'govuk-tag--red',
-            default    => 'govuk-tag--grey',
+        return match ($assessmentStatus) {
+            AssessmentStatus::APPROVED      => 'govuk-tag--green',
+            AssessmentStatus::REJECTED      => 'govuk-tag--red',
+            AssessmentStatus::PENDING, null => 'govuk-tag--grey',
         };
     }
 }
