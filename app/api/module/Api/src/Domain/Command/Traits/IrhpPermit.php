@@ -1,28 +1,28 @@
 <?php
 
-namespace Dvsa\Olcs\Transfer\FieldType\Traits;
+namespace Dvsa\Olcs\Api\Domain\Command\Traits;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
- * Cabotage
- * @author ONE
+ * IRHP Permit
+ *
+ * @package Dvsa\Olcs\Api\Domain\Command\Traits
  */
-trait Cabotage
+trait IrhpPermit
 {
     /**
      * @var int
      */
-    #[Transfer\Filter('Laminas\Filter\Digits')]
     #[Transfer\Validator('Laminas\Validator\Digits')]
     #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
-    protected $cabotage;
+    protected $irhpPermit;
 
     /**
      * @return int
      */
-    public function getCabotage()
+    public function getIrhpPermit(): int
     {
-        return $this->cabotage;
+        return $this->irhpPermit;
     }
 }
