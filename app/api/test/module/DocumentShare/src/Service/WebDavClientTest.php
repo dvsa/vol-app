@@ -16,6 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
 use org\bovigo\vfs\vfsStream;
 use Psr\Log\NullLogger;
+use Sabre\DAV\Exception\NotFound;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\DocumentShare\Service\WebDavClient::class)]
 final class WebDavClientTest extends MockeryTestCase
@@ -149,6 +150,7 @@ final class WebDavClientTest extends MockeryTestCase
             ->shouldReceive('getResource')->andReturn($res)
             ->getMock();
 
+        $this->mockFileSystem->expects('fileExists')->with($expectPath)->andReturn(true);
         $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andReturn(true);
 
         $actual = $this->sut->update($expectPath, $mockFile);
@@ -170,9 +172,31 @@ final class WebDavClientTest extends MockeryTestCase
             ->shouldReceive('getResource')->andReturn($res)
             ->getMock();
 
+        $this->mockFileSystem->expects('fileExists')->with($expectPath)->andReturn(true);
         $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andThrow(
-            UnableToWriteFile::atLocation($expectPath)
+            new UnableToWriteFile($expectPath)
         );
+
+        $actual = $this->sut->update($expectPath, $mockFile);
+
+        $this->assertFalse($actual->isSuccess());
+    }
+
+    public function testUpdateFailNotFound(): void
+    {
+        $expectPath = 'unit_Path';
+
+        $res = vfsStream::newFile('res')
+            ->withContent('unit_ABCDE123')
+            ->at(vfsStream::setup('temp'))
+            ->url();
+
+        /** @var DsFile $mockFile */
+        $mockFile = m::mock(DsFile::class)
+            ->shouldReceive('getResource')->andReturn($res)
+            ->getMock();
+
+        $this->mockFileSystem->expects('fileExists')->with($expectPath)->andReturn(false);
 
         $actual = $this->sut->update($expectPath, $mockFile);
 

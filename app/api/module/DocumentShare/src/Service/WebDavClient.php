@@ -10,6 +10,7 @@ use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToWriteFile;
 use Psr\Log\LoggerInterface;
+use Sabre\DAV\Exception\NotFound;
 
 class WebDavClient implements DocumentStoreInterface
 {
@@ -94,12 +95,12 @@ class WebDavClient implements DocumentStoreInterface
 
         try {
             if (!$this->filesystem->fileExists($path)) {
-                throw new UnableToReadFile($path);
+                throw new NotFound(sprintf('File not found for delete: %s', $path));
             }
 
             $this->filesystem->delete($path);
             $response->setStatusCode(200);
-        } catch (UnableToReadFile) {
+        } catch (NotFound) {
             $response->setStatusCode(404);
         } catch (UnableToDeleteFile) {
             $response->setStatusCode(500);
@@ -166,11 +167,18 @@ class WebDavClient implements DocumentStoreInterface
                 $this->logger->error('Failed to open file for reading', ['file' => $file->getResource(), 'path' => $path]);
                 $response->setResponse(false);
             } else {
+                if (!$this->filesystem->fileExists($path)) {
+                    throw new NotFound(sprintf('File not found for update: %s', $path));
+                }
+
                 $this->filesystem->writeStream($path, $fh);
                 $response->setResponse(true);
             }
-        } catch (UnableToWriteFile $e) {
-            $this->logger->error('Unable to write file', ['path' => $path, 'reason' => $e->reason() ?? '']);
+        } catch (NotFound) {
+            $this->logger->error('File not found for update', ['path' => $path]);
+            $response->setResponse(false);
+        } catch (UnableToWriteFile) {
+            $this->logger->error('Unable to write file', ['path' => $path]);
             $response->setResponse(false);
         } finally {
             if (is_resource($fh)) {
