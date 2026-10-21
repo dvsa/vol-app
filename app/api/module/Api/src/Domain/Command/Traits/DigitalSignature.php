@@ -1,6 +1,6 @@
 <?php
 
-namespace Dvsa\Olcs\Transfer\FieldType\Traits;
+namespace Dvsa\Olcs\Api\Domain\Command\Traits;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
