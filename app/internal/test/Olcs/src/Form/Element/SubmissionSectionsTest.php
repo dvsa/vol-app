@@ -66,6 +66,8 @@ final class SubmissionSectionsTest extends TestCase
         $sut->setSubmissionType($mockSelect);
 
         $mockMultiCheckbox = m::mock(\Laminas\Form\Element\MultiCheckbox::class);
+        // getPreselectedSectionsForType() merges the mandatory sections in front of the
+        // per-type list, and both name case-outline and people, so those two appear twice.
         $mockMultiCheckbox->shouldReceive('setValue')->once()->with(
             [
                 'case-summary',
