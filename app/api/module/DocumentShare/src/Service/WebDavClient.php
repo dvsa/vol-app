@@ -93,6 +93,10 @@ class WebDavClient implements DocumentStoreInterface
         $response = new Response();
 
         try {
+            if (!$this->filesystem->fileExists($path)) {
+                throw new UnableToReadFile($path);
+            }
+
             $this->filesystem->delete($path);
             $response->setStatusCode(200);
         } catch (UnableToReadFile) {

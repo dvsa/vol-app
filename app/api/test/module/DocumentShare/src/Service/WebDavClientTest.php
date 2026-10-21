@@ -204,6 +204,7 @@ final class WebDavClientTest extends MockeryTestCase
 
     public function testRemoveSuccess(): void
     {
+        $this->mockFileSystem->expects('fileExists')->with('testFileToUnlink')->andReturn(true);
         $this->mockFileSystem->expects('delete')->with('testFileToUnlink')->andReturn(true);
 
         $result = $this->sut->remove('testFileToUnlink');
@@ -214,6 +215,7 @@ final class WebDavClientTest extends MockeryTestCase
 
     public function testRemoveFail(): void
     {
+        $this->mockFileSystem->expects('fileExists')->with('testFileToUnlink')->andReturn(true);
         $this->mockFileSystem->expects('delete')->with('testFileToUnlink')->andThrow(
             new UnableToDeleteFile('testFileToUnlink')
         );
@@ -226,9 +228,7 @@ final class WebDavClientTest extends MockeryTestCase
 
     public function testRemoveFileNotFound(): void
     {
-        $this->mockFileSystem->expects('delete')->with('testFileToUnlink')->andThrow(
-            new UnableToReadFile('testFileToUnlink')
-        );
+        $this->mockFileSystem->expects('fileExists')->with('testFileToUnlink')->andReturn(false);
 
         $result = $this->sut->remove('testFileToUnlink');
 
