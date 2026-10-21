@@ -50,7 +50,7 @@
     "gedmo/doctrine-extensions": "^3.21",
     "guzzlehttp/guzzle": "^7.12.1",
     "league/flysystem": "^3.35.3",
-    "league/flysystem-webdav": "3.31.0",
+    "league/flysystem-webdav": "^3.31",
     "olcs/olcs-logging": "*",
     "olcs/vol-logging-mvc": "*",
     "olcs/olcs-transfer": "*",
