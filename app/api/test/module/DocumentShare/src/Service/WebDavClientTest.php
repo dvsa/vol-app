@@ -138,7 +138,7 @@ final class WebDavClientTest extends MockeryTestCase
         $this->assertEquals(false, $actual->isSuccess());
     }
 
-    public function testWriteFailIfFileAlreadyExists(): void
+    public function testWriteFileAlreadyExists(): void
     {
         $expectPath = 'unit_Path';
         $expectContent = 'unit_ABCDE123';
@@ -206,7 +206,7 @@ final class WebDavClientTest extends MockeryTestCase
         $this->assertFalse($actual->isSuccess());
     }
 
-    public function testUpdateFailNotFound(): void
+    public function testUpdateFileNotFound(): void
     {
         $expectPath = 'unit_Path';
 
