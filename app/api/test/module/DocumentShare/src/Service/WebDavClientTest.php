@@ -171,7 +171,7 @@ final class WebDavClientTest extends MockeryTestCase
             ->getMock();
 
         $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andThrow(
-            new UnableToWriteFile($expectPath)
+            UnableToWriteFile::atLocation($expectPath)
         );
 
         $actual = $this->sut->update($expectPath, $mockFile);

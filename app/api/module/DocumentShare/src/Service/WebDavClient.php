@@ -170,7 +170,7 @@ class WebDavClient implements DocumentStoreInterface
                 $response->setResponse(true);
             }
         } catch (UnableToWriteFile $e) {
-            $this->logger->error('Unable to write file', ['path' => $path, 'reason' => $e->reason()]);
+            $this->logger->error('Unable to write file', ['path' => $path, 'reason' => $e->reason() ?? '']);
             $response->setResponse(false);
         } finally {
             if (is_resource($fh)) {
