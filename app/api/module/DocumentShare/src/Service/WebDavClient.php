@@ -169,8 +169,8 @@ class WebDavClient implements DocumentStoreInterface
                 $this->filesystem->writeStream($path, $fh);
                 $response->setResponse(true);
             }
-        } catch (UnableToReadFile) {
-            $this->logger->error('File not found for update', ['path' => $path]);
+        } catch (UnableToWriteFile $e) {
+            $this->logger->error('Unable to write file', ['path' => $path, 'reason' => $e->reason()]);
             $response->setResponse(false);
         } finally {
             if (is_resource($fh)) {

@@ -171,30 +171,7 @@ final class WebDavClientTest extends MockeryTestCase
             ->getMock();
 
         $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andThrow(
-            new UnableToReadFile($expectPath)
-        );
-
-        $actual = $this->sut->update($expectPath, $mockFile);
-
-        $this->assertFalse($actual->isSuccess());
-    }
-
-    public function testUpdateFileNotFound(): void
-    {
-        $expectPath = 'unit_Path';
-
-        $res = vfsStream::newFile('res')
-            ->withContent('unit_ABCDE123')
-            ->at(vfsStream::setup('temp'))
-            ->url();
-
-        /** @var DsFile $mockFile */
-        $mockFile = m::mock(DsFile::class)
-            ->shouldReceive('getResource')->andReturn($res)
-            ->getMock();
-
-        $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andThrow(
-            new UnableToReadFile($expectPath)
+            new UnableToWriteFile($expectPath)
         );
 
         $actual = $this->sut->update($expectPath, $mockFile);
