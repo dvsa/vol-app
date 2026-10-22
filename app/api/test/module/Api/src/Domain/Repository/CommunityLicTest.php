@@ -7,6 +7,7 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Domain\Repository\CommunityLic as Repo;
 use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic as Entity;
 use Dvsa\Olcs\Transfer\Query\CommunityLic\CommunityLicences as CommunityLicencesDTO;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Mockery as m;
 
 final class CommunityLicTest extends RepositoryTestCase
@@ -126,12 +127,25 @@ final class CommunityLicTest extends RepositoryTestCase
         $this->assertSame(['RESULTS'], $this->sut->fetchForSuspension('2015-01-01'));
 
         $this->assertSame(
-            'SELECT m' . self::FROM . self::SUSPENSION_JOINS
-            . ' WHERE m.status = :status AND s.startDate <= :startDate'
-            . ' AND (s.endDate IS NULL OR s.endDate > :endDate)',
+            'SELECT m'
+            . self::FROM
+            . ' LEFT JOIN m.communityLicSuspensions s'
+            . ' LEFT JOIN s.communityLicSuspensionReasons sr'
+            . ' INNER JOIN m.licence l'
+            . ' WHERE m.status = :status'
+            . ' AND (l.status = :licenceStatus'
+            . ' OR (s.startDate <= :startDate'
+            . ' AND (s.endDate IS NULL OR s.endDate > :endDate)))',
             $qb->getDQL(),
         );
+
         $this->assertSame(Entity::STATUS_ACTIVE, $qb->getParameter('status')->getValue());
+        $this->assertSame(
+            Licence::LICENCE_STATUS_SUSPENDED,
+            $qb->getParameter('licenceStatus')->getValue(),
+        );
+        $this->assertSame('2015-01-01', $qb->getParameter('startDate')->getValue());
+        $this->assertSame('2015-01-01', $qb->getParameter('endDate')->getValue());
     }
 
     public function testFetchForActivation(): void
