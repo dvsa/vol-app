@@ -65,7 +65,7 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
             ->with($command)
             ->andReturn($this->analysis(Entity::STATUS_SUCCESS));
         $this->normaliser->expects('fromStored')->with(self::STORED)->andReturn($this->normalisedResult($flag));
-        $this->repoMap['DocumentAnalysis']->expects('recordAssessmentStatus')
+        $this->repoMap['DocumentAnalysis']->expects('recordInitialAssessmentStatus')
             ->with(5, $expected, $this->user)
             ->andReturn(1);
 
@@ -90,7 +90,7 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
 
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->andReturn($this->analysis($status));
         $this->normaliser->shouldNotReceive('fromStored');
-        $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordAssessmentStatus');
+        $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordInitialAssessmentStatus');
 
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage(sprintf('Document analysis 5 is %s, not SUCCESS', $status));
@@ -105,6 +105,32 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
         yield 'timeout' => [Entity::STATUS_TIMEOUT];
     }
 
+    /**
+     * A decided review is immutable here: a caseworker changing it deliberately is
+     * UpdateDocumentAnalysisAssessmentStatus, not a second accept.
+     */
+    #[DataProvider('decidedProvider')]
+    public function testRefusesAnAnalysisAlreadyReviewed(AssessmentStatus $decided): void
+    {
+        $command = Cmd::create(['id' => 5]);
+
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $decided));
+        $this->normaliser->shouldNotReceive('fromStored');
+        $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordInitialAssessmentStatus');
+
+        $this->expectException(BadRequestException::class);
+        $this->expectExceptionMessage(sprintf('Document analysis 5 has already been reviewed (%s)', $decided->value));
+
+        $this->sut->handleCommand($command);
+    }
+
+    public static function decidedProvider(): \Iterator
+    {
+        yield 'already approved' => [AssessmentStatus::APPROVED];
+        yield 'already rejected' => [AssessmentStatus::REJECTED];
+    }
+
     /** A stored report the normaliser could not read, or one with no flagged rows: nothing to decide on. */
     #[DataProvider('nothingToDecideProvider')]
     public function testRefusesAnAnalysisWithNoAssessmentToDecideOn(?NormalisedResult $normalised): void
@@ -113,7 +139,7 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
 
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->andReturn($this->analysis(Entity::STATUS_SUCCESS));
         $this->normaliser->expects('fromStored')->andReturn($normalised);
-        $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordAssessmentStatus');
+        $this->repoMap['DocumentAnalysis']->shouldNotReceive('recordInitialAssessmentStatus');
 
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage('Document analysis 5 has no assessment to review');
@@ -129,29 +155,31 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
         ])];
     }
 
-    /** The row stopped being SUCCESS between the read and the guarded write. */
+    /** The row stopped being SUCCESS (or became decided) between the read and the guarded write. */
     public function testThrowsWhenTheGuardedWriteMatchesNothing(): void
     {
         $command = Cmd::create(['id' => 5]);
 
         $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')->andReturn($this->analysis(Entity::STATUS_SUCCESS));
         $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('pass'));
-        $this->repoMap['DocumentAnalysis']->expects('recordAssessmentStatus')->andReturn(0);
+        $this->repoMap['DocumentAnalysis']->expects('recordInitialAssessmentStatus')->andReturn(0);
 
         $this->expectException(BadRequestException::class);
-        $this->expectExceptionMessage('Document analysis 5 is no longer a successful analysis');
+        $this->expectExceptionMessage('Document analysis 5 is no longer a successful, undecided analysis');
 
         $this->sut->handleCommand($command);
     }
 
-    private function analysis(string $status): Entity|m\MockInterface
+    private function analysis(string $status, ?AssessmentStatus $assessmentStatus = null): Entity|m\MockInterface
     {
         $analysis = m::mock(Entity::class);
         $analysis->allows('getStatus')->andReturn($status);
+        $analysis->allows('getAssessmentStatus')->andReturn($assessmentStatus?->value);
         $analysis->allows('getResultNormalised')->andReturn(self::STORED);
 
         return $analysis;
     }
+
 
     /** A current result whose six flagged rows all carry $flag. */
     private function normalisedResult(string $flag): NormalisedResult

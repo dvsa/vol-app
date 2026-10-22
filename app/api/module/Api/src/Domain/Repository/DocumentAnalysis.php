@@ -224,6 +224,10 @@ class DocumentAnalysis extends AbstractRepository
      * A bulk UPDATE bypasses the ORM's lifecycle and Blameable listeners, so the audit columns
      * are set here explicitly, as User::updateLastLogin() does.
      *
+     * Used for a caseworker's deliberate change of a decision (UpdateDocumentAnalysisAssessmentStatus);
+     * it may overwrite an existing assessment status. A first decision
+     * (AcceptDocumentAnalysisReview) uses recordInitialAssessmentStatus() instead, which cannot.
+     *
      * @return int rows affected (0 if no successful analysis has that id)
      */
     public function recordAssessmentStatus(int $analysisId, AssessmentStatus $status, UserEntity $reviewedBy): int
@@ -236,6 +240,35 @@ class DocumentAnalysis extends AbstractRepository
             ->set($this->alias . '.lastModifiedBy', ':lastModifiedBy')
             ->where($qb->expr()->eq($this->alias . '.id', ':id'))
             ->andWhere($qb->expr()->eq($this->alias . '.status', ':success'))
+            ->setParameter('assessmentStatus', $status->value)
+            ->setParameter('now', new \DateTime())
+            ->setParameter('lastModifiedBy', $reviewedBy->getId())
+            ->setParameter('id', $analysisId)
+            ->setParameter('success', Entity::STATUS_SUCCESS)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
+     * Record a caseworker's first review of a successful analysis. Identical to
+     * recordAssessmentStatus() except the UPDATE is additionally guarded on assessmentStatus
+     * being still NULL, so a row already decided (by this analysis having been accepted
+     * concurrently, or elsewhere) cannot be overwritten. A deliberate later change goes through
+     * recordAssessmentStatus() via UpdateDocumentAnalysisAssessmentStatus instead.
+     *
+     * @return int rows affected (0 if no successful, undecided analysis has that id)
+     */
+    public function recordInitialAssessmentStatus(int $analysisId, AssessmentStatus $status, UserEntity $reviewedBy): int
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        return (int)$qb->update(Entity::class, $this->alias)
+            ->set($this->alias . '.assessmentStatus', ':assessmentStatus')
+            ->set($this->alias . '.lastModifiedOn', ':now')
+            ->set($this->alias . '.lastModifiedBy', ':lastModifiedBy')
+            ->where($qb->expr()->eq($this->alias . '.id', ':id'))
+            ->andWhere($qb->expr()->eq($this->alias . '.status', ':success'))
+            ->andWhere($qb->expr()->isNull($this->alias . '.assessmentStatus'))
             ->setParameter('assessmentStatus', $status->value)
             ->setParameter('now', new \DateTime())
             ->setParameter('lastModifiedBy', $reviewedBy->getId())

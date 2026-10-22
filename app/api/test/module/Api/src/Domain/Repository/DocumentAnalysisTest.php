@@ -294,6 +294,47 @@ final class DocumentAnalysisTest extends RepositoryTestCase
         $this->assertSame(0, $this->sut->recordAssessmentStatus(5, AssessmentStatus::REJECTED, $user));
     }
 
+    /**
+     * A first review is the same guarded UPDATE as recordAssessmentStatus(), with an extra
+     * condition that assessmentStatus is still NULL, so it cannot overwrite a decision already
+     * made (including one made concurrently, between the handler's read and this write).
+     */
+    public function testRecordInitialAssessmentStatus(): void
+    {
+        $user = m::mock(User::class);
+        $user->allows('getId')->andReturn(99);
+
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(1);
+
+        $this->assertSame(1, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::APPROVED, $user));
+
+        $this->assertSame(
+            'UPDATE ' . Entity::class . ' da'
+            . ' SET da.assessmentStatus = :assessmentStatus, da.lastModifiedOn = :now,'
+            . ' da.lastModifiedBy = :lastModifiedBy'
+            . ' WHERE da.id = :id AND da.status = :success AND da.assessmentStatus IS NULL',
+            $qb->getDQL(),
+        );
+        $this->assertSame('APPROVED', $qb->getParameter('assessmentStatus')->getValue());
+        $this->assertSame(99, $qb->getParameter('lastModifiedBy')->getValue());
+        $this->assertSame(5, $qb->getParameter('id')->getValue());
+        $this->assertSame(Entity::STATUS_SUCCESS, $qb->getParameter('success')->getValue());
+        $this->assertInstanceOf(\DateTime::class, $qb->getParameter('now')->getValue());
+    }
+
+    /** A row not successful, not found, or already decided (even by a concurrent accept) is left untouched. */
+    public function testRecordInitialAssessmentStatusReturnsZeroWhenNoSuccessfulUndecidedAnalysisMatches(): void
+    {
+        $user = m::mock(User::class);
+        $user->allows('getId')->andReturn(99);
+
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(0);
+
+        $this->assertSame(0, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::REJECTED, $user));
+    }
+
     private function expectEntityManagerQb(): TestQueryBuilder
     {
         $qb = $this->newRealQb();

@@ -24,11 +24,12 @@ use Dvsa\Olcs\Transfer\Command\Document\AcceptDocumentAnalysisReview as Cmd;
  * The outcome goes back in the result's "assessmentStatus" flag so the caller can report it.
  *
  * An analysis that does not exist is a 404 (fetchUsingId throws NotFoundException). One that
- * exists but cannot be reviewed - not successful, or with nothing to decide on - is a 400
- * (BadRequestException), as GrantBusReg does for a registration that is not grantable: the
- * record is there, the action does not apply to it in its current state.
+ * exists but cannot be reviewed - not successful, already decided, or with nothing to decide on
+ * - is a 400 (BadRequestException), as GrantBusReg does for a registration that is not
+ * grantable: the record is there, the action does not apply to it in its current state.
  *
- * A caseworker choosing a status deliberately is UpdateDocumentAnalysisAssessmentStatus.
+ * A caseworker choosing a status deliberately, including changing a decision already made here,
+ * is UpdateDocumentAnalysisAssessmentStatus.
  */
 final class AcceptDocumentAnalysisReview extends AbstractCommandHandler implements AuthAwareInterface
 {
@@ -64,6 +65,18 @@ final class AcceptDocumentAnalysisReview extends AbstractCommandHandler implemen
             );
         }
 
+        // A decided review is immutable here: a deliberate change is
+        // UpdateDocumentAnalysisAssessmentStatus, not a second accept.
+        if ($analysis->getAssessmentStatus() !== null) {
+            throw new BadRequestException(
+                sprintf(
+                    'Document analysis %d has already been reviewed (%s), so cannot be accepted again',
+                    $analysisId,
+                    $analysis->getAssessmentStatus()
+                )
+            );
+        }
+
         $normalised = $this->normaliser->fromStored($analysis->getResultNormalised());
         $status = $normalised === null ? null : $this->outcome->decide($normalised);
 
@@ -73,10 +86,14 @@ final class AcceptDocumentAnalysisReview extends AbstractCommandHandler implemen
             );
         }
 
-        // Guarded on status = SUCCESS, so a row resolved otherwise since it was read matches nothing.
-        if ($repo->recordAssessmentStatus($analysisId, $status, $this->getCurrentUser()) === 0) {
+        // Guarded on status = SUCCESS and assessmentStatus = NULL, so a row resolved otherwise,
+        // or already decided (even concurrently, by another accept), matches nothing.
+        if ($repo->recordInitialAssessmentStatus($analysisId, $status, $this->getCurrentUser()) === 0) {
             throw new BadRequestException(
-                sprintf('Document analysis %d is no longer a successful analysis, so cannot be reviewed', $analysisId)
+                sprintf(
+                    'Document analysis %d is no longer a successful, undecided analysis, so cannot be reviewed',
+                    $analysisId
+                )
             );
         }
 

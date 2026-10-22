@@ -175,7 +175,9 @@ class ReportMapper
     {
         return match ($category) {
             'name' => $this->text($details['account_holder_name'] ?? null),
-            'statementDate' => $this->date($details['statement_issue_date'] ?? null),
+            // FI10 checks the statement's closing date, not the issue date printed on it (which
+            // may not be present at all); the period end is what the Statement Date row explains.
+            'statementDate' => $this->date($details['statement_period_end'] ?? null),
             'statementPeriod' => $this->period(
                 $details['statement_period_start'] ?? null,
                 $details['statement_period_end'] ?? null

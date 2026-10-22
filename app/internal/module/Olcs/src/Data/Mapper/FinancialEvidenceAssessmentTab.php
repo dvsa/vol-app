@@ -142,7 +142,9 @@ final class FinancialEvidenceAssessmentTab
 
         $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $value);
 
-        return $date === false ? null : $date->format('d/m/Y');
+        // createFromFormat() rolls an impossible date like 2026-02-30 over into a different
+        // valid one rather than failing, so the round trip must match the input exactly.
+        return $date !== false && $date->format('Y-m-d') === $value ? $date->format('d/m/Y') : null;
     }
 
     private static function period(mixed $value): ?string
