@@ -1,0 +1,80 @@
+{
+  "name": "financial-evidence-decision",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "analysisId",
+        "type": "Hidden",
+        "attributes": {
+          "required": "required"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "decision",
+        "attributes": {
+          "required": "required",
+          "radios_wrapper_attributes": {
+            "class": "govuk-radios--standard"
+          }
+        },
+        "type": "Radio",
+        "options": {
+          "label": "Select your decision",
+          "fieldset-attributes": {
+            "class": "govuk-fieldset govuk-! "
+          },
+          "legend-attributes": {
+            "class": "govuk-fieldset__legend govuk-fieldset__legend--l"
+          },
+          "value_options": {
+            "APPROVED": "Accept financial evidence",
+            "REJECTED": "Reject financial evidence"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "saveDecision",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "value": "decide"
+        },
+        "options": {
+          "label": "Save"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "analysisId": {
+      "name": "analysisId",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        }
+      ]
+    },
+    "decision": {
+      "name": "decision",
+      "required": true
+    }
+  }
+}

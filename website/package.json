@@ -56,7 +56,8 @@
         "katex": "0.18.2"
       }
     },
-    "postcss-selector-parser": "^7.1.6"
+    "postcss-selector-parser": "^7.1.6",
+    "qs": "^6.16.1"
   },
   "browserslist": {
     "production": [

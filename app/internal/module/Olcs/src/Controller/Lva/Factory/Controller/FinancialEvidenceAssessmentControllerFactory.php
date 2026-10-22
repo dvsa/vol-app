@@ -8,6 +8,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -45,6 +46,7 @@ class FinancialEvidenceAssessmentControllerFactory implements FactoryInterface
             $container->get(RestrictionHelperService::class),
             $container->get(FlashMessengerHelperService::class),
             $container->get(FormHelperService::class),
+            $container->get(TableFactory::class),
             $container->get('navigation')
         );
     }
