@@ -8,7 +8,6 @@
 
 namespace Olcs\Controller\Lva\Licence;
 
-use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
 use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -17,6 +16,7 @@ use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Olcs\Controller\Lva\AbstractCommunityLicencesController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use LmcRbacMvc\Service\AuthorizationService;
 
@@ -25,7 +25,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CommunityLicencesController extends Lva\AbstractCommunityLicencesController implements LicenceControllerInterface
+class CommunityLicencesController extends AbstractCommunityLicencesController implements LicenceControllerInterface
 {
     use LicenceControllerTrait;
 
