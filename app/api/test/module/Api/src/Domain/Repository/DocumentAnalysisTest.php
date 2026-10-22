@@ -296,8 +296,9 @@ final class DocumentAnalysisTest extends RepositoryTestCase
 
     /**
      * A first review is the same guarded UPDATE as recordAssessmentStatus(), with an extra
-     * condition that assessmentStatus is still NULL, so it cannot overwrite a decision already
-     * made (including one made concurrently, between the handler's read and this write).
+     * condition that the row is not already decided (APPROVED or REJECTED), so it cannot
+     * overwrite a decision already made (including one made concurrently, between the handler's
+     * read and this write). NULL and PENDING both count as undecided.
      */
     public function testRecordInitialAssessmentStatus(): void
     {
@@ -313,14 +314,31 @@ final class DocumentAnalysisTest extends RepositoryTestCase
             'UPDATE ' . Entity::class . ' da'
             . ' SET da.assessmentStatus = :assessmentStatus, da.lastModifiedOn = :now,'
             . ' da.lastModifiedBy = :lastModifiedBy'
-            . ' WHERE da.id = :id AND da.status = :success AND da.assessmentStatus IS NULL',
+            . ' WHERE da.id = :id AND da.status = :success'
+            . ' AND (da.assessmentStatus IS NULL OR da.assessmentStatus NOT IN(:decided))',
             $qb->getDQL(),
         );
         $this->assertSame('APPROVED', $qb->getParameter('assessmentStatus')->getValue());
         $this->assertSame(99, $qb->getParameter('lastModifiedBy')->getValue());
         $this->assertSame(5, $qb->getParameter('id')->getValue());
         $this->assertSame(Entity::STATUS_SUCCESS, $qb->getParameter('success')->getValue());
+        $this->assertSame([AssessmentStatus::APPROVED->value, AssessmentStatus::REJECTED->value], $qb->getParameter('decided')->getValue());
         $this->assertInstanceOf(\DateTime::class, $qb->getParameter('now')->getValue());
+    }
+
+    /**
+     * A row already reverted to PENDING by a deliberate change (UpdateDocumentAnalysisAssessmentStatus)
+     * is undecided again, so a first review can still record it, exactly as an unreviewed row can.
+     */
+    public function testRecordInitialAssessmentStatusMatchesAPendingRow(): void
+    {
+        $user = m::mock(User::class);
+        $user->allows('getId')->andReturn(99);
+
+        $qb = $this->expectEntityManagerQb();
+        $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn(1);
+
+        $this->assertSame(1, $this->sut->recordInitialAssessmentStatus(5, AssessmentStatus::REJECTED, $user));
     }
 
     /** A row not successful, not found, or already decided (even by a concurrent accept) is left untouched. */

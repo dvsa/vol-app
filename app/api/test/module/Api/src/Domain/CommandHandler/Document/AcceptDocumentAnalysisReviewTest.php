@@ -131,6 +131,34 @@ final class AcceptDocumentAnalysisReviewTest extends AbstractCommandHandlerTestC
         yield 'already rejected' => [AssessmentStatus::REJECTED];
     }
 
+    /**
+     * PENDING is not a decision: it is what UpdateDocumentAnalysisAssessmentStatus records when a
+     * caseworker deliberately reverts a prior decision. An analysis reset that way must be
+     * reviewable again by accept, exactly as an unreviewed (NULL) one is.
+     */
+    #[DataProvider('undecidedProvider')]
+    public function testAcceptsAnAnalysisThatIsNotYetDecided(?AssessmentStatus $undecided): void
+    {
+        $command = Cmd::create(['id' => 5]);
+
+        $this->repoMap['DocumentAnalysis']->expects('fetchUsingId')
+            ->andReturn($this->analysis(Entity::STATUS_SUCCESS, $undecided));
+        $this->normaliser->expects('fromStored')->andReturn($this->normalisedResult('pass'));
+        $this->repoMap['DocumentAnalysis']->expects('recordInitialAssessmentStatus')
+            ->with(5, AssessmentStatus::APPROVED, $this->user)
+            ->andReturn(1);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertSame(AssessmentStatus::APPROVED->value, $result->getFlag(AcceptDocumentAnalysisReview::FLAG_ASSESSMENT_STATUS));
+    }
+
+    public static function undecidedProvider(): \Iterator
+    {
+        yield 'never reviewed' => [null];
+        yield 'reverted to pending' => [AssessmentStatus::PENDING];
+    }
+
     /** A stored report the normaliser could not read, or one with no flagged rows: nothing to decide on. */
     #[DataProvider('nothingToDecideProvider')]
     public function testRefusesAnAnalysisWithNoAssessmentToDecideOn(?NormalisedResult $normalised): void

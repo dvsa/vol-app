@@ -14,6 +14,7 @@ use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisReviewOutcome;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Document\AcceptDocumentAnalysisReview as Cmd;
+use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 
 /**
  * A caseworker accepts the review of a successful document analysis.
@@ -65,14 +66,18 @@ final class AcceptDocumentAnalysisReview extends AbstractCommandHandler implemen
             );
         }
 
-        // A decided review is immutable here: a deliberate change is
-        // UpdateDocumentAnalysisAssessmentStatus, not a second accept.
-        if ($analysis->getAssessmentStatus() !== null) {
+        // A decided review (approved or rejected) is immutable here: a deliberate change is
+        // UpdateDocumentAnalysisAssessmentStatus, not a second accept. NULL and PENDING are both
+        // undecided - PENDING is a decision explicitly reverted by that handler, so accept stays
+        // available after a reset, exactly as it is before any review at all.
+        $decidedStatus = AssessmentStatus::tryFrom((string)$analysis->getAssessmentStatus());
+
+        if (in_array($decidedStatus, [AssessmentStatus::APPROVED, AssessmentStatus::REJECTED], true)) {
             throw new BadRequestException(
                 sprintf(
                     'Document analysis %d has already been reviewed (%s), so cannot be accepted again',
                     $analysisId,
-                    $analysis->getAssessmentStatus()
+                    $decidedStatus->value
                 )
             );
         }
@@ -86,8 +91,8 @@ final class AcceptDocumentAnalysisReview extends AbstractCommandHandler implemen
             );
         }
 
-        // Guarded on status = SUCCESS and assessmentStatus = NULL, so a row resolved otherwise,
-        // or already decided (even concurrently, by another accept), matches nothing.
+        // Guarded on status = SUCCESS and assessmentStatus not already APPROVED/REJECTED, so a
+        // row resolved otherwise, or decided (even concurrently, by another accept), matches nothing.
         if ($repo->recordInitialAssessmentStatus($analysisId, $status, $this->getCurrentUser()) === 0) {
             throw new BadRequestException(
                 sprintf(
