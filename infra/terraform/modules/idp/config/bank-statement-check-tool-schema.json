@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "required": ["summary", "detected_currency", "core_checks"],
+  "required": ["summary", "detected_currency", "statement_details", "category_remarks", "core_checks"],
   "properties": {
     "summary": {
       "type": "string",
@@ -9,6 +9,92 @@
     "detected_currency": {
       "type": "string",
       "description": "ISO currency code detected on the statement (GBP, USD, EUR, etc)."
+    },
+    "statement_details": {
+      "type": "object",
+      "description": "Facts read from the statement, shown to the caseworker beside each summary category. Report what the statement shows and what the checks actually used. Use null for anything the statement does not show or that could not be determined. Never guess or infer a value.",
+      "required": [
+        "bank_name",
+        "bank_address",
+        "account_holder_name",
+        "statement_issue_date",
+        "statement_period_start",
+        "statement_period_end",
+        "average_funds",
+        "large_deposit_count"
+      ],
+      "properties": {
+        "bank_name": {
+          "type": ["string", "null"],
+          "description": "Bank or building society name as shown on the statement."
+        },
+        "bank_address": {
+          "type": ["string", "null"],
+          "description": "Postal address of the bank or branch as shown on the statement, on one line with commas between the parts. This is the bank's address, not the account holder's. null if the statement does not show one."
+        },
+        "account_holder_name": {
+          "type": ["string", "null"],
+          "description": "The account holder name that the account name checks assessed, exactly as shown on the statement."
+        },
+        "statement_issue_date": {
+          "type": ["string", "null"],
+          "description": "Date the statement was issued, as printed on the statement, in ISO 8601 format (YYYY-MM-DD). null if no issue date is printed; do not substitute the statement period end date."
+        },
+        "statement_period_start": {
+          "type": ["string", "null"],
+          "description": "First day of the statement period in ISO 8601 format (YYYY-MM-DD)."
+        },
+        "statement_period_end": {
+          "type": ["string", "null"],
+          "description": "Last day of the statement period in ISO 8601 format (YYYY-MM-DD)."
+        },
+        "average_funds": {
+          "type": ["number", "null"],
+          "description": "The 4-balance average calculated for the average funds check, including any agreed overdraft added by the calculation steps, as a plain number in the statement currency. null if the average could not be calculated or the check was skipped."
+        },
+        "large_deposit_count": {
+          "type": ["integer", "null"],
+          "description": "Number of individual deposits that exceed 25% of the required funds. 0 if there are none. null if the large deposits check was skipped."
+        }
+      }
+    },
+    "category_remarks": {
+      "type": "object",
+      "description": "One caseworker-facing remark per summary category, drafted from the category definition in summaryCategories and consistent with the results of the checks in that category.",
+      "required": [
+        "authenticity",
+        "name",
+        "statement_date",
+        "statement_period",
+        "average_funds",
+        "large_deposit"
+      ],
+      "properties": {
+        "authenticity": {
+          "type": "string",
+          "description": "Remark for the Authenticity category (1 concise sentence)."
+        },
+        "name": {
+          "type": "string",
+          "description": "Remark for the Name category (1 concise sentence)."
+        },
+        "statement_date": {
+          "type": "string",
+          "description": "Remark for the Statement Date category (1 concise sentence)."
+        },
+        "statement_period": {
+          "type": "string",
+          "description": "Remark for the Statement Period category (1 concise sentence)."
+        },
+        "average_funds": {
+          "type": "string",
+          "description": "Remark for the Average Funds category (1 concise sentence)."
+        },
+        "large_deposit": {
+          "type": "string",
+          "description": "Remark for the Large Deposit category (1 concise sentence)."
+        }
+      }
     },
     "core_checks": {
       "type": "object",
