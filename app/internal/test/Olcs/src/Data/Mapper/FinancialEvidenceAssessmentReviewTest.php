@@ -58,6 +58,7 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
         $this->assertSame(
             [
                 'key' => 'statementDate',
+                'flagged' => true,
                 'label' => 'Statement date',
                 'value' => '29/12/2025',
                 'flag' => 'FAIL',
@@ -116,7 +117,10 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
 
     /**
      * A genuine pass changed to a fail shows the fail it was changed to, not a pass regardless of
-     * direction: changedTo must follow the row's own flag, not be fixed to one value.
+     * direction: changedTo must follow the row's own flag, not be fixed to one value. It stays
+     * listed as a pass (what it started as), not promoted to an issue, so it never seems to
+     * vanish from the passes list the caseworker is looking at. It still counts toward
+     * unchangedIssueCount though, since it currently reads as a fail and needs resolving.
      */
     public function testAPassChangedToAFailShowsTheFailItWasChangedToNotAlwaysPass(): void
     {
@@ -134,15 +138,20 @@ final class FinancialEvidenceAssessmentReviewTest extends TestCase
             ],
         ]));
 
-        $issue = $page['issues'][0];
+        $this->assertNotContains('authenticity', array_column($page['issues'], 'key'));
 
-        $this->assertSame('PASS', $issue['flag']);
-        $this->assertSame('govuk-tag--grey', $issue['flagTag']);
-        $this->assertTrue($issue['changed']);
-        $this->assertSame('FAIL', $issue['changedTo']);
-        $this->assertSame('govuk-tag--red', $issue['changedToTag']);
-        $this->assertSame('Sam Taylor', $issue['changedBy']);
-        $this->assertSame('Reconsidered after a second look', $issue['comment']);
+        $pass = array_values(array_filter($page['passes'], static fn(array $pass): bool => $pass['key'] === 'authenticity'))[0];
+
+        $this->assertSame('PASS', $pass['flag']);
+        $this->assertSame('govuk-tag--grey', $pass['flagTag']);
+        $this->assertTrue($pass['changed']);
+        $this->assertSame('FAIL', $pass['changedTo']);
+        $this->assertSame('govuk-tag--red', $pass['changedToTag']);
+        $this->assertSame('Sam Taylor', $pass['changedBy']);
+        $this->assertSame('Reconsidered after a second look', $pass['comment']);
+        // Still unresolved, even though it is shown in the passes list: it currently reads as a
+        // fail, so it still counts, decoupled from which section it happens to be shown in.
+        $this->assertSame(1, $page['unchangedIssueCount']);
     }
 
     /**

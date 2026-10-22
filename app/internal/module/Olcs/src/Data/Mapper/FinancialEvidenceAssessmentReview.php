@@ -14,7 +14,10 @@ namespace Olcs\Data\Mapper;
  *
  * An issue is a check the analyser failed or skipped, whether or not a caseworker has since
  * changed it to a pass (the API lays that change over the result and says what it replaced).
- * A pass is a check the analyser passed; bank and bank address are shown with them for reference.
+ * A pass is a check the analyser passed, whether or not a caseworker has since changed it to a
+ * fail, the same way; bank and bank address are shown with them for reference. A row's section
+ * is fixed by what it started as, so an override never moves a row off the page it is shown on -
+ * it only changes the badge shown against it.
  */
 final class FinancialEvidenceAssessmentReview
 {
@@ -35,6 +38,7 @@ final class FinancialEvidenceAssessmentReview
      *     hasAssessment: bool,
      *     issues: list<array{
      *         key: string,
+     *         flagged: bool,
      *         label: string,
      *         value: string|null,
      *         flag: string,
@@ -47,7 +51,21 @@ final class FinancialEvidenceAssessmentReview
      *         changedToTag: string|null,
      *         changedBy: string|null
      *     }>,
-     *     passes: list<array{key: string, flagged: bool, label: string, value: string|null, flag: string|null, flagTag: string|null, remark: string|null, comment: string|null}>,
+     *     passes: list<array{
+     *         key: string,
+     *         flagged: bool,
+     *         label: string,
+     *         value: string|null,
+     *         flag: string|null,
+     *         flagTag: string|null,
+     *         remark: string|null,
+     *         comment: string|null,
+     *         changed: bool,
+     *         kept: bool,
+     *         changedTo: string|null,
+     *         changedToTag: string|null,
+     *         changedBy: string|null
+     *     }>,
      *     passCount: int,
      *     unchangedIssueCount: int
      * }
@@ -61,28 +79,25 @@ final class FinancialEvidenceAssessmentReview
         $unchangedIssueCount = 0;
 
         foreach ($tab['rows'] as $row) {
-            if ($row['flagged'] && ($row['flag'] !== FinancialEvidenceAssessmentTab::FLAG_PASS || self::isRealChange($row))) {
-                $issues[] = self::issue($row);
+            // A row's section is fixed by what it started as, never by what a caseworker has
+            // since changed it to: an override only changes the badge shown against the row, so a
+            // row can never seem to vanish from the page the caseworker is looking at by being
+            // changed on it (an issue changed to a pass stays listed as an issue, grey and
+            // superseded, and a pass changed to a fail stays listed as a pass the same way).
+            $originalFlag = $row['override']['originalFlag'] ?? $row['flag'];
 
-                // Read directly from the row's own current flag, not from any derived state: an
-                // issue still needs resolving for as long as it does not currently read as a pass.
-                if ($row['flag'] !== FinancialEvidenceAssessmentTab::FLAG_PASS) {
-                    $unchangedIssueCount++;
-                }
-
-                continue;
+            if ($row['flagged'] && $originalFlag !== FinancialEvidenceAssessmentTab::FLAG_PASS) {
+                $issues[] = self::entry($row, $originalFlag, true);
+            } else {
+                $passes[] = self::entry($row, $originalFlag, false);
             }
 
-            $passes[] = [
-                'key' => $row['key'],
-                'flagged' => $row['flagged'],
-                'label' => $row['label'],
-                'value' => $row['value'],
-                'flag' => $row['flag'],
-                'flagTag' => $row['flagTag'],
-                'remark' => $row['remark'],
-                'comment' => $row['override']['comment'] ?? null,
-            ];
+            // Read directly from the row's own current flag, not from its section: a row still
+            // needs resolving for as long as it does not currently read as a pass, whichever
+            // section it is shown in.
+            if ($row['flagged'] && $row['flag'] !== FinancialEvidenceAssessmentTab::FLAG_PASS) {
+                $unchangedIssueCount++;
+            }
         }
 
         return [
@@ -109,32 +124,40 @@ final class FinancialEvidenceAssessmentReview
     }
 
     /**
-     * One issue as the view lists it: the infringing value (null when there is none worth
-     * showing), the flag the analyser gave with its remark, and the caseworker's decision on it.
+     * One row as either list shows it: the infringing value (issues only; null when there is none
+     * worth showing), the flag it started as with its remark, and the caseworker's decision on it.
      *
      * A genuine change (the row's flag moved) greys out the original flag and carries the flag it
      * was changed to. A note (the caseworker left a comment but kept the flag as it stands) keeps
      * the flag as it is and says so - "Kept as X by Y" - rather than either staying silent or
      * wrongly claiming a change that did not happen.
      */
-    private static function issue(array $row): array
+    private static function entry(array $row, ?string $originalFlag, bool $isIssue): array
     {
         $override = $row['override'];
         $changed = self::isRealChange($row);
         $kept = $override !== null && !$changed;
-        $originalFlag = $changed ? $override['originalFlag'] : (string)$row['flag'];
-        $showValue = !in_array($row['key'], self::ROWS_WITHOUT_INFRINGING_VALUE, true)
-            && $row['value'] !== null
-            && $row['value'] !== self::NO_VALUE;
+
+        if ($isIssue) {
+            $showValue = !in_array($row['key'], self::ROWS_WITHOUT_INFRINGING_VALUE, true)
+                && $row['value'] !== null
+                && $row['value'] !== self::NO_VALUE;
+            $value = $showValue ? $row['value'] : null;
+        } else {
+            // The passes list shows a row's value for reference regardless (e.g. a large deposit
+            // count), not just when it names what failed.
+            $value = $row['value'];
+        }
 
         return [
             'key' => $row['key'],
+            'flagged' => $row['flagged'],
             'label' => $row['label'],
-            'value' => $showValue ? $row['value'] : null,
+            'value' => $value,
             'flag' => $originalFlag,
             'flagTag' => $changed
                 ? FinancialEvidenceAssessmentTab::FLAG_TAG_SUPERSEDED
-                : FinancialEvidenceAssessmentTab::flagTag($originalFlag),
+                : ($originalFlag !== null ? FinancialEvidenceAssessmentTab::flagTag($originalFlag) : null),
             'remark' => $row['remark'],
             'comment' => $override['comment'] ?? null,
             'changed' => $changed,

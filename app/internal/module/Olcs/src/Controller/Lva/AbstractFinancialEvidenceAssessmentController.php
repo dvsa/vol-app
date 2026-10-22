@@ -327,7 +327,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
             $this->flashMessengerHelper->addUnknownError();
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $decisionForm->get('analysisId')->setValue((string)$analysisId);
@@ -369,7 +369,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         if (!$form->isValid()) {
             $this->flashMessengerHelper->addUnknownError();
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $data = $form->getData();
@@ -377,7 +377,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         if ((int)$data['analysisId'] !== $analysisId) {
             $this->flashMessengerHelper->addUnknownError();
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $issue = self::findByKey($page['issues'], (string)$data['row']);
@@ -385,7 +385,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         if ($issue === null || $issue['changed']) {
             $this->flashMessengerHelper->addErrorMessage('This recommendation has already been changed');
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $comment = trim((string)$data['comment']);
@@ -395,12 +395,12 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         if ($changeToPass && $comment === '' && $issue['flag'] === FinancialEvidenceAssessmentTab::FLAG_FAIL) {
             $this->flashMessengerHelper->addErrorMessage('Enter a reason for changing the recommendation');
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         if (!$changeToPass && $comment === '') {
             // Nothing to change and nothing to say.
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $response = $this->handleCommand(
@@ -420,7 +420,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             $this->flashMessengerHelper->addErrorMessage('The change to the recommendation could not be recorded');
         }
 
-        return $this->redirect()->refresh();
+        return $this->redirectBackToChangeReview();
     }
 
     /**
@@ -438,7 +438,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         if (!$form->isValid()) {
             $this->flashMessengerHelper->addUnknownError();
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $data = $form->getData();
@@ -446,7 +446,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         if ((int)$data['analysisId'] !== $analysisId) {
             $this->flashMessengerHelper->addUnknownError();
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $pass = self::findByKey($page['passes'], (string)$data['row']);
@@ -454,7 +454,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         if ($pass === null || !$pass['flagged']) {
             $this->flashMessengerHelper->addErrorMessage('This recommendation has already been changed');
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $comment = trim((string)$data['comment']);
@@ -462,14 +462,14 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
 
         // Every row here is a genuine pass, so changing it always needs a reason.
         if ($changeToFail && $comment === '') {
-            $this->flashMessengerHelper->addErrorMessage('Enter more detail about the change');
+            $this->flashMessengerHelper->addErrorMessage('You must provide explanatory text.');
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         if (!$changeToFail && $comment === '') {
             // Nothing to change and nothing to say.
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $response = $this->handleCommand(
@@ -489,7 +489,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
             $this->flashMessengerHelper->addErrorMessage('The change to the recommendation could not be recorded');
         }
 
-        return $this->redirect()->refresh();
+        return $this->redirectBackToChangeReview();
     }
 
     /**
@@ -504,7 +504,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         if (!$form->isValid()) {
             $this->flashMessengerHelper->addErrorMessage('Select a decision');
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $data = $form->getData();
@@ -512,7 +512,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         if ((int)$data['analysisId'] !== $analysisId) {
             $this->flashMessengerHelper->addUnknownError();
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $decision = AssessmentStatus::from((string)$data['decision']);
@@ -533,7 +533,7 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
                 $this->flashMessengerHelper->addErrorMessage('The decision could not be recorded');
             }
 
-            return $this->redirect()->refresh();
+            return $this->redirectBackToChangeReview();
         }
 
         $this->flashMessengerHelper->addSuccessMessage(
@@ -543,6 +543,21 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
         );
 
         return $this->redirectToIndex();
+    }
+
+    /**
+     * Back to this page (post/redirect/get), staying on the passed-checks view if that is where
+     * the caseworker was. redirect()->refresh() rebuilds the URL from the route match alone and
+     * drops ?view=passes, which would otherwise silently switch a failed or noted submission back
+     * to the default (fails and changes) view.
+     */
+    protected function redirectBackToChangeReview()
+    {
+        $query = $this->getRequest()->getQuery(self::QUERY_VIEW) === self::VIEW_PASSES
+            ? [self::QUERY_VIEW => self::VIEW_PASSES]
+            : [];
+
+        return $this->redirect()->toRoute(null, [], ['query' => $query], true);
     }
 
     /** The entry of $list (one of the mapper's issues or passes) whose 'key' matches, or null. */

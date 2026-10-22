@@ -608,7 +608,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut->allows('getRequest')->andReturn($this->postRequest(['analysisId' => '9']));
         $sut->expects('handleQuery')->andReturn($this->okResponse([$this->assessedAnalysis(9, 'fail')]));
         $sut->shouldNotReceive('handleCommand');
-        $response = $this->expectRedirectToRefresh($sut);
+        $response = $this->expectRedirectBackToChangeReview($sut);
 
         $this->assertSame($response, $sut->changeReviewAction());
     }
@@ -628,7 +628,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
                 && (int)$c->getId() === 9 && $c->getRow() === 'largeDeposit' && $c->getComment() === 'Checked by hand'
                 && $c->getChangeRecommendation() === 'Y'))
             ->andReturn($this->commandResponse(true, null));
-        $response = $this->expectRedirectToRefresh($sut);
+        $response = $this->expectRedirectBackToChangeReview($sut);
 
         $this->assertSame($response, $this->override($sut, $post, true));
     }
@@ -642,7 +642,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->expects('handleCommand')->andReturn($this->commandResponse(false, null));
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->override($sut, $post, true);
     }
@@ -654,7 +654,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->override($sut, $post, true);
     }
@@ -672,7 +672,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             ->with(m::on(static fn($c): bool => $c instanceof OverrideDocumentAnalysisFlag
                 && $c->getComment() === 'Just a note' && $c->getChangeRecommendation() === 'N'))
             ->andReturn($this->commandResponse(true, null));
-        $response = $this->expectRedirectToRefresh($sut);
+        $response = $this->expectRedirectBackToChangeReview($sut);
 
         $this->assertSame($response, $this->override($sut, $post, true));
     }
@@ -686,7 +686,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->override($sut, $post, true);
     }
@@ -703,7 +703,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut->expects('handleCommand')
             ->with(m::on(static fn($c): bool => $c instanceof OverrideDocumentAnalysisFlag && $c->getComment() === ''))
             ->andReturn($this->commandResponse(true, null));
-        $response = $this->expectRedirectToRefresh($sut);
+        $response = $this->expectRedirectBackToChangeReview($sut);
 
         $this->assertSame($response, $this->override($sut, $post, true, $this->assessedAnalysis(9, 'skipped')));
     }
@@ -717,7 +717,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->override($sut, $post, false);
     }
@@ -732,7 +732,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->override($sut, $post, true);
     }
@@ -761,7 +761,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->override($sut, $post, true, $analysis);
     }
@@ -781,7 +781,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
                 && (int)$c->getId() === 9 && $c->getRow() === 'largeDeposit' && $c->getComment() === 'Checked by hand'
                 && $c->getChangeRecommendation() === 'Y'))
             ->andReturn($this->commandResponse(true, null));
-        $response = $this->expectRedirectToRefresh($sut);
+        $response = $this->expectRedirectBackToChangeReview($sut);
 
         $this->assertSame($response, $this->passOverride($sut, $post, true));
     }
@@ -795,7 +795,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->expects('handleCommand')->andReturn($this->commandResponse(false, null));
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->passOverride($sut, $post, true);
     }
@@ -807,7 +807,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->passOverride($sut, $post, true);
     }
@@ -825,7 +825,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             ->with(m::on(static fn($c): bool => $c instanceof OverridePassedDocumentAnalysisFlag
                 && $c->getComment() === 'Just a note' && $c->getChangeRecommendation() === 'N'))
             ->andReturn($this->commandResponse(true, null));
-        $response = $this->expectRedirectToRefresh($sut);
+        $response = $this->expectRedirectBackToChangeReview($sut);
 
         $this->assertSame($response, $this->passOverride($sut, $post, true));
     }
@@ -834,12 +834,12 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     {
         $post = ['analysisId' => '9', 'row' => 'largeDeposit', 'changeRecommendation' => 'Y', 'comment' => ''];
         $flash = m::mock(FlashMessengerHelperService::class);
-        $flash->expects('addErrorMessage')->with('Enter more detail about the change');
+        $flash->expects('addErrorMessage')->with('You must provide explanatory text.');
 
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->passOverride($sut, $post, true);
     }
@@ -853,7 +853,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->passOverride($sut, $post, false);
     }
@@ -868,7 +868,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->passOverride($sut, $post, true);
     }
@@ -898,7 +898,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         $this->passOverride($sut, $post, true, $analysis);
     }
@@ -914,7 +914,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, false), 9);
     }
@@ -928,7 +928,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $sut = $this->createSut(ApplicationController::class, $flash);
         $sut->allows('getRequest')->andReturn($this->postRequest($post));
         $sut->shouldNotReceive('handleCommand');
-        $this->expectRedirectToRefresh($sut);
+        $this->expectRedirectBackToChangeReview($sut);
 
         (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, true), 9);
     }
@@ -1113,6 +1113,22 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         return $response;
     }
 
+    /**
+     * The pass/fail/decision post handlers redirect back to this page rather than refreshing,
+     * so that the ?view=passes query flag (dropped by refresh()) survives the round trip.
+     *
+     * @param array<string, string> $query expected query to carry, e.g. ['view' => 'passes']
+     */
+    private function expectRedirectBackToChangeReview(m\MockInterface $sut, array $query = []): Response
+    {
+        $response = new Response();
+        $redirect = m::mock(Redirect::class);
+        $redirect->expects('toRoute')->with(null, [], ['query' => $query], true)->andReturn($response);
+        $sut->expects('redirect')->andReturn($redirect);
+
+        return $response;
+    }
+
     /** The API's response to AcceptDocumentAnalysisReview: the decided status travels in the result's flags. */
     private function commandResponse(bool $ok, ?string $assessmentStatus): CqrsResponse
     {
@@ -1149,7 +1165,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             ->with(m::on(static fn($command): bool => $command instanceof UpdateDocumentAnalysisAssessmentStatus
                 && (int)$command->getId() === 9 && $command->getStatus() === 'APPROVED'))
             ->andReturn($apiResponse);
-        $redirectResponse = $this->expectRedirectToRefresh($sut);
+        $redirectResponse = $this->expectRedirectBackToChangeReview($sut);
 
         $result = (new \ReflectionMethod($sut, 'processDecision'))->invoke($sut, $this->reviewForm($post, true), 9);
         $this->assertSame($redirectResponse, $result);

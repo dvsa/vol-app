@@ -69,7 +69,7 @@ class FinancialEvidenceIssueOverride
      * @Form\Attributes({
      *     "data-module": "govuk-button",
      *     "type": "submit",
-     *     "class": "govuk-button",
+     *     "class":"govuk-button govuk-button--secondary",
      *     "value": "override",
      * })
      * @Form\Options({"label": "Save and continue"})
