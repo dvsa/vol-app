@@ -98,6 +98,7 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
             [
                 'licence' => $this->getFromRoute('licence'),
                 'showDocs' => FilterOptions::EXCLUDE_IRHP,
+                'hideUnsubmittedApplicationDocs' => true
             ]
         );
     }

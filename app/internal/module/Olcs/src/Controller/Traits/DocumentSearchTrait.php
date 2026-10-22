@@ -45,6 +45,14 @@ trait DocumentSearchTrait
             $this->getRequest()->getQuery()->toArray()
         );
 
+        if(isset($filters['hideUnsubmittedApplicationDocs'])) {
+            if ($filters['hideUnsubmittedApplicationDocs'] === true) {
+                $filters['hideUnsubmittedApplicationDocs'] = 'Y';
+            } else {
+                unset($filters['hideUnsubmittedApplicationDocs']);
+            }
+        }
+
         if (isset($filters['isExternal'])) {
             if ($hideExternalDocumentsOverride) {
                 $filters['isExternal'] = 'N';

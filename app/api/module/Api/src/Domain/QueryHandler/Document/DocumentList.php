@@ -33,6 +33,7 @@ class DocumentList extends AbstractQueryHandler
         unset($data['isExternal']);
         unset($data['showDocs']);
         unset($data['format']);
+        unset($data['hideUnsubmittedApplicationDocs']);
 
         $unfilteredQuery = \Dvsa\Olcs\Transfer\Query\Document\DocumentList::create($data);
 
