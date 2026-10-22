@@ -16,7 +16,6 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 #[ORM\Index(name: 'ix_licence_operating_centre_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_licence_operating_centre_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_licence_operating_centre_s4_id', columns: ['s4_id'])]
-#[ORM\UniqueConstraint(name: 'uk_licence_operating_centre_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class LicenceOperatingCentre extends AbstractLicenceOperatingCentre implements OrganisationProviderInterface
 {
