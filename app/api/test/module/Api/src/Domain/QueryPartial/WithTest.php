@@ -33,6 +33,43 @@ final class WithTest extends QueryPartialTestCase
         );
     }
 
+    public function testDoesNotJoinSamePropertyTwice(): void
+    {
+        $this->sut->modifyQuery($this->qb, ['PROPERTY', 'p']);
+        $this->sut->modifyQuery($this->qb, ['PROPERTY']);
+
+        $this->assertSame(
+            'SELECT a, p FROM foo a LEFT JOIN a.PROPERTY p',
+            $this->qb->getDQL()
+        );
+    }
+
+    public function testExplicitAliasReplacesGeneratedAlias(): void
+    {
+        $this->sut->modifyQuery($this->qb, ['PROPERTY']);
+        $this->sut->modifyQuery($this->qb, ['PROPERTY', 'p']);
+
+        $this->assertSame(
+            'SELECT a, p FROM foo a LEFT JOIN a.PROPERTY p',
+            $this->qb->getDQL()
+        );
+    }
+
+    public function testExplicitAliasUpdatesDependentJoin(): void
+    {
+        $this->sut->modifyQuery($this->qb, ['PROPERTY', 'old']);
+        $this->sut->modifyQuery($this->qb, ['old.CHILD', 'child']);
+
+        $this->sut->modifyQuery($this->qb, ['PROPERTY', 'new']);
+
+        $this->assertSame(
+            'SELECT a, new, child FROM foo a'
+            . ' LEFT JOIN a.PROPERTY new'
+            . ' LEFT JOIN new.CHILD child',
+            $this->qb->getDQL()
+        );
+    }
+
     public static function dataProvider(): \Iterator
     {
         yield [

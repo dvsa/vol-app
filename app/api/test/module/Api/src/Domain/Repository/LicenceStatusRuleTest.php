@@ -12,10 +12,9 @@ final class LicenceStatusRuleTest extends RepositoryTestCase
     private const string FROM = ' FROM ' . Entity::class . ' lsr';
 
     /**
-     * withRefdata() joins licenceStatus as w0 and with('licenceStatus') joins it again as w1 —
-     * the same association twice, for no effect beyond the extra join.
+     * withRefdata() already joins licenceStatus, so the duplicate explicit join is not added.
      */
-    private const string JOINS = ' LEFT JOIN lsr.licenceStatus w0 LEFT JOIN lsr.licenceStatus w1'
+    private const string JOINS = ' LEFT JOIN lsr.licenceStatus w0'
         . ' LEFT JOIN lsr.licence l LEFT JOIN l.status w2';
 
     #[\Override]
@@ -39,7 +38,7 @@ final class LicenceStatusRuleTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->{$method}($date));
 
         $this->assertSame(
-            'SELECT lsr, w0, w1, l, w2' . self::FROM . self::JOINS . ' WHERE ' . $expectedWhere,
+            'SELECT lsr, w0, l, w2' . self::FROM . self::JOINS . ' WHERE ' . $expectedWhere,
             $qb->getDQL(),
         );
         $this->assertSame($date, $qb->getParameter($expectedParameter)->getValue());
