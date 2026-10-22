@@ -9,17 +9,10 @@ use Laminas\Form\Annotation as Form;
  */
 class IrfoStockControlIssued
 {
-    /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"small"})
-     * @Form\Options({"label": "IRFO GV Permit No"})
-     * @Form\Type("Text")
-     * @Form\Validator("Digits")
-     * @Form\Validator({
-     *     "name":"GreaterThan",
-     *     "options": {
-     *         "min":"0",
-     *     }
-     * })
-     */
+    #[Form\Attributes(['id' => '', 'placeholder' => '', 'class' => 'small'])]
+    #[Form\Options(['label' => 'IRFO GV Permit No'])]
+    #[Form\Type('Text')]
+    #[Form\Validator('Digits')]
+    #[Form\Validator(['name' => 'GreaterThan', 'options' => ['min' => '0']])]
     public $irfoGvPermitId;
 }
