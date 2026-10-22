@@ -1,13 +1,13 @@
 <?php
 
-namespace Dvsa\Olcs\Transfer\FieldType\Traits;
+namespace Dvsa\Olcs\Api\Domain\Command\Traits;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * End IRHP Applications and Permits Context Trait
  *
- * @package Dvsa\Olcs\Transfer\FieldType\Traits
+ * @package Dvsa\Olcs\Api\Domain\Command\Traits
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 trait EndIrhpApplicationsAndPermitsContext

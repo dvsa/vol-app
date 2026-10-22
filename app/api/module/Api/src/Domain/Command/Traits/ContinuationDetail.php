@@ -1,31 +1,24 @@
 <?php
 
-namespace Dvsa\Olcs\Transfer\FieldType\Traits;
+namespace Dvsa\Olcs\Api\Domain\Command\Traits;
 
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * Trait PresidingTC
- *
- * @package Dvsa\Olcs\Transfer\Command\Traits\FieldType
- * @author Valtech <uk@valtech.co.uk>
- */
-trait PresidingTCOptional
+trait ContinuationDetail
 {
     /**
      * @var int
      */
-    #[Transfer\Optional]
     #[Transfer\Filter('Laminas\Filter\Digits')]
     #[Transfer\Validator('Laminas\Validator\Digits')]
     #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
-    protected $presidingTc;
+    protected $continuationDetail;
 
     /**
      * @return int
      */
-    public function getPresidingTc()
+    public function getContinuationDetail()
     {
-        return $this->presidingTc;
+        return $this->continuationDetail;
     }
 }
