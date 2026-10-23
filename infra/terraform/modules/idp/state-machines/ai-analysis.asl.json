@@ -173,7 +173,7 @@
     },
     "BuildAnalysisReport": {
       "Type": "Pass",
-      "Comment": "Assembles the full analysis report to persist to S3. metadata provides an audit/provenance trail; applicantProfile documents exactly what data the AI received; analysis is the model output.",
+      "Comment": "Assembles the full analysis report to persist to S3. metadata provides an audit/provenance trail; applicantProfile documents exactly what data the AI received; analysis is the model output. schemaVersion says which shape of tool output the analysis has and promptVersionArn which published prompt produced it, so a stored report describes itself.",
       "Parameters": {
         "bucket.$": "$.bucket",
         "key.$": "$.key",
@@ -192,7 +192,9 @@
             "versionId.$": "$.object.versionId",
             "classification.$": "$.classification",
             "bedrockInvocationArn.$": "$.bedrockInvocationArn",
-            "documentSizeBytes.$": "$.documentSizeBytes"
+            "documentSizeBytes.$": "$.documentSizeBytes",
+            "schemaVersion": ${ANALYSIS_SCHEMA_VERSION},
+            "promptVersionArn": "${BEDROCK_PROMPT_VERSION_ARN}"
           },
           "applicantProfile.$": "$.applicantProfile",
           "analysis.$": "$.analysis"
