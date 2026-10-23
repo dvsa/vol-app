@@ -10,23 +10,19 @@ use Olcs\Form\Model\Fieldset\Conversation as ConversationFieldset;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Conversation")
- * @Form\Attributes({"method": "post"})
- * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
  */
+#[Form\Name('Conversation')]
+#[Form\Attributes(['method' => 'post'])]
+#[Form\Type('Common\Form\Form')]
+#[Form\Options(['prefer_form_input_filter' => true])]
 class Conversation
 {
-    /**
-     * @Form\Name("fields")
-     * @Form\ComposedObject(ConversationFieldset::Class)
-     */
+    #[Form\Name('fields')]
+    #[Form\ComposedObject(ConversationFieldset::class)]
     public ?ConversationFieldset $fields = null;
 
-    /**
-     * @Form\Name("form-actions")
-     * @Form\Attributes({"class":"govuk-button-group"})
-     * @Form\ComposedObject(CreateConversationFormActions::class)
-     */
+    #[Form\Name('form-actions')]
+    #[Form\Attributes(['class' => 'govuk-button-group'])]
+    #[Form\ComposedObject(CreateConversationFormActions::class)]
     public ?CreateConversationFormActions $formActions = null;
 }

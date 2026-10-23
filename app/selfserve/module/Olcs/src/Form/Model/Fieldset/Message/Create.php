@@ -9,24 +9,18 @@ use Laminas\Form\Annotation as Form;
 
 class Create
 {
-    /**
-     * @Form\Name("inputs")
-     * @Form\Attributes({"id": "inputs"})
-     * @Form\ComposedObject(CreateInput::class)
-     */
+    #[Form\Name('inputs')]
+    #[Form\Attributes(['id' => 'inputs'])]
+    #[Form\ComposedObject(CreateInput::class)]
     public ?CreateInput $inputs = null;
 
-    /**
-     * @Form\Name("file")
-     * @Form\Attributes({"id": "file"})
-     * @Form\ComposedObject(MultipleFileUpload::class)
-     */
+    #[Form\Name('file')]
+    #[Form\Attributes(['id' => 'file'])]
+    #[Form\ComposedObject(MultipleFileUpload::class)]
     public ?MultipleFileUpload $file = null;
 
-    /**
-     * @Form\Name("actions")
-     * @Form\Attributes({"id": "actions"})
-     * @Form\ComposedObject(Actions::class)
-     */
+    #[Form\Name('actions')]
+    #[Form\Attributes(['id' => 'actions'])]
+    #[Form\ComposedObject(Actions::class)]
     public ?Actions $send = null;
 }
