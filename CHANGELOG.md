@@ -1,5 +1,18 @@
 # Changelog
 
+## [9.6.0](https://github.com/dvsa/vol-app/compare/v9.5.4...v9.6.0) (2026-10-23)
+
+
+### Features
+
+* reduce the default ticked bus registration VOL-7250 ([#1857](https://github.com/dvsa/vol-app/issues/1857)) ([8ac0ace](https://github.com/dvsa/vol-app/commit/8ac0ace316163b4fe2e36a1fe4fbc8918c905946))
+
+
+### Bug Fixes
+
+* docs snyk vulnerabilities ([#1868](https://github.com/dvsa/vol-app/issues/1868)) ([36fca87](https://github.com/dvsa/vol-app/commit/36fca87f3c5c214b7c25174325d2f26d073c8aff))
+* fixed rendering of table using govuk styling ([#1848](https://github.com/dvsa/vol-app/issues/1848)) ([ed41a92](https://github.com/dvsa/vol-app/commit/ed41a92f04644c4c062526023d8facd0dec2f8ad))
+
 ## [9.5.4](https://github.com/dvsa/vol-app/compare/v9.5.3...v9.5.4) (2026-10-21)
 
 
