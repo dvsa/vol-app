@@ -109,7 +109,7 @@ abstract class AbstractEmailHandler extends AbstractCommandHandler implements Em
      *
      * @param object $recordObject record will be a doctrine entity
      */
-    private function getLicNo($recordObject): ?string
+    private function getLicNo(object $recordObject): ?string
     {
         $licence = match (true) {
             $recordObject instanceof Licence => $recordObject,

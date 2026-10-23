@@ -97,13 +97,29 @@ class TemplateRenderer
         $locale = $message->getLocale();
 
         $plainContent = $this->getEmailContent($locale, $templates, 'plain', $variables);
-        $message->setPlainBody($this->getLayoutView($locale, $layout, 'plain', $plainContent, $variables));
+        $message->setPlainBody(
+            $this->getLayoutView($locale, $layout, 'plain', $plainContent, $this->withoutPrintedLicNo($variables, $plainContent))
+        );
 
         //works around inspection request email which doesn't have a HTML version, and sets the HTML variable to false
         if ($message->getHasHtml()) {
             $htmlContent = $this->getEmailContent($locale, $templates, 'html', $variables);
-            $message->setHtmlBody($this->getLayoutView($locale, $layout, 'html', $htmlContent, $variables));
+            $message->setHtmlBody(
+                $this->getLayoutView($locale, $layout, 'html', $htmlContent, $this->withoutPrintedLicNo($variables, $htmlContent))
+            );
         }
+    }
+
+    /**
+     * The layout adds a "Licence: ..." line from licNo, so drop it when the body already prints the licence number.
+     */
+    private function withoutPrintedLicNo(array $variables, string $content): array
+    {
+        if (isset($variables['licNo']) && str_contains($content, (string) $variables['licNo'])) {
+            unset($variables['licNo']);
+        }
+
+        return $variables;
     }
 
     /**

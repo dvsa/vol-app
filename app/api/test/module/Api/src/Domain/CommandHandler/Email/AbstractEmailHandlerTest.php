@@ -102,6 +102,14 @@ class AbstractEmailHandlerTest extends AbstractCommandHandlerTestCase
         $this->runHandler($record, [], ['licNo' => 'OB1234567']);
     }
 
+    public function testVariablesUntouchedWhenLicenceHasNoNumber(): void
+    {
+        $record = m::mock(Licence::class);
+        $record->shouldReceive('getLicNo')->withNoArgs()->once()->andReturn(null);
+
+        $this->runHandler($record, ['foo' => 'bar'], ['foo' => 'bar']);
+    }
+
     public function testLicNoNotOverwrittenWhenHandlerSuppliesIt(): void
     {
         $record = m::mock(Licence::class);
