@@ -1,5 +1,20 @@
 # Changelog
 
+## [9.5.4](https://github.com/dvsa/vol-app/compare/v9.5.3...v9.5.4) (2026-10-21)
+
+
+### Bug Fixes
+
+* build app images on the PHP 8.4.27 base images ([2f24326](https://github.com/dvsa/vol-app/commit/2f243268dad84a586ad22c41bbb0e77aa0e9d8a9))
+* build app images on the PHP 8.4.27 base images ([fa3be0a](https://github.com/dvsa/vol-app/commit/fa3be0ac0bb925ce764be07d7596d1aff292d0c8))
+
+## [9.5.3](https://github.com/dvsa/vol-app/compare/v9.5.2...v9.5.3) (2026-10-21)
+
+
+### Miscellaneous Chores
+
+* release 9.5.3 ([19a19cb](https://github.com/dvsa/vol-app/commit/19a19cb7be064b949dd2d377317f63f965e37046))
+
 ## [9.5.2](https://github.com/dvsa/vol-app/compare/v9.5.1...v9.5.2) (2026-10-19)
 
 

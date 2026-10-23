@@ -9,12 +9,10 @@ use Laminas\Form\Annotation as Form;
  */
 class TradingNames extends Base
 {
-    /**
-     * @Form\Attributes({"class":"long","id":""})
-     * @Form\Required(false)
-     * @Form\Type("Text")
-     * @Form\Filter("Laminas\Filter\StringTrim")
-     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":70})
-     */
+    #[Form\Attributes(['class' => 'long', 'id' => ''])]
+    #[Form\Required(false)]
+    #[Form\Type('Text')]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 70])]
     public $name;
 }

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace OlcsTest\Service\Qa;
 
 use ArrayObject;
-use Laminas\Form\Annotation\AnnotationBuilder;
 use Common\Service\Qa\FieldsetPopulator;
 use Common\Service\Qa\UsageContext;
+use Laminas\Form\Annotation\AttributeBuilder;
 use Laminas\Form\Factory as LaminasFormFactory;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
@@ -51,7 +51,7 @@ final class FormProviderTest extends MockeryTestCase
 
         $this->laminasFormFactory = m::mock(LaminasFormFactory::class);
 
-        $this->annotationBuilder = m::mock(new AnnotationBuilder())->makePartial();
+        $this->annotationBuilder = m::mock(new AttributeBuilder())->makePartial();
 
         $this->formProvider = new FormProvider(
             $this->formFactory,

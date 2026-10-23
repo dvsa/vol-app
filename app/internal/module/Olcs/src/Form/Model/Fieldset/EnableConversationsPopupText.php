@@ -12,11 +12,7 @@ use Laminas\Form\Annotation as Form;
  */
 class EnableConversationsPopupText
 {
-    /**
-     * @Form\Type(\Common\Form\Elements\Types\PlainText::class)
-     * @Form\Attributes({
-     *     "value": "Messaging will be enabled for this user."
-     * })
-     */
+    #[Form\Type(\Common\Form\Elements\Types\PlainText::class)]
+    #[Form\Attributes(['value' => 'Messaging will be enabled for this user.'])]
     public ?PlainText $text = null;
 }
