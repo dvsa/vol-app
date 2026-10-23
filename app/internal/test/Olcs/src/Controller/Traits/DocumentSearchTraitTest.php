@@ -251,8 +251,8 @@ final class DocumentSearchTraitTest extends MockeryTestCase
 
     public function testHideUnsubmittedApplicationDocsTrue(): void
     {
-        $query = ['hideUnsubmittedApplicationDocs' => true];
-        $overrides = [];
+        $query = [];
+        $overrides = ['hideUnsubmittedApplicationDocs' => 'hidden'];
 
         $mockRequest = m::mock(\Laminas\Http\Request::class);
         $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn($query);
@@ -265,8 +265,8 @@ final class DocumentSearchTraitTest extends MockeryTestCase
 
     public function testHideUnsubmittedApplicationDocsFalse(): void
     {
-        $query = ['hideUnsubmittedApplicationDocs' => false];
-        $overrides = [];
+        $query = [];
+        $overrides = ['hideUnsubmittedApplicationDocs' => false];
 
         $mockRequest = m::mock(\Laminas\Http\Request::class);
         $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn($query);
