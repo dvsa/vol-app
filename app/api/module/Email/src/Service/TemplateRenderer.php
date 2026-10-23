@@ -97,12 +97,12 @@ class TemplateRenderer
         $locale = $message->getLocale();
 
         $plainContent = $this->getEmailContent($locale, $templates, 'plain', $variables);
-        $message->setPlainBody($this->getLayoutView($locale, $layout, 'plain', $plainContent));
+        $message->setPlainBody($this->getLayoutView($locale, $layout, 'plain', $plainContent, $variables));
 
         //works around inspection request email which doesn't have a HTML version, and sets the HTML variable to false
         if ($message->getHasHtml()) {
             $htmlContent = $this->getEmailContent($locale, $templates, 'html', $variables);
-            $message->setHtmlBody($this->getLayoutView($locale, $layout, 'html', $htmlContent));
+            $message->setHtmlBody($this->getLayoutView($locale, $layout, 'html', $htmlContent, $variables));
         }
     }
 
@@ -127,12 +127,13 @@ class TemplateRenderer
      * @param string $layout
      * @param string $format
      * @param string $content
+     * @param array $variables
      *
      * @return string
      */
-    private function getLayoutView($locale, $layout, $format, $content)
+    private function getLayoutView($locale, $layout, $format, $content, $variables = [])
     {
-        return $this->viewRenderer->render($locale, $format, $layout, ['content' => $content]);
+        return $this->viewRenderer->render($locale, $format, $layout, array_merge($variables, ['content' => $content]));
     }
 
     /**

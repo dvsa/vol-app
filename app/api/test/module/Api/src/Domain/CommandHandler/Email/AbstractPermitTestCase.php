@@ -73,6 +73,9 @@ abstract class AbstractPermitTestCase extends AbstractCommandHandlerTestCase
     /** @var string */
     protected $applicationRef;
 
+    /** @var string */
+    protected $licNo = 'OB1234567';
+
     /** @var Organisation */
     protected $organisation;
 
@@ -121,6 +124,11 @@ abstract class AbstractPermitTestCase extends AbstractCommandHandlerTestCase
             ->atLeast(1)
             ->withNoArgs()
             ->andReturn($this->organisation);
+        // read by AbstractEmailHandler to add licNo to the template variables
+        $this->applicationEntity->shouldReceive('getLicence->getLicNo')
+            ->atMost(1)
+            ->withNoArgs()
+            ->andReturn($this->licNo);
 
         $this->repoMap[$this->permitApplicationRepo]
             ->shouldReceive('fetchUsingId')
