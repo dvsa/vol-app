@@ -39,7 +39,7 @@ final class TemplateRendererTest extends MockeryTestCase
             ->andReturn('RENDER_PLAIN_TEMPLATE');
 
         $mockViewRenderer->shouldReceive('render')
-            ->with('en_GB', 'plain', 'default', ['content' => 'RENDER_PLAIN_TEMPLATE'])
+            ->with('en_GB', 'plain', 'default', ['var1', 'var2', 'content' => 'RENDER_PLAIN_TEMPLATE'])
             ->once()
             ->andReturn('RENDER_PLAIN_LAYOUT');
 
@@ -49,7 +49,7 @@ final class TemplateRendererTest extends MockeryTestCase
             ->andReturn('RENDER_HTML_TEMPLATE');
 
         $mockViewRenderer->shouldReceive('render')
-            ->with('en_GB', 'html', 'default', ['content' => 'RENDER_HTML_TEMPLATE'])
+            ->with('en_GB', 'html', 'default', ['var1', 'var2', 'content' => 'RENDER_HTML_TEMPLATE'])
             ->times($htmlRenderTimes)
             ->andReturn('RENDER_HTML_LAYOUT');
 
@@ -57,6 +57,90 @@ final class TemplateRendererTest extends MockeryTestCase
 
         $this->assertSame('RENDER_PLAIN_LAYOUT', $message->getPlainBody());
         $this->assertSame($renderedHtml, $message->getHtmlBody());
+    }
+
+    public function testRenderBodyPassesVariablesToLayoutWithoutOverwritingContent(): void
+    {
+        $sut = new TemplateRenderer();
+        $message = new \Dvsa\Olcs\Email\Data\Message('TO', 'SUBJECT');
+        $message->setLocale('en_GB');
+        $message->setHasHtml(false);
+
+        $mockViewRenderer = m::mock(StrategySelectingViewRenderer::class);
+        $sut->setViewRenderer($mockViewRenderer);
+
+        $variables = ['licNo' => 'OB1234567', 'content' => 'HANDLER_CONTENT'];
+
+        $mockViewRenderer->shouldReceive('render')
+            ->with('en_GB', 'plain', 'TEMPLATE', $variables)
+            ->once()
+            ->andReturn('RENDER_PLAIN_TEMPLATE');
+
+        // the layout gets the handler variables, but the rendered body replaces the handler's "content"
+        $mockViewRenderer->shouldReceive('render')
+            ->with('en_GB', 'plain', 'default', ['licNo' => 'OB1234567', 'content' => 'RENDER_PLAIN_TEMPLATE'])
+            ->once()
+            ->andReturn('RENDER_PLAIN_LAYOUT');
+
+        $sut->renderBody($message, 'TEMPLATE', $variables);
+
+        $this->assertSame('RENDER_PLAIN_LAYOUT', $message->getPlainBody());
+    }
+
+    public function testRenderBodyKeepsLicNoOutOfLayoutWhenBodyPrintsIt(): void
+    {
+        $sut = new TemplateRenderer();
+        $message = new \Dvsa\Olcs\Email\Data\Message('TO', 'SUBJECT');
+        $message->setLocale('en_GB');
+        $message->setHasHtml(false);
+
+        $mockViewRenderer = m::mock(StrategySelectingViewRenderer::class);
+        $sut->setViewRenderer($mockViewRenderer);
+
+        $variables = ['licNo' => 'OB1234567', 'operatorName' => 'OPERATOR'];
+
+        $mockViewRenderer->shouldReceive('render')
+            ->with('en_GB', 'plain', 'TEMPLATE', $variables)
+            ->once()
+            ->andReturn('Your licence OB1234567 is due');
+
+        // the layout gets the handler variables without licNo, plus the rendered body as "content"
+        $mockViewRenderer->shouldReceive('render')
+            ->with('en_GB', 'plain', 'default', ['operatorName' => 'OPERATOR', 'content' => 'Your licence OB1234567 is due'])
+            ->once()
+            ->andReturn('RENDER_PLAIN_LAYOUT');
+
+        $sut->renderBody($message, 'TEMPLATE', $variables);
+
+        $this->assertSame('RENDER_PLAIN_LAYOUT', $message->getPlainBody());
+    }
+
+    public function testRenderBodyGivesLicNoToLayoutWhenBodyDoesNotPrintIt(): void
+    {
+        $sut = new TemplateRenderer();
+        $message = new \Dvsa\Olcs\Email\Data\Message('TO', 'SUBJECT');
+        $message->setLocale('en_GB');
+        $message->setHasHtml(false);
+
+        $mockViewRenderer = m::mock(StrategySelectingViewRenderer::class);
+        $sut->setViewRenderer($mockViewRenderer);
+
+        $variables = ['licNo' => 'OB1234567', 'operatorName' => 'OPERATOR'];
+
+        $mockViewRenderer->shouldReceive('render')
+            ->with('en_GB', 'plain', 'TEMPLATE', $variables)
+            ->once()
+            ->andReturn('RENDER_PLAIN_TEMPLATE');
+
+        // the layout gets the handler variables including licNo, plus the rendered body as "content"
+        $mockViewRenderer->shouldReceive('render')
+            ->with('en_GB', 'plain', 'default', $variables + ['content' => 'RENDER_PLAIN_TEMPLATE'])
+            ->once()
+            ->andReturn('RENDER_PLAIN_LAYOUT');
+
+        $sut->renderBody($message, 'TEMPLATE', $variables);
+
+        $this->assertSame('RENDER_PLAIN_LAYOUT', $message->getPlainBody());
     }
 
     /**
