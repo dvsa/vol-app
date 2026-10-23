@@ -66,6 +66,10 @@ class DocumentList extends AbstractQuery implements
     #[Transfer\Optional]
     protected $onlyUnlinked = null;
 
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
+    #[Transfer\Optional]
+    protected $hideUnsubmittedApplicationDocs = null;
 
     /**
      * Is External
@@ -125,5 +129,15 @@ class DocumentList extends AbstractQuery implements
     public function getOnlyUnlinked()
     {
         return $this->onlyUnlinked;
+    }
+
+    /**
+     * Get hideUnsubmittedApplicationDocs (only retrieve external records linked to applications that have been submitted)
+     *
+     * @return string
+     */
+    public function getHideUnsubmittedApplicationDocs()
+    {
+        return $this->hideUnsubmittedApplicationDocs;
     }
 }
