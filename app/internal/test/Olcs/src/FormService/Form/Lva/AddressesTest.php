@@ -35,6 +35,9 @@ final class AddressesTest extends AbstractLvaFormServiceTestCase
 
         $mockForm->shouldReceive('get')->with('form-actions')->once()->andReturn($mockFsActions);
 
+        // the establishment address labels are covered by the common Addresses test
+        $mockForm->expects('has')->with('establishment_address')->andReturn(false);
+
         //  check change email setting
         $mockInputFilter = m::mock(InputFilter::class)
             ->shouldReceive('get')

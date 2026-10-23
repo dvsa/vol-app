@@ -35,10 +35,7 @@
           "data-container-class": "compound"
         },
         "options": {
-          "label": "address_addressLines",
-          "label_attributes": {
-            "aria-label": "Enter address manually. Establishment address line 1"
-          },
+          "label": "address_addressLine1",
           "short-label": "address_addressLine1"
         },
         "type": "Text"
@@ -54,10 +51,7 @@
           "data-container-class": "compound"
         },
         "options": {
-          "label": "address_addressLine2",
-          "label_attributes": {
-            "class": "govuk-visually-hidden"
-          }
+          "label": "address_addressLine2"
         },
         "type": "Text"
       }
@@ -72,10 +66,7 @@
           "data-container-class": "compound"
         },
         "options": {
-          "label": "address_addressLine3",
-          "label_attributes": {
-            "class": "govuk-visually-hidden"
-          }
+          "label": "address_addressLine3"
         },
         "type": "Text"
       }
@@ -89,10 +80,7 @@
           "id": ""
         },
         "options": {
-          "label": "address_addressLine4",
-          "label_attributes": {
-            "class": "govuk-visually-hidden"
-          }
+          "label": "address_addressLine4"
         },
         "type": "Text"
       }
@@ -106,10 +94,7 @@
           "id": ""
         },
         "options": {
-          "label": "address_townCity",
-          "label_attributes": {
-            "aria-label": "Establishment town/city"
-          }
+          "label": "address_townCity"
         },
         "type": "Text"
       }
@@ -119,10 +104,7 @@
       "spec": {
         "name": "postcode",
         "options": {
-          "label": "address_postcode",
-          "label_attributes": {
-            "aria-label": "Establishment postcode"
-          }
+          "label": "address_postcode"
         },
         "type": "Text",
         "attributes": {
@@ -142,9 +124,6 @@
         },
         "options": {
           "label": "address_country",
-          "label_attributes": {
-            "aria-label": "Choose establishment country"
-          },
           "empty_option": "Please select",
           "disable_inarray_validator": false,
           "service_name": "Common\\Service\\Data\\Country"

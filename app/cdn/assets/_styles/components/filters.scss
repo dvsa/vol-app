@@ -6,7 +6,7 @@
   padding-top: 0.5em;
   background: $white;
   font-weight: 400;
-  @if $app == 'internal' {
+  @if $app == "internal" {
     margin: 0.5em 0 -7px;
   }
   .field {
@@ -16,6 +16,7 @@
     }
   }
   .inline-text {
+    margin-right: 0;
     input {
       width: 4em;
       margin-right: 0;
@@ -45,17 +46,17 @@
 }
 
 .search-filter {
-  @media (max-width: breakpoint('break-4')) {
-    h3 {
+  @media (max-width: breakpoint("break-4")) {
+    h2 {
       cursor: pointer;
       &:before {
-        content: '►';
+        content: "►";
         font-size: 0.9em;
         margin-right: 0.25em;
       }
     }
-    &.toggled h3:before {
-      content: '▼';
+    &.toggled h2:before {
+      content: "▼";
     }
   }
   &:not(.toggled) {

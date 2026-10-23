@@ -67,10 +67,7 @@
         },
         "options": {
           "label": "lva-tm-details-details-birthPlace",
-          "short-label": "lva-tm-details-details-birthPlace",
-          "label_attributes": {
-            "aria-label": "Enter their place of birth"
-          }
+          "short-label": "lva-tm-details-details-birthPlace"
         },
         "type": "Text"
       }
@@ -220,8 +217,7 @@
           "hint": "markup-professional-competence-certificates-obtained-abroad.phtml",
           "hint-position": "above",
           "label_attributes": {
-            "class": "legend",
-            "aria-label": "Certificate of professional competence, attach file(s) for upload"
+            "class": "legend"
           }
         }
       }
