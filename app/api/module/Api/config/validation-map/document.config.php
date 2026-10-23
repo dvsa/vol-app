@@ -32,9 +32,9 @@ return [
     CommandHandler\Document\StoreDocumentAnalysisResultFactory::class => IsSystemUser::class,
     // Reviewing an analysis is an internal action; the handlers refuse anything that is not a
     // successful analysis, and the id alone identifies it.
-    CommandHandler\Document\AcceptDocumentAnalysisReview::class => IsInternalUser::class,
-    CommandHandler\Document\AcceptDocumentAnalysisReviewFactory::class => IsInternalUser::class,
-    CommandHandler\Document\UpdateDocumentAnalysisAssessmentStatus::class => IsInternalUser::class,
+    CommandHandler\Document\AcceptDocumentAnalysisReview::class => \Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalEdit::class,
+    CommandHandler\Document\AcceptDocumentAnalysisReviewFactory::class => \Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalEdit::class,
+    CommandHandler\Document\UpdateDocumentAnalysisAssessmentStatus::class => \Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalEdit::class,
     CommandHandler\Document\OverwriteContent::class => CanOverwriteDocumentWithId::class,
     CommandHandler\Email\SendPsvOperatorListReport::class => CanAccessDocumentWithId::class,
     CommandHandler\Email\SendInternationalGoods::class => CanAccessDocumentWithId::class,
