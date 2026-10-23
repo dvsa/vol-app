@@ -48,5 +48,8 @@
     "grunt-svg-sprite": "^2.0.2",
     "postcss": "^8.5.18",
     "sass": "^1.97.0"
+  },
+  "overrides": {
+    "postcss-selector-parser": "^7.1.6"
   }
 }
