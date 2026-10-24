@@ -95,3 +95,19 @@ packages/local-refresh/.cache/
 # Playwright browser tests for CDN components
 app/cdn/test-results/
 app/cdn/playwright-report/
+
+# CodeGPT
+.codegpt/
+app/selfserve/.codegpt/
+
+# Devcontainer lock
+.devcontainer/developer/devcontainer-lock.json
+
+# Generated release docs
+docs/app/release/
+
+# Terraform external module cache
+infra/terraform/.external_modules/
+
+# Local lockfile
+packages/local-refresh/package-lock.json
