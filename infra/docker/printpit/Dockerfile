@@ -1,4 +1,4 @@
-FROM alpine:3.22 AS builder
+FROM alpine:3.24.1 AS builder
 
 # Set shell for proper pipe error handling
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
@@ -22,7 +22,7 @@ RUN npm install && \
 WORKDIR /build
 RUN go build -ldflags "-s -w" -o filebrowser .
 
-FROM alpine:3.22
+FROM alpine:3.24.1
 
 # Set shell for proper pipe error handling
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
