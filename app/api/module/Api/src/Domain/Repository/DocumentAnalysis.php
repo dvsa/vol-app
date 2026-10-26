@@ -9,7 +9,9 @@ use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
+use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList as DocumentAnalysisListQuery;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
@@ -159,25 +161,29 @@ class DocumentAnalysis extends AbstractRepository
      * conditional UPDATE pattern as sweepStalePending() so a row already resolved by the
      * sweeper (or a concurrent/duplicate invocation) cannot be overwritten.
      *
-     * @param array<mixed> $result
-     * @param array<mixed> $metadata
+     * Both columns are written in the one UPDATE so a row can never hold a result without the
+     * normalised form that was derived from it.
+     *
+     * @param array<mixed> $result the analysis report exactly as the pipeline produced it
+     * @param array<mixed>|null $resultNormalised the report mapped to the assessment payload, or
+     *                                            null when it held nothing that could be mapped
      *
      * @return int rows affected (0 if the row was no longer PENDING)
      */
-    public function recordSuccess(int $analysisId, array $result, array $metadata): int
+    public function recordSuccess(int $analysisId, array $result, ?array $resultNormalised): int
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         return (int)$qb->update(Entity::class, $this->alias)
             ->set($this->alias . '.status', ':success')
             ->set($this->alias . '.result', ':result')
-            ->set($this->alias . '.resultMetadata', ':metadata')
+            ->set($this->alias . '.resultNormalised', ':resultNormalised')
             ->set($this->alias . '.completedAt', ':now')
             ->where($qb->expr()->eq($this->alias . '.id', ':id'))
             ->andWhere($qb->expr()->eq($this->alias . '.status', ':pending'))
             ->setParameter('success', Entity::STATUS_SUCCESS)
             ->setParameter('result', $result, Types::JSON)
-            ->setParameter('metadata', $metadata, Types::JSON)
+            ->setParameter('resultNormalised', $resultNormalised, Types::JSON)
             ->setParameter('now', new \DateTime())
             ->setParameter('id', $analysisId)
             ->setParameter('pending', Entity::STATUS_PENDING)
@@ -208,6 +214,75 @@ class DocumentAnalysis extends AbstractRepository
             ->setParameter('pending', Entity::STATUS_PENDING)
             ->getQuery()
             ->execute();
+    }
+
+    /**
+     * Record a caseworker's review of a successful analysis, as one conditional UPDATE like the
+     * status transitions above. Only SUCCESS rows can be reviewed; anything else (still pending,
+     * failed, timed out, or no such row) matches nothing.
+     *
+     * Used for a caseworker's deliberate change of a decision (UpdateDocumentAnalysisAssessmentStatus);
+     * it may overwrite an existing assessment status. A first decision
+     * (AcceptDocumentAnalysisReview) uses recordInitialAssessmentStatus() instead, which cannot.
+     *
+     * @return int rows affected (0 if no successful analysis has that id)
+     */
+    public function recordAssessmentStatus(int $analysisId, AssessmentStatus $status, UserEntity $reviewedBy): int
+    {
+        return (int)$this->assessmentStatusUpdate($analysisId, $status, $reviewedBy)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
+     * Record a caseworker's first review of a successful analysis. The same guarded UPDATE as
+     * recordAssessmentStatus(), with one extra condition: the row must not already hold a
+     * decision (APPROVED or REJECTED), so a row decided concurrently (by this analysis having
+     * been accepted elsewhere) cannot be overwritten. NULL and PENDING both count as undecided:
+     * PENDING is a decision explicitly reverted by UpdateDocumentAnalysisAssessmentStatus, so an
+     * analysis reset that way is reviewable again here exactly as an unreviewed one is.
+     *
+     * A deliberate change of a decision already made goes through recordAssessmentStatus() via
+     * UpdateDocumentAnalysisAssessmentStatus instead.
+     *
+     * @return int rows affected (0 if no successful, undecided analysis has that id)
+     */
+    public function recordInitialAssessmentStatus(int $analysisId, AssessmentStatus $status, UserEntity $reviewedBy): int
+    {
+        $qb = $this->assessmentStatusUpdate($analysisId, $status, $reviewedBy);
+
+        return (int)$qb
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->isNull($this->alias . '.assessmentStatus'),
+                    $qb->expr()->notIn($this->alias . '.assessmentStatus', ':decided')
+                )
+            )
+            ->setParameter('decided', [AssessmentStatus::APPROVED->value, AssessmentStatus::REJECTED->value])
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
+     * The UPDATE common to both assessment status writes: the SET clause, the base SUCCESS
+     * guard, and the audit columns, which are set explicitly here because a bulk UPDATE bypasses
+     * the ORM's lifecycle and Blameable listeners, as User::updateLastLogin() does.
+     */
+    private function assessmentStatusUpdate(int $analysisId, AssessmentStatus $status, UserEntity $reviewedBy): QueryBuilder
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        return $qb->update(Entity::class, $this->alias)
+            ->set($this->alias . '.assessmentStatus', ':assessmentStatus')
+            ->set($this->alias . '.lastModifiedOn', ':now')
+            ->set($this->alias . '.lastModifiedBy', ':lastModifiedBy')
+            ->where($qb->expr()->eq($this->alias . '.id', ':id'))
+            ->andWhere($qb->expr()->eq($this->alias . '.status', ':success'))
+            ->setParameter('assessmentStatus', $status->value)
+            ->setParameter('now', new \DateTime())
+            ->setParameter('lastModifiedBy', $reviewedBy->getId())
+            ->setParameter('id', $analysisId)
+            ->setParameter('success', Entity::STATUS_SUCCESS);
     }
 
     /**
