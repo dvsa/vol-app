@@ -4,7 +4,7 @@ namespace Olcs\Service\Qa;
 
 use Common\Service\Qa\FieldsetPopulator;
 use Common\Service\Qa\UsageContext;
-use Laminas\Form\Annotation\AnnotationBuilder;
+use Laminas\Form\Annotation\AttributeBuilder;
 use Laminas\Form\Factory as LaminasFormFactory;
 use Laminas\Form\InputFilterProviderFieldset;
 use RuntimeException;
@@ -14,7 +14,7 @@ class FormProvider
     /**
      * Create service instance
      *
-     * @param AnnotationBuilder $annotationBuilder
+     * @param AttributeBuilder $annotationBuilder
      *
      * @return FormProvider
      */

@@ -233,6 +233,8 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
      */
     protected function getTabsFromAnalyses(array $analyses): array
     {
+        // Temporary caseworker stamp until stamping is implemented; independent of processing status.
+        $caseworkerStamp = 'APPROVED';
         $tabs = [];
 
         foreach ($analyses as $analysis) {

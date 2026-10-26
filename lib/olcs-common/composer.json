@@ -29,7 +29,6 @@
   ],
   "require": {
     "php": "~8.4.0",
-    "doctrine/annotations": "^2.0",
     "ezyang/htmlpurifier": "^4.17",
     "laminas/laminas-authentication": "^2.18",
     "laminas/laminas-code": "^4.16",

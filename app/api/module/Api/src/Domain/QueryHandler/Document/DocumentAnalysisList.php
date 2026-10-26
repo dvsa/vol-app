@@ -66,6 +66,7 @@ class DocumentAnalysisList extends AbstractQueryHandler
                     // with, and with the caseworker's changes laid over it (a changed row carries an
                     // "override" block). Null when the stored report held no analysis that could be normalised.
                     'resultNormalised' => $this->effectiveResult($row),
+                    'assessmentStatus' => $row->getAssessmentStatus(),
                     'errorDetail' => $row->getErrorDetail(),
                     'completedAt' => $row->getCompletedAt(true)?->format('Y-m-d H:i:s'),
                 ],

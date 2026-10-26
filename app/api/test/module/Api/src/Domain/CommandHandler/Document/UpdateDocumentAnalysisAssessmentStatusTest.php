@@ -57,6 +57,7 @@ final class UpdateDocumentAnalysisAssessmentStatusTest extends AbstractCommandHa
     /** Only approval is guarded, so these never read the analysis. */
     public static function statusProvider(): \Iterator
     {
+        yield 'approved' => [AssessmentStatus::APPROVED];
         yield 'rejected' => [AssessmentStatus::REJECTED];
         yield 'pending' => [AssessmentStatus::PENDING];
     }

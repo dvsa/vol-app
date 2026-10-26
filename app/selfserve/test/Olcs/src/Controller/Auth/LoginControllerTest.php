@@ -11,7 +11,7 @@ use Common\Rbac\User;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Laminas\Authentication\Result;
-use Laminas\Form\Annotation\AnnotationBuilder;
+use Laminas\Form\Annotation\AttributeBuilder;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
@@ -556,7 +556,7 @@ final class LoginControllerTest extends MockeryTestCase
     protected function formHelper(): void
     {
         $this->formHelperMock->allows('createForm')->andReturnUsing(function () {
-            $formBuilder = new AnnotationBuilder();
+            $formBuilder = new AttributeBuilder();
             return $formBuilder->createForm(Login::class);
         })->byDefault();
     }
