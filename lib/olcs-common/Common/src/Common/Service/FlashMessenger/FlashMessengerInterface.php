@@ -2,6 +2,8 @@
 
 namespace Common\Service\FlashMessenger;
 
+use Laminas\Session\Container;
+
 interface FlashMessengerInterface
 {
     public function addMessage(string $message, ?string $namespace = null, int $hops = 1): self;
@@ -27,4 +29,6 @@ interface FlashMessengerInterface
     public function hasCurrentMessages($namespace = null): bool;
 
     public function getCurrentMessages($namespace = null): array;
+
+    public function getContainer(): Container;
 }
