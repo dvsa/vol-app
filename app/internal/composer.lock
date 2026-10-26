@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "d18de5ea08801f8df89547af5d331767",
+  "content-hash": "c7b641b83d389358c503c56fa24d0ff7",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -3068,14 +3068,13 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-auth",
-        "reference": "1560750bc6bd83676a46030342a09baffcc5d80c"
+        "reference": "8c4c3cd036d57ef3290abb58afd223cf4572733c"
       },
       "require": {
         "laminas/laminas-authentication": "^2.18",
         "laminas/laminas-form": "^3.21",
         "laminas/laminas-http": "^2.22",
         "laminas/laminas-mvc": "^3.8.0",
-        "laminas/laminas-mvc-plugin-flashmessenger": "^1.9",
         "laminas/laminas-servicemanager": "^3.19",
         "laminas/laminas-session": "^2.24.0",
         "laminas/laminas-stdlib": "^3.19",
@@ -3138,7 +3137,7 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-common",
-        "reference": "3b3f7a30f1dcf37867058ffdcbc8bde958399a2b"
+        "reference": "fb48d4590fa2ac154d6d723387869ce5d237271b"
       },
       "require": {
         "ezyang/htmlpurifier": "^4.17",
@@ -3152,7 +3151,6 @@
         "laminas/laminas-inputfilter": "^2.33",
         "laminas/laminas-modulemanager": "^2.17",
         "laminas/laminas-mvc": "^3.8",
-        "laminas/laminas-mvc-plugin-flashmessenger": "^1.11",
         "laminas/laminas-navigation": "^2.20",
         "laminas/laminas-servicemanager": "^3.23",
         "laminas/laminas-stdlib": "^3.20",
