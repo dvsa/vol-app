@@ -8,13 +8,11 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Variation;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractUpdateAddresses;
 
-/**
- * @Transfer\RouteName("backend/variation/single/addresses")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/variation/single/addresses')]
+#[Transfer\Method('PUT')]
 final class UpdateAddresses extends AbstractUpdateAddresses
 {
 }

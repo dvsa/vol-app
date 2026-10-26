@@ -8,12 +8,10 @@
 
 namespace Dvsa\Olcs\Transfer\Query\FeeType;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/fee-type/fee-types-distinct")
- */
+#[Transfer\RouteName('backend/fee-type/fee-types-distinct')]
 final class GetDistinctList extends AbstractQuery
 {
 }

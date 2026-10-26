@@ -1,0 +1,457 @@
+{
+  "routeName": "backend/variation/single/interim",
+  "method": "PUT",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter",
+    "inputs": {
+      "action": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\InArray",
+                "haystack": [
+                  "grant",
+                  "refuse"
+                ]
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "action"
+      },
+      "authHgvVehicles": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": true
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "authHgvVehicles"
+      },
+      "authLgvVehicles": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": true
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "authLgvVehicles"
+      },
+      "authTrailers": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": true
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "authTrailers"
+      },
+      "endDate": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Dvsa\\Olcs\\Transfer\\Validators\\Date"
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "endDate"
+      },
+      "id": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": false
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "id"
+      },
+      "operatingCentres": {
+        "class": "Dvsa\\Olcs\\Transfer\\Util\\ArrayInput",
+        "arrayFilterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": []
+        },
+        "arrayValidatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": false
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "operatingCentres"
+      },
+      "reason": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\StringLength",
+                "options": {
+                  "min": 1,
+                  "max": 1000,
+                  "encoding": "UTF-8",
+                  "length": 0
+                }
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "reason"
+      },
+      "requested": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\InArray",
+                "haystack": [
+                  "Y",
+                  "N"
+                ]
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "requested"
+      },
+      "startDate": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Dvsa\\Olcs\\Transfer\\Validators\\Date"
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "startDate"
+      },
+      "status": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\InArray",
+                "haystack": [
+                  "int_sts_requested",
+                  "int_sts_in_force",
+                  "int_sts_refused",
+                  "int_sts_revoked",
+                  "int_sts_granted",
+                  "int_sts_ended"
+                ]
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "status"
+      },
+      "vehicles": {
+        "class": "Dvsa\\Olcs\\Transfer\\Util\\ArrayInput",
+        "arrayFilterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": []
+        },
+        "arrayValidatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": false
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "vehicles"
+      },
+      "version": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": false
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "version"
+      }
+    }
+  }
+}

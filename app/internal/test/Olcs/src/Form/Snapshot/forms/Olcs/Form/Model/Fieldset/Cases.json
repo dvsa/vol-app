@@ -1,0 +1,161 @@
+{
+  "name": "Cases",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "caseType",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Case type",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "case_type"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "categorys",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "chosen-select-medium",
+          "multiple": "true"
+        },
+        "options": {
+          "label": "Case category",
+          "disable_inarray_validator": true,
+          "category": "case_category",
+          "use_groups": true
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "attributes": {
+          "id": "",
+          "placeholder": "Case outline",
+          "class": "long"
+        },
+        "options": {
+          "label": "Case outline",
+          "label_attributes": {
+            "class": ""
+          }
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "ecmsNo",
+        "attributes": {
+          "class": "medium",
+          "placeholder": "ECMS Number",
+          "id": ""
+        },
+        "options": {
+          "label": "ECMS Number"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "outcomes",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "chosen-select-medium",
+          "multiple": "multiple"
+        },
+        "options": {
+          "label": "Outcome",
+          "disable_inarray_validator": false,
+          "category": "case_outcome"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "description": {
+      "name": "description",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 1024
+          }
+        }
+      ]
+    },
+    "ecmsNo": {
+      "name": "ecmsNo",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 45
+          }
+        }
+      ]
+    },
+    "outcomes": {
+      "name": "outcomes",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    }
+  }
+}

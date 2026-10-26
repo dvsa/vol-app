@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait Irhp Permit Range Is Reserve
  *
@@ -11,12 +13,12 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 trait IrhpPermitRangeSsReserve
 {
     /**
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": -1})
-     * @Transfer\Optional
      *
      * @var int
      */
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => -1])]
+    #[Transfer\Optional]
     protected $ssReserve;
 
     /**

@@ -1,0 +1,119 @@
+{
+  "name": "fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "text1",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Text 1"
+        },
+        "type": "Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "text2",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Text 2"
+        },
+        "type": "Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "text3",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Text 3"
+        },
+        "type": "Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "text1": {
+      "name": "text1",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 4000
+          }
+        }
+      ]
+    },
+    "text2": {
+      "name": "text2",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 4000
+          }
+        }
+      ]
+    },
+    "text3": {
+      "name": "text3",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 4000
+          }
+        }
+      ]
+    }
+  }
+}

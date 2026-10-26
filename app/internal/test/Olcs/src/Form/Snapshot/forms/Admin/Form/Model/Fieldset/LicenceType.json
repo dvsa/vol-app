@@ -1,0 +1,33 @@
+{
+  "name": "LicenceType",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceType",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "short-label": "short-label-tol-licence-type",
+          "fieldset-attributes": {
+            "id": "licence-type",
+            "class": "checkbox"
+          },
+          "fieldset-data-group": "licence-type",
+          "label": "Licence type",
+          "value_options": {
+            "ltyp_r": "Restricted",
+            "ltyp_sn": "Standard National",
+            "ltyp_si": "Standard International"
+          }
+        },
+        "type": "Radio"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "input_filter": []
+}

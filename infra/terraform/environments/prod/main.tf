@@ -6,6 +6,8 @@ locals {
 
   supporting_service_names = ["liquibase"]
 
+  application_parameters_arn = "arn:aws:ssm:eu-west-1:146997448015:parameter/applicationparams/app/*"
+
   task_exec_iam_role_statements = [
     {
       effect = "Allow"
@@ -35,7 +37,16 @@ locals {
         "ssm:GetParametersByPath"
       ]
       resources = [
-        "arn:aws:ssm:eu-west-1:146997448015:parameter/applicationparams/app/*"
+        local.application_parameters_arn
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "kms:Decrypt"
+      ]
+      resources = [
+        data.aws_kms_alias.ssm.target_key_arn
       ]
     },
     {
@@ -131,12 +142,12 @@ locals {
         "rds:ModifyDBClusterSnapshotAttribute"
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:146997448015:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:prod-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-db-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*"
       ]
     },
     {
@@ -145,7 +156,7 @@ locals {
         "rds:DescribeDBClusters"
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:146997448015:cluster:app-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:prod-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
       ]
@@ -174,6 +185,7 @@ locals {
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*"
+
       ]
     },
     {
@@ -211,7 +223,9 @@ locals {
         "arn:aws:s3:::app-olcs-pri-integration-reporting-s3",
         "arn:aws:s3:::app-olcs-pri-integration-reporting-s3/*",
         "arn:aws:s3:::app-mc-pri-integration-data-s3",
-        "arn:aws:s3:::app-mc-pri-integration-data-s3/*"
+        "arn:aws:s3:::app-mc-pri-integration-data-s3/*",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
       ]
     }
   ]
@@ -260,6 +274,10 @@ data "aws_secretsmanager_secret" "this" {
 
 data "aws_secretsmanager_secret" "infra" {
   name = "APP-BASE-SM-INFRA"
+}
+
+data "aws_kms_alias" "ssm" {
+  name = "alias/aws/ssm"
 }
 
 data "aws_cognito_user_pools" "this" {
@@ -375,7 +393,16 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:146997448015:parameter/applicationparams/app/*"
+            local.application_parameters_arn
+          ]
+        },
+        {
+          effect = "Allow"
+          actions = [
+            "kms:Decrypt"
+          ]
+          resources = [
+            data.aws_kms_alias.ssm.target_key_arn
           ]
         },
       ]
@@ -421,7 +448,16 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:146997448015:parameter/applicationparams/app/*"
+            local.application_parameters_arn
+          ]
+        },
+        {
+          effect = "Allow"
+          actions = [
+            "kms:Decrypt"
+          ]
+          resources = [
+            data.aws_kms_alias.ssm.target_key_arn
           ]
         },
       ]

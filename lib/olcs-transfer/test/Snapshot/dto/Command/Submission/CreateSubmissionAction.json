@@ -1,0 +1,206 @@
+{
+  "routeName": "backend/submission-action",
+  "method": "POST",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter",
+    "inputs": {
+      "actionTypes": {
+        "class": "Dvsa\\Olcs\\Transfer\\Util\\ArrayInput",
+        "arrayFilterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Dvsa\\Olcs\\Transfer\\Filter\\FilterEmptyItems"
+            },
+            {
+              "class": "Dvsa\\Olcs\\Transfer\\Filter\\UniqueItems"
+            }
+          ]
+        },
+        "arrayValidatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\StringLength",
+                "options": {
+                  "min": 5,
+                  "max": 32,
+                  "encoding": "UTF-8",
+                  "length": 0
+                }
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "actionTypes"
+      },
+      "comment": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\IsJsonString"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\StringLength",
+                "options": {
+                  "min": 5,
+                  "max": null,
+                  "encoding": "UTF-8",
+                  "length": 0
+                }
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "comment"
+      },
+      "isDecision": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\InArray",
+                "haystack": [
+                  "Y",
+                  "N"
+                ]
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "isDecision"
+      },
+      "reasons": {
+        "class": "Dvsa\\Olcs\\Transfer\\Util\\ArrayInput",
+        "arrayFilterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Dvsa\\Olcs\\Transfer\\Filter\\FilterEmptyItems"
+            },
+            {
+              "class": "Dvsa\\Olcs\\Transfer\\Filter\\UniqueItems"
+            }
+          ]
+        },
+        "arrayValidatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": false
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "reasons"
+      },
+      "submission": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": false
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "submission"
+      }
+    }
+  }
+}

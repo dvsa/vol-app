@@ -13,13 +13,11 @@ use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\CacheableShortTermQueryInterface;
 
-/**
- * @Transfer\RouteName("backend/document")
- */
+#[Transfer\RouteName('backend/document')]
 class DocumentList extends AbstractQuery implements
     OrderedQueryInterface,
     PagedQueryInterface,
@@ -35,49 +33,37 @@ class DocumentList extends AbstractQuery implements
     use IrfoOrganisationOptional;
     use IrhpApplicationOptional;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
+    #[Transfer\Optional]
     protected $isExternal;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $category;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\FilterEmptyItems")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\FilterEmptyItems')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $documentSubCategory = [];
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"tsw_all", "tsw_self_only", "tsw_exclude_irhp"}})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['tsw_all', 'tsw_self_only', 'tsw_exclude_irhp']])]
     protected $showDocs = null;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\I18n\Validator\Alnum")
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\I18n\Validator\Alnum')]
     protected $format = null;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
+    #[Transfer\Optional]
     protected $onlyUnlinked = null;
 
 

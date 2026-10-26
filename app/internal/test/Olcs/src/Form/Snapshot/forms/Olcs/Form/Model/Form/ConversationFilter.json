@@ -1,0 +1,48 @@
+{
+  "name": "conversation_filter",
+  "attributes": {
+    "method": "get",
+    "class": "filters form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "attributes": {
+          "id": "status"
+        },
+        "options": {
+          "label": "internal-licence-fees-status",
+          "value_options": {
+            "": "All",
+            "open": "Open",
+            "closed": "Closed"
+          }
+        },
+        "type": "Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "Submit"
+        },
+        "type": "Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": []
+}

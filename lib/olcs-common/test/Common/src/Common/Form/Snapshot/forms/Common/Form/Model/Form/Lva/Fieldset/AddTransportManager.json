@@ -1,0 +1,37 @@
+{
+  "name": "AddTransportManager",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "registeredUser",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "transport-manager-choose"
+        },
+        "type": "Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "addUser",
+        "attributes": {
+          "id": "addUser",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "transport-manager-add"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

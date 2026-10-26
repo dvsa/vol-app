@@ -12,13 +12,11 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\TranslationSearchOptional;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 
-/**
- * @Transfer\RouteName("backend/translation-key")
- */
+#[Transfer\RouteName('backend/translation-key')]
 class GetList extends AbstractQuery implements OrderedQueryInterface, PagedQueryInterface
 {
     use PagedTrait;

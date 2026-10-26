@@ -3,16 +3,15 @@
 namespace Dvsa\Olcs\Transfer\Command\Processing\Note;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\FieldType as FieldType;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldTypeTraits;
 
 /**
  * Class to Create a Note
- *
- * @Transfer\Method("POST")
- * @Transfer\RouteName("backend/processing/note")
  */
+#[Transfer\Method('POST')]
+#[Transfer\RouteName('backend/processing/note')]
 class Create extends AbstractCommand implements
     FieldType\ApplicationInterface,
     FieldType\CasesInterface,
@@ -32,11 +31,9 @@ class Create extends AbstractCommand implements
     // Individual Fields
     use FieldTypeTraits\CommentOptional;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
+    #[Transfer\Optional]
     protected $priority;
 
     /**

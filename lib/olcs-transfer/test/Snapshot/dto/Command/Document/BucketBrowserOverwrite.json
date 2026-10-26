@@ -1,0 +1,44 @@
+{
+  "routeName": "backend/document/bucket-browser/overwrite",
+  "method": "POST",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter",
+    "inputs": {
+      "content": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "name": "content"
+      },
+      "key": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "name": "key"
+      }
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "name": "DiscNumbering",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "startNumber",
+        "options": {
+          "label": "admin_disc-printing.startNumber"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "maxPages",
+        "options": {
+          "label": "Max pages to print"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "endNumber",
+        "attributes": {
+          "disabled": true
+        },
+        "options": {
+          "label": "admin_disc-printing.endNumber"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "totalPages",
+        "attributes": {
+          "disabled": true
+        },
+        "options": {
+          "label": "admin_disc-printing.totalPages"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "originalEndNumber",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "endNumberIncreased",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "options": {
+    "label": "admin_disc-printing.discNumbering"
+  },
+  "input_filter": {
+    "maxPages": {
+      "name": "maxPages",
+      "filters": [
+        {
+          "name": "Digits"
+        }
+      ],
+      "validators": [
+        {
+          "name": "GreaterThan",
+          "options": {
+            "min": 0
+          }
+        }
+      ],
+      "required": false
+    }
+  }
+}

@@ -2,12 +2,16 @@
 
 namespace Dvsa\Olcs\DocumentShare\Service;
 
+use Dvsa\Olcs\Api\Domain\Exception\FileExistsException;
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
 use Laminas\Http\Response;
-use League\Flysystem\FileExistsException;
-use League\Flysystem\FileNotFoundException;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToWriteFile;
 use Psr\Log\LoggerInterface;
+use Sabre\DAV\Exception\NotFound;
 
 class WebDavClient implements DocumentStoreInterface
 {
@@ -26,10 +30,10 @@ class WebDavClient implements DocumentStoreInterface
     /**
      * Client constructor.
      *
-     * @param FilesystemInterface $filesystem File System
+     * @param FilesystemOperator $filesystem File System
      */
     public function __construct(
-        protected FilesystemInterface $filesystem,
+        protected FilesystemOperator $filesystem,
         protected LoggerInterface $logger
     ) {
     }
@@ -65,7 +69,7 @@ class WebDavClient implements DocumentStoreInterface
             if ($file->getSize() !== 0) {
                 return $file;
             }
-        } catch (FileNotFoundException) {
+        } catch (UnableToReadFile) {
             return false;
         } finally {
             if (is_file($tmpFileName)) {
@@ -91,9 +95,18 @@ class WebDavClient implements DocumentStoreInterface
         $response = new Response();
 
         try {
-            $response->setStatusCode($this->filesystem->delete($path) ? 200 : 500);
-        } catch (FileNotFoundException) {
+            if (!$this->filesystem->fileExists($path)) {
+                throw new NotFound(sprintf('File not found for delete: %s', $path));
+            }
+
+            $this->filesystem->delete($path);
+            $response->setStatusCode(200);
+        } catch (NotFound) {
             $response->setStatusCode(404);
+        } catch (UnableToDeleteFile) {
+            $response->setStatusCode(500);
+        } catch (FilesystemException) {
+            $response->setStatusCode(500);
         }
 
         return $response;
@@ -121,9 +134,14 @@ class WebDavClient implements DocumentStoreInterface
 
                 $response->setResponse(false);
             } else {
-                $response->setResponse($this->filesystem->writeStream($path, $fh));
+                if ($this->filesystem->fileExists($path)) {
+                    throw new FileExistsException($path);
+                }
+
+                $this->filesystem->writeStream($path, $fh);
+                $response->setResponse(true);
             }
-        } catch (FileExistsException) {
+        } catch (FileExistsException | UnableToWriteFile) {
             $response->setResponse(false);
         } finally {
             if (is_resource($fh)) {
@@ -154,10 +172,18 @@ class WebDavClient implements DocumentStoreInterface
                 $this->logger->error('Failed to open file for reading', ['file' => $file->getResource(), 'path' => $path]);
                 $response->setResponse(false);
             } else {
-                $response->setResponse($this->filesystem->updateStream($path, $fh));
+                if (!$this->filesystem->fileExists($path)) {
+                    throw new NotFound(sprintf('File not found for update: %s', $path));
+                }
+
+                $this->filesystem->writeStream($path, $fh);
+                $response->setResponse(true);
             }
-        } catch (FileNotFoundException) {
+        } catch (NotFound) {
             $this->logger->error('File not found for update', ['path' => $path]);
+            $response->setResponse(false);
+        } catch (UnableToWriteFile) {
+            $this->logger->error('Unable to write file', ['path' => $path]);
             $response->setResponse(false);
         } finally {
             if (is_resource($fh)) {

@@ -1,0 +1,193 @@
+{
+  "name": "previousHistory",
+  "attributes": {
+    "class": "table__form",
+    "id": "previousHistory"
+  },
+  "elements": [
+    {
+      "flags": {
+        "priority": -10
+      },
+      "spec": {
+        "name": "hasConvictions",
+        "options": {
+          "label": "transport-manager.convictions-and-penalties.form.radio.label",
+          "hint": "transport-manager.convictions-and-penalties.form.radio.hint",
+          "hint-class": "",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          }
+        },
+        "type": "Radio"
+      }
+    },
+    {
+      "flags": {
+        "priority": -30
+      },
+      "spec": {
+        "name": "hasPreviousLicences",
+        "options": {
+          "label": "transport-manager.previous-licences.form.radio.label",
+          "hint": "transport-manager.previous-licences.form.radio.hint",
+          "hint-class": "",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          }
+        },
+        "type": "Radio"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": {
+        "priority": -20
+      },
+      "spec": {
+        "name": "convictions",
+        "attributes": {
+          "id": "previousConvictions",
+          "class": "help__text help__text--removePadding"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -40
+      },
+      "spec": {
+        "name": "previousLicences",
+        "attributes": {
+          "id": "previousLicences",
+          "class": "help__text help__text--removePadding"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "input_filter": {
+    "hasConvictions": {
+      "name": "hasConvictions",
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\YesNoTableRequiredValidator",
+          "options": {
+            "table": "convictions",
+            "message": "transport-manager-details.form.convictions.required"
+          }
+        }
+      ]
+    },
+    "hasPreviousLicences": {
+      "name": "hasPreviousLicences",
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\YesNoTableRequiredValidator",
+          "options": {
+            "table": "previousLicences",
+            "message": "transport-manager-details.form.previouslicences.required"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/irhp-application/application-path-list",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

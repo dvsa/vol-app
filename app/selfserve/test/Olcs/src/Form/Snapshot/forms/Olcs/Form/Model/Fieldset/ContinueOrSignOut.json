@@ -1,0 +1,42 @@
+{
+  "name": "form-actions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "id": "submit"
+        },
+        "options": {
+          "label": "Save and continue"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "signOut",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "id": "signout"
+        },
+        "options": {
+          "label": "selfserve-dashboard-topnav-sign-out"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

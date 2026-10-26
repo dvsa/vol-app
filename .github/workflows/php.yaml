@@ -24,49 +24,25 @@ on:
         type: string
         required: false
       skip-checks:
-        description: "Skip the test and static-analysis jobs and package straight from the ref. Intended for branch stand-ups where CI has already run on the PR."
+        description: "Skip the test and static-analysis checks and package straight from the ref. Intended for branch stand-ups where CI has already run on the PR."
         type: boolean
         required: false
         default: false
 
 jobs:
-  warm-cache:
-    name: Warm cache
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app/${{ inputs.project }}
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.ref || null }}
-          sparse-checkout: |
-            app/${{ inputs.project }}
-            lib
-          fetch-depth: ${{ !inputs.ref && 1 || 0 }}
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.4"
-          coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring, igbinary
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-      - name: Cache Composer packages
-        uses: actions/cache@v5
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
-          restore-keys: ${{ runner.os }}-composer-
-      - name: Install dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
-
-  test:
-    name: Test
+  checks:
+    name: ${{ matrix.name }}
     if: ${{ !inputs.skip-checks }}
-    needs:
-      - warm-cache
+    strategy:
+      fail-fast: false
+      matrix:
+        # Every job repeats ~25s of setup, so a check only gets a job of its own when it takes far
+        # longer than that. api's tests, PHPStan and Psalm each take 30-60s, so they run side by side;
+        # its phpcs (~15s) keeps its own job as well, because adding it to any of the others would
+        # make that job as long as Psalm's. selfserve's and internal's checks take seconds, so one
+        # job runs them all. Decided here rather than by the caller so CI, CD and branch deploys lay
+        # them out the same. See "PHP checks" in docs/ci-cd.md.
+        include: ${{ fromJSON(inputs.project == 'api' && '[{"name":"Test","test":true},{"name":"PHPStan","phpstan":true},{"name":"PHP CodeSniffer","phpcs":true},{"name":"Psalm","psalm":true}]' || '[{"name":"Checks","test":true,"phpcs":true,"psalm":true,"phpstan":true}]') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -94,58 +70,32 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
+        id: install
         run: composer install --no-progress --prefer-dist --optimize-autoloader
+      # One step per check, each run even if an earlier one failed, so one failure cannot hide another.
+      # Serial phpunit, not `composer test` (paratest): only phpunit shuffles the tests within a file,
+      # which is what catches one test leaking state into the next.
       - name: Test
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && matrix.test }}
         run: vendor/bin/phpunit
-
-  static-analysis:
-    name: Static analysis
-    if: ${{ !inputs.skip-checks }}
-    needs:
-      - warm-cache
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app/${{ inputs.project }}
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.ref || null }}
-          sparse-checkout: |
-            app/${{ inputs.project }}
-            lib
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.4"
-          coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring, igbinary
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-      - name: Cache Composer packages
-        uses: actions/cache@v5
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
-          restore-keys: ${{ runner.os }}-composer-
-      - name: Install dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
-      - name: PHPStan
-        run: composer run-script phpstan
       - name: PHP CodeSniffer
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && matrix.phpcs }}
         run: composer run-script phpcs
       - name: Psalm
-        run: composer run-script psalm
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && matrix.psalm }}
+        # Psalm drops to a single thread for both scanning and analysis when it detects CI, unless told otherwise.
+        run: composer run-script psalm -- --threads=$(nproc) --scan-threads=$(nproc)
+      - name: PHPStan
+        if: ${{ !cancelled() && steps.install.outcome == 'success' && matrix.phpstan }}
+        run: composer run-script phpstan
 
   package:
     name: Package
-    # `needs` cannot be made conditional, so depend on both jobs unconditionally and gate here
+    # `needs` cannot be made conditional, so depend on the checks unconditionally and gate here
     # instead. With skip-checks they report `skipped`, which `always()` lets through.
-    if: ${{ always() && !cancelled() && (inputs.skip-checks || (needs.test.result == 'success' && needs.static-analysis.result == 'success')) }}
+    if: ${{ always() && !cancelled() && (inputs.skip-checks || needs.checks.result == 'success') }}
     needs:
-      - test
-      - static-analysis
+      - checks
     runs-on: ubuntu-latest
     defaults:
       run:

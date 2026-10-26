@@ -1,0 +1,432 @@
+{
+  "name": "LicenceChecklist",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "typeOfLicenceCheckbox",
+              "type": "Common\\Form\\Elements\\Types\\CheckboxAdvanced",
+              "attributes": {
+                "required": "required",
+                "id": "typeOfLicenceCheckbox",
+                "data-js-validate": "required",
+                "data-show-element": "#typeOfLicenceCheckbox-hidden",
+                "class": "checkbox"
+              },
+              "options": {
+                "label": "continuations.type-of-licence-checkbox.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "content": "partials/continuation/licence-checklist-type-of-licence",
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y",
+                "not_checked_message": "continuations.checklist.section.error.type-of-licence"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "businessTypeCheckbox",
+              "type": "Common\\Form\\Elements\\Types\\CheckboxAdvanced",
+              "attributes": {
+                "required": "required",
+                "id": "businessTypeCheckbox",
+                "data-js-validate": "required",
+                "data-show-element": "#businessTypeCheckbox-hidden",
+                "class": "checkbox"
+              },
+              "options": {
+                "label": "continuations.business-type-checkbox.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "content": "partials/continuation/licence-checklist-business-type",
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y",
+                "not_checked_message": "continuations.checklist.section.error.business-type"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "businessDetailsCheckbox",
+              "type": "Common\\Form\\Elements\\Types\\CheckboxAdvanced",
+              "attributes": {
+                "required": "required",
+                "id": "businessDetailsCheckbox",
+                "data-js-validate": "required",
+                "data-show-element": "#businessDetailsCheckbox-hidden",
+                "class": "checkbox"
+              },
+              "options": {
+                "label": "continuations.business-details-checkbox.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "content": "partials/continuation/licence-checklist-business-details",
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y",
+                "not_checked_message": "continuations.checklist.section.error.business-details"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressesCheckbox",
+              "type": "Common\\Form\\Elements\\Types\\CheckboxAdvanced",
+              "attributes": {
+                "required": "required",
+                "id": "addressesCheckbox",
+                "data-js-validate": "required",
+                "data-show-element": "#addressesCheckbox-hidden",
+                "class": "checkbox"
+              },
+              "options": {
+                "label": "continuations.addresses-checkbox.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "content": "partials/continuation/licence-checklist-addresses",
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y",
+                "not_checked_message": "continuations.checklist.section.error.addresses"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "peopleCheckbox",
+              "type": "Common\\Form\\Elements\\Types\\CheckboxAdvanced",
+              "attributes": {
+                "required": "required",
+                "id": "peopleCheckbox",
+                "data-js-validate": "required",
+                "data-show-element": "#peopleCheckbox-hidden",
+                "class": "checkbox"
+              },
+              "options": {
+                "label": "continuations.people-checkbox.label.",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "content": "partials/continuation/licence-checklist-people",
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y",
+                "not_checked_message": "continuations.checklist.section.error.people."
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "operatingCentresCheckbox",
+              "type": "Common\\Form\\Elements\\Types\\CheckboxAdvanced",
+              "attributes": {
+                "required": "required",
+                "id": "operatingCentresCheckbox",
+                "data-js-validate": "required",
+                "data-show-element": "#operatingCentresCheckbox-hidden",
+                "class": "checkbox"
+              },
+              "options": {
+                "label": "continuations.operatingCentres-checkbox.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "content": "partials/continuation/licence-checklist-operating-centres",
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y",
+                "not_checked_message": "continuations.checklist.section.error.operatingCentres"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "transportManagersCheckbox",
+              "type": "Common\\Form\\Elements\\Types\\CheckboxAdvanced",
+              "attributes": {
+                "required": "required",
+                "id": "transportManagersCheckbox",
+                "data-js-validate": "required",
+                "data-show-element": "#transportManagersCheckbox-hidden",
+                "class": "checkbox"
+              },
+              "options": {
+                "label": "continuations.transportManagers-checkbox.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "content": "partials/continuation/licence-checklist-transport-managers",
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y",
+                "not_checked_message": "continuations.checklist.section.error.transportManagers"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "vehiclesCheckbox",
+              "type": "Common\\Form\\Elements\\Types\\CheckboxAdvanced",
+              "attributes": {
+                "required": "required",
+                "id": "vehiclesCheckbox",
+                "data-js-validate": "required",
+                "data-show-element": "#vehiclesCheckbox-hidden",
+                "class": "checkbox"
+              },
+              "options": {
+                "label": "continuations.vehicles-checkbox.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "content": "partials/continuation/licence-checklist-vehicles",
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y",
+                "not_checked_message": "continuations.checklist.section.error.vehicles"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "safetyCheckbox",
+              "type": "Common\\Form\\Elements\\Types\\CheckboxAdvanced",
+              "attributes": {
+                "required": "required",
+                "id": "safetyCheckbox",
+                "data-js-validate": "required",
+                "data-show-element": "#safetyCheckbox-hidden",
+                "class": "checkbox"
+              },
+              "options": {
+                "label": "continuations.safety-checkbox.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "content": "partials/continuation/licence-checklist-safety",
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y",
+                "not_checked_message": "continuations.checklist.section.error.safety"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "usersCheckbox",
+              "type": "Common\\Form\\Elements\\Types\\CheckboxAdvanced",
+              "attributes": {
+                "required": "required",
+                "id": "usersCheckbox",
+                "data-js-validate": "required",
+                "data-show-element": "#usersCheckbox-hidden",
+                "class": "checkbox"
+              },
+              "options": {
+                "label": "continuations.users-checkbox.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "content": "partials/continuation/licence-checklist-users",
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y",
+                "not_checked_message": "continuations.checklist.section.error.users"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "hint": "continuations.checklist.form-hint",
+          "hintClass": "form-hint",
+          "label": "continuations.checklist.hidden.legend",
+          "label_attributes": {
+            "class": "govuk-visually-hidden"
+          },
+          "shouldWrap": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceChecklistConfirmation",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "yesNo",
+              "type": "Common\\Form\\Elements\\Types\\RadioYesNo"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "yesContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "checklistConfirmText",
+                    "attributes": {
+                      "value": "markup-continuation-licence-checklist-confirmation-yes"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "submit",
+                    "attributes": {
+                      "data-module": "govuk-button",
+                      "type": "submit",
+                      "class": "govuk-button"
+                    },
+                    "options": {
+                      "label": "continuations.checklist.confirmation.yes-button"
+                    },
+                    "type": "\\Laminas\\Form\\Element\\Button"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "noContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "checklistDeclineText",
+                    "attributes": {
+                      "value": "markup-continuation-licence-checklist-confirmation-no"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "backToLicence",
+                    "attributes": {
+                      "data-module": "govuk-button",
+                      "type": "submit",
+                      "class": "govuk-button govuk-button--secondary"
+                    },
+                    "options": {
+                      "label": "continuations.checklist.confirmation.no-button"
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\ActionLink"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioHorizontal",
+        "options": {
+          "label": "continuations.checklist.confirmation.label"
+        }
+      }
+    }
+  ],
+  "options": {
+    "formErrorsTitle": "continuations.checklist.form-errors-title",
+    "formErrorsParagraph": "continuations.checklist.form-errors-paragraph"
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "data": {
+      "typeOfLicenceCheckbox": {
+        "name": "typeOfLicenceCheckbox",
+        "required": true
+      },
+      "businessTypeCheckbox": {
+        "name": "businessTypeCheckbox",
+        "required": true
+      },
+      "businessDetailsCheckbox": {
+        "name": "businessDetailsCheckbox",
+        "required": true
+      },
+      "addressesCheckbox": {
+        "name": "addressesCheckbox",
+        "required": true
+      },
+      "peopleCheckbox": {
+        "name": "peopleCheckbox",
+        "required": true
+      },
+      "operatingCentresCheckbox": {
+        "name": "operatingCentresCheckbox",
+        "required": true
+      },
+      "transportManagersCheckbox": {
+        "name": "transportManagersCheckbox",
+        "required": true
+      },
+      "vehiclesCheckbox": {
+        "name": "vehiclesCheckbox",
+        "required": true
+      },
+      "safetyCheckbox": {
+        "name": "safetyCheckbox",
+        "required": true
+      },
+      "usersCheckbox": {
+        "name": "usersCheckbox",
+        "required": true
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "licenceChecklistConfirmation": {
+      "yesNo": {
+        "name": "yesNo",
+        "error_message": "continuations.checklist.confirmation.error"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

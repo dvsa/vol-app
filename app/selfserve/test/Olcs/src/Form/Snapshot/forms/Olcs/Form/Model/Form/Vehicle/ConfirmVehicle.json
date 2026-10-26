@@ -1,0 +1,26 @@
+{
+  "name": "ConfirmVehicle",
+  "attributes": {
+    "method": "post",
+    "id": "vehicle-add"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "confirm",
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton",
+        "options": {
+          "label": "Add vehicle"
+        },
+        "attributes": {
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

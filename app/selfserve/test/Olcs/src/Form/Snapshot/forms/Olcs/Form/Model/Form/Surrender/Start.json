@@ -1,0 +1,26 @@
+{
+  "name": "Start",
+  "attributes": {
+    "method": "post",
+    "id": "surrender-start"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "type": "submit",
+          "class": "govuk-button govuk-button--start"
+        },
+        "options": {
+          "label": "licence.surrender.start"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

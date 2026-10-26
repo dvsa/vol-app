@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 trait Realm
 {
     /**
      * @var String
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"selfserve","internal"}})
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['selfserve', 'internal']])]
     protected ?string $realm = null;
 
     /**

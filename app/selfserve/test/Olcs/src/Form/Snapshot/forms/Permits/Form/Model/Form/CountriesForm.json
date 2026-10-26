@@ -1,0 +1,100 @@
+{
+  "name": "Countries",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "countries",
+              "attributes": {
+                "id": "countries",
+                "class": "govuk-checkboxes__item"
+              },
+              "options": {
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm govuk-!-padding-bottom-2"
+                }
+              },
+              "type": "DynamicMultiCheckbox"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "Submit",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "SubmitButton",
+              "attributes": {
+                "class": "govuk-button",
+                "data-module": "govuk-button",
+                "type": "submit"
+              },
+              "options": {
+                "label": "Save and continue"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "CancelButton",
+              "attributes": {
+                "role": "link"
+              },
+              "options": {
+                "label": "permits.form.cancel_application.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "fields": {
+      "countries": {
+        "name": "countries",
+        "required": false,
+        "continue_if_empty": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": {
+              "messages": {
+                "isEmpty": "error.messages.permits.countries"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

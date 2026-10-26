@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/irhp-permit-stock/available-countries",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

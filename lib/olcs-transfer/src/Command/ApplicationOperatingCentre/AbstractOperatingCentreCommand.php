@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Transfer\Command\ApplicationOperatingCentre;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Application;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
 /**
@@ -13,48 +13,34 @@ use Dvsa\Olcs\Transfer\Command\AbstractCommand;
  */
 abstract class AbstractOperatingCentreCommand extends AbstractCommand
 {
-    /**
-     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\AddressOptionalPostcode")
-     * @Transfer\Optional
-     */
+    #[Transfer\Partial('Dvsa\Olcs\Transfer\Command\Partial\AddressOptionalPostcode')]
+    #[Transfer\Optional]
     protected $address;
 
-    /**
-     * @Transfer\Validator("Laminas\Validator\Between", options={"min":0, "max":1000000})
-     */
+    #[Transfer\Validator('Laminas\Validator\Between', options: ['min' => 0, 'max' => 1000000])]
     protected $noOfVehiclesRequired;
 
-    /**
-     * @Transfer\Validator("Laminas\Validator\Between", options={"min":0, "max":1000000})
-     * @Transfer\Optional
-     */
+    #[Transfer\Validator('Laminas\Validator\Between', options: ['min' => 0, 'max' => 1000000])]
+    #[Transfer\Optional]
     protected $noOfTrailersRequired;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y","N"}})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
+    #[Transfer\Optional]
     protected $permission;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\Between", options={"min": 0, "max": 2})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Between', options: ['min' => 0, 'max' => 2])]
+    #[Transfer\Optional]
     protected $adPlaced;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Optional]
     protected $adPlacedIn;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     * @Transfer\Optional
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
+    #[Transfer\Optional]
     protected $adPlacedDate;
 
     /**

@@ -1,0 +1,153 @@
+{
+  "name": "merge",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fromOperatorName",
+        "attributes": {
+          "id": "fromOperatorName",
+          "class": "extra-long",
+          "readonly": "true"
+        },
+        "options": {
+          "label": "form.operator-merge.from-operator-name"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "toOperatorId",
+        "attributes": {
+          "id": "toOperatorId"
+        },
+        "options": {
+          "label": "form.operator-merge.to-operator-id",
+          "short-label": "form.operator-merge.to-operator-id"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceIds",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "licences",
+          "placeholder": "",
+          "multiple": "multiple",
+          "class": "chosen-select-large"
+        },
+        "options": {
+          "label": "Licences",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\Licence",
+          "context": "fromOperatorName",
+          "use_groups": "false"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "confirm",
+        "attributes": {
+          "id": "confirm"
+        },
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "form.operator-merge.confirm",
+          "short-label": "form.operator-merge.confirm"
+        },
+        "type": "OlcsCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Confirm"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "toOperatorId": {
+      "name": "toOperatorId",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        }
+      ]
+    },
+    "licenceIds": {
+      "name": "licenceIds",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "confirm": {
+      "name": "confirm",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Identical",
+          "options": {
+            "token": "Y",
+            "message": "form.operator-merge.confirm.validation"
+          }
+        }
+      ]
+    }
+  }
+}

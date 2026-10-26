@@ -9,11 +9,9 @@
 namespace Dvsa\Olcs\Transfer\Query\Team;
 
 use Dvsa\Olcs\Transfer\Query\AbstractListData;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/team/list-data")
- */
+#[Transfer\RouteName('backend/team/list-data')]
 final class TeamListData extends AbstractListData
 {
 }

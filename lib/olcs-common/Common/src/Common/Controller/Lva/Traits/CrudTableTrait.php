@@ -2,9 +2,8 @@
 
 namespace Common\Controller\Lva\Traits;
 
-use Common\View\Model\Section;
 use Laminas\Http\Response;
-use Olcs\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Crud table trait
@@ -66,10 +65,6 @@ trait CrudTableTrait
              * @phpstan-ignore-next-line
              */
             $response = $this->delete();
-            /**
-             * @VOL VOL-5191 has been created to refactor this piece of code (location of ViewModel)
-             * @phpstan-ignore-next-line
-             */
             if ($response instanceof Response || $response instanceof ViewModel) {
                 return $response;
             }

@@ -1,0 +1,61 @@
+{
+  "name": "ConfirmYesNo",
+  "attributes": {
+    "method": "post",
+    "class": "js-modal-alert",
+    "data-close-trigger": "#no"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "yes",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button",
+                "id": "yes"
+              },
+              "options": {
+                "label": "Yes"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "no",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "no"
+              },
+              "options": {
+                "label": "No"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "label": ""
+  },
+  "input_filter": []
+}

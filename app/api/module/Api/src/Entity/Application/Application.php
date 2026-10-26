@@ -2880,16 +2880,12 @@ class Application extends AbstractApplication implements ContextProviderInterfac
             return false;
         }
 
-        if ($this->isPsv() && $this->isRestricted()) {
-            return false;
-        }
-
         if ($this->wasSubmittedBeforeKnowledgeExperience()) {
             return false;
         }
 
         return $this->getPrevHasLicence() === 'N'
-            || $this->getPrevHadLicence() === 'N';
+            && $this->getPrevHadLicence() === 'N';
     }
 
     /**

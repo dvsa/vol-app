@@ -1,0 +1,28 @@
+{
+  "name": "CheckAnswers",
+  "attributes": {
+    "method": "POST",
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "SubmitButton",
+        "attributes": {
+          "class": "govuk-button",
+          "data-module": "govuk-button",
+          "id": "submitbutton",
+          "type": "submit"
+        },
+        "options": {
+          "label": "confirm-and-return-to-overview"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

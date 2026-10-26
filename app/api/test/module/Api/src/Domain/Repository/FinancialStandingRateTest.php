@@ -16,22 +16,15 @@ final class FinancialStandingRateTest extends RepositoryTestCase
         $this->setUpRealSut(RateRepo::class);
     }
 
-    /**
-     * Pins a known defect rather than blessing it: fetchRatesInEffect() calls
-     * $this->getQueryBuilder()->withRefdata() with no modifyQuery($qb), and the helper is a
-     * shared service. So the refdata joins land on whichever builder the helper last held,
-     * and the rate query gets none of them. Fixing the repository will fail this test, which
-     * is the intent — see the migration findings.
-     */
-    public function testFetchRatesInEffectLosesItsRefdataJoinsToTheSharedHelper(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('priorQueryProvider')]
+    public function testFetchRatesInEffect(bool $previouslyBound): void
     {
         $date = new \DateTime();
-
-        // Stand in for any earlier repository call in the same request. Without one the helper
-        // is cold and the method throws RuntimeException('Doctrine Query Builder is not set').
-        $strayBuilder = $this->newRealQb();
-        $strayBuilder->select('c')->from(Cases::class, 'c');
-        $this->queryBuilder->modifyQuery($strayBuilder);
+        if ($previouslyBound) {
+            $previous = $this->newRealQb();
+            $previous->select('c')->from(Cases::class, 'c');
+            $this->queryBuilder->modifyQuery($previous);
+        }
 
         $qb = $this->createRealQb();
         $qb->stubbedQuery()->expects('execute')->withNoArgs()->andReturn('RESULT');
@@ -39,15 +32,23 @@ final class FinancialStandingRateTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchRatesInEffect($date));
 
         $this->assertSame(
-            'SELECT fsr FROM ' . Entity::class . ' fsr'
+            'SELECT fsr, w0, w1, w2 FROM ' . Entity::class . ' fsr'
+            . ' LEFT JOIN fsr.licenceType w0 LEFT JOIN fsr.goodsOrPsv w1'
+            . ' LEFT JOIN fsr.vehicleType w2'
             . ' WHERE fsr.deletedDate IS NULL AND fsr.effectiveFrom <= :effectiveFrom'
             . ' ORDER BY fsr.effectiveFrom DESC',
             $qb->getDQL(),
         );
         $this->assertSame($date, $qb->getParameter('effectiveFrom')->getValue());
+        if ($previouslyBound) {
+            $this->assertSame('SELECT c FROM ' . Cases::class . ' c', $previous->getDQL());
+        }
+    }
 
-        $this->assertStringNotContainsString('LEFT JOIN', $qb->getDQL());
-        $this->assertStringContainsString('LEFT JOIN', $strayBuilder->getDQL());
+    public static function priorQueryProvider(): \Iterator
+    {
+        yield 'first use' => [false];
+        yield 'after another query' => [true];
     }
 
     public function testFetchByCategoryTypeAndDate(): void

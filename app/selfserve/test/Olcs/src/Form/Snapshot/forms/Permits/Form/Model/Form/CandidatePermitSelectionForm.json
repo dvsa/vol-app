@@ -1,0 +1,48 @@
+{
+  "name": "CandidatePermitSelection",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "Submit",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "SubmitButton",
+              "attributes": {
+                "class": "govuk-button",
+                "data-module": "govuk-button",
+                "id": "saveandreturnbutton",
+                "type": "submit"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

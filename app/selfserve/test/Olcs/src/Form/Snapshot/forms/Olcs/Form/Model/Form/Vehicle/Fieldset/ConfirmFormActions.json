@@ -1,0 +1,27 @@
+{
+  "name": "form-actions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "formActions",
+        "options": {
+          "label": "Next"
+        },
+        "attributes": {
+          "id": "next",
+          "title": "licence.vehicle.generic.button.next.title",
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "type": "Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

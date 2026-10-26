@@ -1,0 +1,380 @@
+{
+  "routeName": "backend/licence/single/goods-vehicles",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter",
+    "inputs": {
+      "disc": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\InArray",
+                "haystack": [
+                  "Y",
+                  "N"
+                ]
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "disc"
+      },
+      "id": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": false
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "id"
+      },
+      "includeRemoved": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Boolean"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "name": "includeRemoved"
+      },
+      "limit": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\InArray",
+                "haystack": [
+                  1,
+                  10,
+                  25,
+                  50,
+                  100
+                ]
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "limit"
+      },
+      "order": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            },
+            {
+              "class": "Laminas\\Filter\\StringToUpper"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Dvsa\\Olcs\\Transfer\\Validators\\Order"
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "order"
+      },
+      "page": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Digits"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\Digits"
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\GreaterThan",
+                "min": 0,
+                "inclusive": false
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "page"
+      },
+      "sort": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\NotEmpty",
+                "options": {
+                  "type": 489
+                }
+              },
+              "breakChainOnFailure": false
+            },
+            {
+              "instance": {
+                "class": "Dvsa\\Olcs\\Transfer\\Validators\\Sort"
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "sort"
+      },
+      "sortWhitelist": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "name": "sortWhitelist"
+      },
+      "specified": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Laminas\\Validator\\InArray",
+                "haystack": [
+                  "Y",
+                  "N"
+                ]
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "specified"
+      },
+      "vehicleIds": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Dvsa\\Olcs\\Transfer\\Validators\\ValidateEach",
+                "validatorChain": {
+                  "class": "Laminas\\Validator\\ValidatorChain",
+                  "validators": [
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\Digits"
+                      },
+                      "breakChainOnFailure": false
+                    },
+                    {
+                      "instance": {
+                        "class": "Laminas\\Validator\\GreaterThan",
+                        "min": 0,
+                        "inclusive": false
+                      },
+                      "breakChainOnFailure": false
+                    }
+                  ]
+                },
+                "messageTemplates": {
+                  "notCountable": "The input must be an array or an instance of \\Countable",
+                  "notEquals": "The input count must equal '%count%'",
+                  "greaterThan": "The input count must be less than '%max%', inclusively",
+                  "lessThan": "The input count must be greater than '%min%', inclusively",
+                  "notArray": "Expected input to be an array"
+                },
+                "options": {
+                  "count": null,
+                  "min": 1,
+                  "max": 100,
+                  "children": [
+                    {
+                      "name": "\\Laminas\\Validator\\Digits",
+                      "options": []
+                    },
+                    {
+                      "name": "\\Laminas\\Validator\\GreaterThan",
+                      "options": {
+                        "min": 0
+                      }
+                    }
+                  ]
+                },
+                "abstractOptions": {
+                  "messageTemplates": {
+                    "notCountable": "The input must be an array or an instance of \\Countable",
+                    "notEquals": "The input count must equal '%count%'",
+                    "greaterThan": "The input count must be less than '%max%', inclusively",
+                    "lessThan": "The input count must be greater than '%min%', inclusively",
+                    "notArray": "Expected input to be an array"
+                  }
+                }
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "vehicleIds"
+      },
+      "vrm": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "name": "vrm"
+      }
+    }
+  }
+}

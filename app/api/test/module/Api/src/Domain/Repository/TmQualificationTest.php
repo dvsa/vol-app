@@ -37,10 +37,9 @@ final class TmQualificationTest extends RepositoryTestCase
     {
         $qb = $this->createRealQb();
 
-        // applyListJoins() calls with() without modifyQuery() first, so it only reaches $qb
-        // because fetchList() runs buildDefaultListQuery() immediately before, leaving the
-        // shared helper pointed here. Reproduce that sequencing rather than paper over it.
-        $this->queryBuilder->modifyQuery($qb);
+        $previous = $this->newRealQb();
+        $previous->select('other')->from(Entity::class, 'other');
+        $this->queryBuilder->modifyQuery($previous);
 
         $this->sut->applyListJoins($qb);
 
@@ -50,5 +49,6 @@ final class TmQualificationTest extends RepositoryTestCase
             . ' ORDER BY qt.displayOrder ASC',
             $qb->getDQL(),
         );
+        $this->assertSame('SELECT other FROM ' . Entity::class . ' other', $previous->getDQL());
     }
 }

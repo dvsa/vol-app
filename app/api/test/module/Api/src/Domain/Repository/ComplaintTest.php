@@ -49,9 +49,9 @@ final class ComplaintTest extends RepositoryTestCase
     {
         $qb = $this->createRealQb();
 
-        // applyListJoins() omits modifyQuery(); fetchList() has already pointed the shared
-        // helper at $qb by this stage, so reproduce that.
-        $this->queryBuilder->modifyQuery($qb);
+        $previous = $this->newRealQb();
+        $previous->select('other')->from(Entity::class, 'other');
+        $this->queryBuilder->modifyQuery($previous);
 
         $this->sut->applyListJoins($qb);
 
@@ -61,6 +61,7 @@ final class ComplaintTest extends RepositoryTestCase
             . ' LEFT JOIN m.operatingCentres oc LEFT JOIN oc.address w1',
             $qb->getDQL(),
         );
+        $this->assertSame('SELECT other FROM ' . Entity::class . ' other', $previous->getDQL());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('listFilterProvider')]
@@ -72,7 +73,9 @@ final class ComplaintTest extends RepositoryTestCase
         bool $joinsCase,
     ): void {
         $qb = $this->createRealQb();
-        $this->queryBuilder->modifyQuery($qb);
+        $previous = $this->newRealQb();
+        $previous->select('other')->from(Entity::class, 'other');
+        $this->queryBuilder->modifyQuery($previous);
 
         $query = m::mock(QueryInterface::class);
         foreach (['getCase', 'getIsCompliance', 'getLicence', 'getApplication'] as $getter) {
@@ -84,6 +87,7 @@ final class ComplaintTest extends RepositoryTestCase
         $this->assertStringEndsWith(' WHERE ' . $expectedWhere, $qb->getDQL());
         $this->assertSame($expectedValue, $qb->getParameter($parameter)->getValue());
         $this->assertSame($joinsCase, str_contains($qb->getDQL(), 'LEFT JOIN m.case ca'));
+        $this->assertSame('SELECT other FROM ' . Entity::class . ' other', $previous->getDQL());
     }
 
     public static function listFilterProvider(): \Iterator
@@ -105,5 +109,21 @@ final class ComplaintTest extends RepositoryTestCase
             133,
             true,
         ];
+    }
+
+    public function testApplyListFiltersJoinsCaseOnceForLicenceAndApplication(): void
+    {
+        $qb = $this->createRealQb();
+        $query = m::mock(QueryInterface::class);
+        $query->shouldReceive('getCase', 'getIsCompliance')->andReturn(null);
+        $query->shouldReceive('getLicence')->andReturn(33);
+        $query->shouldReceive('getApplication')->andReturn(133);
+
+        $this->sut->applyListFilters($qb, $query);
+
+        $this->assertSame(1, substr_count($qb->getDQL(), 'LEFT JOIN m.case ca'));
+        $this->assertStringContainsString('ca.licence = :licence', $qb->getDQL());
+        $this->assertStringContainsString('ca.application = :application', $qb->getDQL());
+        $this->compileDql($qb->getDQL());
     }
 }

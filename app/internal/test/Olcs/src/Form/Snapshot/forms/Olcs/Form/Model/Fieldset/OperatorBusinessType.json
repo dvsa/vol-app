@@ -1,0 +1,48 @@
+{
+  "name": "operator-business-type",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "type",
+        "attributes": {
+          "id": "businessType",
+          "class": "inline"
+        },
+        "options": {
+          "label": "internal-operator-profile-business-type",
+          "value": "defendant_type.operator",
+          "disable_inarray_validator": false,
+          "category": "org_type"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "refresh",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary js-hidden",
+          "id": "refresh"
+        },
+        "options": {
+          "label": "internal-operator-profile-business-type-refresh"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": [
+    {
+      "name": "type",
+      "required": false
+    }
+  ]
+}

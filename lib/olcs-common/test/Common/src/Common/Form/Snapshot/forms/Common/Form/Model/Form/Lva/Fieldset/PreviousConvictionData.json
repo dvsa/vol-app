@@ -1,0 +1,236 @@
+{
+  "name": "data",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "title",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "empty_option": "Please Select",
+          "label": "selfserve-app-subSection-previous-history-criminal-conviction-formTitle",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "error-message": "previousConvictionData_title-error",
+          "category": "person_title"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "forename",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "selfserve-app-subSection-previous-history-criminal-conviction-formFirstName",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "error-message": "previousConvictionData_forename-error"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "familyName",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "selfserve-app-subSection-previous-history-criminal-conviction-formLastName",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "error-message": "previousConvictionData_familyName-error"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "convictionDate",
+        "attributes": {
+          "required": false,
+          "id": "dob"
+        },
+        "options": {
+          "label": "selfserve-app-subSection-previous-history-criminal-conviction-formDateOfConviction",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "error-message": "previousConvictionData_convictionDate-error"
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "categoryText",
+        "attributes": {
+          "class": "long",
+          "id": "",
+          "required": "required"
+        },
+        "options": {
+          "label": "selfserve-app-subSection-previous-history-criminal-conviction-formOffence",
+          "label_attributes": {
+            "class": "form-element__question"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "notes",
+        "attributes": {
+          "id": "",
+          "class": "long"
+        },
+        "options": {
+          "label": "selfserve-app-subSection-previous-history-criminal-conviction-formOffenceDetails",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "error-message": "previousConvictionData_notes-error",
+          "hint": "selfserve-app-subSection-previous-history-criminal-conviction-formOffenceDetaisHelpBlock",
+          "hint-position": "above"
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "courtFpn",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "selfserve-app-subSection-previous-history-criminal-conviction-formNameOfCourt",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "error-message": "previousConvictionData_courtFpn-error"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "penalty",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "selfserve-app-subSection-previous-history-criminal-conviction-formPenalty",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "error-message": "previousConvictionData_penalty-error"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "forename": {
+      "name": "forename",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "familyName": {
+      "name": "familyName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "convictionDate": {
+      "name": "convictionDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "categoryText": {
+      "name": "categoryText",
+      "required": true
+    },
+    "notes": {
+      "name": "notes",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "courtFpn": {
+      "name": "courtFpn",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "penalty": {
+      "name": "penalty",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

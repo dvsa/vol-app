@@ -1,0 +1,48 @@
+{
+  "routeName": "backend/document/bucket-browser/download",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter",
+    "inputs": {
+      "isInline": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\Boolean"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "name": "isInline"
+      },
+      "key": {
+        "class": "Laminas\\InputFilter\\Input",
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Laminas\\Filter\\StringTrim"
+            }
+          ]
+        },
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "name": "key"
+      }
+    }
+  }
+}

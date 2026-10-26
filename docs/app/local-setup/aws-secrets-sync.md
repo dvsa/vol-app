@@ -141,12 +141,21 @@ Shows detailed AWS calls, cache hits, and config updates.
 ## Required IAM Permissions
 
 ```json
-{
-    "Effect": "Allow",
-    "Action": ["ssm:GetParameter", "secretsmanager:GetSecretValue", "sts:GetCallerIdentity"],
-    "Resource": ["arn:aws:ssm:*:*:parameter/applicationparams/*", "arn:aws:secretsmanager:*:*:secret:DEVAPP*"]
-}
+[
+    {
+        "Effect": "Allow",
+        "Action": ["ssm:GetParameter", "secretsmanager:GetSecretValue", "sts:GetCallerIdentity"],
+        "Resource": ["arn:aws:ssm:*:*:parameter/applicationparams/*", "arn:aws:secretsmanager:*:*:secret:DEVAPP*"]
+    },
+    {
+        "Effect": "Allow",
+        "Action": ["kms:Decrypt"],
+        "Resource": "arn:aws:kms:<region>:<account-id>:key/<ssm-key-id>"
+    }
+]
 ```
+
+If the synced SSM parameters are stored as `SecureString`, the caller also needs decrypt access to the KMS key used by Parameter Store (for the shared AWS-managed key this is `alias/aws/ssm` in the target account and region).
 
 ## Common Errors
 

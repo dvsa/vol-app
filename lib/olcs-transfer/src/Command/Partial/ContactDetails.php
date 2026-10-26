@@ -2,7 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Partial;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * Contact Details partial
@@ -11,62 +11,46 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
  */
 class ContactDetails
 {
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $id;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $version;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":1,"max":90})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 90])]
     protected $fao;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\EmailAddress")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\EmailAddress')]
+    #[Transfer\Optional]
     public $emailAddress;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":5,"max":255})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 255])]
+    #[Transfer\Optional]
     public $description;
 
-    /**
-     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\AddressOptional")
-     * @Transfer\Optional
-     */
+    #[Transfer\Partial('Dvsa\Olcs\Transfer\Command\Partial\AddressOptional')]
+    #[Transfer\Optional]
     protected $address;
 
-    /**
-     * @Transfer\ArrayInput
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\FilterEmptyItems")
-     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\PhoneContact")
-     * @Transfer\Optional
-     */
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\FilterEmptyItems')]
+    #[Transfer\Partial('Dvsa\Olcs\Transfer\Command\Partial\PhoneContact')]
+    #[Transfer\Optional]
     protected $phoneContacts = [];
 
-    /**
-     * @Transfer\ArrayInput
-     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\Person")
-     * @Transfer\Optional
-     */
+    #[Transfer\ArrayInput]
+    #[Transfer\Partial('Dvsa\Olcs\Transfer\Command\Partial\Person')]
+    #[Transfer\Optional]
     protected $person = [];
 
     /**

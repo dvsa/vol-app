@@ -9,11 +9,9 @@ namespace Dvsa\Olcs\Transfer\Query\Si;
 use Dvsa\Olcs\Transfer\Query\AbstractListData;
 use Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PublicQueryCacheInterface;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/si/si-penalty-type/list-data")
- */
+#[Transfer\RouteName('backend/si/si-penalty-type/list-data')]
 final class SiPenaltyTypeListData extends AbstractListData implements
     CacheableLongTermQueryInterface,
     PublicQueryCacheInterface

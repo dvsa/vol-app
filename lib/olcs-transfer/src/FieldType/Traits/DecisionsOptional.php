@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait DecisionsOptional
  *
@@ -10,15 +12,13 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait DecisionsOptional
 {
-    /**
-     * @Transfer\Optional()
-     * @Transfer\ArrayInput
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\FilterEmptyItems")
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\UniqueItems")
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\FilterEmptyItems')]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\UniqueItems')]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $decisions = [];
 
     /**

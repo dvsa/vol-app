@@ -1,0 +1,129 @@
+{
+  "name": "UserForgotUsername",
+  "attributes": {
+    "method": "post",
+    "label": "user-forgot-username.form.label"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": {
+          "method": "post",
+          "label": "user-forgot-username.form.label"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "licenceNumber",
+              "type": "Text",
+              "options": {
+                "label": "user-forgot-username.field.licenceNumber.label",
+                "label_attributes": {
+                  "aria-label": "Enter your licence number"
+                }
+              },
+              "attributes": {
+                "class": "medium"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailAddress",
+              "type": "Text",
+              "options": {
+                "label": "user-forgot-username.field.emailAddress.label",
+                "label_attributes": {
+                  "aria-label": "Enter your email address"
+                }
+              },
+              "attributes": {
+                "class": "long"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "user-forgot-username.form.label",
+          "prefer_form_input_filter": true
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "user-forgot-username.form-actions.submit.label"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "user-forgot-username.form.label"
+  },
+  "input_filter": {
+    "fields": {
+      "licenceNumber": {
+        "name": "licenceNumber",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 2,
+              "max": 18
+            }
+          }
+        ]
+      },
+      "emailAddress": {
+        "name": "emailAddress",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

@@ -4,33 +4,32 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Transfer\Command\Cases\Pi;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
 /**
  * Create PI SLA Exception Command
- *
- * @Transfer\RouteName("backend/pi/sla-exceptions")
- * @Transfer\Method("POST")
  */
+#[Transfer\RouteName('backend/pi/sla-exceptions')]
+#[Transfer\Method('POST')]
 class CreatePiSlaException extends AbstractCommand
 {
     /**
      * Case ID
      *
      * @var ?int
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected ?int $case = null;
 
     /**
      * SLA Exception ID
      *
      * @var ?int
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected ?int $slaException = null;
 
     /**

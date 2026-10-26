@@ -1,0 +1,97 @@
+{
+  "name": "search-filter",
+  "attributes": {
+    "method": "post",
+    "class": "filters form__filter",
+    "id": "filterContent"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "index",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "search",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "searchBy",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": {
+        "priority": -1
+      },
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "search.form.filter.update_button"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "text",
+        "attributes": {
+          "class": "",
+          "legend": "Filter By:"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "search",
+              "attributes": {
+                "value": "",
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "search.form.label"
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "",
+          "class": ""
+        }
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "bypass_auth": true
+  },
+  "input_filter": []
+}

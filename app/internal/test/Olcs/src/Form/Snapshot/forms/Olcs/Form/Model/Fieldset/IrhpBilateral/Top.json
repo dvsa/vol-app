@@ -1,0 +1,105 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "dateReceived",
+        "attributes": {
+          "id": "dateReceived"
+        },
+        "options": {
+          "label": "Date received",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "irhpPermitType",
+        "type": "Laminas\\Form\\Element\\Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licence",
+        "type": "Laminas\\Form\\Element\\Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "numVehiclesLabel",
+        "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement",
+        "options": {
+          "label": "Current total vehicle authorization"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "numVehicles",
+        "type": "Laminas\\Form\\Element\\Hidden",
+        "attributes": {
+          "id": "numVehicles"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "id": {
+      "name": "id",
+      "required": false
+    },
+    "dateReceived": {
+      "name": "dateReceived",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,343 @@
+{
+  "name": "User",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": {
+          "method": "post"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "forename",
+              "attributes": {
+                "id": "forename",
+                "class": "medium"
+              },
+              "options": {
+                "label": "tm-add-user-forename",
+                "short-label": "tm-add-user-forename"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "familyName",
+              "attributes": {
+                "id": "familyName",
+                "class": "medium"
+              },
+              "options": {
+                "label": "tm-add-user-familyName",
+                "short-label": "tm-add-user-familyName"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "birthDate",
+              "attributes": {
+                "id": "dob"
+              },
+              "options": {
+                "label": "tm-add-user-birthDate",
+                "short-label": "tm-add-user-birthDate",
+                "create_empty_option": true,
+                "render_delimiters": true
+              },
+              "type": "Common\\Form\\Elements\\Custom\\DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "hasEmail",
+              "attributes": {
+                "id": "hasEmail"
+              },
+              "options": {
+                "fieldset-attributes": {
+                  "class": "js-visible"
+                },
+                "label": "tm-add-user-hasEmail",
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                },
+                "short-label": "tm-add-user-hasEmail",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                }
+              },
+              "type": "\\Laminas\\Form\\Element\\Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "username",
+              "attributes": {
+                "id": "username",
+                "class": "medium",
+                "data-container-class": "js-visible"
+              },
+              "options": {
+                "label": "tm-add-user-username",
+                "short-label": "tm-add-user-username",
+                "hint": "tm-add-user-username.hint"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailAddress",
+              "attributes": {
+                "id": "emailAddress",
+                "class": "long",
+                "data-container-class": "js-visible"
+              },
+              "options": {
+                "label": "tm-add-user-email",
+                "short-label": "tm-add-user-email"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailConfirm",
+              "attributes": {
+                "id": "emailConfirm",
+                "class": "long",
+                "data-container-class": "js-visible"
+              },
+              "options": {
+                "label": "tm-add-user-confirm-email",
+                "short-label": "tm-add-user-confirm-email"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "translateToWelsh",
+              "attributes": {
+                "id": "translateToWelsh",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "translate-to-welsh",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "checked_value": "Y",
+                "unchecked_value": "N"
+              },
+              "type": "Common\\Form\\Elements\\Custom\\OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailGuidance",
+              "attributes": {
+                "value": "markup-lva-tm-add-user-with-email-guidance",
+                "data-container-class": "tm-guidance-email js-visible"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\GuidanceTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "noEmailGuidance",
+              "attributes": {
+                "value": "markup-lva-tm-add-user-without-email-guidance",
+                "data-container-class": "tm-guidance-no-email"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\GuidanceTranslated"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "",
+          "prefer_form_input_filter": true
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "continue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "data": {
+      "forename": {
+        "name": "forename",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 35
+            }
+          }
+        ]
+      },
+      "familyName": {
+        "name": "familyName",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 35
+            }
+          }
+        ]
+      },
+      "birthDate": {
+        "name": "birthDate",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "DateNotInFuture"
+          }
+        ]
+      },
+      "hasEmail": {
+        "name": "hasEmail",
+        "required": false
+      },
+      "username": {
+        "name": "username",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          },
+          {
+            "name": "Laminas\\Filter\\StringToLower"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\UsernameCreate"
+          }
+        ]
+      },
+      "emailAddress": {
+        "name": "emailAddress",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+          },
+          {
+            "name": "Common\\Form\\Elements\\Validators\\EmailConfirm",
+            "options": {
+              "token": "emailConfirm"
+            }
+          }
+        ]
+      },
+      "emailConfirm": {
+        "name": "emailConfirm",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

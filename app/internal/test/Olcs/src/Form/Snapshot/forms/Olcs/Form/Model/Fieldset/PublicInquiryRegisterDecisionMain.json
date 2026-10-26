@@ -1,0 +1,356 @@
+{
+  "name": "fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "decidedByTc",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Presiding TC/DTC/HTRU/DHTRU",
+          "service_name": "Olcs\\Service\\Data\\PresidingTc",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "decidedByTcRole",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Presiding TC/DTC/HTRU/DHTRU role",
+          "category": "tc_role",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "decisions",
+        "attributes": {
+          "required": false,
+          "id": "",
+          "placeholder": "",
+          "class": "chosen-select-large",
+          "multiple": true
+        },
+        "type": "DynamicSelect",
+        "options": {
+          "label": "Decisions",
+          "service_name": "Olcs\\Service\\Data\\PublicInquiryDecision",
+          "disable_inarray_validator": false,
+          "use_groups": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceRevokedAtPi",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Licence revoked at PI"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceSuspendedAtPi",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Licence suspended at PI"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceCurtailedAtPi",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Licence curtailed at PI"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "tmCalledWithOperator",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "TM called with operator?"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "tmDecisions",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "chosen-select-large",
+          "multiple": true,
+          "required": false
+        },
+        "options": {
+          "label": "TM decision",
+          "disable_inarray_validator": false,
+          "category": "pi_tm_decision"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "witnesses",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "small"
+        },
+        "options": {
+          "label": "Number of witnesses"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "decisionDate",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "Date of decision",
+          "create_empty_option": true,
+          "render_delimiters": true
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "notificationDate",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "Date of notification",
+          "create_empty_option": true,
+          "render_delimiters": true
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "definition",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "js-definition-source chosen-select-large"
+        },
+        "options": {
+          "label": "Definition",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\PublicInquiryDefinition",
+          "use_groups": true,
+          "empty_option": "Add definition option"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "decisionNotes",
+        "attributes": {
+          "id": "",
+          "class": "extra-long js-definition-target"
+        },
+        "options": {
+          "label": "Details to be published"
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "case",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": ""
+  },
+  "input_filter": {
+    "decisions": {
+      "name": "decisions",
+      "required": true,
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "decisionDate",
+            "contextValues": [
+              null
+            ],
+            "context_truth": false,
+            "validators": [
+              {
+                "name": "NotEmpty"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "tmDecisions": {
+      "name": "tmDecisions",
+      "required": false,
+      "allow_empty": true,
+      "type": "\\Common\\InputFilter\\ContinueIfEmptyInput",
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "witnesses": {
+      "name": "witnesses",
+      "validators": [
+        {
+          "name": "Digits"
+        }
+      ]
+    },
+    "decisionDate": {
+      "name": "decisionDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "notificationDate": {
+      "name": "notificationDate",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "definition": {
+      "name": "definition",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "decisionNotes": {
+      "name": "decisionNotes",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 4000
+          }
+        }
+      ]
+    }
+  }
+}

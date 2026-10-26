@@ -1,0 +1,150 @@
+{
+  "name": "bus-reg-ta",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficAreas",
+        "attributes": {
+          "id": "trafficAreas",
+          "placeholder": "",
+          "multiple": "multiple",
+          "class": "chosen-select-large"
+        },
+        "options": {
+          "label": "TAOs covered by route",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\TrafficArea",
+          "use_groups": "false"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "localAuthoritys",
+        "attributes": {
+          "id": "localAuthoritys",
+          "placeholder": "",
+          "multiple": "multiple",
+          "class": "chosen-select-large"
+        },
+        "options": {
+          "label": "Local authorities covered by route",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\LocalAuthority",
+          "use_groups": "true"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "stoppingArrangements",
+        "attributes": {
+          "id": "stoppingArrangements",
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Stopping arrangements (Tours and excursions only)",
+          "label_attributes": {
+            "class": "extra-long"
+          }
+        },
+        "type": "Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isTxcApp",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[isTxcApp]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isLatestVariation",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[isLatestVariation]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "type": "Hidden",
+        "attributes": {
+          "id": "fields[status]"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "trafficAreas": {
+      "name": "trafficAreas",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "localAuthoritys": {
+      "name": "localAuthoritys",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "stoppingArrangements": {
+      "name": "stoppingArrangements",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 800
+          }
+        }
+      ]
+    }
+  }
+}

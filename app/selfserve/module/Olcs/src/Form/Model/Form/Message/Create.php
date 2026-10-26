@@ -8,20 +8,14 @@ use Laminas\Form\Annotation as Form;
 use Laminas\Form\Element\Hidden;
 use Olcs\Form\Model\Fieldset\Message\Create as CreateFieldset;
 
-/**
- * @Form\Type("Common\Form\Form")
- */
+#[Form\Type('Common\Form\Form')]
 class Create
 {
-    /**
-     * @Form\Attributes({"value": ""})
-     * @Form\Type(Hidden::class)
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type(Hidden::class)]
     public ?Hidden $correlationId = null;
 
-    /**
-     * @Form\Name("form-actions")
-     * @Form\ComposedObject(CreateFieldset::class)
-     */
+    #[Form\Name('form-actions')]
+    #[Form\ComposedObject(CreateFieldset::class)]
     public ?CreateFieldset $formActions = null;
 }
