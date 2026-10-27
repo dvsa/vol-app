@@ -41,8 +41,8 @@ into `result` or `result_normalised`.
 The page's "Accept document review" button sends `AcceptDocumentAnalysisReview { id }` and
 nothing else. As with `Application\Grant`, the command states the caseworker's intent and the
 API decides the consequence: the handler reads the stored normalised result, `AnalysisReviewOutcome`
-turns its flags into APPROVED (every flagged row is a pass) or REJECTED (any fail, or any skipped
-check, since a check that could not be made is not a pass), and `recordAssessmentStatus()` writes
+turns its category flags into APPROVED (every flagged row is a pass) or REJECTED (any category
+fails or is entirely skipped), and `recordAssessmentStatus()` writes
 `assessment_status` and the reviewing user in one UPDATE guarded on `status = 'SUCCESS'`. The
 decided status comes back in the result's `assessmentStatus` flag, which is all the internal app
 uses to pick its message.
