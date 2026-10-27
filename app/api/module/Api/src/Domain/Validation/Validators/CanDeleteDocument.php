@@ -22,7 +22,7 @@ class CanDeleteDocument extends AbstractCanAccessEntity
         $document = $this->getDocument($entityId);
         if ($this->isExternalUser() && $this->isDocumentAttachedToApplication($document)) {
             return $this->isCurrentApplicationDocAndIsNotSubmitted($document)
-                || $this->getIsPostSubmissionUpload($document);
+                || $this->isPostSubmissionUpload($document);
         }
 
         return parent::isValid($entityId);
@@ -38,7 +38,7 @@ class CanDeleteDocument extends AbstractCanAccessEntity
         return $document->getApplication() !== null;
     }
 
-    private function getIsPostSubmissionUpload(Document $document): bool
+    private function isPostSubmissionUpload(Document $document): bool
     {
         return $document->getIsPostSubmissionUpload() === true;
     }
