@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Lva;
 
-use Laminas\Form\Annotation as Form;
+use Laminas\Form\Annotation;
 
 /**
  * Caseworker review of one analysis on the financial evidence assessment page.
@@ -10,32 +10,27 @@ use Laminas\Form\Annotation as Form;
  * Built through FormHelperService::createForm(), which adds the CSRF ("security") element.
  * One instance serves every tab: the view sets analysisId per tab before rendering it.
  *
- * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("financial-evidence-assessment-review")
- * @Form\Attributes({"method":"post"})
- * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
+ * @codeCoverageIgnore
  */
+#[Annotation\Name('financial-evidence-assessment-review')]
+#[Annotation\Attributes(['method' => 'post'])]
+#[Annotation\Type('Common\Form\Form')]
+#[Annotation\Options(['prefer_form_input_filter' => true])]
 class FinancialEvidenceAssessmentReview
 {
-    /**
-     * @Form\Type("Hidden")
-     * @Form\Required(true)
-     * @Form\Validator("Laminas\Validator\Digits")
-     */
+    #[Annotation\Type('Hidden')]
+    #[Annotation\Required(true)]
+    #[Annotation\Validator('Laminas\Validator\Digits')]
     public $analysisId = null;
 
-    /**
-     * Posted as review=accept, so the action is explicit when more review actions are added.
-     *
-     * @Form\Attributes({
-     *     "data-module": "govuk-button",
-     *     "type": "submit",
-     *     "class": "govuk-button",
-     *     "value": "accept",
-     * })
-     * @Form\Options({"label": "Accept document review"})
-     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
-     */
+    /** Posted as review=accept, so the action is explicit when more review actions are added. */
+    #[Annotation\Attributes([
+        'data-module' => 'govuk-button',
+        'type' => 'submit',
+        'class' => 'govuk-button',
+        'value' => 'accept',
+    ])]
+    #[Annotation\Options(['label' => 'Accept document review'])]
+    #[Annotation\Type('\Common\Form\Elements\InputFilters\ActionButton')]
     public $review = null;
 }
