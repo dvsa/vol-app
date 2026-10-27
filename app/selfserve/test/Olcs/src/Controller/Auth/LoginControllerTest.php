@@ -8,6 +8,7 @@ use Common\Auth\Service\AuthenticationServiceInterface;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Rbac\User;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Laminas\Authentication\Result;
@@ -16,7 +17,6 @@ use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Http\Response as HttpResponse;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Router\Http\RouteMatch;
 use Laminas\Stdlib\Parameters;
 use Laminas\View\Model\ViewModel;
@@ -43,7 +43,7 @@ final class LoginControllerTest extends MockeryTestCase
     private $currentUserMock;
 
     /**
-     * @var FlashMessenger
+     * @var FlashMessengerInterface
      */
     private $flashMessengerMock;
 
@@ -107,7 +107,7 @@ final class LoginControllerTest extends MockeryTestCase
         $this->authenticationAdapterMock = m::mock(SelfserveCommandAdapter::class);
         $this->authenticationServiceMock = m::mock(AuthenticationServiceInterface::class);
         $this->currentUserMock = m::mock(CurrentUser::class);
-        $this->flashMessengerMock = m::mock(FlashMessenger::class);
+        $this->flashMessengerMock = m::mock(FlashMessengerInterface::class);
         $this->formHelperMock = m::mock(FormHelperService::class);
         $this->redirectHelperMock = m::mock(Redirect::class);
         $this->authChallengeContainerMock = m::mock(AuthChallengeContainer::class);
@@ -180,10 +180,6 @@ final class LoginControllerTest extends MockeryTestCase
         $this->flashMessengerMock->allows()->hasMessages(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR)->andReturn(false); // Return false for this namespace
         $this->flashMessengerMock->expects()->getMessages(LoginController::FLASH_MESSAGE_NAMESPACE_INPUT)->andReturn(['{"username": "username", "password":"abc"}']);
 
-        $this->flashMessengerMock->shouldReceive('getMessagesFromNamespace')
-            ->with(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR)
-            ->andReturnTrue();
-
         // Execute
         $result = $this->sut->indexAction();
         $form = $result->getVariable('form');
@@ -213,13 +209,15 @@ final class LoginControllerTest extends MockeryTestCase
 
         $this->flashMessengerMock->shouldReceive('getMessagesFromNamespace')
             ->with(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR)
-            ->andReturn(['failureReason']);
+            ->once()
+            ->andReturn(['unit test failure reason']);
 
         // Execute
         $result = $this->sut->indexAction();
 
         // Assert
         $this->assertArrayHasKey('failureReason', $result->getVariables());
+        $this->assertEquals('unit test failure reason', $result->getVariable('failureReason'));
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

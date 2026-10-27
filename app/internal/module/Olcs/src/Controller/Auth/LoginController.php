@@ -7,6 +7,7 @@ namespace Olcs\Controller\Auth;
 use Common\Auth\Service\AuthenticationServiceInterface;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Laminas\Authentication\Adapter\ValidatableAdapterInterface;
@@ -16,7 +17,6 @@ use Laminas\EventManager\EventInterface;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Layout;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\InjectApplicationEventInterface;
@@ -70,7 +70,7 @@ class LoginController implements InjectApplicationEventInterface
         private readonly ValidatableAdapterInterface $authenticationAdapter,
         AuthenticationServiceInterface $authenticationService,
         private readonly CurrentUser $currentUser,
-        private readonly FlashMessenger $flashMessenger,
+        private readonly FlashMessengerInterface $flashMessenger,
         FormHelperService $formHelper,
         private readonly Layout $layout,
         Redirect $redirectHelper,
