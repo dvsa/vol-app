@@ -8,10 +8,10 @@ use Common\Auth\Service\AuthenticationServiceInterface;
 use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Psr\Container\ContainerInterface;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
 
@@ -34,7 +34,7 @@ class LoginControllerFactory implements FactoryInterface
             $container->get(SelfserveCommandAdapter::class),
             $container->get(AuthenticationServiceInterface::class),
             $controllerPluginManager->get(CurrentUser::class),
-            $controllerPluginManager->get(FlashMessenger::class),
+            $container->get(LaminasSessionFlashMessenger::class),
             $container->get(FormHelperService::class),
             $redirectHelper = $controllerPluginManager->get(Redirect::class),
             new AuthChallengeContainer()

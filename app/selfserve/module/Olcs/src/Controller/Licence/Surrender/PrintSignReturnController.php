@@ -7,7 +7,6 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
-use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\Surrender\SubmitForm;
 use Laminas\View\Model\ViewModel;
 use Permits\Data\Mapper\MapperManager;
@@ -19,8 +18,6 @@ use Permits\Data\Mapper\MapperManager;
  */
 class PrintSignReturnController extends AbstractSurrenderController
 {
-    use FlashMessengerTrait;
-
     protected $templateConfig = [
         'default' => 'licence/surrender-print-sign-return'
     ];
