@@ -11,6 +11,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\Controller\Plugin\CreateHttpNotFoundModel;
@@ -40,6 +41,7 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
             m::mock(RestrictionHelperService::class),
             m::mock(FlashMessengerHelperService::class),
             m::mock(FormHelperService::class),
+            m::mock(TableFactory::class),
             [],
         ])->makePartial()->shouldAllowMockingProtectedMethods();
     }

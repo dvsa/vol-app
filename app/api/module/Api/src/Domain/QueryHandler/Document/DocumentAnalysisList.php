@@ -6,6 +6,7 @@ use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisAnnotationOverlay;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Psr\Container\ContainerInterface;
@@ -26,10 +27,13 @@ class DocumentAnalysisList extends AbstractQueryHandler
 
     private AnalysisResultNormaliser $normaliser;
 
+    private AnalysisAnnotationOverlay $overlay;
+
     #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->normaliser = $container->get(AnalysisResultNormaliser::class);
+        $this->overlay = $container->get(AnalysisAnnotationOverlay::class);
 
         return parent::__invoke($container, $requestedName, $options);
     }
@@ -59,8 +63,9 @@ class DocumentAnalysisList extends AbstractQueryHandler
                     'status'      => $row->getStatus(),
                     'assessmentStatus' => $row->getAssessmentStatus(),
                     // Always at the current payload version, whatever version the row was written
-                    // with. Null when the stored report held no analysis that could be normalised.
-                    'resultNormalised' => $this->normaliser->fromStored($row->getResultNormalised())?->toArray(),
+                    // with, and with the caseworker's changes laid over it (a changed row carries an
+                    // "override" block). Null when the stored report held no analysis that could be normalised.
+                    'resultNormalised' => $this->effectiveResult($row),
                     'errorDetail' => $row->getErrorDetail(),
                     'completedAt' => $row->getCompletedAt(true)?->format('Y-m-d H:i:s'),
                 ],
@@ -68,5 +73,14 @@ class DocumentAnalysisList extends AbstractQueryHandler
             ),
             'count' => $repo->fetchCount($query),
         ];
+    }
+
+    private function effectiveResult(DocumentAnalysis $row): ?array
+    {
+        $normalised = $this->normaliser->fromStored($row->getResultNormalised());
+
+        return $normalised === null
+            ? null
+            : $this->overlay->apply($normalised, $row->getAnnotations())->toArray();
     }
 }

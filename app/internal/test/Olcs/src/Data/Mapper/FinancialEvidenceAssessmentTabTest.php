@@ -40,7 +40,11 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
         $tab = FinancialEvidenceAssessmentTab::mapFromAnalysis($this->givenAnalysis());
 
         foreach ($tab['rows'] as $row) {
-            $this->assertSame(['label', 'value', 'flag', 'flagTag', 'remark'], array_keys($row), $row['label']);
+            $this->assertSame(
+                ['key', 'flagged', 'label', 'value', 'flag', 'flagTag', 'remark', 'override'],
+                array_keys($row),
+                $row['label']
+            );
         }
     }
 
@@ -236,6 +240,67 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
         $this->assertSame(0, $tab['issueCount']);
         // The document is still linked so the caseworker can assess it by hand.
         $this->assertSame(11, $tab['document']['id']);
+    }
+
+    public static function flagTagProvider(): \Iterator
+    {
+        yield 'pass' => ['PASS', 'govuk-tag--green'];
+        yield 'fail' => ['FAIL', 'govuk-tag--red'];
+        yield 'skipped' => ['SKIPPED', 'govuk-tag--grey'];
+        yield 'unknown reads as skipped' => ['MAYBE', 'govuk-tag--grey'];
+    }
+
+    #[DataProvider('flagTagProvider')]
+    public function testFlagTagMapsALabelToItsColour(string $flag, string $expected): void
+    {
+        $this->assertSame($expected, FinancialEvidenceAssessmentTab::flagTag($flag));
+    }
+
+    public function testCarriesACaseworkersOverrideThrough(): void
+    {
+        $tab = FinancialEvidenceAssessmentTab::mapFromAnalysis($this->givenAnalysis([
+            'statementDate' => [
+                'flag' => 'pass', 'remark' => null, 'value' => '2026-08-31', 'checks' => [],
+                'override' => [
+                    'originalFlag' => 'fail', 'comment' => '  Checked by hand ', 'changedBy' => 'Jo Bloggs',
+                    'changedOn' => '2026-10-08 10:00:00',
+                ],
+            ],
+        ]));
+
+        $this->assertSame(
+            ['originalFlag' => 'FAIL', 'comment' => 'Checked by hand', 'changedBy' => 'Jo Bloggs', 'changedOn' => '08/10/2026'],
+            $this->row($tab, 'Statement date')['override']
+        );
+    }
+
+    public function testAnOverrideWithUnusableFieldsFallsBackToNulls(): void
+    {
+        $tab = FinancialEvidenceAssessmentTab::mapFromAnalysis($this->givenAnalysis([
+            'name' => [
+                'flag' => 'pass', 'remark' => null, 'value' => 'X', 'checks' => [],
+                'override' => ['originalFlag' => 'maybe', 'comment' => '  ', 'changedBy' => 5, 'changedOn' => 'not a date'],
+            ],
+        ]));
+
+        $this->assertSame(
+            ['originalFlag' => 'SKIPPED', 'comment' => null, 'changedBy' => null, 'changedOn' => null],
+            $this->row($tab, 'Name')['override']
+        );
+    }
+
+    public function testRowsWithoutAnOverrideOrWithoutAFlagHaveNone(): void
+    {
+        $tab = FinancialEvidenceAssessmentTab::mapFromAnalysis($this->givenAnalysis([
+            'bank' => [
+                'flag' => null, 'remark' => null, 'value' => 'Example Bank', 'checks' => [],
+                'override' => ['originalFlag' => 'fail', 'comment' => 'x', 'changedBy' => 'Jo', 'changedOn' => null],
+            ],
+        ]));
+
+        $this->assertNull($this->row($tab, 'Name')['override']);
+        // Bank is never flagged, so an override on it is ignored even if the payload carries one.
+        $this->assertNull($this->row($tab, 'Bank')['override']);
     }
 
     private function row(array $tab, string $label): array
