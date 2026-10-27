@@ -907,30 +907,6 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
     }
 
     /**
-     * A successful analysis as DocumentAnalysisList returns it, with a current normalised result
-     * whose six flagged rows all carry $flag (bank and bank address are never flagged).
-     */
-    private function assessedAnalysis(int $id, string $flag, ?string $assessmentStatus = null): array
-    {
-        $rows = [];
-
-        foreach (['authenticity', 'name', 'statementDate', 'statementPeriod', 'averageFunds', 'largeDeposit'] as $key) {
-            $rows[$key] = ['flag' => $flag, 'remark' => null, 'value' => null, 'checks' => []];
-        }
-
-        $rows['bank'] = ['flag' => null, 'remark' => null, 'value' => 'Example Bank', 'checks' => []];
-        $rows['bankAddress'] = ['flag' => null, 'remark' => null, 'value' => '1 Example Street', 'checks' => []];
-
-        return [
-            'id' => $id,
-            'documentId' => 100 + $id,
-            'documentDate' => null,
-            'assessmentStatus' => $assessmentStatus,
-            'resultNormalised' => ['version' => 1, 'rows' => $rows],
-        ];
-    }
-
-    /**
      * A review form that receives the post and reports the given validity.
      *
      * @param array<string, mixed> $post

@@ -54,10 +54,9 @@ final class UpdateDocumentAnalysisAssessmentStatusTest extends AbstractCommandHa
         parent::setUp();
     }
 
-    /** Only approval is guarded, so these never read the analysis. */
+    /** Approval is covered separately, as it reads the analysis before recording. */
     public static function statusProvider(): \Iterator
     {
-        yield 'approved' => [AssessmentStatus::APPROVED];
         yield 'rejected' => [AssessmentStatus::REJECTED];
         yield 'pending' => [AssessmentStatus::PENDING];
     }
@@ -79,6 +78,14 @@ final class UpdateDocumentAnalysisAssessmentStatusTest extends AbstractCommandHa
             [sprintf('Document analysis 5 assessment status set to %s', $status->value)],
             $result->getMessages()
         );
+    }
+
+    public static function nonApprovalStatusProvider(): array
+    {
+        return [
+            'rejected' => [AssessmentStatus::REJECTED],
+            'pending' => [AssessmentStatus::PENDING],
+        ];
     }
 
     /** No successful analysis with that id (missing, or not SUCCESS): nothing was written. */
