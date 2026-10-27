@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Lva\Factory\Controller\DirectorChange;
 
 use Common\FormService\FormServiceManager;
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -33,7 +34,7 @@ class ConvictionsPenaltiesControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $translationHelper = $container->get(TranslationHelperService::class);
         $scriptFactory = $container->get(ScriptFactory::class);
-        $flashMessengerPlugin = $container->get('ControllerPluginManager')->get('FlashMessenger');
+        $flashMessengerPlugin = $container->get(LaminasSessionFlashMessenger::class);
 
         return new ConvictionsPenaltiesController(
             $niTextTranslationUtil,

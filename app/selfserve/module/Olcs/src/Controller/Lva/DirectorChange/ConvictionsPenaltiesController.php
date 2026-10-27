@@ -6,6 +6,7 @@ use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\AbstractConvictionsPenaltiesController;
 use Common\FormService\FormServiceManager;
 use Common\RefData;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -15,7 +16,6 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Variation\GrantDirectorChange;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Http\Response;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Olcs\Controller\Lva\Traits\VariationWizardFinalPageControllerTrait;
 use LmcRbacMvc\Service\AuthorizationService;
 
@@ -46,7 +46,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
         TableFactory $tableFactory,
         private TranslationHelperService $translationHelper,
         ScriptFactory $scriptFactory,
-        protected FlashMessenger $flashMessengerPlugin
+        protected FlashMessengerInterface $flashMessengerPlugin
     ) {
         parent::__construct(
             $niTextTranslationUtil,
