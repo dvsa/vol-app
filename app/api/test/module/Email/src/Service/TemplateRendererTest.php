@@ -115,6 +115,46 @@ final class TemplateRendererTest extends MockeryTestCase
         $this->assertSame('RENDER_PLAIN_LAYOUT', $message->getPlainBody());
     }
 
+    public function testRenderBodyChecksLicNoSeparatelyForPlainAndHtmlBodies(): void
+    {
+        $sut = new TemplateRenderer();
+        $message = new \Dvsa\Olcs\Email\Data\Message('TO', 'SUBJECT');
+        $message->setLocale('en_GB');
+        $message->setHasHtml(true);
+
+        $mockViewRenderer = m::mock(StrategySelectingViewRenderer::class);
+        $sut->setViewRenderer($mockViewRenderer);
+
+        $variables = ['licNo' => 'OB1234567', 'operatorName' => 'OPERATOR'];
+
+        $mockViewRenderer->shouldReceive('render')
+            ->with('en_GB', 'plain', 'TEMPLATE', $variables)
+            ->once()
+            ->andReturn('RENDER_PLAIN_TEMPLATE');
+
+        $mockViewRenderer->shouldReceive('render')
+            ->with('en_GB', 'html', 'TEMPLATE', $variables)
+            ->once()
+            ->andReturn('<p>Your licence OB1234567 is due</p>');
+
+        // the plain body does not print the licence number, so its layout keeps licNo
+        $mockViewRenderer->shouldReceive('render')
+            ->with('en_GB', 'plain', 'default', $variables + ['content' => 'RENDER_PLAIN_TEMPLATE'])
+            ->once()
+            ->andReturn('RENDER_PLAIN_LAYOUT');
+
+        // the html body does, so its layout loses licNo
+        $mockViewRenderer->shouldReceive('render')
+            ->with('en_GB', 'html', 'default', ['operatorName' => 'OPERATOR', 'content' => '<p>Your licence OB1234567 is due</p>'])
+            ->once()
+            ->andReturn('RENDER_HTML_LAYOUT');
+
+        $sut->renderBody($message, 'TEMPLATE', $variables);
+
+        $this->assertSame('RENDER_PLAIN_LAYOUT', $message->getPlainBody());
+        $this->assertSame('RENDER_HTML_LAYOUT', $message->getHtmlBody());
+    }
+
     public function testRenderBodyGivesLicNoToLayoutWhenBodyDoesNotPrintIt(): void
     {
         $sut = new TemplateRenderer();

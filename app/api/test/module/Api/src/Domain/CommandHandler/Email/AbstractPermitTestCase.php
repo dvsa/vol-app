@@ -124,7 +124,7 @@ abstract class AbstractPermitTestCase extends AbstractCommandHandlerTestCase
             ->atLeast(1)
             ->withNoArgs()
             ->andReturn($this->organisation);
-        // read by AbstractEmailHandler to add licNo to the template variables
+        // zero calls only happens in testHandleCommandException, which returns before the licence lookup
         $this->applicationEntity->shouldReceive('getLicence->getLicNo')
             ->atMost(1)
             ->withNoArgs()
