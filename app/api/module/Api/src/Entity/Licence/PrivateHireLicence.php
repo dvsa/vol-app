@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'ix_private_hire_licence_contact_details_id', columns: ['contact_details_id'])]
 #[ORM\Index(name: 'ix_private_hire_licence_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_private_hire_licence_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_private_hire_licence_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class PrivateHireLicence extends AbstractPrivateHireLicence
 {

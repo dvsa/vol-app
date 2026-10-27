@@ -30,7 +30,7 @@ use Permits\Data\Mapper\MapperManager;
  */
 class ViewVehicleController extends AbstractVehicleController
 {
-    public const REF_DATA_ATTRIBUTES = ['description', 'displayOrder', 'id', 'olbsKey', 'refDataCategoryId', 'version'];
+    public const REF_DATA_ATTRIBUTES = ['description', 'displayOrder', 'id', 'refDataCategoryId', 'version'];
 
     protected $formConfig = [
         'default' => [
@@ -240,19 +240,19 @@ class ViewVehicleController extends AbstractVehicleController
             throw new VehiclesNotFoundWithIdsException([$vehicleId]);
         }
 
-        $data = array_intersect_key($licenceVehicleData, array_flip(['id', 'olbsKey', 'receivedDate', 'removalDate',
+        $data = array_intersect_key($licenceVehicleData, array_flip(['id', 'receivedDate', 'removalDate',
             'removalLetterSeedDate', 'specifiedDate', 'version', 'viAction', 'warningLetterSeedDate',
             'warningLetterSentDate', 'createdOn', 'lastModifiedOn', 'deletedDate',
         ]));
 
         $data['vehicle'] = array_intersect_key($licenceVehicleData['vehicle'], array_flip(['certificateNo', 'id',
-            'makeModel', 'olbsKey', 'platedWeight', 'section26', 'section26Curtail', 'section26Revoked',
+            'makeModel', 'platedWeight', 'section26', 'section26Curtail', 'section26Revoked',
             'section26Suspend', 'version', 'viAction', 'vrm', 'createdOn', 'lastModifiedOn', 'deletedDate',
         ]));
 
         $data['licence'] = array_intersect_key($result, array_flip(['cnsDate', 'correspondenceCd', 'curtailedDate',
             'enforcementArea', 'establishmentCd', 'expiryDate', 'fabsReference', 'feeDate', 'grantedDate', 'id',
-            'inForceDate', 'isMaintenanceSuitable', 'licNo', 'olbsKey', 'optOutTmLetter', 'psvDiscsToBePrintedNo',
+            'inForceDate', 'isMaintenanceSuitable', 'licNo', 'optOutTmLetter', 'psvDiscsToBePrintedNo',
             'reviewDate', 'revokedDate', 'safetyIns', 'safetyInsTrailers', 'safetyInsVaries', 'safetyInsVehicles',
             'surrenderedDate', 'suspendedDate', 'tachographIns', 'tachographInsName', 'totAuthTrailers',
             'totAuthVehicles', 'totCommunityLicences', 'trafficArea', 'trailersInPossession', 'translateToWelsh',

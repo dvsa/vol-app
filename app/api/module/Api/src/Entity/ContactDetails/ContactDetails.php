@@ -16,7 +16,6 @@ use Dvsa\Olcs\Api\Entity\Person\Person;
 #[ORM\Index(name: 'ix_contact_details_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_contact_details_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_contact_details_contact_type', columns: ['contact_type'])]
-#[ORM\UniqueConstraint(name: 'uk_contact_details_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\Entity]
 class ContactDetails extends AbstractContactDetails
 {
