@@ -906,59 +906,6 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         return $response;
     }
 
-    /**
-     * A review form that receives the post and reports the given validity.
-     *
-     * @param array<string, mixed> $post
-     */
-    private function reviewForm(array $post, bool $isValid): Form|m\MockInterface
-    {
-        $form = m::mock(Form::class);
-        $form->expects('setData')->with(m::on(
-            static fn($data): bool => $data instanceof Parameters && $data->toArray() === $post
-        ));
-        $form->allows('isValid')->andReturn($isValid);
-        $form->allows('getData')->andReturn($post);
-
-        return $form;
-    }
-
-    /**
-     * @param array<string, mixed> $post
-     */
-    private function postRequest(array $post): Request
-    {
-        $request = new Request();
-        $request->setMethod(Request::METHOD_POST);
-        $request->setPost(new Parameters($post));
-
-        return $request;
-    }
-
-    private function expectRedirectToRefresh(m\MockInterface $sut): Response
-    {
-        $response = new Response();
-        $redirect = m::mock(Redirect::class);
-        $redirect->expects('refresh')->andReturn($response);
-        $sut->expects('redirect')->andReturn($redirect);
-
-        return $response;
-    }
-
-    /** The API's response to AcceptDocumentAnalysisReview: the decided status travels in the result's flags. */
-    private function commandResponse(bool $ok, ?string $assessmentStatus): CqrsResponse
-    {
-        $response = m::mock(CqrsResponse::class);
-        $response->allows('isOk')->andReturn($ok);
-        $response->allows('getResult')->andReturn([
-            'id' => ['documentAnalysis' => 9],
-            'messages' => [],
-            'flags' => $assessmentStatus === null ? [] : ['assessmentStatus' => $assessmentStatus],
-        ]);
-
-        return $response;
-    }
-
     private function okResponse(array $analyses): CqrsResponse
     {
         $response = m::mock(CqrsResponse::class);
