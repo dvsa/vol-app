@@ -7,6 +7,7 @@ use Common\FeatureToggle;
 use Common\Form\Elements\Types\AbstractInputSearch;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
@@ -14,7 +15,6 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\DvlaSearch\Vehicle;
 use Dvsa\Olcs\Transfer\Query\Licence\Vehicles;
 use Exception;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractSelfserveController;
@@ -47,7 +47,7 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
 
     protected $pageTemplate = 'pages/licence-vehicle';
 
-    /** @var  FlashMessenger */
+    /** @var  FlashMessengerInterface */
     protected $flashMessenger;
 
     /** @var LicenceVehicleManagement */
@@ -63,14 +63,14 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
      * @param FormHelperService $formHelper
      * @param TableFactory $tableBuilder
      * @param MapperManager $mapperManager
-     * @param FlashMessenger $flashMessenger
+     * @param FlashMessengerInterface $flashMessenger
      */
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
         MapperManager $mapperManager,
-        FlashMessenger $flashMessenger
+        FlashMessengerInterface $flashMessenger
     ) {
         $this->flashMessenger = $flashMessenger;
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);

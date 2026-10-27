@@ -8,11 +8,11 @@ use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\HandleQuery;
 use Common\Controller\Plugin\Redirect;
 use Common\Form\FormValidator;
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\Test\MockeryTestCase;
 use Common\Test\MocksServicesTrait;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\ServiceManager;
 use Olcs\Session\LicenceVehicleManagement;
@@ -57,12 +57,12 @@ final class SwitchBoardControllerFactoryTest extends MockeryTestCase
 
     /**
      * @return (FormValidator|LicenceVehicleManagement|\Mockery\MockInterface)[]
-     * @psalm-return array{'Laminas\\Mvc\\Plugin\\FlashMessenger\\FlashMessenger'::class: \Mockery\MockInterface, 'Common\\Service\\Helper\\FormHelperService'::class: \Mockery\MockInterface, 'Common\\Controller\\Plugin\\HandleQuery'::class: \Mockery\MockInterface, 'Common\\Controller\\Plugin\\Redirect'::class: \Mockery\MockInterface, 'Common\\Service\\Helper\\ResponseHelperService'::class: \Mockery\MockInterface, 'Laminas\\Mvc\\Controller\\Plugin\\Url'::class: \Mockery\MockInterface, 'Olcs\\Session\\LicenceVehicleManagement'::class: LicenceVehicleManagement, 'Common\\Form\\FormValidator'::class: FormValidator}
+     * @psalm-return array{'Common\\Service\\FlashMessenger\\LaminasSessionFlashMessenger'::class: \Mockery\MockInterface, 'Common\\Service\\Helper\\FormHelperService'::class: \Mockery\MockInterface, 'Common\\Controller\\Plugin\\HandleQuery'::class: \Mockery\MockInterface, 'Common\\Controller\\Plugin\\Redirect'::class: \Mockery\MockInterface, 'Common\\Service\\Helper\\ResponseHelperService'::class: \Mockery\MockInterface, 'Laminas\\Mvc\\Controller\\Plugin\\Url'::class: \Mockery\MockInterface, 'Olcs\\Session\\LicenceVehicleManagement'::class: LicenceVehicleManagement, 'Common\\Form\\FormValidator'::class: FormValidator}
      */
     protected function setUpDefaultServices(ServiceManager $serviceManager): array
     {
         return [
-            FlashMessenger::class => $this->setUpMockService(FlashMessenger::class),
+            LaminasSessionFlashMessenger::class => $this->setUpMockService(LaminasSessionFlashMessenger::class),
             FormHelperService::class => $this->setUpMockService(FormHelperService::class),
             HandleQuery::class => $this->setUpMockService(HandleQuery::class),
             Redirect::class => $this->setUpMockService(Redirect::class),
