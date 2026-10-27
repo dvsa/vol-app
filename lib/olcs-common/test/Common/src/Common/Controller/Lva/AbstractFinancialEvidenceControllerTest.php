@@ -6,6 +6,7 @@ namespace CommonTest\Common\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\AbstractFinancialEvidenceController;
+use Common\Data\Mapper\Lva\FinancialEvidence;
 use Common\FormService\FormServiceManager;
 use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Helper\FileUploadHelperService;
@@ -26,30 +27,32 @@ final class AbstractFinancialEvidenceControllerTest extends MockeryTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('dpLocation')]
     public function testIndexActionPassesLocationToView(string $location): void
     {
-        $request = m::mock(Request::class);
-        $request->allows('isPost')->andReturnFalse();
-
-        $form = m::mock(Form::class);
-        $form->allows('setData')->andReturnSelf();
-
-        $formService = m::mock();
-        $formService->allows('getForm')->andReturn($form);
-
-        $formServiceManager = m::mock(FormServiceManager::class);
-        $formServiceManager->allows('get')->with('lva-application-financial_evidence')->andReturn($formService);
-
-        $scriptFactory = m::mock(ScriptFactory::class);
-        $scriptFactory->allows('loadFiles');
-
-        $lvaAdapter = m::mock();
-        $lvaAdapter->allows('alterFormForLva');
-        $lvaAdapter->allows('getData')->andReturn([
+        $lvaData = [
             'id' => 7,
             'version' => 1,
             'applicationReference' => 'OB1',
             'financialEvidenceUploaded' => null,
             'financialEvidence' => ['requiredFinance' => 7000],
-        ]);
+        ];
+
+        $request = m::mock(Request::class);
+        $request->expects('isPost')->twice()->withNoArgs()->andReturnFalse();
+
+        $form = m::mock(Form::class);
+        $form->expects('setData')->once()->with(FinancialEvidence::mapFromResult($lvaData))->andReturnSelf();
+
+        $formService = m::mock();
+        $formService->expects('getForm')->once()->with($request)->andReturn($form);
+
+        $formServiceManager = m::mock(FormServiceManager::class);
+        $formServiceManager->expects('get')->once()->with('lva-application-financial_evidence')->andReturn($formService);
+
+        $scriptFactory = m::mock(ScriptFactory::class);
+        $scriptFactory->expects('loadFiles')->once()->with(['financial-evidence'])->andReturnNull();
+
+        $lvaAdapter = m::mock();
+        $lvaAdapter->expects('alterFormForLva')->once()->with($form)->andReturnNull();
+        $lvaAdapter->expects('getData')->twice()->with('7')->andReturn($lvaData);
 
         $sut = m::mock(
             AbstractFinancialEvidenceController::class,
@@ -70,11 +73,22 @@ final class AbstractFinancialEvidenceControllerTest extends MockeryTestCase
         (new \ReflectionProperty(AbstractController::class, 'location'))->setValue($sut, $location);
         (new \ReflectionProperty(AbstractController::class, 'lva'))->setValue($sut, 'application');
 
-        $sut->allows('getRequest')->andReturn($request);
-        $sut->allows('getIdentifier')->andReturn('7');
-        $sut->allows('alterFormForLva');
-        $sut->expects('processFiles')->andReturnFalse();
+        $sut->expects('getRequest')->twice()->withNoArgs()->andReturn($request);
+        $sut->expects('getIdentifier')->once()->withNoArgs()->andReturn('7');
+        $sut->expects('alterFormForLva')->once()->with($form)->andReturnNull();
+        $sut->expects('processFiles')
+            ->once()
+            ->with(
+                $form,
+                'evidence->files',
+                m::type(\Closure::class),
+                m::type(\Closure::class),
+                m::type(\Closure::class),
+                'evidence->uploadedFileCount'
+            )
+            ->andReturnFalse();
         $sut->expects('render')
+            ->once()
             ->with('financial_evidence', $form, m::subset(['location' => $location, 'requiredFinance' => 7000]))
             ->andReturn('VIEW');
 
