@@ -234,8 +234,21 @@ trait DynamicTrait
         }
 
         if (!empty($this->getExclude())) {
-            // exclude unwanted options
-            $this->valueOptions = array_diff_key($this->valueOptions, array_flip($this->getExclude()));
+            // exclude unwanted options, including those inside option groups
+            $exclude = array_flip($this->getExclude());
+            $this->valueOptions = array_diff_key($this->valueOptions, $exclude);
+
+            foreach ($this->valueOptions as $key => $option) {
+                if (is_array($option) && isset($option['options']) && is_array($option['options'])) {
+                    $option['options'] = array_diff_key($option['options'], $exclude);
+
+                    if ($option['options'] === []) {
+                        unset($this->valueOptions[$key]);
+                    } else {
+                        $this->valueOptions[$key] = $option;
+                    }
+                }
+            }
         }
 
         if ($this->otherOption()) {

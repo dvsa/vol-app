@@ -103,6 +103,32 @@ final class DynamicSelectTest extends TestCase
         $this->sut->getValueOptions();
     }
 
+    /**
+     * Grouped options (use_groups) nest the options to exclude a level down; a group left with
+     * none is dropped
+     */
+    public function testGetValueOptionsWithExcludeInGroups(): void
+    {
+        $this->mockRefDataService
+            ->expects($this->once())
+            ->method('fetchListOptions')
+            ->with('category', true)
+            ->willReturn([
+                'B' => ['label' => 'North East', 'options' => [36 => 'Darlington', 193 => 'Tees Valley']],
+                'F' => ['label' => 'East', 'options' => [98 => 'Northamptonshire']],
+            ]);
+
+        $this->sut->setExclude([36, 98]);
+        $this->sut->setDataService($this->mockRefDataService);
+        $this->sut->setContext('category');
+        $this->sut->setUseGroups(true);
+
+        $this->assertEquals(
+            ['B' => ['label' => 'North East', 'options' => [193 => 'Tees Valley']]],
+            $this->sut->getValueOptions()
+        );
+    }
+
     public function testGetValueOptionsWithEmptyOption(): void
     {
         $this->mockRefDataService

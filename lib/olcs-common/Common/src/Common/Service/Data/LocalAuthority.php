@@ -26,7 +26,7 @@ class LocalAuthority extends AbstractDataService implements ListData
         $optionData = [];
 
         foreach ($data as $datum) {
-            $optionData[$datum['id']] = $datum['description'];
+            $optionData[$datum['id']] = $this->label($datum);
         }
 
         return $optionData;
@@ -53,10 +53,19 @@ class LocalAuthority extends AbstractDataService implements ListData
                 ];
             }
 
-            $optionData[$taId]['options'][$datum['id']] = $datum['description'];
+            $optionData[$taId]['options'][$datum['id']] = $this->label($datum);
         }
 
         return $optionData;
+    }
+
+    /**
+     * An authority's option label. A replaced authority often keeps the public name of the one
+     * that replaced it, so it is marked to tell the two apart where a list shows both.
+     */
+    private function label(array $datum): string
+    {
+        return empty($datum['isSuperseded']) ? $datum['description'] : $datum['description'] . ' (replaced)';
     }
 
     /**
@@ -84,12 +93,6 @@ class LocalAuthority extends AbstractDataService implements ListData
     }
 
     /**
-     * Fetch list data
-     *
-     * @return array
-     * @throw DataServiceException
-     */
-    /**
      * Ids of the local authorities another authority has replaced, which lists no longer offer
      *
      * @return int[]
@@ -104,6 +107,12 @@ class LocalAuthority extends AbstractDataService implements ListData
         ));
     }
 
+    /**
+     * Fetch list data
+     *
+     * @return array
+     * @throw DataServiceException
+     */
     public function fetchListData()
     {
         /*
