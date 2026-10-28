@@ -100,6 +100,21 @@ class LocalAuthority extends AbstractLocalAuthority
     }
 
     /**
+     * Ids of this authority and of every authority it replaced, however far back: the users a
+     * local authority admin manages. Unlike what users see, this never reaches up to the authority
+     * that replaced this one, or across to the other councils it replaced.
+     *
+     * @return int[]
+     */
+    public function getIdsIncludingPredecessors(): array
+    {
+        return array_map(
+            static fn (LocalAuthority $authority) => $authority->getId(),
+            $this->getAuthoritiesIncludingPredecessors()
+        );
+    }
+
+    /**
      * Ids of the records this authority's users see: the authority that stands for it now and
      * every authority that one replaced, since older registrations stay linked to the authority
      * they were made with. A user can still be attached to a council that has been replaced;

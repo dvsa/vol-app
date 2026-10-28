@@ -78,7 +78,7 @@ final class ManageUserSelfserveTest extends MockeryTestCase
     ): void {
         $currentUser = m::mock(User::class);
         $currentUser->shouldReceive('getUserType')->andReturn($currentUserType);
-        $currentUser->shouldReceive('getLocalAuthority->getAuthorityIdsVisibleToUsers')->andReturn($currentUserEntityIds);
+        $currentUser->shouldReceive('getLocalAuthority->getIdsIncludingPredecessors')->andReturn($currentUserEntityIds);
 
         $user = m::mock(User::class);
         $user->shouldReceive('getUserType')->andReturn($userType);
@@ -102,6 +102,8 @@ final class ManageUserSelfserveTest extends MockeryTestCase
         yield [false, User::USER_TYPE_LOCAL_AUTHORITY, [123], User::USER_TYPE_LOCAL_AUTHORITY, 123, false];
         // a user still attached to a council the admin's authority replaced
         yield [true, User::USER_TYPE_LOCAL_AUTHORITY, [193, 36], User::USER_TYPE_LOCAL_AUTHORITY, 36, true];
+        // an admin on a replaced council manages only its own users, not the combined authority's
+        yield [true, User::USER_TYPE_LOCAL_AUTHORITY, [36], User::USER_TYPE_LOCAL_AUTHORITY, 193, false];
     }
 
     public function testAssertForOperatorTm(): void

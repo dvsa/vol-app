@@ -136,6 +136,24 @@ final class LocalAuthorityEntityTest extends EntityTester
         $this->assertSame([75], $kent->getAuthorityIdsVisibleToUsers());
     }
 
+    /**
+     * The users an admin manages: never up to the authority that replaced theirs, or across to
+     * the other councils it replaced
+     */
+    public function testIdsIncludingPredecessors(): void
+    {
+        $teesValley = $this->authority('TeesValleyCA', 193);
+        $darlington = $this->authority('Darlington', 36);
+        $stockton = $this->authority('StocktonOnTees', 168);
+        foreach ([$darlington, $stockton] as $council) {
+            $council->addSuccessors($teesValley);
+            $teesValley->addPredecessors($council);
+        }
+
+        $this->assertSame([193, 36, 168], $teesValley->getIdsIncludingPredecessors());
+        $this->assertSame([36], $darlington->getIdsIncludingPredecessors());
+    }
+
     public function testUsersIncludingPredecessors(): void
     {
         $teesValley = $this->authority('TeesValleyCA', 193);

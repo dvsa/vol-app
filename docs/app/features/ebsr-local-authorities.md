@@ -50,9 +50,10 @@ same authority and pass.
 
 - **Local authority users** see TXC inbox items, documents and registrations for the authority
   that stands for theirs now and every authority that one replaced
-  (`LocalAuthority::getAuthorityIdsVisibleToUsers()`), and a local authority admin manages the
-  users of all of them. A user can stay attached to a replaced council's row: they work for the
-  authority that replaced it. The inbox lists an older registration once even when it was
+  (`LocalAuthority::getAuthorityIdsVisibleToUsers()`). A user can stay attached to a replaced
+  council's row: they work for the authority that replaced it. A local authority admin manages the
+  users of their own authority and of those it replaced (`getIdsIncludingPredecessors()`), never
+  those of the authority that replaced theirs or of its other councils. The inbox lists an older registration once even when it was
   circulated to several of those councils.
 - **Emails** about a registration (`SendBSRNotificationToLTAs`, the EBSR emails) go to its
   authorities and to the authorities that replaced them, each address once, and copy the users of

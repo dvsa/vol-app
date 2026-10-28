@@ -57,13 +57,13 @@ class ManageUserSelfserve implements AssertionInterface
             && ($currentUser->getUserType() === $context->getUserType())
             && in_array(
                 $context->getLocalAuthority()->getId(),
-                $currentUser->getLocalAuthority()->getAuthorityIdsVisibleToUsers(),
+                $currentUser->getLocalAuthority()->getIdsIncludingPredecessors(),
                 true
             )
         ) {
             // has related admin permission
             // and manages the same type of user
-            // and is linked to the same authority, or one it replaced (or the one that replaced it)
+            // and is linked to the same authority, or one it replaced
             return true;
         }
 

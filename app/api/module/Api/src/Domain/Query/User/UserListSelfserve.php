@@ -40,7 +40,7 @@ final class UserListSelfserve extends AbstractQuery implements PagedQueryInterfa
     protected $partnerContactDetails = null;
 
     /**
-     * @return int|int[] an id, or a local authority's id with those of the authorities it covers
+     * @return int|int[] an id, or a local authority's id with those of the authorities it replaced
      */
     public function getLocalAuthority()
     {
