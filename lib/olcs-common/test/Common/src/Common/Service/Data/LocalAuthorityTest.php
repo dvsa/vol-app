@@ -25,6 +25,24 @@ final class LocalAuthorityTest extends AbstractDataServiceTestCase
         $this->sut = new LocalAuthority($this->abstractDataServiceServices);
     }
 
+    public function testFetchSupersededIds(): void
+    {
+        $this->sut->setData('LocalAuthority', [
+            ['id' => '36', 'description' => 'Darlington', 'isSuperseded' => true],
+            ['id' => '193', 'description' => 'Tees Valley', 'isSuperseded' => false],
+            ['id' => '5', 'description' => 'Anglesey'],
+        ]);
+
+        $this->assertSame([36], $this->sut->fetchSupersededIds());
+    }
+
+    public function testFetchSupersededIdsWithNoData(): void
+    {
+        $this->sut->setData('LocalAuthority', false);
+
+        $this->assertSame([], $this->sut->fetchSupersededIds());
+    }
+
     public function testFormatData(): void
     {
         $source = self::getSingleSource();

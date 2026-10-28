@@ -150,8 +150,19 @@ class BusDetailsController extends AbstractInternalController implements
      */
     protected function alterForm($form, $formData)
     {
-        $busReg = $this->getBusReg();
+        return $this->alterFormForBusReg($form, $this->getBusReg());
+    }
 
+    /**
+     * Alter form for the bus registration it shows
+     *
+     * @param \Common\Form\Form $form   Form
+     * @param array             $busReg Bus registration
+     *
+     * @return \Common\Form\Form
+     */
+    private function alterFormForBusReg($form, array $busReg)
+    {
         if ($busReg['isReadOnly']) {
             // If read only show read only form
             $form->setOption('readonly', true);
@@ -183,7 +194,21 @@ class BusDetailsController extends AbstractInternalController implements
      */
     protected function alterFormForTa($form, $formData)
     {
-        return $this->alterForm($form, $formData);
+        $busReg = $this->getBusReg();
+
+        // Offer only current local authorities, keeping any replaced one this registration already has
+        /** @var \Common\Form\Element\DynamicSelect $localAuthorities */
+        $localAuthorities = $form->get('fields')->get('localAuthoritys');
+        $localAuthorities->setExclude(
+            array_values(
+                array_diff(
+                    $localAuthorities->getDataService()->fetchSupersededIds(),
+                    array_column($busReg['localAuthoritys'] ?? [], 'id')
+                )
+            )
+        );
+
+        return $this->alterFormForBusReg($form, $busReg);
     }
 
     /**

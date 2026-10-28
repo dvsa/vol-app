@@ -57,10 +57,43 @@ final class BusDetailsControllerTest extends MockeryTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('alterFormProvider')]
     public function testAlterFormForTa(mixed $data, mixed $readonly): void
     {
+        $data['localAuthoritys'] = [];
         $mockForm = $this->getAlterFormAssertions($data, $readonly);
+        $this->expectLocalAuthoritiesExcluded($mockForm, [36, 98], [36, 98]);
+
         $result = $this->sut->alterFormForTa($mockForm, []);
 
         $this->assertSame($mockForm, $result);
+    }
+
+    /**
+     * Authorities that have been replaced are not offered, except those the registration already
+     * has: leaving one out would drop it from the registration when the form is saved
+     */
+    public function testAlterFormForTaKeepsReplacedAuthoritiesTheRegistrationHas(): void
+    {
+        $mockForm = $this->getAlterFormAssertions(
+            ['isReadOnly' => false, 'localAuthoritys' => [['id' => 36], ['id' => 5]]],
+            false
+        );
+        $this->expectLocalAuthoritiesExcluded($mockForm, [36, 62, 98], [62, 98]);
+
+        $this->assertSame($mockForm, $this->sut->alterFormForTa($mockForm, []));
+    }
+
+    private function expectLocalAuthoritiesExcluded(m\MockInterface $mockForm, array $supersededIds, array $excluded): void
+    {
+        $dataService = m::mock(\Common\Service\Data\LocalAuthority::class);
+        $dataService->expects('fetchSupersededIds')->withNoArgs()->andReturn($supersededIds);
+
+        $localAuthorities = m::mock(\Common\Form\Element\DynamicSelect::class);
+        $localAuthorities->expects('getDataService')->withNoArgs()->andReturn($dataService);
+        $localAuthorities->expects('setExclude')->with($excluded)->andReturnSelf();
+
+        $fields = m::mock(\Laminas\Form\Fieldset::class);
+        $fields->expects('get')->with('localAuthoritys')->andReturn($localAuthorities);
+
+        $mockForm->expects('get')->with('fields')->andReturn($fields);
     }
 
     /**

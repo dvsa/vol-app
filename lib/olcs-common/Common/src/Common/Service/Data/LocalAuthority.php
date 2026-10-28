@@ -89,6 +89,21 @@ class LocalAuthority extends AbstractDataService implements ListData
      * @return array
      * @throw DataServiceException
      */
+    /**
+     * Ids of the local authorities another authority has replaced, which lists no longer offer
+     *
+     * @return int[]
+     */
+    public function fetchSupersededIds(): array
+    {
+        $data = $this->fetchListData() ?: [];
+
+        return array_values(array_map(
+            static fn (array $authority) => (int) $authority['id'],
+            array_filter($data, static fn (array $authority) => !empty($authority['isSuperseded']))
+        ));
+    }
+
     public function fetchListData()
     {
         /*
