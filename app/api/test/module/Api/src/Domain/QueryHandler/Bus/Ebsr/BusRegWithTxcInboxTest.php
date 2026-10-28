@@ -166,7 +166,7 @@ final class BusRegWithTxcInboxTest extends QueryHandlerTestCase
         $mockResult->setLicence($licence);
 
         $this->repoMap['Bus']->shouldReceive('fetchWithTxcInboxListForLocalAuthority')
-            ->with($query, $localAuthorityId)
+            ->with($query, [$localAuthorityId])
             ->andReturn($mockResult);
 
         $this->sut->handleQuery($query);
@@ -239,7 +239,7 @@ final class BusRegWithTxcInboxTest extends QueryHandlerTestCase
             ->andReturn($this->getCurrentUser(4));
 
         $this->repoMap['Bus']->shouldReceive('fetchWithTxcInboxListForLocalAuthority')
-            ->with($query, 4)
+            ->with($query, [4])
             ->andReturnNull();
 
         $this->repoMap['Bus']->shouldReceive('fetchById')
@@ -268,7 +268,7 @@ final class BusRegWithTxcInboxTest extends QueryHandlerTestCase
             ->andReturn($this->getCurrentUser());
 
         $this->repoMap['Bus']->shouldReceive('fetchWithTxcInboxListForLocalAuthority')
-            ->with($query, 4)
+            ->with($query, [4])
             ->andReturnNull();
 
         $this->repoMap['Bus']->shouldReceive('fetchWithTxcInboxListForOrganisation')

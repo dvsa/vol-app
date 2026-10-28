@@ -65,9 +65,9 @@ final class TxcInboxList extends AbstractQuery implements PagedQueryInterface, O
     }
 
     /**
-     * Gets local authority
+     * Gets local authority: an id, or a local authority's id with those of the authorities it replaced
      *
-     * @return int
+     * @return int|int[]
      */
     public function getLocalAuthority()
     {

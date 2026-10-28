@@ -292,8 +292,9 @@ abstract class SendEbsrAbstract extends AbstractCommandHandler implements EmailA
             //main local authority email address
             $localAuthoritiesCc[] = $localAuth->getEmailAddress();
 
-            //retrieve other local authority users and add their email addresses
-            $localAuthUsers = $localAuth->getUsers();
+            //retrieve other local authority users and add their email addresses, including users
+            //still attached to an authority this one replaced
+            $localAuthUsers = $localAuth->getUsersIncludingPredecessors();
 
             /** @var UserEntity $user */
             foreach ($localAuthUsers as $user) {

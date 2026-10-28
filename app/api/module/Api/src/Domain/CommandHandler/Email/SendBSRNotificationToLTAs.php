@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Domain\EmailAwareInterface;
 use Dvsa\Olcs\Api\Domain\Exception\MissingEmailException;
 use Dvsa\Olcs\Api\Domain\Repository\Bus;
 use Dvsa\Olcs\Api\Entity\Bus\BusReg;
+use Dvsa\Olcs\Api\Entity\Bus\LocalAuthority;
 use Dvsa\Olcs\Api\Entity\System\Category;
 
 final class SendBSRNotificationToLTAs extends AbstractEmailHandler implements EmailAwareInterface, AuthAwareInterface
@@ -37,7 +38,8 @@ final class SendBSRNotificationToLTAs extends AbstractEmailHandler implements Em
 
         $emailValidator = new \Laminas\Validator\EmailAddress();
 
-        foreach ($recordObject->getLocalAuthoritys() as $lta) {
+        // An older registration can still be linked to an authority that has since been replaced
+        foreach (LocalAuthority::currentAuthoritiesOf($recordObject->getLocalAuthoritys()) as $lta) {
             $email = $lta->getEmailAddress();
 
             if ($emailValidator->isValid($email)) {

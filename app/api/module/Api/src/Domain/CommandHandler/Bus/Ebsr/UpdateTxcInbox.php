@@ -52,7 +52,7 @@ final class UpdateTxcInbox extends AbstractCommandHandler implements Transaction
 
         $txcInboxRecords = $this->getRepo()->fetchByIdsForLocalAuthority(
             $command->getIds(),
-            $localAuthority->getId(),
+            $localAuthority->getAuthorityIdsVisibleToUsers(),
             Query::HYDRATE_OBJECT
         );
 

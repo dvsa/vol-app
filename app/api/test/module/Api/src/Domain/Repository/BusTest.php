@@ -126,10 +126,11 @@ final class BusTest extends RepositoryTestCase
             't.localAuthority IS NULL AND t.organisation = :organisation',
             'organisation',
         ];
+        // A local authority also sees the rows of the authorities it replaced.
         yield 'a local authority' => [
             'fetchWithTxcInboxListForLocalAuthority',
-            3,
-            't.localAuthority = :localAuthority',
+            [193, 36],
+            't.localAuthority IN(:localAuthority)',
             'localAuthority',
         ];
         // No local authority falls back to the same unowned rows an operator sees.

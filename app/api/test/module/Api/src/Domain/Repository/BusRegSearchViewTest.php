@@ -90,7 +90,8 @@ final class BusRegSearchViewTest extends RepositoryTestCase
     }
 
     /**
-     * A local authority filter only applies when there is no organisation.
+     * A local authority filter only applies when there is no organisation. It covers the
+     * authorities that local authority replaced, whose registrations stay linked to them.
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('provideContexts')]
     public function testFetchDistinctListWithLocalAuthorityId(string $context, string $expectedSelect): void
@@ -100,13 +101,13 @@ final class BusRegSearchViewTest extends RepositoryTestCase
         $query = m::mock(QueryInterface::class);
         $query->shouldReceive('getContext')->andReturn($context);
 
-        $this->assertSame(['RESULTS'], $this->sut->fetchDistinctList($query, null, 1));
+        $this->assertSame(['RESULTS'], $this->sut->fetchDistinctList($query, null, [193, 36]));
 
         $this->assertSame(
-            'SELECT DISTINCT ' . $expectedSelect . self::FROM . ' WHERE m.localAuthorityId = :localAuthorityId',
+            'SELECT DISTINCT ' . $expectedSelect . self::FROM . ' WHERE m.localAuthorityId IN(:localAuthorityId)',
             $qb->getDQL(),
         );
-        $this->assertSame(1, $qb->getParameter('localAuthorityId')->getValue());
+        $this->assertSame([193, 36], $qb->getParameter('localAuthorityId')->getValue());
     }
 
     public static function provideContexts(): \Iterator

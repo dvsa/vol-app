@@ -47,7 +47,8 @@ class BusRegSearchViewList extends AbstractQueryHandler
             // fetch for Organisation
             $data['organisationId'] = $this->getCurrentOrganisation()->getId();
         } elseif ($this->isLocalAuthority()) {
-            $data['localAuthorityId'] = $this->getCurrentUser()->getLocalAuthority()->getId();
+            // The authority the user works for and those it replaced, whose registrations stay linked to them
+            $data['localAuthorityId'] = $this->getCurrentUser()->getLocalAuthority()->getAuthorityIdsVisibleToUsers();
         }
 
         // create new query with extra data

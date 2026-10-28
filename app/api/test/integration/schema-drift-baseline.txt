@@ -17,7 +17,7 @@ ALTER TABLE si_penalty_imposed_type CHANGE deleted_date deleted_date DATETIME DE
 ALTER TABLE sla_exception CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE transport_manager CHANGE merge_details merge_details JSON DEFAULT NULL
 
-# ---- inexpressible from mapping (74) ----
+# ---- inexpressible from mapping (75) ----
 # Differences on implicit ManyToMany join tables that no entity change can fix -
 # generated index names, and columns a JoinTable cannot carry. See classify().
 # Recorded and compared like any other statement, but not work anyone can pick up.
@@ -51,6 +51,7 @@ ALTER TABLE irhp_permit_request_attribute RENAME INDEX ix_irhp_permit_request_at
 ALTER TABLE irhp_permit_request_attribute RENAME INDEX ix_irhp_permit_request_att_irhp_permit_request_id TO IDX_701A670F7613AFB4
 ALTER TABLE licence_status_decision RENAME INDEX ix_licence_status_decision_licence_id TO IDX_78887D6626EF07C9
 ALTER TABLE licence_status_decision RENAME INDEX ix_licence_status_decision_reason_id TO IDX_78887D66BDEE7539
+ALTER TABLE local_authority_successor RENAME INDEX ix_local_authority_successor_successor_id TO IDX_5E0BD9B67323E667
 ALTER TABLE oc_complaint DROP olbs_key
 ALTER TABLE oc_complaint RENAME INDEX ix_oc_complaint_complaint_id TO IDX_19143EF1EDAE188E
 ALTER TABLE oc_complaint RENAME INDEX ix_oc_complaint_operating_centre_id TO IDX_19143EF135382CCB

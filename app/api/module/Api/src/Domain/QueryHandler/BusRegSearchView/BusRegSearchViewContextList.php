@@ -47,7 +47,7 @@ class BusRegSearchViewContextList extends AbstractQueryHandler
             // fetch for Organisation
             $organisationId = $this->getCurrentOrganisation()->getId();
         } elseif ($this->isLocalAuthority()) {
-            $localAuthorityId = $this->getCurrentUser()->getLocalAuthority()->getId();
+            $localAuthorityId = $this->getCurrentUser()->getLocalAuthority()->getAuthorityIdsVisibleToUsers();
         }
 
         $results = $repo->fetchDistinctList($query, $organisationId, $localAuthorityId);

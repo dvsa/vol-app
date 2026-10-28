@@ -28,6 +28,7 @@ use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea as TrafficAreaEntity;
 use Dvsa\Olcs\Api\Domain\Repository\TrafficArea as TrafficAreaRepo;
 use Dvsa\Olcs\Api\Entity\Bus\LocalAuthority as LocalAuthorityEntity;
 use Dvsa\Olcs\Api\Domain\Repository\LocalAuthority as LocalAuthorityRepo;
+use Dvsa\Olcs\Api\Service\Ebsr\LocalAuthorityResolver;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Transfer\Command\Document\Upload as UploadCmd;
 use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentLinks as UpdateDocumentLinksCmd;
@@ -534,7 +535,10 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
 
         $ebsrData['subsidised'] = $this->getRepo()->getRefdataReference($ebsrData['subsidised']);
         $ebsrData['naptanAuthorities'] = $this->processNaptan($ebsrData['naptan']);
-        $ebsrData['localAuthoritys'] = $this->processLocalAuthority($ebsrData['localAuthorities']);
+        $ebsrData['localAuthoritys'] = $this->processLocalAuthority(
+            $ebsrData['localAuthorities'],
+            $ebsrData['naptanAuthorities']
+        );
         $ebsrData['trafficAreas'] = $this->processTrafficAreas($ebsrData['trafficAreas'], $ebsrData['localAuthoritys']);
         $ebsrData['busServiceTypes'] = $this->processServiceTypes($ebsrData['serviceClassifications']);
         $ebsrData['busNoticePeriod'] = $this->getRepo()->getReference(
@@ -593,28 +597,26 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
     }
 
     /**
-     * Returns collection of local authorities.
+     * Returns collection of local authorities: the authorities that stand now for those the file
+     * circulates, whether it names them by an old or a new TransXChange name.
      *
-     * @param array $localAuthority array of local authorities
+     * @param array           $localAuthority    array of local authorities
+     * @param ArrayCollection $naptanAuthorities local authorities of the stops, to pick the side of a split
      *
      * @return ArrayCollection
      */
-    protected function processLocalAuthority(array $localAuthority)
+    protected function processLocalAuthority(array $localAuthority, ArrayCollection $naptanAuthorities)
     {
-        $collection = new ArrayCollection();
+        $txcNames = LocalAuthorityResolver::normaliseNames($localAuthority);
 
-        if (!empty($localAuthority)) {
-            /** @var LocalAuthorityRepo $repo */
-            $repo = $this->getRepo('LocalAuthority');
-            $laList = $repo->fetchByTxcName($localAuthority);
-
-            /** @var LocalAuthorityEntity $la */
-            foreach ($laList as $la) {
-                $collection->add($la);
-            }
+        if (empty($txcNames)) {
+            return new ArrayCollection();
         }
 
-        return $collection;
+        /** @var LocalAuthorityRepo $repo */
+        $repo = $this->getRepo('LocalAuthority');
+
+        return (new LocalAuthorityResolver())->resolveCirculated($repo->fetchByTxcName($txcNames), $naptanAuthorities);
     }
 
     /**

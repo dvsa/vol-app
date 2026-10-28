@@ -96,9 +96,9 @@ class TxcInbox extends AbstractRepository
     /**
      * Fetch a group of records by id list and filter by Local authority ID to prevent the need for validation
      *
-     * @param array $ids              list of ids to return
-     * @param int   $localAuthorityId local authority filter
-     * @param int   $hydrateMode      hydrate mode
+     * @param array     $ids              list of ids to return
+     * @param int|int[] $localAuthorityId local authority filter: an id, or a local authority and those it replaced
+     * @param int       $hydrateMode      hydrate mode
      *
      * @return array TxcInbox records
      */
@@ -113,8 +113,8 @@ class TxcInbox extends AbstractRepository
 
         $this->getQueryBuilder()->modifyQuery($qb);
 
-        $qb->andWhere($qb->expr()->eq('m.localAuthority', ':localAuthority'))
-            ->setParameter('localAuthority', $localAuthorityId)
+        $qb->andWhere($qb->expr()->in('m.localAuthority', ':localAuthority'))
+            ->setParameter('localAuthority', (array) $localAuthorityId)
         ->andWhere($qb->expr()->in('m.id', $ids));
 
         return $qb->getQuery()->getResult($hydrateMode);
@@ -154,8 +154,8 @@ class TxcInbox extends AbstractRepository
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if (method_exists($query, 'getLocalAuthority') && !empty($query->getLocalAuthority())) {
-            $qb->andWhere($qb->expr()->eq($this->alias . '.localAuthority', ':localAuthority'))
-                ->setParameter('localAuthority', $query->getLocalAuthority());
+            $qb->andWhere($qb->expr()->in($this->alias . '.localAuthority', ':localAuthority'))
+                ->setParameter('localAuthority', (array) $query->getLocalAuthority());
         }
         if (method_exists($query, 'getStatus') && !empty($query->getStatus())) {
             $qb->andWhere($qb->expr()->eq('b.status', ':status'))

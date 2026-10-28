@@ -43,8 +43,9 @@ final class UpdateTxcInboxTest extends AbstractCommandHandlerTestCase
         $user = m::mock();
         $mockLocalAuthority = m::mock(\Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class)->makePartial();
 
-        $mockLocalAuthority->shouldReceive('getId')
-            ->andReturn($localAuthorityId);
+        $mockLocalAuthority->expects('getAuthorityIdsVisibleToUsers')
+            ->withNoArgs()
+            ->andReturn([$localAuthorityId]);
 
         $user->shouldReceive('getLocalAuthority')
             ->andReturn($mockLocalAuthority);
@@ -68,7 +69,7 @@ final class UpdateTxcInboxTest extends AbstractCommandHandlerTestCase
             ->andReturn($id);
 
         $this->repoMap['TxcInbox']->shouldReceive('fetchByIdsForLocalAuthority')
-            ->with($command->getIds(), $localAuthorityId, Query::HYDRATE_OBJECT)
+            ->with($command->getIds(), [$localAuthorityId], Query::HYDRATE_OBJECT)
             ->andReturn([$txcInbox])
             ->shouldReceive('save')
             ->with(m::type(TxcInboxEntity::class))

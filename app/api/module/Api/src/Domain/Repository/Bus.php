@@ -95,9 +95,9 @@ class Bus extends AbstractRepository
     /**
      * Fetch a list of unread docs filtered by local authority, submission type and status for a given bus reg id
      *
-     * @param QryCmd $query            query
-     * @param int    $localAuthorityId local authority id
-     * @param int    $hydrateMode      doctrine hydrate mode
+     * @param QryCmd    $query            query
+     * @param int|int[] $localAuthorityId local authority id, or a local authority and those it replaced
+     * @param int       $hydrateMode      doctrine hydrate mode
      *
      * @throws Exception\NotFoundException
      * @return Entity
@@ -123,8 +123,8 @@ class Bus extends AbstractRepository
                 $this->alias . '.txcInboxs',
                 't',
                 Join::WITH,
-                $qb->expr()->eq('t.localAuthority', ':localAuthority')
-            )->setParameter('localAuthority', $localAuthorityId);
+                $qb->expr()->in('t.localAuthority', ':localAuthority')
+            )->setParameter('localAuthority', (array) $localAuthorityId);
         }
 
         $results = $qb->getQuery()->getResult($hydrateMode);

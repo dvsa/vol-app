@@ -57,7 +57,10 @@ class BusRegWithTxcInbox extends AbstractQueryHandler
         if (empty($localAuthority) && $organisation instanceof Organisation) {
             $result = $repo->fetchWithTxcInboxListForOrganisation($query, $organisation->getId());
         } elseif (empty($organisation) && $localAuthority instanceof LocalAuthority) {
-            $result = $repo->fetchWithTxcInboxListForLocalAuthority($query, $localAuthority->getId());
+            $result = $repo->fetchWithTxcInboxListForLocalAuthority(
+                $query,
+                $localAuthority->getAuthorityIdsVisibleToUsers()
+            );
         } else {
             $result = $this->getRepo('Bus')->fetchUsingId($query);
             if (empty($result)) {

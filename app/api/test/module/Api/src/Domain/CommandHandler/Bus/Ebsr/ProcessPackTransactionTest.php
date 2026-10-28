@@ -1268,8 +1268,10 @@ final class ProcessPackTransactionTest extends ProcessPackTestCase
     {
         $localAuthority1 = m::mock(LocalAuthorityEntity::class);
         $localAuthority1->shouldReceive('getTrafficArea')->andReturn($firstTa);
+        $localAuthority1->expects('getCurrentAuthorities')->withNoArgs()->andReturn([$localAuthority1]);
         $localAuthority2 = m::mock(LocalAuthorityEntity::class);
         $localAuthority2->shouldReceive('getTrafficArea')->andReturn($secondTa);
+        $localAuthority2->expects('getCurrentAuthorities')->withNoArgs()->andReturn([$localAuthority2]);
 
         $localAuthorities = [
             0 => $localAuthority1,

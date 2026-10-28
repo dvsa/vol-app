@@ -21,9 +21,9 @@ class BusRegSearchViewList extends BusRegSearchViewTransfer
     protected $localAuthorityId;
 
     /**
-     * Get Local Authority Id
+     * Get Local Authority Id: an id, or a local authority's id with those of the authorities it replaced
      *
-     * @return int
+     * @return int|int[]
      */
     public function getLocalAuthorityId()
     {
@@ -33,7 +33,7 @@ class BusRegSearchViewList extends BusRegSearchViewTransfer
     /**
      * Set Local Authority Id
      *
-     * @param int $localAuthorityId Local Authority Id
+     * @param int|int[] $localAuthorityId Local Authority Id(s)
      *
      * @return void
      */

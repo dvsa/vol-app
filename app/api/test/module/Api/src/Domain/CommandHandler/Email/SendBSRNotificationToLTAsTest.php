@@ -1,0 +1,49 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendBSRNotificationToLTAs;
+use Dvsa\Olcs\Api\Entity\Bus\BusReg;
+use Dvsa\Olcs\Api\Entity\Bus\LocalAuthority;
+use PHPUnit\Framework\TestCase;
+
+final class SendBSRNotificationToLTAsTest extends TestCase
+{
+    /**
+     * An older registration stays linked to the councils it was made with; once a council has
+     * been replaced, its notifications go to the authority that replaced it, once
+     */
+    public function testRecipientsAreTheAuthoritiesThatStandForTheRegistrationsAuthoritiesNow(): void
+    {
+        $teesValley = $this->authority('tees.valley@example.com');
+        $darlington = $this->authority('darlington@example.com');
+        $stockton = $this->authority('stockton@example.com');
+        $durham = $this->authority('durham@example.com');
+        $darlington->addSuccessors($teesValley);
+        $stockton->addSuccessors($teesValley);
+
+        $busReg = new BusReg();
+        $busReg->setLocalAuthoritys(new ArrayCollection([$darlington, $stockton, $durham]));
+
+        $this->assertSame(
+            [
+                'to' => 'tees.valley@example.com',
+                'cc' => ['durham@example.com'],
+                'bcc' => [],
+            ],
+            (new \ReflectionMethod(SendBSRNotificationToLTAs::class, 'getRecipients'))
+                ->invoke(new SendBSRNotificationToLTAs(), $busReg)
+        );
+    }
+
+    private function authority(string $emailAddress): LocalAuthority
+    {
+        $authority = new LocalAuthority();
+        $authority->setEmailAddress($emailAddress);
+
+        return $authority;
+    }
+}

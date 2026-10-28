@@ -45,14 +45,21 @@ class LocalAuthorityMissing extends AbstractValidator
 
         $missing = [];
 
+        // An authority that has been replaced is covered by any authority that stands for it now
         foreach ($naptanLocalAuthorities as $naptan) {
-            if (!$localAuthorities->contains($naptan)) {
-                $missing[] = $naptan->getDescription();
+            $current = $naptan->getCurrentAuthorities();
+
+            foreach ($current as $currentAuthority) {
+                if ($localAuthorities->contains($currentAuthority)) {
+                    continue 2;
+                }
             }
+
+            $missing[] = implode(' or ', array_map(static fn (LaEntity $la) => $la->getDescription(), $current));
         }
 
         if (!empty($missing)) {
-            $this->error(self::LA_MISSING_ERROR, implode(', ', $missing));
+            $this->error(self::LA_MISSING_ERROR, implode(', ', array_unique($missing)));
             return false;
         }
 

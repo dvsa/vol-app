@@ -109,18 +109,18 @@ final class TxcInboxTest extends RepositoryTestCase
     {
         $qb = $this->createRealQb();
 
-        $query = TxcInboxList::create(['localAuthority' => 3, 'subType' => 'bar', 'status' => 'foo']);
+        $query = TxcInboxList::create(['localAuthority' => [193, 36], 'subType' => 'bar', 'status' => 'foo']);
 
         $this->sut->applyListFilters($qb, $query);
 
         $this->assertSame(
             'SELECT m' . self::FROM
-            . ' WHERE m.localAuthority = :localAuthority AND b.status = :status'
+            . ' WHERE m.localAuthority IN(:localAuthority) AND b.status = :status'
             . ' AND e.ebsrSubmissionType = :ebsrSubmissionType'
             . ' AND m.fileRead = 0',
             $qb->getDQL(),
         );
-        $this->assertSame(3, $qb->getParameter('localAuthority')->getValue());
+        $this->assertSame([193, 36], $qb->getParameter('localAuthority')->getValue());
         $this->assertSame('foo', $qb->getParameter('status')->getValue());
         $this->assertSame('bar', $qb->getParameter('ebsrSubmissionType')->getValue());
     }
@@ -145,15 +145,15 @@ final class TxcInboxTest extends RepositoryTestCase
         $qb = $this->createRealQb();
         $qb->stubbedQuery()->expects('getResult')->with(Query::HYDRATE_OBJECT)->andReturn(['RESULTS']);
 
-        $this->assertSame(['RESULTS'], $this->sut->fetchByIdsForLocalAuthority([1, 2], 3));
+        $this->assertSame(['RESULTS'], $this->sut->fetchByIdsForLocalAuthority([1, 2], [193, 36]));
 
-        // The ids are inlined into the IN() rather than bound.
+        // The inbox ids are inlined into the IN() rather than bound; the authority ids are bound.
         $this->assertSame(
             'SELECT m' . self::FROM
-            . ' WHERE m.localAuthority = :localAuthority AND m.id IN(1, 2)',
+            . ' WHERE m.localAuthority IN(:localAuthority) AND m.id IN(1, 2)',
             $qb->getDQL(),
         );
-        $this->assertSame(3, $qb->getParameter('localAuthority')->getValue());
+        $this->assertSame([193, 36], $qb->getParameter('localAuthority')->getValue());
     }
 
     public function testFetchByIdsForLocalAuthorityWithNoIds(): void

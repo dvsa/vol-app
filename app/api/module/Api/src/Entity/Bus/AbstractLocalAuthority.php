@@ -125,6 +125,25 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     protected $busRegs;
 
     /**
+     * Successors
+     *
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority>
+     */
+    #[ORM\JoinTable(name: 'local_authority_successor')]
+    #[ORM\JoinColumn(name: 'predecessor_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'successor_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, inversedBy: 'predecessors', fetch: 'LAZY')]
+    protected $successors;
+
+    /**
+     * Predecessors
+     *
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority>
+     */
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, mappedBy: 'successors', fetch: 'LAZY')]
+    protected $predecessors;
+
+    /**
      * Users
      *
      * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\User\User>
@@ -146,6 +165,8 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     public function initCollections(): void
     {
         $this->busRegs = new ArrayCollection();
+        $this->successors = new ArrayCollection();
+        $this->predecessors = new ArrayCollection();
         $this->users = new ArrayCollection();
     }
 
@@ -424,6 +445,132 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     {
         if ($this->busRegs->contains($busRegs)) {
             $this->busRegs->removeElement($busRegs);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the successors
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $successors collection being set as the value
+     *
+     * @return static
+     */
+    public function setSuccessors($successors)
+    {
+        $this->successors = $successors;
+
+        return $this;
+    }
+
+    /**
+     * Get the successors
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getSuccessors()
+    {
+        return $this->successors;
+    }
+
+    /**
+     * Add a successors
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $successors collection being added
+     *
+     * @return static
+     */
+    public function addSuccessors($successors)
+    {
+        if ($successors instanceof ArrayCollection) {
+            $this->successors = new ArrayCollection(
+                array_merge(
+                    $this->successors->toArray(),
+                    $successors->toArray()
+                )
+            );
+        } elseif (!$this->successors->contains($successors)) {
+            $this->successors->add($successors);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a successors
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $successors collection being removed
+     *
+     * @return static
+     */
+    public function removeSuccessors($successors)
+    {
+        if ($this->successors->contains($successors)) {
+            $this->successors->removeElement($successors);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the predecessors
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $predecessors collection being set as the value
+     *
+     * @return static
+     */
+    public function setPredecessors($predecessors)
+    {
+        $this->predecessors = $predecessors;
+
+        return $this;
+    }
+
+    /**
+     * Get the predecessors
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getPredecessors()
+    {
+        return $this->predecessors;
+    }
+
+    /**
+     * Add a predecessors
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $predecessors collection being added
+     *
+     * @return static
+     */
+    public function addPredecessors($predecessors)
+    {
+        if ($predecessors instanceof ArrayCollection) {
+            $this->predecessors = new ArrayCollection(
+                array_merge(
+                    $this->predecessors->toArray(),
+                    $predecessors->toArray()
+                )
+            );
+        } elseif (!$this->predecessors->contains($predecessors)) {
+            $this->predecessors->add($predecessors);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a predecessors
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $predecessors collection being removed
+     *
+     * @return static
+     */
+    public function removePredecessors($predecessors)
+    {
+        if ($this->predecessors->contains($predecessors)) {
+            $this->predecessors->removeElement($predecessors);
         }
 
         return $this;

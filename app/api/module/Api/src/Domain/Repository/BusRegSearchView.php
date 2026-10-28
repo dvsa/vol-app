@@ -78,8 +78,8 @@ class BusRegSearchView extends AbstractRepository
             $qb->andWhere($qb->expr()->eq($this->alias . '.organisationId', ':organisationId'))
                 ->setParameter('organisationId', $query->getOrganisationId());
         } elseif (method_exists($query, 'getLocalAuthorityId') && !empty($query->getLocalAuthorityId())) {
-            $qb->andWhere($qb->expr()->eq($this->alias . '.localAuthorityId', ':localAuthorityId'))
-                ->setParameter('localAuthorityId', $query->getLocalAuthorityId());
+            $qb->andWhere($qb->expr()->in($this->alias . '.localAuthorityId', ':localAuthorityId'))
+                ->setParameter('localAuthorityId', (array) $query->getLocalAuthorityId());
         }
 
         // this is required for filtering from BusReg home page
@@ -124,7 +124,7 @@ class BusRegSearchView extends AbstractRepository
      * For example context = 'organisation' returns all unique organisation IDs and names
      *
      * @param   null            $organisationId
-     * @param   null            $localAuthorityId
+     * @param   int|int[]|null  $localAuthorityId a local authority, or a local authority and those it replaced
      * @return array
      */
     public function fetchDistinctList(
@@ -140,8 +140,8 @@ class BusRegSearchView extends AbstractRepository
             $qb->andWhere($qb->expr()->eq($this->alias . '.organisationId', ':organisationId'))
                 ->setParameter('organisationId', $organisationId);
         } elseif (!empty($localAuthorityId)) {
-            $qb->andWhere($qb->expr()->eq($this->alias . '.localAuthorityId', ':localAuthorityId'))
-                ->setParameter('localAuthorityId', $localAuthorityId);
+            $qb->andWhere($qb->expr()->in($this->alias . '.localAuthorityId', ':localAuthorityId'))
+                ->setParameter('localAuthorityId', (array) $localAuthorityId);
         }
 
         switch ($query->getContext()) {

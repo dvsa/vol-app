@@ -137,7 +137,7 @@ final class BusRegSearchViewContextListTest extends QueryHandlerTestCase
         $this->repoMap['BusRegSearchView']
             ->shouldReceive('fetchDistinctList')
             ->once()
-            ->with($query, $organisationId, $localAuthorityId)
+            ->with($query, $organisationId, [$localAuthorityId])
             ->andReturn([$mockRecord]);
 
         $expected = [

@@ -14,8 +14,11 @@ use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Service\Ebsr\InputFilter\BusRegistrationInputFactory;
 use Dvsa\Olcs\Api\Service\Ebsr\InputFilter\XmlStructureInputFactory;
+use Dvsa\Olcs\Api\Service\Ebsr\LocalAuthorityResolver;
+use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\ProcessedData\LocalAuthorityMissing;
 use Dvsa\Olcs\Api\Service\Ebsr\Mapping\TransExchangeXmlFactory;
 use Dvsa\Olcs\Api\Service\InputFilter\Input;
+use Dvsa\OlcsTest\Api\Service\Ebsr\LocalAuthorityDirectory;
 use Laminas\Filter\FilterPluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ArrayUtils;
@@ -113,7 +116,7 @@ final class TransXChangeExamplesTest extends TestCase
         $this->assertSame([], $xmlStructureInput->getMessages());
 
         $document = $xmlStructureInput->getValue();
-        $this->moveOperatingPeriodIntoFuture($document);
+        $busRegistration = $this->readBusRegistration($document);
 
         $xpath = new DOMXPath($document);
         $xpath->registerNamespace('txc', self::TXC_NAMESPACE);
@@ -121,28 +124,12 @@ final class TransXChangeExamplesTest extends TestCase
         $licNo = $xpath->evaluate('string(//txc:LicensedOperator/txc:LicenceNumber)');
         $txcAppType = $xpath->evaluate('string(//txc:Registration/txc:ApplicationClassification)');
 
-        $busRegistrationInput = (new BusRegistrationInputFactory())($this->container, Input::class);
-        $busRegistrationInput->setValue($document);
-
-        $context = [
-            'submissionType' => $txcAppType === 'nonChargeableChange'
-                ? EbsrSubmission::DATA_REFRESH_SUBMISSION_TYPE
-                : EbsrSubmission::NEW_SUBMISSION_TYPE,
-            'organisation' => $this->organisationWithLicence($licNo),
-        ];
-
-        $this->assertTrue(
-            $busRegistrationInput->isValid($context),
-            implode("\n", $busRegistrationInput->getMessages())
-        );
-
         $authorityNames = [];
 
         foreach ($xpath->query('//txc:CirculatedAuthority/txc:AuthorityName') as $authorityName) {
             $authorityNames[] = $authorityName->nodeValue;
         }
 
-        $busRegistration = $busRegistrationInput->getValue();
         $this->assertSame($licNo, $busRegistration['licNo']);
         $this->assertSame($txcAppType, $busRegistration['txcAppType']);
         $this->assertSame($authorityNames, $busRegistration['localAuthorities']);
@@ -151,6 +138,63 @@ final class TransXChangeExamplesTest extends TestCase
     public static function provideAcceptedExample(): array
     {
         return array_diff_key(self::provideExample(), self::EXPECTED_REJECTIONS);
+    }
+
+    /**
+     * A real registration file with its circulated authorities and stops rewritten, read the way
+     * EBSR reads it, then resolved against old authority records linked to their successors
+     *
+     * @param string[] $authorityNames the file's CirculatedAuthorities
+     * @param string[] $expected txc names of the authorities the registration is attached to
+     */
+    #[DataProvider('provideRewrittenAuthorities')]
+    public function testCirculatedAuthoritiesResolveFromTheFile(
+        array $authorityNames,
+        string $stopCode,
+        array $expected,
+        bool $valid
+    ): void {
+        $document = new DOMDocument();
+        $document->load(self::apiDir() . self::EXAMPLES_DIR . '/linear/linear.xml');
+        $this->rewriteAuthoritiesAndStops($document, $authorityNames, $stopCode);
+
+        $xmlStructureInput = $this->validateXml($document->saveXML());
+        $this->assertSame([], $xmlStructureInput->getMessages());
+
+        $busRegistration = $this->readBusRegistration($xmlStructureInput->getValue());
+        $this->assertSame([$stopCode => $stopCode], $busRegistration['naptan']);
+
+        $directory = LocalAuthorityDirectory::withDefaultAuthorities();
+        $fromStops = $directory->findByNaptanCodes($busRegistration['naptan']);
+        $circulated = (new LocalAuthorityResolver())->resolveCirculated(
+            $directory->findByTxcNames(LocalAuthorityResolver::normaliseNames($busRegistration['localAuthorities'])),
+            $fromStops
+        );
+
+        $this->assertSame(
+            $expected,
+            array_map(static fn ($authority) => $authority->getTxcName(), $circulated->getValues())
+        );
+        $this->assertSame(
+            $valid,
+            (new LocalAuthorityMissing())->isValid([
+                'localAuthoritys' => $circulated,
+                'naptanAuthorities' => new ArrayCollection($fromStops),
+            ])
+        );
+    }
+
+    public static function provideRewrittenAuthorities(): array
+    {
+        return [
+            'name only valid in 2.5.2, with the old stop code' => [['GreaterManchesterMCA'], '180', ['GreaterManchesterMCA'], true],
+            'deprecated name with its old stop code' => [['Darlington'], '076', ['TeesValleyCA'], true],
+            'old and new names for the same authority' => [['TeesValleyCA', 'Darlington'], '077', ['TeesValleyCA'], true],
+            'old split name, stops renumbered to the new code' => [['Northamptonshire'], '305', ['NorthNorthamptonshire'], true],
+            'new split name that misses the stops' => [['WestNorthamptonshire'], '305', ['WestNorthamptonshire'], false],
+            'name padded with whitespace' => [[' Leicestershire '], '260', ['Leicestershire'], true],
+            'stops in an authority not circulated' => [['Kent'], '076', ['Kent'], false],
+        ];
     }
 
     #[DataProvider('provideRejectedExample')]
@@ -207,7 +251,11 @@ final class TransXChangeExamplesTest extends TestCase
      */
     private function validateXmlStructure(string $example, bool $expectValid = true): Input
     {
-        $xml = file_get_contents($example);
+        return $this->validateXml(file_get_contents($example), $expectValid);
+    }
+
+    private function validateXml(string $xml, bool $expectValid = true): Input
+    {
         $files = ['example.xml' => $xml];
 
         $document = new DOMDocument();
@@ -225,7 +273,11 @@ final class TransXChangeExamplesTest extends TestCase
         $input = (new XmlStructureInputFactory())($this->container, Input::class);
         $input->setValue($xmlFilename);
 
-        $this->assertSame($expectValid, $input->isValid(['xml_filename' => $xmlFilename]));
+        $this->assertSame(
+            $expectValid,
+            $input->isValid(['xml_filename' => $xmlFilename]),
+            implode("\n", $input->getMessages())
+        );
 
         return $input;
     }
@@ -234,6 +286,67 @@ final class TransXChangeExamplesTest extends TestCase
      * The examples' services started years ago, and a new application must not start in the past. Moves the
      * operating period so it starts 60 days from now, keeping its length
      */
+    /**
+     * Runs the bus registration checks and mapping over a valid document, as EBSR does
+     */
+    private function readBusRegistration(DOMDocument $document): array
+    {
+        $this->moveOperatingPeriodIntoFuture($document);
+
+        $xpath = new DOMXPath($document);
+        $xpath->registerNamespace('txc', self::TXC_NAMESPACE);
+
+        $licNo = $xpath->evaluate('string(//txc:LicensedOperator/txc:LicenceNumber)');
+        $txcAppType = $xpath->evaluate('string(//txc:Registration/txc:ApplicationClassification)');
+
+        $busRegistrationInput = (new BusRegistrationInputFactory())($this->container, Input::class);
+        $busRegistrationInput->setValue($document);
+
+        $context = [
+            'submissionType' => $txcAppType === 'nonChargeableChange'
+                ? EbsrSubmission::DATA_REFRESH_SUBMISSION_TYPE
+                : EbsrSubmission::NEW_SUBMISSION_TYPE,
+            'organisation' => $this->organisationWithLicence($licNo),
+        ];
+
+        $this->assertTrue(
+            $busRegistrationInput->isValid($context),
+            implode("\n", $busRegistrationInput->getMessages())
+        );
+
+        return $busRegistrationInput->getValue();
+    }
+
+    /**
+     * Replaces the circulated authorities with the given names, and moves every stop (referenced
+     * or defined) to the given ATCO area code, the first three characters of its code
+     *
+     * @param string[] $authorityNames
+     */
+    private function rewriteAuthoritiesAndStops(DOMDocument $document, array $authorityNames, string $stopCode): void
+    {
+        $xpath = new DOMXPath($document);
+        $xpath->registerNamespace('txc', self::TXC_NAMESPACE);
+
+        $circulatedAuthorities = $xpath->query('//txc:Registration/txc:CirculatedAuthorities')->item(0);
+
+        while ($circulatedAuthorities->firstChild !== null) {
+            $circulatedAuthorities->removeChild($circulatedAuthorities->firstChild);
+        }
+
+        foreach ($authorityNames as $authorityName) {
+            $circulatedAuthority = $document->createElementNS(self::TXC_NAMESPACE, 'CirculatedAuthority');
+            $circulatedAuthority->appendChild(
+                $document->createElementNS(self::TXC_NAMESPACE, 'AuthorityName', $authorityName)
+            );
+            $circulatedAuthorities->appendChild($circulatedAuthority);
+        }
+
+        foreach ($xpath->query('//txc:StopPointRef | //txc:StopPoint/txc:AtcoCode') as $stopCodeNode) {
+            $stopCodeNode->nodeValue = $stopCode . substr($stopCodeNode->nodeValue, 3);
+        }
+    }
+
     private function moveOperatingPeriodIntoFuture(DOMDocument $document): void
     {
         $xpath = new DOMXPath($document);

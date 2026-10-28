@@ -29,6 +29,12 @@ Skips cleanly if the database is unreachable. Connection overrides:
   `SchemaComparisonTest`, which needs no database
 - `src/Repository/` — real-DQL smoke tests (the VOL-7445 `toIterable()` export
   paths and friends)
+- `src/Ebsr/LocalAuthorityResolutionTest.php` — every TransXChange authority
+  name in the bundled schemas, and every NaPTAN ATCO area code
+  (`naptan-atco-area-codes.txt`), resolved through `local_authority_successor`
+  to the authority that is current now, against
+  `local-authority-resolution-baseline.txt` (regenerate:
+  `REGENERATE_LOCAL_AUTHORITY_BASELINE=1 vendor/bin/phpunit -c phpunit-integration.xml --filter LocalAuthorityResolutionTest`)
 
 The baseline is grouped under two headings carrying a count. Grouping is
 presentational — every statement is compared, and headings are comments the

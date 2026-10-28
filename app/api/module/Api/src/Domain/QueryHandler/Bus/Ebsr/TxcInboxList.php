@@ -38,7 +38,8 @@ class TxcInboxList extends AbstractQueryHandler
         // get data from transfer query
         $data = $query->getArrayCopy();
 
-        $data['localAuthority'] = $this->getCurrentUser()->getLocalAuthority()->getId();
+        // The authority the user works for and those it replaced, whose inbox rows stay linked to them
+        $data['localAuthority'] = $this->getCurrentUser()->getLocalAuthority()->getAuthorityIdsVisibleToUsers();
 
         $listDto = ListDto::create($data);
 

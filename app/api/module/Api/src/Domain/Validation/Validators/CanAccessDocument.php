@@ -50,12 +50,16 @@ class CanAccessDocument extends AbstractCanAccessEntity
             return false;
         }
 
-        $localAuthorityUser = $this->getCurrentLocalAuthority();
+        // A local authority can see what was sent to the authorities it replaced
+        $localAuthorityIds = $this->getCurrentLocalAuthority()->getAuthorityIdsVisibleToUsers();
 
         foreach ($txcEntities as $txcEntity) {
             $txcLocalAuthority = $txcEntity->getLocalAuthority();
 
-            if ($txcLocalAuthority instanceof Entity\Bus\LocalAuthority && $txcLocalAuthority->getId() === $localAuthorityUser->getId()) {
+            if (
+                $txcLocalAuthority instanceof Entity\Bus\LocalAuthority
+                && in_array($txcLocalAuthority->getId(), $localAuthorityIds, true)
+            ) {
                 return true;
             }
         }
