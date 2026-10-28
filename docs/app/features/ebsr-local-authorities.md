@@ -41,17 +41,27 @@ now. During EBSR processing (`AbstractProcessPack`, `LocalAuthorityResolver`):
 So an old name with an old code, a new name with an old code, or a mixture of both all reach the
 same authority and pass.
 
+- **Traffic areas** come from the councils involved, not from the authority that now stands for
+  them: a combined authority has one traffic area but can cover councils in several. A council
+  the file names gives its own; a current authority the file names gives those of the councils its
+  stops are in, or its own when none of the stops is.
+
 ## Elsewhere
 
 - **Local authority users** see TXC inbox items, documents and registrations for the authority
   that stands for theirs now and every authority that one replaced
-  (`LocalAuthority::getAuthorityIdsVisibleToUsers()`). A user can stay attached to a replaced
-  council's row: they work for the authority that replaced it, and EBSR emails copy them too
-  (`getUsersIncludingPredecessors()`).
-- **LTA notifications** (`SendBSRNotificationToLTAs`) go to the current authorities of a
-  registration's records, so an older registration notifies the authority that replaced its council.
+  (`LocalAuthority::getAuthorityIdsVisibleToUsers()`), and a local authority admin manages the
+  users of all of them. A user can stay attached to a replaced council's row: they work for the
+  authority that replaced it. The inbox lists an older registration once even when it was
+  circulated to several of those councils.
+- **Emails** about a registration (`SendBSRNotificationToLTAs`, the EBSR emails) go to its
+  authorities and to the authorities that replaced them, each address once, and copy the users of
+  those authorities and of the councils they replaced (`LocalAuthority::withCurrentAuthorities()`,
+  `getUsersIncludingPredecessors()`).
 - **The internal TA & authorities form** offers only current authorities, plus any replaced one the
-  registration already has. `LocalAuthorityList` flags replaced rows with `isSuperseded`.
+  registration already has. `LocalAuthorityList` flags replaced rows with `isSuperseded`, and lists
+  label them "(replaced)": a replaced council often keeps the public name of the authority that
+  replaced it.
 
 ## Changing the mapping
 
@@ -59,6 +69,9 @@ The data lives in olcs-etl (`patches/9.6.0/VOL-7153-local-authority-successors.s
 TransXChange names, ATCO codes and links. A later change is another patch in the same shape. Add a
 row for a new authority, link the old row(s) to it, and move an ATCO code to the new row only when
 NaPTAN has given the code to it alone.
+
+Deploy the vol-app code before the data. The code without links behaves as it did before them, but
+links and moved ATCO codes on older code reject files that name the old authority.
 
 Then regenerate the integration baseline and review the diff. It lists every TransXChange name in
 the bundled schemas and every NaPTAN ATCO code (`app/api/test/integration/naptan-atco-area-codes.txt`,
