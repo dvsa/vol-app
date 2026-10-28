@@ -535,11 +535,13 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
 
         $ebsrData['subsidised'] = $this->getRepo()->getRefdataReference($ebsrData['subsidised']);
         $ebsrData['naptanAuthorities'] = $this->processNaptan($ebsrData['naptan']);
-        $ebsrData['localAuthoritys'] = $this->processLocalAuthority(
-            $ebsrData['localAuthorities'],
-            $ebsrData['naptanAuthorities']
+        $circulated = $this->fetchCirculatedAuthorities($ebsrData['localAuthorities']);
+        $resolver = new LocalAuthorityResolver();
+        $ebsrData['localAuthoritys'] = $resolver->resolveCirculated($circulated, $ebsrData['naptanAuthorities']);
+        $ebsrData['trafficAreas'] = $this->processTrafficAreas(
+            $ebsrData['trafficAreas'],
+            new ArrayCollection($resolver->trafficAreaAuthorities($circulated, $ebsrData['naptanAuthorities']))
         );
-        $ebsrData['trafficAreas'] = $this->processTrafficAreas($ebsrData['trafficAreas'], $ebsrData['localAuthoritys']);
         $ebsrData['busServiceTypes'] = $this->processServiceTypes($ebsrData['serviceClassifications']);
         $ebsrData['busNoticePeriod'] = $this->getRepo()->getReference(
             BusNoticePeriodEntity::class,
@@ -597,26 +599,30 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
     }
 
     /**
-     * Returns collection of local authorities: the authorities that stand now for those the file
-     * circulates, whether it names them by an old or a new TransXChange name.
+     * Returns the local authority records the file's circulated authority names match, old or new.
+     * LocalAuthorityResolver turns them into the authorities that stand for them now.
      *
-     * @param array           $localAuthority    array of local authorities
-     * @param ArrayCollection $naptanAuthorities local authorities of the stops, to pick the side of a split
+     * @param array $localAuthority array of local authority names
      *
-     * @return ArrayCollection
+     * @return LocalAuthorityEntity[]
      */
-    protected function processLocalAuthority(array $localAuthority, ArrayCollection $naptanAuthorities)
+    protected function fetchCirculatedAuthorities(array $localAuthority): array
     {
         $txcNames = LocalAuthorityResolver::normaliseNames($localAuthority);
 
         if (empty($txcNames)) {
-            return new ArrayCollection();
+            return [];
         }
 
         /** @var LocalAuthorityRepo $repo */
         $repo = $this->getRepo('LocalAuthority');
 
-        return (new LocalAuthorityResolver())->resolveCirculated($repo->fetchByTxcName($txcNames), $naptanAuthorities);
+        $authorities = [];
+        foreach ($repo->fetchByTxcName($txcNames) as $authority) {
+            $authorities[] = $authority;
+        }
+
+        return $authorities;
     }
 
     /**
@@ -648,7 +654,7 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
      * Returns collection of traffic areas.
      *
      * @param array           $trafficAreas     array of traffic areas
-     * @param ArrayCollection $localAuthorities collections of local authorities
+     * @param ArrayCollection $localAuthorities local authorities whose traffic areas the registration takes
      *
      * @return ArrayCollection
      */

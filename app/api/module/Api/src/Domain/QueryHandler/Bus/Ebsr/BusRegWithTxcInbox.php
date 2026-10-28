@@ -24,8 +24,9 @@ class BusRegWithTxcInbox extends AbstractQueryHandler
 
     /**
      * Handle Query - relationship between busReg and TxcInbox is 1:n to allow multiple entries for different local
-     * authorities. However the actual result for a look up will always be a 1:1 providing the local authority or
-     * organisation filter is applied. Filter by organisation returns where localAuthority is null.
+     * authorities. Filtered by organisation, the result is the one entry where localAuthority is null. Filtered by
+     * local authority it is that authority's entries, which include those of the authorities it replaced: an older
+     * registration circulated to two of them has two, each with the same documents.
      *
      * @param QueryInterface $query
      * @return \Dvsa\Olcs\Api\Domain\QueryHandler\Result
@@ -51,9 +52,9 @@ class BusRegWithTxcInbox extends AbstractQueryHandler
         $localAuthority = $currentUser->getLocalAuthority();
         $organisation = $this->getCurrentOrganisation();
 
-        // relationship is 1:n to allow multiple entries for different local authorities.
-        // However the actual result for a look up will always be a 1:1 providing the local authority or
-        // organisation filter is applied
+        // relationship is 1:n to allow multiple entries for different local authorities: one for an
+        // organisation, and for a local authority one per authority it stands for that the registration
+        // was circulated to, all with the same documents
         if (empty($localAuthority) && $organisation instanceof Organisation) {
             $result = $repo->fetchWithTxcInboxListForOrganisation($query, $organisation->getId());
         } elseif (empty($organisation) && $localAuthority instanceof LocalAuthority) {

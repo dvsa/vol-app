@@ -1269,9 +1269,11 @@ final class ProcessPackTransactionTest extends ProcessPackTestCase
         $localAuthority1 = m::mock(LocalAuthorityEntity::class);
         $localAuthority1->shouldReceive('getTrafficArea')->andReturn($firstTa);
         $localAuthority1->expects('getCurrentAuthorities')->withNoArgs()->andReturn([$localAuthority1]);
+        $localAuthority1->expects('isSuperseded')->withNoArgs()->andReturnFalse();
         $localAuthority2 = m::mock(LocalAuthorityEntity::class);
         $localAuthority2->shouldReceive('getTrafficArea')->andReturn($secondTa);
         $localAuthority2->expects('getCurrentAuthorities')->withNoArgs()->andReturn([$localAuthority2]);
+        $localAuthority2->expects('isSuperseded')->withNoArgs()->andReturnFalse();
 
         $localAuthorities = [
             0 => $localAuthority1,
@@ -1323,7 +1325,9 @@ final class ProcessPackTransactionTest extends ProcessPackTestCase
     private function naptan(mixed $naptanCodes): ArrayCollection
     {
         $naptanAuthority1 = m::mock(LocalAuthorityEntity::class);
+        $naptanAuthority1->expects('getCurrentAuthorities')->withNoArgs()->andReturn([$naptanAuthority1]);
         $naptanAuthority2 = m::mock(LocalAuthorityEntity::class);
+        $naptanAuthority2->expects('getCurrentAuthorities')->withNoArgs()->andReturn([$naptanAuthority2]);
 
         $naptanAuthorities = [
             0 => $naptanAuthority1,

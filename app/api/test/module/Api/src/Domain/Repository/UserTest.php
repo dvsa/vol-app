@@ -85,7 +85,7 @@ final class UserTest extends RepositoryTestCase
             ],
             // The organisation filter is a join condition, not a WHERE clause.
             ' INNER JOIN u.organisationUsers ou WITH ou.organisation = :organisation'
-            . ' WHERE u.localAuthority = :localAuthority'
+            . ' WHERE u.localAuthority IN(:localAuthority)'
             . ' AND u.partnerContactDetails = :partnerContactDetails'
             . ' AND u.lastLoginAt >= :lastLoggedInFrom'
             . ' AND ' . self::SYSTEM_USER_WHERE,

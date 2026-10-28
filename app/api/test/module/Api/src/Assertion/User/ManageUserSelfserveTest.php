@@ -71,14 +71,14 @@ final class ManageUserSelfserveTest extends MockeryTestCase
     public function testAssertForLocalAuthority(
         mixed $isGranted,
         mixed $currentUserType,
-        mixed $currentUserEntityId,
+        array $currentUserEntityIds,
         mixed $userType,
         mixed $userEntityId,
         mixed $expected
     ): void {
         $currentUser = m::mock(User::class);
         $currentUser->shouldReceive('getUserType')->andReturn($currentUserType);
-        $currentUser->shouldReceive('getLocalAuthority->getId')->andReturn($currentUserEntityId);
+        $currentUser->shouldReceive('getLocalAuthority->getAuthorityIdsVisibleToUsers')->andReturn($currentUserEntityIds);
 
         $user = m::mock(User::class);
         $user->shouldReceive('getUserType')->andReturn($userType);
@@ -96,10 +96,12 @@ final class ManageUserSelfserveTest extends MockeryTestCase
 
     public static function getAssertForLocalAuthorityDataProvider(): \Iterator
     {
-        yield [true, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_LOCAL_AUTHORITY, 123, true];
-        yield [true, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_LOCAL_AUTHORITY, 1, false];
-        yield [true, User::USER_TYPE_PARTNER, 123, User::USER_TYPE_LOCAL_AUTHORITY, 123, false];
-        yield [false, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_LOCAL_AUTHORITY, 123, false];
+        yield [true, User::USER_TYPE_LOCAL_AUTHORITY, [123], User::USER_TYPE_LOCAL_AUTHORITY, 123, true];
+        yield [true, User::USER_TYPE_LOCAL_AUTHORITY, [123], User::USER_TYPE_LOCAL_AUTHORITY, 1, false];
+        yield [true, User::USER_TYPE_PARTNER, [123], User::USER_TYPE_LOCAL_AUTHORITY, 123, false];
+        yield [false, User::USER_TYPE_LOCAL_AUTHORITY, [123], User::USER_TYPE_LOCAL_AUTHORITY, 123, false];
+        // a user still attached to a council the admin's authority replaced
+        yield [true, User::USER_TYPE_LOCAL_AUTHORITY, [193, 36], User::USER_TYPE_LOCAL_AUTHORITY, 36, true];
     }
 
     public function testAssertForOperatorTm(): void

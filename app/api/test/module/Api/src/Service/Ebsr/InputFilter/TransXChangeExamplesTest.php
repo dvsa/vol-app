@@ -283,10 +283,6 @@ final class TransXChangeExamplesTest extends TestCase
     }
 
     /**
-     * The examples' services started years ago, and a new application must not start in the past. Moves the
-     * operating period so it starts 60 days from now, keeping its length
-     */
-    /**
      * Runs the bus registration checks and mapping over a valid document, as EBSR does
      */
     private function readBusRegistration(DOMDocument $document): array
@@ -347,6 +343,10 @@ final class TransXChangeExamplesTest extends TestCase
         }
     }
 
+    /**
+     * The examples' services started years ago, and a new application must not start in the past. Moves the
+     * operating period so it starts 60 days from now, keeping its length
+     */
     private function moveOperatingPeriodIntoFuture(DOMDocument $document): void
     {
         $xpath = new DOMXPath($document);

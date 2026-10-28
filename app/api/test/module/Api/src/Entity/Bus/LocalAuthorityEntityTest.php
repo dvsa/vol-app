@@ -98,7 +98,7 @@ final class LocalAuthorityEntityTest extends EntityTester
         $this->assertSame([], Entity::currentAuthoritiesOf([]));
     }
 
-    public function testIdsIncludingPredecessorsCoverEveryAuthorityItReplaced(): void
+    public function testAuthoritiesIncludingPredecessorsCoverEveryAuthorityItReplaced(): void
     {
         $teesValley = $this->authority('TeesValleyCA', 193);
         $darlington = $this->authority('Darlington', 36);
@@ -111,9 +111,9 @@ final class LocalAuthorityEntityTest extends EntityTester
         $older->addSuccessors($darlington);
         $darlington->addPredecessors($older);
 
-        $this->assertSame([193, 36, 7, 168], $teesValley->getIdsIncludingPredecessors());
-        $this->assertSame([36, 7], $darlington->getIdsIncludingPredecessors());
-        $this->assertSame([168], $stockton->getIdsIncludingPredecessors());
+        $this->assertSame([193, 36, 7, 168], $this->ids($teesValley->getAuthoritiesIncludingPredecessors()));
+        $this->assertSame([36, 7], $this->ids($darlington->getAuthoritiesIncludingPredecessors()));
+        $this->assertSame([168], $this->ids($stockton->getAuthoritiesIncludingPredecessors()));
     }
 
     /**
@@ -152,14 +152,39 @@ final class LocalAuthorityEntityTest extends EntityTester
         $this->assertSame([$councilUser], $darlington->getUsersIncludingPredecessors());
     }
 
-    public function testIdsIncludingPredecessorsStopAtACircle(): void
+    public function testAuthoritiesIncludingPredecessorsStopAtACircle(): void
     {
         $first = $this->authority('First', 1);
         $second = $this->authority('Second', 2);
         $first->addPredecessors($second);
         $second->addPredecessors($first);
 
-        $this->assertSame([1, 2], $first->getIdsIncludingPredecessors());
+        $this->assertSame([1, 2], $this->ids($first->getAuthoritiesIncludingPredecessors()));
+    }
+
+    public function testWithCurrentAuthoritiesKeepsTheAuthoritiesGivenAndAddsTheirSuccessors(): void
+    {
+        $darlington = $this->authority('Darlington');
+        $stockton = $this->authority('StocktonOnTees');
+        $teesValley = $this->authority('TeesValleyCA');
+        $kent = $this->authority('Kent');
+        $darlington->addSuccessors($teesValley);
+        $stockton->addSuccessors($teesValley);
+
+        $this->assertSame(
+            [$darlington, $teesValley, $stockton, $kent],
+            Entity::withCurrentAuthorities([$darlington, $stockton, $kent])
+        );
+    }
+
+    /**
+     * @param Entity[] $authorities
+     *
+     * @return int[]
+     */
+    private function ids(array $authorities): array
+    {
+        return array_map(static fn (Entity $authority) => $authority->getId(), $authorities);
     }
 
     private function authority(string $txcName, ?int $id = null): Entity

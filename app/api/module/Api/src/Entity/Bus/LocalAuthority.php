@@ -65,24 +65,45 @@ class LocalAuthority extends AbstractLocalAuthority
     }
 
     /**
-     * This authority's id and the ids of every authority it replaced, however far back: the
-     * records a user of this authority works with, since older registrations stay linked to the
-     * authority they were made with
+     * The authorities given and those that stand for them now, each once: who hears about a
+     * registration that may still be linked to an authority that has since been replaced
      *
-     * @return int[]
+     * @param iterable<LocalAuthority> $authorities
+     *
+     * @return LocalAuthority[]
      */
-    public function getIdsIncludingPredecessors(): array
+    public static function withCurrentAuthorities(iterable $authorities): array
     {
-        $ids = [];
-        $this->collectIdsIncludingPredecessors($ids);
+        $all = [];
+        foreach ($authorities as $authority) {
+            $all[spl_object_id($authority)] = $authority;
 
-        return array_values($ids);
+            foreach ($authority->getCurrentAuthorities() as $currentAuthority) {
+                $all[spl_object_id($currentAuthority)] = $currentAuthority;
+            }
+        }
+
+        return array_values($all);
+    }
+
+    /**
+     * This authority and every authority it replaced, however far back
+     *
+     * @return LocalAuthority[]
+     */
+    public function getAuthoritiesIncludingPredecessors(): array
+    {
+        $authorities = [];
+        $this->collectAuthoritiesIncludingPredecessors($authorities);
+
+        return array_values($authorities);
     }
 
     /**
      * Ids of the records this authority's users see: the authority that stands for it now and
-     * every authority that one replaced. A user can still be attached to a council that has
-     * been replaced; they work for the authority that replaced it.
+     * every authority that one replaced, since older registrations stay linked to the authority
+     * they were made with. A user can still be attached to a council that has been replaced;
+     * they work for the authority that replaced it.
      *
      * @return int[]
      */
@@ -90,7 +111,9 @@ class LocalAuthority extends AbstractLocalAuthority
     {
         $ids = [];
         foreach ($this->getCurrentAuthorities() as $currentAuthority) {
-            $currentAuthority->collectIdsIncludingPredecessors($ids);
+            foreach ($currentAuthority->getAuthoritiesIncludingPredecessors() as $authority) {
+                $ids[$authority->getId()] = $authority->getId();
+            }
         }
 
         return array_values($ids);
@@ -104,49 +127,30 @@ class LocalAuthority extends AbstractLocalAuthority
     public function getUsersIncludingPredecessors(): array
     {
         $users = [];
-        $visited = [];
-        $this->collectUsersIncludingPredecessors($users, $visited);
+        foreach ($this->getAuthoritiesIncludingPredecessors() as $authority) {
+            foreach ($authority->getUsers() as $user) {
+                $users[spl_object_id($user)] = $user;
+            }
+        }
 
         return array_values($users);
     }
 
     /**
-     * @param array<int, \Dvsa\Olcs\Api\Entity\User\User> $users
-     * @param array<int, true> $visited
+     * @param array<int, LocalAuthority> $authorities
      */
-    private function collectUsersIncludingPredecessors(array &$users, array &$visited): void
+    private function collectAuthoritiesIncludingPredecessors(array &$authorities): void
     {
         $key = spl_object_id($this);
-        if (isset($visited[$key])) {
+        if (isset($authorities[$key])) {
             return;
         }
 
-        $visited[$key] = true;
-
-        foreach ($this->users as $user) {
-            $users[spl_object_id($user)] = $user;
-        }
+        $authorities[$key] = $this;
 
         /** @var LocalAuthority $predecessor */
         foreach ($this->predecessors as $predecessor) {
-            $predecessor->collectUsersIncludingPredecessors($users, $visited);
-        }
-    }
-
-    /**
-     * @param array<int, int> $ids
-     */
-    private function collectIdsIncludingPredecessors(array &$ids): void
-    {
-        if (isset($ids[$this->id])) {
-            return;
-        }
-
-        $ids[$this->id] = $this->id;
-
-        /** @var LocalAuthority $predecessor */
-        foreach ($this->predecessors as $predecessor) {
-            $predecessor->collectIdsIncludingPredecessors($ids);
+            $predecessor->collectAuthoritiesIncludingPredecessors($authorities);
         }
     }
 

@@ -42,7 +42,8 @@ class UserListSelfserve extends AbstractQueryHandler
                 $data['partnerContactDetails'] = $this->getCurrentUser()->getPartnerContactDetails()->getId();
                 break;
             case UserEntity::USER_TYPE_LOCAL_AUTHORITY:
-                $data['localAuthority'] = $this->getCurrentUser()->getLocalAuthority()->getId();
+                // users of the authority the user works for and of those it replaced
+                $data['localAuthority'] = $this->getCurrentUser()->getLocalAuthority()->getAuthorityIdsVisibleToUsers();
                 break;
             case UserEntity::USER_TYPE_OPERATOR:
             case UserEntity::USER_TYPE_TRANSPORT_MANAGER:

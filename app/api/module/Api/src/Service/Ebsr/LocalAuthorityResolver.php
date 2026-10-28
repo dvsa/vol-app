@@ -50,6 +50,47 @@ class LocalAuthorityResolver
     }
 
     /**
+     * The local authorities whose traffic areas a registration takes. A combined authority has one
+     * traffic area but can cover councils in several, so a council the file names gives its own,
+     * and an authority the file names that is current gives those of the councils its stops are
+     * in, or its own when none of the stops is.
+     *
+     * @param iterable<LocalAuthority> $circulated records matched by the file's CirculatedAuthorities
+     * @param iterable<LocalAuthority> $fromStops records matched by the ATCO codes of the file's stops
+     *
+     * @return LocalAuthority[]
+     */
+    public function trafficAreaAuthorities(iterable $circulated, iterable $fromStops): array
+    {
+        $stopAuthorities = [];
+        foreach ($fromStops as $stopAuthority) {
+            $stopAuthorities[] = [$stopAuthority, $stopAuthority->getCurrentAuthorities()];
+        }
+
+        $authorities = [];
+        foreach ($circulated as $authority) {
+            if ($authority->isSuperseded()) {
+                $authorities[spl_object_id($authority)] = $authority;
+                continue;
+            }
+
+            $inStops = false;
+            foreach ($stopAuthorities as [$stopAuthority, $current]) {
+                if (in_array($authority, $current, true)) {
+                    $authorities[spl_object_id($stopAuthority)] = $stopAuthority;
+                    $inStops = true;
+                }
+            }
+
+            if (!$inStops) {
+                $authorities[spl_object_id($authority)] = $authority;
+            }
+        }
+
+        return array_values($authorities);
+    }
+
+    /**
      * Tidies the authority names read from a file before they are looked up: TransXChange
      * names are tokens, but files do carry stray whitespace (" Leicester" in a DfT example)
      *

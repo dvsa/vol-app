@@ -38,12 +38,13 @@ final class SendBSRNotificationToLTAs extends AbstractEmailHandler implements Em
 
         $emailValidator = new \Laminas\Validator\EmailAddress();
 
-        // An older registration can still be linked to an authority that has since been replaced
-        foreach (LocalAuthority::currentAuthoritiesOf($recordObject->getLocalAuthoritys()) as $lta) {
+        // An older registration can still be linked to an authority that has since been replaced:
+        // tell that authority and the one that replaced it
+        foreach (LocalAuthority::withCurrentAuthorities($recordObject->getLocalAuthoritys()) as $lta) {
             $email = $lta->getEmailAddress();
 
             if ($emailValidator->isValid($email)) {
-                $recipients[] = $email;
+                $recipients[$email] = $email;
             } else {
                 $invalidEmails[] = $lta;
             }
@@ -56,6 +57,8 @@ final class SendBSRNotificationToLTAs extends AbstractEmailHandler implements Em
         if (empty($recipients)) {
             throw new MissingEmailException('No associated LTAs have valid email addresses!');
         }
+
+        $recipients = array_values($recipients);
 
         return [
             'to' => array_shift($recipients),  // Send to the first valid email

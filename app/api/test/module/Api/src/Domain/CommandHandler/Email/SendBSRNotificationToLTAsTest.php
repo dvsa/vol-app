@@ -14,9 +14,10 @@ final class SendBSRNotificationToLTAsTest extends TestCase
 {
     /**
      * An older registration stays linked to the councils it was made with; once a council has
-     * been replaced, its notifications go to the authority that replaced it, once
+     * been replaced, its notifications go to it and to the authority that replaced it, each
+     * address once
      */
-    public function testRecipientsAreTheAuthoritiesThatStandForTheRegistrationsAuthoritiesNow(): void
+    public function testRecipientsIncludeTheAuthoritiesThatReplacedTheRegistrationsAuthorities(): void
     {
         $teesValley = $this->authority('tees.valley@example.com');
         $darlington = $this->authority('darlington@example.com');
@@ -30,10 +31,29 @@ final class SendBSRNotificationToLTAsTest extends TestCase
 
         $this->assertSame(
             [
-                'to' => 'tees.valley@example.com',
-                'cc' => ['durham@example.com'],
+                'to' => 'darlington@example.com',
+                'cc' => ['tees.valley@example.com', 'stockton@example.com', 'durham@example.com'],
                 'bcc' => [],
             ],
+            (new \ReflectionMethod(SendBSRNotificationToLTAs::class, 'getRecipients'))
+                ->invoke(new SendBSRNotificationToLTAs(), $busReg)
+        );
+    }
+
+    /**
+     * The two sides of a split carry the old authority's address until they have their own
+     */
+    public function testAnAddressSharedByAuthoritiesIsUsedOnce(): void
+    {
+        $northamptonshire = $this->authority('northants@example.com');
+        $northamptonshire->addSuccessors($this->authority('northants@example.com'));
+        $northamptonshire->addSuccessors($this->authority('northants@example.com'));
+
+        $busReg = new BusReg();
+        $busReg->setLocalAuthoritys(new ArrayCollection([$northamptonshire]));
+
+        $this->assertSame(
+            ['to' => 'northants@example.com', 'cc' => [], 'bcc' => []],
             (new \ReflectionMethod(SendBSRNotificationToLTAs::class, 'getRecipients'))
                 ->invoke(new SendBSRNotificationToLTAs(), $busReg)
         );

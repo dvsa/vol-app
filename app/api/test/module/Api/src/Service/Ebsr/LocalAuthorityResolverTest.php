@@ -18,7 +18,17 @@ final class LocalAuthorityResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->authorities = [];
-        foreach (['Kent', 'Darlington', 'TeesValleyCA', 'Northamptonshire', 'WestNorthamptonshire', 'NorthNorthamptonshire'] as $name) {
+        $names = [
+            'Kent',
+            'Darlington',
+            'StocktonOnTees',
+            'TeesValleyCA',
+            'Northamptonshire',
+            'WestNorthamptonshire',
+            'NorthNorthamptonshire',
+        ];
+
+        foreach ($names as $name) {
             $authority = new LocalAuthority();
             $authority->setTxcName($name);
             $authority->setDescription($name);
@@ -26,6 +36,7 @@ final class LocalAuthorityResolverTest extends TestCase
         }
 
         $this->authorities['Darlington']->addSuccessors($this->authorities['TeesValleyCA']);
+        $this->authorities['StocktonOnTees']->addSuccessors($this->authorities['TeesValleyCA']);
         $this->authorities['Northamptonshire']->addSuccessors($this->authorities['WestNorthamptonshire']);
         $this->authorities['Northamptonshire']->addSuccessors($this->authorities['NorthNorthamptonshire']);
     }
@@ -68,6 +79,39 @@ final class LocalAuthorityResolverTest extends TestCase
                 ['Kent'],
                 ['WestNorthamptonshire', 'NorthNorthamptonshire'],
             ],
+        ];
+    }
+
+    /**
+     * A combined authority has one traffic area but can cover councils in several, so the
+     * registration takes its traffic areas from the councils involved
+     *
+     * @param string[] $circulated records the file's authority names matched
+     * @param string[] $fromStops records the file's stop codes matched
+     * @param string[] $expected
+     */
+    #[DataProvider('trafficAreaAuthoritiesProvider')]
+    public function testTrafficAreaAuthorities(array $circulated, array $fromStops, array $expected): void
+    {
+        $this->assertSame(
+            $this->pick($expected),
+            (new LocalAuthorityResolver())->trafficAreaAuthorities($this->pick($circulated), $this->pick($fromStops))
+        );
+    }
+
+    public static function trafficAreaAuthoritiesProvider(): array
+    {
+        return [
+            'a named council gives its own' => [['Darlington'], ['Darlington'], ['Darlington']],
+            'a named current authority gives its own when no stop is in it' => [['Kent'], [], ['Kent']],
+            'a named current authority gives its own stops\' councils' => [['Kent'], ['Kent'], ['Kent']],
+            'a named combined authority gives the councils its stops are in' => [
+                ['TeesValleyCA'],
+                ['StocktonOnTees', 'Kent'],
+                ['StocktonOnTees'],
+            ],
+            'a named combined authority with no stops in it gives its own' => [['TeesValleyCA'], ['Kent'], ['TeesValleyCA']],
+            'each council once' => [['Darlington', 'TeesValleyCA'], ['Darlington'], ['Darlington']],
         ];
     }
 

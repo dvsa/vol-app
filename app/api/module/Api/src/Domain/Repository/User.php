@@ -96,8 +96,8 @@ class User extends AbstractRepository
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if (method_exists($query, 'getLocalAuthority') && !empty($query->getLocalAuthority())) {
-            $qb->andWhere($qb->expr()->eq($this->alias . '.localAuthority', ':localAuthority'))
-                ->setParameter('localAuthority', $query->getLocalAuthority());
+            $qb->andWhere($qb->expr()->in($this->alias . '.localAuthority', ':localAuthority'))
+                ->setParameter('localAuthority', (array) $query->getLocalAuthority());
         }
 
         if (method_exists($query, 'getPartnerContactDetails') && !empty($query->getPartnerContactDetails())) {

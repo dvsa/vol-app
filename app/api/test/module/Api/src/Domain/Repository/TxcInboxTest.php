@@ -113,9 +113,13 @@ final class TxcInboxTest extends RepositoryTestCase
 
         $this->sut->applyListFilters($qb, $query);
 
+        // Several authorities: a registration circulated to more than one of them is listed once
         $this->assertSame(
             'SELECT m' . self::FROM
-            . ' WHERE m.localAuthority IN(:localAuthority) AND b.status = :status'
+            . ' WHERE m.localAuthority IN(:localAuthority)'
+            . ' AND (NOT EXISTS (SELECT t2.id FROM ' . Entity::class . ' t2 WHERE t2.busReg = m.busReg'
+            . ' AND t2.localAuthority IN (:localAuthority) AND t2.id < m.id))'
+            . ' AND b.status = :status'
             . ' AND e.ebsrSubmissionType = :ebsrSubmissionType'
             . ' AND m.fileRead = 0',
             $qb->getDQL(),
@@ -123,6 +127,19 @@ final class TxcInboxTest extends RepositoryTestCase
         $this->assertSame([193, 36], $qb->getParameter('localAuthority')->getValue());
         $this->assertSame('foo', $qb->getParameter('status')->getValue());
         $this->assertSame('bar', $qb->getParameter('ebsrSubmissionType')->getValue());
+    }
+
+    public function testApplyListFiltersForOneLocalAuthority(): void
+    {
+        $qb = $this->createRealQb();
+
+        $this->sut->applyListFilters($qb, TxcInboxList::create(['localAuthority' => 36]));
+
+        $this->assertSame(
+            'SELECT m' . self::FROM . ' WHERE m.localAuthority IN(:localAuthority) AND m.fileRead = 0',
+            $qb->getDQL(),
+        );
+        $this->assertSame([36], $qb->getParameter('localAuthority')->getValue());
     }
 
     public function testFetchLinkedToDocument(): void

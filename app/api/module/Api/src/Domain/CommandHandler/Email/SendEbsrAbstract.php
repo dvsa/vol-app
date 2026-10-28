@@ -287,8 +287,10 @@ abstract class SendEbsrAbstract extends AbstractCommandHandler implements EmailA
     {
         $localAuthoritiesCc = [];
 
+        // An older registration can still be linked to an authority that has since been replaced:
+        // copy that authority and the one that replaced it
         /** @var LocalAuthority $localAuth */
-        foreach ($localAuths as $localAuth) {
+        foreach (LocalAuthority::withCurrentAuthorities($localAuths) as $localAuth) {
             //main local authority email address
             $localAuthoritiesCc[] = $localAuth->getEmailAddress();
 
@@ -306,7 +308,7 @@ abstract class SendEbsrAbstract extends AbstractCommandHandler implements EmailA
             }
         }
 
-        return $localAuthoritiesCc;
+        return array_values(array_unique($localAuthoritiesCc));
     }
 
     /**

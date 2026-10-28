@@ -110,11 +110,13 @@ abstract class SendEbsrEmailTestAbstract extends AbstractCommandHandlerTestCase
         $la1->shouldReceive('getDescription')->once()->withNoArgs()->andReturn($laDescription1);
         $la1->shouldReceive('getEmailAddress')->once()->withNoArgs()->andReturn($laEmail1);
         $la1->shouldReceive('getUsersIncludingPredecessors')->once()->withNoArgs()->andReturn($la1Users->toArray());
+        $la1->shouldReceive('getCurrentAuthorities')->once()->withNoArgs()->andReturn([$la1]);
 
         $la2 = m::mock(LocalAuthorityEntity::class);
         $la2->shouldReceive('getDescription')->once()->withNoArgs()->andReturn($laDescription2);
         $la2->shouldReceive('getEmailAddress')->once()->withNoArgs()->andReturn($laEmail2);
         $la2->shouldReceive('getUsersIncludingPredecessors')->once()->withNoArgs()->andReturn([]);
+        $la2->shouldReceive('getCurrentAuthorities')->once()->withNoArgs()->andReturn([$la2]);
 
         $la = new ArrayCollection([$la1, $la2]);
 

@@ -334,11 +334,6 @@ final class CanAccessDocumentTest extends AbstractValidatorsTestCase
     }
 
     /**
-     *
-     * @throws NotFoundException
-     * @throws Exception
-     */
-    /**
      * A combined authority's user sees what was sent to the councils it replaced
      *
      * @throws NotFoundException
@@ -348,34 +343,53 @@ final class CanAccessDocumentTest extends AbstractValidatorsTestCase
     public function testLocalAuthorityUserCanAccessTxcDocumentForAnAuthorityTheirsReplaced(int $localAuthorityUserType): void
     {
         $combinedAuthority = m::mock(Entity\Bus\LocalAuthority::class);
-        $combinedAuthority
-            ->allows('getAuthorityIdsVisibleToUsers')
-            ->withNoArgs()
-            ->andReturn([193, 36]);
+        $combinedAuthority->expects('getAuthorityIdsVisibleToUsers')->withNoArgs()->andReturn([193, 36]);
 
         $replacedCouncil = m::mock(Entity\Bus\LocalAuthority::class);
-        $replacedCouncil
-            ->allows('getId')
-            ->andReturn(36);
+        $replacedCouncil->expects('getId')->withNoArgs()->andReturn(36);
+
+        $txcInbox = m::mock(Entity\Ebsr\TxcInbox::class);
+        $txcInbox->expects('getLocalAuthority')->withNoArgs()->andReturn($replacedCouncil);
 
         $this->setupMockIdentity($localAuthorityUserType, $this->getMockOrganisation(), 123456, $combinedAuthority);
 
-        $this->mockRepo(Repository\Document::class)
-            ->shouldReceive('fetchById')
-            ->andReturn($this->getMockDocument(false));
+        $this->mockRepo(Repository\Document::class)->shouldNotReceive('fetchById');
         $this->mockRepo(Repository\TxcInbox::class)
-            ->shouldReceive('fetchLinkedToDocument')
+            ->expects('fetchLinkedToDocument')
             ->with(static::DOCUMENT_ID)
-            ->andReturn([
-                m::mock(Entity\Ebsr\TxcInbox::class)
-                ->shouldReceive('getLocalAuthority')
-                ->andReturn($replacedCouncil)
-                ->getMock()
-            ]);
+            ->andReturn([$txcInbox]);
 
         $this->assertTrue($this->sut->isValid(static::DOCUMENT_ID));
     }
 
+    /**
+     * A local authority user whose account has lost its authority sees nothing, rather than an error
+     *
+     * @throws NotFoundException
+     * @throws Exception
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('localAuthorityTypeProvider')]
+    public function testLocalAuthorityUserWithNoAuthorityCannotAccessTxcDocument(int $localAuthorityUserType): void
+    {
+        $txcInbox = m::mock(Entity\Ebsr\TxcInbox::class);
+        $txcInbox->shouldNotReceive('getLocalAuthority');
+
+        $this->setupMockIdentity($localAuthorityUserType, $this->getMockOrganisation(), 123456, null);
+
+        $this->mockRepo(Repository\Document::class)->shouldNotReceive('fetchById');
+        $this->mockRepo(Repository\TxcInbox::class)
+            ->expects('fetchLinkedToDocument')
+            ->with(static::DOCUMENT_ID)
+            ->andReturn([$txcInbox]);
+
+        $this->assertFalse($this->sut->isValid(static::DOCUMENT_ID));
+    }
+
+    /**
+     *
+     * @throws NotFoundException
+     * @throws Exception
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('localAuthorityTypeProvider')]
     public function testLocalAuthorityUserCannotAccessTxcDocumentForDifferentAuthority(int $localAuthorityUserType): void
     {

@@ -154,8 +154,18 @@ class TxcInbox extends AbstractRepository
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if (method_exists($query, 'getLocalAuthority') && !empty($query->getLocalAuthority())) {
+            $localAuthorityIds = (array) $query->getLocalAuthority();
+
             $qb->andWhere($qb->expr()->in($this->alias . '.localAuthority', ':localAuthority'))
-                ->setParameter('localAuthority', (array) $query->getLocalAuthority());
+                ->setParameter('localAuthority', $localAuthorityIds);
+
+            if (count($localAuthorityIds) > 1) {
+                // A registration circulated to several of these authorities has a row for each: list it once
+                $qb->andWhere(
+                    'NOT EXISTS (SELECT t2.id FROM ' . Entity::class . ' t2 WHERE t2.busReg = ' . $this->alias
+                    . '.busReg AND t2.localAuthority IN (:localAuthority) AND t2.id < ' . $this->alias . '.id)'
+                );
+            }
         }
         if (method_exists($query, 'getStatus') && !empty($query->getStatus())) {
             $qb->andWhere($qb->expr()->eq('b.status', ':status'))

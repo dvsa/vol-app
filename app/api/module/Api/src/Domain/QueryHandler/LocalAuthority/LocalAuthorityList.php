@@ -26,7 +26,6 @@ final class LocalAuthorityList extends AbstractQueryHandler
     public function handleQuery(QueryInterface $query)
     {
         /** @var LocalAuthorityRepo $repo */
-        /** @var LocalAuthorityRepo $repo */
         $repo = $this->getRepo();
 
         $authorities = $this->resultList(

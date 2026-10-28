@@ -84,9 +84,8 @@ final class UserListSelfserveTest extends QueryHandlerTestCase
     public function testHandleQueryForLocalAuthority(): void
     {
         /** @var LocalAuthorityEntity $localAuthority */
-        $localAuthority = m::mock(LocalAuthorityEntity::class)->makePartial();
-        $localAuthority->setId(1000);
-        $localAuthority->shouldReceive('getId')->once()->andReturn(1000);
+        $localAuthority = m::mock(LocalAuthorityEntity::class);
+        $localAuthority->expects('getAuthorityIdsVisibleToUsers')->withNoArgs()->andReturn([1000]);
 
         /** @var UserEntity $currentUser */
         $currentUser = m::mock(UserEntity::class)->makePartial();
