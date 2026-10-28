@@ -401,6 +401,54 @@ final class AttributeEmissionTest extends MockeryTestCase
         $this->assertStringContainsString("inversedBy: 'oppositions'", $field['annotation']);
     }
 
+    public function testSelfReferencingManyToManyOwningSideNamesBothSidesFromTheJoinColumns(): void
+    {
+        // cf. AbstractLocalAuthority::$successors - both join columns point at local_authority,
+        // so the table name can't tell the two sides apart; the column names do
+        $field = $this->invokeConstructedGeneratorMethod('createManyToManyField', [
+            [
+                'join_table' => 'local_authority_successor',
+                'foreign_table' => 'local_authority',
+                'join_columns' => ['predecessor_id'],
+                'local_columns' => ['id'],
+                'inverse_join_columns' => ['successor_id'],
+                'foreign_columns' => ['id'],
+                'is_owning' => true,
+            ],
+            'local_authority',
+            [],
+        ]);
+
+        $this->assertSame('successors', $field['property']['name']);
+        $this->assertStringContainsString("inversedBy: 'predecessors'", $field['annotation']);
+    }
+
+    public function testSelfReferencingManyToManyInverseSideIsMappedByTheOwningProperty(): void
+    {
+        // cf. AbstractLocalAuthority::$predecessors - mappedBy must name the owning side's
+        // property ($successors), not the entity's own pluralised name (localAuthoritys)
+        $field = $this->invokeConstructedGeneratorMethod('createManyToManyField', [
+            [
+                'join_table' => 'local_authority_successor',
+                'foreign_table' => 'local_authority',
+                'join_columns' => ['successor_id'],
+                'local_columns' => ['id'],
+                'inverse_join_columns' => ['predecessor_id'],
+                'foreign_columns' => ['id'],
+                'is_owning' => false,
+            ],
+            'local_authority',
+            [],
+        ]);
+
+        $this->assertSame('predecessors', $field['property']['name']);
+        $this->assertSame(
+            "#[ORM\\ManyToMany(targetEntity: \\Dvsa\\Olcs\\Api\\Entity\\Bus\\LocalAuthority::class,"
+            . " mappedBy: 'successors', fetch: 'LAZY')]",
+            $field['annotation']
+        );
+    }
+
     /**
      * cf. document_analysis.status. A column the platform cannot type aborts the whole
      * generation run ("Unknown database type enum requested"), not just the table that owns

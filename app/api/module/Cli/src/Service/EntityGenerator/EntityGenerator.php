@@ -589,7 +589,14 @@ class EntityGenerator implements EntityGeneratorInterface
         }
 
         // Generate the inverse property name
-        if (!$isOwning) {
+        if (!$isOwning && $foreignTable === $tableName && isset($relationship['join_columns'][0])) {
+            // Self-referencing join table (e.g. local_authority_successor): both sides are this
+            // entity, so its pluralised name would name both. The owning side names its property
+            // after its inverse join column, which is this side's join column
+            $basePropertyName = preg_replace('/_id$/', '', (string) $relationship['join_columns'][0]);
+            $basePropertyName = lcfirst(str_replace('_', '', ucwords($basePropertyName, '_')));
+            $inversePropertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+        } elseif (!$isOwning) {
             // For inverse side, mappedBy should reference the property name on the owning side
             // The owning side generates its property name from the inverse entity (this entity)
             // We need to use the same logic the owning side would use
