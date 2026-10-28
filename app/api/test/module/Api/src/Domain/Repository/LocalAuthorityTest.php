@@ -33,6 +33,19 @@ final class LocalAuthorityTest extends RepositoryTestCase
         );
     }
 
+    public function testFetchSupersededIds(): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getScalarResult')->withNoArgs()->andReturn([['id' => '36'], ['id' => '98']]);
+
+        $this->assertSame([36, 98], $this->sut->fetchSupersededIds());
+
+        $this->assertSame(
+            'SELECT DISTINCT m.id FROM ' . Entity::class . ' m INNER JOIN m.successors s',
+            $qb->getDQL(),
+        );
+    }
+
     public static function lookupProvider(): \Iterator
     {
         yield 'by TransXChange name' => [

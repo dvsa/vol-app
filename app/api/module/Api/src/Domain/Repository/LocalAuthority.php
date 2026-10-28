@@ -29,6 +29,20 @@ class LocalAuthority extends AbstractRepository
     }
 
     /**
+     * Ids of the local authorities another authority has replaced
+     *
+     * @return int[]
+     */
+    public function fetchSupersededIds(): array
+    {
+        $qb = $this->createQueryBuilder();
+        $qb->select('DISTINCT ' . $this->alias . '.id')
+            ->innerJoin($this->alias . '.successors', 's');
+
+        return array_map(intval(...), array_column($qb->getQuery()->getScalarResult(), 'id'));
+    }
+
+    /**
      * Fetches a list of local authorities matching the naptan codes
      *
      * @param $naptanCodes

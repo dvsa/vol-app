@@ -36,19 +36,30 @@ final class LocalAuthorityListTest extends QueryHandlerTestCase
         $count = 25;
         $query = Qry::create([]);
 
-        $mockResult = m::mock();
-        $mockResult->shouldReceive('serialize')->once()->andReturn('foo');
+        $darlington = m::mock();
+        $darlington->expects('serialize')->with(['trafficArea'])->andReturn(['id' => 36, 'description' => 'Darlington']);
+        $teesValley = m::mock();
+        $teesValley->expects('serialize')->with(['trafficArea'])->andReturn(['id' => 193, 'description' => 'Tees Valley']);
 
         $this->repoMap['LocalAuthority']->shouldReceive('fetchList')
             ->with($query, m::type('integer'))
-            ->andReturn([$mockResult]);
+            ->andReturn([$darlington, $teesValley]);
 
         $this->repoMap['LocalAuthority']->shouldReceive('fetchCount')
             ->with($query)
             ->andReturn($count);
 
+        $this->repoMap['LocalAuthority']->expects('fetchSupersededIds')->withNoArgs()->andReturn([36]);
+
         $result = $this->sut->handleQuery($query);
         $this->assertEquals($result['count'], $count);
-        $this->assertEquals($result['result'], ['foo']);
+        // Replaced authorities are flagged so that lists can leave them out
+        $this->assertSame(
+            [
+                ['id' => 36, 'description' => 'Darlington', 'isSuperseded' => true],
+                ['id' => 193, 'description' => 'Tees Valley', 'isSuperseded' => false],
+            ],
+            $result['result']
+        );
     }
 }

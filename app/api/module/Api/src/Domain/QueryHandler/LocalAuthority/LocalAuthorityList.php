@@ -26,12 +26,22 @@ final class LocalAuthorityList extends AbstractQueryHandler
     public function handleQuery(QueryInterface $query)
     {
         /** @var LocalAuthorityRepo $repo */
+        /** @var LocalAuthorityRepo $repo */
         $repo = $this->getRepo();
+
+        $authorities = $this->resultList(
+            $repo->fetchList($query, Query::HYDRATE_OBJECT),
+            ['trafficArea']
+        );
+
+        // Flag the authorities another has replaced, so lists can offer only current ones
+        $supersededIds = array_flip($repo->fetchSupersededIds());
+        foreach ($authorities as $key => $authority) {
+            $authorities[$key]['isSuperseded'] = isset($supersededIds[$authority['id']]);
+        }
+
         return [
-            'result' => $this->resultList(
-                $repo->fetchList($query, Query::HYDRATE_OBJECT),
-                ['trafficArea']
-            ),
+            'result' => $authorities,
             'count' => $repo->fetchCount($query)
         ];
     }
