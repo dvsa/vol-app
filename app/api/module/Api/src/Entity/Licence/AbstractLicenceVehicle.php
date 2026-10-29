@@ -189,7 +189,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc::class, mappedBy: 'licenceVehicle')]
-    #[ORM\OrderBy(['createdOn' => 'DESC'])]
+    #[ORM\OrderBy(['createdOn' => \SortDirection::Descending])]
     protected $goodsDiscs;
 
     /**
