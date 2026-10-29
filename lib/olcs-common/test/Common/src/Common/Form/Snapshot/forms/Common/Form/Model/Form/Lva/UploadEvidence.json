@@ -355,7 +355,7 @@
               "name": "files",
               "attributes": {
                 "class": "file-uploader",
-                "id": "files"
+                "id": "supportingEvidenceFiles"
               },
               "elements": [
                 {

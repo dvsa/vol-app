@@ -36,7 +36,7 @@ class TeamDetails
     #[Form\Type('DynamicSelect')]
     public $trafficArea = null;
 
-    #[Form\Attributes(['id' => 'team', 'placeholder' => '', 'class' => 'medium'])]
+    #[Form\Attributes(['id' => 'defaultPrinter', 'placeholder' => '', 'class' => 'medium'])]
     #[Form\Options(['label' => 'Default printer', 'service_name' => 'Olcs\Service\Data\Printer', 'empty_option' => 'Please Select', 'disable_inarray_validator' => false])]
     #[Form\Type('DynamicSelect')]
     public $defaultPrinter = null;
