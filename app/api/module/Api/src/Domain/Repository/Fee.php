@@ -737,9 +737,8 @@ class Fee extends AbstractRepository
 
         $qb
             ->select('br2.id')
-            ->join(BusRegEntity::class, 'br2')
-            ->where('br.routeNo = br2.routeNo')
-            ->andWhere('br.id = :id')
+            ->join(BusRegEntity::class, 'br2', Query\Expr\Join::ON, 'br.routeNo = br2.routeNo')
+            ->where('br.id = :id')
             ->setParameter('id', $busRegId);
 
         return $qb->getQuery()->getArrayResult();

@@ -748,7 +748,7 @@ class Licence extends AbstractRepository
         $qb->innerJoin(
             TMLicenceEntity::class,
             'tml',
-            Join::WITH,
+            Join::ON,
             $qb->expr()->eq($this->alias . '.id', 'tml.licence')
         );
 

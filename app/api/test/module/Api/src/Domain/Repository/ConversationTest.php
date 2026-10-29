@@ -49,7 +49,7 @@ final class ConversationTest extends RepositoryTestCase
             . ' THEN 1 ELSE 0 END AS has_unread'
             . self::FROM
             . ' LEFT JOIN ' . MessagingMessage::class . ' irmm'
-            . ' WITH irmm.messagingConversation = m.id'
+            . ' ON irmm.messagingConversation = m.id'
             . ' LEFT JOIN irmm.messagingConversation inner_conversation'
             . ' LEFT JOIN inner_conversation.task inner_task'
             // The filter goes through expr()->exists(), which renders EXISTS(...) and brackets it.
