@@ -104,7 +104,7 @@
               "name": "roadworthiness",
               "attributes": {
                 "class": "input--roadworthiness",
-                "id": "cabotage"
+                "id": "roadworthiness"
               },
               "options": {
                 "checked_value": "1",

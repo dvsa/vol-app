@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CommonTest\View\Factory\Helper;
 
 use Common\Service\Cqrs\Query\CachingQueryService;
+use Common\Service\Helper\TranslationHelperService;
 use Common\View\Factory\Helper\SystemInfoMessagesFactory;
 use Common\View\Helper\SystemInfoMessages;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
@@ -23,6 +24,7 @@ final class SystemInfoMessagesFactoryTest extends TestCase
         $container = m::mock(ContainerInterface::class);
         $container->expects('get')->with('QueryService')->andReturn($queryService);
         $container->expects('get')->with('TransferAnnotationBuilder')->andReturn($transferAnnotationBuilder);
+        $container->expects('get')->with('Helper\Translation')->andReturn(m::mock(TranslationHelperService::class));
 
         $this->assertInstanceOf(SystemInfoMessages::class, new SystemInfoMessagesFactory()->__invoke($container, SystemInfoMessages::class));
     }

@@ -19,7 +19,7 @@
                 "id": "hoursMon"
               },
               "options": {
-                "label": "days-of-week-short-mon"
+                "label": "days-of-week-mon"
               }
             }
           },
@@ -32,7 +32,7 @@
                 "data-container-class": "inline-text"
               },
               "options": {
-                "label": "days-of-week-short-tue"
+                "label": "days-of-week-tue"
               }
             }
           },
@@ -45,7 +45,7 @@
                 "data-container-class": "inline-text"
               },
               "options": {
-                "label": "days-of-week-short-wed"
+                "label": "days-of-week-wed"
               }
             }
           },
@@ -58,7 +58,7 @@
                 "data-container-class": "inline-text"
               },
               "options": {
-                "label": "days-of-week-short-thu"
+                "label": "days-of-week-thu"
               }
             }
           },
@@ -71,7 +71,7 @@
                 "data-container-class": "inline-text"
               },
               "options": {
-                "label": "days-of-week-short-fri"
+                "label": "days-of-week-fri"
               }
             }
           },
@@ -84,7 +84,7 @@
                 "data-container-class": "inline-text"
               },
               "options": {
-                "label": "days-of-week-short-sat"
+                "label": "days-of-week-sat"
               }
             }
           },
@@ -97,7 +97,7 @@
                 "data-container-class": "inline-text"
               },
               "options": {
-                "label": "days-of-week-short-sun"
+                "label": "days-of-week-sun"
               }
             }
           }

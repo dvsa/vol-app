@@ -8,6 +8,6 @@ use Laminas\Form\Annotation as Form;
 class UploadEvidenceSupportingEvidence
 {
     #[Form\ComposedObject('\Common\Form\Model\Fieldset\MultipleFileUpload')]
-    #[Form\Attributes(['id' => 'files'])]
+    #[Form\Attributes(['id' => 'supportingEvidenceFiles'])]
     public $files;
 }

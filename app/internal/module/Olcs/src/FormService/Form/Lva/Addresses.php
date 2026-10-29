@@ -32,7 +32,7 @@ class Addresses extends CommonAddresses
     {
         $form->get('form-actions')->get('save')->setLabel('internal.save.button');
 
-        $this->removeEstablishment($form, $params['typeOfLicence']['licenceType']);
+        parent::alterForm($form, $params);
 
         $contact = $form->getInputFilter()->get('contact');
 

@@ -19,7 +19,7 @@ class OpposerContact
     #[Form\Type('Hidden')]
     public $phone_primary_version = null;
 
-    #[Form\Attributes(['id' => 'phone', 'placeholder' => '', 'class' => 'medium'])]
+    #[Form\Attributes(['id' => 'phone_secondary', 'placeholder' => '', 'class' => 'medium'])]
     #[Form\Options(['label' => 'secondary-contact-number-optional'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\Phone')]
     public $phone_secondary = null;

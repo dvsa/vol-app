@@ -130,10 +130,11 @@
                   "spec": {
                     "name": "lgvDeclarationWarning",
                     "attributes": {
-                      "value": "<p class='exclamation'>%s</p>"
+                      "value": "<p class='exclamation'><span class='govuk-visually-hidden'>%s: </span>%s</p>"
                     },
                     "options": {
                       "tokens": [
+                        "lva-summary-important",
                         "application_type-of-licence_licence-type.data.lgvDeclarationWarning"
                       ]
                     },

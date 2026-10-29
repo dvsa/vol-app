@@ -135,6 +135,10 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
 
     public function alterFormForIndex($form, $data)
     {
+        /** @var \Common\Form\Elements\Types\Address $workAddress */
+        $workAddress = $form->get('work-address');
+        $workAddress->useNamesAsIds();
+
         // if TM has removedDate then make the form readonly
         if (
             isset($data['transport-manager-details']['removedDate'])

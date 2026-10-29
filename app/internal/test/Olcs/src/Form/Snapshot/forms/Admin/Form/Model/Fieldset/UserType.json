@@ -1,8 +1,6 @@
 {
   "name": "user-type",
-  "attributes": {
-    "id": "userType"
-  },
+  "attributes": [],
   "elements": [
     {
       "flags": [],

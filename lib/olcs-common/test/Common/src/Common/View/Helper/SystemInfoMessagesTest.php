@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CommonTest\View\Helper;
 
 use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
+use Common\Service\Helper\TranslationHelperService;
 use Common\View\Helper\SystemInfoMessages;
 use Dvsa\Olcs\Transfer\Query\QueryContainerInterface;
 use Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetListActive;
@@ -59,7 +60,13 @@ final class SystemInfoMessagesTest extends MockeryTestCase
             ->with($mockQryCntr)
             ->andReturn($mockResp);
 
-        $invoke = new SystemInfoMessages($this->mockAnnotationBuilder, $this->mockQuerySrv);
+        $translator = m::mock(TranslationHelperService::class);
+        $translator->shouldReceive('translate')
+            ->with('lva-summary-important')
+            ->times($expect === null ? 0 : 1)
+            ->andReturn('Important');
+
+        $invoke = new SystemInfoMessages($this->mockAnnotationBuilder, $this->mockQuerySrv, $translator);
         $actual = $invoke(true); // __invoke
 
         $this->assertEquals($expect, $actual);
@@ -68,7 +75,7 @@ final class SystemInfoMessagesTest extends MockeryTestCase
     /**
      * @return \Iterator<(int | string), array<(array<(array<array<string>> | int)> | string | null)>>
      *
-     * @psalm-return list{array{data: null, expect: null}, array{data: array{count: 2, results: list{array{description: 'unit_Desc1'}, array{description: 'unit_Desc2 &'}}}, expect: '<div class="system-messages"><div class="system-messages__wrapper"><p>unit_Desc1</p></div><div class="system-messages__wrapper"><p>unit_Desc2 &amp;</p></div></div>'}, array{data: array<never, never>, expect: null}}
+     * @psalm-return list{array{data: null, expect: null}, array{data: array{count: 2, results: list{array{description: 'unit_Desc1'}, array{description: 'unit_Desc2 &'}}}, expect: string}, array{data: array<never, never>, expect: null}}
      */
     public static function dataProviderTest(): \Iterator
     {
@@ -91,8 +98,17 @@ final class SystemInfoMessagesTest extends MockeryTestCase
                 ],
             ],
             'expect' =>
-                '<div class="system-messages"><div class="system-messages__wrapper"><p>unit_Desc1</p></div>' .
-                '<div class="system-messages__wrapper"><p>unit_Desc2 &amp;</p></div>' .
+                '<div class="govuk-notification-banner" role="region" ' .
+                'aria-labelledby="system-info-messages-title" data-module="govuk-notification-banner">' . "\n" .
+                '  <div class="govuk-notification-banner__header">' . "\n" .
+                '    <h2 class="govuk-notification-banner__title" id="system-info-messages-title">' . "\n" .
+                '      Important' . "\n" .
+                '    </h2>' . "\n" .
+                '  </div>' . "\n" .
+                '  <div class="govuk-notification-banner__content">' . "\n" .
+                '    <p class="govuk-notification-banner__heading">unit_Desc1</p>' .
+                '<p class="govuk-notification-banner__heading">unit_Desc2 &amp;</p>' . "\n" .
+                '  </div>' . "\n" .
                 '</div>',
         ];
         // no data alt

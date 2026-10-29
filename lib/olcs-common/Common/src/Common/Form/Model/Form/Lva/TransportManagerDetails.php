@@ -6,7 +6,7 @@ use Laminas\Form\Annotation as Form;
 
 #[Form\Options(['prefer_form_input_filter' => true])]
 #[Form\Name('lva-transport-manager-details')]
-#[Form\Attributes(['method' => 'post', 'autocomplete' => 'off'])]
+#[Form\Attributes(['method' => 'post'])]
 #[Form\Type('Common\Form\Form')]
 class TransportManagerDetails
 {
@@ -17,7 +17,7 @@ class TransportManagerDetails
 
     #[Form\Name('homeAddress')]
     #[Form\ComposedObject('Common\Form\Model\Fieldset\Address')]
-    #[Form\Options(['label' => 'lva-tm-details-details-homeAddress', 'label_attributes' => ['aria-label' => 'Postcode search, enter home postcode', 'id' => 'homeAddress']])]
+    #[Form\Options(['label' => 'lva-tm-details-details-homeAddress', 'label_attributes' => ['id' => 'homeAddress']])]
     #[Form\Flags(['priority' => -20])]
     public $homeAddress;
 

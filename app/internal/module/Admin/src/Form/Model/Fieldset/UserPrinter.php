@@ -28,7 +28,7 @@ class UserPrinter
     #[Form\Required(false)]
     public $subCategoryUser = null;
 
-    #[Form\Attributes(['id' => 'printer', 'placeholder' => ''])]
+    #[Form\Attributes(['id' => 'printerUser', 'placeholder' => ''])]
     #[Form\Options(['label' => 'Printer', 'service_name' => 'Olcs\Service\Data\Printer'])]
     #[Form\Type('DynamicSelect')]
     #[Form\Required(true)]

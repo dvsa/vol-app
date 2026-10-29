@@ -89,7 +89,7 @@ class InspectionRequestDetails
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
     public $fromDate = null;
 
-    #[Form\Attributes(['id' => 'fromDate'])]
+    #[Form\Attributes(['id' => 'toDate'])]
     #[Form\Options(['label' => 'Investigation to', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Required(false)]
     #[Form\Type('DateSelect')]

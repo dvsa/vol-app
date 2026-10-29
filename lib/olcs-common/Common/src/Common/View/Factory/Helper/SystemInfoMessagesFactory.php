@@ -24,6 +24,8 @@ class SystemInfoMessagesFactory implements FactoryInterface
         $annotationBuilder = $container->get('TransferAnnotationBuilder');
         /** @var \Common\Service\Cqrs\Query\CachingQueryService $queryService */
         $queryService = $container->get('QueryService');
-        return new SystemInfoMessages($annotationBuilder, $queryService);
+        /** @var \Common\Service\Helper\TranslationHelperService $translator */
+        $translator = $container->get('Helper\Translation');
+        return new SystemInfoMessages($annotationBuilder, $queryService, $translator);
     }
 }

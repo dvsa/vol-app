@@ -49,7 +49,7 @@ class CreatePermit extends Base
 
     #[Form\Name('roadworthiness')]
     #[Form\Required(false)]
-    #[Form\Attributes(['class' => 'input--roadworthiness', 'id' => 'cabotage'])]
+    #[Form\Attributes(['class' => 'input--roadworthiness', 'id' => 'roadworthiness'])]
     #[Form\Options(['checked_value' => '1', 'unchecked_value' => '0', 'label' => 'I understand that I must obtain and carry the appropriate ECMT Certificate of Compliance and Certificate of Roadworthiness for each vehicle and trailer I intend to use with this permit', 'label_attributes' => ['class' => 'form-control form-control--checkbox form-control--advanced']])]
     #[Form\Type('\Common\Form\Elements\InputFilters\SingleCheckbox')]
     public $roadworthiness = null;
