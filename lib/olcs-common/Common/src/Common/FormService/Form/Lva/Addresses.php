@@ -2,6 +2,7 @@
 
 namespace Common\FormService\Form\Lva;
 
+use Common\Form\Elements\Types\Address as AddressFieldset;
 use Common\RefData;
 use Common\Service\Helper\FormHelperService;
 
@@ -59,6 +60,10 @@ class Addresses
     {
         $this->removeEstablishment($form, $params['typeOfLicence']['licenceType']);
         $this->labelEstablishmentAddress($form);
+
+        /** @var AddressFieldset $consultantAddress */
+        $consultantAddress = $form->get('consultantAddress');
+        $consultantAddress->useNamesAsIds();
     }
 
     /**

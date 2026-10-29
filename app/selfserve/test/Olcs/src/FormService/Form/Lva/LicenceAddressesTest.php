@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\Form\Elements\Types\Address as AddressFieldset;
 use Common\RefData;
 use Laminas\Form\ElementInterface;
 use Mockery as m;
@@ -41,8 +42,11 @@ final class LicenceAddressesTest extends MockeryTestCase
             ->getMock();
 
         $mockForm = m::mock(Form::class);
-        // the establishment address labels are covered by the common Addresses test
+        // the establishment address labels and consultant address ids are covered by the common Addresses test
         $mockForm->expects('has')->with('establishment_address')->andReturn(false);
+        $consultantAddress = m::mock(AddressFieldset::class);
+        $consultantAddress->expects('useNamesAsIds')->withNoArgs()->andReturnNull();
+        $mockForm->expects('get')->with('consultantAddress')->andReturn($consultantAddress);
         $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
