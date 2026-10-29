@@ -44,7 +44,7 @@ class User extends AbstractQueryHandler
                 $this->getRepo('EventHistoryType')
                     ->fetchOneByEventCode(EventHistoryType::EVENT_CODE_PASSWORD_RESET),
                 'id',
-                'desc',
+                \SortDirection::Descending,
                 1
             );
 

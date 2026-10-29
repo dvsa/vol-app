@@ -93,8 +93,8 @@ class Template extends AbstractRepository
             ->andWhere('t.id != :id')
             ->setParameter('name', $name)
             ->setParameter('id', $excludeId)
-            ->orderBy('t.locale', 'ASC')
-            ->addOrderBy('t.format', 'ASC')
+            ->orderBy('t.locale', \SortDirection::Ascending)
+            ->addOrderBy('t.format', \SortDirection::Ascending)
             ->getQuery()
             ->getArrayResult();
     }
@@ -125,9 +125,9 @@ class Template extends AbstractRepository
             ->from(Entity::class, 't')
             ->where('t.name IN (:names)')
             ->setParameter('names', $names)
-            ->orderBy('t.name', 'ASC')
-            ->addOrderBy('t.locale', 'ASC')
-            ->addOrderBy('t.format', 'ASC')
+            ->orderBy('t.name', \SortDirection::Ascending)
+            ->addOrderBy('t.locale', \SortDirection::Ascending)
+            ->addOrderBy('t.format', \SortDirection::Ascending)
             ->getQuery()
             ->getArrayResult();
 
@@ -219,7 +219,7 @@ class Template extends AbstractRepository
             ->select('m.name AS name', 'MIN(m.description) AS description')
             ->from(Entity::class, 'm')
             ->groupBy('m.name')
-            ->orderBy('description', 'ASC')
+            ->orderBy('description', \SortDirection::Ascending)
             ->setFirstResult(($page - 1) * $perPage)
             ->setMaxResults($perPage);
 

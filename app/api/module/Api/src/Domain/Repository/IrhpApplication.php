@@ -271,7 +271,7 @@ class IrhpApplication extends AbstractRepository
             ->where('IDENTITY(ipw.irhpPermitStock) = ?1')
             ->andWhere('IDENTITY(epa.sectors) = ?2')
             ->andWhere('epa.inScope = 1')
-            ->orderBy('icp.randomizedScore', 'DESC')
+            ->orderBy('icp.randomizedScore', \SortDirection::Descending)
             ->setParameter(1, $stockId)
             ->setParameter(2, $sectorsId)
             ->getQuery()
@@ -333,7 +333,7 @@ class IrhpApplication extends AbstractRepository
             ->where('IDENTITY(ipw.irhpPermitStock) = ?1')
             ->andWhere('icp.successful = 0')
             ->andWhere('epa.inScope = 1')
-            ->orderBy('icp.randomizedScore', 'DESC')
+            ->orderBy('icp.randomizedScore', \SortDirection::Descending)
             ->setParameter(1, $stockId);
 
         if (!is_null($trafficAreaId)) {
@@ -394,7 +394,7 @@ class IrhpApplication extends AbstractRepository
             ->where('IDENTITY(ipw.irhpPermitStock) = ?1')
             ->andWhere('icp.successful = 1')
             ->andWhere('epa.inScope = 1')
-            ->orderBy('icp.randomizedScore', 'DESC')
+            ->orderBy('icp.randomizedScore', \SortDirection::Descending)
             ->setParameter(1, $stockId)
             ->getQuery()
             ->getResult();

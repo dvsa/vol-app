@@ -148,8 +148,8 @@ class ConvertToMarkdownCommand extends AbstractOlcsCommand
                 )'
             )
             ->setParameter('md', self::FORMAT_MARKDOWN)
-            ->orderBy('t.name', 'ASC')
-            ->addOrderBy('t.locale', 'ASC');
+            ->orderBy('t.name', \SortDirection::Ascending)
+            ->addOrderBy('t.locale', \SortDirection::Ascending);
 
         if ($localeFilter !== null) {
             $qb->andWhere('t.locale = :locale')->setParameter('locale', $localeFilter);

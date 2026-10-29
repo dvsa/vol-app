@@ -142,12 +142,12 @@ class EventHistory extends AbstractRepository
      * @param int|\Dvsa\Olcs\Api\Entity\User\User                     $user             User
      * @param int|\Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType $eventHistoryType EventHistoryType
      * @param string                                                  $sort             Sort
-     * @param string                                                  $order            Order
+     * @param \SortDirection|null                                     $order            Order
      * @param int                                                     $limit            Limit
      *
      * @return array
      */
-    public function fetchByAccount($user, $eventHistoryType = null, $sort = null, $order = null, $limit = null)
+    public function fetchByAccount($user, $eventHistoryType = null, $sort = null, ?\SortDirection $order = null, $limit = null)
     {
         $doctrineQb = $this->createQueryBuilder();
 
@@ -265,7 +265,7 @@ class EventHistory extends AbstractRepository
             ->where($qb->expr()->in('eht.id', [7, 31, 75]))
             ->andWhere($qb->expr()->eq('l.id', ':licenceId'))
             ->setParameter('licenceId', $licenceId)
-            ->orderBy($this->alias . '.eventDatetime', 'DESC')
+            ->orderBy($this->alias . '.eventDatetime', \SortDirection::Descending)
             ->setMaxResults(1);
 
         try {

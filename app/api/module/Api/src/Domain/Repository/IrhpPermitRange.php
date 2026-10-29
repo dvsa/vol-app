@@ -171,8 +171,8 @@ class IrhpPermitRange extends AbstractRepository
             ->andWhere($this->alias . '.irhpPermitStock = :irhpPermitStockId')
             ->setParameter('statuses', IrhpPermitEntity::$readyToPrintStatuses)
             ->setParameter('irhpPermitStockId', $irhpPermitStockId)
-            ->orderBy('rd.id', 'ASC')
-            ->addOrderBy($this->alias . '.cabotage', 'ASC');
+            ->orderBy('rd.id', \SortDirection::Ascending)
+            ->addOrderBy($this->alias . '.cabotage', \SortDirection::Ascending);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
 

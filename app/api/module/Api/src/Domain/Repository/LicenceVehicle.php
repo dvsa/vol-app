@@ -110,7 +110,7 @@ class LicenceVehicle extends AbstractRepository
 
         $qb->andWhere($qb->expr()->eq('m.licence', ':licence'));
         $qb->setParameter('licence', $licenceId);
-        $qb->orderBy('m.createdOn', 'ASC');
+        $qb->orderBy('m.createdOn', \SortDirection::Ascending);
 
         return $qb;
     }
@@ -408,7 +408,7 @@ class LicenceVehicle extends AbstractRepository
 
         $qb->where($qb->expr()->eq($this->alias . '.vehicle', ':vehicle'))
             ->setParameter('vehicle', $vehicleId)
-            ->orderBy($this->alias . '.specifiedDate', 'DESC');
+            ->orderBy($this->alias . '.specifiedDate', \SortDirection::Descending);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
@@ -525,7 +525,7 @@ class LicenceVehicle extends AbstractRepository
 
         $qb->innerJoin('m.vehicle', 'v')
             ->select('v.vrm, v.makeModel, m.specifiedDate, m.removalDate')
-            ->orderBy('m.specifiedDate', 'ASC')
+            ->orderBy('m.specifiedDate', \SortDirection::Ascending)
             ->andWhere($qb->expr()->isNotNull('m.specifiedDate'))
             ->andWhere($qb->expr()->eq('m.licence', ':licence'))
             ->setParameter('licence', $licenceId);
