@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CommonTest\Common\FormService\Form\Lva;
 
+use Common\Form\Elements\Types\Address as AddressFieldset;
 use Common\RefData;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\FieldsetInterface;
@@ -38,6 +39,7 @@ final class AddressesTest extends MockeryTestCase
             ->shouldReceive('remove')->once()->with($form, 'establishment_address');
 
         $form->expects('has')->with('establishment_address')->andReturn(false);
+        $this->expectConsultantAddressUsesNamesAsIds($form);
 
         $this->assertEquals(
             $form,
@@ -76,6 +78,7 @@ final class AddressesTest extends MockeryTestCase
             $element->expects('setLabel')->with($label)->andReturnSelf();
             $address->expects('get')->with($name)->andReturn($element);
         }
+        $this->expectConsultantAddressUsesNamesAsIds($form);
 
         $this->assertSame(
             $form,
@@ -87,5 +90,12 @@ final class AddressesTest extends MockeryTestCase
                 ]
             )
         );
+    }
+
+    private function expectConsultantAddressUsesNamesAsIds(m\MockInterface $form): void
+    {
+        $consultantAddress = m::mock(AddressFieldset::class);
+        $consultantAddress->expects('useNamesAsIds')->withNoArgs()->andReturnNull();
+        $form->expects('get')->with('consultantAddress')->andReturn($consultantAddress);
     }
 }

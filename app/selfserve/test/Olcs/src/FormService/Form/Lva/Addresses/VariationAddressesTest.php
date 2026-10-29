@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OlcsTest\FormService\Form\Lva\Addresses;
 
+use Common\Form\Elements\Types\Address as AddressFieldset;
 use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -38,6 +39,9 @@ final class VariationAddressesTest extends MockeryTestCase
     {
         $mockForm = m::mock(Form::class);
         $mockForm->expects('has')->with('establishment_address')->andReturn(false);
+        $consultantAddress = m::mock(AddressFieldset::class);
+        $consultantAddress->expects('useNamesAsIds')->withNoArgs()->andReturnNull();
+        $mockForm->expects('get')->with('consultantAddress')->andReturn($consultantAddress);
 
         $this->fh->shouldReceive('createForm')
             ->once()

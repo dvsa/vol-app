@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\Form\Elements\Types\Address as AddressFieldset;
 use Mockery as m;
 use Olcs\FormService\Form\Lva\Addresses;
 use Laminas\InputFilter\InputFilter;
@@ -35,8 +36,11 @@ final class AddressesTest extends AbstractLvaFormServiceTestCase
 
         $mockForm->shouldReceive('get')->with('form-actions')->once()->andReturn($mockFsActions);
 
-        // the establishment address labels are covered by the common Addresses test
+        // the establishment address labels and consultant address ids are covered by the common Addresses test
         $mockForm->expects('has')->with('establishment_address')->andReturn(false);
+        $consultantAddress = m::mock(AddressFieldset::class);
+        $consultantAddress->expects('useNamesAsIds')->withNoArgs()->andReturnNull();
+        $mockForm->expects('get')->with('consultantAddress')->andReturn($consultantAddress);
 
         //  check change email setting
         $mockInputFilter = m::mock(InputFilter::class)
