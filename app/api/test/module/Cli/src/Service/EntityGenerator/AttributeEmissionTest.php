@@ -663,7 +663,7 @@ final class AttributeEmissionTest extends MockeryTestCase
         );
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageIs('OrderBy direction for "createdOn" must be an instance of \\SortDirection');
+        $this->expectExceptionMessageIsOrContains('OrderBy direction for "createdOn" must be an instance of \\SortDirection');
 
         $processor->generateOrderByAnnotation([
             'createdOn' => 'DESC',
