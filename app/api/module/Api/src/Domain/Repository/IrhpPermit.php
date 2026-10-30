@@ -158,7 +158,7 @@ class IrhpPermit extends AbstractRepository
         } elseif ($query instanceof ReadyToPrintConfirm) {
             $qb->andWhere($qb->expr()->in($this->alias . '.id', ':ids'))
                 ->setParameter('ids', $query->getIds());
-            $qb->orderBy($this->alias . '.permitNumber', 'ASC');
+            $qb->orderBy($this->alias . '.permitNumber', \SortDirection::Ascending);
         }
 
         if (($query instanceof GetList) && ($query->getIrhpPermitApplication() != null)) {
@@ -201,10 +201,10 @@ class IrhpPermit extends AbstractRepository
                     ->setParameter('countryId', $query->getCountry());
             }
 
-            $qb->orderBy('ipc.countryDesc', 'ASC');
-            $qb->addOrderBy($this->alias . '.expiryDate', 'ASC');
-            $qb->addOrderBy('ipa.id', 'ASC');
-            $qb->addOrderBy($this->alias . '.permitNumber', 'ASC');
+            $qb->orderBy('ipc.countryDesc', \SortDirection::Ascending);
+            $qb->addOrderBy($this->alias . '.expiryDate', \SortDirection::Ascending);
+            $qb->addOrderBy('ipa.id', \SortDirection::Ascending);
+            $qb->addOrderBy($this->alias . '.permitNumber', \SortDirection::Ascending);
         }
     }
 

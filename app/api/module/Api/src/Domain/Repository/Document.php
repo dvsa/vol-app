@@ -40,7 +40,7 @@ class Document extends AbstractRepository
         $qb = $this->createQueryBuilder();
         $qb->andWhere($qb->expr()->isNull($this->alias . '.messagingMessage'))
            ->andWhere($qb->expr()->eq($this->alias . '.createdBy', $createdBy))
-           ->orderBy($this->alias . '.id', 'DESC');
+           ->orderBy($this->alias . '.id', \SortDirection::Descending);
 
         return $qb->getQuery()->execute();
     }
@@ -57,7 +57,7 @@ class Document extends AbstractRepository
             ->setParameter('subCategory', CategoryEntity::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL)
             ->setParameter('transportManager', $tmId)
             ->setParameter($type, $id)
-            ->orderBy($this->alias . '.id', 'DESC');
+            ->orderBy($this->alias . '.id', \SortDirection::Descending);
 
         return $qb->getQuery()->execute();
     }
@@ -71,7 +71,7 @@ class Document extends AbstractRepository
             ->setParameter('category', CategoryEntity::CATEGORY_TRANSPORT_MANAGER)
             ->setParameter('subCategory', CategoryEntity::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CPC_OR_EXEMPTION)
             ->setParameter('transportManager', $id)
-            ->orderBy($this->alias . '.id', 'DESC');
+            ->orderBy($this->alias . '.id', \SortDirection::Descending);
 
         return $qb->getQuery()->execute();
     }
@@ -115,7 +115,7 @@ class Document extends AbstractRepository
         $qb = $this->createQueryBuilder();
         $qb->andWhere($qb->expr()->eq($this->alias . '.continuationDetail', ':continuationDetail'))
             ->setParameter('continuationDetail', $continuationId)
-            ->orderBy($this->alias . '.id', 'DESC');
+            ->orderBy($this->alias . '.id', \SortDirection::Descending);
 
         return $qb->getQuery()->getResult($hydrationMode);
     }

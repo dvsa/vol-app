@@ -162,7 +162,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact::class, mappedBy: 'contactDetails', cascade: ['persist'], indexBy: 'id', orphanRemoval: true)]
-    #[ORM\OrderBy(['id' => 'DESC'])]
+    #[ORM\OrderBy(['id' => \SortDirection::Descending])]
     protected $phoneContacts;
 
     /**

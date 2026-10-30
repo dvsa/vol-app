@@ -40,7 +40,7 @@ class PiHearing extends AbstractRepository
             ->setParameter('hearingDate', $hearingDate)
             ->setParameter('pi', $pi)
             ->setParameter('isAdjourned', 1)
-            ->orderBy($this->alias . '.hearingDate', 'DESC')
+            ->orderBy($this->alias . '.hearingDate', \SortDirection::Descending)
             ->setMaxResults(1);
 
         $this->getQueryBuilder()->modifyQuery($qb);

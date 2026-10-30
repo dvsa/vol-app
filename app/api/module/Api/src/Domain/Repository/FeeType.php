@@ -81,13 +81,13 @@ class FeeType extends AbstractRepository
                 )
             )
                 // Send the NULL values to the bottom
-                ->orderBy('ft.trafficArea', 'DESC')
+                ->orderBy('ft.trafficArea', \SortDirection::Descending)
                 ->setParameter('trafficArea', $trafficArea);
         } else {
             $qb->andWhere($qb->expr()->isNull('ft.trafficArea'));
         }
 
-        $qb->addOrderBy('ft.effectiveFrom', 'DESC')
+        $qb->addOrderBy('ft.effectiveFrom', \SortDirection::Descending)
             ->setParameter('goodsOrPsv', $goodsOrPsv)
             ->setParameter('licenceType', $licenceType)
             ->setParameter('feeType', $feeType)
@@ -116,7 +116,7 @@ class FeeType extends AbstractRepository
         $qb->andWhere($qb->expr()->eq('ft.feeType', ':feeType'));
         $qb->andWhere($qb->expr()->eq('ft.irfoFeeType', ':irfoFeeType'));
 
-        $qb->addOrderBy('ft.effectiveFrom', 'DESC')
+        $qb->addOrderBy('ft.effectiveFrom', \SortDirection::Descending)
             ->setParameter('feeType', $feeType->getId())
             ->setParameter('irfoFeeType', $irfoFeeType->getId())
             ->setMaxResults(1);
@@ -139,7 +139,7 @@ class FeeType extends AbstractRepository
         $qb = $this->createQueryBuilder();
         $qb->andWhere($qb->expr()->eq('ft.feeType', ':feeType'));
 
-        $qb->orderBy('ft.effectiveFrom', 'DESC')
+        $qb->orderBy('ft.effectiveFrom', \SortDirection::Descending)
             ->setParameter('feeType', Entity::FEE_TYPE_ADJUSTMENT)
             ->setMaxResults(1);
 
@@ -245,14 +245,14 @@ class FeeType extends AbstractRepository
             $qb->andWhere($qb->expr()->isNotNull('ft.goodsOrPsv'));
             $qb->andWhere($this->alias . '.isVisibleInInternal = :isVisibleInInternal')
                 ->setParameter('isVisibleInInternal', 1);
-            $qb->addOrderBy('ft.id', 'ASC');
+            $qb->addOrderBy('ft.id', \SortDirection::Ascending);
         } else {
             $qb->andWhere(
                 $qb->expr()->lte($this->alias . '.effectiveFrom', ':effectiveFrom')
             );
             $qb->setParameter('effectiveFrom', $date);
-            $qb->addOrderBy('ftft.id', 'ASC'); // feeType.feeType.id
-            $qb->addOrderBy($this->alias . '.effectiveFrom', 'DESC');
+            $qb->addOrderBy('ftft.id', \SortDirection::Ascending); // feeType.feeType.id
+            $qb->addOrderBy($this->alias . '.effectiveFrom', \SortDirection::Descending);
         }
     }
 
@@ -323,7 +323,7 @@ class FeeType extends AbstractRepository
         $qb = $this->createQueryBuilder();
         $qb->andWhere($qb->expr()->eq('ft.productReference', ':productReference'));
 
-        $qb->addOrderBy('ft.effectiveFrom', 'DESC')
+        $qb->addOrderBy('ft.effectiveFrom', \SortDirection::Descending)
             ->setParameter('productReference', $productReference)
             ->setMaxResults(1);
 
@@ -350,7 +350,7 @@ class FeeType extends AbstractRepository
         $qb->andWhere($qb->expr()->eq('ft.productReference', ':productReference'));
         $qb->andWhere($qb->expr()->lt('ft.effectiveFrom', ':receivedDate'));
 
-        $qb->addOrderBy('ft.effectiveFrom', 'DESC')
+        $qb->addOrderBy('ft.effectiveFrom', \SortDirection::Descending)
             ->setParameter('productReference', $productReference)
             ->setParameter('receivedDate', $receivedDate)
             ->setMaxResults(1);
@@ -376,7 +376,7 @@ class FeeType extends AbstractRepository
 
         $qb->distinct()
             ->select(['ftft.id'])
-            ->orderBy('ftft.id', 'ASC')
+            ->orderBy('ftft.id', \SortDirection::Ascending)
             ->where($this->alias . '.isVisibleInInternal = :isVisibleInInternal')
             ->setParameter('isVisibleInInternal', 1);
 

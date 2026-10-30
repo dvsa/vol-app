@@ -757,8 +757,8 @@ class Fee extends AbstractRepository
         $qb = $this->createQueryBuilder()
             ->innerJoin($this->alias . '.feeTransactions', 'ft')
             ->innerJoin('ft.transaction', 't')
-            ->addOrderBy('t.completedDate', 'DESC')
-            ->addOrderBy('t.id', 'DESC');
+            ->addOrderBy('t.completedDate', \SortDirection::Descending)
+            ->addOrderBy('t.id', \SortDirection::Descending);
 
         $qb->andWhere($qb->expr()->eq($this->alias . '.application', ':application'))
             ->setParameter('application', $applicationId)
@@ -782,8 +782,8 @@ class Fee extends AbstractRepository
             ->innerJoin($this->alias . '.feeTransactions', 'ft')
             ->innerJoin($this->alias . '.feeType', 'ftp')
             ->innerJoin('ft.transaction', 't')
-            ->addOrderBy('t.completedDate', 'DESC')
-            ->addOrderBy('t.id', 'DESC');
+            ->addOrderBy('t.completedDate', \SortDirection::Descending)
+            ->addOrderBy('t.id', \SortDirection::Descending);
 
         $qb->andWhere($qb->expr()->eq($this->alias . '.licence', ':licence'))
             ->andWhere($qb->expr()->eq($this->alias . '.feeStatus', ':feeStatus'))
