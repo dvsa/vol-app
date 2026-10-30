@@ -504,7 +504,7 @@ class LicenceVehicle extends AbstractRepository
             ->leftJoin(
                 GoodsDiscEntity::class,
                 'gd2',
-                Expr\Join::WITH,
+                Expr\Join::ON,
                 $qb->expr()->eq('gd2.id', '(' . $qbs->getDQL() . ')')
             );
 
