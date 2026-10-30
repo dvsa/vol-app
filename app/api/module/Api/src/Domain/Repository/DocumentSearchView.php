@@ -180,5 +180,20 @@ class DocumentSearchView extends AbstractReadonlyRepository
                 call_user_func_array($expr->orX(...), $idExpressions)
             );
         }
+
+        if ($query->getHideUnsubmittedApplicationDocs() === 'Y') {
+            $qb->leftJoin(\Dvsa\Olcs\Api\Entity\Application\Application::class, 'a', 'WITH', 'm.applicationId = a.id');
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->neq('a.status', ':applicationStatusNotSubmitted'),
+                    $qb->expr()->isNull('a.status'),
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('a.status', ':applicationStatusNotSubmitted'),
+                        $qb->expr()->eq('m.isExternal', 0)
+                    )
+                )
+            );
+            $qb->setParameter('applicationStatusNotSubmitted', \Dvsa\Olcs\Api\Entity\Application\Application::APPLICATION_STATUS_NOT_SUBMITTED);
+        }
     }
 }
