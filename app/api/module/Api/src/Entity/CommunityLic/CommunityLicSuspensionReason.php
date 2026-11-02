@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'ix_community_lic_suspension_reason_community_lic_suspension_id', columns: ['community_lic_suspension_id'])]
 #[ORM\Index(name: 'ix_community_lic_suspension_reason_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_community_lic_suspension_reason_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_community_lic_suspension_reason_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class CommunityLicSuspensionReason extends AbstractCommunityLicSuspensionReason
 {

@@ -18,7 +18,6 @@ final class DataRetentionRuleActionTypeTest extends TestCase
                 "description" => "DR action type",
                 "displayOrder" => null,
                 "id" => "Automate",
-                "olbsKey" => null,
                 "parent" => null,
                 "refDataCategoryId" => "action_type",
                 "version" => 1

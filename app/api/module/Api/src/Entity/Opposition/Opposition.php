@@ -19,7 +19,6 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 #[ORM\Index(name: 'ix_opposition_opposition_type', columns: ['opposition_type'])]
 #[ORM\Index(name: 'ix_opposition_is_valid', columns: ['is_valid'])]
 #[ORM\Index(name: 'ix_opposition_status', columns: ['status'])]
-#[ORM\UniqueConstraint(name: 'ux_olbs_key', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\Entity]
 class Opposition extends AbstractOpposition
 {
