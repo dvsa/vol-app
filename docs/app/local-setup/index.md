@@ -70,7 +70,7 @@ If you have [nvm](https://github.com/nvm-sh/nvm) installed, use `nvm use` to aut
     :::
 
     ```bash
-    sudo echo "127.0.0.1 iuweb.local.olcs.dev-dvsacloud.uk ssweb.local.olcs.dev-dvsacloud.uk api.local.olcs.dev-dvsacloud.uk cdn.local.olcs.dev-dvsacloud.uk mailpit.local.olcs.dev-dvsacloud.uk" >> /etc/hosts
+    sudo echo "127.0.0.1 iuweb.local.olcs.dev-dvsacloud.uk ssweb.local.olcs.dev-dvsacloud.uk api.local.olcs.dev-dvsacloud.uk cdn.local.olcs.dev-dvsacloud.uk mailpit.local.olcs.dev-dvsacloud.uk mocksignin.local.olcs.dev-dvsacloud.uk printpit.local.olcs.dev-dvsacloud.uk renderer.local.olcs.dev-dvsacloud.uk" >> /etc/hosts
     ```
 
 1. Start the application
