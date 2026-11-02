@@ -266,17 +266,20 @@ $pageLang = $this->plugin('languageNavigation')->currentLanguage();
       </div>
     </section>
     <?php if($this->currentUser()->isLoggedIn()):?>
-    <div class="govuk-width-container govuk-clearfix govuk-!-margin-bottom-2">
-      <ul class="user-menu">
-        <li class="user-menu__item">
-          <?php if($this->IsGranted('can-manage-user-selfserve')):?>
-            <?php echo $this->currentUser()->getFullName() ?> (<?php echo $this->translate('Admin'); ?>),
-          <?php else: ?>
-            <?php echo $this->currentUser()->getFullName() ?>,
-          <?php endif;?>
-          <b><?php echo $this->escapeHtml($this->currentUser()->getOrganisationName()); ?></b>
-        </li>
-      </ul>
+    <div class="govuk-width-container">
+      <div class="govuk-clearfix">
+        <ul class="user-menu">
+          <li class="user-menu__item">
+            <?php if($this->IsGranted('can-manage-user-selfserve')):?>
+              <?php echo $this->currentUser()->getFullName() ?> (<?php echo $this->translate('Admin'); ?>),
+            <?php else: ?>
+              <?php echo $this->currentUser()->getFullName() ?>,
+            <?php endif;?>
+            <b><?php echo $this->escapeHtml($this->currentUser()->getOrganisationName()); ?></b>
+          </li>
+        </ul>
+      </div>
+      <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-2 govuk-!-margin-bottom-4">
     </div>
     <?php endif;?>
 
