@@ -5,11 +5,17 @@
     <div class="govuk-summary-card__title-wrapper">
       <h2 class="govuk-summary-card__title">
         <?php
-        if ($message->getCreatedBy()->getContactDetails() !== null && $message->getCreatedBy()->getContactDetails()->getPerson()) {
-          if (!$enhanced && $message->getCreatedBy()->getTeam() !== null){
-            $sender = $message->getCreatedBy()->getContactDetails()->getPerson()->getForename();
-          } else {
-            $sender = $message->getCreatedBy()->getContactDetails()->getPerson()->getFullName();
+        $createdBy = $message->getCreatedBy();
+        $sender = $this->safeUser(
+          $createdBy,
+          function ($createdBy) use ($enhanced) {
+            if ($createdBy->getContactDetails() !== null && $createdBy->getContactDetails()->getPerson()) {
+              if (!$enhanced && $createdBy->getTeam() !== null) {
+                return $createdBy->getContactDetails()->getPerson()->getForename();
+              }
+              return $createdBy->getContactDetails()->getPerson()->getFullName();
+            }
+            return $createdBy->getLoginId();
           }
         } else {
           $sender = $message->getCreatedBy()->getLoginId();
@@ -49,6 +55,7 @@
                 } else {
                   $readBy = $messageRead->getUser()->getLoginId();
                 }
+              );
 
                 $createdOn = $messageRead->getCreatedOn(true);
                 $createdOn->setTimezone(new \DateTimeZone('Europe/London'));
