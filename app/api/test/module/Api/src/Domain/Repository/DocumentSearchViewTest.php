@@ -83,7 +83,7 @@ final class DocumentSearchViewTest extends RepositoryTestCase
 
         yield 'hide unsubmitted application docs' => [
             ['hideUnsubmittedApplicationDocs' => 'Y'],
-            ' LEFT JOIN Dvsa\\Olcs\\Api\\Entity\\Application\\Application a WITH m.applicationId = a.id'
+            ' LEFT JOIN Dvsa\\Olcs\\Api\\Entity\\Application\\Application a ON m.applicationId = a.id'
             . ' WHERE a.status <> :applicationStatusNotSubmitted OR a.status IS NULL'
             . ' OR (a.status = :applicationStatusNotSubmitted AND m.isExternal = 0)',
         ];

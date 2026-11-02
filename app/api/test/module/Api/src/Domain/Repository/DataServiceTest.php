@@ -33,7 +33,7 @@ final class DataServiceTest extends RepositoryTestCase
 
         $this->assertSame(
             'SELECT m FROM ' . Entity\System\RefData::class . ' m'
-            . ' INNER JOIN ' . Entity\Application\Application::class . ' a WITH a.status = m.id'
+            . ' INNER JOIN ' . Entity\Application\Application::class . ' a ON a.status = m.id'
             . ' INNER JOIN a.licence l WITH l.organisation = :ORG_ID',
             $qb->getDQL(),
         );
