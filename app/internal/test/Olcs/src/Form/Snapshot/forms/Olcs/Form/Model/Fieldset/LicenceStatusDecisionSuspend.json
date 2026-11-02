@@ -1,0 +1,110 @@
+{
+  "name": "licence-decision-suspend",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "suspendFrom",
+        "type": "DateTimeSelect",
+        "attributes": {
+          "required": false
+        },
+        "options": {
+          "label": "licence-status.suspension.from",
+          "create_empty_option": true,
+          "max_year_delta": "+10",
+          "min_year_delta": "-5"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "suspendTo",
+        "type": "DateTimeSelect",
+        "options": {
+          "label": "licence-status.suspension.to",
+          "create_empty_option": true,
+          "max_year_delta": "+10",
+          "min_year_delta": "0"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "suspendFrom": {
+      "name": "suspendFrom",
+      "filters": [
+        {
+          "name": "DateTimeSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d H:i:s",
+            "messages": {
+              "dateInvalidDate": "datetime.compare.validation.message.invalid"
+            }
+          }
+        }
+      ],
+      "required": true
+    },
+    "suspendTo": {
+      "name": "suspendTo",
+      "filters": [
+        {
+          "name": "DateTimeSelectNullifier"
+        }
+      ],
+      "required": false,
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "suspendTo",
+            "context_values": [
+              "--"
+            ],
+            "context_truth": false,
+            "allow_empty": true,
+            "validators": [
+              {
+                "name": "\\Common\\Validator\\Date"
+              },
+              {
+                "name": "Date",
+                "options": {
+                  "format": "Y-m-d H:i:s",
+                  "messages": {
+                    "dateInvalidDate": "datetime.compare.validation.message.invalid"
+                  }
+                },
+                "break_chain_on_failure": true
+              },
+              {
+                "name": "DateCompare",
+                "options": {
+                  "has_time": true,
+                  "compare_to": "suspendFrom",
+                  "operator": "gt",
+                  "compare_to_label": "Suspend from"
+                }
+              },
+              {
+                "name": "DateInFuture"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,269 @@
+{
+  "name": "Recipient",
+  "attributes": {
+    "method": "post",
+    "label": "Recipient"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "isObjector",
+              "type": "Radio",
+              "options": {
+                "label": "Recipient type",
+                "value_options": {
+                  "N": "Subscriber",
+                  "Y": "Statutory Objector"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              },
+              "attributes": {
+                "id": "isObjector",
+                "required": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "contactName",
+              "attributes": {
+                "required": false,
+                "id": "contactName",
+                "placeholder": "",
+                "class": "medium"
+              },
+              "options": {
+                "label": "Contact Name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailAddress",
+              "attributes": {
+                "required": false,
+                "id": "email",
+                "placeholder": "",
+                "class": "medium"
+              },
+              "options": {
+                "label": "Email"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "sendAppDecision",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "A&D"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "sendNoticesProcs",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "N&P"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "trafficAreas",
+              "attributes": {
+                "required": "required",
+                "id": "trafficAreas",
+                "placeholder": "",
+                "multiple": "multiple",
+                "class": "chosen-select-large"
+              },
+              "options": {
+                "label": "Traffic area",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\TrafficArea",
+                "use_groups": "false"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isPolice",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "Send police copy"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "Recipient"
+  },
+  "input_filter": {
+    "fields": {
+      "contactName": {
+        "name": "contactName",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 100
+            }
+          }
+        ]
+      },
+      "emailAddress": {
+        "name": "emailAddress",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+          }
+        ]
+      },
+      "sendAppDecision": {
+        "name": "sendAppDecision",
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "sendNoticesProcs",
+              "context_values": [
+                "",
+                "N"
+              ],
+              "validators": [
+                {
+                  "name": "Identical",
+                  "options": {
+                    "token": "Y",
+                    "messages": {
+                      "notSame": "Subscription details must be selected"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "trafficAreas": {
+        "name": "trafficAreas",
+        "required": true
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

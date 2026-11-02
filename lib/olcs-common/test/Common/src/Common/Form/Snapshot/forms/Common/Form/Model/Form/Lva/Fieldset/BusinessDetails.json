@@ -1,0 +1,166 @@
+{
+  "name": "BusinessDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "name",
+        "attributes": {
+          "class": "long"
+        },
+        "options": {
+          "label": "application_your-business_business-details.data.company_name",
+          "label_attributes": {
+            "class": "form-element__question"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "natureOfBusiness",
+        "attributes": {
+          "id": "natureOfBusiness",
+          "placeholder": "",
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Nature of business",
+          "error-message": "businessDetails_natureOfBusiness-error",
+          "label_attributes": {
+            "aria-label": "businessDetails_natureOfBusiness-error",
+            "class": "form-element__question"
+          }
+        }
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "companyNumber",
+        "options": {
+          "label": "application_your-business_business-details.data.company_number"
+        },
+        "attributes": {
+          "id": "companyNumber"
+        },
+        "type": "Common\\Form\\Elements\\Types\\CompanyNumber"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "tradingNames",
+        "attributes": {
+          "class": "add-another"
+        },
+        "type": "Laminas\\Form\\Element\\Collection",
+        "options": {
+          "count": 1,
+          "label": "application_your-business_business-details.data.trading_names_optional",
+          "hint": "markup-trading-name-hint",
+          "hint-position": "below",
+          "target_element": {
+            "name": "TradingNames",
+            "attributes": [],
+            "elements": [
+              {
+                "flags": [],
+                "spec": {
+                  "name": "name",
+                  "attributes": {
+                    "class": "long",
+                    "id": ""
+                  },
+                  "type": "Text"
+                }
+              },
+              {
+                "flags": [],
+                "spec": {
+                  "name": "id",
+                  "attributes": {
+                    "value": ""
+                  },
+                  "type": "Hidden"
+                }
+              },
+              {
+                "flags": [],
+                "spec": {
+                  "name": "version",
+                  "attributes": {
+                    "value": ""
+                  },
+                  "type": "Hidden"
+                }
+              }
+            ],
+            "fieldsets": [],
+            "type": "Laminas\\Form\\InputFilterProviderFieldset",
+            "options": {
+              "input_filter_spec": {
+                "name": {
+                  "name": "name",
+                  "required": false,
+                  "filters": [
+                    {
+                      "name": "Laminas\\Filter\\StringTrim"
+                    }
+                  ],
+                  "validators": [
+                    {
+                      "name": "Laminas\\Validator\\StringLength",
+                      "options": {
+                        "min": 1,
+                        "max": 70
+                      }
+                    }
+                  ]
+                },
+                "type": "Laminas\\InputFilter\\InputFilter"
+              },
+              "target_type": "Common\\Form\\Model\\Form\\Lva\\Fieldset\\TradingNames"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "input_filter": {
+    "name": {
+      "name": "name",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 0,
+            "max": 200
+          }
+        }
+      ]
+    },
+    "natureOfBusiness": {
+      "name": "natureOfBusiness",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 0,
+            "max": 200
+          }
+        }
+      ]
+    }
+  }
+}

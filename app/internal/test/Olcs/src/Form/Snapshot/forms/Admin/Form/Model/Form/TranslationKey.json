@@ -1,0 +1,180 @@
+{
+  "name": "translationKeyForm",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "jsonUrl",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "resultsKey",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "translationVar",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "addedit",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": {
+          "class": "translation-keys"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "id": "id"
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "translationKey",
+              "attributes": {
+                "id": "translationKey",
+                "data-container-class": "translationKeyContainer js-hidden"
+              },
+              "options": {
+                "label": "New Translation Key"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "description",
+              "attributes": {
+                "id": "translationKey",
+                "data-container-class": "translationKeyContainer js-hidden"
+              },
+              "options": {
+                "label": "Description"
+              },
+              "type": "Text"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save and replace"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel",
+                "keepForReadOnly": true
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "label": "Edit translation key"
+  },
+  "input_filter": {
+    "fields": {
+      "translationKey": {
+        "name": "translationKey",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 512
+            }
+          }
+        ],
+        "required": false
+      },
+      "description": {
+        "name": "description",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 512
+            }
+          }
+        ],
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

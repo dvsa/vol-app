@@ -19,13 +19,11 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\MessagingMessageOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\SurrenderOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\TransportManagerOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\IrhpApplicationOptional;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/document/upload")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/document/upload')]
+#[Transfer\Method('POST')]
 final class Upload extends AbstractCommand implements LoggerOmitContentInterface
 {
     use ApplicationOptional;
@@ -39,154 +37,104 @@ final class Upload extends AbstractCommand implements LoggerOmitContentInterface
     use MessagingMessageOptional;
     use CorrelationIdOptional;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\PregReplace", options={"pattern": "/[^a-zA-Z0-9\-\_\.]+/", "replacement": ""})
-     */
+    #[Transfer\Filter('Laminas\Filter\PregReplace', options: ['pattern' => '/[^a-zA-Z0-9\-\_\.]+/', 'replacement' => ''])]
     protected $filename;
 
     protected $content;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
+    #[Transfer\Optional]
     protected $irfoOrganisation;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
+    #[Transfer\Optional]
     protected $submission;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
+    #[Transfer\Optional]
     protected $trafficArea;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
+    #[Transfer\Optional]
     protected $operatingCentre;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
+    #[Transfer\Optional]
     protected $opposition;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
+    #[Transfer\Optional]
     protected $continuationDetail;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
+    #[Transfer\Optional]
     protected $category;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
+    #[Transfer\Optional]
     protected $subCategory;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\PregReplace", options={"pattern": "/[^a-zA-Z0-9\-\_\.\ ]+/", "replacement": ""})
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":2,"max":255})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\PregReplace', options: ['pattern' => '/[^a-zA-Z0-9\-\_\.\ ]+/', 'replacement' => ''])]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 255])]
+    #[Transfer\Optional]
     protected $description;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
+    #[Transfer\Optional]
     protected $isExternal;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
+    #[Transfer\Optional]
     protected $isScan = 0;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
+    #[Transfer\Optional]
     protected $isEbsrPack = 0;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\DateTimeFormatter")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\DateTimeFormatter')]
+    #[Transfer\Optional]
     protected $issuedDate;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
+    #[Transfer\Optional]
     protected $user;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
+    #[Transfer\Optional]
     protected $shouldUploadOnly = false;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
+    #[Transfer\Optional]
     protected $additionalCopy;
 
-    /**
-     * @Transfer\ArrayInput
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\FilterEmptyItems")
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\UniqueItems")
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *      options={
-     *          "haystack": {
-     *              "application",
-     *              "licence",
-     *              "transportManager",
-     *              "surrender",
-     *              "case",
-     *              "busReg",
-     *              "irhpApplication"
-     *          }
-     *      }
-     * )
-     * @Transfer\Optional
-     */
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\FilterEmptyItems')]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\UniqueItems')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['application', 'licence', 'transportManager', 'surrender', 'case', 'busReg', 'irhpApplication']])]
+    #[Transfer\Optional]
     protected $additionalEntities = [];
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
+    #[Transfer\Optional]
     protected $isPostSubmissionUpload = 0;
 
     /**

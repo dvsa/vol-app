@@ -83,7 +83,7 @@ final class SendEcmtShortTermApsgPartSuccessfulTest extends AbstractPermitTestCa
         $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')->once()->with(
             m::type(Message::class),
             $this->template,
-            $templateVars,
+            $templateVars + ['licNo' => $this->licNo], // licNo added by AbstractEmailHandler
             'default'
         );
 
@@ -224,7 +224,7 @@ final class SendEcmtShortTermApsgPartSuccessfulTest extends AbstractPermitTestCa
         $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')->once()->with(
             m::type(Message::class),
             $this->template,
-            $templateVars,
+            $templateVars + ['licNo' => $this->licNo], // licNo added by AbstractEmailHandler
             'default'
         );
 

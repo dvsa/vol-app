@@ -4,14 +4,13 @@ namespace Dvsa\Olcs\Transfer\Command\Cache;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\Service\CacheEncryption;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * Cache Clear Command DTO
- *
- * @Transfer\RouteName("backend/cache-clear")
- * @Transfer\Method("POST")
  */
+#[Transfer\RouteName('backend/cache-clear')]
+#[Transfer\Method('POST')]
 class Clear extends AbstractCommand
 {
     /**
@@ -62,24 +61,16 @@ class Clear extends AbstractCommand
      */
     public const string RESULT_FLAG_KEYS_DELETED = 'keysDeleted';
 
-    /**
-     * @Transfer\Optional()
-     */
+    #[Transfer\Optional]
     protected ?bool $flushAll = null;
 
-    /**
-     * @Transfer\Optional()
-     */
+    #[Transfer\Optional]
     protected ?string $namespace = null;
 
-    /**
-     * @Transfer\Optional()
-     */
+    #[Transfer\Optional]
     protected ?string $pattern = null;
 
-    /**
-     * @Transfer\Optional()
-     */
+    #[Transfer\Optional]
     protected ?bool $dryRun = null;
 
     /**

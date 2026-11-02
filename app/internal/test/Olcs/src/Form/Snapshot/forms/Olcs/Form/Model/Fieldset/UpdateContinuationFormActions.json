@@ -1,0 +1,89 @@
+{
+  "name": "form-actions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "continueLicence",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button",
+          "id": "continue-licence"
+        },
+        "options": {
+          "label": "Continue Licence"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "id": "submit"
+        },
+        "options": {
+          "label": "save"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "cancel",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "id": "cancel"
+        },
+        "options": {
+          "label": "cancel"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "printSeperator",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "id": "print-separator"
+        },
+        "options": {
+          "label": "Print separator"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "viewContinuation",
+        "attributes": {
+          "class": "govuk-link",
+          "id": "view-continuation",
+          "target": "_blank"
+        },
+        "options": {
+          "label": "View digital continuation (opens in new window)"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionLink"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -1,0 +1,94 @@
+{
+  "name": "fields",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "defectType",
+        "attributes": {
+          "class": "extra-long",
+          "id": "defectType"
+        },
+        "options": {
+          "label": "Defect type"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "notes",
+        "attributes": {
+          "class": "extra-long",
+          "id": "notes"
+        },
+        "options": {
+          "label": "Definition"
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "Prohibition defect"
+  },
+  "input_filter": {
+    "defectType": {
+      "name": "defectType",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 255
+          }
+        }
+      ]
+    },
+    "notes": {
+      "name": "notes",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 1024
+          }
+        }
+      ]
+    }
+  }
+}

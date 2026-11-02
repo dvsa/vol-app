@@ -8,8 +8,8 @@
 
 namespace Dvsa\Olcs\Api\Domain\Command\Licence;
 
+use Dvsa\Olcs\Api\Domain\Command\Traits\EndIrhpApplicationsAndPermitsContext;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
-use Dvsa\Olcs\Transfer\FieldType\Traits\EndIrhpApplicationsAndPermitsContext;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\FieldType\Traits\PermitAppWithdrawReason;
 

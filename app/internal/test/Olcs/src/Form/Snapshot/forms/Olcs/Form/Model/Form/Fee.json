@@ -1,0 +1,186 @@
+{
+  "name": "fee",
+  "attributes": {
+    "method": "post",
+    "class": "js-form-ajax-submit"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fee-details",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "waiveRemainder",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "Waive fee remainder?"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "waiveReason",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "Waive note"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\FeeWaiveNote"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "pay",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button",
+                "id": "pay"
+              },
+              "options": {
+                "label": "Pay"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "recommend",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button",
+                "id": "recommend"
+              },
+              "options": {
+                "label": "Recommend waive"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "approve",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button",
+                "id": "approve"
+              },
+              "options": {
+                "label": "Approve waive"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "reject",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button",
+                "id": "reject"
+              },
+              "options": {
+                "label": "Reject waive"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "refund",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button",
+                "id": "refund"
+              },
+              "options": {
+                "label": "Refund fee"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Back"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "action_lcfirst": true
+  },
+  "input_filter": []
+}

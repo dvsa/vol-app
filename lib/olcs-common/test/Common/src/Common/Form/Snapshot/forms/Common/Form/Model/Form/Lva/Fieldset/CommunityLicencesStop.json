@@ -1,0 +1,53 @@
+{
+  "name": "community-licences-stop",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "type",
+        "options": {
+          "label": "internal.community_licence.form.change_status_to",
+          "value_options": {
+            "Y": "internal.community_licence.form.suspended",
+            "N": "internal.community_licence.form.withdrawn"
+          }
+        },
+        "type": "radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "reason",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "chosen-select-medium",
+          "multiple": true
+        },
+        "options": {
+          "label": "internal.community_licence.form.reasons",
+          "category": "com_lic_sw_reason"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "reason": {
+      "name": "reason",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "internal.community_licence.form.licences_validation"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

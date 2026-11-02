@@ -8,18 +8,14 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Scan;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/scan/continuation-separator-sheet")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/scan/continuation-separator-sheet')]
+#[Transfer\Method('POST')]
 final class CreateContinuationSeparatorSheet extends AbstractCommand
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $licNo;
 
     /**

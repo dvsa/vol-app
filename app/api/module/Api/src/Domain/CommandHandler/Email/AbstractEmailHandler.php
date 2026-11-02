@@ -8,6 +8,9 @@ use Dvsa\Olcs\Api\Domain\EmailAwareInterface;
 use Dvsa\Olcs\Api\Domain\EmailAwareTrait;
 use Dvsa\Olcs\Api\Domain\Exception\MissingEmailException;
 use Dvsa\Olcs\Api\Domain\Repository\ReadonlyRepositoryInterface;
+use Dvsa\Olcs\Api\Entity\Bus\BusReg;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 use Dvsa\Olcs\Email\Data\Message;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 
@@ -76,6 +79,13 @@ abstract class AbstractEmailHandler extends AbstractCommandHandler implements Em
         }
 
         $templateVariables = $this->getTemplateVariables($recordObject);
+
+        // a licNo set by the handler itself takes priority
+        $licNo = $this->getLicNo($recordObject);
+        if ($licNo !== null) {
+            $templateVariables += ['licNo' => $licNo];
+        }
+
         $subjectVariables = $this->getSubjectVariables($recordObject);
 
         $this->message = new Message($recipients['to'], $this->subject);
@@ -92,6 +102,22 @@ abstract class AbstractEmailHandler extends AbstractCommandHandler implements Em
         $result->addMessage('Email sent');
 
         return $result;
+    }
+
+    /**
+     * Licence number for the record, where a licence can be reached from it
+     *
+     * @param object $recordObject record will be a doctrine entity
+     */
+    private function getLicNo(object $recordObject): ?string
+    {
+        $licence = match (true) {
+            $recordObject instanceof Licence => $recordObject,
+            $recordObject instanceof IrhpApplication, $recordObject instanceof BusReg => $recordObject->getLicence(),
+            default => null,
+        };
+
+        return $licence?->getLicNo();
     }
 
     /**

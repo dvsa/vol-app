@@ -5,23 +5,20 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\AbstractIdWithVersionCommand;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/application/single/knowledge-experience")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/application/single/knowledge-experience')]
+#[Transfer\Method('PUT')]
 final class UpdateKnowledgeExperience extends AbstractIdWithVersionCommand
 {
     /**
      * The frontend sends an int, which StringTrim passes through untouched; Digits normalises it to the
      * string the getter declares.
-     *
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\Between", options={"min": 1, "max": 2})
-     * @Transfer\Optional
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Between', options: ['min' => 1, 'max' => 2])]
+    #[Transfer\Optional]
     protected $evidenceUploadType;
 
     public function getEvidenceUploadType(): ?string
@@ -29,10 +26,8 @@ final class UpdateKnowledgeExperience extends AbstractIdWithVersionCommand
         return $this->evidenceUploadType;
     }
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"Y", "N"}})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['Y', 'N']])]
     protected $knowledgeExperienceOlat;
 
     public function getKnowledgeExperienceOlat(): ?string

@@ -11,12 +11,10 @@ namespace Dvsa\Olcs\Transfer\Command\Fee;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldTypeTraits;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/fee")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/fee')]
+#[Transfer\Method('POST')]
 class CreateFee extends AbstractCommand implements
     FieldType\ApplicationInterface,
     FieldType\BusRegInterface,
@@ -36,42 +34,30 @@ class CreateFee extends AbstractCommand implements
     use FieldTypeTraits\IrfoGvPermitOptional;
     use FieldTypeTraits\IrfoPsvAuthOptional;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\Money")
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\Money')]
     protected $amount;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $invoicedDate;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $feeType;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $description;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"lfs_ot","lfs_pd","lfs_cn"}})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['lfs_ot', 'lfs_pd', 'lfs_cn']])]
     protected $feeStatus = 'lfs_ot';
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 1,"inclusive": true})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 1, 'inclusive' => true])]
     protected $quantity;
 
     /**

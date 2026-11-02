@@ -1,0 +1,173 @@
+{
+  "name": "document-relink",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "document-relink-details",
+        "attributes": {
+          "class": ""
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "relinkTo",
+              "attributes": {
+                "id": "idHtml",
+                "required": false,
+                "value": "<b>Relink to:</b>"
+              },
+              "type": "Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "type",
+              "attributes": {
+                "id": "relinkType",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Entity",
+                "disable_empty_option": false,
+                "disable_inarray_validator": false,
+                "value_options": {
+                  "application": "Application",
+                  "busReg": "Bus Registration",
+                  "case": "Case",
+                  "licence": "Licence",
+                  "irfoOrganisation": "IRFO",
+                  "irhpApplication": "Permit",
+                  "transportManager": "Transport Manager"
+                }
+              },
+              "type": "Laminas\\Form\\Element\\Select"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "targetId",
+              "attributes": {
+                "id": "targetId",
+                "class": "medium",
+                "name": "targetId"
+              },
+              "options": {
+                "label": "Application ID"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "ids",
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "copy",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Copy"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "move",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Move"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "action_lcfirst": true
+  },
+  "input_filter": {
+    "document-relink-details": {
+      "relinkTo": {
+        "name": "relinkTo",
+        "required": false
+      },
+      "targetId": {
+        "name": "targetId",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 1,
+              "max": 255
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

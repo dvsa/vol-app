@@ -1,0 +1,7 @@
+{
+  "routeName": "backend/translation-key/generate-cache",
+  "method": "POST",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

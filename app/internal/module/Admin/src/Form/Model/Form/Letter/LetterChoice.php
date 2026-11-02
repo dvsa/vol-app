@@ -6,24 +6,18 @@ namespace Admin\Form\Model\Form\Letter;
 
 use Laminas\Form\Annotation as Form;
 
-/**
- * @Form\Name("letter-choice")
- * @Form\Attributes({"method":"post"})
- * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
- */
+#[Form\Name('letter-choice')]
+#[Form\Attributes(['method' => 'post'])]
+#[Form\Type('Common\Form\Form')]
+#[Form\Options(['prefer_form_input_filter' => true])]
 class LetterChoice
 {
-    /**
-     * @Form\Name("letterChoice")
-     * @Form\ComposedObject("Admin\Form\Model\Fieldset\Letter\LetterChoice")
-     */
+    #[Form\Name('letterChoice')]
+    #[Form\ComposedObject('Admin\Form\Model\Fieldset\Letter\LetterChoice')]
     public $letterChoice = null;
 
-    /**
-     * @Form\Name("form-actions")
-     * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
-     */
+    #[Form\Name('form-actions')]
+    #[Form\Attributes(['class' => 'actions-container'])]
+    #[Form\ComposedObject('Common\Form\Model\Fieldset\CancelFormActions')]
     public $formActions = null;
 }

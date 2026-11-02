@@ -1,0 +1,68 @@
+{
+  "name": "Year",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "year",
+              "attributes": {
+                "radios_wrapper_attributes": {
+                  "data-module": "radios"
+                }
+              },
+              "options": {
+                "input_class": "Common\\Form\\Input\\YearInput"
+              },
+              "type": "DynamicRadio"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "Submit",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "SubmitButton",
+              "attributes": {
+                "class": "govuk-button",
+                "type": "submit",
+                "data-module": "govuk-button",
+                "id": "submit-continue-button"
+              },
+              "options": {
+                "label": "permits.button.continue"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

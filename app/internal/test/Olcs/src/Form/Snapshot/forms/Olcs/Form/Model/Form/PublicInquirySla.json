@@ -1,0 +1,444 @@
+{
+  "name": "Service level agreement",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "callUpLetterDate",
+              "options": {
+                "label": "Call up letter issued",
+                "create_empty_option": true,
+                "render_delimiters": true,
+                "hint": "some hint",
+                "category": "pi",
+                "field": "callUpLetterDate"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "briefToTcDate",
+              "options": {
+                "label": "Brief sent",
+                "create_empty_option": true,
+                "render_delimiters": true,
+                "category": "pi",
+                "field": "briefToTcDate"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "writtenOutcome",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "medium"
+              },
+              "options": {
+                "label": "Written outcome",
+                "category": "pi_written_outcome",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "tcWrittenDecisionDate",
+              "options": {
+                "label": "Date of written decision",
+                "create_empty_option": true,
+                "render_delimiters": true,
+                "category": "pi",
+                "field": "tcWrittenDecisionDate"
+              },
+              "attributes": {
+                "required": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "decisionLetterSentDate",
+              "options": {
+                "label": "Decision letter sent",
+                "create_empty_option": true,
+                "render_delimiters": true,
+                "category": "pi",
+                "field": "decisionLetterSentDate"
+              },
+              "attributes": {
+                "required": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "tcWrittenReasonDate",
+              "options": {
+                "label": "Date of written reason",
+                "create_empty_option": true,
+                "render_delimiters": true,
+                "category": "pi",
+                "field": "tcWrittenReasonDate"
+              },
+              "attributes": {
+                "required": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "writtenReasonLetterDate",
+              "options": {
+                "label": "Written reason letter sent",
+                "create_empty_option": true,
+                "render_delimiters": true,
+                "category": "pi",
+                "field": "writtenReasonLetterDate"
+              },
+              "attributes": {
+                "required": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "writtenDecisionLetterDate",
+              "options": {
+                "label": "Written decision letter sent",
+                "create_empty_option": true,
+                "render_delimiters": true,
+                "category": "pi",
+                "field": "writtenDecisionLetterDate"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": ""
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "callUpLetterDate": {
+        "name": "callUpLetterDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "briefToTcDate": {
+        "name": "briefToTcDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "writtenOutcome": {
+        "name": "writtenOutcome",
+        "required": false
+      },
+      "tcWrittenDecisionDate": {
+        "name": "tcWrittenDecisionDate",
+        "required": true,
+        "allow_empty": true,
+        "type": "\\Common\\InputFilter\\ContinueIfEmptyInput",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "writtenOutcome",
+              "context_values": [
+                "piwo_decision"
+              ],
+              "allow_empty": true,
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d"
+                  }
+                },
+                {
+                  "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "decisionLetterSentDate": {
+        "name": "decisionLetterSentDate",
+        "required": true,
+        "allow_empty": true,
+        "type": "\\Common\\InputFilter\\ContinueIfEmptyInput",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "writtenOutcome",
+              "context_values": [
+                "piwo_decision"
+              ],
+              "allow_empty": true,
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d"
+                  }
+                },
+                {
+                  "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "tcWrittenReasonDate": {
+        "name": "tcWrittenReasonDate",
+        "required": true,
+        "allow_empty": true,
+        "type": "\\Common\\InputFilter\\ContinueIfEmptyInput",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "writtenOutcome",
+              "context_values": [
+                "piwo_reason"
+              ],
+              "allow_empty": true,
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d"
+                  }
+                },
+                {
+                  "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "writtenReasonLetterDate": {
+        "name": "writtenReasonLetterDate",
+        "required": true,
+        "allow_empty": true,
+        "type": "\\Common\\InputFilter\\ContinueIfEmptyInput",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "writtenOutcome",
+              "context_values": [
+                "piwo_reason"
+              ],
+              "allow_empty": true,
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d"
+                  }
+                },
+                {
+                  "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "writtenDecisionLetterDate": {
+        "name": "writtenDecisionLetterDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

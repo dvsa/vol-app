@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * FeatureToggleConfigName
  *
@@ -10,10 +12,8 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait FeatureToggleConfigName
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":1,"max":255})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
     protected $configName;
 
     public function getConfigName(): string

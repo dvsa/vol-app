@@ -1,0 +1,50 @@
+{
+  "name": "licence-decision-surrender",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "surrenderDate",
+        "type": "DateSelect",
+        "attributes": {
+          "required": false
+        },
+        "options": {
+          "label": "licence-status.surrender.date.label",
+          "create_empty_option": true,
+          "min_year_delta": "-5"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "surrenderDate": {
+      "name": "surrenderDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "required": true,
+      "validators": [
+        {
+          "name": "\\Laminas\\Validator\\NotEmpty"
+        },
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    }
+  }
+}

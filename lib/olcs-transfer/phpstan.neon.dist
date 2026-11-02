@@ -14,9 +14,5 @@ parameters:
       identifier: property.parentPropertyFinalByPhpDoc
       paths:
         - 'src/Validators'
-  - # There are 24 traits which are unused, however, they may be used by commands running on API nodes - see VOL-6570
-      identifier: trait.unused
-      paths:
-        - 'src/FieldType/Traits'
 includes:
   - vendor/phpstan/phpstan-mockery/extension.neon

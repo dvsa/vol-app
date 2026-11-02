@@ -1,0 +1,476 @@
+{
+  "name": "OperatingCentres",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "table",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "required": "required",
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "dataTrafficArea",
+        "attributes": {
+          "class": "traffic-area"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "trafficArea",
+              "attributes": {
+                "id": "trafficArea",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "application_operating-centres_authorisation.dataTrafficArea.label.new",
+                "hint": "markup-traffic-area-help",
+                "value_options": [],
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false
+              },
+              "type": "\\Laminas\\Form\\Element\\Select"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "trafficAreaSet",
+              "type": "Common\\Form\\Elements\\Types\\TrafficAreaSet",
+              "options": {
+                "label": "application_operating-centres_authorisation.dataTrafficArea.label.new",
+                "label_attributes": {
+                  "class": "legend"
+                },
+                "hint": "markup-traffic-area-help",
+                "hint-position": "below"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "enforcementArea",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "application_operating-centres_authorisation.enforcementArea.label",
+                "value_options": [],
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false
+              },
+              "type": "\\Laminas\\Form\\Element\\Select"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "totAuthHgvVehiclesFieldset",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "totAuthHgvVehicles",
+                    "attributes": {
+                      "required": false,
+                      "class": "short",
+                      "id": "totAuthHgvVehicles",
+                      "pattern": "\\d*"
+                    },
+                    "type": "Text",
+                    "options": {
+                      "label": "application_operating-centres_authorisation.data.totAuthHgvVehicles.hgvs-label",
+                      "hint-below-class": "govuk-hint govuk-body govuk-!-font-size-16 govuk-!-margin-top-2"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "options": {
+                "label": "application_operating-centres_authorisation.data.totAuthHgvVehiclesFieldset.hgvs-label",
+                "hint": "markup-operating-centres-authorisation",
+                "hint-position": "below"
+              },
+              "type": "Laminas\\Form\\Fieldset"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "totAuthLgvVehiclesFieldset",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "totAuthLgvVehicles",
+                    "attributes": {
+                      "required": false,
+                      "class": "short",
+                      "id": "totAuthLgvVehicles",
+                      "pattern": "\\d*"
+                    },
+                    "type": "Text",
+                    "options": {
+                      "label": "application_operating-centres_authorisation.data.totAuthLgvVehicles.label",
+                      "hint": "application_operating-centres_authorisation.data.totAuthLgvVehicles.hint",
+                      "hint-below-class": "govuk-hint govuk-body govuk-!-font-size-16 govuk-!-margin-top-2"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "options": {
+                "label": "application_operating-centres_authorisation.data.totAuthLgvVehiclesFieldset.label"
+              },
+              "type": "Laminas\\Form\\Fieldset"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "totAuthTrailersFieldset",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "totAuthTrailers",
+                    "attributes": {
+                      "required": false,
+                      "class": "short",
+                      "id": "totAuthTrailers",
+                      "pattern": "\\d*"
+                    },
+                    "type": "Text",
+                    "options": {
+                      "label": "application_operating-centres_authorisation.data.totAuthTrailers",
+                      "hint-below-class": "govuk-hint govuk-body govuk-!-font-size-16 govuk-!-margin-top-2"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "options": {
+                "label": "application_operating-centres_authorisation.data.totAuthTrailersFieldset.label"
+              },
+              "type": "Laminas\\Form\\Fieldset"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "totCommunityLicencesFieldset",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "totCommunityLicences",
+                    "attributes": {
+                      "class": "short",
+                      "id": "totCommunityLicences"
+                    },
+                    "options": {
+                      "label": "application_operating-centres_authorisation.data.totCommunityLicences",
+                      "hint": "application_operating-centres_authorisation.data.totCommunityLicences.hint"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "options": {
+                "label": "application_operating-centres_authorisation.data.totCommunityLicencesFieldset.label"
+              },
+              "type": "Laminas\\Form\\Fieldset"
+            }
+          }
+        ],
+        "options": [],
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "saveAndContinue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "save.continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "table": {
+      "rows": {
+        "name": "rows",
+        "required": true,
+        "validators": [
+          {
+            "name": "Common\\Form\\Elements\\Validators\\TableRequiredValidator",
+            "options": {
+              "label": "record"
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "dataTrafficArea": {
+      "enforcementArea": {
+        "name": "enforcementArea",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "data": {
+      "totAuthHgvVehiclesFieldset": {
+        "totAuthHgvVehicles": {
+          "name": "totAuthHgvVehicles",
+          "required": true,
+          "validators": [
+            {
+              "name": "Digits",
+              "options": {
+                "break_chain_on_failure": true
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 1,
+                "max": 5000
+              }
+            }
+          ],
+          "filters": [
+            {
+              "name": "\\Laminas\\Filter\\ToNull",
+              "options": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "totAuthLgvVehiclesFieldset": {
+        "totAuthLgvVehicles": {
+          "name": "totAuthLgvVehicles",
+          "required": true,
+          "validators": [
+            {
+              "name": "Digits",
+              "options": {
+                "break_chain_on_failure": true
+              }
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 5000
+              }
+            }
+          ],
+          "filters": [
+            {
+              "name": "\\Laminas\\Filter\\ToNull",
+              "options": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "totAuthTrailersFieldset": {
+        "totAuthTrailers": {
+          "name": "totAuthTrailers",
+          "required": true,
+          "validators": [
+            {
+              "name": "Digits"
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 5000
+              }
+            }
+          ],
+          "filters": [
+            {
+              "name": "\\Laminas\\Filter\\ToNull",
+              "options": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "totCommunityLicencesFieldset": {
+        "totCommunityLicences": {
+          "name": "totCommunityLicences",
+          "validators": [
+            {
+              "name": "Digits"
+            },
+            {
+              "name": "Between",
+              "options": {
+                "min": 0,
+                "max": 10000
+              }
+            }
+          ],
+          "filters": [
+            {
+              "name": "\\Laminas\\Filter\\ToNull",
+              "options": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

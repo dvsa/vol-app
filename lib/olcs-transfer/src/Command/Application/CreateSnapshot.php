@@ -8,14 +8,12 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Application;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 
-/**
- * @Transfer\RouteName("backend/application/single/snapshot")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/application/single/snapshot')]
+#[Transfer\Method('POST')]
 final class CreateSnapshot extends AbstractCommand
 {
     use Identity;
@@ -26,9 +24,7 @@ final class CreateSnapshot extends AbstractCommand
     public const ON_WITHDRAW = 3;
     public const ON_NTU = 4;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $event;
 
     /**

@@ -3,19 +3,17 @@
 namespace Dvsa\Olcs\Transfer\Query\Document;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\IsSlugOptional;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/document/download-guide")
- */
+#[Transfer\RouteName('backend/document/download-guide')]
 class DownloadGuide extends AbstractDownload
 {
     use IsSlugOptional;
 
     /**
      * @var  string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $identifier;
 
     /**

@@ -6,11 +6,9 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\TrafficAreasOptionalWithOther;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/cases/report/open")
- */
+#[Transfer\RouteName('backend/cases/report/open')]
 class OpenList extends AbstractQuery implements PagedQueryInterface
 {
     use PagedTrait;
@@ -18,28 +16,28 @@ class OpenList extends AbstractQuery implements PagedQueryInterface
 
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Filter("Laminas\Filter\StringToLower")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\CaseType")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Filter('Laminas\Filter\StringToLower')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\CaseType')]
     protected $caseType = null;
 
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Filter("Laminas\Filter\StringToLower")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\ApplicationStatus")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Filter('Laminas\Filter\StringToLower')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\ApplicationStatus')]
     protected $applicationStatus = null;
 
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\LicenceStatus")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\LicenceStatus')]
     protected $licenceStatus = null;
 
     /**

@@ -7,9 +7,9 @@
 
 namespace Dvsa\Olcs\Api\Domain\Command\IrhpPermitApplication;
 
+use Dvsa\Olcs\Api\Domain\Command\Traits\IrhpPermitWindow;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\IrhpApplication;
-use Dvsa\Olcs\Transfer\FieldType\Traits\IrhpPermitWindow;
 
 final class CreateForIrhpApplication extends AbstractCommand
 {

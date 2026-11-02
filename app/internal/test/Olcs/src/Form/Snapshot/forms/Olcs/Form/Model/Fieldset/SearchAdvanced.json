@@ -1,0 +1,192 @@
+{
+  "name": "search-advanced",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "address",
+        "attributes": {
+          "id": "",
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "Address"
+        },
+        "type": "\\Laminas\\Form\\Element\\Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "town",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "Town"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "caseNumber",
+        "attributes": {
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "Case number"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "transportManagerId",
+        "attributes": {
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "Transport manager ID"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "operatorId",
+        "attributes": {
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "Operator ID"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "vehicleRegMark",
+        "attributes": {
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "Vehicle registration mark"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "diskSerialNumber",
+        "attributes": {
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "Disc serial number"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "fabsRef",
+        "attributes": {
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "Fabs reference"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "companyNo",
+        "attributes": {
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "Company number"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "Advanced search",
+    "class": "extra-long"
+  },
+  "input_filter": {
+    "address": {
+      "name": "address",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        },
+        {
+          "name": "Laminas\\Filter\\StringToLower"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 10,
+            "max": 100
+          }
+        }
+      ]
+    },
+    "town": {
+      "name": "town",
+      "required": false
+    },
+    "caseNumber": {
+      "name": "caseNumber",
+      "required": false
+    },
+    "transportManagerId": {
+      "name": "transportManagerId",
+      "required": false
+    },
+    "operatorId": {
+      "name": "operatorId",
+      "required": false
+    },
+    "vehicleRegMark": {
+      "name": "vehicleRegMark",
+      "required": false
+    },
+    "diskSerialNumber": {
+      "name": "diskSerialNumber",
+      "required": false
+    },
+    "fabsRef": {
+      "name": "fabsRef",
+      "required": false
+    },
+    "companyNo": {
+      "name": "companyNo",
+      "required": false
+    }
+  }
+}

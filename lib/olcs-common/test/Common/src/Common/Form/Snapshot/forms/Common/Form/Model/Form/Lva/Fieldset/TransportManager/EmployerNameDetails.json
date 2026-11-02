@@ -1,0 +1,43 @@
+{
+  "name": "tm-employer-name-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "employerName",
+        "attributes": {
+          "class": "long",
+          "required": "required"
+        },
+        "options": {
+          "label": "transport-manager.employment.form.employerName",
+          "short-label": "transport-manager.employment.form.employerName"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "employerName": {
+      "name": "employerName",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 90
+          }
+        }
+      ]
+    }
+  }
+}

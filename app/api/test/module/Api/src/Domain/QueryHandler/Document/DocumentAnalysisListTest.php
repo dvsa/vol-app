@@ -9,17 +9,30 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\Document\DocumentAnalysisList;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\NormalisedResult;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentAnalysisList as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
 final class DocumentAnalysisListTest extends QueryHandlerTestCase
 {
+    private const STORED_PAYLOAD = ['version' => 1, 'rows' => ['bank' => ['value' => 'stored']]];
+    private const CURRENT_PAYLOAD = ['version' => 1, 'rows' => ['bank' => ['value' => 'current']]];
+
     #[\Override]
     public function setUp(): void
     {
         $this->sut = new DocumentAnalysisList();
         $this->mockRepo('DocumentAnalysis', DocumentAnalysisRepo::class);
+
+        // Every stored payload goes out through the normaliser, whatever version it holds, and
+        // what leaves the API is the current array form.
+        $normaliser = m::mock(AnalysisResultNormaliser::class);
+        $normaliser->allows('fromStored')->with(self::STORED_PAYLOAD)
+            ->andReturn(NormalisedResult::fromRows(self::CURRENT_PAYLOAD['rows']));
+        $normaliser->allows('fromStored')->with(null)->andReturnNull();
+        $this->mockedSmServices[AnalysisResultNormaliser::class] = $normaliser;
 
         parent::setUp();
     }
@@ -58,15 +71,37 @@ final class DocumentAnalysisListTest extends QueryHandlerTestCase
             [
                 'id' => 1,
                 'documentId' => 11,
+                'documentDescription' => 'August statement',
+                'documentFilename' => 'documents/2026/statement.pdf',
                 'documentDate' => '2026-03-04 10:11:12',
                 'status' => DocumentAnalysis::STATUS_SUCCESS,
-                'result' => [],
-                'metadata' => [],
+                // Read from the assessment_status column.
+                'assessmentStatus' => 'APPROVED',
+                'resultNormalised' => self::CURRENT_PAYLOAD,
                 'errorDetail' => null,
                 'completedAt' => '2026-03-05 09:00:00',
             ],
             $result['analyses'][0]
         );
+    }
+
+    /**
+     * The raw result holds the applicant profile and pipeline provenance (bucket, key, execution
+     * ARN). Callers render the normalised payload, so the raw result stays inside the API.
+     */
+    public function testHandleQueryDoesNotExposeTheRawResult(): void
+    {
+        $query = Qry::create(['licence' => 7, 'status' => DocumentAnalysis::STATUS_SUCCESS]);
+
+        $this->repoMap['DocumentAnalysis']->expects('fetchList')
+            ->with($query, Query::HYDRATE_OBJECT)
+            ->andReturn(new \ArrayIterator([$this->mockAnalysis(1, 11, null)]));
+        $this->repoMap['DocumentAnalysis']->expects('fetchCount')->with($query)->andReturn(1);
+
+        $result = $this->sut->handleQuery($query);
+
+        $this->assertArrayNotHasKey('result', $result['analyses'][0]);
+        $this->assertArrayNotHasKey('metadata', $result['analyses'][0]);
     }
 
     /**
@@ -97,14 +132,16 @@ final class DocumentAnalysisListTest extends QueryHandlerTestCase
     {
         $document = m::mock(Document::class);
         $document->allows('getId')->andReturn($documentId);
+        $document->allows('getDescription')->andReturn('August statement');
+        $document->allows('getFilename')->andReturn('documents/2026/statement.pdf');
         $document->allows('getIssuedDate')->with(true)->andReturn($issuedDate);
 
         $analysis = m::mock(DocumentAnalysis::class);
         $analysis->allows('getId')->andReturn($id);
         $analysis->allows('getDocument')->andReturn($document);
         $analysis->allows('getStatus')->andReturn(DocumentAnalysis::STATUS_SUCCESS);
-        $analysis->allows('getResult')->andReturn([]);
-        $analysis->allows('getResultMetadata')->andReturn([]);
+        $analysis->allows('getAssessmentStatus')->andReturn('APPROVED');
+        $analysis->allows('getResultNormalised')->andReturn(self::STORED_PAYLOAD);
         $analysis->allows('getErrorDetail')->andReturnNull();
         $analysis->allows('getCompletedAt')->with(true)->andReturn(new \DateTime('2026-03-05 09:00:00'));
 

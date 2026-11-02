@@ -1,0 +1,149 @@
+{
+  "name": "lva-vehicles-declarations-small-conditions",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvSmallVhlHeading",
+        "options": {
+          "label": "application_vehicle-safety_undertakings.smallVehiclesUndertakingsScotland.title",
+          "label_attributes": {
+            "class": "govuk-heading-s"
+          }
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvSmallVhlConditions",
+        "attributes": {
+          "id": "",
+          "value": "markup-application_vehicle-safety_undertakings-smallVehiclesUndertakingsScotland"
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvSmallVhlUndertakings",
+        "attributes": {
+          "value": "markup-application_vehicle-safety_undertakings-smallVehiclesUndertakings"
+        },
+        "options": {
+          "label": "application_vehicle-safety_undertakings.smallVehiclesUndertakings.title",
+          "label_attributes": {
+            "class": "govuk-heading-s"
+          }
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "psvSmallVhlConfirmation",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "application_vehicle-safety_undertakings.smallVehiclesConfirmation",
+          "label_attributes": {
+            "class": "govuk-label govuk-checkboxes__label form-control form-control--checkbox form-control--advanced"
+          },
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "must_be_value": "Y",
+          "use_hidden_element": false
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isOperatingSmallPsvAsPartOfLarge",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "saveAndContinue",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "save.continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "save.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "cancel.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

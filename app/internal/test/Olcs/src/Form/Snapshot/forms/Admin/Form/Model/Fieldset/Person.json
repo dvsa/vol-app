@@ -1,0 +1,126 @@
+{
+  "name": "person",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "title",
+        "attributes": {
+          "id": "title",
+          "placeholder": "",
+          "class": "small"
+        },
+        "options": {
+          "label": "Title",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "person_title"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "forename",
+        "attributes": {
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "First name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "familyName",
+        "attributes": {
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Last name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "birthDate",
+        "attributes": {
+          "id": "birthDate"
+        },
+        "options": {
+          "label": "Birth date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "forename": {
+      "name": "forename",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "familyName": {
+      "name": "familyName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "birthDate": {
+      "name": "birthDate",
+      "required": false,
+      "validators": [
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ],
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ]
+    }
+  }
+}

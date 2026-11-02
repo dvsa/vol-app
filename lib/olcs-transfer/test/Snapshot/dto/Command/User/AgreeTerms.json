@@ -1,0 +1,7 @@
+{
+  "routeName": "backend/user/selfserve/agree-terms",
+  "method": "POST",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

@@ -8,179 +8,100 @@ use Laminas\Form\Annotation as Form;
 
 class LetterIssue
 {
-    /**
-     * @Form\Type("Hidden")
-     */
+    #[Form\Type('Hidden')]
     public $id = null;
 
-    /**
-     * @Form\Options({"label": "Issue Key"})
-     * @Form\Required(true)
-     * @Form\Type("Text")
-     * @Form\Attributes({"class":"medium", "required": true})
-     * @Form\Filter("Laminas\Filter\StringTrim")
-     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1, "max":100})
-     */
+    #[Form\Options(['label' => 'Issue Key'])]
+    #[Form\Required(true)]
+    #[Form\Type('Text')]
+    #[Form\Attributes(['class' => 'medium', 'required' => true])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 100])]
     public $issueKey = null;
 
-    /**
-     * @Form\Options({"label": "Modal Label"})
-     * @Form\Required(false)
-     * @Form\Type("Text")
-     * @Form\Attributes({"class":"medium"})
-     * @Form\Filter("Laminas\Filter\StringTrim")
-     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1, "max":200})
-     */
+    #[Form\Options(['label' => 'Modal Label'])]
+    #[Form\Required(false)]
+    #[Form\Type('Text')]
+    #[Form\Attributes(['class' => 'medium'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 200])]
     public $modalLabel = null;
 
-    /**
-     * @Form\Options({"label": "Heading"})
-     * @Form\Required(true)
-     * @Form\Type("Text")
-     * @Form\Attributes({"class":"long", "required": true})
-     * @Form\Filter("Laminas\Filter\StringTrim")
-     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
-     */
+    #[Form\Options(['label' => 'Heading'])]
+    #[Form\Required(true)]
+    #[Form\Type('Text')]
+    #[Form\Attributes(['class' => 'long', 'required' => true])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
     public $heading = null;
 
-    /**
-     * @Form\Options({
-     *     "label": "Issue Type",
-     *     "disable_inarray_validator": false,
-     *     "service_name": "Olcs\Service\Data\Letter\LetterIssueType",
-     *     "empty_option": "Please Select"
-     * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"letterIssueType","class":"medium"})
-     */
+    #[Form\Options(['label' => 'Issue Type', 'disable_inarray_validator' => false, 'service_name' => 'Olcs\Service\Data\Letter\LetterIssueType', 'empty_option' => 'Please Select'])]
+    #[Form\Type('DynamicSelect')]
+    #[Form\Required(false)]
+    #[Form\Attributes(['id' => 'letterIssueType', 'class' => 'medium'])]
     public $letterIssueType = null;
 
-    /**
-     * @Form\Options({
-     *     "label": "Linked To-dos",
-     *     "hint": "Optional. Select the to-dos that apply when a caseworker picks this issue. Same to-do on multiple issues will appear only once in the generated letter.",
-     *     "disable_inarray_validator": false,
-     *     "service_name": "Olcs\Service\Data\Letter\LetterTodo",
-     *     "use_groups": false
-     * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"letterTodos","class":"medium chosen-select-large","multiple":"multiple"})
-     */
+    #[Form\Options(['label' => 'Linked To-dos', 'hint' => 'Optional. Select the to-dos that apply when a caseworker picks this issue. Same to-do on multiple issues will appear only once in the generated letter.', 'disable_inarray_validator' => false, 'service_name' => 'Olcs\Service\Data\Letter\LetterTodo', 'use_groups' => false])]
+    #[Form\Type('DynamicSelect')]
+    #[Form\Required(false)]
+    #[Form\Attributes(['id' => 'letterTodos', 'class' => 'medium chosen-select-large', 'multiple' => 'multiple'])]
     public $letterTodos = null;
 
-    /**
-     * @Form\Options({
-     *     "label": "Category",
-     *     "disable_inarray_validator": false,
-     *     "service_name": "Olcs\Service\Data\Category",
-     *     "empty_option": "Please Select"
-     * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"category","class":"medium"})
-     */
+    #[Form\Options(['label' => 'Category', 'disable_inarray_validator' => false, 'service_name' => 'Olcs\Service\Data\Category', 'empty_option' => 'Please Select'])]
+    #[Form\Type('DynamicSelect')]
+    #[Form\Required(true)]
+    #[Form\Attributes(['id' => 'category', 'class' => 'medium'])]
     public $category = null;
 
-    /**
-     * @Form\Options({
-     *     "label": "Sub Category",
-     *     "disable_inarray_validator": false,
-     *     "service_name": "Olcs\Service\Data\SubCategory",
-     *     "empty_option": "Please Select"
-     * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"subCategory","class":"medium"})
-     */
+    #[Form\Options(['label' => 'Sub Category', 'disable_inarray_validator' => false, 'service_name' => 'Olcs\Service\Data\SubCategory', 'empty_option' => 'Please Select'])]
+    #[Form\Type('DynamicSelect')]
+    #[Form\Required(false)]
+    #[Form\Attributes(['id' => 'subCategory', 'class' => 'medium'])]
     public $subCategory = null;
 
-    /**
-     * @Form\Options({
-     *     "label": "Goods or PSV",
-     *     "disable_inarray_validator": false,
-     *     "empty_option": "Both"
-     * })
-     * @Form\Type("Select")
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"goodsOrPsv","class":"medium"})
-     * @Form\Options({
-     *     "value_options": {
-     *         "lcat_gv": "Goods",
-     *         "lcat_psv": "PSV"
-     *     }
-     * })
-     */
+    #[Form\Options(['label' => 'Goods or PSV', 'disable_inarray_validator' => false, 'empty_option' => 'Both', 'value_options' => ['lcat_gv' => 'Goods', 'lcat_psv' => 'PSV']])]
+    #[Form\Type('Select')]
+    #[Form\Required(false)]
+    #[Form\Attributes(['id' => 'goodsOrPsv', 'class' => 'medium'])]
     public $goodsOrPsv = null;
 
-    /**
-     * @Form\Options({
-     *     "label": "Default Body Content",
-     *     "label_attributes": {
-     *         "class": ""
-     *     }
-     * })
-     * @Form\Required(false)
-     * @Form\Type("EditorJs")
-     * @Form\Attributes({"id":"defaultBodyContent", "class":"extra-long", "name":"defaultBodyContent"})
-     * @Form\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Form\Options(['label' => 'Default Body Content', 'label_attributes' => ['class' => '']])]
+    #[Form\Required(false)]
+    #[Form\Type('EditorJs')]
+    #[Form\Attributes(['id' => 'defaultBodyContent', 'class' => 'extra-long', 'name' => 'defaultBodyContent'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     public $defaultBodyContent = null;
 
-    /**
-     * @Form\Options({
-     *     "label": "Northern Ireland Only",
-     *     "checked_value": "1",
-     *     "unchecked_value": "0"
-     * })
-     * @Form\Type("OlcsCheckbox")
-     * @Form\Attributes({"class":"", "id":"isNi"})
-     */
+    #[Form\Options(['label' => 'Northern Ireland Only', 'checked_value' => '1', 'unchecked_value' => '0'])]
+    #[Form\Type('OlcsCheckbox')]
+    #[Form\Attributes(['class' => '', 'id' => 'isNi'])]
     public $isNi = null;
 
-    /**
-     * @Form\Options({
-     *     "label": "Requires Input",
-     *     "checked_value": "1",
-     *     "unchecked_value": "0"
-     * })
-     * @Form\Type("OlcsCheckbox")
-     * @Form\Attributes({"class":"", "id":"requiresInput"})
-     */
+    #[Form\Options(['label' => 'Requires Input', 'checked_value' => '1', 'unchecked_value' => '0'])]
+    #[Form\Type('OlcsCheckbox')]
+    #[Form\Attributes(['class' => '', 'id' => 'requiresInput'])]
     public $requiresInput = null;
 
-    /**
-     * @Form\Options({"label": "Minimum Length"})
-     * @Form\Required(false)
-     * @Form\Type("Number")
-     * @Form\Attributes({"class":"short"})
-     * @Form\Filter("Laminas\Filter\Digits")
-     * @Form\Validator("Laminas\Validator\Digits")
-     */
+    #[Form\Options(['label' => 'Minimum Length'])]
+    #[Form\Required(false)]
+    #[Form\Type('Number')]
+    #[Form\Attributes(['class' => 'short'])]
+    #[Form\Filter('Laminas\Filter\Digits')]
+    #[Form\Validator('Laminas\Validator\Digits')]
     public $minLength = null;
 
-    /**
-     * @Form\Options({"label": "Maximum Length"})
-     * @Form\Required(false)
-     * @Form\Type("Number")
-     * @Form\Attributes({"class":"short"})
-     * @Form\Filter("Laminas\Filter\Digits")
-     * @Form\Validator("Laminas\Validator\Digits")
-     */
+    #[Form\Options(['label' => 'Maximum Length'])]
+    #[Form\Required(false)]
+    #[Form\Type('Number')]
+    #[Form\Attributes(['class' => 'short'])]
+    #[Form\Filter('Laminas\Filter\Digits')]
+    #[Form\Validator('Laminas\Validator\Digits')]
     public $maxLength = null;
 
-    /**
-     * @Form\Options({
-     *     "label": "Help Text",
-     *     "label_attributes": {
-     *         "class": ""
-     *     }
-     * })
-     * @Form\Required(false)
-     * @Form\Type("Textarea")
-     * @Form\Attributes({"class":"extra-long", "rows": 3})
-     * @Form\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Form\Options(['label' => 'Help Text', 'label_attributes' => ['class' => '']])]
+    #[Form\Required(false)]
+    #[Form\Type('Textarea')]
+    #[Form\Attributes(['class' => 'extra-long', 'rows' => 3])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     public $helpText = null;
 }

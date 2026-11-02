@@ -28,7 +28,6 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\WithdrawableInterface;
 use Dvsa\Olcs\Transfer\Command\Licence\SurrenderLicence as Command;
-use Dvsa\Olcs\Transfer\FieldType\Traits\EndIrhpApplicationsAndPermitsContext;
 use Mockery as m;
 
 /**

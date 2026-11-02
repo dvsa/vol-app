@@ -2,7 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Partial;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
 /**
@@ -14,20 +14,16 @@ class OperatingCentreEvidence extends AbstractCommand
 {
     /**
      * @var int
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $aocId;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $adPlacedIn;
 
-    /**
-     * @Transfer\Validator("Date", options={"format": "Y-m-d"})
-     */
+    #[Transfer\Validator('Date', options: ['format' => 'Y-m-d'])]
     protected $adPlacedDate;
 
     /**

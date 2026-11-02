@@ -1,0 +1,239 @@
+{
+  "name": "financial-standing-rate",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "details",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "goodsOrPsv",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "short-label": "financial-standing-rate-element-goodsOrPsv",
+                "fieldset-attributes": {
+                  "id": "fieldset-operator-type",
+                  "class": "checkbox"
+                },
+                "fieldset-data-group": "operator-type",
+                "label": "financial-standing-rate-element-goodsOrPsv",
+                "value_options": {
+                  "lcat_gv": "Goods",
+                  "lcat_psv": "PSV"
+                }
+              },
+              "type": "Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "licenceType",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "short-label": "financial-standing-rate-element-licenceType",
+                "fieldset-attributes": {
+                  "id": "fieldset-licence-type",
+                  "class": "checkbox"
+                },
+                "fieldset-data-group": "licence-type",
+                "label": "financial-standing-rate-element-licenceType",
+                "value_options": {
+                  "ltyp_r": "Restricted",
+                  "ltyp_sn": "Standard National",
+                  "ltyp_si": "Standard International",
+                  "ltyp_sr": "Special Restricted"
+                }
+              },
+              "type": "Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "vehicleType",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "short-label": "financial-standing-rate-element-vehicleType",
+                "fieldset-attributes": {
+                  "id": "fieldset-vehicle-type",
+                  "class": "checkbox"
+                },
+                "fieldset-data-group": "vehicle-type",
+                "label": "financial-standing-rate-element-vehicleType",
+                "value_options": {
+                  "fin_sta_veh_typ_na": "Not Applicable",
+                  "fin_sta_veh_typ_hgv": "Heavy Goods Vehicle",
+                  "fin_sta_veh_typ_lgv": "Light Goods Vehicle"
+                }
+              },
+              "type": "Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "firstVehicleRate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "short-label": "financial-standing-rate-element-firstVehicleRate-short",
+                "label": "financial-standing-rate-element-firstVehicleRate",
+                "label_attributes": {
+                  "id": "label-firstVehicleRate"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "additionalVehicleRate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "short-label": "financial-standing-rate-element-additionalVehicleRate-short",
+                "label": "financial-standing-rate-element-additionalVehicleRate",
+                "label_attributes": {
+                  "id": "label-additionalVehicleRate"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "effectiveFrom",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "short-label": "financial-standing-rate-element-effectiveDate",
+                "label": "financial-standing-rate-element-effectiveDate",
+                "label_attributes": {
+                  "id": "label-effectiveFrom"
+                },
+                "render_delimiters": false,
+                "create_empty_option": true,
+                "required": true,
+                "max_year_delta": "+10",
+                "min_year_delta": "-10"
+              },
+              "type": "\\Common\\Form\\Elements\\Custom\\DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "details": {
+      "firstVehicleRate": {
+        "name": "firstVehicleRate",
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Money"
+          }
+        ]
+      },
+      "additionalVehicleRate": {
+        "name": "additionalVehicleRate",
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Money"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

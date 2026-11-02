@@ -1,0 +1,150 @@
+{
+  "name": "LetterTodo",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "todoKey",
+        "options": {
+          "label": "Todo Key"
+        },
+        "attributes": {
+          "required": true,
+          "class": "medium"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "name",
+        "options": {
+          "label": "Name"
+        },
+        "attributes": {
+          "required": true,
+          "class": "long"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "options": {
+          "label": "Description",
+          "label_attributes": {
+            "class": ""
+          }
+        },
+        "attributes": {
+          "required": "required",
+          "id": "description",
+          "class": "extra-long",
+          "name": "description"
+        },
+        "type": "EditorJs"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "helpText",
+        "options": {
+          "label": "Help Text",
+          "label_attributes": {
+            "class": ""
+          }
+        },
+        "type": "Textarea",
+        "attributes": {
+          "class": "extra-long",
+          "rows": 3
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "requiresInput",
+        "options": {
+          "label": "Requires Input",
+          "checked_value": "1",
+          "unchecked_value": "0"
+        },
+        "type": "OlcsCheckbox",
+        "attributes": {
+          "class": "",
+          "id": "requiresInput"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "todoKey": {
+      "name": "todoKey",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 100
+          }
+        }
+      ]
+    },
+    "name": {
+      "name": "name",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 255
+          }
+        }
+      ]
+    },
+    "description": {
+      "name": "description",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "helpText": {
+      "name": "helpText",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

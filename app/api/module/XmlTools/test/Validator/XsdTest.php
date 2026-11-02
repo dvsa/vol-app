@@ -245,6 +245,49 @@ XSD;
         $this->assertTrue($passed, 'Expected exception not thrown');
     }
 
+    /**
+     * A document failing the main xsd is valid if it passes the fallback xsd. If it fails both, the errors reported
+     * are the main xsd's
+     */
+    #[DataProvider('provideIsValidWithFallbackXsd')]
+    public function testIsValidWithFallbackXsd(string $xml, bool $expectedValid, string $expectedMessage): void
+    {
+        libxml_clear_errors();
+        vfsStream::setup('root');
+        $mainXsd = vfsStream::url('root/main.xsd');
+        $fallbackXsd = vfsStream::url('root/fallback.xsd');
+
+        file_put_contents($mainXsd, $this->enumerationXsd('main'));
+        file_put_contents($fallbackXsd, $this->enumerationXsd('fallback'));
+
+        $domDocument = new DOMDocument();
+        $domDocument->loadXML($xml);
+
+        $sut = new Xsd();
+        $sut->setXsd($mainXsd);
+        $sut->setFallbackXsd($fallbackXsd);
+
+        $this->assertSame($fallbackXsd, $sut->getFallbackXsd());
+        $this->assertSame($expectedValid, $sut->isValid($domDocument));
+        $this->assertSame($expectedMessage, implode("\n", $sut->getMessages()));
+        $this->assertSame([], libxml_get_errors());
+    }
+
+    public static function provideIsValidWithFallbackXsd(): array
+    {
+        return [
+            'valid against main xsd' => ['<test>main</test>', true, ''],
+            'valid against fallback xsd only' => ['<test>fallback</test>', true, ''],
+            'invalid against both' => [
+                '<test>neither</test>',
+                false,
+                "The xml file didn't validate against the schema (first 1 errors shown)\n" .
+                'XML error "Element \'test\': [facet \'enumeration\'] The value \'neither\' is not an element of ' .
+                "the set {'main'}.\n\" on line 1 column 0",
+            ],
+        ];
+    }
+
     public function testMaxErrors(): void
     {
         $maxErrors = 123;
@@ -262,5 +305,24 @@ XSD;
         libxml_clear_errors();
         $xsd = new Xsd();
         $this->assertEquals([], $xsd->getXmlErrors());
+    }
+
+    /**
+     * A schema for a single "test" element whose only allowed value is $value
+     */
+    private function enumerationXsd(string $value): string
+    {
+        return <<<XSD
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+ <xs:element name="test">
+  <xs:simpleType>
+   <xs:restriction base="xs:string">
+    <xs:enumeration value="$value" />
+   </xs:restriction>
+  </xs:simpleType>
+ </xs:element>
+</xs:schema>
+XSD;
     }
 }

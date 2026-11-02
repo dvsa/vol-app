@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Permit Category Optional
  *
@@ -10,12 +12,10 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait PermitCategoryOptional
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":1,"max":32})
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"permit_cat_standard_multiple_15", "permit_cat_standard_single", "permit_cat_empty_entry", "permit_cat_hors_contingent"}})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 32])]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['permit_cat_standard_multiple_15', 'permit_cat_standard_single', 'permit_cat_empty_entry', 'permit_cat_hors_contingent']])]
+    #[Transfer\Optional]
     public $permitCategory;
 
     public function getPermitCategory()

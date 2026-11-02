@@ -2,6 +2,7 @@
 
 namespace Common\Service\Helper;
 
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
@@ -16,7 +17,7 @@ class FlashMessengerHelperServiceFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FlashMessengerHelperService
     {
         return new FlashMessengerHelperService(
-            $container->get('ControllerPluginManager')->get('FlashMessenger')
+            $container->get(LaminasSessionFlashMessenger::class),
         );
     }
 }

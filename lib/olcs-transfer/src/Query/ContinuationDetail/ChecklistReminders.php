@@ -8,35 +8,27 @@
 
 namespace Dvsa\Olcs\Transfer\Query\ContinuationDetail;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/continuation-detail/checklist-reminders")
- */
+#[Transfer\RouteName('backend/continuation-detail/checklist-reminders')]
 final class ChecklistReminders extends AbstractQuery
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\Between", options={"min": 1, "max": 12})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Between', options: ['min' => 1, 'max' => 12])]
+    #[Transfer\Optional]
     public $month;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Optional]
     public $year;
 
-    /**
-     * @Transfer\ArrayInput
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Optional
-     */
+    #[Transfer\ArrayInput]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Optional]
     protected $ids = [];
 
     /**

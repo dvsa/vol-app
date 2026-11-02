@@ -2,15 +2,13 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Letter\LetterChoice;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\GoodsOrPsvOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 
-/**
- * @Transfer\RouteName("backend/letter/letter-choice/single")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/letter/letter-choice/single')]
+#[Transfer\Method('PUT')]
 final class Update extends AbstractCommand
 {
     use Identity;
@@ -18,46 +16,46 @@ final class Update extends AbstractCommand
 
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":100})
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 100])]
     protected $choiceKey;
 
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
     protected $label;
 
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
     protected $groupLabel;
 
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"checkbox", "radio"}})
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['checkbox', 'radio']])]
     protected $inputType;
 
     /**
      * @var int
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
     protected $displayOrder;
 
     /**
      * @var bool
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $isActive;
 
     /**

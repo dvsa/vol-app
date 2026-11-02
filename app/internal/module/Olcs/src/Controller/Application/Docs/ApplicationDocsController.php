@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Application\Docs;
 
+use Common\RefData;
 use Common\Service\Data\PluginManager;
 use Common\Service\Helper\ComplaintsHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -100,13 +101,16 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     private function getDocumentFilters()
     {
         $appId = $this->getFromRoute('application');
-        $licence = $this->getLicenceIdForApplication($appId);
+        $application = $this->getApplication($appId);
+        $licence = $application['licence']['id'];
+        $status = $application['status']['id'];
 
         return $this->mapDocumentFilters(
             [
                 'licence' => $licence,
                 'application' => $this->getFromRoute('application'),
                 'showDocs' => FilterOptions::EXCLUDE_IRHP,
+                'isExternal' => $status === RefData::APPLICATION_STATUS_NOT_SUBMITTED ? 'internal' : null
             ]
         );
     }

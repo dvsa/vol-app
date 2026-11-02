@@ -1,0 +1,53 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "declaration",
+        "attributes": {
+          "class": "input--declaration",
+          "id": "declaration"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "permits.form.declaration.label",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "1"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "declaration": {
+      "name": "declaration",
+      "required": false
+    }
+  }
+}

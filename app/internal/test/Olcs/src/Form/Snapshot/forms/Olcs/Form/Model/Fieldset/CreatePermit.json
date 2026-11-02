@@ -1,0 +1,476 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "title",
+        "options": {
+          "label": "<h4>ECMT Annual Permit Application</h4>",
+          "label_options": {
+            "disable_html_escape": "true"
+          }
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "stockHtml",
+        "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement",
+        "options": {
+          "label": "Stock"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "dateReceived",
+        "attributes": {
+          "id": "dateReceived"
+        },
+        "options": {
+          "label": "Date received",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "numVehicles",
+        "type": "Laminas\\Form\\Element\\Hidden",
+        "attributes": {
+          "id": "numVehicles"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "numVehiclesLabel",
+        "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement",
+        "options": {
+          "label": "Current total vehicle authorization"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "year",
+        "type": "Laminas\\Form\\Element\\Hidden",
+        "attributes": {
+          "id": "year"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "cabotage",
+        "attributes": {
+          "class": "input--cabotage",
+          "id": "cabotage"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "I confirm that I will not undertake any cabotage journeys using an ECMT permit.",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          }
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "roadworthiness",
+        "attributes": {
+          "class": "input--roadworthiness",
+          "id": "cabotage"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "I understand that I must obtain and carry the appropriate ECMT Certificate of Compliance and Certificate of Roadworthiness for each vehicle and trailer I intend to use with this permit",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          }
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "countrys",
+        "options": {
+          "label": "The following countries have imposed limits on the number of permits for UK Hauliers. Please select any countries the applicant intends to travel to below.",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox"
+          },
+          "service_name": "Common\\Service\\Data\\Country",
+          "category": "ecmtConstraint",
+          "disable_inarray_validator": true
+        },
+        "attributes": {
+          "class": "chosen-select-large",
+          "id": "countrys",
+          "allowWrap": true,
+          "multiple": "multiple",
+          "empty": "Select options if applicable",
+          "data-container-class": "form-control__container"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "emissions",
+        "attributes": {
+          "class": "input--euro6",
+          "id": "emissions"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "I confirm that I will only use my ECMT permits with vehicles that are environmentally compliant with the minimum Euro emissions standards that the permit allows",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "Yes",
+          "error-message": "error.messages.euro6"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "requiredEuro5",
+        "attributes": {
+          "class": "input--permits-requiredEuro5",
+          "id": "requiredEuro5",
+          "step": "any",
+          "data-container-class": "js-hidden"
+        },
+        "options": {
+          "label": "Number of permits required for <strong>Euro5</strong> Emissions Standard",
+          "hint": "",
+          "short-label": "",
+          "allow_empty": true,
+          "label_options": {
+            "disable_html_escape": "true"
+          }
+        },
+        "type": "Laminas\\Form\\Element\\Number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "requiredEuro6",
+        "attributes": {
+          "class": "input--permits-requiredEuro6",
+          "id": "requiredEuro6",
+          "step": "any",
+          "data-container-class": "js-hidden"
+        },
+        "options": {
+          "label": "Number of permits required for <strong>Euro6</strong> Emissions Standard",
+          "hint": "",
+          "short-label": "",
+          "allow_empty": true,
+          "label_options": {
+            "disable_html_escape": "true"
+          }
+        },
+        "type": "Laminas\\Form\\Element\\Number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trips",
+        "attributes": {
+          "class": "input--trips",
+          "id": "trips",
+          "step": "any"
+        },
+        "options": {
+          "label": "Number of trips abroad in the last 12 months",
+          "short-label": ""
+        },
+        "type": "Laminas\\Form\\Element\\Number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "internationalJourneys",
+        "attributes": {
+          "class": "input--international-journey",
+          "id": "internationalJourneys"
+        },
+        "options": {
+          "label": "International Journeys",
+          "fieldset-attributes": {
+            "id": "international-journey"
+          },
+          "fieldset-data-group": "percentage-type",
+          "label_attributes": {
+            "class": "form-control form-control--radio"
+          },
+          "category": "inter_journey_percentage",
+          "error-message": "error.messages.international-journey"
+        },
+        "type": "DynamicRadio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "sectors",
+        "attributes": {
+          "class": "input--trips",
+          "id": "EcmtSectorList"
+        },
+        "options": {
+          "label": "markup-ecmt-sector-list-label",
+          "fieldset-attributes": {
+            "id": "sector-list",
+            "class": "inline"
+          },
+          "fieldset-data-group": "sector-list",
+          "label_attributes": {
+            "class": "form-control form-control--radio"
+          },
+          "disable_inarray_validator": true
+        },
+        "type": "Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "declaration",
+        "attributes": {
+          "class": "input--declaration",
+          "id": "declaration"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "permits.form.declaration.label",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "1"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "checked",
+        "attributes": {
+          "class": "input--checked",
+          "id": "checked"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "permits.form.checked.label",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "1"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "attributes": {
+          "id": "status",
+          "class": "permitApplicationStatus"
+        },
+        "type": "Laminas\\Form\\Element\\Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "canBeCancelled",
+        "attributes": {
+          "id": "canBeCancelled",
+          "class": "permitApplicationCanBeCancelled"
+        },
+        "type": "Laminas\\Form\\Element\\Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "irhpPermitStock",
+        "attributes": {
+          "id": "irhpPermitStock"
+        },
+        "type": "Laminas\\Form\\Element\\Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licence",
+        "type": "Laminas\\Form\\Element\\Hidden",
+        "attributes": {
+          "id": "licenceId"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "dateReceived": {
+      "name": "dateReceived",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "cabotage": {
+      "name": "cabotage",
+      "required": false
+    },
+    "roadworthiness": {
+      "name": "roadworthiness",
+      "required": false
+    },
+    "countrys": {
+      "name": "countrys",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "emissions": {
+      "name": "emissions",
+      "required": false
+    },
+    "requiredEuro5": {
+      "name": "requiredEuro5",
+      "required": false,
+      "validators": [
+        {
+          "name": "SumCompare",
+          "options": {
+            "compare_to": "numVehicles",
+            "operator": "lte",
+            "sumWith": "requiredEuro6",
+            "allowEmpty": true,
+            "compare_to_label": "Your number of authorised vehicles"
+          }
+        }
+      ]
+    },
+    "requiredEuro6": {
+      "name": "requiredEuro6",
+      "required": false,
+      "validators": [
+        {
+          "name": "SumCompare",
+          "options": {
+            "compare_to": "numVehicles",
+            "operator": "lte",
+            "sumWith": "requiredEuro5",
+            "allowEmpty": true,
+            "compare_to_label": "Your number of authorised vehicles"
+          }
+        }
+      ]
+    },
+    "trips": {
+      "name": "trips",
+      "required": false
+    },
+    "internationalJourneys": {
+      "name": "internationalJourneys",
+      "required": false
+    },
+    "sectors": {
+      "name": "sectors",
+      "required": false
+    },
+    "declaration": {
+      "name": "declaration",
+      "required": false
+    },
+    "checked": {
+      "name": "checked",
+      "required": false
+    },
+    "status": {
+      "name": "status",
+      "required": false
+    },
+    "canBeCancelled": {
+      "name": "canBeCancelled",
+      "required": false
+    },
+    "irhpPermitStock": {
+      "name": "irhpPermitStock",
+      "required": false
+    }
+  }
+}

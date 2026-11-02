@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/template/template-categories",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

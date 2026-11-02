@@ -1,0 +1,661 @@
+{
+  "name": "Conviction",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "defendantType",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "defendantType",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Defendant type",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "category": "def_type"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "personFirstname",
+              "type": "Text",
+              "attributes": {
+                "placeholder": "First name",
+                "required": false
+              },
+              "options": {
+                "label": "First name"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "personLastname",
+              "type": "Text",
+              "attributes": {
+                "placeholder": "Last name",
+                "required": false
+              },
+              "options": {
+                "label": "Last name"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "birthDate",
+              "type": "DateSelect",
+              "options": {
+                "label": "Date of birth",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "attributes": {
+                "required": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "convictionCategory",
+              "type": "DynamicSelect",
+              "attributes": {
+                "id": "category",
+                "placeholder": "",
+                "class": "long chosen-select-medium"
+              },
+              "options": {
+                "label": "Conviction description",
+                "empty_option": "User Defined",
+                "disable_inarray_validator": false,
+                "category": "conv_category",
+                "use_groups": true
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "categoryText",
+              "attributes": {
+                "required": false,
+                "id": "categoryText",
+                "class": "extra-long"
+              },
+              "type": "TextArea",
+              "options": {
+                "label": "Conviction description detail"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "offenceDate",
+              "attributes": {
+                "required": "required",
+                "id": ""
+              },
+              "type": "DateSelect",
+              "options": {
+                "label": "Offence date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "convictionDate",
+              "type": "DateSelect",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Conviction date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "msi",
+              "type": "Select",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "SI",
+                "empty_option": "Please Select",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "disable_inarray_validator": false
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "court",
+              "type": "Text",
+              "attributes": {
+                "class": "medium",
+                "id": ""
+              },
+              "options": {
+                "label": "Court/FPN"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "penalty",
+              "type": "Text",
+              "attributes": {
+                "class": "medium",
+                "id": ""
+              },
+              "options": {
+                "label": "Penalty"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "costs",
+              "type": "Text",
+              "attributes": {
+                "class": "medium",
+                "id": ""
+              },
+              "options": {
+                "label": "Costs"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "notes",
+              "type": "TextArea",
+              "attributes": {
+                "id": "",
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Conviction notes"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "takenIntoConsideration",
+              "type": "TextArea",
+              "attributes": {
+                "id": "",
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Taken into consideration"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isDeclared",
+              "type": "Select",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Declared to TC/TR",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isDealtWith",
+              "type": "OlcsCheckbox",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "Dealt with"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "Offence details:",
+          "class": "extra-long"
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "personFirstname": {
+        "name": "personFirstname",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "defendantType",
+              "context_values": [
+                "def_t_op",
+                ""
+              ],
+              "context_truth": false,
+              "validators": [
+                {
+                  "name": "Laminas\\Validator\\StringLength",
+                  "options": {
+                    "min": 2,
+                    "max": 35
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "personLastname": {
+        "name": "personLastname",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "defendantType",
+              "context_values": [
+                "def_t_op",
+                ""
+              ],
+              "context_truth": false,
+              "validators": [
+                {
+                  "name": "Laminas\\Validator\\StringLength",
+                  "options": {
+                    "min": 2,
+                    "max": 35
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "birthDate": {
+        "name": "birthDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "defendantType",
+              "context_values": [
+                "def_t_op",
+                ""
+              ],
+              "context_truth": false,
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d"
+                  }
+                },
+                {
+                  "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "convictionCategory": {
+        "name": "convictionCategory",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ],
+        "validators": [
+          {
+            "name": "NotEmpty",
+            "options": [
+              "array"
+            ]
+          }
+        ]
+      },
+      "categoryText": {
+        "name": "categoryText",
+        "required": true,
+        "allow_empty": true,
+        "type": "Common\\InputFilter\\ContinueIfEmptyInput",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "convictionCategory",
+              "context_values": [
+                ""
+              ],
+              "context_truth": true,
+              "validators": [
+                {
+                  "name": "Laminas\\Validator\\StringLength",
+                  "options": {
+                    "min": 5,
+                    "max": 4000
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "offenceDate": {
+        "name": "offenceDate",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\DateSelect",
+            "options": {
+              "null_on_empty": true
+            }
+          }
+        ],
+        "validators": [
+          {
+            "name": "NotEmpty",
+            "options": [
+              "array"
+            ]
+          },
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          },
+          {
+            "name": "DateCompare",
+            "options": {
+              "compare_to": "convictionDate",
+              "compare_to_label": "Conviction date",
+              "operator": "lte"
+            }
+          }
+        ]
+      },
+      "convictionDate": {
+        "name": "convictionDate",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "court": {
+        "name": "court",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 2,
+              "max": 70
+            }
+          }
+        ]
+      },
+      "penalty": {
+        "name": "penalty",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 255
+            }
+          }
+        ]
+      },
+      "costs": {
+        "name": "costs",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 2,
+              "max": 255
+            }
+          }
+        ]
+      },
+      "notes": {
+        "name": "notes",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 5,
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "takenIntoConsideration": {
+        "name": "takenIntoConsideration",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 5,
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

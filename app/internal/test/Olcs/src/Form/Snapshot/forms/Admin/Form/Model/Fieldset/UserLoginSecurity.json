@@ -1,0 +1,173 @@
+{
+  "name": "user-login-security",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "loginId",
+        "options": {
+          "label": "Username"
+        },
+        "attributes": {
+          "id": "username",
+          "placeholder": "",
+          "class": "medium",
+          "required": false
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "createdOn",
+        "options": {
+          "label": "Created on"
+        },
+        "attributes": {
+          "id": "createdOn",
+          "required": false
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlDateTime"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "lastLoggedInOn",
+        "options": {
+          "label": "Last logged in on"
+        },
+        "attributes": {
+          "id": "lastLoginOn",
+          "required": false
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlDateTime"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "locked",
+        "options": {
+          "label": "Account locked"
+        },
+        "attributes": {
+          "id": "locked",
+          "required": false
+        },
+        "type": "Common\\Form\\Elements\\Types\\ReadonlyElement"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "passwordLastReset",
+        "options": {
+          "label": "Password last reset"
+        },
+        "attributes": {
+          "id": "passwordLastReset",
+          "required": false
+        },
+        "type": "Common\\Form\\Elements\\Types\\ReadonlyElement"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "resetPassword",
+        "type": "Radio",
+        "options": {
+          "label": "Reset password / Unlock account",
+          "value_options": {
+            "": "N/A",
+            "post": "By post",
+            "email": "By email"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "accountDisabled",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Disable account"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "disabledDate",
+        "options": {
+          "label": "Account disabled"
+        },
+        "attributes": {
+          "id": "disabledDate",
+          "required": false
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlDateTime"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "options": {
+    "label": "Login"
+  },
+  "input_filter": {
+    "loginId": {
+      "name": "loginId",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        },
+        {
+          "name": "Laminas\\Filter\\StringToLower"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\UsernameCreate"
+        }
+      ]
+    },
+    "createdOn": {
+      "name": "createdOn",
+      "required": false
+    },
+    "lastLoggedInOn": {
+      "name": "lastLoggedInOn",
+      "required": false
+    },
+    "locked": {
+      "name": "locked",
+      "required": false
+    },
+    "passwordLastReset": {
+      "name": "passwordLastReset",
+      "required": false
+    },
+    "resetPassword": {
+      "name": "resetPassword",
+      "required": false
+    },
+    "disabledDate": {
+      "name": "disabledDate",
+      "required": false
+    }
+  }
+}

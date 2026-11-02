@@ -1,0 +1,14 @@
+{
+  "name": "NoDiscs",
+  "attributes": {
+    "id": "noDiscs",
+    "keepEmptyFieldset": true
+  },
+  "elements": [],
+  "fieldsets": [],
+  "options": {
+    "label": "admin_disc-printing.noDiscs"
+  },
+  "type": "Laminas\\Form\\Fieldset",
+  "input_filter": []
+}

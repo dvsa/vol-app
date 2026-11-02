@@ -1,0 +1,107 @@
+{
+  "name": "login-form",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "username",
+        "options": {
+          "label": "auth.login.username",
+          "short-label": "auth.login.username",
+          "label_attributes": {
+            "aria-label": "Enter your username"
+          }
+        },
+        "attributes": {
+          "id": "auth.login.username"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "password",
+        "options": {
+          "label": "auth.login.password",
+          "short-label": "auth.login.password",
+          "label_attributes": {
+            "aria-label": "Enter your password"
+          }
+        },
+        "attributes": {
+          "id": "auth.login.password"
+        },
+        "type": "Password"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "declarationRead",
+        "attributes": {
+          "id": "declarationRead",
+          "class": ""
+        },
+        "options": {
+          "label": "auth.login.declaration-read.label",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--confirm full-width"
+          },
+          "use_hidden_element": false,
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "must_be_value": "Y",
+          "error-message": "auth.login.declaration-read.error"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "options": {
+          "label": "auth.login.button"
+        },
+        "attributes": {
+          "id": "auth.login.button",
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "type": "Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "username": {
+      "name": "username",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        },
+        {
+          "name": "Common\\Filter\\StripSpaces"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\Username"
+        }
+      ]
+    },
+    "password": {
+      "name": "password",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

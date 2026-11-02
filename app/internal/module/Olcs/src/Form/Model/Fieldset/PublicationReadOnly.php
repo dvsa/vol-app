@@ -6,37 +6,25 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("readOnly")
  */
+#[Form\Name('readOnly')]
 class PublicationReadOnly
 {
-    /**
-     * @Form\Options({"label":"Publication No."})
-     */
+    #[Form\Options(['label' => 'Publication No.'])]
     public $publicationNo = null;
 
-    /**
-     * @Form\Options({"label":"Status"})
-     */
+    #[Form\Options(['label' => 'Status'])]
     public $status = null;
 
-    /**
-     * @Form\Options({"label":"Publication date"})
-     */
+    #[Form\Options(['label' => 'Publication date'])]
     public $publicationDate = null;
 
-    /**
-     * @Form\Options({"label":"Type/Area"})
-     */
+    #[Form\Options(['label' => 'Type/Area'])]
     public $typeArea = null;
 
-    /**
-     * @Form\Options({"label":"Section"})
-     */
+    #[Form\Options(['label' => 'Section'])]
     public $section = null;
 
-    /**
-     * @Form\Options({"label":"Traffic area"})
-     */
+    #[Form\Options(['label' => 'Traffic area'])]
     public $trafficArea = null;
 }

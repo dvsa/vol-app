@@ -1,0 +1,257 @@
+{
+  "name": "ERRU penalty",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "siPenaltyType",
+              "options": {
+                "label": "Penalty type",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\SiPenaltyType",
+                "empty_option": "Please Select"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "erruPenaltyRequested",
+              "options": {
+                "label": "Requested Penalty",
+                "disable_inarray_validator": false,
+                "empty_option": "Please Select"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "startDate",
+              "attributes": {
+                "id": "startDate"
+              },
+              "options": {
+                "label": "Start date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "endDate",
+              "attributes": {
+                "id": "endDate"
+              },
+              "options": {
+                "label": "End date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "imposed",
+              "type": "Radio",
+              "options": {
+                "label": "Imposed",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "reasonNotImposed",
+              "attributes": {
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Reason not imposed"
+              },
+              "type": "TextArea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "si",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "case",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "startDate": {
+        "name": "startDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "endDate": {
+        "name": "endDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "reasonNotImposed": {
+        "name": "reasonNotImposed",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 500
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

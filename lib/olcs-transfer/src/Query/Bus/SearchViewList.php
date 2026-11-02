@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Transfer\Query\Bus;
 
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
@@ -12,8 +12,8 @@ use Dvsa\Olcs\Transfer\FieldType\Traits as FieldTypeTraits;
 
 /**
  * Class Bus Reg Search View
- * @Transfer\RouteName("backend/bus-reg-search-view")
  */
+#[Transfer\RouteName('backend/bus-reg-search-view')]
 class SearchViewList extends AbstractQuery implements PagedQueryInterface, OrderedQueryInterface
 {
     use PagedTrait;
@@ -21,10 +21,10 @@ class SearchViewList extends AbstractQuery implements PagedQueryInterface, Order
 
     /**
      * @var int
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $licId;
 
     /**
@@ -37,10 +37,10 @@ class SearchViewList extends AbstractQuery implements PagedQueryInterface, Order
 
     /**
      * @var String
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"max":32})
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['max' => 32])]
     protected $status;
 
     /**

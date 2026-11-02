@@ -1,0 +1,748 @@
+{
+  "name": "OperatingCentre",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "address",
+        "attributes": {
+          "class": "address js-postcode-search"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine1",
+              "attributes": {
+                "class": "long",
+                "id": "addressLine1",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLines",
+                "error-message": "address_addressLine1-error",
+                "label_attributes": {
+                  "aria-label": "Enter address manually. Address line one"
+                },
+                "short-label": "address_addressLine1"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine2",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine2",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine3",
+              "attributes": {
+                "class": "long",
+                "id": "",
+                "data-container-class": "compound"
+              },
+              "options": {
+                "label": "address_addressLine3",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addressLine4",
+              "attributes": {
+                "class": "long",
+                "id": ""
+              },
+              "options": {
+                "label": "address_addressLine4",
+                "label_attributes": {
+                  "class": "govuk-visually-hidden"
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "town",
+              "attributes": {
+                "class": "long",
+                "id": "addressTown"
+              },
+              "options": {
+                "label": "address_townCity",
+                "short-label": "address_townCity",
+                "label_attributes": {
+                  "aria-label": "address_townCity"
+                },
+                "error-message": "address_town-error"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "postcode",
+              "options": {
+                "label": "address_postcode",
+                "short-label": "address_postcode"
+              },
+              "type": "Text",
+              "attributes": {
+                "required": false,
+                "id": "postcode"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "countryCode",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "value": "GB"
+              },
+              "options": {
+                "label": "address_country",
+                "label_attributes": {
+                  "aria-label": "Choose country"
+                },
+                "error-message": "address_country-error",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\Country"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": {
+              "priority": 100
+            },
+            "spec": {
+              "name": "searchPostcode",
+              "options": {
+                "label": "Postcode search",
+                "label_attributes": {
+                  "class": "form-element__label"
+                }
+              },
+              "type": "Common\\Form\\Elements\\Types\\PostcodeSearch"
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\Address",
+        "options": {
+          "label": "Address"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "data",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "noOfVehiclesRequired",
+              "attributes": {
+                "class": "tiny",
+                "pattern": "\\d*",
+                "id": "noOfVehiclesRequired"
+              },
+              "options": {
+                "label": "application_operating-centres_authorisation-sub-action.data.noOfVehiclesRequired"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "noOfTrailersRequired",
+              "attributes": {
+                "class": "tiny",
+                "pattern": "\\d*",
+                "id": "noOfTrailersRequired"
+              },
+              "options": {
+                "label": "application_operating-centres_authorisation-sub-action.data.noOfTrailersRequired",
+                "error-message": "Your total number of trailers"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "guidance",
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "permission",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "permission",
+                    "attributes": {
+                      "id": "permission",
+                      "placeholder": ""
+                    },
+                    "options": {
+                      "checked_value": "Y",
+                      "unchecked_value": "N",
+                      "label": "application_operating-centres_authorisation-sub-action.data.permission",
+                      "label_attributes": {
+                        "class": "form-control form-control--checkbox form-control--advanced"
+                      },
+                      "must_be_value": "Y"
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": {
+                "label": "lva-operating-centre-newspaper-permission"
+              }
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "application_operating-centres_authorisation-sub-action.data"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "advertisements",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "radio",
+              "type": "Common\\Form\\Elements\\Types\\Radio",
+              "attributes": {
+                "id": "adPlacedPost",
+                "allowWrap": true,
+                "data-container-class": "form-control__container"
+              },
+              "options": {
+                "label_attributes": {
+                  "class": "form-control form-control--radio"
+                },
+                "value_options": {
+                  "adPlaced": "Yes",
+                  "adPlacedLater": "No (operator to upload)"
+                }
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "adPlacedLaterContent",
+              "attributes": {
+                "data-container-class": "ad-upload-later"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "uploadedFileCount",
+              "options": {
+                "fieldset-attributes": {
+                  "id": "advertisements[file][file]"
+                }
+              },
+              "attributes": {
+                "required": false,
+                "id": "uploadedFileCount"
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "adPlacedContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "adPlacedIn",
+                    "attributes": {
+                      "class": "long",
+                      "id": "adPlacedIn"
+                    },
+                    "options": {
+                      "label": "application_operating-centres_authorisation-sub-action.advertisements.adPlacedIn"
+                    },
+                    "type": "Text"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "adPlacedDate",
+                    "attributes": {
+                      "id": "adPlacedDate",
+                      "data-container-class": "adPlacedDate"
+                    },
+                    "options": {
+                      "label": "application_operating-centres_authorisation-sub-action.advertisements.adPlacedDate",
+                      "legend-attributes": {
+                        "class": "form-element__label"
+                      },
+                      "label_attributes": {
+                        "class": "form-element__label"
+                      },
+                      "create_empty_option": true,
+                      "render_delimiters": false,
+                      "fieldset-attributes": {
+                        "id": "adPlacedDate_day"
+                      }
+                    },
+                    "type": "DateSelect"
+                  }
+                }
+              ],
+              "fieldsets": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "file",
+                    "attributes": {
+                      "class": "file-uploader"
+                    },
+                    "elements": [
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "fileCount",
+                          "type": "Hidden"
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "file",
+                          "attributes": {
+                            "class": "js-visually-hidden"
+                          },
+                          "options": {
+                            "value": "common.file-upload.browse.title",
+                            "hint": "common.file-upload.browse.hint"
+                          },
+                          "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "__messages__",
+                          "attributes": [],
+                          "options": [],
+                          "type": "Hidden"
+                        }
+                      },
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "upload",
+                          "attributes": {
+                            "data-module": "govuk-button",
+                            "type": "submit",
+                            "class": "inline-upload govuk-button js-upload"
+                          },
+                          "options": {
+                            "label": "Upload"
+                          },
+                          "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+                        }
+                      }
+                    ],
+                    "fieldsets": [
+                      {
+                        "flags": [],
+                        "spec": {
+                          "name": "list",
+                          "attributes": {
+                            "class": "js-upload-list"
+                          },
+                          "options": {
+                            "preview_images": "true"
+                          },
+                          "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+                        }
+                      }
+                    ],
+                    "type": "Laminas\\Form\\Fieldset",
+                    "options": {
+                      "label": "application_operating-centres_authorisation-sub-action.advertisements.file",
+                      "label_attributes": {
+                        "class": "form-element__label"
+                      }
+                    }
+                  }
+                }
+              ],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+        "options": {
+          "label": "application_operating-centres_authorisation-sub-action.advertisements",
+          "error-messages": "test",
+          "fieldset-data-group": "advertisements"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button",
+                "aria-label": "Save and Continue"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel",
+                "keepForReadOnly": true
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addAnother",
+              "attributes": {
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "Save and add another"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "address": {
+      "searchPostcode": {
+        "name": "searchPostcode",
+        "required": false
+      },
+      "addressLine1": {
+        "name": "addressLine1",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 90
+            }
+          }
+        ]
+      },
+      "addressLine2": {
+        "name": "addressLine2",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 90
+            }
+          }
+        ]
+      },
+      "addressLine3": {
+        "name": "addressLine3",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 100
+            }
+          }
+        ]
+      },
+      "addressLine4": {
+        "name": "addressLine4",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 35
+            }
+          }
+        ]
+      },
+      "town": {
+        "name": "town",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 0,
+              "max": 30
+            }
+          }
+        ]
+      },
+      "postcode": {
+        "name": "postcode",
+        "required": true,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\Postcode"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "data": {
+      "noOfVehiclesRequired": {
+        "name": "noOfVehiclesRequired",
+        "validators": [
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 1000000
+            }
+          }
+        ]
+      },
+      "noOfTrailersRequired": {
+        "name": "noOfTrailersRequired",
+        "validators": [
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 1000000
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "advertisements": {
+      "radio": {
+        "name": "radio",
+        "error_message": "advertisements_adPlaced-error"
+      },
+      "adPlacedContent": {
+        "adPlacedIn": {
+          "name": "adPlacedIn",
+          "required": false
+        },
+        "adPlacedDate": {
+          "name": "adPlacedDate",
+          "required": false,
+          "filters": [
+            {
+              "name": "DateSelectNullifier"
+            }
+          ],
+          "validators": [
+            {
+              "name": "\\Common\\Validator\\Date"
+            },
+            {
+              "name": "Date",
+              "options": {
+                "format": "Y-m-d"
+              }
+            }
+          ]
+        },
+        "file": {
+          "fileCount": {
+            "name": "fileCount",
+            "required": false,
+            "validators": [
+              {
+                "name": "Laminas\\Validator\\NotEmpty",
+                "options": [
+                  "null"
+                ]
+              },
+              {
+                "name": "Common\\Validator\\FileUploadCountV2",
+                "options": {
+                  "min": 1
+                }
+              }
+            ]
+          },
+          "type": "Laminas\\InputFilter\\InputFilter"
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "uploadedFileCount": {
+        "name": "uploadedFileCount",
+        "allow_empty": true,
+        "type": "Common\\InputFilter\\ContinueIfEmptyInput",
+        "required": true,
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "radio",
+              "context_values": [
+                "adPlaced"
+              ],
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\FileUploadCount",
+                  "options": {
+                    "min": 1,
+                    "message": "ERR_OC_AD_FI_1"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

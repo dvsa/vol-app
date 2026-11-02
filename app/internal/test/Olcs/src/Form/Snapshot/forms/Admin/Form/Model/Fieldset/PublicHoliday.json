@@ -1,0 +1,78 @@
+{
+  "name": "public-holiday",
+  "attributes": {
+    "class": "table__form"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "areas",
+        "type": "MultiCheckbox",
+        "attributes": {
+          "required": "required",
+          "id": "areas",
+          "name": "areas"
+        },
+        "options": {
+          "label": "Area:",
+          "value_options": {
+            "isEngland": "England",
+            "isWales": "Wales",
+            "isScotland": "Scotland",
+            "isNi": "Northern Ireland"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "holidayDate",
+        "type": "DateSelect",
+        "attributes": {
+          "required": "required"
+        },
+        "options": {
+          "label": "Holiday Date:",
+          "create_empty_option": true,
+          "max_year_delta": "+5"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "areas": {
+      "name": "areas",
+      "required": true
+    },
+    "holidayDate": {
+      "name": "holidayDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "financial-evidence-assessment-review",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "analysisId",
+        "type": "Hidden",
+        "attributes": {
+          "required": "required"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "review",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "value": "accept"
+        },
+        "options": {
+          "label": "Accept document review"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "analysisId": {
+      "name": "analysisId",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        }
+      ]
+    }
+  }
+}

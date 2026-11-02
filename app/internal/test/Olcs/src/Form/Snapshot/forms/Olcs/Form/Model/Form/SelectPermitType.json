@@ -1,0 +1,150 @@
+{
+  "name": "selectPermitType",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "permitType",
+        "attributes": {
+          "id": "permitType"
+        },
+        "options": {
+          "empty_option": "Please Select",
+          "label": "Select Permit Type",
+          "short-label": "Permit Type",
+          "label_attributes": {
+            "id": "label-permit-type"
+          },
+          "service_name": "Common\\Service\\Data\\IrhpPermitType"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "year",
+        "attributes": {
+          "data-container-class": "js-hidden yearSelect",
+          "id": "yearList"
+        },
+        "options": {
+          "label": "Select a year",
+          "fieldset-attributes": {
+            "id": "year-list",
+            "class": "inline"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio"
+          },
+          "disable_inarray_validator": true
+        },
+        "type": "Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "stock",
+        "attributes": {
+          "data-container-class": "js-hidden stock",
+          "id": "stock"
+        },
+        "options": {
+          "label": "Select a stock",
+          "fieldset-attributes": {
+            "id": "year-list",
+            "class": "inline"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio"
+          },
+          "disable_inarray_validator": true
+        },
+        "type": "Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "bilateralCountries",
+        "attributes": {
+          "value": "<div id=\"bilateralCountries\"></div>"
+        },
+        "type": "Common\\Form\\Elements\\Types\\Html"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "transport-manager.responsibilities.continue"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "transport-manager.responsibilities.cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "permitType": {
+      "name": "permitType",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    },
+    "year": {
+      "name": "year",
+      "required": false
+    },
+    "stock": {
+      "name": "stock",
+      "required": false
+    }
+  }
+}

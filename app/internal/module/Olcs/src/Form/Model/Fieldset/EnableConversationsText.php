@@ -12,11 +12,7 @@ use Laminas\Form\Annotation as Form;
  */
 class EnableConversationsText
 {
-    /**
-     * @Form\Type(\Common\Form\Elements\Types\PlainText::class)
-     * @Form\Attributes({
-     *     "value": "Are you sure you want to enable messaging?"
-     * })
-     */
+    #[Form\Type(\Common\Form\Elements\Types\PlainText::class)]
+    #[Form\Attributes(['value' => 'Are you sure you want to enable messaging?'])]
     public ?PlainText $text = null;
 }

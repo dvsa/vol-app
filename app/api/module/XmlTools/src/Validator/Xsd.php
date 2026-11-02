@@ -38,6 +38,12 @@ class Xsd extends AbstractValidator
     protected $xsd;
 
     /**
+     * Filepath to an Xsd schema that is tried if the document fails the main one. Errors are always reported against
+     * the main schema
+     */
+    protected ?string $fallbackXsd = null;
+
+    /**
      * The maximum number of schema errors to return, defaults to 3 (prevents massive error messages)
      *
      * @var int
@@ -72,6 +78,24 @@ class Xsd extends AbstractValidator
     public function getXsd()
     {
         return $this->xsd;
+    }
+
+    /**
+     * Sets the fallback xsd
+     *
+     * @param string|null $fallbackXsd the fallback xsd, null for none
+     */
+    public function setFallbackXsd(?string $fallbackXsd): void
+    {
+        $this->fallbackXsd = $fallbackXsd;
+    }
+
+    /**
+     * Gets the fallback xsd
+     */
+    public function getFallbackXsd(): ?string
+    {
+        return $this->fallbackXsd;
     }
 
     /**
@@ -129,6 +153,13 @@ class Xsd extends AbstractValidator
 
         if (!$valid) {
             $errors = $this->getXmlErrors();
+            libxml_clear_errors();
+
+            if ($this->isValidAgainstFallbackXsd($value)) {
+                libxml_use_internal_errors($restore);
+
+                return true;
+            }
 
             foreach ($errors as $key => $error) {
                 foreach ($this->xmlMessageExclude as $exclusion) {
@@ -163,11 +194,24 @@ class Xsd extends AbstractValidator
                     );
                 }
             }
-
-            libxml_clear_errors();
         }
 
         libxml_use_internal_errors($restore);
+
+        return $valid;
+    }
+
+    /**
+     * Whether the document validates against the fallback xsd, if there is one. Its errors are discarded
+     */
+    private function isValidAgainstFallbackXsd(\DOMDocument $value): bool
+    {
+        if ($this->fallbackXsd === null) {
+            return false;
+        }
+
+        $valid = @$value->schemaValidate($this->fallbackXsd);
+        libxml_clear_errors();
 
         return $valid;
     }

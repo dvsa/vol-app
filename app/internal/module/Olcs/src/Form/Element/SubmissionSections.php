@@ -303,8 +303,6 @@ class SubmissionSections extends LaminasElement implements ElementPrepareAwareIn
                 'annex',
                 'bus-reg-app-details',
                 'transport-authority-comments',
-                'total-bus-registrations',
-                'registration-details',
             ],
             'submission_type_o_clo_fep' => [
                 'case-outline',

@@ -24,11 +24,12 @@ final class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    private function todoWithCurrentVersion(bool $requiresInput): LetterTodoEntity
+    private function todoWithCurrentVersion(bool $requiresInput, ?string $name = null): LetterTodoEntity
     {
         $currentVersion = new LetterTodoVersion();
         $currentVersion->setVersionNumber(1);
         $currentVersion->setRequiresInput($requiresInput);
+        $currentVersion->setName($name);
 
         $todo = new LetterTodoEntity();
         $todo->setId(5);
@@ -75,5 +76,23 @@ final class UpdateTest extends AbstractCommandHandlerTestCase
         $this->update($todo, []);
 
         $this->assertTrue($todo->getRequiresInput());
+    }
+
+    public function testNameCanBeChanged(): void
+    {
+        $todo = $this->todoWithCurrentVersion(false, 'You need to upload bank statements');
+
+        $this->update($todo, ['name' => 'You need to post us your bank statements']);
+
+        $this->assertSame('You need to post us your bank statements', $todo->getName());
+    }
+
+    public function testAnUnnamedTodoCanBeGivenAName(): void
+    {
+        $todo = $this->todoWithCurrentVersion(false);
+
+        $this->update($todo, ['name' => 'You need to upload bank statements']);
+
+        $this->assertSame('You need to upload bank statements', $todo->getName());
     }
 }

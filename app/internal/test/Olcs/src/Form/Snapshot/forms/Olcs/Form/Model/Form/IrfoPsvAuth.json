@@ -1,0 +1,844 @@
+{
+  "name": "IrfoPsvAuth",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "irfoPsvAuthType",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Service type",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\IrfoPsvAuthType"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "validityPeriod",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Validity period",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "value_options": {
+                  "1": "1 year",
+                  "2": "2 years",
+                  "3": "3 years",
+                  "4": "4 years",
+                  "5": "5 years"
+                }
+              },
+              "type": "Laminas\\Form\\Element\\Select"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "statusHtml",
+              "attributes": {
+                "id": "statusHtml",
+                "required": false
+              },
+              "options": {
+                "label": "Status"
+              },
+              "type": "Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "status",
+              "attributes": {
+                "id": "status"
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "statusDescription",
+              "attributes": {
+                "id": "statusDescription"
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "irfoFileNo",
+              "attributes": {
+                "id": "",
+                "required": false
+              },
+              "options": {
+                "label": "IRFO file number"
+              },
+              "type": "Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "createdOnHtml",
+              "attributes": {
+                "id": "createdOnHtml",
+                "required": false
+              },
+              "options": {
+                "label": "Created date"
+              },
+              "type": "Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "inForceDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "In force date",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "max_year_delta": "+1",
+                "min_year_delta": "-40"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "expiryDate",
+              "attributes": {
+                "id": "expiryDate"
+              },
+              "options": {
+                "label": "Expiry date",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "max_year_delta": "+2",
+                "min_year_delta": "-40",
+                "hint": "The calculated expiry date is <span id=calculatedExpiryDateText>dd/mm/yyyy</span>"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "applicationSentDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Application sent date",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "max_year_delta": "+1",
+                "min_year_delta": "-40"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "serviceRouteFrom",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Service route from"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "serviceRouteTo",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Service route to"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "journeyFrequency",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "Journey frequency",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "category": "irfo_psv_journey_freq"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "countrys",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "multiple": "multiple",
+                "class": "chosen-select-large"
+              },
+              "options": {
+                "label": "Transit countries",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\Country",
+                "use_groups": false
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isFeeExemptApplication",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "Application fee exempt"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isFeeExemptAnnual",
+              "options": {
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "label": "Annual fee exempt"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "exemptionDetails",
+              "attributes": {
+                "class": "extra-long",
+                "id": "exemptionDetails",
+                "required": false
+              },
+              "options": {
+                "label": "Exemption reason"
+              },
+              "type": "TextArea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "copiesIssuedHtml",
+              "attributes": {
+                "id": "copiesIssuedHtml",
+                "required": false
+              },
+              "options": {
+                "label": "Total chargeable copies issued"
+              },
+              "type": "Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "copiesIssuedTotalHtml",
+              "attributes": {
+                "id": "copiesIssuedTotalHtml",
+                "required": false
+              },
+              "options": {
+                "label": "Total copies issued"
+              },
+              "type": "Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "copiesRequired",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "small"
+              },
+              "options": {
+                "label": "Chargeable copies required"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "copiesRequiredNonChargeable",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "small"
+              },
+              "options": {
+                "label": "Non-Chargeable copies required"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "copiesRequiredTotal",
+              "attributes": {
+                "id": "",
+                "placeholder": "",
+                "class": "small",
+                "readonly": true
+              },
+              "options": {
+                "label": "Total copies required"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isGrantable",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isApprovable",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isDocumentable",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isCnsable",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isWithdrawable",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isRefusable",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isResetable",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "organisation",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "irfoPsvAuthNumbers",
+              "attributes": {
+                "class": "add-another"
+              },
+              "type": "Laminas\\Form\\Element\\Collection",
+              "options": {
+                "count": 1,
+                "label": "Authorisation number",
+                "hint": "markup-authorisation-number-hint",
+                "hint_at_bottom": true,
+                "target_element": {
+                  "name": "irfo-psv-auth-number",
+                  "attributes": [],
+                  "elements": [
+                    {
+                      "flags": [],
+                      "spec": {
+                        "name": "name",
+                        "attributes": {
+                          "class": "",
+                          "id": "irfoPsvAuthNumber"
+                        },
+                        "type": "Text"
+                      }
+                    }
+                  ],
+                  "fieldsets": [],
+                  "type": "Laminas\\Form\\InputFilterProviderFieldset",
+                  "options": {
+                    "input_filter_spec": {
+                      "name": {
+                        "name": "name",
+                        "required": false,
+                        "filters": [
+                          {
+                            "name": "Laminas\\Filter\\StringTrim"
+                          }
+                        ],
+                        "validators": [
+                          {
+                            "name": "Laminas\\Validator\\StringLength",
+                            "options": {
+                              "min": 1,
+                              "max": 70
+                            }
+                          }
+                        ]
+                      },
+                      "type": "Laminas\\InputFilter\\InputFilter"
+                    },
+                    "target_type": "Olcs\\Form\\Model\\Fieldset\\IrfoPsvAuthNumber"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "grant",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "grant"
+              },
+              "options": {
+                "label": "Grant"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "approve",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "approve"
+              },
+              "options": {
+                "label": "Approve"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "generate",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "generate"
+              },
+              "options": {
+                "label": "Generate"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cns",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cns"
+              },
+              "options": {
+                "label": "CNS"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "withdraw",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "withdraw"
+              },
+              "options": {
+                "label": "Withdraw"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "refuse",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "refuse"
+              },
+              "options": {
+                "label": "Refuse"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "statusHtml": {
+        "name": "statusHtml",
+        "required": false
+      },
+      "irfoFileNo": {
+        "name": "irfoFileNo",
+        "required": false
+      },
+      "createdOnHtml": {
+        "name": "createdOnHtml",
+        "required": false
+      },
+      "inForceDate": {
+        "name": "inForceDate",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "expiryDate": {
+        "name": "expiryDate",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "expiryDate",
+              "context_values": [
+                "--"
+              ],
+              "context_truth": false,
+              "allow_empty": true,
+              "validators": [
+                {
+                  "name": "\\Common\\Validator\\Date"
+                },
+                {
+                  "name": "Date",
+                  "options": {
+                    "format": "Y-m-d"
+                  }
+                },
+                {
+                  "name": "DateCompare",
+                  "options": {
+                    "compare_to": "inForceDate",
+                    "compare_to_label": "In force date",
+                    "operator": "gte"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "applicationSentDate": {
+        "name": "applicationSentDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "serviceRouteFrom": {
+        "name": "serviceRouteFrom",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 1,
+              "max": 30
+            }
+          }
+        ]
+      },
+      "serviceRouteTo": {
+        "name": "serviceRouteTo",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 1,
+              "max": 30
+            }
+          }
+        ]
+      },
+      "countrys": {
+        "name": "countrys",
+        "required": false,
+        "filters": [
+          {
+            "name": "Common\\Filter\\NullToArray"
+          }
+        ]
+      },
+      "exemptionDetails": {
+        "name": "exemptionDetails",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 255
+            }
+          }
+        ]
+      },
+      "copiesIssuedHtml": {
+        "name": "copiesIssuedHtml",
+        "required": false
+      },
+      "copiesIssuedTotalHtml": {
+        "name": "copiesIssuedTotalHtml",
+        "required": false
+      },
+      "copiesRequired": {
+        "name": "copiesRequired",
+        "validators": [
+          {
+            "name": "Digits"
+          },
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 500
+            }
+          }
+        ]
+      },
+      "copiesRequiredNonChargeable": {
+        "name": "copiesRequiredNonChargeable",
+        "validators": [
+          {
+            "name": "Digits"
+          },
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 500
+            }
+          }
+        ]
+      },
+      "copiesRequiredTotal": {
+        "name": "copiesRequiredTotal",
+        "validators": [
+          {
+            "name": "Digits"
+          },
+          {
+            "name": "Between",
+            "options": {
+              "min": 0,
+              "max": 1000
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

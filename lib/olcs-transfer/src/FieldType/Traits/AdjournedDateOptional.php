@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Agreed Date
  *
@@ -12,10 +14,10 @@ trait AdjournedDateOptional
 {
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\DateTimeFormatter")
-     * @Transfer\Validator("Date", options={"format": \DateTime::ISO8601})
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\DateTimeFormatter')]
+    #[Transfer\Validator('Date', options: ['format' => \DateTime::ISO8601])]
     protected $adjournedDate;
 
     /**

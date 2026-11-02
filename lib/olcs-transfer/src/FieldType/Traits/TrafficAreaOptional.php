@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Traffic Area
  */
@@ -9,13 +11,10 @@ trait TrafficAreaOptional
 {
     /**
      * @var String
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray",
-     *      options={
-     *          "haystack": {"B","C","D","F","G","H","K","M","N"}}
-     *      )
-     * @Transfer\Optional
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['B', 'C', 'D', 'F', 'G', 'H', 'K', 'M', 'N']])]
+    #[Transfer\Optional]
     protected $trafficArea = null;
 
     /**

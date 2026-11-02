@@ -1,0 +1,28 @@
+{
+  "name": "details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "application",
+        "options": {
+          "label": "transport-manager.responsibilities.application-id"
+        },
+        "attributes": {
+          "required": false,
+          "class": "medium",
+          "id": ""
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "application": {
+      "name": "application",
+      "required": true
+    }
+  }
+}

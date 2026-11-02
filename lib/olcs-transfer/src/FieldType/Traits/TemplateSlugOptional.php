@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Template slug
  *
@@ -12,9 +14,9 @@ trait TemplateSlugOptional
 {
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Optional
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Optional]
     protected $templateSlug;
 
     /**

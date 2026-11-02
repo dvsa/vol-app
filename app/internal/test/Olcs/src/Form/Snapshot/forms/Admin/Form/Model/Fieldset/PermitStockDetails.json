@@ -1,0 +1,308 @@
+{
+  "name": "PermitStockDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "irhpPermitType",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "irhpPermitType",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Permit Type",
+          "disable_inarray_validator": false,
+          "empty_option": "Please Select",
+          "service_name": "Common\\Service\\Data\\IrhpPermitType",
+          "required": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "country",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "country",
+          "placeholder": "",
+          "class": "medium",
+          "data-container-class": "stockCountry js-hidden"
+        },
+        "options": {
+          "label": "Country",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\Country",
+          "category": "isPermitState",
+          "empty_option": "Please Select"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "permitCategory",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "permitCategory",
+          "placeholder": "",
+          "class": "medium",
+          "data-container-class": "permitCategoryFields js-hidden"
+        },
+        "options": {
+          "label": "Permit Category",
+          "disable_inarray_validator": false,
+          "empty_option": "Please Select",
+          "service_name": "Common\\Service\\Data\\RefData",
+          "context": "permit_cat",
+          "required": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "applicationPathGroup",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "applicationPathGroup",
+          "placeholder": "",
+          "class": "medium",
+          "data-container-class": "pathProcess js-hidden"
+        },
+        "options": {
+          "label": "Application Path",
+          "disable_inarray_validator": false,
+          "empty_option": "Please Select",
+          "service_name": "Common\\Service\\Data\\ApplicationPathGroup",
+          "required": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "applicationPathGroupHtml",
+        "attributes": {
+          "id": "applicationPathGroupHtml",
+          "data-container-class": "pathProcess js-hidden"
+        },
+        "options": {
+          "label": "Application Path"
+        },
+        "type": "Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "businessProcess",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "businessProcess",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Business Process",
+          "disable_inarray_validator": false,
+          "empty_option": "Please Select",
+          "category": "app_business_process",
+          "required": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "businessProcessHtml",
+        "options": {
+          "label": "Business Process"
+        },
+        "type": "Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "periodNameKey",
+        "attributes": {
+          "id": "periodNameKey"
+        },
+        "options": {
+          "label": "Period selection translation key "
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "validFrom",
+        "attributes": {
+          "id": "validFrom",
+          "placeholder": "",
+          "class": "medium",
+          "data-container-class": "stockDates"
+        },
+        "options": {
+          "label": "Validity Period Start",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "validTo",
+        "attributes": {
+          "id": "validTo",
+          "placeholder": "",
+          "class": "medium",
+          "data-container-class": "stockDates"
+        },
+        "options": {
+          "label": "Validity Period End",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "initialStock",
+        "attributes": {
+          "id": "initialStock"
+        },
+        "options": {
+          "label": "Quota"
+        },
+        "type": "Laminas\\Form\\Element\\Number"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hiddenSs",
+        "attributes": {
+          "class": "input--hiddenss",
+          "id": "hiddenss"
+        },
+        "options": {
+          "checked_value": "1",
+          "unchecked_value": "0",
+          "label": "Hidden from Self Serve?",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "1"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "country": {
+      "name": "country",
+      "required": false
+    },
+    "permitCategory": {
+      "name": "permitCategory",
+      "required": false
+    },
+    "applicationPathGroup": {
+      "name": "applicationPathGroup",
+      "required": false
+    },
+    "periodNameKey": {
+      "name": "periodNameKey",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 512
+          }
+        }
+      ],
+      "required": false
+    },
+    "validFrom": {
+      "name": "validFrom",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "validTo": {
+      "name": "validTo",
+      "required": false,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        }
+      ]
+    },
+    "initialStock": {
+      "name": "initialStock",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        },
+        {
+          "name": "Laminas\\Validator\\Between",
+          "options": {
+            "min": -1,
+            "max": 9999999
+          }
+        }
+      ],
+      "required": false
+    },
+    "hiddenSs": {
+      "name": "hiddenSs",
+      "required": false
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "OperatorLocation",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "niFlag",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "fieldset-attributes": {
+            "id": "operator-location",
+            "class": "checkbox"
+          },
+          "fieldset-data-group": "operator-location",
+          "label": "Operator location",
+          "value_options": {
+            "N": "Great Britain",
+            "Y": "Northern Ireland"
+          }
+        },
+        "type": "Radio"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "input_filter": []
+}

@@ -1,0 +1,195 @@
+{
+  "name": "Declaration",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "content",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "review",
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated",
+              "options": {
+                "tokens": [
+                  "application.review-declarations.review.director"
+                ]
+              },
+              "attributes": {
+                "value": "markup-continuation-declaration-review"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "declaration",
+              "attributes": {
+                "value": "SET IN FORM SERVICE"
+              },
+              "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "signatureOptions",
+              "attributes": {
+                "id": "",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "application.signature.options.label",
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--advanced"
+                },
+                "value_options": {
+                  "Y": "application.signature.options.verify",
+                  "N": "application.signature.options.sign"
+                },
+                "label_options": {
+                  "disable_html_escape": "true"
+                }
+              },
+              "type": "\\Laminas\\Form\\Element\\Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "disabledReview",
+              "attributes": {
+                "value": "markup-signature-disabled-text"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "declarationDownload",
+              "attributes": {
+                "id": "declarationDownload"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Html"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "declarationForVerify",
+              "attributes": {
+                "value": "markup-declaration-for-verify",
+                "data-container-class": "declarationForVerify"
+              },
+              "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "signatureDetails",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "signature",
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated",
+              "attributes": {
+                "data-container-class": "verify"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "sign",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button",
+                "id": "sign"
+              },
+              "options": {
+                "label": "application.review-declarations.sign-button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "submitAndPay",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button",
+                "id": "submitAndPay"
+              },
+              "options": {
+                "label": "continue-to-payment.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button",
+                "id": "submit"
+              },
+              "options": {
+                "label": "continue.button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "\\Common\\Form\\Form",
+  "input_filter": []
+}

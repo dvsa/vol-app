@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Application step slug
  *
@@ -12,8 +14,8 @@ trait ApplicationStepSlug
 {
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $slug;
 
     /**

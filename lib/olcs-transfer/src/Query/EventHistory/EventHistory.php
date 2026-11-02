@@ -9,12 +9,10 @@
 namespace Dvsa\Olcs\Transfer\Query\EventHistory;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/event-history/single")
- */
+#[Transfer\RouteName('backend/event-history/single')]
 class EventHistory extends AbstractQuery
 {
     use Identity;

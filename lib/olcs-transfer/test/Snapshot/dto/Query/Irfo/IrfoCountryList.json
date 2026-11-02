@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/irfo/country-list",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}
