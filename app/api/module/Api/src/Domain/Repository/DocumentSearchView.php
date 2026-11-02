@@ -182,7 +182,7 @@ class DocumentSearchView extends AbstractReadonlyRepository
         }
 
         if ($query->getHideUnsubmittedApplicationDocs() === 'Y') {
-            $qb->leftJoin(\Dvsa\Olcs\Api\Entity\Application\Application::class, 'a', 'WITH', 'm.applicationId = a.id');
+            $qb->leftJoin(\Dvsa\Olcs\Api\Entity\Application\Application::class, 'a', \Doctrine\ORM\Query\Expr\Join::ON, 'm.applicationId = a.id');
             $qb->andWhere(
                 $qb->expr()->orX(
                     $qb->expr()->neq('a.status', ':applicationStatusNotSubmitted'),
