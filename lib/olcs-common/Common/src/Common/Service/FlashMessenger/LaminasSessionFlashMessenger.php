@@ -37,6 +37,7 @@ class LaminasSessionFlashMessenger extends AbstractPlugin implements FlashMessen
     {
     }
 
+    #[\Override]
     public function getContainer(): Container
     {
         return $this->container;

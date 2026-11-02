@@ -330,7 +330,7 @@ final class LicenceVehicleTest extends RepositoryTestCase
         $this->assertSame(['RESULTS'], $this->sut->fetchForExport($qb));
 
         $this->assertStringContainsString(
-            'LEFT JOIN Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc gd2 WITH gd2.id ='
+            'LEFT JOIN Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc gd2 ON gd2.id ='
             . ' (SELECT MAX(gds.id) as maxId FROM Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc gds'
             . ' WHERE gds.licenceVehicle = m.id)',
             $qb->getDQL(),
