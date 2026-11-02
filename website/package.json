@@ -44,7 +44,7 @@
   "overrides": {
     "brace-expansion@^1": "^1.1.21",
     "fast-uri": "^3.1.9",
-    "follow-redirects": "^1.16.1",
+    "follow-redirects": "^1.16.2",
     "launch-editor": "^2.14.2",
     "qs": "^6.16.2",
     "serialize-javascript": "^7.1.3",
