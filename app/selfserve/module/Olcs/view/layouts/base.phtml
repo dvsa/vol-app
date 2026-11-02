@@ -266,7 +266,7 @@ $pageLang = $this->plugin('languageNavigation')->currentLanguage();
       </div>
     </section>
     <?php if($this->currentUser()->isLoggedIn()):?>
-    <div class="govuk-width-container">
+    <div class="govuk-width-container govuk-clearfix govuk-!-margin-bottom-2">
       <ul class="user-menu">
         <li class="user-menu__item">
           <?php if($this->IsGranted('can-manage-user-selfserve')):?>
