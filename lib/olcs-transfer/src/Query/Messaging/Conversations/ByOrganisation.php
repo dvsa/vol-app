@@ -9,11 +9,9 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\Organisation;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\PagedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PagedTrait;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/messaging/conversations/by-organisation")
- */
+#[Transfer\RouteName('backend/messaging/conversations/by-organisation')]
 final class ByOrganisation extends AbstractQuery implements PagedQueryInterface
 {
     use PagedTrait;

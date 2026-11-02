@@ -2,7 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Letter\LetterType;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\FieldType\Traits\MasterTemplateOptional;
@@ -10,10 +10,8 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\CategoryOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\SubCategoryOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\LetterTestDataOptional;
 
-/**
- * @Transfer\RouteName("backend/letter/letter-type/single")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/letter/letter-type/single')]
+#[Transfer\Method('PUT')]
 final class Update extends AbstractCommand
 {
     use Identity;
@@ -25,62 +23,62 @@ final class Update extends AbstractCommand
 
     /**
      * @var string
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min":1, "max":255})
      */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 255])]
     protected $name;
 
     /**
      * @var string
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $description;
 
     /**
      * @var bool
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $isActive;
 
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $sections;
 
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $issues;
 
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $todos;
 
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $appendices;
 
     /**
      * @var array
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $choices;
 
     /**
      * @var array
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $sectionsRequired;
 
     /**

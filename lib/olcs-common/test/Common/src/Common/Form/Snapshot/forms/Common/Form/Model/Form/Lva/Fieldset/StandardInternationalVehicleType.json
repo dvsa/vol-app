@@ -1,0 +1,86 @@
+{
+  "name": "StandardInternationalVehicleType",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "vehicle-type",
+        "options": {
+          "error-message": "type-of-vehicle-error",
+          "label": "application_type-of-licence_licence-type.data.vehicleType",
+          "label_attributes": {
+            "class": "form-control form-control--radio"
+          },
+          "hint": "application_type-of-licence_licence-type.data.vehicleType.hint",
+          "value_options": {
+            "app_veh_type_lgv": {
+              "value": "app_veh_type_lgv",
+              "label": "select-option-yes"
+            },
+            "app_veh_type_mixed": {
+              "value": "app_veh_type_mixed",
+              "label": "select-option-no"
+            }
+          }
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Radio"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "lgv-declaration",
+        "attributes": {
+          "id": "lgv-declaration"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "lgv-declaration-confirmation",
+              "attributes": {
+                "id": "lgv-declaration-confirmation",
+                "data-container-class": "lgv-declaration-confirmation"
+              },
+              "options": {
+                "checked_value": "1",
+                "unchecked_value": "0",
+                "label": "application_type-of-licence_licence-type.data.lgvDeclarationConfirmation",
+                "must_be_value": "1",
+                "not_checked_message": "lgv-undertakings.form.declaration.error",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--advanced"
+                }
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "lgvDeclarationWarning",
+              "attributes": {
+                "value": "<p class='exclamation'>%s</p>"
+              },
+              "options": {
+                "tokens": [
+                  "application_type-of-licence_licence-type.data.lgvDeclarationWarning"
+                ]
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "application_type-of-licence_licence-type.data.lgvDeclaration"
+        }
+      }
+    }
+  ],
+  "input_filter": []
+}

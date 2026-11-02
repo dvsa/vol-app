@@ -1,0 +1,73 @@
+{
+  "name": "PublishedPublicationFilter",
+  "attributes": {
+    "method": "get",
+    "class": "filters form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "pubType",
+        "type": "Select",
+        "options": {
+          "label": "Publication type",
+          "empty_option": "All",
+          "value_options": {
+            "A&D": "Applications and Decisions",
+            "N&P": "Notices and Proceedings"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "pubDate",
+        "options": {
+          "label": "Publication Date",
+          "default_date": "now"
+        },
+        "type": "MonthSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficArea",
+        "options": {
+          "label": "Traffic area",
+          "service_name": "Common\\Service\\Data\\TrafficArea",
+          "empty_option": "All"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "filter-button"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "pubType": {
+      "name": "pubType",
+      "required": false
+    }
+  }
+}

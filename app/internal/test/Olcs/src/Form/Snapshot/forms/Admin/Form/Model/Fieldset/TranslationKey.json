@@ -1,0 +1,74 @@
+{
+  "name": "TranslationKey",
+  "attributes": {
+    "class": "translation-keys"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "id": "id"
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "translationKey",
+        "attributes": {
+          "id": "translationKey",
+          "data-container-class": "translationKeyContainer js-hidden"
+        },
+        "options": {
+          "label": "New Translation Key"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "attributes": {
+          "id": "translationKey",
+          "data-container-class": "translationKeyContainer js-hidden"
+        },
+        "options": {
+          "label": "Description"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "input_filter": {
+    "translationKey": {
+      "name": "translationKey",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 512
+          }
+        }
+      ],
+      "required": false
+    },
+    "description": {
+      "name": "description",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 512
+          }
+        }
+      ],
+      "required": false
+    }
+  }
+}

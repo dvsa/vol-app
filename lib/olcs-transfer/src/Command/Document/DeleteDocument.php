@@ -8,22 +8,18 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Document;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 
-/**
- * @Transfer\RouteName("backend/document/single")
- * @Transfer\Method("DELETE")
- */
+#[Transfer\RouteName('backend/document/single')]
+#[Transfer\Method('DELETE')]
 final class DeleteDocument extends AbstractCommand
 {
     use Identity;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
+    #[Transfer\Optional]
     protected $unlinkLicence = false;
 
     /**

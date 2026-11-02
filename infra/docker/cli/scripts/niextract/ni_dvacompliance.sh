@@ -211,7 +211,7 @@ cd "${script_dir}"
 xml_dir="/tmp/xml"
 anon_dir="/tmp/anon"
 
-if [[ "${ENVIRONMENT_NAME}" != "PROD" ]]; then
+if [[ "${ENVIRONMENT_NAME}" != "APP" ]]; then
   ./NI_Extract.sh \
     -c "-h${endpoint} -umaster -p${M_DB_PASSWORD}" \
     -d "${db_name}" \

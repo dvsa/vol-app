@@ -1,0 +1,26 @@
+{
+  "name": "CommunityLicencesData",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "totalActiveCommunityLicences",
+        "attributes": {
+          "class": "short",
+          "id": "",
+          "disabled": "disabled"
+        },
+        "options": {
+          "label": "application_community_licence_total_community_licences"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": ""
+  },
+  "input_filter": []
+}

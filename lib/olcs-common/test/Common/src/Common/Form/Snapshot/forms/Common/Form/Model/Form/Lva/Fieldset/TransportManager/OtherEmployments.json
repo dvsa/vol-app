@@ -1,0 +1,99 @@
+{
+  "name": "otherEmployments",
+  "attributes": {
+    "class": "table__form",
+    "id": "hasOtherEmployments"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "hasOtherEmployment",
+        "options": {
+          "label": "transport-manager.employment.form.radio.label",
+          "hint": "transport-manager.employment.form.radio.hint",
+          "hint-class": "",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          }
+        },
+        "type": "Radio"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "otherEmployment",
+        "attributes": {
+          "id": "otherEmployments",
+          "class": "help__text help__text--removePadding"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "input_filter": {
+    "hasOtherEmployment": {
+      "name": "hasOtherEmployment",
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\YesNoTableRequiredValidator",
+          "options": {
+            "table": "otherEmployment",
+            "message": "transport-manager-details.form.employment.required"
+          }
+        }
+      ]
+    }
+  }
+}

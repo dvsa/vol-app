@@ -1,0 +1,227 @@
+{
+  "name": "scanning",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "details",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "category",
+              "attributes": {
+                "id": "category",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "scanning.data.category",
+                "service_name": "Olcs\\Service\\Data\\ScannerCategory"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "subCategory",
+              "attributes": {
+                "id": "subCategory",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "scanning.data.sub_category",
+                "service_name": "Olcs\\Service\\Data\\ScannerSubCategory"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "description",
+              "attributes": {
+                "id": "description",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "scanning.data.description",
+                "service_name": "Olcs\\Service\\Data\\SubCategoryDescription",
+                "context": []
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "otherDescription",
+              "attributes": {
+                "id": "other_description",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "scanning.data.description"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "entityIdentifier",
+              "attributes": {
+                "id": "entity_identifier",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "scanning.data.entity"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "backScan",
+              "attributes": {
+                "id": "back_scan"
+              },
+              "options": {
+                "checked_value": "1",
+                "unchecked_value": "0",
+                "label": "scanning.data.back_scan",
+                "must_be_value": "Yes"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "dateReceived",
+              "attributes": {
+                "required": "required",
+                "id": "received_date"
+              },
+              "options": {
+                "label": "scanning.data.received_date",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "fieldsetClass": "received_date"
+              },
+              "type": "DateSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "scanning.details"
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Create"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "details": {
+      "otherDescription": {
+        "name": "otherDescription",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty"
+          }
+        ]
+      },
+      "entityIdentifier": {
+        "name": "entityIdentifier",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty"
+          }
+        ]
+      },
+      "backScan": {
+        "name": "backScan",
+        "required": false
+      },
+      "dateReceived": {
+        "name": "dateReceived",
+        "required": true,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "name": "licence_message_reply",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "action",
+        "attributes": {
+          "value": "reply"
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "reply",
+              "attributes": {
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "You can enter up to 1000 characters"
+              },
+              "type": "Laminas\\Form\\Element\\Textarea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "send",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button govuk-button--default",
+                "id": "send"
+              },
+              "options": {
+                "label": "Send message"
+              },
+              "type": "Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "form-actions": {
+      "reply": {
+        "name": "reply",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": {
+              "messages": {
+                "isEmpty": "messaging.form.message.content.empty.error_message"
+              }
+            },
+            "break_chain_on_failure": true
+          },
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 5,
+              "max": 1000,
+              "messages": {
+                "stringLengthTooShort": "messaging.form.message.content.too_short.error_message",
+                "stringLengthTooLong": "messaging.form.message.content.too_long.error_message"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

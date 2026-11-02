@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Transfer\Command;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
 /**
  * Update Addresses
@@ -22,36 +22,24 @@ abstract class AbstractUpdateAddresses extends AbstractCommand
 {
     use Traits\Identity;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $correspondence;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $contact;
 
-    /**
-     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\AddressOptional")
-     * @Transfer\Optional
-     */
+    #[Transfer\Partial('Dvsa\Olcs\Transfer\Command\Partial\AddressOptional')]
+    #[Transfer\Optional]
     protected $correspondenceAddress;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $establishment;
 
-    /**
-     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\AddressOptional")
-     * @Transfer\Optional
-     */
+    #[Transfer\Partial('Dvsa\Olcs\Transfer\Command\Partial\AddressOptional')]
+    #[Transfer\Optional]
     protected $establishmentAddress;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $consultant;
 
     /**

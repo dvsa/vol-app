@@ -1,0 +1,93 @@
+{
+  "name": "BusRegBrowse",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficAreas",
+        "options": {
+          "label": "selfserve.search.busreg.browse.form.trafficAreas.label",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\TrafficArea",
+          "exclude": [
+            "N"
+          ],
+          "use_groups": "false"
+        },
+        "attributes": {
+          "id": "trafficAreas",
+          "placeholder": ""
+        },
+        "type": "DynamicMultiCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "options": {
+          "label": "selfserve.search.busreg.browse.form.status.label",
+          "empty_option": "All",
+          "disable_inarray_validator": false,
+          "category": "bus_reg_browse_status"
+        },
+        "attributes": {
+          "id": "status",
+          "placeholder": "",
+          "class": "long"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "acceptedDate",
+        "options": {
+          "label": "selfserve.search.busreg.browse.form.acceptedDate.label",
+          "render_delimiters": false
+        },
+        "attributes": {
+          "id": "acceptedDate",
+          "placeholder": ""
+        },
+        "type": "DateSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "status": {
+      "name": "status",
+      "required": false
+    },
+    "acceptedDate": {
+      "name": "acceptedDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    }
+  }
+}

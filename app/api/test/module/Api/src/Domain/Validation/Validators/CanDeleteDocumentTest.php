@@ -111,6 +111,48 @@ final class CanDeleteDocumentTest extends AbstractValidatorsTestCase
     }
 
     /**
+     * @throws NotFoundException
+     * @throws Exception
+     */
+    public function testIsExternalUserCannotDeleteDocWithAppAttachedAndSubmittedAndNotPostUpload(): void
+    {
+        $this->setupMockIdentity(static::IS_EXTERNAL_USER, $this->getMockOrganisation());
+        $this->mockRepo(Repository\Document::class)
+            ->shouldReceive('fetchById')
+            ->with(static::DOCUMENT_ID)
+            ->andReturn(
+                $this->getMockDocument(
+                    true,
+                    relatedApplication: $this->getMockApplication(true),
+                    isPostSubmissionUpload: false
+                )
+            );
+
+        $this->assertFalse($this->sut->isValid(static::DOCUMENT_ID));
+    }
+
+    /**
+     * @throws NotFoundException
+     * @throws Exception
+     */
+    public function testIsExternalUserCanDeleteDocWithAppAttachedAndSubmittedAndPostUpload(): void
+    {
+        $this->setupMockIdentity(static::IS_EXTERNAL_USER, $this->getMockOrganisation());
+        $this->mockRepo(Repository\Document::class)
+            ->shouldReceive('fetchById')
+            ->with(static::DOCUMENT_ID)
+            ->andReturn(
+                $this->getMockDocument(
+                    true,
+                    relatedApplication: $this->getMockApplication(true),
+                    isPostSubmissionUpload: true
+                )
+            );
+
+        $this->assertTrue($this->sut->isValid(static::DOCUMENT_ID));
+    }
+
+    /**
      * @throws Exception
      * @return m\MockInterface The mocked document object.
      */
@@ -118,7 +160,8 @@ final class CanDeleteDocumentTest extends AbstractValidatorsTestCase
         bool $isExternal,
         int $createdById = 123456,
         ?m\MockInterface $relatedApplication = null,
-        ?m\MockInterface $relatedOrganisation = null
+        ?m\MockInterface $relatedOrganisation = null,
+        bool $isPostSubmissionUpload = false
     ): m\MockInterface {
         if ($relatedOrganisation === null) {
             $relatedOrganisation = m::mock(Entity\Organisation\Organisation::class);
@@ -131,6 +174,7 @@ final class CanDeleteDocumentTest extends AbstractValidatorsTestCase
         $mockDoc->allows('getCreatedBy->getId')->andReturn($createdById);
         $mockDoc->allows('getRelatedOrganisation')->andReturn($relatedOrganisation);
         $mockDoc->allows('getApplication')->andReturn($relatedApplication);
+        $mockDoc->allows('getIsPostSubmissionUpload')->andReturn($isPostSubmissionUpload);
 
         return $mockDoc;
     }

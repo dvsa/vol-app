@@ -1,0 +1,39 @@
+{
+  "name": "AcceptAndContinueOrCancel",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "AcceptAndContinueButton",
+        "attributes": {
+          "class": "govuk-button",
+          "data-module": "govuk-button",
+          "type": "submit"
+        },
+        "options": {
+          "label": "permits.button.accept-and-continue"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "CancelButton",
+        "attributes": {
+          "type": "submit",
+          "role": "link"
+        },
+        "options": {
+          "label": "permits.button.cancel-return-to-overview"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -29,7 +29,6 @@
   ],
   "require": {
     "php": "~8.4.0",
-    "doctrine/annotations": "^2.0",
     "ezyang/htmlpurifier": "^4.17",
     "laminas/laminas-authentication": "^2.18",
     "laminas/laminas-code": "^4.16",
@@ -41,7 +40,6 @@
     "laminas/laminas-inputfilter": "^2.33",
     "laminas/laminas-modulemanager": "^2.17",
     "laminas/laminas-mvc": "^3.8",
-    "laminas/laminas-mvc-plugin-flashmessenger": "^1.11",
     "laminas/laminas-navigation": "^2.20",
     "laminas/laminas-servicemanager": "^3.23",
     "laminas/laminas-stdlib": "^3.20",
@@ -62,7 +60,7 @@
     "phpunit/phpunit": "^13.0",
     "rector/rector": "^2.3",
     "symfony/filesystem": "^8.1",
-    "symfony/lock": "^7.4"
+    "symfony/lock": "^8.1"
   },
   "autoload": {
     "psr-4": {

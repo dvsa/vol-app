@@ -1,0 +1,110 @@
+{
+  "name": "data",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trailerNo",
+        "type": "Text",
+        "attributes": {
+          "class": "long"
+        },
+        "options": {
+          "label": "licence_goods-trailers_trailer.form.add.trailernumber",
+          "hint": "licence_goods-trailers_trailer.form.add.trailernumber.hint"
+        }
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "longerSemiTrailer",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "isLongerSemiTrailer",
+              "options": {
+                "error-message": "is-longer-semi-trailer-error",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                }
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Radio"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "YContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "longerSemiTrailerWarning",
+                    "attributes": {
+                      "value": "markup-lva-trailers-longerSemiTrailersWarningHtml"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioVertical",
+        "options": {
+          "radio-element": "isLongerSemiTrailer",
+          "label": "licence_goods-trailers_trailer.form.add.islongersemitrailer.label",
+          "hint": "licence_goods-trailers_trailer.form.add.islongersemitrailer.hint"
+        }
+      }
+    }
+  ],
+  "input_filter": {
+    "trailerNo": {
+      "name": "trailerNo",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\I18n\\Validator\\Alnum"
+        }
+      ]
+    }
+  }
+}

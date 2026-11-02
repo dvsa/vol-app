@@ -1,0 +1,127 @@
+{
+  "name": "bus-reg-filter-form",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "organisationId",
+              "options": {
+                "label": "Organisation",
+                "empty_option": "All",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\BusRegSearchViewListDataService",
+                "category": "organisation"
+              },
+              "attributes": {
+                "id": "organisation",
+                "placeholder": ""
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "busRegStatus",
+              "options": {
+                "label": "Registration status",
+                "empty_option": "All",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\BusRegSearchViewListDataService",
+                "category": "busRegStatus"
+              },
+              "attributes": {
+                "id": "busRegStatus",
+                "placeholder": ""
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "licId",
+              "options": {
+                "label": "Licence no",
+                "empty_option": "All",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\BusRegSearchViewListDataService",
+                "category": "licence"
+              },
+              "attributes": {
+                "id": "licId",
+                "placeholder": ""
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "Filters"
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "updateResults",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "search.form.filter.update_button"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "fields": {
+      "organisationId": {
+        "name": "organisationId",
+        "required": false
+      },
+      "busRegStatus": {
+        "name": "busRegStatus",
+        "required": false
+      },
+      "licId": {
+        "name": "licId",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

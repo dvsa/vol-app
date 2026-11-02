@@ -1,0 +1,82 @@
+{
+  "name": "presiding-tc",
+  "attributes": {
+    "class": "table__form"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "name",
+        "attributes": {
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "user",
+        "attributes": {
+          "id": "user",
+          "placeholder": ""
+        },
+        "options": {
+          "short-label": "User",
+          "label": "User",
+          "service_name": "Olcs\\Service\\Data\\UserListInternal",
+          "empty_option": "Unassigned"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "name": {
+      "name": "name",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 70
+          }
+        }
+      ]
+    },
+    "user": {
+      "name": "user",
+      "required": false
+    }
+  }
+}

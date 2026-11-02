@@ -8,29 +8,23 @@
 
 namespace Dvsa\Olcs\Transfer\Query\Licence;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/licence")
- */
+#[Transfer\RouteName('backend/licence')]
 final class GetList extends AbstractQuery implements \Dvsa\Olcs\Transfer\Query\OrderedQueryInterface
 {
     use \Dvsa\Olcs\Transfer\Query\OrderedTraitOptional;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
     protected $organisation;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Dvsa\Olcs\Transfer\Validators\LicenceStatus")
-     */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Dvsa\Olcs\Transfer\Validators\LicenceStatus')]
     protected $excludeStatuses = [];
 
     /**

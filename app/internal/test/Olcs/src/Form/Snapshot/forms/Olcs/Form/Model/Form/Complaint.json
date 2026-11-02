@@ -1,0 +1,404 @@
+{
+  "name": "Complaint",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "complainantForename",
+              "attributes": {
+                "id": "complainantForename",
+                "class": "medium",
+                "name": "complainantForename"
+              },
+              "options": {
+                "label": "Complainant first name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "complainantFamilyName",
+              "attributes": {
+                "id": "complainantFamilyName",
+                "class": "medium",
+                "name": "complainantFamilyName"
+              },
+              "options": {
+                "label": "Complainant family name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "complaintDate",
+              "attributes": {
+                "id": "complaintDate"
+              },
+              "options": {
+                "label": "Complaint date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "complaintType",
+              "attributes": {
+                "id": "complaintType"
+              },
+              "options": {
+                "label": "Complaint type",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "category": "complaint_type"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "status",
+              "attributes": {
+                "id": "status",
+                "name": "status"
+              },
+              "options": {
+                "label": "Complaint status",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "category": "complaint_status"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "description",
+              "attributes": {
+                "id": "description",
+                "class": "extra-long",
+                "name": "description"
+              },
+              "options": {
+                "label": "Description",
+                "label_attributes": {
+                  "class": ""
+                }
+              },
+              "type": "TextArea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "vrm",
+              "attributes": {
+                "id": "vrm",
+                "class": "medium",
+                "name": "vrm"
+              },
+              "options": {
+                "label": "Vehicle registration mark",
+                "label_attributes": {
+                  "class": ""
+                }
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "driverForename",
+              "attributes": {
+                "placeholder": "",
+                "class": "medium",
+                "name": "driverForename"
+              },
+              "options": {
+                "label": "Driver first name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "driverFamilyName",
+              "attributes": {
+                "placeholder": "",
+                "class": "medium",
+                "name": "driverFamilyName"
+              },
+              "options": {
+                "label": "Driver family name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "closedDate",
+              "attributes": {
+                "id": "closedDate"
+              },
+              "options": {
+                "label": "Close date",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "case",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "Complaint Details",
+          "class": ""
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "complainantForename": {
+        "name": "complainantForename",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 2,
+              "max": 35
+            }
+          }
+        ]
+      },
+      "complainantFamilyName": {
+        "name": "complainantFamilyName",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 2,
+              "max": 35
+            }
+          }
+        ]
+      },
+      "complaintDate": {
+        "name": "complaintDate",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "description": {
+        "name": "description",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 5,
+              "max": 4000
+            }
+          }
+        ]
+      },
+      "vrm": {
+        "name": "vrm",
+        "required": false
+      },
+      "driverForename": {
+        "name": "driverForename",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 2,
+              "max": 35
+            }
+          }
+        ]
+      },
+      "driverFamilyName": {
+        "name": "driverFamilyName",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 2,
+              "max": 35
+            }
+          }
+        ]
+      },
+      "closedDate": {
+        "name": "closedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

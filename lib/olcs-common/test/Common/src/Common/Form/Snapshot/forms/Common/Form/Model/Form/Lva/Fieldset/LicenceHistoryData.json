@@ -1,0 +1,292 @@
+{
+  "name": "LicenceHistoryData",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": {
+        "priority": -10
+      },
+      "spec": {
+        "name": "prevHasLicence",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "application_previous-history_licence-history_prevHasLicence",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "legend-attributes": {
+            "class": "form-element__label"
+          },
+          "error-message": "licenceHistoryData_prevHasLicence-error",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          }
+        },
+        "type": "radio"
+      }
+    },
+    {
+      "flags": {
+        "priority": -30
+      },
+      "spec": {
+        "name": "prevHadLicence",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "application_previous-history_licence-history_prevHadLicence",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "legend-attributes": {
+            "class": "form-element__label"
+          },
+          "error-message": "licenceHistoryData_prevHadLicence-error",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          }
+        },
+        "type": "radio"
+      }
+    },
+    {
+      "flags": {
+        "priority": -50
+      },
+      "spec": {
+        "name": "prevBeenDisqualifiedTc",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "application_previous-history_licence-history_prevBeenDisqualifiedTc",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "legend-attributes": {
+            "class": "form-element__label"
+          },
+          "error-message": "licenceHistoryData_prevBeenDisqualifiedTc-error",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          }
+        },
+        "type": "radio"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": {
+        "priority": -20
+      },
+      "spec": {
+        "name": "prevHasLicence-table",
+        "attributes": {
+          "id": "prevHasLicence",
+          "class": "help__text help__text--removePadding"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -40
+      },
+      "spec": {
+        "name": "prevHadLicence-table",
+        "attributes": {
+          "id": "prevHadLicence",
+          "class": "help__text help__text--removePadding"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -60
+      },
+      "spec": {
+        "name": "prevBeenDisqualifiedTc-table",
+        "attributes": {
+          "id": "prevBeenDisqualifiedTc",
+          "class": "help__text help__text--removePadding"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "input_filter": {
+    "prevHasLicence": {
+      "name": "prevHasLicence",
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\LicenceHistoryLicenceValidator",
+          "options": {
+            "table": "prevHasLicence-table"
+          }
+        }
+      ]
+    },
+    "prevHadLicence": {
+      "name": "prevHadLicence",
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\LicenceHistoryLicenceValidator",
+          "options": {
+            "table": "prevHadLicence-table"
+          }
+        }
+      ]
+    },
+    "prevBeenDisqualifiedTc": {
+      "name": "prevBeenDisqualifiedTc",
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\LicenceHistoryLicenceValidator",
+          "options": {
+            "table": "prevBeenDisqualifiedTc-table"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "idHtml",
+        "attributes": {
+          "id": "idHtml",
+          "required": false
+        },
+        "options": {
+          "label": "IRFO OP Number"
+        },
+        "type": "Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "irfoNationality",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "chosen-select-fixed"
+        },
+        "options": {
+          "label": "Country of origin",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\Country",
+          "use_groups": false
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "tradingNames",
+        "attributes": {
+          "class": "add-another"
+        },
+        "type": "Laminas\\Form\\Element\\Collection",
+        "options": {
+          "count": 1,
+          "label": "Trading names",
+          "hint": "markup-trading-name-hint",
+          "hint_at_bottom": true,
+          "target_element": {
+            "name": "TradingNames",
+            "attributes": [],
+            "elements": [
+              {
+                "flags": [],
+                "spec": {
+                  "name": "name",
+                  "attributes": {
+                    "class": "long",
+                    "id": ""
+                  },
+                  "type": "Text"
+                }
+              },
+              {
+                "flags": [],
+                "spec": {
+                  "name": "id",
+                  "attributes": {
+                    "value": ""
+                  },
+                  "type": "Hidden"
+                }
+              },
+              {
+                "flags": [],
+                "spec": {
+                  "name": "version",
+                  "attributes": {
+                    "value": ""
+                  },
+                  "type": "Hidden"
+                }
+              }
+            ],
+            "fieldsets": [],
+            "type": "Laminas\\Form\\InputFilterProviderFieldset",
+            "options": {
+              "input_filter_spec": {
+                "name": {
+                  "name": "name",
+                  "required": false,
+                  "filters": [
+                    {
+                      "name": "Laminas\\Filter\\StringTrim"
+                    }
+                  ],
+                  "validators": [
+                    {
+                      "name": "Laminas\\Validator\\StringLength",
+                      "options": {
+                        "min": 1,
+                        "max": 70
+                      }
+                    }
+                  ]
+                },
+                "type": "Laminas\\InputFilter\\InputFilter"
+              },
+              "target_type": "Common\\Form\\Model\\Form\\Lva\\Fieldset\\TradingNames"
+            }
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "irfoPartners",
+        "attributes": {
+          "class": "add-another"
+        },
+        "type": "Laminas\\Form\\Element\\Collection",
+        "options": {
+          "count": 1,
+          "label": "Partner details",
+          "hint": "markup-partner-detail-hint",
+          "hint_at_bottom": true,
+          "target_element": {
+            "name": "irfo-partner",
+            "attributes": [],
+            "elements": [
+              {
+                "flags": [],
+                "spec": {
+                  "name": "name",
+                  "attributes": {
+                    "class": "",
+                    "id": "irfoPartner"
+                  },
+                  "type": "Text"
+                }
+              }
+            ],
+            "fieldsets": [],
+            "type": "Laminas\\Form\\InputFilterProviderFieldset",
+            "options": {
+              "input_filter_spec": {
+                "name": {
+                  "name": "name",
+                  "required": false,
+                  "filters": [
+                    {
+                      "name": "Laminas\\Filter\\StringTrim"
+                    }
+                  ],
+                  "validators": [
+                    {
+                      "name": "Laminas\\Validator\\StringLength",
+                      "options": {
+                        "min": 1,
+                        "max": 70
+                      }
+                    }
+                  ]
+                },
+                "type": "Laminas\\InputFilter\\InputFilter"
+              },
+              "target_type": "Olcs\\Form\\Model\\Fieldset\\IrfoPartner"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "input_filter": {
+    "idHtml": {
+      "name": "idHtml",
+      "required": false
+    },
+    "irfoNationality": {
+      "name": "irfoNationality",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,632 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "venue",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "venue",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Venue",
+          "service_name": "Common\\Service\\Data\\Venue",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "other_option": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "venueOther",
+        "attributes": {
+          "required": false,
+          "class": "medium",
+          "id": "venueOther"
+        },
+        "type": "Text",
+        "options": {
+          "label": "Other venue"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hearingDate",
+        "attributes": {
+          "required": "required",
+          "id": "hearingDate"
+        },
+        "type": "DateTimeSelect",
+        "options": {
+          "label": "Date of PI",
+          "create_empty_option": true,
+          "render_delimiters": true,
+          "category": "pi_hearing",
+          "field": "hearingDate"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isFullDay",
+        "type": "Radio",
+        "options": {
+          "label": "Hearing length",
+          "value_options": {
+            "not-set": "Not set",
+            "N": "Half day",
+            "Y": "Full day"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "value": "not-set"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "presidingTc",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "presidingTc",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Presiding TC/DTC/HTRU/DHTRU",
+          "service_name": "Olcs\\Service\\Data\\PresidingTc",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "presidedByRole",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "presidedByRole",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Presiding TC/DTC/HTRU/DHTRU role",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "tc_role"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "witnesses",
+        "type": "Text",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Number of witnesses"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "drivers",
+        "type": "Text",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Number of drivers",
+          "error-message": "digits.validation.zero-to-ninety-nine"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isCancelled",
+        "type": "OlcsCheckbox",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Cancelled / Withdrawn"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "cancelledDate",
+        "attributes": {
+          "required": false,
+          "id": "cancelledDate"
+        },
+        "type": "DateSelect",
+        "options": {
+          "label": "Cancelled date",
+          "create_empty_option": true
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "cancelledReason",
+        "attributes": {
+          "required": false,
+          "class": "extra-long",
+          "id": "cancelledReason"
+        },
+        "type": "TextArea",
+        "options": {
+          "label": "Cancelled reason"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isAdjourned",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Adjourned"
+        },
+        "type": "OlcsCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "adjournedDate",
+        "attributes": {
+          "required": "required",
+          "id": "adjournedDate"
+        },
+        "type": "DateTimeSelect",
+        "options": {
+          "label": "Date adjournment agreed",
+          "create_empty_option": true,
+          "render_delimiters": true,
+          "field": "adjournedDate"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "adjournedReason",
+        "attributes": {
+          "required": false,
+          "class": "extra-long",
+          "id": ""
+        },
+        "type": "TextArea",
+        "options": {
+          "label": "Adjourned reason"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "definition",
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "chosen-select-large js-definition-source"
+        },
+        "options": {
+          "label": "Definition",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\PublicInquiryDefinition",
+          "use_groups": true,
+          "empty_option": "Add definition option"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "details",
+        "type": "TextArea",
+        "attributes": {
+          "class": "extra-long    js-definition-target",
+          "id": ""
+        },
+        "options": {
+          "label": "Details to be published"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "pubType",
+        "type": "Select",
+        "attributes": {
+          "id": "pubType",
+          "value": "All"
+        },
+        "options": {
+          "label": "Publication type",
+          "value_options": {
+            "All": "All",
+            "A&D": "A&D",
+            "N&P": "N&P"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficAreas",
+        "type": "Select",
+        "attributes": {
+          "id": "trafficAreas",
+          "placeholder": "",
+          "multiple": "multiple",
+          "value": "all",
+          "class": "chosen-select-large"
+        },
+        "options": {
+          "label": "Traffic areas",
+          "value_options": {
+            "all": "All traffic areas",
+            "B": "North East of England",
+            "C": "North West of England",
+            "D": "West Midlands",
+            "F": "East of England",
+            "G": "Wales",
+            "H": "West of England",
+            "K": "London and the South East of England",
+            "M": "Scotland",
+            "N": "Northern Ireland"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "pi",
+        "type": "Hidden",
+        "attributes": {
+          "value": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "venueOther": {
+      "name": "venueOther",
+      "required": true,
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "venue",
+            "context_values": [
+              "other"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "NotEmpty"
+              },
+              {
+                "name": "Laminas\\Validator\\StringLength",
+                "options": {
+                  "max": 255
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "hearingDate": {
+      "name": "hearingDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateTimeSelect",
+          "options": {
+            "null_on_empty": true
+          }
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d H:i:s"
+          }
+        }
+      ]
+    },
+    "witnesses": {
+      "name": "witnesses",
+      "validators": [
+        {
+          "name": "Digits"
+        }
+      ]
+    },
+    "drivers": {
+      "name": "drivers",
+      "validators": [
+        {
+          "name": "Digits",
+          "options": {
+            "messages": {
+              "notDigits": "digits.validation.zero-to-ninety-nine",
+              "digitsStringEmpty": "digits.validation.zero-to-ninety-nine",
+              "digitsInvalid": "digits.validation.zero-to-ninety-nine"
+            },
+            "break_chain_on_failure": true
+          }
+        },
+        {
+          "name": "NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "digits.validation.zero-to-ninety-nine"
+            },
+            "break_chain_on_failure": true
+          }
+        },
+        {
+          "name": "Laminas\\Validator\\Between",
+          "options": {
+            "min": 0,
+            "max": 99,
+            "inclusive": true,
+            "messages": {
+              "notBetween": "digits.validation.zero-to-ninety-nine"
+            }
+          }
+        }
+      ]
+    },
+    "cancelledDate": {
+      "name": "cancelledDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelect",
+          "options": {
+            "null_on_empty": true
+          }
+        }
+      ],
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": [
+            "array"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "isCancelled",
+            "context_values": [
+              "Y"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "NotEmpty"
+              },
+              {
+                "name": "\\Common\\Validator\\Date"
+              },
+              {
+                "name": "Date",
+                "options": {
+                  "format": "Y-m-d"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "cancelledReason": {
+      "name": "cancelledReason",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "isCancelled",
+            "context_values": [
+              "Y"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "NotEmpty"
+              },
+              {
+                "name": "Laminas\\Validator\\StringLength",
+                "options": {
+                  "max": 1000
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "adjournedDate": {
+      "name": "adjournedDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateTimeSelect",
+          "options": {
+            "null_on_empty": true
+          }
+        }
+      ],
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": [
+            "array"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "isAdjourned",
+            "context_values": [
+              "Y"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "NotEmpty"
+              },
+              {
+                "name": "\\Common\\Validator\\Date"
+              },
+              {
+                "name": "Date",
+                "options": {
+                  "format": "Y-m-d H:i:s"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "adjournedReason": {
+      "name": "adjournedReason",
+      "required": true,
+      "validators": [
+        {
+          "name": "NotEmpty",
+          "options": [
+            "null"
+          ]
+        },
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "isAdjourned",
+            "context_values": [
+              "Y"
+            ],
+            "allow_empty": false,
+            "validators": [
+              {
+                "name": "NotEmpty"
+              },
+              {
+                "name": "Laminas\\Validator\\StringLength",
+                "options": {
+                  "max": 1000
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "definition": {
+      "name": "definition",
+      "required": false,
+      "filters": [
+        {
+          "name": "Common\\Filter\\NullToArray"
+        }
+      ]
+    },
+    "details": {
+      "name": "details",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 4000
+          }
+        }
+      ]
+    }
+  }
+}

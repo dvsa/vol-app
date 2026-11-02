@@ -1,0 +1,78 @@
+{
+  "name": "licence-lost",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "notice",
+        "options": {
+          "label": "licence.surrender.operator_licence.lost.note"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "details",
+        "type": "\\Laminas\\Form\\Element\\Textarea",
+        "attributes": {
+          "class": "govuk-textarea",
+          "rows": "5"
+        },
+        "options": {
+          "hint": "licence.surrender.document.lost.details.hint"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "details": {
+      "name": "details",
+      "allow_empty": true,
+      "continue_if_empty": true,
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "operatorLicenceDocument",
+            "context_values": [
+              "lost"
+            ],
+            "inject_post_data": "operatorLicenceDocument->operatorLicenceDocument",
+            "validators": [
+              {
+                "name": "StringLength",
+                "options": {
+                  "min": 0,
+                  "max": 500,
+                  "break_chain_on_failure": true,
+                  "messages": {
+                    "stringLengthTooShort": "licence.surrender.operator_licence_lost.text_area.stringLengthTooShort",
+                    "stringLengthTooLong": "licence.surrender.operator_licence_lost.text_area.stringLengthTooLong",
+                    "stringLengthInvalid": "licence.surrender.operator_licence_lost.text_area.stringLengthToShort"
+                  }
+                }
+              },
+              {
+                "name": "NotEmpty",
+                "options": {
+                  "messages": {
+                    "isEmpty": "licence.surrender.operator_licence_lost.text_area.empty"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

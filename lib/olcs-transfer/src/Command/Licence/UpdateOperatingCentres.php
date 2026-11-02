@@ -4,53 +4,41 @@ namespace Dvsa\Olcs\Transfer\Command\Licence;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Version;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/licence/single/operating-centres")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/licence/single/operating-centres')]
+#[Transfer\Method('PUT')]
 final class UpdateOperatingCentres extends AbstractCommand
 {
     use Identity;
     use Version;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\Boolean")
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
+    #[Transfer\Optional]
     protected $partial;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\ToInt")
-     * @Transfer\Validator("Digits")
-     * @Transfer\Validator("Between", options={"min":0, "max": 5000})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\ToInt')]
+    #[Transfer\Validator('Digits')]
+    #[Transfer\Validator('Between', options: ['min' => 0, 'max' => 5000])]
+    #[Transfer\Optional]
     protected $totAuthHgvVehicles;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\ToInt")
-     * @Transfer\Validator("Digits")
-     * @Transfer\Validator("Between", options={"min":0, "max": 5000})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\ToInt')]
+    #[Transfer\Validator('Digits')]
+    #[Transfer\Validator('Between', options: ['min' => 0, 'max' => 5000])]
+    #[Transfer\Optional]
     protected $totAuthLgvVehicles;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\ToInt")
-     * @Transfer\Validator("Digits")
-     * @Transfer\Validator("Between", options={"min":0, "max": 5000})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\ToInt')]
+    #[Transfer\Validator('Digits')]
+    #[Transfer\Validator('Between', options: ['min' => 0, 'max' => 5000])]
+    #[Transfer\Optional]
     protected $totAuthTrailers;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength", options={"min": 1, "max": "4"})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => '4'])]
+    #[Transfer\Optional]
     protected $enforcementArea;
 
     /**

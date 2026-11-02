@@ -24,6 +24,15 @@ final class OtpService
     public const MAX_ATTEMPTS = 5;
 
     /**
+     * @param array<string, int> $hashOptions password_hash() options. Production passes none and
+     *                                        gets PHP's defaults; tests lower the bcrypt cost, as
+     *                                        each hash at the default cost takes about 0.25s.
+     */
+    public function __construct(private readonly array $hashOptions = [])
+    {
+    }
+
+    /**
      * A cryptographically-random, zero-padded numeric code, e.g. "004271".
      */
     public function generateCode(): string
@@ -35,7 +44,7 @@ final class OtpService
 
     public function hash(string $code): string
     {
-        return password_hash($code, PASSWORD_DEFAULT);
+        return password_hash($code, PASSWORD_DEFAULT, $this->hashOptions);
     }
 
     /**

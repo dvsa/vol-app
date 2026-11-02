@@ -1,0 +1,22 @@
+{
+  "name": "bus-service-grant",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "grantValidation",
+        "type": "Common\\Form\\Elements\\Types\\Html",
+        "options": {
+          "label": "Granting a bus registration"
+        },
+        "attributes": {
+          "id": "grantValidation",
+          "value": "All questions must be answered 'Yes' before the registration can be granted"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

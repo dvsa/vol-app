@@ -1,0 +1,7 @@
+{
+  "routeName": "backend/flag-urgent-tasks",
+  "method": "POST",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

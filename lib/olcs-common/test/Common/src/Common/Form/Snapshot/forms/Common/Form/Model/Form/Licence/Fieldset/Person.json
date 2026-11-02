@@ -1,0 +1,193 @@
+{
+  "name": "Person",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "title",
+        "attributes": {
+          "id": "title",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "empty_option": "Please Select",
+          "label": "Title",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "category": "person_title"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "forename",
+        "attributes": {
+          "class": "long",
+          "id": "forename"
+        },
+        "options": {
+          "label": "First name",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "error-message": "Enter first name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "familyName",
+        "attributes": {
+          "class": "long",
+          "id": "familyname"
+        },
+        "options": {
+          "label": "Last name",
+          "label_attributes": {
+            "class": "form-element__question"
+          },
+          "error-message": "Enter last name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "otherName",
+        "attributes": {
+          "class": "long",
+          "id": ""
+        },
+        "options": {
+          "label": "Other names (optional)",
+          "label_attributes": {
+            "class": "form-element__question"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "birthDate",
+        "attributes": {
+          "required": "required",
+          "id": "dob"
+        },
+        "options": {
+          "label": "Date of Birth",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "error-message": "Enter date of birth"
+        },
+        "type": "DateSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "title": {
+      "name": "title",
+      "required": true
+    },
+    "forename": {
+      "name": "forename",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 0,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "familyName": {
+      "name": "familyName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 0,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "otherName": {
+      "name": "otherName",
+      "required": false,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 0,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "birthDate": {
+      "name": "birthDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "name": "reportUpload",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "reportType",
+              "attributes": {
+                "id": "reportType",
+                "placeholder": "",
+                "required": "required"
+              },
+              "options": {
+                "label": "Report type",
+                "empty_option": "Please select",
+                "disable_inarray_validator": false,
+                "category": "report_type"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "docTemplate",
+              "attributes": {
+                "id": "docTemplate",
+                "disabled": true,
+                "data-container-class": "docTemplateContainer js-hidden"
+              },
+              "options": {
+                "label": "Letter Template",
+                "empty_option": "Please select",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\ReportLetterTemplate"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailTemplate",
+              "attributes": {
+                "id": "emailTemplate",
+                "disabled": true,
+                "data-container-class": "emailTemplateContainer js-hidden"
+              },
+              "options": {
+                "label": "Email Template",
+                "empty_option": "Please select",
+                "disable_inarray_validator": false,
+                "service_name": "Olcs\\Service\\Data\\ReportEmailTemplate"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "file",
+              "options": {
+                "label": "File Upload"
+              },
+              "type": "\\Laminas\\Form\\Element\\File"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "upload",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button",
+                "id": "upload"
+              },
+              "options": {
+                "label": "Upload"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "Upload report"
+  },
+  "input_filter": {
+    "fields": {
+      "reportType": {
+        "name": "reportType",
+        "required": true
+      },
+      "docTemplate": {
+        "name": "docTemplate",
+        "required": false
+      },
+      "emailTemplate": {
+        "name": "emailTemplate",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

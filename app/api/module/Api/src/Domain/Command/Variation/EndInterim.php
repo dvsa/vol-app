@@ -8,7 +8,6 @@
 
 namespace Dvsa\Olcs\Api\Domain\Command\Variation;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
 /**

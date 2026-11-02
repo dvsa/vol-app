@@ -1,0 +1,320 @@
+{
+  "name": "lva-transport-manager-details",
+  "attributes": {
+    "id": "details"
+  },
+  "elements": [
+    {
+      "flags": {
+        "priority": -10
+      },
+      "spec": {
+        "name": "name",
+        "options": {
+          "label": "lva-tm-details-details-name"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement"
+      }
+    },
+    {
+      "flags": {
+        "priority": -20
+      },
+      "spec": {
+        "name": "birthDate",
+        "attributes": {
+          "required": "required",
+          "id": "dob"
+        },
+        "options": {
+          "label": "dob",
+          "create_empty_option": true,
+          "render_delimiters": false,
+          "fieldset_attributes": {
+            "id": "details[birthDate]"
+          }
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": {
+        "priority": -30
+      },
+      "spec": {
+        "name": "emailAddress",
+        "attributes": {
+          "class": "extra-long",
+          "id": "emailAddress"
+        },
+        "options": {
+          "label": "lva-tm-details-details-email",
+          "short-label": "lva-tm-details-details-email",
+          "hint": "lva-tm-email-hint"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": {
+        "priority": -40
+      },
+      "spec": {
+        "name": "birthPlace",
+        "attributes": {
+          "id": "birthPlace",
+          "class": "medium"
+        },
+        "options": {
+          "label": "lva-tm-details-details-birthPlace",
+          "short-label": "lva-tm-details-details-birthPlace",
+          "label_attributes": {
+            "aria-label": "Enter their place of birth"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": {
+        "priority": -50
+      },
+      "spec": {
+        "name": "certificateHtml",
+        "attributes": {
+          "value": "markup-lva-tm-details-details-certificateHtml"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": {
+        "priority": -70
+      },
+      "spec": {
+        "name": "lgvAcquiredRightsHtml",
+        "attributes": {
+          "value": "markup-lva-tm-details-details-lgvAcquiredRightsHtml"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": {
+        "priority": -80
+      },
+      "spec": {
+        "name": "lgvAcquiredRightsReferenceNumber",
+        "type": "Text",
+        "attributes": {
+          "id": "lgv-acquired-rights-ref-number",
+          "class": "medium"
+        },
+        "options": {
+          "label": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber",
+          "label_attributes": {
+            "class": "legend"
+          },
+          "hint": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-hint"
+        }
+      }
+    },
+    {
+      "flags": {
+        "priority": -90
+      },
+      "spec": {
+        "name": "hasUndertakenTraining",
+        "options": {
+          "label": "tm-review-responsibility-training-undertaken",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "hint": "tm-hint-responsibility-training-undertaken",
+          "hint-position": "below",
+          "hint-class": "govuk-radios__conditional govuk-body hint hint__below hint__black hintNoTraining"
+        },
+        "type": "Radio"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": {
+        "priority": -60
+      },
+      "spec": {
+        "name": "certificate",
+        "attributes": {
+          "class": "file-uploader"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "fileCount",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "file",
+              "attributes": {
+                "class": "js-visually-hidden"
+              },
+              "options": {
+                "value": "common.file-upload.browse.title",
+                "hint": "common.file-upload.browse.hint"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\AttachFilesButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "__messages__",
+              "attributes": [],
+              "options": [],
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "upload",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "inline-upload govuk-button js-upload"
+              },
+              "options": {
+                "label": "Upload"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "list",
+              "attributes": {
+                "class": "js-upload-list"
+              },
+              "options": {
+                "preview_images": "true"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\FileUploadList"
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "lva-tm-details-details-certificate",
+          "hint": "markup-professional-competence-certificates-obtained-abroad.phtml",
+          "hint-position": "above",
+          "label_attributes": {
+            "class": "legend",
+            "aria-label": "Certificate of professional competence, attach file(s) for upload"
+          }
+        }
+      }
+    }
+  ],
+  "input_filter": {
+    "birthDate": {
+      "name": "birthDate",
+      "required": true,
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "emailAddress": {
+      "name": "emailAddress",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        }
+      ]
+    },
+    "birthPlace": {
+      "name": "birthPlace",
+      "validators": [
+        {
+          "name": "\\Laminas\\Validator\\NotEmpty"
+        }
+      ]
+    },
+    "certificate": {
+      "fileCount": {
+        "name": "fileCount",
+        "required": false,
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "Common\\Validator\\FileUploadCountV2",
+            "options": {
+              "min": 1
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "lgvAcquiredRightsReferenceNumber": {
+      "name": "lgvAcquiredRightsReferenceNumber",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 7,
+            "max": 7,
+            "messages": {
+              "stringLengthInvalid": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length",
+              "stringLengthTooShort": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length",
+              "stringLengthTooLong": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

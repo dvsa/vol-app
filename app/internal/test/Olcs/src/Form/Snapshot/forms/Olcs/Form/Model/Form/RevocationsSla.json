@@ -1,0 +1,627 @@
+{
+  "name": "revocationsSla",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "isSubmissionRequiredForApproval",
+              "type": "Radio",
+              "options": {
+                "label": "Submission required for approval of ptr?",
+                "value_options": [
+                  "No",
+                  "Yes"
+                ]
+              },
+              "attributes": {
+                "value": "0"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "approvalSubmissionIssuedDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Date approval submission issued",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "fieldsetClass": "__ptr-yes"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "approvalSubmissionReturnedDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Date approval submission returned",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "fieldsetClass": "__ptr-yes"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "approvalSubmissionPresidingTc",
+              "attributes": {
+                "id": "approvalSubmissionPresidingTc",
+                "class": "__ptr-yes"
+              },
+              "options": {
+                "label": "Approval submission TC/DTC/TR",
+                "service_name": "Olcs\\Service\\Data\\PresidingTc",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "iorLetterIssuedDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Date IOR letter issued",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "operatorResponseDueDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Date operator's response due",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "operatorResponseReceivedDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Date operator's response received",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isSubmissionRequiredForAction",
+              "type": "Radio",
+              "options": {
+                "label": "Is submission required for action?",
+                "value_options": [
+                  "No",
+                  "Yes"
+                ]
+              },
+              "attributes": {
+                "value": "0"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "finalSubmissionIssuedDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Date final submission issued",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "fieldsetClass": "__sra-yes"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "finalSubmissionReturnedDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Date final submission returned",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "fieldsetClass": "__sra-yes"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "finalSubmissionPresidingTc",
+              "attributes": {
+                "id": "finalSubmissionPresidingTc",
+                "class": "__sra-yes"
+              },
+              "options": {
+                "label": "Final submission TC/DTC/TR",
+                "service_name": "Olcs\\Service\\Data\\PresidingTc",
+                "empty_option": "Please Select",
+                "disable_inarray_validator": false,
+                "labelClass": "__sra-yes"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "actionToBeTaken",
+              "options": {
+                "label": "Action to be taken",
+                "service_name": "Olcs\\Service\\Data\\ActionToBeTaken",
+                "empty_option": "Please select",
+                "disable_inarray_validator": false
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "revocationLetterIssuedDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Revocation letter issued date",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "fieldsetClass": "__ior-revoke"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "nfaLetterIssuedDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "NFA letter issued date",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "fieldsetClass": "__ior-nfa"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "warningLetterIssuedDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Warning letter issued date",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "fieldsetClass": "__ior-warning"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "piAgreedDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "PI agreed",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "fieldsetClass": "__ior-pi"
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "otherActionAgreedDate",
+              "attributes": {
+                "id": ""
+              },
+              "options": {
+                "label": "Other action agreed",
+                "create_empty_option": true,
+                "render_delimiters": false,
+                "fieldsetClass": "__ior-other"
+              },
+              "type": "DateSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "isSubmissionRequiredForApproval": {
+        "name": "isSubmissionRequiredForApproval",
+        "required": false
+      },
+      "approvalSubmissionIssuedDate": {
+        "name": "approvalSubmissionIssuedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "approvalSubmissionReturnedDate": {
+        "name": "approvalSubmissionReturnedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "approvalSubmissionPresidingTc": {
+        "name": "approvalSubmissionPresidingTc",
+        "required": false
+      },
+      "iorLetterIssuedDate": {
+        "name": "iorLetterIssuedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "operatorResponseDueDate": {
+        "name": "operatorResponseDueDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "operatorResponseReceivedDate": {
+        "name": "operatorResponseReceivedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "isSubmissionRequiredForAction": {
+        "name": "isSubmissionRequiredForAction",
+        "required": false
+      },
+      "finalSubmissionIssuedDate": {
+        "name": "finalSubmissionIssuedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "finalSubmissionReturnedDate": {
+        "name": "finalSubmissionReturnedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "finalSubmissionPresidingTc": {
+        "name": "finalSubmissionPresidingTc",
+        "required": false
+      },
+      "actionToBeTaken": {
+        "name": "actionToBeTaken",
+        "required": false
+      },
+      "revocationLetterIssuedDate": {
+        "name": "revocationLetterIssuedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "nfaLetterIssuedDate": {
+        "name": "nfaLetterIssuedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "warningLetterIssuedDate": {
+        "name": "warningLetterIssuedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "piAgreedDate": {
+        "name": "piAgreedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "otherActionAgreedDate": {
+        "name": "otherActionAgreedDate",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

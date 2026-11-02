@@ -1,0 +1,164 @@
+{
+  "name": "LetterSectionVariantEdit",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "goodsOrPsv",
+        "options": {
+          "label": "Vehicle Type",
+          "disable_inarray_validator": false,
+          "empty_option": "Any",
+          "value_options": {
+            "lcat_gv": "Goods Vehicle",
+            "lcat_psv": "PSV"
+          }
+        },
+        "type": "Select",
+        "attributes": {
+          "id": "goodsOrPsv",
+          "class": "medium"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isVariation",
+        "options": {
+          "label": "Application Type",
+          "disable_inarray_validator": false,
+          "empty_option": "Any",
+          "value_options": [
+            "New Application",
+            "Variation"
+          ]
+        },
+        "type": "Select",
+        "attributes": {
+          "id": "isVariation",
+          "class": "medium"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isNi",
+        "options": {
+          "label": "NI / GB",
+          "disable_inarray_validator": false,
+          "empty_option": "Any",
+          "value_options": [
+            "GB",
+            "NI"
+          ]
+        },
+        "type": "Select",
+        "attributes": {
+          "id": "isNi",
+          "class": "medium"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "organisationType",
+        "options": {
+          "label": "Organisation Type",
+          "disable_inarray_validator": false,
+          "empty_option": "Any",
+          "value_options": {
+            "org_t_st": "Sole Trader",
+            "org_t_rc": "Registered Company (LTD)",
+            "org_t_llp": "LLP",
+            "org_t_p": "Partnership",
+            "org_t_pa": "Other"
+          }
+        },
+        "type": "Select",
+        "attributes": {
+          "id": "organisationType",
+          "class": "medium"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "letterChoice",
+        "options": {
+          "label": "Letter Choice",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\Letter\\LetterChoice",
+          "empty_option": "None",
+          "use_groups": false
+        },
+        "type": "DynamicSelect",
+        "attributes": {
+          "id": "letterChoice",
+          "class": "medium"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "defaultContent",
+        "options": {
+          "label": "Default Content",
+          "label_attributes": {
+            "class": ""
+          }
+        },
+        "type": "EditorJs",
+        "attributes": {
+          "id": "defaultContent",
+          "class": "extra-long",
+          "name": "defaultContent"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "goodsOrPsv": {
+      "name": "goodsOrPsv",
+      "required": false
+    },
+    "isVariation": {
+      "name": "isVariation",
+      "required": false
+    },
+    "isNi": {
+      "name": "isNi",
+      "required": false
+    },
+    "organisationType": {
+      "name": "organisationType",
+      "required": false
+    },
+    "letterChoice": {
+      "name": "letterChoice",
+      "required": false
+    },
+    "defaultContent": {
+      "name": "defaultContent",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

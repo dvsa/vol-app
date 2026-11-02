@@ -12,13 +12,11 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\ApplicationOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\FieldType\Traits\LicenceOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Version;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
-/**
- * @Transfer\RouteName("backend/licence-vehicle/single/psv")
- * @Transfer\Method("PUT")
- */
+#[Transfer\RouteName('backend/licence-vehicle/single/psv')]
+#[Transfer\Method('PUT')]
 final class UpdatePsvLicenceVehicle extends AbstractCommand
 {
     use Identity;
@@ -26,28 +24,20 @@ final class UpdatePsvLicenceVehicle extends AbstractCommand
     use ApplicationOptional;
     use LicenceOptional;
 
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":2,"max":100})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 2, 'max' => 100])]
+    #[Transfer\Optional]
     protected $makeModel;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $receivedDate;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $removalDate;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\DateTimeFormatter")
-     * @Transfer\Validator("Date", options={"format": \DateTime::ISO8601})
-     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\DateTimeFormatter')]
+    #[Transfer\Validator('Date', options: ['format' => \DateTime::ISO8601])]
     protected $specifiedDate;
 
     /**

@@ -1,0 +1,254 @@
+{
+  "name": "case",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "submissionSections",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "compliance",
+              "attributes": [],
+              "options": {
+                "label": "Compliance",
+                "category": "case_categories_compliance"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "tm",
+              "attributes": [],
+              "options": {
+                "label": "TM",
+                "category": "case_categories_tm"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "app",
+              "attributes": [],
+              "options": {
+                "label": "Licensing application",
+                "category": "case_categories_app"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "referral",
+              "attributes": [],
+              "options": {
+                "label": "Licence referral",
+                "category": "case_categories_referral"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "bus",
+              "attributes": [],
+              "options": {
+                "label": "Bus registration",
+                "category": "case_categories_bus"
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "Select one or more categories"
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "description",
+              "attributes": {
+                "id": "",
+                "class": "extra-long"
+              },
+              "options": {
+                "label": "Case summary"
+              },
+              "type": "\\Laminas\\Form\\Element\\Textarea"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "ecmsNo",
+              "attributes": {
+                "class": "medium",
+                "id": ""
+              },
+              "options": {
+                "label": "ECMS number"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "licence",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": [],
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "submissionSections": {
+      "compliance": {
+        "name": "compliance",
+        "required": false
+      },
+      "tm": {
+        "name": "tm",
+        "required": false
+      },
+      "app": {
+        "name": "app",
+        "required": false
+      },
+      "referral": {
+        "name": "referral",
+        "required": false
+      },
+      "bus": {
+        "name": "bus",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "fields": {
+      "description": {
+        "name": "description",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          },
+          {
+            "name": "Laminas\\Filter\\StringToLower"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 10,
+              "max": 100
+            }
+          }
+        ]
+      },
+      "ecmsNo": {
+        "name": "ecmsNo",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

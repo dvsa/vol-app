@@ -1,0 +1,24 @@
+{
+  "name": "team-remove-details",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "newTeam",
+        "attributes": {
+          "id": "assignedToTeam",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Reassign tasks to",
+          "service_name": "Olcs\\Service\\Data\\Team",
+          "empty_option": "Please select"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

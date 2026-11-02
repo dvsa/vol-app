@@ -24,7 +24,8 @@ final class VerifyOtpTest extends AbstractCommandHandlerTestCase
     public function setUp(): void
     {
         $this->sut = new VerifyOtp();
-        $this->otpService = new OtpService();
+        // bcrypt's minimum cost; PHP's default takes about 0.25s per hash or verify
+        $this->otpService = new OtpService(['cost' => 4]);
 
         $this->mockRepo('RetrievalLink', RetrievalLinkRepo::class);
         $this->mockRepo('RetrievalOtp', RetrievalOtpRepo::class);

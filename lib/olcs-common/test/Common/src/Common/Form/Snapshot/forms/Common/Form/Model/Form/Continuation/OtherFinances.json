@@ -1,0 +1,209 @@
+{
+  "name": "OtherFinances",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "type": "hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "Continue"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "finances",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "yesNo",
+              "type": "Common\\Form\\Elements\\Types\\RadioYesNo"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "yesContent",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "amount",
+                    "type": "Text",
+                    "attributes": {
+                      "id": "otherFinances_amount",
+                      "required": "required"
+                    },
+                    "options": {
+                      "label": "continuations.finances.otherFinances.amount.label",
+                      "hint": "continuations.finances.otherFinances.amount.hint"
+                    }
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "detail",
+                    "type": "Textarea",
+                    "attributes": {
+                      "id": "otherFinances_detail",
+                      "required": "required"
+                    },
+                    "options": {
+                      "label": "continuations.finances.otherFinances.detail.label"
+                    }
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "\\Common\\Form\\Elements\\Types\\RadioHorizontal",
+        "options": {
+          "label": "continuations.finances.otherFinances.label"
+        }
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "input_filter": {
+    "finances": {
+      "yesNo": {
+        "name": "yesNo",
+        "error_message": "continuations.finances.otherFinances.error"
+      },
+      "yesContent": {
+        "amount": {
+          "name": "amount",
+          "required": true,
+          "validators": [
+            {
+              "name": "NotEmpty",
+              "options": [
+                "null"
+              ]
+            },
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "yesNo",
+                "context_values": [
+                  "Y"
+                ],
+                "inject_post_data": "finances->otherFinances->yesNo",
+                "validators": [
+                  {
+                    "name": "NotEmpty",
+                    "options": {
+                      "messages": {
+                        "isEmpty": "continuations.finances.otherFinances.amount.empty"
+                      },
+                      "break_chain_on_failure": true
+                    }
+                  },
+                  {
+                    "name": "Dvsa\\Olcs\\Transfer\\Validators\\Money",
+                    "options": {
+                      "messages": {
+                        "invalid": "continuations.finances.otherFinances.amount.notNumber"
+                      },
+                      "allow_negative": true,
+                      "break_chain_on_failure": true
+                    }
+                  },
+                  {
+                    "name": "GreaterThan",
+                    "options": {
+                      "min": 0,
+                      "messages": {
+                        "notGreaterThan": "continuations.finances.otherFinances.amount.notGreaterThan"
+                      }
+                    }
+                  },
+                  {
+                    "name": "LessThan",
+                    "options": {
+                      "max": 10000000000,
+                      "messages": {
+                        "notLessThan": "continuations.finances.otherFinances.amount.notLessThan"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "detail": {
+          "name": "detail",
+          "required": true,
+          "validators": [
+            {
+              "name": "NotEmpty",
+              "options": [
+                "null"
+              ]
+            },
+            {
+              "name": "ValidateIf",
+              "options": {
+                "context_field": "yesNo",
+                "context_values": [
+                  "Y"
+                ],
+                "inject_post_data": "finances->otherFinances->yesNo",
+                "validators": [
+                  {
+                    "name": "NotEmpty",
+                    "options": {
+                      "messages": {
+                        "isEmpty": "continuations.finances.otherFinances.detail.empty"
+                      },
+                      "break_chain_on_failure": true
+                    }
+                  },
+                  {
+                    "name": "StringLength",
+                    "options": {
+                      "min": 1,
+                      "max": 200
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "type": "Laminas\\InputFilter\\InputFilter"
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

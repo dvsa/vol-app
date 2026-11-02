@@ -1,0 +1,55 @@
+{
+  "name": "ApplicationDeclaration",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "isDigitallySigned",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "form",
+          "value": "Y"
+        },
+        "options": {
+          "label": "application.signature.options.label",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--advanced"
+          },
+          "value_options": {
+            "Y": "application.signature.options.verify",
+            "N": "application.signature.options.sign"
+          },
+          "label_options": {
+            "disable_html_escape": "true"
+          }
+        },
+        "type": "\\Laminas\\Form\\Element\\Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "declarationDownload",
+        "attributes": {
+          "id": "declarationDownload"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "declarationForVerify",
+        "attributes": {
+          "value": "markup-declaration-for-verify",
+          "data-container-class": "declarationForVerify"
+        },
+        "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -90,6 +90,9 @@ class ProcessInsolvency extends AbstractConsumer
     #[\Override]
     public function handleCommand(CommandInterface $command)
     {
+        // queue:process-insolvency reuses this instance for every message in its run, so start each one afresh
+        $this->result = new Result();
+
         $messages = $this->fetchMessages(1);
 
         if (is_null($messages)) {
@@ -174,14 +177,16 @@ class ProcessInsolvency extends AbstractConsumer
     {
         $licences = $organisation->getActiveLicences();
         foreach ($licences as $licence) {
-            $this->generateLetters($licence);
-            $this->printLetters();
-            $this->generateEmails($licence);
+            // print and attach from this licence's own result: $this->result is merged across licences, so a key
+            // this licence didn't set (e.g. no correspondence address letter) would still hold an earlier licence's
+            $letters = $this->generateLetters($licence);
+            $this->printLetters((array) $letters->getId('documents'));
+            $this->generateEmails($licence, $letters->getId('correspondenceAddress'));
             $this->generateFollowUpTask($licence);
         }
     }
 
-    private function generateLetters(Licence $licence): void
+    private function generateLetters(Licence $licence): Result
     {
         $template = $this->selectTemplate($licence);
 
@@ -206,7 +211,10 @@ class ProcessInsolvency extends AbstractConsumer
             ]
         ];
 
-        $this->result->merge($this->handleSideEffect(GenerateAndStoreWithMultipleAddresses::create($data)));
+        $letters = $this->handleSideEffect(GenerateAndStoreWithMultipleAddresses::create($data));
+        $this->result->merge($letters);
+
+        return $letters;
     }
 
     /**
@@ -235,7 +243,7 @@ class ProcessInsolvency extends AbstractConsumer
         $this->result->merge($this->handleSideEffect(CreateQueue::create($params)));
     }
 
-    private function generateEmails(Licence $licence): void
+    private function generateEmails(Licence $licence, ?int $correspondenceLetterId): void
     {
         $translateToWelsh = $licence->getTranslateToWelsh();
 
@@ -265,7 +273,8 @@ class ProcessInsolvency extends AbstractConsumer
             $this->sendCorrespondenceEmail(
                 $correspondenceEmail,
                 $translateToWelsh,
-                !empty($selfServeUserEmailCommands)
+                !empty($selfServeUserEmailCommands),
+                $correspondenceLetterId
             );
         }
 
@@ -274,9 +283,9 @@ class ProcessInsolvency extends AbstractConsumer
         }
     }
 
-    private function printLetters(): void
+    private function printLetters(array $letters): void
     {
-        foreach ($this->result->getId('documents') as $letter) {
+        foreach ($letters as $letter) {
             $this->result->merge($this->handleSideEffect(
                 PrintLetter::create([
                     'id' => $letter,
@@ -322,12 +331,16 @@ class ProcessInsolvency extends AbstractConsumer
         return static::GB_GV_STANDARD_TEMPLATE;
     }
 
-    private function sendCorrespondenceEmail(string $email, string $translateToWelsh, bool $isRegistered): void
-    {
+    private function sendCorrespondenceEmail(
+        string $email,
+        string $translateToWelsh,
+        bool $isRegistered,
+        ?int $correspondenceLetterId
+    ): void {
         $cmdData = [
             'emailAddress' => $email,
             'translateToWelsh' => $translateToWelsh,
-            'docs' => [$this->result->getId('correspondenceAddress')]
+            'docs' => $correspondenceLetterId === null ? [] : [$correspondenceLetterId],
         ];
         if (!$isRegistered) {
             $cmd = $this->emailQueue(SendLiquidatedCompanyForUnregisteredUser::class, $cmdData, $this->company->getId());

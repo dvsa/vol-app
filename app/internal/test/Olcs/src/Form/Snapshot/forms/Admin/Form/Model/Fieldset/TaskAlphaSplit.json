@@ -1,0 +1,91 @@
+{
+  "name": "task-alpha-split",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "user",
+        "attributes": {
+          "id": "user",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "short-label": "User",
+          "label": "User",
+          "service_name": "Olcs\\Service\\Data\\UserListInternal",
+          "empty_option": "Please select"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "letters",
+        "attributes": {
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "short-label": "Task letters",
+          "label": "Assign operator tasks starting with these letters"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "user": {
+      "name": "user",
+      "required": true
+    },
+    "letters": {
+      "name": "letters",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 50
+          }
+        },
+        {
+          "name": "Laminas\\Validator\\Regex",
+          "options": {
+            "pattern": "/^[a-zA-Z]+$/",
+            "messages": {
+              "regexNotMatch": "The input must contain only letters"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -8,17 +8,13 @@
 
 namespace Dvsa\Olcs\Transfer\Query\VariationOperatingCentre;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/variation-operating-centre/single")
- */
+#[Transfer\RouteName('backend/variation-operating-centre/single')]
 class VariationOperatingCentre extends AbstractQuery
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected $id;
 
     /**

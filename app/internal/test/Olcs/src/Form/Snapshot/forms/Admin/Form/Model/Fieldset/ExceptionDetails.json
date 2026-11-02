@@ -1,0 +1,58 @@
+{
+  "name": "exception-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "teamOrUser",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "fieldset-attributes": {
+            "id": "fieldset-team-or-user",
+            "class": "checkbox"
+          },
+          "fieldset-data-group": "operator-type",
+          "value_options": {
+            "team": "Team",
+            "user": "User"
+          }
+        },
+        "type": "Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "team",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

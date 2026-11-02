@@ -1,0 +1,219 @@
+{
+  "name": "LicenceStatusDecisionRevoke",
+  "attributes": {
+    "method": "post",
+    "class": "status-decision-form"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "licence-decision-affect-immediate",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "immediateAffect",
+              "attributes": {
+                "required": "required",
+                "value": "Y"
+              },
+              "type": "Radio",
+              "options": {
+                "label": "licence-status.curtailment.immediate-affect",
+                "value_options": {
+                  "Y": "Yes",
+                  "N": "No"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licence-decision",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "revokeFrom",
+              "type": "DateTimeSelect",
+              "attributes": {
+                "required": false
+              },
+              "options": {
+                "label": "licence-status.revocation.from",
+                "create_empty_option": true,
+                "max_year_delta": "+5",
+                "min_year_delta": "-5"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licence-decision-legislation",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "decisions",
+              "attributes": {
+                "id": "reasons",
+                "placeholder": "",
+                "class": "chosen-select-medium",
+                "multiple": true
+              },
+              "options": {
+                "label": "Legislation",
+                "service_name": "Olcs\\Service\\Data\\LicenceDecisionLegislation",
+                "disable_inarray_validator": false,
+                "use_groups": true
+              },
+              "type": "DynamicSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "affectImmediate",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button",
+                "id": "affect-immediate"
+              },
+              "options": {
+                "label": "Affect now"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button",
+                "id": "submit"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "remove",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button",
+                "id": "remove"
+              },
+              "options": {
+                "label": "licence-status.remove"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "licence-decision-affect-immediate": {
+      "immediateAffect": {
+        "name": "immediateAffect",
+        "required": true
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "licence-decision": {
+      "revokeFrom": {
+        "name": "revokeFrom",
+        "filters": [
+          {
+            "name": "DateTimeSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d H:i:s",
+              "messages": {
+                "dateInvalidDate": "datetime.compare.validation.message.invalid"
+              }
+            }
+          }
+        ],
+        "required": true
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

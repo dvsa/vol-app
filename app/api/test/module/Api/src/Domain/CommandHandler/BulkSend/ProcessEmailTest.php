@@ -47,12 +47,15 @@ final class ProcessEmailTest extends AbstractCommandHandlerTestCase
         $templateVars = [
             'licenceType' => 'Restricted',
             'goodsOrPsv' => 'Goods',
+            'licNo' => 'OB1234567', // added by AbstractEmailHandler
         ];
 
         $licenceEntity = m::mock(Licence::class);
         $organisation = m::mock(Organisation::class);
 
         $command = SendEmailCmd::create(['id' => 7, 'templateName' => $templateName]);
+
+        $licenceEntity->shouldReceive('getLicNo')->once()->withNoArgs()->andReturn('OB1234567');
 
         $licenceEntity->shouldReceive('getId')
             ->once()

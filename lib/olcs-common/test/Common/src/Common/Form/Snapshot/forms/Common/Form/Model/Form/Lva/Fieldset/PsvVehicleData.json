@@ -1,0 +1,74 @@
+{
+  "name": "data",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "vrm",
+        "attributes": {
+          "id": "vrm",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "application_vehicle-safety_vehicle-psv-sub-action.data.vrm",
+          "error-message": "vehicle.error.top.vrm"
+        },
+        "type": "\\Common\\Form\\Elements\\Custom\\VehicleVrm"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "makeModel",
+        "options": {
+          "label": "application_vehicle-safety_vehicle-psv-sub-action.data.makeModel",
+          "error-message": "vehicle.error.top.modelName"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": [],
+  "input_filter": {
+    "makeModel": {
+      "name": "makeModel",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 100
+          }
+        }
+      ]
+    }
+  }
+}

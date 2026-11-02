@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\ContinuationDetail;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Dvsa\Olcs\Api\Domain\QueryHandler\ContinuationDetail\LicenceChecklist;
 use Dvsa\Olcs\Api\Domain\Repository\ContinuationDetail as ContinuationDetailRepo;
 use Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking as ConditionUndertakingRepo;
@@ -12,6 +14,8 @@ use Dvsa\Olcs\Transfer\Query\ContinuationDetail\LicenceChecklist as LicenceCheck
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Dvsa\Olcs\Api\Service\Lva\SectionAccessService;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
+use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
+use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle;
 use Mockery as m;
 
 final class LicenceChecklistTest extends QueryHandlerTestCase
@@ -233,5 +237,63 @@ final class LicenceChecklistTest extends QueryHandlerTestCase
             'isMixedWithLgv' => true,
         ];
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
+    }
+
+    public function testHandleQueryOnlyIncludesSpecifiedVehicles(): void
+    {
+        $mockLicence = m::mock(LicenceEntity::class);
+        $mockLicence->shouldReceive('getConditionUndertakings')->once()->andReturn([]);
+        $mockLicence->shouldReceive('getOcPendingChanges')->once()->andReturn(1);
+        $mockLicence->shouldReceive('getTmPendingChanges')->once()->andReturn(2);
+        $mockLicence->shouldReceive('getId')->once()->andReturn(1);
+        $mockLicence->shouldReceive('canHaveTrailer')->once()->andReturn(true);
+        $mockLicence->shouldReceive('getApplicableAuthProperties')->once()->andReturn([]);
+        $mockLicence->shouldReceive('isVehicleTypeMixedWithLgv')->once()->andReturn(false);
+
+        $specified = new LicenceVehicle($mockLicence, new Vehicle());
+        $specified->setSpecifiedDate('2020-01-01');
+
+        $unspecified = new LicenceVehicle($mockLicence, new Vehicle());
+
+        $removed = new LicenceVehicle($mockLicence, new Vehicle());
+        $removed->setSpecifiedDate('2020-01-01');
+        $removed->setRemovalDate('2021-01-01');
+
+        $matching = null;
+        $mockContinuationDetail = m::mock(ContinuationDetailEntity::class);
+        $mockContinuationDetail->shouldReceive('getLicence')->once()->andReturn($mockLicence);
+        $mockContinuationDetail->shouldReceive('serialize')->once()->andReturnUsing(
+            function (array $bundle) use ($specified, $unspecified, $removed, &$matching) {
+                $this->assertInstanceOf(Criteria::class, $bundle['licence']['licenceVehicles']['criteria']);
+
+                $matching = (new ArrayCollection([$specified, $unspecified, $removed]))
+                    ->matching($bundle['licence']['licenceVehicles']['criteria'])
+                    ->getValues();
+
+                return [];
+            }
+        );
+
+        $this->mockedSmServices['SectionAccessService']
+            ->shouldReceive('getAccessibleSectionsForLicenceContinuation')
+            ->with($mockLicence)
+            ->once()
+            ->andReturn([]);
+
+        $this->repoMap['ContinuationDetail']->shouldReceive('fetchWithLicence')
+            ->with(999)
+            ->once()
+            ->andReturn($mockContinuationDetail);
+
+        $this->repoMap['ConditionUndertaking']
+            ->shouldReceive('fetchListForLicenceReadOnly')
+            ->with(1)
+            ->once()
+            ->andReturn([]);
+
+        $this->sut->handleQuery(LicenceChecklistQry::create(['id' => 999]))->serialize();
+
+        $this->assertCount(1, $matching);
+        $this->assertSame($specified, $matching[0]);
     }
 }

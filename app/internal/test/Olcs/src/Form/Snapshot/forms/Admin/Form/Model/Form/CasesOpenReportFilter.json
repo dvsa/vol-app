@@ -1,0 +1,108 @@
+{
+  "name": "cases-open-report-filter",
+  "attributes": {
+    "method": "GET",
+    "class": "filters form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficAreas",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Traffic areas",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\TrafficArea",
+          "other_option": true
+        },
+        "type": "DynamicMultiCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "caseType",
+        "options": {
+          "label": "Case type",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\RefData",
+          "other_option": false,
+          "extra_option": {
+            "": "All"
+          },
+          "context": "case_type"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceStatus",
+        "options": {
+          "label": "Licence status",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\RefData",
+          "other_option": false,
+          "extra_option": {
+            "": "All"
+          },
+          "context": "lic_status"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "applicationStatus",
+        "options": {
+          "label": "Application status",
+          "disable_inarray_validator": false,
+          "service_name": "Common\\Service\\Data\\RefData",
+          "other_option": false,
+          "extra_option": {
+            "": "All"
+          },
+          "context": "app_status"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "filter-button"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "limit",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": []
+}

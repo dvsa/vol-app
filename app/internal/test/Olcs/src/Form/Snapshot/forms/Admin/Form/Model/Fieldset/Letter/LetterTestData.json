@@ -1,0 +1,80 @@
+{
+  "name": "LetterTestData",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "name",
+        "options": {
+          "label": "Name"
+        },
+        "attributes": {
+          "required": true,
+          "class": "long"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "json",
+        "options": {
+          "label": "JSON Data",
+          "label_attributes": {
+            "class": ""
+          },
+          "hint": "Enter valid JSON data for testing"
+        },
+        "attributes": {
+          "required": "required",
+          "class": "extra-long",
+          "rows": 10
+        },
+        "type": "Textarea"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "name": {
+      "name": "name",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 255
+          }
+        }
+      ]
+    },
+    "json": {
+      "name": "json",
+      "required": true,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\IsJsonString"
+        }
+      ]
+    }
+  }
+}

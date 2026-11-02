@@ -1,0 +1,88 @@
+{
+  "name": "DeclarationContent",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "review",
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated",
+        "options": {
+          "tokens": [
+            "application.review-declarations.review.director"
+          ]
+        },
+        "attributes": {
+          "value": "markup-continuation-declaration-review"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "declaration",
+        "attributes": {
+          "value": "SET IN FORM SERVICE"
+        },
+        "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "signatureOptions",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "application.signature.options.label",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--advanced"
+          },
+          "value_options": {
+            "Y": "application.signature.options.verify",
+            "N": "application.signature.options.sign"
+          },
+          "label_options": {
+            "disable_html_escape": "true"
+          }
+        },
+        "type": "\\Laminas\\Form\\Element\\Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "disabledReview",
+        "attributes": {
+          "value": "markup-signature-disabled-text"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "declarationDownload",
+        "attributes": {
+          "id": "declarationDownload"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Html"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "declarationForVerify",
+        "attributes": {
+          "value": "markup-declaration-for-verify",
+          "data-container-class": "declarationForVerify"
+        },
+        "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

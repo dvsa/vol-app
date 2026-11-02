@@ -1,0 +1,47 @@
+{
+  "name": "OperatingCentresTotCommunityLicences",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "totCommunityLicences",
+        "attributes": {
+          "class": "short",
+          "id": "totCommunityLicences"
+        },
+        "options": {
+          "label": "application_operating-centres_authorisation.data.totCommunityLicences",
+          "hint": "application_operating-centres_authorisation.data.totCommunityLicences.hint"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": [],
+  "input_filter": {
+    "totCommunityLicences": {
+      "name": "totCommunityLicences",
+      "validators": [
+        {
+          "name": "Digits"
+        },
+        {
+          "name": "Between",
+          "options": {
+            "min": 0,
+            "max": 10000
+          }
+        }
+      ],
+      "filters": [
+        {
+          "name": "\\Laminas\\Filter\\ToNull",
+          "options": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  }
+}

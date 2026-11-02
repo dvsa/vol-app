@@ -1,0 +1,76 @@
+{
+  "name": "transport-consultant",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "add-transport-consultant",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "value": "N"
+        },
+        "options": {
+          "label": "application_your-business_business-type.add-transport-consultant.label",
+          "legend-attributes": {
+            "class": "form-element__label"
+          },
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          }
+        },
+        "type": "\\Laminas\\Form\\Element\\Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "writtenPermissionToEngage",
+        "type": "OlcsCheckbox",
+        "attributes": {
+          "id": "written-permission-to-engage",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "application_your-business_business-type.written-perm-engage.label",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--confirm"
+          },
+          "checked_value": "Y",
+          "unchecked_value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "transportConsultantName",
+        "type": "Text",
+        "attributes": {
+          "class": "long"
+        },
+        "options": {
+          "label": "application_your-business_business-type.consultant-name.label"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "transportConsultantName": {
+      "name": "transportConsultantName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

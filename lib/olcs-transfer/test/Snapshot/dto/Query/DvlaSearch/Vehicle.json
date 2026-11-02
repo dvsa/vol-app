@@ -1,0 +1,36 @@
+{
+  "routeName": "backend/dvla-search/vehicle",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter",
+    "inputs": {
+      "vrm": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            },
+            {
+              "class": "Dvsa\\Olcs\\Transfer\\Filter\\Vrm"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": [
+            {
+              "instance": {
+                "class": "Dvsa\\Olcs\\Transfer\\Validators\\Vrm"
+              },
+              "breakChainOnFailure": false
+            }
+          ]
+        },
+        "name": "vrm"
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "OperatorType",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "goodsOrPsv",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "fieldset-attributes": {
+            "id": "operator-type",
+            "class": "checkbox"
+          },
+          "fieldset-data-group": "operator-type",
+          "label": "Operator type",
+          "value_options": {
+            "lcat_gv": "Goods",
+            "lcat_psv": "PSV"
+          }
+        },
+        "type": "Radio"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "input_filter": []
+}

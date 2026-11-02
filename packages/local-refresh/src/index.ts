@@ -25,6 +25,8 @@ const actionOrder = [
   "FlushRedis",
   "ResetDatabase",
   "ResetLdap",
+  "UpdateDtoSnapshots",
+  "UpdateFormSnapshots",
 ];
 
 /**

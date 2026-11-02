@@ -403,6 +403,7 @@ module "eventbridge" {
 
 }
 
+#checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "this" {
   for_each = { for job in var.batch.jobs : job.name => job }
 

@@ -1,0 +1,21 @@
+{
+  "name": "Header",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "header",
+        "options": {
+          "hint": "Select all options that are relevant to your discs."
+        },
+        "attributes": {
+          "value": "markup-licence-surrender-current-disc-form-header"
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -17,7 +17,6 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\TrafficAreas;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 
 final class UserListInternalByTrafficArea extends AbstractQuery implements OrderedQueryInterface
 {

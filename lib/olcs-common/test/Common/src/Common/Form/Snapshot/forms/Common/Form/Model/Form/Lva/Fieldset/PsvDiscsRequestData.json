@@ -1,0 +1,33 @@
+{
+  "name": "lva-psv-discs-request-data",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "additionalDiscs",
+        "type": "text",
+        "options": {
+          "label": "application_vehicle-safety_discs-psv-sub-action.additionalDiscs"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "additionalDiscs": {
+      "name": "additionalDiscs",
+      "validators": [
+        {
+          "name": "Digits"
+        },
+        {
+          "name": "GreaterThan",
+          "options": {
+            "min": 0
+          }
+        }
+      ]
+    }
+  }
+}

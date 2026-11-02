@@ -8,7 +8,7 @@
 namespace Dvsa\Olcs\Api\Domain\Command\IrhpPermitApplication;
 
 use Dvsa\Olcs\Api\Domain\Command\AbstractIdOnlyCommand;
-use Dvsa\Olcs\Transfer\FieldType\Traits\IrhpPermitWindow;
+use Dvsa\Olcs\Api\Domain\Command\Traits\IrhpPermitWindow;
 
 final class UpdateIrhpPermitWindow extends AbstractIdOnlyCommand
 {

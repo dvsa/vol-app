@@ -1,0 +1,95 @@
+{
+  "name": "remove-vehicle-confirmation-form",
+  "attributes": [],
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "optionsFieldset",
+        "attributes": {
+          "id": "radio"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "options",
+              "options": {
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--advanced"
+                },
+                "value_options": {
+                  "yes": {
+                    "label": "Yes",
+                    "value": "yes",
+                    "attributes": {
+                      "id": "option-yes"
+                    }
+                  },
+                  "no": {
+                    "label": "No",
+                    "value": "no",
+                    "attributes": {
+                      "id": "option-no"
+                    }
+                  }
+                }
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Radio"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "formActions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "formActions",
+              "options": {
+                "label": "Next"
+              },
+              "attributes": {
+                "id": "next",
+                "title": "licence.vehicle.generic.button.next.title",
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "type": "Button"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "\\Common\\Form\\Form",
+  "input_filter": {
+    "optionsFieldset": {
+      "options": {
+        "name": "options",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

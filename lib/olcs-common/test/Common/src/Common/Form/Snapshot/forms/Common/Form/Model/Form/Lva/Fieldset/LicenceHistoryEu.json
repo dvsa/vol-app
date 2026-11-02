@@ -1,0 +1,198 @@
+{
+  "name": "LicenceHistoryEu",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": {
+        "priority": -10
+      },
+      "spec": {
+        "name": "prevBeenRefused",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "application_previous-history_licence-history_prevBeenRefused",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "legend-attributes": {
+            "class": "form-element__label"
+          },
+          "error-message": "licenceHistoryEu_prevBeenRefused-error",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          }
+        },
+        "type": "radio"
+      }
+    },
+    {
+      "flags": {
+        "priority": -30
+      },
+      "spec": {
+        "name": "prevBeenRevoked",
+        "attributes": {
+          "id": ""
+        },
+        "options": {
+          "label": "application_previous-history_licence-history_prevBeenRevoked",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "legend-attributes": {
+            "class": "form-element__label"
+          },
+          "error-message": "licenceHistoryEu_prevBeenRevoked-error",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          }
+        },
+        "type": "radio"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": {
+        "priority": -20
+      },
+      "spec": {
+        "name": "prevBeenRefused-table",
+        "attributes": {
+          "id": "prevBeenRefused",
+          "class": "help__text help__text--removePadding"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -40
+      },
+      "spec": {
+        "name": "prevBeenRevoked-table",
+        "attributes": {
+          "id": "prevBeenRevoked",
+          "class": "help__text help__text--removePadding"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "input_filter": {
+    "prevBeenRefused": {
+      "name": "prevBeenRefused",
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\LicenceHistoryLicenceValidator",
+          "options": {
+            "table": "prevBeenRefused-table"
+          }
+        }
+      ]
+    },
+    "prevBeenRevoked": {
+      "name": "prevBeenRevoked",
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\LicenceHistoryLicenceValidator",
+          "options": {
+            "table": "prevBeenRevoked-table"
+          }
+        }
+      ]
+    }
+  }
+}

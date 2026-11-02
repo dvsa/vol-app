@@ -1,5 +1,6 @@
 # hadolint global ignore=DL3018,SC2086
-FROM ghcr.io/dvsa/dvsa-docker-images/php/8.4/fpm-nginx:0 AS api
+# PHP 8.4.27 build (dvsa-docker-images cfac129), pinned until it is released under :0
+FROM ghcr.io/dvsa/dvsa-docker-images/php/8.4/fpm-nginx:latest@sha256:bd741513c1fb7c41c7cec814d4c033aebb711e9478ee4f1cb1488fc6b5f702ed AS api
 
 # hadolint ignore=DL3002
 USER root
