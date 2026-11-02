@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Api\Entity\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Entity as Entities;
@@ -4355,7 +4356,7 @@ final class ApplicationEntityTest extends EntityTester
         $mockFees = m::mock(ArrayCollection::class)
             ->shouldReceive('matching')->once()->andReturnUsing(
                 function (Criteria $item) use ($mockFee) {
-                    $this->assertEquals(['invoicedDate' => 'DESC'], $item->getOrderings());
+                    $this->assertEquals(['invoicedDate' => Order::Descending], $item->orderings());
 
                     return new \ArrayIterator([$mockFee]);
                 }
@@ -4411,7 +4412,7 @@ final class ApplicationEntityTest extends EntityTester
         $mockFees = m::mock(ArrayCollection::class)
             ->shouldReceive('matching')->once()->andReturnUsing(
                 function (Criteria $item) use ($mockFee) {
-                    $this->assertEquals(['invoicedDate' => 'DESC'], $item->getOrderings());
+                    $this->assertEquals(['invoicedDate' => Order::Descending], $item->orderings());
 
                     return new \ArrayIterator([$mockFee]);
                 }
