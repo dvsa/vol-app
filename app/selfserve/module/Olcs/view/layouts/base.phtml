@@ -271,9 +271,9 @@ $pageLang = $this->plugin('languageNavigation')->currentLanguage();
         <ul class="user-menu">
           <li class="user-menu__item">
             <?php if($this->IsGranted('can-manage-user-selfserve')):?>
-              <?php echo $this->currentUser()->getFullName() ?> (<?php echo $this->translate('Admin'); ?>),
+              <?php echo $this->escapeHtml($this->currentUser()->getFullName()); ?> (<?php echo $this->translate('Admin'); ?>),
             <?php else: ?>
-              <?php echo $this->currentUser()->getFullName() ?>,
+              <?php echo $this->escapeHtml($this->currentUser()->getFullName()); ?>,
             <?php endif;?>
             <b><?php echo $this->escapeHtml($this->currentUser()->getOrganisationName()); ?></b>
           </li>
