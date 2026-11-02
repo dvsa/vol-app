@@ -103,7 +103,7 @@ $pageLang = $this->plugin('languageNavigation')->currentLanguage();
 
 
   <?php if ($cookieBannerMode != ''):;?>
-    <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on <?php echo $this->escapeHtml($this->translate('service.name')); ?>">
+    <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="<?php echo $this->escapeHtmlAttr($this->translate('cookie-banner.tell-us')); ?>">
       <?php if ($cookieBannerMode == 'banner'): ?>
         <form>
           <div class="govuk-cookie-banner__message govuk-width-container">
