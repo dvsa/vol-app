@@ -61,13 +61,43 @@ final class SchemaComparison
     public const INEXPRESSIBLE = 'inexpressible';
 
     /**
+     * Database ENUM columns whose entity mapping deliberately uses a plain string.
+     *
+     * @return array<string, list<string>> table names mapped to their enum/string columns
+     */
+    public static function enumColumnsMappedAsStrings(Schema $databaseSchema, Schema $entitySchema): array
+    {
+        $columns = [];
+
+        foreach ($entitySchema->getTables() as $entityTable) {
+            if (!$databaseSchema->hasTable($entityTable->getName())) {
+                continue;
+            }
+
+            $databaseTable = $databaseSchema->getTable($entityTable->getName());
+            foreach ($entityTable->getColumns() as $entityColumn) {
+                $columnName = $entityColumn->getName();
+                if (
+                    $databaseTable->hasColumn($columnName)
+                    && $databaseTable->getColumn($columnName)->getTypeName() === 'enum'
+                    && $entityColumn->getTypeName() === 'string'
+                ) {
+                    $columns[$entityTable->getName()][] = $columnName;
+                }
+            }
+        }
+
+        return $columns;
+    }
+
+    /**
      * Which of the two buckets a drift statement belongs in.
      *
      * "Inexpressible" means the mapping has no vocabulary for the difference, so it can never
-     * be resolved by changing an entity - only by changing the database to match a name
-     * Doctrine generates, which is not worth a migration. It is confined to implicit
-     * ManyToMany join tables: those have no entity to carry an #[ORM\Index], and ORM 3's
-     * JoinTable attribute takes only name, schema, joinColumns, inverseJoinColumns and
+     * be resolved by changing an entity. This includes implicit ManyToMany join tables, which
+     * have no entity to carry an #[ORM\Index], and database ENUM columns deliberately mapped
+     * as strings, since Doctrine's string mapping cannot preserve the database's ENUM type.
+     * ORM 3's JoinTable attribute takes only name, schema, joinColumns, inverseJoinColumns and
      * options - no way to name an index, declare a unique constraint, or map an extra column.
      * SchemaTool therefore builds their indexes with no name at all and DBAL falls through to
      * _generateIdentifierName(), producing IDX_<hash>.
@@ -78,13 +108,20 @@ final class SchemaComparison
      * stays visible rather than being filed away with the half that cannot.
      *
      * @param list<string> $mappedTables tables that an entity maps directly
+     * @param array<string, list<string>> $enumStringColumns database ENUM columns mapped as strings
      */
-    public static function classify(string $statement, array $mappedTables): string
+    public static function classify(string $statement, array $mappedTables, array $enumStringColumns = []): string
     {
         $table = self::tableOf($statement);
 
-        if ($table === null || in_array($table, $mappedTables, true)) {
+        if ($table === null) {
             return self::ACTIONABLE;
+        }
+
+        if (in_array($table, $mappedTables, true)) {
+            return self::onlyEnumStringChanges($statement, $enumStringColumns[$table] ?? [])
+                ? self::INEXPRESSIBLE
+                : self::ACTIONABLE;
         }
 
         if (!str_starts_with($statement, 'ALTER TABLE')) {
@@ -99,6 +136,29 @@ final class SchemaComparison
         }
 
         return self::INEXPRESSIBLE;
+    }
+
+    /**
+     * Whether every operation changes a database ENUM column mapped as a string.
+     *
+     * @param list<string> $enumStringColumns
+     */
+    private static function onlyEnumStringChanges(string $statement, array $enumStringColumns): bool
+    {
+        if ($enumStringColumns === [] || !str_starts_with($statement, 'ALTER TABLE')) {
+            return false;
+        }
+
+        foreach (self::alterOperations($statement) as $operation) {
+            if (
+                preg_match('/^CHANGE (\S+) \S+/', $operation, $matches) !== 1
+                || !in_array($matches[1], $enumStringColumns, true)
+            ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /** The table a drift statement acts on, or null if it cannot be read off. */
@@ -134,12 +194,13 @@ final class SchemaComparison
      *
      * @param list<string> $statements
      * @param list<string> $mappedTables
+     * @param array<string, list<string>> $enumStringColumns database ENUM columns mapped as strings
      */
-    public static function renderBaseline(array $statements, array $mappedTables): string
+    public static function renderBaseline(array $statements, array $mappedTables, array $enumStringColumns = []): string
     {
         $buckets = [self::ACTIONABLE => [], self::INEXPRESSIBLE => []];
         foreach ($statements as $statement) {
-            $buckets[self::classify($statement, $mappedTables)][] = $statement;
+            $buckets[self::classify($statement, $mappedTables, $enumStringColumns)][] = $statement;
         }
 
         $out = [
@@ -160,7 +221,8 @@ final class SchemaComparison
         $out[] = '';
         $out[] = sprintf('# ---- inexpressible from mapping (%d) ----', count($buckets[self::INEXPRESSIBLE]));
         $out[] = '# Differences on implicit ManyToMany join tables that no entity change can fix -';
-        $out[] = '# generated index names, and columns a JoinTable cannot carry. See classify().';
+        $out[] = '# generated index names, columns a JoinTable cannot carry, and database ENUM ';
+        $out[] = '# columns mapped as strings See classify().';
         $out[] = '# Recorded and compared like any other statement, but not work anyone can pick up.';
         $out[] = '';
         $out = array_merge($out, $buckets[self::INEXPRESSIBLE]);
