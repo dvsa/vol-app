@@ -375,7 +375,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $knowledgeExperienceEvidenceUploaded;
 
     /**
-     * Knowledge experience olat
+     * knowledgeExperienceOlat
      *
      * @var string|null
      */
@@ -1793,7 +1793,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the knowledge experience evidence uploaded
      *
-     * @param int|null $knowledgeExperienceEvidenceUploaded
+     * @param int|null $knowledgeExperienceEvidenceUploaded new value being set
      *
      * @return static
      */
@@ -1817,7 +1817,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the knowledge experience olat
      *
-     * @param string|null $knowledgeExperienceOlat
+     * @param string|null $knowledgeExperienceOlat new value being set
      *
      * @return static
      */

@@ -99,7 +99,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     /**
      * Set when the link is manually revoked
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'revoked_at', nullable: true)]
     protected $revokedAt;
@@ -107,7 +107,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     /**
      * Last accessed on
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'last_accessed_on', nullable: true)]
     protected $lastAccessedOn;

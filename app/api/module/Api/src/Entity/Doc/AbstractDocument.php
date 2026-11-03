@@ -385,6 +385,14 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     protected $slaTargetDate;
 
     /**
+     * DocumentAnalyses
+     *
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis>
+     */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis::class, mappedBy: 'document')]
+    protected $documentAnalyses;
+
+    /**
      * Initialise the collections
      */
     public function __construct()
@@ -399,6 +407,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     {
         $this->continuationDetails = new ArrayCollection();
         $this->templates = new ArrayCollection();
+        $this->documentAnalyses = new ArrayCollection();
     }
 
 
@@ -1396,6 +1405,69 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     public function getSlaTargetDate()
     {
         return $this->slaTargetDate;
+    }
+
+    /**
+     * Set the document analyses
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $documentAnalyses collection being set as the value
+     *
+     * @return static
+     */
+    public function setDocumentAnalyses($documentAnalyses)
+    {
+        $this->documentAnalyses = $documentAnalyses;
+
+        return $this;
+    }
+
+    /**
+     * Get the document analyses
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getDocumentAnalyses()
+    {
+        return $this->documentAnalyses;
+    }
+
+    /**
+     * Add a document analyses
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documentAnalyses collection being added
+     *
+     * @return static
+     */
+    public function addDocumentAnalyses($documentAnalyses)
+    {
+        if ($documentAnalyses instanceof ArrayCollection) {
+            $this->documentAnalyses = new ArrayCollection(
+                array_merge(
+                    $this->documentAnalyses->toArray(),
+                    $documentAnalyses->toArray()
+                )
+            );
+        } elseif (!$this->documentAnalyses->contains($documentAnalyses)) {
+            $this->documentAnalyses->add($documentAnalyses);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a document analyses
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $documentAnalyses collection being removed
+     *
+     * @return static
+     */
+    public function removeDocumentAnalyses($documentAnalyses)
+    {
+        if ($this->documentAnalyses->contains($documentAnalyses)) {
+            $this->documentAnalyses->removeElement($documentAnalyses);
+        }
+
+        return $this;
     }
 
     /**

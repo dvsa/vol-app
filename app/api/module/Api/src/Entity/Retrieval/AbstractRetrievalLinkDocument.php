@@ -54,11 +54,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
      */
     #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(
-        targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class,
-        inversedBy: 'documents',
-        fetch: 'LAZY'
-    )]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $retrievalLink;
 
     /**
