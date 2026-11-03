@@ -2501,4 +2501,12 @@ return array(
     ),
     'messaging_subject' => array(
     ),
+    'document_analysis' => array(
+        'document_id' => array(
+            'inversedBy' => array(
+                'entity' => 'Document',
+                'property' => 'documentAnalyses'
+            )
+        ),
+    ),
 );
