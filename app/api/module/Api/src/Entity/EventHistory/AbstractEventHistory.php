@@ -26,6 +26,7 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Index(name: 'ix_event_history_case_id', columns: ['case_id'])]
 #[ORM\Index(name: 'ix_event_history_entity_pk', columns: ['entity_pk'])]
 #[ORM\Index(name: 'ix_event_history_entity_type', columns: ['entity_type'])]
+#[ORM\Index(name: 'ix_event_history_entity_type_entity_pk', columns: ['entity_type', 'entity_pk'])]
 #[ORM\Index(name: 'ix_event_history_event_history_type_id', columns: ['event_history_type_id'])]
 #[ORM\Index(name: 'ix_event_history_irhp_application_id', columns: ['irhp_application_id'])]
 #[ORM\Index(name: 'ix_event_history_licence_id', columns: ['licence_id'])]
