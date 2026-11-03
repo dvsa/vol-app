@@ -43,7 +43,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
     protected $id;
 
     /**
-     * Foreign Key to retrieval_link
+     * RetrievalLink
      *
      * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
      */
@@ -52,7 +52,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
     protected $retrievalLink;
 
     /**
-     * Code hash
+     * Hash of the OTP (password_hash). Never store the plaintext code.
      *
      * @var string
      */
@@ -76,7 +76,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
     protected $maxAttempts = 5;
 
     /**
-     * Expires at
+     * Short-lived code validity end (~10 min)
      *
      * @var \DateTime
      */
@@ -84,23 +84,23 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
     protected $expiresAt;
 
     /**
-     * Consumed at
+     * Set on first successful verification
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'consumed_at', nullable: true)]
     protected $consumedAt;
 
     /**
-     * Invalidated at
+     * Set when locked out or superseded by a newer code
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'invalidated_at', nullable: true)]
     protected $invalidatedAt;
 
     /**
-     * Request ip
+     * IPv4/IPv6 of the code request (rate-limit + audit)
      *
      * @var string|null
      */
@@ -128,7 +128,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return RetrievalOtp
+     * @return static
      */
     public function setId($id)
     {
@@ -152,7 +152,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink $retrievalLink new value being set
      *
-     * @return RetrievalOtp
+     * @return static
      */
     public function setRetrievalLink($retrievalLink)
     {
@@ -176,7 +176,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @param string $codeHash new value being set
      *
-     * @return RetrievalOtp
+     * @return static
      */
     public function setCodeHash($codeHash)
     {
@@ -200,7 +200,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @param int $attempts new value being set
      *
-     * @return RetrievalOtp
+     * @return static
      */
     public function setAttempts($attempts)
     {
@@ -224,7 +224,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @param int $maxAttempts new value being set
      *
-     * @return RetrievalOtp
+     * @return static
      */
     public function setMaxAttempts($maxAttempts)
     {
@@ -248,7 +248,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @param \DateTime $expiresAt new value being set
      *
-     * @return RetrievalOtp
+     * @return static
      */
     public function setExpiresAt($expiresAt)
     {
@@ -278,7 +278,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @param \DateTime $consumedAt new value being set
      *
-     * @return RetrievalOtp
+     * @return static
      */
     public function setConsumedAt($consumedAt)
     {
@@ -308,7 +308,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @param \DateTime $invalidatedAt new value being set
      *
-     * @return RetrievalOtp
+     * @return static
      */
     public function setInvalidatedAt($invalidatedAt)
     {
@@ -338,7 +338,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @param string $requestIp new value being set
      *
-     * @return RetrievalOtp
+     * @return static
      */
     public function setRequestIp($requestIp)
     {

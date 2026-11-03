@@ -375,7 +375,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $knowledgeExperienceEvidenceUploaded;
 
     /**
-     * Applicant is content to attend Operator Licence Awareness Training
+     * Knowledge experience olat
      *
      * @var string|null
      */
@@ -1791,23 +1791,21 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set knowledge experience evidence uploaded
+     * Set the knowledge experience evidence uploaded
      *
      * @param int|null $knowledgeExperienceEvidenceUploaded
      *
      * @return static
      */
-    public function setKnowledgeExperienceEvidenceUploaded(
-        $knowledgeExperienceEvidenceUploaded
-    ) {
-        $this->knowledgeExperienceEvidenceUploaded =
-            $knowledgeExperienceEvidenceUploaded;
+    public function setKnowledgeExperienceEvidenceUploaded($knowledgeExperienceEvidenceUploaded)
+    {
+        $this->knowledgeExperienceEvidenceUploaded = $knowledgeExperienceEvidenceUploaded;
 
         return $this;
     }
 
     /**
-     * Get knowledge experience evidence uploaded
+     * Get the knowledge experience evidence uploaded
      *
      * @return int|null
      */
@@ -1817,7 +1815,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set knowledge experience OLAT
+     * Set the knowledge experience olat
      *
      * @param string|null $knowledgeExperienceOlat
      *
@@ -1831,7 +1829,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Get knowledge experience OLAT
+     * Get the knowledge experience olat
      *
      * @return string|null
      */

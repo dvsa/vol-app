@@ -50,7 +50,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     protected $id;
 
     /**
-     * Token
+     * Opaque, unguessable url id (base64url of >=32 random bytes). The only id in the link.
      *
      * @var string
      */
@@ -58,7 +58,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     protected $token = '';
 
     /**
-     * Gate mode
+     * Access gate: none | otp
      *
      * @var string
      */
@@ -66,7 +66,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     protected $gateMode = '';
 
     /**
-     * Flow key
+     * Owning email flow, drives per-flow policy + audit e.g. publication, financial-evidence
      *
      * @var string
      */
@@ -74,7 +74,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     protected $flowKey = '';
 
     /**
-     * Source context
+     * Trace back to the source entity e.g. publication:12345 (audit only)
      *
      * @var string|null
      */
@@ -82,7 +82,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     protected $sourceContext;
 
     /**
-     * Recipient email
+     * Address the OTP is sent to; required when gate_mode=otp. PII.
      *
      * @var string|null
      */
@@ -90,7 +90,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     protected $recipientEmail;
 
     /**
-     * Expires at
+     * Link validity end (per-flow window)
      *
      * @var \DateTime
      */
@@ -98,7 +98,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     protected $expiresAt;
 
     /**
-     * Revoked at
+     * Set when the link is manually revoked
      *
      * @var \DateTime
      */
@@ -172,7 +172,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param int $id new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setId($id)
     {
@@ -196,7 +196,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param string $token new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setToken($token)
     {
@@ -220,7 +220,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param string $gateMode new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setGateMode($gateMode)
     {
@@ -244,7 +244,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param string $flowKey new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setFlowKey($flowKey)
     {
@@ -268,7 +268,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param string $sourceContext new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setSourceContext($sourceContext)
     {
@@ -292,7 +292,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param string $recipientEmail new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setRecipientEmail($recipientEmail)
     {
@@ -316,7 +316,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param \DateTime $expiresAt new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setExpiresAt($expiresAt)
     {
@@ -346,7 +346,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param \DateTime $revokedAt new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setRevokedAt($revokedAt)
     {
@@ -376,7 +376,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param \DateTime $lastAccessedOn new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setLastAccessedOn($lastAccessedOn)
     {
@@ -406,7 +406,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -430,7 +430,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -454,7 +454,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param int $version new value being set
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setVersion($version)
     {
@@ -474,11 +474,11 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     }
 
     /**
-     * Set the document
+     * Set the documents
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function setDocuments($documents)
     {
@@ -502,7 +502,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function addDocuments($documents)
     {
@@ -525,7 +525,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being removed
      *
-     * @return RetrievalLink
+     * @return static
      */
     public function removeDocuments($documents)
     {
