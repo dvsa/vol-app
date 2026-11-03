@@ -9,6 +9,7 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Adapters\Doctrine3SchemaIntrospector;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\EntityGenerator;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\EntityData;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService;
@@ -615,7 +616,51 @@ final class AttributeEmissionTest extends MockeryTestCase
         );
     }
 
-    private function invokeGeneratorMethod(string $method, array $args): string
+    public function testExistingFieldOrderIsPreservedAndNewFieldsAreAppended(): void
+    {
+        $entityPath = sys_get_temp_dir() . '/entity-field-order-' . bin2hex(random_bytes(6));
+        mkdir($entityPath . '/Doc', 0777, true);
+        $abstractPath = $entityPath . '/Doc/AbstractDocumentAnalysis.php';
+
+        try {
+            file_put_contents($abstractPath, <<<'PHP'
+                <?php
+                abstract class AbstractDocumentAnalysis
+                {
+                    protected $id;
+                    protected $application;
+                    protected $document;
+                }
+                PHP);
+
+            $fields = [
+                ['property' => ['name' => 'document']],
+                ['property' => ['name' => 'newField']],
+                ['property' => ['name' => 'application']],
+                ['property' => ['name' => 'id']],
+            ];
+
+            $orderedFields = $this->invokeGeneratorMethod(
+                'preserveExistingFieldOrder',
+                [
+                    $fields,
+                    new EntityData('document_analysis', 'DocumentAnalysis', 'Dvsa\\Olcs\\Api\\Entity\\Doc', 'Doc'),
+                    ['sourceEntityPath' => $entityPath],
+                ]
+            );
+
+            $this->assertSame(
+                ['id', 'application', 'document', 'newField'],
+                array_column(array_column($orderedFields, 'property'), 'name')
+            );
+        } finally {
+            unlink($abstractPath);
+            rmdir($entityPath . '/Doc');
+            rmdir($entityPath);
+        }
+    }
+
+    private function invokeGeneratorMethod(string $method, array $args): mixed
     {
         $generator = (new \ReflectionClass(EntityGenerator::class))->newInstanceWithoutConstructor();
 
