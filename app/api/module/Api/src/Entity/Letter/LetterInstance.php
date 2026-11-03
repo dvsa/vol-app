@@ -159,6 +159,15 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
+     * Remove letter instance todo
+     */
+    public function removeLetterInstanceTodo(LetterInstanceTodo $todo): void
+    {
+        $this->letterInstanceTodos->removeElement($todo);
+        $this->todoRequiringIssueCounts = null;
+    }
+
+    /**
      * How many of this letter's issues require each to-do, keyed by LetterTodoVersion::getDedupeKey
      * so that issues linking different versions of the same to-do count towards one total (VOL-7408).
      *

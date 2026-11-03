@@ -42,6 +42,25 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
     }
 
     /**
+     * Add a letter instance todo, keeping both sides of the association in step
+     */
+    public function addLetterInstanceTodo(LetterInstanceTodo $todo): void
+    {
+        if (!$this->letterInstanceTodos->contains($todo)) {
+            $todo->setLetterInstanceIssue($this);
+            $this->letterInstanceTodos->add($todo);
+        }
+    }
+
+    /**
+     * Remove a letter instance todo from this issue's collection
+     */
+    public function removeLetterInstanceTodo(LetterInstanceTodo $todo): void
+    {
+        $this->letterInstanceTodos->removeElement($todo);
+    }
+
+    /**
      * Get the effective content (edited or default)
      *
      * Handles both properly stored arrays and double-encoded JSON strings

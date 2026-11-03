@@ -71,37 +71,110 @@ class LetterInstanceComposer
      */
     public function composeTodos(LetterInstance $letterInstance): void
     {
-        $seenTodos = [];
+        $this->reconcileTodos($letterInstance);
+    }
 
-        foreach ($letterInstance->getLetterInstanceIssues() as $instanceIssue) {
-            $issueVersion = $instanceIssue->getLetterIssueVersion();
-            if ($issueVersion === null) {
-                continue;
+    /**
+     * Bring the letter's to-dos into line with its issues, keeping every row that is still needed.
+     *
+     * The same rules as a fresh letter (one row per to-do, owned by the first issue in display order
+     * that brings it, numbered in that order), but a to-do already on the letter keeps its row and
+     * so its edits, its grab snapshot and whether it is shown; it just moves to its new owner when
+     * the old one has gone (VOL-7734). Rows no remaining issue brings are dropped. On a letter with
+     * no to-dos yet this is plain generation.
+     *
+     * Letters generated before VOL-7408 can hold more than one row for the same to-do. Those rows
+     * travel together rather than being thrown away, as any of them may carry an edit.
+     *
+     * @return LetterInstanceTodo[] the rows this created
+     */
+    public function reconcileTodos(LetterInstance $letterInstance): array
+    {
+        $existingByKey = [];
+        foreach ($letterInstance->getLetterInstanceTodos() as $instanceTodo) {
+            $key = $instanceTodo->getLetterTodoVersion()?->getDedupeKey();
+            if ($key !== null) {
+                $existingByKey[$key][] = $instanceTodo;
             }
+        }
 
-            foreach ($issueVersion->getLetterIssueTodos() ?? [] as $issueTodo) {
+        $seen = [];
+        $created = [];
+        $displayOrder = 0;
+
+        foreach ($this->issuesInDisplayOrder($letterInstance) as $instanceIssue) {
+            foreach ($instanceIssue->getLetterIssueVersion()?->getLetterIssueTodos() ?? [] as $issueTodo) {
                 $todoVersion = $issueTodo->getLetterTodoVersion();
                 if ($todoVersion === null) {
                     continue;
                 }
 
                 $key = $todoVersion->getDedupeKey();
-                if (isset($seenTodos[$key])) {
+                if (isset($seen[$key])) {
                     continue;
                 }
-                $seenTodos[$key] = true;
+                $seen[$key] = true;
+
+                if (isset($existingByKey[$key])) {
+                    foreach ($existingByKey[$key] as $instanceTodo) {
+                        $this->moveTodo($instanceTodo, $instanceIssue);
+                        $instanceTodo->setDisplayOrder($displayOrder++);
+                    }
+                    continue;
+                }
 
                 // always show the latest wording, not whichever version this issue happened to link
                 $renderVersion = $todoVersion->getLetterTodo()?->getCurrentVersion() ?? $todoVersion;
 
                 $instanceTodo = new LetterInstanceTodo();
-                $instanceTodo->setLetterInstance($letterInstance);
-                $instanceTodo->setLetterInstanceIssue($instanceIssue);
                 $instanceTodo->setLetterTodoVersion($renderVersion);
-
+                $instanceTodo->setDisplayOrder($displayOrder++);
+                $instanceIssue->addLetterInstanceTodo($instanceTodo);
                 $letterInstance->addLetterInstanceTodo($instanceTodo);
+
+                $created[] = $instanceTodo;
             }
         }
+
+        foreach ($existingByKey as $key => $instanceTodos) {
+            if (isset($seen[$key])) {
+                continue;
+            }
+            foreach ($instanceTodos as $instanceTodo) {
+                $instanceTodo->getLetterInstanceIssue()?->removeLetterInstanceTodo($instanceTodo);
+                $letterInstance->removeLetterInstanceTodo($instanceTodo);
+            }
+        }
+
+        return $created;
+    }
+
+    /**
+     * The letter's issues sorted by display order. The collection keeps the order rows were loaded
+     * or added in, which stops being display order as soon as issues are added or renumbered.
+     *
+     * @return LetterInstanceIssue[]
+     */
+    private function issuesInDisplayOrder(LetterInstance $letterInstance): array
+    {
+        $issues = $letterInstance->getLetterInstanceIssues()->toArray();
+        usort(
+            $issues,
+            static fn(LetterInstanceIssue $a, LetterInstanceIssue $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder()
+        );
+
+        return $issues;
+    }
+
+    private function moveTodo(LetterInstanceTodo $instanceTodo, LetterInstanceIssue $owner): void
+    {
+        $currentOwner = $instanceTodo->getLetterInstanceIssue();
+        if ($currentOwner === $owner) {
+            return;
+        }
+
+        $currentOwner?->removeLetterInstanceTodo($instanceTodo);
+        $owner->addLetterInstanceTodo($instanceTodo);
     }
 
     /**
