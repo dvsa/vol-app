@@ -121,27 +121,6 @@ class Document extends AbstractDocument implements OrganisationProviderInterface
     public const IRHP_PERMIT_ANN_MULTILAT_COVERING_LETTER = 'IRHP_PERMIT_ANN_MULTILAT_COVERING_LETTER';
 
 
-    #[ORM\OneToMany(targetEntity: DocumentAnalysis::class, mappedBy: 'document', fetch: 'LAZY')]
-    protected $documentAnalyses;
-
-
-
-    public function getAnalysis(): ?DocumentAnalysis
-    {
-        $analyses = $this->getDocumentAnalyses();
-
-        if ($analyses->isEmpty()) {
-            return null;
-        }
-
-        return $analyses->first();
-    }
-
-    public function getDocumentAnalyses(): Collection
-    {
-        return $this->documentAnalyses;
-    }
-
     /**
      * Document constructor.
      *
