@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Entity\Permits;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -522,7 +523,7 @@ class IrhpPermitStock extends AbstractIrhpPermitStock implements DeletableInterf
 
         $criteria->where($criteria->expr()->eq('ssReserve', false))
             ->andWhere($criteria->expr()->eq('lostReplacement', false))
-            ->orderBy(['fromNo' => Criteria::ASC]);
+            ->orderBy(['fromNo' => Order::Ascending]);
 
         $ranges = $this->getIrhpPermitRanges()->matching($criteria);
 
