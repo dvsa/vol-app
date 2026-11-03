@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Api\Domain\Repository;
 
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
@@ -141,7 +142,7 @@ class LicenceVehicle extends AbstractRepository
             );
         }
 
-        $criteria->orderBy(['specifiedDate' => 'ASC']);
+        $criteria->orderBy(['specifiedDate' => Order::Ascending]);
 
         return $entity->getLicenceVehicles()->matching($criteria);
     }
