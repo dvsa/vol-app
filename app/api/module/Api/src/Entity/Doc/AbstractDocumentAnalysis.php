@@ -568,7 +568,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     /**
      * Set the result metadata
      *
-     * @param array $resultMetadata new value being set
+     * @param array|null $resultMetadata new value being set
      *
      * @return static
      */
@@ -582,7 +582,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     /**
      * Get the result metadata
      *
-     * @return array
+     * @return array|null
      */
     public function getResultMetadata()
     {

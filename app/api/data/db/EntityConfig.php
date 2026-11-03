@@ -2521,5 +2521,8 @@ return array(
                 'property' => 'documentAnalyses'
             )
         ),
+        'result_metadata' => array(
+            'nullable' => true
+        )
     ),
 );
