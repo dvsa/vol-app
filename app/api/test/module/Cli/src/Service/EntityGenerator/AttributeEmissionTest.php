@@ -322,6 +322,71 @@ final class AttributeEmissionTest extends MockeryTestCase
         $this->assertSame('null', $sut->generateProperty($column)['defaultValue']);
     }
 
+    public function testNullableGetterAndSetterTypesAreOptInThroughFieldConfig(): void
+    {
+        $appRoot = dirname(__DIR__, 6);
+        $configuredField = (new EntityConfigService($appRoot . '/data/db/EntityConfig.php'))
+            ->getFieldConfig('application', 'knowledge_experience_evidence_uploaded');
+        $renderer = new TemplateRenderer(
+            $appRoot . '/module/Cli/src/Service/EntityGenerator/Templates',
+            new MethodGeneratorService()
+        );
+        $fields = [];
+
+        foreach ([
+            'knowledgeExperienceEvidenceUploaded' => $configuredField,
+            'defaultValue' => null,
+        ] as $name => $fieldConfig) {
+            $fields[] = [
+                'annotation' => "#[ORM\\Column(name: '" . $name . "')]",
+                'fieldConfig' => $fieldConfig,
+                'property' => [
+                    'name' => $name,
+                    'type' => 'int',
+                    'docBlock' => $name,
+                    'defaultValue' => 'null',
+                    'nullable' => true,
+                    'isRelationship' => false,
+                ],
+                'isRelationship' => false,
+                'isCollection' => false,
+            ];
+        }
+
+        $content = $renderer->render('abstract-entity', [
+            'namespace' => 'Dvsa\\Olcs\\Api\\Entity\\Test',
+            'className' => 'NullableField',
+            'tableName' => 'nullable_field',
+            'fields' => $fields,
+            'indexes' => [],
+            'uniqueConstraints' => [],
+            'hasCollections' => false,
+            'hasCreatedOn' => false,
+            'createdOnNotNull' => false,
+            'hasModifiedOn' => false,
+            'softDeletable' => false,
+            'imports' => [],
+            'idProperties' => [],
+        ]);
+
+        $this->assertStringContainsString(
+            "* @return int|null\n     */\n    public function getKnowledgeExperienceEvidenceUploaded()",
+            $content
+        );
+        $this->assertStringContainsString(
+            "* @param int|null \$knowledgeExperienceEvidenceUploaded new value being set",
+            $content
+        );
+        $this->assertStringContainsString(
+            "* @return int\n     */\n    public function getDefaultValue()",
+            $content
+        );
+        $this->assertStringContainsString(
+            "* @param int \$defaultValue new value being set",
+            $content
+        );
+    }
+
     /**
      * cf. document_analysis.status - an ENUM, which the introspector maps to string and
      * which MySQL reports with length 0. Emitting that would declare VARCHAR(0).

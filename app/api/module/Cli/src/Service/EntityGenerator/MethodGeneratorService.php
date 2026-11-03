@@ -244,4 +244,22 @@ final readonly class MethodGeneratorService
         // Just capitalize the property name - it's already properly pluralized
         return ucfirst($propertyName);
     }
+
+    /**
+     * Whether this field explicitly requests a nullable getter PHPDoc return type.
+     */
+    public function hasNullableGetterReturn(array $field): bool
+    {
+        return ($field['property']['nullable'] ?? false)
+            && (($field['fieldConfig'] ?? null)?->nullable ?? false);
+    }
+
+    /**
+     * Whether this field explicitly requests a nullable setter PHPDoc parameter.
+     */
+    public function hasNullableSetterParameter(array $field): bool
+    {
+        return ($field['property']['nullable'] ?? false)
+            && (($field['fieldConfig'] ?? null)?->nullable ?? false);
+    }
 }
