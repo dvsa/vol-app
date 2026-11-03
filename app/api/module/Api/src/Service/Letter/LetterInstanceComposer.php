@@ -81,7 +81,11 @@ class LetterInstanceComposer
      * Removed issues go first so the to-do walk only sees the issues that remain; issues are then
      * numbered in their final order, which is the order the to-dos are owned and numbered in.
      *
-     * @return array{issues: list<LetterInstanceIssue>, todos: list<LetterInstanceTodo>} rows created
+     * @return array{
+     *     issues: list<LetterInstanceIssue>,
+     *     todos: list<LetterInstanceTodo>,
+     *     movedTodos: list<array{0: LetterInstanceTodo, 1: LetterInstanceTodo}>
+     * } rows created, and to-dos carried over to a new row (old, new)
      */
     public function applyIssueChange(LetterInstance $letterInstance, IssueChangePlan $plan): array
     {
@@ -101,9 +105,12 @@ class LetterInstanceComposer
             $finalIssue->setDisplayOrder($displayOrder);
         }
 
+        $todos = $this->reconcileTodos($letterInstance);
+
         return [
             'issues' => $createdIssues,
-            'todos' => array_values($this->reconcileTodos($letterInstance)),
+            'todos' => $todos['created'],
+            'movedTodos' => $todos['moved'],
         ];
     }
 
@@ -111,15 +118,22 @@ class LetterInstanceComposer
      * Bring the letter's to-dos into line with its issues, keeping every row that is still needed.
      *
      * The same rules as a fresh letter (one row per to-do, owned by the first issue in display order
-     * that brings it, numbered in that order), but a to-do already on the letter keeps its row and
-     * so its edits, its grab snapshot and whether it is shown; it just moves to its new owner when
-     * the old one has gone (VOL-7734). Rows no remaining issue brings are dropped. On a letter with
-     * no to-dos yet this is plain generation.
+     * that brings it, numbered in that order), but a to-do already on the letter keeps its edits,
+     * its grab snapshot and whether it is shown (VOL-7734). Rows no remaining issue brings are
+     * dropped. On a letter with no to-dos yet this is plain generation.
+     *
+     * When a to-do's owner changes it is carried over to a NEW row rather than re-parented. Both
+     * of its collections are orphanRemoval, and Doctrine deletes a row taken out of one unless it
+     * lands in another already-persisted collection, which a newly added issue's is not; the
+     * mapping's contract is that such rows are never re-parented at all.
      *
      * Letters generated before VOL-7408 can hold more than one row for the same to-do. Those rows
      * travel together rather than being thrown away, as any of them may carry an edit.
      *
-     * @return LetterInstanceTodo[] the rows this created
+     * @return array{
+     *     created: list<LetterInstanceTodo>,
+     *     moved: list<array{0: LetterInstanceTodo, 1: LetterInstanceTodo}>
+     * } rows created for to-dos new to the letter, and to-dos carried over to a new owner (old, new)
      */
     public function reconcileTodos(LetterInstance $letterInstance): array
     {
@@ -133,6 +147,7 @@ class LetterInstanceComposer
 
         $seen = [];
         $created = [];
+        $moved = [];
         $displayOrder = 0;
 
         foreach ($this->issuesInDisplayOrder($letterInstance) as $instanceIssue) {
@@ -150,7 +165,11 @@ class LetterInstanceComposer
 
                 if (isset($existingByKey[$key])) {
                     foreach ($existingByKey[$key] as $instanceTodo) {
-                        $this->moveTodo($instanceTodo, $instanceIssue);
+                        if ($instanceTodo->getLetterInstanceIssue() !== $instanceIssue) {
+                            $carried = $this->carryOver($letterInstance, $instanceTodo, $instanceIssue);
+                            $moved[] = [$instanceTodo, $carried];
+                            $instanceTodo = $carried;
+                        }
                         $instanceTodo->setDisplayOrder($displayOrder++);
                     }
                     continue;
@@ -179,7 +198,7 @@ class LetterInstanceComposer
             }
         }
 
-        return $created;
+        return ['created' => $created, 'moved' => $moved];
     }
 
     /**
@@ -199,15 +218,28 @@ class LetterInstanceComposer
         return $issues;
     }
 
-    private function moveTodo(LetterInstanceTodo $instanceTodo, LetterInstanceIssue $owner): void
-    {
-        $currentOwner = $instanceTodo->getLetterInstanceIssue();
-        if ($currentOwner === $owner) {
-            return;
-        }
+    /**
+     * Replace a to-do with an identical one owned by a different issue; see reconcileTodos for why
+     * it isn't simply re-parented. The old row leaves both collections and is deleted as an orphan.
+     */
+    private function carryOver(
+        LetterInstance $letterInstance,
+        LetterInstanceTodo $instanceTodo,
+        LetterInstanceIssue $owner
+    ): LetterInstanceTodo {
+        $carried = new LetterInstanceTodo();
+        $carried->setLetterTodoVersion($instanceTodo->getLetterTodoVersion());
+        $carried->setEditedDescription($instanceTodo->getEditedDescription());
+        $carried->setGeneratedDescription($instanceTodo->getGeneratedDescription());
+        $carried->setIsRendered($instanceTodo->getIsRendered());
 
-        $currentOwner?->removeLetterInstanceTodo($instanceTodo);
-        $owner->addLetterInstanceTodo($instanceTodo);
+        $instanceTodo->getLetterInstanceIssue()?->removeLetterInstanceTodo($instanceTodo);
+        $letterInstance->removeLetterInstanceTodo($instanceTodo);
+
+        $owner->addLetterInstanceTodo($carried);
+        $letterInstance->addLetterInstanceTodo($carried);
+
+        return $carried;
     }
 
     /**

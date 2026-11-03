@@ -14,8 +14,9 @@ use Dvsa\OlcsTest\Integration\IntegrationTestCase;
  * Changing the issues on a generated letter (VOL-7734), flushed through the real mappings.
  *
  * Instance to-dos sit in two orphanRemoval collections (the letter's and their issue's) and an issue
- * cascades its removal to its to-dos. A to-do that moves from a removed issue to a remaining one has
- * to survive all of that with its edit intact; only a real flush shows whether it does.
+ * cascades its removal to its to-dos. A to-do whose issue changes is carried over to a new row, and
+ * its edit has to come through all of that intact, whether its new issue was already on the letter
+ * or has just been added; only a real flush shows whether it does.
  */
 final class LetterIssueChangeTest extends IntegrationTestCase
 {
@@ -33,16 +34,13 @@ final class LetterIssueChangeTest extends IntegrationTestCase
         $instanceId = $this->letterInstance();
         $rowA = $this->instanceIssue($instanceId, $versionA, 0);
         $rowB = $this->instanceIssue($instanceId, $versionB, 1);
-        $todoRow = $this->instanceTodo($instanceId, $rowA, $todoVersion, self::EDIT);
+        $this->instanceTodo($instanceId, $rowA, $todoVersion, self::EDIT);
 
         $this->change($instanceId, [$issueB]);
 
         $this->assertSame(0, $this->rows('letter_instance_issue', 'id', $rowA));
-        $moved = $this->conn()->fetchAssociative('SELECT * FROM letter_instance_todo WHERE id = ?', [$todoRow]);
-        $this->assertIsArray($moved, 'the shared to-do row must survive its first issue being removed');
-        $this->assertSame($rowB, (int) $moved['letter_instance_issue_id']);
-        // MySQL's JSON type reorders object keys, so compare by content, not key order
-        $this->assertEquals(json_decode(self::EDIT, true), json_decode((string) $moved['edited_description'], true));
+        $this->assertSame(1, $this->rows('letter_instance_issue', 'id', $rowB));
+        $this->assertEditedTodoOwnedBy($instanceId, $versionB);
     }
 
     public function testTodoOnlyTheRemovedIssueBroughtIsDeleted(): void
@@ -81,6 +79,62 @@ final class LetterIssueChangeTest extends IntegrationTestCase
         );
         $this->assertGreaterThan(0, $rowB);
         $this->assertSame(1, $this->rows('letter_instance_todo', 'letter_instance_issue_id', $rowB));
+    }
+
+    /**
+     * Swap: the only issue owning an edited to-do is replaced by a newly added one that brings the
+     * same to-do. Nothing is lost, so nobody is asked, and the edit must still be there.
+     */
+    public function testEditedTodoSurvivesMovingOntoANewlyAddedIssue(): void
+    {
+        [, [$versionA]] = $this->issue();
+        [$issueC, [$versionC]] = $this->issue();
+        [, [$todoVersion]] = $this->todo();
+        $this->linkToDo($versionA, $todoVersion);
+        $this->linkToDo($versionC, $todoVersion);
+
+        $instanceId = $this->letterInstance();
+        $rowA = $this->instanceIssue($instanceId, $versionA, 0);
+        $this->instanceTodo($instanceId, $rowA, $todoVersion, self::EDIT);
+
+        $this->change($instanceId, [$issueC]);
+
+        $this->assertEditedTodoOwnedBy($instanceId, $versionC);
+    }
+
+    /**
+     * Add only: a newly ticked issue that sits earlier in the letter takes over a to-do an existing
+     * issue owns. No issue is removed, and the edit must survive.
+     */
+    public function testEditedTodoSurvivesANewIssueAheadOfItsOwner(): void
+    {
+        [$issueB, [$versionB]] = $this->issue();
+        [$issueC, [$versionC]] = $this->issue();
+        [, [$todoVersion]] = $this->todo();
+        $this->linkToDo($versionB, $todoVersion);
+        $this->linkToDo($versionC, $todoVersion);
+
+        $instanceId = $this->letterInstance();
+        $rowB = $this->instanceIssue($instanceId, $versionB, 0);
+        $this->instanceTodo($instanceId, $rowB, $todoVersion, self::EDIT);
+
+        $this->change($instanceId, [$issueC, $issueB]);
+
+        $this->assertEditedTodoOwnedBy($instanceId, $versionC);
+    }
+
+    private function assertEditedTodoOwnedBy(int $instanceId, int $issueVersionId): void
+    {
+        $rows = $this->conn()->fetchAllAssociative(
+            'SELECT t.edited_description, i.letter_issue_version_id FROM letter_instance_todo t'
+            . ' JOIN letter_instance_issue i ON i.id = t.letter_instance_issue_id WHERE t.letter_instance_id = ?',
+            [$instanceId]
+        );
+
+        $this->assertCount(1, $rows, 'the to-do both issues bring must still be on the letter, once');
+        $this->assertSame($issueVersionId, (int) $rows[0]['letter_issue_version_id']);
+        // MySQL's JSON type reorders object keys, so compare by content, not key order
+        $this->assertEquals(json_decode(self::EDIT, true), json_decode((string) $rows[0]['edited_description'], true));
     }
 
     /**

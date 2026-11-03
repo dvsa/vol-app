@@ -589,7 +589,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
     {
         $sut = $this->bareSut();
         $sut->shouldReceive('handleCommand')->andReturn($this->okResponse([
-            'flags' => ['addedIssueIds' => [903]],
+            'flags' => ['addedIssueIds' => [903], 'movedTodoIds' => [61 => 904]],
             'messages' => ['Issues updated: 1 added, 0 removed'],
         ]));
         $sut->shouldReceive('fetchLetterInstanceById')->with(55)->andReturn([
@@ -602,6 +602,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertSame([903], $json['addedIssueIds']);
         $this->assertSame([501, 903], $json['issueIds']);
         $this->assertSame([61], $json['todoIds']);
+        $this->assertSame([61 => 904], $json['movedTodoIds']);
     }
 
     public function testUpdateIssuesShowsTheValidationMessage(): void

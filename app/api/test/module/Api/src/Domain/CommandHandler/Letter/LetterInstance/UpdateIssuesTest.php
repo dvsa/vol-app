@@ -10,6 +10,9 @@ use Dvsa\Olcs\Api\Domain\Repository\LetterInstance as LetterInstanceRepo;
 use Dvsa\Olcs\Api\Domain\Repository\LetterIssue as LetterIssueRepo;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
+use Dvsa\Olcs\Api\Entity\Letter\LetterIssueTodo;
+use Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssue as LetterIssueEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion as LetterIssueVersionEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
@@ -29,6 +32,8 @@ class UpdateIssuesTest extends AbstractCommandHandlerTestCase
     private const LETTER_ID = 55;
 
     private m\MockInterface $mockSnapshotter;
+
+    private ?LetterInstanceTodo $deletedTodo = null;
 
     /** @var array<int, LetterIssueEntity> */
     private array $issues = [];
@@ -53,13 +58,19 @@ class UpdateIssuesTest extends AbstractCommandHandlerTestCase
             ->andReturnUsing(fn(int $id) => $this->issues[$id]);
     }
 
-    private function issue(int $id, ?string $goodsOrPsv = null): LetterIssueEntity
+    private function issue(int $id, ?string $goodsOrPsv = null, array $todoVersions = []): LetterIssueEntity
     {
         $issue = m::mock(LetterIssueEntity::class)->makePartial();
         $issue->setId($id);
 
+        $issueTodos = array_map(function (LetterTodoVersion $todoVersion) {
+            $issueTodo = m::mock(LetterIssueTodo::class)->makePartial();
+            $issueTodo->shouldReceive('getLetterTodoVersion')->andReturn($todoVersion);
+            return $issueTodo;
+        }, $todoVersions);
+
         $version = m::mock(LetterIssueVersionEntity::class)->makePartial();
-        $version->shouldReceive('getLetterIssueTodos')->andReturn([]);
+        $version->shouldReceive('getLetterIssueTodos')->andReturn($issueTodos);
         $version->setLetterIssue($issue);
         $version->setHeading('Issue ' . $id);
         if ($goodsOrPsv !== null) {
@@ -119,6 +130,13 @@ class UpdateIssuesTest extends AbstractCommandHandlerTestCase
                         $row->setId($nextId++);
                     }
                 }
+                foreach ($letterInstance->getLetterInstanceTodos() as $todo) {
+                    if ($todo->getId() === null) {
+                        $todo->setId($nextId++);
+                    }
+                }
+                // as Doctrine does: a deleted row loses its id on flush
+                $this->deletedTodo?->setId(null);
             }
         );
     }
@@ -259,5 +277,35 @@ class UpdateIssuesTest extends AbstractCommandHandlerTestCase
         $this->expectException(ValidationException::class);
 
         $this->sut->handleCommand(Cmd::create(['id' => self::LETTER_ID, 'selectedIssues' => []]));
+    }
+
+    /**
+     * A to-do whose issue changes comes back as a new row; the edit page needs the new id to keep
+     * its editor open.
+     */
+    public function testReportsTheNewIdOfAToDoCarriedOverToAnotherIssue(): void
+    {
+        $todoVersion = m::mock(LetterTodoVersion::class)->makePartial();
+        $todoVersion->setId(70);
+
+        $letterInstance = $this->letter();
+        $rowA = $this->onLetter($letterInstance, $this->issue(1, null, [$todoVersion]), 0);
+        $this->issue(2, null, [$todoVersion]);
+
+        $existing = new LetterInstanceTodo();
+        $existing->setId(61);
+        $existing->setLetterTodoVersion($todoVersion);
+        $existing->setEditedDescription(['blocks' => []]);
+        $rowA->addLetterInstanceTodo($existing);
+        $letterInstance->addLetterInstanceTodo($existing);
+        $this->deletedTodo = $existing;
+
+        $this->mockSnapshotter->shouldReceive('snapshotRows')->once()->with($letterInstance, m::type('array'), []);
+        $this->expectSaveAssigningIds();
+
+        $result = $this->sut->handleCommand(Cmd::create(['id' => self::LETTER_ID, 'selectedIssues' => [2]]));
+
+        $this->assertNull($result->getFlag('confirmationRequired'), 'the edited to-do is kept, so nothing to confirm');
+        $this->assertSame([61 => 901], $result->getFlag('movedTodoIds'));
     }
 }

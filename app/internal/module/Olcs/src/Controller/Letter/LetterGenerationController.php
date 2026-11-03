@@ -698,6 +698,8 @@ class LetterGenerationController extends AbstractInternalController implements L
             'addedIssueIds' => array_values($result['flags']['addedIssueIds'] ?? []),
             'issueIds' => array_column($letterInstance['letterInstanceIssues'] ?? [], 'id'),
             'todoIds' => array_column($letterInstance['letterInstanceTodos'] ?? [], 'id'),
+            // old to-do id => new, for to-dos carried over to another issue as a new row
+            'movedTodoIds' => (object) ($result['flags']['movedTodoIds'] ?? []),
         ]);
     }
 

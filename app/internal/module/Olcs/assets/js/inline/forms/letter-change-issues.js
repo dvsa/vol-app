@@ -142,6 +142,13 @@ OLCS.ready(function () {
         sections.push(String(id));
       }
     });
+    // a to-do that changed issue is a new row now, so follow it to its new id
+    var moved = response.movedTodoIds || {};
+    params.getAll("todos[]").forEach(function (id) {
+      if (moved[id] !== undefined) {
+        params.append("todos[]", String(moved[id]));
+      }
+    });
     var todos = keep("todos[]", response.todoIds || []);
     var appendices = keep("appendices[]");
     var letterSections = keep("letterSections[]");

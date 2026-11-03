@@ -78,6 +78,9 @@ final class UpdateIssues extends AbstractCommandHandler
         // grabs on the new rows resolve now; what was frozen at generation stays as it was
         $this->grabSnapshotter->snapshotRows($letterInstance, $created['issues'], $created['todos']);
 
+        // read before saving: Doctrine clears the id of a row it deletes
+        $movedFrom = array_map(static fn(array $pair) => $pair[0]->getId(), $created['movedTodos']);
+
         $this->getRepo()->save($letterInstance);
 
         // a flag rather than addId: Result collapses a single id to a scalar, callers want a list
@@ -85,6 +88,13 @@ final class UpdateIssues extends AbstractCommandHandler
             static fn($instanceIssue) => $instanceIssue->getId(),
             $created['issues']
         ));
+
+        // to-dos that changed issue are new rows now (see LetterInstanceComposer::reconcileTodos)
+        $movedTodoIds = [];
+        foreach ($created['movedTodos'] as $index => [, $to]) {
+            $movedTodoIds[$movedFrom[$index]] = $to->getId();
+        }
+        $this->result->setFlag('movedTodoIds', $movedTodoIds);
         $this->result->addMessage(sprintf(
             'Issues updated: %d added, %d removed',
             count($created['issues']),

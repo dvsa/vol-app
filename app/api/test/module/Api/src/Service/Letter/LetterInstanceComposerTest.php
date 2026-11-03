@@ -319,30 +319,49 @@ class LetterInstanceComposerTest extends TestCase
         $existing->setEditedDescription(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'edited']]]]);
         $existing->setIsRendered(0);
 
-        $created = $this->sut->reconcileTodos($letterInstance);
+        $result = $this->sut->reconcileTodos($letterInstance);
 
-        $this->assertSame([], $created);
+        $this->assertSame([], $result['created']);
+        $this->assertSame([], $result['moved']);
         $this->assertCount(1, $letterInstance->getLetterInstanceTodos());
         $this->assertSame($existing, $letterInstance->getLetterInstanceTodos()->first());
         $this->assertSame('edited', $existing->getEditedDescription()['blocks'][0]['data']['text']);
         $this->assertSame(0, $existing->getIsRendered());
     }
 
-    public function testReconcileMovesASharedTodoToTheNextIssueThatBringsIt(): void
+    /**
+     * Doctrine deletes a row taken out of an orphanRemoval collection, whatever happens to it next,
+     * so a to-do changing issue is carried over to a new row with everything the caseworker
+     * sees: their edit, the grab snapshot and whether it is shown.
+     */
+    public function testReconcileCarriesASharedTodoOverToTheNextIssueThatBringsIt(): void
     {
         $t1 = $this->todoVersion(1);
         $letterInstance = new LetterInstance();
         $a = $this->instanceIssue($letterInstance, 0, [$t1]);
         $b = $this->instanceIssue($letterInstance, 1, [$t1]);
         $shared = $this->existingTodo($letterInstance, $a, $t1);
+        $shared->setEditedDescription(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'edited']]]]);
+        $shared->setGeneratedDescription(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'snapshot']]]]);
+        $shared->setIsRendered(0);
 
         $letterInstance->getLetterInstanceIssues()->removeElement($a);
-        $this->sut->reconcileTodos($letterInstance);
+        $result = $this->sut->reconcileTodos($letterInstance);
 
-        $this->assertSame($b, $shared->getLetterInstanceIssue());
-        $this->assertTrue($b->getLetterInstanceTodos()->contains($shared));
+        $this->assertSame([], $result['created'], 'a carried-over to-do is not new, so it is not re-snapshotted');
+        $this->assertCount(1, $result['moved']);
+        [$from, $to] = $result['moved'][0];
+        $this->assertSame($shared, $from);
+        $this->assertNotSame($shared, $to);
+        $this->assertFalse($letterInstance->getLetterInstanceTodos()->contains($shared));
         $this->assertFalse($a->getLetterInstanceTodos()->contains($shared));
-        $this->assertTrue($letterInstance->getLetterInstanceTodos()->contains($shared));
+        $this->assertSame([$to], array_values($letterInstance->getLetterInstanceTodos()->toArray()));
+        $this->assertSame($b, $to->getLetterInstanceIssue());
+        $this->assertTrue($b->getLetterInstanceTodos()->contains($to));
+        $this->assertSame($t1, $to->getLetterTodoVersion());
+        $this->assertSame($shared->getEditedDescription(), $to->getEditedDescription());
+        $this->assertSame($shared->getGeneratedDescription(), $to->getGeneratedDescription());
+        $this->assertSame(0, $to->getIsRendered());
     }
 
     public function testReconcileRemovesTodosNoIssueBringsAnyMore(): void
@@ -366,7 +385,7 @@ class LetterInstanceComposerTest extends TestCase
         $letterInstance = new LetterInstance();
         $issue = $this->instanceIssue($letterInstance, 0, [$this->todoVersionOf($todo, 39)]);
 
-        $created = $this->sut->reconcileTodos($letterInstance);
+        $created = $this->sut->reconcileTodos($letterInstance)['created'];
 
         $this->assertCount(1, $created);
         $this->assertSame(40, $created[0]->getLetterTodoVersion()->getId());
@@ -382,7 +401,7 @@ class LetterInstanceComposerTest extends TestCase
         $this->instanceIssue($letterInstance, 1, [$t1]);
         $a = $this->instanceIssue($letterInstance, 0, [$t1]);
 
-        $created = $this->sut->reconcileTodos($letterInstance);
+        $created = $this->sut->reconcileTodos($letterInstance)['created'];
 
         $this->assertSame($a, $created[0]->getLetterInstanceIssue());
     }
@@ -399,13 +418,18 @@ class LetterInstanceComposerTest extends TestCase
         $b = $this->instanceIssue($letterInstance, 1, [$t1]);
         $first = $this->existingTodo($letterInstance, $a, $t1);
         $duplicate = $this->existingTodo($letterInstance, $b, $t1);
-        $duplicate->setEditedDescription(['blocks' => []]);
+        $duplicate->setEditedDescription(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'dup edit']]]]);
 
-        $this->sut->reconcileTodos($letterInstance);
+        $result = $this->sut->reconcileTodos($letterInstance);
 
-        $this->assertCount(2, $letterInstance->getLetterInstanceTodos());
+        $todos = array_values($letterInstance->getLetterInstanceTodos()->toArray());
+        $this->assertCount(2, $todos);
+        $this->assertContains($first, $todos);
         $this->assertSame($a, $first->getLetterInstanceIssue());
-        $this->assertSame($a, $duplicate->getLetterInstanceIssue());
+        [$from, $to] = $result['moved'][0];
+        $this->assertSame($duplicate, $from);
+        $this->assertSame($a, $to->getLetterInstanceIssue());
+        $this->assertSame('dup edit', $to->getEditedDescription()['blocks'][0]['data']['text']);
     }
 
     public function testApplyIssueChangeRenumbersIssuesAndReturnsNewRows(): void
@@ -419,6 +443,7 @@ class LetterInstanceComposerTest extends TestCase
         $cVersion = $this->issueVersionWithTodos([$this->todoVersion(3)]);
 
         $created = $this->sut->applyIssueChange($letterInstance, new IssueChangePlan([$cVersion, $b], [$a], []));
+        $this->assertSame([], $created['movedTodos'], "B's to-do stays with B");
 
         $issues = $letterInstance->getLetterInstanceIssues();
         $this->assertCount(2, $issues);
