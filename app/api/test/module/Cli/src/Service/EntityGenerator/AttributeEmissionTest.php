@@ -333,10 +333,12 @@ final class AttributeEmissionTest extends MockeryTestCase
         );
         $fields = [];
 
-        foreach ([
-            'knowledgeExperienceEvidenceUploaded' => $configuredField,
-            'defaultValue' => null,
-        ] as $name => $fieldConfig) {
+        foreach (
+            [
+                'knowledgeExperienceEvidenceUploaded' => $configuredField,
+                'defaultValue' => null,
+            ] as $name => $fieldConfig
+        ) {
             $fields[] = [
                 'annotation' => "#[ORM\\Column(name: '" . $name . "')]",
                 'fieldConfig' => $fieldConfig,
