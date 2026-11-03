@@ -67,6 +67,7 @@ return [
     CommandHandler\Letter\LetterInstance\Update::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstance\Generate::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstance\PrepareToSend::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterInstance\UpdateIssues::class => IsInternalUser::class,
 
     // Letter Instance Issue
     CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class => IsInternalUser::class,
