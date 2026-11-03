@@ -222,7 +222,7 @@ final class SchemaComparison
         $out[] = sprintf('# ---- inexpressible from mapping (%d) ----', count($buckets[self::INEXPRESSIBLE]));
         $out[] = '# Differences on implicit ManyToMany join tables that no entity change can fix -';
         $out[] = '# generated index names, columns a JoinTable cannot carry, and database ENUM ';
-        $out[] = '# columns mapped as strings See classify().';
+        $out[] = '# columns mapped as strings. See classify().';
         $out[] = '# Recorded and compared like any other statement, but not work anyone can pick up.';
         $out[] = '';
         $out = array_merge($out, $buckets[self::INEXPRESSIBLE]);
