@@ -33,8 +33,8 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     protected $inlineScripts = [
         'createAction' => ['forms/letter-generation'],
-        'previewAction' => ['forms/letter-preview'],
-        'editAction' => ['forms/letter-edit'],
+        'previewAction' => ['forms/letter-preview', 'forms/letter-change-issues'],
+        'editAction' => ['forms/letter-edit', 'forms/letter-change-issues'],
     ];
 
     /**
@@ -49,7 +49,8 @@ class LetterGenerationController extends AbstractInternalController implements L
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelperService,
         FlashMessengerHelperService $flashMessengerHelperService,
-        Navigation $navigation
+        Navigation $navigation,
+        private readonly int $csrfTimeout = 5400
     ) {
         parent::__construct(
             $translationHelperService,
@@ -638,6 +639,7 @@ class LetterGenerationController extends AbstractInternalController implements L
             'hasAppendices' => !empty($letterInstance['letterInstanceAppendices']),
             'accordionData' => $accordionData,
             'selectedIssueIds' => $selectedIssueIds,
+            'csrfToken' => $locked ? '' : $this->csrfToken(),
         ]);
         $view->setTemplate('pages/letter/change-issues');
         $view->setTerminal(true);
@@ -697,6 +699,19 @@ class LetterGenerationController extends AbstractInternalController implements L
             'issueIds' => array_column($letterInstance['letterInstanceIssues'] ?? [], 'id'),
             'todoIds' => array_column($letterInstance['letterInstanceTodos'] ?? [], 'id'),
         ]);
+    }
+
+    /**
+     * A "security" token for a hand-built form. Common\Module turns form posts without a valid one
+     * into GETs; the timeout matches the forms the app builds itself, not the validator's 5 minutes.
+     */
+    protected function csrfToken(): string
+    {
+        $element = new \Laminas\Form\Element\Csrf('security', [
+            'csrf_options' => ['timeout' => $this->csrfTimeout],
+        ]);
+
+        return (string) $element->getValue();
     }
 
     /**

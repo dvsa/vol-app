@@ -9,16 +9,18 @@
  * @var bool $hasAppendices whether every issue may be unticked
  * @var array $accordionData
  * @var array $selectedIssueIds
+ * @var string $csrfToken posted back as "security", see Common\Module::validateCsrfToken
  */
 ?>
 <?php if ($locked): ?>
     <p class="govuk-body">This letter can no longer be changed.</p>
-    <button type="button" class="govuk-button govuk-button--secondary modal__close">Close</button>
+    <button type="button" class="govuk-button govuk-button--secondary js-change-issues-close">Close</button>
 <?php else: ?>
 <form id="change-issues-form"
       data-letter-instance-id="<?= $this->escapeHtmlAttr($letterInstanceId) ?>"
       data-from="<?= $this->escapeHtmlAttr($from) ?>"
       data-has-appendices="<?= $hasAppendices ? '1' : '0' ?>">
+    <input type="hidden" name="security" value="<?= $this->escapeHtmlAttr($csrfToken) ?>">
 
     <div id="change-issues-error" class="govuk-error-summary" role="alert" tabindex="-1" style="display: none;">
         <h2 class="govuk-error-summary__title">There is a problem</h2>
@@ -37,7 +39,7 @@
 
         <div class="govuk-button-group">
             <button type="button" id="change-issues-save" class="govuk-button">Save issues</button>
-            <button type="button" class="govuk-button govuk-button--secondary modal__close">Cancel</button>
+            <button type="button" class="govuk-button govuk-button--secondary js-change-issues-close">Cancel</button>
         </div>
     </div>
 

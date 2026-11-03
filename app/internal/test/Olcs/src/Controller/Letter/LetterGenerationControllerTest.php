@@ -430,6 +430,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $request->getQuery()->fromArray($query);
         $sut->shouldReceive('getRequest')->andReturn($request);
         $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+        $sut->shouldReceive('csrfToken')->andReturn('csrf-hash')->byDefault();
 
         return $sut->changeIssuesAction();
     }
@@ -627,5 +628,22 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $sut->shouldReceive('handleCommand')->never();
 
         $this->assertSame(405, $sut->updateIssuesAction()->getStatusCode());
+    }
+
+    /**
+     * Form posts without a valid "security" token are turned into GETs by Common\Module, so the
+     * modal has to carry one or saving can never work.
+     */
+    public function testChangeIssuesCarriesACsrfToken(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn($this->letterForChangeIssues());
+        $sut->shouldReceive('fetchLetterContext')->andReturn([]);
+        $sut->shouldReceive('buildAccordionData')->andReturn([]);
+        $sut->shouldReceive('csrfToken')->once()->andReturn('abc123-token');
+
+        $view = $this->runChangeIssues($sut, ['id' => '55']);
+
+        $this->assertSame('abc123-token', $view->getVariable('csrfToken'));
     }
 }

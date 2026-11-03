@@ -109,6 +109,18 @@
 <div class="small-module">
     <h4 class="title">Actions</h4>
     <p class="small-module__details">
+        <?php if (in_array($letterInstance['status']['id'] ?? null, ['ltr_sts_draft', 'ltr_sts_ready'], true)): ?>
+        <button
+            type="button"
+            id="change-issues-btn"
+            class="govuk-button govuk-button--secondary"
+            data-letter-instance-id="<?= $this->escapeHtmlAttr($letterInstance['id'] ?? '') ?>"
+            data-from="preview"
+            style="margin-bottom: 10px; width: 100%;"
+        >
+            Change issues
+        </button>
+        <?php endif; ?>
         <button
             type="button"
             id="continue-to-editor"
