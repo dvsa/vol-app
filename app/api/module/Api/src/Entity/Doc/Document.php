@@ -120,6 +120,17 @@ class Document extends AbstractDocument implements OrganisationProviderInterface
     public const IRHP_PERMIT_ANN_MULTILAT = 'IRHP_PERMIT_ANN_MULTILATERAL';
     public const IRHP_PERMIT_ANN_MULTILAT_COVERING_LETTER = 'IRHP_PERMIT_ANN_MULTILAT_COVERING_LETTER';
 
+    public function getAnalysis(): ?DocumentAnalysis
+    {
+        $analyses = $this->getDocumentAnalyses();
+
+        if ($analyses->isEmpty()) {
+            return null;
+        }
+
+        return $analyses->first();
+    }
+
 
     /**
      * Document constructor.
