@@ -21,9 +21,9 @@ use Doctrine\Common\Collections\Collection;
  * @source OLCS-Entity-Generator-v2
  */
 #[ORM\Table(name: 'retrieval_link_event')]
+#[ORM\Index(name: 'ix_retrieval_link_event_created_on', columns: ['created_on'])]
 #[ORM\Index(name: 'ix_retrieval_link_event_retrieval_link_id', columns: ['retrieval_link_id'])]
 #[ORM\Index(name: 'ix_retrieval_link_event_type', columns: ['event_type'])]
-#[ORM\Index(name: 'ix_retrieval_link_event_created_on', columns: ['created_on'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface, JsonSerializable, \Stringable

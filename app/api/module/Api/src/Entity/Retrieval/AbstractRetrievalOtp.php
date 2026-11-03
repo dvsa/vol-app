@@ -21,8 +21,8 @@ use Doctrine\Common\Collections\Collection;
  * @source OLCS-Entity-Generator-v2
  */
 #[ORM\Table(name: 'retrieval_otp')]
-#[ORM\Index(name: 'ix_retrieval_otp_retrieval_link_id', columns: ['retrieval_link_id'])]
 #[ORM\Index(name: 'ix_retrieval_otp_expires_at', columns: ['expires_at'])]
+#[ORM\Index(name: 'ix_retrieval_otp_retrieval_link_id', columns: ['retrieval_link_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 abstract class AbstractRetrievalOtp implements BundleSerializableInterface, JsonSerializable, \Stringable
