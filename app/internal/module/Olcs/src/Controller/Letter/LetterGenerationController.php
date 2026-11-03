@@ -646,6 +646,60 @@ class LetterGenerationController extends AbstractInternalController implements L
     }
 
     /**
+     * Update issues action - saves the issues picked in the change issues modal (VOL-7734)
+     *
+     * Posts the full list of ticked issues. When that would throw away the caseworker's edits the
+     * API changes nothing and names them; the modal asks, then posts again with confirmLoss.
+     *
+     * POST: letterInstanceId, letterIssues[] (in the order shown), confirmLoss ('1')
+     *
+     * @return Response JSON
+     */
+    public function updateIssuesAction()
+    {
+        $request = $this->getRequest();
+        if (!$request->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $letterInstanceId = (int) $request->getPost('letterInstanceId');
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\UpdateIssues::create([
+            'id' => $letterInstanceId,
+            'selectedIssues' => array_map('intval', array_values((array) $request->getPost('letterIssues', []))),
+            'confirmLoss' => $request->getPost('confirmLoss') === '1',
+        ]);
+
+        $response = $this->handleCommand($command);
+        $result = $response->getResult();
+
+        if (!$response->isOk()) {
+            $messages = [];
+            $raw = (array) ($result['messages'] ?? []);
+            array_walk_recursive($raw, static function ($message) use (&$messages): void {
+                if (is_string($message)) {
+                    $messages[] = $message;
+                }
+            });
+            return $this->jsonError($messages === [] ? 'Failed to change issues' : implode(' ', $messages));
+        }
+
+        if (!empty($result['flags']['confirmationRequired'])) {
+            return $this->jsonSuccess([
+                'confirmationRequired' => true,
+                'lostEdits' => array_values($result['messages'] ?? []),
+            ]);
+        }
+
+        $letterInstance = $this->fetchLetterInstanceById($letterInstanceId) ?? [];
+
+        return $this->jsonSuccess([
+            'addedIssueIds' => array_values($result['flags']['addedIssueIds'] ?? []),
+            'issueIds' => array_column($letterInstance['letterInstanceIssues'] ?? [], 'id'),
+            'todoIds' => array_column($letterInstance['letterInstanceTodos'] ?? [], 'id'),
+        ]);
+    }
+
+    /**
      * The entity Goods/PSV is worked out from, the same way Generate does: application, then licence
      *
      * @return array{type?: string, id?: int}

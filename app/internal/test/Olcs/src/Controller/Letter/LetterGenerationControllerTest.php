@@ -8,6 +8,7 @@ use Common\Service\Cqrs\Response;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\UpdateIssues;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\GenerationContext;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterIssue\GetList as LetterIssueList;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList as LetterIssueTypeList;
@@ -524,5 +525,107 @@ final class LetterGenerationControllerTest extends MockeryTestCase
 
         $this->assertSame(404, $this->runChangeIssues($sut, ['id' => '55'])->getStatusCode());
         $this->assertSame(404, $this->runChangeIssues($this->bareSut(), [])->getStatusCode());
+    }
+
+    private function postUpdateIssues(Sut $sut, array $post): array
+    {
+        $request = new Request();
+        $request->setMethod('POST');
+        $request->getPost()->fromArray($post);
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+
+        $response = $sut->updateIssuesAction();
+
+        return ['status' => $response->getStatusCode(), 'json' => json_decode($response->getContent(), true)];
+    }
+
+    public function testUpdateIssuesPostsTheSelection(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd instanceof UpdateIssues
+                && $cmd->getId() === 55
+                && $cmd->getSelectedIssues() === [21, 20]
+                && $cmd->getConfirmLoss() === true))
+            ->once()
+            ->andReturn($this->okResponse(['flags' => ['addedIssueIds' => []], 'messages' => []]));
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn(['letterInstanceIssues' => [], 'letterInstanceTodos' => []]);
+
+        $result = $this->postUpdateIssues($sut, ['letterInstanceId' => '55', 'letterIssues' => ['21', '20'], 'confirmLoss' => '1']);
+
+        $this->assertTrue($result['json']['success']);
+    }
+
+    public function testUpdateIssuesWithNothingTickedSendsAnEmptySelection(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd->getSelectedIssues() === [] && !$cmd->getConfirmLoss()))
+            ->once()
+            ->andReturn($this->okResponse(['flags' => [], 'messages' => []]));
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn([]);
+
+        $this->assertTrue($this->postUpdateIssues($sut, ['letterInstanceId' => '55'])['json']['success']);
+    }
+
+    public function testUpdateIssuesAsksForConfirmation(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->andReturn($this->okResponse([
+            'flags' => ['confirmationRequired' => true],
+            'messages' => ['Bank statements', 'Send a lease'],
+        ]));
+        $sut->shouldReceive('fetchLetterInstanceById')->never();
+
+        $json = $this->postUpdateIssues($sut, ['letterInstanceId' => '55', 'letterIssues' => []])['json'];
+
+        $this->assertTrue($json['confirmationRequired']);
+        $this->assertSame(['Bank statements', 'Send a lease'], $json['lostEdits']);
+    }
+
+    public function testUpdateIssuesReturnsRemainingIds(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->andReturn($this->okResponse([
+            'flags' => ['addedIssueIds' => [903]],
+            'messages' => ['Issues updated: 1 added, 0 removed'],
+        ]));
+        $sut->shouldReceive('fetchLetterInstanceById')->with(55)->andReturn([
+            'letterInstanceIssues' => [['id' => 501], ['id' => 903]],
+            'letterInstanceTodos' => [['id' => 61]],
+        ]);
+
+        $json = $this->postUpdateIssues($sut, ['letterInstanceId' => '55', 'letterIssues' => ['20', '30']])['json'];
+
+        $this->assertSame([903], $json['addedIssueIds']);
+        $this->assertSame([501, 903], $json['issueIds']);
+        $this->assertSame([61], $json['todoIds']);
+    }
+
+    public function testUpdateIssuesShowsTheValidationMessage(): void
+    {
+        $failed = m::mock(Response::class);
+        $failed->shouldReceive('isOk')->andReturn(false);
+        $failed->shouldReceive('getResult')->andReturn([
+            'messages' => [['Issues can only be changed on a draft or ready letter']],
+        ]);
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->andReturn($failed);
+
+        $result = $this->postUpdateIssues($sut, ['letterInstanceId' => '55']);
+
+        $this->assertSame(400, $result['status']);
+        $this->assertSame('Issues can only be changed on a draft or ready letter', $result['json']['message']);
+    }
+
+    public function testUpdateIssuesRejectsGet(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('getRequest')->andReturn(new Request());
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+        $sut->shouldReceive('handleCommand')->never();
+
+        $this->assertSame(405, $sut->updateIssuesAction()->getStatusCode());
     }
 }

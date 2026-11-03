@@ -247,6 +247,17 @@ $routes = [
                 ],
                 'may_terminate' => true,
             ],
+            'update-issues' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/update-issues',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'updateIssues',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
             'save-issue-content' => [
                 'type' => 'Literal',
                 'options' => [
