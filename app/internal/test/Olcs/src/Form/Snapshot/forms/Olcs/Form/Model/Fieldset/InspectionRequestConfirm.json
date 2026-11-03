@@ -1,0 +1,36 @@
+{
+  "name": "inspection-request-confirm",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "createInspectionRequest",
+        "attributes": {
+          "required": "required",
+          "value": "Y"
+        },
+        "type": "Radio",
+        "options": {
+          "label": "internal.inspection-request.form.create-inspection-request",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "createInspectionRequest": {
+      "name": "createInspectionRequest",
+      "required": true
+    }
+  }
+}

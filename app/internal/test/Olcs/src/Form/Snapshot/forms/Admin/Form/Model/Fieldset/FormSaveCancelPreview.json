@@ -1,0 +1,75 @@
+{
+  "name": "form-actions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "save",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "aria-label": "Save and Continue",
+          "id": "save"
+        },
+        "options": {
+          "label": "Save"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "cancel",
+        "attributes": {
+          "type": "submit",
+          "class": "govuk-button govuk-button--secondary",
+          "id": "cancel"
+        },
+        "options": {
+          "label": "Cancel",
+          "keepForReadOnly": true
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "preview",
+        "attributes": {
+          "type": "button",
+          "class": "govuk-button govuk-button--secondary",
+          "id": "preview"
+        },
+        "options": {
+          "label": "Preview",
+          "keepForReadOnly": true
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "sendTestViaNotify",
+        "attributes": {
+          "type": "button",
+          "class": "govuk-button govuk-button--secondary",
+          "id": "sendTestViaNotify"
+        },
+        "options": {
+          "label": "Send test via Notify",
+          "keepForReadOnly": true
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

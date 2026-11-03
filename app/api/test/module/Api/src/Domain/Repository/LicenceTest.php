@@ -507,7 +507,7 @@ final class LicenceTest extends RepositoryTestCase
 
         $this->assertStringStartsWith('SELECT DISTINCT m' . self::FROM, $dql);
         $this->assertStringContainsString(
-            ' INNER JOIN ' . TMLicenceEntity::class . ' tml WITH m.id = tml.licence',
+            ' INNER JOIN ' . TMLicenceEntity::class . ' tml ON m.id = tml.licence',
             $dql,
         );
         $this->assertStringContainsString(' tml.lastTmLetterDate IS NULL', $dql);

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CommonTest\Controller\Util;
 
 use Common\Util\FlashMessengerTrait;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger as FlashMessengerPlugin;
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger as FlashMessengerPlugin;
 use Mockery as m;
 
 final class FlashMessengerTraitTest extends m\Adapter\Phpunit\MockeryTestCase

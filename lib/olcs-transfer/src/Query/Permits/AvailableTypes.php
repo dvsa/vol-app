@@ -7,11 +7,9 @@
 namespace Dvsa\Olcs\Transfer\Query\Permits;
 
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/permits/available-types")
- */
+#[Transfer\RouteName('backend/permits/available-types')]
 class AvailableTypes extends AbstractQuery
 {
 }

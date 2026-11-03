@@ -1,0 +1,26 @@
+{
+  "name": "DisableConversationsActions",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "close",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button govuk-button--warning",
+          "id": "close"
+        },
+        "options": {
+          "label": "Disable messaging"
+        },
+        "type": "Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

@@ -1,0 +1,51 @@
+{
+  "name": "lva-community-licence-filter",
+  "attributes": {
+    "method": "get",
+    "class": "form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "options": {
+          "category": "com_lic_sts"
+        },
+        "type": "DynamicMultiCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isFiltered",
+        "attributes": {
+          "value": 1
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "type": "submit",
+          "class": "govuk-button",
+          "data-container-class": "js-hidden"
+        },
+        "options": {
+          "label": "lva-community-licence-filter-button"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "prefer_form_input_filter": true,
+    "bypass_auth": true
+  },
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

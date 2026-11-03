@@ -1,0 +1,65 @@
+{
+  "name": "dataTrafficArea",
+  "attributes": {
+    "class": "traffic-area"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficArea",
+        "attributes": {
+          "id": "trafficArea",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "application_operating-centres_authorisation.dataTrafficArea.label.new",
+          "hint": "markup-traffic-area-help",
+          "value_options": [],
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficAreaSet",
+        "type": "Common\\Form\\Elements\\Types\\TrafficAreaSet",
+        "options": {
+          "label": "application_operating-centres_authorisation.dataTrafficArea.label.new",
+          "label_attributes": {
+            "class": "legend"
+          },
+          "hint": "markup-traffic-area-help",
+          "hint-position": "below"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "enforcementArea",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "application_operating-centres_authorisation.enforcementArea.label",
+          "value_options": [],
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "enforcementArea": {
+      "name": "enforcementArea",
+      "required": false
+    }
+  }
+}

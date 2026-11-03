@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Api\Entity\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Entity as Entities;
@@ -4355,7 +4356,7 @@ final class ApplicationEntityTest extends EntityTester
         $mockFees = m::mock(ArrayCollection::class)
             ->shouldReceive('matching')->once()->andReturnUsing(
                 function (Criteria $item) use ($mockFee) {
-                    $this->assertEquals(['invoicedDate' => 'DESC'], $item->getOrderings());
+                    $this->assertEquals(['invoicedDate' => Order::Descending], $item->orderings());
 
                     return new \ArrayIterator([$mockFee]);
                 }
@@ -4411,7 +4412,7 @@ final class ApplicationEntityTest extends EntityTester
         $mockFees = m::mock(ArrayCollection::class)
             ->shouldReceive('matching')->once()->andReturnUsing(
                 function (Criteria $item) use ($mockFee) {
-                    $this->assertEquals(['invoicedDate' => 'DESC'], $item->getOrderings());
+                    $this->assertEquals(['invoicedDate' => Order::Descending], $item->orderings());
 
                     return new \ArrayIterator([$mockFee]);
                 }
@@ -5719,8 +5720,8 @@ final class ApplicationEntityTest extends EntityTester
         string $niFlag,
         string $goodsOrPsv,
         string $licenceType,
-        string $prevHasLicence,
-        string $prevHadLicence,
+        ?string $prevHasLicence,
+        ?string $prevHadLicence,
         bool $expected
     ): void {
         /** @var RefData $goodsOrPsvRefData */
@@ -5766,7 +5767,7 @@ final class ApplicationEntityTest extends EntityTester
             Licence::LICENCE_TYPE_STANDARD_NATIONAL,
             'Y',
             'N',
-            true,
+            false,
         ];
 
         yield 'no yes' => [
@@ -5776,7 +5777,7 @@ final class ApplicationEntityTest extends EntityTester
             Licence::LICENCE_TYPE_STANDARD_NATIONAL,
             'N',
             'Y',
-            true,
+            false,
         ];
 
         yield 'no no' => [
@@ -5805,6 +5806,56 @@ final class ApplicationEntityTest extends EntityTester
             Licence::LICENCE_CATEGORY_PSV,
             Licence::LICENCE_TYPE_RESTRICTED,
             'N',
+            'N',
+            true,
+        ];
+
+        yield 'restricted PSV with a previous licence' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            'Y',
+            'N',
+            false,
+        ];
+
+        yield 'standard national PSV' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            'N',
+            true,
+        ];
+
+        yield 'restricted goods' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            'N',
+            'N',
+            true,
+        ];
+
+        yield 'no, answer not given' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'N',
+            null,
+            false,
+        ];
+
+        yield 'answer not given, no' => [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            null,
             'N',
             false,
         ];

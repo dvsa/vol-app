@@ -11,16 +11,8 @@ use Laminas\Form\Annotation as Form;
  */
 class BusinessType
 {
-    /**
-     * @Form\Attributes({"id":"","placeholder":""})
-     * @Form\Options({
-     *     "label": "application_your-business_business-type.data.type",
-     *     "label_attributes": {"class": "form-control form-control--radio"},
-     *     "disable_inarray_validator": false,
-     *     "category": "org_type",
-     *     "exclude": {"org_t_ir"}
-     * })
-     * @Form\Type("DynamicRadio")
-     */
+    #[Form\Attributes(['id' => '', 'placeholder' => ''])]
+    #[Form\Options(['label' => 'application_your-business_business-type.data.type', 'label_attributes' => ['class' => 'form-control form-control--radio'], 'disable_inarray_validator' => false, 'category' => 'org_type', 'exclude' => ['org_t_ir']])]
+    #[Form\Type('DynamicRadio')]
     public $type;
 }

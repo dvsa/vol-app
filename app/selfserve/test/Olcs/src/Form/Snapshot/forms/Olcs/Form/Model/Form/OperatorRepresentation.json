@@ -1,0 +1,104 @@
+{
+  "name": "OperatorRepresentation",
+  "attributes": {
+    "method": "post",
+    "label": "user-registration.form.label"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": {
+          "method": "post"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "actingOnOperatorsBehalf",
+              "options": {
+                "label": "user-registration.field.act-on-operators-behalf.label",
+                "hint": "user-registration.field.act-on-operators-behalf.hint",
+                "value_options": {
+                  "Y": "select-option-yes",
+                  "N": "select-option-no"
+                },
+                "label_attributes": {
+                  "class": "form-control form-control--radio form-control--inline"
+                }
+              },
+              "attributes": {
+                "required": false,
+                "id": "actingOnOperatorsBehalf",
+                "placeholder": ""
+              },
+              "type": "Radio"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "licenceNumber",
+              "type": "hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "",
+          "prefer_form_input_filter": true
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "user-registration.form-actions.continue.label"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "user-registration.form.label"
+  },
+  "input_filter": {
+    "fields": {
+      "actingOnOperatorsBehalf": {
+        "name": "actingOnOperatorsBehalf",
+        "required": true
+      },
+      "licenceNumber": {
+        "name": "licenceNumber",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

@@ -1,0 +1,285 @@
+{
+  "name": "team-details",
+  "attributes": {
+    "class": "table__form"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "headingCriteria",
+        "attributes": {
+          "value": "Criteria:"
+        },
+        "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "category",
+        "attributes": {
+          "id": "category",
+          "placeholder": "",
+          "required": "required"
+        },
+        "options": {
+          "short-label": "Category",
+          "label": "Category",
+          "service_name": "Olcs\\Service\\Data\\Category",
+          "context": {
+            "isTaskCategory": "Y"
+          },
+          "empty_option": "Please select"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "subCategory",
+        "attributes": {
+          "id": "subCategory",
+          "placeholder": ""
+        },
+        "options": {
+          "short-label": "Sub category",
+          "label": "Sub category",
+          "service_name": "Olcs\\Service\\Data\\SubCategory",
+          "context": {
+            "isTaskCategory": "Y"
+          },
+          "empty_option": "Not applicable"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "goodsOrPsv",
+        "attributes": {
+          "id": "",
+          "required": "required"
+        },
+        "options": {
+          "short-label": "Operator type",
+          "fieldset-attributes": {
+            "id": "fieldset-goodsOrPsv",
+            "class": "checkbox"
+          },
+          "fieldset-data-group": "operator-type",
+          "label": "Operator type",
+          "value_options": {
+            "lcat_gv": "Goods",
+            "lcat_psv": "PSV",
+            "na": "N/A"
+          }
+        },
+        "type": "Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isMlh",
+        "type": "Radio",
+        "attributes": {
+          "id": "is-mlh"
+        },
+        "options": {
+          "short-label": "Is MLH",
+          "fieldset-attributes": {
+            "id": "fieldset-isMlh",
+            "class": "checkbox"
+          },
+          "fieldset-data-group": "isMlh",
+          "label": "Is MLH",
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          }
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "trafficArea",
+        "attributes": {
+          "id": "trafficArea",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "short-label": "Traffic area",
+          "label": "Traffic area",
+          "service_name": "Common\\Service\\Data\\TrafficArea",
+          "empty_option": "Not applicable"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "headingAssignTo",
+        "attributes": {
+          "value": "Assign to:"
+        },
+        "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "teamId",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "team",
+        "attributes": {
+          "id": "team",
+          "placeholder": "",
+          "class": "medium",
+          "required": "required"
+        },
+        "options": {
+          "short-label": "Team",
+          "label": "Team",
+          "service_name": "Olcs\\Service\\Data\\Team",
+          "empty_option": "Please select"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "user",
+        "attributes": {
+          "id": "user",
+          "placeholder": ""
+        },
+        "options": {
+          "short-label": "User",
+          "label": "User",
+          "service_name": "Olcs\\Service\\Data\\UserListInternal",
+          "empty_option": "Unassigned",
+          "extra_option": {
+            "alpha-split": "Alpha split"
+          }
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "taskAlphaSplit",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "options": {
+                "label": "row"
+              },
+              "type": "\\Common\\Form\\Elements\\Types\\Table"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "action",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "rows",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "input_filter": {
+    "category": {
+      "name": "category",
+      "required": true
+    },
+    "subCategory": {
+      "name": "subCategory",
+      "required": false
+    },
+    "goodsOrPsv": {
+      "name": "goodsOrPsv",
+      "required": true
+    },
+    "isMlh": {
+      "name": "isMlh",
+      "required": false
+    },
+    "trafficArea": {
+      "name": "trafficArea",
+      "required": false
+    },
+    "team": {
+      "name": "team",
+      "required": true
+    },
+    "user": {
+      "name": "user",
+      "required": false
+    }
+  }
+}

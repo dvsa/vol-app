@@ -1,0 +1,56 @@
+{
+  "name": "ConditionsUndertakings",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "confirmation",
+        "attributes": {
+          "id": "confirmation"
+        },
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "continuations.conditions-undertakings.confirmation",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          },
+          "must_be_value": "Y",
+          "not_checked_message": "continuations.conditions-undertakings.confirmation.error"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "summary",
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated",
+        "attributes": {
+          "value": "continuations.conditions-undertakings.summary"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submit",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "continuations.conditions-undertakings.continue.label"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "input_filter": []
+}

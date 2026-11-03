@@ -1,0 +1,193 @@
+{
+  "name": "lva-safety-licence",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "safetyInsVehicles",
+        "attributes": {
+          "class": "tiny",
+          "id": ""
+        },
+        "options": {
+          "label": "application_vehicle-safety_safety.licence.vehicleInspectionInterval",
+          "label_attributes": {
+            "class": "legend"
+          },
+          "error-message": "safetyLicence_safetyInsVehicles-error"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "safetyInsTrailers",
+        "attributes": {
+          "class": "tiny",
+          "id": ""
+        },
+        "options": {
+          "label": "application_vehicle-safety_safety.licence.trailerInspectionInterval",
+          "label_attributes": {
+            "class": "legend"
+          },
+          "error-message": "safetyLicence_safetyInsTrailers-error"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "safetyInsVaries",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "application_vehicle-safety_safety.licence.moreFrequentInspections",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          },
+          "hint": "application_vehicle-safety_safety.licence.moreFrequentInspectionsHint"
+        },
+        "type": "\\Laminas\\Form\\Element\\Radio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "tachographIns",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "error-message": "safetyLicence_tachographsIns-error",
+          "label": "application_vehicle-safety_safety.licence.tachographAnalyser",
+          "label_attributes": {
+            "class": "form-control form-control--radio"
+          },
+          "value_options": [
+            {
+              "value": "tach_internal",
+              "label": "tachograph_analyser.tach_internal"
+            },
+            {
+              "value": "tach_external",
+              "label": "tachograph_analyser.tach_external"
+            },
+            {
+              "value": "tach_na",
+              "label": "tachograph_analyser.tach_na"
+            }
+          ],
+          "category": "tachograph_analyser",
+          "service_name": "StaticList"
+        },
+        "type": "DynamicRadio"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "tachographInsName",
+        "attributes": {
+          "required": false,
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "application_vehicle-safety_safety.licence.tachographAnalyserContractor",
+          "error-message": "You must add at least one safety inspector"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "safetyInsVehicles": {
+      "name": "safetyInsVehicles",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Between",
+          "options": {
+            "min": 1,
+            "max": 13,
+            "messages": {
+              "notBetween": "safetyLicence_safetyInsBetween-error"
+            }
+          }
+        }
+      ]
+    },
+    "safetyInsTrailers": {
+      "name": "safetyInsTrailers",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Between",
+          "options": {
+            "min": 1,
+            "max": 13,
+            "messages": {
+              "notBetween": "safetyLicence_safetyInsBetween-error"
+            }
+          }
+        }
+      ]
+    },
+    "tachographInsName": {
+      "name": "tachographInsName",
+      "required": true,
+      "allow_empty": true,
+      "type": "\\Common\\InputFilter\\ContinueIfEmptyInput",
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "tachographIns",
+            "context_values": [
+              "tach_external"
+            ],
+            "validators": [
+              {
+                "name": "StringLength",
+                "options": {
+                  "min": "1",
+                  "max": 90
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

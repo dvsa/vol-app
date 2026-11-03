@@ -1,0 +1,35 @@
+{
+  "name": "YesNoRadio",
+  "attributes": {
+    "class": "radio-button__fieldset"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "yesNo",
+        "attributes": {
+          "required": "required"
+        },
+        "type": "\\Laminas\\Form\\Element\\Radio",
+        "options": {
+          "error-message": "internal-delete-final-tm-letter-opt-out.validation-message",
+          "label_attributes": {
+            "class": "form-control form-control--radio form-control--inline"
+          },
+          "value_options": {
+            "Y": "Yes",
+            "N": "No"
+          }
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "yesNo": {
+      "name": "yesNo",
+      "required": true
+    }
+  }
+}

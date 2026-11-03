@@ -1,0 +1,76 @@
+{
+  "name": "partner-name",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "description",
+        "attributes": {
+          "id": "description",
+          "placeholder": "",
+          "class": "medium"
+        },
+        "options": {
+          "label": "Partner name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "contactType",
+        "attributes": {
+          "value": "ct_partner"
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Laminas\\Form\\Fieldset",
+  "options": {
+    "label": "Partner Name"
+  },
+  "input_filter": {
+    "description": {
+      "name": "description",
+      "type": "Common\\InputFilter\\ContinueIfEmptyInput",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 3,
+            "max": 35
+          }
+        }
+      ]
+    }
+  }
+}

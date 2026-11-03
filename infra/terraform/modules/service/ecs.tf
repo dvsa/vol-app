@@ -182,9 +182,7 @@ resource "aws_lb_listener_rule" "internal-pub" {
 module "ecs_cluster" {
   for_each = var.services
 
-  source  = "terraform-aws-modules/ecs/aws//modules/cluster"
-  version = "~> 5.10"
-
+  source       = "git::https://github.com/terraform-aws-modules/terraform-aws-ecs.git//modules/cluster?ref=31b4352a9446fe630baa7130017bf0b51bc97218"
   cluster_name = "vol-app-${var.environment}-${each.key}-cluster"
 
   cluster_settings = [
@@ -198,9 +196,7 @@ module "ecs_cluster" {
 module "ecs_service" {
   for_each = var.services
 
-  source  = "terraform-aws-modules/ecs/aws//modules/service"
-  version = "< 6.1.0"
-
+  source      = "git::https://github.com/terraform-aws-modules/terraform-aws-ecs.git//modules/service?ref=086afd997374c71304991895cba322d3556c508d"
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
 
@@ -319,4 +315,3 @@ module "ecs_service" {
 
 
 }
-

@@ -4,15 +4,11 @@ namespace Permits\Form\Model\Form;
 
 use Laminas\Form\Annotation as Form;
 
-/**
- * @Form\Attributes({"method":"POST"})
- * @Form\Type("Common\Form\Form")
- */
+#[Form\Attributes(['method' => 'POST'])]
+#[Form\Type('Common\Form\Form')]
 class AcceptAndPayForm
 {
-    /**
-     * @Form\Name("Submit")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\AcceptAndPay")
-     */
+    #[Form\Name('Submit')]
+    #[Form\ComposedObject('Permits\Form\Model\Fieldset\AcceptAndPay')]
     public $submit = null;
 }

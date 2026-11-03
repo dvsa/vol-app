@@ -1,0 +1,113 @@
+{
+  "name": "tm-merge",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fromTmName",
+        "attributes": {
+          "id": "fromTmName",
+          "class": "extra-long",
+          "readonly": "true"
+        },
+        "options": {
+          "label": "form.tm-merge.from-tm-name"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "toTmId",
+        "attributes": {
+          "id": "toTmId"
+        },
+        "options": {
+          "label": "form.tm-merge.to-tm-id",
+          "short-label": "form.tm-merge.to-tm-id"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "confirm",
+        "attributes": {
+          "id": "confirm"
+        },
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "form.tm-merge.confirm",
+          "short-label": "form.tm-merge.confirm",
+          "must_be_value": "Y"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Confirm"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "toTmId": {
+      "name": "toTmId",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\Digits"
+        }
+      ]
+    }
+  }
+}

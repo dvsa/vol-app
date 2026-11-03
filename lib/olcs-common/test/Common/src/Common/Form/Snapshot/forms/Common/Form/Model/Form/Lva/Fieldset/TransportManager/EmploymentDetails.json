@@ -1,0 +1,126 @@
+{
+  "name": "tm-employment-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "position",
+        "attributes": {
+          "class": "long",
+          "required": "required"
+        },
+        "options": {
+          "label": "transport-manager.employment.form.position",
+          "short-label": "transport-manager.employment.form.position"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "hoursPerWeek",
+        "attributes": {
+          "class": "long",
+          "placeholder": "transport-manager.employment.form.hoursPerWeek.placeholder",
+          "required": "required"
+        },
+        "options": {
+          "label": "transport-manager.employment.form.hoursPerWeek",
+          "short-label": "transport-manager.employment.form.hoursPerWeek",
+          "error-message": "transport-manager.employment.form.hoursPerWeek.errorMessage"
+        },
+        "type": "Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "availabilityGuidance",
+        "attributes": {
+          "value": "<div>%s<br></div>",
+          "data-container-class": "help__text"
+        },
+        "options": {
+          "tokens": [
+            "transportManager.data.availability.availabilityGuidance"
+          ]
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "understood-availability-agreement-confirmation",
+        "attributes": {
+          "id": "understoodAvailabilityAgreement",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "transportManager.data.availability.understoodAvailabilityAgreementConfirmation",
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "must_be_value": "Y",
+          "label_attributes": {
+            "class": "form-control form-control--checkbox form-control--advanced"
+          }
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "transport-manager.employment.form.position.title"
+  },
+  "input_filter": {
+    "position": {
+      "name": "position",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 45
+          }
+        }
+      ]
+    },
+    "hoursPerWeek": {
+      "name": "hoursPerWeek",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "max": 300
+          }
+        }
+      ]
+    }
+  }
+}

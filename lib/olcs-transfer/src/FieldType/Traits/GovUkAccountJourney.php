@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait GovUkAccountJourney
  *
@@ -9,10 +11,8 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait GovUkAccountJourney
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack": {"jrny_new_application","jrny_continuation","jrny_variation","jrny_tm_application","jrny_surrender"}})
-     */
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['jrny_new_application', 'jrny_continuation', 'jrny_variation', 'jrny_tm_application', 'jrny_surrender']])]
     protected $journey = null;
 
     public function getJourney()

@@ -8,14 +8,12 @@
 
 namespace Dvsa\Olcs\Transfer\Query\TrafficArea;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface;
 use Dvsa\Olcs\Transfer\Query\PublicQueryCacheInterface;
 
-/**
- * @Transfer\RouteName("backend/traffic-area/single")
- */
+#[Transfer\RouteName('backend/traffic-area/single')]
 final class Get extends AbstractQuery implements CacheableLongTermQueryInterface, PublicQueryCacheInterface
 {
     /**

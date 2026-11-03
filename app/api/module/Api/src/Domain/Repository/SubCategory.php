@@ -76,13 +76,13 @@ class SubCategory extends AbstractRepository
                 ->join(
                     Entities\Doc\DocTemplate::class,
                     'dct',
-                    Query\Expr\Join::WITH,
+                    Query\Expr\Join::ON,
                     $expr->andX(
                         $expr->eq('dct.category', $this->alias . '.category'),
                         $expr->eq('dct.subCategory', $this->alias . '.id')
                     )
                 )
-                ->join(Entities\Doc\Document::class, 'dc', Query\Expr\Join::WITH, $expr->eq('dc.id', 'dct.document'));
+                ->join(Entities\Doc\Document::class, 'dc', Query\Expr\Join::ON, $expr->eq('dc.id', 'dct.document'));
 
             $this->getQueryBuilder()->modifyQuery($qb);
         }

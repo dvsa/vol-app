@@ -147,7 +147,7 @@ locals {
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-db-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*"
       ]
     },
     {
@@ -184,8 +184,8 @@ locals {
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*",
-        
+        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*"
+
       ]
     },
     {
@@ -223,7 +223,9 @@ locals {
         "arn:aws:s3:::app-olcs-pri-integration-reporting-s3",
         "arn:aws:s3:::app-olcs-pri-integration-reporting-s3/*",
         "arn:aws:s3:::app-mc-pri-integration-data-s3",
-        "arn:aws:s3:::app-mc-pri-integration-data-s3/*"
+        "arn:aws:s3:::app-mc-pri-integration-data-s3/*",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
       ]
     }
   ]

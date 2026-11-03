@@ -1,0 +1,125 @@
+{
+  "name": "bus-service-number-and-type",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "copiedToLaPte",
+        "type": "Radio",
+        "options": {
+          "label": "Application copied to LA/PTE",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "id": "registerService[copiedToLaPte]",
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "laShortNote",
+        "type": "Radio",
+        "options": {
+          "label": "LA/PTE support short notice",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "id": "registerService[laShortNote]",
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "opNotifiedLaPte",
+        "type": "Radio",
+        "options": {
+          "label": "Operator notified LA/PTE 14 days prior",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "id": "registerService[opNotifiedLaPte]",
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "applicationSigned",
+        "type": "Radio",
+        "options": {
+          "label": "Application signed",
+          "value_options": {
+            "N": "No",
+            "Y": "Yes"
+          },
+          "fieldset-attributes": {
+            "class": "inline"
+          }
+        },
+        "attributes": {
+          "id": "registerService[applicationSigned]",
+          "value": "N"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "variationReasonsHtml",
+        "type": "Common\\Form\\Elements\\Types\\Html",
+        "options": {
+          "label": "Variation reasons"
+        },
+        "attributes": {
+          "id": "variationReasons"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

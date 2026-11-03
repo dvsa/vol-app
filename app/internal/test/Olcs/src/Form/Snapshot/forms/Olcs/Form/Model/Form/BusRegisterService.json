@@ -1,0 +1,435 @@
+{
+  "name": "bus-register-service",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "grant",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "grantValidation",
+              "type": "Common\\Form\\Elements\\Types\\Html",
+              "options": {
+                "label": "Granting a bus registration"
+              },
+              "attributes": {
+                "id": "grantValidation",
+                "value": "All questions must be answered 'Yes' before the registration can be granted"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "Timetable route",
+          "class": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "timetable",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "timetableAcceptable",
+              "type": "Radio",
+              "options": {
+                "label": "Timetable acceptable",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              },
+              "attributes": {
+                "id": "timetable[timetableAcceptable]",
+                "value": "N"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "mapSupplied",
+              "type": "Radio",
+              "options": {
+                "label": "Maps supplied",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              },
+              "attributes": {
+                "id": "mapSupplied",
+                "value": "N"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "routeDescription",
+              "attributes": {
+                "class": "extra-long",
+                "id": "timetable[routeDescription]"
+              },
+              "options": {
+                "label": "Route description"
+              },
+              "type": "TextArea"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "Timetable route",
+          "class": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "conditions",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "trcConditionChecked",
+              "type": "Radio",
+              "options": {
+                "label": "TRC's / Conditions satisfactory",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              },
+              "attributes": {
+                "id": "conditions[trcConditionChecked]",
+                "value": "N"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "trcNotes",
+              "attributes": {
+                "class": "extra-long",
+                "id": "conditions[trcNotes]"
+              },
+              "options": {
+                "label": "Notes"
+              },
+              "type": "TextArea"
+            }
+          }
+        ],
+        "fieldsets": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "table",
+              "attributes": [],
+              "elements": [
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "table",
+                    "options": {
+                      "label": "row"
+                    },
+                    "type": "\\Common\\Form\\Elements\\Types\\Table"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "action",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "rows",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "Hidden"
+                  }
+                },
+                {
+                  "flags": [],
+                  "spec": {
+                    "name": "id",
+                    "attributes": {
+                      "value": ""
+                    },
+                    "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+                  }
+                }
+              ],
+              "fieldsets": [],
+              "type": "Laminas\\Form\\Fieldset",
+              "options": []
+            }
+          }
+        ],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "Conditions",
+          "class": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "copiedToLaPte",
+              "type": "Radio",
+              "options": {
+                "label": "Application copied to LA/PTE",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              },
+              "attributes": {
+                "id": "registerService[copiedToLaPte]",
+                "value": "N"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "laShortNote",
+              "type": "Radio",
+              "options": {
+                "label": "LA/PTE support short notice",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              },
+              "attributes": {
+                "id": "registerService[laShortNote]",
+                "value": "N"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "opNotifiedLaPte",
+              "type": "Radio",
+              "options": {
+                "label": "Operator notified LA/PTE 14 days prior",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              },
+              "attributes": {
+                "id": "registerService[opNotifiedLaPte]",
+                "value": "N"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "applicationSigned",
+              "type": "Radio",
+              "options": {
+                "label": "Application signed",
+                "value_options": {
+                  "N": "No",
+                  "Y": "Yes"
+                },
+                "fieldset-attributes": {
+                  "class": "inline"
+                }
+              },
+              "attributes": {
+                "id": "registerService[applicationSigned]",
+                "value": "N"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "variationReasonsHtml",
+              "type": "Common\\Form\\Elements\\Types\\Html",
+              "options": {
+                "label": "Variation reasons"
+              },
+              "attributes": {
+                "id": "variationReasons"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": {
+          "label": "Register service",
+          "class": ""
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "timetable": {
+      "routeDescription": {
+        "name": "routeDescription",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 1000
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "conditions": {
+      "trcNotes": {
+        "name": "trcNotes",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 255
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

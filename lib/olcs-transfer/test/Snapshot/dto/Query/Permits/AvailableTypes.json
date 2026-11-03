@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/permits/available-types",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

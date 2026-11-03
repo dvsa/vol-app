@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Person\Person;
 use Dvsa\Olcs\Api\Service\Document\ContextProviderInterface;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 
 /**
@@ -351,7 +352,7 @@ class TransportManager extends AbstractTransportManager implements
     public function getMostRecentQualification()
     {
         $criteria = Criteria::create()
-            ->orderBy(['issuedDate' => Criteria::DESC, 'id' => Criteria::DESC])
+            ->orderBy(['issuedDate' => Order::Descending, 'id' => Order::Descending])
             ->setMaxResults(1);
 
         return $this->getQualifications()->matching($criteria);

@@ -1,0 +1,18 @@
+{
+  "name": "Qa",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "qa",
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    }
+  ],
+  "type": "Common\\Form\\QaForm",
+  "input_filter": []
+}

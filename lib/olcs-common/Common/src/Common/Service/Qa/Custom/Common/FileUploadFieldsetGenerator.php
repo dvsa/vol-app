@@ -3,7 +3,7 @@
 namespace Common\Service\Qa\Custom\Common;
 
 use Common\Form\Model\Fieldset\MultipleFileUpload;
-use Laminas\Form\Annotation\AnnotationBuilder;
+use Laminas\Form\Annotation\AttributeBuilder;
 use Laminas\Form\Factory as FormFactory;
 use Laminas\Form\InputFilterProviderFieldset;
 
@@ -12,7 +12,7 @@ class FileUploadFieldsetGenerator
     /**
      * Create service instance
      *
-     * @param AnnotationBuilder $customAnnotationBuilder
+     * @param AttributeBuilder $customAnnotationBuilder
      * @return FileUploadFieldsetGenerator
      */
     public function __construct(private FormFactory $formFactory, private $customAnnotationBuilder)

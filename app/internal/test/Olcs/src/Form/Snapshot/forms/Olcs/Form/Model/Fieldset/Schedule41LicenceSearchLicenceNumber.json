@@ -1,0 +1,36 @@
+{
+  "name": "schedule41licencesearchlicencenumber",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "licenceNumber",
+        "type": "Text",
+        "options": {
+          "label": "Licence number"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "licenceNumber": {
+      "name": "licenceNumber",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 35
+          }
+        }
+      ]
+    }
+  }
+}

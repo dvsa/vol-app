@@ -35,7 +35,19 @@ class CacheEncryption
     public const string USER_ACCOUNT_IDENTIFIER = 'user_account';
     public const string GENERIC_STORAGE_IDENTIFIER = 'storage';
 
-    public const string SECRETS_MANAGER_IDENTIFIER = 'secretsmanager';
+    /**
+     * Key prefix applied to every generic CQRS query cached by CachingQueryService.
+     *
+     * Those keys are md5 hashes of the query, so before this prefix existed they were
+     * indistinguishable from anything else in the pool and could not be cleared selectively.
+     * The writer (Common\Service\Cqrs\Query\CachingQueryService) and the deleter
+     * (Api\Domain\CommandHandler\Cache\Clear) must agree on it, which is why it lives here
+     * rather than being declared privately at either end.
+     *
+     * The trailing separator is an underscore, not a colon: these values are handed to a PSR-6
+     * pool, and PSR-6 reserves "{}()/\@:" in cache keys.
+     */
+    public const string CQRS_CACHE_PREFIX = 'cqrs_';
 
     /** @var string[] a list of caches held against a user id */
     public const array USER_CACHES = [
@@ -72,11 +84,6 @@ class CacheEncryption
             'mode' => self::ENCRYPTION_MODE_SHARED,
             'ttl' => self::TTL_2_MINUTES,
         ],
-        self::SECRETS_MANAGER_IDENTIFIER => [
-            'mode' => self::ENCRYPTION_MODE_SHARED,
-            'ttl'  => self::TTL_20_DAYS
-        ]
-
     ];
 
     public function __construct(

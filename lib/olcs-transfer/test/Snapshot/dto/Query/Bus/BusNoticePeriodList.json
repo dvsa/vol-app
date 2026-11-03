@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/bus/notice-period-list",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

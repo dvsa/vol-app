@@ -1,0 +1,41 @@
+{
+  "name": "licence-in-possession",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "notice",
+        "options": {
+          "label": "licence.surrender.operator_licence.possession.note"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "notice": {
+      "name": "notice",
+      "allow_empty": true,
+      "continue_if_empty": true,
+      "validators": [
+        {
+          "name": "ValidateIf",
+          "options": {
+            "context_field": "operatorLicenceDocument",
+            "context_values": [
+              "possession"
+            ],
+            "inject_post_data": "operatorLicenceDocument->operatorLicenceDocument",
+            "validators": [
+              {
+                "name": "NotEmpty"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

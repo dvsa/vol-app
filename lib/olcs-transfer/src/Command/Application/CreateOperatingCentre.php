@@ -11,12 +11,10 @@ namespace Dvsa\Olcs\Transfer\Command\Application;
 use Dvsa\Olcs\Transfer\Command\ApplicationOperatingCentre\AbstractOperatingCentreCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Application;
 use Dvsa\Olcs\Transfer\FieldType\Traits\IsTaOverridden;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/application/named-single/operating-centre")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/application/named-single/operating-centre')]
+#[Transfer\Method('POST')]
 final class CreateOperatingCentre extends AbstractOperatingCentreCommand
 {
     use Application;

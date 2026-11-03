@@ -6,14 +6,12 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("organisation-base")
- * @Form\Options({"label":""})
  */
+#[Form\Name('organisation-base')]
+#[Form\Options(['label' => ''])]
 class OrganisationBase extends Base
 {
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type('Hidden')]
     public $organisation = null;
 }

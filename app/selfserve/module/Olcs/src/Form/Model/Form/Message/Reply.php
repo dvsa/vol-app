@@ -11,34 +11,26 @@ use Olcs\Form\Model\Fieldset\Message\Reply as ReplyFieldset;
 
 /**
  * @codeCoverageIgnore No methods
- * @Form\Name("licence_message_reply")
- * @Form\Attributes({"method": "post"})
- * @Form\Type(\Common\Form\Form::class)
- * @Form\Options({"prefer_form_input_filter": true})
  */
+#[Form\Name('licence_message_reply')]
+#[Form\Attributes(['method' => 'post'])]
+#[Form\Type(\Common\Form\Form::class)]
+#[Form\Options(['prefer_form_input_filter' => true])]
 class Reply
 {
-    /**
-     * @Form\Attributes({"value": ""})
-     * @Form\Type(\Laminas\Form\Element\Hidden::class)
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type(\Laminas\Form\Element\Hidden::class)]
     public ?Hidden $id = null;
 
-    /**
-     * @Form\Attributes({"value": ""})
-     * @Form\Type(\Laminas\Form\Element\Hidden::class)
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type(\Laminas\Form\Element\Hidden::class)]
     public ?Hidden $correlationId = null;
 
-    /**
-     * @Form\Attributes({"value": "reply"})
-     * @Form\Type(\Laminas\Form\Element\Hidden::class)
-     */
+    #[Form\Attributes(['value' => 'reply'])]
+    #[Form\Type(\Laminas\Form\Element\Hidden::class)]
     public ?Hidden $action = null;
 
-    /**
-     * @Form\Name("form-actions")
-     * @Form\ComposedObject(\Olcs\Form\Model\Fieldset\Message\Reply::class)
-     */
+    #[Form\Name('form-actions')]
+    #[Form\ComposedObject(\Olcs\Form\Model\Fieldset\Message\Reply::class)]
     public ?ReplyFieldset $formActions = null;
 }

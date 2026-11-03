@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/fee-type/fee-types-distinct",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

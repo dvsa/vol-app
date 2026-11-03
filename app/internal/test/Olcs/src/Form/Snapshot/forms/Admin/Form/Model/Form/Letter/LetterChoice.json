@@ -1,0 +1,269 @@
+{
+  "name": "letter-choice",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "letterChoice",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "choiceKey",
+              "options": {
+                "label": "Choice Key"
+              },
+              "attributes": {
+                "required": true,
+                "class": "medium"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "label",
+              "options": {
+                "label": "Label"
+              },
+              "attributes": {
+                "required": true,
+                "class": "long"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "groupLabel",
+              "options": {
+                "label": "Group Label",
+                "hint": "Options that share a Group Label appear together. For a 'pick one' question, give every option the same Group Label and set Input Type to Radio."
+              },
+              "type": "Text",
+              "attributes": {
+                "class": "long"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "inputType",
+              "options": {
+                "label": "Input Type",
+                "hint": "Checkbox = an independent, optional toggle. Radio = part of a 'pick one' group (no default, the caseworker must select exactly one).",
+                "value_options": {
+                  "checkbox": "Checkbox",
+                  "radio": "Radio"
+                }
+              },
+              "type": "Select",
+              "attributes": {
+                "required": "required",
+                "id": "inputType",
+                "class": "medium"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "goodsOrPsv",
+              "options": {
+                "label": "Goods or PSV",
+                "hint": "Only offer this choice on letters for this type of licence. Both offers it on every letter.",
+                "disable_inarray_validator": false,
+                "empty_option": "Both",
+                "value_options": {
+                  "lcat_gv": "Goods",
+                  "lcat_psv": "PSV"
+                }
+              },
+              "type": "Select",
+              "attributes": {
+                "id": "goodsOrPsv",
+                "class": "medium"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "displayOrder",
+              "options": {
+                "label": "Display Order"
+              },
+              "type": "Number",
+              "attributes": {
+                "class": "short"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isActive",
+              "options": {
+                "label": "Active",
+                "checked_value": "1",
+                "unchecked_value": "0"
+              },
+              "type": "OlcsCheckbox",
+              "attributes": {
+                "class": "",
+                "id": "isActive"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "letterChoice": {
+      "choiceKey": {
+        "name": "choiceKey",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 1,
+              "max": 100
+            }
+          }
+        ]
+      },
+      "label": {
+        "name": "label",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 1,
+              "max": 255
+            }
+          }
+        ]
+      },
+      "groupLabel": {
+        "name": "groupLabel",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 255
+            }
+          }
+        ]
+      },
+      "inputType": {
+        "name": "inputType",
+        "required": true
+      },
+      "goodsOrPsv": {
+        "name": "goodsOrPsv",
+        "required": false
+      },
+      "displayOrder": {
+        "name": "displayOrder",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\Digits"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\Digits"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

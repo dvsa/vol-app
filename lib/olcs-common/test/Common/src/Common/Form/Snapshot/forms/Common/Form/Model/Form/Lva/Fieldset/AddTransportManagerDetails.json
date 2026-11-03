@@ -1,0 +1,132 @@
+{
+  "name": "AddTransportManagerDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "forename",
+        "attributes": {
+          "class": "long",
+          "id": "",
+          "disabled": "disabled"
+        },
+        "options": {
+          "label": "lva-tm-details-forename"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "familyName",
+        "attributes": {
+          "class": "long",
+          "id": "",
+          "disabled": "disabled"
+        },
+        "options": {
+          "label": "lva-tm-details-familyName"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "birthDate",
+        "attributes": {
+          "id": "dob"
+        },
+        "options": {
+          "label": "dob",
+          "create_empty_option": false,
+          "render_delimiters": true
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "email",
+        "attributes": {
+          "class": "medium",
+          "disabled": "disabled"
+        },
+        "options": {
+          "label": "lva-tm-details-email",
+          "label_attributes": {
+            "aria-label": "Enter their email address"
+          }
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "guidance",
+        "attributes": {
+          "value": "markup-lva-tm-add-tm-details-guidance"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\GuidanceTranslated"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "forename": {
+      "name": "forename",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "familyName": {
+      "name": "familyName",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    },
+    "birthDate": {
+      "name": "birthDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "DateNotInFuture"
+        }
+      ]
+    },
+    "email": {
+      "name": "email",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+        }
+      ]
+    }
+  }
+}

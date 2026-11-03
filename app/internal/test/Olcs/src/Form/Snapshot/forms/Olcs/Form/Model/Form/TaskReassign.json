@@ -1,0 +1,192 @@
+{
+  "name": "task",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "linkType",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "linkId",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "assignment",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "assignedToTeam",
+              "attributes": {
+                "required": "required",
+                "id": "assignedToTeam",
+                "placeholder": ""
+              },
+              "type": "DynamicSelect",
+              "options": {
+                "label": "tasks.data.team",
+                "service_name": "Olcs\\Service\\Data\\Team",
+                "empty_option": "please-select",
+                "error-message": "Team and/or owner must be selected"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "assignedToUser",
+              "attributes": {
+                "required": "required",
+                "id": "assignedToUser",
+                "placeholder": ""
+              },
+              "type": "DynamicSelect",
+              "options": {
+                "label": "tasks.data.owner",
+                "service_name": "Olcs\\Service\\Data\\UserListInternalExcludingLimitedReadOnlyUsers",
+                "empty_option": "Unassigned"
+              }
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "tasks.assignment"
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "Re-assign Task"
+  },
+  "input_filter": {
+    "assignment": {
+      "assignedToTeam": {
+        "name": "assignedToTeam",
+        "required": true,
+        "validators": [
+          {
+            "name": "NotEmpty",
+            "options": [
+              "null"
+            ]
+          },
+          {
+            "name": "ValidateIf",
+            "options": {
+              "context_field": "assignedToUser",
+              "context_values": [
+                ""
+              ],
+              "validators": [
+                {
+                  "name": "Laminas\\Validator\\NotEmpty"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "assignedToUser": {
+        "name": "assignedToUser",
+        "required": true,
+        "validators": [
+          {
+            "name": "NotEmpty",
+            "options": [
+              "null"
+            ]
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

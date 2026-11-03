@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait FilenameAndContentOptional
  *
@@ -10,15 +12,11 @@ namespace Dvsa\Olcs\Transfer\FieldType\Traits;
  */
 trait FilenameAndContentOptional
 {
-    /**
-     * @Transfer\Filter("Laminas\Filter\PregReplace", options={"pattern": "/[^a-zA-Z0-9\-\_\.]+/", "replacement": ""})
-     * @Transfer\Optional
-     */
+    #[Transfer\Filter('Laminas\Filter\PregReplace', options: ['pattern' => '/[^a-zA-Z0-9\-\_\.]+/', 'replacement' => ''])]
+    #[Transfer\Optional]
     protected $filename;
 
-    /**
-     * @Transfer\Optional
-     */
+    #[Transfer\Optional]
     protected $content;
 
     /**

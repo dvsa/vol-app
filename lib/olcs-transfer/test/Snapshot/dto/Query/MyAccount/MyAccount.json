@@ -1,0 +1,6 @@
+{
+  "routeName": "backend/my-account",
+  "inputFilter": {
+    "class": "Laminas\\InputFilter\\InputFilter"
+  }
+}

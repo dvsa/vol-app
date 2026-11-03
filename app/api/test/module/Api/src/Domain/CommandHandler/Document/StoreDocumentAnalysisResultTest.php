@@ -18,6 +18,8 @@ use Dvsa\Olcs\Api\Domain\Repository\TransactionManagerInterface;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\NormalisedResult;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
@@ -32,6 +34,7 @@ final class StoreDocumentAnalysisResultTest extends TestCase
     private m\MockInterface $analysisRepo;
     private m\MockInterface $sfnClient;
     private m\MockInterface $s3Client;
+    private m\MockInterface $normaliser;
     private StoreDocumentAnalysisResult $sut;
 
     protected function tearDown(): void
@@ -46,6 +49,11 @@ final class StoreDocumentAnalysisResultTest extends TestCase
         $this->sfnClient    = m::mock(SfnClient::class);
         $this->s3Client     = m::mock(S3Client::class);
 
+        // Most tests are about the pipeline plumbing, not the payload, so by default the
+        // normaliser finds nothing to normalise. Tests that care set their own expectation.
+        $this->normaliser = m::mock(AnalysisResultNormaliser::class);
+        $this->normaliser->allows('normalise')->andReturnNull()->byDefault();
+
         $repoManager = m::mock(\Dvsa\Olcs\Api\Domain\RepositoryServiceManager::class);
         $repoManager->shouldReceive('get')->with(DocumentAnalysisRepo::class)->andReturn($this->analysisRepo);
 
@@ -56,7 +64,7 @@ final class StoreDocumentAnalysisResultTest extends TestCase
         $container->shouldReceive('get')->with('QueryHandlerManager')->andReturn(m::mock(QueryHandlerManager::class));
         $container->shouldReceive('get')->with(IdentityProviderInterface::class)->andReturn(m::mock(IdentityProviderInterface::class));
 
-        $sut = new StoreDocumentAnalysisResult($this->sfnClient, $this->s3Client);
+        $sut = new StoreDocumentAnalysisResult($this->sfnClient, $this->s3Client, $this->normaliser);
         $this->sut = $sut->__invoke($container, null);
     }
 
@@ -80,7 +88,11 @@ final class StoreDocumentAnalysisResultTest extends TestCase
         ]);
     }
 
-    public function testSuccessfulProcessingTransitionsToSuccess(): void
+    /**
+     * The analysis report is stored verbatim, metadata included, so the result column is an
+     * exact copy of what the pipeline produced; the normalised payload is stored beside it.
+     */
+    public function testSuccessfulProcessingStoresTheReportVerbatimWithItsNormalisedForm(): void
     {
         $analysis = $this->makeAnalysis(1);
 
@@ -102,16 +114,14 @@ final class StoreDocumentAnalysisResultTest extends TestCase
             ->once()
             ->andReturn(new Result(['Body' => json_encode($resultPayload)]));
 
+        $normalised = NormalisedResult::fromRows(['bank' => ['flag' => null, 'remark' => null, 'value' => 'Example Bank', 'checks' => []]]);
+
+        $this->normaliser->expects('normalise')->with($resultPayload)->andReturn($normalised);
+
+        // The column holds the array form, at the current version.
         $this->analysisRepo->shouldReceive('recordSuccess')
             ->once()
-            ->withArgs(function (int $id, array $result, array $metadata) use ($resultPayload): bool {
-                return $id === 1
-                    && $result === [
-                        'applicantProfile' => $resultPayload['applicantProfile'],
-                        'analysis' => $resultPayload['analysis'],
-                    ]
-                    && $metadata === $resultPayload['metadata'];
-            })
+            ->with(1, $resultPayload, $normalised->toArray())
             ->andReturn(1);
 
         $result = $this->sut->handleCommand(Cmd::create([
@@ -122,7 +132,11 @@ final class StoreDocumentAnalysisResultTest extends TestCase
         $this->assertStringContainsString('stored successfully', implode(' ', $result->getMessages()));
     }
 
-    public function testMissingMetadataKeyStoresEmptyMetadataAndFullResult(): void
+    /**
+     * Nothing validates the report's shape, so one the normaliser cannot read is still a
+     * successful analysis: the raw result is kept and the normalised column is left null.
+     */
+    public function testAResultThatCannotBeNormalisedIsStillStoredAsSuccess(): void
     {
         $analysis = $this->makeAnalysis(1);
 
@@ -138,11 +152,11 @@ final class StoreDocumentAnalysisResultTest extends TestCase
             ->once()
             ->andReturn(new Result(['Body' => json_encode($resultPayload)]));
 
+        $this->normaliser->expects('normalise')->with($resultPayload)->andReturnNull();
+
         $this->analysisRepo->shouldReceive('recordSuccess')
             ->once()
-            ->withArgs(function (int $id, array $result, array $metadata) use ($resultPayload): bool {
-                return $id === 1 && $result === $resultPayload && $metadata === [];
-            })
+            ->with(1, $resultPayload, null)
             ->andReturn(1);
 
         $result = $this->sut->handleCommand(Cmd::create([

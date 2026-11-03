@@ -2,17 +2,15 @@
 
 namespace Dvsa\Olcs\Transfer\Query\Document;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
-/**
- * @Transfer\RouteName("backend/document/download")
- */
+#[Transfer\RouteName('backend/document/download')]
 class Download extends AbstractDownload
 {
     /**
      * @var  int
-     * @Transfer\Filter("Laminas\Filter\Digits")
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
     protected $identifier;
 
     /**

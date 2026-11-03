@@ -23,8 +23,9 @@ class LetterSectionVariantEdit implements MapperInterface
             'letterSectionVariant' => [
                 'id' => $data['id'] ?? null,
                 'goodsOrPsv' => $data['goodsOrPsv']['id'] ?? $data['goodsOrPsv'] ?? null,
-                'isVariation' => $data['isVariation'] ?? null,
-                'isNi' => $data['isNi'] ?? null,
+                // As '0'/'1': the select matches on strval(), and strval(false) is '' (Any)
+                'isVariation' => isset($data['isVariation']) ? (string) (int) $data['isVariation'] : null,
+                'isNi' => isset($data['isNi']) ? (string) (int) $data['isNi'] : null,
                 'organisationType' => $data['organisationType']['id'] ?? $data['organisationType'] ?? null,
                 'letterChoice' => $data['letterChoice']['id'] ?? $data['letterChoice'] ?? null,
                 'defaultContent' => $data['currentVersion']['defaultContent']

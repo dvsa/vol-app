@@ -1,0 +1,274 @@
+{
+  "name": "RegisterConsultantAccount",
+  "attributes": {
+    "method": "post",
+    "label": "register-consultant-account.form.label"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": {
+          "method": "post",
+          "label": "operator-registration.form.labe"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "header",
+              "attributes": {
+                "value": "register-as-consultant.form.header"
+              },
+              "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "loginId",
+              "options": {
+                "label": "user-name",
+                "hint": "user-registration.field.username-for-consultant.hint"
+              },
+              "attributes": {
+                "required": false,
+                "id": "username",
+                "placeholder": "",
+                "class": "medium"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "forename",
+              "attributes": {
+                "id": "forename",
+                "placeholder": "",
+                "class": "medium",
+                "required": false
+              },
+              "options": {
+                "label": "first-name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "familyName",
+              "attributes": {
+                "id": "familyName",
+                "placeholder": "",
+                "class": "medium",
+                "required": false
+              },
+              "options": {
+                "label": "last-name"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailAddress",
+              "attributes": {
+                "class": "long"
+              },
+              "options": {
+                "label": "email-address",
+                "hint": "user-registration.field.consultant-email.hint"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "emailConfirm",
+              "attributes": {
+                "class": "long"
+              },
+              "options": {
+                "label": "confirm-email-address"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "translateToWelsh",
+              "attributes": {
+                "id": "translateToWelsh",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "translate-to-welsh",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "checked_value": "Y",
+                "unchecked_value": "N"
+              },
+              "type": "OlcsCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "termsAgreed",
+              "attributes": {
+                "id": "termsAgreed",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "user-registration.field.termsAgreed.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--confirm"
+                },
+                "checked_value": "Y",
+                "unchecked_value": "N",
+                "must_be_value": "Y"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "",
+          "prefer_form_input_filter": true
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "user-registration.form-actions.continue.label"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "label": "register-consultant-account.form.label"
+  },
+  "input_filter": {
+    "fields": {
+      "loginId": {
+        "name": "loginId",
+        "required": true,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          },
+          {
+            "name": "Laminas\\Filter\\StringToLower"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\UsernameCreate"
+          },
+          {
+            "name": "Olcs\\Form\\Validator\\UniqueConsultantDetails"
+          }
+        ]
+      },
+      "forename": {
+        "name": "forename",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 35
+            }
+          }
+        ]
+      },
+      "familyName": {
+        "name": "familyName",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "max": 35
+            }
+          }
+        ]
+      },
+      "emailAddress": {
+        "name": "emailAddress",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Dvsa\\Olcs\\Transfer\\Validators\\EmailAddress"
+          },
+          {
+            "name": "Common\\Form\\Elements\\Validators\\EmailConfirm",
+            "options": {
+              "token": "emailConfirm"
+            }
+          },
+          {
+            "name": "Olcs\\Form\\Validator\\UniqueConsultantDetails"
+          }
+        ]
+      },
+      "emailConfirm": {
+        "name": "emailConfirm",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

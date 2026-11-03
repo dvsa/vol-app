@@ -1,0 +1,26 @@
+{
+  "name": "vehicle-search",
+  "attributes": {
+    "method": "get",
+    "class": "filters form__search"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "vehicleSearch",
+        "options": {
+          "label": "licence.vehicle.table.search.label",
+          "legend": "licence.vehicle.table.search.legend"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\VehicleTableSearch"
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": []
+}

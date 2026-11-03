@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Transfer\FieldType\Traits\Messaging;
 
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
+
 /**
  * Trait Conversation
  *
@@ -13,17 +15,15 @@ trait ReadRolesOptional
 {
     /**
      * @var bool
-     * @Transfer\Optional
-     * @Transfer\Filter("Laminas\Filter\Boolean")
      */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Boolean')]
     protected $includeReadRoles = false;
 
-    /**
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
-     * @Transfer\ArrayFilter("Dvsa\Olcs\Transfer\Filter\UniqueItems")
-     * @Transfer\Filter("Laminas\Filter\StringTrim")
-     */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
+    #[Transfer\ArrayFilter('Dvsa\Olcs\Transfer\Filter\UniqueItems')]
+    #[Transfer\Filter('Laminas\Filter\StringTrim')]
     protected array $readRoles = [];
 
 

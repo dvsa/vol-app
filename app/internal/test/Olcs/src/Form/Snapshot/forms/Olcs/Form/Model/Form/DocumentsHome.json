@@ -1,0 +1,96 @@
+{
+  "name": "documents-home",
+  "attributes": {
+    "method": "get",
+    "class": "filters  form__filter"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "category",
+        "options": {
+          "label": "documents-home.data.category",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\DocumentCategory",
+          "empty_option": "All"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "documentSubCategory",
+        "options": {
+          "label": "documents-home.data.sub_category",
+          "disable_inarray_validator": false,
+          "service_name": "Olcs\\Service\\Data\\DocumentSubCategory",
+          "empty_option": "All"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "isExternal",
+        "options": {
+          "label": "documents-home.data.source",
+          "service_name": "staticList",
+          "category": "document_types",
+          "disable_inarray_validator": false
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "showDocs",
+        "options": {
+          "label": "documents.filter.show-docs.title",
+          "value_options": [],
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "format",
+        "options": {
+          "label": "documents.filter.format.title",
+          "value_options": {
+            "": "All"
+          },
+          "disable_inarray_validator": false
+        },
+        "type": "\\Laminas\\Form\\Element\\Select"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "filter",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "documents-home.submit.filter"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true,
+    "bypass_auth": true
+  },
+  "input_filter": []
+}

@@ -9,12 +9,10 @@
 namespace Dvsa\Olcs\Transfer\Query\InspectionRequest;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 
-/**
- * @Transfer\RouteName("backend/inspection-request/single")
- */
+#[Transfer\RouteName('backend/inspection-request/single')]
 class InspectionRequest extends AbstractQuery
 {
     use Identity;

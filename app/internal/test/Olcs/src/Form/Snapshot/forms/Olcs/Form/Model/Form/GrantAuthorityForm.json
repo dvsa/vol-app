@@ -1,0 +1,105 @@
+{
+  "name": "GrantAuthority",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "grant-authority",
+        "attributes": {
+          "required": "required"
+        },
+        "type": "DynamicRadio",
+        "options": {
+          "label": "internal.application.decisions.grant.authority.label",
+          "hint": "internal.application.decisions.grant.authority.hint",
+          "fieldset-attributes": {
+            "class": "inline"
+          },
+          "category": "application_grant_authority"
+        }
+      }
+    }
+  ],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "continue-to-grant",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Grant"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "cancel",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "cancel"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "label": ""
+  },
+  "input_filter": {
+    "grant-authority": {
+      "name": "grant-authority",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\InArray",
+          "options": {
+            "haystack": [
+              "grant_authority_dl",
+              "grant_authority_tc",
+              "grant_authority_tr"
+            ],
+            "messages": {
+              "notInArray": "internal.application.decisions.grant.authority.validation.invalid"
+            }
+          }
+        },
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "internal.application.decisions.grant.authority.validation.invalid"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

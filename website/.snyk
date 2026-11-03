@@ -10,9 +10,10 @@
 # fallback --policy-path=website on the snyk test command.
 version: v1.25.0
 ignore:
-  # uri-js, percent-decoding and removeDotSegments infinite loop. 4.4.1 is the final release of an
-  # unmaintained package and both affect it. Reached only through ajv 6 inside schema-utils 3,
-  # which file-loader, url-loader and null-loader use to validate their own webpack options -
+  # uri-js, percent-decoding and removeDotSegments infinite loop, and an uncaught exception on
+  # malformed input. 4.4.1 is the final release of an unmaintained package and all three affect
+  # it. Reached only through ajv 6 inside schema-utils 3, which file-loader, url-loader and
+  # null-loader use to validate their own webpack options -
   # options written by Docusaurus and this repo's config, never a URI from outside. ajv 8 has
   # moved off uri-js; this goes away when Docusaurus drops the schema-utils 3 loaders.
   SNYK-JS-URIJS-19963961:
@@ -27,8 +28,16 @@ ignore:
           No fixed release exists - uri-js is unmaintained. Build-time only, via ajv 6 validating
           webpack loader options that come from Docusaurus and this repo's config.
         expires: 2026-11-25T00:00:00.000Z
+  SNYK-JS-URIJS-20341609:
+    - "*":
+        reason: >-
+          No fixed release exists - uri-js is unmaintained. Build-time only, via ajv 6 validating
+          webpack loader options that come from Docusaurus and this repo's config.
+        expires: 2026-11-25T00:00:00.000Z
   # http-cache-semantics, two shared-cache flaws that serve one client's cached response to
-  # another. Every published version is affected. Reached only through update-notifier, which
+  # another. 4.3.0 (now in the lockfile) fixes the Vary: * flaw (19964064) but Snyk still lists
+  # every version as affected, and nothing yet fixes the max-stale flaw (19964068). Drop 19964064
+  # once Snyk records 4.3.0 as the fix. Reached only through update-notifier, which
   # asks the npm registry whether a newer Docusaurus exists when the CLI runs; there is one
   # client and no shared cache, so there is nobody else's response to leak.
   SNYK-JS-HTTPCACHESEMANTICS-19964068:
@@ -51,6 +60,16 @@ ignore:
         reason: >-
           No fixed release exists. Build-time only - the glob patterns come from Docusaurus and
           this repo's config, and the worst outcome is a crashed build.
+        expires: 2026-11-25T00:00:00.000Z
+  # picomatch, ReDoS on single-branch repeated extglobs such as +(*). No fixed release on any
+  # line (2.3.2 is the last 2.x). Reached through micromatch, anymatch and readdirp while
+  # Docusaurus globs and watches this repo's docs, and through jest-worker's file matching - the
+  # patterns are Docusaurus's and this repo's own, and the worst outcome is a slow build.
+  SNYK-JS-PICOMATCH-21248802:
+    - "*":
+        reason: >-
+          No fixed release exists. Build-time only - the glob patterns come from Docusaurus and
+          this repo's config, and the worst outcome is a slow or crashed build.
         expires: 2026-11-25T00:00:00.000Z
   # deepmerge, prototype pollution through a __proto__ key. 4.3.1 is the latest release and is
   # affected. Reached only through @svgr/plugin-svgo merging its SVGO config while building

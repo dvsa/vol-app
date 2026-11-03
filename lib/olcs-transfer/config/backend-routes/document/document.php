@@ -68,6 +68,31 @@ return [
                     'GET' => QueryConfig::getConfig(Query\Document\DocumentAnalysisList::class),
                 ]
             ),
+            'document_analysis' => RouteConfig::getRouteConfig(
+                'document_analysis',
+                [
+                    'single' => RouteConfig::getSingleConfig(
+                        [
+                            'accept-review' => RouteConfig::getRouteConfig(
+                                'accept-review',
+                                [
+                                    'PUT' => CommandConfig::getPutConfig(
+                                        Command\Document\AcceptDocumentAnalysisReview::class
+                                    ),
+                                ]
+                            ),
+                            'assessment-status' => RouteConfig::getRouteConfig(
+                                'assessment-status',
+                                [
+                                    'PUT' => CommandConfig::getPutConfig(
+                                        Command\Document\UpdateDocumentAnalysisAssessmentStatus::class
+                                    ),
+                                ]
+                            ),
+                        ]
+                    ),
+                ]
+            ),
             'POST' => CommandConfig::getPostConfig(Command\Document\CreateDocument::class),
             'DELETE' => CommandConfig::getDeleteConfig(Command\Document\DeleteDocuments::class),
             'GET' => QueryConfig::getConfig(Query\Document\DocumentList::class),

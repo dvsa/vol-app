@@ -11,9 +11,12 @@ final class OtpServiceTest extends TestCase
 {
     private OtpService $sut;
 
+    /** bcrypt's minimum cost; PHP's default takes about 0.25s per hash or verify. */
+    private const array FAST_HASH = ['cost' => 4];
+
     protected function setUp(): void
     {
-        $this->sut = new OtpService();
+        $this->sut = new OtpService(self::FAST_HASH);
     }
 
     public function testGeneratedCodeIsSixDigits(): void
@@ -44,6 +47,13 @@ final class OtpServiceTest extends TestCase
         $code = '424242';
 
         self::assertStringNotContainsString($code, $this->sut->hash($code));
+    }
+
+    public function testHashesWithPhpsDefaultSettingsUnlessToldOtherwise(): void
+    {
+        $hash = (new OtpService())->hash('123456');
+
+        self::assertFalse(password_needs_rehash($hash, PASSWORD_DEFAULT));
     }
 
     public function testVerifyRejectsEmptyHash(): void

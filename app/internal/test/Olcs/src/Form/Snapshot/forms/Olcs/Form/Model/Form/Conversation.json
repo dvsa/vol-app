@@ -1,0 +1,134 @@
+{
+  "name": "Conversation",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "messageSubject",
+              "attributes": {
+                "id": "subject",
+                "placeholder": ""
+              },
+              "options": {
+                "label": "messaging.create-conversation.subject",
+                "service_name": "Common\\Service\\Data\\MessagingSubject",
+                "empty_option": "Please Select"
+              },
+              "type": "Common\\Form\\Element\\DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "messageContent",
+              "attributes": {
+                "class": "extra-long",
+                "id": ""
+              },
+              "options": {
+                "label": "You can enter up to 1000 characters"
+              },
+              "type": "Laminas\\Form\\Element\\Textarea"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "Create Conversation"
+              },
+              "type": "Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\Form",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "messageSubject": {
+        "name": "messageSubject",
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": {
+              "messages": {
+                "isEmpty": "messaging.form.message.subject.empty.error_message"
+              }
+            },
+            "break_chain_on_failure": true,
+            "priority": 100
+          }
+        ]
+      },
+      "messageContent": {
+        "name": "messageContent",
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ],
+        "validators": [
+          {
+            "name": "Laminas\\Validator\\NotEmpty",
+            "options": {
+              "messages": {
+                "isEmpty": "messaging.form.message.content.empty.error_message"
+              }
+            },
+            "break_chain_on_failure": true
+          },
+          {
+            "name": "Laminas\\Validator\\StringLength",
+            "options": {
+              "min": 5,
+              "max": 1000,
+              "messages": {
+                "stringLengthTooShort": "messaging.form.message.content.too_short.error_message",
+                "stringLengthTooLong": "messaging.form.message.content.too_long.error_message"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

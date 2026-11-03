@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEcmtShortTermAutomaticallyWithdrawn
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendEcmtShortTermAutomaticallyWithdrawn
     as SendEcmtShortTermAutomaticallyWithdrawnHandler;
+use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 use Dvsa\Olcs\Email\Data\Message;
 use Dvsa\Olcs\Email\Domain\Command\SendEmail;
 use Dvsa\Olcs\Email\Service\TemplateRenderer;
@@ -51,7 +52,7 @@ final class SendEcmtShortTermAutomaticallyWithdrawnTest extends AbstractPermitTe
         $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')->once()->with(
             m::type(Message::class),
             $this->template,
-            $templateVars,
+            $templateVars + ['licNo' => $this->licNo], // licNo added by AbstractEmailHandler
             'default'
         );
 
@@ -100,7 +101,7 @@ final class SendEcmtShortTermAutomaticallyWithdrawnTest extends AbstractPermitTe
         $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')->once()->with(
             m::type(Message::class),
             $this->template,
-            $templateVars,
+            $templateVars + ['licNo' => $this->licNo], // licNo added by AbstractEmailHandler
             'default'
         );
 

@@ -1,0 +1,363 @@
+{
+  "name": "irhpApplication",
+  "attributes": {
+    "method": "post"
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "topFields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "stockHtml",
+              "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement",
+              "options": {
+                "label": "Stock"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "stockText",
+              "type": "Laminas\\Form\\Element\\Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "status",
+              "type": "Laminas\\Form\\Element\\Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "addOrRemoveCountriesButton",
+              "type": "Common\\Form\\Elements\\Types\\Html",
+              "attributes": {
+                "value": "<a id=\"addOrRemoveCountriesButton\" class=\"govuk-button govuk-button--secondary\" role=\"button\" data-module=\"govuk-button\">Add or remove countries</a>"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "dateReceived",
+              "attributes": {
+                "id": "dateReceived"
+              },
+              "options": {
+                "label": "Date received",
+                "create_empty_option": true,
+                "render_delimiters": false
+              },
+              "type": "DateSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "irhpPermitType",
+              "type": "Laminas\\Form\\Element\\Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "isApplicationPathEnabled",
+              "type": "Laminas\\Form\\Element\\Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "requiresPreAllocationCheck",
+              "type": "Laminas\\Form\\Element\\Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "licence",
+              "type": "Laminas\\Form\\Element\\Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "numVehiclesLabel",
+              "type": "\\Common\\Form\\Elements\\Types\\ReadonlyElement",
+              "options": {
+                "label": "Current total vehicle authorization"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "numVehicles",
+              "type": "Laminas\\Form\\Element\\Hidden",
+              "attributes": {
+                "id": "numVehicles"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -1
+      },
+      "spec": {
+        "name": "qa",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -2
+      },
+      "spec": {
+        "name": "bottomFields",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "corCertificateNumber",
+              "attributes": {
+                "maxlength": "12"
+              },
+              "options": {
+                "label": "permits.form.cor-certificate-number.label"
+              },
+              "type": "Text"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "declaration",
+              "attributes": {
+                "class": "input--declaration",
+                "id": "declaration"
+              },
+              "options": {
+                "checked_value": "1",
+                "unchecked_value": "0",
+                "label": "permits.form.declaration.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--advanced"
+                },
+                "must_be_value": "1"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "checked",
+              "attributes": {
+                "class": "input--checked",
+                "id": "checked"
+              },
+              "options": {
+                "checked_value": "1",
+                "unchecked_value": "0",
+                "label": "permits.form.checked.label",
+                "label_attributes": {
+                  "class": "form-control form-control--checkbox form-control--advanced"
+                },
+                "must_be_value": "1"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SingleCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": {
+        "priority": -3
+      },
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "save",
+              "attributes": {
+                "type": "submit",
+                "data-module": "govuk-button",
+                "class": "govuk-button",
+                "id": "saveIrhpPermitApplication"
+              },
+              "options": {
+                "label": "Save"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "back",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary",
+                "id": "closeModal"
+              },
+              "options": {
+                "label": "Cancel"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "type": "Common\\Form\\BaseQaForm",
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "topFields": {
+      "id": {
+        "name": "id",
+        "required": false
+      },
+      "dateReceived": {
+        "name": "dateReceived",
+        "required": false,
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    },
+    "bottomFields": {
+      "corCertificateNumber": {
+        "name": "corCertificateNumber",
+        "required": false,
+        "filters": [
+          {
+            "name": "Laminas\\Filter\\StringTrim"
+          }
+        ]
+      },
+      "declaration": {
+        "name": "declaration",
+        "required": false
+      },
+      "checked": {
+        "name": "checked",
+        "required": false
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

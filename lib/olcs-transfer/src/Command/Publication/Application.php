@@ -6,14 +6,12 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Publication;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits as FieldType;
 
-/**
- * @Transfer\RouteName("backend/publication/application")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/publication/application')]
+#[Transfer\Method('POST')]
 final class Application extends AbstractCommand
 {
     use FieldType\Identity;
@@ -21,11 +19,11 @@ final class Application extends AbstractCommand
 
     /**
      * @var int
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
      */
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
+    #[Transfer\Optional]
     protected $publicationSection;
 
     /**

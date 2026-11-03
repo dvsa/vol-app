@@ -1,0 +1,106 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "actionTypes",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Decision type",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "submission_decision"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "piReasons",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "multiple": "multiple"
+        },
+        "options": {
+          "label": "Select legislation",
+          "disable_inarray_validator": false,
+          "category": "pi-reasons"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "recipientUser",
+        "attributes": {
+          "id": "",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "Send to",
+          "empty_option": "Please Select",
+          "disable_inarray_validator": false,
+          "category": "user-list"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "comment",
+        "attributes": {
+          "class": "extra-long",
+          "id": ""
+        },
+        "options": {
+          "label": "Reason"
+        },
+        "type": "TextArea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "urgent",
+        "options": {
+          "checked_value": "Y",
+          "unchecked_value": "N",
+          "label": "Urgent"
+        },
+        "type": "OlcsCheckbox"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "options": {
+    "label": "Add decision"
+  },
+  "input_filter": {
+    "comment": {
+      "name": "comment",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 4000
+          }
+        }
+      ]
+    }
+  }
+}

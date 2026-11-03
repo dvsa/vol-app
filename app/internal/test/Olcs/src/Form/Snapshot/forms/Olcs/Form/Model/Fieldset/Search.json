@@ -1,0 +1,161 @@
+{
+  "name": "search",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "licNo",
+        "attributes": {
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "Licence number"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "operatorName",
+        "attributes": {
+          "class": "medium",
+          "id": ""
+        },
+        "options": {
+          "label": "Operator/trading name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "postcode",
+        "attributes": {
+          "class": "short",
+          "id": ""
+        },
+        "options": {
+          "label": "Postcode"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "forename",
+        "attributes": {
+          "placeholder": "",
+          "class": "long"
+        },
+        "options": {
+          "label": "First name(s)"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "familyName",
+        "attributes": {
+          "placeholder": "",
+          "class": "long"
+        },
+        "options": {
+          "label": "Last name"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "birthDate",
+        "attributes": {
+          "id": "dob"
+        },
+        "options": {
+          "label": "Date of birth",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\DateNotRequiredNotInFuture"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "search",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "Search"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "licNo": {
+      "name": "licNo",
+      "required": false
+    },
+    "operatorName": {
+      "name": "operatorName",
+      "required": false
+    },
+    "postcode": {
+      "name": "postcode",
+      "required": false
+    },
+    "forename": {
+      "name": "forename",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "familyName": {
+      "name": "familyName",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 2,
+            "max": 35
+          }
+        }
+      ]
+    },
+    "birthDate": {
+      "name": "birthDate",
+      "required": false
+    }
+  }
+}

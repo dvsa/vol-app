@@ -14,14 +14,16 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\XmlTools\Filter\ParseXml;
 use Olcs\XmlTools\Validator\Xsd;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Container\ContainerInterface;
 
 final class XmlStructureInputFactoryTest extends TestCase
 {
-    public function testInvoke(): void
+    #[DataProvider('provideFallbackSchemaVersion')]
+    public function testInvoke(?string $fallbackSchemaVersion): void
     {
         $maxSchemaErrors = 3;
-        $schemaVersion = 2.5;
+        $schemaVersion = '2.5.2';
         $xmlMessageExclude = [];
 
         $config = [
@@ -38,6 +40,13 @@ final class XmlStructureInputFactoryTest extends TestCase
         $mockXsdValidator = m::mock(\Laminas\Validator\AbstractValidator::class);
         $mockXsdValidator->shouldReceive('setXsd')->once()
             ->with('http://www.transxchange.org.uk/schema/' . $schemaVersion . '/TransXChange_registration.xsd');
+
+        if ($fallbackSchemaVersion !== null) {
+            $config['ebsr']['transxchange_fallback_schema_version'] = $fallbackSchemaVersion;
+            $mockXsdValidator->expects('setFallbackXsd')->with(
+                'http://www.transxchange.org.uk/schema/' . $fallbackSchemaVersion . '/TransXChange_registration.xsd'
+            );
+        }
         $mockXsdValidator->shouldReceive('setMaxErrors')->once()->with($maxSchemaErrors);
         $mockXsdValidator->shouldReceive('setXmlMessageExclude')->once()->with($xmlMessageExclude);
 
@@ -62,6 +71,14 @@ final class XmlStructureInputFactoryTest extends TestCase
         $this->assertInstanceOf(\Laminas\InputFilter\Input::class, $service);
         $this->assertCount(1, $service->getFilterChain());
         $this->assertCount(5, $service->getValidatorChain());
+    }
+
+    public static function provideFallbackSchemaVersion(): array
+    {
+        return [
+            'with fallback schema' => ['2.5'],
+            'without fallback schema' => [null],
+        ];
     }
 
     /**
@@ -161,7 +178,7 @@ final class XmlStructureInputFactoryTest extends TestCase
                     'xml_structure' => true
                 ],
                 'max_schema_errors' => 3,
-                'transxchange_schema_version' => 2.5
+                'transxchange_schema_version' => '2.5.2'
             ]
         ];
 

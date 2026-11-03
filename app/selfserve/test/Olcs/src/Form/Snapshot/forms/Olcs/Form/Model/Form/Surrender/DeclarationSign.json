@@ -1,0 +1,48 @@
+{
+  "name": "DeclarationSign",
+  "attributes": {
+    "method": "post",
+    "class": "form"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "header",
+        "attributes": {
+          "value": "licence.surrender.declaration.form.header"
+        },
+        "type": "Common\\Form\\Elements\\Types\\HtmlTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "declaration",
+        "attributes": {
+          "value": "markup-declaration-for-verify",
+          "data-container-class": "declarationForVerify"
+        },
+        "type": "Common\\Form\\Elements\\Types\\GuidanceTranslated"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "sign",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button"
+        },
+        "options": {
+          "label": "licence.surrender.declaration.sign"
+        },
+        "type": "\\Laminas\\Form\\Element\\Button"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "type": "\\Common\\Form\\Form",
+  "input_filter": []
+}

@@ -8,6 +8,7 @@ use Common\Auth\Service\AuthenticationServiceInterface;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Rbac\User;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Dvsa\Olcs\Auth\Service\Auth\CookieService;
@@ -16,7 +17,6 @@ use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Http\Response as HttpResponse;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Layout;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Router\Http\RouteMatch;
@@ -77,7 +77,7 @@ final class LoginControllerTest extends MockeryTestCase
     {
         $this->authenticationService = $this->createMock(AuthenticationServiceInterface::class);
         $this->currentUser = $this->createMock(CurrentUser::class);
-        $this->flashMessenger = $this->createMock(FlashMessenger::class);
+        $this->flashMessenger = $this->createMock(FlashMessengerInterface::class);
         $this->formHelper = $this->createMock(FormHelperService::class);
         $this->redirectHelper = $this->createMock(Redirect::class);
         $this->authChallengeContainer = $this->createMock(AuthChallengeContainer::class);
@@ -183,7 +183,7 @@ final class LoginControllerTest extends MockeryTestCase
 
         $this->flashMessenger->method('getMessagesFromNamespace')
             ->willReturnMap([
-                [LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR, ['failureReason']],
+                [LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR, ['unit test failure reason']],
             ]);
 
         // Execute
@@ -191,6 +191,7 @@ final class LoginControllerTest extends MockeryTestCase
 
         // Assert
         $this->assertArrayHasKey('failureReason', $result->getVariables());
+        $this->assertEquals('unit test failure reason', $result->getVariable('failureReason'));
     }
 
     #[Test]

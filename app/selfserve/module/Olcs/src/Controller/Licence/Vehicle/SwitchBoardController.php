@@ -7,6 +7,7 @@ namespace Olcs\Controller\Licence\Vehicle;
 use Common\Controller\Plugin\HandleQuery;
 use Common\Controller\Plugin\Redirect;
 use Common\Form\FormValidator;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\View\Helper\Panel;
@@ -14,7 +15,6 @@ use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
-use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Router\RouteMatch;
 use Laminas\Stdlib\ResponseInterface;
@@ -37,7 +37,7 @@ class SwitchBoardController
     public const PANEL_FLASH_MESSENGER_NAMESPACE = 'panel';
     protected const FLASH_MESSAGE_INPUT_NAMESPACE = 'switchboard-input';
 
-    public function __construct(private readonly FlashMessenger $flashMessenger, private readonly FormHelperService $formHelper, private readonly HandleQuery $queryHandler, private readonly Redirect $redirectHelper, private readonly ResponseHelperService $responseHelper, private readonly LicenceVehicleManagement $session, private readonly Url $urlHelper, private readonly FormValidator $formValidator)
+    public function __construct(private readonly FlashMessengerInterface $flashMessenger, private readonly FormHelperService $formHelper, private readonly HandleQuery $queryHandler, private readonly Redirect $redirectHelper, private readonly ResponseHelperService $responseHelper, private readonly LicenceVehicleManagement $session, private readonly Url $urlHelper, private readonly FormValidator $formValidator)
     {
     }
 

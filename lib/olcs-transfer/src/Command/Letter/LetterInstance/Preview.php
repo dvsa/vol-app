@@ -2,7 +2,7 @@
 
 namespace Dvsa\Olcs\Transfer\Command\Letter\LetterInstance;
 
-use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
+use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\LetterType;
 use Dvsa\Olcs\Transfer\FieldType\Traits\LicenceOptional;
@@ -10,10 +10,8 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\ApplicationOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\CasesOptional;
 use Dvsa\Olcs\Transfer\FieldType\Traits\LetterTestDataOptional;
 
-/**
- * @Transfer\RouteName("backend/letter/letter-instance/preview")
- * @Transfer\Method("POST")
- */
+#[Transfer\RouteName('backend/letter/letter-instance/preview')]
+#[Transfer\Method('POST')]
 final class Preview extends AbstractCommand
 {
     use LetterType;
@@ -24,29 +22,29 @@ final class Preview extends AbstractCommand
 
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $selectedIssues;
 
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $selectedTodos;
 
     /**
      * @var array
-     * @Transfer\Optional
-     * @Transfer\ArrayInput
      */
+    #[Transfer\Optional]
+    #[Transfer\ArrayInput]
     protected $selectedAppendices;
 
     /**
      * @var array
-     * @Transfer\Optional
      */
+    #[Transfer\Optional]
     protected $additionalData;
 
     /**

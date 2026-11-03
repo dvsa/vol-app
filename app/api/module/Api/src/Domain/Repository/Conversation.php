@@ -63,7 +63,7 @@ class Conversation extends AbstractRepository
             ->where('inner_read.messagingMessage = irmm.id')
             ->andWhere($qb->expr()->in('inner_role.role', ':roleNames'));
 
-        $qb->leftJoin(MessagingMessage::class, 'irmm', Join::WITH, 'irmm.messagingConversation = ' . $this->alias . '.id')
+        $qb->leftJoin(MessagingMessage::class, 'irmm', Join::ON, 'irmm.messagingConversation = ' . $this->alias . '.id')
             ->leftJoin('irmm.messagingConversation', 'inner_conversation')
             ->leftJoin('inner_conversation.task', 'inner_task')
             ->addSelect('MAX(irmm.createdOn) AS last_read')

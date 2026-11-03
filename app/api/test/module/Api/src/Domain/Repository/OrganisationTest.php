@@ -200,7 +200,7 @@ final class OrganisationTest extends RepositoryTestCase
 
         $this->assertSame(
             'SELECT DISTINCT o.companyOrLlpNo' . self::FROM
-            . ' INNER JOIN ' . LicenceEntity::class . ' l WITH l.organisation = o.id'
+            . ' INNER JOIN ' . LicenceEntity::class . ' l ON l.organisation = o.id'
             . ' WHERE l.status IN(:licenceStatuses) AND o.companyOrLlpNo IS NOT NULL'
             . ' AND o.type IN(:orgTypes)',
             $qb->getDQL(),

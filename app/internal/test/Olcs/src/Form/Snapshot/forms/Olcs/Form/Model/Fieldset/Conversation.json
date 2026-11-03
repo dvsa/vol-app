@@ -1,0 +1,84 @@
+{
+  "name": "main",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "messageSubject",
+        "attributes": {
+          "id": "subject",
+          "placeholder": ""
+        },
+        "options": {
+          "label": "messaging.create-conversation.subject",
+          "service_name": "Common\\Service\\Data\\MessagingSubject",
+          "empty_option": "Please Select"
+        },
+        "type": "Common\\Form\\Element\\DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "messageContent",
+        "attributes": {
+          "class": "extra-long",
+          "id": ""
+        },
+        "options": {
+          "label": "You can enter up to 1000 characters"
+        },
+        "type": "Laminas\\Form\\Element\\Textarea"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "messageSubject": {
+      "name": "messageSubject",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "messaging.form.message.subject.empty.error_message"
+            }
+          },
+          "break_chain_on_failure": true,
+          "priority": 100
+        }
+      ]
+    },
+    "messageContent": {
+      "name": "messageContent",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "messaging.form.message.content.empty.error_message"
+            }
+          },
+          "break_chain_on_failure": true
+        },
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 1000,
+            "messages": {
+              "stringLengthTooShort": "messaging.form.message.content.too_short.error_message",
+              "stringLengthTooLong": "messaging.form.message.content.too_long.error_message"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

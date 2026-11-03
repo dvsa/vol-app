@@ -1,0 +1,43 @@
+{
+  "name": "LetterSectionEditContent",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "defaultContent",
+        "options": {
+          "label": "Default Content",
+          "label_attributes": {
+            "class": ""
+          }
+        },
+        "type": "EditorJs",
+        "attributes": {
+          "id": "defaultContent",
+          "class": "extra-long",
+          "name": "defaultContent"
+        }
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "defaultContent": {
+      "name": "defaultContent",
+      "required": false,
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "transport-manager-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "options": {
+          "label": "internal.interim.form.interim_status",
+          "category": "interim_status"
+        },
+        "type": "DynamicSelect"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

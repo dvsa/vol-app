@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Permits;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Country;
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -143,7 +144,7 @@ class StockAlignmentReport extends AbstractQueryHandler
             // some restricted countries requested
             // order the list
             $criteria = Criteria::create()
-                ->orderBy(['countryDesc' => Criteria::ASC]);
+                ->orderBy(['countryDesc' => Order::Ascending]);
 
             foreach ($restrictedCountries->matching($criteria) as $country) {
                 $countryId = $country->getId();

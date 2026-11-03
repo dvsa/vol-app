@@ -1,0 +1,183 @@
+{
+  "name": "tm-convictions-and-penalties-details",
+  "attributes": {
+    "class": ""
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "convictionDate",
+        "attributes": {
+          "id": "conviction-date",
+          "required": "required",
+          "class": "long"
+        },
+        "options": {
+          "label": "transport-manager.convictions-and-penalties.form.conviction-date",
+          "create_empty_option": true,
+          "render_delimiters": false
+        },
+        "type": "DateSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "categoryText",
+        "attributes": {
+          "class": "long",
+          "id": "category-text",
+          "required": "required"
+        },
+        "options": {
+          "label": "transport-manager.convictions-and-penalties.form.offence"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "notes",
+        "attributes": {
+          "class": "long",
+          "id": "notes",
+          "required": "required"
+        },
+        "options": {
+          "label": "transport-manager.convictions-and-penalties.form.offence-details"
+        },
+        "type": "Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "courtFpn",
+        "attributes": {
+          "class": "long",
+          "id": "court-fpn",
+          "required": "required"
+        },
+        "options": {
+          "label": "transport-manager.convictions-and-penalties.form.court-fpn"
+        },
+        "type": "Text"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "penalty",
+        "attributes": {
+          "class": "long",
+          "id": "penalty",
+          "required": "required"
+        },
+        "options": {
+          "label": "transport-manager.convictions-and-penalties.form.penalty"
+        },
+        "type": "Text"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "convictionDate": {
+      "name": "convictionDate",
+      "filters": [
+        {
+          "name": "DateSelectNullifier"
+        }
+      ],
+      "required": true,
+      "validators": [
+        {
+          "name": "\\Common\\Validator\\Date"
+        },
+        {
+          "name": "Date",
+          "options": {
+            "format": "Y-m-d"
+          }
+        },
+        {
+          "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+        }
+      ]
+    },
+    "categoryText": {
+      "name": "categoryText",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 1024
+          }
+        }
+      ]
+    },
+    "notes": {
+      "name": "notes",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 4000
+          }
+        }
+      ]
+    },
+    "courtFpn": {
+      "name": "courtFpn",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 70
+          }
+        }
+      ]
+    },
+    "penalty": {
+      "name": "penalty",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 1,
+            "max": 255
+          }
+        }
+      ]
+    }
+  }
+}

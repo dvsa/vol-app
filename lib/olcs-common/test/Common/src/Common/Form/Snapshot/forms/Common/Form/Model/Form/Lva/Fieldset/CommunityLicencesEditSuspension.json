@@ -1,0 +1,69 @@
+{
+  "name": "community-licences-edit-suspension",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "reasons",
+        "attributes": {
+          "id": "",
+          "placeholder": "",
+          "class": "chosen-select-medium",
+          "multiple": true
+        },
+        "options": {
+          "label": "internal.community_licence.form.reasons",
+          "category": "com_lic_sw_reason"
+        },
+        "type": "DynamicSelect"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "status",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "version",
+        "attributes": {
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "reasons": {
+      "name": "reasons",
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "internal.community_licence.form.licences_validation"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "name": "table",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "rows",
+        "attributes": {
+          "required": "required",
+          "value": ""
+        },
+        "type": "Hidden"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "table",
+        "options": {
+          "label": "row"
+        },
+        "type": "\\Common\\Form\\Elements\\Types\\Table"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "action",
+        "attributes": {
+          "value": ""
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "id",
+        "attributes": {
+          "value": ""
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\NoRender"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "rows": {
+      "name": "rows",
+      "required": true,
+      "validators": [
+        {
+          "name": "Common\\Form\\Elements\\Validators\\TableRequiredValidator",
+          "options": {
+            "label": "Transport Manager"
+          }
+        }
+      ]
+    }
+  }
+}

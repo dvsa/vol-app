@@ -1,0 +1,34 @@
+{
+  "name": "ApplicationSignatureDetails",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "signature",
+        "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated",
+        "attributes": {
+          "data-container-class": "verify"
+        }
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "submitAndPay",
+        "attributes": {
+          "data-module": "govuk-button",
+          "type": "submit",
+          "class": "govuk-button",
+          "id": "submitAndPay"
+        },
+        "options": {
+          "label": "submitandpay.button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}

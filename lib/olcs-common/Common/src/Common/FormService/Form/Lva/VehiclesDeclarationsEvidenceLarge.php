@@ -33,6 +33,7 @@ class VehiclesDeclarationsEvidenceLarge
         $evidenceFieldset->get('uploadNowRadio')->setName('uploadNow');
         $evidenceFieldset->get('uploadLaterRadio')->setName('uploadNow');
         $this->formHelper->remove($form, 'evidence->uploadNow');
+        $this->formHelper->remove($form, 'evidence->evidenceStatementGuidance');
 
         $inputFilter = $form->getInputFilter();
         $evidenceInputFilter = $inputFilter->get('evidence');

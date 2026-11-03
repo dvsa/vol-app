@@ -1,0 +1,158 @@
+{
+  "name": "bus-reg-browse-form",
+  "attributes": {
+    "method": "post",
+    "action": ""
+  },
+  "elements": [],
+  "fieldsets": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "fields",
+        "attributes": {
+          "method": "post"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "trafficAreas",
+              "options": {
+                "label": "selfserve.search.busreg.browse.form.trafficAreas.label",
+                "disable_inarray_validator": false,
+                "service_name": "Common\\Service\\Data\\TrafficArea",
+                "exclude": [
+                  "N"
+                ],
+                "use_groups": "false"
+              },
+              "attributes": {
+                "id": "trafficAreas",
+                "placeholder": ""
+              },
+              "type": "DynamicMultiCheckbox"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "status",
+              "options": {
+                "label": "selfserve.search.busreg.browse.form.status.label",
+                "empty_option": "All",
+                "disable_inarray_validator": false,
+                "category": "bus_reg_browse_status"
+              },
+              "attributes": {
+                "id": "status",
+                "placeholder": "",
+                "class": "long"
+              },
+              "type": "DynamicSelect"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "acceptedDate",
+              "options": {
+                "label": "selfserve.search.busreg.browse.form.acceptedDate.label",
+                "render_delimiters": false
+              },
+              "attributes": {
+                "id": "acceptedDate",
+                "placeholder": ""
+              },
+              "type": "DateSelect"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "options": {
+          "label": "",
+          "prefer_form_input_filter": true
+        },
+        "type": "Laminas\\Form\\Fieldset"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "form-actions",
+        "attributes": {
+          "class": "govuk-button-group"
+        },
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "submit",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button"
+              },
+              "options": {
+                "label": "selfserve.search.busreg.browse.form.submit.label"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "export",
+              "attributes": {
+                "data-module": "govuk-button",
+                "type": "submit",
+                "class": "govuk-button govuk-button--secondary"
+              },
+              "options": {
+                "label": "selfserve.search.busreg.browse.form.export.label"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    }
+  ],
+  "options": {
+    "prefer_form_input_filter": true
+  },
+  "input_filter": {
+    "fields": {
+      "status": {
+        "name": "status",
+        "required": false
+      },
+      "acceptedDate": {
+        "name": "acceptedDate",
+        "filters": [
+          {
+            "name": "DateSelectNullifier"
+          }
+        ],
+        "validators": [
+          {
+            "name": "\\Common\\Validator\\Date"
+          },
+          {
+            "name": "Date",
+            "options": {
+              "format": "Y-m-d"
+            }
+          },
+          {
+            "name": "\\Common\\Form\\Elements\\Validators\\DateNotInFuture"
+          }
+        ]
+      },
+      "type": "Laminas\\InputFilter\\InputFilter"
+    }
+  }
+}

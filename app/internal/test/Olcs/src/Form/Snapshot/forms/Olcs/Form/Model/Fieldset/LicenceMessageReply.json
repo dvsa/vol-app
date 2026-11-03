@@ -1,0 +1,68 @@
+{
+  "name": "LicenceMessageReply",
+  "attributes": [],
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "reply",
+        "attributes": {
+          "class": "extra-long"
+        },
+        "options": {
+          "label": "You can enter up to 1000 characters"
+        },
+        "type": "Laminas\\Form\\Element\\Textarea"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "send",
+        "attributes": {
+          "type": "submit",
+          "data-module": "govuk-button",
+          "class": "govuk-button govuk-button--default",
+          "id": "send"
+        },
+        "options": {
+          "label": "Send message"
+        },
+        "type": "Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": {
+    "reply": {
+      "name": "reply",
+      "filters": [
+        {
+          "name": "Laminas\\Filter\\StringTrim"
+        }
+      ],
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "messaging.form.message.content.empty.error_message"
+            }
+          },
+          "break_chain_on_failure": true
+        },
+        {
+          "name": "Laminas\\Validator\\StringLength",
+          "options": {
+            "min": 5,
+            "max": 1000,
+            "messages": {
+              "stringLengthTooShort": "messaging.form.message.content.too_short.error_message",
+              "stringLengthTooLong": "messaging.form.message.content.too_long.error_message"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

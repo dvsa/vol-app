@@ -1,0 +1,38 @@
+{
+  "name": "SaveAndContinueOrCancelApplication",
+  "attributes": {
+    "class": "govuk-button-group"
+  },
+  "elements": [
+    {
+      "flags": [],
+      "spec": {
+        "name": "SubmitButton",
+        "attributes": {
+          "class": "govuk-button",
+          "data-module": "govuk-button",
+          "type": "submit"
+        },
+        "options": {
+          "label": "Save and continue"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
+        "name": "CancelButton",
+        "attributes": {
+          "role": "link"
+        },
+        "options": {
+          "label": "permits.form.cancel_application.button"
+        },
+        "type": "\\Common\\Form\\Elements\\InputFilters\\ActionButton"
+      }
+    }
+  ],
+  "fieldsets": [],
+  "input_filter": []
+}
