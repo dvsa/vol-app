@@ -401,4 +401,128 @@ final class LetterGenerationControllerTest extends MockeryTestCase
 
         $this->assertStringContainsString('Failed to generate letter', $response->getContent());
     }
+
+    private function letterForChangeIssues(array $overrides = []): array
+    {
+        return $overrides + [
+            'id' => 55,
+            'status' => ['id' => 'ltr_sts_draft'],
+            'licence' => ['id' => 7],
+            'application' => null,
+            'letterInstanceAppendices' => [],
+            'letterInstanceIssues' => [
+                [
+                    'id' => 501,
+                    'letterIssueVersion' => [
+                        'heading' => 'Bank statements',
+                        'letterIssue' => ['id' => 20],
+                        'letterIssueType' => ['id' => 2, 'name' => 'Finance'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    private function runChangeIssues(Sut $sut, array $query): mixed
+    {
+        $request = new Request();
+        $request->getQuery()->fromArray($query);
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+
+        return $sut->changeIssuesAction();
+    }
+
+    private function financeAccordion(): array
+    {
+        return [
+            ['issueType' => ['id' => 1, 'name' => 'Adverts'], 'issues' => [['id' => 10, 'issueKey' => 'AD1', 'currentVersion' => ['heading' => 'Advert']]]],
+            ['issueType' => ['id' => 2, 'name' => 'Finance'], 'issues' => [
+                ['id' => 20, 'issueKey' => 'FI1', 'currentVersion' => ['heading' => 'Bank statements']],
+                ['id' => 21, 'issueKey' => 'FI2', 'currentVersion' => ['heading' => 'Overdraft']],
+            ]],
+        ];
+    }
+
+    public function testChangeIssuesPreTicksIssuesOnTheLetter(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->with(55)->andReturn($this->letterForChangeIssues());
+        $sut->shouldReceive('fetchLetterContext')->andReturn(['goodsOrPsv' => 'lcat_psv']);
+        $sut->shouldReceive('buildAccordionData')->andReturn($this->financeAccordion());
+
+        $view = $this->runChangeIssues($sut, ['id' => '55', 'from' => 'edit']);
+
+        $this->assertInstanceOf(ViewModel::class, $view);
+        $this->assertTrue($view->terminate());
+        $this->assertSame('pages/letter/change-issues', $view->getTemplate());
+        $this->assertSame([20], $view->getVariable('selectedIssueIds'));
+        $this->assertSame('edit', $view->getVariable('from'));
+        $this->assertSame(55, $view->getVariable('letterInstanceId'));
+        $this->assertFalse($view->getVariable('hasAppendices'));
+        $this->assertFalse($view->getVariable('locked'));
+    }
+
+    public function testChangeIssuesShowsAnIssueNoLongerOffered(): void
+    {
+        $letter = $this->letterForChangeIssues();
+        $letter['letterInstanceIssues'][] = ['id' => 502, 'letterIssueVersion' => [
+            'heading' => 'Retired wording',
+            'letterIssue' => ['id' => 99],
+            'letterIssueType' => ['id' => 2, 'name' => 'Finance'],
+        ]];
+        $letter['letterInstanceIssues'][] = ['id' => 503, 'letterIssueVersion' => [
+            'heading' => 'Orphaned',
+            'letterIssue' => ['id' => 77],
+            'letterIssueType' => ['id' => 5, 'name' => 'Gone type'],
+        ]];
+
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn($letter);
+        $sut->shouldReceive('fetchLetterContext')->andReturn([]);
+        $sut->shouldReceive('buildAccordionData')->andReturn($this->financeAccordion());
+
+        $accordion = $this->runChangeIssues($sut, ['id' => '55'])->getVariable('accordionData');
+
+        $finance = $accordion[1];
+        $this->assertSame([20, 21, 99], array_column($finance['issues'], 'id'));
+        $this->assertSame('Retired wording', $finance['issues'][2]['currentVersion']['heading']);
+        $this->assertSame('Gone type', $accordion[2]['issueType']['name']);
+        $this->assertSame([77], array_column($accordion[2]['issues'], 'id'));
+    }
+
+    public function testChangeIssuesUsesTheApplicationThenLicenceForGoodsOrPsv(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn(
+            $this->letterForChangeIssues(['application' => ['id' => 3]])
+        );
+        $sut->shouldReceive('fetchLetterContext')->with(['type' => 'application', 'id' => 3])->once()
+            ->andReturn(['goodsOrPsv' => 'lcat_gv']);
+        $sut->shouldReceive('buildAccordionData')->with('lcat_gv')->once()->andReturn([]);
+
+        $this->runChangeIssues($sut, ['id' => '55']);
+    }
+
+    public function testChangeIssuesOnASentLetterIsLocked(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn(
+            $this->letterForChangeIssues(['status' => ['id' => 'ltr_sts_sent']])
+        );
+        $sut->shouldReceive('buildAccordionData')->never();
+
+        $view = $this->runChangeIssues($sut, ['id' => '55']);
+
+        $this->assertTrue($view->getVariable('locked'));
+    }
+
+    public function testChangeIssuesForAMissingLetterIs404(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn(null);
+
+        $this->assertSame(404, $this->runChangeIssues($sut, ['id' => '55'])->getStatusCode());
+        $this->assertSame(404, $this->runChangeIssues($this->bareSut(), [])->getStatusCode());
+    }
 }

@@ -35,6 +35,7 @@ final class GetTest extends QueryHandlerTestCase
                         'category',
                         'subCategory'
                     ],
+                    'status',
                     'licence',
                     'application',
                     'case',

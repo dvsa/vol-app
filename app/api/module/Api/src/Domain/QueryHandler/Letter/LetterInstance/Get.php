@@ -18,6 +18,7 @@ class Get extends AbstractQueryByIdHandler
             'category',
             'subCategory'
         ],
+        'status',
         'licence',
         'application',
         'case',
