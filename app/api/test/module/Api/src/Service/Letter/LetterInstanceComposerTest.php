@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
+use Dvsa\Olcs\Api\Service\Letter\IssueChange\IssueChangePlan;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueTodo;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSection;
@@ -405,6 +406,35 @@ class LetterInstanceComposerTest extends TestCase
         $this->assertCount(2, $letterInstance->getLetterInstanceTodos());
         $this->assertSame($a, $first->getLetterInstanceIssue());
         $this->assertSame($a, $duplicate->getLetterInstanceIssue());
+    }
+
+    public function testApplyIssueChangeRenumbersIssuesAndReturnsNewRows(): void
+    {
+        $shared = $this->todoVersion(1);
+        $letterInstance = new LetterInstance();
+        $a = $this->instanceIssue($letterInstance, 0, [$this->todoVersion(2)]);
+        $b = $this->instanceIssue($letterInstance, 1, [$shared]);
+        $edited = $this->existingTodo($letterInstance, $b, $shared);
+        $edited->setEditedDescription(['blocks' => []]);
+        $cVersion = $this->issueVersionWithTodos([$this->todoVersion(3)]);
+
+        $created = $this->sut->applyIssueChange($letterInstance, new IssueChangePlan([$cVersion, $b], [$a], []));
+
+        $issues = $letterInstance->getLetterInstanceIssues();
+        $this->assertCount(2, $issues);
+        $this->assertFalse($issues->contains($a));
+        $this->assertCount(1, $created['issues']);
+        $c = $created['issues'][0];
+        $this->assertSame($cVersion, $c->getLetterIssueVersion());
+        $this->assertSame(0, $c->getDisplayOrder());
+        $this->assertSame(1, $b->getDisplayOrder());
+        $this->assertCount(1, $created['todos']);
+        $this->assertSame($c, $created['todos'][0]->getLetterInstanceIssue());
+        $this->assertSame($b, $edited->getLetterInstanceIssue());
+        $this->assertNotNull($edited->getEditedDescription());
+        $ids = $this->todoVersionIds($letterInstance);
+        sort($ids);
+        $this->assertSame([1, 3], $ids, "A's to-do goes with A; C's arrives; B's shared one stays");
     }
 
     public function testComposesAppendicesInOrder(): void

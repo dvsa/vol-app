@@ -134,6 +134,15 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
+     * Remove letter instance issue
+     */
+    public function removeLetterInstanceIssue(LetterInstanceIssue $issue): void
+    {
+        $this->letterInstanceIssues->removeElement($issue);
+        $this->todoRequiringIssueCounts = null;
+    }
+
+    /**
      * Get letter instance todos
      *
      * @return ArrayCollection

@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion;
+use Dvsa\Olcs\Api\Service\Letter\IssueChange\IssueChangePlan;
 use Dvsa\Olcs\Api\Service\Letter\Resolution\SectionResolution;
 
 /**
@@ -72,6 +73,38 @@ class LetterInstanceComposer
     public function composeTodos(LetterInstance $letterInstance): void
     {
         $this->reconcileTodos($letterInstance);
+    }
+
+    /**
+     * Change the issues on an existing letter as planned, then reconcile its to-dos (VOL-7734).
+     *
+     * Removed issues go first so the to-do walk only sees the issues that remain; issues are then
+     * numbered in their final order, which is the order the to-dos are owned and numbered in.
+     *
+     * @return array{issues: list<LetterInstanceIssue>, todos: list<LetterInstanceTodo>} rows created
+     */
+    public function applyIssueChange(LetterInstance $letterInstance, IssueChangePlan $plan): array
+    {
+        foreach ($plan->removedIssues as $removedIssue) {
+            $letterInstance->removeLetterInstanceIssue($removedIssue);
+        }
+
+        $createdIssues = [];
+        foreach ($plan->finalIssues as $displayOrder => $finalIssue) {
+            if ($finalIssue instanceof LetterIssueVersion) {
+                $instanceIssue = new LetterInstanceIssue();
+                $instanceIssue->setLetterIssueVersion($finalIssue);
+                $letterInstance->addLetterInstanceIssue($instanceIssue);
+                $createdIssues[] = $instanceIssue;
+                $finalIssue = $instanceIssue;
+            }
+            $finalIssue->setDisplayOrder($displayOrder);
+        }
+
+        return [
+            'issues' => $createdIssues,
+            'todos' => array_values($this->reconcileTodos($letterInstance)),
+        ];
     }
 
     /**
