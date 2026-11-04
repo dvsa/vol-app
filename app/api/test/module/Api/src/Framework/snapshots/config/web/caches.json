@@ -1,0 +1,24 @@
+{
+  "default-cache": {
+    "options": {
+      "server": {
+        "host": "1",
+        "port": 6379
+      },
+      "ttl": 3600,
+      "namespace": "zfcache"
+    }
+  },
+  "doctrine-cache": {
+    "options": {
+      "ttl": 3600,
+      "namespace": "doctrine-orm3"
+    }
+  },
+  "jwks-cache": {
+    "options": {
+      "ttl": 3600,
+      "namespace": "jwks"
+    }
+  }
+}

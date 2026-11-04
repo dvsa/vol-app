@@ -1,0 +1,11 @@
+{
+  "locale": [
+    "en_GB",
+    "en_GB"
+  ],
+  "remote_translation": [
+    {
+      "type": "Dvsa\\Olcs\\Api\\Service\\Translator\\TranslationLoader"
+    }
+  ]
+}

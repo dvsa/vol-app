@@ -1,0 +1,58 @@
+{
+  "Logger": {
+    "processors": [
+      {
+        "name": "Olcs\\Logging\\Log\\Processor\\Microtime"
+      },
+      {
+        "name": "Olcs\\Logging\\Log\\Processor\\UserId"
+      },
+      {
+        "name": "Olcs\\Logging\\Log\\Processor\\SessionId"
+      },
+      {
+        "name": "Olcs\\Logging\\Log\\Processor\\RemoteIp"
+      },
+      {
+        "name": "Olcs\\Logging\\Log\\Processor\\RequestId"
+      },
+      {
+        "name": "Olcs\\Logging\\Log\\Processor\\CorrelationId"
+      }
+    ],
+    "writers": {
+      "full": {
+        "name": "stream",
+        "options": {
+          "stream": "/var/log/dvsa/olcs-api/api.log",
+          "formatter": "Olcs\\Logging\\Log\\Formatter\\Standard",
+          "filters": {
+            "priority": {
+              "name": "priority",
+              "options": {
+                "priority": "1"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "ExceptionLogger": {
+    "writers": {
+      "full": {
+        "options": {
+          "stream": "/var/log/dvsa/olcs-api/api.log",
+          "filters": {
+            "priority": {
+              "name": "priority",
+              "options": {
+                "priority": "1"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

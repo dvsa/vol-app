@@ -1,0 +1,29 @@
+{
+  "logger_alias": "Logger",
+  "identity_provider": "CpmsIdentityProvider",
+  "enable_cache": true,
+  "cache_storage": "array",
+  "rest_client": {
+    "options": {
+      "version": 2,
+      "domain": "1",
+      "grant_type": "client_credentials",
+      "timeout": 15.0,
+      "headers": {
+        "Accept": "application/json"
+      }
+    }
+  },
+  "gateway": {
+    "domain": "1",
+    "proxy": "http://1",
+    "oauth2": {
+      "client_id": "1",
+      "client_secret": "1",
+      "token_url": "1",
+      "scope": "1",
+      "proxy": "http://1",
+      "service_name": "CPMS Hybrid Gateway"
+    }
+  }
+}

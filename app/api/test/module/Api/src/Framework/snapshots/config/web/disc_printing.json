@@ -1,0 +1,5 @@
+{
+  "disc_batch_size": 120,
+  "psv_vehicle_list_batch_size": 120,
+  "gv_vehicle_list_batch_size": 120
+}

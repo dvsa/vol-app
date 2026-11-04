@@ -1,0 +1,27 @@
+{
+  "template_path_stack": {
+    "0": "{app}/module/Snapshot/config/../view",
+    "translations": "{app}/module/Snapshot/config/language/partials",
+    "layout": "{app}/module/Email/config/../view/layout",
+    "email": "{app}/module/Email/config/../view/email",
+    "submission": "{app}/module/Api/config/../view/submission",
+    "answers-summary": "{app}/module/Api/config/../view/permits/"
+  },
+  "display_not_found_reason": false,
+  "display_exceptions": true,
+  "strategies": [
+    "ViewJsonStrategy",
+    "ViewJsonStrategy"
+  ],
+  "not_found_template": "error/error",
+  "exception_template": "error/error",
+  "template_map": {
+    "error/404": "{app}/module/Db/config/../view/error/404.phtml",
+    "error/index": "{app}/module/Db/config/../view/error/index.phtml",
+    "layout/layout": "{app}/module/Scanning/config/../view/layout/layout.phtml",
+    "error/403": "{app}/vendor/lm-commons/lmc-rbac-mvc/config/../view/error/403.phtml",
+    "laminas-developer-tools/toolbar/lmc-rbac": "{app}/vendor/lm-commons/lmc-rbac-mvc/config/../view/laminas-developer-tools/toolbar/lmc-rbac.phtml",
+    "error/error": "{app}/module/Scanning/config/../view/error/error.phtml"
+  },
+  "doctype": "HTML5"
+}
