@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Framework;
 
-use Dvsa\Olcs\Api\Domain\Repository\User as UserRepository;
-use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
-use Dvsa\Olcs\Api\Entity\User\User;
-use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\Olcs\Api\Service\Translator\TranslationLoader;
 use Dvsa\Olcs\Api\Service\Translator\TranslationLoaderFactory;
 use Dvsa\Olcs\Transfer\Service\CacheEncryption;
@@ -17,11 +13,11 @@ use Dvsa\OlcsTest\Api\Framework\Support\FrameworkTestCase;
 use Dvsa\OlcsTest\Api\Framework\Support\InertSessionManager;
 use Dvsa\OlcsTest\Api\Framework\Support\JsonSnapshot;
 use Dvsa\OlcsTest\Api\Framework\Support\PortableValues;
+use Dvsa\OlcsTest\Api\Framework\Support\SystemUser;
 use Laminas\I18n\Translator\LoaderPluginManager;
 use Laminas\ModuleManager\Listener\ServiceListener;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\ServiceManager;
-use Mockery as m;
 use Olcs\Logging\Log\Processor\SessionId;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
@@ -297,22 +293,9 @@ final class ContainerTest extends FrameworkTestCase
      */
     private function boot(Entrypoint $entrypoint, bool $withRealTranslationLoader = false): ApiApplication
     {
-        $userRepository = null;
-
-        if ($entrypoint === Entrypoint::Cli) {
-            // The command line resolves the system user from the database while it bootstraps
-            $systemUser = new User('pid', User::USER_TYPE_INTERNAL);
-            $systemUser->setLoginId('system-user');
-
-            $userRepository = m::mock(UserRepository::class);
-            $userRepository->expects('fetchById')
-                ->with(IdentityProviderInterface::SYSTEM_USER)
-                ->andReturn($systemUser);
-        }
-
         return ApiApplication::bootstrap(
             $entrypoint,
-            static function (ServiceManager $serviceManager) use ($userRepository, $withRealTranslationLoader): void {
+            static function (ServiceManager $serviceManager) use ($entrypoint, $withRealTranslationLoader): void {
                 if ($withRealTranslationLoader) {
                     self::useRealTranslationLoader($serviceManager);
                 }
@@ -321,12 +304,8 @@ final class ContainerTest extends FrameworkTestCase
                 assert($sessionId instanceof SessionId);
                 $sessionId->setSessionManager(new InertSessionManager());
 
-                if ($userRepository !== null) {
-                    $repositories = $serviceManager->get('RepositoryServiceManager');
-                    assert($repositories instanceof RepositoryServiceManager);
-                    $repositories->setAllowOverride(true);
-                    $repositories->setService('User', $userRepository);
-                    $repositories->setAllowOverride(false);
+                if ($entrypoint === Entrypoint::Cli) {
+                    SystemUser::answerTheBootstrapLookup($serviceManager);
                 }
             }
         );

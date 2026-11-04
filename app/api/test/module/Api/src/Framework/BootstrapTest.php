@@ -7,12 +7,9 @@ namespace Dvsa\OlcsTest\Api\Framework;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Dvsa\Olcs\Address\Service\Address;
-use Dvsa\Olcs\Api\Domain\Repository\User as UserRepository;
-use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
 use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
 use Dvsa\Olcs\Api\Entity\Types\EncryptedStringType;
 use Dvsa\Olcs\Api\Entity\User\User;
-use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\Olcs\Cli\Request\CliRequest;
 use Dvsa\Olcs\Cli\Session\NullSaveHandler;
 use Dvsa\Olcs\DvsaAddressService\Service\DvsaAddressService;
@@ -20,6 +17,7 @@ use Dvsa\OlcsTest\Api\Framework\Support\ApiApplication;
 use Dvsa\OlcsTest\Api\Framework\Support\Entrypoint;
 use Dvsa\OlcsTest\Api\Framework\Support\FixedToggleService;
 use Dvsa\OlcsTest\Api\Framework\Support\FrameworkTestCase;
+use Dvsa\OlcsTest\Api\Framework\Support\SystemUser;
 use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 use Laminas\Cli\ContainerCommandLoader;
 use Laminas\Http\PhpEnvironment\Request as HttpRequest;
@@ -45,8 +43,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 final class BootstrapTest extends FrameworkTestCase
 {
-    private const string CLI_SYSTEM_USER_LOGIN_ID = 'system-user';
-
     /**
      * The cipher text of PLAINTEXT under ApiApplication::ENCRYPTION_KEY with the current settings:
      * AES-CBC through OpenSSL with an all-zero IV (see Api Module::initDoctrineEncrypterType). Every
@@ -103,7 +99,7 @@ final class BootstrapTest extends FrameworkTestCase
         // A web request with no Authorization header is the anonymous user
         yield 'web' => [Entrypoint::Web, User::ANON_USERNAME];
         // The command line always runs as the system user
-        yield 'cli' => [Entrypoint::Cli, self::CLI_SYSTEM_USER_LOGIN_ID];
+        yield 'cli' => [Entrypoint::Cli, SystemUser::LOGIN_ID];
     }
 
     #[DataProvider('logUsers')]
@@ -229,23 +225,7 @@ final class BootstrapTest extends FrameworkTestCase
             return ApiApplication::bootstrap($entrypoint);
         }
 
-        // The command line resolves the system user from the database while it bootstraps
-        $systemUser = new User('pid', User::USER_TYPE_INTERNAL);
-        $systemUser->setLoginId(self::CLI_SYSTEM_USER_LOGIN_ID);
-
-        $userRepository = m::mock(UserRepository::class);
-        $userRepository->expects('fetchById')->with(IdentityProviderInterface::SYSTEM_USER)->andReturn($systemUser);
-
-        return ApiApplication::bootstrap(
-            $entrypoint,
-            static function (ServiceManager $serviceManager) use ($userRepository): void {
-                $repositories = $serviceManager->get('RepositoryServiceManager');
-                assert($repositories instanceof RepositoryServiceManager);
-                $repositories->setAllowOverride(true);
-                $repositories->setService('User', $userRepository);
-                $repositories->setAllowOverride(false);
-            }
-        );
+        return ApiApplication::bootstrap($entrypoint, SystemUser::answerTheBootstrapLookup(...));
     }
 
     private function lastRecord(ApiApplication $app): LogRecord
