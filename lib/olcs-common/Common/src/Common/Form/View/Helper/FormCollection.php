@@ -126,6 +126,9 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
         }
 
         $attributes       = $element->getAttributes();
+
+        unset($attributes['name']);
+
         $markup           = '';
         $templateMarkup   = '';
         $readOnly = $this->isReadOnly() || $element->getOption('readonly');
