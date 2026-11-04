@@ -89,6 +89,9 @@ final class MvcHttpKernel implements HttpKernel
      * The headers the client receives, which are not simply the response's header list: laminas-mvc's
      * AbstractResponseSender passes each one to header(), which replaces any earlier header of the same
      * name unless the header class allows several. A response holding Content-Type twice sends the last.
+     * A JsonModel rendered by the view holds it twice today: the Db and Scanning modules both list
+     * ViewJsonStrategy in view_manager.strategies, the merge keeps both, and each copy's injectResponse()
+     * adds the header (see the view section of EventListenerTest's snapshots).
      *
      * @return array<string, list<string>>
      */

@@ -1,0 +1,93 @@
+{
+  "application": {
+    "identifiers": [
+      "Laminas\\Mvc\\Application"
+    ],
+    "events": {
+      "bootstrap": [
+        "10000 Laminas\\Mvc\\View\\Http\\ViewManager::onBootstrap",
+        "1000 {closure:Laminas\\ModuleManager\\Listener\\LocatorRegistrationListener::onLoadModules()}",
+        "1 Olcs\\Logging\\Mvc\\Module::onBootstrap",
+        "1 Dvsa\\Olcs\\Db\\Module::onBootstrap",
+        "1 LmcRbacMvc\\Module::onBootstrap",
+        "1 Dvsa\\Olcs\\Api\\Module::onBootstrap",
+        "1 Dvsa\\Olcs\\Address\\Module::onBootstrap",
+        "1 Dvsa\\Olcs\\Cli\\Module::onBootstrap"
+      ],
+      "dispatch": [
+        "10000 Olcs\\Logging\\Mvc\\Listener\\LogRequest::onDispatch",
+        "1 Laminas\\Mvc\\MiddlewareListener::onDispatch",
+        "1 Laminas\\Mvc\\DispatchListener::onDispatch",
+        "-90 Laminas\\Mvc\\View\\Http\\RouteNotFoundStrategy::prepareNotFoundViewModel"
+      ],
+      "dispatch.error": [
+        "1 Laminas\\Mvc\\View\\Http\\RouteNotFoundStrategy::detectNotFoundError",
+        "1 Laminas\\Mvc\\View\\Http\\RouteNotFoundStrategy::prepareNotFoundViewModel",
+        "1 Laminas\\Mvc\\View\\Http\\ExceptionStrategy::prepareExceptionViewModel",
+        "0 Olcs\\Logging\\Mvc\\Listener\\LogError::onDispatchError",
+        "-100 Laminas\\Mvc\\View\\Http\\InjectViewModelListener::injectViewModel"
+      ],
+      "finish": [
+        "10000 Olcs\\Logging\\Mvc\\Listener\\LogRequest::onDispatchEnd",
+        "-10000 Laminas\\Mvc\\SendResponseListener::sendResponse"
+      ],
+      "render": [
+        "-10000 Laminas\\Mvc\\View\\Http\\DefaultRenderingStrategy::render"
+      ],
+      "render.error": [
+        "1 Laminas\\Mvc\\View\\Http\\ExceptionStrategy::prepareExceptionViewModel",
+        "0 Olcs\\Logging\\Mvc\\Listener\\LogError::onDispatchError",
+        "-100 Laminas\\Mvc\\View\\Http\\InjectViewModelListener::injectViewModel",
+        "-10000 Laminas\\Mvc\\View\\Http\\DefaultRenderingStrategy::render"
+      ],
+      "route": [
+        "10000 Laminas\\Mvc\\HttpMethodListener::onRoute",
+        "10000 Olcs\\Logging\\Mvc\\Listener\\LogRequest::onRoute",
+        "1 Laminas\\Mvc\\RouteListener::onRoute",
+        "1 Laminas\\Mvc\\ModuleRouteListener::onRoute",
+        "1 Dvsa\\Olcs\\Api\\Mvc\\PayloadValidationListener::onRoute"
+      ]
+    }
+  },
+  "send response": {
+    "identifiers": [
+      "Laminas\\Mvc\\SendResponseListener"
+    ],
+    "events": {
+      "sendResponse": [
+        "1 {closure:Dvsa\\Olcs\\Api\\Module::onBootstrap()}",
+        "-1000 Laminas\\Mvc\\ResponseSender\\PhpEnvironmentResponseSender::__invoke",
+        "-3000 Laminas\\Mvc\\ResponseSender\\SimpleStreamResponseSender::__invoke",
+        "-4000 Laminas\\Mvc\\ResponseSender\\HttpResponseSender::__invoke"
+      ]
+    }
+  },
+  "view": {
+    "identifiers": [
+      "Laminas\\View\\View"
+    ],
+    "events": {
+      "renderer": [
+        "100 Laminas\\View\\Strategy\\JsonStrategy::selectRenderer",
+        "100 Laminas\\View\\Strategy\\JsonStrategy::selectRenderer",
+        "1 Laminas\\View\\Strategy\\PhpRendererStrategy::selectRenderer"
+      ],
+      "response": [
+        "100 Laminas\\View\\Strategy\\JsonStrategy::injectResponse",
+        "100 Laminas\\View\\Strategy\\JsonStrategy::injectResponse",
+        "1 Laminas\\View\\Strategy\\PhpRendererStrategy::injectResponse"
+      ]
+    }
+  },
+  "shared, other identifiers": {
+    "Laminas\\Stdlib\\DispatchableInterface": {
+      "dispatch": [
+        "-80 Laminas\\Mvc\\View\\Http\\CreateViewModelListener::createViewModelFromArray",
+        "-80 Laminas\\Mvc\\View\\Http\\CreateViewModelListener::createViewModelFromNull",
+        "-90 Laminas\\Mvc\\View\\Http\\RouteNotFoundStrategy::prepareNotFoundViewModel",
+        "-90 Laminas\\Mvc\\View\\Http\\InjectTemplateListener::injectTemplate",
+        "-100 Laminas\\Mvc\\View\\Http\\InjectViewModelListener::injectViewModel"
+      ]
+    }
+  }
+}
