@@ -127,18 +127,6 @@ class RelationshipTypeHandler extends AbstractTypeHandler
             implode(', ', $options)
         );
 
-        // Add OrderBy annotation if specified (only for collections)
-        if ($relationType === 'OneToMany' || $relationType === 'ManyToMany') {
-            $orderBy = $this->getOrderBy($column, $config);
-            if (!empty($orderBy)) {
-                $orderByPairs = [];
-                foreach ($orderBy as $field => $direction) {
-                    $orderByPairs[] = sprintf("'%s' => '%s'", $field, strtoupper((string) $direction));
-                }
-                $annotations[] = sprintf('#[ORM\OrderBy([%s])]', implode(', ', $orderByPairs));
-            }
-        }
-
         return implode("\n    ", $annotations);
     }
 

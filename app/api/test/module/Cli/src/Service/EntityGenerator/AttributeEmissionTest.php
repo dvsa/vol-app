@@ -647,4 +647,26 @@ final class AttributeEmissionTest extends MockeryTestCase
 
         return (new \ReflectionMethod(Doctrine3SchemaIntrospector::class, $method))->invoke($introspector, ...$args);
     }
+
+    public function testInverseRelationshipProcessorOrderByUsesSortDirectionEnumsOnly(): void
+    {
+        $processor = new InverseRelationshipProcessor(
+            new EntityConfigService(dirname(__DIR__, 6) . '/data/db/EntityConfig.php'),
+            new PropertyNameResolver()
+        );
+
+        $this->assertSame(
+            "#[ORM\\OrderBy(['createdOn' => \\SortDirection::Descending])]",
+            $processor->generateOrderByAnnotation([
+                'createdOn' => \SortDirection::Descending,
+            ])
+        );
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageIsOrContains('OrderBy direction for "createdOn" must be an instance of \\SortDirection');
+
+        $processor->generateOrderByAnnotation([
+            'createdOn' => 'DESC',
+        ]);
+    }
 }

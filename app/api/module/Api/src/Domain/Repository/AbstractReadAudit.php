@@ -83,6 +83,6 @@ abstract class AbstractReadAudit extends AbstractRepository implements ReadAudit
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.' . $this->entityProperty, ':byEntity'))
             ->setParameter('byEntity', $query->getId())
-            ->orderBy($this->alias . '.createdOn', 'DESC');
+            ->orderBy($this->alias . '.createdOn', \SortDirection::Descending);
     }
 }

@@ -757,8 +757,8 @@ return array(
                 'entity' => 'LicenceVehicle',
                 'property' => 'goodsDisc',
                 'orderBy' => array(
-                    'createdOn' => 'DESC'
-                )
+                    'createdOn' => \SortDirection::Descending,
+                ),
             )
         )
     ),
@@ -777,8 +777,8 @@ return array(
                 'entity' => 'Licence',
                 'property' => 'psvDisc',
                 'orderBy' => array(
-                    'discNo' => 'ASC'
-                )
+                    'discNo' => \SortDirection::Ascending,
+                ),
             )
         )
     ),
@@ -1775,7 +1775,7 @@ return array(
                 'indexBy' => 'id',
                 'orphanRemoval' => 'true',
                 'orderBy' => array(
-                    'id' => 'DESC',
+                    'id' => \SortDirection::Descending,
                 ),
             )
         )
@@ -2415,7 +2415,7 @@ return array(
                 'entity' => 'ApplicationPath',
                 'property' => 'applicationStep',
                 'orderBy' => array(
-                    'weight' => 'ASC'
+                    'weight' => \SortDirection::Ascending,
                 )
             )
         ),
@@ -2426,7 +2426,7 @@ return array(
                 'entity' => 'Question',
                 'property' => 'applicationValidation',
                 'orderBy' => array(
-                    'weight' => 'ASC'
+                    'weight' => \SortDirection::Ascending,
                 )
             )
         ),

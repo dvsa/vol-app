@@ -33,7 +33,7 @@ class LetterInstance extends AbstractLetterInstance
      * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceSection>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $letterInstanceSections;
 
     /**
@@ -42,7 +42,7 @@ class LetterInstance extends AbstractLetterInstance
      * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceIssue>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $letterInstanceIssues;
 
     /**
@@ -51,7 +51,7 @@ class LetterInstance extends AbstractLetterInstance
      * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceTodo>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $letterInstanceTodos;
 
     /**
@@ -60,7 +60,7 @@ class LetterInstance extends AbstractLetterInstance
      * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceAppendix>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $letterInstanceAppendices;
 
     /**

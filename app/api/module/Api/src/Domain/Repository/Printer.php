@@ -37,6 +37,6 @@ class Printer extends AbstractRepository
     #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
-        $qb->orderBy($this->alias . '.printerName', 'ASC');
+        $qb->orderBy($this->alias . '.printerName', \SortDirection::Ascending);
     }
 }
