@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" class="review">
+    
+    <head>
+    
+    <meta charset="utf-8">
+    
+    <title>Licence review - Vehicle Operator Licensing - GOV.UK</title><meta name="viewport" content="width&#x3D;device-width,&#x20;initial-scale&#x3D;1.0">
+<meta http-equiv="X-UA-Compatible" content="IE&#x3D;edge"><link href="&#x2F;styles&#x2F;print.css" media="screen,&#x20;print" rel="stylesheet" type="text&#x2F;css">    
+</head>
+
+    <body>
+        
+        <div class="review-header">
+            <p>OB1234567 &lt;&amp;&gt;</p>
+            <h1>continuation-review-title</h1>
+            <a class="hide-print" href="javascript:window.print()">Print this page</a>
+        </div>
+                    <div class="review-section">
+                <h2>
+                    1. continuation-review-details                </h2>
+                <table class="table--2-column"><tr><th>Licence number</th><td>OB1234567 &lt;&amp;&gt;</td></tr><tr><th>Raw</th><td><b>not escaped</b></td></tr></table>            </div>
+                    <div class="review-section">
+                <h2>
+                    2. continuation-review-vehicles                </h2>
+                <table class="table--3-column"><tr><th>VRM</th><th>Weight</th><th>Added</th></tr><tr><td>AB12CDE</td><td>3500 &lt;&amp;&gt;</td><td>01/01/2026</td></tr></table>    <h4>continuation-review-summary <&></h4>
+<table class="table--2-column"><tr><th>Total</th><td>1</td></tr></table>            </div>
+                    <div class="review-section">
+                <h2>
+                    3. continuation-review-people                </h2>
+                                            <p>No people, printed raw <&></p>
+                            </div>
+                    <div class="review-section">
+                <h2>
+                    4. continuation-review-finance                </h2>
+                <div class="read-only">
+    
+        <ul class="definition-list">
+                    <li class="definition-list__item">
+            <dt>Balance</dt>
+        <dd>
+                        £1,000 &lt;&amp;&gt;                                </dd>
+    </li>
+            </ul>
+
+</div>
+            </div>
+                    <div class="review-section">
+                <h2>
+                    5. continuation-review-declaration                </h2>
+                            </div>
+                
+    </body>
+    
+</html>

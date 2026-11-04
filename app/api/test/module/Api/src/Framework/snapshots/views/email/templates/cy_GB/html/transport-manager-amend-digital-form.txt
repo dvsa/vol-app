@@ -1,0 +1,17 @@
+<p>Helô,</p>
+<p>
+Mae [organisation &lt;&amp;&gt;] wedi'ch enwi fel Rheolwr Trafnidiaeth ar Drwydded Gweithredwr
+Cerbydau [reference &lt;&amp;&gt;].
+</p>
+<p>
+    Maent wedi adolygu'ch cais ac mae angen ichi ddiwygio neu wirio'ch manylion. Bydd angen ichi lofnodi'r datganiad eto ar ôl ichi adolygu neu ddiwygio'ch cais.
+</p>
+<p>
+    I adolygu'r cais, <a href="[signInLink &lt;&amp;&gt;]">mewngofnodwch ar-lein</a> gyda'ch enw defnyddiwr
+    ([username &lt;&amp;&gt;]) a'ch cyfrinair.
+</p>
+<p>
+    <b>Profi problemau?</b><br>
+Am gyngor gwelwch y <a href="http://www.doeni.gov.uk/index/information/foi/recent-releases/publications-details.htm?docid=9994">Canllaw cymorth ar gyfer Rheolwyr Trafnidiaeth</a> neu
+<a href="mailto:notifications@vehicle-operator-licensing.service.gov.uk">e-bostiwch ni</a>.
+</p>

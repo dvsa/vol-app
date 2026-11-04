@@ -1,0 +1,7 @@
+Diolch am eich cyflwyniad Adnewyddu Data EBSR a dderbyniwyd ar [submissionDate <&>] ar gyfer y gwasanaeth bysiau lleol dilynol - [registrationNumber <&>] - rhwng [origin <&>] a [destination <&>] gyda'r rhif gwasanaeth [lineName <&>] i ddod i effaith ar [startDate <&>].
+
+Derbyniwyd eich cyflwyniad ac erbyn hyn diweddarwyd ein cofnodion llaw presennol gyda'r ffeil Cofrestru Electronig o Wasanaeth Bysiau (EBSR).
+
+Rydym wedi copïo'r e-bost hwn i'r awdurdodau lleol dilynol: [localAuthoritys <&>].
+
+Byddwch yn canfod copi o'r fersiwn PDF o'r manylion cofrestredig yn eich ardal ddogfennau. Gwiriwch y cynnwys a rhoi gwybod inni os oes unrhyw ddiffygion fel y gallwn eu cywiro cyn gynted â phosibl.

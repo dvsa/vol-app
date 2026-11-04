@@ -1,0 +1,12 @@
+Hello,
+
+[organisation <&>] has named you as a Transport Manager on Vehicle Operator Licence [reference <&>].
+
+Before we can consider their application, you’ll need to submit your details to us.
+
+To do that sign in online at [signInLink <&>] with your username ([username <&>]) and password.
+
+Having problems?
+
+
+For advice see the Transport Manager help guide at https://www.gov.uk/government/publications/application-to-add-a-transport-manager-to-a-licence-tm1 or email us at notifications@vehicle-operator-licensing.service.gov.uk.

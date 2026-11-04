@@ -1,0 +1,29 @@
+<div class="signature-box">
+    <div class="signature-box__column">
+        <form>
+            <label class="signature-box__label">Llofnod  y Rheolwr Trafnidiaeth</label>
+            <input type="text" class="signature-box__input signature">
+
+            <label class="signature-box__label">Eich enw yn llawn mewn llythrennau bras</label>
+            <input type="text" class="signature-box__input">
+
+            <label class="signature-box__label">Dyddiad</label>
+            <input type="text" class="signature-box__input date">
+        </form>
+    </div>
+    <div class="signature-box__column">
+        <form>
+            <label class="signature-box__label">%s</label>
+            <input type="text" class="signature-box__input signature">
+
+            <label class="signature-box__label">Eich enw yn llawn mewn llythrennau bras</label>
+            <input type="text" class="signature-box__input">
+
+            <label class="signature-box__label">Dyddiad</label>
+            <input type="text" class="signature-box__input date">
+        </form>
+    </div>
+</div>
+
+<p>Rhaid i chi lofnodi a dyddio’r ffurflen hon cyn i ni fedru ystyried eich cais.</p>
+<p><strong>Dychwelwch i:</strong> %s</p>
