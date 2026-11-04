@@ -1138,6 +1138,8 @@ unit suite, in CI, with no database, Redis or AWS.
 | `ContainerTest`     | Every name the booted container answers to and how it is wired, including the services laminas-mvc registers implicitly (`Request`, `ViewRenderer`, `ViewHelperManager`…), and whether each service and plugin can still be created                                                                                             |
 | `MergedConfigTest`  | The merged configuration, one file per top-level key (CLI: only what differs from the web)                                                                                                                                                                                                                                      |
 | `ViewRenderingTest` | The HTML and text the API renders server-side (snapshot documents, permit summaries, submission sections, email bodies): which file each template name resolves to, which class each helper resolves to, and the rendered output                                                                                                |
+| `EventListenerTest` | Every listener attached when the API boots, in the order each event runs them: laminas-mvc's routing, dispatch, view strategies and response sending, and the API's own (payload validation, request and response logging). Each one has to become middleware, or be dropped deliberately                                       |
+| `BatchJobTest`      | That every AWS Batch job in `infra/terraform/environments/*/main.tf` names a command the API has, with options and arguments it accepts, checked by Symfony Console as it would before running the command                                                                                                                      |
 | `GlobalStateTest`   | That booting and restoring leaves the process as it was (see below)                                                                                                                                                                                                                                                             |
 
 The snapshots are committed under `Framework/snapshots/`, one folder per test.
@@ -1175,15 +1177,17 @@ The point of these tests is that the migration should not change a single
 file. A diff is a behaviour change that a client, a batch job or a stored
 document would notice. Find out why before regenerating.
 
-| Failure                                          | Usually means                                                                                     |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| a route snapshot changed                         | a route was added, removed or reordered in `lib/olcs-transfer/config`, or the router was replaced |
-| an HTTP snapshot changed                         | a status, header, body byte or log line changed                                                   |
-| a `BootstrapTest` assertion fails                | something `onBootstrap` did is no longer done; carry it across to the new bootstrap               |
-| the container wiring lost names                  | services laminas-mvc registered implicitly; register them in the API                              |
-| the merged config changed                        | module order, merge rules or parameter resolution differ                                          |
-| a view snapshot changed                          | the renderer, resolver or helper configuration changed, or a template did                         |
-| `GlobalStateTest` fails, or unrelated tests fail | booting the API now changes some process-wide state that `GlobalState` does not restore           |
+| Failure                                          | Usually means                                                                                                                                                      |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| a route snapshot changed                         | a route was added, removed or reordered in `lib/olcs-transfer/config`, or the router was replaced                                                                  |
+| an HTTP snapshot changed                         | a status, header, body byte or log line changed                                                                                                                    |
+| a `BootstrapTest` assertion fails                | something `onBootstrap` did is no longer done; carry it across to the new bootstrap                                                                                |
+| the container wiring lost names                  | services laminas-mvc registered implicitly; register them in the API                                                                                               |
+| the merged config changed                        | module order, merge rules or parameter resolution differ                                                                                                           |
+| a view snapshot changed                          | the renderer, resolver or helper configuration changed, or a template did                                                                                          |
+| a listener snapshot changed                      | a listener was added, removed or moved; under the new stack, check its middleware equivalent sits in the same position                                             |
+| a `BatchJobTest` job fails                       | a command or option was renamed or removed, or the terraform names one that does not exist. Fix whichever side is wrong; terraform changes go through infra review |
+| `GlobalStateTest` fails, or unrelated tests fail | booting the API now changes some process-wide state that `GlobalState` does not restore                                                                            |
 
 Ordinary feature work changes them too. A new route, a new service or a template
 edit each fail the relevant snapshot, so regenerate in the same PR and review
@@ -1235,12 +1239,26 @@ real class is already loaded. `S3ProcessorFactoryTest` and
 - **Routing.** `RouteSnapshotTest` makes it safe either to keep laminas-router's
   tree or to replace it. Either way, every request has to keep landing in the
   same place.
+- **Listeners.** `EventListenerTest`'s snapshots are the checklist of what the
+  middleware pipeline has to do, and in what order.
+- **Batch jobs.** They start from `config/container-cli.php`, so a change to
+  the command-line bootstrap or to a command's options is checked against
+  every environment's job definitions by `BatchJobTest`. CI's sparse checkout
+  includes `infra/terraform` for it. The API's checks don't run when only the
+  terraform changes, so a mistake made only in the terraform is reported by
+  the next API change. Jobs that are wrong in the terraform today are listed
+  in the test's `KNOWN_FAILURES`, which fails once one of them is fixed.
 
 ### What they do not cover
 
-- **Headers a controller sends itself with `header()`.** The CLI SAPI discards
-  them. Today only stream downloads do this (`GenericController::getList()` via
-  `streamResult()`). The body is still captured.
+- **Headers that PHP sends itself.** The CLI SAPI discards them. Today these are:
+    - the headers a stream download sends with `header()`
+      (`GenericController::getList()` via `streamResult()`), though the body is
+      still captured;
+    - the `Set-Cookie: PHPSESSID` and no-cache headers that come with a PHP
+      session. The logger's `SessionId` processor starts one whenever a log record
+      is written: on every request locally, but only on requests that log a
+      warning or worse in the deployed environments.
 - **What `public/index.php` does after an exception escapes the application.**
   Today that happens when a bearer token is invalid or malformed: identity is
   resolved while bootstrapping, before laminas-mvc can turn the exception into
