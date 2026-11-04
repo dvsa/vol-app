@@ -6,6 +6,7 @@ use Laminas\Form\Annotation as Form;
 
 #[Form\Attributes(['class' => 'govuk-button-group'])]
 #[Form\Name('fee-actions')]
+#[Form\Options(['wrapperElement' => 'div'])]
 class FeeActions
 {
     #[Form\Attributes(['type' => 'submit', 'data-module' => 'govuk-button', 'class' => 'govuk-button', 'id' => 'pay'])]
