@@ -1,0 +1,152 @@
+{
+  "request": {
+    "method": "GET",
+    "uri": "/search/licence?q=smith&page=1&limit=10",
+    "headers": {
+      "Host": "olcs-backend",
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "framework-test-correlation-id"
+    },
+    "body": ""
+  },
+  "response": {
+    "status": 200,
+    "reason": "OK",
+    "headers": [],
+    "body": "{\"Response\":{\"Code\":200,\"Message\":\"OK\",\"Summary\":\"Results found\",\"Data\":{\"Count\":1,\"Results\":[{\"licNo\":\"OB1\"}]}}}",
+    "json": {
+      "Response": {
+        "Code": 200,
+        "Message": "OK",
+        "Summary": "Results found",
+        "Data": {
+          "Count": 1,
+          "Results": [
+            {
+              "licNo": "OB1"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "logs": [
+    {
+      "level": "DEBUG",
+      "message": "Request received",
+      "context": {
+        "data": {
+          "path": "http://olcs-backend/search/licence?q=smith&page=1&limit=10",
+          "method": "GET",
+          "route_params": [],
+          "get": {
+            "q": "smith",
+            "page": "1",
+            "limit": "10"
+          },
+          "post": [],
+          "headers": {
+            "Host": "olcs-backend",
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Correlation-Id": "framework-test-correlation-id"
+          },
+          "content": "MAX_CONTENT_LENGTH_TO_LOG exceeded"
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request dispatched",
+      "context": {
+        "data": {
+          "controller": "Dvsa\\Olcs\\Db\\Controller\\SearchController",
+          "action": null
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "*** Legacy Api Controller ***: Dvsa\\Olcs\\Db\\Controller\\SearchController",
+      "context": {
+        "data": {
+          "content": ""
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "*** Legacy Api Controller Response ***",
+      "context": {
+        "data": {
+          "response": {
+            "content": "{\"Response\":{\"Code\":200,\"Message\":\"OK\",\"Summary\":\"Results found\",\"Data\":{\"Count\":1,\"Results\":[{\"licNo\":\"OB1\"}]}}}",
+            "status": 200
+          }
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request completed",
+      "context": {
+        "data": {
+          "request": "http://olcs-backend/search/licence?q=smith&page=1&limit=10",
+          "code": 200,
+          "status": "OK"
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "API Response Sent",
+      "context": {
+        "status": 200,
+        "content": "{\"Response\":{\"Code\":200,\"Message\":\"OK\",\"Summary\":\"Results found\",\"Data\":{\"Count\":1,\"Results\":[{\"licNo\":\"OB1\"}]}}}"
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    }
+  ]
+}

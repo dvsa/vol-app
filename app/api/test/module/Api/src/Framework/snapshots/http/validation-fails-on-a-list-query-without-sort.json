@@ -1,0 +1,96 @@
+{
+  "request": {
+    "method": "GET",
+    "uri": "/api/presiding-tc/?dto=Dvsa%5COlcs%5CTransfer%5CQuery%5CCases%5CPresidingTc%5CGetList",
+    "headers": {
+      "Host": "olcs-backend",
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "framework-test-correlation-id"
+    },
+    "body": ""
+  },
+  "response": {
+    "status": 422,
+    "reason": "Unprocessable Content",
+    "headers": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": "{\"sort\":{\"isEmpty\":\"Value is required and can't be empty\",\"invalidSort\":\"The sort value is not valid\"},\"order\":{\"isEmpty\":\"Value is required and can't be empty\"}}",
+    "json": {
+      "sort": {
+        "isEmpty": "Value is required and can't be empty",
+        "invalidSort": "The sort value is not valid"
+      },
+      "order": {
+        "isEmpty": "Value is required and can't be empty"
+      }
+    }
+  },
+  "logs": [
+    {
+      "level": "DEBUG",
+      "message": "Request received",
+      "context": {
+        "data": {
+          "path": "http://olcs-backend/api/presiding-tc/?dto=Dvsa%5COlcs%5CTransfer%5CQuery%5CCases%5CPresidingTc%5CGetList",
+          "method": "GET",
+          "route_params": [],
+          "get": {
+            "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\PresidingTc\\GetList"
+          },
+          "post": [],
+          "headers": {
+            "Host": "olcs-backend",
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Correlation-Id": "framework-test-correlation-id"
+          },
+          "content": "MAX_CONTENT_LENGTH_TO_LOG exceeded"
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request completed",
+      "context": {
+        "data": {
+          "request": "http://olcs-backend/api/presiding-tc/?dto=Dvsa%5COlcs%5CTransfer%5CQuery%5CCases%5CPresidingTc%5CGetList",
+          "code": 422,
+          "status": "Unprocessable Content"
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "API Response Sent",
+      "context": {
+        "status": 422,
+        "content": "{\"sort\":{\"isEmpty\":\"Value is required and can't be empty\",\"invalidSort\":\"The sort value is not valid\"},\"order\":{\"isEmpty\":\"Value is required and can't be empty\"}}"
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    }
+  ]
+}

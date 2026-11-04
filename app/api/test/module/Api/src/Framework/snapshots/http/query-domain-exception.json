@@ -1,0 +1,111 @@
+{
+  "request": {
+    "method": "GET",
+    "uri": "/api/licence/101/?dto=Dvsa%5COlcs%5CTransfer%5CQuery%5CLicence%5CLicence",
+    "headers": {
+      "Host": "olcs-backend",
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "framework-test-correlation-id"
+    },
+    "body": ""
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "headers": {
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ]
+    },
+    "body": "{\"messages\":{\"field\":{\"ERR_X\":\"Is wrong\"}}}",
+    "json": {
+      "messages": {
+        "field": {
+          "ERR_X": "Is wrong"
+        }
+      }
+    }
+  },
+  "logs": [
+    {
+      "level": "DEBUG",
+      "message": "Request received",
+      "context": {
+        "data": {
+          "path": "http://olcs-backend/api/licence/101/?dto=Dvsa%5COlcs%5CTransfer%5CQuery%5CLicence%5CLicence",
+          "method": "GET",
+          "route_params": [],
+          "get": {
+            "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Licence"
+          },
+          "post": [],
+          "headers": {
+            "Host": "olcs-backend",
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Correlation-Id": "framework-test-correlation-id"
+          },
+          "content": "MAX_CONTENT_LENGTH_TO_LOG exceeded"
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request dispatched",
+      "context": {
+        "data": {
+          "controller": "Dvsa\\Olcs\\Api\\Controller\\GenericController",
+          "action": null
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request completed",
+      "context": {
+        "data": {
+          "request": "http://olcs-backend/api/licence/101/?dto=Dvsa%5COlcs%5CTransfer%5CQuery%5CLicence%5CLicence",
+          "code": 400,
+          "status": "Bad Request"
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "API Response Sent",
+      "context": {
+        "status": 400,
+        "content": "{\"messages\":{\"field\":{\"ERR_X\":\"Is wrong\"}}}"
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    }
+  ]
+}

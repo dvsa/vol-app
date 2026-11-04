@@ -1,0 +1,102 @@
+{
+  "request": {
+    "method": "POST",
+    "uri": "/scanning/document",
+    "headers": {
+      "Host": "olcs-backend",
+      "Content-Type": "multipart/form-data; boundary=x"
+    },
+    "body": ""
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "headers": {
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ]
+    },
+    "body": "{\"status\":400,\"title\":\"POST \\u0022description\\u0022 is not a valid number\"}",
+    "json": {
+      "status": 400,
+      "title": "POST \"description\" is not a valid number"
+    }
+  },
+  "logs": [
+    {
+      "level": "DEBUG",
+      "message": "Request received",
+      "context": {
+        "data": {
+          "path": "http://olcs-backend/scanning/document",
+          "method": "POST",
+          "route_params": [],
+          "get": [],
+          "post": [],
+          "headers": {
+            "Host": "olcs-backend",
+            "Content-Type": "multipart/form-data; boundary=x"
+          },
+          "content": "MAX_CONTENT_LENGTH_TO_LOG exceeded"
+        }
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request dispatched",
+      "context": {
+        "data": {
+          "controller": "Dvsa\\Olcs\\Scanning\\Controller\\DocumentController",
+          "action": null
+        }
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request completed",
+      "context": {
+        "data": {
+          "request": "http://olcs-backend/scanning/document",
+          "code": 400,
+          "status": "Bad Request"
+        }
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "API Response Sent",
+      "context": {
+        "status": 400,
+        "content": "{\"status\":400,\"title\":\"POST \\u0022description\\u0022 is not a valid number\"}"
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    }
+  ]
+}

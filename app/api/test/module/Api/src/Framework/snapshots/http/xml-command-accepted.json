@@ -1,0 +1,94 @@
+{
+  "request": {
+    "method": "POST",
+    "uri": "/msi/compliance-episode",
+    "headers": {
+      "Host": "olcs-backend",
+      "Content-Type": "text/xml"
+    },
+    "body": "<?xml version=\"1.0\"?><episode/>"
+  },
+  "response": {
+    "status": 202,
+    "reason": "Accepted",
+    "headers": [],
+    "body": ""
+  },
+  "logs": [
+    {
+      "level": "DEBUG",
+      "message": "Request received",
+      "context": {
+        "data": {
+          "path": "http://olcs-backend/msi/compliance-episode",
+          "method": "POST",
+          "route_params": [],
+          "get": [],
+          "post": [],
+          "headers": {
+            "Host": "olcs-backend",
+            "Content-Type": "text/xml"
+          },
+          "content": "MAX_CONTENT_LENGTH_TO_LOG exceeded"
+        }
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request dispatched",
+      "context": {
+        "data": {
+          "controller": "Dvsa\\Olcs\\Api\\Controller\\XmlController",
+          "action": null
+        }
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request completed",
+      "context": {
+        "data": {
+          "request": "http://olcs-backend/msi/compliance-episode",
+          "code": 202,
+          "status": "Accepted"
+        }
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "API Response Sent",
+      "context": {
+        "status": 202,
+        "content": ""
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    }
+  ]
+}

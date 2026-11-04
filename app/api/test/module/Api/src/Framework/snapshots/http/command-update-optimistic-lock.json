@@ -1,0 +1,107 @@
+{
+  "request": {
+    "method": "PUT",
+    "uri": "/api/presiding-tc/7/",
+    "headers": {
+      "Host": "olcs-backend",
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "framework-test-correlation-id"
+    },
+    "body": "{\"id\":7,\"version\":2,\"name\":\"Framework Test\",\"user\":3}"
+  },
+  "response": {
+    "status": 409,
+    "reason": "Conflict",
+    "headers": {
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ]
+    },
+    "body": "{\"messages\":[\"Locked\"]}",
+    "json": {
+      "messages": [
+        "Locked"
+      ]
+    }
+  },
+  "logs": [
+    {
+      "level": "DEBUG",
+      "message": "Request received",
+      "context": {
+        "data": {
+          "path": "http://olcs-backend/api/presiding-tc/7/",
+          "method": "PUT",
+          "route_params": [],
+          "get": [],
+          "post": [],
+          "headers": {
+            "Host": "olcs-backend",
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Correlation-Id": "framework-test-correlation-id"
+          },
+          "content": "MAX_CONTENT_LENGTH_TO_LOG exceeded"
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request dispatched",
+      "context": {
+        "data": {
+          "controller": "Dvsa\\Olcs\\Api\\Controller\\GenericController",
+          "action": null
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request completed",
+      "context": {
+        "data": {
+          "request": "http://olcs-backend/api/presiding-tc/7/",
+          "code": 409,
+          "status": "Conflict"
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "API Response Sent",
+      "context": {
+        "status": 409,
+        "content": "{\"messages\":[\"Locked\"]}"
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    }
+  ]
+}
