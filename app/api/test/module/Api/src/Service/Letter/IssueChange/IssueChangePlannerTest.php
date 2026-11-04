@@ -184,6 +184,47 @@ class IssueChangePlannerTest extends TestCase
         $this->onLetter($letterInstance, $nine->getCurrentVersion(), 1);
 
         $this->assertFalse($this->sut->plan($letterInstance, [$seven, $nine])->hasChanges());
-        $this->assertTrue($this->sut->plan($letterInstance, [$nine, $seven])->hasChanges());
+    }
+
+    public function testSameIssuesInADifferentOrderKeepTheLettersOrder(): void
+    {
+        $seven = $this->issue(7);
+        $nine = $this->issue(9);
+        $letterInstance = new LetterInstance();
+        $sevenRow = $this->onLetter($letterInstance, $seven->getCurrentVersion(), 0);
+        $nineRow = $this->onLetter($letterInstance, $nine->getCurrentVersion(), 1);
+
+        $plan = $this->sut->plan($letterInstance, [$nine, $seven]);
+
+        $this->assertFalse($plan->hasChanges());
+        $this->assertSame([$sevenRow, $nineRow], $plan->finalIssues);
+    }
+
+    public function testAddingAnIssueUsesTheSelectionOrder(): void
+    {
+        $seven = $this->issue(7);
+        $nine = $this->issue(9);
+        $eleven = $this->issue(11);
+        $letterInstance = new LetterInstance();
+        $sevenRow = $this->onLetter($letterInstance, $seven->getCurrentVersion(), 0);
+        $nineRow = $this->onLetter($letterInstance, $nine->getCurrentVersion(), 1);
+
+        $plan = $this->sut->plan($letterInstance, [$nine, $eleven, $seven]);
+
+        $this->assertTrue($plan->hasChanges());
+        $this->assertSame([$nineRow, $eleven->getCurrentVersion(), $sevenRow], $plan->finalIssues);
+    }
+
+    public function testHiddenLostTodoCountsAsAnEdit(): void
+    {
+        $t1 = $this->todoVersion(1, 'Send bank statements');
+        $seven = $this->issue(7, [$t1]);
+        $letterInstance = new LetterInstance();
+        $row = $this->onLetter($letterInstance, $seven->getCurrentVersion(), 0);
+        $this->todoOnLetter($letterInstance, $row, $t1)->setIsRendered(false);
+
+        $plan = $this->sut->plan($letterInstance, []);
+
+        $this->assertSame(['Send bank statements'], $plan->lostEdits());
     }
 }

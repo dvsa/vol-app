@@ -56,16 +56,17 @@ class IssueChangePlanner
             }
         }
 
-        $currentlyKept = array_values(array_filter(
-            $this->issuesInDisplayOrder($letterInstance),
-            static fn(LetterInstanceIssue $i): bool => in_array($i, $keptIssues, true)
-        ));
+        // Nothing ticked or unticked: keep the letter's own order. The modal's order can differ
+        // (an issue since switched off, a type changed or reordered), and a save that changes
+        // nothing shouldn't renumber the letter.
+        if ($removedIssues === [] && count($keptIssues) === count($finalIssues)) {
+            $finalIssues = $this->issuesInDisplayOrder($letterInstance);
+        }
 
         return new IssueChangePlan(
             $finalIssues,
             $removedIssues,
             $this->lostTodos($letterInstance, $finalIssues),
-            $currentlyKept !== $keptIssues,
         );
     }
 

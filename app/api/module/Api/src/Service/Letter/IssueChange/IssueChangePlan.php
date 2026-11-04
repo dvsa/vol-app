@@ -18,19 +18,17 @@ final readonly class IssueChangePlan
      * @param list<LetterInstanceIssue|LetterIssueVersion> $finalIssues kept rows, or versions to add, in final order
      * @param list<LetterInstanceIssue> $removedIssues
      * @param list<LetterInstanceTodo> $lostTodos existing rows that no final issue brings
-     * @param bool $orderChanged whether the kept issues end up in a different order
      */
     public function __construct(
         public array $finalIssues,
         public array $removedIssues,
         public array $lostTodos,
-        public bool $orderChanged = false,
     ) {
     }
 
     /**
      * Names of the caseworker's edits that applying this plan would throw away: the headings of
-     * edited issues being removed, then the names of edited to-dos that go with them.
+     * edited issues being removed, then the names of edited or hidden to-dos that go with them.
      *
      * @return list<string>
      */
@@ -45,7 +43,8 @@ final readonly class IssueChangePlan
         }
 
         foreach ($this->lostTodos as $instanceTodo) {
-            if (!empty($instanceTodo->getEditedDescription())) {
+            $hidden = !(bool) ($instanceTodo->getIsRendered() ?? true);
+            if ($instanceTodo->hasBeenEdited() || $hidden) {
                 $todoVersion = $instanceTodo->getLetterTodoVersion();
                 $name = trim((string) $todoVersion?->getName());
                 $names[] = $name !== '' ? $name : (string) $todoVersion?->getLetterTodo()?->getTodoKey();
@@ -57,7 +56,7 @@ final readonly class IssueChangePlan
 
     public function hasChanges(): bool
     {
-        if ($this->removedIssues !== [] || $this->orderChanged) {
+        if ($this->removedIssues !== []) {
             return true;
         }
 
