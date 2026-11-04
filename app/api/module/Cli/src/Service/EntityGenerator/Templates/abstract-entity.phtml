@@ -127,7 +127,7 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
 <?php elseif ($methodGenerator->isRelationshipField($field)): ?>
      * @param \<?php echo $methodGenerator->getTargetEntity($field); ?> $<?php echo $methodGenerator->formatParamName($field); ?> entity being set as the value
 <?php else: ?>
-     * @param <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?><?php if ($methodGenerator->hasNullableSetterParameter($field)): ?>|null<?php endif; ?> $<?php echo $methodGenerator->formatParamName($field); ?> new value being set
+     * @param <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?><?php if ($methodGenerator->hasNullableReturn($field)): ?>|null<?php endif; ?> $<?php echo $methodGenerator->formatParamName($field); ?> new value being set
 <?php endif; ?>
      *
      * @return <?php echo $methodGenerator->getFluidReturnType(); ?>
@@ -147,15 +147,15 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
 <?php if ($methodGenerator->isCollectionField($field)): ?>
      * @return \Doctrine\Common\Collections\ArrayCollection
 <?php elseif ($methodGenerator->isRelationshipField($field)): ?>
-     * @return \<?php echo $methodGenerator->getTargetEntity($field); ?><?php if ($methodGenerator->hasNullableGetterReturn($field)): ?>|null<?php endif; ?>
+     * @return \<?php echo $methodGenerator->getTargetEntity($field); ?><?php if ($methodGenerator->hasNullableReturn($field)): ?>|null<?php endif; ?>
 
 <?php elseif ($methodGenerator->isDateTimeField($field)): ?>
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?><?php if ($methodGenerator->hasNullableGetterReturn($field)): ?>|null<?php endif; ?>
+     * @return <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?><?php if ($methodGenerator->hasNullableReturn($field)): ?>|null<?php endif; ?>
 
 <?php else: ?>
-     * @return <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?><?php if ($methodGenerator->hasNullableGetterReturn($field)): ?>|null<?php endif; ?>
+     * @return <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?><?php if ($methodGenerator->hasNullableReturn($field)): ?>|null<?php endif; ?>
 
 <?php endif; ?>
      */

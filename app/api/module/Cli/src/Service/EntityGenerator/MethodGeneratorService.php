@@ -246,18 +246,9 @@ final readonly class MethodGeneratorService
     }
 
     /**
-     * Whether this field explicitly requests a nullable getter PHPDoc return type.
+     * Whether this field explicitly requests a nullable PHPDoc return type.
      */
-    public function hasNullableGetterReturn(array $field): bool
-    {
-        return ($field['property']['nullable'] ?? false)
-            && (($field['fieldConfig'] ?? null)?->nullable ?? false);
-    }
-
-    /**
-     * Whether this field explicitly requests a nullable setter PHPDoc parameter.
-     */
-    public function hasNullableSetterParameter(array $field): bool
+    public function hasNullableReturn(array $field): bool
     {
         return ($field['property']['nullable'] ?? false)
             && (($field['fieldConfig'] ?? null)?->nullable ?? false);
