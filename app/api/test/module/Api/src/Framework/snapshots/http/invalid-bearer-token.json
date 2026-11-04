@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "uri": "/api/licence/101/?dto=Dvsa%5COlcs%5CTransfer%5CQuery%5CLicence%5CLicence",
+    "headers": {
+      "Host": "olcs-backend",
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "framework-test-correlation-id",
+      "Authorization": "Bearer eyJhbGciOiJSUzI1NiJ9.eyJ1c2VybmFtZSI6InVzcjYxMSJ9.c2lnbmF0dXJl"
+    },
+    "body": ""
+  },
+  "uncaught": "Dvsa\\Contracts\\Auth\\Exceptions\\InvalidTokenException: Bad signature",
+  "logs": []
+}

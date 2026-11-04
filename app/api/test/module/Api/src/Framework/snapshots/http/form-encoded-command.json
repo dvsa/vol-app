@@ -1,0 +1,109 @@
+{
+  "request": {
+    "method": "POST",
+    "uri": "/api/presiding-tc/",
+    "headers": {
+      "Host": "olcs-backend",
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    "body": "name=Framework+Test&user=3"
+  },
+  "response": {
+    "status": 201,
+    "reason": "Created",
+    "headers": {
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ]
+    },
+    "body": "{\"id\":{\"presidingTc\":7},\"messages\":[]}",
+    "json": {
+      "id": {
+        "presidingTc": 7
+      },
+      "messages": []
+    }
+  },
+  "logs": [
+    {
+      "level": "DEBUG",
+      "message": "Request received",
+      "context": {
+        "data": {
+          "path": "http://olcs-backend/api/presiding-tc/",
+          "method": "POST",
+          "route_params": [],
+          "get": [],
+          "post": {
+            "name": "Framework Test",
+            "user": "3"
+          },
+          "headers": {
+            "Host": "olcs-backend",
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          "content": "MAX_CONTENT_LENGTH_TO_LOG exceeded"
+        }
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request dispatched",
+      "context": {
+        "data": {
+          "controller": "Dvsa\\Olcs\\Api\\Controller\\GenericController",
+          "action": null
+        }
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request completed",
+      "context": {
+        "data": {
+          "request": "http://olcs-backend/api/presiding-tc/",
+          "code": 201,
+          "status": "Created"
+        }
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "API Response Sent",
+      "context": {
+        "status": 201,
+        "content": "{\"id\":{\"presidingTc\":7},\"messages\":[]}"
+      },
+      "extra": {
+        "correlationId": null,
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    }
+  ]
+}
