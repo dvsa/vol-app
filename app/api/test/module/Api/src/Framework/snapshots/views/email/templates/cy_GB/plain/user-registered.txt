@@ -1,0 +1,6 @@
+Helô,
+
+Croeso i'r gwasanaeth Trwyddedu Gweithredwyr Cerbydau. Dyma grynodeb o'ch manylion cofrestru:
+
+* enw cwmni: [orgName <&>]* enw defnyddiwr: [loginId <&>]
+Mewngofnodi [url <&>].

@@ -1,0 +1,12 @@
+<p>Thank you for your EBSR application received on [submissionDate &lt;&amp;&gt;] for the
+    following local bus service - [registrationNumber &lt;&amp;&gt;] - between
+    [origin &lt;&amp;&gt;] and [destination &lt;&amp;&gt;] with 
+    service number [lineName &lt;&amp;&gt;] to come into effect on 
+    [startDate &lt;&amp;&gt;].</p>
+
+<p>Your application has been refused. Therefore you cannot start, change or cancel your service as applied for.
+    If you do, you could face disciplinary action by the Traffic Commissioner.
+    If you are in any doubt, please ring your usual caseworker or e-mail: <a href="mailto:notifications@vehicle-operator-licensing.service.gov.uk">notifications@vehicle-operator-licensing.service.gov.uk</a></p>
+
+<p>We have copied this e-mail to the following local authorities: 
+    [localAuthoritys &lt;&amp;&gt;].</p>

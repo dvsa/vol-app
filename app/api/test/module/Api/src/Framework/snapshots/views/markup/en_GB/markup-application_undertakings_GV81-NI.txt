@@ -1,0 +1,37 @@
+%s
+%s
+<p>
+    <strong>
+        Please see the licence undertakings below as a reminder of your obligations:
+    </strong>
+</p>
+<ul class="list--bullet">
+    <li>the laws relating to the driving and operation of vehicles used under this licence are observed;</li>
+    <li>
+        the rules on drivers’ hours and tachographs are observed and proper records are kept, and that these are made available on request;
+    </li>
+    <li>vehicles and trailers are not overloaded;</li>
+    <li>vehicles operate within speed limits;</li>
+    <li>vehicles and trailers, including hired vehicles and trailers, are kept in a fit and serviceable condition;</li>
+    <li>
+        drivers report promptly any defects or symptoms of defects that could prevent the safe operation of vehicles
+        and/or trailers, and that any defects are recorded in writing;
+    </li>
+    <li>
+        records are kept (for at least 15 months) of all driver reports that record defects, and all safety inspection, routine maintenance and vehicle repair reports, and that these are made available on request;
+    </li>
+    %s
+    <li>
+        furthermore, I will notify the DfI of any penalties and unspent convictions against myself, or the company,
+        business partner(s), the company directors, nominated transport manager(s) named in this application, or
+        employees or agents of the applicant for this licence and, if the licence is issued, convictions against the
+        licence holder or employees or agents of the licence holder;
+    </li>
+    <li>
+        I will ensure that the DfI is notified within 28 days of any other changes, for example a change to the proposed
+        maintenance arrangements; a change in the financial status of the licence holder (eg if placed in liquidation
+        or receivership); or a change to Limited Company status or partnership, that might affect the licence, if
+        issued.
+    </li>
+    %s
+</ul>

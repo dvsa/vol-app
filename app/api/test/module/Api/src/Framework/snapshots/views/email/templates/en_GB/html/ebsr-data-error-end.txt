@@ -1,0 +1,9 @@
+<p>When you have checked your data file you should re-submit the full file. The registration
+    number has NOT been used and so can remain the same (if it was correct). The local
+    authorities listed in your data file have NOT been notified as errors were found and we
+    have NOT charged you for this transaction.</p>
+
+<p>Please do not reply directly to this e-mail by using the ‘Reply’ button in your e-mail
+    application as this is an automated facility that cannot handle incoming e-mails. If you
+    need to contact us, please ring your usual caseworker or e-mail:
+    <a href="mailto: notifications@vehicle-operator-licensing.service.gov.uk">notifications@vehicle-operator-licensing.service.gov.uk</a></p>

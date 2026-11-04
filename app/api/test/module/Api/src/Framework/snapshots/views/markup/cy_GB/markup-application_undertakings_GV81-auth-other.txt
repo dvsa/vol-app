@@ -1,0 +1,6 @@
+    <li>
+        mewn perthynas â phob canolfan weithredu a ddynodir, na fydd y nifer o gerbydau ac ôl-gerbydau a gedwir yno yn
+        fwy na’r uchafswm o awdurdodir ym mhob canolfan weithredu (a nodir ar y drwydded);
+    </li>
+    <li>ni ddefnyddir canolfan weithredu anawdurdodedig mewn unrhyw ardal draffig;</li>
+

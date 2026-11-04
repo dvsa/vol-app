@@ -1,0 +1,8 @@
+<p>Helô,</p>
+<p>
+    Mae [operatorName &lt;&amp;&gt;] wedi cymeradwyo'r manylion ichi eu cyflwyno ar gyfer
+    Trwydded Gweithredwr Cerbydau [licNo &lt;&amp;&gt;]/[applicationId &lt;&amp;&gt;].
+</p>
+<p>
+    <a href="[tmaUrl &lt;&amp;&gt;]">Mewngofnodi i'ch cyfrif</a>
+</p>

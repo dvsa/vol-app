@@ -1,0 +1,6 @@
+email.licensing-information-continuation-html.body
+<p>Trwydded: [licNo &lt;&amp;&gt;] [operatorName &lt;&amp;&gt;]</p>
+
+<p>
+  <a href="[url &lt;&amp;&gt;]">Mewngofnodi i'ch cyfrif</a>
+</p>

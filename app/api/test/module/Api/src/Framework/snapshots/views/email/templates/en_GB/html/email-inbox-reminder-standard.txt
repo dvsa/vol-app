@@ -1,0 +1,11 @@
+<p>Dear operator,</p>
+
+<p>We have sent an e-mail to you recently advising that new correspondence relating to your
+Operator&rsquo;s Licence [licNo &lt;&amp;&gt;] [operatorName &lt;&amp;&gt;] has
+been placed in your Operator Self Service inbox.</p>
+
+<p>We note that this has not yet been read. Please log on to view the correspondence as soon as possible.</p>
+
+<p>
+    <a href="[url &lt;&amp;&gt;]">Sign in to your account</a>
+</p>

@@ -1,0 +1,15 @@
+<p>Thank you for your EBSR application received on [submissionDate &lt;&amp;&gt;] for the
+following local bus service - [registrationNumber &lt;&amp;&gt;] - between
+    [origin &lt;&amp;&gt;] and [destination &lt;&amp;&gt;] with
+    service number [lineName &lt;&amp;&gt;] to come into effect on
+    [startDate &lt;&amp;&gt;].</p>
+
+<p>Your application has been accepted. However you must not start or change your service until the date mentioned above.
+    If you do, you could face disciplinary action by the Traffic Commissioner.</p>
+
+<p>Notice of this application will appear in "Notices and Proceedings" issue number
+[publicationId &lt;&amp;&gt;]. We have copied this e-mail to the following local authorities:
+[localAuthoritys &lt;&amp;&gt;].</p>
+
+<p>You will find a copy of the PDF version of the registered particulars in your document area.
+    Please check the contents and let us know if there are any discrepancies so we can sort them out as quickly as possible.</p>

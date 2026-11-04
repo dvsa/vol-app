@@ -1,0 +1,8 @@
+<ul class="govuk-list govuk-list--bullet">
+    <li>have read and agree to follow <a href="https://www.gov.uk/guidance/international-road-haulage-removal-permits" target="_blank">the rules on how to use ECMT international removal permits<span class="govuk-visually-hidden">(link opens in a new window)</span></a></li>
+    <li>will comply fully with the conditions of use under which the permits may be used</li>
+    <li>understand that a Certificate of Compliance and a Certificate of Roadworthiness is required for each vehicle and trailer you intend to use</li>
+    <li>understand that this permit can only be used for delivering removal goods and business international removals between ECMT member countries</li>
+    <li>will use specialised equipment and staff to undertake removal operations</li>
+</ul>
+<p class="govuk-body">Your driver must also carry the permit, and the certificates for the entire outbound and return journey and present it to any competent authority or inspectors.</p>

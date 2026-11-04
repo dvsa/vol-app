@@ -1,0 +1,8 @@
+Helô,
+
+Mae un o ddefnyddwyr eich cyfrif Trwyddedu Gweithredwyr Cerbydau wedi anghofio eu henw defnyddiwr.
+
+Fel y gweinyddydd, bydd angen ichi roi'r wybodaeth hon iddynt eich hunan. Gallwch ei chanfod yn ardal rheoli defnyddwyr eich cyfrif.
+
+Eich enw defnyddiwr yw: [loginId <&>]
+Mewngofnodi [url <&>].

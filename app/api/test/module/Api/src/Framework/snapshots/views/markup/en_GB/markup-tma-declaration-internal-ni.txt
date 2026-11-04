@@ -1,0 +1,25 @@
+<p>
+    <b>By submitting this form you are confirming your status as an internal transport manager, an external transport manager or both.</b>
+</p>
+
+<p>I confirm that:</p>
+<ul class="list--bullet">
+    <li>I shall effectively and continuously manage the transport activities of the licence holder/applicant;</li>
+    <li>I have a genuine link to the licence holder/applicant.</li>
+</ul>
+
+<p>I understand that my responsibilities include:</p>
+<ul class="list--bullet">
+    <li>The making of arrangements to ensure that drivers comply with drivers’ hours and tachograph rules and with speed limits;</li>
+    <li>The making of arrangements to ensure that the vehicles are maintained properly, including the inspection of vehicles at the appropriate time and the action taken to remedy defects found;</li>
+    <li>The reporting and recording of vehicle defects by drivers;</li>
+    <li>The method of compilation and the accuracy of all records, which must be kept for a period of not less than 15 months;</li>
+    <li>The making of arrangements to ensure that the vehicle/s are not overloaded;</li>
+    <li>Ensuring that authorised vehicles will be kept at the authorised operating centre(s) when not in use;</li>
+    <li>Where appropriate, notifying the Department (in writing) of all prosecutions and convictions concerning the operator, the drivers and me within 28 days of the court hearing; and</li>
+    <li>Notifying the Department of my resignation.</li>
+</ul>
+
+<p>
+    <b>Should I fail to meet any of the above requirements I understand that the Department has the power to disqualify me from being a transport manager in any European Union country.</b>
+</p>

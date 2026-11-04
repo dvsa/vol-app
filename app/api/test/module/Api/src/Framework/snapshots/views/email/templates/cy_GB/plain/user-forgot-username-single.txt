@@ -1,0 +1,6 @@
+Helô,
+
+Fe wnaethoch ofyn am nodyn atgoffa o enw defnyddiwr eich cyfrif Trwyddedu Gweithredwyr Cerbydau.
+
+Mae'n: [loginId <&>]
+Mewngofnodi [url <&>].

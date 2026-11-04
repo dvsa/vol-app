@@ -1,0 +1,3 @@
+email.licensing-information-continuation-plain.body
+Licence: [licNo <&>] [operatorName <&>]
+Sign in to your account at [url <&>].

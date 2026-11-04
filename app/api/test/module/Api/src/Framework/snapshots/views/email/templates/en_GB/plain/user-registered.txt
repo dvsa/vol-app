@@ -1,0 +1,6 @@
+Hello,
+
+Welcome to the Vehicle Operator Licensing service. Here’s a summary of your registration details:
+
+* company name: [orgName <&>]* username: [loginId <&>]
+Sign in at [url <&>]

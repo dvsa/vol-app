@@ -1,0 +1,6 @@
+Hello,
+
+You asked for a reminder of your Vehicle Operator Licensing account username.
+
+It’s: [loginId <&>]
+Sign in at [url <&>]

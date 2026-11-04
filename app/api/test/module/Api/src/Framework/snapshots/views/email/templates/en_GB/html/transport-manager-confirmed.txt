@@ -1,0 +1,10 @@
+<p>Hello,</p>
+
+<p>
+    [operatorName &lt;&amp;&gt;] has approved the details you submitted for Vehicle Operator
+    Licence [licNo &lt;&amp;&gt;]/[applicationId &lt;&amp;&gt;].
+</p>
+
+<p>
+    <a href="[tmaUrl &lt;&amp;&gt;]">Sign into your account</a>
+</p>

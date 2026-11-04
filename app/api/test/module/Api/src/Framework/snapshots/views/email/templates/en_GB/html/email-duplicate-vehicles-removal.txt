@@ -1,0 +1,14 @@
+<table>
+    <tr>
+        <th>VRM</th>
+        <th>Licence No</th>
+    </tr>
+            <tr>
+            <td>AB12CDE</td>
+            <td>OB1234567 <&></td>
+        </tr>
+            <tr>
+            <td>XY34ZZZ</td>
+            <td>PD7654321</td>
+        </tr>
+    </table>

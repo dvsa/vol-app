@@ -1,0 +1,20 @@
+<p>
+    Diolch am eich cais EBSR a ddaeth i law ar [submissionDate &lt;&amp;&gt;] ar gyfer y
+    gwasanaeth bws lleol a ganlyn - [registrationNumber &lt;&amp;&gt;] - rhwng
+    [origin &lt;&amp;&gt;] a [destination &lt;&amp;&gt;] â rhif
+    gwasanaeth [lineName &lt;&amp;&gt;].
+</p>
+
+<p>
+    Mae eich cais am rybudd byr dan rymoedd diamod y Comisiynwyr Traffig wedi ei wrthod, felly mae’n rhaid i chi roi’r
+    cyfnod rhybudd llawn cyn y medrwch ddechrau, newid neu ddileu eich gwasanaeth. Os na fyddwch yn gwneud hyn, fe
+    allwch wynebu achos o ddisgyblaeth gan y Comisiynydd Traffig.
+</p>
+
+<p>
+    Y dyddiad effeithiol diwygiedig fydd [startDate &lt;&amp;&gt;].<br />
+    Os oes gennych unrhyw amheuon, rhowch ganiad i’ch gweithiwr achos arferol neu e-bostiwch:
+    <a href="mailto:notifications@vehicle-operator-licensing.service.gov.uk">notifications@vehicle-operator-licensing.service.gov.uk</a><br />
+    Rydym wedi copïo’r e-bost hwn i’r awdurdodau lleol a ganlyn:
+    [localAuthoritys &lt;&amp;&gt;].
+</p>

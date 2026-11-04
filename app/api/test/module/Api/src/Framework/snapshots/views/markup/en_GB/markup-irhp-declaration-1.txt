@@ -1,0 +1,8 @@
+<ul class="govuk-list govuk-list--bullet">
+    <li>have read and agree to follow <a href="https://www.gov.uk/guidance/international-authorisations-and-permits-for-road-haulage" target="_blank">the rules on how to use ECMT permits<span class="govuk-visually-hidden">(link opens in a new window)</span></a></li>
+    <li>will only use vehicles that comply with the Euro emissions standard for each permit</li>
+    <li>understand if a permit is issued, it may exclude travel to Austria, Greece, Hungary, Italy and Russia as there are limited numbers of permits for travel to these countries</li>
+    <li>must complete the corresponding logbook with full journey details before the start of a journey</li>
+    <li>understand that a Certificate of Compliance and a Certificate of Roadworthiness is required for each vehicle and trailer you intend to use</li>
+</ul>
+<p class="govuk-body">Your driver must also carry the permit and corresponding logbook, and the certificates for the entire outbound and return journey and present it to any competent authority or inspectors.</p>

@@ -1,0 +1,12 @@
+<p>Helô,</p>
+
+<p>Croeso i'r gwasanaeth Trwyddedu Gweithredwyr Cerbydau. Dyma grynodeb o'ch manylion cofrestru:</p>
+
+<ul>
+    <li>enw cwmni: [orgName &lt;&amp;&gt;]</li>
+    <li>enw defnyddiwr: [loginId &lt;&amp;&gt;]</li>
+</ul>
+
+<p>
+    <a href="[url &lt;&amp;&gt;]">Mewngofnodi</a>
+</p>

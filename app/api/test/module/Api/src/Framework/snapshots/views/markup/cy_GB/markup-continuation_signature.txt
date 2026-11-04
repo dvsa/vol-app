@@ -1,0 +1,17 @@
+<div class="signature-box">
+    <div class="signature-box__column">
+        <form>
+            <label for="" class="signature-box__label">%s</label>
+            <input type="text" class="signature-box__input signature" disabled="disabled">
+            <label for="" class="signature-box__label">Eich enw yn llawn mewn llythrennau bras</label>
+            <input type="text" class="signature-box__input name" disabled="disabled">
+            <label for="" class="signature-box__label">Dyddiad</label>
+            <input type="text" class="signature-box__input date" disabled="disabled">
+        </form>
+    </div>
+</div>
+
+<p>
+    Rhaid i chi lofnodi a dyddio’r ffurflen hon cyn y gallwn ystyried eich cais.<br />
+    <b>Dychwelwch i: </b>%s
+</p>

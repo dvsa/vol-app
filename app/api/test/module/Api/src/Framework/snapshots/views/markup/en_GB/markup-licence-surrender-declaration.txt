@@ -1,0 +1,5 @@
+<p>I have securely destroyed my vehicle discs and operator licence.</p>
+<p>I will destroy any lost discs or licences that are found later.</p>
+<p>I declare that the statements made in this application are true.</p>
+<p>I am applying to surrender licence %s.</p>
+<p>I understand that it is an offence to make a false declaration.</p>

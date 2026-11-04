@@ -1,0 +1,7 @@
+Hello,
+
+[tmFullName <&>] has submitted their details for application [licNo <&>]/[applicationId <&>].
+
+To review them sign into your account.
+
+Review application at [tmaUrl <&>]

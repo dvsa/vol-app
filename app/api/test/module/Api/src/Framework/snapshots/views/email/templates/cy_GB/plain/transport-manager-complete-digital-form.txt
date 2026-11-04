@@ -1,0 +1,12 @@
+Helô,
+
+Mae [organisation <&>] wedi'ch enwi fel Rheolwr Trafnidiaeth ar Drwydded Gweithredwr Cerbydau [reference <&>].
+
+Cyn gallwn ystyried eu cais, bydd angen ichi gylwyno'ch manylion inni.
+
+I wneud hynny mewngofnodwch ar-lein [signInLink <&>] gyda'ch enw defnyddiwr ([username <&>]) a'ch cyfrinair.
+
+Profi problemau?
+
+
+Am gyngor gwelwch y Canllaw cymorth ar gyfer Rheolwyr Trafnidiaeth https://www.gov.uk/government/publications/application-to-add-a-transport-manager-to-a-licence-tm1 neu e-bostiwch ni notifications@vehicle-operator-licensing.service.gov.uk.

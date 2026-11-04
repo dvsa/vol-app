@@ -1,0 +1,5 @@
+Diolch am eich cais EBSR a dderbyniwyd ar [submissionDate <&>] am y gwasanaeth bysiau lleol dilynol - [registrationNumber <&>] - rhwng [origin <&>] a [destination <&>] gyda'r rhif gwasanaeth [lineName <&>] a ddaeth i effaith ar [startDate <&>].
+
+Hoffem eich atgoffa bod rhaid ichi barhau i weithredu'r gwasanaeth tan y dyddiad canslo y sonir amdano uchod. Os na wnewch, gallech wynebu camau disgyblu gan y Comisiynydd Traffig.
+
+Ymddengys hysbysiad o'r cais hwn i ganslo yn "Hysbysiadau ac Achosion" rhif cyhoeddiad [publicationId <&>]. Rydym wedi copïo'r e-bost hwn i'r awdurdodau lleol dilynol: [localAuthoritys <&>].

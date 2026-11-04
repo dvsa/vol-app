@@ -1,0 +1,17 @@
+<p>Helô,</p>
+<p>
+    Mae [organisation &lt;&amp;&gt;] wedi'ch enwi fel Rheolwr Trafnidiaeth ar Drwydded Gweithredwr
+    Cerbydau [reference &lt;&amp;&gt;].
+</p>
+<p>
+    Cyn gallwn ystyried eu cais, bydd angen ichi gylwyno'ch manylion inni.
+</p>
+<p>
+    I wneud hynny <a href="[signInLink &lt;&amp;&gt;]">mewngofnodwch ar-lein</a> gyda'ch enw
+    defnyddiwr ([username &lt;&amp;&gt;]) a'ch cyfrinair.
+</p>
+<p>
+    <b>Profi problemau?</b><br>
+        Am gyngor gwelwch y <a href="https://www.gov.uk/government/publications/application-to-add-a-transport-manager-to-a-licence-tm1">Canllaw cymorth ar gyfer Rheolwyr
+        Trafnidiaeth</a> neu <a href="mailto:notifications@vehicle-operator-licensing.service.gov.uk">e-bostiwch ni</a>.
+</p>
