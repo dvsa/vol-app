@@ -1,0 +1,9 @@
+{
+  "inspection_request": {
+    "host": "1",
+    "user": "1",
+    "password": "1",
+    "port": "1",
+    "ssl": "1"
+  }
+}

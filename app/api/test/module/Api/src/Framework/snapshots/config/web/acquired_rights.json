@@ -1,0 +1,11 @@
+{
+  "check_enabled": true,
+  "expiry": "(object DateTimeImmutable)",
+  "client": {
+    "base_uri": "1",
+    "timeout": 30,
+    "headers": {
+      "x-api-key": "1"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "factories": {
+    "MessageConsumerManager": "Dvsa\\Olcs\\Cli\\Service\\Queue\\MessageConsumerManagerFactory",
+    "Queue": "Dvsa\\Olcs\\Cli\\Service\\Queue\\QueueProcessorFactory",
+    "Dvsa\\Olcs\\Cli\\Service\\Queue\\Consumer\\AbstractConsumerServices": "Dvsa\\Olcs\\Cli\\Service\\Queue\\Consumer\\Factory\\AbstractConsumerServicesFactory",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\Adapters\\Doctrine3SchemaIntrospector": "(closure)",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\TypeHandlerRegistry": "(closure)",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\MethodGeneratorService": "(closure)",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\PropertyNameResolver": "(closure)",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\TemplateRenderer": "(closure)",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\EntityGenerator": "(closure)",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\EntityConfigService": "(closure)",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\InverseRelationshipProcessor": "(closure)"
+  },
+  "invokables": {
+    "Request": "Dvsa\\Olcs\\Cli\\Request\\CliRequest"
+  },
+  "abstract_factories": [
+    "Laminas\\ServiceManager\\AbstractFactory\\ConfigAbstractFactory"
+  ]
+}

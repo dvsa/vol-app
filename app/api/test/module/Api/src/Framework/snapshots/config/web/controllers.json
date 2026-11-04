@@ -1,0 +1,9 @@
+{
+  "invokables": [],
+  "factories": {
+    "Search": "Dvsa\\Olcs\\Db\\Controller\\SearchControllerFactory",
+    "Api\\Generic": "Dvsa\\Olcs\\Api\\Controller\\GenericControllerFactory",
+    "Api\\Xml": "Dvsa\\Olcs\\Api\\Controller\\XmlControllerFactory",
+    "Dvsa\\Olcs\\Scanning\\Controller\\DocumentController": "Dvsa\\Olcs\\Scanning\\Controller\\DocumentControllerFactory"
+  }
+}

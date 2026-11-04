@@ -1,0 +1,4 @@
+{
+  "sweeper_threshold_minutes": "1",
+  "dedupe_success_window_hours": "1"
+}

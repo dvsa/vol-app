@@ -1,0 +1,7 @@
+{
+  "node_suffix": "api",
+  "secrets": {
+    "node": "1",
+    "shared": "1"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "profiler": {
+    "collectors": {
+      "lmc_rbac": "LmcRbacMvc\\Collector\\RbacCollector"
+    }
+  },
+  "toolbar": {
+    "entries": {
+      "lmc_rbac": "laminas-developer-tools/toolbar/lmc-rbac"
+    }
+  }
+}

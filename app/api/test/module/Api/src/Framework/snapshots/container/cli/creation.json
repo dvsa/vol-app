@@ -1,0 +1,1141 @@
+{
+  "services": {
+    "AddressFormatter": "Dvsa\\Olcs\\Api\\Service\\Helper\\FormatAddress",
+    "AddressService": "Dvsa\\Olcs\\Address\\Service\\Address",
+    "ApiRouter": "Laminas\\Router\\Http\\TreeRouteStack",
+    "Application": "Laminas\\Mvc\\Application",
+    "ApplicationConfig": "(array)",
+    "ApplicationGrantValidationService": "Dvsa\\Olcs\\Api\\Service\\Lva\\Application\\GrantValidationService",
+    "ApplicationPublishValidationService": "Dvsa\\Olcs\\Api\\Service\\Lva\\Application\\PublishValidationService",
+    "Aws\\CognitoIdentityProvider\\CognitoIdentityProviderClient": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\CognitoIdentityProvider\\CognitoIdentityProviderClient\" could not be created. Reason: Missing required client configuration options:",
+      "warnings": [
+        "Undefined array key \"cognito\" in {app}/module/AwsSdk/src/Factories/CognitoIdentityProviderClientFactory.php",
+        "Trying to access array offset on null in {app}/module/AwsSdk/src/Factories/CognitoIdentityProviderClientFactory.php"
+      ]
+    },
+    "Aws\\EventBridge\\EventBridgeClient": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\EventBridge\\EventBridgeClient\" could not be created. Reason: The eventbridge service does not have version: 1."
+    },
+    "Aws\\S3\\S3Client": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\S3\\S3Client\" could not be created. Reason: The s3 service does not have version: 1."
+    },
+    "Aws\\Sfn\\SfnClient": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\Sfn\\SfnClient\" could not be created. Reason: The states service does not have version: 1."
+    },
+    "CommandHandlerManager": "Dvsa\\Olcs\\Api\\Domain\\CommandHandlerManager",
+    "CommonCurrentDateTimeFactory": "Dvsa\\Olcs\\Api\\Service\\Common\\CurrentDateTimeFactory",
+    "ComplianceEpisodeInput": "Dvsa\\Olcs\\Api\\Service\\InputFilter\\Input",
+    "ComplianceEpisodeXmlMapping": "Dvsa\\Olcs\\Api\\Service\\Nr\\Mapping\\ComplianceEpisodeXml",
+    "ComplianceXmlStructure": "Dvsa\\Olcs\\Api\\Service\\InputFilter\\Input",
+    "Config": "(array)",
+    "Configuration": "(array)",
+    "ContentStore": "Dvsa\\Olcs\\DocumentShare\\Service\\WebDavClient",
+    "ContinuationReview": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Generator",
+    "ContinuationReview\\Addresses": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\AddressesReviewService",
+    "ContinuationReview\\BusinessDetails": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\BusinessDetailsReviewService",
+    "ContinuationReview\\BusinessType": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\BusinessTypeReviewService",
+    "ContinuationReview\\ConditionsUndertakings": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\ConditionsUndertakingsReviewService",
+    "ContinuationReview\\Declaration": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\DeclarationReviewService",
+    "ContinuationReview\\Finance": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\FinanceReviewService",
+    "ContinuationReview\\OperatingCentres": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\OperatingCentresReviewService",
+    "ContinuationReview\\People": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\PeopleReviewService",
+    "ContinuationReview\\Safety": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\SafetyReviewService",
+    "ContinuationReview\\TransportManagers": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\TransportManagersReviewService",
+    "ContinuationReview\\TypeOfLicence": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\TypeOfLicenceReviewService",
+    "ContinuationReview\\Users": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\UsersReviewService",
+    "ContinuationReview\\Vehicles": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\VehiclesReviewService",
+    "ContinuationReview\\VehiclesPsv": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\VehiclesReviewService",
+    "ControllerManager": "Laminas\\Mvc\\Controller\\ControllerManager",
+    "ControllerPluginManager": "Laminas\\Mvc\\Controller\\PluginManager",
+    "ConvertToPdf": "Dvsa\\Olcs\\Api\\Service\\ConvertToPdf\\WebServiceClient",
+    "CpmsHelperService": {
+      "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
+    },
+    "CqrsCommandCreator": "Dvsa\\Olcs\\Api\\Service\\Cqrs\\CommandCreator",
+    "DateService": "Dvsa\\Olcs\\Api\\Service\\Date",
+    "DbQueryServiceManager": "Dvsa\\Olcs\\Api\\Domain\\DbQueryServiceManager",
+    "DispatchListener": "Laminas\\Mvc\\DispatchListener",
+    "Document": "Dvsa\\Olcs\\Api\\Service\\Document\\Document",
+    "DocumentGenerator": "Dvsa\\Olcs\\Api\\Service\\Document\\DocumentGenerator",
+    "DocumentNamingService": "Dvsa\\Olcs\\Api\\Service\\Document\\NamingService",
+    "DomainValidatorManager": "Dvsa\\Olcs\\Api\\Domain\\ValidatorManager",
+    "Dvsa\\Authentication\\Cognito\\Client": "Dvsa\\Authentication\\Cognito\\Client",
+    "Dvsa\\Authentication\\Ldap\\Client": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Authentication\\Ldap\\Client\" could not be created. Reason: The option \"host\" with value null is expected to be of type \"string\", but is of type \"null\".",
+      "warnings": [
+        "Undefined array key \"ldap\" in {app}/module/Auth/src/Client/LdapClientFactory.php",
+        "Trying to access array offset on null in {app}/module/Auth/src/Client/LdapClientFactory.php"
+      ]
+    },
+    "Dvsa\\Contracts\\Auth\\OAuthClientInterface": "Dvsa\\Authentication\\Cognito\\Client",
+    "Dvsa\\Olcs\\AcquiredRights\\Client\\AcquiredRightsClient": "Dvsa\\Olcs\\AcquiredRights\\Client\\AcquiredRightsClient",
+    "Dvsa\\Olcs\\AcquiredRights\\Service\\AcquiredRightsService": "Dvsa\\Olcs\\AcquiredRights\\Service\\AcquiredRightsService",
+    "Dvsa\\Olcs\\Address\\Service\\Address": "Dvsa\\Olcs\\Address\\Service\\Address",
+    "Dvsa\\Olcs\\Api\\Domain\\Logger\\EntityAccessLogger": "Dvsa\\Olcs\\Api\\Domain\\Logger\\EntityAccessLogger",
+    "Dvsa\\Olcs\\Api\\Domain\\Util\\SlaCalculatorInterface": "Dvsa\\Olcs\\Api\\Domain\\Util\\SlaCalculator",
+    "Dvsa\\Olcs\\Api\\Domain\\Util\\TimeProcessorBuilderInterface": "Dvsa\\Olcs\\Api\\Domain\\Util\\TimeProcessorBuilder",
+    "Dvsa\\Olcs\\Api\\Listener\\OlcsEntityListener": "Dvsa\\Olcs\\Api\\Listener\\OlcsEntityListener",
+    "Dvsa\\Olcs\\Api\\Mvc\\OlcsBlameableListener": "Dvsa\\Olcs\\Api\\Mvc\\OlcsBlameableListener",
+    "Dvsa\\Olcs\\Api\\Rbac\\IdentityProviderInterface": "Dvsa\\Olcs\\Api\\Rbac\\JWTIdentityProvider",
+    "Dvsa\\Olcs\\Api\\Rbac\\JWTIdentityProvider": "Dvsa\\Olcs\\Api\\Rbac\\JWTIdentityProvider",
+    "Dvsa\\Olcs\\Api\\Service\\AccessToken\\Provider": {
+      "error": "TypeError: Dvsa\\Olcs\\Api\\Service\\AccessToken\\Provider::__construct(): Argument #2 ($scope) must be of type string, null given, called in {app}/module/Api/src/Service/AccessToken/ProviderFactory.php",
+      "warnings": [
+        "Trying to access array offset on null in {app}/module/Api/src/Service/AccessToken/ProviderFactory.php"
+      ]
+    },
+    "Dvsa\\Olcs\\Api\\Service\\AddressHelper\\AddressHelperService": "Dvsa\\Olcs\\Api\\Service\\AddressHelper\\AddressHelperService",
+    "Dvsa\\Olcs\\Api\\Service\\Common\\CurrentDateTimeFactory": "Dvsa\\Olcs\\Api\\Service\\Common\\CurrentDateTimeFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Cpms\\ApiServiceFactory": {
+      "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
+    },
+    "Dvsa\\Olcs\\Api\\Service\\Cqrs\\CommandCreator": "Dvsa\\Olcs\\Api\\Service\\Cqrs\\CommandCreator",
+    "Dvsa\\Olcs\\Api\\Service\\Date": "Dvsa\\Olcs\\Api\\Service\\Date",
+    "Dvsa\\Olcs\\Api\\Service\\Document\\PrintLetter": "Dvsa\\Olcs\\Api\\Service\\Document\\PrintLetter",
+    "Dvsa\\Olcs\\Api\\Service\\DvlaSearch\\DvlaSearchService": "Dvsa\\Olcs\\Api\\Service\\DvlaSearch\\DvlaSearchService",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\FileProcessor": "Dvsa\\Olcs\\Api\\Service\\Ebsr\\FileProcessor",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\FileProcessorInterface": "Dvsa\\Olcs\\Api\\Service\\Ebsr\\FileProcessor",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\InputFilter\\BusRegistrationInputFactory": "Dvsa\\Olcs\\Api\\Service\\InputFilter\\Input",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\InputFilter\\ProcessedDataInputFactory": "Dvsa\\Olcs\\Api\\Service\\InputFilter\\Input",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\InputFilter\\ShortNoticeInputFactory": "Dvsa\\Olcs\\Api\\Service\\InputFilter\\Input",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\InputFilter\\XmlStructureInputFactory": "Dvsa\\Olcs\\Api\\Service\\InputFilter\\Input",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\S3Processor": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Ebsr\\S3Processor\" could not be created. Reason: Found 1 error while validating the input provided for the AssumeRole operation:"
+    },
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\TransExchangeClient": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Ebsr\\TransExchangeClient\" could not be created. Reason: URI must include a scheme and host. Use an absolute URI, a network-path reference starting with //, or configure a base_uri."
+    },
+    "Dvsa\\Olcs\\Api\\Service\\EditorJs\\ConverterService": "Dvsa\\Olcs\\Api\\Service\\EditorJs\\ConverterService",
+    "Dvsa\\Olcs\\Api\\Service\\EventBridge\\EventBridge": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\EventBridge\\EventBridgeClient\" could not be created. Reason: The eventbridge service does not have version: 1."
+    },
+    "Dvsa\\Olcs\\Api\\Service\\EventHistory\\Creator": "Dvsa\\Olcs\\Api\\Service\\EventHistory\\Creator",
+    "Dvsa\\Olcs\\Api\\Service\\GovUkAccount\\GovUkAccountService": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\GovUkAccount\\GovUkAccountService\" could not be created. Reason: Dvsa\\GovUkAccount\\Provider\\GovUkAccount configuration: option \"keys.private_key\" is not valid base64"
+    },
+    "Dvsa\\Olcs\\Api\\Service\\Helper\\FormatAddress": "Dvsa\\Olcs\\Api\\Service\\Helper\\FormatAddress",
+    "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisResultNormaliser\\AnalysisResultNormaliser": "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisResultNormaliser\\AnalysisResultNormaliser",
+    "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisReviewOutcome": "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisReviewOutcome",
+    "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisTokenGenerator": "Dvsa\\Olcs\\Api\\Service\\Idp\\AnalysisTokenGenerator",
+    "Dvsa\\Olcs\\Api\\Service\\Idp\\ApplicantProfileBuilder": "Dvsa\\Olcs\\Api\\Service\\Idp\\ApplicantProfileBuilder",
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\CompositionDiagnostics": "Dvsa\\Olcs\\Api\\Service\\Letter\\CompositionDiagnostics",
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterInstanceComposer": "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterInstanceComposer",
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterInstanceGrabSnapshotter": "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterInstanceGrabSnapshotter",
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterPreviewService": "Dvsa\\Olcs\\Api\\Service\\Letter\\LetterPreviewService",
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\MasterTemplateResolver": "Dvsa\\Olcs\\Api\\Service\\Letter\\MasterTemplateResolver",
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\PreviewRecordSuggester": "Dvsa\\Olcs\\Api\\Service\\Letter\\PreviewRecordSuggester",
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\SectionRenderer\\SectionRendererPluginManager": "Dvsa\\Olcs\\Api\\Service\\Letter\\SectionRenderer\\SectionRendererPluginManager",
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\SectionVariantResolver": "Dvsa\\Olcs\\Api\\Service\\Letter\\SectionVariantResolver",
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\VolGrabContextBuilder": "Dvsa\\Olcs\\Api\\Service\\Letter\\VolGrabContextBuilder",
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\VolGrabReplacementService": "Dvsa\\Olcs\\Api\\Service\\Letter\\VolGrabReplacementService",
+    "Dvsa\\Olcs\\Api\\Service\\Lva\\RestrictionService": "Dvsa\\Olcs\\Api\\Service\\Lva\\RestrictionService",
+    "Dvsa\\Olcs\\Api\\Service\\Lva\\SectionConfig": "Dvsa\\Olcs\\Api\\Service\\Lva\\SectionConfig",
+    "Dvsa\\Olcs\\Api\\Service\\Lva\\Variation\\PublishValidationService": "Dvsa\\Olcs\\Api\\Service\\Lva\\Variation\\PublishValidationService",
+    "Dvsa\\Olcs\\Api\\Service\\Nr\\CheckGoodRepute": "Dvsa\\Olcs\\Api\\Service\\Nr\\CheckGoodRepute",
+    "Dvsa\\Olcs\\Api\\Service\\Nr\\InputFilter\\CgrInputFactory": "Dvsa\\Olcs\\Api\\Service\\InputFilter\\Input",
+    "Dvsa\\Olcs\\Api\\Service\\Nr\\InrClientInterface": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Nr\\InrClientInterface\" could not be created. Reason: URI must include a scheme and host. Use an absolute URI, a network-path reference starting with //, or configure a base_uri."
+    },
+    "Dvsa\\Olcs\\Api\\Service\\Nr\\Mapping\\CgrResponseXml": "Dvsa\\Olcs\\Api\\Service\\Nr\\Mapping\\CgrResponseXml",
+    "Dvsa\\Olcs\\Api\\Service\\Nr\\MsiResponse": "Dvsa\\Olcs\\Api\\Service\\Nr\\MsiResponse",
+    "Dvsa\\Olcs\\Api\\Service\\Nysiis\\NysiisRestClient": "Dvsa\\Olcs\\Api\\Service\\Nysiis\\NysiisRestClient",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\Allocate\\BilateralCriteriaFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\Allocate\\BilateralCriteriaFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\Allocate\\EmissionsStandardCriteriaFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\Allocate\\EmissionsStandardCriteriaFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\AnswersSummaryFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\AnswersSummaryFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\AnswersSummaryRowFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\AnswersSummaryRowFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\ApplyRanges\\ForCpProviderFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\ApplyRanges\\ForCpProviderFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\BilateralRequiredGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\BilateralRequiredGenerator",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\IrhpPermitApplicationFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\IrhpPermitApplicationFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\PermitUsageSelectionGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\PermitUsageSelectionGenerator",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Metadata\\CurrentFieldValuesGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Metadata\\CurrentFieldValuesGenerator",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Metadata\\MoroccoFieldsGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Metadata\\MoroccoFieldsGenerator",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\CandidatePermits\\ApggCandidatePermitFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\CandidatePermits\\ApggCandidatePermitFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\Checkable\\CreateTaskCommandFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\Checkable\\CreateTaskCommandFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\FeeBreakdown\\MultilateralFeeBreakdownGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\FeeBreakdown\\MultilateralFeeBreakdownGenerator",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\Scoring\\IrhpCandidatePermitFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\Scoring\\IrhpCandidatePermitFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Permits\\Scoring\\SuccessfulCandidatePermitsLogger": "Dvsa\\Olcs\\Api\\Service\\Permits\\Scoring\\SuccessfulCandidatePermitsLogger",
+    "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PluginManager": "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PluginManager",
+    "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\PluginManager": "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\PluginManager",
+    "Dvsa\\Olcs\\Api\\Service\\Publication\\PublicationGenerator": "Dvsa\\Olcs\\Api\\Service\\Publication\\PublicationGenerator",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\AnswerSaver\\AnswerFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\AnswerSaver\\AnswerFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Common\\ArrayCollectionFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Common\\ArrayCollectionFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Common\\DateIntervalFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Common\\DateIntervalFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Common\\DateTimeFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Common\\DateTimeFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Facade\\SupplementedApplicationSteps\\SupplementedApplicationStepFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Facade\\SupplementedApplicationSteps\\SupplementedApplicationStepFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\QaContextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\QaContextFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ApplicationStepFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ApplicationStepFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Checkbox\\CheckboxAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Checkbox\\CheckboxAnswerSummaryProvider",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Checkbox\\CheckboxFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Checkbox\\CheckboxFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\CabotageOnlyAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\CabotageOnlyAnswerSummaryProvider",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\CabotageOnlyFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\CabotageOnlyFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\EmissionsStandardsFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\EmissionsStandardsFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsAnswerSummaryProvider",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsMoroccoAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsMoroccoAnswerSummaryProvider",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsMoroccoFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsMoroccoFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsTextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsTextFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\PermitUsageAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\PermitUsageAnswerSummaryProvider",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\StandardAndCabotageAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\StandardAndCabotageAnswerSummaryProvider",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\StandardAndCabotageFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\StandardAndCabotageFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\ThirdCountryFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\ThirdCountryFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\CertRoadworthiness\\MotExpiryDateFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\CertRoadworthiness\\MotExpiryDateFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Common\\DateWithThresholdFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Common\\DateWithThresholdFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\AnnualTripsAbroadFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\AnnualTripsAbroadFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\EmissionsCategoryFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\EmissionsCategoryFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\IntJourneysFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\IntJourneysFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\NoOfPermitsAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\NoOfPermitsAnswerSummaryProvider",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\NoOfPermitsFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\NoOfPermitsFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountriesAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountriesAnswerSummaryProvider",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountriesFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountriesFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountryFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountryFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Date\\DateAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Date\\DateAnswerSummaryProvider",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Date\\DateFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Date\\DateFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\ElementGeneratorContextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\ElementGeneratorContextFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\GenericAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\GenericAnswerSummaryProvider",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\NamedAnswerFetcher": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\NamedAnswerFetcher",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Options\\OptionFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Options\\OptionFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Options\\OptionListFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Options\\OptionListFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Radio\\RadioFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Radio\\RadioFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Text\\TextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Text\\TextFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\FilteredTranslateableTextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\FilteredTranslateableTextFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\FormFragmentFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\FormFragmentFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\QuestionText\\QuestionTextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\QuestionText\\QuestionTextFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\SelfservePageFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\SelfservePageFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\TranslateableTextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\TranslateableTextFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\TranslateableTextParameterFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\TranslateableTextParameterFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ValidatorFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ValidatorFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ValidatorListFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ValidatorListFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Retrieval\\OtpService": "Dvsa\\Olcs\\Api\\Service\\Retrieval\\OtpService",
+    "Dvsa\\Olcs\\Api\\Service\\Retrieval\\RetrievalLinkCreator": "Dvsa\\Olcs\\Api\\Service\\Retrieval\\RetrievalLinkCreator",
+    "Dvsa\\Olcs\\Api\\Service\\Retrieval\\RetrievalPolicyResolver": "Dvsa\\Olcs\\Api\\Service\\Retrieval\\RetrievalPolicyResolver",
+    "Dvsa\\Olcs\\Api\\Service\\Retrieval\\SessionGrantService": "Dvsa\\Olcs\\Api\\Service\\Retrieval\\SessionGrantService",
+    "Dvsa\\Olcs\\Api\\Service\\Retrieval\\TokenGenerator": "Dvsa\\Olcs\\Api\\Service\\Retrieval\\TokenGenerator",
+    "Dvsa\\Olcs\\Api\\Service\\Submission\\Sections\\SectionGeneratorPluginManager": "Dvsa\\Olcs\\Api\\Service\\Submission\\Sections\\SectionGeneratorPluginManager",
+    "Dvsa\\Olcs\\Api\\Service\\Submission\\SubmissionGenerator": "Dvsa\\Olcs\\Api\\Service\\Submission\\SubmissionGenerator",
+    "Dvsa\\Olcs\\Api\\Service\\Toggle\\ToggleService": "Dvsa\\OlcsTest\\Api\\Framework\\Support\\FixedToggleService",
+    "Dvsa\\Olcs\\Auth\\Adapter\\CognitoAdapter": "Dvsa\\Olcs\\Auth\\Adapter\\CognitoAdapter",
+    "Dvsa\\Olcs\\Auth\\Adapter\\LdapAdapter": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Authentication\\Ldap\\Client\" could not be created. Reason: The option \"host\" with value null is expected to be of type \"string\", but is of type \"null\".",
+      "warnings": [
+        "Undefined array key \"ldap\" in {app}/module/Auth/src/Client/LdapClientFactory.php",
+        "Trying to access array offset on null in {app}/module/Auth/src/Client/LdapClientFactory.php"
+      ]
+    },
+    "Dvsa\\Olcs\\Auth\\Service\\AuthenticationServiceInterface": "Dvsa\\Olcs\\Auth\\Service\\AuthenticationService",
+    "Dvsa\\Olcs\\Auth\\Service\\PasswordService": "Dvsa\\Olcs\\Auth\\Service\\PasswordService",
+    "Dvsa\\Olcs\\Cli\\Request\\CliRequest": "Dvsa\\Olcs\\Cli\\Request\\CliRequest",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\Adapters\\Doctrine3SchemaIntrospector": "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\Adapters\\Doctrine3SchemaIntrospector",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\EntityConfigService": "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\EntityConfigService",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\EntityGenerator": "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\EntityGenerator",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\InverseRelationshipProcessor": "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\InverseRelationshipProcessor",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\MethodGeneratorService": "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\MethodGeneratorService",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\PropertyNameResolver": "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\PropertyNameResolver",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\TemplateRenderer": "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\TemplateRenderer",
+    "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\TypeHandlerRegistry": "Dvsa\\Olcs\\Cli\\Service\\EntityGenerator\\TypeHandlerRegistry",
+    "Dvsa\\Olcs\\Cli\\Service\\Queue\\Consumer\\AbstractConsumerServices": "Dvsa\\Olcs\\Cli\\Service\\Queue\\Consumer\\AbstractConsumerServices",
+    "Dvsa\\Olcs\\CompaniesHouse\\Service\\Client": "Dvsa\\Olcs\\CompaniesHouse\\Service\\Client",
+    "Dvsa\\Olcs\\DocumentShare\\Service\\S3BucketBrowser": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\S3\\S3Client\" could not be created. Reason: The s3 service does not have version: 1."
+    },
+    "Dvsa\\Olcs\\DvsaAddressService\\Client\\DvsaAddressServiceClient": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\DvsaAddressService\\Client\\DvsaAddressServiceClient\" could not be created. Reason: URI must include a scheme and host. Use an absolute URI, a network-path reference starting with //, or configure a base_uri."
+    },
+    "Dvsa\\Olcs\\DvsaAddressService\\Service\\DvsaAddressService": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\DvsaAddressService\\Client\\DvsaAddressServiceClient\" could not be created. Reason: URI must include a scheme and host. Use an absolute URI, a network-path reference starting with //, or configure a base_uri."
+    },
+    "Dvsa\\Olcs\\Email\\Service\\NotifyTestMailer": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Email\\Service\\NotifyTestMailer\" could not be created. Reason: The mailer DSN must contain a scheme."
+    },
+    "Dvsa\\Olcs\\Email\\Service\\TemplateRenderer": "Dvsa\\Olcs\\Email\\Service\\TemplateRenderer",
+    "Dvsa\\Olcs\\Email\\Transport\\GovUkNotifyTransportFactory": "Dvsa\\Olcs\\Email\\Transport\\GovUkNotifyTransportFactory",
+    "Dvsa\\Olcs\\Queue\\Service\\Message\\MessageBuilder": "Dvsa\\Olcs\\Queue\\Service\\Message\\MessageBuilder",
+    "Dvsa\\Olcs\\Queue\\Service\\Queue": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"SqsClient\" could not be created. Reason: The sqs service does not have version: 1."
+    },
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\AbstractGeneratorServices": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\AbstractGeneratorServices",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\AbstractReviewServiceServices": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\AbstractReviewServiceServices",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationAddressesReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationAddressesReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationBusinessDetailsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationBusinessDetailsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationBusinessTypeReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationBusinessTypeReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationConditionsUndertakingsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationConditionsUndertakingsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationConvictionsPenaltiesReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationConvictionsPenaltiesReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationFinancialEvidenceReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationFinancialEvidenceReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationFinancialHistoryReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationFinancialHistoryReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationGoodsOcTotalAuthReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationGoodsOcTotalAuthReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationKnowledgeExperienceReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationKnowledgeExperienceReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationLicenceHistoryReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationLicenceHistoryReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationOperatingCentresReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationOperatingCentresReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPeopleReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPeopleReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvDocumentaryEvidenceLargeReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvDocumentaryEvidenceLargeReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvDocumentaryEvidenceSmallReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvDocumentaryEvidenceSmallReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvMainOccupationUndertakingsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvMainOccupationUndertakingsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOcTotalAuthReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOcTotalAuthReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOperateLargeReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOperateLargeReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOperateNoveltyReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOperateNoveltyReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOperateSmallReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOperateSmallReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvSmallConditionsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvSmallConditionsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvSmallPartWrittenReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvSmallPartWrittenReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationSafetyReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationSafetyReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationTransportManagersReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationTransportManagersReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationTypeOfLicenceReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationTypeOfLicenceReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationUndertakingsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationUndertakingsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationVehiclesPsvReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationVehiclesPsvReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationVehiclesReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationVehiclesReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationVehiclesSizeReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationVehiclesSizeReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ConditionsUndertakingsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ConditionsUndertakingsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\GoodsOperatingCentreReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\GoodsOperatingCentreReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\LicenceConditionsUndertakingsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\LicenceConditionsUndertakingsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\PeopleReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\PeopleReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\PsvOperatingCentreReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\PsvOperatingCentreReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\SignatureReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\SignatureReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\TrafficAreaReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\TrafficAreaReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\TransportManagersReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\TransportManagersReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationAddressesReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationAddressesReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationBusinessDetailsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationBusinessDetailsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationBusinessTypeReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationBusinessTypeReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationConditionsUndertakingsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationConditionsUndertakingsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationConvictionsPenaltiesReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationConvictionsPenaltiesReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationDiscsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationDiscsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationFinancialEvidenceReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationFinancialEvidenceReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationFinancialHistoryReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationFinancialHistoryReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationGoodsOcTotalAuthReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationGoodsOcTotalAuthReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationLicenceHistoryReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationLicenceHistoryReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationOperatingCentresReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationOperatingCentresReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPeopleReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPeopleReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvDocumentaryEvidenceLargeReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvDocumentaryEvidenceLargeReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvDocumentaryEvidenceSmallReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvDocumentaryEvidenceSmallReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvMainOccupationUndertakingsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvMainOccupationUndertakingsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOcTotalAuthReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOcTotalAuthReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOperateLargeReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOperateLargeReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOperateNoveltyReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOperateNoveltyReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOperateSmallReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOperateSmallReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvSmallConditionsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvSmallConditionsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvSmallPartWrittenReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvSmallPartWrittenReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationSafetyReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationSafetyReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationTransportManagersReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationTransportManagersReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationTypeOfLicenceReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationTypeOfLicenceReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationUndertakingsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationUndertakingsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationVehiclesPsvReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationVehiclesPsvReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationVehiclesReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationVehiclesReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationVehiclesSizeReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationVehiclesSizeReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VehiclesPsvReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VehiclesPsvReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\AbstractReviewServiceServices": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\AbstractReviewServiceServices",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\AddressesReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\AddressesReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\BusinessDetailsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\BusinessDetailsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\BusinessTypeReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\BusinessTypeReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\ConditionsUndertakingsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\ConditionsUndertakingsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\DeclarationReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\DeclarationReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\FinanceReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\FinanceReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\OperatingCentresReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\OperatingCentresReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\PeopleReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\PeopleReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\SafetyReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\SafetyReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\TransportManagersReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\TransportManagersReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\TypeOfLicenceReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\TypeOfLicenceReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\UsersReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\UsersReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\VehiclesReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ContinuationReview\\Section\\VehiclesReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Messaging\\EnhancedGenerator": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Messaging\\EnhancedGenerator",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Messaging\\Generator": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Messaging\\Generator",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Permits\\IrhpGenerator": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Permits\\IrhpGenerator",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Generator": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Generator",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\AbstractReviewServiceServices": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\AbstractReviewServiceServices",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\CommunityLicenceReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\CommunityLicenceReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\CurrentDiscsReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\CurrentDiscsReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\DeclarationReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\DeclarationReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\LicenceDetailsService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\LicenceDetailsService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\OperatorLicenceReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\OperatorLicenceReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\SignatureReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\Surrender\\Section\\SignatureReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TmReputeCheck\\Generator": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TmReputeCheck\\Generator",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\AbstractReviewServiceServices": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\AbstractReviewServiceServices",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerDeclarationReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerDeclarationReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerMainReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerMainReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerOtherEmploymentReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerOtherEmploymentReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerPreviousConvictionReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerPreviousConvictionReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerPreviousLicenceReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerPreviousLicenceReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerResponsibilityReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerResponsibilityReviewService",
+    "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerSignatureReviewService": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerSignatureReviewService",
+    "Dvsa\\Olcs\\Transfer\\Service\\CacheEncryption": "Dvsa\\Olcs\\Transfer\\Service\\CacheEncryption",
+    "Dvsa\\Olcs\\Transfer\\Util\\Annotation\\AnnotationBuilder": "Dvsa\\Olcs\\Transfer\\Util\\Annotation\\AnnotationBuilder",
+    "Dvsa\\Olcs\\Utils\\Client\\HttpExternalClientFactory": "Laminas\\Http\\Client",
+    "Dvsa\\Olcs\\Utils\\Translation\\MissingTranslationProcessor": "Dvsa\\Olcs\\Utils\\Translation\\MissingTranslationProcessor",
+    "Dvsa\\Olcs\\Utils\\Translation\\NiTextTranslation": "Dvsa\\Olcs\\Utils\\Translation\\NiTextTranslation",
+    "Elasticsearch\\Search": "Dvsa\\Olcs\\Db\\Service\\Search\\Search",
+    "EmailService": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"EmailService\" could not be created. Reason: The mailer DSN must contain a scheme."
+    },
+    "EventHistoryCreator": "Dvsa\\Olcs\\Api\\Service\\EventHistory\\Creator",
+    "EventManager": "Laminas\\EventManager\\EventManager",
+    "EventManagerInterface": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotFoundException: Unable to resolve service \"Laminas\\EventManager\\EventManager\" to a factory; are you certain you provided it during configuration?"
+    },
+    "ExceptionLogger": "Monolog\\Logger",
+    "FeesHelperService": "Dvsa\\Olcs\\Api\\Service\\FeesHelperService",
+    "FileUploader": "Dvsa\\Olcs\\Api\\Service\\File\\ContentStoreFileUploader",
+    "FilterManager": "Laminas\\Filter\\FilterPluginManager",
+    "FinancialStandingHelperService": "Dvsa\\Olcs\\Api\\Service\\FinancialStandingHelperService",
+    "FormControlServiceManager": "Dvsa\\Olcs\\Api\\Domain\\FormControlServiceManager",
+    "HTMLPurifier": "HTMLPurifier",
+    "HTMLPurifier_Config": "HTMLPurifier_Config",
+    "HttpDefaultRenderingStrategy": "Laminas\\Mvc\\View\\Http\\DefaultRenderingStrategy",
+    "HttpExceptionStrategy": "Laminas\\Mvc\\View\\Http\\ExceptionStrategy",
+    "HttpMethodListener": "Laminas\\Mvc\\HttpMethodListener",
+    "HttpRouteNotFoundStrategy": "Laminas\\Mvc\\View\\Http\\RouteNotFoundStrategy",
+    "HttpRouter": "Laminas\\Router\\Http\\TreeRouteStack",
+    "HttpViewManager": "Laminas\\Mvc\\View\\Http\\ViewManager",
+    "ImapService": "Dvsa\\Olcs\\Email\\Service\\Imap",
+    "InjectTemplateListener": "Laminas\\Mvc\\View\\Http\\InjectTemplateListener",
+    "Laminas\\Authentication\\Adapter\\ValidatableAdapterInterface": "Dvsa\\Olcs\\Auth\\Adapter\\CognitoAdapter",
+    "Laminas\\EventManager\\EventManagerInterface": "Laminas\\EventManager\\EventManager",
+    "Laminas\\EventManager\\SharedEventManager": "Laminas\\EventManager\\SharedEventManager",
+    "Laminas\\EventManager\\SharedEventManagerInterface": "Laminas\\EventManager\\SharedEventManager",
+    "Laminas\\Filter\\FilterPluginManager": "Laminas\\Filter\\FilterPluginManager",
+    "Laminas\\I18n\\Geography\\CountryCodeListInterface": "Laminas\\I18n\\Geography\\DefaultCountryCodeList",
+    "Laminas\\I18n\\Geography\\DefaultCountryCodeList": "Laminas\\I18n\\Geography\\DefaultCountryCodeList",
+    "Laminas\\I18n\\Translator\\LoaderPluginManager": "Laminas\\I18n\\Translator\\LoaderPluginManager",
+    "Laminas\\I18n\\Translator\\TranslatorInterface": "Laminas\\I18n\\Translator\\Translator",
+    "Laminas\\ModuleManager\\Listener\\ServiceListener": "Laminas\\ModuleManager\\Listener\\ServiceListener",
+    "Laminas\\ModuleManager\\ModuleManager": "Laminas\\ModuleManager\\ModuleManager",
+    "Laminas\\Mvc\\Controller\\ControllerManager": "Laminas\\Mvc\\Controller\\ControllerManager",
+    "Laminas\\Mvc\\Controller\\PluginManager": "Laminas\\Mvc\\Controller\\PluginManager",
+    "Laminas\\Mvc\\MiddlewareListener": "Laminas\\Mvc\\MiddlewareListener",
+    "Laminas\\Mvc\\RouteListener": "Laminas\\Mvc\\RouteListener",
+    "Laminas\\Mvc\\SendResponseListener": "Laminas\\Mvc\\SendResponseListener",
+    "Laminas\\Mvc\\View\\Http\\DefaultRenderingStrategy": "Laminas\\Mvc\\View\\Http\\DefaultRenderingStrategy",
+    "Laminas\\Mvc\\View\\Http\\InjectTemplateListener": "Laminas\\Mvc\\View\\Http\\InjectTemplateListener",
+    "Laminas\\Router\\Http\\TreeRouteStack": "Laminas\\Router\\Http\\TreeRouteStack",
+    "Laminas\\Router\\RoutePluginManager": "Laminas\\Router\\RoutePluginManager",
+    "Laminas\\Router\\RouteStackInterface": "Laminas\\Router\\Http\\TreeRouteStack",
+    "Laminas\\ServiceManager\\ServiceManager": "Laminas\\ServiceManager\\ServiceManager",
+    "Laminas\\Translator\\TranslatorInterface": "Laminas\\I18n\\Translator\\Translator",
+    "Laminas\\Validator\\Translator\\Translator": "Laminas\\Validator\\Translator\\Translator",
+    "Laminas\\Validator\\Translator\\TranslatorInterface": "Laminas\\Validator\\Translator\\Translator",
+    "Laminas\\Validator\\ValidatorPluginManager": "Laminas\\Validator\\ValidatorPluginManager",
+    "Laminas\\View\\Renderer\\FeedRenderer": "Laminas\\View\\Renderer\\FeedRenderer",
+    "Laminas\\View\\Renderer\\JsonRenderer": "Laminas\\View\\Renderer\\JsonRenderer",
+    "Laminas\\View\\Renderer\\PhpRenderer": "Laminas\\View\\Renderer\\PhpRenderer",
+    "Laminas\\View\\Renderer\\RendererInterface": "Laminas\\View\\Renderer\\PhpRenderer",
+    "Laminas\\View\\Resolver\\AggregateResolver": "Laminas\\View\\Resolver\\AggregateResolver",
+    "Laminas\\View\\Resolver\\ResolverInterface": "Laminas\\View\\Resolver\\AggregateResolver",
+    "Laminas\\View\\Resolver\\TemplateMapResolver": "Laminas\\View\\Resolver\\TemplateMapResolver",
+    "Laminas\\View\\Resolver\\TemplatePathStack": "Laminas\\View\\Resolver\\TemplatePathStack",
+    "Laminas\\View\\Strategy\\PhpRendererStrategy": "Laminas\\View\\Strategy\\PhpRendererStrategy",
+    "Laminas\\View\\View": "Laminas\\View\\View",
+    "Laminas\\Xml\\Security": "Laminas\\Xml\\Security",
+    "LmcRbacMvc\\Assertion\\AssertionPluginManager": "LmcRbacMvc\\Assertion\\AssertionPluginManager",
+    "LmcRbacMvc\\Collector\\RbacCollector": {
+      "error": "Error: Interface \"Laminas\\DeveloperTools\\Collector\\CollectorInterface\" not found"
+    },
+    "LmcRbacMvc\\Guard\\GuardPluginManager": "LmcRbacMvc\\Guard\\GuardPluginManager",
+    "LmcRbacMvc\\Guards": "(array)",
+    "LmcRbacMvc\\Identity\\AuthenticationIdentityProvider": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotFoundException: Unable to resolve service \"Laminas\\Authentication\\AuthenticationService\" to a factory; are you certain you provided it during configuration?"
+    },
+    "LmcRbacMvc\\Options\\ModuleOptions": "LmcRbacMvc\\Options\\ModuleOptions",
+    "LmcRbacMvc\\Role\\RoleProviderPluginManager": "LmcRbacMvc\\Role\\RoleProviderPluginManager",
+    "LmcRbacMvc\\Service\\AuthorizationService": "LmcRbacMvc\\Service\\AuthorizationService",
+    "LmcRbacMvc\\Service\\RoleService": "LmcRbacMvc\\Service\\RoleService",
+    "LmcRbacMvc\\View\\Strategy\\RedirectStrategy": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotFoundException: Unable to resolve service \"Laminas\\Authentication\\AuthenticationService\" to a factory; are you certain you provided it during configuration?"
+    },
+    "LmcRbacMvc\\View\\Strategy\\UnauthorizedStrategy": "LmcRbacMvc\\View\\Strategy\\UnauthorizedStrategy",
+    "Logger": "Monolog\\Logger",
+    "MessageConsumerManager": "Dvsa\\Olcs\\Cli\\Service\\Queue\\MessageConsumerManager",
+    "MiddlewareListener": "Laminas\\Mvc\\MiddlewareListener",
+    "ModuleManager": "Laminas\\ModuleManager\\ModuleManager",
+    "MvcTranslator": "Dvsa\\Olcs\\Utils\\Translation\\TranslatorDelegator",
+    "Olcs\\Logging\\Helper\\LogError": "Olcs\\Logging\\Helper\\LogError",
+    "Olcs\\Logging\\Helper\\LogException": "Olcs\\Logging\\Helper\\LogException",
+    "Olcs\\Logging\\Log\\Formatter\\Standard": "Olcs\\Logging\\Log\\Formatter\\Standard",
+    "Olcs\\Logging\\Log\\Processor\\CorrelationId": "Olcs\\Logging\\Log\\Processor\\CorrelationId",
+    "Olcs\\Logging\\Log\\Processor\\HideCredentials": "Olcs\\Logging\\Log\\Processor\\HideCredentials",
+    "Olcs\\Logging\\Log\\Processor\\HidePassword": "Olcs\\Logging\\Log\\Processor\\HidePassword",
+    "Olcs\\Logging\\Log\\Processor\\Microtime": "Olcs\\Logging\\Log\\Processor\\Microtime",
+    "Olcs\\Logging\\Log\\Processor\\RemoteIp": "Olcs\\Logging\\Log\\Processor\\RemoteIp",
+    "Olcs\\Logging\\Log\\Processor\\RequestId": "Olcs\\Logging\\Log\\Processor\\RequestId",
+    "Olcs\\Logging\\Log\\Processor\\SessionId": "Olcs\\Logging\\Log\\Processor\\SessionId",
+    "Olcs\\Logging\\Log\\Processor\\UserId": "Olcs\\Logging\\Log\\Processor\\UserId",
+    "Olcs\\Logging\\Mvc\\Listener\\LogError": "Olcs\\Logging\\Mvc\\Listener\\LogError",
+    "Olcs\\Logging\\Mvc\\Listener\\LogRequest": "Olcs\\Logging\\Mvc\\Listener\\LogRequest",
+    "Olcs\\XmlTools\\Xml\\TemplateBuilder": "Olcs\\XmlTools\\Xml\\TemplateBuilder",
+    "OpenSearch\\Client": "OpenSearch\\Client",
+    "OperatingCentreHelper": "Dvsa\\Olcs\\Api\\Domain\\Service\\OperatingCentreHelper",
+    "PaginatorPluginManager": {
+      "error": "Error: Class \"Laminas\\Paginator\\AdapterPluginManager\" not found"
+    },
+    "PayloadValidationListener": "Dvsa\\Olcs\\Api\\Mvc\\PayloadValidationListener",
+    "PermitsAllocateBilateralCriteriaFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\Allocate\\BilateralCriteriaFactory",
+    "PermitsAllocateEmissionsStandardCriteriaFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\Allocate\\EmissionsStandardCriteriaFactory",
+    "PermitsAllocateIrhpPermitAllocator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Allocate\\IrhpPermitAllocator",
+    "PermitsAnswersSummaryFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\AnswersSummaryFactory",
+    "PermitsAnswersSummaryGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\AnswersSummaryGenerator",
+    "PermitsAnswersSummaryRowFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\AnswersSummaryRowFactory",
+    "PermitsApplyRangesForCpProviderFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\ApplyRanges\\ForCpProviderFactory",
+    "PermitsApplyRangesStockBasedForCpProviderFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\ApplyRanges\\StockBasedForCpProviderFactory",
+    "PermitsAvailabilityCandidatePermitsAvailableCountCalculator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Availability\\CandidatePermitsAvailableCountCalculator",
+    "PermitsAvailabilityCandidatePermitsGrantabilityChecker": "Dvsa\\Olcs\\Api\\Service\\Permits\\Availability\\CandidatePermitsGrantabilityChecker",
+    "PermitsAvailabilityEmissionsCategoriesGrantabilityChecker": "Dvsa\\Olcs\\Api\\Service\\Permits\\Availability\\EmissionsCategoriesGrantabilityChecker",
+    "PermitsAvailabilityEmissionsCategoryAvailabilityChecker": "Dvsa\\Olcs\\Api\\Service\\Permits\\Availability\\EmissionsCategoryAvailabilityChecker",
+    "PermitsAvailabilityEmissionsCategoryAvailabilityCounter": "Dvsa\\Olcs\\Api\\Service\\Permits\\Availability\\EmissionsCategoryAvailabilityCounter",
+    "PermitsAvailabilityStockAvailabilityChecker": "Dvsa\\Olcs\\Api\\Service\\Permits\\Availability\\StockAvailabilityChecker",
+    "PermitsAvailabilityStockAvailabilityCounter": "Dvsa\\Olcs\\Api\\Service\\Permits\\Availability\\StockAvailabilityCounter",
+    "PermitsAvailabilityStockLicenceMaxPermittedCounter": "Dvsa\\Olcs\\Api\\Service\\Permits\\Availability\\StockLicenceMaxPermittedCounter",
+    "PermitsAvailabilityWindowAvailabilityChecker": "Dvsa\\Olcs\\Api\\Service\\Permits\\Availability\\WindowAvailabilityChecker",
+    "PermitsBilateralAnswersSummaryRowsAdder": "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\BilateralAnswersSummaryRowsAdder",
+    "PermitsBilateralApplicationCountryRemover": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\ApplicationCountryRemover",
+    "PermitsBilateralApplicationFeesClearer": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\ApplicationFeesClearer",
+    "PermitsBilateralCommonModifiedAnswerUpdater": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Common\\ModifiedAnswerUpdater",
+    "PermitsBilateralCommonNoOfPermitsConditionalUpdater": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Common\\NoOfPermitsConditionalUpdater",
+    "PermitsBilateralCommonNoOfPermitsUpdater": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Common\\NoOfPermitsUpdater",
+    "PermitsBilateralCommonPermitUsageUpdater": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Common\\PermitUsageUpdater",
+    "PermitsBilateralCommonStandardAndCabotageUpdater": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Common\\StandardAndCabotageUpdater",
+    "PermitsBilateralFeeBreakdownGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\FeeBreakdown\\BilateralFeeBreakdownGenerator",
+    "PermitsBilateralInternalApplicationCountryUpdater": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\ApplicationCountryUpdater",
+    "PermitsBilateralInternalApplicationUpdater": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\ApplicationUpdater",
+    "PermitsBilateralInternalBilateralRequiredGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\BilateralRequiredGenerator",
+    "PermitsBilateralInternalCabotageOnlyQuestionHandler": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\FixedAnswerQuestionHandler",
+    "PermitsBilateralInternalEmissionsStandardsQuestionHandler": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\FixedAnswerQuestionHandler",
+    "PermitsBilateralInternalExistingIrhpPermitApplicationHandler": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\ExistingIrhpPermitApplicationHandler",
+    "PermitsBilateralInternalIrhpPermitApplicationCreator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\IrhpPermitApplicationCreator",
+    "PermitsBilateralInternalIrhpPermitApplicationFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\IrhpPermitApplicationFactory",
+    "PermitsBilateralInternalNumberOfPermitsMoroccoQuestionHandler": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\NumberOfPermitsMoroccoQuestionHandler",
+    "PermitsBilateralInternalNumberOfPermitsQuestionHandler": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\NumberOfPermitsQuestionHandler",
+    "PermitsBilateralInternalPermitUsageQuestionHandler": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\PermitUsageQuestionHandler",
+    "PermitsBilateralInternalPermitUsageSelectionGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\PermitUsageSelectionGenerator",
+    "PermitsBilateralInternalQuestionHandlerDelegator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\QuestionHandlerDelegator",
+    "PermitsBilateralInternalStandardAndCabotageQuestionHandler": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\StandardAndCabotageQuestionHandler",
+    "PermitsBilateralInternalThirdCountryQuestionHandler": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Internal\\FixedAnswerQuestionHandler",
+    "PermitsBilateralIpaAnswersSummaryRowsAdder": "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\BilateralIpaAnswersSummaryRowsAdder",
+    "PermitsBilateralMetadataCountryGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Metadata\\CountryGenerator",
+    "PermitsBilateralMetadataCurrentFieldValuesGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Metadata\\CurrentFieldValuesGenerator",
+    "PermitsBilateralMetadataMoroccoFieldsGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Metadata\\MoroccoFieldsGenerator",
+    "PermitsBilateralMetadataPeriodArrayGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Metadata\\PeriodArrayGenerator",
+    "PermitsBilateralMetadataPeriodGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Metadata\\PeriodGenerator",
+    "PermitsBilateralMetadataStandardFieldsGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Bilateral\\Metadata\\StandardFieldsGenerator",
+    "PermitsCandidatePermitsApggCandidatePermitFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\CandidatePermits\\ApggCandidatePermitFactory",
+    "PermitsCandidatePermitsApggCandidatePermitsCreator": "Dvsa\\Olcs\\Api\\Service\\Permits\\CandidatePermits\\ApggCandidatePermitsCreator",
+    "PermitsCandidatePermitsApggEmissionsCatCandidatePermitsCreator": "Dvsa\\Olcs\\Api\\Service\\Permits\\CandidatePermits\\ApggEmissionsCatCandidatePermitsCreator",
+    "PermitsCandidatePermitsIrhpCandidatePermitsCreator": "Dvsa\\Olcs\\Api\\Service\\Permits\\CandidatePermits\\IrhpCandidatePermitsCreator",
+    "PermitsCheckableCheckedValueUpdater": "Dvsa\\Olcs\\Api\\Service\\Permits\\Checkable\\CheckedValueUpdater",
+    "PermitsCheckableCreateTaskCommandFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\Checkable\\CreateTaskCommandFactory",
+    "PermitsCheckableCreateTaskCommandGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Checkable\\CreateTaskCommandGenerator",
+    "PermitsCommonRangeBasedRestrictedCountriesProvider": "Dvsa\\Olcs\\Api\\Service\\Permits\\Common\\RangeBasedRestrictedCountriesProvider",
+    "PermitsCommonStockBasedPermitTypeConfigProvider": "Dvsa\\Olcs\\Api\\Service\\Permits\\Common\\StockBasedPermitTypeConfigProvider",
+    "PermitsCommonStockBasedRestrictedCountryIdsProvider": "Dvsa\\Olcs\\Api\\Service\\Permits\\Common\\StockBasedRestrictedCountryIdsProvider",
+    "PermitsCommonTypeBasedPermitTypeConfigProvider": "Dvsa\\Olcs\\Api\\Service\\Permits\\Common\\TypeBasedPermitTypeConfigProvider",
+    "PermitsFeesDaysToPayIssueFeeProvider": "Dvsa\\Olcs\\Api\\Service\\Permits\\Fees\\DaysToPayIssueFeeProvider",
+    "PermitsFeesEcmtApplicationFeeCommandCreator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Fees\\EcmtApplicationFeeCommandCreator",
+    "PermitsGrantabilityChecker": "Dvsa\\Olcs\\Api\\Service\\Permits\\GrantabilityChecker",
+    "PermitsHeaderAnswersSummaryRowsAdder": "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\HeaderAnswersSummaryRowsAdder",
+    "PermitsIpaAnswersSummaryGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\IpaAnswersSummaryGenerator",
+    "PermitsMultilateralAnswersSummaryRowsAdder": "Dvsa\\Olcs\\Api\\Service\\Permits\\AnswersSummary\\MultilateralAnswersSummaryRowsAdder",
+    "PermitsMultilateralFeeBreakdownGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\FeeBreakdown\\MultilateralFeeBreakdownGenerator",
+    "PermitsScoringCandidatePermitsCreator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Scoring\\CandidatePermitsCreator",
+    "PermitsScoringEmissionsCategoryAvailabilityCounter": "Dvsa\\Olcs\\Api\\Service\\Permits\\Scoring\\EmissionsCategoryAvailabilityCounter",
+    "PermitsScoringIrhpCandidatePermitFactory": "Dvsa\\Olcs\\Api\\Service\\Permits\\Scoring\\IrhpCandidatePermitFactory",
+    "PermitsScoringSuccessfulCandidatePermitsFacade": "Dvsa\\Olcs\\Api\\Service\\Permits\\Scoring\\SuccessfulCandidatePermitsFacade",
+    "PermitsScoringSuccessfulCandidatePermitsGenerator": "Dvsa\\Olcs\\Api\\Service\\Permits\\Scoring\\SuccessfulCandidatePermitsGenerator",
+    "PermitsScoringSuccessfulCandidatePermitsLogger": "Dvsa\\Olcs\\Api\\Service\\Permits\\Scoring\\SuccessfulCandidatePermitsLogger",
+    "PermitsScoringSuccessfulCandidatePermitsWriter": "Dvsa\\Olcs\\Api\\Service\\Permits\\Scoring\\SuccessfulCandidatePermitsWriter",
+    "QaAnswerFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\AnswerSaver\\AnswerFactory",
+    "QaAnswersSummaryRowGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\AnswersSummary\\AnswersSummaryRowGenerator",
+    "QaAnswersSummaryRowsAdder": "Dvsa\\Olcs\\Api\\Service\\Qa\\AnswersSummary\\AnswersSummaryRowsAdder",
+    "QaApplicationAnswersClearer": "Dvsa\\Olcs\\Api\\Service\\Qa\\AnswerSaver\\ApplicationAnswersClearer",
+    "QaApplicationStepFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ApplicationStepFactory",
+    "QaApplicationStepGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ApplicationStepGenerator",
+    "QaBaseAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\BaseAnswerSaver",
+    "QaBilateralCabotageOnlyAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\CabotageOnlyAnswerSaver",
+    "QaBilateralCabotageOnlyAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\CabotageOnlyAnswerSummaryProvider",
+    "QaBilateralCabotageOnlyElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\CabotageOnlyFactory",
+    "QaBilateralCabotageOnlyElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\CabotageOnlyGenerator",
+    "QaBilateralCabotageQuestionTextGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\QuestionText\\Custom\\Bilateral\\CabotageGenerator",
+    "QaBilateralClientReturnCodeHandler": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\ClientReturnCodeHandler",
+    "QaBilateralCountryDeletingAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\CountryDeletingAnswerSaver",
+    "QaBilateralEmissionsStandardsAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\EmissionsStandardsAnswerSaver",
+    "QaBilateralEmissionsStandardsElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\EmissionsStandardsFactory",
+    "QaBilateralEmissionsStandardsElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\EmissionsStandardsGenerator",
+    "QaBilateralNoOfPermitsAnswerClearer": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsAnswerClearer",
+    "QaBilateralNoOfPermitsAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsAnswerSaver",
+    "QaBilateralNoOfPermitsAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsAnswerSummaryProvider",
+    "QaBilateralNoOfPermitsElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsFactory",
+    "QaBilateralNoOfPermitsElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsGenerator",
+    "QaBilateralNoOfPermitsMoroccoAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsMoroccoAnswerSaver",
+    "QaBilateralNoOfPermitsMoroccoAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsMoroccoAnswerSummaryProvider",
+    "QaBilateralNoOfPermitsMoroccoElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsMoroccoFactory",
+    "QaBilateralNoOfPermitsMoroccoElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsMoroccoGenerator",
+    "QaBilateralNoOfPermitsTextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\NoOfPermitsTextFactory",
+    "QaBilateralPermitUsageAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\PermitUsageAnswerSaver",
+    "QaBilateralPermitUsageAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\PermitUsageAnswerSummaryProvider",
+    "QaBilateralPermitUsageGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\PermitUsageGenerator",
+    "QaBilateralPermitUsageQuestionTextGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\QuestionText\\Custom\\Bilateral\\PermitUsageGenerator",
+    "QaBilateralStandardAndCabotageAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\StandardAndCabotageAnswerSaver",
+    "QaBilateralStandardAndCabotageAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\StandardAndCabotageAnswerSummaryProvider",
+    "QaBilateralStandardAndCabotageElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\StandardAndCabotageFactory",
+    "QaBilateralStandardAndCabotageElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\StandardAndCabotageGenerator",
+    "QaBilateralThirdCountryAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\ThirdCountryAnswerSaver",
+    "QaBilateralThirdCountryElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\ThirdCountryFactory",
+    "QaBilateralThirdCountryElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Bilateral\\ThirdCountryGenerator",
+    "QaCertRoadworthinessMotExpiryDateElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\CertRoadworthiness\\MotExpiryDateFactory",
+    "QaCertRoadworthinessMotExpiryDateElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\CertRoadworthiness\\MotExpiryDateGenerator",
+    "QaCheckboxAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Checkbox\\CheckboxAnswerSaver",
+    "QaCheckboxAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Checkbox\\CheckboxAnswerSummaryProvider",
+    "QaCheckboxElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Checkbox\\CheckboxFactory",
+    "QaCheckboxElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Checkbox\\CheckboxGenerator",
+    "QaCommonArrayCollectionFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Common\\ArrayCollectionFactory",
+    "QaCommonCertificatesAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Common\\CertificatesAnswerSaver",
+    "QaCommonDateIntervalFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Common\\DateIntervalFactory",
+    "QaCommonDateTimeFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Common\\DateTimeFactory",
+    "QaCommonDateWithThresholdElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Common\\DateWithThresholdFactory",
+    "QaCommonDateWithThresholdElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Common\\DateWithThresholdGenerator",
+    "QaContextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\QaContextFactory",
+    "QaContextGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\QaContextGenerator",
+    "QaDateAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Date\\DateAnswerSaver",
+    "QaDateAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Date\\DateAnswerSummaryProvider",
+    "QaDateElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Date\\DateFactory",
+    "QaDateElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Date\\DateGenerator",
+    "QaEcmtAnnualTripsAbroadAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\AnnualTripsAbroadAnswerSaver",
+    "QaEcmtAnnualTripsAbroadElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\AnnualTripsAbroadFactory",
+    "QaEcmtAnnualTripsAbroadElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\AnnualTripsAbroadGenerator",
+    "QaEcmtConditionalFeeUpdater": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\ConditionalFeeUpdater",
+    "QaEcmtEmissionsCategoryConditionalAdder": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\EmissionsCategoryConditionalAdder",
+    "QaEcmtEmissionsCategoryFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\EmissionsCategoryFactory",
+    "QaEcmtFeeUpdater": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\FeeUpdater",
+    "QaEcmtIntJourneysAnswerClearer": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\IntJourneysAnswerClearer",
+    "QaEcmtIntJourneysAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\IntJourneysAnswerSaver",
+    "QaEcmtIntJourneysElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\IntJourneysFactory",
+    "QaEcmtIntJourneysElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\IntJourneysGenerator",
+    "QaEcmtNoOfPermitsAnswerClearer": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\NoOfPermitsAnswerClearer",
+    "QaEcmtNoOfPermitsAnswerFetcher": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\NoOfPermitsAnswerFetcher",
+    "QaEcmtNoOfPermitsAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\NoOfPermitsAnswerSaver",
+    "QaEcmtNoOfPermitsAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\NoOfPermitsAnswerSummaryProvider",
+    "QaEcmtNoOfPermitsElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\NoOfPermitsFactory",
+    "QaEcmtNoOfPermitsElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\NoOfPermitsGenerator",
+    "QaEcmtPermitUsageFourOptionsRefDataOptionsSource": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Options\\EcmtPermitUsageRefDataSource",
+    "QaEcmtPermitUsageThreeOptionsRefDataOptionsSource": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Options\\EcmtPermitUsageRefDataSource",
+    "QaEcmtRemovalNoOfPermitsAnswerClearer": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Text\\Custom\\EcmtRemoval\\NoOfPermits\\NoOfPermitsAnswerClearer",
+    "QaEcmtRemovalNoOfPermitsAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Text\\Custom\\EcmtRemoval\\NoOfPermits\\NoOfPermitsAnswerSaver",
+    "QaEcmtRemovalNoOfPermitsAnswerWriter": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Text\\Custom\\EcmtRemoval\\NoOfPermits\\AnswerWriter",
+    "QaEcmtRemovalNoOfPermitsFeeCreator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Text\\Custom\\EcmtRemoval\\NoOfPermits\\FeeCreator",
+    "QaEcmtRemovalNoOfPermitsQuestionTextGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\QuestionText\\Custom\\EcmtRemovalNoOfPermitsGenerator",
+    "QaEcmtRemovalPermitStartDateElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\EcmtRemoval\\PermitStartDateGenerator",
+    "QaEcmtRestrictedCountriesAnswerClearer": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountriesAnswerClearer",
+    "QaEcmtRestrictedCountriesAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountriesAnswerSaver",
+    "QaEcmtRestrictedCountriesAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountriesAnswerSummaryProvider",
+    "QaEcmtRestrictedCountriesElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountriesFactory",
+    "QaEcmtRestrictedCountriesElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountriesGenerator",
+    "QaEcmtRestrictedCountriesQuestionTextGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\QuestionText\\Custom\\Ecmt\\RestrictedCountriesGenerator",
+    "QaEcmtRestrictedCountryFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\RestrictedCountryFactory",
+    "QaEcmtSectorsAnswerClearer": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\SectorsAnswerClearer",
+    "QaEcmtSectorsAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Custom\\Ecmt\\SectorsAnswerSaver",
+    "QaElementGeneratorContextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\ElementGeneratorContextFactory",
+    "QaElementGeneratorContextGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\ElementGeneratorContextGenerator",
+    "QaEntityProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\QaEntityProvider",
+    "QaFilteredTranslateableTextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\FilteredTranslateableTextFactory",
+    "QaFilteredTranslateableTextGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\FilteredTranslateableTextGenerator",
+    "QaFormFragmentFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\FormFragmentFactory",
+    "QaFormFragmentGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\FormFragmentGenerator",
+    "QaGenericAnswerClearer": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\GenericAnswerClearer",
+    "QaGenericAnswerFetcher": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\GenericAnswerFetcher",
+    "QaGenericAnswerProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\AnswerSaver\\GenericAnswerProvider",
+    "QaGenericAnswerSaver": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\GenericAnswerSaver",
+    "QaGenericAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\GenericAnswerSummaryProvider",
+    "QaGenericAnswerWriter": "Dvsa\\Olcs\\Api\\Service\\Qa\\AnswerSaver\\GenericAnswerWriter",
+    "QaIrhpApplicationPostSubmitHandler": "Dvsa\\Olcs\\Api\\Service\\Qa\\PostSubmit\\IrhpApplicationPostSubmitHandler",
+    "QaJsonDecodingFilteredTranslateableTextGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\JsonDecodingFilteredTranslateableTextGenerator",
+    "QaNamedAnswerFetcher": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\NamedAnswerFetcher",
+    "QaOptionFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Options\\OptionFactory",
+    "QaOptionListFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Options\\OptionListFactory",
+    "QaOptionListGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Options\\OptionListGenerator",
+    "QaQuestionTextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\QuestionText\\QuestionTextFactory",
+    "QaQuestionTextGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\QuestionText\\QuestionTextGenerator",
+    "QaRadioAnswerSummaryProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Radio\\RadioAnswerSummaryProvider",
+    "QaRadioElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Radio\\RadioFactory",
+    "QaRadioElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Radio\\RadioGenerator",
+    "QaRefDataOptionsSource": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Options\\RefDataSource",
+    "QaRepoQueryOptionsSource": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Options\\RepoQuerySource",
+    "QaSelfservePageFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\SelfservePageFactory",
+    "QaSelfservePageGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\SelfservePageGenerator",
+    "QaSupplementedApplicationStepFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Facade\\SupplementedApplicationSteps\\SupplementedApplicationStepFactory",
+    "QaSupplementedApplicationStepsProvider": "Dvsa\\Olcs\\Api\\Service\\Qa\\Facade\\SupplementedApplicationSteps\\SupplementedApplicationStepsProvider",
+    "QaTextElementFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Text\\TextFactory",
+    "QaTextElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Text\\TextGenerator",
+    "QaTotAuthVehiclesTextElementGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\Element\\Text\\Custom\\TotAuthVehiclesGenerator",
+    "QaTranslateableTextFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\TranslateableTextFactory",
+    "QaTranslateableTextGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\TranslateableTextGenerator",
+    "QaTranslateableTextParameterFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\TranslateableTextParameterFactory",
+    "QaTranslateableTextParameterGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\TranslateableTextParameterGenerator",
+    "QaValidatorFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ValidatorFactory",
+    "QaValidatorGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ValidatorGenerator",
+    "QaValidatorListFactory": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ValidatorListFactory",
+    "QaValidatorListGenerator": "Dvsa\\Olcs\\Api\\Service\\Qa\\Structure\\ValidatorListGenerator",
+    "QueryBuilder": "Dvsa\\Olcs\\Api\\Domain\\QueryBuilder",
+    "QueryHandlerManager": "Dvsa\\Olcs\\Api\\Domain\\QueryHandlerManager",
+    "QueryPartialServiceManager": "Dvsa\\Olcs\\Api\\Domain\\QueryPartialServiceManager",
+    "Queue": "Dvsa\\Olcs\\Cli\\Service\\Queue\\QueueProcessor",
+    "Rbac\\Rbac": "Rbac\\Rbac",
+    "RepositoryServiceManager": "Dvsa\\Olcs\\Api\\Domain\\RepositoryServiceManager",
+    "Request": "Dvsa\\Olcs\\Cli\\Request\\CliRequest",
+    "Response": "Laminas\\Http\\PhpEnvironment\\Response",
+    "RestrictionService": "Dvsa\\Olcs\\Api\\Service\\Lva\\RestrictionService",
+    "ReviewSnapshot": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Generator",
+    "Review\\ApplicationAddresses": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationAddressesReviewService",
+    "Review\\ApplicationBusinessDetails": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationBusinessDetailsReviewService",
+    "Review\\ApplicationBusinessType": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationBusinessTypeReviewService",
+    "Review\\ApplicationConditionsUndertakings": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationConditionsUndertakingsReviewService",
+    "Review\\ApplicationConvictionsPenalties": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationConvictionsPenaltiesReviewService",
+    "Review\\ApplicationFinancialEvidence": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationFinancialEvidenceReviewService",
+    "Review\\ApplicationFinancialHistory": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationFinancialHistoryReviewService",
+    "Review\\ApplicationGoodsOcTotalAuth": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationGoodsOcTotalAuthReviewService",
+    "Review\\ApplicationKnowledgeExperience": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationKnowledgeExperienceReviewService",
+    "Review\\ApplicationLicenceHistory": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationLicenceHistoryReviewService",
+    "Review\\ApplicationOperatingCentres": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationOperatingCentresReviewService",
+    "Review\\ApplicationPeople": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPeopleReviewService",
+    "Review\\ApplicationPsvDocumentaryEvidenceLarge": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvDocumentaryEvidenceLargeReviewService",
+    "Review\\ApplicationPsvDocumentaryEvidenceSmall": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvDocumentaryEvidenceSmallReviewService",
+    "Review\\ApplicationPsvMainOccupationUndertakings": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvMainOccupationUndertakingsReviewService",
+    "Review\\ApplicationPsvOcTotalAuth": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOcTotalAuthReviewService",
+    "Review\\ApplicationPsvOperateLarge": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOperateLargeReviewService",
+    "Review\\ApplicationPsvOperateNovelty": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOperateNoveltyReviewService",
+    "Review\\ApplicationPsvOperateSmall": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvOperateSmallReviewService",
+    "Review\\ApplicationPsvSmallConditions": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvSmallConditionsReviewService",
+    "Review\\ApplicationPsvSmallPartWritten": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationPsvSmallPartWrittenReviewService",
+    "Review\\ApplicationSafety": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationSafetyReviewService",
+    "Review\\ApplicationTaxiPhv": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotFoundException: Unable to resolve service \"Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationTaxiPhvReviewService\" to a factory; are you certain you provided it during configuration?"
+    },
+    "Review\\ApplicationTransportManagers": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationTransportManagersReviewService",
+    "Review\\ApplicationTypeOfLicence": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationTypeOfLicenceReviewService",
+    "Review\\ApplicationUndertakings": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationUndertakingsReviewService",
+    "Review\\ApplicationVehicles": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationVehiclesReviewService",
+    "Review\\ApplicationVehiclesPsv": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationVehiclesPsvReviewService",
+    "Review\\ApplicationVehiclesSize": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ApplicationVehiclesSizeReviewService",
+    "Review\\ConditionsUndertakings": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\ConditionsUndertakingsReviewService",
+    "Review\\GoodsOperatingCentre": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\GoodsOperatingCentreReviewService",
+    "Review\\LicenceConditionsUndertakings": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\LicenceConditionsUndertakingsReviewService",
+    "Review\\People": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\PeopleReviewService",
+    "Review\\PsvOperatingCentre": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\PsvOperatingCentreReviewService",
+    "Review\\TrafficArea": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\TrafficAreaReviewService",
+    "Review\\TransportManagerDeclaration": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerDeclarationReviewService",
+    "Review\\TransportManagerMain": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerMainReviewService",
+    "Review\\TransportManagerOtherEmployment": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerOtherEmploymentReviewService",
+    "Review\\TransportManagerPreviousConviction": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerPreviousConvictionReviewService",
+    "Review\\TransportManagerPreviousLicence": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerPreviousLicenceReviewService",
+    "Review\\TransportManagerResponsibility": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerResponsibilityReviewService",
+    "Review\\TransportManagerSignature": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Section\\TransportManagerSignatureReviewService",
+    "Review\\TransportManagers": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\TransportManagersReviewService",
+    "Review\\VariationAddresses": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationAddressesReviewService",
+    "Review\\VariationBusinessDetails": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationBusinessDetailsReviewService",
+    "Review\\VariationBusinessType": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationBusinessTypeReviewService",
+    "Review\\VariationConditionsUndertakings": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationConditionsUndertakingsReviewService",
+    "Review\\VariationConvictionsPenalties": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationConvictionsPenaltiesReviewService",
+    "Review\\VariationDiscs": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationDiscsReviewService",
+    "Review\\VariationFinancialEvidence": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationFinancialEvidenceReviewService",
+    "Review\\VariationFinancialHistory": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationFinancialHistoryReviewService",
+    "Review\\VariationGoodsOcTotalAuth": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationGoodsOcTotalAuthReviewService",
+    "Review\\VariationLicenceHistory": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationLicenceHistoryReviewService",
+    "Review\\VariationOperatingCentres": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationOperatingCentresReviewService",
+    "Review\\VariationPeople": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPeopleReviewService",
+    "Review\\VariationPsvDocumentaryEvidenceLarge": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvDocumentaryEvidenceLargeReviewService",
+    "Review\\VariationPsvDocumentaryEvidenceSmall": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvDocumentaryEvidenceSmallReviewService",
+    "Review\\VariationPsvMainOccupationUndertakings": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvMainOccupationUndertakingsReviewService",
+    "Review\\VariationPsvOcTotalAuth": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOcTotalAuthReviewService",
+    "Review\\VariationPsvOperateLarge": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOperateLargeReviewService",
+    "Review\\VariationPsvOperateNovelty": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOperateNoveltyReviewService",
+    "Review\\VariationPsvOperateSmall": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvOperateSmallReviewService",
+    "Review\\VariationPsvSmallConditions": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvSmallConditionsReviewService",
+    "Review\\VariationPsvSmallPartWritten": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationPsvSmallPartWrittenReviewService",
+    "Review\\VariationSafety": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationSafetyReviewService",
+    "Review\\VariationTransportManagers": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationTransportManagersReviewService",
+    "Review\\VariationTypeOfLicence": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationTypeOfLicenceReviewService",
+    "Review\\VariationUndertakings": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationUndertakingsReviewService",
+    "Review\\VariationVehicles": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationVehiclesReviewService",
+    "Review\\VariationVehiclesPsv": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationVehiclesPsvReviewService",
+    "Review\\VariationVehiclesSize": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VariationVehiclesSizeReviewService",
+    "Review\\VehiclesPsv": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\ApplicationReview\\Section\\VehiclesPsvReviewService",
+    "RouteListener": "Laminas\\Mvc\\RouteListener",
+    "RoutePluginManager": "Laminas\\Router\\RoutePluginManager",
+    "Router": "Laminas\\Router\\Http\\TreeRouteStack",
+    "S3Client": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"S3Client\" could not be created. Reason: The s3 service does not have version: 1."
+    },
+    "SectionAccessService": "Dvsa\\Olcs\\Api\\Service\\Lva\\SectionAccessService",
+    "SectionConfig": "Dvsa\\Olcs\\Api\\Service\\Lva\\SectionConfig",
+    "SendResponseListener": "Laminas\\Mvc\\SendResponseListener",
+    "SeriousInfringementInput": "Dvsa\\Olcs\\Api\\Service\\InputFilter\\Input",
+    "ServiceListener": "Laminas\\ModuleManager\\Listener\\ServiceListener",
+    "ServiceManager": "Laminas\\ServiceManager\\ServiceManager",
+    "SharedEventManager": "Laminas\\EventManager\\SharedEventManager",
+    "SharedEventManagerInterface": "Laminas\\EventManager\\SharedEventManager",
+    "SqsClient": {
+      "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"SqsClient\" could not be created. Reason: The sqs service does not have version: 1."
+    },
+    "TemplateDatabaseTemplateFetcher": "Dvsa\\Olcs\\Api\\Service\\Template\\DatabaseTemplateFetcher",
+    "TemplateDatabaseTwigLoader": "Dvsa\\Olcs\\Api\\Service\\Template\\DatabaseTwigLoader",
+    "TemplateStrategySelectingViewRenderer": "Dvsa\\Olcs\\Api\\Service\\Template\\StrategySelectingViewRenderer",
+    "TemplateTwigEnvironment": "Twig\\Environment",
+    "TemplateTwigRenderer": "Dvsa\\Olcs\\Api\\Service\\Template\\TwigRenderer",
+    "TmReviewSnapshot": "Dvsa\\Olcs\\Snapshot\\Service\\Snapshots\\TransportManagerApplication\\Generator",
+    "TrafficAreaValidator": "Dvsa\\Olcs\\Api\\Domain\\Service\\TrafficAreaValidator",
+    "TransExchangePublisherXmlMapping": "Olcs\\XmlTools\\Xml\\Specification\\Recursion",
+    "TransExchangeXmlMapping": "Olcs\\XmlTools\\Xml\\Specification\\Recursion",
+    "TransactionManager": "Dvsa\\Olcs\\Api\\Domain\\Repository\\TransactionManager",
+    "TransferAnnotationBuilder": "Dvsa\\Olcs\\Transfer\\Util\\Annotation\\AnnotationBuilder",
+    "TranslatorPluginManager": "Laminas\\I18n\\Translator\\LoaderPluginManager",
+    "UpdateOperatingCentreHelper": "Dvsa\\Olcs\\Api\\Domain\\Service\\UpdateOperatingCentreHelper",
+    "Utils\\MissingTranslationProcessor": "Dvsa\\Olcs\\Utils\\Translation\\MissingTranslationProcessor",
+    "Utils\\NiTextTranslation": "Dvsa\\Olcs\\Utils\\Translation\\NiTextTranslation",
+    "ValidationHandlerManager": "Dvsa\\Olcs\\Api\\Domain\\ValidationHandlerManager",
+    "ValidatorManager": "Laminas\\Validator\\ValidatorPluginManager",
+    "VariationOperatingCentreHelper": "Dvsa\\Olcs\\Api\\Domain\\Service\\VariationOperatingCentreHelper",
+    "VariationPublishValidationService": "Dvsa\\Olcs\\Api\\Service\\Lva\\Variation\\PublishValidationService",
+    "View": "Laminas\\View\\View",
+    "ViewFeedRenderer": "Laminas\\View\\Renderer\\FeedRenderer",
+    "ViewFeedStrategy": "Laminas\\View\\Strategy\\FeedStrategy",
+    "ViewHelperManager": "Laminas\\View\\HelperPluginManager",
+    "ViewJsonRenderer": "Laminas\\View\\Renderer\\JsonRenderer",
+    "ViewJsonStrategy": "Laminas\\View\\Strategy\\JsonStrategy",
+    "ViewManager": "Laminas\\Mvc\\View\\Http\\ViewManager",
+    "ViewPhpRenderer": "Laminas\\View\\Renderer\\PhpRenderer",
+    "ViewPhpRendererStrategy": "Laminas\\View\\Strategy\\PhpRendererStrategy",
+    "ViewPrefixPathStackResolver": "Laminas\\View\\Resolver\\PrefixPathStackResolver",
+    "ViewRenderer": "Laminas\\View\\Renderer\\PhpRenderer",
+    "ViewResolver": "Laminas\\View\\Resolver\\AggregateResolver",
+    "ViewTemplateMapResolver": "Laminas\\View\\Resolver\\TemplateMapResolver",
+    "ViewTemplatePathStack": "Laminas\\View\\Resolver\\TemplatePathStack",
+    "Zend\\Filter\\FilterPluginManager": "Laminas\\Filter\\FilterPluginManager",
+    "Zend\\I18n\\Translator\\LoaderPluginManager": "Laminas\\I18n\\Translator\\LoaderPluginManager",
+    "Zend\\I18n\\Translator\\TranslatorInterface": "Laminas\\I18n\\Translator\\Translator",
+    "Zend\\Router\\Http\\TreeRouteStack": "Laminas\\Router\\Http\\TreeRouteStack",
+    "Zend\\Router\\RoutePluginManager": "Laminas\\Router\\RoutePluginManager",
+    "Zend\\Router\\RouteStackInterface": "Laminas\\Router\\Http\\TreeRouteStack",
+    "Zend\\Validator\\ValidatorPluginManager": "Laminas\\Validator\\ValidatorPluginManager",
+    "application": "Laminas\\Mvc\\Application",
+    "cache.redis.connection": "Redis",
+    "config": "(array)",
+    "configuration": "(array)",
+    "default-cache": "Symfony\\Component\\Cache\\Adapter\\ArrayAdapter",
+    "doctrine-cache": "Symfony\\Component\\Cache\\Adapter\\ArrayAdapter",
+    "doctrine.connection.export": "Doctrine\\DBAL\\Connection",
+    "doctrine.connection.orm_default": "Doctrine\\DBAL\\Connection",
+    "doctrine.entity_manager.orm_default": "Doctrine\\ORM\\EntityManager",
+    "doctrine.entitymanager.orm_default": "Doctrine\\ORM\\EntityManager",
+    "jwks-cache": "Symfony\\Component\\Cache\\Adapter\\ArrayAdapter",
+    "request": "Dvsa\\Olcs\\Cli\\Request\\CliRequest",
+    "response": "Laminas\\Http\\PhpEnvironment\\Response",
+    "router": "Laminas\\Router\\Http\\TreeRouteStack",
+    "translator": "Dvsa\\Olcs\\Utils\\Translation\\TranslatorDelegator"
+  },
+  "plugin_managers": {
+    "CommandHandlerManager": {
+      "class": "Dvsa\\Olcs\\Api\\Domain\\CommandHandlerManager",
+      "config_key": null,
+      "plugins": 909,
+      "not_created": {
+        "Dvsa\\Olcs\\Api\\Domain\\Command\\Bus\\Ebsr\\ProcessRequestMap": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Ebsr\\S3Processor\" could not be created. Reason: Found 1 error while validating the input provided for the AssumeRole operation:"
+        },
+        "Dvsa\\Olcs\\Api\\Domain\\Command\\Cases\\Si\\SendResponse": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Nr\\InrClientInterface\" could not be created. Reason: URI must include a scheme and host. Use an absolute URI, a network-path reference starting with //, or configure a base_uri."
+        },
+        "Dvsa\\Olcs\\Api\\Domain\\Command\\DataRetention\\Precheck": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Domain\\Command\\DataRetention\\Precheck\" could not be created. Reason: An exception occurred in the driver: SQLSTATE[HY000] [2002] No such file or directory"
+        },
+        "Dvsa\\Olcs\\Api\\Domain\\Command\\Document\\AnalyseFinancialEvidence": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\EventBridge\\EventBridgeClient\" could not be created. Reason: The eventbridge service does not have version: 1."
+        },
+        "Dvsa\\Olcs\\Api\\Domain\\Command\\Document\\StoreDocumentAnalysisResult": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\Sfn\\SfnClient\" could not be created. Reason: The states service does not have version: 1."
+        },
+        "Dvsa\\Olcs\\Api\\Domain\\Command\\Transaction\\ResolvePayment": {
+          "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
+        },
+        "Dvsa\\Olcs\\Cli\\Domain\\Command\\DataDvaNiExport": {
+          "error": "TypeError: Cannot assign null to property Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\AbstractDataExport::$s3Bucket of type string",
+          "warnings": [
+            "Undefined array key \"host\" in {app}/module/Cli/src/Domain/CommandHandler/DataDvaNiExport.php"
+          ]
+        },
+        "Dvsa\\Olcs\\Cli\\Domain\\Command\\DataGovUkExport": {
+          "error": "TypeError: Cannot assign null to property Dvsa\\Olcs\\Cli\\Domain\\CommandHandler\\AbstractDataExport::$s3Bucket of type string",
+          "warnings": [
+            "Undefined array key \"host\" in {app}/module/Cli/src/Domain/CommandHandler/DataGovUkExport.php"
+          ]
+        },
+        "Dvsa\\Olcs\\Cli\\Domain\\Command\\MessageQueue\\Consumer\\CompaniesHouse\\CompanyProfile": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"SqsClient\" could not be created. Reason: The sqs service does not have version: 1."
+        },
+        "Dvsa\\Olcs\\Cli\\Domain\\Command\\MessageQueue\\Consumer\\CompaniesHouse\\CompanyProfileDlq": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"SqsClient\" could not be created. Reason: The sqs service does not have version: 1."
+        },
+        "Dvsa\\Olcs\\Cli\\Domain\\Command\\MessageQueue\\Consumer\\CompaniesHouse\\ProcessInsolvency": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"SqsClient\" could not be created. Reason: The sqs service does not have version: 1."
+        },
+        "Dvsa\\Olcs\\Cli\\Domain\\Command\\MessageQueue\\Consumer\\CompaniesHouse\\ProcessInsolvencyDlq": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"SqsClient\" could not be created. Reason: The sqs service does not have version: 1."
+        },
+        "Dvsa\\Olcs\\Cli\\Domain\\Command\\MessageQueue\\Consumer\\TransXChange\\TransXChangeConsumer": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"SqsClient\" could not be created. Reason: The sqs service does not have version: 1."
+        },
+        "Dvsa\\Olcs\\Cli\\Domain\\Command\\MessageQueue\\Enqueue": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"SqsClient\" could not be created. Reason: The sqs service does not have version: 1."
+        },
+        "Dvsa\\Olcs\\Email\\Domain\\Command\\SendEmail": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"EmailService\" could not be created. Reason: The mailer DSN must contain a scheme."
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\Cpms\\DownloadReport": {
+          "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\Cpms\\RequestReport": {
+          "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\Document\\BucketBrowserOverwrite": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\S3\\S3Client\" could not be created. Reason: The s3 service does not have version: 1."
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\Fee\\RefundFee": {
+          "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\GovUkAccount\\GetGovUkAccountRedirect": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\GovUkAccount\\GovUkAccountService\" could not be created. Reason: Dvsa\\GovUkAccount\\Provider\\GovUkAccount configuration: option \"keys.private_key\" is not valid base64"
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\GovUkAccount\\ProcessAuthResponse": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\GovUkAccount\\GovUkAccountService\" could not be created. Reason: Dvsa\\GovUkAccount\\Provider\\GovUkAccount configuration: option \"keys.private_key\" is not valid base64"
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\PrepareToSend": {
+          "error": "TypeError: Cannot assign Dvsa\\Olcs\\Api\\Service\\ConvertToPdf\\WebServiceClient to property Dvsa\\Olcs\\Api\\Domain\\CommandHandler\\Letter\\LetterInstance\\PrepareToSend::$convertHtmlToPdf of type Dvsa\\Olcs\\Api\\Service\\ConvertToPdf\\ConvertHtmlToPdfInterface"
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\Template\\SendTestEmail": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Email\\Service\\NotifyTestMailer\" could not be created. Reason: The mailer DSN must contain a scheme."
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\Tm\\CheckRepute": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Service\\Nr\\InrClientInterface\" could not be created. Reason: URI must include a scheme and host. Use an absolute URI, a network-path reference starting with //, or configure a base_uri."
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\Transaction\\CompleteTransaction": {
+          "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\Transaction\\PayOutstandingFees": {
+          "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
+        },
+        "Dvsa\\Olcs\\Transfer\\Command\\Transaction\\ReverseTransaction": {
+          "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
+        }
+      }
+    },
+    "ControllerManager": {
+      "class": "Laminas\\Mvc\\Controller\\ControllerManager",
+      "config_key": "controllers",
+      "plugins": 4,
+      "not_created": []
+    },
+    "ControllerPluginManager": {
+      "class": "Laminas\\Mvc\\Controller\\PluginManager",
+      "config_key": "controller_plugins",
+      "plugins": 3,
+      "not_created": []
+    },
+    "DbQueryServiceManager": {
+      "class": "Dvsa\\Olcs\\Api\\Domain\\DbQueryServiceManager",
+      "config_key": null,
+      "plugins": 30,
+      "not_created": []
+    },
+    "DomainValidatorManager": {
+      "class": "Dvsa\\Olcs\\Api\\Domain\\ValidatorManager",
+      "config_key": null,
+      "plugins": 58,
+      "not_created": []
+    },
+    "Dvsa\\Olcs\\Api\\Service\\Letter\\SectionRenderer\\SectionRendererPluginManager": {
+      "class": "Dvsa\\Olcs\\Api\\Service\\Letter\\SectionRenderer\\SectionRendererPluginManager",
+      "config_key": null,
+      "plugins": 8,
+      "not_created": []
+    },
+    "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PluginManager": {
+      "class": "Dvsa\\Olcs\\Api\\Service\\Publication\\Context\\PluginManager",
+      "config_key": null,
+      "plugins": 0,
+      "not_created": []
+    },
+    "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\PluginManager": {
+      "class": "Dvsa\\Olcs\\Api\\Service\\Publication\\Process\\PluginManager",
+      "config_key": null,
+      "plugins": 0,
+      "not_created": []
+    },
+    "Dvsa\\Olcs\\Api\\Service\\Submission\\Sections\\SectionGeneratorPluginManager": {
+      "class": "Dvsa\\Olcs\\Api\\Service\\Submission\\Sections\\SectionGeneratorPluginManager",
+      "config_key": null,
+      "plugins": 104,
+      "not_created": {
+        "dvsaolcsapiservicesubmissionsectionsannualtesthistory": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsannualtesthistory\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsapplicantscomments": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsapplicantscomments\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsapplicantsresponses": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsapplicantsresponses\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsauthrequestedappliedfor": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsauthrequestedappliedfor\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionscaseoutline": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionscaseoutline\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionscasesummary": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionscasesummary\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionscompliancecomplaints": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionscompliancecomplaints\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsconditionsandundertakings": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsconditionsandundertakings\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsconvictionfpnoffencehistory": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsconvictionfpnoffencehistory\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsenvironmentalcomplaints": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsenvironmentalcomplaints\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsleadtcarea": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsleadtcarea\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionslinkedlicences": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionslinkedlicences\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsmostseriousinfringement": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsmostseriousinfringement\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsnodatacommentsonly": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsnodatacommentsonly\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsoperatingcentres": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsoperatingcentres\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsoppositions": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsoppositions\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsoutstandingapplications": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsoutstandingapplications\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionspenalties": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionspenalties\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionspeople": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionspeople\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsprohibitionhistory": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsprohibitionhistory\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionsstatements": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionsstatements\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionstmdetails": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionstmdetails\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionstmotheremployment": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionstmotheremployment\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionstmprevioushistory": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionstmprevioushistory\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionstmqualifications": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionstmqualifications\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionstmresponsibilities": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionstmresponsibilities\" not found"
+        },
+        "dvsaolcsapiservicesubmissionsectionstransportmanagers": {
+          "error": "Error: Class \"dvsaolcsapiservicesubmissionsectionstransportmanagers\" not found"
+        }
+      }
+    },
+    "FilterManager": {
+      "class": "Laminas\\Filter\\FilterPluginManager",
+      "config_key": "filters",
+      "plugins": 38,
+      "not_created": []
+    },
+    "FormControlServiceManager": {
+      "class": "Dvsa\\Olcs\\Api\\Domain\\FormControlServiceManager",
+      "config_key": null,
+      "plugins": 24,
+      "not_created": []
+    },
+    "MessageConsumerManager": {
+      "class": "Dvsa\\Olcs\\Cli\\Service\\Queue\\MessageConsumerManager",
+      "config_key": null,
+      "plugins": 66,
+      "not_created": []
+    },
+    "QueryHandlerManager": {
+      "class": "Dvsa\\Olcs\\Api\\Domain\\QueryHandlerManager",
+      "config_key": null,
+      "plugins": 505,
+      "not_created": {
+        "Dvsa\\Olcs\\Api\\Domain\\Query\\DataRetention\\Postcheck": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Domain\\Query\\DataRetention\\Postcheck\" could not be created. Reason: An exception occurred in the driver: SQLSTATE[HY000] [2002] No such file or directory"
+        },
+        "Dvsa\\Olcs\\Api\\Domain\\Query\\Diagnostics\\CheckFkIntegrity": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Domain\\Query\\Diagnostics\\CheckFkIntegrity\" could not be created. Reason: An exception occurred in the driver: SQLSTATE[HY000] [2002] No such file or directory"
+        },
+        "Dvsa\\Olcs\\Api\\Domain\\Query\\Diagnostics\\GenerateCheckFkIntegritySql": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Dvsa\\Olcs\\Api\\Domain\\Query\\Diagnostics\\GenerateCheckFkIntegritySql\" could not be created. Reason: An exception occurred in the driver: SQLSTATE[HY000] [2002] No such file or directory"
+        },
+        "Dvsa\\Olcs\\Transfer\\Query\\Cpms\\ReportList": {
+          "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
+        },
+        "Dvsa\\Olcs\\Transfer\\Query\\Cpms\\ReportStatus": {
+          "error": "TypeError: Dvsa\\Olcs\\Cpms\\Service\\ApiServiceFactory::__construct(): Argument #2 ($userId) must be of type string, null given, called in {app}/module/Api/src/Service/Cpms/ApiServiceFactory.php"
+        },
+        "Dvsa\\Olcs\\Transfer\\Query\\Document\\BucketBrowserDownload": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\S3\\S3Client\" could not be created. Reason: The s3 service does not have version: 1."
+        },
+        "Dvsa\\Olcs\\Transfer\\Query\\Document\\BucketBrowserList": {
+          "error": "Laminas\\ServiceManager\\Exception\\ServiceNotCreatedException: Service with name \"Aws\\S3\\S3Client\" could not be created. Reason: The s3 service does not have version: 1."
+        }
+      }
+    },
+    "QueryPartialServiceManager": {
+      "class": "Dvsa\\Olcs\\Api\\Domain\\QueryPartialServiceManager",
+      "config_key": null,
+      "plugins": 36,
+      "not_created": []
+    },
+    "RepositoryServiceManager": {
+      "class": "Dvsa\\Olcs\\Api\\Domain\\RepositoryServiceManager",
+      "config_key": null,
+      "plugins": 264,
+      "not_created": []
+    },
+    "RoutePluginManager": {
+      "class": "Laminas\\Router\\RoutePluginManager",
+      "config_key": "route_manager",
+      "plugins": 0,
+      "not_created": []
+    },
+    "TranslatorPluginManager": {
+      "class": "Laminas\\I18n\\Translator\\LoaderPluginManager",
+      "config_key": "translator_plugins",
+      "plugins": 1,
+      "not_created": []
+    },
+    "ValidationHandlerManager": {
+      "class": "Dvsa\\Olcs\\Api\\Domain\\ValidationHandlerManager",
+      "config_key": null,
+      "plugins": 1428,
+      "not_created": []
+    },
+    "ValidatorManager": {
+      "class": "Laminas\\Validator\\ValidatorPluginManager",
+      "config_key": "validators",
+      "plugins": 63,
+      "not_created": []
+    },
+    "ViewHelperManager": {
+      "class": "Laminas\\View\\HelperPluginManager",
+      "config_key": "view_helpers",
+      "plugins": 40,
+      "not_created": []
+    }
+  }
+}
