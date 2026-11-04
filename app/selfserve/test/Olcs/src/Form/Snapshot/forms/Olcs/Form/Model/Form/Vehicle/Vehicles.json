@@ -98,10 +98,11 @@
           }
         ],
         "fieldsets": [],
-        "type": "Laminas\\Form\\Fieldset",
         "options": {
+          "wrapperElement": "div",
           "showErrors": true
-        }
+        },
+        "type": "Laminas\\Form\\Fieldset"
       }
     }
   ],

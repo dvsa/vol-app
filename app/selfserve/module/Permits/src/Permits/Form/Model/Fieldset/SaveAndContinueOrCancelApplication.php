@@ -9,6 +9,7 @@ use Laminas\Form\Annotation as Form;
  */
 #[Form\Name('SaveAndContinueOrCancelApplication')]
 #[Form\Attributes(['class' => 'govuk-button-group'])]
+#[Form\Options(['wrapperElement' => 'div'])]
 class SaveAndContinueOrCancelApplication
 {
     #[Form\Name('SubmitButton')]

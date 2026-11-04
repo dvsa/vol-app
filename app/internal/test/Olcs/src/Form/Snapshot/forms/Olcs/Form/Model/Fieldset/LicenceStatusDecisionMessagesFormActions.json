@@ -38,5 +38,8 @@
     }
   ],
   "fieldsets": [],
+  "options": {
+    "wrapperElement": "div"
+  },
   "input_filter": []
 }

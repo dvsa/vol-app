@@ -256,8 +256,10 @@
           }
         ],
         "fieldsets": [],
-        "type": "Laminas\\Form\\Fieldset",
-        "options": []
+        "options": {
+          "wrapperElement": "div"
+        },
+        "type": "Laminas\\Form\\Fieldset"
       }
     }
   ],

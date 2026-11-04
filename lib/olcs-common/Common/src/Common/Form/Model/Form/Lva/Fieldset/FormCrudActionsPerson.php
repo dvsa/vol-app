@@ -6,6 +6,7 @@ use Laminas\Form\Annotation as Form;
 
 #[Form\Name('form-actions')]
 #[Form\Attributes(['class' => 'govuk-button-group'])]
+#[Form\Options(['wrapperElement' => 'div'])]
 class FormCrudActionsPerson
 {
     #[Form\Attributes(['type' => 'submit', 'class' => 'govuk-button', 'aria-label' => 'Save and continue'])]
