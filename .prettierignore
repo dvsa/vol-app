@@ -8,3 +8,5 @@ app/internal/test/Olcs/src/Form/Snapshot/forms/
 app/selfserve/test/Olcs/src/Form/Snapshot/forms/
 # Third-party scripts, not formatted by hand
 app/cdn/assets/_js/vendor/
+# Generated api framework snapshots: written by the Framework tests in app/api, not formatted by hand
+app/api/test/module/Api/src/Framework/snapshots/

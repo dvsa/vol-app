@@ -1,0 +1,123 @@
+{
+  "api/continuation-detail/single/licence-checklist/GET": {
+    "request": "GET /api/continuation-detail/101/licence-checklist/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContinuationDetail\\LicenceChecklist"
+    },
+    "matches": "api/continuation-detail/single/licence-checklist/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContinuationDetail\\LicenceChecklist",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/continuation-detail/single/licence-checklist/GET"
+  },
+  "api/continuation-detail/single/review/GET": {
+    "request": "GET /api/continuation-detail/101/review/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContinuationDetail\\Review"
+    },
+    "matches": "api/continuation-detail/single/review/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContinuationDetail\\Review",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/continuation-detail/single/review/GET"
+  },
+  "api/continuation-detail/single/finances/PUT": {
+    "request": "PUT /api/continuation-detail/101/finances/",
+    "matches": "api/continuation-detail/single/finances/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ContinuationDetail\\UpdateFinances",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/continuation-detail/single/finances/PUT"
+  },
+  "api/continuation-detail/single/insufficient-finances/PUT": {
+    "request": "PUT /api/continuation-detail/101/insufficient-finances/",
+    "matches": "api/continuation-detail/single/insufficient-finances/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ContinuationDetail\\UpdateInsufficientFinances",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/continuation-detail/single/insufficient-finances/PUT"
+  },
+  "api/continuation-detail/single/submit/PUT": {
+    "request": "PUT /api/continuation-detail/101/submit/",
+    "matches": "api/continuation-detail/single/submit/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ContinuationDetail\\Submit",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/continuation-detail/single/submit/PUT"
+  },
+  "api/continuation-detail/single/PUT": {
+    "request": "PUT /api/continuation-detail/101/",
+    "matches": "api/continuation-detail/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ContinuationDetail\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/continuation-detail/single/PUT"
+  },
+  "api/continuation-detail/single/GET": {
+    "request": "GET /api/continuation-detail/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContinuationDetail\\Get"
+    },
+    "matches": "api/continuation-detail/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContinuationDetail\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/continuation-detail/single/GET"
+  },
+  "api/continuation-detail/checklist-reminders/GET": {
+    "request": "GET /api/continuation-detail/checklist-reminders/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContinuationDetail\\ChecklistReminders"
+    },
+    "matches": "api/continuation-detail/checklist-reminders/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContinuationDetail\\ChecklistReminders"
+    },
+    "withoutTrailingSlash": "api/continuation-detail/checklist-reminders/GET"
+  },
+  "api/continuation-detail/queue/POST": {
+    "request": "POST /api/continuation-detail/queue/",
+    "matches": "api/continuation-detail/queue/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ContinuationDetail\\Queue"
+    },
+    "withoutTrailingSlash": "api/continuation-detail/queue/POST"
+  },
+  "api/continuation-detail/prepare-continuations/POST": {
+    "request": "POST /api/continuation-detail/prepare-continuations/",
+    "matches": "api/continuation-detail/prepare-continuations/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ContinuationDetail\\PrepareContinuations"
+    },
+    "withoutTrailingSlash": "api/continuation-detail/prepare-continuations/POST"
+  },
+  "api/continuation-detail/list/GET": {
+    "request": "GET /api/continuation-detail/list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContinuationDetail\\GetList"
+    },
+    "matches": "api/continuation-detail/list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContinuationDetail\\GetList"
+    },
+    "withoutTrailingSlash": "api/continuation-detail/list/GET"
+  }
+}

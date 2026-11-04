@@ -1,0 +1,14 @@
+{
+  "api/preview-record/lookup/GET": {
+    "request": "GET /api/preview-record/lookup",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\PreviewRecord\\Lookup"
+    },
+    "matches": "api/preview-record/lookup/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\PreviewRecord\\Lookup"
+    },
+    "withTrailingSlash": null
+  }
+}

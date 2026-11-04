@@ -1,0 +1,20 @@
+{
+  "api/goods-disc/print-discs/POST": {
+    "request": "POST /api/goods-disc/print-discs/",
+    "matches": "api/goods-disc/print-discs/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\GoodsDisc\\PrintDiscs"
+    },
+    "withoutTrailingSlash": "api/goods-disc/print-discs/POST"
+  },
+  "api/goods-disc/confirm-printing/POST": {
+    "request": "POST /api/goods-disc/confirm-printing/",
+    "matches": "api/goods-disc/confirm-printing/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\GoodsDisc\\ConfirmPrinting"
+    },
+    "withoutTrailingSlash": "api/goods-disc/confirm-printing/POST"
+  }
+}

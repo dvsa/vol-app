@@ -1,0 +1,69 @@
+{
+  "api/licence-vehicle/GET": {
+    "request": "GET /api/licence-vehicle/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\LicenceVehicle\\LicenceVehiclesById"
+    },
+    "matches": "api/licence-vehicle/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\LicenceVehicle\\LicenceVehiclesById"
+    },
+    "withoutTrailingSlash": "api/licence-vehicle/GET"
+  },
+  "api/licence-vehicle/single/GET": {
+    "request": "GET /api/licence-vehicle/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\LicenceVehicle\\LicenceVehicle"
+    },
+    "matches": "api/licence-vehicle/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\LicenceVehicle\\LicenceVehicle",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence-vehicle/single/GET"
+  },
+  "api/licence-vehicle/single/PUT": {
+    "request": "PUT /api/licence-vehicle/101/",
+    "matches": "api/licence-vehicle/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Vehicle\\UpdateGoodsVehicle",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence-vehicle/single/PUT"
+  },
+  "api/licence-vehicle/single/psv/GET": {
+    "request": "GET /api/licence-vehicle/101/psv/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\LicenceVehicle\\PsvLicenceVehicle"
+    },
+    "matches": "api/licence-vehicle/single/psv/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\LicenceVehicle\\PsvLicenceVehicle",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence-vehicle/single/psv/GET"
+  },
+  "api/licence-vehicle/single/psv/PUT": {
+    "request": "PUT /api/licence-vehicle/101/psv/",
+    "matches": "api/licence-vehicle/single/psv/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\LicenceVehicle\\UpdatePsvLicenceVehicle",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence-vehicle/single/psv/PUT"
+  },
+  "api/licence-vehicle/DELETE": {
+    "request": "DELETE /api/licence-vehicle/",
+    "matches": "api/licence-vehicle/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Vehicle\\DeleteLicenceVehicle"
+    },
+    "withoutTrailingSlash": "api/licence-vehicle/DELETE"
+  }
+}
