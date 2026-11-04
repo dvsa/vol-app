@@ -191,6 +191,8 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
             $markup .= $templateMarkup;
         }
 
+        $fieldsetWrapper = $element->getOption('wrapperElement') ?: 'fieldset';
+
         // Every collection is wrapped by a fieldset if needed
         if ($element->getOption('shouldWrap') || $this->shouldWrap) {
             $label = $element->getLabel();
@@ -249,9 +251,9 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
             } elseif ($element instanceof FileUploadListItem) {
                 $markup = sprintf('<li%s>%s%s</li>', $attributesString, $hint, $markup);
             } elseif ($element->getOption('hint-position') === 'below') {
-                $markup = sprintf('<fieldset%s>%s%s%s</fieldset>', $attributesString, $legend, $markup, $hint);
+                $markup = sprintf('<%s%s>%s%s%s</%s>', $fieldsetWrapper, $attributesString, $legend, $markup, $hint, $fieldsetWrapper);
             } else {
-                $markup = sprintf('<fieldset%s>%s%s%s</fieldset>', $attributesString, $legend, $hint, $markup);
+                $markup = sprintf('<%s%s>%s%s%s</%s>', $fieldsetWrapper, $attributesString, $legend, $hint, $markup, $fieldsetWrapper);
             }
         }
 
