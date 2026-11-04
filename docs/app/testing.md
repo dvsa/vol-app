@@ -16,8 +16,9 @@ This page documents how to run the unit tests in parallel or one at a time, how
 slow tests are reported, how repository unit tests assert against real Doctrine,
 the integration layer, the two baseline mechanisms that guard the Doctrine
 entity metadata, the Doctrine deprecation report both suites print, the three
-tests that guard output escaping in the table render pipeline, and the snapshots
-that guard how API requests are validated and how forms are declared.
+tests that guard output escaping in the table render pipeline, the snapshots
+that guard how API requests are validated and how forms are declared, and the
+API framework tests that pin the application shell for the laminas-mvc removal.
 
 ## Running the tests
 
@@ -1116,6 +1117,139 @@ The snapshot stops at the specification. It does not cover:
   plain plugin managers, which play no part in reading them
 - anything done to a form after it is built: form services, controllers
   altering the form, elements added with `$form->add()`
+
+## API framework tests
+
+laminas-mvc is discontinued, and the plan is to replace it with Mezzio (see
+[RFC-010](../rfc/rfc-010-laminas-mvc-to-mezzio-migration.md)). The API goes
+first. These tests pin the behaviour of the shell around the API's business
+logic: how it boots, routes, validates, answers, logs, and renders. That shell
+is what the migration replaces. They live in
+`app/api/test/module/Api/src/Framework/`. They boot the real application, with
+every module, every config file and every `onBootstrap`. Only the
+infrastructure is swapped for in-memory stand-ins, so they run in the ordinary
+unit suite, in CI, with no database, Redis or AWS.
+
+| Test                | Pins                                                                                                                                                                                                                                                                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `BootstrapTest`     | What booting does, for the web and for the command line (which every AWS Batch job uses): soft-delete filter on, the encrypted-column cipher (pinned ciphertext), the static logger and its credential redaction, the user on every log record, the address-service toggle, the CLI session handler, every CLI command loadable |
+| `RouteSnapshotTest` | For each of the ~1,100 routes: the URL a frontend assembles, and the route, controller, DTO and parameters the API matches it to, with and without the trailing slash                                                                                                                                                           |
+| `HttpContractTest`  | What a client receives (status, headers, the exact body bytes) and what is logged, for every response mapping in the controllers, payload validation (JSON, query, form, XML), streams, routing misses, bearer tokens, search and scanning                                                                                      |
+| `ContainerTest`     | Every name the booted container answers to and how it is wired, including the services laminas-mvc registers implicitly (`Request`, `ViewRenderer`, `ViewHelperManager`…), and whether each service and plugin can still be created                                                                                             |
+| `MergedConfigTest`  | The merged configuration, one file per top-level key (CLI: only what differs from the web)                                                                                                                                                                                                                                      |
+| `ViewRenderingTest` | The HTML and text the API renders server-side (snapshot documents, permit summaries, submission sections, email bodies): which file each template name resolves to, which class each helper resolves to, and the rendered output                                                                                                |
+| `GlobalStateTest`   | That booting and restoring leaves the process as it was (see below)                                                                                                                                                                                                                                                             |
+
+The snapshots are committed under `Framework/snapshots/`, one folder per test.
+
+### Running them
+
+```bash
+cd app/api
+vendor/bin/phpunit test/module/Api/src/Framework
+```
+
+They run with the rest of the API unit suite (`composer test`,
+`composer test:serial`, and CI's `vendor/bin/phpunit`). Serially they take
+about 12 seconds on a developer Mac. Each HTTP case boots a fresh application
+(about 70ms), and `ContainerTest`'s two creation runs each get their own
+process (see below).
+
+### Regenerating the snapshots
+
+These snapshots work the same way as the DTO and form snapshots above. Testing
+never writes them, and regenerating is a deliberate step:
+
+```bash
+cd app/api
+UPDATE_SNAPSHOTS=1 vendor/bin/phpunit test/module/Api/src/Framework
+git diff --stat test/module/Api/src/Framework/snapshots   # then read the diff itself
+```
+
+`--filter RouteSnapshotTest` (or `HttpContractTest`, etc.) limits the
+regeneration to one test. Each failure message names its own command.
+
+### When they fail
+
+The point of these tests is that the migration should not change a single
+file. A diff is a behaviour change that a client, a batch job or a stored
+document would notice. Find out why before regenerating.
+
+| Failure                                          | Usually means                                                                                     |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| a route snapshot changed                         | a route was added, removed or reordered in `lib/olcs-transfer/config`, or the router was replaced |
+| an HTTP snapshot changed                         | a status, header, body byte or log line changed                                                   |
+| a `BootstrapTest` assertion fails                | something `onBootstrap` did is no longer done; carry it across to the new bootstrap               |
+| the container wiring lost names                  | services laminas-mvc registered implicitly; register them in the API                              |
+| the merged config changed                        | module order, merge rules or parameter resolution differ                                          |
+| a view snapshot changed                          | the renderer, resolver or helper configuration changed, or a template did                         |
+| `GlobalStateTest` fails, or unrelated tests fail | booting the API now changes some process-wide state that `GlobalState` does not restore           |
+
+Ordinary feature work changes them too. A new route, a new service or a template
+edit each fail the relevant snapshot, so regenerate in the same PR and review
+the diff.
+
+### How the API is booted
+
+`Support/ApiApplication` is the one place that knows how the API is put
+together. Today `config/container.php` and `config/container-cli.php` both call
+`Laminas\Mvc\Application::init()`, which loads the modules and then bootstraps
+them. `ApiApplication` repeats those two steps and puts the test
+infrastructure in between:
+
+- every `%placeholder%` resolves to `1`, with no AWS calls; `ENVIRONMENT_NAME` is
+  hidden; only `*.global.php` config is loaded; the config caches are off
+- the encryption key is a fixed 32-byte key
+- Doctrine's `serverVersion` is pinned, so it never connects to a database
+- the Redis-backed caches are replaced with in-memory ones
+- the real logger is built from config, but writes to a Monolog `TestHandler`
+- feature toggles return fixed answers, and translations are empty, so every
+  message translates to its own key
+
+Booting changes process-wide state: error and exception handlers, the static
+logger, Doctrine's type registry, the PHP session and autoloaders.
+`FrameworkTestCase` captures that state before each test and restores it
+afterwards (`Support/GlobalState`), and `GlobalStateTest` checks that the
+restore works. CI runs the suite in random order, so anything left behind would
+make unrelated tests flaky.
+
+Classes are the one thing that cannot be put back. Once a class is loaded or
+declared, it stays for the rest of the process. `ContainerTest`'s creation run
+builds every service, and so loads nearly every class, so it runs in its own
+process. Tests that use Mockery `overload:` or `alias:` mocks must also run in
+their own process (`#[RunInSeparateProcess]`), because those mocks fail if the
+real class is already loaded. `S3ProcessorFactoryTest` and
+`TransXChangeConsumerTest` do this.
+
+### Using them during the migration
+
+- **New bootstrap.** When the container files stop calling
+  `Application::init()`, change `ApiApplication` to build the application the
+  new way. Every test then runs against the new bootstrap without further
+  changes.
+- **New HTTP stack.** `HttpContractTest` talks to `Support/HttpKernel`: a
+  PSR-7 request goes in, and the response and logs come out.
+  `Support/MvcHttpKernel` is today's implementation. Add a PSR-15
+  implementation for the new stack, and while both stacks exist, run the cases
+  against both.
+- **Routing.** `RouteSnapshotTest` makes it safe either to keep laminas-router's
+  tree or to replace it. Either way, every request has to keep landing in the
+  same place.
+
+### What they do not cover
+
+- **Headers a controller sends itself with `header()`.** The CLI SAPI discards
+  them. Today only stream downloads do this (`GenericController::getList()` via
+  `streamResult()`). The body is still captured.
+- **What `public/index.php` does after an exception escapes the application.**
+  Today that happens when a bearer token is invalid or malformed: identity is
+  resolved while bootstrapping, before laminas-mvc can turn the exception into
+  a response. The snapshot records the exception. From reading the code,
+  Monolog's handler then sends an empty 500.
+- **Real infrastructure:** the database, Redis, AWS parameters, and the
+  translations held in the database. The integration suite and the functional
+  tests cover those.
+- **Notify email templates.** They are Twig templates held in the database.
 
 ## Adding integration tests
 
