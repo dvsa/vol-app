@@ -7,6 +7,7 @@
 namespace Dvsa\Olcs\Api\Domain\QueryPartial;
 
 use Doctrine\ORM\QueryBuilder;
+use Dvsa\Olcs\Api\Domain\Util\QueryHelper;
 
 /**
  * Paginate
@@ -30,10 +31,12 @@ final class Order implements QueryPartialInterface
 
         [$alias] = $qb->getRootAliases();
 
+        $sortDirection = QueryHelper::toSortDirection($order);
+
         if (str_contains((string) $sort, '.') || in_array($sort, $compositeFields)) {
-            $qb->addOrderBy($sort, $order);
+            $qb->addOrderBy($sort, $sortDirection);
         } else {
-            $qb->addOrderBy($alias . '.' . $sort, $order);
+            $qb->addOrderBy($alias . '.' . $sort, $sortDirection);
         }
     }
 }

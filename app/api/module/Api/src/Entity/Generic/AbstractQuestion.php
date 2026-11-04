@@ -143,7 +143,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation::class, mappedBy: 'question')]
-    #[ORM\OrderBy(['weight' => 'ASC'])]
+    #[ORM\OrderBy(['weight' => \SortDirection::Ascending])]
     protected $applicationValidations;
 
     /**

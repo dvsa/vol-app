@@ -149,7 +149,7 @@ class PublicationLink extends AbstractRepository
                 ->setParameter('byLicence', $query->getLicence());
         }
 
-        $qb->orderBy('p.publicationNo', 'DESC')
+        $qb->orderBy('p.publicationNo', \SortDirection::Descending)
         ->setMaxResults(1);
 
         $result = $qb->getQuery()->getResult(Query::HYDRATE_OBJECT);

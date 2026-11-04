@@ -20,7 +20,7 @@ class LetterType extends AbstractLetterType
      * @var \Doctrine\Common\Collections\Collection<int, LetterTypeSection>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection::class, mappedBy: 'letterType', cascade: ['persist'], orphanRemoval: true)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $letterTypeSections;
 
     /**
@@ -37,7 +37,7 @@ class LetterType extends AbstractLetterType
      * @var \Doctrine\Common\Collections\Collection<int, LetterTypeAppendix>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTypeAppendix::class, mappedBy: 'letterType', cascade: ['persist'], orphanRemoval: true)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $letterTypeAppendices;
 
     /**
@@ -46,7 +46,7 @@ class LetterType extends AbstractLetterType
      * @var \Doctrine\Common\Collections\Collection<int, LetterTypeChoice>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTypeChoice::class, mappedBy: 'letterType', cascade: ['persist'], orphanRemoval: true)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $letterTypeChoices;
 
     /**

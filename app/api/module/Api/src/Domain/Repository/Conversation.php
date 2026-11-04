@@ -48,7 +48,7 @@ class Conversation extends AbstractRepository
             ->andWhere($qb->expr()->isNotNull('t.licence'))
             ->andWhere($qb->expr()->eq('l1.organisation', ':organisation'))
             ->setParameter('organisation', $organisationId)
-            ->addOrderBy($this->alias . '.isClosed', 'ASC');
+            ->addOrderBy($this->alias . '.isClosed', \SortDirection::Ascending);
 
         return $qb;
     }
@@ -69,9 +69,9 @@ class Conversation extends AbstractRepository
             ->addSelect('MAX(irmm.createdOn) AS last_read')
             ->addSelect('CASE WHEN ' . $this->alias . '.isClosed = 0 AND NOT EXISTS (' . $subQuery->getDQL() . ') THEN 1 ELSE 0 END AS has_unread')
             ->groupBy($this->alias . '.id')
-            ->addOrderBy($this->alias . '.isClosed', 'ASC')
-            ->addOrderBy('has_unread', 'DESC')
-            ->addOrderBy('last_read', 'DESC')
+            ->addOrderBy($this->alias . '.isClosed', \SortDirection::Ascending)
+            ->addOrderBy('has_unread', \SortDirection::Descending)
+            ->addOrderBy('last_read', \SortDirection::Descending)
             ->andWhere($qb->expr()->orX(
                 $qb->expr()->eq($this->alias . '.isClosed', ':closed'),
                 $qb->expr()->exists(

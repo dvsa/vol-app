@@ -101,7 +101,7 @@ class CommunityLic extends AbstractRepository
             ->setParameter('active', CommunityLicEntity::STATUS_ACTIVE)
             ->setParameter('withdrawn', CommunityLicEntity::STATUS_WITHDRAWN)
             ->setParameter('suspended', CommunityLicEntity::STATUS_SUSPENDED)
-            ->orderBy($this->alias . '.issueNo', 'ASC');
+            ->orderBy($this->alias . '.issueNo', \SortDirection::Ascending);
         return $qb->getQuery()->execute();
     }
 

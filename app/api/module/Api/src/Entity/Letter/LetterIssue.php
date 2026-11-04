@@ -20,7 +20,7 @@ class LetterIssue extends AbstractLetterIssue
      * @var \Doctrine\Common\Collections\Collection<int, LetterIssueVersion>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, mappedBy: 'letterIssue', cascade: ['persist'], orphanRemoval: false)]
-    #[ORM\OrderBy(['versionNumber' => 'DESC'])]
+    #[ORM\OrderBy(['versionNumber' => \SortDirection::Descending])]
     protected $versions;
 
     /**

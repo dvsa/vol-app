@@ -20,7 +20,7 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
      * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceTodo>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo::class, mappedBy: 'letterInstanceIssue', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $letterInstanceTodos;
 
     /**

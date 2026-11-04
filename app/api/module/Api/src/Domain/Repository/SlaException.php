@@ -35,7 +35,7 @@ class SlaException extends AbstractRepository
             )
         )
         ->setParameter('checkDate', $checkDate)
-        ->orderBy($this->alias . '.slaDescription', 'ASC');
+        ->orderBy($this->alias . '.slaDescription', \SortDirection::Ascending);
 
         return $qb->getQuery()->getResult();
     }
@@ -57,7 +57,7 @@ class SlaException extends AbstractRepository
             )
         )
         ->setParameter('pattern', '%' . $pattern . '%')
-        ->orderBy($this->alias . '.slaDescription', 'ASC');
+        ->orderBy($this->alias . '.slaDescription', \SortDirection::Ascending);
 
         return $qb->getQuery()->getResult();
     }
@@ -70,8 +70,8 @@ class SlaException extends AbstractRepository
     public function fetchAllOrdered()
     {
         $qb = $this->createQueryBuilder();
-        $qb->orderBy($this->alias . '.slaDescription', 'ASC')
-           ->addOrderBy($this->alias . '.slaExceptionDescription', 'ASC');
+        $qb->orderBy($this->alias . '.slaDescription', \SortDirection::Ascending)
+           ->addOrderBy($this->alias . '.slaExceptionDescription', \SortDirection::Ascending);
 
         return $qb->getQuery()->getResult();
     }
