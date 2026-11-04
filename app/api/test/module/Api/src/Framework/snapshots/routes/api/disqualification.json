@@ -1,0 +1,31 @@
+{
+  "api/disqualification/POST": {
+    "request": "POST /api/disqualification/",
+    "matches": "api/disqualification/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Disqualification\\Create"
+    },
+    "withoutTrailingSlash": "api/disqualification/POST"
+  },
+  "api/disqualification/single/PUT": {
+    "request": "PUT /api/disqualification/101/",
+    "matches": "api/disqualification/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Disqualification\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/disqualification/single/PUT"
+  },
+  "api/disqualification/single/DELETE": {
+    "request": "DELETE /api/disqualification/101/",
+    "matches": "api/disqualification/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Disqualification\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/disqualification/single/DELETE"
+  }
+}

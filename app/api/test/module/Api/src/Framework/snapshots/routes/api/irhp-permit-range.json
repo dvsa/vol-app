@@ -1,0 +1,56 @@
+{
+  "api/irhp-permit-range/single/GET": {
+    "request": "GET /api/irhp-permit-range/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitRange\\ById"
+    },
+    "matches": "api/irhp-permit-range/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitRange\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-range/single/GET"
+  },
+  "api/irhp-permit-range/single/PUT": {
+    "request": "PUT /api/irhp-permit-range/101/",
+    "matches": "api/irhp-permit-range/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermitRange\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-range/single/PUT"
+  },
+  "api/irhp-permit-range/single/DELETE": {
+    "request": "DELETE /api/irhp-permit-range/101/",
+    "matches": "api/irhp-permit-range/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermitRange\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-range/single/DELETE"
+  },
+  "api/irhp-permit-range/GET": {
+    "request": "GET /api/irhp-permit-range/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitRange\\GetList"
+    },
+    "matches": "api/irhp-permit-range/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitRange\\GetList"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-range/GET"
+  },
+  "api/irhp-permit-range/POST": {
+    "request": "POST /api/irhp-permit-range/",
+    "matches": "api/irhp-permit-range/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermitRange\\Create"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-range/POST"
+  }
+}

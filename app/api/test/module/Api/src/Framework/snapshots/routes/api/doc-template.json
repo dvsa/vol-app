@@ -1,0 +1,68 @@
+{
+  "api/doc-template/single/GET": {
+    "request": "GET /api/doc-template/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DocTemplate\\ById"
+    },
+    "matches": "api/doc-template/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DocTemplate\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/doc-template/single/GET"
+  },
+  "api/doc-template/single/POST": {
+    "request": "POST /api/doc-template/101/",
+    "matches": "api/doc-template/single/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\DocTemplate\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/doc-template/single/POST"
+  },
+  "api/doc-template/single/DELETE": {
+    "request": "DELETE /api/doc-template/101/",
+    "matches": "api/doc-template/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\DocTemplate\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/doc-template/single/DELETE"
+  },
+  "api/doc-template/GET": {
+    "request": "GET /api/doc-template/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DocTemplate\\GetList"
+    },
+    "matches": "api/doc-template/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DocTemplate\\GetList"
+    },
+    "withoutTrailingSlash": "api/doc-template/GET"
+  },
+  "api/doc-template/POST": {
+    "request": "POST /api/doc-template/",
+    "matches": "api/doc-template/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\DocTemplate\\Create"
+    },
+    "withoutTrailingSlash": "api/doc-template/POST"
+  },
+  "api/doc-template/admin-list/GET": {
+    "request": "GET /api/doc-template/admin-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DocTemplate\\FullList"
+    },
+    "matches": "api/doc-template/admin-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DocTemplate\\FullList"
+    },
+    "withoutTrailingSlash": "api/doc-template/admin-list/GET"
+  }
+}

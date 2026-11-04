@@ -1,0 +1,89 @@
+{
+  "api/inspection-request/single/GET": {
+    "request": "GET /api/inspection-request/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\InspectionRequest\\InspectionRequest"
+    },
+    "matches": "api/inspection-request/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\InspectionRequest\\InspectionRequest",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/inspection-request/single/GET"
+  },
+  "api/inspection-request/single/DELETE": {
+    "request": "DELETE /api/inspection-request/101/",
+    "matches": "api/inspection-request/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\InspectionRequest\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/inspection-request/single/DELETE"
+  },
+  "api/inspection-request/single/PUT": {
+    "request": "PUT /api/inspection-request/101/",
+    "matches": "api/inspection-request/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\InspectionRequest\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/inspection-request/single/PUT"
+  },
+  "api/inspection-request/create/POST": {
+    "request": "POST /api/inspection-request/create/",
+    "matches": "api/inspection-request/create/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\InspectionRequest\\Create"
+    },
+    "withoutTrailingSlash": "api/inspection-request/create/POST"
+  },
+  "api/inspection-request/create-from-grant/POST": {
+    "request": "POST /api/inspection-request/create-from-grant/",
+    "matches": "api/inspection-request/create-from-grant/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\InspectionRequest\\CreateFromGrant"
+    },
+    "withoutTrailingSlash": "api/inspection-request/create-from-grant/POST"
+  },
+  "api/inspection-request/operating-centres/GET": {
+    "request": "GET /api/inspection-request/operating-centres/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\InspectionRequest\\OperatingCentres"
+    },
+    "matches": "api/inspection-request/operating-centres/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\InspectionRequest\\OperatingCentres"
+    },
+    "withoutTrailingSlash": "api/inspection-request/operating-centres/GET"
+  },
+  "api/inspection-request/licence/GET": {
+    "request": "GET /api/inspection-request/licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\InspectionRequest\\LicenceInspectionRequestList"
+    },
+    "matches": "api/inspection-request/licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\InspectionRequest\\LicenceInspectionRequestList"
+    },
+    "withoutTrailingSlash": "api/inspection-request/licence/GET"
+  },
+  "api/inspection-request/application/GET": {
+    "request": "GET /api/inspection-request/application/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\InspectionRequest\\ApplicationInspectionRequestList"
+    },
+    "matches": "api/inspection-request/application/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\InspectionRequest\\ApplicationInspectionRequestList"
+    },
+    "withoutTrailingSlash": "api/inspection-request/application/GET"
+  }
+}

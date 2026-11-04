@@ -1,0 +1,30 @@
+{
+  "api/private-hire-licence/DELETE": {
+    "request": "DELETE /api/private-hire-licence/",
+    "matches": "api/private-hire-licence/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\PrivateHireLicence\\DeleteList"
+    },
+    "withoutTrailingSlash": "api/private-hire-licence/DELETE"
+  },
+  "api/private-hire-licence/POST": {
+    "request": "POST /api/private-hire-licence/",
+    "matches": "api/private-hire-licence/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\PrivateHireLicence\\Create"
+    },
+    "withoutTrailingSlash": "api/private-hire-licence/POST"
+  },
+  "api/private-hire-licence/single/PUT": {
+    "request": "PUT /api/private-hire-licence/101/",
+    "matches": "api/private-hire-licence/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\PrivateHireLicence\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/private-hire-licence/single/PUT"
+  }
+}

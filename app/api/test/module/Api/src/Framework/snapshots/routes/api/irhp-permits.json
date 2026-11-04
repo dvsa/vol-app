@@ -1,0 +1,71 @@
+{
+  "api/irhp-permits/single/GET": {
+    "request": "GET /api/irhp-permits/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermit\\ById"
+    },
+    "matches": "api/irhp-permits/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermit\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permits/single/GET"
+  },
+  "api/irhp-permits/single/replace/POST": {
+    "request": "POST /api/irhp-permits/101/replace/",
+    "matches": "api/irhp-permits/single/replace/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermit\\Replace",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permits/single/replace/POST"
+  },
+  "api/irhp-permits/single/terminate/POST": {
+    "request": "POST /api/irhp-permits/101/terminate/",
+    "matches": "api/irhp-permits/single/terminate/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermit\\Terminate",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permits/single/terminate/POST"
+  },
+  "api/irhp-permits/by-irhp-id/GET": {
+    "request": "GET /api/irhp-permits/by-irhp-id/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermit\\GetListByIrhpId"
+    },
+    "matches": "api/irhp-permits/by-irhp-id/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermit\\GetListByIrhpId"
+    },
+    "withoutTrailingSlash": "api/irhp-permits/by-irhp-id/GET"
+  },
+  "api/irhp-permits/by-licence/GET": {
+    "request": "GET /api/irhp-permits/by-licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermit\\GetListByLicence"
+    },
+    "matches": "api/irhp-permits/by-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermit\\GetListByLicence"
+    },
+    "withoutTrailingSlash": "api/irhp-permits/by-licence/GET"
+  },
+  "api/irhp-permits/unique-countries-by-licence/GET": {
+    "request": "GET /api/irhp-permits/unique-countries-by-licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermit\\UniqueCountriesByLicence"
+    },
+    "matches": "api/irhp-permits/unique-countries-by-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermit\\UniqueCountriesByLicence"
+    },
+    "withoutTrailingSlash": "api/irhp-permits/unique-countries-by-licence/GET"
+  }
+}

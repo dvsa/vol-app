@@ -1,0 +1,56 @@
+{
+  "api/conviction/GET": {
+    "request": "GET /api/conviction/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Conviction\\ConvictionList"
+    },
+    "matches": "api/conviction/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Conviction\\ConvictionList"
+    },
+    "withoutTrailingSlash": "api/conviction/GET"
+  },
+  "api/conviction/POST": {
+    "request": "POST /api/conviction/",
+    "matches": "api/conviction/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Conviction\\Create"
+    },
+    "withoutTrailingSlash": "api/conviction/POST"
+  },
+  "api/conviction/single/GET": {
+    "request": "GET /api/conviction/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Conviction\\Conviction"
+    },
+    "matches": "api/conviction/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Conviction\\Conviction",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/conviction/single/GET"
+  },
+  "api/conviction/single/PUT": {
+    "request": "PUT /api/conviction/101/",
+    "matches": "api/conviction/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Conviction\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/conviction/single/PUT"
+  },
+  "api/conviction/single/DELETE": {
+    "request": "DELETE /api/conviction/101/",
+    "matches": "api/conviction/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Conviction\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/conviction/single/DELETE"
+  }
+}

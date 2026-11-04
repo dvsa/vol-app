@@ -1,0 +1,43 @@
+{
+  "api/organisation-person/single/GET": {
+    "request": "GET /api/organisation-person/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\OrganisationPerson\\GetSingle"
+    },
+    "matches": "api/organisation-person/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\OrganisationPerson\\GetSingle",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation-person/single/GET"
+  },
+  "api/organisation-person/single/PUT": {
+    "request": "PUT /api/organisation-person/101/",
+    "matches": "api/organisation-person/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\OrganisationPerson\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation-person/single/PUT"
+  },
+  "api/organisation-person/POST": {
+    "request": "POST /api/organisation-person/",
+    "matches": "api/organisation-person/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\OrganisationPerson\\Create"
+    },
+    "withoutTrailingSlash": "api/organisation-person/POST"
+  },
+  "api/organisation-person/DELETE": {
+    "request": "DELETE /api/organisation-person/",
+    "matches": "api/organisation-person/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\OrganisationPerson\\DeleteList"
+    },
+    "withoutTrailingSlash": "api/organisation-person/DELETE"
+  }
+}

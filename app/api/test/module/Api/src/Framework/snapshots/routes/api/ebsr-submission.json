@@ -1,0 +1,27 @@
+{
+  "api/ebsr-submission/GET": {
+    "request": "GET /api/ebsr-submission/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\Ebsr\\EbsrSubmissionList"
+    },
+    "matches": "api/ebsr-submission/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\Ebsr\\EbsrSubmissionList"
+    },
+    "withoutTrailingSlash": "api/ebsr-submission/GET"
+  },
+  "api/ebsr-submission/single/GET": {
+    "request": "GET /api/ebsr-submission/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\Ebsr\\EbsrSubmission"
+    },
+    "matches": "api/ebsr-submission/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\Ebsr\\EbsrSubmission",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/ebsr-submission/single/GET"
+  }
+}

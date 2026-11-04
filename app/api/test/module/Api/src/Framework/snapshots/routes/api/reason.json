@@ -1,0 +1,14 @@
+{
+  "api/reason/GET": {
+    "request": "GET /api/reason/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Reason\\ReasonList"
+    },
+    "matches": "api/reason/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Reason\\ReasonList"
+    },
+    "withoutTrailingSlash": "api/reason/GET"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "api/search/licence/GET": {
+    "request": "GET /api/search/licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Search\\Licence"
+    },
+    "matches": "api/search/licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Search\\Licence"
+    },
+    "withoutTrailingSlash": "api/search/licence/GET"
+  },
+  "api/search/licence/single/GET": {
+    "request": "GET /api/search/licence/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Search\\Licence"
+    },
+    "matches": "api/search/licence/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Search\\Licence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/search/licence/single/GET"
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "api/variation/named-single/psv-discs/void/POST": {
+    "request": "POST /api/variation/101/psv-discs/void/",
+    "matches": "api/variation/named-single/psv-discs/void/POST",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\VoidPsvDiscs",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/variation/named-single/psv-discs/void/POST"
+  },
+  "api/variation/named-single/psv-discs/replace/POST": {
+    "request": "POST /api/variation/101/psv-discs/replace/",
+    "matches": "api/variation/named-single/psv-discs/replace/POST",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\ReplacePsvDiscs",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/variation/named-single/psv-discs/replace/POST"
+  },
+  "api/variation/named-single/psv-discs/POST": {
+    "request": "POST /api/variation/101/psv-discs/",
+    "matches": "api/variation/named-single/psv-discs/POST",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\CreatePsvDiscs",
+      "id": null
+    },
+    "withoutTrailingSlash": "api/variation/named-single/psv-discs/POST"
+  },
+  "api/variation/named-single/operating-centre/single/DELETE": {
+    "request": "DELETE /api/variation/101/operating-centre/102/",
+    "matches": "api/variation/named-single/operating-centre/single/DELETE",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\DeleteOperatingCentre",
+      "id": "102"
+    },
+    "withoutTrailingSlash": "api/variation/named-single/operating-centre/single/DELETE"
+  },
+  "api/variation/single/GET": {
+    "request": "GET /api/variation/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Variation\\Variation"
+    },
+    "matches": "api/variation/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Variation\\Variation",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/GET"
+  },
+  "api/variation/single/DELETE": {
+    "request": "DELETE /api/variation/101/",
+    "matches": "api/variation/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\DeleteVariation",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/DELETE"
+  },
+  "api/variation/single/type-of-licence/GET": {
+    "request": "GET /api/variation/101/type-of-licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Variation\\TypeOfLicence"
+    },
+    "matches": "api/variation/single/type-of-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Variation\\TypeOfLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/type-of-licence/GET"
+  },
+  "api/variation/single/type-of-licence/PUT": {
+    "request": "PUT /api/variation/101/type-of-licence/",
+    "matches": "api/variation/single/type-of-licence/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\UpdateTypeOfLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/type-of-licence/PUT"
+  },
+  "api/variation/single/addresses/GET": {
+    "request": "GET /api/variation/101/addresses/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Addresses"
+    },
+    "matches": "api/variation/single/addresses/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Addresses",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/addresses/GET"
+  },
+  "api/variation/single/addresses/PUT": {
+    "request": "PUT /api/variation/101/addresses/",
+    "matches": "api/variation/single/addresses/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\UpdateAddresses",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/addresses/PUT"
+  },
+  "api/variation/single/transport-manager-delete-delta/POST": {
+    "request": "POST /api/variation/101/transport-manager-delete-delta/",
+    "matches": "api/variation/single/transport-manager-delete-delta/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\TransportManagerDeleteDelta",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/transport-manager-delete-delta/POST"
+  },
+  "api/variation/single/goods-vehicles/GET": {
+    "request": "GET /api/variation/101/goods-vehicles/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Variation\\GoodsVehicles"
+    },
+    "matches": "api/variation/single/goods-vehicles/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Variation\\GoodsVehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/goods-vehicles/GET"
+  },
+  "api/variation/single/goods-vehicles/export/GET": {
+    "request": "GET /api/variation/101/goods-vehicles/export/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Variation\\GoodsVehiclesExport"
+    },
+    "matches": "api/variation/single/goods-vehicles/export/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Variation\\GoodsVehiclesExport",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/goods-vehicles/export/GET"
+  },
+  "api/variation/single/grant/PUT": {
+    "request": "PUT /api/variation/101/grant/",
+    "matches": "api/variation/single/grant/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\Grant",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/grant/PUT"
+  },
+  "api/variation/single/grant-director-change/PUT": {
+    "request": "PUT /api/variation/101/grant-director-change/",
+    "matches": "api/variation/single/grant-director-change/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\GrantDirectorChange",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/grant-director-change/PUT"
+  },
+  "api/variation/single/condition-undertaking/DELETE": {
+    "request": "DELETE /api/variation/101/condition-undertaking/",
+    "matches": "api/variation/single/condition-undertaking/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\DeleteListConditionUndertaking",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/condition-undertaking/DELETE"
+  },
+  "api/variation/single/condition-undertaking/PUT": {
+    "request": "PUT /api/variation/101/condition-undertaking/",
+    "matches": "api/variation/single/condition-undertaking/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\RestoreListConditionUndertaking",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/condition-undertaking/PUT"
+  },
+  "api/variation/single/condition-undertaking/single/PUT": {
+    "request": "PUT /api/variation/101/condition-undertaking/102/",
+    "matches": "api/variation/single/condition-undertaking/single/PUT",
+    "params": {
+      "conditionUndertaking": "102",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\UpdateConditionUndertaking",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/condition-undertaking/single/PUT"
+  },
+  "api/variation/single/psv-vehicles/GET": {
+    "request": "GET /api/variation/101/psv-vehicles/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Variation\\PsvVehicles"
+    },
+    "matches": "api/variation/single/psv-vehicles/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Variation\\PsvVehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/psv-vehicles/GET"
+  },
+  "api/variation/single/interim/PUT": {
+    "request": "PUT /api/variation/101/interim/",
+    "matches": "api/variation/single/interim/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\UpdateInterim",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/variation/single/interim/PUT"
+  }
+}

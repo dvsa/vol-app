@@ -1,0 +1,837 @@
+{
+  "api/licence/exists-with-operator-admin/GET": {
+    "request": "GET /api/licence/exists-with-operator-admin/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\ExistsWithOperatorAdmin"
+    },
+    "matches": "api/licence/exists-with-operator-admin/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\ExistsWithOperatorAdmin",
+      "licNo": "101"
+    },
+    "withoutTrailingSlash": "api/licence/exists-with-operator-admin/GET"
+  },
+  "api/licence/by-number/GET": {
+    "request": "GET /api/licence/by-number/101",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\LicenceByNumber"
+    },
+    "matches": "api/licence/by-number/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\LicenceByNumber",
+      "licenceNumber": "101"
+    },
+    "withTrailingSlash": null
+  },
+  "api/licence/propose-to-revoke/POST": {
+    "request": "POST /api/licence/propose-to-revoke",
+    "matches": "api/licence/propose-to-revoke/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\ProposeToRevoke"
+    },
+    "withTrailingSlash": null
+  },
+  "api/licence/registered-address/GET": {
+    "request": "GET /api/licence/registered-address/101",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\LicenceRegisteredAddress"
+    },
+    "matches": "api/licence/registered-address/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\LicenceRegisteredAddress",
+      "licenceNumber": "101"
+    },
+    "withTrailingSlash": null
+  },
+  "api/licence/named-single/company-subsidiary/single/PUT": {
+    "request": "PUT /api/licence/101/company-subsidiary/102/",
+    "matches": "api/licence/named-single/company-subsidiary/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\UpdateCompanySubsidiary",
+      "id": "102",
+      "licence": "101"
+    },
+    "withoutTrailingSlash": "api/licence/named-single/company-subsidiary/single/PUT"
+  },
+  "api/licence/named-single/company-subsidiary/DELETE": {
+    "request": "DELETE /api/licence/101/company-subsidiary/",
+    "matches": "api/licence/named-single/company-subsidiary/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\DeleteCompanySubsidiary",
+      "licence": "101"
+    },
+    "withoutTrailingSlash": "api/licence/named-single/company-subsidiary/DELETE"
+  },
+  "api/licence/named-single/company-subsidiary/POST": {
+    "request": "POST /api/licence/101/company-subsidiary/",
+    "matches": "api/licence/named-single/company-subsidiary/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\CreateCompanySubsidiary",
+      "licence": "101"
+    },
+    "withoutTrailingSlash": "api/licence/named-single/company-subsidiary/POST"
+  },
+  "api/licence/named-single/psv-discs/void/POST": {
+    "request": "POST /api/licence/101/psv-discs/void/",
+    "matches": "api/licence/named-single/psv-discs/void/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\VoidPsvDiscs",
+      "licence": "101"
+    },
+    "withoutTrailingSlash": "api/licence/named-single/psv-discs/void/POST"
+  },
+  "api/licence/named-single/psv-discs/replace/POST": {
+    "request": "POST /api/licence/101/psv-discs/replace/",
+    "matches": "api/licence/named-single/psv-discs/replace/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\ReplacePsvDiscs",
+      "licence": "101"
+    },
+    "withoutTrailingSlash": "api/licence/named-single/psv-discs/replace/POST"
+  },
+  "api/licence/named-single/psv-discs/POST": {
+    "request": "POST /api/licence/101/psv-discs/",
+    "matches": "api/licence/named-single/psv-discs/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\CreatePsvDiscs",
+      "licence": "101"
+    },
+    "withoutTrailingSlash": "api/licence/named-single/psv-discs/POST"
+  },
+  "api/licence/named-single/operating-centre/POST": {
+    "request": "POST /api/licence/101/operating-centre/",
+    "matches": "api/licence/named-single/operating-centre/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\CreateOperatingCentre",
+      "licence": "101"
+    },
+    "withoutTrailingSlash": "api/licence/named-single/operating-centre/POST"
+  },
+  "api/licence/named-single/operating-centre/DELETE": {
+    "request": "DELETE /api/licence/101/operating-centre/",
+    "matches": "api/licence/named-single/operating-centre/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\DeleteOperatingCentres",
+      "licence": "101"
+    },
+    "withoutTrailingSlash": "api/licence/named-single/operating-centre/DELETE"
+  },
+  "api/licence/named-single/psv-vehicles/POST": {
+    "request": "POST /api/licence/101/psv-vehicles/",
+    "matches": "api/licence/named-single/psv-vehicles/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\CreatePsvVehicle",
+      "licence": "101"
+    },
+    "withoutTrailingSlash": "api/licence/named-single/psv-vehicles/POST"
+  },
+  "api/licence/single/GET": {
+    "request": "GET /api/licence/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Licence"
+    },
+    "matches": "api/licence/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Licence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/GET"
+  },
+  "api/licence/single/decisions/GET": {
+    "request": "GET /api/licence/101/decisions/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\LicenceDecisions"
+    },
+    "matches": "api/licence/single/decisions/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\LicenceDecisions",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/decisions/GET"
+  },
+  "api/licence/single/decisions/revoke/POST": {
+    "request": "POST /api/licence/101/decisions/revoke/",
+    "matches": "api/licence/single/decisions/revoke/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\RevokeLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/decisions/revoke/POST"
+  },
+  "api/licence/single/decisions/curtail/POST": {
+    "request": "POST /api/licence/101/decisions/curtail/",
+    "matches": "api/licence/single/decisions/curtail/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\CurtailLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/decisions/curtail/POST"
+  },
+  "api/licence/single/decisions/suspend/POST": {
+    "request": "POST /api/licence/101/decisions/suspend/",
+    "matches": "api/licence/single/decisions/suspend/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\SuspendLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/decisions/suspend/POST"
+  },
+  "api/licence/single/decisions/surrender/POST": {
+    "request": "POST /api/licence/101/decisions/surrender/",
+    "matches": "api/licence/single/decisions/surrender/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\SurrenderLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/decisions/surrender/POST"
+  },
+  "api/licence/single/decisions/reset-to-valid/POST": {
+    "request": "POST /api/licence/101/decisions/reset-to-valid/",
+    "matches": "api/licence/single/decisions/reset-to-valid/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\ResetToValid",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/decisions/reset-to-valid/POST"
+  },
+  "api/licence/single/type-of-licence/GET": {
+    "request": "GET /api/licence/101/type-of-licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\TypeOfLicence"
+    },
+    "matches": "api/licence/single/type-of-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\TypeOfLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/type-of-licence/GET"
+  },
+  "api/licence/single/addresses/GET": {
+    "request": "GET /api/licence/101/addresses/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Addresses"
+    },
+    "matches": "api/licence/single/addresses/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Addresses",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/addresses/GET"
+  },
+  "api/licence/single/addresses/PUT": {
+    "request": "PUT /api/licence/101/addresses/",
+    "matches": "api/licence/single/addresses/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\UpdateAddresses",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/addresses/PUT"
+  },
+  "api/licence/single/safety/GET": {
+    "request": "GET /api/licence/101/safety/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Safety"
+    },
+    "matches": "api/licence/single/safety/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Safety",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/safety/GET"
+  },
+  "api/licence/single/safety/PUT": {
+    "request": "PUT /api/licence/101/safety/",
+    "matches": "api/licence/single/safety/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\UpdateSafety",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/safety/PUT"
+  },
+  "api/licence/single/transport-managers/GET": {
+    "request": "GET /api/licence/101/transport-managers/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\TransportManagers"
+    },
+    "matches": "api/licence/single/transport-managers/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\TransportManagers",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/transport-managers/GET"
+  },
+  "api/licence/single/psv-discs/GET": {
+    "request": "GET /api/licence/101/psv-discs/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\PsvDiscs"
+    },
+    "matches": "api/licence/single/psv-discs/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\PsvDiscs",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/psv-discs/GET"
+  },
+  "api/licence/single/psv-disc-count/GET": {
+    "request": "GET /api/licence/101/psv-disc-count/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\PsvDiscCount"
+    },
+    "matches": "api/licence/single/psv-disc-count/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\PsvDiscCount",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/psv-disc-count/GET"
+  },
+  "api/licence/single/goods-disc-count/GET": {
+    "request": "GET /api/licence/101/goods-disc-count/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\GoodsDiscCount"
+    },
+    "matches": "api/licence/single/goods-disc-count/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\GoodsDiscCount",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/goods-disc-count/GET"
+  },
+  "api/licence/single/goods-vehicles/GET": {
+    "request": "GET /api/licence/101/goods-vehicles/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\GoodsVehicles"
+    },
+    "matches": "api/licence/single/goods-vehicles/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\GoodsVehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/goods-vehicles/GET"
+  },
+  "api/licence/single/goods-vehicles/POST": {
+    "request": "POST /api/licence/101/goods-vehicles/",
+    "matches": "api/licence/single/goods-vehicles/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\CreateGoodsVehicle",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/goods-vehicles/POST"
+  },
+  "api/licence/single/goods-vehicles/PUT": {
+    "request": "PUT /api/licence/101/goods-vehicles/",
+    "matches": "api/licence/single/goods-vehicles/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\UpdateVehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/goods-vehicles/PUT"
+  },
+  "api/licence/single/goods-vehicles/export/GET": {
+    "request": "GET /api/licence/101/goods-vehicles/export/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\GoodsVehiclesExport"
+    },
+    "matches": "api/licence/single/goods-vehicles/export/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\GoodsVehiclesExport",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/goods-vehicles/export/GET"
+  },
+  "api/licence/single/goods-vehicles/transfer/POST": {
+    "request": "POST /api/licence/101/goods-vehicles/transfer/",
+    "matches": "api/licence/single/goods-vehicles/transfer/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\TransferVehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/goods-vehicles/transfer/POST"
+  },
+  "api/licence/single/document/vehicle-list/POST": {
+    "request": "POST /api/licence/101/document/vehicle-list/",
+    "matches": "api/licence/single/document/vehicle-list/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\CreateVehicleListDocument",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/document/vehicle-list/POST"
+  },
+  "api/licence/single/other-active-licences/GET": {
+    "request": "GET /api/licence/101/other-active-licences/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\OtherActiveLicences"
+    },
+    "matches": "api/licence/single/other-active-licences/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\OtherActiveLicences",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/other-active-licences/GET"
+  },
+  "api/licence/single/print-document/POST": {
+    "request": "POST /api/licence/101/print-document/",
+    "matches": "api/licence/single/print-document/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\PrintLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/print-document/POST"
+  },
+  "api/licence/single/overview/GET": {
+    "request": "GET /api/licence/101/overview/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Overview"
+    },
+    "matches": "api/licence/single/overview/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Overview",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/overview/GET"
+  },
+  "api/licence/single/overview/PUT": {
+    "request": "PUT /api/licence/101/overview/",
+    "matches": "api/licence/single/overview/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\Overview",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/overview/PUT"
+  },
+  "api/licence/single/enforcement-area/GET": {
+    "request": "GET /api/licence/101/enforcement-area/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\EnforcementArea"
+    },
+    "matches": "api/licence/single/enforcement-area/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\EnforcementArea",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/enforcement-area/GET"
+  },
+  "api/licence/single/condition-undertaking/GET": {
+    "request": "GET /api/licence/101/condition-undertaking/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\ConditionUndertaking"
+    },
+    "matches": "api/licence/single/condition-undertaking/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\ConditionUndertaking",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/condition-undertaking/GET"
+  },
+  "api/licence/single/variation/POST": {
+    "request": "POST /api/licence/101/variation/",
+    "matches": "api/licence/single/variation/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\CreateVariation",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/variation/POST"
+  },
+  "api/licence/single/people/GET": {
+    "request": "GET /api/licence/101/people/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\People"
+    },
+    "matches": "api/licence/single/people/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\People",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/people/GET"
+  },
+  "api/licence/single/people/POST": {
+    "request": "POST /api/licence/101/people/",
+    "matches": "api/licence/single/people/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\CreatePeople",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/people/POST"
+  },
+  "api/licence/single/people/DELETE": {
+    "request": "DELETE /api/licence/101/people/",
+    "matches": "api/licence/single/people/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\DeletePeople",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/people/DELETE"
+  },
+  "api/licence/single/people/via-variation/POST": {
+    "request": "POST /api/licence/101/people/via-variation/",
+    "matches": "api/licence/single/people/via-variation/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\DeletePeopleViaVariation",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/people/via-variation/POST"
+  },
+  "api/licence/single/people/person/PUT": {
+    "request": "PUT /api/licence/101/people/102/",
+    "matches": "api/licence/single/people/person/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\UpdatePeople",
+      "id": "101",
+      "person": "102"
+    },
+    "withoutTrailingSlash": "api/licence/single/people/person/PUT"
+  },
+  "api/licence/single/operating-centre/GET": {
+    "request": "GET /api/licence/101/operating-centre/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\OperatingCentre"
+    },
+    "matches": "api/licence/single/operating-centre/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\OperatingCentre",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/operating-centre/GET"
+  },
+  "api/licence/single/taxi-phv/GET": {
+    "request": "GET /api/licence/101/taxi-phv/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\TaxiPhv"
+    },
+    "matches": "api/licence/single/taxi-phv/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\TaxiPhv",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/taxi-phv/GET"
+  },
+  "api/licence/single/update-traffic-area/PUT": {
+    "request": "PUT /api/licence/101/update-traffic-area/",
+    "matches": "api/licence/single/update-traffic-area/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\UpdateTrafficArea",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/update-traffic-area/PUT"
+  },
+  "api/licence/single/markers/GET": {
+    "request": "GET /api/licence/101/markers/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Markers"
+    },
+    "matches": "api/licence/single/markers/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Markers",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/markers/GET"
+  },
+  "api/licence/single/continuation-detail/GET": {
+    "request": "GET /api/licence/101/continuation-detail/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\ContinuationDetail"
+    },
+    "matches": "api/licence/single/continuation-detail/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\ContinuationDetail",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/continuation-detail/GET"
+  },
+  "api/licence/single/continue-licence/PUT": {
+    "request": "PUT /api/licence/101/continue-licence/",
+    "matches": "api/licence/single/continue-licence/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\ContinueLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/continue-licence/PUT"
+  },
+  "api/licence/single/operating-centres/GET": {
+    "request": "GET /api/licence/101/operating-centres/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\OperatingCentres"
+    },
+    "matches": "api/licence/single/operating-centres/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\OperatingCentres",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/operating-centres/GET"
+  },
+  "api/licence/single/operating-centres/PUT": {
+    "request": "PUT /api/licence/101/operating-centres/",
+    "matches": "api/licence/single/operating-centres/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\UpdateOperatingCentres",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/operating-centres/PUT"
+  },
+  "api/licence/single/psv-vehicles/GET": {
+    "request": "GET /api/licence/101/psv-vehicles/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\PsvVehicles"
+    },
+    "matches": "api/licence/single/psv-vehicles/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\PsvVehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/psv-vehicles/GET"
+  },
+  "api/licence/single/export-psv-vehicles/GET": {
+    "request": "GET /api/licence/101/export-psv-vehicles/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\PsvVehiclesExport"
+    },
+    "matches": "api/licence/single/export-psv-vehicles/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\PsvVehiclesExport",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/export-psv-vehicles/GET"
+  },
+  "api/licence/single/trailers/GET": {
+    "request": "GET /api/licence/101/trailers/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Trailers"
+    },
+    "matches": "api/licence/single/trailers/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Trailers",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/trailers/GET"
+  },
+  "api/licence/single/trailers/PUT": {
+    "request": "PUT /api/licence/101/trailers/",
+    "matches": "api/licence/single/trailers/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\UpdateTrailers",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/trailers/PUT"
+  },
+  "api/licence/single/vehicles/GET": {
+    "request": "GET /api/licence/101/vehicles/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Vehicles"
+    },
+    "matches": "api/licence/single/vehicles/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Vehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/vehicles/GET"
+  },
+  "api/licence/single/surrender/POST": {
+    "request": "POST /api/licence/101/surrender/",
+    "matches": "api/licence/single/surrender/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Surrender\\Create",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/surrender/POST"
+  },
+  "api/licence/single/surrender/PUT": {
+    "request": "PUT /api/licence/101/surrender/",
+    "matches": "api/licence/single/surrender/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Surrender\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/surrender/PUT"
+  },
+  "api/licence/single/surrender/DELETE": {
+    "request": "DELETE /api/licence/101/surrender/",
+    "matches": "api/licence/single/surrender/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Surrender\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/surrender/DELETE"
+  },
+  "api/licence/single/surrender/GET": {
+    "request": "GET /api/licence/101/surrender/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Surrender\\ByLicence"
+    },
+    "matches": "api/licence/single/surrender/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Surrender\\ByLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/surrender/GET"
+  },
+  "api/licence/single/surrender/open-cases/GET": {
+    "request": "GET /api/licence/101/surrender/open-cases/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Surrender\\OpenCases"
+    },
+    "matches": "api/licence/single/surrender/open-cases/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Surrender\\OpenCases",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/surrender/open-cases/GET"
+  },
+  "api/licence/single/surrender/signature/GET": {
+    "request": "GET /api/licence/101/surrender/signature/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Surrender\\GetSignature"
+    },
+    "matches": "api/licence/single/surrender/signature/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Surrender\\GetSignature",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/surrender/signature/GET"
+  },
+  "api/licence/single/surrender/open-bus-reg/GET": {
+    "request": "GET /api/licence/101/surrender/open-bus-reg/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Surrender\\OpenBusReg"
+    },
+    "matches": "api/licence/single/surrender/open-bus-reg/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Surrender\\OpenBusReg",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/surrender/open-bus-reg/GET"
+  },
+  "api/licence/single/surrender/submit-form/POST": {
+    "request": "POST /api/licence/101/surrender/submit-form/",
+    "matches": "api/licence/single/surrender/submit-form/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Surrender\\SubmitForm",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/surrender/submit-form/POST"
+  },
+  "api/licence/single/surrender/approve/POST": {
+    "request": "POST /api/licence/101/surrender/approve/",
+    "matches": "api/licence/single/surrender/approve/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Surrender\\Approve",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/surrender/approve/POST"
+  },
+  "api/licence/single/surrender/withdraw/POST": {
+    "request": "POST /api/licence/101/surrender/withdraw/",
+    "matches": "api/licence/single/surrender/withdraw/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Surrender\\Withdraw",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/surrender/withdraw/POST"
+  },
+  "api/licence/single/surrender/previous-licence-status/GET": {
+    "request": "GET /api/licence/101/surrender/previous-licence-status/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Surrender\\PreviousLicenceStatus"
+    },
+    "matches": "api/licence/single/surrender/previous-licence-status/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Surrender\\PreviousLicenceStatus",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/surrender/previous-licence-status/GET"
+  },
+  "api/licence/single/with-contact-details/GET": {
+    "request": "GET /api/licence/101/with-contact-details/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\LicenceWithCorrespondenceCd"
+    },
+    "matches": "api/licence/single/with-contact-details/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\LicenceWithCorrespondenceCd",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence/single/with-contact-details/GET"
+  },
+  "api/licence/GET": {
+    "request": "GET /api/licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\GetList"
+    },
+    "matches": "api/licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\GetList"
+    },
+    "withoutTrailingSlash": "api/licence/GET"
+  }
+}

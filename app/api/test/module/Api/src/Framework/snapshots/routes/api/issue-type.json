@@ -1,0 +1,56 @@
+{
+  "api/issue-type/GET": {
+    "request": "GET /api/issue-type/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssueType\\GetList"
+    },
+    "matches": "api/issue-type/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssueType\\GetList"
+    },
+    "withoutTrailingSlash": "api/issue-type/GET"
+  },
+  "api/issue-type/POST": {
+    "request": "POST /api/issue-type/",
+    "matches": "api/issue-type/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterIssueType\\Create"
+    },
+    "withoutTrailingSlash": "api/issue-type/POST"
+  },
+  "api/issue-type/single/GET": {
+    "request": "GET /api/issue-type/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssueType\\Get"
+    },
+    "matches": "api/issue-type/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssueType\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/issue-type/single/GET"
+  },
+  "api/issue-type/single/PUT": {
+    "request": "PUT /api/issue-type/101/",
+    "matches": "api/issue-type/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterIssueType\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/issue-type/single/PUT"
+  },
+  "api/issue-type/single/DELETE": {
+    "request": "DELETE /api/issue-type/101/",
+    "matches": "api/issue-type/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterIssueType\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/issue-type/single/DELETE"
+  }
+}

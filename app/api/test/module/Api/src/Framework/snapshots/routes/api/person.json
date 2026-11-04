@@ -1,0 +1,25 @@
+{
+  "api/person/single/GET": {
+    "request": "GET /api/person/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Person\\Person"
+    },
+    "matches": "api/person/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Person\\Person",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/person/single/GET"
+  },
+  "api/person/single/PUT": {
+    "request": "PUT /api/person/101/",
+    "matches": "api/person/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Person\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/person/single/PUT"
+  }
+}

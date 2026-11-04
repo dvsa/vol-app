@@ -1,0 +1,15 @@
+{
+  "api/event-history/single/GET": {
+    "request": "GET /api/event-history/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\EventHistory\\EventHistory"
+    },
+    "matches": "api/event-history/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\EventHistory\\EventHistory",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/event-history/single/GET"
+  }
+}

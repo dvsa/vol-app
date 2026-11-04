@@ -1,0 +1,56 @@
+{
+  "api/printer/single/GET": {
+    "request": "GET /api/printer/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Printer\\Printer"
+    },
+    "matches": "api/printer/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Printer\\Printer",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/printer/single/GET"
+  },
+  "api/printer/single/PUT": {
+    "request": "PUT /api/printer/101/",
+    "matches": "api/printer/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Printer\\UpdatePrinter",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/printer/single/PUT"
+  },
+  "api/printer/single/DELETE": {
+    "request": "DELETE /api/printer/101/",
+    "matches": "api/printer/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Printer\\DeletePrinter",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/printer/single/DELETE"
+  },
+  "api/printer/GET": {
+    "request": "GET /api/printer/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Printer\\PrinterList"
+    },
+    "matches": "api/printer/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Printer\\PrinterList"
+    },
+    "withoutTrailingSlash": "api/printer/GET"
+  },
+  "api/printer/POST": {
+    "request": "POST /api/printer/",
+    "matches": "api/printer/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Printer\\CreatePrinter"
+    },
+    "withoutTrailingSlash": "api/printer/POST"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "api/system-info-message/single/GET": {
+    "request": "GET /api/system-info-message/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\InfoMessage\\Get"
+    },
+    "matches": "api/system-info-message/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\InfoMessage\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/system-info-message/single/GET"
+  },
+  "api/system-info-message/single/PUT": {
+    "request": "PUT /api/system-info-message/101/",
+    "matches": "api/system-info-message/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\System\\InfoMessage\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/system-info-message/single/PUT"
+  },
+  "api/system-info-message/single/DELETE": {
+    "request": "DELETE /api/system-info-message/101/",
+    "matches": "api/system-info-message/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\System\\InfoMessage\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/system-info-message/single/DELETE"
+  },
+  "api/system-info-message/GET": {
+    "request": "GET /api/system-info-message/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\InfoMessage\\GetList"
+    },
+    "matches": "api/system-info-message/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\InfoMessage\\GetList"
+    },
+    "withoutTrailingSlash": "api/system-info-message/GET"
+  },
+  "api/system-info-message/POST": {
+    "request": "POST /api/system-info-message/",
+    "matches": "api/system-info-message/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\System\\InfoMessage\\Create"
+    },
+    "withoutTrailingSlash": "api/system-info-message/POST"
+  },
+  "api/system-info-message/active/GET": {
+    "request": "GET /api/system-info-message/active/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\InfoMessage\\GetListActive"
+    },
+    "matches": "api/system-info-message/active/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\InfoMessage\\GetListActive"
+    },
+    "withoutTrailingSlash": "api/system-info-message/active/GET"
+  }
+}

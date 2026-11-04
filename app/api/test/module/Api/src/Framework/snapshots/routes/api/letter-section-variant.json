@@ -1,0 +1,44 @@
+{
+  "api/letter-section-variant/single/GET": {
+    "request": "GET /api/letter-section-variant/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterSectionVariant\\Get"
+    },
+    "matches": "api/letter-section-variant/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterSectionVariant\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-section-variant/single/GET"
+  },
+  "api/letter-section-variant/single/PUT": {
+    "request": "PUT /api/letter-section-variant/101/",
+    "matches": "api/letter-section-variant/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterSectionVariant\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-section-variant/single/PUT"
+  },
+  "api/letter-section-variant/single/DELETE": {
+    "request": "DELETE /api/letter-section-variant/101/",
+    "matches": "api/letter-section-variant/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterSectionVariant\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-section-variant/single/DELETE"
+  },
+  "api/letter-section-variant/POST": {
+    "request": "POST /api/letter-section-variant/",
+    "matches": "api/letter-section-variant/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterSectionVariant\\Create"
+    },
+    "withoutTrailingSlash": "api/letter-section-variant/POST"
+  }
+}

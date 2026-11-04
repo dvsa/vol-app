@@ -1,0 +1,173 @@
+{
+  "api/publication/single/generate/PUT": {
+    "request": "PUT /api/publication/101/generate/",
+    "matches": "api/publication/single/generate/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Publication\\Generate",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/publication/single/generate/PUT"
+  },
+  "api/publication/single/publish/PUT": {
+    "request": "PUT /api/publication/101/publish/",
+    "matches": "api/publication/single/publish/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Publication\\Publish",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/publication/single/publish/PUT"
+  },
+  "api/publication/recipient/single/GET": {
+    "request": "GET /api/publication/recipient/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\Recipient"
+    },
+    "matches": "api/publication/recipient/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\Recipient",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/publication/recipient/single/GET"
+  },
+  "api/publication/recipient/single/PUT": {
+    "request": "PUT /api/publication/recipient/101/",
+    "matches": "api/publication/recipient/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Publication\\UpdateRecipient",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/publication/recipient/single/PUT"
+  },
+  "api/publication/recipient/GET": {
+    "request": "GET /api/publication/recipient/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\RecipientList"
+    },
+    "matches": "api/publication/recipient/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\RecipientList"
+    },
+    "withoutTrailingSlash": "api/publication/recipient/GET"
+  },
+  "api/publication/recipient/POST": {
+    "request": "POST /api/publication/recipient/",
+    "matches": "api/publication/recipient/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Publication\\CreateRecipient"
+    },
+    "withoutTrailingSlash": "api/publication/recipient/POST"
+  },
+  "api/publication/recipient/DELETE": {
+    "request": "DELETE /api/publication/recipient/",
+    "matches": "api/publication/recipient/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Publication\\DeleteRecipient"
+    },
+    "withoutTrailingSlash": "api/publication/recipient/DELETE"
+  },
+  "api/publication/bus/POST": {
+    "request": "POST /api/publication/bus/",
+    "matches": "api/publication/bus/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Publication\\Bus"
+    },
+    "withoutTrailingSlash": "api/publication/bus/POST"
+  },
+  "api/publication/application/POST": {
+    "request": "POST /api/publication/application/",
+    "matches": "api/publication/application/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Publication\\Application"
+    },
+    "withoutTrailingSlash": "api/publication/application/POST"
+  },
+  "api/publication/pending-list/GET": {
+    "request": "GET /api/publication/pending-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\PendingList"
+    },
+    "matches": "api/publication/pending-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\PendingList"
+    },
+    "withoutTrailingSlash": "api/publication/pending-list/GET"
+  },
+  "api/publication/published-list/GET": {
+    "request": "GET /api/publication/published-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\PublishedList"
+    },
+    "matches": "api/publication/published-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\PublishedList"
+    },
+    "withoutTrailingSlash": "api/publication/published-list/GET"
+  },
+  "api/publication/link/single/GET": {
+    "request": "GET /api/publication/link/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\PublicationLink"
+    },
+    "matches": "api/publication/link/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\PublicationLink",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/publication/link/single/GET"
+  },
+  "api/publication/link/single/PUT": {
+    "request": "PUT /api/publication/link/101/",
+    "matches": "api/publication/link/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Publication\\UpdatePublicationLink",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/publication/link/single/PUT"
+  },
+  "api/publication/link/tm-list/GET": {
+    "request": "GET /api/publication/link/tm-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\PublicationLinkTmList"
+    },
+    "matches": "api/publication/link/tm-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\PublicationLinkTmList"
+    },
+    "withoutTrailingSlash": "api/publication/link/tm-list/GET"
+  },
+  "api/publication/link/GET": {
+    "request": "GET /api/publication/link/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\PublicationLinkList"
+    },
+    "matches": "api/publication/link/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Publication\\PublicationLinkList"
+    },
+    "withoutTrailingSlash": "api/publication/link/GET"
+  },
+  "api/publication/link/DELETE": {
+    "request": "DELETE /api/publication/link/",
+    "matches": "api/publication/link/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Publication\\DeletePublicationLink"
+    },
+    "withoutTrailingSlash": "api/publication/link/DELETE"
+  }
+}

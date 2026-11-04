@@ -1,0 +1,55 @@
+{
+  "api/task-allocation-rule/GET": {
+    "request": "GET /api/task-allocation-rule/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TaskAllocationRule\\GetList"
+    },
+    "matches": "api/task-allocation-rule/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TaskAllocationRule\\GetList"
+    },
+    "withoutTrailingSlash": "api/task-allocation-rule/GET"
+  },
+  "api/task-allocation-rule/DELETE": {
+    "request": "DELETE /api/task-allocation-rule/",
+    "matches": "api/task-allocation-rule/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TaskAllocationRule\\DeleteList"
+    },
+    "withoutTrailingSlash": "api/task-allocation-rule/DELETE"
+  },
+  "api/task-allocation-rule/POST": {
+    "request": "POST /api/task-allocation-rule/",
+    "matches": "api/task-allocation-rule/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TaskAllocationRule\\Create"
+    },
+    "withoutTrailingSlash": "api/task-allocation-rule/POST"
+  },
+  "api/task-allocation-rule/single/GET": {
+    "request": "GET /api/task-allocation-rule/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TaskAllocationRule\\Get"
+    },
+    "matches": "api/task-allocation-rule/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TaskAllocationRule\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/task-allocation-rule/single/GET"
+  },
+  "api/task-allocation-rule/single/PUT": {
+    "request": "PUT /api/task-allocation-rule/101/",
+    "matches": "api/task-allocation-rule/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TaskAllocationRule\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/task-allocation-rule/single/PUT"
+  }
+}

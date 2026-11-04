@@ -1,0 +1,27 @@
+{
+  "api/traffic-area/GET": {
+    "request": "GET /api/traffic-area/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TrafficArea\\TrafficAreaList"
+    },
+    "matches": "api/traffic-area/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TrafficArea\\TrafficAreaList"
+    },
+    "withoutTrailingSlash": "api/traffic-area/GET"
+  },
+  "api/traffic-area/single/GET": {
+    "request": "GET /api/traffic-area/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TrafficArea\\Get"
+    },
+    "matches": "api/traffic-area/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TrafficArea\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/traffic-area/single/GET"
+  }
+}

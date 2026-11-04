@@ -1,0 +1,26 @@
+{
+  "api/si/si-category-type/list-data/GET": {
+    "request": "GET /api/si/si-category-type/list-data/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Si\\SiCategoryTypeListData"
+    },
+    "matches": "api/si/si-category-type/list-data/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Si\\SiCategoryTypeListData"
+    },
+    "withoutTrailingSlash": "api/si/si-category-type/list-data/GET"
+  },
+  "api/si/si-penalty-type/list-data/GET": {
+    "request": "GET /api/si/si-penalty-type/list-data/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Si\\SiPenaltyTypeListData"
+    },
+    "matches": "api/si/si-penalty-type/list-data/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Si\\SiPenaltyTypeListData"
+    },
+    "withoutTrailingSlash": "api/si/si-penalty-type/list-data/GET"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "api/condition-undertaking/GET": {
+    "request": "GET /api/condition-undertaking/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ConditionUndertaking\\GetList"
+    },
+    "matches": "api/condition-undertaking/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ConditionUndertaking\\GetList"
+    },
+    "withoutTrailingSlash": "api/condition-undertaking/GET"
+  },
+  "api/condition-undertaking/DELETE": {
+    "request": "DELETE /api/condition-undertaking/",
+    "matches": "api/condition-undertaking/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ConditionUndertaking\\DeleteList"
+    },
+    "withoutTrailingSlash": "api/condition-undertaking/DELETE"
+  },
+  "api/condition-undertaking/POST": {
+    "request": "POST /api/condition-undertaking/",
+    "matches": "api/condition-undertaking/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ConditionUndertaking\\Create"
+    },
+    "withoutTrailingSlash": "api/condition-undertaking/POST"
+  },
+  "api/condition-undertaking/single/PUT": {
+    "request": "PUT /api/condition-undertaking/101/",
+    "matches": "api/condition-undertaking/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ConditionUndertaking\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/condition-undertaking/single/PUT"
+  },
+  "api/condition-undertaking/single/GET": {
+    "request": "GET /api/condition-undertaking/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ConditionUndertaking\\Get"
+    },
+    "matches": "api/condition-undertaking/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ConditionUndertaking\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/condition-undertaking/single/GET"
+  },
+  "api/condition-undertaking/single/DELETE": {
+    "request": "DELETE /api/condition-undertaking/101/",
+    "matches": "api/condition-undertaking/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ConditionUndertaking\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/condition-undertaking/single/DELETE"
+  }
+}

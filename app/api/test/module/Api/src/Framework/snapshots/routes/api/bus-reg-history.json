@@ -1,0 +1,14 @@
+{
+  "api/bus-reg-history/GET": {
+    "request": "GET /api/bus-reg-history/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\HistoryList"
+    },
+    "matches": "api/bus-reg-history/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\HistoryList"
+    },
+    "withoutTrailingSlash": "api/bus-reg-history/GET"
+  }
+}

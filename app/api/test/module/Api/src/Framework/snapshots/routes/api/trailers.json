@@ -1,0 +1,43 @@
+{
+  "api/trailers/single/GET": {
+    "request": "GET /api/trailers/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Trailer\\Trailer"
+    },
+    "matches": "api/trailers/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Trailer\\Trailer",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/trailers/single/GET"
+  },
+  "api/trailers/single/PUT": {
+    "request": "PUT /api/trailers/101/",
+    "matches": "api/trailers/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Trailer\\UpdateTrailer",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/trailers/single/PUT"
+  },
+  "api/trailers/POST": {
+    "request": "POST /api/trailers/",
+    "matches": "api/trailers/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Trailer\\CreateTrailer"
+    },
+    "withoutTrailingSlash": "api/trailers/POST"
+  },
+  "api/trailers/DELETE": {
+    "request": "DELETE /api/trailers/",
+    "matches": "api/trailers/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Trailer\\DeleteTrailer"
+    },
+    "withoutTrailingSlash": "api/trailers/DELETE"
+  }
+}

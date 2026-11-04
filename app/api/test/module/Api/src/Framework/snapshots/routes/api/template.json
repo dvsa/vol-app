@@ -1,0 +1,80 @@
+{
+  "api/template/available-templates/GET": {
+    "request": "GET /api/template/available-templates/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Template\\AvailableTemplates"
+    },
+    "matches": "api/template/available-templates/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Template\\AvailableTemplates"
+    },
+    "withoutTrailingSlash": "api/template/available-templates/GET"
+  },
+  "api/template/available-template-groups/GET": {
+    "request": "GET /api/template/available-template-groups/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Template\\AvailableTemplateGroups"
+    },
+    "matches": "api/template/available-template-groups/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Template\\AvailableTemplateGroups"
+    },
+    "withoutTrailingSlash": "api/template/available-template-groups/GET"
+  },
+  "api/template/send-test-email/POST": {
+    "request": "POST /api/template/send-test-email/",
+    "matches": "api/template/send-test-email/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Template\\SendTestEmail"
+    },
+    "withoutTrailingSlash": "api/template/send-test-email/POST"
+  },
+  "api/template/preview-template-source/GET": {
+    "request": "GET /api/template/preview-template-source/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Template\\PreviewTemplateSource"
+    },
+    "matches": "api/template/preview-template-source/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Template\\PreviewTemplateSource"
+    },
+    "withoutTrailingSlash": "api/template/preview-template-source/GET"
+  },
+  "api/template/template-source/GET": {
+    "request": "GET /api/template/template-source/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Template\\TemplateSource"
+    },
+    "matches": "api/template/template-source/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Template\\TemplateSource"
+    },
+    "withoutTrailingSlash": "api/template/template-source/GET"
+  },
+  "api/template/update-template-source/PUT": {
+    "request": "PUT /api/template/update-template-source/",
+    "matches": "api/template/update-template-source/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Template\\UpdateTemplateSource"
+    },
+    "withoutTrailingSlash": "api/template/update-template-source/PUT"
+  },
+  "api/template/template-categories/GET": {
+    "request": "GET /api/template/template-categories/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Template\\TemplateCategories"
+    },
+    "matches": "api/template/template-categories/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Template\\TemplateCategories"
+    },
+    "withoutTrailingSlash": "api/template/template-categories/GET"
+  }
+}

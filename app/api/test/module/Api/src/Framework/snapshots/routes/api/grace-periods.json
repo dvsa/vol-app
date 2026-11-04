@@ -1,0 +1,55 @@
+{
+  "api/grace-periods/single/GET": {
+    "request": "GET /api/grace-periods/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\GracePeriod\\GracePeriod"
+    },
+    "matches": "api/grace-periods/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\GracePeriod\\GracePeriod",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/grace-periods/single/GET"
+  },
+  "api/grace-periods/single/PUT": {
+    "request": "PUT /api/grace-periods/101/",
+    "matches": "api/grace-periods/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\GracePeriod\\UpdateGracePeriod",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/grace-periods/single/PUT"
+  },
+  "api/grace-periods/GET": {
+    "request": "GET /api/grace-periods/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\GracePeriod\\GracePeriods"
+    },
+    "matches": "api/grace-periods/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\GracePeriod\\GracePeriods"
+    },
+    "withoutTrailingSlash": "api/grace-periods/GET"
+  },
+  "api/grace-periods/POST": {
+    "request": "POST /api/grace-periods/",
+    "matches": "api/grace-periods/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\GracePeriod\\CreateGracePeriod"
+    },
+    "withoutTrailingSlash": "api/grace-periods/POST"
+  },
+  "api/grace-periods/DELETE": {
+    "request": "DELETE /api/grace-periods/",
+    "matches": "api/grace-periods/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\GracePeriod\\DeleteGracePeriod"
+    },
+    "withoutTrailingSlash": "api/grace-periods/DELETE"
+  }
+}

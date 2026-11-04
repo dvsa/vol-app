@@ -1,0 +1,56 @@
+{
+  "api/prohibition/GET": {
+    "request": "GET /api/prohibition/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Prohibition\\ProhibitionList"
+    },
+    "matches": "api/prohibition/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Prohibition\\ProhibitionList"
+    },
+    "withoutTrailingSlash": "api/prohibition/GET"
+  },
+  "api/prohibition/POST": {
+    "request": "POST /api/prohibition/",
+    "matches": "api/prohibition/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Prohibition\\Create"
+    },
+    "withoutTrailingSlash": "api/prohibition/POST"
+  },
+  "api/prohibition/single/GET": {
+    "request": "GET /api/prohibition/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Prohibition\\Prohibition"
+    },
+    "matches": "api/prohibition/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Prohibition\\Prohibition",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/prohibition/single/GET"
+  },
+  "api/prohibition/single/PUT": {
+    "request": "PUT /api/prohibition/101/",
+    "matches": "api/prohibition/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Prohibition\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/prohibition/single/PUT"
+  },
+  "api/prohibition/single/DELETE": {
+    "request": "DELETE /api/prohibition/101/",
+    "matches": "api/prohibition/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Prohibition\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/prohibition/single/DELETE"
+  }
+}

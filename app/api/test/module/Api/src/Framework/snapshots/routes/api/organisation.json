@@ -1,0 +1,163 @@
+{
+  "api/organisation/single/GET": {
+    "request": "GET /api/organisation/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\Organisation"
+    },
+    "matches": "api/organisation/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\Organisation",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation/single/GET"
+  },
+  "api/organisation/single/business-type/PUT": {
+    "request": "PUT /api/organisation/101/business-type/",
+    "matches": "api/organisation/single/business-type/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Organisation\\UpdateBusinessType",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation/single/business-type/PUT"
+  },
+  "api/organisation/single/business-details/GET": {
+    "request": "GET /api/organisation/101/business-details/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\BusinessDetails"
+    },
+    "matches": "api/organisation/single/business-details/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\BusinessDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation/single/business-details/GET"
+  },
+  "api/organisation/single/outstanding-fees/GET": {
+    "request": "GET /api/organisation/101/outstanding-fees/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\OutstandingFees"
+    },
+    "matches": "api/organisation/single/outstanding-fees/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\OutstandingFees",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation/single/outstanding-fees/GET"
+  },
+  "api/organisation/single/dashboard/GET": {
+    "request": "GET /api/organisation/101/dashboard/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\Dashboard"
+    },
+    "matches": "api/organisation/single/dashboard/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\Dashboard",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation/single/dashboard/GET"
+  },
+  "api/organisation/single/people/GET": {
+    "request": "GET /api/organisation/101/people/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\People"
+    },
+    "matches": "api/organisation/single/people/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\People",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation/single/people/GET"
+  },
+  "api/organisation/single/unlicensed-cases/GET": {
+    "request": "GET /api/organisation/101/unlicensed-cases/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\UnlicensedCases"
+    },
+    "matches": "api/organisation/single/unlicensed-cases/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\UnlicensedCases",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation/single/unlicensed-cases/GET"
+  },
+  "api/organisation/single/transfer/PUT": {
+    "request": "PUT /api/organisation/101/transfer/",
+    "matches": "api/organisation/single/transfer/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Organisation\\TransferTo",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation/single/transfer/PUT"
+  },
+  "api/organisation/business-details/licence/GET": {
+    "request": "GET /api/organisation/business-details/licence/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\BusinessDetails"
+    },
+    "matches": "api/organisation/business-details/licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\BusinessDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation/business-details/licence/GET"
+  },
+  "api/organisation/business-details/licence/PUT": {
+    "request": "PUT /api/organisation/business-details/licence/101/",
+    "matches": "api/organisation/business-details/licence/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Licence\\UpdateBusinessDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation/business-details/licence/PUT"
+  },
+  "api/organisation/business-details/application/PUT": {
+    "request": "PUT /api/organisation/business-details/application/101/",
+    "matches": "api/organisation/business-details/application/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateBusinessDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/organisation/business-details/application/PUT"
+  },
+  "api/organisation/cpid/POST": {
+    "request": "POST /api/organisation/cpid/",
+    "matches": "api/organisation/cpid/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Organisation\\CpidOrganisationExport"
+    },
+    "withoutTrailingSlash": "api/organisation/cpid/POST"
+  },
+  "api/organisation/cpid/GET": {
+    "request": "GET /api/organisation/cpid/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\CpidOrganisation"
+    },
+    "matches": "api/organisation/cpid/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Organisation\\CpidOrganisation"
+    },
+    "withoutTrailingSlash": "api/organisation/cpid/GET"
+  },
+  "api/organisation/generate-name/POST": {
+    "request": "POST /api/organisation/generate-name/",
+    "matches": "api/organisation/generate-name/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Organisation\\GenerateName"
+    },
+    "withoutTrailingSlash": "api/organisation/generate-name/POST"
+  }
+}

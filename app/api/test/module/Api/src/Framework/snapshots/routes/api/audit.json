@@ -1,0 +1,149 @@
+{
+  "api/audit/read/application/POST": {
+    "request": "POST /api/audit/read/application/",
+    "matches": "api/audit/read/application/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Audit\\ReadApplication"
+    },
+    "withoutTrailingSlash": "api/audit/read/application/POST"
+  },
+  "api/audit/read/application/GET": {
+    "request": "GET /api/audit/read/application/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadApplication"
+    },
+    "matches": "api/audit/read/application/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadApplication"
+    },
+    "withoutTrailingSlash": "api/audit/read/application/GET"
+  },
+  "api/audit/read/licence/POST": {
+    "request": "POST /api/audit/read/licence/",
+    "matches": "api/audit/read/licence/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Audit\\ReadLicence"
+    },
+    "withoutTrailingSlash": "api/audit/read/licence/POST"
+  },
+  "api/audit/read/licence/GET": {
+    "request": "GET /api/audit/read/licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadLicence"
+    },
+    "matches": "api/audit/read/licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadLicence"
+    },
+    "withoutTrailingSlash": "api/audit/read/licence/GET"
+  },
+  "api/audit/read/organisation/POST": {
+    "request": "POST /api/audit/read/organisation/",
+    "matches": "api/audit/read/organisation/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Audit\\ReadOrganisation"
+    },
+    "withoutTrailingSlash": "api/audit/read/organisation/POST"
+  },
+  "api/audit/read/organisation/GET": {
+    "request": "GET /api/audit/read/organisation/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadOrganisation"
+    },
+    "matches": "api/audit/read/organisation/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadOrganisation"
+    },
+    "withoutTrailingSlash": "api/audit/read/organisation/GET"
+  },
+  "api/audit/read/bus-reg/POST": {
+    "request": "POST /api/audit/read/bus-reg/",
+    "matches": "api/audit/read/bus-reg/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Audit\\ReadBusReg"
+    },
+    "withoutTrailingSlash": "api/audit/read/bus-reg/POST"
+  },
+  "api/audit/read/bus-reg/GET": {
+    "request": "GET /api/audit/read/bus-reg/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadBusReg"
+    },
+    "matches": "api/audit/read/bus-reg/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadBusReg"
+    },
+    "withoutTrailingSlash": "api/audit/read/bus-reg/GET"
+  },
+  "api/audit/read/transport-manager/POST": {
+    "request": "POST /api/audit/read/transport-manager/",
+    "matches": "api/audit/read/transport-manager/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Audit\\ReadTransportManager"
+    },
+    "withoutTrailingSlash": "api/audit/read/transport-manager/POST"
+  },
+  "api/audit/read/transport-manager/GET": {
+    "request": "GET /api/audit/read/transport-manager/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadTransportManager"
+    },
+    "matches": "api/audit/read/transport-manager/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadTransportManager"
+    },
+    "withoutTrailingSlash": "api/audit/read/transport-manager/GET"
+  },
+  "api/audit/read/case/POST": {
+    "request": "POST /api/audit/read/case/",
+    "matches": "api/audit/read/case/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Audit\\ReadCase"
+    },
+    "withoutTrailingSlash": "api/audit/read/case/POST"
+  },
+  "api/audit/read/case/GET": {
+    "request": "GET /api/audit/read/case/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadCase"
+    },
+    "matches": "api/audit/read/case/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadCase"
+    },
+    "withoutTrailingSlash": "api/audit/read/case/GET"
+  },
+  "api/audit/read/irhp-application/POST": {
+    "request": "POST /api/audit/read/irhp-application/",
+    "matches": "api/audit/read/irhp-application/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Audit\\ReadIrhpApplication"
+    },
+    "withoutTrailingSlash": "api/audit/read/irhp-application/POST"
+  },
+  "api/audit/read/irhp-application/GET": {
+    "request": "GET /api/audit/read/irhp-application/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadIrhpApplication"
+    },
+    "matches": "api/audit/read/irhp-application/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Audit\\ReadIrhpApplication"
+    },
+    "withoutTrailingSlash": "api/audit/read/irhp-application/GET"
+  }
+}

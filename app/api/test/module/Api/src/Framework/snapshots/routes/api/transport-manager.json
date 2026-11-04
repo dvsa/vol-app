@@ -1,0 +1,104 @@
+{
+  "api/transport-manager/single/GET": {
+    "request": "GET /api/transport-manager/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Tm\\TransportManager"
+    },
+    "matches": "api/transport-manager/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Tm\\TransportManager",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager/single/GET"
+  },
+  "api/transport-manager/single/PUT": {
+    "request": "PUT /api/transport-manager/101/",
+    "matches": "api/transport-manager/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Tm\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager/single/PUT"
+  },
+  "api/transport-manager/single/documents/GET": {
+    "request": "GET /api/transport-manager/101/documents/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Tm\\Documents"
+    },
+    "matches": "api/transport-manager/single/documents/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Tm\\Documents",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager/single/documents/GET"
+  },
+  "api/transport-manager/single/merge/PUT": {
+    "request": "PUT /api/transport-manager/101/merge/",
+    "matches": "api/transport-manager/single/merge/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Tm\\Merge",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager/single/merge/PUT"
+  },
+  "api/transport-manager/single/unmerge/PUT": {
+    "request": "PUT /api/transport-manager/101/unmerge/",
+    "matches": "api/transport-manager/single/unmerge/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Tm\\Unmerge",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager/single/unmerge/PUT"
+  },
+  "api/transport-manager/single/undo-disqualification/PUT": {
+    "request": "PUT /api/transport-manager/101/undo-disqualification/",
+    "matches": "api/transport-manager/single/undo-disqualification/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Tm\\UndoDisqualification",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager/single/undo-disqualification/PUT"
+  },
+  "api/transport-manager/create/POST": {
+    "request": "POST /api/transport-manager/create/",
+    "matches": "api/transport-manager/create/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Tm\\Create"
+    },
+    "withoutTrailingSlash": "api/transport-manager/create/POST"
+  },
+  "api/transport-manager/create-new-user/POST": {
+    "request": "POST /api/transport-manager/create-new-user/",
+    "matches": "api/transport-manager/create-new-user/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Tm\\CreateNewUser"
+    },
+    "withoutTrailingSlash": "api/transport-manager/create-new-user/POST"
+  },
+  "api/transport-manager/remove/POST": {
+    "request": "POST /api/transport-manager/remove/",
+    "matches": "api/transport-manager/remove/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Tm\\Remove"
+    },
+    "withoutTrailingSlash": "api/transport-manager/remove/POST"
+  },
+  "api/transport-manager/check-repute/POST": {
+    "request": "POST /api/transport-manager/check-repute/",
+    "matches": "api/transport-manager/check-repute/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Tm\\CheckRepute"
+    },
+    "withoutTrailingSlash": "api/transport-manager/check-repute/POST"
+  }
+}

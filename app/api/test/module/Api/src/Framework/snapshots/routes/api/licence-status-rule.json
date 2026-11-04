@@ -1,0 +1,44 @@
+{
+  "api/licence-status-rule/POST": {
+    "request": "POST /api/licence-status-rule/",
+    "matches": "api/licence-status-rule/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\LicenceStatusRule\\CreateLicenceStatusRule"
+    },
+    "withoutTrailingSlash": "api/licence-status-rule/POST"
+  },
+  "api/licence-status-rule/single/GET": {
+    "request": "GET /api/licence-status-rule/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\LicenceStatusRule\\LicenceStatusRule"
+    },
+    "matches": "api/licence-status-rule/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\LicenceStatusRule\\LicenceStatusRule",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence-status-rule/single/GET"
+  },
+  "api/licence-status-rule/single/PUT": {
+    "request": "PUT /api/licence-status-rule/101/",
+    "matches": "api/licence-status-rule/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\LicenceStatusRule\\UpdateLicenceStatusRule",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence-status-rule/single/PUT"
+  },
+  "api/licence-status-rule/single/DELETE": {
+    "request": "DELETE /api/licence-status-rule/101/",
+    "matches": "api/licence-status-rule/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\LicenceStatusRule\\DeleteLicenceStatusRule",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/licence-status-rule/single/DELETE"
+  }
+}

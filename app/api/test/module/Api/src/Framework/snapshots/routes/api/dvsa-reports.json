@@ -1,0 +1,11 @@
+{
+  "api/dvsa-reports/get-redirect/POST": {
+    "request": "POST /api/dvsa-reports/get-redirect/",
+    "matches": "api/dvsa-reports/get-redirect/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\DvsaReports\\GetRedirect"
+    },
+    "withoutTrailingSlash": "api/dvsa-reports/get-redirect/POST"
+  }
+}

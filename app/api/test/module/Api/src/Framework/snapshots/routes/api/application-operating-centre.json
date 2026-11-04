@@ -1,0 +1,25 @@
+{
+  "api/application-operating-centre/single/GET": {
+    "request": "GET /api/application-operating-centre/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ApplicationOperatingCentre\\ApplicationOperatingCentre"
+    },
+    "matches": "api/application-operating-centre/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ApplicationOperatingCentre\\ApplicationOperatingCentre",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application-operating-centre/single/GET"
+  },
+  "api/application-operating-centre/single/PUT": {
+    "request": "PUT /api/application-operating-centre/101/",
+    "matches": "api/application-operating-centre/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\ApplicationOperatingCentre\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application-operating-centre/single/PUT"
+  }
+}

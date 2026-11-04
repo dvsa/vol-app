@@ -1,0 +1,11 @@
+{
+  "api/report/upload/POST": {
+    "request": "POST /api/report/upload/",
+    "matches": "api/report/upload/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Report\\Upload"
+    },
+    "withoutTrailingSlash": "api/report/upload/POST"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "api/opposition/GET": {
+    "request": "GET /api/opposition/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Opposition\\OppositionList"
+    },
+    "matches": "api/opposition/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Opposition\\OppositionList"
+    },
+    "withoutTrailingSlash": "api/opposition/GET"
+  },
+  "api/opposition/single/GET": {
+    "request": "GET /api/opposition/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Opposition\\Opposition"
+    },
+    "matches": "api/opposition/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Opposition\\Opposition",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/opposition/single/GET"
+  },
+  "api/opposition/single/PUT": {
+    "request": "PUT /api/opposition/101/",
+    "matches": "api/opposition/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Opposition\\UpdateOpposition",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/opposition/single/PUT"
+  },
+  "api/opposition/single/DELETE": {
+    "request": "DELETE /api/opposition/101/",
+    "matches": "api/opposition/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Opposition\\DeleteOpposition",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/opposition/single/DELETE"
+  },
+  "api/opposition/POST": {
+    "request": "POST /api/opposition/",
+    "matches": "api/opposition/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Opposition\\CreateOpposition"
+    },
+    "withoutTrailingSlash": "api/opposition/POST"
+  }
+}

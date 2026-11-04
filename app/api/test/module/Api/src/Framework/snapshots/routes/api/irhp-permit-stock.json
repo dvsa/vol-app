@@ -1,0 +1,80 @@
+{
+  "api/irhp-permit-stock/single/GET": {
+    "request": "GET /api/irhp-permit-stock/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitStock\\ById"
+    },
+    "matches": "api/irhp-permit-stock/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitStock\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-stock/single/GET"
+  },
+  "api/irhp-permit-stock/single/PUT": {
+    "request": "PUT /api/irhp-permit-stock/101/",
+    "matches": "api/irhp-permit-stock/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermitStock\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-stock/single/PUT"
+  },
+  "api/irhp-permit-stock/single/DELETE": {
+    "request": "DELETE /api/irhp-permit-stock/101/",
+    "matches": "api/irhp-permit-stock/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermitStock\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-stock/single/DELETE"
+  },
+  "api/irhp-permit-stock/GET": {
+    "request": "GET /api/irhp-permit-stock/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitStock\\GetList"
+    },
+    "matches": "api/irhp-permit-stock/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitStock\\GetList"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-stock/GET"
+  },
+  "api/irhp-permit-stock/POST": {
+    "request": "POST /api/irhp-permit-stock/",
+    "matches": "api/irhp-permit-stock/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermitStock\\Create"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-stock/POST"
+  },
+  "api/irhp-permit-stock/available-countries/GET": {
+    "request": "GET /api/irhp-permit-stock/available-countries/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitStock\\AvailableCountries"
+    },
+    "matches": "api/irhp-permit-stock/available-countries/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitStock\\AvailableCountries"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-stock/available-countries/GET"
+  },
+  "api/irhp-permit-stock/available-bilateral/GET": {
+    "request": "GET /api/irhp-permit-stock/available-bilateral/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitStock\\AvailableBilateral"
+    },
+    "matches": "api/irhp-permit-stock/available-bilateral/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitStock\\AvailableBilateral"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-stock/available-bilateral/GET"
+  }
+}

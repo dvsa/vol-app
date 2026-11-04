@@ -1,0 +1,37 @@
+{
+  "api/correspondence/single/GET": {
+    "request": "GET /api/correspondence/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Correspondence\\Correspondence"
+    },
+    "matches": "api/correspondence/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Correspondence\\Correspondence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/correspondence/single/GET"
+  },
+  "api/correspondence/single/access/PUT": {
+    "request": "PUT /api/correspondence/101/access/",
+    "matches": "api/correspondence/single/access/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Correspondence\\AccessCorrespondence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/correspondence/single/access/PUT"
+  },
+  "api/correspondence/GET": {
+    "request": "GET /api/correspondence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Correspondence\\Correspondences"
+    },
+    "matches": "api/correspondence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Correspondence\\Correspondences"
+    },
+    "withoutTrailingSlash": "api/correspondence/GET"
+  }
+}
