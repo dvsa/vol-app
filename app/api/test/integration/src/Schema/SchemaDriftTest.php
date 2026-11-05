@@ -130,9 +130,13 @@ class SchemaDriftTest extends IntegrationTestCase
             static fn (\Doctrine\ORM\Mapping\ClassMetadata $classMetadata): string => $classMetadata->getTableName(),
             $metadata,
         );
+        $enumStringColumns = SchemaComparison::enumColumnsMappedAsStrings($databaseSchema, $entitySchema);
 
         if (getenv('REGENERATE_SCHEMA_DRIFT_BASELINE')) {
-            file_put_contents(self::BASELINE_FILE, SchemaComparison::renderBaseline($statements, $mappedTables));
+            file_put_contents(
+                self::BASELINE_FILE,
+                SchemaComparison::renderBaseline($statements, $mappedTables, $enumStringColumns)
+            );
             $this->assertFileExists(self::BASELINE_FILE);
             return;
         }
