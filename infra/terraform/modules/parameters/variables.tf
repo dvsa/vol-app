@@ -92,11 +92,13 @@ variable "application_parameters" {
     olcs_natreg_repute                           = string
     olcs_natreg_token_url                        = string
     olcs_natreg_uri                              = string
+    olcs_notify_sms_template                     = string
     olcs_notify_template_cy_gb                   = string
     olcs_notify_template_en_gb                   = string
     olcs_notify_test_dsn                         = string
     olcs_nysiis_version                          = string
     olcs_send_all_mail_to                        = string
+    olcs_send_all_sms_to                         = string
     olcs_ss_cookie                               = string
     olcs_ss_uri                                  = string
     olcs_txc_client_id                           = string
