@@ -30,15 +30,36 @@ class NotifyMessageEntityTest extends EntityTester
         $entity = new Entity(new RefData('nmc_sms'), new RefData('nms_queued'), '+447700900123', new \DateTimeImmutable('2026-07-01 21:30:00', new \DateTimeZone('Europe/London')));
 
         // the app replaces the stock 'datetime' type with this one (module.config.php)
-        if (Type::hasType('datetime')) {
+        $hadType = Type::hasType('datetime');
+        $previous = $hadType ? Type::getType('datetime')::class : null;
+        if ($hadType) {
             Type::overrideType('datetime', DateTimeType::class);
         } else {
             Type::addType('datetime', DateTimeType::class);
         }
 
-        $this->assertSame(
-            '2026-07-01 20:30:00',
-            Type::getType('datetime')->convertToDatabaseValue($entity->getRequestedOn(), new MySQLPlatform())
-        );
+        try {
+            $this->assertSame(
+                '2026-07-01 20:30:00',
+                Type::getType('datetime')->convertToDatabaseValue($entity->getRequestedOn(), new MySQLPlatform())
+            );
+        } finally {
+            // put back whatever other tests expect to find
+            if ($previous !== null) {
+                Type::overrideType('datetime', $previous);
+            }
+        }
+    }
+
+    public function testDatetimeTypeIsRestored(): void
+    {
+        if (!Type::hasType('datetime')) {
+            $this->markTestSkipped('no datetime type registered');
+        }
+        $before = Type::getType('datetime')::class;
+
+        $this->testRequestedOnSurvivesTheAppDateTimeType();
+
+        $this->assertSame($before, Type::getType('datetime')::class);
     }
 }
