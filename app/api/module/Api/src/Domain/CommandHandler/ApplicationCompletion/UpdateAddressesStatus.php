@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\ApplicationCompletion;
 
 use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -38,8 +39,10 @@ final class UpdateAddressesStatus extends AbstractUpdateStatus implements AuthAw
             return false;
         }
 
-        // Must have at least 1 phone contact
-        $phoneContacts = $corAdd->getPhoneContacts();
+        // Must have at least 1 phone contact, and the SMS number does not count as one
+        $phoneContacts = $corAdd->getPhoneContacts()->filter(
+            static fn (PhoneContact $pc): bool => $pc->getPhoneContactType()?->getId() !== PhoneContact::TYPE_SMS
+        );
         if ($phoneContacts->count() < 1 && $this->isExternalUser()) {
             return false;
         }

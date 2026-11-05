@@ -210,4 +210,24 @@ final class UpdateAddressesStatusTest extends AbstractUpdateStatusTestCase
 
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
+
+    public function testExternalWithOnlyAnSmsNumberIsIncomplete(): void
+    {
+        $this->setupIsExternalUser(true);
+        $this->applicationCompletion->setAddressesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
+        $this->licence->setCorrespondenceCd($this->corAddWithPhones([PhoneContact::TYPE_SMS]));
+        $this->application->setLicenceType($this->refData[Licence::LICENCE_TYPE_RESTRICTED]);
+
+        $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
+    }
+
+    public function testInternalWithOnlyAnSmsNumberIsComplete(): void
+    {
+        $this->setupIsExternalUser(false);
+        $this->applicationCompletion->setAddressesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
+        $this->licence->setCorrespondenceCd($this->corAddWithPhones([PhoneContact::TYPE_SMS]));
+        $this->application->setLicenceType($this->refData[Licence::LICENCE_TYPE_RESTRICTED]);
+
+        $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
+    }
 }
