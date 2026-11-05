@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Service\Sms;
 
+use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Mailer\Transport\Dsn;
@@ -48,9 +49,15 @@ final class SmsConfigFactory implements FactoryInterface
             $host,
             $port,
             self::setOrNull($sms['template_id'] ?? null),
-            self::setOrNull($sms['send_all_sms_to'] ?? null),
+            self::normalisedNumber(self::setOrNull($sms['send_all_sms_to'] ?? null)),
             (bool) ($sms['is_production'] ?? false),
         );
+    }
+
+    /** A redirect that is not a valid UK mobile number counts as unset, so a typo cannot enable SMS. */
+    private static function normalisedNumber(?string $value): ?string
+    {
+        return $value === null ? null : SmsPhoneNumber::normalise($value);
     }
 
     /** Blank, whitespace and the "null" sentinel (any case) mean unset. */
