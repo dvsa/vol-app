@@ -8,6 +8,7 @@ use Common\Form\Elements\InputFilters\ActionButton;
 use Common\Form\Elements\Types\GuidanceTranslated;
 use Laminas\Form\Annotation as Form;
 
+#[Form\Options(['wrapperElement' => 'div'])]
 class Actions
 {
     #[Form\Attributes(['value' => 'markup-messaging-new-conversation-timeframe', 'id' => 'guidance'])]

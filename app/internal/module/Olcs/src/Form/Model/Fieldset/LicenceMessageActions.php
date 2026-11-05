@@ -7,6 +7,7 @@ namespace Olcs\Form\Model\Fieldset;
 use Common\Form\Elements\InputFilters\ActionButton;
 use Laminas\Form\Annotation as Form;
 
+#[Form\Options(['wrapperElement' => 'div'])]
 class LicenceMessageActions
 {
     #[Form\Attributes(['type' => 'submit', 'data-module' => 'govuk-button', 'class' => 'govuk-button govuk-button--warning', 'id' => 'close'])]
