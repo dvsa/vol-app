@@ -85,7 +85,7 @@ final class GovUkNotifyTransport extends AbstractTransport
                 $notifyId = is_array($response) ? ($response['id'] ?? null) : null;
                 Logger::info('notify email sent', ['notify_id' => $notifyId, 'locale' => $payload['locale'] ?? null]);
             } catch (NotifyException $e) {
-                if ($this->isTransient($e)) {
+                if (NotifyErrors::isTransient($e)) {
                     // Transient (429/5xx): the queue will retry the whole message.
                     $transient = $e;
                     Logger::info('notify send transient failure, message will be retried', ['code' => (int) $e->getCode()]);
@@ -186,18 +186,6 @@ final class GovUkNotifyTransport extends AbstractTransport
         }
 
         return $unique;
-    }
-
-    private function isTransient(NotifyException $e): bool
-    {
-        $code = (int) $e->getCode();
-
-        // 429 (rate limit) and 5xx are transient and must be retried. A code of 0 means the Notify
-        // SDK never received an HTTP response at all — a connection/DNS/timeout/proxy failure
-        // (php-http NetworkException, which is always code 0) — which is the most common transient
-        // class and must NOT be misread as permanent and dropped. Only genuine 4xx client errors
-        // (e.g. a malformed recipient address) are permanent.
-        return $code === 429 || $code < 400 || $code >= 500;
     }
 
     private function resolveTemplateId(string $locale): string

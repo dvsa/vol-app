@@ -1,0 +1,263 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Sms;
+
+use Alphagov\Notifications\Exception\NotifyException;
+use Dvsa\Olcs\Api\Domain\Command\Sms\SendSms as Cmd;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Sms\SendSms;
+use Dvsa\Olcs\Api\Domain\Exception\NotReadyException;
+use Dvsa\Olcs\Api\Domain\Repository;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\Notify\NotifyMessage;
+use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
+use Dvsa\Olcs\Api\Service\Sms\SmsConfig;
+use Dvsa\Olcs\Api\Service\Sms\SmsGate;
+use Dvsa\Olcs\Api\Service\Sms\SmsTransportInterface;
+use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
+use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use Mockery as m;
+use Twig\Error\LoaderError;
+
+#[\PHPUnit\Framework\Attributes\CoversClass(SendSms::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+final class SendSmsTest extends AbstractCommandHandlerTestCase
+{
+    private const int ID = 555;
+    private const string NUMBER = '+447700900123';
+    private const string REDIRECT = '+447700900999';
+    private const string TEMPLATE_ID = 'tmpl-uuid';
+
+    private $gate;
+    private $transport;
+    private $twig;
+    private $messageRepo;
+    private \DateTimeImmutable $now;
+    private SmsConfig $config;
+
+    public function setUp(): void
+    {
+        $this->now = new \DateTimeImmutable('2026-11-05 10:30:00', new \DateTimeZone('Europe/London'));
+        $this->config = new SmsConfig('key', false, null, 1025, self::TEMPLATE_ID, self::REDIRECT, str_starts_with($this->name(), 'testProd'));
+
+        $this->sut = m::mock(SendSms::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $this->sut->shouldReceive('now')->andReturnUsing(fn() => $this->now);
+
+        $this->messageRepo = $this->mockRepo('NotifyMessage', Repository\NotifyMessage::class);
+        $this->gate = m::mock(SmsGate::class);
+        $this->transport = m::mock(SmsTransportInterface::class);
+        $this->twig = m::mock(TwigRenderer::class);
+
+        $this->refData = [
+            NotifyMessage::STATUS_CANCELLED,
+            NotifyMessage::STATUS_REJECTED,
+            NotifyMessage::STATUS_FAILED,
+            NotifyMessage::STATUS_CREATED,
+            NotifyMessage::STATUS_QUEUED,
+        ];
+
+        $this->mockedSmServices[SmsGate::class] = $this->gate;
+        $this->mockedSmServices[SmsConfig::class] = $this->config;
+        $this->mockedSmServices[SmsTransportInterface::class] = $this->transport;
+        $this->mockedSmServices['TemplateTwigRenderer'] = $this->twig;
+
+        parent::setUp();
+    }
+
+    private function message(bool $welsh = false, int $attempts = 0): NotifyMessage
+    {
+        $org = m::mock(Organisation::class)->makePartial();
+        $org->setName('Acme Haulage');
+        $licence = m::mock(Licence::class)->makePartial();
+        $licence->setTranslateToWelsh($welsh ? 'Y' : 'N');
+
+        $status = $this->refData[NotifyMessage::STATUS_QUEUED];
+        $m = new NotifyMessage($status, $status, self::NUMBER, $this->now);
+        $m->setId(self::ID);
+        $m->setOrganisation($org);
+        $m->setLicence($licence);
+        $m->setTemplateName('letter-issued-sms');
+        $m->setAttempts($attempts);
+        $this->messageRepo->shouldReceive('fetchById')->with(self::ID)->andReturn($m);
+
+        return $m;
+    }
+
+    private function handle(): mixed
+    {
+        return $this->sut->handleCommand(Cmd::create(['id' => self::ID]));
+    }
+
+    public function testGateOffCancels(): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(false);
+        $this->transport->shouldNotReceive('send');
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+
+        $this->handle();
+
+        $this->assertSame(NotifyMessage::STATUS_CANCELLED, $m->getStatus()->getId());
+    }
+
+    public function testOutsideWindowThrowsNotReady(): void
+    {
+        $this->now = new \DateTimeImmutable('2026-11-05 21:00:00', new \DateTimeZone('Europe/London'));
+        $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->transport->shouldNotReceive('send');
+
+        try {
+            $this->handle();
+            $this->fail('expected NotReadyException');
+        } catch (NotReadyException $e) {
+            // 21:00 to 08:00 next day
+            $this->assertSame(11 * 3600, $e->getRetryAfter());
+        }
+    }
+
+    public function testSendsRenderedBodyWithReference(): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')
+            ->once()
+            ->with('en_GB/sms/letter-issued-sms', ['name' => 'Acme Haulage', 'dayOfWeek' => 'Thursday'])
+            ->andReturn('Hello Acme');
+        $this->transport->shouldReceive('send')
+            ->once()
+            ->with(self::REDIRECT, self::TEMPLATE_ID, 'Hello Acme', (string) self::ID)
+            ->andReturn('notify-1');
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+
+        $this->handle();
+
+        $this->assertSame('notify-1', $m->getNotifyId());
+        $this->assertSame(NotifyMessage::STATUS_CREATED, $m->getStatus()->getId());
+        $this->assertSame(1, $m->getAttempts());
+        $this->assertSame(self::TEMPLATE_ID, $m->getNotifyTemplateId());
+        $this->assertInstanceOf(\DateTime::class, $m->getSentOn());
+        $this->assertNotInstanceOf(\DateTimeImmutable::class, $m->getSentOn());
+        $this->assertInstanceOf(\DateTime::class, $m->getStatusUpdatedOn());
+    }
+
+    public function testWelshLicenceUsesCyTemplateWhenPresent(): void
+    {
+        $this->message(true);
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->once()->with('cy_GB/sms/letter-issued-sms', m::type('array'))->andReturn('Helo');
+        $this->transport->shouldReceive('send')->once()->with(m::any(), m::any(), 'Helo', m::any())->andReturn(null);
+        $this->messageRepo->shouldReceive('save')->once();
+
+        $this->handle();
+    }
+
+    public function testFallsBackToEnglish(): void
+    {
+        $this->message(true);
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->once()->with('cy_GB/sms/letter-issued-sms', m::type('array'))
+            ->andThrow(new LoaderError('missing'));
+        $this->twig->shouldReceive('render')->once()->with('en_GB/sms/letter-issued-sms', m::type('array'))->andReturn('Hello');
+        $this->transport->shouldReceive('send')->once()->with(m::any(), m::any(), 'Hello', m::any())->andReturn(null);
+        $this->messageRepo->shouldReceive('save')->once();
+
+        $this->handle();
+    }
+
+    public function testRedirectedNonProd(): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('send')->once()->with(self::REDIRECT, m::any(), 'x', m::any())->andReturn('n');
+        $this->messageRepo->shouldReceive('save')->once();
+
+        $this->handle();
+
+        $this->assertSame(self::REDIRECT, $m->getRedirectedTo());
+        $this->assertSame(self::NUMBER, $m->getRecipient());
+    }
+
+    public function testProdSendsToRecipientIgnoringRedirect(): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('send')->once()->with(self::NUMBER, m::any(), 'x', m::any())->andReturn('n');
+        $this->messageRepo->shouldReceive('save')->once();
+
+        $this->handle();
+
+        $this->assertNull($m->getRedirectedTo());
+    }
+
+    public function testPermanent400Rejected(): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('send')->andThrow(new NotifyException('Not a UK mobile', 400));
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+
+        $this->handle();
+
+        $this->assertSame(NotifyMessage::STATUS_REJECTED, $m->getStatus()->getId());
+        $this->assertSame('400', $m->getErrorCode());
+        $this->assertSame('Not a UK mobile', $m->getErrorMessage());
+        $this->assertNotInstanceOf(\DateTimeImmutable::class, $m->getCompletedOn());
+        $this->assertNotNull($m->getCompletedOn());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('transientCodes')]
+    public function testTransientThrowsNotReady(int $code): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('send')->andThrow(new NotifyException('boom', $code));
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+
+        try {
+            $this->handle();
+            $this->fail('expected NotReadyException');
+        } catch (NotReadyException $e) {
+            $this->assertSame(900, $e->getRetryAfter());
+        }
+
+        $this->assertSame(1, $m->getAttempts());
+        $this->assertSame(NotifyMessage::STATUS_QUEUED, $m->getStatus()->getId());
+    }
+
+    public static function transientCodes(): array
+    {
+        return [[429], [500], [0]];
+    }
+
+    public function testTransientOnLastAttemptMarksFailed(): void
+    {
+        $m = $this->message(false, 3);
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('send')->andThrow(new NotifyException('boom', 503));
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+
+        $this->handle();
+
+        $this->assertSame(4, $m->getAttempts());
+        $this->assertSame(NotifyMessage::STATUS_FAILED, $m->getStatus()->getId());
+        $this->assertSame('503', $m->getErrorCode());
+    }
+
+    public function testAlreadyProcessedIsSkipped(): void
+    {
+        $m = $this->message();
+        $m->setStatus($this->refData[NotifyMessage::STATUS_CREATED]);
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->transport->shouldNotReceive('send');
+        $this->messageRepo->shouldNotReceive('save');
+
+        $this->handle();
+    }
+}

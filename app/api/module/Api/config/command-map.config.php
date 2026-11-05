@@ -238,6 +238,7 @@ return [
 
     // SMS
     Command\Sms\QueueLetterSms::class => CommandHandler\Sms\QueueLetterSms::class,
+    Command\Sms\SendSms::class => CommandHandler\Sms\SendSms::class,
 
     // Transfer - Licence
     TransferCommand\Licence\UpdateAddresses::class => CommandHandler\Licence\UpdateAddresses::class,

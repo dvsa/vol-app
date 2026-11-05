@@ -1,0 +1,167 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Dvsa\Olcs\Api\Domain\CommandHandler\Sms;
+
+use Alphagov\Notifications\Exception\NotifyException;
+use Dvsa\Olcs\Api\Domain\Command\Result;
+use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\Exception\NotReadyException;
+use Dvsa\Olcs\Api\Entity\Notify\NotifyMessage;
+use Dvsa\Olcs\Api\Service\Sms\SendingWindow;
+use Dvsa\Olcs\Api\Service\Sms\SmsConfig;
+use Dvsa\Olcs\Api\Service\Sms\SmsGate;
+use Dvsa\Olcs\Api\Service\Sms\SmsTransportInterface;
+use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
+use Dvsa\Olcs\Email\Transport\NotifyErrors;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Utils\Helper\ValueHelper;
+use Psr\Container\ContainerInterface;
+use Twig\Error\LoaderError;
+
+/**
+ * Send the SMS held in a notify_message row. Runs from the queue as the system user.
+ */
+class SendSms extends AbstractCommandHandler
+{
+    private const string LOCALE_EN = 'en_GB';
+    private const string LOCALE_CY = 'cy_GB';
+    private const int MAX_ATTEMPTS = 4;
+    private const int RETRY_AFTER = 900;
+
+    protected $repoServiceName = 'NotifyMessage';
+
+    private SmsGate $smsGate;
+    private SmsConfig $config;
+    private SmsTransportInterface $transport;
+    private TwigRenderer $twig;
+
+    #[\Override]
+    public function handleCommand(CommandInterface $command)
+    {
+        $message = $this->getRepo()->fetchById($command->getId());
+
+        // Already handled (a retry that raced a success, or a replayed queue item).
+        if ($message->getStatus()->getId() !== NotifyMessage::STATUS_QUEUED) {
+            return $this->result;
+        }
+
+        $now = $this->now();
+
+        if (!$this->smsGate->isEnabled()) {
+            $this->finish($message, NotifyMessage::STATUS_CANCELLED, $now);
+            $this->result->addMessage('SMS cancelled, sending is switched off');
+
+            return $this->result;
+        }
+
+        $nextAllowed = SendingWindow::nextAllowed($now);
+        if ($nextAllowed !== null) {
+            $e = new NotReadyException('Outside the SMS sending window');
+            $e->setRetryAfter(max(1, $nextAllowed->getTimestamp() - $now->getTimestamp()));
+            throw $e;
+        }
+
+        // Outside production we only ever text the redirect number, never the real recipient.
+        $to = $message->getRecipient();
+        if (!$this->config->isProduction) {
+            $to = $this->config->sendAllSmsTo;
+            if ($to === null || $to === '') {
+                $this->finish($message, NotifyMessage::STATUS_CANCELLED, $now);
+
+                return $this->result;
+            }
+            $message->setRedirectedTo($to);
+        }
+
+        $body = $this->render($message, $now);
+        $templateId = (string) $this->config->templateId;
+
+        $message->setAttempts(($message->getAttempts() ?? 0) + 1);
+        $message->setNotifyTemplateId($templateId);
+
+        try {
+            $notifyId = $this->transport->send($to, $templateId, $body, (string) $message->getId());
+        } catch (NotifyException $e) {
+            return $this->handleFailure($message, $e, $now);
+        }
+
+        $message->setNotifyId($notifyId);
+        $message->setStatus($this->refData(NotifyMessage::STATUS_CREATED));
+        $message->setSentOn(\DateTime::createFromInterface($now));
+        $message->setStatusUpdatedOn(\DateTime::createFromInterface($now));
+        $this->getRepo()->save($message);
+        $this->result->addMessage('SMS sent');
+
+        return $this->result;
+    }
+
+    private function handleFailure(NotifyMessage $message, NotifyException $e, \DateTimeImmutable $now): Result
+    {
+        $message->setErrorCode((string) (int) $e->getCode());
+        $message->setErrorMessage(mb_substr($e->getMessage(), 0, 1024));
+
+        if (!NotifyErrors::isTransient($e)) {
+            $this->finish($message, NotifyMessage::STATUS_REJECTED, $now);
+            $this->result->addMessage('SMS rejected by Notify');
+
+            return $this->result;
+        }
+
+        if ($message->getAttempts() >= self::MAX_ATTEMPTS) {
+            $this->finish($message, NotifyMessage::STATUS_FAILED, $now);
+            $this->result->addMessage('SMS failed after the last attempt');
+
+            return $this->result;
+        }
+
+        $this->getRepo()->save($message);
+        $retry = new NotReadyException('Notify unavailable: ' . $e->getMessage(), 0, $e);
+        $retry->setRetryAfter(self::RETRY_AFTER);
+        throw $retry;
+    }
+
+    private function finish(NotifyMessage $message, string $status, \DateTimeImmutable $now): void
+    {
+        $message->setStatus($this->refData($status));
+        $message->setStatusUpdatedOn(\DateTime::createFromInterface($now));
+        $message->setCompletedOn(\DateTime::createFromInterface($now));
+        $this->getRepo()->save($message);
+    }
+
+    private function render(NotifyMessage $message, \DateTimeImmutable $now): string
+    {
+        $variables = [
+            'name' => $message->getOrganisation()?->getName(),
+            'dayOfWeek' => $now->setTimezone(new \DateTimeZone('Europe/London'))->format('l'),
+        ];
+        $name = $message->getTemplateName();
+
+        if (ValueHelper::isOn($message->getLicence()?->getTranslateToWelsh())) {
+            try {
+                return $this->twig->render(self::LOCALE_CY . '/sms/' . $name, $variables);
+            } catch (LoaderError) {
+                // no Welsh text yet, fall through to English
+            }
+        }
+
+        return $this->twig->render(self::LOCALE_EN . '/sms/' . $name, $variables);
+    }
+
+    protected function now(): \DateTimeImmutable
+    {
+        return new \DateTimeImmutable();
+    }
+
+    #[\Override]
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    {
+        $this->smsGate = $container->get(SmsGate::class);
+        $this->config = $container->get(SmsConfig::class);
+        $this->transport = $container->get(SmsTransportInterface::class);
+        $this->twig = $container->get('TemplateTwigRenderer');
+
+        return parent::__invoke($container, $requestedName, $options);
+    }
+}
