@@ -41,12 +41,16 @@ trait RecordsNotifyEmails
         }
 
         try {
-            // With send_all_mail_to the real recipients are in originalTo, the redirect is what we sent to.
+            // Only when the handler says send_all_mail_to is active: record the intended
+            // recipients and note where it really went.
             $original = array_values(array_filter((array) ($context['originalTo'] ?? []), 'is_string'));
-            unset($context['originalTo']);
-            if ($original !== [] && !in_array(strtolower($recipient), array_map('strtolower', $original), true)) {
+            $redirected = isset($context['redirectTo']);
+            unset($context['originalTo'], $context['redirectTo']);
+            if ($redirected) {
                 $context['redirectedTo'] = $recipient;
-                $recipient = implode(', ', $original);
+                if ($original !== []) {
+                    $recipient = implode(', ', $original);
+                }
             }
 
             $recorder->recordEmail($recipient, $context, $notifyId, $errorCode, $errorMessage);

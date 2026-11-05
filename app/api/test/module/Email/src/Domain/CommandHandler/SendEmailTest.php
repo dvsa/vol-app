@@ -451,7 +451,6 @@ final class SendEmailTest extends AbstractCommandHandlerTestCase
                     'licence' => 9,
                     'templateName' => 'my-template',
                     'description' => 'translated-Some subject',
-                    'originalTo' => ['foo@bar.com'],
                 ])
             );
 
@@ -484,7 +483,38 @@ final class SendEmailTest extends AbstractCommandHandlerTestCase
             ->with(
                 m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(),
                 m::on(fn($payload): bool => $payload['context']['templateName'] === null
-                    && $payload['context']['originalTo'] === ['foo@bar.com'])
+                    && !isset($payload['context']['redirectTo']))
+            );
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testRedirectIsStatedInContext(): void
+    {
+        $command = Cmd::create([
+            'to' => ['foo@bar.com'],
+            'cc' => ['cc@bar.com'],
+            'bcc' => [],
+            'docs' => [],
+            'subject' => 'Some subject',
+            'plainBody' => null,
+            'htmlBody' => null,
+            'markdownBody' => 'Body',
+            'templateKey' => 'notify-template-uuid',
+            'locale' => 'en_GB',
+            'personalisation' => [],
+            'highPriority' => false,
+            'subjectVariables' => [],
+        ]);
+
+        $this->repoMap['Document']->shouldReceive('fetchByIds')->with([])->andReturn([]);
+
+        $this->mockedSmServices['EmailService']->shouldReceive('send')
+            ->once()
+            ->with(
+                m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(),
+                m::on(fn($payload): bool => $payload['context']['redirectTo'] === 'terry.valtech@gmail.com'
+                    && $payload['context']['originalTo'] === ['foo@bar.com', 'cc@bar.com'])
             );
 
         $this->sut->handleCommand($command);

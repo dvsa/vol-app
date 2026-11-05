@@ -69,13 +69,31 @@ final class GovUkNotifyTransportTest extends MockeryTestCase
 
     public function testRecordsRedirectedRecipient(): void
     {
-        $email = $this->buildEmail(['markdownBody' => 'Hi', 'context' => ['originalTo' => ['real@example.com']]]);
+        $email = $this->buildEmail(['markdownBody' => 'Hi', 'context' => ['originalTo' => ['real@example.com'], 'redirectTo' => 'user@example.com']]);
         $this->notifyClient->shouldReceive('sendEmail')->andReturn(['id' => 'id-1']);
 
         $this->recorder->shouldReceive('recordEmail')->once()->with(
             'real@example.com',
             m::on(fn($c) => $c['redirectedTo'] === 'user@example.com'),
             'id-1',
+            null,
+            null
+        );
+
+        $this->sut->send($email);
+    }
+
+    public function testCcRecipientIsNotMarkedRedirected(): void
+    {
+        $email = $this->buildEmail(['markdownBody' => 'Hi', 'context' => []]);
+        $email->addCc('cc@example.com');
+        $this->notifyClient->shouldReceive('sendEmail')->andReturn(['id' => 'id-1'], ['id' => 'id-2']);
+
+        $this->recorder->shouldReceive('recordEmail')->once()->with('user@example.com', m::type('array'), 'id-1', null, null);
+        $this->recorder->shouldReceive('recordEmail')->once()->with(
+            'cc@example.com',
+            m::on(fn($c) => !isset($c['redirectedTo'])),
+            'id-2',
             null,
             null
         );

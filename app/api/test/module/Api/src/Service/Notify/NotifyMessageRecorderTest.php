@@ -4,14 +4,6 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Service\Notify;
 
-use Dvsa\Olcs\Api\Domain\Repository\NotifyMessage as Repo;
-use Dvsa\Olcs\Api\Entity\Doc\Document;
-use Dvsa\Olcs\Api\Entity\Licence\Licence;
-use Dvsa\Olcs\Api\Entity\Notify\NotifyMessage;
-use Dvsa\Olcs\Api\Entity\Organisation\CorrespondenceInbox;
-use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
-use Dvsa\Olcs\Api\Entity\System\RefData;
-use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Api\Service\Notify\NotifyMessageRecorder;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -20,98 +12,117 @@ use Psr\Container\ContainerInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(NotifyMessageRecorder::class)]
 final class NotifyMessageRecorderTest extends MockeryTestCase
 {
-    private $repo;
+    private $conn;
+    private $em;
     private NotifyMessageRecorder $sut;
 
     protected function setUp(): void
     {
-        $this->repo = m::mock(Repo::class);
-        $repos = m::mock(ContainerInterface::class);
-        $repos->shouldReceive('get')->with('NotifyMessage')->andReturn($this->repo);
+        $this->conn = m::mock(\Doctrine\DBAL\Connection::class);
+        $this->em = m::mock(\Doctrine\ORM\EntityManagerInterface::class);
+        $this->em->shouldReceive('getConnection')->andReturn($this->conn);
+        $this->em->shouldNotReceive('flush');
+        $this->em->shouldNotReceive('persist');
         $container = m::mock(ContainerInterface::class);
-        $container->shouldReceive('get')->with('RepositoryServiceManager')->andReturn($repos);
-
-        $this->repo->shouldReceive('getRefdataReference')->andReturnUsing(
-            fn(string $id) => new RefData($id)
-        );
+        $container->shouldReceive('get')->with('doctrine.entitymanager.orm_default')->andReturn($this->em);
 
         $this->sut = new NotifyMessageRecorder($container);
     }
 
     public function testWritesRowWithContext(): void
     {
-        $refs = [];
-        $this->repo->shouldReceive('getReference')->andReturnUsing(
-            function (string $class, $id) use (&$refs) {
-                $refs[] = [$class, $id];
-                return m::mock($class);
-            }
-        );
-
-        $saved = null;
-        $this->repo->shouldReceive('save')->once()->andReturnUsing(function ($e) use (&$saved) {
-            $saved = $e;
+        $this->conn->shouldReceive('isTransactionActive')->andReturn(false);
+        $row = null;
+        $this->conn->shouldReceive('insert')->once()->andReturnUsing(function ($table, $r) use (&$row) {
+            $this->assertSame('notify_message', $table);
+            $row = $r;
+            return 1;
         });
 
         $this->sut->recordEmail(
             'a@example.com',
             [
-                'organisation' => 1,
-                'licence' => 2,
-                'document' => 3,
-                'correspondenceInbox' => 4,
-                'user' => 5,
-                'templateName' => 'licensing-information-standard',
-                'description' => 'Subject',
-                'notifyTemplateId' => 'tpl-id',
-                'redirectedTo' => 'redirect@example.com',
+                'organisation' => 1, 'licence' => 2, 'document' => 3, 'correspondenceInbox' => 4, 'user' => 5,
+                'templateName' => 'licensing-information-standard', 'description' => 'Subject',
+                'notifyTemplateId' => 'tpl-id', 'redirectedTo' => 'redirect@example.com',
             ],
             'notify-id-1',
             null,
             null
         );
 
-        /** @var NotifyMessage $saved */
-        $this->assertInstanceOf(NotifyMessage::class, $saved);
-        $this->assertSame(NotifyMessage::CHANNEL_EMAIL, $saved->getChannel()->getId());
-        $this->assertSame(NotifyMessage::STATUS_CREATED, $saved->getStatus()->getId());
-        $this->assertSame('a@example.com', $saved->getRecipient());
-        $this->assertSame('redirect@example.com', $saved->getRedirectedTo());
-        $this->assertSame('notify-id-1', $saved->getNotifyId());
-        $this->assertSame('tpl-id', $saved->getNotifyTemplateId());
-        $this->assertSame('licensing-information-standard', $saved->getTemplateName());
-        $this->assertSame('Subject', $saved->getDescription());
-        $this->assertSame(1, $saved->getAttempts());
-        $this->assertSame(\DateTime::class, $saved->getRequestedOn()::class);
-        $this->assertSame(\DateTime::class, $saved->getSentOn()::class);
-        $this->assertSame(\DateTime::class, $saved->getStatusUpdatedOn()::class);
-        $this->assertNull($saved->getErrorCode());
-        $this->assertSame(
-            [
-                [Organisation::class, 1],
-                [Licence::class, 2],
-                [Document::class, 3],
-                [CorrespondenceInbox::class, 4],
-                [User::class, 5],
-            ],
-            $refs
-        );
+        $this->assertSame('nmc_email', $row['channel']);
+        $this->assertSame('nms_created', $row['status']);
+        $this->assertSame('a@example.com', $row['recipient']);
+        $this->assertSame('redirect@example.com', $row['redirected_to']);
+        $this->assertSame('notify-id-1', $row['notify_id']);
+        $this->assertSame('tpl-id', $row['notify_template_id']);
+        $this->assertSame('licensing-information-standard', $row['template_name']);
+        $this->assertSame('Subject', $row['description']);
+        $this->assertSame(1, $row['attempts']);
+        $this->assertSame(1, $row['version']);
+        $this->assertSame(1, $row['organisation_id']);
+        $this->assertSame(2, $row['licence_id']);
+        $this->assertNull($row['application_id']);
+        $this->assertSame(3, $row['document_id']);
+        $this->assertSame(4, $row['correspondence_inbox_id']);
+        $this->assertSame(5, $row['user_id']);
+        $this->assertMatchesRegularExpression('/^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/', $row['requested_on']);
+        $this->assertSame($row['requested_on'], $row['sent_on']);
+        $this->assertSame($row['requested_on'], $row['created_on']);
+        $this->assertSame($row['requested_on'], $row['status_updated_on']);
+        $this->assertNull($row['completed_on']);
+        $this->assertNull($row['error_code']);
+    }
+
+    public function testAcceptedWithoutNotifyIdIsCreated(): void
+    {
+        $this->conn->shouldReceive('isTransactionActive')->andReturn(false);
+        $this->conn->shouldReceive('insert')->once()->with('notify_message', m::on(
+            fn($r) => $r['status'] === 'nms_created' && $r['notify_id'] === null && $r['sent_on'] !== null
+        ));
+
+        $this->sut->recordEmail('a@example.com', [], null, null, null);
     }
 
     public function testWritesRejectedRowWithError(): void
     {
-        $saved = null;
-        $this->repo->shouldReceive('save')->once()->andReturnUsing(function ($e) use (&$saved) {
-            $saved = $e;
+        $this->conn->shouldReceive('isTransactionActive')->andReturn(false);
+        $row = null;
+        $this->conn->shouldReceive('insert')->once()->andReturnUsing(function ($t, $r) use (&$row) {
+            $row = $r;
+            return 1;
         });
 
         $this->sut->recordEmail('bad@example.com', [], null, '400', str_repeat('x', 2000));
 
-        $this->assertSame(NotifyMessage::STATUS_REJECTED, $saved->getStatus()->getId());
-        $this->assertNull($saved->getNotifyId());
-        $this->assertSame('400', $saved->getErrorCode());
-        $this->assertSame(1024, mb_strlen($saved->getErrorMessage()));
-        $this->assertNull($saved->getSentOn());
-        $this->assertSame(\DateTime::class, $saved->getCompletedOn()::class);
+        $this->assertSame('nms_rejected', $row['status']);
+        $this->assertNull($row['notify_id']);
+        $this->assertSame('400', $row['error_code']);
+        $this->assertSame(1024, mb_strlen($row['error_message']));
+        $this->assertNull($row['sent_on']);
+        $this->assertNotNull($row['completed_on']);
+    }
+
+    public function testInsertUsesSavepointInsideTransaction(): void
+    {
+        $this->conn->shouldReceive('isTransactionActive')->andReturn(true);
+        $this->conn->shouldReceive('createSavepoint')->once()->ordered();
+        $this->conn->shouldReceive('insert')->once()->ordered();
+        $this->conn->shouldReceive('releaseSavepoint')->once()->ordered();
+
+        $this->sut->recordEmail('a@example.com', [], 'id', null, null);
+    }
+
+    public function testFailedInsertRollsBackSavepoint(): void
+    {
+        $this->conn->shouldReceive('isTransactionActive')->andReturn(true);
+        $this->conn->shouldReceive('createSavepoint')->once();
+        $this->conn->shouldReceive('insert')->once()->andThrow(new \RuntimeException('boom'));
+        $this->conn->shouldReceive('rollbackSavepoint')->once();
+        $this->conn->shouldNotReceive('releaseSavepoint');
+
+        $this->expectException(\RuntimeException::class);
+        $this->sut->recordEmail('a@example.com', [], 'id', null, null);
     }
 }
