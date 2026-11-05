@@ -109,7 +109,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->message();
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->transport->shouldNotReceive('send');
-        $this->messageRepo->shouldReceive('save')->once();
+        $this->messageRepo->shouldNotReceive('save');
 
         try {
             $this->handle();
@@ -270,6 +270,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
     public function testTransientOnLastAttemptMarksFailed(): void
     {
         $m = $this->message(false, 3);
+        $m->setNotifyTemplateId(self::TEMPLATE_ID);
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
         $this->transport->shouldReceive('findByReference')->once()->andReturn(null);
@@ -364,37 +365,66 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->assertSame([1, NotifyMessage::STATUS_CREATED], $savedAttempts[1]);
     }
 
-    public function testOutsideWindowCountsAsAnAttempt(): void
+    public function testOutsideWindowDoesNotUseASendAttempt(): void
     {
         $this->now = new \DateTimeImmutable('2026-11-05 21:00:00', new \DateTimeZone('Europe/London'));
         $m = $this->message(false, 1);
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->transport->shouldNotReceive('send');
-        $this->messageRepo->shouldReceive('save')->once()->with($m);
+        $this->messageRepo->shouldNotReceive('save');
 
         $this->expectException(NotReadyException::class);
 
         try {
             $this->handle();
         } finally {
-            $this->assertSame(2, $m->getAttempts());
+            $this->assertSame(1, $m->getAttempts());
             $this->assertSame(NotifyMessage::STATUS_QUEUED, $m->getStatus()->getId());
         }
     }
 
-    public function testOutsideWindowOnLastAttemptMarksFailed(): void
+    public function testOutsideWindowMoreThan12HoursAfterRequestMarksFailed(): void
     {
         $this->now = new \DateTimeImmutable('2026-11-05 21:00:00', new \DateTimeZone('Europe/London'));
-        $m = $this->message(false, 3);
+        $m = $this->message(false, 1);
+        $m->setRequestedOn(new \DateTime('2026-11-05 08:59:59', new \DateTimeZone('Europe/London')));
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->transport->shouldNotReceive('send');
         $this->messageRepo->shouldReceive('save')->once()->with($m);
 
         $this->handle();
 
-        $this->assertSame(4, $m->getAttempts());
+        $this->assertSame(1, $m->getAttempts());
         $this->assertSame(NotifyMessage::STATUS_FAILED, $m->getStatus()->getId());
         $this->assertNotNull($m->getCompletedOn());
+        $this->assertNotNull($m->getErrorMessage());
+    }
+
+    public function testOutsideWindowWithin12HoursOfRequestStillDefers(): void
+    {
+        $this->now = new \DateTimeImmutable('2026-11-05 21:00:00', new \DateTimeZone('Europe/London'));
+        $m = $this->message();
+        $m->setRequestedOn(new \DateTime('2026-11-05 09:00:00', new \DateTimeZone('Europe/London')));
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->transport->shouldNotReceive('send');
+
+        $this->expectException(NotReadyException::class);
+        $this->handle();
+    }
+
+    public function testFirstSendAfterAWindowDeferralDoesNotLookUp(): void
+    {
+        // deferred overnight: nothing was ever sent, so there is nothing to look up
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldNotReceive('findByReference');
+        $this->transport->shouldReceive('send')->once()->andReturn('notify-1');
+        $this->messageRepo->shouldReceive('save');
+
+        $this->handle();
+
+        $this->assertSame(1, $m->getAttempts());
     }
 
     public function testFirstAttemptDoesNotLookUp(): void
@@ -438,6 +468,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
     public function testRetrySendsWhenNotifyHasNothing(): void
     {
         $m = $this->message(false, 1);
+        $m->setNotifyTemplateId(self::TEMPLATE_ID);
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
         $this->messageRepo->shouldReceive('save')->with($m);
@@ -453,6 +484,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
     public function testFailedLookupRetriesWithoutSending(): void
     {
         $m = $this->message(false, 1);
+        $m->setNotifyTemplateId(self::TEMPLATE_ID);
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
         $this->messageRepo->shouldReceive('save')->once()->with($m);
@@ -473,6 +505,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
     public function testFailedLookupOnLastAttemptMarksFailed(): void
     {
         $m = $this->message(false, 3);
+        $m->setNotifyTemplateId(self::TEMPLATE_ID);
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
         $this->messageRepo->shouldReceive('save')->once()->with($m);

@@ -30,6 +30,7 @@ class SendSms extends AbstractCommandHandler
     private const string LOCALE_CY = 'cy_GB';
     private const int MAX_ATTEMPTS = 4;
     private const int RETRY_AFTER = 900;
+    private const int MAX_WAIT_AFTER_REQUEST = 12 * 3600;
 
     protected $repoServiceName = 'NotifyMessage';
 
@@ -59,15 +60,21 @@ class SendSms extends AbstractCommandHandler
 
         $nextAllowed = SendingWindow::nextAllowed($now);
         if ($nextAllowed !== null) {
-            // counts as an attempt so the row always ends before the queue item runs out of tries
-            $message->setAttempts(($message->getAttempts() ?? 0) + 1);
+            // A wait for the window is not a send attempt. Each wait retries at the next 08:00, so
+            // within 12 hours of the request there can be only one; a later one ends the row. With
+            // at most 4 attempts that is 6 fetches at most, inside the consumer's limit.
+            $requestedOn = $message->getRequestedOn(true);
+            if ($requestedOn !== null && $now->getTimestamp() - $requestedOn->getTimestamp() > self::MAX_WAIT_AFTER_REQUEST) {
+                $message->setErrorMessage('Still outside the SMS sending window 12 hours after it was requested');
+                $this->finish($message, NotifyMessage::STATUS_FAILED, $now);
+                $this->result->addMessage('SMS failed, not sent within 12 hours');
 
-            return $this->retryOrFail(
-                $message,
-                $now,
-                max(1, $nextAllowed->getTimestamp() - $now->getTimestamp()),
-                'Outside the SMS sending window'
-            );
+                return $this->result;
+            }
+
+            $e = new NotReadyException('Outside the SMS sending window');
+            $e->setRetryAfter(max(1, $nextAllowed->getTimestamp() - $now->getTimestamp()));
+            throw $e;
         }
 
         // Outside production we only ever text the redirect number, never the real recipient.
@@ -94,12 +101,13 @@ class SendSms extends AbstractCommandHandler
         }
         $templateId = (string) $this->config->templateId;
 
-        $previousAttempts = $message->getAttempts() ?? 0;
-        $message->setAttempts($previousAttempts + 1);
+        // The template id is saved just before every send, so it is only set once a send may have happened.
+        $maySendAlready = $message->getNotifyTemplateId() !== null;
+        $message->setAttempts(($message->getAttempts() ?? 0) + 1);
         $message->setNotifyTemplateId($templateId);
 
         // An earlier attempt may have reached Notify without us hearing back, so ask before sending again.
-        if ($previousAttempts > 0) {
+        if ($maySendAlready) {
             try {
                 $existingId = $this->transport->findByReference($this->config->smsReference($message->getId()));
             } catch (\Throwable $e) {
@@ -185,8 +193,8 @@ class SendSms extends AbstractCommandHandler
     }
 
     /**
-     * Every retry goes through here, so the row is marked failed on its last attempt instead of
-     * being left queued when the queue item gives up.
+     * Every retry after an attempt goes through here, so the row is marked failed on its last
+     * attempt instead of being left queued when the queue item gives up.
      */
     private function retryOrFail(
         NotifyMessage $message,
