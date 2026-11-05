@@ -306,6 +306,7 @@ return [
             'TemplateDatabaseTwigLoader' => ApiSrv\Template\DatabaseTwigLoaderFactory::class,
             'TemplateDatabaseTemplateFetcher' => ApiSrv\Template\DatabaseTemplateFetcherFactory::class,
             'TemplateTwigRenderer' => ApiSrv\Template\TwigRendererFactory::class,
+            'TemplatePlainTextTwigRenderer' => ApiSrv\Template\PlainTextTwigRendererFactory::class,
             'TemplateTwigEnvironment' => ApiSrv\Template\TwigEnvironmentFactory::class,
             'TemplateStrategySelectingViewRenderer' => ApiSrv\Template\StrategySelectingViewRendererFactory::class,
 

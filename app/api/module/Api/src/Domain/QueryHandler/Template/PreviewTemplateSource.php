@@ -30,6 +30,9 @@ class PreviewTemplateSource extends AbstractQueryHandler
     /** @var TwigRenderer */
     private $twigRenderer;
 
+    /** SMS is plain text, so it is rendered without HTML escaping */
+    private TwigRenderer $plainTextTwigRenderer;
+
     /** @var StrategySelectingViewRenderer */
     private $strategySelectingViewRenderer;
 
@@ -56,12 +59,13 @@ class PreviewTemplateSource extends AbstractQueryHandler
         $result = [];
         foreach ($datasets as $datasetName => $datasetValues) {
             try {
-                $rendered = $this->twigRenderer->renderString($source, $datasetValues);
                 if ($format === self::FORMAT_SMS) {
                     // Plain text as sent, plus how many texts it will use.
+                    $rendered = $this->plainTextTwigRenderer->renderString($source, $datasetValues);
                     $result[$datasetName] = ['text' => $rendered] + SmsLength::estimate($rendered);
                     continue;
                 }
+                $rendered = $this->twigRenderer->renderString($source, $datasetValues);
                 $result[$datasetName] = $format === self::FORMAT_MARKDOWN
                     ? $this->renderMarkdownPreview($rendered, $description)
                     : $this->strategySelectingViewRenderer->render(
@@ -106,6 +110,7 @@ class PreviewTemplateSource extends AbstractQueryHandler
         $fullContainer = $container;
 
         $this->twigRenderer = $container->get('TemplateTwigRenderer');
+        $this->plainTextTwigRenderer = $container->get('TemplatePlainTextTwigRenderer');
         $this->strategySelectingViewRenderer = $container->get('TemplateStrategySelectingViewRenderer');
         return parent::__invoke($fullContainer, $requestedName, $options);
     }

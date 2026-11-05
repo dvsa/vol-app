@@ -173,7 +173,7 @@ class SendSms extends AbstractCommandHandler
         $this->smsGate = $container->get(SmsGate::class);
         $this->config = $container->get(SmsConfig::class);
         $this->transport = $container->get(SmsTransportInterface::class);
-        $this->twig = $container->get('TemplateTwigRenderer');
+        $this->twig = $container->get('TemplatePlainTextTwigRenderer');
 
         return parent::__invoke($container, $requestedName, $options);
     }

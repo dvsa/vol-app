@@ -15,6 +15,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Service\Sms\SmsConfig;
 use Dvsa\Olcs\Api\Service\Sms\SmsGate;
 use Dvsa\Olcs\Api\Service\Sms\SmsTransportInterface;
+use Dvsa\Olcs\Api\Service\Template\PlainTextTwigRendererFactory;
 use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
@@ -60,7 +61,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->mockedSmServices[SmsGate::class] = $this->gate;
         $this->mockedSmServices[SmsConfig::class] = $this->config;
         $this->mockedSmServices[SmsTransportInterface::class] = $this->transport;
-        $this->mockedSmServices['TemplateTwigRenderer'] = $this->twig;
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer'] = $this->twig;
 
         parent::setUp();
     }
@@ -140,6 +141,35 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(\DateTime::class, $m->getSentOn());
         $this->assertNotInstanceOf(\DateTimeImmutable::class, $m->getSentOn());
         $this->assertInstanceOf(\DateTime::class, $m->getStatusUpdatedOn());
+    }
+
+    public function testOrganisationNameIsSentLiterally(): void
+    {
+        $m = $this->message();
+        $m->getOrganisation()->setName("Smith & Sons' <Haulage>");
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+
+        // the real plain text renderer over the seeded template
+        $loader = new \Twig\Loader\ArrayLoader(
+            ['en_GB/sms/letter-issued-sms' => "Hey {{ name }}, I'm trying out Notify. Today is {{ dayOfWeek }}"]
+        );
+        $container = m::mock(\Psr\Container\ContainerInterface::class);
+        $container->shouldReceive('get')->with('TemplateDatabaseTwigLoader')->andReturn($loader);
+        $real = (new PlainTextTwigRendererFactory())($container, 'TemplatePlainTextTwigRenderer');
+        $this->twig->shouldReceive('render')->andReturnUsing(fn ($path, $vars) => $real->render($path, $vars));
+
+        $this->transport->shouldReceive('send')
+            ->once()
+            ->with(
+                self::REDIRECT,
+                self::TEMPLATE_ID,
+                "Hey Smith & Sons' <Haulage>, I'm trying out Notify. Today is Thursday",
+                (string) self::ID
+            )
+            ->andReturn('notify-1');
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+
+        $this->handle();
     }
 
     public function testWelshLicenceUsesCyTemplateWhenPresent(): void

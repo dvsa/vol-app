@@ -23,6 +23,7 @@ final class PreviewTemplateSourceMarkdownTest extends QueryHandlerTestCase
         $this->mockedSmServices = [
             'TemplateStrategySelectingViewRenderer' => m::mock(StrategySelectingViewRenderer::class),
             'TemplateTwigRenderer' => m::mock(TwigRenderer::class),
+            'TemplatePlainTextTwigRenderer' => m::mock(TwigRenderer::class),
         ];
 
         parent::setUp();

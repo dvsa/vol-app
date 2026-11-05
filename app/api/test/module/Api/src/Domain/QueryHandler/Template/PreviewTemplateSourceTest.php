@@ -24,6 +24,7 @@ final class PreviewTemplateSourceTest extends QueryHandlerTestCase
         $this->mockedSmServices = [
             'TemplateStrategySelectingViewRenderer' => m::mock(StrategySelectingViewRenderer::class),
             'TemplateTwigRenderer' => m::mock(TwigRenderer::class),
+            'TemplatePlainTextTwigRenderer' => m::mock(TwigRenderer::class),
         ];
 
         parent::setUp();
@@ -116,15 +117,43 @@ final class PreviewTemplateSourceTest extends QueryHandlerTestCase
 
         $query = PreviewTemplateSourceQry::create(['id' => 7, 'source' => $source]);
 
-        $this->mockedSmServices['TemplateTwigRenderer']->shouldReceive('renderString')
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer']->shouldReceive('renderString')
             ->with($source, ['name' => 'Bob'])
             ->andReturn('Hi Bob');
+        $this->mockedSmServices['TemplateTwigRenderer']->shouldNotReceive('renderString');
         $this->mockedSmServices['TemplateStrategySelectingViewRenderer']->shouldNotReceive('render');
 
         $this->repoMap['Template']->shouldReceive('fetchUsingId')->with($query)->andReturn($template);
 
         $this->assertSame(
             ['Example' => ['text' => 'Hi Bob', 'characters' => 6, 'fragments' => 1]],
+            $this->sut->handleQuery($query)
+        );
+    }
+
+    public function testSmsPreviewIsNotHtmlEscaped(): void
+    {
+        $name = "Smith & Sons' <Haulage>";
+        $source = 'Hi {{ name }}';
+        $template = m::mock(Template::class);
+        $template->shouldReceive('getDecodedTestData')->andReturn(['Example' => ['name' => $name]]);
+        $template->shouldReceive('getLocale')->andReturn('en_GB');
+        $template->shouldReceive('getFormat')->andReturn('sms');
+        $template->shouldReceive('getDescription')->andReturn('Letter issued SMS');
+
+        $query = PreviewTemplateSourceQry::create(['id' => 7, 'source' => $source]);
+
+        $container = m::mock(\Psr\Container\ContainerInterface::class);
+        $container->shouldReceive('get')->with('TemplateDatabaseTwigLoader')->andReturn(new \Twig\Loader\ArrayLoader([]));
+        $real = (new \Dvsa\Olcs\Api\Service\Template\PlainTextTwigRendererFactory())($container, 'x');
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer']->shouldReceive('renderString')
+            ->andReturnUsing(fn ($src, $vars) => $real->renderString($src, $vars));
+
+        $this->repoMap['Template']->shouldReceive('fetchUsingId')->with($query)->andReturn($template);
+
+        $expected = 'Hi ' . $name;
+        $this->assertSame(
+            ['Example' => ['text' => $expected, 'characters' => mb_strlen($expected), 'fragments' => 1]],
             $this->sut->handleQuery($query)
         );
     }
