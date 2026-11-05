@@ -7,6 +7,7 @@ use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Snapshot\Service\Formatter\Address;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 
 /**
  * Addresses Continuation Review Service
@@ -80,7 +81,7 @@ class AddressesReviewService extends AbstractReviewService
         if ($smsNumber !== null) {
             $config[] = [
                 ['value' => 'continuation-review-addresses-sms-number'],
-                ['value' => $smsNumber, 'header' => true]
+                ['value' => SmsPhoneNumber::formatForDisplay($smsNumber), 'header' => true]
             ];
         }
 

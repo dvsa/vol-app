@@ -189,14 +189,15 @@ final class AddressesTest extends MockeryTestCase
     {
         $this->apiData['correspondenceCd']['phoneContacts'][] = [
             'phoneContactType' => ['id' => 'phone_t_SMS'],
-            'phoneNumber' => '07700900123',
+            'phoneNumber' => '+447700900123',
             'id' => 'unit_SmsId',
             'version' => 'unit_SmsVersion',
         ];
 
         $actual = Addresses::mapFromResult($this->apiData);
 
-        $this->assertSame('07700900123', $actual['contact']['phone_sms']);
+        // stored as E.164, shown as people write it
+        $this->assertSame('07700 900123', $actual['contact']['phone_sms']);
         $this->assertSame('unit_SmsId', $actual['contact']['phone_sms_id']);
         $this->assertSame('unit_SmsVersion', $actual['contact']['phone_sms_version']);
     }

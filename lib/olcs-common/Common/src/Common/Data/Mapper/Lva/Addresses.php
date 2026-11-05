@@ -4,6 +4,7 @@ namespace Common\Data\Mapper\Lva;
 
 use Common\Data\Mapper\MapperInterface;
 use Dvsa\Olcs\Api\Entity;
+use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 
 /**
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
@@ -106,8 +107,14 @@ class Addresses implements MapperInterface
                 self::$typeMap[$phoneContact['phoneContactType']['id']] ?? ''
             );
 
+            $number = $phoneContact['phoneNumber'];
+            if ($phoneType === 'phone_sms') {
+                // stored as E.164, shown as people write it
+                $number = SmsPhoneNumber::formatForDisplay((string) $number);
+            }
+
             $contacts += [
-                $phoneType => $phoneContact['phoneNumber'],
+                $phoneType => $number,
                 $phoneType . '_id' => $phoneContact['id'],
                 $phoneType . '_version' => $phoneContact['version'],
             ];

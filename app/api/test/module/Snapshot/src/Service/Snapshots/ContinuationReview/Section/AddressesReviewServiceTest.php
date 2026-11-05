@@ -119,7 +119,7 @@ final class AddressesReviewServiceTest extends MockeryTestCase
             ],
             [
                 ['value' => 'continuation-review-addresses-sms-number'],
-                ['value' => '+447700900123', 'header' => true]
+                ['value' => '07700 900123', 'header' => true]
             ],
         ];
 

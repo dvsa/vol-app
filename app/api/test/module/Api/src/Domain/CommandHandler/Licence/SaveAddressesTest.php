@@ -387,6 +387,32 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Phone contact sms created'], $result->getMessages());
     }
 
+    public function testDisplayedSmsNumberResavedIsNotAChange(): void
+    {
+        // the form shows +447700900123 as 07700 900123 and posts it back like that
+        $command = Cmd::create($this->smsCommandData([
+            'phone_sms' => '07700 900123',
+            'phone_sms_id' => 99,
+            'phone_sms_version' => 3,
+        ]));
+
+        $this->expectSmsCorrespondenceSetup($command, m::mock());
+
+        $existing = m::mock(PhoneContactEntity::class)->makePartial();
+        $existing->setPhoneNumber('+447700900123');
+        $existing->shouldReceive('getVersion')->andReturn(3);
+        $existing->shouldReceive('getId')->andReturn(99);
+
+        $this->repoMap['PhoneContact']->shouldReceive('fetchById')->with(99, m::any(), 3)->andReturn($existing);
+        $this->repoMap['PhoneContact']->shouldReceive('save')->once()->with($existing);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertSame('+447700900123', $existing->getPhoneNumber());
+        $this->assertNull($result->getFlag('smsChanged'));
+        $this->assertSame([], $result->getMessages());
+    }
+
     public function testInvalidSmsNumberThrows(): void
     {
         $command = Cmd::create($this->smsCommandData(['phone_sms' => '0906 123 4567']));

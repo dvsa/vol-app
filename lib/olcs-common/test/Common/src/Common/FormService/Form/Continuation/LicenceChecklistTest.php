@@ -91,7 +91,7 @@ final class LicenceChecklistTest extends MockeryTestCase
             ],
         ]);
 
-        $this->assertSame('+447700900123', $form->get('smsNumber')->get('smsNumber')->getValue());
+        $this->assertSame('07700 900123', $form->get('smsNumber')->get('smsNumber')->getValue());
         $this->assertTrue($inputFilter->get('smsNumber')->get('smsNumber')->isRequired());
         // Always required when shown, so no "(optional)".
         $this->assertSame('contact-number-sms', $form->get('smsNumber')->get('smsNumber')->getLabel());

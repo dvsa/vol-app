@@ -9,6 +9,7 @@ use Common\RefData;
 use Common\Service\Cqrs\Query\QuerySender;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\UrlHelperService;
+use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 
 /**
  * Continuation licence checklist form
@@ -91,7 +92,7 @@ class LicenceChecklist
 
         foreach ($licenceData['correspondenceCd']['phoneContacts'] ?? [] as $phoneContact) {
             if (($phoneContact['phoneContactType']['id'] ?? null) === RefData::PHONE_TYPE_SMS) {
-                $smsElement->setValue($phoneContact['phoneNumber']);
+                $smsElement->setValue(SmsPhoneNumber::formatForDisplay((string) $phoneContact['phoneNumber']));
                 break;
             }
         }

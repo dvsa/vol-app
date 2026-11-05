@@ -314,7 +314,7 @@ final class LicenceChecklistTest extends MockeryTestCase
                     'establishmentAddress' => 'Flat 99, Bar house, London, SW1A 2AA',
                     'primaryNumber' => '123',
                     'secondaryNumber' => '456',
-                    'smsNumber' => '+447700900123',
+                    'smsNumber' => '07700 900123',
                     'showEstablishmentAddress' => true,
                     'correspondenceEmail' => 'test@example.com'
                 ],

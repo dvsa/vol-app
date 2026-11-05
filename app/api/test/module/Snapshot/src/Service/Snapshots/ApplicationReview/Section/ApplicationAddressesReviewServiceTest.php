@@ -135,7 +135,7 @@ final class ApplicationAddressesReviewServiceTest extends MockeryTestCase
                                             ],
                                             [
                                                 'label' => 'application-review-addresses-sms-number',
-                                                'value' => '+447700900123'
+                                                'value' => '07700 900123'
                                             ],
                                             [
                                                 'label' => 'application-review-addresses-correspondence-email',

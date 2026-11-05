@@ -81,6 +81,26 @@ final class SmsPhoneNumber extends AbstractValidator
     }
 
     /**
+     * Shows a stored E.164 UK number the way people write it, e.g. 07700 900123.
+     * Anything else comes back unchanged.
+     */
+    public static function formatForDisplay(string $e164): string
+    {
+        if (!str_starts_with($e164, '+' . self::UK_COUNTRY_CODE)) {
+            return $e164;
+        }
+
+        $util = PhoneNumberUtil::getInstance();
+        try {
+            $parsed = $util->parse($e164, 'GB');
+        } catch (NumberParseException) {
+            return $e164;
+        }
+
+        return $util->format($parsed, PhoneNumberFormat::NATIONAL);
+    }
+
+    /**
      * @return string[]
      */
     private static function candidates(string $digits): array

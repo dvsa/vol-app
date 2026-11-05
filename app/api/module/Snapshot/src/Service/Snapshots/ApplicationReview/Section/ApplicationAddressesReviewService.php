@@ -10,6 +10,7 @@ namespace Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
+use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 
 /**
  * Application Addresses Review Service
@@ -70,9 +71,8 @@ class ApplicationAddressesReviewService extends AbstractReviewService
                                     ],
                                     [
                                         'label' => 'application-review-addresses-sms-number',
-                                        'value' => $this->getPhoneNumber(
-                                            $phoneContacts,
-                                            PhoneContact::TYPE_SMS
+                                        'value' => SmsPhoneNumber::formatForDisplay(
+                                            $this->getPhoneNumber($phoneContacts, PhoneContact::TYPE_SMS)
                                         )
                                     ],
                                     [
