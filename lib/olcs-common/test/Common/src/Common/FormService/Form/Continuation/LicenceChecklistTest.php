@@ -97,6 +97,38 @@ final class LicenceChecklistTest extends MockeryTestCase
         $this->assertSame('contact-number-sms', $form->get('smsNumber')->get('smsNumber')->getLabel());
     }
 
+    public function testDuplicateSmsRowsPrefillTheMostRecentlyModified(): void
+    {
+        $form = $this->smsForm();
+        $inner = new \Laminas\InputFilter\InputFilter();
+        $inner->add(new \Laminas\InputFilter\Input('smsNumber'), 'smsNumber');
+        $inputFilter = new \Laminas\InputFilter\InputFilter();
+        $inputFilter->add($inner, 'smsNumber');
+        $form->setInputFilter($inputFilter);
+
+        $this->captureOn(true);
+        $sut = m::mock(LicenceChecklist::class, [$this->formHelper, $this->urlHelper, $this->querySender])
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $sms = static fn (string $id, string $number, string $modified) => [
+            'phoneContactType' => ['id' => RefData::PHONE_TYPE_SMS],
+            'phoneNumber' => $number,
+            'id' => $id,
+            'lastModifiedOn' => $modified,
+        ];
+        $sut->alterSmsNumber($form, [
+            'correspondenceCd' => [
+                'phoneContacts' => [
+                    $sms('1', '+447700900001', '2026-03-01T10:00:00+0000'),
+                    $sms('2', '+447700900002', '2026-05-01T10:00:00+0000'),
+                    $sms('3', '+447700900003', '2026-04-01T10:00:00+0000'),
+                ],
+            ],
+        ]);
+
+        $this->assertSame('07700 900002', $form->get('smsNumber')->get('smsNumber')->getValue());
+    }
+
     public function testSmsNumberNotPrefilledWhenAbsent(): void
     {
         $form = $this->smsForm();

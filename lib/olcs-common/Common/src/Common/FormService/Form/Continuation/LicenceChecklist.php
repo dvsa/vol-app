@@ -2,6 +2,7 @@
 
 namespace Common\FormService\Form\Continuation;
 
+use Common\Data\Mapper\Lva\Addresses;
 use Common\FeatureToggle;
 use Common\Form\Form;
 use Common\Form\Model\Form\Continuation\LicenceChecklist as LicenceChecklistForm;
@@ -90,7 +91,7 @@ class LicenceChecklist
         $smsElement = $form->get('smsNumber')->get('smsNumber');
         $smsElement->setLabel('contact-number-sms');
 
-        foreach ($licenceData['correspondenceCd']['phoneContacts'] ?? [] as $phoneContact) {
+        foreach (Addresses::newestSmsFirst($licenceData['correspondenceCd']['phoneContacts'] ?? []) as $phoneContact) {
             if (($phoneContact['phoneContactType']['id'] ?? null) === RefData::PHONE_TYPE_SMS) {
                 $smsElement->setValue(SmsPhoneNumber::formatForDisplay((string) $phoneContact['phoneNumber']));
                 break;
