@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Email\Service;
 
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Dvsa\Olcs\Email\Transport\GovUkNotifyTransportFactory;
+use Dvsa\Olcs\Email\Transport\MailDsn;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
@@ -234,9 +235,9 @@ class Email implements FactoryInterface
     {
         $mailConfig = $config['mail'];
 
-        $dsn = $mailConfig['dsn'] ?? null;
         // Ignore unresolved `%placeholder%` strings left over when SM/SSM didn't provide a value.
-        if (is_string($dsn) && $dsn !== '' && !preg_match('/^%[^%]+%$/', $dsn)) {
+        $dsn = MailDsn::configured($mailConfig['dsn'] ?? null);
+        if ($dsn !== null) {
             return $dsn;
         }
 

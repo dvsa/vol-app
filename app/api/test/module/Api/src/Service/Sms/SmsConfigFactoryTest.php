@@ -42,6 +42,14 @@ final class SmsConfigFactoryTest extends TestCase
         $this->assertSame('PASS', $c->apiKey);
     }
 
+    public function testPercentEncodedKeyStillCounts(): void
+    {
+        $c = $this->build(['mail' => ['dsn' => ' govuknotify://user:ab%2Bcd@default ']]);
+
+        $this->assertSame('ab+cd', $c->apiKey);
+        $this->assertTrue($c->hasNotifyTransport());
+    }
+
     public function testMailpitDsn(): void
     {
         $c = $this->build(['mail' => ['dsn' => 'govuknotify+mailpit://mailpit:1026']]);

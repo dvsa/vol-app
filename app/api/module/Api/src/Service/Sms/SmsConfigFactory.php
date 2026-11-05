@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Service\Sms;
 
+use Dvsa\Olcs\Email\Transport\GovUkNotifyTransportFactory;
+use Dvsa\Olcs\Email\Transport\MailDsn;
 use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
@@ -11,9 +13,6 @@ use Symfony\Component\Mailer\Transport\Dsn;
 
 final class SmsConfigFactory implements FactoryInterface
 {
-    private const SCHEME_LIVE = 'govuknotify';
-    private const SCHEME_MAILPIT = 'govuknotify+mailpit';
-
     #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SmsConfig
     {
@@ -25,19 +24,19 @@ final class SmsConfigFactory implements FactoryInterface
         $host = null;
         $port = 1025;
 
-        $dsnString = $config['mail']['dsn'] ?? null;
-        if (is_string($dsnString) && trim($dsnString) !== '' && !str_contains($dsnString, '%')) {
+        $dsnString = MailDsn::configured($config['mail']['dsn'] ?? null);
+        if ($dsnString !== null) {
             try {
-                $dsn = Dsn::fromString(trim($dsnString));
+                $dsn = Dsn::fromString($dsnString);
             } catch (\Throwable) {
                 $dsn = null;
             }
 
-            if ($dsn !== null && $dsn->getScheme() === self::SCHEME_MAILPIT) {
+            if ($dsn !== null && $dsn->getScheme() === GovUkNotifyTransportFactory::SCHEME_DEV) {
                 $mailpit = true;
                 $host = $dsn->getHost();
                 $port = $dsn->getPort(1025);
-            } elseif ($dsn !== null && $dsn->getScheme() === self::SCHEME_LIVE) {
+            } elseif ($dsn !== null && $dsn->getScheme() === GovUkNotifyTransportFactory::SCHEME_PRODUCTION) {
                 $key = $dsn->getPassword() ?? $dsn->getUser() ?? '';
                 $apiKey = $key !== '' ? $key : null;
             }
