@@ -33,4 +33,10 @@ final class MailpitSmsTransport implements SmsTransportInterface
 
         return null;
     }
+
+    #[\Override]
+    public function findByReference(string $reference): ?string
+    {
+        return null;
+    }
 }

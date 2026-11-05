@@ -94,8 +94,35 @@ class SendSms extends AbstractCommandHandler
         }
         $templateId = (string) $this->config->templateId;
 
-        $message->setAttempts(($message->getAttempts() ?? 0) + 1);
+        $previousAttempts = $message->getAttempts() ?? 0;
+        $message->setAttempts($previousAttempts + 1);
         $message->setNotifyTemplateId($templateId);
+
+        // An earlier attempt may have reached Notify without us hearing back, so ask before sending again.
+        if ($previousAttempts > 0) {
+            try {
+                $existingId = $this->transport->findByReference((string) $message->getId());
+            } catch (\Throwable $e) {
+                // never send blind on a retry
+                $message->setErrorMessage(mb_substr('Notify lookup failed: ' . $e->getMessage(), 0, 1024));
+
+                return $this->retryOrFail(
+                    $message,
+                    $now,
+                    $this->retryDelay($now),
+                    'Notify lookup failed: ' . $e->getMessage(),
+                    $e
+                );
+            }
+
+            if ($existingId !== null) {
+                $this->markSent($message, $existingId, $now);
+                $this->result->addMessage('SMS already sent on an earlier attempt');
+
+                return $this->result;
+            }
+        }
+
         // saved before the send, so a crash after it leaves attempts > 0 for the next run to see
         $this->getRepo()->save($message);
 
@@ -112,14 +139,28 @@ class SendSms extends AbstractCommandHandler
             return $this->result;
         }
 
+        $this->markSent($message, $notifyId, $now);
+        $this->result->addMessage('SMS sent');
+
+        return $this->result;
+    }
+
+    private function markSent(NotifyMessage $message, ?string $notifyId, \DateTimeImmutable $now): void
+    {
         $message->setNotifyId($notifyId);
         $message->setStatus($this->refData(NotifyMessage::STATUS_CREATED));
         $message->setSentOn(\DateTime::createFromInterface($now));
         $message->setStatusUpdatedOn(\DateTime::createFromInterface($now));
         $this->getRepo()->save($message);
-        $this->result->addMessage('SMS sent');
+    }
 
-        return $this->result;
+    /** Seconds to the next retry, never landing outside the window so every fetch is a real send. */
+    private function retryDelay(\DateTimeImmutable $now): int
+    {
+        $retryAt = $now->modify('+' . self::RETRY_AFTER . ' seconds');
+        $next = SendingWindow::nextAllowed($retryAt);
+
+        return ($next ?? $retryAt)->getTimestamp() - $now->getTimestamp();
     }
 
     private function handleFailure(NotifyMessage $message, NotifyException $e, \DateTimeImmutable $now): Result
@@ -134,14 +175,10 @@ class SendSms extends AbstractCommandHandler
             return $this->result;
         }
 
-        // Never schedule the retry outside the window, so every fetch is a real send.
-        $retryAt = $now->modify('+' . self::RETRY_AFTER . ' seconds');
-        $next = SendingWindow::nextAllowed($retryAt);
-
         return $this->retryOrFail(
             $message,
             $now,
-            ($next ?? $retryAt)->getTimestamp() - $now->getTimestamp(),
+            $this->retryDelay($now),
             'Notify unavailable: ' . $e->getMessage(),
             $e
         );

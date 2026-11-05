@@ -271,6 +271,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $m = $this->message(false, 3);
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('findByReference')->once()->andReturn(null);
         $this->transport->shouldReceive('send')->andThrow(new NotifyException('boom', 503));
         $this->messageRepo->shouldReceive('save')->twice()->with($m);
 
@@ -391,6 +392,94 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->handle();
 
         $this->assertSame(4, $m->getAttempts());
+        $this->assertSame(NotifyMessage::STATUS_FAILED, $m->getStatus()->getId());
+        $this->assertNotNull($m->getCompletedOn());
+    }
+
+    public function testFirstAttemptDoesNotLookUp(): void
+    {
+        $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldNotReceive('findByReference');
+        $this->transport->shouldReceive('send')->once()->andReturn('notify-1');
+        $this->messageRepo->shouldReceive('save');
+
+        $this->handle();
+    }
+
+    public function testRetryRecordsAnEarlierAcceptedSendInsteadOfSendingAgain(): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->messageRepo->shouldReceive('save')->with($m);
+        // attempt 1: Notify took it but the response was lost
+        $this->transport->shouldReceive('send')->once()->andThrow(new NotifyException('timed out', 0));
+
+        try {
+            $this->handle();
+            $this->fail('expected NotReadyException');
+        } catch (NotReadyException) {
+        }
+
+        // attempt 2: Notify already has our reference
+        $this->transport->shouldReceive('findByReference')->once()->with((string) self::ID)->andReturn('notify-1');
+
+        $this->handle();
+
+        $this->assertSame('notify-1', $m->getNotifyId());
+        $this->assertSame(NotifyMessage::STATUS_CREATED, $m->getStatus()->getId());
+        $this->assertNotNull($m->getSentOn());
+        $this->assertSame(2, $m->getAttempts());
+    }
+
+    public function testRetrySendsWhenNotifyHasNothing(): void
+    {
+        $m = $this->message(false, 1);
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->messageRepo->shouldReceive('save')->with($m);
+        $this->transport->shouldReceive('findByReference')->once()->with((string) self::ID)->andReturn(null)->ordered();
+        $this->transport->shouldReceive('send')->once()->andReturn('notify-2')->ordered();
+
+        $this->handle();
+
+        $this->assertSame('notify-2', $m->getNotifyId());
+        $this->assertSame(NotifyMessage::STATUS_CREATED, $m->getStatus()->getId());
+    }
+
+    public function testFailedLookupRetriesWithoutSending(): void
+    {
+        $m = $this->message(false, 1);
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+        $this->transport->shouldReceive('findByReference')->andThrow(new NotifyException('boom', 503));
+        $this->transport->shouldNotReceive('send');
+
+        try {
+            $this->handle();
+            $this->fail('expected NotReadyException');
+        } catch (NotReadyException $e) {
+            $this->assertSame(900, $e->getRetryAfter());
+        }
+
+        $this->assertSame(2, $m->getAttempts());
+        $this->assertSame(NotifyMessage::STATUS_QUEUED, $m->getStatus()->getId());
+    }
+
+    public function testFailedLookupOnLastAttemptMarksFailed(): void
+    {
+        $m = $this->message(false, 3);
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+        $this->transport->shouldReceive('findByReference')->andThrow(new \RuntimeException('dns'));
+        $this->transport->shouldNotReceive('send');
+
+        $this->handle();
+
         $this->assertSame(NotifyMessage::STATUS_FAILED, $m->getStatus()->getId());
         $this->assertNotNull($m->getCompletedOn());
     }

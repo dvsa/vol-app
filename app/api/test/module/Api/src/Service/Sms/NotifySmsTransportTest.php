@@ -21,4 +21,33 @@ final class NotifySmsTransportTest extends TestCase
 
         $this->assertSame('abc', (new NotifySmsTransport($client))->send('+447700900123', 'tmpl', 'Hello', '42'));
     }
+
+    public function testFindByReferenceReturnsTheMatchingSmsId(): void
+    {
+        $client = $this->createMock(Client::class);
+        $client->expects($this->once())
+            ->method('listNotifications')
+            ->with(['reference' => '42', 'template_type' => 'sms'])
+            ->willReturn(['notifications' => [['id' => 'abc', 'reference' => '42', 'type' => 'sms']]]);
+
+        $this->assertSame('abc', (new NotifySmsTransport($client))->findByReference('42'));
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('noMatch')]
+    public function testFindByReferenceReturnsNullWithNoMatch(mixed $response): void
+    {
+        $client = $this->createStub(Client::class);
+        $client->method('listNotifications')->willReturn($response);
+
+        $this->assertNull((new NotifySmsTransport($client))->findByReference('42'));
+    }
+
+    public static function noMatch(): array
+    {
+        return [
+            'not found' => [null],
+            'empty' => [['notifications' => []]],
+            'other reference' => [['notifications' => [['id' => 'abc', 'reference' => '420']]]],
+        ];
+    }
 }

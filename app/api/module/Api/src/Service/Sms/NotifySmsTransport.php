@@ -24,4 +24,22 @@ final class NotifySmsTransport implements SmsTransportInterface
 
         return is_string($id) ? $id : null;
     }
+
+    #[\Override]
+    public function findByReference(string $reference): ?string
+    {
+        $response = $this->client->listNotifications(['reference' => $reference, 'template_type' => 'sms']);
+
+        foreach ((is_array($response) ? $response['notifications'] ?? [] : []) as $notification) {
+            if (
+                is_array($notification)
+                && ($notification['reference'] ?? null) === $reference
+                && is_string($notification['id'] ?? null)
+            ) {
+                return $notification['id'];
+            }
+        }
+
+        return null;
+    }
 }

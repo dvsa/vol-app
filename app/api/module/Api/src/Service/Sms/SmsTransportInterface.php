@@ -12,4 +12,10 @@ interface SmsTransportInterface
      * @throws \Alphagov\Notifications\Exception\NotifyException
      */
     public function send(string $to, string $templateId, string $body, string $reference): ?string;
+
+    /**
+     * @return string|null The id of a notification already sent with this reference, null when there is none
+     * @throws \Throwable when the lookup itself fails
+     */
+    public function findByReference(string $reference): ?string;
 }

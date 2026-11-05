@@ -27,4 +27,11 @@ final class MailpitSmsTransportTest extends TestCase
 
         $this->assertNull($sut->send('+447700900123', 'tmpl', 'Hello', '1'));
     }
+
+    public function testFindByReferenceIsAlwaysNull(): void
+    {
+        $sut = new MailpitSmsTransport($this->createStub(MailerInterface::class));
+
+        $this->assertNull($sut->findByReference('1'));
+    }
 }
