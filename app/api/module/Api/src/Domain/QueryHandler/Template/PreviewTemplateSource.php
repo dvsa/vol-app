@@ -30,7 +30,7 @@ class PreviewTemplateSource extends AbstractQueryHandler
     /** @var TwigRenderer */
     private $twigRenderer;
 
-    /** SMS is plain text, so it is rendered without HTML escaping */
+    /** SMS and Notify markdown are rendered without HTML escaping */
     private TwigRenderer $plainTextTwigRenderer;
 
     /** @var StrategySelectingViewRenderer */
@@ -76,15 +76,19 @@ class PreviewTemplateSource extends AbstractQueryHandler
                     $result[$datasetName] = ['text' => $rendered] + SmsLength::estimate($rendered);
                     continue;
                 }
+                if ($format === self::FORMAT_MARKDOWN) {
+                    // Rendered as sent to Notify, which escapes HTML itself.
+                    $rendered = $this->plainTextTwigRenderer->renderString($source, $datasetValues);
+                    $result[$datasetName] = $this->renderMarkdownPreview($rendered, $description);
+                    continue;
+                }
                 $rendered = $this->twigRenderer->renderString($source, $datasetValues);
-                $result[$datasetName] = $format === self::FORMAT_MARKDOWN
-                    ? $this->renderMarkdownPreview($rendered, $description)
-                    : $this->strategySelectingViewRenderer->render(
-                        $locale,
-                        $format,
-                        'default',
-                        ['content' => $rendered]
-                    );
+                $result[$datasetName] = $this->strategySelectingViewRenderer->render(
+                    $locale,
+                    $format,
+                    'default',
+                    ['content' => $rendered]
+                );
             } catch (Throwable $e) {
                 $result['error'] = true;
                 $result[$datasetName] = $e->getMessage();
@@ -97,7 +101,7 @@ class PreviewTemplateSource extends AbstractQueryHandler
 
     private function renderMarkdownPreview(string $markdown, string $subject): string
     {
-        $this->markdownConverter ??= new GithubFlavoredMarkdownConverter();
+        $this->markdownConverter ??= NotifyChrome::markdownConverter();
 
         // Shared Notify-style rendering + chrome with DevNotifyTransport, so the admin preview
         // matches both Mailpit and what GOV.UK Notify actually delivers.

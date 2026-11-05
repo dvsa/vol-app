@@ -40,9 +40,10 @@ final class PreviewTemplateSourceMarkdownTest extends QueryHandlerTestCase
         $template->shouldReceive('getFormat')->andReturn(PreviewTemplateSource::FORMAT_MARKDOWN);
         $template->shouldReceive('getDescription')->andReturn('Greeting template');
 
-        $this->mockedSmServices['TemplateTwigRenderer']
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer']
             ->shouldReceive('renderString')->with($source, ['name' => 'world'])
             ->andReturn('Hello **world**');
+        $this->mockedSmServices['TemplateTwigRenderer']->shouldNotReceive('renderString');
 
         // Bypass the strategy-selecting renderer entirely for md rows.
         $this->mockedSmServices['TemplateStrategySelectingViewRenderer']->shouldNotReceive('render');
@@ -58,5 +59,31 @@ final class PreviewTemplateSourceMarkdownTest extends QueryHandlerTestCase
         // Shared NotifyChrome wrap: GOV.UK header + description in the document title.
         $this->assertStringContainsString('GOV.UK', (string) $result['Default']);
         $this->assertStringContainsString('Greeting template', (string) $result['Default']);
+    }
+
+    public function testMdPreviewShowsAmpersandOnceAndEscapesTags(): void
+    {
+        $source = 'Hello {{ name }}';
+        $query = Qry::create(['id' => 1, 'source' => $source]);
+
+        $template = m::mock(Template::class);
+        $template->shouldReceive('getDecodedTestData')->andReturn(['Default' => ['name' => 'Smith & Sons <b>']]);
+        $template->shouldReceive('getLocale')->andReturn('en_GB');
+        $template->shouldReceive('getFormat')->andReturn(PreviewTemplateSource::FORMAT_MARKDOWN);
+        $template->shouldReceive('getDescription')->andReturn('Greeting template');
+
+        $container = m::mock(\Psr\Container\ContainerInterface::class);
+        $container->shouldReceive('get')->with('TemplateDatabaseTwigLoader')->andReturn(new \Twig\Loader\ArrayLoader([]));
+        $real = (new \Dvsa\Olcs\Api\Service\Template\PlainTextTwigRendererFactory())($container, 'x');
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer']->shouldReceive('renderString')
+            ->andReturnUsing(fn ($src, $vars) => $real->renderString($src, $vars));
+
+        $this->repoMap['Template']->shouldReceive('fetchUsingId')->with($query)->andReturn($template);
+
+        $preview = (string) $this->sut->handleQuery($query)['Default'];
+
+        $this->assertStringContainsString('Hello Smith &amp; Sons &lt;b&gt;', $preview);
+        $this->assertStringNotContainsString('&amp;amp;', $preview);
+        $this->assertStringNotContainsString('<b>', $preview);
     }
 }

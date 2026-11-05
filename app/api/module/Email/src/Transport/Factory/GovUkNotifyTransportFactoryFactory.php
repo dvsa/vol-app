@@ -10,7 +10,6 @@ use Dvsa\Olcs\Email\Transport\GovUkNotifyTransportFactory;
 use Dvsa\Olcs\Email\Transport\NotifyMessageRecorderInterface;
 use Dvsa\Olcs\Email\View\NotifyChrome;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -38,7 +37,7 @@ final class GovUkNotifyTransportFactoryFactory implements FactoryInterface
             ? $notifyConfig['dev_chrome_template']
             : NotifyChrome::template();
 
-        $markdownConverter = new GithubFlavoredMarkdownConverter();
+        $markdownConverter = NotifyChrome::markdownConverter();
 
         // The client factory routes through the shared egress proxy where one is configured.
         $notifyClientFactory = $container->get(NotifyClientFactory::class);
