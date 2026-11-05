@@ -33,7 +33,7 @@ class Details
     public $emailAddress;
 
     #[Form\Attributes(['id' => 'birthPlace', 'class' => 'medium'])]
-    #[Form\Options(['label' => 'lva-tm-details-details-birthPlace', 'short-label' => 'lva-tm-details-details-birthPlace', 'label_attributes' => ['aria-label' => 'Enter their place of birth']])]
+    #[Form\Options(['label' => 'lva-tm-details-details-birthPlace', 'short-label' => 'lva-tm-details-details-birthPlace'])]
     #[Form\Type('Text')]
     #[Form\Validator('\Laminas\Validator\NotEmpty')]
     #[Form\Flags(['priority' => -40])]
@@ -46,7 +46,7 @@ class Details
 
     #[Form\Attributes(['id' => 'certificate', 'class' => 'file-upload'])]
     #[Form\ComposedObject('\Common\Form\Model\Fieldset\MultipleFileUpload')]
-    #[Form\Options(['label' => 'lva-tm-details-details-certificate', 'hint' => 'markup-professional-competence-certificates-obtained-abroad.phtml', 'hint-position' => 'above', 'label_attributes' => ['class' => 'legend', 'aria-label' => 'Certificate of professional competence, attach file(s) for upload']])]
+    #[Form\Options(['label' => 'lva-tm-details-details-certificate', 'hint' => 'markup-professional-competence-certificates-obtained-abroad.phtml', 'hint-position' => 'above', 'label_attributes' => ['class' => 'legend']])]
     #[Form\Flags(['priority' => -60])]
     public $certificate;
 

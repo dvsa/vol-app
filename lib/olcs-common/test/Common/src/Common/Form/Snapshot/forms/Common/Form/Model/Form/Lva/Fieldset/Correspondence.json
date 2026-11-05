@@ -31,10 +31,7 @@
           "id": ""
         },
         "options": {
-          "label": "application_your-business_fao.label",
-          "label_attributes": {
-            "aria-label": "application_your-business_fao.label"
-          }
+          "label": "application_your-business_fao.label"
         },
         "type": "Text"
       }

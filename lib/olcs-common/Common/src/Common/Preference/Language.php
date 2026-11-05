@@ -29,6 +29,10 @@ class Language implements FactoryInterface
 
     private $key = 'langPref';
 
+    private ?Response $response = null;
+
+    private bool $cookieSent = false;
+
     /**
      * @psalm-param 'XX'|'en' $preference
      */
@@ -41,6 +45,7 @@ class Language implements FactoryInterface
         $this->preference = $preference;
 
         $this->requestCookie->setValue($this->preference);
+        $this->sendCookie();
     }
 
     public function getPreference()
@@ -67,26 +72,50 @@ class Language implements FactoryInterface
         $cookie = $request->getCookie();
         $this->preference = self::OPTION_EN;
         $this->requestCookie = new SetCookie();
-        if ($container->has('CookieCookieReader')) {
-            $cookieState = $container->get('CookieCookieReader')->getState($cookie);
+        $this->response = $container->get('Response');
 
-            if (!$cookieState->isActive('settings')) {
-                return $this;
-            }
-        }
+        $hasChosen = $cookie instanceof Cookie
+            && isset($cookie[$this->key])
+            && array_key_exists($cookie[$this->key], $this->options);
 
-        if ($cookie instanceof Cookie && isset($cookie[$this->key])) {
+        if ($hasChosen) {
             $this->preference = $cookie[$this->key];
         }
 
         $this->requestCookie->setName($this->key);
         $this->requestCookie->setValue($this->preference);
         $this->requestCookie->setPath('/');
-        $this->requestCookie->setExpires(strtotime('+10 years'));
         $this->requestCookie->setSameSite('Strict');
-        /** @var Response $response */
-        $response = $container->get('Response');
-        $response->getHeaders()->addHeader($this->requestCookie);
+
+        $remembersSettings = !$container->has('CookieCookieReader')
+            || $container->get('CookieCookieReader')->getState($cookie)->isActive('settings');
+
+        if ($remembersSettings) {
+            // the user has accepted the cookies that remember their settings, so keep the
+            // language for their next visit
+            $this->requestCookie->setExpires(strtotime('+10 years'));
+            $this->sendCookie();
+            return $this;
+        }
+
+        // Without that consent, a language the user chose is kept only until they close the
+        // browser, so they can carry on in it. Rewriting the cookie with no expiry also turns
+        // one kept from an earlier consent into a session cookie. No cookie is set for someone
+        // who hasn't chosen a language (setPreference sets it when they do).
+        if ($hasChosen) {
+            $this->sendCookie();
+        }
+
         return $this;
+    }
+
+    private function sendCookie(): void
+    {
+        if ($this->cookieSent || $this->response === null) {
+            return;
+        }
+
+        $this->response->getHeaders()->addHeader($this->requestCookie);
+        $this->cookieSent = true;
     }
 }

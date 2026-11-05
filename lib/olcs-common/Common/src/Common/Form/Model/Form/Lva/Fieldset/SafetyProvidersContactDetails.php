@@ -9,7 +9,7 @@ use Laminas\Form\Annotation as Form;
 class SafetyProvidersContactDetails
 {
     #[Form\Attributes(['class' => 'medium', 'id' => ''])]
-    #[Form\Options(['label' => 'application_vehicle-safety_safety-sub-action.data.fao', 'label_attributes' => ['aria-label' => 'Enter the name of the contractor or employee']])]
+    #[Form\Options(['label' => 'application_vehicle-safety_safety-sub-action.data.fao'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 1, 'max' => 90])]

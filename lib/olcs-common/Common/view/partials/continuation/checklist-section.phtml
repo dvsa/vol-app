@@ -6,7 +6,7 @@
         $isLast = $key === (count($line) - 1) && count($line) !== 1;
         $class = 'govuk-table__cell' . ($isLast ? ' td--right-aligned' : '');
         if (isset($cell['header']) && $cell['header']) : ?>
-          <th class="govuk-table__header <?php echo $class; ?>"><h4><?php echo $cell['value']; ?></h4></th>
+          <th class="govuk-table__header <?php echo $class; ?>"><h2 class="h4"><?php echo $cell['value']; ?></h2></th>
         <?php else : ?>
           <td class="<?php echo $class; ?>"><?php echo $cell['value']; ?></td>
         <?php endif;

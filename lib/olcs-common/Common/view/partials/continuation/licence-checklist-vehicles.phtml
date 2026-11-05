@@ -16,9 +16,8 @@ if (count($this->data['vehicles']['vehicles']) > 0) {
         href="<?php echo $this->url(
             'continuation/checklist/vehicles', ['continuationDetailId' => $this->data['continuationDetailId']])
         ; ?>"
-        class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false">
-        <?php echo $this->translate('continuations.vehicles.button-label'); ?>
+        class="govuk-button govuk-button--secondary" target="_blank" role="button" draggable="false" data-module="govuk-button">
+        <?php echo $this->translate('continuations.vehicles.button-label'); ?><span class="govuk-visually-hidden"> <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?></span>
     </a>
     </p>
-    <p><?php echo $this->translate('continuations.checklist.section.opens_in_a_new_window'); ?></p>
 <?php endif; ?>
