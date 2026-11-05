@@ -4,11 +4,12 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\ApplicationCompletion;
 
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
-use Dvsa\Olcs\Api\Service\Sms\SmsNumber;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
+use Psr\Container\ContainerInterface;
 
 /**
  * Update Addresses Status
@@ -22,6 +23,8 @@ final class UpdateAddressesStatus extends AbstractUpdateStatus implements AuthAw
     protected $repoServiceName = 'Application';
 
     protected $section = 'Addresses';
+
+    private SmsNumberCapture $smsNumberCapture;
 
     #[\Override]
     protected function isSectionValid(Application $application)
@@ -41,8 +44,8 @@ final class UpdateAddressesStatus extends AbstractUpdateStatus implements AuthAw
             return false;
         }
 
-        // Selfserve users must give an SMS number
-        if ($this->isExternalUser() && SmsNumber::forLicence($licence) === null) {
+        // Selfserve users must give an SMS number once capture is switched on
+        if ($this->smsNumberCapture->isMissing($licence, $this->isExternalUser())) {
             return false;
         }
 
@@ -61,5 +64,13 @@ final class UpdateAddressesStatus extends AbstractUpdateStatus implements AuthAw
         }
 
         return true;
+    }
+
+    #[\Override]
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    {
+        $this->smsNumberCapture = $container->get(SmsNumberCapture::class);
+
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

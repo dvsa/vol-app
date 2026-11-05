@@ -25,10 +25,11 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
-use Dvsa\Olcs\Api\Service\Sms\SmsNumber;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
 use Dvsa\Olcs\Transfer\Command\Application\CreateSnapshot as CreateSnapshotCmd;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Olcs\Logging\Log\Logger;
+use Psr\Container\ContainerInterface;
 
 /**
  * Submit Application
@@ -43,6 +44,8 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
 
     protected $repoServiceName = 'Application';
     protected $extraRepos = ['TransportManagerApplication', 'Sla', 'Organisation'];
+
+    private SmsNumberCapture $smsNumberCapture;
 
     /**
      * Handle Command
@@ -373,11 +376,8 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
             throw new Exception\ValidationException([$msg]);
         }
 
-        if (
-            !$application->isVariation()
-            && $this->isExternalUser()
-            && SmsNumber::forLicence($application->getLicence()) === null
-        ) {
+        // Backstop for the payment guard in PayOutstandingFees
+        if ($this->smsNumberCapture->blocksApplication($application, $this->isExternalUser(...))) {
             throw new Exception\ValidationException(['application.submit.sms-number-required']);
         }
 
@@ -446,5 +446,13 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
                 ['applicationId' => $application->getId()]
             )
         );
+    }
+
+    #[\Override]
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    {
+        $this->smsNumberCapture = $container->get(SmsNumberCapture::class);
+
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

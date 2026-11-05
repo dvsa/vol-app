@@ -171,6 +171,7 @@ return [
             \Dvsa\Olcs\Email\Transport\NotifyMessageRecorderInterface::class => \Dvsa\Olcs\Api\Service\Notify\NotifyMessageRecorderFactory::class,
             \Dvsa\Olcs\Api\Service\Sms\SmsConfig::class => \Dvsa\Olcs\Api\Service\Sms\SmsConfigFactory::class,
             \Dvsa\Olcs\Api\Service\Sms\SmsGate::class => \Dvsa\Olcs\Api\Service\Sms\SmsGateFactory::class,
+            \Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture::class => \Dvsa\Olcs\Api\Service\Sms\SmsNumberCaptureFactory::class,
             \Dvsa\Olcs\Api\Service\Sms\SmsTransportInterface::class => \Dvsa\Olcs\Api\Service\Sms\SmsTransportFactory::class,
             \Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class => \Dvsa\Olcs\Api\Service\EditorJs\ConverterServiceFactory::class,
             \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger::class => \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLoggerFactory::class,
