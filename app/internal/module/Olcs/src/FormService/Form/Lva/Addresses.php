@@ -34,6 +34,12 @@ class Addresses extends CommonAddresses
 
         $this->removeEstablishment($form, $params['typeOfLicence']['licenceType']);
 
+        // the SMS hint is written for operators
+        $contactFieldset = $form->get('contact');
+        if ($contactFieldset->has('phone_sms')) {
+            $contactFieldset->get('phone_sms')->setOption('hint', null);
+        }
+
         $contact = $form->getInputFilter()->get('contact');
 
         //  change email settings

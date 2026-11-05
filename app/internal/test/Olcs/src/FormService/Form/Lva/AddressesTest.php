@@ -34,6 +34,7 @@ final class AddressesTest extends AbstractLvaFormServiceTestCase
         $mockFsActions->shouldReceive('get')->once()->andReturn($mockElmSaveBtn);
 
         $mockForm->shouldReceive('get')->with('form-actions')->once()->andReturn($mockFsActions);
+        $this->expectSmsHintRemoved($mockForm);
 
         //  check change email setting
         $mockInputFilter = m::mock(InputFilter::class)
@@ -90,6 +91,8 @@ final class AddressesTest extends AbstractLvaFormServiceTestCase
                 ->getMock()
         );
 
+        $this->expectSmsHintRemoved($mockForm);
+
         $optional = m::mock(Input::class)->shouldReceive('setRequired')->with(false)->andReturnSelf()->getMock();
         $contact = m::mock(InputFilter::class);
         $contact->shouldReceive('get')->with('email')->andReturn($optional);
@@ -102,5 +105,16 @@ final class AddressesTest extends AbstractLvaFormServiceTestCase
         $this->sut->getForm(
             ['typeOfLicence' => ['licenceType' => 'ltyp_sn'], 'corrPhoneContacts' => ['unit_PhoneContacts']]
         );
+    }
+
+    /** The SMS hint speaks to operators, so caseworkers don't see it. */
+    private function expectSmsHintRemoved(m\MockInterface $mockForm): void
+    {
+        $sms = m::mock(\Laminas\Form\ElementInterface::class);
+        $sms->shouldReceive('setOption')->with('hint', null)->once()->andReturnSelf();
+        $contact = m::mock(\Laminas\Form\FieldsetInterface::class);
+        $contact->shouldReceive('has')->with('phone_sms')->andReturn(true);
+        $contact->shouldReceive('get')->with('phone_sms')->andReturn($sms);
+        $mockForm->shouldReceive('get')->with('contact')->andReturn($contact);
     }
 }
