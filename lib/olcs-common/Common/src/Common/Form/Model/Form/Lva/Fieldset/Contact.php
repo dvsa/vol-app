@@ -20,7 +20,7 @@ class Contact
     #[Form\Type('Hidden')]
     public $phone_primary_version;
 
-    #[Form\Attributes(['class' => 'medium', 'id' => 'phone_secondary'])]
+    #[Form\Attributes(['class' => 'medium', 'id' => '$phone_secondary'])]
     #[Form\Options(['label' => 'secondary-contact-number-optional'])]
     #[Form\Type('\Common\Form\Elements\InputFilters\Phone')]
     public $phone_secondary;
