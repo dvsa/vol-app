@@ -102,7 +102,7 @@ class Addresses implements MapperInterface
     {
         $contacts = [];
 
-        foreach ($data['phoneContacts'] as $phoneContact) {
+        foreach (self::newestSmsFirst($data['phoneContacts']) as $phoneContact) {
             $phoneType = (
                 self::$typeMap[$phoneContact['phoneContactType']['id']] ?? ''
             );
@@ -123,6 +123,46 @@ class Addresses implements MapperInterface
         $contacts['email'] = $data['emailAddress'];
 
         return $contacts;
+    }
+
+    /**
+     * Older data can hold more than one SMS row. Put the most recently modified first (then created,
+     * then highest id), the same choice as the API's SmsNumber::latestContact(), so the first-wins
+     * mapping shows and posts back that one.
+     *
+     * @param array $phoneContacts Api phone contacts
+     */
+    public static function newestSmsFirst(array $phoneContacts): array
+    {
+        $sms = [];
+        $others = [];
+        foreach ($phoneContacts as $phoneContact) {
+            if (($phoneContact['phoneContactType']['id'] ?? null) === 'phone_t_SMS') {
+                $sms[] = $phoneContact;
+            } else {
+                $others[] = $phoneContact;
+            }
+        }
+
+        usort(
+            $sms,
+            static fn (array $a, array $b): int
+                => [self::changedAt($b), (int) ($b['id'] ?? 0)] <=> [self::changedAt($a), (int) ($a['id'] ?? 0)]
+        );
+
+        return array_merge($others, $sms);
+    }
+
+    private static function changedAt(array $phoneContact): int
+    {
+        $at = $phoneContact['lastModifiedOn'] ?? $phoneContact['createdOn'] ?? null;
+        if (is_array($at)) {
+            $at = $at['date'] ?? null;
+        }
+
+        $time = is_string($at) ? strtotime($at) : false;
+
+        return $time === false ? 0 : $time;
     }
 
     /**

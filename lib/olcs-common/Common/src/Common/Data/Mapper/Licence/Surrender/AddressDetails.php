@@ -2,6 +2,7 @@
 
 namespace Common\Data\Mapper\Licence\Surrender;
 
+use Common\Data\Mapper\Lva\Addresses;
 use Common\Data\Mapper\MapperInterface;
 use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 
@@ -47,7 +48,7 @@ class AddressDetails implements MapperInterface
     {
         $contacts = [];
 
-        foreach ($data["correspondenceCd"]["phoneContacts"] as $phoneContact) {
+        foreach (Addresses::newestSmsFirst($data["correspondenceCd"]["phoneContacts"]) as $phoneContact) {
             $phoneType = self::$typeMap[$phoneContact['phoneContactType']['id']] ?? '';
 
             $number = $phoneContact['phoneNumber'];
