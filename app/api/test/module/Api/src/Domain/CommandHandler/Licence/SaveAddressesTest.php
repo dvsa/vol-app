@@ -59,6 +59,7 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $this->refData = [
             \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact::TYPE_PRIMARY,
             \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact::TYPE_SECONDARY,
+            \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact::TYPE_SMS,
         ];
 
         $this->references = [
@@ -291,6 +292,137 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
         ];
 
         $this->assertEquals($expected, $result->toArray());
+    }
+
+    private function smsCommandData(array $contact): array
+    {
+        return [
+            'id' => 10,
+            'correspondence' => ['id' => '', 'version' => '', 'fao' => 'foo bar'],
+            'correspondenceAddress' => [
+                'id' => '',
+                'version' => '',
+                'addressLine1' => 'Address 1',
+                'town' => 'Leeds',
+                'postcode' => 'LS9 6NF',
+                'countryCode' => 'GB',
+            ],
+            'contact' => $contact + ['email' => 'contact@email.com'],
+        ];
+    }
+
+    private function expectSmsCorrespondenceSetup(Cmd $command, $phoneContacts): array
+    {
+        $correspondenceCd = m::mock(ContactDetailsEntity::class)
+            ->shouldReceive('setFao')
+            ->shouldReceive('setEmailAddress')
+            ->shouldReceive('getVersion')
+            ->andReturn(1)
+            ->shouldReceive('getPhoneContacts')
+            ->andReturn($phoneContacts)
+            ->getMock();
+
+        $licence = m::mock(LicenceEntity::class)
+            ->makePartial()
+            ->shouldReceive('getCorrespondenceCd')
+            ->andReturn($correspondenceCd)
+            ->getMock();
+
+        $this->expectedLicenceCacheClear($licence);
+
+        $result = new Result();
+        $result->setFlag('hasChanged', false);
+        $this->expectedSideEffect(
+            SaveAddress::class,
+            [
+                'id' => '',
+                'version' => '',
+                'addressLine1' => 'Address 1',
+                'addressLine2' => null,
+                'addressLine3' => null,
+                'addressLine4' => null,
+                'town' => 'Leeds',
+                'postcode' => 'LS9 6NF',
+                'countryCode' => 'GB',
+                'contactType' => 'ct_corr',
+            ],
+            $result
+        );
+
+        $this->repoMap['Licence']->shouldReceive('fetchUsingId')
+            ->with($command)
+            ->andReturn($licence)
+            ->shouldReceive('save')
+            ->with($licence);
+        $this->repoMap['ContactDetails']->shouldReceive('save')->with($correspondenceCd);
+
+        return [$licence, $correspondenceCd];
+    }
+
+    public function testSmsNumberCreatedNormalised(): void
+    {
+        $command = Cmd::create($this->smsCommandData([
+            'phone_sms' => '07700 900123',
+            'phone_sms_id' => '',
+            'phone_sms_version' => '',
+        ]));
+
+        $this->expectSmsCorrespondenceSetup(
+            $command,
+            m::mock()->shouldReceive('add')->once()->getMock()
+        );
+
+        $this->repoMap['PhoneContact']->shouldReceive('save')
+            ->once()
+            ->with(m::on(function ($pc) {
+                return $pc instanceof PhoneContactEntity
+                    && $pc->getPhoneContactType()->getId() === PhoneContactEntity::TYPE_SMS
+                    && $pc->getPhoneNumber() === '+447700900123';
+            }));
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertTrue($result->getFlag('smsChanged'));
+        $this->assertFalse($result->getFlag('isDirty'));
+        $this->assertSame(['Phone contact sms created'], $result->getMessages());
+    }
+
+    public function testInvalidSmsNumberThrows(): void
+    {
+        $command = Cmd::create($this->smsCommandData(['phone_sms' => '0906 123 4567']));
+
+        $licence = m::mock(LicenceEntity::class)->makePartial();
+        $this->repoMap['Licence']->shouldReceive('fetchUsingId')->with($command)->andReturn($licence);
+
+        try {
+            $this->sut->handleCommand($command);
+            $this->fail('Expected ValidationException');
+        } catch (\Dvsa\Olcs\Api\Domain\Exception\ValidationException $e) {
+            $this->assertSame(
+                ['phone_sms' => ['contact-number-sms-invalid']],
+                $e->getMessages()
+            );
+        }
+    }
+
+    public function testMissingSmsKeysLeavesExistingRow(): void
+    {
+        $command = Cmd::create($this->smsCommandData([
+            'phone_primary' => '',
+            'phone_primary_id' => '',
+            'phone_primary_version' => '',
+        ]));
+
+        // an existing SMS row on the contact must not be touched
+        $this->expectSmsCorrespondenceSetup($command, m::mock());
+        $this->repoMap['PhoneContact']->shouldReceive('save')->never();
+        $this->repoMap['PhoneContact']->shouldReceive('delete')->never();
+        $this->repoMap['PhoneContact']->shouldReceive('fetchById')->never();
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertNull($result->getFlag('smsChanged'));
+        $this->assertFalse($result->getFlag('isDirty'));
     }
 
     public function testHandleExistingCorrespondenceUpdateWithNoChangeAndDifferentPhoneNumbers(): void

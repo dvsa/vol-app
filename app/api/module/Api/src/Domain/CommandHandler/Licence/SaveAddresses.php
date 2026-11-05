@@ -10,12 +10,14 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Traits\DeleteContactDetailsAndAddressTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
 use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -35,6 +37,7 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
     private $phoneTypes = [
         'primary' => PhoneContact::TYPE_PRIMARY,
         'secondary' => PhoneContact::TYPE_SECONDARY,
+        'sms' => PhoneContact::TYPE_SMS,
     ];
 
     private EventHistoryCreator $eventHistoryCreator;
@@ -53,11 +56,14 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
         /** @var Licence $licence */
         $licence = $this->getRepo()->fetchUsingId($command);
 
+        $contact = $command->getContact();
+        $smsData = $this->normaliseSms($contact);
+
         $this->result->setFlag('isDirty', false);
 
         $this->saveCorrespondenceAddress($command, $licence);
 
-        $this->updateCorrespondencePhoneContacts($command, $licence);
+        $this->updateCorrespondencePhoneContacts($smsData, $licence);
 
         $this->maybeSaveEstablishmentAddress($command, $licence);
 
@@ -67,6 +73,33 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
         $this->clearLicenceCaches($licence);
 
         return $this->result;
+    }
+
+    /**
+     * Normalise phone_sms in the contact data, or throw when it is not a valid UK mobile
+     *
+     * @param array|null $contact Contact data
+     *
+     * @return array
+     * @throws ValidationException
+     */
+    private function normaliseSms($contact): array
+    {
+        $contact = (array) $contact;
+
+        if (isset($contact['phone_sms']) && trim((string) $contact['phone_sms']) !== '') {
+            $normalised = SmsPhoneNumber::normalise((string) $contact['phone_sms']);
+
+            if ($normalised === null) {
+                throw new ValidationException(['phone_sms' => ['contact-number-sms-invalid']]);
+            }
+
+            $contact['phone_sms'] = $normalised;
+        } elseif (array_key_exists('phone_sms', $contact)) {
+            $contact['phone_sms'] = '';
+        }
+
+        return $contact;
     }
 
     /**
@@ -130,17 +163,18 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
     /**
      * Update Corr Phone contacts
      *
-     * @param DomainCmd\Licence\SaveAddresses $command Comman
-     * @param Licence                         $licence Licence entity
+     * @param array   $contact Contact data, phone_sms already normalised
+     * @param Licence $licence Licence entity
      *
      * @return void
      */
-    private function updateCorrespondencePhoneContacts(DomainCmd\Licence\SaveAddresses $command, Licence $licence)
+    private function updateCorrespondencePhoneContacts(array $contact, Licence $licence)
     {
         $this->updatePhoneContacts(
-            $command->getContact(),
+            $contact,
             $licence->getCorrespondenceCd(),
-            $licence
+            $licence,
+            true
         );
     }
 
@@ -150,13 +184,21 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
      * @param array          $data           Phone Contact data
      * @param ContactDetails $contactDetails Contact Details entity
      * @param Licence $licence entity
+     * @param bool $includeSms Handle the SMS number too (correspondence contact only)
      *
      * @return void
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
-    private function updatePhoneContacts($data, ContactDetails $contactDetails, ?Licence $licence = null)
+    private function updatePhoneContacts($data, ContactDetails $contactDetails, ?Licence $licence = null, bool $includeSms = false)
     {
         foreach ($this->phoneTypes as $phoneType => $phoneRefName) {
+            $isSms = $phoneType === 'sms';
+
+            // a post without the SMS key leaves any existing SMS row alone
+            if ($isSms && (!$includeSms || !array_key_exists('phone_sms', $data))) {
+                continue;
+            }
+
             $result = new Result();
             $result->setFlag('hasChanged', false);
 
@@ -207,6 +249,17 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
 
                 $result->addMessage('Phone contact ' . $phoneType . ' deleted');
                 $result->setFlag('hasChanged', true);
+            }
+
+            if ($isSms) {
+                // SMS changes are tracked apart from isDirty so they raise no Address Change task
+                foreach ($result->getMessages() as $message) {
+                    $this->result->addMessage($message);
+                }
+                if ($result->getFlag('hasChanged')) {
+                    $this->result->setFlag('smsChanged', true);
+                }
+                continue;
             }
 
             $this->handleSideEffectResult($result);

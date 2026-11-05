@@ -135,4 +135,55 @@ final class UpdateAddressesTest extends AbstractCommandHandlerTestCase
 
         $this->assertTrue($result->getFlag('hasChanged'));
     }
+
+    public function testSmsOnlyChangeCreatesNoTask(): void
+    {
+        $data = [
+            'id' => 123,
+            'correspondence' => 'corr',
+            'contact' => 'contact',
+            'correspondenceAddress' => 'c_address',
+            'establishment' => 'est',
+            'establishmentAddress' => 'e_address',
+            'consultant' => 'consultant'
+        ];
+        $command = Cmd::create($data);
+
+        $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
+            ->with(Permission::SELFSERVE_USER, null)
+            ->andReturn(true);
+
+        $result = new Result();
+        $result->setFlag('isDirty', false);
+        $result->setFlag('smsChanged', true);
+
+        $this->expectedSideEffect(SaveAddresses::class, array_merge($data, ['id' => 456]), $result);
+        $this->expectedSideEffect(
+            UpdateApplicationCompletionCommand::class,
+            ['id' => 123, 'section' => 'addresses'],
+            $result
+        );
+
+        $application = m::mock(ApplicationEntity::class)
+            ->makePartial()
+            ->shouldReceive('getId')
+            ->andReturn(123)
+            ->shouldReceive('getLicence')
+            ->andReturn(
+                m::mock(LicenceEntity::class)
+                ->shouldReceive('getId')
+                ->andReturn(456)
+                ->getMock()
+            )
+            ->getMock();
+
+        $this->repoMap['Application']->shouldReceive('fetchUsingId')
+            ->with($command)
+            ->andReturn($application);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertTrue($result->getFlag('hasChanged'));
+        $this->assertFalse($result->getFlag('isDirty'));
+    }
 }

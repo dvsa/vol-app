@@ -22,7 +22,7 @@ class PhoneContact
     protected $version;
 
     #[Transfer\Filter('Laminas\Filter\StringTrim')]
-    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['phone_t_primary', 'phone_t_secondary']])]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['phone_t_primary', 'phone_t_secondary', 'phone_t_SMS']])]
     protected $phoneContactType;
 
     #[Transfer\Filter('Laminas\Filter\StringTrim')]

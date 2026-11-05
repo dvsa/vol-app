@@ -46,7 +46,7 @@ final class UpdateAddresses extends AbstractCommandHandler implements AuthAwareI
             $result->merge($this->handleSideEffect(CreateTask::create($taskParams)));
         }
 
-        $result->setFlag('hasChanged', $result->getFlag('isDirty'));
+        $result->setFlag('hasChanged', $result->getFlag('isDirty') || $result->getFlag('smsChanged'));
 
         return $result;
     }

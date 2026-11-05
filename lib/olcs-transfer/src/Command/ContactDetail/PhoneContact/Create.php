@@ -13,7 +13,7 @@ class Create extends AbstractCommand
      * @var string
      */
     #[Transfer\Filter('Laminas\Filter\StringTrim')]
-    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['phone_t_primary', 'phone_t_secondary']])]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => ['phone_t_primary', 'phone_t_secondary', 'phone_t_SMS']])]
     public $phoneContactType;
 
     /**
