@@ -5,7 +5,7 @@ namespace Common\View\Helper;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class LanguageLinkFactory implements FactoryInterface
+class LanguageNavigationFactory implements FactoryInterface
 {
     /**
      * @param $requestedName
@@ -13,10 +13,10 @@ class LanguageLinkFactory implements FactoryInterface
      *
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LanguageLink
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LanguageNavigation
     {
         $languagePref = $container->get('LanguagePreference');
 
-        return new LanguageLink($languagePref);
+        return new LanguageNavigation($languagePref);
     }
 }

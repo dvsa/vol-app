@@ -33,7 +33,7 @@
       "spec": {
         "name": "description",
         "attributes": {
-          "id": "translationKey",
+          "id": "description",
           "data-container-class": "translationKeyContainer js-hidden"
         },
         "options": {
