@@ -31,12 +31,13 @@ class NotifyMessage extends AbstractNotifyMessage
     public const STATUS_TEMPORARY_FAILURE = 'nms_temporary_failure';
     public const STATUS_TECHNICAL_FAILURE = 'nms_technical_failure';
 
-    public function __construct(RefData $channel, RefData $status, string $recipient, \DateTimeImmutable $requestedOn)
+    public function __construct(RefData $channel, RefData $status, string $recipient, \DateTimeInterface $requestedOn)
     {
         parent::__construct();
         $this->channel = $channel;
         $this->status = $status;
         $this->recipient = $recipient;
-        $this->requestedOn = $requestedOn;
+        // the app's datetime type only accepts a mutable \DateTime
+        $this->requestedOn = \DateTime::createFromInterface($requestedOn);
     }
 }

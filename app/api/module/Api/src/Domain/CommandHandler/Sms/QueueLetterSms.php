@@ -8,7 +8,9 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\Sms\QueueLetterSms as Cmd;
 use Dvsa\Olcs\Api\Domain\Command\Sms\SendSms;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\QueueAwareTrait;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Notify\NotifyMessage;
 use Dvsa\Olcs\Api\Entity\Queue\Queue;
@@ -17,6 +19,7 @@ use Dvsa\Olcs\Api\Service\Sms\SmsGate;
 use Dvsa\Olcs\Api\Service\Sms\SmsNumber;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Utils\Helper\ValueHelper;
+use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -38,32 +41,30 @@ class QueueLetterSms extends AbstractCommandHandler
     {
         assert($command instanceof Cmd);
 
-        if (!$this->smsGate->isEnabled()) {
+        try {
+            $prepared = $this->prepare($command);
+        } catch (\Throwable $e) {
+            // The letter matters more than the text, so never let a read failure escape.
+            Logger::err(
+                'Could not queue letter SMS',
+                [
+                    'document_id' => $command->getDocument(),
+                    'exception' => [
+                        'class' => $e::class,
+                        'message' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString(),
+                    ],
+                ]
+            );
+
             return $this->result;
         }
 
-        /** @var Document $document */
-        $document = $this->getRepo()->fetchById($command->getDocument());
-
-        if ($this->isSuppressedFromOperator($document)) {
+        if ($prepared === null) {
             return $this->result;
         }
 
-        $licence = $document->getRelatedLicence();
-        if ($licence === null) {
-            return $this->result;
-        }
-
-        $recipient = SmsNumber::forLicence($licence);
-        if ($recipient === null) {
-            return $this->result;
-        }
-
-        $now = $this->now();
-        $londonDay = $now->setTimezone(new \DateTimeZone('Europe/London'));
-        if ($this->getRepo('NotifyMessage')->hasSmsForRecipientOn($recipient, $londonDay)) {
-            return $this->result;
-        }
+        [$document, $licence, $recipient, $now] = $prepared;
 
         $message = new NotifyMessage(
             $this->refData(NotifyMessage::CHANNEL_SMS),
@@ -97,13 +98,50 @@ class QueueLetterSms extends AbstractCommandHandler
                     $messageId,
                     Queue::TYPE_SMS,
                     ['commandClass' => SendSms::class, 'commandData' => ['id' => $messageId]],
-                    $processAfter?->format('Y-m-d H:i:s')
+                    $processAfter?->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s')
                 )
             )
         );
         $this->result->addId('notifyMessage', $messageId);
 
         return $this->result;
+    }
+
+    /**
+     * All the reads that decide whether to text. Null means skip.
+     *
+     * @return array{Document, Licence, string, \DateTimeImmutable}|null
+     */
+    private function prepare(Cmd $command): ?array
+    {
+        if (!$this->smsGate->isEnabled()) {
+            return null;
+        }
+
+        /** @var Document $document */
+        $document = $this->getRepo()->fetchById($command->getDocument());
+
+        if ($this->isSuppressedFromOperator($document)) {
+            return null;
+        }
+
+        $licence = $document->getRelatedLicence();
+        if ($licence === null) {
+            return null;
+        }
+
+        $recipient = SmsNumber::forLicence($licence);
+        if ($recipient === null) {
+            return null;
+        }
+
+        $now = $this->now();
+        $londonDay = $now->setTimezone(new \DateTimeZone('Europe/London'));
+        if ($this->getRepo('NotifyMessage')->hasSmsForRecipientOn($recipient, $londonDay)) {
+            return null;
+        }
+
+        return [$document, $licence, $recipient, $now];
     }
 
     protected function now(): \DateTimeImmutable
@@ -119,9 +157,14 @@ class QueueLetterSms extends AbstractCommandHandler
             return false;
         }
 
-        $template = $this->getRepo('DocTemplate')->fetchById($templateId);
+        try {
+            $template = $this->getRepo('DocTemplate')->fetchById($templateId);
+        } catch (NotFoundException) {
+            // Cannot tell whether it is for the operator, so do not text.
+            return true;
+        }
 
-        return $template !== null && ValueHelper::isOn($template->getSuppressFromOp());
+        return ValueHelper::isOn($template->getSuppressFromOp());
     }
 
     #[\Override]

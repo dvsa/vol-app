@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\Sms\QueueLetterSms as Cmd;
 use Dvsa\Olcs\Api\Domain\Command\Sms\SendSms;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Sms\QueueLetterSms;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
@@ -195,5 +196,48 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         );
 
         $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
+    }
+
+    public function testBstWindowIsSentToQueueAsUtc(): void
+    {
+        $this->now = new \DateTimeImmutable('2026-07-01 21:30:00', new \DateTimeZone('Europe/London'));
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->document($this->licence());
+        $this->messageRepo->shouldReceive('hasSmsForRecipientOn')->andReturn(false);
+        $this->messageRepo->shouldReceive('save')->once()->andReturnUsing(
+            fn(NotifyMessage $message) => $message->setId(self::MESSAGE_ID)
+        );
+
+        $this->expectedQueueSideEffect(
+            self::MESSAGE_ID,
+            Queue::TYPE_SMS,
+            ['commandClass' => SendSms::class, 'commandData' => ['id' => self::MESSAGE_ID]],
+            new Result(),
+            '2026-07-02 07:00:00'
+        );
+
+        $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
+    }
+
+    public function testMissingTemplateSkipsSms(): void
+    {
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->document($this->licence(), json_encode(['details' => ['documentTemplate' => 12]]));
+        $this->templateRepo->shouldReceive('fetchById')->with(12)->andThrow(new NotFoundException('gone'));
+        $this->messageRepo->shouldNotReceive('save');
+
+        $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
+    }
+
+    public function testReadFailureIsLoggedAndSkipped(): void
+    {
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->document($this->licence());
+        $this->messageRepo->shouldReceive('hasSmsForRecipientOn')->andThrow(new \RuntimeException('db down'));
+        $this->messageRepo->shouldNotReceive('save');
+
+        $result = $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
+
+        $this->assertSame([], $result->getIds());
     }
 }

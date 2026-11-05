@@ -32,8 +32,8 @@ class NotifyMessage extends AbstractRepository
             ->setParameter('channel', Entity::CHANNEL_SMS)
             ->setParameter('recipient', $recipient)
             ->setParameter('cancelled', Entity::STATUS_CANCELLED)
-            ->setParameter('dayStart', $start->setTimezone($utc))
-            ->setParameter('dayEnd', $end->setTimezone($utc));
+            ->setParameter('dayStart', \DateTime::createFromInterface($start->setTimezone($utc)))
+            ->setParameter('dayEnd', \DateTime::createFromInterface($end->setTimezone($utc)));
 
         return (int) $qb->getQuery()->getSingleScalarResult() > 0;
     }
