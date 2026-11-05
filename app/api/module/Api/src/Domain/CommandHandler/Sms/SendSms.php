@@ -59,9 +59,15 @@ class SendSms extends AbstractCommandHandler
 
         $nextAllowed = SendingWindow::nextAllowed($now);
         if ($nextAllowed !== null) {
-            $e = new NotReadyException('Outside the SMS sending window');
-            $e->setRetryAfter(max(1, $nextAllowed->getTimestamp() - $now->getTimestamp()));
-            throw $e;
+            // counts as an attempt so the row always ends before the queue item runs out of tries
+            $message->setAttempts(($message->getAttempts() ?? 0) + 1);
+
+            return $this->retryOrFail(
+                $message,
+                $now,
+                max(1, $nextAllowed->getTimestamp() - $now->getTimestamp()),
+                'Outside the SMS sending window'
+            );
         }
 
         // Outside production we only ever text the redirect number, never the real recipient.
@@ -90,11 +96,20 @@ class SendSms extends AbstractCommandHandler
 
         $message->setAttempts(($message->getAttempts() ?? 0) + 1);
         $message->setNotifyTemplateId($templateId);
+        // saved before the send, so a crash after it leaves attempts > 0 for the next run to see
+        $this->getRepo()->save($message);
 
         try {
             $notifyId = $this->transport->send($to, $templateId, $body, (string) $message->getId());
         } catch (NotifyException $e) {
             return $this->handleFailure($message, $e, $now);
+        } catch (\Throwable $e) {
+            // not a Notify error, so retrying would not help and could double send
+            $message->setErrorMessage(mb_substr($e::class . ': ' . $e->getMessage(), 0, 1024));
+            $this->finish($message, NotifyMessage::STATUS_FAILED, $now);
+            $this->result->addMessage('SMS failed, transport error');
+
+            return $this->result;
         }
 
         $message->setNotifyId($notifyId);
@@ -119,6 +134,30 @@ class SendSms extends AbstractCommandHandler
             return $this->result;
         }
 
+        // Never schedule the retry outside the window, so every fetch is a real send.
+        $retryAt = $now->modify('+' . self::RETRY_AFTER . ' seconds');
+        $next = SendingWindow::nextAllowed($retryAt);
+
+        return $this->retryOrFail(
+            $message,
+            $now,
+            ($next ?? $retryAt)->getTimestamp() - $now->getTimestamp(),
+            'Notify unavailable: ' . $e->getMessage(),
+            $e
+        );
+    }
+
+    /**
+     * Every retry goes through here, so the row is marked failed on its last attempt instead of
+     * being left queued when the queue item gives up.
+     */
+    private function retryOrFail(
+        NotifyMessage $message,
+        \DateTimeImmutable $now,
+        int $retryAfter,
+        string $reason,
+        ?\Throwable $previous = null
+    ): Result {
         if ($message->getAttempts() >= self::MAX_ATTEMPTS) {
             $this->finish($message, NotifyMessage::STATUS_FAILED, $now);
             $this->result->addMessage('SMS failed after the last attempt');
@@ -127,11 +166,8 @@ class SendSms extends AbstractCommandHandler
         }
 
         $this->getRepo()->save($message);
-        $retry = new NotReadyException('Notify unavailable: ' . $e->getMessage(), 0, $e);
-        // Never schedule the retry outside the window, so every fetch is a real send.
-        $retryAt = $now->modify('+' . self::RETRY_AFTER . ' seconds');
-        $next = SendingWindow::nextAllowed($retryAt);
-        $retry->setRetryAfter(($next ?? $retryAt)->getTimestamp() - $now->getTimestamp());
+        $retry = new NotReadyException($reason, 0, $previous);
+        $retry->setRetryAfter($retryAfter);
         throw $retry;
     }
 

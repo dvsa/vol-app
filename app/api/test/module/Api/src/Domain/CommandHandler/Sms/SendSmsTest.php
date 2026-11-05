@@ -108,6 +108,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->message();
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->transport->shouldNotReceive('send');
+        $this->messageRepo->shouldReceive('save')->once();
 
         try {
             $this->handle();
@@ -130,7 +131,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
             ->once()
             ->with(self::REDIRECT, self::TEMPLATE_ID, 'Hello Acme', (string) self::ID)
             ->andReturn('notify-1');
-        $this->messageRepo->shouldReceive('save')->once()->with($m);
+        $this->messageRepo->shouldReceive('save')->twice()->with($m);
 
         $this->handle();
 
@@ -167,7 +168,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
                 (string) self::ID
             )
             ->andReturn('notify-1');
-        $this->messageRepo->shouldReceive('save')->once()->with($m);
+        $this->messageRepo->shouldReceive('save')->twice()->with($m);
 
         $this->handle();
     }
@@ -178,7 +179,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->once()->with('cy_GB/sms/letter-issued-sms', m::type('array'))->andReturn('Helo');
         $this->transport->shouldReceive('send')->once()->with(m::any(), m::any(), 'Helo', m::any())->andReturn(null);
-        $this->messageRepo->shouldReceive('save')->once();
+        $this->messageRepo->shouldReceive('save')->twice();
 
         $this->handle();
     }
@@ -191,7 +192,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
             ->andThrow(new LoaderError('missing'));
         $this->twig->shouldReceive('render')->once()->with('en_GB/sms/letter-issued-sms', m::type('array'))->andReturn('Hello');
         $this->transport->shouldReceive('send')->once()->with(m::any(), m::any(), 'Hello', m::any())->andReturn(null);
-        $this->messageRepo->shouldReceive('save')->once();
+        $this->messageRepo->shouldReceive('save')->twice();
 
         $this->handle();
     }
@@ -202,7 +203,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
         $this->transport->shouldReceive('send')->once()->with(self::REDIRECT, m::any(), 'x', m::any())->andReturn('n');
-        $this->messageRepo->shouldReceive('save')->once();
+        $this->messageRepo->shouldReceive('save')->twice();
 
         $this->handle();
 
@@ -216,7 +217,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
         $this->transport->shouldReceive('send')->once()->with(self::NUMBER, m::any(), 'x', m::any())->andReturn('n');
-        $this->messageRepo->shouldReceive('save')->once();
+        $this->messageRepo->shouldReceive('save')->twice();
 
         $this->handle();
 
@@ -229,7 +230,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
         $this->transport->shouldReceive('send')->andThrow(new NotifyException('Not a UK mobile', 400));
-        $this->messageRepo->shouldReceive('save')->once()->with($m);
+        $this->messageRepo->shouldReceive('save')->twice()->with($m);
 
         $this->handle();
 
@@ -247,7 +248,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
         $this->transport->shouldReceive('send')->andThrow(new NotifyException('boom', $code));
-        $this->messageRepo->shouldReceive('save')->once()->with($m);
+        $this->messageRepo->shouldReceive('save')->twice()->with($m);
 
         try {
             $this->handle();
@@ -271,7 +272,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
         $this->transport->shouldReceive('send')->andThrow(new NotifyException('boom', 503));
-        $this->messageRepo->shouldReceive('save')->once()->with($m);
+        $this->messageRepo->shouldReceive('save')->twice()->with($m);
 
         $this->handle();
 
@@ -298,7 +299,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
         $this->transport->shouldReceive('send')->andThrow(new NotifyException('boom', 503));
-        $this->messageRepo->shouldReceive('save')->once();
+        $this->messageRepo->shouldReceive('save')->twice();
 
         try {
             $this->handle();
@@ -322,6 +323,76 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->assertSame(NotifyMessage::STATUS_FAILED, $m->getStatus()->getId());
         $this->assertSame('no such template', $m->getErrorMessage());
         $this->assertNotInstanceOf(\DateTimeImmutable::class, $m->getCompletedOn());
+    }
+
+    public function testTransportErrorMarksFailedWithoutRethrow(): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('send')->once()->andThrow(new \RuntimeException('socket closed'));
+        $this->messageRepo->shouldReceive('save')->with($m);
+
+        $this->handle();
+
+        $this->assertSame(NotifyMessage::STATUS_FAILED, $m->getStatus()->getId());
+        $this->assertSame('RuntimeException: socket closed', $m->getErrorMessage());
+        $this->assertNotNull($m->getCompletedOn());
+        $this->assertNull($m->getNotifyId());
+    }
+
+    public function testAttemptIsSavedBeforeSending(): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $savedAttempts = [];
+        $this->messageRepo->shouldReceive('save')->with($m)->andReturnUsing(function () use ($m, &$savedAttempts) {
+            $savedAttempts[] = [$m->getAttempts(), $m->getStatus()->getId()];
+        });
+        $this->transport->shouldReceive('send')->once()->andReturnUsing(function () use (&$savedAttempts) {
+            // a crash after this point must leave attempts > 0 in the DB
+            $this->assertSame([[1, NotifyMessage::STATUS_QUEUED]], $savedAttempts);
+
+            return 'notify-1';
+        });
+
+        $this->handle();
+
+        $this->assertSame([1, NotifyMessage::STATUS_CREATED], $savedAttempts[1]);
+    }
+
+    public function testOutsideWindowCountsAsAnAttempt(): void
+    {
+        $this->now = new \DateTimeImmutable('2026-11-05 21:00:00', new \DateTimeZone('Europe/London'));
+        $m = $this->message(false, 1);
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->transport->shouldNotReceive('send');
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+
+        $this->expectException(NotReadyException::class);
+
+        try {
+            $this->handle();
+        } finally {
+            $this->assertSame(2, $m->getAttempts());
+            $this->assertSame(NotifyMessage::STATUS_QUEUED, $m->getStatus()->getId());
+        }
+    }
+
+    public function testOutsideWindowOnLastAttemptMarksFailed(): void
+    {
+        $this->now = new \DateTimeImmutable('2026-11-05 21:00:00', new \DateTimeZone('Europe/London'));
+        $m = $this->message(false, 3);
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->transport->shouldNotReceive('send');
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+
+        $this->handle();
+
+        $this->assertSame(4, $m->getAttempts());
+        $this->assertSame(NotifyMessage::STATUS_FAILED, $m->getStatus()->getId());
+        $this->assertNotNull($m->getCompletedOn());
     }
 
     public function testNonProdWithNoRedirectCancels(): void
