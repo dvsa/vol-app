@@ -46,8 +46,12 @@ OLCS.formHelper = (function (document, $, undefined) {
     var actionValue = button.val();
     var actionName = button.attr("name");
     form.find("." + formClickAction).remove();
-    form.prepend("<input class='" + formClickAction + "' type=hidden name='" + actionName + "' />");
-    form.find("." + formClickAction).val(actionValue);
+    var actionInput = document.createElement("input");
+    actionInput.className = formClickAction;
+    actionInput.type = "hidden";
+    actionInput.name = actionName;
+    actionInput.value = actionValue;
+    form.prepend(actionInput);
   };
 
   exports.buttonPressed = function (form, name) {
