@@ -268,6 +268,7 @@ Generated 125 entities in 2.34 seconds
 ## Important Notes
 
 - **Always commit your code before regenerating** - while concrete entities are safe, it's good practice
+- **Existing generated property and accessor order is preserved** when regenerating. Newly added fields are appended, so schema metadata changes don't reshuffle existing declarations across entities.
 - **Never hand-edit abstract entities** - anything written there (including docblock
   documentation) is silently lost on the next regeneration. Document entity behaviour
   in the concrete class; column descriptions belong in the database column comments

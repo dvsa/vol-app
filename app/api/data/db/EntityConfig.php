@@ -287,6 +287,13 @@ return array(
         'application_referred_to_pi' => array(
             'type' => 'yesnonull'
         ),
+        'knowledge_experience_evidence_uploaded' => array(
+            'nullable' => true
+        ),
+        'knowledge_experience_olat' => array(
+            'type' => 'yesnonull',
+            'nullable' => true
+        ),
     ),
     's4' => array(
         'application_id' => array(
@@ -1022,6 +1029,9 @@ return array(
                     'persist'
                 )
             )
+        ),
+        'knowledge_experience_status' => array(
+            'nullable' => true
         )
     ),
     'application_tracking' => array(
@@ -1033,6 +1043,9 @@ return array(
                     'persist'
                 )
             )
+        ),
+        'knowledge_experience_status' => array(
+            'nullable' => true
         )
     ),
     'presiding_tc' => array(
@@ -2500,5 +2513,16 @@ return array(
         ),
     ),
     'messaging_subject' => array(
+    ),
+    'document_analysis' => array(
+        'document_id' => array(
+            'inversedBy' => array(
+                'entity' => 'Document',
+                'property' => 'documentAnalyses'
+            )
+        ),
+        'result_metadata' => array(
+            'nullable' => true
+        )
     ),
 );

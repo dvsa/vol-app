@@ -135,6 +135,7 @@ class GenerateEntities extends AbstractCommandHandler
             'mappingConfig' => $entityConfig['mappingConfig'] ?? [],
             'namespaces' => $entityConfig['namespaces'] ?? [],
             'outputPath' => $command->getOutputPath() ?? '/tmp/generated-entities',
+            'sourceEntityPath' => $this->getEntityPath(),
             'replace' => $command->isReplace(),
         ];
     }
