@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\ApplicationCompletion;
 
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumber;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
@@ -37,6 +38,11 @@ final class UpdateAddressesStatus extends AbstractUpdateStatus implements AuthAw
         // Must have at least 1 phone contact
         $phoneContacts = $corAdd->getPhoneContacts();
         if ($phoneContacts->count() < 1 && $this->isExternalUser()) {
+            return false;
+        }
+
+        // Selfserve users must give an SMS number
+        if ($this->isExternalUser() && SmsNumber::forLicence($licence) === null) {
             return false;
         }
 

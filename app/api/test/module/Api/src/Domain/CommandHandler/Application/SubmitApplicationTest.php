@@ -143,6 +143,10 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
     public function testHandleCommand(mixed $isVariation, mixed $expected, mixed $isInternalUser, mixed $goodOrPsv, mixed $hasS4): void
     {
         $this->setupIsInternalUser($isInternalUser);
+        $this->mockLic->setCorrespondenceCd($this->smsContact());
+        if (!$isVariation) {
+            $this->setupIsExternalUser(!$isInternalUser);
+        }
 
         $now           = new DateTime();
 
@@ -500,6 +504,8 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
     public function testHandleCommandSpecialRestricted(): void
     {
         $this->setupIsInternalUser(false);
+        $this->setupIsExternalUser(true);
+        $this->mockLic->setCorrespondenceCd($this->smsContact());
 
         $now           = new DateTime();
 
@@ -857,6 +863,64 @@ final class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             array_merge($expectedTaskData, ['urgent' => 'Y']),
             'GV80A'
         ];
+    }
+
+    private function smsContact(): Entity\ContactDetails\ContactDetails
+    {
+        $pc = new Entity\ContactDetails\PhoneContact(new RefData(Entity\ContactDetails\PhoneContact::TYPE_SMS));
+        $pc->setPhoneNumber('07700900123');
+        $cd = new Entity\ContactDetails\ContactDetails(new RefData());
+        $cd->setPhoneContacts(new \Doctrine\Common\Collections\ArrayCollection([$pc]));
+        return $cd;
+    }
+
+    private function submitCommand(): Cmd
+    {
+        $command = Cmd::create(['id' => self::APP_ID, 'version' => self::VERSION]);
+        $this->repoMap['Application']
+            ->shouldReceive('fetchUsingId')
+            ->with($command, Query::HYDRATE_OBJECT, self::VERSION)
+            ->andReturn($this->mockApp);
+        return $command;
+    }
+
+    public function testExternalSubmitWithoutSmsThrows(): void
+    {
+        $this->setupIsExternalUser(true);
+        $this->mockApp->setIsVariation(false);
+        $command = $this->submitCommand();
+
+        try {
+            $this->sut->handleCommand($command);
+            $this->fail('Expected ValidationException');
+        } catch (ValidationException $e) {
+            $this->assertSame(['application.submit.sms-number-required'], $e->getMessages());
+        }
+    }
+
+    public function testInternalSubmitWithoutSmsAllowed(): void
+    {
+        $this->setupIsExternalUser(false);
+        $this->mockApp->setIsVariation(false);
+        $command = $this->submitCommand();
+
+        // the first side effect after the guard proves it was passed
+        $this->commandHandler->shouldReceive('handleCommand')->andThrow(new \RuntimeException('after-guard'));
+
+        $this->expectExceptionMessage('after-guard');
+        $this->sut->handleCommand($command);
+    }
+
+    public function testVariationSubmitWithoutSmsAllowed(): void
+    {
+        $this->mockApp->setIsVariation(true);
+        $command = $this->submitCommand();
+
+        // the first side effect after the guard proves it was passed
+        $this->commandHandler->shouldReceive('handleCommand')->andThrow(new \RuntimeException('after-guard'));
+
+        $this->expectExceptionMessage('after-guard');
+        $this->sut->handleCommand($command);
     }
 
     public function testHandleInvalidStatus(): void

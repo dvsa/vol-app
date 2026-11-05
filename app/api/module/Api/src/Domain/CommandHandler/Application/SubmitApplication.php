@@ -25,6 +25,7 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumber;
 use Dvsa\Olcs\Transfer\Command\Application\CreateSnapshot as CreateSnapshotCmd;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Olcs\Logging\Log\Logger;
@@ -370,6 +371,14 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
                 $application->getStatus()->getDescription()
             );
             throw new Exception\ValidationException([$msg]);
+        }
+
+        if (
+            !$application->isVariation()
+            && $this->isExternalUser()
+            && SmsNumber::forLicence($application->getLicence()) === null
+        ) {
+            throw new Exception\ValidationException(['application.submit.sms-number-required']);
         }
 
         return true;
