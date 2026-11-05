@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cli\Service\Queue\Consumer\CommandConsumer;
 class Send extends CommandConsumer
 {
     /**
-     * @var int Max retry attempts before fails
+     * @var int Backstop only: the handler owns the 4-try cap
      */
-    protected $maxAttempts = 4;
+    protected $maxAttempts = 6;
 }

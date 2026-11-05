@@ -18,6 +18,7 @@ use Dvsa\Olcs\Email\Transport\NotifyErrors;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Utils\Helper\ValueHelper;
 use Psr\Container\ContainerInterface;
+use Twig\Error\Error as TwigError;
 use Twig\Error\LoaderError;
 
 /**
@@ -69,13 +70,22 @@ class SendSms extends AbstractCommandHandler
             $to = $this->config->sendAllSmsTo;
             if ($to === null || $to === '') {
                 $this->finish($message, NotifyMessage::STATUS_CANCELLED, $now);
+                $this->result->addMessage('SMS cancelled, no redirect number outside production');
 
                 return $this->result;
             }
             $message->setRedirectedTo($to);
         }
 
-        $body = $this->render($message, $now);
+        try {
+            $body = $this->render($message, $now);
+        } catch (TwigError $e) {
+            $message->setErrorMessage(mb_substr($e->getMessage(), 0, 1024));
+            $this->finish($message, NotifyMessage::STATUS_FAILED, $now);
+            $this->result->addMessage('SMS failed, template could not be rendered');
+
+            return $this->result;
+        }
         $templateId = (string) $this->config->templateId;
 
         $message->setAttempts(($message->getAttempts() ?? 0) + 1);
@@ -118,7 +128,10 @@ class SendSms extends AbstractCommandHandler
 
         $this->getRepo()->save($message);
         $retry = new NotReadyException('Notify unavailable: ' . $e->getMessage(), 0, $e);
-        $retry->setRetryAfter(self::RETRY_AFTER);
+        // Never schedule the retry outside the window, so every fetch is a real send.
+        $retryAt = $now->modify('+' . self::RETRY_AFTER . ' seconds');
+        $next = SendingWindow::nextAllowed($retryAt);
+        $retry->setRetryAfter(($next ?? $retryAt)->getTimestamp() - $now->getTimestamp());
         throw $retry;
     }
 

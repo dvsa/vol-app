@@ -51,8 +51,8 @@ final class SendTest extends AbstractConsumerTestCase
         $this->assertStringStartsWith('Requeued message: 99', $this->sut->processMessage($item));
     }
 
-    public function testMaxAttemptsIsFour(): void
+    public function testMaxAttemptsIsSix(): void
     {
-        $this->assertSame(4, (new \ReflectionProperty(Send::class, 'maxAttempts'))->getDefaultValue());
+        $this->assertSame(6, (new \ReflectionProperty(Send::class, 'maxAttempts'))->getDefaultValue());
     }
 }

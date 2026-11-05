@@ -39,7 +39,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
     public function setUp(): void
     {
         $this->now = new \DateTimeImmutable('2026-11-05 10:30:00', new \DateTimeZone('Europe/London'));
-        $this->config = new SmsConfig('key', false, null, 1025, self::TEMPLATE_ID, self::REDIRECT, str_starts_with($this->name(), 'testProd'));
+        $this->config = new SmsConfig('key', false, null, 1025, self::TEMPLATE_ID, str_contains($this->name(), 'NoRedirect') ? null : self::REDIRECT, str_starts_with($this->name(), 'testProd'));
 
         $this->sut = m::mock(SendSms::class)->makePartial()->shouldAllowMockingProtectedMethods();
         $this->sut->shouldReceive('now')->andReturnUsing(fn() => $this->now);
@@ -259,5 +259,51 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->messageRepo->shouldNotReceive('save');
 
         $this->handle();
+    }
+
+    public function testTransientRetryNeverLandsOutsideWindow(): void
+    {
+        $this->now = new \DateTimeImmutable('2026-11-05 19:50:00', new \DateTimeZone('Europe/London'));
+        $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('send')->andThrow(new NotifyException('boom', 503));
+        $this->messageRepo->shouldReceive('save')->once();
+
+        try {
+            $this->handle();
+            $this->fail('expected NotReadyException');
+        } catch (NotReadyException $e) {
+            // 19:50 to 08:00 next day
+            $this->assertSame(12 * 3600 + 10 * 60, $e->getRetryAfter());
+        }
+    }
+
+    public function testMissingTemplateMarksFailed(): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andThrow(new LoaderError('no such template'));
+        $this->transport->shouldNotReceive('send');
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+
+        $this->handle();
+
+        $this->assertSame(NotifyMessage::STATUS_FAILED, $m->getStatus()->getId());
+        $this->assertSame('no such template', $m->getErrorMessage());
+        $this->assertNotInstanceOf(\DateTimeImmutable::class, $m->getCompletedOn());
+    }
+
+    public function testNonProdWithNoRedirectCancels(): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->transport->shouldNotReceive('send');
+        $this->messageRepo->shouldReceive('save')->once()->with($m);
+
+        $result = $this->handle();
+
+        $this->assertSame(NotifyMessage::STATUS_CANCELLED, $m->getStatus()->getId());
+        $this->assertNotEmpty($result->getMessages());
     }
 }
