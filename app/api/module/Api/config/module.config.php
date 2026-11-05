@@ -892,6 +892,7 @@ return [
             'RetrievalLinkDocument' => RepositoryFactory::class,
             'RetrievalOtp' => RepositoryFactory::class,
             'RetrievalLinkEvent' => RepositoryFactory::class,
+            'NotifyMessage' => RepositoryFactory::class,
             Repository\LetterSectionVariant::class => RepositoryFactory::class
         ],
         'aliases' => [
