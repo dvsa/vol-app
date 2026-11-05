@@ -29,6 +29,9 @@ class Email implements FactoryInterface
 
     private MailerInterface $mailer;
 
+    /** Only a Notify transport reads and strips the payload header; SMTP would send it on. */
+    private bool $notifyTransport = false;
+
     /**
      * Get Mailer.
      *
@@ -180,7 +183,7 @@ class Email implements FactoryInterface
         }
 
         // Attach Notify payload header when the handler provided one. Transport reads+strips it.
-        if ($notifyPayload !== null) {
+        if ($notifyPayload !== null && $this->notifyTransport) {
             $email->getHeaders()->addTextHeader(
                 \Dvsa\Olcs\Email\Transport\GovUkNotifyTransport::PAYLOAD_HEADER,
                 json_encode($notifyPayload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES)
@@ -209,8 +212,15 @@ class Email implements FactoryInterface
         $factories = iterator_to_array(Transport::getDefaultFactories());
         $factories[] = $container->get(GovUkNotifyTransportFactory::class);
 
-        $transport = (new Transport($factories))->fromDsnObject(Dsn::fromString($dsn));
+        $dsnObject = Dsn::fromString($dsn);
+        $transport = (new Transport($factories))->fromDsnObject($dsnObject);
         $mailer = new Mailer($transport);
+
+        $this->notifyTransport = in_array(
+            $dsnObject->getScheme(),
+            [GovUkNotifyTransportFactory::SCHEME_PRODUCTION, GovUkNotifyTransportFactory::SCHEME_DEV],
+            true
+        );
 
         $this->setMailer($mailer);
         return $this;
