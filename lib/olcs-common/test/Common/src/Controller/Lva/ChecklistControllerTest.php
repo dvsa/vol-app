@@ -81,12 +81,15 @@ final class ChecklistControllerTest extends MockeryTestCase
                 'operatingCentres' => [],
                 'tmLicences' => [],
                 'workshops' => [],
+                'safetyInsVaries' => false,
             ],
             'id' => 99,
             'isMixedWithLgv' => false,
             'canHaveTrailers' => false,
             'tachographInsName' => null,
             'ocChanges' => 0,
+            'applicableAuthProperties' => [],
+            'tmChanges' => 0,
             'hasConditionsUndertakings' => false,
         ];
     }
@@ -143,6 +146,21 @@ final class ChecklistControllerTest extends MockeryTestCase
         );
         $this->sut->shouldReceive('redirect')->never();
         $this->sut->shouldReceive('addErrorMessage')->once()->with('unknown-error');
+
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $this->sut->indexAction());
+    }
+
+    public function testGetDoesNotSave(): void
+    {
+        $this->sut->shouldReceive('params')->with('continuationDetailId')->andReturn(99);
+        $this->sut->shouldReceive('handleQuery')->andReturn(
+            m::mock()->shouldReceive('isOk')->andReturn(true)->getMock()
+                ->shouldReceive('getResult')->andReturn($this->indexData())->getMock()
+        );
+        $this->request->setMethod('GET');
+        $this->sut->shouldReceive('getForm')->andReturn(m::mock(\Common\Form\Form::class));
+        $this->sut->shouldReceive('handleCommand')->never();
+        $this->sut->shouldReceive('redirect')->never();
 
         $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $this->sut->indexAction());
     }
