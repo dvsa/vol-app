@@ -29,12 +29,12 @@ OLCS.formHelper = (function (document, $, undefined) {
 
   // public interface
   exports.fieldset = function (selector) {
-    selector = selector.replace("[", "\\[").replace("]", "\\]");
+    selector = selector.replace(/\[/g, "\\[").replace(/\]/g, "\\]");
     return $("html").find("[data-group='" + selector + "']");
   };
 
   exports.input = function (fieldset, name) {
-    fieldset = fieldset.replace("[", "\\[").replace("]", "\\]");
+    fieldset = fieldset.replace(/\[/g, "\\[").replace(/\]/g, "\\]");
     return $("html").find("[name=" + fieldset + "\\[" + name + "\\]]");
   };
 
