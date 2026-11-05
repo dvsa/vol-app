@@ -93,7 +93,8 @@
                 "class": "Laminas\\Validator\\InArray",
                 "haystack": [
                   "phone_t_primary",
-                  "phone_t_secondary"
+                  "phone_t_secondary",
+                  "phone_t_SMS"
                 ]
               },
               "breakChainOnFailure": false

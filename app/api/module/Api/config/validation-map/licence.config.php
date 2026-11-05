@@ -28,6 +28,7 @@ return [
     CommandHandler\Licence\PrintLicence::class => Misc\CanEditLicenceWithId::class,
     CommandHandler\Licence\CreateVariation::class => Misc\CanEditLicenceWithId::class,
     CommandHandler\Licence\UpdateAddresses::class => Misc\CanAccessLicenceWithId::class,
+    CommandHandler\Licence\UpdateSmsNumber::class => Misc\CanAccessLicenceWithId::class,
     CommandHandler\Licence\UpdateBusinessDetails::class => Misc\CanAccessLicenceWithId::class,
     CommandHandler\Licence\UpdateOperatingCentres::class => Misc\CanAccessLicenceWithId::class,
     CommandHandler\Licence\EnqueueContinuationNotSought::class => Misc\IsSystemUser::class,
