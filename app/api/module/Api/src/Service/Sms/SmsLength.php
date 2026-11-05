@@ -10,6 +10,7 @@ namespace Dvsa\Olcs\Api\Service\Sms;
  * GSM-7 gives 160 characters in a single text and 153 per part when split. Any character
  * outside GSM-7 switches the whole message to UCS-2: 70 single, 67 per part.
  * GSM-7 extension characters take two characters each.
+ * Like Notify, curly quotes, dashes, ellipsis and non-breaking spaces are swapped for GSM ones first.
  */
 final class SmsLength
 {
@@ -17,6 +18,17 @@ final class SmsLength
         . "¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà";
 
     private const string GSM_EXTENSION = "\f^{}\\[~]|€";
+
+    private const array DOWNGRADES = [
+        "\u{2018}" => "'",
+        "\u{2019}" => "'",
+        "\u{201C}" => '"',
+        "\u{201D}" => '"',
+        "\u{2013}" => '-',
+        "\u{2014}" => '-',
+        "\u{2026}" => '...',
+        "\u{00A0}" => ' ',
+    ];
 
     /**
      * @return array{characters:int, fragments:int}
@@ -26,6 +38,8 @@ final class SmsLength
         if ($text === '') {
             return ['characters' => 0, 'fragments' => 0];
         }
+
+        $text = strtr($text, self::DOWNGRADES);
 
         $gsm = true;
         $count = 0;
