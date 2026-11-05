@@ -2,9 +2,11 @@
 
 namespace Common\FormService\Form\Continuation;
 
+use Common\FeatureToggle;
 use Common\Form\Form;
 use Common\Form\Model\Form\Continuation\LicenceChecklist as LicenceChecklistForm;
 use Common\RefData;
+use Common\Service\Cqrs\Query\QuerySender;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\UrlHelperService;
 
@@ -29,7 +31,11 @@ class LicenceChecklist
     ];
 
 
-    public function __construct(protected FormHelperService $formHelper, private UrlHelperService $urlHelper)
+    public function __construct(
+        protected FormHelperService $formHelper,
+        private UrlHelperService $urlHelper,
+        private QuerySender $querySender
+    )
     {
     }
 
@@ -67,13 +73,19 @@ class LicenceChecklist
     }
 
     /**
-     * Prefill the SMS number from the correspondence contact and make it mandatory
+     * Prefill the SMS number from the correspondence contact and make it mandatory.
+     * Until sms_number_capture is on the field is removed, so nothing is asked or saved.
      *
      * @param Form  $form        form
      * @param array $licenceData licence data
      */
     protected function alterSmsNumber($form, $licenceData): void
     {
+        if (!$this->querySender->featuresEnabled([FeatureToggle::SMS_NUMBER_CAPTURE])) {
+            $this->formHelper->remove($form, 'smsNumber');
+            return;
+        }
+
         $smsElement = $form->get('smsNumber')->get('smsNumber');
 
         foreach ($licenceData['correspondenceCd']['phoneContacts'] ?? [] as $phoneContact) {

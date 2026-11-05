@@ -57,6 +57,11 @@ class ChecklistController extends AbstractContinuationController
         if ($request->isPost()) {
             $form->setData((array) $request->getPost());
             if ($form->isValid()) {
+                // The field is only on the form once sms_number_capture is on
+                if (!$form->has('smsNumber')) {
+                    return $this->redirect()->toRoute($this->getNextStepRoute($data), [], [], true);
+                }
+
                 $response = $this->handleCommand(
                     UpdateSmsNumber::create([
                         'id' => $licenceData['id'],

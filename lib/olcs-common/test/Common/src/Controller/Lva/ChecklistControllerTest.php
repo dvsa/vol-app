@@ -113,13 +113,26 @@ final class ChecklistControllerTest extends MockeryTestCase
         }
     }
 
-    private function aForm(bool $valid)
+    private function aForm(bool $valid, bool $hasSms = true)
     {
         $form = m::mock(\Common\Form\Form::class);
         $form->shouldReceive('setData')->once();
         $form->shouldReceive('isValid')->andReturn($valid);
+        $form->shouldReceive('has')->with('smsNumber')->andReturn($hasSms);
         $form->shouldReceive('get->get->getValue')->andReturn('+447700900123');
         return $form;
+    }
+
+    public function testValidPostWithoutSmsFieldRedirectsWithoutSaving(): void
+    {
+        // sms_number_capture off: the form service removed the field
+        $this->prepareIndex([], null, $this->aForm(true, false));
+        $redirect = m::mock();
+        $redirect->shouldReceive('toRoute')->once()
+            ->with(ChecklistController::FINANCES_ROUTE, [], [], true)->andReturn('redirected');
+        $this->sut->shouldReceive('redirect')->andReturn($redirect);
+
+        $this->assertSame('redirected', $this->sut->indexAction());
     }
 
     public function testValidPostSavesSmsThenRedirects(): void

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CommonTest\Common\FormService\Form\Lva;
 
+use Common\FeatureToggle;
+use Common\Service\Cqrs\Query\QuerySender;
 use Common\Service\Helper\UrlHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -29,12 +31,15 @@ final class LicenceChecklistTest extends MockeryTestCase
     /** @var  m\MockInterface */
     protected $urlHelper;
 
+    private m\MockInterface $querySender;
+
     #[\Override]
     protected function setUp(): void
     {
         $this->formHelper = m::mock(FormHelperService::class);
         $this->urlHelper = m::mock(UrlHelperService::class);
-        $this->sut = new LicenceChecklist($this->formHelper, $this->urlHelper);
+        $this->querySender = m::mock(QuerySender::class);
+        $this->sut = new LicenceChecklist($this->formHelper, $this->urlHelper, $this->querySender);
     }
 
     private function smsInputFilter()
@@ -43,6 +48,14 @@ final class LicenceChecklistTest extends MockeryTestCase
         return m::mock()->shouldReceive('get')->with('smsNumber')->andReturn(
             m::mock()->shouldReceive('get')->with('smsNumber')->andReturn($input)->getMock()
         )->getMock();
+    }
+
+    private function captureOn(bool $on): void
+    {
+        $this->querySender->shouldReceive('featuresEnabled')
+            ->with([FeatureToggle::SMS_NUMBER_CAPTURE])
+            ->once()
+            ->andReturn($on);
     }
 
     private function smsForm(): Form
@@ -65,7 +78,10 @@ final class LicenceChecklistTest extends MockeryTestCase
         $inputFilter->add($inner, 'smsNumber');
         $form->setInputFilter($inputFilter);
 
-        $sut = m::mock(LicenceChecklist::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $this->captureOn(true);
+        $sut = m::mock(LicenceChecklist::class, [$this->formHelper, $this->urlHelper, $this->querySender])
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
         $sut->alterSmsNumber($form, [
             'correspondenceCd' => [
                 'phoneContacts' => [
@@ -89,15 +105,39 @@ final class LicenceChecklistTest extends MockeryTestCase
         $inputFilter->add($inner, 'smsNumber');
         $form->setInputFilter($inputFilter);
 
-        $sut = m::mock(LicenceChecklist::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $this->captureOn(true);
+        $sut = m::mock(LicenceChecklist::class, [$this->formHelper, $this->urlHelper, $this->querySender])
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
         $sut->alterSmsNumber($form, ['correspondenceCd' => ['phoneContacts' => []]]);
 
         $this->assertNull($form->get('smsNumber')->get('smsNumber')->getValue());
         $this->assertTrue($inputFilter->get('smsNumber')->get('smsNumber')->isRequired());
     }
 
+    public function testSmsNumberRemovedWhenCaptureOff(): void
+    {
+        $form = $this->smsForm();
+        $this->captureOn(false);
+        $this->formHelper->shouldReceive('remove')->with($form, 'smsNumber')->once();
+
+        $sut = m::mock(LicenceChecklist::class, [$this->formHelper, $this->urlHelper, $this->querySender])
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $sut->alterSmsNumber($form, [
+            'correspondenceCd' => [
+                'phoneContacts' => [
+                    ['phoneContactType' => ['id' => RefData::PHONE_TYPE_SMS], 'phoneNumber' => '+447700900123'],
+                ],
+            ],
+        ]);
+
+        $this->assertNull($form->get('smsNumber')->get('smsNumber')->getValue());
+    }
+
     public function testAlterForm(): void
     {
+        $this->captureOn(true);
         $form = m::mock(LicenceChecklistForm::class)
             ->shouldReceive('get')
             ->with('data')
