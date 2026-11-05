@@ -35,6 +35,17 @@ final class GovUkNotifyTransportFactory extends AbstractTransportFactory
         parent::__construct();
     }
 
+    /** The same factory, but its transports record nothing in notify_message (admin test sends). */
+    public function withoutRecorder(): self
+    {
+        return new self(
+            $this->passthroughTemplateIds,
+            $this->clientFactory,
+            $this->markdownConverter,
+            $this->chromeTemplate,
+        );
+    }
+
     #[\Override]
     public function supports(Dsn $dsn): bool
     {
