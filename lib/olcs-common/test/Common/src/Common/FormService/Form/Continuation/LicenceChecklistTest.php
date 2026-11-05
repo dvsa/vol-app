@@ -37,6 +37,65 @@ final class LicenceChecklistTest extends MockeryTestCase
         $this->sut = new LicenceChecklist($this->formHelper, $this->urlHelper);
     }
 
+    private function smsInputFilter()
+    {
+        $input = m::mock()->shouldReceive('setRequired')->with(true)->once()->getMock();
+        return m::mock()->shouldReceive('get')->with('smsNumber')->andReturn(
+            m::mock()->shouldReceive('get')->with('smsNumber')->andReturn($input)->getMock()
+        )->getMock();
+    }
+
+    private function smsForm(): Form
+    {
+        $fieldset = new \Laminas\Form\Fieldset('smsNumber');
+        $fieldset->add(new \Laminas\Form\Element\Text('smsNumber'));
+        $form = new Form();
+        $form->add($fieldset);
+
+        return $form;
+    }
+
+    public function testSmsNumberPrefilled(): void
+    {
+        $form = $this->smsForm();
+        $inner = new \Laminas\InputFilter\InputFilter();
+        $inner->add(new \Laminas\InputFilter\Input('smsNumber'), 'smsNumber');
+        $inner->get('smsNumber')->setRequired(false);
+        $inputFilter = new \Laminas\InputFilter\InputFilter();
+        $inputFilter->add($inner, 'smsNumber');
+        $form->setInputFilter($inputFilter);
+
+        $sut = m::mock(LicenceChecklist::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $sut->alterSmsNumber($form, [
+            'correspondenceCd' => [
+                'phoneContacts' => [
+                    ['phoneContactType' => ['id' => RefData::PHONE_TYPE_PRIMARY], 'phoneNumber' => '0113 000'],
+                    ['phoneContactType' => ['id' => RefData::PHONE_TYPE_SMS], 'phoneNumber' => '+447700900123'],
+                ],
+            ],
+        ]);
+
+        $this->assertSame('+447700900123', $form->get('smsNumber')->get('smsNumber')->getValue());
+        $this->assertTrue($inputFilter->get('smsNumber')->get('smsNumber')->isRequired());
+    }
+
+    public function testSmsNumberNotPrefilledWhenAbsent(): void
+    {
+        $form = $this->smsForm();
+        $inner = new \Laminas\InputFilter\InputFilter();
+        $inner->add(new \Laminas\InputFilter\Input('smsNumber'), 'smsNumber');
+        $inner->get('smsNumber')->setRequired(false);
+        $inputFilter = new \Laminas\InputFilter\InputFilter();
+        $inputFilter->add($inner, 'smsNumber');
+        $form->setInputFilter($inputFilter);
+
+        $sut = m::mock(LicenceChecklist::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $sut->alterSmsNumber($form, ['correspondenceCd' => ['phoneContacts' => []]]);
+
+        $this->assertNull($form->get('smsNumber')->get('smsNumber')->getValue());
+        $this->assertTrue($inputFilter->get('smsNumber')->get('smsNumber')->isRequired());
+    }
+
     public function testAlterForm(): void
     {
         $form = m::mock(LicenceChecklistForm::class)
@@ -108,6 +167,11 @@ final class LicenceChecklistTest extends MockeryTestCase
                     ->getMock()
             )
             ->twice()
+            ->shouldReceive('get')
+            ->with('smsNumber')
+            ->andReturn(m::mock()->shouldReceive('get')->with('smsNumber')->andReturn(m::mock())->getMock())
+            ->shouldReceive('getInputFilter')
+            ->andReturn($this->smsInputFilter())
             ->getMock();
 
         $this->urlHelper->shouldReceive('fromRoute')

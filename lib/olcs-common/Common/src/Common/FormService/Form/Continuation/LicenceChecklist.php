@@ -63,6 +63,27 @@ class LicenceChecklist
         $this->alterBackUrl($form, $data['licence']['id']);
         $this->alterContinueButton($form, $data);
         $this->alterAllSections($form, $data['sections']);
+        $this->alterSmsNumber($form, $data['licence']);
+    }
+
+    /**
+     * Prefill the SMS number from the correspondence contact and make it mandatory
+     *
+     * @param Form  $form        form
+     * @param array $licenceData licence data
+     */
+    protected function alterSmsNumber($form, $licenceData): void
+    {
+        $smsElement = $form->get('smsNumber')->get('smsNumber');
+
+        foreach ($licenceData['correspondenceCd']['phoneContacts'] ?? [] as $phoneContact) {
+            if (($phoneContact['phoneContactType']['id'] ?? null) === RefData::PHONE_TYPE_SMS) {
+                $smsElement->setValue($phoneContact['phoneNumber']);
+                break;
+            }
+        }
+
+        $form->getInputFilter()->get('smsNumber')->get('smsNumber')->setRequired(true);
     }
 
     /**

@@ -7,6 +7,7 @@ namespace CommonTest\Controller\Lva;
 use Common\Controller\Continuation\ChecklistController;
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Command\Licence\UpdateSmsNumber;
 use Dvsa\Olcs\Transfer\Query\ContinuationDetail\LicenceChecklist;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Hamcrest\Core\IsEqual;
@@ -32,6 +33,7 @@ final class ChecklistControllerTest extends MockeryTestCase
             $mockFormServiceManager,
             $mockTranslationHelper,
         ]);
+        $mockTranslationHelper->shouldReceive('translateReplace')->andReturn('translated');
         $mockTranslationHelper->shouldReceive('translate')
             ->andReturnUsing(
                 static fn($input) => $input
@@ -56,6 +58,101 @@ final class ChecklistControllerTest extends MockeryTestCase
         $this->sut
             ->shouldReceive('getRequest')
             ->andReturn($this->request);
+    }
+
+    private function indexData(): array
+    {
+        return [
+            'licence' => [
+                'id' => 77,
+                'licNo' => 'OB1',
+                'licenceType' => ['id' => 'ltyp_sn', 'description' => 'SN'],
+                'goodsOrPsv' => ['id' => 'lcat_gv', 'description' => 'Goods'],
+                'trafficArea' => ['id' => 'B'],
+                'organisation' => [
+                    'type' => ['id' => 'org_t_o', 'description' => 'Other'],
+                    'organisationPersons' => [],
+                    'name' => 'Org',
+                ],
+                'tradingNames' => [],
+                'tachographInsName' => null,
+                'correspondenceCd' => [],
+                'licenceVehicles' => [],
+                'operatingCentres' => [],
+                'tmLicences' => [],
+                'workshops' => [],
+            ],
+            'id' => 99,
+            'isMixedWithLgv' => false,
+            'canHaveTrailers' => false,
+            'tachographInsName' => null,
+            'ocChanges' => 0,
+            'hasConditionsUndertakings' => false,
+        ];
+    }
+
+    private function prepareIndex(array $post, $commandResponse, $form)
+    {
+        $this->sut->shouldReceive('params')->with('continuationDetailId')->andReturn(99);
+        $this->sut->shouldReceive('handleQuery')->andReturn(
+            m::mock()->shouldReceive('isOk')->andReturn(true)->getMock()
+                ->shouldReceive('getResult')->andReturn($this->indexData())->getMock()
+        );
+        $this->request->setMethod('POST');
+        $this->request->setPost(new \Laminas\Stdlib\Parameters($post));
+        $this->sut->shouldReceive('getForm')->andReturn($form);
+        if ($commandResponse !== null) {
+            $this->sut->shouldReceive('handleCommand')->once()
+                ->with(IsEqual::equalTo(UpdateSmsNumber::create(['id' => 77, 'smsNumber' => '+447700900123'])))
+                ->andReturn($commandResponse);
+        } else {
+            $this->sut->shouldReceive('handleCommand')->never();
+        }
+    }
+
+    private function aForm(bool $valid)
+    {
+        $form = m::mock(\Common\Form\Form::class);
+        $form->shouldReceive('setData')->once();
+        $form->shouldReceive('isValid')->andReturn($valid);
+        $form->shouldReceive('get->get->getValue')->andReturn('+447700900123');
+        return $form;
+    }
+
+    public function testValidPostSavesSmsThenRedirects(): void
+    {
+        $this->prepareIndex(
+            ['smsNumber' => ['smsNumber' => '07700900123']],
+            m::mock()->shouldReceive('isOk')->andReturn(true)->getMock(),
+            $this->aForm(true)
+        );
+        $redirect = m::mock();
+        $redirect->shouldReceive('toRoute')->once()
+            ->with(ChecklistController::FINANCES_ROUTE, [], [], true)->andReturn('redirected');
+        $this->sut->shouldReceive('redirect')->andReturn($redirect);
+
+        $this->assertSame('redirected', $this->sut->indexAction());
+    }
+
+    public function testFailedSaveShowsErrorAndRedisplays(): void
+    {
+        $this->prepareIndex(
+            ['smsNumber' => ['smsNumber' => '07700900123']],
+            m::mock()->shouldReceive('isOk')->andReturn(false)->getMock(),
+            $this->aForm(true)
+        );
+        $this->sut->shouldReceive('redirect')->never();
+        $this->sut->shouldReceive('addErrorMessage')->once()->with('unknown-error');
+
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $this->sut->indexAction());
+    }
+
+    public function testInvalidPostDoesNotSave(): void
+    {
+        $this->prepareIndex(['smsNumber' => ['smsNumber' => '']], null, $this->aForm(false));
+        $this->sut->shouldReceive('redirect')->never();
+
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $this->sut->indexAction());
     }
 
     public function testUsersAction(): void

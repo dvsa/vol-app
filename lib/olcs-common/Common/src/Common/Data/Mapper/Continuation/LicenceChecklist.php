@@ -130,6 +130,10 @@ class LicenceChecklist
                 if ($pc['phoneContactType']['id'] === RefData::PHONE_TYPE_SECONDARY) {
                     $addresses['secondaryNumber'] = $pc['phoneNumber'];
                 }
+
+                if ($pc['phoneContactType']['id'] === RefData::PHONE_TYPE_SMS) {
+                    $addresses['smsNumber'] = $pc['phoneNumber'];
+                }
             }
         }
 

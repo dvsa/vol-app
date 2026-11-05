@@ -143,6 +143,12 @@ final class LicenceChecklistTest extends MockeryTestCase
                             ],
                             'phoneNumber' => '456'
                         ],
+                        [
+                            'phoneContactType' => [
+                                'id' => RefData::PHONE_TYPE_SMS
+                            ],
+                            'phoneNumber' => '+447700900123'
+                        ],
                     ],
                     'emailAddress' => 'test@example.com'
                 ],
@@ -308,6 +314,7 @@ final class LicenceChecklistTest extends MockeryTestCase
                     'establishmentAddress' => 'Flat 99, Bar house, London, SW1A 2AA',
                     'primaryNumber' => '123',
                     'secondaryNumber' => '456',
+                    'smsNumber' => '+447700900123',
                     'showEstablishmentAddress' => true,
                     'correspondenceEmail' => 'test@example.com'
                 ],
