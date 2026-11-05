@@ -33,6 +33,8 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
     protected const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
 
+    private const string ERR_SMS_NUMBER_REQUIRED = 'application.submit.sms-number-required';
+
     protected $lva;
     protected string $location = 'external';
     protected $disableCardPayments = false;
@@ -108,6 +110,11 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             return $this->redirectToOverview();
         }
 
+        $smsRedirect = $this->redirectIfSmsNumberMissing($messages);
+        if ($smsRedirect !== null) {
+            return $smsRedirect;
+        }
+
         if (!$response->isOk()) {
             $this->addErrorMessage('feeNotPaidError');
             return $this->redirectToOverview();
@@ -160,8 +167,34 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             return $this->redirectToSummary();
         }
 
+        $smsRedirect = $this->redirectIfSmsNumberMissing($response->getResult()['messages'] ?? []);
+        if ($smsRedirect !== null) {
+            return $smsRedirect;
+        }
+
         $this->flashMessengerHelper->addUnknownError();
         return $this->redirectToOverview();
+    }
+
+    /**
+     * The API refuses to take payment or submit until an SMS number is given; say so and go to addresses
+     *
+     * @param mixed $messages Messages from the API response
+     *
+     * @return \Laminas\Http\Response|null
+     */
+    private function redirectIfSmsNumberMissing($messages)
+    {
+        if (!is_array($messages) || !in_array(self::ERR_SMS_NUMBER_REQUIRED, $messages, true)) {
+            return null;
+        }
+
+        $this->addErrorMessage($this->translationHelper->translate(self::ERR_SMS_NUMBER_REQUIRED));
+
+        return $this->redirect()->toRoute(
+            'lva-' . $this->lva . '/addresses',
+            [$this->getIdentifierIndex() => $this->getApplicationId()]
+        );
     }
 
     /**
