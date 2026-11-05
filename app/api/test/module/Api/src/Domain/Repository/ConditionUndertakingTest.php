@@ -47,8 +47,8 @@ final class ConditionUndertakingTest extends RepositoryTestCase
     /**
      * Only live conditions are shown read-only: drafts and fulfilled ones are excluded.
      *
-     * This query joins m.attachedTo and m.conditionType twice each — withRefdata() covers both
-     * and the method then asks for them explicitly. See the migration findings.
+     * withRefdata() already joins m.attachedTo and m.conditionType, so asking for them again
+     * adds nothing.
      */
     public function testFetchListForLicenceReadOnly(): void
     {
@@ -57,9 +57,8 @@ final class ConditionUndertakingTest extends RepositoryTestCase
         $this->assertSame(['RESULTS'], $this->sut->fetchListForLicenceReadOnly(7));
 
         $this->assertSame(
-            'SELECT m, w0, w1, w2, w3, w4, w5, oc, w6' . self::FROM . self::REFDATA_JOINS
-            . ' LEFT JOIN m.attachedTo w4 LEFT JOIN m.conditionType w5'
-            . ' LEFT JOIN m.operatingCentre oc LEFT JOIN oc.address w6'
+            'SELECT m, w0, w1, w2, w3, oc, w4' . self::FROM . self::REFDATA_JOINS
+            . ' LEFT JOIN m.operatingCentre oc LEFT JOIN oc.address w4'
             . ' WHERE m.licence = :licence AND m.isDraft = 0 AND m.isFulfilled = 0',
             $qb->getDQL(),
         );

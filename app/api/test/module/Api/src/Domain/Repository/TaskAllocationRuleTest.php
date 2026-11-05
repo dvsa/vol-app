@@ -91,16 +91,15 @@ final class TaskAllocationRuleTest extends RepositoryTestCase
 
         $this->sut->buildDefaultListQuery($qb, m::mock(QueryInterface::class));
 
-        // m.goodsOrPsv is joined twice: w0 by withRefdata and gop explicitly. The explicit
-        // alias is the one the HIDDEN criteria select needs. See the migration findings.
+        // m.goodsOrPsv is joined once, as gop, which is the alias the HIDDEN criteria select needs.
         $this->assertSame(
-            'SELECT m, w0, cat, gop, ta,'
+            'SELECT m, gop, cat, ta,'
             . ' cat.description as HIDDEN categoryDescription,'
             . ' gop.id as HIDDEN criteria,'
             . ' ta.name as HIDDEN trafficAreaName'
             . ' FROM ' . Entity::class . ' m'
-            . ' LEFT JOIN m.goodsOrPsv w0 LEFT JOIN m.category cat'
-            . ' LEFT JOIN m.goodsOrPsv gop LEFT JOIN m.trafficArea ta',
+            . ' LEFT JOIN m.goodsOrPsv gop LEFT JOIN m.category cat'
+            . ' LEFT JOIN m.trafficArea ta',
             $qb->getDQL(),
         );
     }
