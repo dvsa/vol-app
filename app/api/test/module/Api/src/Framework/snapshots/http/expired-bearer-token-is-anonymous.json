@@ -7,7 +7,7 @@
       "Accept": "application/json",
       "Content-Type": "application/json",
       "X-Correlation-Id": "framework-test-correlation-id",
-      "Authorization": "Bearer eyJhbGciOiJSUzI1NiJ9.eyJ1c2VybmFtZSI6InVzcjYxMSJ9.c2lnbmF0dXJl"
+      "Authorization": "Bearer framework-test.not-a-real.token"
     },
     "body": ""
   },

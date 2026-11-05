@@ -72,7 +72,12 @@ final class HttpContractTest extends FrameworkTestCase
         'X-Correlation-Id' => 'framework-test-correlation-id',
     ];
 
-    private const string TOKEN = 'eyJhbGciOiJSUzI1NiJ9.eyJ1c2VybmFtZSI6InVzcjYxMSJ9.c2lnbmF0dXJl';
+    /**
+     * Shaped only as the api checks before decoding (`Bearer x.y.z`); the decoding itself is mocked. Not
+     * base64 JSON, so it reads as a placeholder to people and to secret scanning: this repository is
+     * public, and a JWT-shaped test value raises a GitHub secret scanning alert.
+     */
+    private const string TOKEN = 'framework-test.not-a-real.token';
 
     #[DataProvider('cases')]
     public function testResponseMatchesSnapshot(ServerRequestInterface $request, ?\Closure $configure): void
