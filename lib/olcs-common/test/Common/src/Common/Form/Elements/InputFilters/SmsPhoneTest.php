@@ -18,7 +18,8 @@ final class SmsPhoneTest extends MockeryTestCase
 
         $sut->init();
 
-        $this->assertSame('contact-number-sms', $sut->getLabel());
+        // Optional unless a form service makes it required.
+        $this->assertSame('contact-number-sms-optional', $sut->getLabel());
         $this->assertSame('contact-number-sms-hint', $sut->getOption('hint'));
     }
 

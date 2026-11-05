@@ -19,5 +19,6 @@ trait SmsNumberRequiredTrait
         }
 
         $form->getInputFilter()->get('contact')->get('phone_sms')->setRequired(true);
+        $form->get('contact')->get('phone_sms')->setLabel('contact-number-sms');
     }
 }

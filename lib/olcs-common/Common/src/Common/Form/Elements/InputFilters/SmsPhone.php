@@ -17,7 +17,8 @@ class SmsPhone extends LaminasElement implements InputProviderInterface
     #[\Override]
     public function init(): void
     {
-        $this->setLabel('contact-number-sms');
+        // Labelled optional; form services that make it required swap to contact-number-sms.
+        $this->setLabel('contact-number-sms-optional');
         $this->setOption('hint', 'contact-number-sms-hint');
         parent::init();
     }

@@ -87,6 +87,7 @@ class LicenceChecklist
         }
 
         $smsElement = $form->get('smsNumber')->get('smsNumber');
+        $smsElement->setLabel('contact-number-sms');
 
         foreach ($licenceData['correspondenceCd']['phoneContacts'] ?? [] as $phoneContact) {
             if (($phoneContact['phoneContactType']['id'] ?? null) === RefData::PHONE_TYPE_SMS) {

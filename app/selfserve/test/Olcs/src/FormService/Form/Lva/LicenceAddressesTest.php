@@ -94,5 +94,12 @@ final class LicenceAddressesTest extends MockeryTestCase
         $inputFilter = m::mock(InputFilter::class);
         $inputFilter->shouldReceive('get')->with('contact')->once()->andReturn($contact);
         $mockForm->shouldReceive('getInputFilter')->once()->andReturn($inputFilter);
+
+        // Required, so the label drops "(optional)".
+        $smsElement = m::mock(\Laminas\Form\Element::class);
+        $smsElement->shouldReceive('setLabel')->once()->with('contact-number-sms');
+        $contactFieldset = m::mock(\Laminas\Form\Fieldset::class);
+        $contactFieldset->shouldReceive('get')->with('phone_sms')->once()->andReturn($smsElement);
+        $mockForm->shouldReceive('get')->with('contact')->once()->andReturn($contactFieldset);
     }
 }

@@ -93,6 +93,8 @@ final class LicenceChecklistTest extends MockeryTestCase
 
         $this->assertSame('+447700900123', $form->get('smsNumber')->get('smsNumber')->getValue());
         $this->assertTrue($inputFilter->get('smsNumber')->get('smsNumber')->isRequired());
+        // Always required when shown, so no "(optional)".
+        $this->assertSame('contact-number-sms', $form->get('smsNumber')->get('smsNumber')->getLabel());
     }
 
     public function testSmsNumberNotPrefilledWhenAbsent(): void
@@ -209,7 +211,9 @@ final class LicenceChecklistTest extends MockeryTestCase
             ->twice()
             ->shouldReceive('get')
             ->with('smsNumber')
-            ->andReturn(m::mock()->shouldReceive('get')->with('smsNumber')->andReturn(m::mock())->getMock())
+            ->andReturn(m::mock()->shouldReceive('get')->with('smsNumber')->andReturn(
+                m::mock()->shouldReceive('setLabel')->with('contact-number-sms')->once()->getMock()
+            )->getMock())
             ->shouldReceive('getInputFilter')
             ->andReturn($this->smsInputFilter())
             ->getMock();

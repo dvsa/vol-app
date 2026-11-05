@@ -53,6 +53,7 @@ final class SmsNumberRequiredTraitTest extends TestCase
         $this->applyTrait($form, true);
 
         $this->assertTrue($form->getInputFilter()->get('contact')->get('phone_sms')->isRequired());
+        $this->assertSame('contact-number-sms', $form->get('contact')->get('phone_sms')->getLabel());
     }
 
     public function testEmptySmsNumberFailsWhenRequired(): void
@@ -68,7 +69,10 @@ final class SmsNumberRequiredTraitTest extends TestCase
     public function testSmsNumberStaysOptionalWhenCaptureOff(): void
     {
         $form = $this->buildForm();
+        $form->get('contact')->get('phone_sms')->init();
         $this->applyTrait($form, false);
+
+        $this->assertSame('contact-number-sms-optional', $form->get('contact')->get('phone_sms')->getLabel());
 
         $this->assertFalse($form->getInputFilter()->get('contact')->get('phone_sms')->isRequired());
 
