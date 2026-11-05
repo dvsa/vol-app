@@ -9,11 +9,11 @@ use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
 use Dvsa\Olcs\Email\View\NotifyChrome;
 use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource as PreviewTemplateSourceQry;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Exception;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Throwable;
 
 /**
  * Preview template source
@@ -56,8 +56,19 @@ class PreviewTemplateSource extends AbstractQueryHandler
         $format = $template->getFormat();
         $description = (string) $template->getDescription();
 
+        if (!is_array($datasets)) {
+            return ['error' => true, 'Test data' => 'Test data is not valid JSON'];
+        }
+
         $result = [];
         foreach ($datasets as $datasetName => $datasetValues) {
+            // Test data must be {"<set name>": {<variables>}}, not a flat list of variables.
+            if (!is_array($datasetValues)) {
+                return [
+                    'error' => true,
+                    $datasetName => sprintf('Test data set "%s" is not a set of variables', $datasetName),
+                ];
+            }
             try {
                 if ($format === self::FORMAT_SMS) {
                     // Plain text as sent, plus how many texts it will use.
@@ -74,7 +85,7 @@ class PreviewTemplateSource extends AbstractQueryHandler
                         'default',
                         ['content' => $rendered]
                     );
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 $result['error'] = true;
                 $result[$datasetName] = $e->getMessage();
                 break;

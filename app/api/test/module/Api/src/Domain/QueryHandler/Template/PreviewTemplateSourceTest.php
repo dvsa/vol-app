@@ -214,4 +214,62 @@ final class PreviewTemplateSourceTest extends QueryHandlerTestCase
 
         $this->assertEquals($expectedResponse, $result);
     }
+
+    public function testFlatDatasetIsAnErrorResultNotATypeError(): void
+    {
+        $template = m::mock(Template::class);
+        $template->shouldReceive('getDecodedTestData')
+            ->andReturn(['name' => 'Example Haulage Ltd', 'dayOfWeek' => 'Monday']);
+        $template->shouldReceive('getLocale')->andReturn('en_GB');
+        $template->shouldReceive('getFormat')->andReturn('sms');
+        $template->shouldReceive('getDescription')->andReturn('Letter issued SMS');
+
+        $query = PreviewTemplateSourceQry::create(['id' => 7, 'source' => 'Hi {{ name }}']);
+
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer']->shouldNotReceive('renderString');
+        $this->repoMap['Template']->shouldReceive('fetchUsingId')->with($query)->andReturn($template);
+
+        $this->assertSame(
+            ['error' => true, 'name' => 'Test data set "name" is not a set of variables'],
+            $this->sut->handleQuery($query)
+        );
+    }
+
+    public function testMissingTestDataIsAnErrorResult(): void
+    {
+        $template = m::mock(Template::class);
+        $template->shouldReceive('getDecodedTestData')->andReturn(null);
+        $template->shouldReceive('getLocale')->andReturn('en_GB');
+        $template->shouldReceive('getFormat')->andReturn('sms');
+        $template->shouldReceive('getDescription')->andReturn('Letter issued SMS');
+
+        $query = PreviewTemplateSourceQry::create(['id' => 7, 'source' => 'Hi']);
+
+        $this->repoMap['Template']->shouldReceive('fetchUsingId')->with($query)->andReturn($template);
+
+        $this->assertSame(
+            ['error' => true, 'Test data' => 'Test data is not valid JSON'],
+            $this->sut->handleQuery($query)
+        );
+    }
+
+    public function testRendererErrorIsAnErrorResult(): void
+    {
+        $template = m::mock(Template::class);
+        $template->shouldReceive('getDecodedTestData')->andReturn(['Default' => ['name' => 'Bob']]);
+        $template->shouldReceive('getLocale')->andReturn('en_GB');
+        $template->shouldReceive('getFormat')->andReturn('sms');
+        $template->shouldReceive('getDescription')->andReturn('Letter issued SMS');
+
+        $query = PreviewTemplateSourceQry::create(['id' => 7, 'source' => 'Hi']);
+
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer']->shouldReceive('renderString')
+            ->andThrow(new \TypeError('bad argument'));
+        $this->repoMap['Template']->shouldReceive('fetchUsingId')->with($query)->andReturn($template);
+
+        $this->assertSame(
+            ['error' => true, 'Default' => 'bad argument'],
+            $this->sut->handleQuery($query)
+        );
+    }
 }
