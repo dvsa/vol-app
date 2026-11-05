@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Framework;
 
 use Doctrine\DBAL\Types\Type;
-use Dvsa\Olcs\Api\Domain\Repository\User as UserRepository;
-use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
-use Dvsa\Olcs\Api\Entity\User\User;
-use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\OlcsTest\Api\Framework\Support\ApiApplication;
 use Dvsa\OlcsTest\Api\Framework\Support\Entrypoint;
 use Dvsa\OlcsTest\Api\Framework\Support\GlobalState;
-use Laminas\ServiceManager\ServiceManager;
-use Mockery as m;
+use Dvsa\OlcsTest\Api\Framework\Support\SystemUser;
+use Laminas\Session\Container;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -43,14 +39,15 @@ final class GlobalStateTest extends MockeryTestCase
         $state = GlobalState::capture();
 
         $this->boot($entrypoint);
-        // Logging is what starts a session (the SessionId processor)
-        Logger::info('framework test');
+        // Through the session manager the boot set up, as api code would. Started here rather than left to
+        // whatever in the boot might start one, so the session's restore is checked either way.
+        Container::getDefaultManager()->start();
 
         $during = $this->observe();
 
-        // Proves the test is looking at state the boot really changes
+        // Proves the test is looking at state that really changed
         foreach (['error handler', 'exception handler', 'logger', 'log user id', 'doctrine types', 'session status'] as $item) {
-            $this->assertNotSame($before[$item], $during[$item], $item . ' was not changed by the boot');
+            $this->assertNotSame($before[$item], $during[$item], $item . ' did not change');
         }
 
         $state->restore();
@@ -87,23 +84,9 @@ final class GlobalStateTest extends MockeryTestCase
 
     private function boot(Entrypoint $entrypoint): void
     {
-        if ($entrypoint === Entrypoint::Web) {
-            ApiApplication::bootstrap($entrypoint);
-
-            return;
-        }
-
-        $systemUser = new User('pid', User::USER_TYPE_INTERNAL);
-        $systemUser->setLoginId('system-user');
-
-        $userRepository = m::mock(UserRepository::class);
-        $userRepository->expects('fetchById')->with(IdentityProviderInterface::SYSTEM_USER)->andReturn($systemUser);
-
-        ApiApplication::bootstrap($entrypoint, static function (ServiceManager $serviceManager) use ($userRepository): void {
-            $repositories = $serviceManager->get('RepositoryServiceManager');
-            assert($repositories instanceof RepositoryServiceManager);
-            $repositories->setAllowOverride(true);
-            $repositories->setService('User', $userRepository);
-        });
+        ApiApplication::bootstrap(
+            $entrypoint,
+            $entrypoint === Entrypoint::Cli ? SystemUser::answerTheBootstrapLookup(...) : null
+        );
     }
 }
