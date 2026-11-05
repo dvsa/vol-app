@@ -50,12 +50,15 @@ final class SmsPhoneNumber extends AbstractValidator
      */
     public static function normalise(string $value): ?string
     {
-        // only digits, whitespace and ()-+ are allowed
-        if (preg_match('/^[\d\s()\-+]+$/', $value) !== 1) {
+        // pasted numbers often carry non-breaking spaces
+        $value = str_replace(["\u{00A0}", "\u{202F}"], ' ', $value);
+
+        // only digits, whitespace and ()-+ are allowed; invalid UTF-8 fails here too
+        if (preg_match('/^[\d\s()\-+]+$/u', $value) !== 1) {
             return null;
         }
 
-        $digits = preg_replace('/[\s()\-]/', '', $value);
+        $digits = preg_replace('/[\s()\-]/u', '', $value);
         if ($digits === null || preg_match('/\d/', $digits) !== 1) {
             return null;
         }

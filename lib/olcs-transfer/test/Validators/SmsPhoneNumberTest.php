@@ -27,6 +27,9 @@ final class SmsPhoneNumberTest extends TestCase
         yield 'dashes' => ['07700-900-123', '+447700900123'];
         yield 'london landline' => ['020 7946 0000', '+442079460000'];
         yield 'jersey' => ['07797 123456', '+447797123456'];
+        // pasted from Word or a web page
+        yield 'non-breaking spaces' => ["07700\u{00A0}900\u{00A0}123", '+447700900123'];
+        yield 'narrow non-breaking spaces' => ["+44\u{202F}7700\u{202F}900123", '+447700900123'];
     }
 
     #[DataProvider('invalidProvider')]
@@ -48,6 +51,7 @@ final class SmsPhoneNumberTest extends TestCase
         yield 'too short' => ['123'];
         yield 'french national' => ['0612345678'];
         yield 'empty' => [''];
+        yield 'invalid utf-8' => ["07700\xC2900123"];
     }
 
     public function testNonStringRejected(): void
