@@ -86,6 +86,10 @@ final class ApplicationAddressesReviewServiceTest extends MockeryTestCase
                                 [
                                     'phoneContactType' => ['id' => PhoneContact::TYPE_SECONDARY],
                                     'phoneNumber' => '0765465465'
+                                ],
+                                [
+                                    'phoneContactType' => ['id' => PhoneContact::TYPE_SMS],
+                                    'phoneNumber' => '+447700900123'
                                 ]
                             ]
                         ],
@@ -128,6 +132,10 @@ final class ApplicationAddressesReviewServiceTest extends MockeryTestCase
                                             [
                                                 'label' => 'application-review-addresses-correspondence-secondary',
                                                 'value' => '0765465465'
+                                            ],
+                                            [
+                                                'label' => 'application-review-addresses-sms-number',
+                                                'value' => '+447700900123'
                                             ],
                                             [
                                                 'label' => 'application-review-addresses-correspondence-email',
@@ -213,6 +221,10 @@ final class ApplicationAddressesReviewServiceTest extends MockeryTestCase
                                             ],
                                             [
                                                 'label' => 'application-review-addresses-correspondence-secondary',
+                                                'value' => ''
+                                            ],
+                                            [
+                                                'label' => 'application-review-addresses-sms-number',
                                                 'value' => ''
                                             ],
                                             [

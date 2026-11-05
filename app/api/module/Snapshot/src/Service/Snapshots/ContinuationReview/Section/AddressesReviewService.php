@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
+use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Snapshot\Service\Formatter\Address;
@@ -72,6 +73,14 @@ class AddressesReviewService extends AbstractReviewService
             $config[] = [
                 ['value' => 'continuation-review-addresses-secondary-number'],
                 ['value' => $secondaryNumber, 'header' => true]
+            ];
+        }
+
+        $smsNumber = $correspondenceCd->getPhoneContactNumber(PhoneContact::TYPE_SMS);
+        if ($smsNumber !== null) {
+            $config[] = [
+                ['value' => 'continuation-review-addresses-sms-number'],
+                ['value' => $smsNumber, 'header' => true]
             ];
         }
 

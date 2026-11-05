@@ -69,6 +69,13 @@ class ApplicationAddressesReviewService extends AbstractReviewService
                                         )
                                     ],
                                     [
+                                        'label' => 'application-review-addresses-sms-number',
+                                        'value' => $this->getPhoneNumber(
+                                            $phoneContacts,
+                                            PhoneContact::TYPE_SMS
+                                        )
+                                    ],
+                                    [
                                         'label' => 'application-review-addresses-correspondence-email',
                                         'value' => $data['licence']['correspondenceCd']['emailAddress']
                                     ]

@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Address;
+use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Laminas\I18n\Translator\TranslatorInterface;
 
@@ -67,6 +68,10 @@ final class AddressesReviewServiceTest extends MockeryTestCase
             ->with(RefData::PHONE_NUMBER_SECONDARY_TYPE)
             ->andReturn('456')
             ->once()
+            ->shouldReceive('getPhoneContactNumber')
+            ->with(PhoneContact::TYPE_SMS)
+            ->andReturn('+447700900123')
+            ->once()
             ->getMock();
 
         $mockEstablishmentCd = m::mock(ContactDetails::class)
@@ -112,6 +117,10 @@ final class AddressesReviewServiceTest extends MockeryTestCase
                 ['value' => 'continuation-review-addresses-secondary-number'],
                 ['value' => '456', 'header' => true]
             ],
+            [
+                ['value' => 'continuation-review-addresses-sms-number'],
+                ['value' => '+447700900123', 'header' => true]
+            ],
         ];
 
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
@@ -138,6 +147,10 @@ final class AddressesReviewServiceTest extends MockeryTestCase
             ->once()
             ->shouldReceive('getPhoneContactNumber')
             ->with(RefData::PHONE_NUMBER_SECONDARY_TYPE)
+            ->andReturn(null)
+            ->once()
+            ->shouldReceive('getPhoneContactNumber')
+            ->with(PhoneContact::TYPE_SMS)
             ->andReturn(null)
             ->once()
             ->getMock();
@@ -197,6 +210,10 @@ final class AddressesReviewServiceTest extends MockeryTestCase
             ->once()
             ->shouldReceive('getPhoneContactNumber')
             ->with(RefData::PHONE_NUMBER_SECONDARY_TYPE)
+            ->andReturn(null)
+            ->once()
+            ->shouldReceive('getPhoneContactNumber')
+            ->with(PhoneContact::TYPE_SMS)
             ->andReturn(null)
             ->once()
             ->getMock();
