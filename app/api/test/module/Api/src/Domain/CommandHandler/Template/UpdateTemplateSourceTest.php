@@ -29,7 +29,8 @@ final class UpdateTemplateSourceTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('Template', TemplateRepo::class);
 
         $this->mockedSmServices = [
-            'TemplateTwigRenderer' => m::mock(TwigRenderer::class)
+            'TemplateTwigRenderer' => m::mock(TwigRenderer::class),
+            'TemplatePlainTextTwigRenderer' => m::mock(TwigRenderer::class),
         ];
 
         parent::setUp();

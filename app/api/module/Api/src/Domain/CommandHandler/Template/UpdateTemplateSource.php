@@ -30,6 +30,9 @@ class UpdateTemplateSource extends AbstractCommandHandler
     /** @var TwigRenderer */
     private $twigRenderer;
 
+    /** md goes to Notify without HTML escaping, so it is checked that way */
+    private TwigRenderer $plainTextTwigRenderer;
+
     private ?MarkdownConverter $markdownValidator = null;
 
     /**
@@ -47,6 +50,7 @@ class UpdateTemplateSource extends AbstractCommandHandler
         $source = $command->getSource();
 
         $isMarkdown = $template->getFormat() === self::FORMAT_MARKDOWN;
+        $renderer = $isMarkdown ? $this->plainTextTwigRenderer : $this->twigRenderer;
 
         $testDatasets = $template->getDecodedTestData();
         if (!is_array($testDatasets)) {
@@ -60,7 +64,7 @@ class UpdateTemplateSource extends AbstractCommandHandler
                 );
             }
             try {
-                $rendered = $this->twigRenderer->renderString($source, $datasetValues);
+                $rendered = $renderer->renderString($source, $datasetValues);
             } catch (Throwable $e) {
                 throw new ValidationException(
                     [sprintf(
@@ -89,6 +93,7 @@ class UpdateTemplateSource extends AbstractCommandHandler
         $fullContainer = $container;
 
         $this->twigRenderer = $container->get('TemplateTwigRenderer');
+        $this->plainTextTwigRenderer = $container->get('TemplatePlainTextTwigRenderer');
         return parent::__invoke($fullContainer, $requestedName, $options);
     }
 
