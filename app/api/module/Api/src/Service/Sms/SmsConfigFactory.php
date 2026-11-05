@@ -54,7 +54,7 @@ final class SmsConfigFactory implements FactoryInterface
         );
     }
 
-    /** A redirect that is not a valid UK mobile number counts as unset, so a typo cannot enable SMS. */
+    /** A redirect that is not a valid UK mobile or landline number counts as unset, so a typo cannot enable SMS. */
     private static function normalisedNumber(?string $value): ?string
     {
         return $value === null ? null : SmsPhoneNumber::normalise($value);

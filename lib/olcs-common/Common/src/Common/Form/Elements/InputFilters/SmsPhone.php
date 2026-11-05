@@ -8,7 +8,7 @@ use Laminas\InputFilter\InputProviderInterface;
 use Laminas\Validator\NotEmpty;
 
 /**
- * Optional mobile number used for SMS notifications
+ * Optional mobile or landline number used for SMS notifications
  */
 class SmsPhone extends LaminasElement implements InputProviderInterface
 {

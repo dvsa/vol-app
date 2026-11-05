@@ -76,7 +76,7 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
     }
 
     /**
-     * Normalise phone_sms in the contact data, or throw when it is not a valid UK mobile
+     * Normalise phone_sms in the contact data, or throw when it is not a valid UK mobile or landline
      *
      * @param array|null $contact Contact data
      *
