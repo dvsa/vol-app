@@ -10,6 +10,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\Addresses\LicenceAddresses;
 use Laminas\Form\Form;
+use Laminas\InputFilter\Input;
+use Laminas\InputFilter\InputFilter;
 
 final class LicenceAddressesTest extends MockeryTestCase
 {
@@ -41,6 +43,7 @@ final class LicenceAddressesTest extends MockeryTestCase
             ->getMock();
 
         $mockForm = m::mock(Form::class);
+        $this->mockSmsRequired($mockForm);
         $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
@@ -57,5 +60,16 @@ final class LicenceAddressesTest extends MockeryTestCase
         $this->sut->getForm(
             ['typeOfLicence' => ['licenceType' => RefData::LICENCE_TYPE_STANDARD_NATIONAL]]
         );
+    }
+
+    private function mockSmsRequired(Form $mockForm): void
+    {
+        $smsInput = m::mock(Input::class);
+        $smsInput->shouldReceive('setRequired')->once()->with(true)->andReturnSelf();
+        $contact = m::mock(InputFilter::class);
+        $contact->shouldReceive('get')->with('phone_sms')->once()->andReturn($smsInput);
+        $inputFilter = m::mock(InputFilter::class);
+        $inputFilter->shouldReceive('get')->with('contact')->once()->andReturn($contact);
+        $mockForm->shouldReceive('getInputFilter')->once()->andReturn($inputFilter);
     }
 }

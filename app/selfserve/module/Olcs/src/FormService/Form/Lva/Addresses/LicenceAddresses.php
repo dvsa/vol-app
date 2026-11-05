@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva\Addresses;
 
 use Common\FormService\Form\Lva\Addresses as CommonAddress;
+use Common\FormService\Form\Lva\SmsNumberRequiredTrait;
 use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 
@@ -13,6 +14,8 @@ use Laminas\Form\Form;
  */
 class LicenceAddresses extends CommonAddress
 {
+    use SmsNumberRequiredTrait;
+
     protected FormHelperService $formHelper;
 
     public function __construct(FormHelperService $formHelper)
@@ -31,6 +34,7 @@ class LicenceAddresses extends CommonAddress
     protected function alterForm(Form $form, array $params)
     {
         parent::alterForm($form, $params);
+        $this->requireSmsNumber($form);
         $form->get('form-actions')->get('save')->setAttribute('class', 'govuk-button');
         $this->formHelper->remove($form, 'form-actions->cancel');
 

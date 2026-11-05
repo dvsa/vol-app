@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva\Addresses;
 
 use Common\FormService\Form\Lva\Addresses as CommonAddress;
+use Common\FormService\Form\Lva\SmsNumberRequiredTrait;
 use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 
@@ -13,6 +14,8 @@ use Laminas\Form\Form;
  */
 class VariationAddresses extends CommonAddress
 {
+    use SmsNumberRequiredTrait;
+
     protected FormHelperService $formHelper;
 
     public function __construct(FormHelperService $formHelper)
@@ -32,6 +35,7 @@ class VariationAddresses extends CommonAddress
     protected function alterForm(Form $form, array $params)
     {
         parent::alterForm($form, $params);
+        $this->requireSmsNumber($form);
         $this->formHelper->remove($form, 'form-actions->cancel');
 
         return $form;

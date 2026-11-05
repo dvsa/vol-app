@@ -9,6 +9,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\Addresses\VariationAddresses;
 use Laminas\Form\Form;
+use Laminas\InputFilter\Input;
+use Laminas\InputFilter\InputFilter;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
@@ -37,6 +39,7 @@ final class VariationAddressesTest extends MockeryTestCase
     public function testAlterForm(): void
     {
         $mockForm = m::mock(Form::class);
+        $this->mockSmsRequired($mockForm);
 
         $this->fh->shouldReceive('createForm')
             ->once()
@@ -59,5 +62,16 @@ final class VariationAddressesTest extends MockeryTestCase
         $form = $this->sut->getForm(['typeOfLicence' => ['licenceType' => 'foo']]);
 
         $this->assertSame($mockForm, $form);
+    }
+
+    private function mockSmsRequired(Form $mockForm): void
+    {
+        $smsInput = m::mock(Input::class);
+        $smsInput->shouldReceive('setRequired')->once()->with(true)->andReturnSelf();
+        $contact = m::mock(InputFilter::class);
+        $contact->shouldReceive('get')->with('phone_sms')->once()->andReturn($smsInput);
+        $inputFilter = m::mock(InputFilter::class);
+        $inputFilter->shouldReceive('get')->with('contact')->once()->andReturn($contact);
+        $mockForm->shouldReceive('getInputFilter')->once()->andReturn($inputFilter);
     }
 }
