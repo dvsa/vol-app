@@ -82,7 +82,7 @@ final class SmsPhoneNumber extends AbstractValidator
 
     /**
      * Shows a stored E.164 UK number the way people write it, e.g. 07700 900123.
-     * Anything else comes back unchanged.
+     * Anything that isn't a number we would accept comes back unchanged.
      */
     public static function formatForDisplay(string $e164): string
     {
@@ -94,6 +94,11 @@ final class SmsPhoneNumber extends AbstractValidator
         try {
             $parsed = $util->parse($e164, 'GB');
         } catch (NumberParseException) {
+            return $e164;
+        }
+
+        // same test as normalise(), which also lets the Ofcom drama range through
+        if (!self::isAcceptable($util, $parsed)) {
             return $e164;
         }
 

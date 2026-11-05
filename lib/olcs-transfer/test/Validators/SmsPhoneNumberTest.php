@@ -76,6 +76,9 @@ final class SmsPhoneNumberTest extends TestCase
         yield 'rubbish' => ['not a number', 'not a number'];
         yield 'empty' => ['', ''];
         yield 'other country' => ['+33612345678', '+33612345678'];
+        // parseable but not a real number, so shown as stored
+        yield 'too short' => ['+44123', '+44123'];
+        yield 'too long' => ['+4477009001234567', '+4477009001234567'];
     }
 
     #[DataProvider('displayRoundTripProvider')]
