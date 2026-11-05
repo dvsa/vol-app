@@ -159,7 +159,8 @@ OLCS.postcodeSearch = (function (document, $, undefined) {
               var selectElement = fieldSetElement.querySelector(".address__select select");
               if (null === selectElement) {
                 var nextInputElement = fieldSetElement.querySelector(
-                  "input:not([type='hidden']):not([id^='postcodeInput'])",
+                  // Prettier requires the trailing comma below and adds it back in if you remove it, so ignore the jshint warning
+                  "input:not([type='hidden']):not([id^='postcodeInput'])", // jshint ignore:line
                 );
                 nextInputElement.focus();
               } else {
