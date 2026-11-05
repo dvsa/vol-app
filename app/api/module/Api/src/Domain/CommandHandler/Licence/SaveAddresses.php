@@ -17,6 +17,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
 use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumber;
 use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 use Psr\Container\ContainerInterface;
 
@@ -214,6 +215,10 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
                     Query::HYDRATE_OBJECT,
                     $version
                 );
+            } elseif ($isSms && !empty($data['phone_sms'])) {
+                // a form loaded before the SMS row existed posts no id, so reuse the row instead of adding another
+                $contact = SmsNumber::latestContact($contactDetails);
+                $version = $contact?->getVersion();
             }
 
             $hasContact = ($contact instanceof PhoneContact);
@@ -241,6 +246,24 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
 
                     // create Event History record
                     $this->eventHistoryCreator->create($contact, EventHistoryTypeEntity::EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS, null, $licence);
+                }
+            } elseif ($isSms) {
+                // clearing the number removes every SMS row, including any older duplicates
+                $rows = SmsNumber::smsContacts($contactDetails);
+                if ($hasContact && !in_array($contact, $rows, true)) {
+                    $rows[] = $contact;
+                }
+
+                foreach ($rows as $row) {
+                    if ($row->getId() > 0) {
+                        $contactDetails->getPhoneContacts()->removeElement($row);
+                        $this->getRepo('PhoneContact')->delete($row);
+                        $result->setFlag('hasChanged', true);
+                    }
+                }
+
+                if ($result->getFlag('hasChanged')) {
+                    $result->addMessage('Phone contact sms deleted');
                 }
             } elseif ($hasContact && $contact->getId() > 0) {
                 $contactDetails->getPhoneContacts()->removeElement($contact);

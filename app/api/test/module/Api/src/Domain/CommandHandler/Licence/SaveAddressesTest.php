@@ -367,10 +367,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
             'phone_sms_version' => '',
         ]));
 
-        $this->expectSmsCorrespondenceSetup(
-            $command,
-            m::mock()->shouldReceive('add')->once()->getMock()
-        );
+        $phoneContacts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->expectSmsCorrespondenceSetup($command, $phoneContacts);
 
         $this->repoMap['PhoneContact']->shouldReceive('save')
             ->once()
@@ -385,6 +383,7 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertTrue($result->getFlag('smsChanged'));
         $this->assertFalse($result->getFlag('isDirty'));
         $this->assertSame(['Phone contact sms created'], $result->getMessages());
+        $this->assertCount(1, $phoneContacts);
     }
 
     public function testDisplayedSmsNumberResavedIsNotAChange(): void
@@ -411,6 +410,77 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertSame('+447700900123', $existing->getPhoneNumber());
         $this->assertNull($result->getFlag('smsChanged'));
         $this->assertSame([], $result->getMessages());
+    }
+
+    private function smsRow(int $id, string $number, string $type = PhoneContactEntity::TYPE_SMS): PhoneContactEntity
+    {
+        $row = m::mock(PhoneContactEntity::class)->makePartial();
+        $row->setPhoneContactType(new RefData($type));
+        $row->setPhoneNumber($number);
+        $row->shouldReceive('getId')->andReturn($id);
+
+        return $row;
+    }
+
+    public function testStaleFormWithoutSmsIdUpdatesTheExistingRow(): void
+    {
+        // the form was loaded before the SMS row existed, so it posts no id
+        $command = Cmd::create($this->smsCommandData([
+            'phone_sms' => '07700 900456',
+            'phone_sms_id' => '',
+            'phone_sms_version' => '',
+        ]));
+
+        $existing = $this->smsRow(99, '+447700900123');
+        $existing->shouldReceive('getVersion')->andReturn(3, 4);
+        $phoneContacts = new \Doctrine\Common\Collections\ArrayCollection([$existing]);
+        [$licence] = $this->expectSmsCorrespondenceSetup($command, $phoneContacts);
+
+        $this->repoMap['PhoneContact']->shouldReceive('save')->once()->with($existing);
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->once()
+            ->with($existing, EventHistoryTypeEntity::EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS, null, $licence);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertCount(1, $phoneContacts);
+        $this->assertSame('+447700900456', $existing->getPhoneNumber());
+        $this->assertTrue($result->getFlag('smsChanged'));
+        $this->assertSame(['Phone contact sms updated'], $result->getMessages());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('clearedSmsIds')]
+    public function testClearingSmsDeletesEverySmsRow(string|int $postedId): void
+    {
+        $command = Cmd::create($this->smsCommandData([
+            'phone_sms' => '',
+            'phone_sms_id' => $postedId,
+            'phone_sms_version' => $postedId === '' ? '' : 3,
+        ]));
+
+        $first = $this->smsRow(98, '+447700900001');
+        $second = $this->smsRow(99, '+447700900002');
+        $primary = $this->smsRow(97, '0113 496 0000', PhoneContactEntity::TYPE_PRIMARY);
+        $phoneContacts = new \Doctrine\Common\Collections\ArrayCollection([$first, $second, $primary]);
+        $this->expectSmsCorrespondenceSetup($command, $phoneContacts);
+
+        if ($postedId !== '') {
+            $this->repoMap['PhoneContact']->shouldReceive('fetchById')->with(99, m::any(), 3)->andReturn($second);
+        }
+        $this->repoMap['PhoneContact']->shouldReceive('delete')->once()->with($first);
+        $this->repoMap['PhoneContact']->shouldReceive('delete')->once()->with($second);
+        $this->repoMap['PhoneContact']->shouldReceive('delete')->never()->with($primary);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertSame([$primary], array_values($phoneContacts->toArray()));
+        $this->assertTrue($result->getFlag('smsChanged'));
+        $this->assertSame(['Phone contact sms deleted'], $result->getMessages());
+    }
+
+    public static function clearedSmsIds(): array
+    {
+        return ['posted id' => [99], 'stale form, no id' => ['']];
     }
 
     public function testInvalidSmsNumberThrows(): void

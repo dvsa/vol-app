@@ -82,6 +82,32 @@ final class UpdateSmsNumberTest extends AbstractCommandHandlerTestCase
         $this->assertCount(1, $cd->getPhoneContacts());
     }
 
+    public function testDuplicatesUpdateTheMostRecentlyModifiedRow(): void
+    {
+        $command = Cmd::create(['id' => 7, 'smsNumber' => '07700900123']);
+
+        $cd = new ContactDetails(new RefData(ContactDetails::CONTACT_TYPE_CORRESPONDENCE_ADDRESS));
+        $older = new PhoneContact(new RefData(PhoneContact::TYPE_SMS));
+        $older->setId(1);
+        $older->setPhoneNumber('+447700900001');
+        $older->setLastModifiedOn(new \DateTime('2026-01-01'));
+        $newer = new PhoneContact(new RefData(PhoneContact::TYPE_SMS));
+        $newer->setId(2);
+        $newer->setPhoneNumber('+447700900002');
+        $newer->setLastModifiedOn(new \DateTime('2026-06-01'));
+        $cd->getPhoneContacts()->add($older);
+        $cd->getPhoneContacts()->add($newer);
+
+        $this->repoMap['Licence']->shouldReceive('fetchUsingId')->with($command)->andReturn($this->licenceWith($cd));
+        $this->repoMap['PhoneContact']->shouldReceive('save')->once()->with($newer);
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')->once();
+
+        $this->sut->handleCommand($command);
+
+        $this->assertSame('+447700900123', $newer->getPhoneNumber());
+        $this->assertSame('+447700900001', $older->getPhoneNumber());
+    }
+
     public function testUnchangedNumberWritesNoHistory(): void
     {
         $command = Cmd::create(['id' => 7, 'smsNumber' => '07700 900123']);

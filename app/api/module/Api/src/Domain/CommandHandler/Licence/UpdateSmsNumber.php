@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType;
 use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumber;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 use Olcs\Logging\Log\Logger;
@@ -44,13 +45,7 @@ final class UpdateSmsNumber extends AbstractCommandHandler implements Transactio
             return $this->result;
         }
 
-        $contact = null;
-        foreach ($contactDetails->getPhoneContacts() as $existing) {
-            if ($existing->getPhoneContactType()->getId() === PhoneContact::TYPE_SMS) {
-                $contact = $existing;
-                break;
-            }
-        }
+        $contact = SmsNumber::latestContact($contactDetails);
 
         $isUpdate = $contact !== null && $contact->getPhoneNumber() !== $number;
 
