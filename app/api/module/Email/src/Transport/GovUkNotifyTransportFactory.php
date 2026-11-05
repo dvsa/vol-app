@@ -30,6 +30,7 @@ final class GovUkNotifyTransportFactory extends AbstractTransportFactory
         private readonly \Closure $clientFactory,
         private readonly ConverterInterface $markdownConverter,
         private readonly string $chromeTemplate,
+        private readonly ?NotifyMessageRecorderInterface $recorder = null,
     ) {
         parent::__construct();
     }
@@ -61,6 +62,7 @@ final class GovUkNotifyTransportFactory extends AbstractTransportFactory
                 $this->chromeTemplate,
                 $this->dispatcher,
                 $this->logger,
+                $this->recorder,
             );
         }
 
@@ -76,6 +78,7 @@ final class GovUkNotifyTransportFactory extends AbstractTransportFactory
             $this->passthroughTemplateIds,
             $this->dispatcher,
             $this->logger,
+            $this->recorder,
         );
     }
 }

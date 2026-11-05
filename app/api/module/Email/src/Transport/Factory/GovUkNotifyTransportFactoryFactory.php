@@ -7,6 +7,7 @@ namespace Dvsa\Olcs\Email\Transport\Factory;
 use Alphagov\Notifications\Client as NotifyClient;
 use Dvsa\Olcs\Email\Service\NotifyClientFactory;
 use Dvsa\Olcs\Email\Transport\GovUkNotifyTransportFactory;
+use Dvsa\Olcs\Email\Transport\NotifyMessageRecorderInterface;
 use Dvsa\Olcs\Email\View\NotifyChrome;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
@@ -48,6 +49,9 @@ final class GovUkNotifyTransportFactoryFactory implements FactoryInterface
             $clientFactory,
             $markdownConverter,
             $chromeTemplate,
+            $container->has(NotifyMessageRecorderInterface::class)
+                ? $container->get(NotifyMessageRecorderInterface::class)
+                : null,
         );
     }
 

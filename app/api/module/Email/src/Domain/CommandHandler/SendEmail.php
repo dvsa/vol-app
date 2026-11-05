@@ -257,7 +257,7 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
             ];
         }
 
-        $notifyPayload = $this->buildNotifyPayload($command, $downloadedDocs);
+        $notifyPayload = $this->buildNotifyPayload($command, $downloadedDocs, $subject);
 
         $this->send(
             $to,
@@ -284,7 +284,7 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
      * @param array<int, array{fileName: string, content: string}> $attachments
      * @return array<string, mixed>|null
      */
-    protected function buildNotifyPayload(CommandInterface $command, array $attachments): ?array
+    protected function buildNotifyPayload(CommandInterface $command, array $attachments, string $subject = ''): ?array
     {
         if (!$command instanceof SendEmailCmd || $command->getTemplateKey() === null) {
             return null;
@@ -298,7 +298,24 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
                 ? $this->replaceUris($command->getMarkdownBody())
                 : null,
             'attachments' => $attachments,
+            'context' => $this->buildRecordContext($command, $subject),
         ];
+    }
+
+    /**
+     * What the transport needs to write the notify_message row. originalTo is the intended To list,
+     * taken from the command so it survives the send_all_mail_to redirect.
+     *
+     * @return array<string, mixed>
+     */
+    private function buildRecordContext(SendEmailCmd $command, string $subject): array
+    {
+        $context = $command->getNotifyContext();
+        $context['templateName'] = $context['templateName'] ?? null;
+        $context['description'] = $subject;
+        $context['originalTo'] = array_values(array_filter((array) $command->getTo(), 'is_string'));
+
+        return $context;
     }
 
     /**

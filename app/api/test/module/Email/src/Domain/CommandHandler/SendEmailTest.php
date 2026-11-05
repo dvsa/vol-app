@@ -411,4 +411,82 @@ final class SendEmailTest extends AbstractCommandHandlerTestCase
 
         $this->sut->handleCommand($command);
     }
+
+    public function testContextFlowsIntoPayload(): void
+    {
+        $command = Cmd::create([
+            'to' => ['foo@bar.com'],
+            'cc' => [],
+            'bcc' => [],
+            'docs' => [],
+            'subject' => 'Some subject',
+            'plainBody' => null,
+            'htmlBody' => null,
+            'markdownBody' => 'Body',
+            'templateKey' => 'notify-template-uuid',
+            'locale' => 'en_GB',
+            'personalisation' => [],
+            'highPriority' => false,
+            'subjectVariables' => [],
+            'notifyContext' => ['licence' => 9, 'templateName' => 'my-template'],
+        ]);
+
+        $this->sut->setSendAllMailTo(null);
+        $this->repoMap['Document']->shouldReceive('fetchByIds')->with([])->andReturn([]);
+
+        $this->mockedSmServices['EmailService']->shouldReceive('send')
+            ->once()
+            ->with(
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::on(fn($payload): bool => $payload['context'] === [
+                    'licence' => 9,
+                    'templateName' => 'my-template',
+                    'description' => 'translated-Some subject',
+                    'originalTo' => ['foo@bar.com'],
+                ])
+            );
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testContextHasNullTemplateNameWhenUnknown(): void
+    {
+        $command = Cmd::create([
+            'to' => 'foo@bar.com',
+            'cc' => [],
+            'bcc' => [],
+            'docs' => [],
+            'subject' => 'Some subject',
+            'plainBody' => null,
+            'htmlBody' => null,
+            'markdownBody' => 'Body',
+            'templateKey' => 'notify-template-uuid',
+            'locale' => 'en_GB',
+            'personalisation' => [],
+            'highPriority' => false,
+            'subjectVariables' => [],
+        ]);
+
+        $this->sut->setSendAllMailTo(null);
+        $this->repoMap['Document']->shouldReceive('fetchByIds')->with([])->andReturn([]);
+
+        $this->mockedSmServices['EmailService']->shouldReceive('send')
+            ->once()
+            ->with(
+                m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(),
+                m::on(fn($payload): bool => $payload['context']['templateName'] === null
+                    && $payload['context']['originalTo'] === ['foo@bar.com'])
+            );
+
+        $this->sut->handleCommand($command);
+    }
 }

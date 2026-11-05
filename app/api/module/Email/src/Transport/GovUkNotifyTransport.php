@@ -29,6 +29,8 @@ use Symfony\Component\Mime\Header\UnstructuredHeader;
  */
 final class GovUkNotifyTransport extends AbstractTransport
 {
+    use RecordsNotifyEmails;
+
     public const PAYLOAD_HEADER = 'X-Olcs-Notify-Payload';
 
     public const LOCALE_EN_GB = 'en_GB';
@@ -41,6 +43,7 @@ final class GovUkNotifyTransport extends AbstractTransport
         private readonly array $passthroughTemplateIds,
         ?EventDispatcherInterface $dispatcher = null,
         ?LoggerInterface $logger = null,
+        private readonly ?NotifyMessageRecorderInterface $recorder = null,
     ) {
         parent::__construct($dispatcher, $logger);
     }
@@ -63,6 +66,7 @@ final class GovUkNotifyTransport extends AbstractTransport
         $recipients = $this->resolveRecipients($message->getEnvelope(), $original);
         $templateId = $this->resolveTemplateId($payload['locale'] ?? self::LOCALE_EN_GB);
         $personalisation = $this->buildPersonalisation($original, $payload);
+        $context = $this->recordingContext($payload, $templateId);
 
         // Notify has no To/Cc/Bcc and takes one address per call, so we deliver an individual copy
         // to every recipient (SMTP delivered to all of them). Once Notify accepts a send (201) it
@@ -84,6 +88,7 @@ final class GovUkNotifyTransport extends AbstractTransport
                 $sent++;
                 $notifyId = is_array($response) ? ($response['id'] ?? null) : null;
                 Logger::info('notify email sent', ['notify_id' => $notifyId, 'locale' => $payload['locale'] ?? null]);
+                $this->recordEmail($this->recorder, $recipient, $context, is_string($notifyId) ? $notifyId : null, null, null);
             } catch (NotifyException $e) {
                 if (NotifyErrors::isTransient($e)) {
                     // Transient (429/5xx): the queue will retry the whole message.
@@ -98,6 +103,7 @@ final class GovUkNotifyTransport extends AbstractTransport
                         'code' => (int) $e->getCode(),
                         'error' => $e->getMessage(),
                     ]);
+                    $this->recordEmail($this->recorder, $recipient, $context, null, (string) (int) $e->getCode(), $e->getMessage());
                 }
             }
         }
@@ -127,7 +133,8 @@ final class GovUkNotifyTransport extends AbstractTransport
      *     markdownBody?: string,
      *     attachments?: array<int, array{fileName: string, content: string}>,
      *     reference?: string,
-     *     emailReplyToId?: string
+     *     emailReplyToId?: string,
+     *     context?: array<string, mixed>
      * }
      */
     private function extractPayload(SymfonyEmail $email): array

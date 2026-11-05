@@ -46,6 +46,9 @@ class Message
 
     protected ?string $markdownBody = null;
 
+    /** @var array<string, mixed> */
+    protected array $notifyContext = [];
+
     public function __construct($to, $subject)
     {
         $this->setTo($to);
@@ -71,6 +74,7 @@ class Message
             'templateKey' => $this->getTemplateKey(),
             'personalisation' => $this->getPersonalisation(),
             'markdownBody' => $this->getMarkdownBody(),
+            'notifyContext' => $this->getNotifyContext(),
         ];
 
         return SendEmail::create($data);
@@ -101,6 +105,26 @@ class Message
     public function setPersonalisation(array $personalisation): self
     {
         $this->personalisation = $personalisation;
+        return $this;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getNotifyContext(): array
+    {
+        return $this->notifyContext;
+    }
+
+    /**
+     * Links for the notify_message row: organisation, licence, application, document,
+     * correspondenceInbox, user (ids) and templateName.
+     *
+     * @param array<string, mixed> $notifyContext
+     */
+    public function setNotifyContext(array $notifyContext): self
+    {
+        $this->notifyContext = $notifyContext;
         return $this;
     }
 
