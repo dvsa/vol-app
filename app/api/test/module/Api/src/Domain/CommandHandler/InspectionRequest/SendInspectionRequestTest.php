@@ -411,6 +411,64 @@ final class SendInspectionRequestTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
+    public function testSmsNumberNotSentToInspectors(): void
+    {
+        $id = 189781;
+        $licence = $this->stubLicenceData;
+        $licence['correspondenceCd']['phoneContacts'] = [
+            ['phoneNumber' => '0113 2345678', 'phoneContactType' => ['id' => 'phone_t_tel', 'description' => 'Business']],
+            ['phoneNumber' => '07700 900123', 'phoneContactType' => ['id' => 'phone_t_SMS', 'description' => 'SMS']],
+        ];
+        $inspectionRequest = [
+            'id' => $id,
+            'requestDate' => '2015-04-17T14:13:56+00:00',
+            'dueDate' => '2015-04-18T14:13:56+00:00',
+            'licence' => $licence,
+            'application' => null,
+            'requestType' => ['description' => 'Change of Entity'],
+            'requestorNotes' => 'Lorem ipsum dolor',
+            'operatingCentre' => ['id' => 74, 'address' => ['addressLine1' => 'DVSA']],
+        ];
+        $this->mockAuthService();
+
+        $this->repoMap['InspectionRequest']
+            ->shouldReceive('fetchForInspectionRequest')->with($id)->andReturn($inspectionRequest)
+            ->shouldReceive('fetchLicenceOperatingCentreCount')->with($id)->andReturn(6);
+        $this->repoMap['Workshop']->shouldReceive('fetchForLicence')->with(77, Query::HYDRATE_ARRAY)
+            ->andReturn($licence['workshops']);
+        $this->repoMap['Licence']->shouldReceive('fetchByOrganisationId')->with(1)
+            ->andReturn($licence['organisation']['licences']);
+        $this->repoMap['TransportManagerLicence']->shouldReceive('fetchWithContactDetailsByLicence')->with(77)
+            ->andReturn([['forename' => 'Bob', 'familyName' => 'Smith']]);
+
+        $captured = null;
+        $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')
+            ->with(m::type(\Dvsa\Olcs\Email\Data\Message::class), 'inspection-request', m::on(function ($vars) use (&$captured) {
+                $captured = $vars['contactPhoneNumbers'];
+                return true;
+            }), 'blank');
+
+        $mockQryResult = m::mock(QueryResult::class);
+        $this->queryHandler->shouldReceive('handleQuery')->andReturn($mockQryResult);
+        $mockQryResult->shouldReceive('isEmpty')->andReturn(false);
+        $resultObj = m::mock(QueryResult::class);
+        $mockQryResult->shouldReceive('getObject')->andReturn($resultObj);
+        $resultObj->shouldReceive('getParamValue')->andReturn('im-an-address@email.com');
+
+        $this->expectedSideEffect(SendEmail::class, [
+            'to' => 'im-an-address@email.com',
+            'locale' => 'en_GB',
+            'subject' => "[ Maintenance Inspection ] REQUEST={$id},STATUS=",
+        ], new Result());
+
+        $this->sut->handleCommand(Cmd::create(['id' => $id]));
+
+        $this->assertSame(
+            [['phoneNumber' => '0113 2345678', 'phoneContactType' => ['id' => 'phone_t_tel', 'description' => 'Business']]],
+            $captured
+        );
+    }
+
     public function testHandleCommandAndPopulateForApplicationRequest(): void
     {
         $inspectionRequestId = 189781;
