@@ -6,6 +6,8 @@ namespace OlcsTest\FormService\Form\Lva;
 
 use Common\RefData;
 use Laminas\Form\ElementInterface;
+use Common\FeatureToggle;
+use Common\Service\Cqrs\Query\QuerySender;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\Addresses\LicenceAddresses;
@@ -19,15 +21,19 @@ final class LicenceAddressesTest extends MockeryTestCase
 
     protected $formHelper;
 
+    private m\MockInterface $querySender;
+
     #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial();
 
-        $this->sut = new LicenceAddresses($this->formHelper);
+        $this->querySender = m::mock(QuerySender::class);
+        $this->sut = new LicenceAddresses($this->formHelper, $this->querySender);
     }
 
-    public function testGetForm(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCaptureToggle')]
+    public function testGetForm(bool $captureOn): void
     {
         $formActions = m::mock(ElementInterface::class);
         $formActions->shouldReceive('get')
@@ -43,7 +49,7 @@ final class LicenceAddressesTest extends MockeryTestCase
             ->getMock();
 
         $mockForm = m::mock(Form::class);
-        $this->mockSmsRequired($mockForm);
+        $this->mockSmsRequired($mockForm, $captureOn);
         $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
@@ -62,8 +68,25 @@ final class LicenceAddressesTest extends MockeryTestCase
         );
     }
 
-    private function mockSmsRequired(Form $mockForm): void
+    public static function dpCaptureToggle(): \Iterator
     {
+        yield 'capture on' => [true];
+        yield 'capture off' => [false];
+    }
+
+    private function mockSmsRequired(Form $mockForm, bool $captureOn): void
+    {
+        $this->querySender->shouldReceive('featuresEnabled')
+            ->with([FeatureToggle::SMS_NUMBER_CAPTURE])
+            ->once()
+            ->andReturn($captureOn);
+
+        if (!$captureOn) {
+            // field stays optional
+            $mockForm->shouldReceive('getInputFilter')->never();
+            return;
+        }
+
         $smsInput = m::mock(Input::class);
         $smsInput->shouldReceive('setRequired')->once()->with(true)->andReturnSelf();
         $contact = m::mock(InputFilter::class);
