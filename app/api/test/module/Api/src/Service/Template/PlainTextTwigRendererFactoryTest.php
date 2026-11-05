@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Service\Template;
 
 use Dvsa\Olcs\Api\Service\Template\PlainTextTwigRendererFactory;
+use Dvsa\Olcs\Api\Service\Template\TwigEnvironmentFactory;
 use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
 use Psr\Container\ContainerInterface;
 use PHPUnit\Framework\TestCase;
@@ -52,6 +53,47 @@ final class PlainTextTwigRendererFactoryTest extends TestCase
         $plainEnv = (new \ReflectionProperty(TwigRenderer::class, 'twig'))->getValue($plain);
 
         $this->assertNotSame($html->getTemplateClass('t'), $plainEnv->getTemplateClass('t'));
+    }
+
+    public function testCompilesIntoItsOwnCacheDirectory(): void
+    {
+        $plainEnv = (new \ReflectionProperty(TwigRenderer::class, 'twig'))->getValue($this->renderer());
+
+        $this->assertIsString($plainEnv->getCache());
+        $this->assertNotSame(sys_get_temp_dir(), rtrim($plainEnv->getCache(), '/'));
+        $this->assertStringStartsWith(sys_get_temp_dir(), $plainEnv->getCache());
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('htmlFirst')]
+    public function testBothEnvironmentsKeepTheirEscapingInOneProcess(bool $htmlFirst): void
+    {
+        // a fresh name per run, so nothing compiled by an earlier run is reused
+        $name = 'en_GB/sms/both-' . bin2hex(random_bytes(6));
+        $string = 'String {{ name }} ' . bin2hex(random_bytes(6));
+        $loader = new ArrayLoader([$name => 'Hey {{ name }}']);
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('get')->willReturnMap([['TemplateDatabaseTwigLoader', $loader]]);
+
+        $html = new TwigRenderer((new TwigEnvironmentFactory())($container, 'TemplateTwigEnvironment'));
+        $plain = (new PlainTextTwigRendererFactory())($container, 'TemplatePlainTextTwigRenderer');
+        $vars = ['name' => self::NAME];
+        $escaped = htmlspecialchars(self::NAME, ENT_QUOTES);
+
+        $order = $htmlFirst ? [$html, $plain] : [$plain, $html];
+        foreach ($order as $renderer) {
+            $renderer->render($name, $vars);
+            $renderer->renderString($string, $vars);
+        }
+
+        $this->assertSame('Hey ' . $escaped, $html->render($name, $vars));
+        $this->assertSame('Hey ' . self::NAME, $plain->render($name, $vars));
+        $this->assertStringStartsWith('String ' . $escaped . ' ', $html->renderString($string, $vars));
+        $this->assertStringStartsWith('String ' . self::NAME . ' ', $plain->renderString($string, $vars));
+    }
+
+    public static function htmlFirst(): array
+    {
+        return ['html first' => [true], 'plain first' => [false]];
     }
 
     public function testStrictVariablesStillOn(): void

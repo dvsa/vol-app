@@ -22,10 +22,12 @@ final class PlainTextTwigRendererFactory implements FactoryInterface
             [
                 'strict_variables' => true,
                 'autoescape' => false,
-                'cache' => sys_get_temp_dir(),
+                // own compiled cache, so plain builds never land beside the HTML ones on disk
+                'cache' => sys_get_temp_dir() . '/twig-plain',
                 'auto_reload' => true,
             ]
         );
+        // still needed: in one process the compiled class name ignores autoescape, and only this tells them apart
         $twig->addExtension(new PlainTextTwigExtension());
 
         return new TwigRenderer($twig);
