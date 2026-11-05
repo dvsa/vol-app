@@ -105,6 +105,30 @@ final class PreviewTemplateSourceTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResponse, $result);
     }
 
+    public function testSmsPreviewIncludesLength(): void
+    {
+        $source = 'Hi {{name}}';
+        $template = m::mock(Template::class);
+        $template->shouldReceive('getDecodedTestData')->andReturn(['Example' => ['name' => 'Bob']]);
+        $template->shouldReceive('getLocale')->andReturn('en_GB');
+        $template->shouldReceive('getFormat')->andReturn('sms');
+        $template->shouldReceive('getDescription')->andReturn('Letter issued SMS');
+
+        $query = PreviewTemplateSourceQry::create(['id' => 7, 'source' => $source]);
+
+        $this->mockedSmServices['TemplateTwigRenderer']->shouldReceive('renderString')
+            ->with($source, ['name' => 'Bob'])
+            ->andReturn('Hi Bob');
+        $this->mockedSmServices['TemplateStrategySelectingViewRenderer']->shouldNotReceive('render');
+
+        $this->repoMap['Template']->shouldReceive('fetchUsingId')->with($query)->andReturn($template);
+
+        $this->assertSame(
+            ['Example' => ['text' => 'Hi Bob', 'characters' => 6, 'fragments' => 1]],
+            $this->sut->handleQuery($query)
+        );
+    }
+
     public function testRenderingFailure(): void
     {
         $templateId = 6;

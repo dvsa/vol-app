@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Api\Domain\QueryHandler\Template;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
+use Dvsa\Olcs\Api\Service\Sms\SmsLength;
 use Dvsa\Olcs\Api\Service\Template\StrategySelectingViewRenderer;
 use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
 use Dvsa\Olcs\Email\View\NotifyChrome;
@@ -22,6 +23,7 @@ use Psr\Container\NotFoundExceptionInterface;
 class PreviewTemplateSource extends AbstractQueryHandler
 {
     public const FORMAT_MARKDOWN = 'md';
+    public const FORMAT_SMS = 'sms';
 
     protected $repoServiceName = 'Template';
 
@@ -55,6 +57,11 @@ class PreviewTemplateSource extends AbstractQueryHandler
         foreach ($datasets as $datasetName => $datasetValues) {
             try {
                 $rendered = $this->twigRenderer->renderString($source, $datasetValues);
+                if ($format === self::FORMAT_SMS) {
+                    // Plain text as sent, plus how many texts it will use.
+                    $result[$datasetName] = ['text' => $rendered] + SmsLength::estimate($rendered);
+                    continue;
+                }
                 $result[$datasetName] = $format === self::FORMAT_MARKDOWN
                     ? $this->renderMarkdownPreview($rendered, $description)
                     : $this->strategySelectingViewRenderer->render(
