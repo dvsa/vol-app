@@ -9,6 +9,7 @@ class AddressDetails implements MapperInterface
     private static $typeMap = [
         'phone_t_primary' => 'phone_primary',
         'phone_t_secondary' => 'phone_secondary',
+        'phone_t_SMS' => 'phone_sms',
     ];
 
     /**

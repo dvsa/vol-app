@@ -178,4 +178,20 @@ final class AddressesDetailsTest extends MockeryTestCase
             ]
         ));
     }
+
+    public function testSmsContactMapsToPhoneSms(): void
+    {
+        $this->apiData['correspondenceCd']['phoneContacts'][] = [
+            'phoneContactType' => ['id' => 'phone_t_SMS'],
+            'phoneNumber' => '07700900123',
+            'id' => '1393688',
+            'version' => '2',
+        ];
+
+        $actual = AddressDetails::mapFromResult($this->apiData);
+
+        $this->assertSame('07700900123', $actual['contact']['phone_sms']);
+        $this->assertSame('1393688', $actual['contact']['phone_sms_id']);
+        $this->assertSame('2', $actual['contact']['phone_sms_version']);
+    }
 }

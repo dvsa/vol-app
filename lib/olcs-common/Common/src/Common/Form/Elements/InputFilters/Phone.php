@@ -21,7 +21,7 @@ class Phone extends LaminasElement implements InputProviderInterface
     #[\Override]
     public function init(): void
     {
-        $this->setAttribute('pattern', '\d(\+|-|\(|\))*');
+        $this->setAttribute('pattern', '[0-9 ()+-]{5,45}');
         $this->setLabel('contact-number-optional');
         parent::init();
     }
