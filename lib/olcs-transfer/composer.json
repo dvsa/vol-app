@@ -20,7 +20,8 @@
     "laminas/laminas-router": "^3.14",
     "laminas/laminas-http": "^2.15",
     "psr/container": "^1.1|^2",
-    "laminas/laminas-i18n": "^2.32"
+    "laminas/laminas-i18n": "^2.32",
+    "giggsey/libphonenumber-for-php-lite": "^9.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^13.0",
