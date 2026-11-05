@@ -156,6 +156,9 @@ class SendSms extends AbstractCommandHandler
     private function markSent(NotifyMessage $message, ?string $notifyId, \DateTimeImmutable $now): void
     {
         $message->setNotifyId($notifyId);
+        // an error from an earlier attempt no longer applies
+        $message->setErrorCode(null);
+        $message->setErrorMessage(null);
         $message->setStatus($this->refData(NotifyMessage::STATUS_CREATED));
         $message->setSentOn(\DateTime::createFromInterface($now));
         $message->setStatusUpdatedOn(\DateTime::createFromInterface($now));

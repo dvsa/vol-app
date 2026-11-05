@@ -427,6 +427,43 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->assertSame(1, $m->getAttempts());
     }
 
+    public function testSuccessClearsEarlierError(): void
+    {
+        $m = $this->message(false, 1);
+        $m->setNotifyTemplateId(self::TEMPLATE_ID);
+        $m->setErrorCode('503');
+        $m->setErrorMessage('boom');
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('findByReference')->andReturn(null);
+        $this->transport->shouldReceive('send')->once()->andReturn('notify-1');
+        $this->messageRepo->shouldReceive('save');
+
+        $this->handle();
+
+        $this->assertSame(NotifyMessage::STATUS_CREATED, $m->getStatus()->getId());
+        $this->assertNull($m->getErrorCode());
+        $this->assertNull($m->getErrorMessage());
+    }
+
+    public function testRecordingAnEarlierSendClearsTheError(): void
+    {
+        $m = $this->message(false, 1);
+        $m->setNotifyTemplateId(self::TEMPLATE_ID);
+        $m->setErrorCode('0');
+        $m->setErrorMessage('timed out');
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('findByReference')->andReturn('notify-1');
+        $this->transport->shouldNotReceive('send');
+        $this->messageRepo->shouldReceive('save');
+
+        $this->handle();
+
+        $this->assertNull($m->getErrorCode());
+        $this->assertNull($m->getErrorMessage());
+    }
+
     public function testFirstAttemptDoesNotLookUp(): void
     {
         $this->message();
