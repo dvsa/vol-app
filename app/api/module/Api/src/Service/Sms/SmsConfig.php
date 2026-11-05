@@ -14,7 +14,14 @@ final readonly class SmsConfig
         public ?string $templateId,
         public ?string $sendAllSmsTo,
         public bool $isProduction,
+        public string $environment = 'local',
     ) {
+    }
+
+    /** Non-prod envs share one Notify service, so the reference names the env as well as the row. */
+    public function smsReference(int|string $rowId): string
+    {
+        return $this->environment . '-sms-' . $rowId;
     }
 
     /** True when the mail DSN is a govuknotify one (live or mailpit). */

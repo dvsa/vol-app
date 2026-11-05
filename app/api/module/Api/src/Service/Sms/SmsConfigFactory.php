@@ -50,7 +50,17 @@ final class SmsConfigFactory implements FactoryInterface
             self::setOrNull($sms['template_id'] ?? null),
             self::normalisedNumber(self::setOrNull($sms['send_all_sms_to'] ?? null)),
             (bool) ($sms['is_production'] ?? false),
+            self::environment(),
         );
+    }
+
+    /** Lowercased ENVIRONMENT_NAME, as config.global.php reads it, or "local" when unset. */
+    private static function environment(): string
+    {
+        $environment = getenv('ENVIRONMENT_NAME');
+        $environment = is_string($environment) ? strtolower(trim($environment)) : '';
+
+        return $environment !== '' ? $environment : 'local';
     }
 
     /** A redirect that is not a valid UK mobile or landline number counts as unset, so a typo cannot enable SMS. */

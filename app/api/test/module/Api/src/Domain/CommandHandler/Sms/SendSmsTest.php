@@ -29,6 +29,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
     private const string NUMBER = '+447700900123';
     private const string REDIRECT = '+447700900999';
     private const string TEMPLATE_ID = 'tmpl-uuid';
+    private const string REFERENCE = 'dev-sms-555';
 
     private $gate;
     private $transport;
@@ -40,7 +41,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
     public function setUp(): void
     {
         $this->now = new \DateTimeImmutable('2026-11-05 10:30:00', new \DateTimeZone('Europe/London'));
-        $this->config = new SmsConfig('key', false, null, 1025, self::TEMPLATE_ID, str_contains($this->name(), 'NoRedirect') ? null : self::REDIRECT, str_starts_with($this->name(), 'testProd'));
+        $this->config = new SmsConfig('key', false, null, 1025, self::TEMPLATE_ID, str_contains($this->name(), 'NoRedirect') ? null : self::REDIRECT, str_starts_with($this->name(), 'testProd'), 'dev');
 
         $this->sut = m::mock(SendSms::class)->makePartial()->shouldAllowMockingProtectedMethods();
         $this->sut->shouldReceive('now')->andReturnUsing(fn() => $this->now);
@@ -129,7 +130,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
             ->andReturn('Hello Acme');
         $this->transport->shouldReceive('send')
             ->once()
-            ->with(self::REDIRECT, self::TEMPLATE_ID, 'Hello Acme', (string) self::ID)
+            ->with(self::REDIRECT, self::TEMPLATE_ID, 'Hello Acme', self::REFERENCE)
             ->andReturn('notify-1');
         $this->messageRepo->shouldReceive('save')->twice()->with($m);
 
@@ -165,7 +166,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
                 self::REDIRECT,
                 self::TEMPLATE_ID,
                 "Hey Smith & Sons' <Haulage>, I'm trying out Notify. Today is Thursday",
-                (string) self::ID
+                self::REFERENCE
             )
             ->andReturn('notify-1');
         $this->messageRepo->shouldReceive('save')->twice()->with($m);
@@ -424,7 +425,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         }
 
         // attempt 2: Notify already has our reference
-        $this->transport->shouldReceive('findByReference')->once()->with((string) self::ID)->andReturn('notify-1');
+        $this->transport->shouldReceive('findByReference')->once()->with(self::REFERENCE)->andReturn('notify-1');
 
         $this->handle();
 
@@ -440,7 +441,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->twig->shouldReceive('render')->andReturn('x');
         $this->messageRepo->shouldReceive('save')->with($m);
-        $this->transport->shouldReceive('findByReference')->once()->with((string) self::ID)->andReturn(null)->ordered();
+        $this->transport->shouldReceive('findByReference')->once()->with(self::REFERENCE)->andReturn(null)->ordered();
         $this->transport->shouldReceive('send')->once()->andReturn('notify-2')->ordered();
 
         $this->handle();

@@ -50,6 +50,32 @@ final class SmsConfigFactoryTest extends TestCase
         $this->assertTrue($c->hasNotifyTransport());
     }
 
+    #[DataProvider('environments')]
+    public function testEnvironmentComesFromEnvironmentName(string|false $value, string $expected): void
+    {
+        $previous = getenv('ENVIRONMENT_NAME');
+        $value === false ? putenv('ENVIRONMENT_NAME') : putenv('ENVIRONMENT_NAME=' . $value);
+
+        try {
+            $c = $this->build([]);
+        } finally {
+            $previous === false ? putenv('ENVIRONMENT_NAME') : putenv('ENVIRONMENT_NAME=' . $previous);
+        }
+
+        $this->assertSame($expected, $c->environment);
+        $this->assertSame($expected . '-sms-42', $c->smsReference(42));
+    }
+
+    public static function environments(): array
+    {
+        return [
+            'set' => ['DEV', 'dev'],
+            'padded' => [' Int ', 'int'],
+            'blank' => ['', 'local'],
+            'unset' => [false, 'local'],
+        ];
+    }
+
     public function testMailpitDsn(): void
     {
         $c = $this->build(['mail' => ['dsn' => 'govuknotify+mailpit://mailpit:1026']]);

@@ -31,6 +31,7 @@ final class NotifySmsTransport implements SmsTransportInterface
         $response = $this->client->listNotifications(['reference' => $reference, 'template_type' => 'sms']);
 
         foreach ((is_array($response) ? $response['notifications'] ?? [] : []) as $notification) {
+            // exact match only, so another env's row with the same id is never taken as ours
             if (
                 is_array($notification)
                 && ($notification['reference'] ?? null) === $reference

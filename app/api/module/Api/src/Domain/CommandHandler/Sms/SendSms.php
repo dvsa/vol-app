@@ -101,7 +101,7 @@ class SendSms extends AbstractCommandHandler
         // An earlier attempt may have reached Notify without us hearing back, so ask before sending again.
         if ($previousAttempts > 0) {
             try {
-                $existingId = $this->transport->findByReference((string) $message->getId());
+                $existingId = $this->transport->findByReference($this->config->smsReference($message->getId()));
             } catch (\Throwable $e) {
                 // never send blind on a retry
                 $message->setErrorMessage(mb_substr('Notify lookup failed: ' . $e->getMessage(), 0, 1024));
@@ -127,7 +127,7 @@ class SendSms extends AbstractCommandHandler
         $this->getRepo()->save($message);
 
         try {
-            $notifyId = $this->transport->send($to, $templateId, $body, (string) $message->getId());
+            $notifyId = $this->transport->send($to, $templateId, $body, $this->config->smsReference($message->getId()));
         } catch (NotifyException $e) {
             return $this->handleFailure($message, $e, $now);
         } catch (\Throwable $e) {
