@@ -4,6 +4,8 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
+use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion as UpdateApplicationCompletionCmd;
@@ -32,6 +34,8 @@ class Application extends AbstractQueryHandler
      */
     private $feesHelper;
 
+    private SmsNumberCapture $smsNumberCapture;
+
     #[\Override]
     public function handleQuery(QueryInterface $query)
     {
@@ -49,7 +53,7 @@ class Application extends AbstractQueryHandler
         }
 
         $latestNote = $this->getRepo('Note')->fetchForOverview($application->getLicence()->getId());
-        return $this->result(
+        $result = $this->result(
             $application,
             [
                 'licence' => [
@@ -85,6 +89,23 @@ class Application extends AbstractQueryHandler
                 'canHaveInspectionRequest' => !$application->isSpecialRestricted(),
             ]
         );
+
+        if ($this->hasStaleAddressesCompletion($application)) {
+            // Shown as not done so it can't be submitted; the stored status is left alone.
+            $result->setValue('applicationCompletion', ['addressesStatus' => ApplicationCompletion::STATUS_INCOMPLETE]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Addresses was completed before sms_number_capture went on, and a selfserve user now has to add one.
+     */
+    private function hasStaleAddressesCompletion(ApplicationEntity $application): bool
+    {
+        return $application->getStatus()?->getId() === ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED
+            && $application->getApplicationCompletion()?->getAddressesStatus() === ApplicationCompletion::STATUS_COMPLETE
+            && $this->smsNumberCapture->blocksApplication($application, $this->isExternalUser(...));
     }
 
     /**
@@ -102,6 +123,7 @@ class Application extends AbstractQueryHandler
 
         $this->sectionAccessService = $container->get('SectionAccessService');
         $this->feesHelper = $container->get('FeesHelperService');
+        $this->smsNumberCapture = $container->get(SmsNumberCapture::class);
         return parent::__invoke($fullContainer, $requestedName, $options);
     }
 }
