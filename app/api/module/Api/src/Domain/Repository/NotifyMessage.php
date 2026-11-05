@@ -11,29 +11,25 @@ class NotifyMessage extends AbstractRepository
     protected $entity = Entity::class;
 
     /**
-     * True if an SMS (not cancelled) was already requested for this recipient on the given London calendar day.
+     * True if an SMS (not cancelled) was already requested for this recipient in [start, end).
      */
-    public function hasSmsForRecipientOn(string $recipient, \DateTimeImmutable $londonDay): bool
+    public function hasSmsForRecipientBetween(string $recipient, \DateTimeInterface $start, \DateTimeInterface $end): bool
     {
-        $london = new \DateTimeZone('Europe/London');
-        $utc = new \DateTimeZone('UTC');
-
         // requested_on is written by Doctrine in PHP's default zone (UTC), so compare in UTC.
-        $start = $londonDay->setTimezone($london)->setTime(0, 0);
-        $end = $start->modify('+1 day');
+        $utc = new \DateTimeZone('UTC');
 
         $qb = $this->createQueryBuilder();
         $qb->select('COUNT(' . $this->alias . '.id)')
             ->andWhere($qb->expr()->eq($this->alias . '.channel', ':channel'))
             ->andWhere($qb->expr()->eq($this->alias . '.recipient', ':recipient'))
             ->andWhere($qb->expr()->neq($this->alias . '.status', ':cancelled'))
-            ->andWhere($qb->expr()->gte($this->alias . '.requestedOn', ':dayStart'))
-            ->andWhere($qb->expr()->lt($this->alias . '.requestedOn', ':dayEnd'))
+            ->andWhere($qb->expr()->gte($this->alias . '.requestedOn', ':start'))
+            ->andWhere($qb->expr()->lt($this->alias . '.requestedOn', ':end'))
             ->setParameter('channel', Entity::CHANNEL_SMS)
             ->setParameter('recipient', $recipient)
             ->setParameter('cancelled', Entity::STATUS_CANCELLED)
-            ->setParameter('dayStart', \DateTime::createFromInterface($start->setTimezone($utc)))
-            ->setParameter('dayEnd', \DateTime::createFromInterface($end->setTimezone($utc)));
+            ->setParameter('start', \DateTime::createFromInterface($start)->setTimezone($utc))
+            ->setParameter('end', \DateTime::createFromInterface($end)->setTimezone($utc));
 
         return (int) $qb->getQuery()->getSingleScalarResult() > 0;
     }

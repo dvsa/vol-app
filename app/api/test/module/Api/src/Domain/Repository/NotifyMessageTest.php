@@ -15,41 +15,47 @@ final class NotifyMessageTest extends RepositoryTestCase
         $this->setUpRealSut(Repo::class);
     }
 
-    public function testHasSmsForRecipientOnBuildsDayRangeQuery(): void
+    public function testHasSmsForRecipientBetweenBuildsRangeQueryInUtc(): void
     {
         $qb = $this->createRealQb();
         $qb->stubbedQuery()->expects('getSingleScalarResult')->withNoArgs()->andReturn('1');
 
+        // BST: 20:00 London is 19:00 UTC
+        $london = new \DateTimeZone('Europe/London');
         $this->assertTrue(
-            $this->sut->hasSmsForRecipientOn('+447700900123', new \DateTimeImmutable('2026-11-05 12:00:00', new \DateTimeZone('Europe/London')))
+            $this->sut->hasSmsForRecipientBetween(
+                '+447700900123',
+                new \DateTimeImmutable('2026-06-01 20:00:00', $london),
+                new \DateTimeImmutable('2026-06-02 20:00:00', $london)
+            )
         );
 
         $this->assertSame(
             'SELECT COUNT(m.id) FROM ' . Entity::class . ' m'
             . ' WHERE m.channel = :channel AND m.recipient = :recipient AND m.status <> :cancelled'
-            . ' AND m.requestedOn >= :dayStart AND m.requestedOn < :dayEnd',
+            . ' AND m.requestedOn >= :start AND m.requestedOn < :end',
             $qb->getDQL(),
         );
         $this->assertSame(Entity::CHANNEL_SMS, $qb->getParameter('channel')->getValue());
         $this->assertSame('+447700900123', $qb->getParameter('recipient')->getValue());
         $this->assertSame(Entity::STATUS_CANCELLED, $qb->getParameter('cancelled')->getValue());
-        // November: London is on GMT, so UTC bounds equal the London midnights.
-        $this->assertSame('2026-11-05 00:00:00', $qb->getParameter('dayStart')->getValue()->format('Y-m-d H:i:s'));
-        $this->assertSame('2026-11-06 00:00:00', $qb->getParameter('dayEnd')->getValue()->format('Y-m-d H:i:s'));
+
+        foreach (['start' => '2026-06-01 19:00:00', 'end' => '2026-06-02 19:00:00'] as $name => $expected) {
+            $value = $qb->getParameter($name)->getValue();
+            // VOL's datetime type only takes mutable DateTime
+            $this->assertInstanceOf(\DateTime::class, $value);
+            $this->assertSame('UTC', $value->getTimezone()->getName());
+            $this->assertSame($expected, $value->format('Y-m-d H:i:s'));
+        }
     }
 
-    /** requested_on is stored in UTC, so in summer the London day starts at 23:00 UTC the day before. */
-    public function testHasSmsForRecipientOnConvertsBritishSummerTimeToUtc(): void
+    public function testHasSmsForRecipientBetweenFalseWhenNone(): void
     {
         $qb = $this->createRealQb();
         $qb->stubbedQuery()->expects('getSingleScalarResult')->withNoArgs()->andReturn('0');
 
         $this->assertFalse(
-            $this->sut->hasSmsForRecipientOn('+447700900123', new \DateTimeImmutable('2026-07-01 00:30:00', new \DateTimeZone('Europe/London')))
+            $this->sut->hasSmsForRecipientBetween('+447700900123', new \DateTime('2026-11-02 20:00:00'), new \DateTime('2026-11-03 20:00:00'))
         );
-
-        $this->assertSame('2026-06-30 23:00:00', $qb->getParameter('dayStart')->getValue()->format('Y-m-d H:i:s'));
-        $this->assertSame('2026-07-01 23:00:00', $qb->getParameter('dayEnd')->getValue()->format('Y-m-d H:i:s'));
-        $this->assertSame('UTC', $qb->getParameter('dayStart')->getValue()->getTimezone()->getName());
     }
 }

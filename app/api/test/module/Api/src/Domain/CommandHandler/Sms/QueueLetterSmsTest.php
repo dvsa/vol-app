@@ -129,9 +129,9 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
     {
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->document($this->licence());
-        $this->messageRepo->shouldReceive('hasSmsForRecipientOn')
+        $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')
             ->once()
-            ->with(self::NUMBER, m::type(\DateTimeImmutable::class))
+            ->with(self::NUMBER, m::type(\DateTimeInterface::class), m::type(\DateTimeInterface::class))
             ->andReturn(true);
         $this->messageRepo->shouldNotReceive('save');
 
@@ -144,7 +144,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $document = $this->document($this->licence());
         $application = m::mock(Application::class)->makePartial();
         $document->setApplication($application);
-        $this->messageRepo->shouldReceive('hasSmsForRecipientOn')->andReturn(false);
+        $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')->andReturn(false);
 
         $this->messageRepo->shouldReceive('save')->once()->andReturnUsing(
             function (NotifyMessage $message): void {
@@ -182,7 +182,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $this->now = new \DateTimeImmutable('2026-11-05 21:30:00', new \DateTimeZone('Europe/London'));
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->document($this->licence());
-        $this->messageRepo->shouldReceive('hasSmsForRecipientOn')->andReturn(false);
+        $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')->andReturn(false);
         $this->messageRepo->shouldReceive('save')->once()->andReturnUsing(
             fn(NotifyMessage $message) => $message->setId(self::MESSAGE_ID)
         );
@@ -203,7 +203,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $this->now = new \DateTimeImmutable('2026-07-01 21:30:00', new \DateTimeZone('Europe/London'));
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->document($this->licence());
-        $this->messageRepo->shouldReceive('hasSmsForRecipientOn')->andReturn(false);
+        $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')->andReturn(false);
         $this->messageRepo->shouldReceive('save')->once()->andReturnUsing(
             fn(NotifyMessage $message) => $message->setId(self::MESSAGE_ID)
         );
@@ -217,6 +217,89 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         );
 
         $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
+    }
+
+    /**
+     * The dedupe window is the SMS day (20:00 to 20:00 London) that the text will actually go out in.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSmsDay')]
+    public function testDedupeWindowIsTheSmsDay(string $letterAt, string $expectedStartUtc, string $expectedEndUtc): void
+    {
+        $this->now = new \DateTimeImmutable($letterAt, new \DateTimeZone('Europe/London'));
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->document($this->licence());
+        $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')
+            ->once()
+            ->andReturnUsing(
+                function (string $recipient, \DateTimeInterface $start, \DateTimeInterface $end) use ($expectedStartUtc, $expectedEndUtc): bool {
+                    $utc = new \DateTimeZone('UTC');
+                    $this->assertSame($expectedStartUtc, \DateTimeImmutable::createFromInterface($start)->setTimezone($utc)->format('Y-m-d H:i'));
+                    $this->assertSame($expectedEndUtc, \DateTimeImmutable::createFromInterface($end)->setTimezone($utc)->format('Y-m-d H:i'));
+                    return true;
+                }
+            );
+        $this->messageRepo->shouldNotReceive('save');
+
+        $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
+    }
+
+    public static function dpSmsDay(): \Iterator
+    {
+        // 2026-11-02 is a Monday, GMT
+        yield 'Mon 21:00 goes Tue 08:00' => ['2026-11-02 21:00', '2026-11-02 20:00', '2026-11-03 20:00'];
+        yield 'Tue 10:00' => ['2026-11-03 10:00', '2026-11-02 20:00', '2026-11-03 20:00'];
+        yield 'Tue 19:59' => ['2026-11-03 19:59', '2026-11-02 20:00', '2026-11-03 20:00'];
+        yield 'Tue 20:01 goes Wed 08:00' => ['2026-11-03 20:01', '2026-11-03 20:00', '2026-11-04 20:00'];
+        yield 'Wed 03:00 goes Wed 08:00' => ['2026-11-04 03:00', '2026-11-03 20:00', '2026-11-04 20:00'];
+        // 2026-06-02 is a Tuesday, BST, so London 20:00 is 19:00 UTC
+        yield 'BST Tue 10:00' => ['2026-06-02 10:00', '2026-06-01 19:00', '2026-06-02 19:00'];
+        yield 'BST Tue 20:01 goes Wed 08:00' => ['2026-06-02 20:01', '2026-06-02 19:00', '2026-06-03 19:00'];
+    }
+
+    /**
+     * Two letters for the same number, run through the handler against an in-memory store.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTwoLetters')]
+    public function testTwoLettersSendExpectedNumberOfTexts(string $first, string $second, int $expectedTexts): void
+    {
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->document($this->licence());
+
+        /** @var \DateTimeInterface[] $requested */
+        $requested = [];
+        $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')->andReturnUsing(
+            function (string $recipient, \DateTimeInterface $start, \DateTimeInterface $end) use (&$requested): bool {
+                foreach ($requested as $at) {
+                    if ($at >= $start && $at < $end) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        );
+        $this->messageRepo->shouldReceive('save')->andReturnUsing(
+            function (NotifyMessage $message) use (&$requested): void {
+                $requested[] = $message->getRequestedOn();
+                $message->setId(self::MESSAGE_ID + count($requested));
+            }
+        );
+        $this->commandHandler->shouldReceive('handleCommand')->andReturn(new Result());
+
+        foreach ([$first, $second] as $at) {
+            $this->now = new \DateTimeImmutable($at, new \DateTimeZone('Europe/London'));
+            $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
+        }
+
+        $this->assertCount($expectedTexts, $requested);
+    }
+
+    public static function dpTwoLetters(): \Iterator
+    {
+        yield 'Mon 21:00 then Tue 10:00' => ['2026-11-02 21:00', '2026-11-03 10:00', 1];
+        yield 'Tue 10:00 then Tue 19:59' => ['2026-11-03 10:00', '2026-11-03 19:59', 1];
+        yield 'Tue 19:59 then Tue 20:01' => ['2026-11-03 19:59', '2026-11-03 20:01', 2];
+        yield 'BST Mon 21:00 then Tue 10:00' => ['2026-06-01 21:00', '2026-06-02 10:00', 1];
+        yield 'BST Tue 19:59 then Tue 20:01' => ['2026-06-02 19:59', '2026-06-02 20:01', 2];
     }
 
     public function testMissingTemplateSkipsSms(): void
@@ -233,7 +316,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
     {
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->document($this->licence());
-        $this->messageRepo->shouldReceive('hasSmsForRecipientOn')->andThrow(new \RuntimeException('db down'));
+        $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')->andThrow(new \RuntimeException('db down'));
         $this->messageRepo->shouldNotReceive('save');
 
         $result = $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));

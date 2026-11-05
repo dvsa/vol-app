@@ -135,9 +135,10 @@ class QueueLetterSms extends AbstractCommandHandler
             return null;
         }
 
+        // one text per number per SMS day, so a letter after 20:00 and one the next morning share a text
         $now = $this->now();
-        $londonDay = $now->setTimezone(new \DateTimeZone('Europe/London'));
-        if ($this->getRepo('NotifyMessage')->hasSmsForRecipientOn($recipient, $londonDay)) {
+        [$dayStart, $dayEnd] = SendingWindow::smsDay($now);
+        if ($this->getRepo('NotifyMessage')->hasSmsForRecipientBetween($recipient, $dayStart, $dayEnd)) {
             return null;
         }
 
