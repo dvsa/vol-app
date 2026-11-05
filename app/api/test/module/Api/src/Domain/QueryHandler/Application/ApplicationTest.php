@@ -179,7 +179,7 @@ final class ApplicationTest extends QueryHandlerTestCase
         $query = Qry::create(['id' => 7, 'validateAppCompletion' => true]);
 
         $correspondenceCd = m::mock(ContactDetails::class);
-        $correspondenceCd->shouldReceive('getPhoneContactNumber')->with(PhoneContact::TYPE_SMS)->andReturn($smsNumber);
+        $correspondenceCd->shouldReceive('getPhoneContacts')->andReturn(new \Doctrine\Common\Collections\ArrayCollection($smsNumber === null ? [] : [(new \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact(new \Dvsa\Olcs\Api\Entity\System\RefData(\Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact::TYPE_SMS)))->setPhoneNumber($smsNumber)]));
 
         $organisation = m::mock(OrganisationEntity::class);
         $organisation->shouldReceive('isMlh')->andReturn(false);

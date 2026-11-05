@@ -47,7 +47,7 @@ class SmsNumber
         }
 
         $rows = [];
-        foreach ($contactDetails->getPhoneContacts() as $phoneContact) {
+        foreach ($contactDetails->getPhoneContacts() ?? [] as $phoneContact) {
             if ($phoneContact->getPhoneContactType()?->getId() === PhoneContact::TYPE_SMS) {
                 $rows[] = $phoneContact;
             }

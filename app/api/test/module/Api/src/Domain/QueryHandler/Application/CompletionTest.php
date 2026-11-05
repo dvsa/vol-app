@@ -53,7 +53,7 @@ final class CompletionTest extends QueryHandlerTestCase
         $query = Qry::create(['id' => 7]);
 
         $correspondenceCd = m::mock(ContactDetails::class);
-        $correspondenceCd->shouldReceive('getPhoneContactNumber')->with(PhoneContact::TYPE_SMS)->andReturn($smsNumber);
+        $correspondenceCd->shouldReceive('getPhoneContacts')->andReturn(new \Doctrine\Common\Collections\ArrayCollection($smsNumber === null ? [] : [(new \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact(new \Dvsa\Olcs\Api\Entity\System\RefData(\Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact::TYPE_SMS)))->setPhoneNumber($smsNumber)]));
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getCorrespondenceCd')->andReturn($correspondenceCd);
         $completion = m::mock(ApplicationCompletion::class);

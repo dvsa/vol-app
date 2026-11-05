@@ -595,7 +595,7 @@ final class DeclarationTest extends QueryHandlerTestCase
         $query = Qry::create(['id' => 7]);
 
         $correspondenceCd = m::mock(ContactDetails::class);
-        $correspondenceCd->shouldReceive('getPhoneContactNumber')->with(PhoneContact::TYPE_SMS)->andReturn(null);
+        $correspondenceCd->shouldReceive('getPhoneContacts')->andReturn(new \Doctrine\Common\Collections\ArrayCollection());
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getCorrespondenceCd')->andReturn($correspondenceCd);
         $completion = m::mock(ApplicationCompletion::class);

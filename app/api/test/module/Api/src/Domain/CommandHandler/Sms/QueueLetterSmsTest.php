@@ -63,7 +63,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
     private function licence(?string $number = self::NUMBER): Licence
     {
         $cd = m::mock(ContactDetails::class)->makePartial();
-        $cd->shouldReceive('getPhoneContactNumber')->andReturn($number);
+        $cd->shouldReceive('getPhoneContacts')->andReturn(new \Doctrine\Common\Collections\ArrayCollection($number === null ? [] : [(new \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact(new \Dvsa\Olcs\Api\Entity\System\RefData(\Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact::TYPE_SMS)))->setPhoneNumber($number)]));
 
         $licence = m::mock(Licence::class)->makePartial();
         $licence->setId(self::LIC_ID);
