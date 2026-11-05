@@ -41,6 +41,7 @@ final class VariationTest extends QueryHandlerTestCase
                 ->shouldReceive('isGranted')->andReturn(false)->getMock(),
             \Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture::class => new \Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture(
                 m::mock(\Dvsa\Olcs\Api\Service\Toggle\ToggleService::class)
+                    ->shouldReceive('isEnabled')->andReturn(false)->getMock()
             ),
         ];
 

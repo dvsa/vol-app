@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Service\Sms;
 
+use Dvsa\Olcs\Api\Domain\QueryHandler\Result;
 use Dvsa\Olcs\Api\Entity\Application\Application;
+use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
 use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
@@ -42,5 +44,27 @@ final class SmsNumberCapture
     {
         return !$application->isVariation()
             && $this->isMissing($application->getLicence(), $isExternalUser());
+    }
+
+    /**
+     * Reports Addresses as not done on a query result when a selfserve user's new application had it
+     * completed before capture went on and there is still no SMS number. The stored status is left alone.
+     *
+     * @param callable(): bool $isExternalUser only called when everything else matches
+     */
+    public function markStaleAddressesIncomplete(Result $result, Application $application, callable $isExternalUser): Result
+    {
+        if (
+            $this->isRequired()
+            && !$application->isVariation()
+            && $application->getStatus()?->getId() === Application::APPLICATION_STATUS_NOT_SUBMITTED
+            && $application->getApplicationCompletion()?->getAddressesStatus() === ApplicationCompletion::STATUS_COMPLETE
+            && SmsNumber::forLicence($application->getLicence()) === null
+            && $isExternalUser()
+        ) {
+            $result->setValue('applicationCompletion', ['addressesStatus' => ApplicationCompletion::STATUS_INCOMPLETE]);
+        }
+
+        return $result;
     }
 }

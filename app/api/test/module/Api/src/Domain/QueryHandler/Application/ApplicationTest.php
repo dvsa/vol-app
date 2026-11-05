@@ -50,6 +50,7 @@ final class ApplicationTest extends QueryHandlerTestCase
         $currentUser->shouldReceive('isAnonymous')->andReturn(false);
 
         $this->toggleService = m::mock(ToggleService::class);
+        $this->toggleService->shouldReceive('isEnabled')->andReturn(false)->byDefault();
 
         $this->mockedSmServices = [
             'FeesHelperService' => m::mock(),

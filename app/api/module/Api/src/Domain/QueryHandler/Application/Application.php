@@ -4,7 +4,6 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
-use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
 use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Psr\Container\ContainerInterface;
@@ -90,22 +89,8 @@ class Application extends AbstractQueryHandler
             ]
         );
 
-        if ($this->hasStaleAddressesCompletion($application)) {
-            // Shown as not done so it can't be submitted; the stored status is left alone.
-            $result->setValue('applicationCompletion', ['addressesStatus' => ApplicationCompletion::STATUS_INCOMPLETE]);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Addresses was completed before sms_number_capture went on, and a selfserve user now has to add one.
-     */
-    private function hasStaleAddressesCompletion(ApplicationEntity $application): bool
-    {
-        return $application->getStatus()?->getId() === ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED
-            && $application->getApplicationCompletion()?->getAddressesStatus() === ApplicationCompletion::STATUS_COMPLETE
-            && $this->smsNumberCapture->blocksApplication($application, $this->isExternalUser(...));
+        // Addresses done before sms_number_capture went on is shown as not done.
+        return $this->smsNumberCapture->markStaleAddressesIncomplete($result, $application, $this->isExternalUser(...));
     }
 
     /**

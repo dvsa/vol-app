@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Service\Sms;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Domain\QueryHandler\Result;
 use Dvsa\Olcs\Api\Entity\Application\Application;
+use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -98,5 +100,61 @@ final class SmsNumberCaptureTest extends TestCase
             'new application, toggle off' => [false, false, false],
             'variation, toggle on' => [true, true, false],
         ];
+    }
+
+    #[DataProvider('staleCompletionCases')]
+    public function testMarkStaleAddressesIncomplete(
+        bool $toggle,
+        bool $external,
+        bool $variation,
+        string $status,
+        int $addressesStatus,
+        bool $withSms,
+        bool $expectIncomplete
+    ): void {
+        $completion = $this->createStub(ApplicationCompletion::class);
+        $completion->method('getAddressesStatus')->willReturn($addressesStatus);
+
+        $application = $this->createStub(Application::class);
+        $application->method('isVariation')->willReturn($variation);
+        $application->method('getStatus')->willReturn(new RefData($status));
+        $application->method('getApplicationCompletion')->willReturn($completion);
+        $application->method('getLicence')->willReturn($this->licence($withSms));
+        $application->method('serialize')->willReturn(
+            ['applicationCompletion' => ['addressesStatus' => $addressesStatus, 'peopleStatus' => 2]]
+        );
+
+        $result = new Result($application);
+        $returned = $this->capture($toggle)->markStaleAddressesIncomplete($result, $application, fn (): bool => $external);
+
+        $this->assertSame($result, $returned);
+        $data = $result->serialize();
+        $this->assertSame(
+            $expectIncomplete ? ApplicationCompletion::STATUS_INCOMPLETE : $addressesStatus,
+            $data['applicationCompletion']['addressesStatus']
+        );
+        $this->assertSame(2, $data['applicationCompletion']['peopleStatus']);
+    }
+
+    public static function staleCompletionCases(): \Iterator
+    {
+        $open = Application::APPLICATION_STATUS_NOT_SUBMITTED;
+        $done = ApplicationCompletion::STATUS_COMPLETE;
+
+        yield 'selfserve, capture on, no number' => [true, true, false, $open, $done, false, true];
+        yield 'has a number' => [true, true, false, $open, $done, true, false];
+        yield 'capture off' => [false, true, false, $open, $done, false, false];
+        yield 'internal user' => [true, false, false, $open, $done, false, false];
+        yield 'variation' => [true, true, true, $open, $done, false, false];
+        yield 'submitted' => [true, true, false, Application::APPLICATION_STATUS_UNDER_CONSIDERATION, $done, false, false];
+        yield 'addresses not started' => [true, true, false, $open, ApplicationCompletion::STATUS_NOT_STARTED, false, false];
+    }
+
+    public function testCaptureOffNeverTouchesTheApplication(): void
+    {
+        $application = $this->createMock(Application::class);
+        $application->expects($this->never())->method($this->anything());
+
+        $this->capture(false)->markStaleAddressesIncomplete(new Result(), $application, fn (): bool => true);
     }
 }
