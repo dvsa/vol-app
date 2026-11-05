@@ -236,6 +236,9 @@ return [
     Command\Bus\Ebsr\DeleteSubmission::class => CommandHandler\Bus\Ebsr\DeleteSubmission::class,
     TransferCommand\Bus\PrintLetter::class => CommandHandler\Bus\PrintLetter::class,
 
+    // SMS
+    Command\Sms\QueueLetterSms::class => CommandHandler\Sms\QueueLetterSms::class,
+
     // Transfer - Licence
     TransferCommand\Licence\UpdateAddresses::class => CommandHandler\Licence\UpdateAddresses::class,
     TransferCommand\Licence\UpdateSmsNumber::class => CommandHandler\Licence\UpdateSmsNumber::class,
