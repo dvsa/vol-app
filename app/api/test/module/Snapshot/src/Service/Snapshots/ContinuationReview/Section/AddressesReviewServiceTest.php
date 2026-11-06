@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Address;
+use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Laminas\I18n\Translator\TranslatorInterface;
 
@@ -67,6 +68,12 @@ final class AddressesReviewServiceTest extends MockeryTestCase
             ->with(RefData::PHONE_NUMBER_SECONDARY_TYPE)
             ->andReturn('456')
             ->once()
+            ->shouldReceive('getPhoneContacts')
+            // an older duplicate SMS row loses to the newest one
+            ->andReturn(new ArrayCollection([
+                $this->smsContact(1, '+447700900999', '2026-01-01 09:00:00'),
+                $this->smsContact(2, '+447700900123', '2026-06-01 09:00:00'),
+            ]))
             ->getMock();
 
         $mockEstablishmentCd = m::mock(ContactDetails::class)
@@ -112,6 +119,10 @@ final class AddressesReviewServiceTest extends MockeryTestCase
                 ['value' => 'continuation-review-addresses-secondary-number'],
                 ['value' => '456', 'header' => true]
             ],
+            [
+                ['value' => 'continuation-review-addresses-sms-number'],
+                ['value' => '07700 900123', 'header' => true]
+            ],
         ];
 
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
@@ -140,6 +151,8 @@ final class AddressesReviewServiceTest extends MockeryTestCase
             ->with(RefData::PHONE_NUMBER_SECONDARY_TYPE)
             ->andReturn(null)
             ->once()
+            ->shouldReceive('getPhoneContacts')
+            ->andReturn(new ArrayCollection())
             ->getMock();
 
         $mockLicence = m::mock(Licence::class)
@@ -199,6 +212,8 @@ final class AddressesReviewServiceTest extends MockeryTestCase
             ->with(RefData::PHONE_NUMBER_SECONDARY_TYPE)
             ->andReturn(null)
             ->once()
+            ->shouldReceive('getPhoneContacts')
+            ->andReturn(new ArrayCollection())
             ->getMock();
 
         $mockLicence = m::mock(Licence::class)
@@ -229,5 +244,20 @@ final class AddressesReviewServiceTest extends MockeryTestCase
         ];
 
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
+    }
+
+    private function smsContact(int $id, string $number, string $modifiedOn): PhoneContact
+    {
+        $type = m::mock(\Dvsa\Olcs\Api\Entity\System\RefData::class);
+        $type->shouldReceive('getId')->andReturn(PhoneContact::TYPE_SMS);
+
+        $contact = m::mock(PhoneContact::class);
+        $contact->shouldReceive('getPhoneContactType')->andReturn($type);
+        $contact->shouldReceive('getPhoneNumber')->andReturn($number);
+        $contact->shouldReceive('getLastModifiedOn')->andReturn(new \DateTime($modifiedOn));
+        $contact->shouldReceive('getCreatedOn')->andReturn(null);
+        $contact->shouldReceive('getId')->andReturn($id);
+
+        return $contact;
     }
 }

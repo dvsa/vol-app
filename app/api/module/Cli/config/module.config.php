@@ -267,6 +267,8 @@ return [
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\Email\Send::class
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
+            Dvsa\Olcs\Cli\Service\Queue\Consumer\Sms\Send::class
+                => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\PrintJob\PrintJob::class
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\DiscPrinting\PrintDiscs::class
@@ -333,6 +335,8 @@ return [
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr\ProcessPackFailed::class,
             Queue::TYPE_EMAIL
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Email\Send::class,
+            Queue::TYPE_SMS
+                => Dvsa\Olcs\Cli\Service\Queue\Consumer\Sms\Send::class,
             Queue::TYPE_PRINT
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\PrintJob\PrintJob::class,
             Queue::TYPE_DISC_PRINTING_PRINT

@@ -146,6 +146,13 @@ return [
       // No forward proxy locally — the Notify client connects directly.
       'proxy' => '',
     ],
+    // VOL-7542: SMS via Notify. Uses mail.dsn for the API key (or mailpit). Outside production
+    // send_all_sms_to, if set, gets every text; leave it out to text the real number (use a team key).
+    // 'sms' => [
+    //   'template_id' => '00000000-0000-0000-0000-000000000000',
+    //   'send_all_sms_to' => '07700900000',
+    //   (is_production is derived from ENVIRONMENT_NAME, do not set it here)
+    // ],
     // VOL-7238: dedicated DSN for the admin "Send test via Notify" button (independent of
     // `mail.dsn`). Set to `govuknotify+mailpit://mailpit:1025` to wire the button through
     // the local Mailpit, or `govuknotify://<test-key>@notify.gov.uk` to hit a real Notify

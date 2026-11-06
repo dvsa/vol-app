@@ -30,8 +30,20 @@ final class GovUkNotifyTransportFactory extends AbstractTransportFactory
         private readonly \Closure $clientFactory,
         private readonly ConverterInterface $markdownConverter,
         private readonly string $chromeTemplate,
+        private readonly ?NotifyMessageRecorderInterface $recorder = null,
     ) {
         parent::__construct();
+    }
+
+    /** The same factory, but its transports record nothing in notify_message (admin test sends). */
+    public function withoutRecorder(): self
+    {
+        return new self(
+            $this->passthroughTemplateIds,
+            $this->clientFactory,
+            $this->markdownConverter,
+            $this->chromeTemplate,
+        );
     }
 
     #[\Override]
@@ -61,6 +73,7 @@ final class GovUkNotifyTransportFactory extends AbstractTransportFactory
                 $this->chromeTemplate,
                 $this->dispatcher,
                 $this->logger,
+                $this->recorder,
             );
         }
 
@@ -76,6 +89,7 @@ final class GovUkNotifyTransportFactory extends AbstractTransportFactory
             $this->passthroughTemplateIds,
             $this->dispatcher,
             $this->logger,
+            $this->recorder,
         );
     }
 }

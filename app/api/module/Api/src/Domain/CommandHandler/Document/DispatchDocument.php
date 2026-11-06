@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\Document\DispatchDocument as Cmd;
 use Dvsa\Olcs\Api\Domain\Command\Email\CreateCorrespondenceRecord;
 use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue;
 use Dvsa\Olcs\Api\Domain\Command\Result;
+use Dvsa\Olcs\Api\Domain\Command\Sms\QueueLetterSms;
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTranslateToWelshTask;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
@@ -70,6 +71,8 @@ final class DispatchDocument extends AbstractCommandHandler implements AuthAware
             );
 
             if (!$shouldSendEmail) {
+                $this->queueSms($documentResult->getId('document'));
+
                 return $this->result;
             }
         }
@@ -82,7 +85,21 @@ final class DispatchDocument extends AbstractCommandHandler implements AuthAware
             )
         );
 
+        $this->queueSms($documentResult->getId('document'));
+
         return $this->result;
+    }
+
+    /**
+     * Queue the "letter issued" SMS, once per dispatch
+     *
+     * @param int $documentId Document id
+     *
+     * @return void
+     */
+    protected function queueSms($documentId)
+    {
+        $this->result->merge($this->handleSideEffect(QueueLetterSms::create(['document' => $documentId])));
     }
 
     /**

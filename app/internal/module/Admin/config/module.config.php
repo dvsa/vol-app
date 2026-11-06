@@ -1021,6 +1021,21 @@ return [
                             ]
                         ],
                     ],
+                    'admin-sms-templates' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' =>
+                                'sms-templates[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|edit|previewTemplate)',
+                                'id' => '[0-9\,]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\SmsTemplateController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-document-templates' => [
                         'type' => 'Segment',
                         'options' => [
@@ -1170,6 +1185,7 @@ return [
             Admin\Controller\TaskAllocationRulesController::class => Admin\Controller\TaskAllocationRulesControllerFactory::class,
             Admin\Controller\TeamController::class => Admin\Controller\TeamControllerFactory::class,
             Admin\Controller\TemplateController::class => Admin\Controller\TemplateControllerFactory::class,
+            Admin\Controller\SmsTemplateController::class => Admin\Controller\SmsTemplateControllerFactory::class,
             Admin\Controller\UserManagementController::class => Admin\Controller\UserManagementControllerFactory::class,
             Admin\Controller\DataRetention\RuleAdminController::class => Admin\Controller\DataRetention\RuleAdminControllerFactory::class,
             Admin\Controller\IndexController::class => Admin\Controller\IndexControllerFactory::class,

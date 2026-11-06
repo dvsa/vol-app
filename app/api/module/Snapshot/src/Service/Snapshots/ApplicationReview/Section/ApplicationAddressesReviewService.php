@@ -10,6 +10,7 @@ namespace Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
+use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 
 /**
  * Application Addresses Review Service
@@ -80,6 +81,15 @@ class ApplicationAddressesReviewService extends AbstractReviewService
             ]
         ];
 
+        // only shown when there is one, as it isn't asked for until capture is on
+        $smsNumber = $this->latestSmsNumber($phoneContacts);
+        if ($smsNumber !== '') {
+            array_splice($config['subSections'][0]['mainItems'][1]['multiItems'][0], 2, 0, [[
+                'label' => 'application-review-addresses-sms-number',
+                'value' => SmsPhoneNumber::formatForDisplay($smsNumber),
+            ]]);
+        }
+
         $showEstablishmentAddress = in_array(
             $data['licenceType']['id'],
             [
@@ -103,6 +113,45 @@ class ApplicationAddressesReviewService extends AbstractReviewService
         }
 
         return $config;
+    }
+
+    /**
+     * The most recently changed SMS number, the same choice as SmsNumber::latestContact()
+     */
+    private function latestSmsNumber($phoneContacts): string
+    {
+        $latest = '';
+        $latestKey = null;
+
+        foreach (is_array($phoneContacts) ? $phoneContacts : [] as $phoneContact) {
+            if (($phoneContact['phoneContactType']['id'] ?? null) !== PhoneContact::TYPE_SMS) {
+                continue;
+            }
+
+            $number = trim((string) ($phoneContact['phoneNumber'] ?? ''));
+            if ($number === '') {
+                continue;
+            }
+
+            $key = [$this->changedAt($phoneContact), (int) ($phoneContact['id'] ?? 0)];
+            if ($latestKey === null || $key > $latestKey) {
+                $latest = $number;
+                $latestKey = $key;
+            }
+        }
+
+        return $latest;
+    }
+
+    private function changedAt(array $phoneContact): int
+    {
+        $at = $phoneContact['lastModifiedOn'] ?? $phoneContact['createdOn'] ?? null;
+
+        if ($at instanceof \DateTimeInterface) {
+            return $at->getTimestamp();
+        }
+
+        return is_string($at) ? (int) strtotime($at) : 0;
     }
 
     private function getPhoneNumber($phoneContacts, $which)

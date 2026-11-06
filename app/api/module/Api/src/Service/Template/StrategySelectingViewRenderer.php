@@ -8,14 +8,20 @@ use Laminas\View\Renderer\RendererInterface;
 
 class StrategySelectingViewRenderer
 {
+    private const string FORMAT_MARKDOWN = 'md';
+
     /**
      * Create service instance
      *
      *
      * @return StrategySelectingViewRenderer
      */
-    public function __construct(private readonly RendererInterface $legacyViewRenderer, private readonly TwigRenderer $twigRenderer, private readonly TwigLoader $twigLoader)
-    {
+    public function __construct(
+        private readonly RendererInterface $legacyViewRenderer,
+        private readonly TwigRenderer $twigRenderer,
+        private readonly TwigLoader $twigLoader,
+        private readonly ?TwigRenderer $markdownTwigRenderer = null,
+    ) {
     }
 
     /**
@@ -33,7 +39,12 @@ class StrategySelectingViewRenderer
         $templatePath = implode('/', [$locale, $format, $template]);
 
         if ($this->twigLoader->exists($templatePath)) {
-            return $this->twigRenderer->render($templatePath, $variables);
+            // Notify takes markdown and escapes HTML itself, so md must not be HTML escaped here too.
+            $renderer = $format === self::FORMAT_MARKDOWN && $this->markdownTwigRenderer !== null
+                ? $this->markdownTwigRenderer
+                : $this->twigRenderer;
+
+            return $renderer->render($templatePath, $variables);
         }
 
         $templateView = new ViewModel();

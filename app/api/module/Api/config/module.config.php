@@ -168,6 +168,11 @@ return [
             \Dvsa\Olcs\Api\Service\Retrieval\RetrievalPolicyResolver::class => \Dvsa\Olcs\Api\Service\Retrieval\RetrievalPolicyResolverFactory::class,
             \Dvsa\Olcs\Api\Service\Retrieval\SessionGrantService::class => \Dvsa\Olcs\Api\Service\Retrieval\SessionGrantServiceFactory::class,
             \Dvsa\Olcs\Api\Service\Retrieval\RetrievalLinkCreator::class => \Dvsa\Olcs\Api\Service\Retrieval\RetrievalLinkCreatorFactory::class,
+            \Dvsa\Olcs\Email\Transport\NotifyMessageRecorderInterface::class => \Dvsa\Olcs\Api\Service\Notify\NotifyMessageRecorderFactory::class,
+            \Dvsa\Olcs\Api\Service\Sms\SmsConfig::class => \Dvsa\Olcs\Api\Service\Sms\SmsConfigFactory::class,
+            \Dvsa\Olcs\Api\Service\Sms\SmsGate::class => \Dvsa\Olcs\Api\Service\Sms\SmsGateFactory::class,
+            \Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture::class => \Dvsa\Olcs\Api\Service\Sms\SmsNumberCaptureFactory::class,
+            \Dvsa\Olcs\Api\Service\Sms\SmsTransportInterface::class => \Dvsa\Olcs\Api\Service\Sms\SmsTransportFactory::class,
             \Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class => \Dvsa\Olcs\Api\Service\EditorJs\ConverterServiceFactory::class,
             \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger::class => \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLoggerFactory::class,
             'ConvertToPdf' => \Dvsa\Olcs\Api\Service\ConvertToPdf\ConvertToPdfFactory::class,
@@ -301,6 +306,7 @@ return [
             'TemplateDatabaseTwigLoader' => ApiSrv\Template\DatabaseTwigLoaderFactory::class,
             'TemplateDatabaseTemplateFetcher' => ApiSrv\Template\DatabaseTemplateFetcherFactory::class,
             'TemplateTwigRenderer' => ApiSrv\Template\TwigRendererFactory::class,
+            'TemplatePlainTextTwigRenderer' => ApiSrv\Template\PlainTextTwigRendererFactory::class,
             'TemplateTwigEnvironment' => ApiSrv\Template\TwigEnvironmentFactory::class,
             'TemplateStrategySelectingViewRenderer' => ApiSrv\Template\StrategySelectingViewRendererFactory::class,
 
@@ -892,6 +898,7 @@ return [
             'RetrievalLinkDocument' => RepositoryFactory::class,
             'RetrievalOtp' => RepositoryFactory::class,
             'RetrievalLinkEvent' => RepositoryFactory::class,
+            'NotifyMessage' => RepositoryFactory::class,
             Repository\LetterSectionVariant::class => RepositoryFactory::class
         ],
         'aliases' => [

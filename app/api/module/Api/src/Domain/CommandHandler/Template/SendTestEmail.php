@@ -128,7 +128,8 @@ final class SendTestEmail extends AbstractCommandHandler
     #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $this->twigRenderer = $container->get('TemplateTwigRenderer');
+        // Notify takes markdown and escapes HTML itself.
+        $this->twigRenderer = $container->get('TemplatePlainTextTwigRenderer');
         $this->testMailer = $container->get(NotifyTestMailer::class);
 
         $config = $container->get('config');

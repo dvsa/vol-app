@@ -8,6 +8,7 @@ use Alphagov\Notifications\Client as NotifyClient;
 use Alphagov\Notifications\Exception\NotifyException;
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Dvsa\Olcs\Email\Transport\GovUkNotifyTransport;
+use Dvsa\Olcs\Email\Transport\NotifyMessageRecorderInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
@@ -25,6 +26,9 @@ final class GovUkNotifyTransportTest extends MockeryTestCase
 
     private GovUkNotifyTransport $sut;
 
+    /** @var NotifyMessageRecorderInterface&\Mockery\MockInterface */
+    private $recorder;
+
     #[\Override]
     public function setUp(): void
     {
@@ -36,8 +40,105 @@ final class GovUkNotifyTransportTest extends MockeryTestCase
             [
                 GovUkNotifyTransport::LOCALE_EN_GB => self::EN_TEMPLATE_ID,
                 'cy_GB' => self::CY_TEMPLATE_ID,
-            ]
+            ],
+            null,
+            null,
+            $this->recorder = m::mock(NotifyMessageRecorderInterface::class)->shouldIgnoreMissing(),
         );
+    }
+
+    public function testRecordsAcceptedRecipient(): void
+    {
+        $email = $this->buildEmail(['markdownBody' => 'Hi', 'context' => ['licence' => 7, 'templateName' => 'tpl']]);
+        $email->addTo('second@example.com');
+
+        $this->notifyClient->shouldReceive('sendEmail')
+            ->andReturn(['id' => 'id-1'], ['id' => 'id-2']);
+
+        $this->recorder->shouldReceive('recordEmail')->once()->with(
+            'user@example.com',
+            m::on(fn($c) => $c['licence'] === 7 && $c['templateName'] === 'tpl' && $c['notifyTemplateId'] === self::EN_TEMPLATE_ID),
+            'id-1',
+            null,
+            null
+        );
+        $this->recorder->shouldReceive('recordEmail')->once()->with('second@example.com', m::type('array'), 'id-2', null, null);
+
+        $this->sut->send($email);
+    }
+
+    public function testRecordsRedirectedRecipient(): void
+    {
+        $email = $this->buildEmail(['markdownBody' => 'Hi', 'context' => ['originalTo' => ['real@example.com'], 'redirectTo' => 'user@example.com']]);
+        $this->notifyClient->shouldReceive('sendEmail')->andReturn(['id' => 'id-1']);
+
+        $this->recorder->shouldReceive('recordEmail')->once()->with(
+            'real@example.com',
+            m::on(fn($c) => $c['redirectedTo'] === 'user@example.com'),
+            'id-1',
+            null,
+            null
+        );
+
+        $this->sut->send($email);
+    }
+
+    public function testCcRecipientIsNotMarkedRedirected(): void
+    {
+        $email = $this->buildEmail(['markdownBody' => 'Hi', 'context' => []]);
+        $email->addCc('cc@example.com');
+        $this->notifyClient->shouldReceive('sendEmail')->andReturn(['id' => 'id-1'], ['id' => 'id-2']);
+
+        $this->recorder->shouldReceive('recordEmail')->once()->with('user@example.com', m::type('array'), 'id-1', null, null);
+        $this->recorder->shouldReceive('recordEmail')->once()->with(
+            'cc@example.com',
+            m::on(fn($c) => !isset($c['redirectedTo'])),
+            'id-2',
+            null,
+            null
+        );
+
+        $this->sut->send($email);
+    }
+
+    public function testRecordsPermanentFailure(): void
+    {
+        $email = $this->buildEmail(['markdownBody' => 'Hi']);
+        $email->addTo('second@example.com');
+
+        $this->notifyClient->shouldReceive('sendEmail')->andReturnUsing(
+            function ($to) {
+                if ($to === 'user@example.com') {
+                    throw new NotifyException('bad address', 400);
+                }
+                return ['id' => 'id-2'];
+            }
+        );
+
+        $this->recorder->shouldReceive('recordEmail')->once()->with('user@example.com', m::type('array'), null, '400', 'bad address');
+        $this->recorder->shouldReceive('recordEmail')->once()->with('second@example.com', m::type('array'), 'id-2', null, null);
+
+        $this->sut->send($email);
+    }
+
+    public function testTransientRecordsNothing(): void
+    {
+        $email = $this->buildEmail(['markdownBody' => 'Hi']);
+        $this->notifyClient->shouldReceive('sendEmail')->andThrow(new NotifyException('rate limited', 429));
+        $this->recorder->shouldReceive('recordEmail')->never();
+
+        $this->expectException(EmailNotSentException::class);
+        $this->sut->send($email);
+    }
+
+    public function testRecorderFailureDoesNotBreakSend(): void
+    {
+        $email = $this->buildEmail(['markdownBody' => 'Hi']);
+        $this->notifyClient->shouldReceive('sendEmail')->once()->andReturn(['id' => 'id-1']);
+        $this->recorder->shouldReceive('recordEmail')->once()->andThrow(new \RuntimeException('db down'));
+
+        $this->sut->send($email);
+        $this->addToAssertionCount(1);
     }
 
     public function testSendsEmailViaNotify(): void

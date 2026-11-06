@@ -25,12 +25,15 @@ use Symfony\Component\Mime\RawMessage;
  */
 final class DevNotifyTransport extends AbstractTransport
 {
+    use RecordsNotifyEmails;
+
     public function __construct(
         private readonly TransportInterface $inner,
         private readonly ConverterInterface $markdownConverter,
         private readonly string $chromeTemplate,
         ?EventDispatcherInterface $dispatcher = null,
         ?LoggerInterface $logger = null,
+        private readonly ?NotifyMessageRecorderInterface $recorder = null,
     ) {
         parent::__construct($dispatcher, $logger);
     }
@@ -53,15 +56,26 @@ final class DevNotifyTransport extends AbstractTransport
         $headers = $original->getHeaders();
         $header = $headers->get(GovUkNotifyTransport::PAYLOAD_HEADER);
 
+        $payload = null;
         if ($header instanceof UnstructuredHeader) {
-            $this->renderMarkdownIntoHtml($original, $header->getValue());
+            $payload = $this->renderMarkdownIntoHtml($original, $header->getValue());
             $headers->remove(GovUkNotifyTransport::PAYLOAD_HEADER);
         }
 
         $this->inner->send($original, $message->getEnvelope());
+
+        if ($payload !== null) {
+            $context = $this->recordingContext($payload, null);
+            foreach ($message->getEnvelope()->getRecipients() as $recipient) {
+                $this->recordEmail($this->recorder, $recipient->getAddress(), $context, null, null, null);
+            }
+        }
     }
 
-    private function renderMarkdownIntoHtml(SymfonyEmail $email, string $rawPayload): void
+    /**
+     * @return array<string, mixed>
+     */
+    private function renderMarkdownIntoHtml(SymfonyEmail $email, string $rawPayload): array
     {
         try {
             $payload = json_decode($rawPayload, true, 16, JSON_THROW_ON_ERROR);
@@ -83,5 +97,7 @@ final class DevNotifyTransport extends AbstractTransport
         if ($email->getTextBody() === null || $email->getTextBody() === '') {
             $email->text($markdown);
         }
+
+        return is_array($payload) ? $payload : [];
     }
 }

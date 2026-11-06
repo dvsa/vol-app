@@ -113,4 +113,39 @@ final class UpdateAddressesTest extends AbstractCommandHandlerTestCase
 
         $this->assertTrue($result->getFlag('hasChanged'));
     }
+
+    public function testSmsOnlyChangeCreatesNoTask(): void
+    {
+        $data = [
+            'id' => 123,
+            'correspondence' => 'corr',
+            'contact' => 'contact',
+            'correspondenceAddress' => 'c_address',
+            'establishment' => 'est',
+            'establishmentAddress' => 'e_address',
+            'consultant' => 'consultant'
+        ];
+        $command = Cmd::create($data);
+
+        $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
+            ->with(Permission::SELFSERVE_USER, null)
+            ->andReturn(true);
+
+        $result = new Result();
+        $result->setFlag('isDirty', false);
+        $result->setFlag('smsChanged', true);
+
+        $this->expectedSideEffect(SaveAddresses::class, $data, $result);
+
+        $licence = m::mock(LicenceEntity::class)->makePartial();
+        $this->repoMap['Licence']->shouldReceive('fetchUsingId')
+            ->with($command)
+            ->andReturn($licence);
+
+        $result = $this->sut->handleCommand($command);
+
+        $this->assertTrue($result->getFlag('hasChanged'));
+        $this->assertTrue($result->getFlag('smsChanged'));
+        $this->assertFalse($result->getFlag('isDirty'));
+    }
 }

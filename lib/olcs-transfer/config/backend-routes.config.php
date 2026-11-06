@@ -1127,6 +1127,16 @@ $routes = [
                                     'PUT' => CommandConfig::getPutConfig(Command\Licence\UpdateAddresses::class),
                                 ]
                             ],
+                            'sms-number' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'sms-number[/]'
+                                ],
+                                'may_terminate' => false,
+                                'child_routes' => [
+                                    'PUT' => CommandConfig::getPutConfig(Command\Licence\UpdateSmsNumber::class),
+                                ]
+                            ],
                             'safety' => [
                                 'type' => 'Segment',
                                 'options' => [

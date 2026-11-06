@@ -143,6 +143,12 @@ final class LicenceChecklistTest extends MockeryTestCase
                             ],
                             'phoneNumber' => '456'
                         ],
+                        [
+                            'phoneContactType' => [
+                                'id' => RefData::PHONE_TYPE_SMS
+                            ],
+                            'phoneNumber' => '+447700900123'
+                        ],
                     ],
                     'emailAddress' => 'test@example.com'
                 ],
@@ -308,6 +314,7 @@ final class LicenceChecklistTest extends MockeryTestCase
                     'establishmentAddress' => 'Flat 99, Bar house, London, SW1A 2AA',
                     'primaryNumber' => '123',
                     'secondaryNumber' => '456',
+                    'smsNumber' => '07700 900123',
                     'showEstablishmentAddress' => true,
                     'correspondenceEmail' => 'test@example.com'
                 ],
@@ -809,5 +816,29 @@ final class LicenceChecklistTest extends MockeryTestCase
         ];
 
         $this->assertEquals($out, LicenceChecklist::mapSafetyInspectorsSectionToView($in, $this->mockTranslator));
+    }
+
+    public function testDuplicateSmsRowsShowTheMostRecentlyModified(): void
+    {
+        $mapAddresses = new \ReflectionMethod(LicenceChecklist::class, 'mapAddresses');
+        $sms = static fn (string $id, string $number, string $modified) => [
+            'phoneContactType' => ['id' => RefData::PHONE_TYPE_SMS],
+            'phoneNumber' => $number,
+            'id' => $id,
+            'lastModifiedOn' => $modified,
+        ];
+
+        $addresses = $mapAddresses->invoke(null, [
+            'licenceType' => ['id' => RefData::LICENCE_TYPE_RESTRICTED],
+            'correspondenceCd' => [
+                'phoneContacts' => [
+                    $sms('1', '+447700900001', '2026-03-01T10:00:00+0000'),
+                    $sms('2', '+447700900002', '2026-05-01T10:00:00+0000'),
+                    $sms('3', '+447700900003', '2026-04-01T10:00:00+0000'),
+                ],
+            ],
+        ]);
+
+        $this->assertSame('07700 900002', $addresses['smsNumber']);
     }
 }

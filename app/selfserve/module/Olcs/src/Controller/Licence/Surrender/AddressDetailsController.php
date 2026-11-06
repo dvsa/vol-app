@@ -54,6 +54,13 @@ class AddressDetailsController extends AbstractSurrenderController
         $this->form = $this->getForm('Licence\Surrender\Addresses')
             ->setData($formData);
 
+        // SMS number is not collected on the surrender journey
+        $this->formHelper->removeFieldList(
+            $this->form,
+            'contact',
+            ['phone_sms', 'phone_sms_id', 'phone_sms_version']
+        );
+
         $hasProcessed = $this->formHelper->processAddressLookupForm($this->form, $request);
 
         if (!$hasProcessed && $request->isPost()) {

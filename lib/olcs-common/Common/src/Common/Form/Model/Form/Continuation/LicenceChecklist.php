@@ -14,6 +14,10 @@ class LicenceChecklist
     #[Form\Options(['hint' => 'continuations.checklist.form-hint', 'hintClass' => 'form-hint', 'label' => 'continuations.checklist.hidden.legend', 'label_attributes' => ['class' => 'govuk-visually-hidden'], 'shouldWrap' => true])]
     public $data;
 
+    #[Form\Name('smsNumber')]
+    #[Form\ComposedObject('Common\Form\Model\Form\Continuation\Fieldset\SmsNumber')]
+    public $smsNumber;
+
     #[Form\ComposedObject('Common\Form\Model\Form\Continuation\Fieldset\LicenceChecklistConfirmation')]
     #[Form\Options(['label' => 'continuations.checklist.confirmation.label'])]
     public $licenceChecklistConfirmation;

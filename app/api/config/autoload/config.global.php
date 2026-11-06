@@ -312,6 +312,16 @@ return [
         // it (SSM String params cannot be empty, so envs opt out with " " or "null"). NEVER in
         // production (APP): prod always sends to the real recipients regardless of the param.
         'send_all_mail_to' => $isProduction ? null : '%olcs_send_all_mail_to%',
+        // VOL-7542: SMS via GOV.UK Notify. Blank / "null" values mean unset. Outside production a
+        // send_all_sms_to number gets every text; unset, texts go to the real number and the env's
+        // team or test Notify key is what stops them reaching real people. Not a number: SMS is off.
+        // olcs_send_all_sms_to lives in each non-prod env's API secret (Secrets Manager), not the
+        // Terraform params, so the number stays out of the repo. Every non-prod secret needs the key.
+        'sms' => [
+            'template_id' => '%olcs_notify_sms_template%',
+            'send_all_sms_to' => $isProduction ? null : '%olcs_send_all_sms_to%',
+            'is_production' => $isProduction,
+        ],
         'from_name' => 'OLCS do not reply',
         'from_email' => '%olcs_from_email%',
         'selfserve_uri' => '%olcs_ss_uri%',

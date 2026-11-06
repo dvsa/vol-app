@@ -28,6 +28,8 @@ class FeatureToggle extends AbstractFeatureToggle
     public const INTERNAL_WEBDAV = 'internal_webdav';
     public const S3_BUCKET_BROWSER = 's3_bucket_browser';
     public const S3_BUCKET_BROWSER_OVERWRITE = 's3_bucket_browser_overwrite';
+    public const SMS_NOTIFICATIONS = 'sms_notifications';
+    public const SMS_NUMBER_CAPTURE = 'sms_number_capture';
     public const CPMS_HYBRID_GATEWAY = 'cpms_hybrid_gateway';
     public const IDP = 'idp';
     public const KNOWLEDGE_EXPERIENCE = 'knowledge_experience';

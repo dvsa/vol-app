@@ -76,6 +76,7 @@ module "parameters" {
     olcs_natreg_repute                           = "https://r-inr-01.corp.vosa.gov.uk:444/INR.BackofficeWeb/Repute/SubmitCheck.aspx?"
     olcs_natreg_token_url                        = "https://login.microsoftonline.com/6c448d90-4ca1-4caf-ab59-0a2aa67d7801/oauth2/v2.0/token"
     olcs_natreg_uri                              = "https://r-inr-01.corp.vosa.gov.uk:444/INR.Olcs.RESTServices/OlcsResponseService.svc"
+    olcs_notify_sms_template                     = " "
     olcs_notify_template_cy_gb                   = " "
     olcs_notify_template_en_gb                   = " "
     olcs_notify_test_dsn                         = " "

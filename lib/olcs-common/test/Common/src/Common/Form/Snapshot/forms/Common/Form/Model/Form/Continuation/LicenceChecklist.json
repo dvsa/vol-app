@@ -278,6 +278,29 @@
     {
       "flags": [],
       "spec": {
+        "name": "smsNumber",
+        "attributes": [],
+        "elements": [
+          {
+            "flags": [],
+            "spec": {
+              "name": "smsNumber",
+              "attributes": {
+                "class": "medium",
+                "id": "smsNumber"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SmsPhone"
+            }
+          }
+        ],
+        "fieldsets": [],
+        "type": "Laminas\\Form\\Fieldset",
+        "options": []
+      }
+    },
+    {
+      "flags": [],
+      "spec": {
         "name": "licenceChecklistConfirmation",
         "attributes": [],
         "elements": [

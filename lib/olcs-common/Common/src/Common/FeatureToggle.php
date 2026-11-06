@@ -35,5 +35,7 @@ class FeatureToggle
 
     public const S3_BUCKET_BROWSER_OVERWRITE = 's3_bucket_browser_overwrite';
 
+    public const SMS_NUMBER_CAPTURE = 'sms_number_capture';
+
     public const IDP = 'idp';
 }

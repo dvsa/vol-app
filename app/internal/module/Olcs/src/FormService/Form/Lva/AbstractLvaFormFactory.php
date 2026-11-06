@@ -4,6 +4,7 @@ namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\FormServiceManager;
 use Common\Rbac\Service\Permission;
+use Common\Service\Cqrs\Query\QuerySender;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
@@ -180,7 +181,7 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
             case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-addresses']:
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-addresses']:
             case self::FORM_SERVICE_CLASS_ALIASES['lva-licence-addresses']:
-                return new Addresses($formHelper);
+                return new Addresses($formHelper, $serviceLocator->get(QuerySender::class));
 
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-safety']:
             case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-safety']:
