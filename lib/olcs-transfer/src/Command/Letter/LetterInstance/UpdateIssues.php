@@ -18,7 +18,7 @@ final class UpdateIssues extends AbstractCommand
     /**
      * LetterIssue ids wanted on the letter, in the order they should appear
      *
-     * @var array
+     * @var array|null
      */
     #[Transfer\Optional]
     #[Transfer\ArrayInput]
@@ -27,7 +27,7 @@ final class UpdateIssues extends AbstractCommand
     /**
      * Go ahead even though the caseworker's edits on removed issues or to-dos will be lost
      *
-     * @var bool
+     * @var bool|null
      */
     #[Transfer\Filter('Laminas\Filter\Boolean')]
     #[Transfer\Optional]
