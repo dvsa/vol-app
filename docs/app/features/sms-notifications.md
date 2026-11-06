@@ -55,10 +55,12 @@ operator (`Sms\QueueLetterSms`). It is skipped when:
   all licences)
 
 Texts are only sent between 08:00 and 20:00 London time. Outside those hours the queue item
-waits until 08:00, and a text still waiting 12 hours after it was requested is marked failed
-rather than sent late. Sending (`Sms\SendSms`, queue type `que_typ_sms`) retries Notify outages up
-to 4 times. Before a retry it asks Notify whether the text already went, using the reference
-`<env>-sms-<rowId>`, so a text is never sent twice.
+waits until 08:00. A text that has to wait for the window more than 12 hours after it was
+requested is marked failed rather than sent, though a retry or a queue backlog late in the
+evening can still push one into the next morning. Sending (`Sms\SendSms`, queue type
+`que_typ_sms`) makes up to 4 attempts when Notify is unavailable. Before a retry it asks Notify
+whether the text already went, using the reference `<env>-sms-<rowId>`, so a text is never sent
+twice.
 
 Variables available to the template: `name` (the organisation name) and `dayOfWeek`. Welsh
 licences get the `cy_GB` version when there is one, otherwise English.
@@ -67,7 +69,8 @@ licences get the `cy_GB` version when there is one, otherwise English.
 
 Give it its own template name and its own queueing command. The one-a-day limit and the sending
 hours belong to the letter text, so a new kind sets its own (a one-time code, for example, needs
-neither). `NotifyMessage::hasSmsForRecipientBetween()` checks one template name at a time.
+neither). The `NotifyMessage` repository's `hasSmsForRecipientBetween()` checks one template name
+at a time.
 
 ## Collecting the number
 
@@ -75,10 +78,16 @@ Operators give an SMS number (mobile or UK landline, validated the way Notify do
 Addresses page and the continuation checklist. It is stored in E.164 as a `phone_t_SMS` phone
 contact and shown back in UK national format.
 
-| `sms_number_capture` toggle | Selfserve Addresses (applications, variations, licences)  | Continuation checklist | Internal Addresses |
-| --------------------------- | --------------------------------------------------------- | ---------------------- | ------------------ |
-| off                         | optional                                                  | not asked              | optional           |
-| on                          | required, and checked again before payment and submission | required               | optional           |
+| `sms_number_capture` toggle | Selfserve Addresses (applications, variations, licences) | Continuation checklist | Internal Addresses |
+| --------------------------- | -------------------------------------------------------- | ---------------------- | ------------------ |
+| off                         | not shown                                                | not shown              | not shown          |
+| on                          | required\*\*                                             | required               | optional           |
+
+\*\* A new application without one also can't be paid for or submitted. Variations aren't
+checked again.
+
+With capture off, saving the page leaves any number already held as it is. Review pages show the
+SMS number only when there is one.
 
 Turn capture on only once VFT, the Playwright suite and the api-calls tests fill in the field.
 
@@ -95,7 +104,8 @@ One row per message sent through Notify, with the channel (`nmc_sms`, `nmc_email
 status (`nms_*`), recipient, Notify id, template, timings and errors, plus the licence,
 organisation, application, case, bus reg or document it relates to. That context is there so
 internal users can be shown delivery status later (VOL-7721). Email rows are written by the Notify
-email transport and don't affect sending if the write fails.
+email transport and don't affect sending if the write fails. Admin "send test" emails aren't
+recorded. Rows aren't removed by data retention yet.
 
 Locally, `govuknotify+mailpit://` sends texts to Mailpit as emails to `sms@localhost` with the
 subject `SMS to <number>`.
