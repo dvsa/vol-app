@@ -59,8 +59,10 @@ class FormElementErrors extends LaminasFormElementErrors
             );
         }
 
+        $errorId = ($element->getAttribute('id')  ?: $element->getName()) . '-error';
+
         // Prepare attributes for opening tag
-        $attributes = array_merge($this->attributes, $attributes);
+        $attributes = array_merge($this->attributes, ['id' => $errorId], $attributes);
         $attributes = $this->createAttributesString($attributes);
         if ($attributes !== '' && $attributes !== '0') {
             $attributes = ' ' . $attributes;

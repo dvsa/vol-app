@@ -84,8 +84,8 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend>'
-            . '<span data-template="(.*)"><\/span><p class="hint">(.*)<\/p><\/fieldset>$/'
+            '/^<fieldset class="class" data-group="test" aria-describedby="test-hint"><legend>(.*)<\/legend>'
+            . '<span data-template="(.*)"><\/span><p id="test-hint" class="hint govuk-hint">(.*)<\/p><\/fieldset>$/'
         );
     }
 
@@ -101,7 +101,7 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend><p class="hint">(.*)<\/p>'
+            '/^<fieldset class="class" data-group="test" aria-describedby="test-hint"><legend>(.*)<\/legend><p id="test-hint" class="hint govuk-hint">(.*)<\/p>'
             . '<span data-template="(.*)"><\/span><\/fieldset>$/'
         );
     }
@@ -118,7 +118,7 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend><p class="hint">(.*)<\/p>'
+            '/^<fieldset class="class" data-group="test" aria-describedby="test-hint"><legend>(.*)<\/legend><p id="test-hint" class="hint govuk-hint">(.*)<\/p>'
             . '<fieldset data-group="(.*)"><\/fieldset><span data-template="(.*)"><\/span><\/fieldset>/'
         );
     }
@@ -210,6 +210,7 @@ final class FormCollectionTest extends MockeryTestCase
         $mockFieldset = m::mock(\Laminas\Form\FieldsetInterface::class);
         $mockFieldset->shouldReceive('getMessages')->andReturn([]);
         $mockFieldset->shouldReceive('getAttribute')->with('class')->andReturn('unit_CssClass');
+        $mockFieldset->shouldReceive('getAttribute')->with('id')->andReturn('unit-test');
         $mockFieldset->shouldReceive('getAttributes')->andReturn([]);
         $mockFieldset->shouldReceive('getIterator')->andReturn($iterator);
         $mockFieldset->shouldReceive('getOption')->with('readonly')->andReturn(true);
@@ -269,8 +270,8 @@ final class FormCollectionTest extends MockeryTestCase
 
         $this->assertEquals('<div class="help__text">' .
         '<h3 class="file__heading">_TRANSL_common.file-upload.table.col.FileName</h3>' .
-        '<ul title="unit_attr1" data-group="files">' .
-        '<p class="hint">_TRANSL_@unit_hint@</p>' .
+        '<ul title="unit_attr1" data-group="files" aria-describedby="files-hint">' .
+        '<p id="files-hint" class="hint govuk-hint">_TRANSL_@unit_hint@</p>' .
         '<li data-group="file1"></li>' .
         '</ul>' .
         '</div>', $actual);
@@ -378,8 +379,8 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend>'
-            . '<span data-template="(.*)"><\/span><p class="form-hint">(.*)<\/p><\/fieldset>$/'
+            '/^<fieldset class="class" data-group="test" aria-describedby="test-hint"><legend>(.*)<\/legend>'
+            . '<span data-template="(.*)"><\/span><p id="test-hint" class="form-hint">(.*)<\/p><\/fieldset>$/'
         );
     }
 }

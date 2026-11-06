@@ -142,7 +142,7 @@ final class FormRadioTest extends MockeryTestCase
             ],
             'globalAttributes' => [],
             'labelPosition' => null,
-            'expected' => '<div class="govuk-radios"><div class="govuk-radios__item"><input class="input_class govuk-radios__input" value="B" checked="checked" id="generated_id"><label class="label_class govuk-label govuk-radios__label" for="generated_id">default-translated-bbb</label><div class="hint_class govuk-hint govuk-radios__hint">default-translated-hint_text</div></div></div>'
+            'expected' => '<div class="govuk-radios"><div class="govuk-radios__item"><input class="input_class govuk-radios__input" value="B" checked="checked" id="generated_id" aria-describedby="generated_id-hint"><label class="label_class govuk-label govuk-radios__label" for="generated_id">default-translated-bbb</label><div class="hint_class govuk-hint govuk-radios__hint" id="generated_id-hint">default-translated-hint_text</div></div></div>'
         ];
     }
 }

@@ -6,14 +6,15 @@ $element = $this->element;
 $radioElement = $element->get('yesNo');
 $errors = $this->formElementErrors()->render($radioElement);
 $hasValidationError = !empty($errors);
+$hintId = ($element->getAttribute('id') ?: $element->getName()) . '-hint';
 ?>
 
 <div class="<?php echo ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
-    <fieldset class="radio-button__fieldset radio-button__fieldset--horizontal">
+    <fieldset class="radio-button__fieldset radio-button__fieldset--horizontal"<?php if ($element->getOption('hint')) : ?> aria-describedby="<?php echo $this->escapeHtmlAttr($hintId); ?>"<?php endif; ?>>
         <legend><?php echo $this->translate($element->getLabel()) ?></legend>
 
         <?php if ($element->getOption('hint')) : ?>
-            <p class="form-hint"><?php echo $this->translate($element->getOption('hint')) ?></p>
+            <p id="<?php echo $this->escapeHtmlAttr($hintId); ?>" class="form-hint"><?php echo $this->translate($element->getOption('hint')) ?></p>
         <?php endif; ?>
 
         <?php if ($hasValidationError) : ?>

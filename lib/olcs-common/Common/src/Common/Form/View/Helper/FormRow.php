@@ -37,7 +37,7 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
 
     protected $fieldsetLabelWrapper = '<legend>%s</legend>';
 
-    protected $fieldsetHintFormat = '<p class="hint">%s</p>';
+    protected $fieldsetHintFormat = '<p id="%s" class="hint govuk-hint">%s</p>';
 
     public function __construct()
     {
@@ -145,9 +145,15 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
         $hintText = $element->getOption('hint');
         $legend = '';
         $label = $element->getLabel();
+        $fieldsetAttributes = '';
 
         if (isset($hintText) && '' !== $hintText) {
-            $hint = sprintf($this->fieldsetHintFormat, $this->getView()->translate($hintText));
+            $hintId = ($element->getAttribute('id') ?: $element->getName()) . '-hint';
+            $hint = sprintf($this->fieldsetHintFormat, $hintId, $this->getView()->translate($hintText));
+            $configuredFieldsetAttributes = $element->getOption('fieldset-attributes');
+            $describedBy = $element->getAttribute('aria-describedby')
+                ?: ($configuredFieldsetAttributes['aria-describedby'] ?? $hintId);
+            $fieldsetAttributes = ' ' . $this->createAttributesString(['aria-describedby' => $describedBy]);
         } else {
             $hint = '';
         }
@@ -198,7 +204,7 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
             $markup,
             $legend,
             '',
-            isset($fieldsetClass) ? ' class="' . $fieldsetClass . '"' : ''
+            (isset($fieldsetClass) ? ' class="' . $fieldsetClass . '"' : '') . $fieldsetAttributes
         );
     }
 

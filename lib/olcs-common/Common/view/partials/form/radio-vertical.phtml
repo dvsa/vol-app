@@ -15,16 +15,17 @@ $errors = $this->formElementErrors()->render($this->radioElement);
 $hasValidationError = !empty($errors);
 $dataGroup = $element->getOption('fieldset-data-group');
 $dataGroupAttribute = empty($dataGroup) ? '' : 'data-group="' . $dataGroup . '"';
+$hintId = ($element->getAttribute('id') ?: $element->getName()) . '-hint';
 ?>
 
 <div class="<?= ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
-    <fieldset class="radio-button__fieldset radio-button__fieldset--vertical" <?= $dataGroupAttribute; ?>>
+    <fieldset class="radio-button__fieldset radio-button__fieldset--vertical" <?= $dataGroupAttribute; ?><?php if ($this->hint) { ?> aria-describedby="<?= $this->escapeHtmlAttr($hintId) ?>"<?php } ?>>
         <legend class="<?= $this->labelAttributes['class'] ?? ''; ?>">
             <?= $this->translate($this->label); ?>
         </legend>
 
         <?php if ($this->hint) { ?>
-            <p class="form-hint"><?= $this->translate($this->hint) ?></p>
+            <p id="<?= $this->escapeHtmlAttr($hintId) ?>" class="form-hint"><?= $this->translate($this->hint) ?></p>
         <?php } ?>
 
         <?php if ($hasValidationError) : ?>

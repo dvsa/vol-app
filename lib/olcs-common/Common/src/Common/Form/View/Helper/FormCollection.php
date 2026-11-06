@@ -56,9 +56,9 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
      *
      * @var string
      */
-    private static $hintFormat = '<p class="%s">%s</p>';
+    private static $hintFormat = '<p id="%s" class="%s">%s</p>';
 
-    private static $hintClass = 'hint';
+    private static $hintClass = 'hint govuk-hint';
 
     /**
      * Set Is Form in Read only status
@@ -120,9 +120,10 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
 
         $hint = $element->getOption('hint');
         $hintClass = $element->getOption('hintClass') ?: self::$hintClass;
+        $hintId = ($element->getAttribute('id') ?? $element->getName()) . '-hint';
         if (!empty($hint)) {
             $view = $this->getView();
-            $hint = sprintf(self::$hintFormat, $hintClass, $view->translate($hint));
+            $hint = sprintf(self::$hintFormat, $hintId, $hintClass, $view->translate($hint));
         }
 
         $attributes       = $element->getAttributes();
@@ -229,6 +230,10 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
             // explicitally rather than sniffing around in the DOM
             if (($fieldsetName = $element->getName()) !== null) {
                 $attributes['data-group'] = $fieldsetName;
+            }
+
+            if(!empty($hint)) {
+                $attributes['aria-describedby'] = $hintId;
             }
 
             $attributesString = $this->createAttributesString($attributes);

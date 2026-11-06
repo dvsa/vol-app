@@ -371,7 +371,25 @@ final class FormRowTest extends MockeryTestCase
         $markup = $this->sut->__invoke($element);
 
         // Assert
-        $this->assertEquals('<fieldset class="fieldset--primary"><legend>Label</legend><p class="hint">Hint</p></fieldset>', $markup);
+        $this->assertEquals(
+            '<fieldset class="fieldset--primary" aria-describedby="test-hint"><legend>Label</legend>'
+            . '<p id="test-hint" class="hint govuk-hint">Hint</p></fieldset>',
+            $markup
+        );
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokePreservesExistingDescribedByForFieldsetHint(): void
+    {
+        $this->setUpSut();
+        $element = $this->setUpElement();
+        $element->setAttribute('aria-describedby', 'existing-description');
+        $element->setOption('render_as_fieldset', true);
+
+        $markup = $this->sut->__invoke($element);
+
+        $this->assertStringContainsString('aria-describedby="existing-description"', $markup);
+        $this->assertStringContainsString('<p id="test-hint" class="hint govuk-hint">Hint</p>', $markup);
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
@@ -417,7 +435,11 @@ final class FormRowTest extends MockeryTestCase
         $result = $this->sut->__invoke($element);
 
         // Assert
-        $this->assertEquals('<div class="field "><fieldset class="date"><legend>Foo unit_LabelSfx</legend><p class="hint">Hint</p></fieldset></div>', $result);
+        $this->assertEquals(
+            '<div class="field "><fieldset class="date" aria-describedby="test-hint"><legend>Foo unit_LabelSfx</legend>'
+            . '<p id="test-hint" class="hint govuk-hint">Hint</p></fieldset></div>',
+            $result
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
@@ -463,7 +485,11 @@ final class FormRowTest extends MockeryTestCase
         $result = $this->sut->__invoke($element);
 
         // Assert
-        $this->assertEquals('<div class="field "><fieldset class="date"><legend>Foo</legend><p class="hint">Hint</p></fieldset></div>', $result);
+        $this->assertEquals(
+            '<div class="field "><fieldset class="date" aria-describedby="test-hint"><legend>Foo</legend>'
+            . '<p id="test-hint" class="hint govuk-hint">Hint</p></fieldset></div>',
+            $result
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
