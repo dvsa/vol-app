@@ -61,15 +61,14 @@ RUN apk add --no-cache linux-headers $PHPIZE_DEPS \
   && docker-php-ext-enable xdebug \
   && apk del linux-headers $PHPIZE_DEPS
 
-RUN \
-  # Disable OPCache in development.
-  echo "opcache.enable=0" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  # Setup Xdebug.
-  && echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.remote_log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.mode=debug" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.client_host=host.docker.internal" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.start_with_request=yes" >> ${PHP_INI_DIR}/conf.d/1000-php.ini
+# Development PHP settings (OPcache, Xdebug). Named to load after zzzz-php.ini so they take precedence.
+COPY php-development.ini ${PHP_INI_DIR}/conf.d/zzzzz-development.ini
+
+# Xdebug is installed but off unless XDEBUG_MODE is set (compose.yaml passes it through).
+ENV XDEBUG_MODE=off
+
+# Local config switches virus scanning off (local.php.dist), so don't start clamd: it holds about
+# 1 GB of signatures in memory and takes a CPU core for the first minute after every start.
+RUN rm /etc/supervisor/conf.d/clamd.conf
 
 USER www-data

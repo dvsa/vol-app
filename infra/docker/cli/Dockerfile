@@ -81,13 +81,10 @@ RUN apk update && \
   && docker-php-ext-install ldap \
   && docker-php-ext-enable ldap
 
-RUN \
-  echo "opcache.enable=0" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.remote_log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.mode=debug" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.client_host=host.docker.internal" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.start_with_request=yes" >> ${PHP_INI_DIR}/conf.d/1000-php.ini
+# Development PHP settings (OPcache, Xdebug). Named to load after zzzz-php.ini so they take precedence.
+COPY php-development.ini ${PHP_INI_DIR}/conf.d/zzzzz-development.ini
+
+# Xdebug is installed but off unless XDEBUG_MODE is set (compose.yaml passes it through).
+ENV XDEBUG_MODE=off
 
 USER www-data
