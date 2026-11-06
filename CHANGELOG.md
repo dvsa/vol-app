@@ -1,5 +1,45 @@
 # Changelog
 
+## [9.6.0](https://github.com/dvsa/vol-app/compare/v9.5.4...v9.6.0) (2026-11-06)
+
+
+### Features
+
+* add ability to specify nullable generated type ([3fdd1fe](https://github.com/dvsa/vol-app/commit/3fdd1fe7a357837058683b4011e20723efcdd1e0))
+* add db refresh ([#1884](https://github.com/dvsa/vol-app/issues/1884)) ([f211a85](https://github.com/dvsa/vol-app/commit/f211a853f877408afb94f44c9673476670677be2))
+* add enums to inexpressible on schema drift ([b5ca6aa](https://github.com/dvsa/vol-app/commit/b5ca6aa880babc7f726d4dfe38ff9094bea96cde))
+* reduce the default ticked bus registration VOL-7250 ([#1857](https://github.com/dvsa/vol-app/issues/1857)) ([8ac0ace](https://github.com/dvsa/vol-app/commit/8ac0ace316163b4fe2e36a1fe4fbc8918c905946))
+* selfserve accessibility fixes, with the GOV.UK Frontend 6 language navigation and feedback components VOL-7191 ([#1855](https://github.com/dvsa/vol-app/issues/1855)) ([f43d7f7](https://github.com/dvsa/vol-app/commit/f43d7f74ec814c2fa54a00e0a974bfdde5c5387b))
+* show the licence number in the shared emails VOL-7557 ([#1870](https://github.com/dvsa/vol-app/issues/1870)) ([95781ac](https://github.com/dvsa/vol-app/commit/95781ac3949ddc60efcb1ee9660a699f4cf1cee3))
+* vol 7321 financial evidence assessment tab content ([#1858](https://github.com/dvsa/vol-app/issues/1858)) ([7a8725c](https://github.com/dvsa/vol-app/commit/7a8725c875bd4b433f00486b7b0fb9c1613271d2))
+
+
+### Bug Fixes
+
+* add missing override ([a0f0460](https://github.com/dvsa/vol-app/commit/a0f04601a780e0de30ca6d0c018f8cce2e01894a))
+* add missing override ([f5b42e4](https://github.com/dvsa/vol-app/commit/f5b42e487ff6d2f2367503b29e4ba7d67f1b6703))
+* add required method to interface ([a5e3873](https://github.com/dvsa/vol-app/commit/a5e3873b55d9755958c302309ebb4ced85f20cfe))
+* allow external users to delete post submission docs ([c451ae0](https://github.com/dvsa/vol-app/commit/c451ae0e887fac1dc88ee83d557bd07848643c18))
+* allow external users to delete post submission docs ([7554bd1](https://github.com/dvsa/vol-app/commit/7554bd1072bdfff87451d32a2efa9e23533baa29))
+* docs snyk vulnerabilities ([#1868](https://github.com/dvsa/vol-app/issues/1868)) ([36fca87](https://github.com/dvsa/vol-app/commit/36fca87f3c5c214b7c25174325d2f26d073c8aff))
+* docs snyk vulnerabilities in open, flat and minimatch ([#1892](https://github.com/dvsa/vol-app/issues/1892)) ([f976858](https://github.com/dvsa/vol-app/commit/f97685860bc4f5d1ba795f985a908586ebc3ec7c))
+* fix logic and update snapshot ([3168db5](https://github.com/dvsa/vol-app/commit/3168db5a86e5dde80d73efaf266c151e12ea5b41))
+* fix phpcs error ([fd06c72](https://github.com/dvsa/vol-app/commit/fd06c729a835e5684339d92e80177958ec1b9a8a))
+* fix typo in comment about string mapping ([677ca57](https://github.com/dvsa/vol-app/commit/677ca5714b9ac1f170371e8f53641b24ab1843ea))
+* fixed rendering of table using govuk styling ([#1848](https://github.com/dvsa/vol-app/issues/1848)) ([ed41a92](https://github.com/dvsa/vol-app/commit/ed41a92f04644c4c062526023d8facd0dec2f8ad))
+* hide docs for unsubmitted applications on licence docs tab vol-5856 ([2eaa3ea](https://github.com/dvsa/vol-app/commit/2eaa3eae4157a040fb2b47b4ab12be1971a2097c))
+* hide the financial evidence video on internal ([#1872](https://github.com/dvsa/vol-app/issues/1872)) ([678977b](https://github.com/dvsa/vol-app/commit/678977b40d7f226de7bb7d966a55cdab20340cef))
+* hide unsubmitted application docs on licence docs tab ([01f916f](https://github.com/dvsa/vol-app/commit/01f916fa9f3d292de60ff654d5f377ffab4f367c))
+* log a fingerprint of the session, and never start one to log it ([#1891](https://github.com/dvsa/vol-app/issues/1891)) ([331c9a8](https://github.com/dvsa/vol-app/commit/331c9a8fc2db54a41717c28e6cf12241d186f5e9))
+* re-implement getAnalysis method in Document class ([a192afc](https://github.com/dvsa/vol-app/commit/a192afc9abf850c6e904fb57e2d7d8baa5b3eb9a))
+* regenerate drifted entities ([f365c57](https://github.com/dvsa/vol-app/commit/f365c576ea5653e1ecac34bf4d6a29619fc604b8))
+* remove duplicate relationship and methods ([ffae22b](https://github.com/dvsa/vol-app/commit/ffae22b08830e0b3ae70629d5ffe8b2c5de56650))
+* **terraform:** name the psv surrender batch command in full and drop the dead system-parameter job ([#1893](https://github.com/dvsa/vol-app/issues/1893)) ([75db755](https://github.com/dvsa/vol-app/commit/75db755eb39e6475dcc10f832592f9720377ebf3))
+* update composer hashes ([6d71ac4](https://github.com/dvsa/vol-app/commit/6d71ac47f073c609b63c8daac5ee8783d75bdcb9))
+* update document analysis entity config ([8f9c5b8](https://github.com/dvsa/vol-app/commit/8f9c5b861a2c4a20388e0c6833ab9b4c4065f306))
+* update qs package ([9429f8c](https://github.com/dvsa/vol-app/commit/9429f8c857cbd056e4e4ebb0603599529e3337b2))
+* update qs package ([6cc7fe8](https://github.com/dvsa/vol-app/commit/6cc7fe8927b41252d1b259d583d3306a362567f9))
+
 ## [9.5.4](https://github.com/dvsa/vol-app/compare/v9.5.3...v9.5.4) (2026-10-21)
 
 
