@@ -2,11 +2,11 @@
 
 namespace Dvsa\Olcs\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
-use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Snapshot\Service\Formatter\Address;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumber;
 use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 
 /**
@@ -77,8 +77,8 @@ class AddressesReviewService extends AbstractReviewService
             ];
         }
 
-        $smsNumber = $correspondenceCd->getPhoneContactNumber(PhoneContact::TYPE_SMS);
-        if ($smsNumber !== null) {
+        $smsNumber = SmsNumber::latestContact($correspondenceCd)?->getPhoneNumber();
+        if ($smsNumber !== null && trim((string) $smsNumber) !== '') {
             $config[] = [
                 ['value' => 'continuation-review-addresses-sms-number'],
                 ['value' => SmsPhoneNumber::formatForDisplay($smsNumber), 'header' => true]
