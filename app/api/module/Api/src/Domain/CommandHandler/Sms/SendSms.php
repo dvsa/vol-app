@@ -107,13 +107,15 @@ class SendSms extends AbstractCommandHandler
                 $existingId = $this->transport->findByReference($this->config->smsReference($message->getId()));
             } catch (\Throwable $e) {
                 // never send blind on a retry
-                $message->setErrorMessage(mb_substr('Notify lookup failed: ' . $e->getMessage(), 0, 1024));
+                $error = 'Notify lookup failed: '
+                    . ($e instanceof NotifyException ? NotifyErrors::message($e) : $e->getMessage());
+                $message->setErrorMessage(mb_substr($error, 0, 1024));
 
                 return $this->retryOrFail(
                     $message,
                     $now,
                     $this->retryDelay($now),
-                    'Notify lookup failed: ' . $e->getMessage(),
+                    $error,
                     $e
                 );
             }
@@ -172,7 +174,7 @@ class SendSms extends AbstractCommandHandler
     private function handleFailure(NotifyMessage $message, NotifyException $e, \DateTimeImmutable $now): Result
     {
         $message->setErrorCode((string) (int) $e->getCode());
-        $message->setErrorMessage(mb_substr($e->getMessage(), 0, 1024));
+        $message->setErrorMessage(mb_substr(NotifyErrors::message($e), 0, 1024));
 
         if (!NotifyErrors::isTransient($e)) {
             $this->finish($message, NotifyMessage::STATUS_REJECTED, $now);
@@ -185,7 +187,7 @@ class SendSms extends AbstractCommandHandler
             $message,
             $now,
             $this->retryDelay($now),
-            'Notify unavailable: ' . $e->getMessage(),
+            'Notify unavailable: ' . NotifyErrors::message($e),
             $e
         );
     }

@@ -24,9 +24,7 @@ class NotifyClientFactory
     {
         return new NotifyClient([
             'apiKey' => $apiKey,
-            // Notify turns error responses into an ApiException with its own message. Left on,
-            // Guzzle throws first and the error recorded is Guzzle's text instead.
-            'httpClient' => new GuzzleAdapter(new GuzzleClient(['http_errors' => false] + $this->guzzleOptions)),
+            'httpClient' => new GuzzleAdapter(new GuzzleClient($this->guzzleOptions)),
         ]);
     }
 

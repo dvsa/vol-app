@@ -101,9 +101,9 @@ final class GovUkNotifyTransport extends AbstractTransport
                     $permanentlyFailed++;
                     Logger::err('notify send permanently failed, recipient skipped', [
                         'code' => (int) $e->getCode(),
-                        'error' => $e->getMessage(),
+                        'error' => NotifyErrors::message($e),
                     ]);
-                    $this->recordEmail($this->recorder, $recipient, $context, null, (string) (int) $e->getCode(), $e->getMessage());
+                    $this->recordEmail($this->recorder, $recipient, $context, null, (string) (int) $e->getCode(), NotifyErrors::message($e));
                 }
             }
         }
@@ -112,7 +112,7 @@ final class GovUkNotifyTransport extends AbstractTransport
         // recipients, but a duplicate beats a drop, and transient Notify errors are rare).
         if ($transient !== null) {
             throw new EmailNotSentException(
-                sprintf('Notify send failed (HTTP %d): %s', (int) $transient->getCode(), $transient->getMessage()),
+                sprintf('Notify send failed (HTTP %d): %s', (int) $transient->getCode(), NotifyErrors::message($transient)),
                 0,
                 $transient,
             );
