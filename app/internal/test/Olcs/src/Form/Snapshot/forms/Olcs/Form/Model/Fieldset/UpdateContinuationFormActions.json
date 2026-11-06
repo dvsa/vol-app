@@ -78,7 +78,7 @@
           "target": "_blank"
         },
         "options": {
-          "label": "View digital continuation (opens in new window)"
+          "label": "View digital continuation"
         },
         "type": "\\Common\\Form\\Elements\\InputFilters\\ActionLink"
       }

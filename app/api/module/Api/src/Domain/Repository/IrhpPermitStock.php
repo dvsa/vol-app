@@ -50,7 +50,7 @@ class IrhpPermitStock extends AbstractRepository
                 ->setParameter('countryId', $countryId);
         }
 
-        $qb->orderBy($this->alias . '.validFrom', 'DESC');
+        $qb->orderBy($this->alias . '.validFrom', \SortDirection::Descending);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
@@ -98,8 +98,8 @@ class IrhpPermitStock extends AbstractRepository
         if ($country == Country::ID_MOROCCO) {
             $qb
                 ->innerJoin('ips.permitCategory', 'r')
-                ->addOrderBy('r.displayOrder', 'ASC')
-                ->addOrderBy('ips.validTo', 'ASC');
+                ->addOrderBy('r.displayOrder', \SortDirection::Ascending)
+                ->addOrderBy('ips.validTo', \SortDirection::Ascending);
         }
 
         return $qb->getQuery()

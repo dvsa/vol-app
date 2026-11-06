@@ -242,7 +242,16 @@ readonly class InverseRelationshipProcessor
 
         $orderPairs = [];
         foreach ($orderBy as $field => $direction) {
-            $orderPairs[] = sprintf("'%s' => '%s'", $field, strtoupper((string) $direction));
+            if (!$direction instanceof \SortDirection) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'OrderBy direction for "%s" must be an instance of \\SortDirection; use \\SortDirection::Ascending or \\SortDirection::Descending instead of a string.',
+                        $field
+                    )
+                );
+            }
+
+            $orderPairs[] = sprintf("'%s' => \\SortDirection::%s", $field, $direction->name);
         }
 
         return sprintf('#[ORM\\OrderBy([%s])]', implode(', ', $orderPairs));

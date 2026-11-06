@@ -33,7 +33,7 @@ class AddTransportManagerDetails
     public $birthDate;
 
     #[Form\Attributes(['class' => 'medium', 'disabled' => 'disabled'])]
-    #[Form\Options(['label' => 'lva-tm-details-email', 'label_attributes' => ['aria-label' => 'Enter their email address']])]
+    #[Form\Options(['label' => 'lva-tm-details-email'])]
     #[Form\Type('Text')]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Dvsa\Olcs\Transfer\Validators\EmailAddress')]

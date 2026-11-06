@@ -70,7 +70,7 @@ final class UserTest extends QueryHandlerTestCase
 
         $this->repoMap['EventHistory']
             ->shouldReceive('fetchByAccount')
-            ->with($userId, $eventHistoryType, 'id', 'desc', 1)
+            ->with($userId, $eventHistoryType, 'id', \SortDirection::Descending, 1)
             ->andReturn([$eventHistory]);
 
         $result = $this->sut->handleQuery($query)->serialize();
@@ -120,7 +120,7 @@ final class UserTest extends QueryHandlerTestCase
 
         $this->repoMap['EventHistory']
             ->shouldReceive('fetchByAccount')
-            ->with($userId, $eventHistoryType, 'id', 'desc', 1)
+            ->with($userId, $eventHistoryType, 'id', \SortDirection::Descending, 1)
             ->andReturn([$eventHistory]);
 
         $result = $this->sut->handleQuery($query)->serialize();
@@ -167,7 +167,7 @@ final class UserTest extends QueryHandlerTestCase
 
         $this->repoMap['EventHistory']
             ->shouldReceive('fetchByAccount')
-            ->with($userId, $eventHistoryType, 'id', 'desc', 1)
+            ->with($userId, $eventHistoryType, 'id', \SortDirection::Descending, 1)
             ->andReturn([]);
 
         $result = $this->sut->handleQuery($query)->serialize();

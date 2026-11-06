@@ -5,7 +5,7 @@
  * exclusively. Removes standard headers & footers
  */
 ?>
-<html lang="en">
+<html lang="<?php echo $this->escapeHtmlAttr($this->plugin('languageNavigation')->currentLanguage()); ?>">
   
   <head>
       <meta charset="utf-8">
@@ -18,7 +18,7 @@
   <body class="<?php echo $this->applicationName(); ?>" id="<?php echo $this->pageId(); ?>">
 
 	<div class="page-wrapper">
-    <main id="main" role="main">
+    <main id="main">
         <?php 
           echo $this->content;
           if (isset($this->children)) {

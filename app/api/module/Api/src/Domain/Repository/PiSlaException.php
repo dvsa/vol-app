@@ -27,8 +27,8 @@ class PiSlaException extends AbstractRepository
         ->setParameter('piId', $piId)
         ->join($this->alias . '.slaException', 'se')
         ->addSelect('se')
-        ->orderBy('se.slaDescription', 'ASC')
-        ->addOrderBy($this->alias . '.createdOn', 'DESC');
+        ->orderBy('se.slaDescription', \SortDirection::Ascending)
+        ->addOrderBy($this->alias . '.createdOn', \SortDirection::Descending);
 
         return $qb->getQuery()->getResult();
     }
@@ -50,8 +50,8 @@ class PiSlaException extends AbstractRepository
         ->setParameter('caseId', $caseId)
         ->join($this->alias . '.slaException', 'se')
         ->addSelect('se', 'p')
-        ->orderBy('se.slaDescription', 'ASC')
-        ->addOrderBy($this->alias . '.createdOn', 'DESC');
+        ->orderBy('se.slaDescription', \SortDirection::Ascending)
+        ->addOrderBy($this->alias . '.createdOn', \SortDirection::Descending);
 
         return $qb->getQuery()->getResult();
     }
@@ -88,7 +88,7 @@ class PiSlaException extends AbstractRepository
         )
         ->setParameter('checkDate', $checkDate)
         ->addSelect('se')
-        ->orderBy('se.slaDescription', 'ASC');
+        ->orderBy('se.slaDescription', \SortDirection::Ascending);
 
         return $qb->getQuery()->getResult();
     }

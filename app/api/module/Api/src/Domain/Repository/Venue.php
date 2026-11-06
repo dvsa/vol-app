@@ -41,6 +41,6 @@ class Venue extends AbstractRepository
         $today->setTime(0, 0, 0);
         $qb->setParameter('today', $today);
 
-        $qb->orderBy($this->alias . '.name', 'ASC');
+        $qb->orderBy($this->alias . '.name', \SortDirection::Ascending);
     }
 }
