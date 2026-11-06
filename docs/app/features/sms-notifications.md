@@ -32,10 +32,10 @@ and sends it as the `body` personalisation, so wording changes happen in VOL, no
 | ----------- | ----------------- | ------------------------------------------------------- |
 | Production  | ignored           | the operator's number                                   |
 | Non-prod    | a valid number    | that number (the row records it in `redirected_to`)     |
-| Non-prod    | unset             | the operator's number                                   |
+| Non-prod    | unset             | the operator's number\*                                 |
 | Non-prod    | set, not a number | nobody, SMS stays off (a typo never texts real numbers) |
 
-With it unset, the environment's Notify key is what keeps texts away from real people. A
+\* With it unset, the environment's Notify key is what keeps texts away from real people. A
 **test** key never delivers anything. A **team and guest list** key only delivers to the
 service's team members and guest list, and Notify refuses anyone else (the row is marked
 rejected). Don't put a live key outside production. To test, add yourself to the team or guest
