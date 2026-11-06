@@ -25,6 +25,7 @@ final class NotifyMessageTest extends RepositoryTestCase
         $this->assertTrue(
             $this->sut->hasSmsForRecipientBetween(
                 '+447700900123',
+                'letter-issued-sms',
                 new \DateTimeImmutable('2026-06-01 20:00:00', $london),
                 new \DateTimeImmutable('2026-06-02 20:00:00', $london)
             )
@@ -32,12 +33,14 @@ final class NotifyMessageTest extends RepositoryTestCase
 
         $this->assertSame(
             'SELECT COUNT(m.id) FROM ' . Entity::class . ' m'
-            . ' WHERE m.channel = :channel AND m.recipient = :recipient AND m.status <> :cancelled'
+            . ' WHERE m.channel = :channel AND m.recipient = :recipient AND m.templateName = :templateName'
+            . ' AND m.status <> :cancelled'
             . ' AND m.requestedOn >= :start AND m.requestedOn < :end',
             $qb->getDQL(),
         );
         $this->assertSame(Entity::CHANNEL_SMS, $qb->getParameter('channel')->getValue());
         $this->assertSame('+447700900123', $qb->getParameter('recipient')->getValue());
+        $this->assertSame('letter-issued-sms', $qb->getParameter('templateName')->getValue());
         $this->assertSame(Entity::STATUS_CANCELLED, $qb->getParameter('cancelled')->getValue());
 
         foreach (['start' => '2026-06-01 19:00:00', 'end' => '2026-06-02 19:00:00'] as $name => $expected) {
@@ -55,7 +58,7 @@ final class NotifyMessageTest extends RepositoryTestCase
         $qb->stubbedQuery()->expects('getSingleScalarResult')->withNoArgs()->andReturn('0');
 
         $this->assertFalse(
-            $this->sut->hasSmsForRecipientBetween('+447700900123', new \DateTime('2026-11-02 20:00:00'), new \DateTime('2026-11-03 20:00:00'))
+            $this->sut->hasSmsForRecipientBetween('+447700900123', 'letter-issued-sms', new \DateTime('2026-11-02 20:00:00'), new \DateTime('2026-11-03 20:00:00'))
         );
     }
 }

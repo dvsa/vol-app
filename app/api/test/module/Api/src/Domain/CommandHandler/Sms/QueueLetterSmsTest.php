@@ -131,7 +131,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $this->document($this->licence());
         $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')
             ->once()
-            ->with(self::NUMBER, m::type(\DateTimeInterface::class), m::type(\DateTimeInterface::class))
+            ->with(self::NUMBER, 'letter-issued-sms', m::type(\DateTimeInterface::class), m::type(\DateTimeInterface::class))
             ->andReturn(true);
         $this->messageRepo->shouldNotReceive('save');
 
@@ -231,7 +231,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')
             ->once()
             ->andReturnUsing(
-                function (string $recipient, \DateTimeInterface $start, \DateTimeInterface $end) use ($expectedStartUtc, $expectedEndUtc): bool {
+                function (string $recipient, string $templateName, \DateTimeInterface $start, \DateTimeInterface $end) use ($expectedStartUtc, $expectedEndUtc): bool {
                     $utc = new \DateTimeZone('UTC');
                     $this->assertSame($expectedStartUtc, \DateTimeImmutable::createFromInterface($start)->setTimezone($utc)->format('Y-m-d H:i'));
                     $this->assertSame($expectedEndUtc, \DateTimeImmutable::createFromInterface($end)->setTimezone($utc)->format('Y-m-d H:i'));
@@ -268,7 +268,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         /** @var \DateTimeInterface[] $requested */
         $requested = [];
         $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')->andReturnUsing(
-            function (string $recipient, \DateTimeInterface $start, \DateTimeInterface $end) use (&$requested): bool {
+            function (string $recipient, string $templateName, \DateTimeInterface $start, \DateTimeInterface $end) use (&$requested): bool {
                 foreach ($requested as $at) {
                     if ($at >= $start && $at < $end) {
                         return true;

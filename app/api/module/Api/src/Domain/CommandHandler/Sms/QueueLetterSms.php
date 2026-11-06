@@ -135,10 +135,10 @@ class QueueLetterSms extends AbstractCommandHandler
             return null;
         }
 
-        // one text per number per SMS day, so a letter after 20:00 and one the next morning share a text
+        // one letter text per number per SMS day, so a letter after 20:00 and one the next morning share a text
         $now = $this->now();
         [$dayStart, $dayEnd] = SendingWindow::smsDay($now);
-        if ($this->getRepo('NotifyMessage')->hasSmsForRecipientBetween($recipient, $dayStart, $dayEnd)) {
+        if ($this->getRepo('NotifyMessage')->hasSmsForRecipientBetween($recipient, self::TEMPLATE_NAME, $dayStart, $dayEnd)) {
             return null;
         }
 
