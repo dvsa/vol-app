@@ -528,6 +528,48 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
+    public function testPhoneRowsMoveWhenTheSaveReplacesTheContactDetails(): void
+    {
+        // contact details with no address get replaced by new ones when an address is saved
+        $command = Cmd::create($this->smsCommandData([
+            'phone_primary' => '01131231234',
+            'phone_primary_id' => 55,
+            'phone_primary_version' => 2,
+        ]));
+
+        $oldCd = new ContactDetailsEntity(new RefData(ContactDetailsEntity::CONTACT_TYPE_CORRESPONDENCE_ADDRESS));
+        $newCd = new ContactDetailsEntity(new RefData(ContactDetailsEntity::CONTACT_TYPE_CORRESPONDENCE_ADDRESS));
+        $row = new PhoneContactEntity(new RefData(PhoneContactEntity::TYPE_PRIMARY));
+        $row->setId(55);
+        $row->setVersion(2);
+        $row->setPhoneNumber('01131231234');
+        $row->setContactDetails($oldCd);
+        $oldCd->getPhoneContacts()->add($row);
+
+        $licence = m::mock(LicenceEntity::class)->makePartial();
+        $licence->setCorrespondenceCd($oldCd);
+        $this->expectedLicenceCacheClear($licence);
+
+        $result = new Result();
+        $result->addId('contactDetails', 900);
+        $result->setFlag('hasChanged', true);
+        $this->expectedSideEffect(SaveAddress::class, [], $result);
+
+        $this->repoMap['Licence']->shouldReceive('fetchUsingId')->with($command)->andReturn($licence);
+        $this->references[ContactDetailsEntity::class][900] = $newCd;
+        $this->repoMap['Licence']->shouldReceive('save')->once()->with($licence);
+        $this->repoMap['ContactDetails']->shouldReceive('save')->with($newCd);
+        $this->repoMap['PhoneContact']->shouldReceive('fetchById')->with(55, m::any(), 2)->andReturn($row);
+        $this->repoMap['PhoneContact']->shouldReceive('save')->once()->with($row);
+
+        $this->sut->handleCommand($command);
+
+        $this->assertSame($newCd, $licence->getCorrespondenceCd());
+        $this->assertSame($newCd, $row->getContactDetails());
+        $this->assertTrue($newCd->getPhoneContacts()->contains($row));
+        $this->assertFalse($oldCd->getPhoneContacts()->contains($row));
+    }
+
     public static function phoneRowsOnOtherContactDetails(): array
     {
         return [

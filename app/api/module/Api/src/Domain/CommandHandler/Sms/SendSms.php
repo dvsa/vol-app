@@ -101,6 +101,12 @@ class SendSms extends AbstractCommandHandler
 
         // The template id is saved just before every send, so it is only set once a send may have happened.
         $maySendAlready = $message->getNotifyTemplateId() !== null;
+
+        // a first attempt is checked before it counts as one, a retry only once Notify says it didn't go
+        if (!$maySendAlready && $this->cancelIfAlreadyTextedToday($message, $now)) {
+            return $this->result;
+        }
+
         $message->setAttempts(($message->getAttempts() ?? 0) + 1);
         $message->setNotifyTemplateId($templateId);
 
@@ -129,13 +135,10 @@ class SendSms extends AbstractCommandHandler
 
                 return $this->result;
             }
-        }
 
-        if ($this->alreadyTextedToday($message, $now)) {
-            $this->finish($message, NotifyMessage::STATUS_CANCELLED, $now);
-            $this->result->addMessage('SMS cancelled, this number already had one today');
-
-            return $this->result;
+            if ($this->cancelIfAlreadyTextedToday($message, $now)) {
+                return $this->result;
+            }
         }
 
         // saved before the send, so a crash after it leaves attempts > 0 for the next run to see
@@ -160,7 +163,7 @@ class SendSms extends AbstractCommandHandler
         return $this->result;
     }
 
-    private function alreadyTextedToday(NotifyMessage $message, \DateTimeImmutable $now): bool
+    private function cancelIfAlreadyTextedToday(NotifyMessage $message, \DateTimeImmutable $now): bool
     {
         $templateName = (string) $message->getTemplateName();
         if (!in_array($templateName, self::ONE_PER_SMS_DAY, true)) {
@@ -168,14 +171,20 @@ class SendSms extends AbstractCommandHandler
         }
 
         [$dayStart, $dayEnd] = SendingWindow::smsDay($now);
-
-        return $this->getRepo()->hasOtherSmsSentToRecipientBetween(
+        $alreadyTexted = $this->getRepo()->hasOtherSmsSentToRecipientBetween(
             (int) $message->getId(),
             $message->getRecipient(),
             $templateName,
             $dayStart,
             $dayEnd
         );
+
+        if ($alreadyTexted) {
+            $this->finish($message, NotifyMessage::STATUS_CANCELLED, $now);
+            $this->result->addMessage('SMS cancelled, this number already had one today');
+        }
+
+        return $alreadyTexted;
     }
 
     private function markSent(NotifyMessage $message, ?string $notifyId, \DateTimeImmutable $now): void

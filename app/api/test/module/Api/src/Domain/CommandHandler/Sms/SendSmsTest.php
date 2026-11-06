@@ -595,7 +595,27 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->assertSame(NotifyMessage::STATUS_CANCELLED, $m->getStatus()->getId());
         $this->assertNotNull($m->getCompletedOn());
         $this->assertNull($m->getSentOn());
+        // never attempted, so nothing marks it as possibly sent
+        $this->assertSame(0, $m->getAttempts());
+        $this->assertNull($m->getNotifyTemplateId());
         $this->assertSame(['SMS cancelled, this number already had one today'], $result->getMessages());
+    }
+
+    public function testRetryNotifyHasNothingForIsCancelledWhenTheNumberHadOneSentThisSmsDay(): void
+    {
+        $m = $this->message(false, 1);
+        $m->setNotifyTemplateId(self::TEMPLATE_ID);
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('findByReference')->once()->with(self::REFERENCE)->andReturnNull();
+        $this->messageRepo->shouldReceive('hasOtherSmsSentToRecipientBetween')->once()->andReturn(true);
+        $this->messageRepo->shouldReceive('save')->with($m);
+        $this->transport->shouldReceive('send')->never();
+
+        $this->handle();
+
+        $this->assertSame(NotifyMessage::STATUS_CANCELLED, $m->getStatus()->getId());
+        $this->assertNull($m->getSentOn());
     }
 
     public function testOtherKindsOfTextAreNotLimitedAtSend(): void
