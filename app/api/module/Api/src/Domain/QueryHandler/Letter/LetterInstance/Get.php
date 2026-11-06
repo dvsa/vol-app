@@ -18,6 +18,7 @@ class Get extends AbstractQueryByIdHandler
             'category',
             'subCategory'
         ],
+        'status',
         'licence',
         'application',
         'case',
@@ -30,7 +31,9 @@ class Get extends AbstractQueryByIdHandler
         ],
         'letterInstanceIssues' => [
             'letterIssueVersion' => [
-                'letterIssueType'
+                'letterIssueType',
+                // parent issue id, so changing issues can pre-tick what's on the letter (VOL-7734)
+                'letterIssue',
             ]
         ],
         'letterInstanceTodos' => [
