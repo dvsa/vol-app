@@ -147,7 +147,7 @@ return [
       'proxy' => '',
     ],
     // VOL-7542: SMS via Notify. Uses mail.dsn for the API key (or mailpit). Outside production
-    // send_all_sms_to must be a real number or SMS stays off.
+    // send_all_sms_to, if set, gets every text; leave it out to text the real number (use a team key).
     // 'sms' => [
     //   'template_id' => '00000000-0000-0000-0000-000000000000',
     //   'send_all_sms_to' => '07700900000',

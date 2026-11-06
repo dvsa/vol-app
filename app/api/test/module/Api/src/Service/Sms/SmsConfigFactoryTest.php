@@ -134,7 +134,7 @@ final class SmsConfigFactoryTest extends TestCase
         $this->assertSame('+447700900123', $c->sendAllSmsTo);
     }
 
-    public function testBadRedirectIsUnsetAndGateIsOff(): void
+    public function testBadRedirectTurnsSmsOff(): void
     {
         $c = $this->build([
             'mail' => ['dsn' => 'govuknotify://KEY@default'],
@@ -142,6 +142,7 @@ final class SmsConfigFactoryTest extends TestCase
         ]);
 
         $this->assertNull($c->sendAllSmsTo);
+        $this->assertTrue($c->redirectInvalid);
 
         $toggles = $this->createStub(ToggleService::class);
         $toggles->method('isEnabled')->willReturn(true);

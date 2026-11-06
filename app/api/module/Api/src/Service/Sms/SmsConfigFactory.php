@@ -42,15 +42,19 @@ final class SmsConfigFactory implements FactoryInterface
             }
         }
 
+        $redirect = self::setOrNull($sms['send_all_sms_to'] ?? null);
+        $redirectNumber = self::normalisedNumber($redirect);
+
         return new SmsConfig(
             $apiKey,
             $mailpit,
             $host,
             $port,
             self::setOrNull($sms['template_id'] ?? null),
-            self::normalisedNumber(self::setOrNull($sms['send_all_sms_to'] ?? null)),
+            $redirectNumber,
             (bool) ($sms['is_production'] ?? false),
             self::environment(),
+            $redirect !== null && $redirectNumber === null,
         );
     }
 
@@ -63,7 +67,7 @@ final class SmsConfigFactory implements FactoryInterface
         return $environment !== '' ? $environment : 'local';
     }
 
-    /** A redirect that is not a valid UK mobile or landline number counts as unset, so a typo cannot enable SMS. */
+    /** A UK mobile or landline in E.164, or null if it isn't one. */
     private static function normalisedNumber(?string $value): ?string
     {
         return $value === null ? null : SmsPhoneNumber::normalise($value);

@@ -555,16 +555,16 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->assertNotNull($m->getCompletedOn());
     }
 
-    public function testNonProdWithNoRedirectCancels(): void
+    public function testNonProdWithNoRedirectSendsToRecipient(): void
     {
         $m = $this->message();
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
-        $this->transport->shouldNotReceive('send');
-        $this->messageRepo->shouldReceive('save')->once()->with($m);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('send')->once()->with(self::NUMBER, m::any(), 'x', m::any())->andReturn('n');
+        $this->messageRepo->shouldReceive('save')->twice();
 
-        $result = $this->handle();
+        $this->handle();
 
-        $this->assertSame(NotifyMessage::STATUS_CANCELLED, $m->getStatus()->getId());
-        $this->assertNotEmpty($result->getMessages());
+        $this->assertNull($m->getRedirectedTo());
     }
 }

@@ -21,8 +21,8 @@ class SmsGate
             return false;
         }
 
-        // Outside production a redirect number is mandatory, so a real citizen is never texted.
-        if (!$this->config->isProduction && $this->config->sendAllSmsTo === null) {
+        // A redirect that isn't a number is a typo. Don't fall back to texting real numbers.
+        if ($this->config->redirectInvalid) {
             return false;
         }
 
