@@ -35,7 +35,7 @@ final class NotifyMessageTest extends RepositoryTestCase
             'SELECT COUNT(m.id) FROM ' . Entity::class . ' m'
             . ' WHERE m.channel = :channel AND m.recipient = :recipient AND m.templateName = :templateName'
             . ' AND m.status <> :cancelled'
-            . ' AND m.requestedOn >= :start AND m.requestedOn < :end',
+            . ' AND ((m.requestedOn >= :start AND m.requestedOn < :end) OR (m.sentOn >= :start AND m.sentOn < :end))',
             $qb->getDQL(),
         );
         $this->assertSame(Entity::CHANNEL_SMS, $qb->getParameter('channel')->getValue());
@@ -59,6 +59,44 @@ final class NotifyMessageTest extends RepositoryTestCase
 
         $this->assertFalse(
             $this->sut->hasSmsForRecipientBetween('+447700900123', 'letter-issued-sms', new \DateTime('2026-11-02 20:00:00'), new \DateTime('2026-11-03 20:00:00'))
+        );
+    }
+
+    public function testHasOtherSmsSentToRecipientBetweenLooksAtSendTimeAndSkipsThisRow(): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->withNoArgs()->andReturn('1');
+
+        $london = new \DateTimeZone('Europe/London');
+        $this->assertTrue(
+            $this->sut->hasOtherSmsSentToRecipientBetween(
+                42,
+                '+447700900123',
+                'letter-issued-sms',
+                new \DateTimeImmutable('2026-11-04 20:00:00', $london),
+                new \DateTimeImmutable('2026-11-05 20:00:00', $london)
+            )
+        );
+
+        $this->assertSame(
+            'SELECT COUNT(m.id) FROM ' . Entity::class . ' m'
+            . ' WHERE m.channel = :channel AND m.recipient = :recipient AND m.templateName = :templateName'
+            . ' AND m.status <> :cancelled'
+            . ' AND m.id <> :exceptId AND m.sentOn >= :start AND m.sentOn < :end',
+            $qb->getDQL(),
+        );
+        $this->assertSame(42, $qb->getParameter('exceptId')->getValue());
+        $this->assertSame('2026-11-04 20:00:00', $qb->getParameter('start')->getValue()->format('Y-m-d H:i:s'));
+        $this->assertSame('UTC', $qb->getParameter('end')->getValue()->getTimezone()->getName());
+    }
+
+    public function testHasOtherSmsSentToRecipientBetweenFalseWhenNone(): void
+    {
+        $qb = $this->createRealQb();
+        $qb->stubbedQuery()->expects('getSingleScalarResult')->withNoArgs()->andReturn('0');
+
+        $this->assertFalse(
+            $this->sut->hasOtherSmsSentToRecipientBetween(42, '+447700900123', 'letter-issued-sms', new \DateTime('2026-11-04 20:00:00'), new \DateTime('2026-11-05 20:00:00'))
         );
     }
 }

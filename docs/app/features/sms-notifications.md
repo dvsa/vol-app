@@ -56,13 +56,15 @@ operator (`Sms\QueueLetterSms`). It is skipped when:
 
 - the letter's template is marked suppress from operator
 - the licence has no SMS number
-- that number has already had a letter text in the current SMS day (20:00 to 20:00 London, across
-  all licences)
+- that number has already had a letter text requested or sent in the current SMS day (20:00 to
+  20:00 London, across all licences)
+
+The same check runs again just before sending, by send time, so two letters queued at the same
+moment, or a retry that goes out the next morning, still give the number one text that day.
 
 Texts are only sent between 08:00 and 20:00 London time. Outside those hours the queue item
 waits until 08:00. A text that has to wait for the window more than 12 hours after it was
-requested is marked failed rather than sent, though a retry or a queue backlog late in the
-evening can still push one into the next morning. Sending (`Sms\SendSms`, queue type
+requested is marked failed rather than sent. Sending (`Sms\SendSms`, queue type
 `que_typ_sms`) makes up to 4 attempts when Notify is unavailable. Before a retry it asks Notify
 whether the text already went, using the reference `<env>-sms-<rowId>`, so a text is never sent
 twice.
@@ -72,10 +74,11 @@ licences get the `cy_GB` version when there is one, otherwise English.
 
 ### Adding another kind of text
 
-Give it its own template name and its own queueing command. The one-a-day limit and the sending
-hours belong to the letter text, so a new kind sets its own (a one-time code, for example, needs
-neither). The `NotifyMessage` repository's `hasSmsForRecipientBetween()` checks one template name
-at a time.
+Give it its own template name and its own queueing command. The one-a-day limit belongs to the
+letter text, so a new kind sets its own (a one-time code, for example, has none). The `NotifyMessage`
+repository's `hasSmsForRecipientBetween()` checks one template name at a time, and a kind that is
+limited to one a day also goes in `SendSms::ONE_PER_SMS_DAY` for the check at send time. The
+sending hours apply to every kind.
 
 ## Collecting the number
 

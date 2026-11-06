@@ -47,6 +47,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->sut->shouldReceive('now')->andReturnUsing(fn() => $this->now);
 
         $this->messageRepo = $this->mockRepo('NotifyMessage', Repository\NotifyMessage::class);
+        $this->messageRepo->shouldReceive('hasOtherSmsSentToRecipientBetween')->andReturn(false)->byDefault();
         $this->gate = m::mock(SmsGate::class);
         $this->transport = m::mock(SmsTransportInterface::class);
         $this->twig = m::mock(TwigRenderer::class);
@@ -566,5 +567,66 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->handle();
 
         $this->assertNull($m->getRedirectedTo());
+    }
+
+    public function testLetterTextCancelledWhenTheNumberHadOneSentThisSmsDay(): void
+    {
+        $m = $this->message();
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->messageRepo->shouldReceive('hasOtherSmsSentToRecipientBetween')
+            ->once()
+            ->withArgs(function (int $id, string $to, string $name, \DateTimeInterface $start, \DateTimeInterface $end) {
+                $london = new \DateTimeZone('Europe/London');
+
+                // Thursday 10:30 is in the SMS day from Wednesday 20:00 to Thursday 20:00
+                return $id === self::ID
+                    && $to === self::NUMBER
+                    && $name === 'letter-issued-sms'
+                    && $start->setTimezone($london)->format('Y-m-d H:i') === '2026-11-04 20:00'
+                    && $end->setTimezone($london)->format('Y-m-d H:i') === '2026-11-05 20:00';
+            })
+            ->andReturn(true);
+        $this->transport->shouldReceive('send')->never();
+        $this->messageRepo->shouldReceive('save')->with($m);
+
+        $result = $this->handle();
+
+        $this->assertSame(NotifyMessage::STATUS_CANCELLED, $m->getStatus()->getId());
+        $this->assertNotNull($m->getCompletedOn());
+        $this->assertNull($m->getSentOn());
+        $this->assertSame(['SMS cancelled, this number already had one today'], $result->getMessages());
+    }
+
+    public function testOtherKindsOfTextAreNotLimitedAtSend(): void
+    {
+        $m = $this->message();
+        $m->setTemplateName('one-time-code-sms');
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->messageRepo->shouldReceive('hasOtherSmsSentToRecipientBetween')->never();
+        $this->messageRepo->shouldReceive('save')->with($m);
+        $this->transport->shouldReceive('send')->once()->andReturn('notify-1');
+
+        $this->handle();
+
+        $this->assertSame(NotifyMessage::STATUS_CREATED, $m->getStatus()->getId());
+    }
+
+    public function testRetryThatAlreadyWentIsRecordedRatherThanCancelled(): void
+    {
+        $m = $this->message(false, 1);
+        $m->setNotifyTemplateId(self::TEMPLATE_ID);
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->twig->shouldReceive('render')->andReturn('x');
+        $this->transport->shouldReceive('findByReference')->once()->with(self::REFERENCE)->andReturn('notify-1');
+        $this->messageRepo->shouldReceive('hasOtherSmsSentToRecipientBetween')->never();
+        $this->messageRepo->shouldReceive('save')->with($m);
+        $this->transport->shouldReceive('send')->never();
+
+        $this->handle();
+
+        $this->assertSame('notify-1', $m->getNotifyId());
+        $this->assertSame(NotifyMessage::STATUS_CREATED, $m->getStatus()->getId());
     }
 }

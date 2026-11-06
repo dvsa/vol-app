@@ -32,6 +32,9 @@ class SendSms extends AbstractCommandHandler
     private const int RETRY_AFTER = 900;
     private const int MAX_WAIT_AFTER_REQUEST = 12 * 3600;
 
+    /** Kinds of text a number gets at most once per SMS day, checked again here as the queue-time check can miss one */
+    private const array ONE_PER_SMS_DAY = [QueueLetterSms::TEMPLATE_NAME];
+
     protected $repoServiceName = 'NotifyMessage';
 
     private SmsGate $smsGate;
@@ -128,6 +131,13 @@ class SendSms extends AbstractCommandHandler
             }
         }
 
+        if ($this->alreadyTextedToday($message, $now)) {
+            $this->finish($message, NotifyMessage::STATUS_CANCELLED, $now);
+            $this->result->addMessage('SMS cancelled, this number already had one today');
+
+            return $this->result;
+        }
+
         // saved before the send, so a crash after it leaves attempts > 0 for the next run to see
         $this->getRepo()->save($message);
 
@@ -148,6 +158,24 @@ class SendSms extends AbstractCommandHandler
         $this->result->addMessage('SMS sent');
 
         return $this->result;
+    }
+
+    private function alreadyTextedToday(NotifyMessage $message, \DateTimeImmutable $now): bool
+    {
+        $templateName = (string) $message->getTemplateName();
+        if (!in_array($templateName, self::ONE_PER_SMS_DAY, true)) {
+            return false;
+        }
+
+        [$dayStart, $dayEnd] = SendingWindow::smsDay($now);
+
+        return $this->getRepo()->hasOtherSmsSentToRecipientBetween(
+            (int) $message->getId(),
+            $message->getRecipient(),
+            $templateName,
+            $dayStart,
+            $dayEnd
+        );
     }
 
     private function markSent(NotifyMessage $message, ?string $notifyId, \DateTimeImmutable $now): void
