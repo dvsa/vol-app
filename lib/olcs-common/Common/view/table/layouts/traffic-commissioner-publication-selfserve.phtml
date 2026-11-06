@@ -13,11 +13,11 @@ $showStatus = isset($settings['show-status']) ? $settings['show-status'] : true;
     <?php foreach ($this->object->getRows() as $row): ?>
         <li class="search-result">
             <div class="search-result__header">
-                <h4>
+                <h2 class="h4">
                     <a class="govuk-link" href="/view-details/licence/<?php echo Escape::htmlAttr($row['licId']); ?>">
                         <?php echo Escape::html($row['licNo']); ?>
                     </a> <?php echo Escape::html($this->translate($row['licTypeDesc'])); ?>
-                </h4>
+                </h2>
                 <p><?php echo htmlentities($row['orgName']); ?></p>
             </div>
             <?php if (!empty($row['text1'] . $row['text2'] . $row['text3'])) { ?>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OlcsTest\FormService\Form\Lva\Addresses;
 
+use Common\Form\Elements\Types\Address as AddressFieldset;
 use Common\Service\Helper\FormHelperService;
 use Common\FeatureToggle;
 use Common\Service\Cqrs\Query\QuerySender;
@@ -46,6 +47,10 @@ final class ApplicationAddressesTest extends MockeryTestCase
     {
         $mockForm = m::mock(Form::class);
         $this->mockSmsRequired($mockForm, $captureOn);
+        $mockForm->expects('has')->with('establishment_address')->andReturn(false);
+        $consultantAddress = m::mock(AddressFieldset::class);
+        $consultantAddress->expects('useNamesAsIds')->withNoArgs()->andReturnNull();
+        $mockForm->expects('get')->with('consultantAddress')->andReturn($consultantAddress);
         $this->mockAlterButtons($mockForm, $this->fh);
 
         $this->fh->shouldReceive('createForm')

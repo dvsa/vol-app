@@ -130,6 +130,17 @@ class FormElement extends LaminasFormElement
                 $class = $element->getAttribute('class');
             }
 
+            // A link that opens a new tab says so inside its text
+            if ($element->getAttribute('target') === '_blank') {
+                /** @var callable $linkNewWindow */
+                $linkNewWindow = $renderer->plugin('linkNewWindow');
+                return $linkNewWindow(
+                    (string) $url,
+                    (string) $element->getLabel(),
+                    $class === '' ? 'govuk-link' : $class
+                );
+            }
+
             $target = '';
 
             if ($element->getAttribute('target')) {

@@ -19,10 +19,6 @@ final class SettingsCookieNamesProviderTest extends MockeryTestCase
 
         $expected = [
             [
-                'name' => 'langPref',
-                'domain' => null
-            ],
-            [
                 'name' => 'cookie_seen',
                 'domain' => null
             ]
