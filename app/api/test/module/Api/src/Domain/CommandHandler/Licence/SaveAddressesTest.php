@@ -12,6 +12,7 @@ namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Command\Result;
+use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 use Dvsa\Olcs\Api\Domain\Repository\Address;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Address as AddressEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -395,9 +396,10 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
             'phone_sms_version' => 3,
         ]));
 
-        $this->expectSmsCorrespondenceSetup($command, m::mock());
+        [, $correspondenceCd] = $this->expectSmsCorrespondenceSetup($command, m::mock());
 
         $existing = m::mock(PhoneContactEntity::class)->makePartial();
+        $existing->setContactDetails($correspondenceCd);
         $existing->setPhoneNumber('+447700900123');
         $existing->shouldReceive('getVersion')->andReturn(3);
         $existing->shouldReceive('getId')->andReturn(99);
@@ -462,7 +464,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $second = $this->smsRow(99, '+447700900002');
         $primary = $this->smsRow(97, '0113 496 0000', PhoneContactEntity::TYPE_PRIMARY);
         $phoneContacts = new \Doctrine\Common\Collections\ArrayCollection([$first, $second, $primary]);
-        $this->expectSmsCorrespondenceSetup($command, $phoneContacts);
+        [, $correspondenceCd] = $this->expectSmsCorrespondenceSetup($command, $phoneContacts);
+        $second->setContactDetails($correspondenceCd);
 
         if ($postedId !== '') {
             $this->repoMap['PhoneContact']->shouldReceive('fetchById')->with(99, m::any(), 3)->andReturn($second);
@@ -476,6 +479,85 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertSame([$primary], array_values($phoneContacts->toArray()));
         $this->assertTrue($result->getFlag('smsChanged'));
         $this->assertSame(['Phone contact sms deleted'], $result->getMessages());
+    }
+
+    /** A licence with an existing correspondence contact details, for checks that stop before anything is saved */
+    private function licenceWithCorrespondence(Cmd $command, ?int $addressId = null): array
+    {
+        $address = m::mock(AddressEntity::class);
+        $address->shouldReceive('getId')->andReturn($addressId);
+
+        $correspondenceCd = m::mock(ContactDetailsEntity::class)->makePartial();
+        $correspondenceCd->shouldReceive('getAddress')->andReturn($address);
+        $correspondenceCd->shouldReceive('getVersion')->andReturn(1);
+
+        $licence = m::mock(LicenceEntity::class)->makePartial();
+        $licence->shouldReceive('getCorrespondenceCd')->andReturn($correspondenceCd);
+
+        $this->repoMap['Licence']->shouldReceive('fetchUsingId')->with($command)->andReturn($licence);
+        $this->repoMap['Licence']->shouldReceive('save')->never();
+        $this->repoMap['ContactDetails']->shouldReceive('save');
+
+        return [$licence, $correspondenceCd];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('phoneRowsOnOtherContactDetails')]
+    public function testPhoneContactFromOtherContactDetailsIsRefused(string $type, string $number): void
+    {
+        $command = Cmd::create($this->smsCommandData([
+            'phone_' . $type => $number,
+            'phone_' . $type . '_id' => 55,
+            'phone_' . $type . '_version' => 2,
+        ]));
+
+        $result = new Result();
+        $result->setFlag('hasChanged', false);
+        $this->expectedSideEffect(SaveAddress::class, [], $result);
+        $this->licenceWithCorrespondence($command);
+
+        $otherRow = m::mock(PhoneContactEntity::class)->makePartial();
+        $otherRow->setContactDetails(m::mock(ContactDetailsEntity::class));
+        $otherRow->shouldReceive('getId')->andReturn(55);
+
+        $this->repoMap['PhoneContact']->shouldReceive('fetchById')->with(55, m::any(), 2)->andReturn($otherRow);
+        $this->repoMap['PhoneContact']->shouldReceive('save')->never();
+        $this->repoMap['PhoneContact']->shouldReceive('delete')->never();
+
+        $this->expectException(ForbiddenException::class);
+
+        $this->sut->handleCommand($command);
+    }
+
+    public static function phoneRowsOnOtherContactDetails(): array
+    {
+        return [
+            'primary changed' => ['primary', '01131231234'],
+            'primary cleared' => ['primary', ''],
+            'secondary changed' => ['secondary', '01131231234'],
+            'sms changed' => ['sms', '07700900123'],
+            'sms cleared' => ['sms', ''],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('postedAddressIds')]
+    public function testCorrespondenceAddressMustBeTheLicencesOwn(?int $currentAddressId): void
+    {
+        $data = $this->smsCommandData([]);
+        $data['correspondenceAddress']['id'] = 77;
+        $data['correspondenceAddress']['version'] = 1;
+        $command = Cmd::create($data);
+
+        $this->licenceWithCorrespondence($command, $currentAddressId);
+        $this->repoMap['PhoneContact']->shouldReceive('save')->never();
+
+        $this->expectException(ForbiddenException::class);
+
+        $this->sut->handleCommand($command);
+    }
+
+    public static function postedAddressIds(): array
+    {
+        return ['another address' => [78], 'licence has no address yet' => [null]];
     }
 
     public static function clearedSmsIds(): array
@@ -612,6 +694,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
                 ->makePartial()
                 ->shouldReceive('setContactDetails')
                 ->with($correspondenceCd)
+                ->shouldReceive('getContactDetails')
+                ->andReturn($correspondenceCd)
                 ->shouldReceive('getVersion')
                 ->andReturn(2)
                 ->getMock()
@@ -623,6 +707,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
                 ->makePartial()
                 ->shouldReceive('setContactDetails')
                 ->with($correspondenceCd)
+                ->shouldReceive('getContactDetails')
+                ->andReturn($correspondenceCd)
                 ->shouldReceive('getVersion')
                 ->andReturn(2)
                 ->getMock()
@@ -745,6 +831,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
                 ->makePartial()
                 ->shouldReceive('setContactDetails')
                 ->with($correspondenceCd)
+                ->shouldReceive('getContactDetails')
+                ->andReturn($correspondenceCd)
                 ->shouldReceive('getId')
                 ->andReturn(1)
                 ->getMock()
@@ -756,6 +844,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
                 ->makePartial()
                 ->shouldReceive('setContactDetails')
                 ->with($correspondenceCd)
+                ->shouldReceive('getContactDetails')
+                ->andReturn($correspondenceCd)
                 ->shouldReceive('getId')
                 ->andReturn(2)
                 ->getMock()
@@ -879,6 +969,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
                 ->makePartial()
                 ->shouldReceive('setContactDetails')
                 ->with($correspondenceCd)
+                ->shouldReceive('getContactDetails')
+                ->andReturn($correspondenceCd)
                 ->getMock()
             )
             ->shouldReceive('fetchById')
@@ -888,6 +980,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
                 ->makePartial()
                 ->shouldReceive('setContactDetails')
                 ->with($correspondenceCd)
+                ->shouldReceive('getContactDetails')
+                ->andReturn($correspondenceCd)
                 ->getMock()
             )
             ->getMock();
@@ -1009,6 +1103,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
                     ->makePartial()
                     ->shouldReceive('setContactDetails')
                     ->with($correspondenceCd)
+                    ->shouldReceive('getContactDetails')
+                    ->andReturn($correspondenceCd)
                     ->getMock()
             )
             ->shouldReceive('fetchById')
@@ -1018,6 +1114,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
                     ->makePartial()
                     ->shouldReceive('setContactDetails')
                     ->with($correspondenceCd)
+                    ->shouldReceive('getContactDetails')
+                    ->andReturn($correspondenceCd)
                     ->getMock()
             )
             ->getMock();
@@ -1135,6 +1233,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
                     ->makePartial()
                     ->shouldReceive('setContactDetails')
                     ->with($correspondenceCd)
+                    ->shouldReceive('getContactDetails')
+                    ->andReturn($correspondenceCd)
                     ->getMock()
             )
             ->shouldReceive('fetchById')
@@ -1144,6 +1244,8 @@ final class SaveAddressesTest extends AbstractCommandHandlerTestCase
                     ->makePartial()
                     ->shouldReceive('setContactDetails')
                     ->with($correspondenceCd)
+                    ->shouldReceive('getContactDetails')
+                    ->andReturn($correspondenceCd)
                     ->getMock()
             )
             ->getMock();

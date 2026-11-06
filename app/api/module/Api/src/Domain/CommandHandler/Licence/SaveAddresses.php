@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Traits\DeleteContactDetailsAndAddressTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
+use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
@@ -131,6 +132,7 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
     private function saveCorrespondenceAddress(DomainCmd\Licence\SaveAddresses $command, Licence $licence)
     {
         $address = $command->getCorrespondenceAddress();
+        $this->checkAddressId($address, $licence->getCorrespondenceCd());
         $address['contactType'] = ContactDetails::CONTACT_TYPE_CORRESPONDENCE_ADDRESS;
         $result = $this->handleSideEffect(
             DomainCmd\ContactDetails\SaveAddress::create($address)
@@ -215,6 +217,10 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
                     Query::HYDRATE_OBJECT,
                     $version
                 );
+
+                if ($contact->getContactDetails() !== $contactDetails) {
+                    throw new ForbiddenException('Phone contact does not belong to this licence');
+                }
             } elseif ($isSms && !empty($data['phone_sms'])) {
                 // a form loaded before the SMS row existed posts no id, so reuse the row instead of adding another
                 $contact = SmsNumber::latestContact($contactDetails);
@@ -290,6 +296,25 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
     }
 
     /**
+     * An address id in the command must be the one already on this contact details
+     *
+     * @param array|null          $address        Address data
+     * @param ContactDetails|null $contactDetails The licence's contact details for this address type
+     *
+     * @throws ForbiddenException
+     */
+    private function checkAddressId($address, ?ContactDetails $contactDetails): void
+    {
+        if (empty($address['id'])) {
+            return;
+        }
+
+        if ((int) $address['id'] !== (int) $contactDetails?->getAddress()?->getId()) {
+            throw new ForbiddenException('Address does not belong to this licence');
+        }
+    }
+
+    /**
      * Save Establishment Address
      *
      * @param DomainCmd\Licence\SaveAddresses $command Comman
@@ -305,6 +330,7 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
         }
 
         $address = $command->getEstablishmentAddress();
+        $this->checkAddressId($address, $licence->getEstablishmentCd());
         $address['contactType'] = ContactDetails::CONTACT_TYPE_ESTABLISHMENT_ADDRESS;
         $result = $this->handleSideEffect(
             DomainCmd\ContactDetails\SaveAddress::create($address)
@@ -342,6 +368,7 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
 
         if ($params['add-transport-consultant'] === 'Y') {
             $address = $params['address'];
+            $this->checkAddressId($address, $licence->getTransportConsultantCd());
             $address['contactType'] = ContactDetails::CONTACT_TYPE_TRANSPORT_CONSULTANT;
             $result = $this->handleSideEffect(
                 DomainCmd\ContactDetails\SaveAddress::create($address)
