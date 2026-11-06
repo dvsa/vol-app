@@ -1,0 +1,173 @@
+{
+  "api/pi/single/GET": {
+    "request": "GET /api/pi/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi"
+    },
+    "matches": "api/pi/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/pi/single/GET"
+  },
+  "api/pi/single/agreed/PUT": {
+    "request": "PUT /api/pi/101/agreed/",
+    "matches": "api/pi/single/agreed/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Pi\\UpdateAgreedAndLegislation",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/pi/single/agreed/PUT"
+  },
+  "api/pi/single/close/PUT": {
+    "request": "PUT /api/pi/101/close/",
+    "matches": "api/pi/single/close/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Pi\\Close",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/pi/single/close/PUT"
+  },
+  "api/pi/single/decision/PUT": {
+    "request": "PUT /api/pi/101/decision/",
+    "matches": "api/pi/single/decision/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Pi\\UpdateDecision",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/pi/single/decision/PUT"
+  },
+  "api/pi/single/tm-decision/PUT": {
+    "request": "PUT /api/pi/101/tm-decision/",
+    "matches": "api/pi/single/tm-decision/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Pi\\UpdateTmDecision",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/pi/single/tm-decision/PUT"
+  },
+  "api/pi/single/reopen/PUT": {
+    "request": "PUT /api/pi/101/reopen/",
+    "matches": "api/pi/single/reopen/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Pi\\Reopen",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/pi/single/reopen/PUT"
+  },
+  "api/pi/single/sla/PUT": {
+    "request": "PUT /api/pi/101/sla/",
+    "matches": "api/pi/single/sla/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Pi\\UpdateSla",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/pi/single/sla/PUT"
+  },
+  "api/pi/hearing/GET": {
+    "request": "GET /api/pi/hearing/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi\\HearingList"
+    },
+    "matches": "api/pi/hearing/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi\\HearingList"
+    },
+    "withoutTrailingSlash": "api/pi/hearing/GET"
+  },
+  "api/pi/hearing/single/GET": {
+    "request": "GET /api/pi/hearing/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi\\Hearing"
+    },
+    "matches": "api/pi/hearing/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi\\Hearing",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/pi/hearing/single/GET"
+  },
+  "api/pi/hearing/single/PUT": {
+    "request": "PUT /api/pi/hearing/101/",
+    "matches": "api/pi/hearing/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Pi\\UpdateHearing",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/pi/hearing/single/PUT"
+  },
+  "api/pi/hearing/POST": {
+    "request": "POST /api/pi/hearing/",
+    "matches": "api/pi/hearing/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Pi\\CreateHearing"
+    },
+    "withoutTrailingSlash": "api/pi/hearing/POST"
+  },
+  "api/pi/report/GET": {
+    "request": "GET /api/pi/report/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi\\ReportList"
+    },
+    "matches": "api/pi/report/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi\\ReportList"
+    },
+    "withoutTrailingSlash": "api/pi/report/GET"
+  },
+  "api/pi/definition/GET": {
+    "request": "GET /api/pi/definition/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi\\PiDefinitionList"
+    },
+    "matches": "api/pi/definition/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi\\PiDefinitionList"
+    },
+    "withoutTrailingSlash": "api/pi/definition/GET"
+  },
+  "api/pi/POST": {
+    "request": "POST /api/pi/",
+    "matches": "api/pi/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Pi\\CreateAgreedAndLegislation"
+    },
+    "withoutTrailingSlash": "api/pi/POST"
+  },
+  "api/pi/sla-exceptions/GET": {
+    "request": "GET /api/pi/sla-exceptions/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi\\SlaExceptionList"
+    },
+    "matches": "api/pi/sla-exceptions/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Pi\\SlaExceptionList"
+    },
+    "withoutTrailingSlash": "api/pi/sla-exceptions/GET"
+  },
+  "api/pi/sla-exceptions/POST": {
+    "request": "POST /api/pi/sla-exceptions/",
+    "matches": "api/pi/sla-exceptions/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Pi\\CreatePiSlaException"
+    },
+    "withoutTrailingSlash": "api/pi/sla-exceptions/POST"
+  }
+}

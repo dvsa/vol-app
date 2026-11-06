@@ -1,0 +1,78 @@
+{
+  "api/letter-instance/single/GET": {
+    "request": "GET /api/letter-instance/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\Get"
+    },
+    "matches": "api/letter-instance/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-instance/single/GET"
+  },
+  "api/letter-instance/GET": {
+    "request": "GET /api/letter-instance/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\GetList"
+    },
+    "matches": "api/letter-instance/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter-instance/GET"
+  },
+  "api/letter-instance/generate/POST": {
+    "request": "POST /api/letter-instance/generate",
+    "matches": "api/letter-instance/generate/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\Generate"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter-instance/preview/GET": {
+    "request": "GET /api/letter-instance/preview",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\Preview"
+    },
+    "matches": "api/letter-instance/preview/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\Preview"
+    },
+    "withTrailingSlash": "api/letter-instance/single/GET"
+  },
+  "api/letter-instance/preview/POST": {
+    "request": "POST /api/letter-instance/preview",
+    "matches": "api/letter-instance/preview/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\Preview"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter-instance/generation-context/GET": {
+    "request": "GET /api/letter-instance/generation-context",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\GenerationContext"
+    },
+    "matches": "api/letter-instance/generation-context/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\GenerationContext"
+    },
+    "withTrailingSlash": "api/letter-instance/single/GET"
+  },
+  "api/letter-instance/prepare-to-send/POST": {
+    "request": "POST /api/letter-instance/prepare-to-send",
+    "matches": "api/letter-instance/prepare-to-send/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\PrepareToSend"
+    },
+    "withTrailingSlash": null
+  }
+}

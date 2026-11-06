@@ -1,0 +1,34 @@
+{
+  "api/submission-action/single/GET": {
+    "request": "GET /api/submission-action/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Submission\\SubmissionAction"
+    },
+    "matches": "api/submission-action/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Submission\\SubmissionAction",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/submission-action/single/GET"
+  },
+  "api/submission-action/single/PUT": {
+    "request": "PUT /api/submission-action/101/",
+    "matches": "api/submission-action/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\UpdateSubmissionAction",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/submission-action/single/PUT"
+  },
+  "api/submission-action/POST": {
+    "request": "POST /api/submission-action/",
+    "matches": "api/submission-action/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Submission\\CreateSubmissionAction"
+    },
+    "withoutTrailingSlash": "api/submission-action/POST"
+  }
+}

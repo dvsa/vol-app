@@ -1,0 +1,8 @@
+{
+  "providers": {
+    "Dvsa\\OlcsTest\\Api\\Config\\StubParameterProvider": [
+      "stub"
+    ]
+  },
+  "casts": []
+}

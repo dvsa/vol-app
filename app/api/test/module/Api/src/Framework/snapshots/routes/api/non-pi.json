@@ -1,0 +1,56 @@
+{
+  "api/non-pi/GET": {
+    "request": "GET /api/non-pi/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\NonPi\\Listing"
+    },
+    "matches": "api/non-pi/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\NonPi\\Listing"
+    },
+    "withoutTrailingSlash": "api/non-pi/GET"
+  },
+  "api/non-pi/POST": {
+    "request": "POST /api/non-pi/",
+    "matches": "api/non-pi/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\NonPi\\Create"
+    },
+    "withoutTrailingSlash": "api/non-pi/POST"
+  },
+  "api/non-pi/single/PUT": {
+    "request": "PUT /api/non-pi/101/",
+    "matches": "api/non-pi/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\NonPi\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/non-pi/single/PUT"
+  },
+  "api/non-pi/single/DELETE": {
+    "request": "DELETE /api/non-pi/101/",
+    "matches": "api/non-pi/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\NonPi\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/non-pi/single/DELETE"
+  },
+  "api/non-pi/named-single/GET": {
+    "request": "GET /api/non-pi/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\NonPi\\Single"
+    },
+    "matches": "api/non-pi/named-single/GET",
+    "params": {
+      "case": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\NonPi\\Single"
+    },
+    "withoutTrailingSlash": "api/non-pi/named-single/GET"
+  }
+}

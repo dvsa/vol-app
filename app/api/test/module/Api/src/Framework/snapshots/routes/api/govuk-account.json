@@ -1,0 +1,20 @@
+{
+  "api/govuk-account/process-auth-response/POST": {
+    "request": "POST /api/govuk-account/process-auth-response/",
+    "matches": "api/govuk-account/process-auth-response/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\GovUkAccount\\ProcessAuthResponse"
+    },
+    "withoutTrailingSlash": "api/govuk-account/process-auth-response/POST"
+  },
+  "api/govuk-account/get-govuk-account-redirect/POST": {
+    "request": "POST /api/govuk-account/get-govuk-account-redirect/",
+    "matches": "api/govuk-account/get-govuk-account-redirect/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\GovUkAccount\\GetGovUkAccountRedirect"
+    },
+    "withoutTrailingSlash": "api/govuk-account/get-govuk-account-redirect/POST"
+  }
+}

@@ -1,0 +1,15 @@
+    <p>Thank you for your EBSR application received on [submissionDate &lt;&amp;&gt;] for the
+        following local bus service - [registrationNumber &lt;&amp;&gt;] - between
+        [origin &lt;&amp;&gt;] and [destination &lt;&amp;&gt;] with 
+        service number [lineName &lt;&amp;&gt;] to come into effect on
+        [startDate &lt;&amp;&gt;].</p>
+
+<p>Unfortunately your application has failed our initial checks on the integrity of the data.
+    Therefore we have NOT copied it to the local authorities listed in your TransXChange XML
+    file.</p>
+
+<p>We have tried to pin point the problems and give you some clues about where to find the
+    errors. However it is not possible for us to itemise all possible errors, and solutions,
+    so we recommend that you look again at your data file to ensure that it complies with the
+    relevant registration data schema. We suggest that you start by looking at the following
+    errors:</p>

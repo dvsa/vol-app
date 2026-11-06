@@ -1,0 +1,46 @@
+{
+  "aliases": {
+    "alnum": "Laminas\\I18n\\Filter\\Alnum",
+    "Alnum": "Laminas\\I18n\\Filter\\Alnum",
+    "alpha": "Laminas\\I18n\\Filter\\Alpha",
+    "Alpha": "Laminas\\I18n\\Filter\\Alpha",
+    "numberformat": "Laminas\\I18n\\Filter\\NumberFormat",
+    "numberFormat": "Laminas\\I18n\\Filter\\NumberFormat",
+    "NumberFormat": "Laminas\\I18n\\Filter\\NumberFormat",
+    "numberparse": "Laminas\\I18n\\Filter\\NumberParse",
+    "numberParse": "Laminas\\I18n\\Filter\\NumberParse",
+    "NumberParse": "Laminas\\I18n\\Filter\\NumberParse",
+    "Zend\\I18n\\Filter\\Alnum": "Laminas\\I18n\\Filter\\Alnum",
+    "Zend\\I18n\\Filter\\Alpha": "Laminas\\I18n\\Filter\\Alpha",
+    "Zend\\I18n\\Filter\\NumberFormat": "Laminas\\I18n\\Filter\\NumberFormat",
+    "Zend\\I18n\\Filter\\NumberParse": "Laminas\\I18n\\Filter\\NumberParse",
+    "htmlpurifier": "Soflomo\\Purifier\\PurifierFilter"
+  },
+  "factories": {
+    "Laminas\\I18n\\Filter\\Alnum": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "Laminas\\I18n\\Filter\\Alpha": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "Laminas\\I18n\\Filter\\NumberFormat": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "Laminas\\I18n\\Filter\\NumberParse": "Laminas\\ServiceManager\\Factory\\InvokableFactory",
+    "Dvsa\\Olcs\\Api\\Service\\Nr\\Filter\\Vrm": "Dvsa\\Olcs\\Api\\Service\\Nr\\Filter\\VrmFactory",
+    "Soflomo\\Purifier\\PurifierFilter": "Soflomo\\Purifier\\Factory\\PurifierFilterFactory"
+  },
+  "invokables": {
+    "Dvsa\\Olcs\\Transfer\\Filter\\Vrm": "Dvsa\\Olcs\\Transfer\\Filter\\Vrm",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\NoticePeriod": "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\NoticePeriod",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\InjectIsTxcApp": "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\InjectIsTxcApp",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\InjectNaptanCodes": "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\InjectNaptanCodes",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\InjectReceivedDate": "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\InjectReceivedDate",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\Format\\Subsidy": "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\Format\\Subsidy",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\Format\\Via": "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\Format\\Via",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\Format\\ExistingRegNo": "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\Format\\ExistingRegNo",
+    "Dvsa\\Olcs\\Api\\Service\\Nr\\Filter\\Format\\IsExecuted": "Dvsa\\Olcs\\Api\\Service\\Nr\\Filter\\Format\\IsExecuted",
+    "Dvsa\\Olcs\\Api\\Service\\Nr\\Filter\\Format\\SiDates": "Dvsa\\Olcs\\Api\\Service\\Nr\\Filter\\Format\\SiDates",
+    "Dvsa\\Olcs\\Api\\Service\\Nr\\Filter\\Format\\MemberStateCode": "Dvsa\\Olcs\\Api\\Service\\Nr\\Filter\\Format\\MemberStateCode",
+    "Dvsa\\Olcs\\Api\\Service\\Nr\\Filter\\LicenceNumber": "Dvsa\\Olcs\\Api\\Service\\Nr\\Filter\\LicenceNumber",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\Format\\MiscSnJustification": "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\Format\\MiscSnJustification",
+    "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\Format\\SubmissionResult": "Dvsa\\Olcs\\Api\\Service\\Ebsr\\Filter\\Format\\SubmissionResult",
+    "Olcs\\XmlTools\\Filter\\MapXmlFile": "Olcs\\XmlTools\\Filter\\MapXmlFile",
+    "Olcs\\XmlTools\\Filter\\ParseXml": "Olcs\\XmlTools\\Filter\\ParseXml",
+    "Olcs\\XmlTools\\Filter\\ParseXmlString": "Olcs\\XmlTools\\Filter\\ParseXmlString"
+  }
+}

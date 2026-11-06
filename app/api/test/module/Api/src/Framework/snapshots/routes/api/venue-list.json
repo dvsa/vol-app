@@ -1,0 +1,14 @@
+{
+  "api/venue-list/GET": {
+    "request": "GET /api/venue-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Venue\\VenueList"
+    },
+    "matches": "api/venue-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Venue\\VenueList"
+    },
+    "withoutTrailingSlash": "api/venue-list/GET"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "transexchange_publisher": {
+    "templates": {
+      "RequestMap": "{app}/module/Api/config/../data/ebsr/requestmap_template.xml",
+      "Timetable": "{app}/module/Api/config/../data/ebsr/timetable_template.xml",
+      "DvsaRecord": "{app}/module/Api/config/../data/ebsr/dvsarecord_template.xml"
+    },
+    "new_uri": "1",
+    "options": {
+      "adapter": "Laminas\\Http\\Client\\Adapter\\Proxy",
+      "proxy_host": "proxy.1",
+      "proxy_port": 3128,
+      "timeout": 30
+    },
+    "consumer_proxy": "http://1",
+    "oauth2": {
+      "client_id": "1",
+      "client_secret": "1",
+      "token_url": "1",
+      "scope": "1",
+      "proxy": "http://1",
+      "service_name": "TransXchange"
+    }
+  },
+  "max_schema_errors": 3,
+  "transxchange_schema_version": "2.5.2",
+  "transxchange_fallback_schema_version": "2.5",
+  "tmp_extra_path": "/EBSR",
+  "validate": {
+    "xml_structure": true,
+    "bus_registration": true,
+    "processed_data": true,
+    "short_notice": true
+  },
+  "input_s3_bucket": "1",
+  "output_s3_bucket": "1",
+  "txc_consumer_role_arn": "1",
+  "max_queue_messages_per_run": "100"
+}

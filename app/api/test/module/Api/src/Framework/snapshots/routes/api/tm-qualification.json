@@ -1,0 +1,56 @@
+{
+  "api/tm-qualification/single/GET": {
+    "request": "GET /api/tm-qualification/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmQualification\\TmQualification"
+    },
+    "matches": "api/tm-qualification/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmQualification\\TmQualification",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-qualification/single/GET"
+  },
+  "api/tm-qualification/single/PUT": {
+    "request": "PUT /api/tm-qualification/101/",
+    "matches": "api/tm-qualification/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmQualification\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-qualification/single/PUT"
+  },
+  "api/tm-qualification/DELETE": {
+    "request": "DELETE /api/tm-qualification/",
+    "matches": "api/tm-qualification/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmQualification\\Delete"
+    },
+    "withoutTrailingSlash": "api/tm-qualification/DELETE"
+  },
+  "api/tm-qualification/transport-manager/named-single/GET": {
+    "request": "GET /api/tm-qualification/transport-manager/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmQualification\\TmQualificationsList"
+    },
+    "matches": "api/tm-qualification/transport-manager/named-single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmQualification\\TmQualificationsList",
+      "transportManager": "101"
+    },
+    "withoutTrailingSlash": "api/tm-qualification/transport-manager/named-single/GET"
+  },
+  "api/tm-qualification/create/POST": {
+    "request": "POST /api/tm-qualification/create/",
+    "matches": "api/tm-qualification/create/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmQualification\\Create"
+    },
+    "withoutTrailingSlash": "api/tm-qualification/create/POST"
+  }
+}

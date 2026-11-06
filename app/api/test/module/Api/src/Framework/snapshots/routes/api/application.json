@@ -1,0 +1,1143 @@
+{
+  "api/application/named-single/company-subsidiary/single/PUT": {
+    "request": "PUT /api/application/101/company-subsidiary/102/",
+    "matches": "api/application/named-single/company-subsidiary/single/PUT",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateCompanySubsidiary",
+      "id": "102"
+    },
+    "withoutTrailingSlash": "api/application/named-single/company-subsidiary/single/PUT"
+  },
+  "api/application/named-single/company-subsidiary/DELETE": {
+    "request": "DELETE /api/application/101/company-subsidiary/",
+    "matches": "api/application/named-single/company-subsidiary/DELETE",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\DeleteCompanySubsidiary"
+    },
+    "withoutTrailingSlash": "api/application/named-single/company-subsidiary/DELETE"
+  },
+  "api/application/named-single/company-subsidiary/POST": {
+    "request": "POST /api/application/101/company-subsidiary/",
+    "matches": "api/application/named-single/company-subsidiary/POST",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\CreateCompanySubsidiary"
+    },
+    "withoutTrailingSlash": "api/application/named-single/company-subsidiary/POST"
+  },
+  "api/application/named-single/workshop/single/PUT": {
+    "request": "PUT /api/application/101/workshop/102/",
+    "matches": "api/application/named-single/workshop/single/PUT",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateWorkshop",
+      "id": "102"
+    },
+    "withoutTrailingSlash": "api/application/named-single/workshop/single/PUT"
+  },
+  "api/application/named-single/workshop/DELETE": {
+    "request": "DELETE /api/application/101/workshop/",
+    "matches": "api/application/named-single/workshop/DELETE",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\DeleteWorkshop"
+    },
+    "withoutTrailingSlash": "api/application/named-single/workshop/DELETE"
+  },
+  "api/application/named-single/workshop/POST": {
+    "request": "POST /api/application/101/workshop/",
+    "matches": "api/application/named-single/workshop/POST",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\CreateWorkshop"
+    },
+    "withoutTrailingSlash": "api/application/named-single/workshop/POST"
+  },
+  "api/application/named-single/goods-vehicles/single/PUT": {
+    "request": "PUT /api/application/101/goods-vehicles/102/",
+    "matches": "api/application/named-single/goods-vehicles/single/PUT",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateGoodsVehicle",
+      "id": "102"
+    },
+    "withoutTrailingSlash": "api/application/named-single/goods-vehicles/single/PUT"
+  },
+  "api/application/named-single/goods-vehicles/DELETE": {
+    "request": "DELETE /api/application/101/goods-vehicles/",
+    "matches": "api/application/named-single/goods-vehicles/DELETE",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\DeleteGoodsVehicle"
+    },
+    "withoutTrailingSlash": "api/application/named-single/goods-vehicles/DELETE"
+  },
+  "api/application/named-single/operating-centre/POST": {
+    "request": "POST /api/application/101/operating-centre/",
+    "matches": "api/application/named-single/operating-centre/POST",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\CreateOperatingCentre"
+    },
+    "withoutTrailingSlash": "api/application/named-single/operating-centre/POST"
+  },
+  "api/application/named-single/operating-centre/DELETE": {
+    "request": "DELETE /api/application/101/operating-centre/",
+    "matches": "api/application/named-single/operating-centre/DELETE",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\DeleteOperatingCentres"
+    },
+    "withoutTrailingSlash": "api/application/named-single/operating-centre/DELETE"
+  },
+  "api/application/named-single/variation-operating-centre/single/PUT": {
+    "request": "PUT /api/application/101/variation-operating-centre/102/",
+    "matches": "api/application/named-single/variation-operating-centre/single/PUT",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\VariationOperatingCentre\\Update",
+      "id": "102"
+    },
+    "withoutTrailingSlash": "api/application/named-single/variation-operating-centre/single/PUT"
+  },
+  "api/application/named-single/variation-operating-centre/single/restore/PUT": {
+    "request": "PUT /api/application/101/variation-operating-centre/102/restore/",
+    "matches": "api/application/named-single/variation-operating-centre/single/restore/PUT",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Variation\\RestoreOperatingCentre",
+      "id": "102"
+    },
+    "withoutTrailingSlash": "api/application/named-single/variation-operating-centre/single/restore/PUT"
+  },
+  "api/application/named-single/psv-vehicles/POST": {
+    "request": "POST /api/application/101/psv-vehicles/",
+    "matches": "api/application/named-single/psv-vehicles/POST",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\CreatePsvVehicle"
+    },
+    "withoutTrailingSlash": "api/application/named-single/psv-vehicles/POST"
+  },
+  "api/application/named-single/psv-vehicles/DELETE": {
+    "request": "DELETE /api/application/101/psv-vehicles/",
+    "matches": "api/application/named-single/psv-vehicles/DELETE",
+    "params": {
+      "application": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\DeletePsvVehicle"
+    },
+    "withoutTrailingSlash": "api/application/named-single/psv-vehicles/DELETE"
+  },
+  "api/application/single/GET": {
+    "request": "GET /api/application/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Application"
+    },
+    "matches": "api/application/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Application",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/GET"
+  },
+  "api/application/single/type-of-licence/PUT": {
+    "request": "PUT /api/application/101/type-of-licence/",
+    "matches": "api/application/single/type-of-licence/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateTypeOfLicence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/type-of-licence/PUT"
+  },
+  "api/application/single/addresses/GET": {
+    "request": "GET /api/application/101/addresses/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Addresses"
+    },
+    "matches": "api/application/single/addresses/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Licence\\Addresses",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/addresses/GET"
+  },
+  "api/application/single/addresses/PUT": {
+    "request": "PUT /api/application/101/addresses/",
+    "matches": "api/application/single/addresses/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateAddresses",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/addresses/PUT"
+  },
+  "api/application/single/previous-convictions/GET": {
+    "request": "GET /api/application/101/previous-convictions/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\PreviousConvictions"
+    },
+    "matches": "api/application/single/previous-convictions/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\PreviousConvictions",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/previous-convictions/GET"
+  },
+  "api/application/single/previous-convictions/PUT": {
+    "request": "PUT /api/application/101/previous-convictions/",
+    "matches": "api/application/single/previous-convictions/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdatePreviousConvictions",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/previous-convictions/PUT"
+  },
+  "api/application/single/completion/GET": {
+    "request": "GET /api/application/101/completion/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Completion"
+    },
+    "matches": "api/application/single/completion/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Completion",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/completion/GET"
+  },
+  "api/application/single/declaration/GET": {
+    "request": "GET /api/application/101/declaration/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Declaration"
+    },
+    "matches": "api/application/single/declaration/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Declaration",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/declaration/GET"
+  },
+  "api/application/single/declaration/PUT": {
+    "request": "PUT /api/application/101/declaration/",
+    "matches": "api/application/single/declaration/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateDeclaration",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/declaration/PUT"
+  },
+  "api/application/single/financial-evidence/GET": {
+    "request": "GET /api/application/101/financial-evidence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\FinancialEvidence"
+    },
+    "matches": "api/application/single/financial-evidence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\FinancialEvidence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/financial-evidence/GET"
+  },
+  "api/application/single/financial-evidence/PUT": {
+    "request": "PUT /api/application/101/financial-evidence/",
+    "matches": "api/application/single/financial-evidence/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateFinancialEvidence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/financial-evidence/PUT"
+  },
+  "api/application/single/knowledge-experience/GET": {
+    "request": "GET /api/application/101/knowledge-experience/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\KnowledgeExperience"
+    },
+    "matches": "api/application/single/knowledge-experience/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\KnowledgeExperience",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/knowledge-experience/GET"
+  },
+  "api/application/single/knowledge-experience/PUT": {
+    "request": "PUT /api/application/101/knowledge-experience/",
+    "matches": "api/application/single/knowledge-experience/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateKnowledgeExperience",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/knowledge-experience/PUT"
+  },
+  "api/application/single/financial-history/GET": {
+    "request": "GET /api/application/101/financial-history/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\FinancialHistory"
+    },
+    "matches": "api/application/single/financial-history/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\FinancialHistory",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/financial-history/GET"
+  },
+  "api/application/single/financial-history/PUT": {
+    "request": "PUT /api/application/101/financial-history/",
+    "matches": "api/application/single/financial-history/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateFinancialHistory",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/financial-history/PUT"
+  },
+  "api/application/single/licence-history/GET": {
+    "request": "GET /api/application/101/licence-history/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\LicenceHistory"
+    },
+    "matches": "api/application/single/licence-history/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\LicenceHistory",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/licence-history/GET"
+  },
+  "api/application/single/licence-history/PUT": {
+    "request": "PUT /api/application/101/licence-history/",
+    "matches": "api/application/single/licence-history/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateLicenceHistory",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/licence-history/PUT"
+  },
+  "api/application/single/safety/GET": {
+    "request": "GET /api/application/101/safety/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Safety"
+    },
+    "matches": "api/application/single/safety/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Safety",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/safety/GET"
+  },
+  "api/application/single/safety/PUT": {
+    "request": "PUT /api/application/101/safety/",
+    "matches": "api/application/single/safety/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateSafety",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/safety/PUT"
+  },
+  "api/application/single/transport-managers/GET": {
+    "request": "GET /api/application/101/transport-managers/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\TransportManagers"
+    },
+    "matches": "api/application/single/transport-managers/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\TransportManagers",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/transport-managers/GET"
+  },
+  "api/application/single/submit/PUT": {
+    "request": "PUT /api/application/101/submit/",
+    "matches": "api/application/single/submit/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\SubmitApplication",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/submit/PUT"
+  },
+  "api/application/single/vehicle-size/PUT": {
+    "request": "PUT /api/application/101/vehicle-size/",
+    "matches": "api/application/single/vehicle-size/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateVehicleSize",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/vehicle-size/PUT"
+  },
+  "api/application/single/vehicle-nine-passengers/PUT": {
+    "request": "PUT /api/application/101/vehicle-nine-passengers/",
+    "matches": "api/application/single/vehicle-nine-passengers/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateVehicleNinePassengers",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/vehicle-nine-passengers/PUT"
+  },
+  "api/application/single/vehicle-operating-small/PUT": {
+    "request": "PUT /api/application/101/vehicle-operating-small/",
+    "matches": "api/application/single/vehicle-operating-small/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateVehicleOperatingSmall",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/vehicle-operating-small/PUT"
+  },
+  "api/application/single/small-vehicle-conditions/PUT": {
+    "request": "PUT /api/application/101/small-vehicle-conditions/",
+    "matches": "api/application/single/small-vehicle-conditions/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateSmallVehicleConditionsAndUndertaking",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/small-vehicle-conditions/PUT"
+  },
+  "api/application/single/written-explanation/PUT": {
+    "request": "PUT /api/application/101/written-explanation/",
+    "matches": "api/application/single/written-explanation/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateWrittenExplanation",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/written-explanation/PUT"
+  },
+  "api/application/single/novelty-vehicles/PUT": {
+    "request": "PUT /api/application/101/novelty-vehicles/",
+    "matches": "api/application/single/novelty-vehicles/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateNoveltyVehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/novelty-vehicles/PUT"
+  },
+  "api/application/single/small-vehicle-evidence/PUT": {
+    "request": "PUT /api/application/101/small-vehicle-evidence/",
+    "matches": "api/application/single/small-vehicle-evidence/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateSmallVehicleEvidence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/small-vehicle-evidence/PUT"
+  },
+  "api/application/single/small-vehicle-evidence-upload/PUT": {
+    "request": "PUT /api/application/101/small-vehicle-evidence-upload/",
+    "matches": "api/application/single/small-vehicle-evidence-upload/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UploadSmallVehicleEvidence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/small-vehicle-evidence-upload/PUT"
+  },
+  "api/application/single/main-occupation-evidence/PUT": {
+    "request": "PUT /api/application/101/main-occupation-evidence/",
+    "matches": "api/application/single/main-occupation-evidence/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateMainOccupationEvidence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/main-occupation-evidence/PUT"
+  },
+  "api/application/single/main-occupation-evidence-upload/PUT": {
+    "request": "PUT /api/application/101/main-occupation-evidence-upload/",
+    "matches": "api/application/single/main-occupation-evidence-upload/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UploadMainOccupationEvidence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/main-occupation-evidence-upload/PUT"
+  },
+  "api/application/single/main-occupation-undertakings/PUT": {
+    "request": "PUT /api/application/101/main-occupation-undertakings/",
+    "matches": "api/application/single/main-occupation-undertakings/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateMainOccupationUndertakings",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/main-occupation-undertakings/PUT"
+  },
+  "api/application/single/vehicle-declaration/GET": {
+    "request": "GET /api/application/101/vehicle-declaration/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\VehicleDeclaration"
+    },
+    "matches": "api/application/single/vehicle-declaration/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\VehicleDeclaration",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/vehicle-declaration/GET"
+  },
+  "api/application/single/goods-vehicles/GET": {
+    "request": "GET /api/application/101/goods-vehicles/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\GoodsVehicles"
+    },
+    "matches": "api/application/single/goods-vehicles/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\GoodsVehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/goods-vehicles/GET"
+  },
+  "api/application/single/goods-vehicles/POST": {
+    "request": "POST /api/application/101/goods-vehicles/",
+    "matches": "api/application/single/goods-vehicles/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\CreateGoodsVehicle",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/goods-vehicles/POST"
+  },
+  "api/application/single/goods-vehicles/export/GET": {
+    "request": "GET /api/application/101/goods-vehicles/export/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\GoodsVehiclesExport"
+    },
+    "matches": "api/application/single/goods-vehicles/export/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\GoodsVehiclesExport",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/goods-vehicles/export/GET"
+  },
+  "api/application/single/vehicles/PUT": {
+    "request": "PUT /api/application/101/vehicles/",
+    "matches": "api/application/single/vehicles/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateVehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/vehicles/PUT"
+  },
+  "api/application/single/document/vehicle-list/POST": {
+    "request": "POST /api/application/101/document/vehicle-list/",
+    "matches": "api/application/single/document/vehicle-list/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\CreateVehicleListDocument",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/document/vehicle-list/POST"
+  },
+  "api/application/single/withdraw/PUT": {
+    "request": "PUT /api/application/101/withdraw/",
+    "matches": "api/application/single/withdraw/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\WithdrawApplication",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/withdraw/PUT"
+  },
+  "api/application/single/revive/PUT": {
+    "request": "PUT /api/application/101/revive/",
+    "matches": "api/application/single/revive/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\ReviveApplication",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/revive/PUT"
+  },
+  "api/application/single/refuse/PUT": {
+    "request": "PUT /api/application/101/refuse/",
+    "matches": "api/application/single/refuse/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\RefuseApplication",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/refuse/PUT"
+  },
+  "api/application/single/not-taken-up/PUT": {
+    "request": "PUT /api/application/101/not-taken-up/",
+    "matches": "api/application/single/not-taken-up/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\NotTakenUpApplication",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/not-taken-up/PUT"
+  },
+  "api/application/single/cancel/PUT": {
+    "request": "PUT /api/application/101/cancel/",
+    "matches": "api/application/single/cancel/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\CancelApplication",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/cancel/PUT"
+  },
+  "api/application/single/review/GET": {
+    "request": "GET /api/application/101/review/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Review"
+    },
+    "matches": "api/application/single/review/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Review",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/review/GET"
+  },
+  "api/application/single/overview/GET": {
+    "request": "GET /api/application/101/overview/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Overview"
+    },
+    "matches": "api/application/single/overview/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Overview",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/overview/GET"
+  },
+  "api/application/single/overview/PUT": {
+    "request": "PUT /api/application/101/overview/",
+    "matches": "api/application/single/overview/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\Overview",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/overview/PUT"
+  },
+  "api/application/single/snapshot/POST": {
+    "request": "POST /api/application/101/snapshot/",
+    "matches": "api/application/single/snapshot/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\CreateSnapshot",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/snapshot/POST"
+  },
+  "api/application/single/enforcement-area/GET": {
+    "request": "GET /api/application/101/enforcement-area/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\EnforcementArea"
+    },
+    "matches": "api/application/single/enforcement-area/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\EnforcementArea",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/enforcement-area/GET"
+  },
+  "api/application/single/grant/GET": {
+    "request": "GET /api/application/101/grant/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Grant"
+    },
+    "matches": "api/application/single/grant/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Grant",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/grant/GET"
+  },
+  "api/application/single/grant/PUT": {
+    "request": "PUT /api/application/101/grant/",
+    "matches": "api/application/single/grant/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\Grant",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/grant/PUT"
+  },
+  "api/application/single/undo-grant/PUT": {
+    "request": "PUT /api/application/101/undo-grant/",
+    "matches": "api/application/single/undo-grant/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UndoGrant",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/undo-grant/PUT"
+  },
+  "api/application/single/people/GET": {
+    "request": "GET /api/application/101/people/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\People"
+    },
+    "matches": "api/application/single/people/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\People",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/people/GET"
+  },
+  "api/application/single/people/POST": {
+    "request": "POST /api/application/101/people/",
+    "matches": "api/application/single/people/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\CreatePeople",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/people/POST"
+  },
+  "api/application/single/people/DELETE": {
+    "request": "DELETE /api/application/101/people/",
+    "matches": "api/application/single/people/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\DeletePeople",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/people/DELETE"
+  },
+  "api/application/single/people/PUT": {
+    "request": "PUT /api/application/101/people/",
+    "matches": "api/application/single/people/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\RestorePeople",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/people/PUT"
+  },
+  "api/application/single/people/person/PUT": {
+    "request": "PUT /api/application/101/people/102/",
+    "matches": "api/application/single/people/person/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdatePeople",
+      "id": "101",
+      "person": "102"
+    },
+    "withoutTrailingSlash": "api/application/single/people/person/PUT"
+  },
+  "api/application/single/people/update-completion/POST": {
+    "request": "POST /api/application/101/people/update-completion/",
+    "matches": "api/application/single/people/update-completion/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateCompletion",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/people/update-completion/POST"
+  },
+  "api/application/single/update-completion/POST": {
+    "request": "POST /api/application/101/update-completion/",
+    "matches": "api/application/single/update-completion/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateCompletion",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/update-completion/POST"
+  },
+  "api/application/single/schedule-41/PUT": {
+    "request": "PUT /api/application/101/schedule-41/",
+    "matches": "api/application/single/schedule-41/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\Schedule41",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/schedule-41/PUT"
+  },
+  "api/application/single/approve-schedule-41/GET": {
+    "request": "GET /api/application/101/approve-schedule-41/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Schedule41Approve"
+    },
+    "matches": "api/application/single/approve-schedule-41/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Schedule41Approve",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/approve-schedule-41/GET"
+  },
+  "api/application/single/approve-schedule-41/PUT": {
+    "request": "PUT /api/application/101/approve-schedule-41/",
+    "matches": "api/application/single/approve-schedule-41/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\Schedule41Approve",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/approve-schedule-41/PUT"
+  },
+  "api/application/single/reset-schedule-41/PUT": {
+    "request": "PUT /api/application/101/reset-schedule-41/",
+    "matches": "api/application/single/reset-schedule-41/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\Schedule41Reset",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/reset-schedule-41/PUT"
+  },
+  "api/application/single/refuse-schedule-41/PUT": {
+    "request": "PUT /api/application/101/refuse-schedule-41/",
+    "matches": "api/application/single/refuse-schedule-41/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\Schedule41Refuse",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/refuse-schedule-41/PUT"
+  },
+  "api/application/single/cancel-schedule-41/PUT": {
+    "request": "PUT /api/application/101/cancel-schedule-41/",
+    "matches": "api/application/single/cancel-schedule-41/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\Schedule41Cancel",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/cancel-schedule-41/PUT"
+  },
+  "api/application/single/operating-centre/GET": {
+    "request": "GET /api/application/101/operating-centre/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\OperatingCentre"
+    },
+    "matches": "api/application/single/operating-centre/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\OperatingCentre",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/operating-centre/GET"
+  },
+  "api/application/single/taxi-phv/PUT": {
+    "request": "PUT /api/application/101/taxi-phv/",
+    "matches": "api/application/single/taxi-phv/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateTaxiPhv",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/taxi-phv/PUT"
+  },
+  "api/application/single/taxi-phv/GET": {
+    "request": "GET /api/application/101/taxi-phv/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\TaxiPhv"
+    },
+    "matches": "api/application/single/taxi-phv/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\TaxiPhv",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/taxi-phv/GET"
+  },
+  "api/application/single/taxi-phv/DELETE": {
+    "request": "DELETE /api/application/101/taxi-phv/",
+    "matches": "api/application/single/taxi-phv/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\DeleteTaxiPhv",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/taxi-phv/DELETE"
+  },
+  "api/application/single/taxi-phv/POST": {
+    "request": "POST /api/application/101/taxi-phv/",
+    "matches": "api/application/single/taxi-phv/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\CreateTaxiPhv",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/taxi-phv/POST"
+  },
+  "api/application/single/taxi-phv/single/PUT": {
+    "request": "PUT /api/application/101/taxi-phv/102/",
+    "matches": "api/application/single/taxi-phv/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdatePrivateHireLicence",
+      "id": "101",
+      "privateHireLicence": "102"
+    },
+    "withoutTrailingSlash": "api/application/single/taxi-phv/single/PUT"
+  },
+  "api/application/single/print-interim/POST": {
+    "request": "POST /api/application/101/print-interim/",
+    "matches": "api/application/single/print-interim/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\PrintInterimDocument",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/print-interim/POST"
+  },
+  "api/application/single/interim/GET": {
+    "request": "GET /api/application/101/interim/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Interim"
+    },
+    "matches": "api/application/single/interim/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Interim",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/interim/GET"
+  },
+  "api/application/single/interim/PUT": {
+    "request": "PUT /api/application/101/interim/",
+    "matches": "api/application/single/interim/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateInterim",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/interim/PUT"
+  },
+  "api/application/single/interim/refuse/POST": {
+    "request": "POST /api/application/101/interim/refuse/",
+    "matches": "api/application/single/interim/refuse/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\RefuseInterim",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/interim/refuse/POST"
+  },
+  "api/application/single/interim/grant/POST": {
+    "request": "POST /api/application/101/interim/grant/",
+    "matches": "api/application/single/interim/grant/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\GrantInterim",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/interim/grant/POST"
+  },
+  "api/application/single/operating-centres/GET": {
+    "request": "GET /api/application/101/operating-centres/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\OperatingCentres"
+    },
+    "matches": "api/application/single/operating-centres/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\OperatingCentres",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/operating-centres/GET"
+  },
+  "api/application/single/operating-centres/PUT": {
+    "request": "PUT /api/application/101/operating-centres/",
+    "matches": "api/application/single/operating-centres/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateOperatingCentres",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/operating-centres/PUT"
+  },
+  "api/application/single/psv-vehicles/GET": {
+    "request": "GET /api/application/101/psv-vehicles/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\PsvVehicles"
+    },
+    "matches": "api/application/single/psv-vehicles/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\PsvVehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/psv-vehicles/GET"
+  },
+  "api/application/single/psv-vehicles/PUT": {
+    "request": "PUT /api/application/101/psv-vehicles/",
+    "matches": "api/application/single/psv-vehicles/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdatePsvVehicles",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/psv-vehicles/PUT"
+  },
+  "api/application/single/auth-signature/PUT": {
+    "request": "PUT /api/application/101/auth-signature/",
+    "matches": "api/application/single/auth-signature/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UpdateAuthSignature",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/auth-signature/PUT"
+  },
+  "api/application/single/publish/GET": {
+    "request": "GET /api/application/101/publish/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Publish"
+    },
+    "matches": "api/application/single/publish/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Publish",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/publish/GET"
+  },
+  "api/application/single/publish/PUT": {
+    "request": "PUT /api/application/101/publish/",
+    "matches": "api/application/single/publish/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\Publish",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/publish/PUT"
+  },
+  "api/application/single/declaration-undertakings/GET": {
+    "request": "GET /api/application/101/declaration-undertakings/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\DeclarationUndertakings"
+    },
+    "matches": "api/application/single/declaration-undertakings/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\DeclarationUndertakings",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/declaration-undertakings/GET"
+  },
+  "api/application/single/summary/GET": {
+    "request": "GET /api/application/101/summary/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Summary"
+    },
+    "matches": "api/application/single/summary/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Summary",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/summary/GET"
+  },
+  "api/application/single/outstanding-fees/GET": {
+    "request": "GET /api/application/101/outstanding-fees/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\OutstandingFees"
+    },
+    "matches": "api/application/single/outstanding-fees/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\OutstandingFees",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/outstanding-fees/GET"
+  },
+  "api/application/single/upload-evidence/GET": {
+    "request": "GET /api/application/101/upload-evidence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\UploadEvidence"
+    },
+    "matches": "api/application/single/upload-evidence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\UploadEvidence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/upload-evidence/GET"
+  },
+  "api/application/single/upload-evidence/PUT": {
+    "request": "PUT /api/application/101/upload-evidence/",
+    "matches": "api/application/single/upload-evidence/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\UploadEvidence",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/upload-evidence/PUT"
+  },
+  "api/application/single/documents/GET": {
+    "request": "GET /api/application/101/documents/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Documents"
+    },
+    "matches": "api/application/single/documents/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\Documents",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/application/single/documents/GET"
+  },
+  "api/application/POST": {
+    "request": "POST /api/application/",
+    "matches": "api/application/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Application\\CreateApplication"
+    },
+    "withoutTrailingSlash": "api/application/POST"
+  },
+  "api/application/GET": {
+    "request": "GET /api/application/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\GetList"
+    },
+    "matches": "api/application/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Application\\GetList"
+    },
+    "withoutTrailingSlash": "api/application/GET"
+  }
+}

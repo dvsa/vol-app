@@ -1,0 +1,20 @@
+{
+  "api/psv-disc/print-discs/POST": {
+    "request": "POST /api/psv-disc/print-discs/",
+    "matches": "api/psv-disc/print-discs/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\PsvDisc\\PrintDiscs"
+    },
+    "withoutTrailingSlash": "api/psv-disc/print-discs/POST"
+  },
+  "api/psv-disc/confirm-printing/POST": {
+    "request": "POST /api/psv-disc/confirm-printing/",
+    "matches": "api/psv-disc/confirm-printing/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\PsvDisc\\ConfirmPrinting"
+    },
+    "withoutTrailingSlash": "api/psv-disc/confirm-printing/POST"
+  }
+}

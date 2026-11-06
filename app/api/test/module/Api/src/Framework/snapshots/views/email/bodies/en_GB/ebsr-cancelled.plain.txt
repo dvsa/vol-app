@@ -1,0 +1,5 @@
+Thank you for your EBSR application received on [submissionDate <&>] for the following local bus service - [registrationNumber <&>] - between [origin <&>] and [destination <&>] with service number [lineName <&>] came into effect on [startDate <&>].
+
+We would remind you that you must continue to operate the service until the cancellation date mentioned above. If you do not, you could face disciplinary action by the Traffic Commissioner.
+
+Notice of this cancellation application will appear in "Notices and Proceedings" issue number [publicationId <&>]. We have copied this e-mail to the following local authorities: [localAuthoritys <&>].

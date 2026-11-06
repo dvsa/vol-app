@@ -1,0 +1,68 @@
+{
+  "api/team/single/GET": {
+    "request": "GET /api/team/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Team\\Team"
+    },
+    "matches": "api/team/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Team\\Team",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/team/single/GET"
+  },
+  "api/team/single/PUT": {
+    "request": "PUT /api/team/101/",
+    "matches": "api/team/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Team\\UpdateTeam",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/team/single/PUT"
+  },
+  "api/team/single/DELETE": {
+    "request": "DELETE /api/team/101/",
+    "matches": "api/team/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Team\\DeleteTeam",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/team/single/DELETE"
+  },
+  "api/team/list-data/GET": {
+    "request": "GET /api/team/list-data/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Team\\TeamListData"
+    },
+    "matches": "api/team/list-data/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Team\\TeamListData"
+    },
+    "withoutTrailingSlash": "api/team/list-data/GET"
+  },
+  "api/team/GET": {
+    "request": "GET /api/team/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Team\\TeamList"
+    },
+    "matches": "api/team/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Team\\TeamList"
+    },
+    "withoutTrailingSlash": "api/team/GET"
+  },
+  "api/team/POST": {
+    "request": "POST /api/team/",
+    "matches": "api/team/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Team\\CreateTeam"
+    },
+    "withoutTrailingSlash": "api/team/POST"
+  }
+}

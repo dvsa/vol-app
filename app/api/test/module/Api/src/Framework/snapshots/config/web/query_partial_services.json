@@ -1,0 +1,36 @@
+{
+  "factories": {
+    "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithApplication": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithApplicationFactory",
+    "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithIrhpApplication": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithIrhpApplicationFactory",
+    "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithBusReg": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithBusRegFactory",
+    "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithContactDetails": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithContactDetailsFactory",
+    "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithCase": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithCaseFactory",
+    "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithCreatedBy": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithCreatedByFactory",
+    "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithRefdata": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithRefdataFactory",
+    "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithUser": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithUserFactory",
+    "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithPersonContactDetails": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithPersonContactDetailsFactory",
+    "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithCreatedByWithTeam": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithCreatedByWithTeamFactory"
+  },
+  "invokables": {
+    "byId": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\ById",
+    "with": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\With",
+    "paginate": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\Paginate",
+    "order": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\Order",
+    "filterByLicence": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\Filter\\ByLicence",
+    "filterByApplication": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\Filter\\ByApplication",
+    "filterByBusReg": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\Filter\\ByBusReg",
+    "filterByIds": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\Filter\\ByIds"
+  },
+  "aliases": {
+    "withApplication": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithApplication",
+    "withIrhpApplication": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithIrhpApplication",
+    "withBusReg": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithBusReg",
+    "withContactDetails": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithContactDetails",
+    "withCase": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithCase",
+    "withCreatedBy": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithCreatedBy",
+    "withRefdata": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithRefdata",
+    "withUser": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithUser",
+    "withPersonContactDetails": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithPersonContactDetails",
+    "withCreatedByWithTeam": "Dvsa\\Olcs\\Api\\Domain\\QueryPartial\\WithCreatedByWithTeam"
+  }
+}

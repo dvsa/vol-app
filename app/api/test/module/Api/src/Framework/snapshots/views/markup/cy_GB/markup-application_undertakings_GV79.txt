@@ -1,0 +1,51 @@
+<p class="govuk-body">
+  Rwy'n datgan bod y datganiadau ffeithiol neu ddisgwyliad a ddarparwyd i gefnogi'r cais hwn yn gywir.
+</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>Rwy'n deall mai cyfrifoldeb yr ymgeisydd yw sicrhau bod ganddo'r profiad a'r hyfforddiant gofynnol cyn gwneud cais am drwydded gweithredwr. Rwy'n cadarnhau, drwy lofnodi'r cais hwn, fy mod i'n deall cyfrifoldebau a gofynion dal trwydded gweithredwr cerbyd nwyddau a byddaf yn sicrhau y byddaf yn cael y wybodaeth ddiweddaraf am y gofynion hynny.</li>
+  <li>Rwy'n deall bod yn rhaid i mi hysbysu'r comisiynydd traffig o unrhyw gollfarn berthnasol i'r ymgeisydd neu'r rheolwr trafnidiaeth a gafwyd ers gwneud y cais a bod methu â gwneud hynny yn drosedd.</li>
+  <li>Rwy'n deall bod yn rhaid hysbysu'r comisiynydd traffig am unrhyw newidiadau sy'n digwydd wrth ystyried cais, gwybodaeth sy'n newid yn sylweddol o'r hyn a ddatganwyd yn wreiddiol pan gyflwynwyd y cais gyntaf, gan gynnwys colli rheolwr trafnidiaeth, rhaid eu hysbysu.</li>
+  <li>Rwy'n deall, os cyhoeddir trwydded, y bydd yn awdurdodi uchafswm nifer o gerbydau a threlars y gellir eu defnyddio oddi tani ar unrhyw un adeg, a'i bod yn drosedd defnyddio mwy o gerbydau neu drelars nag a ganiateir o dan delerau'r drwydded.</li>
+  <li>Rhaid i mi allu profi bod gennyf drefniant ffurfiol ar gyfer mynediad bob amser i o leiaf un cerbyd sydd wedi'i gofrestru neu mewn cylchrediad ym Mhrydain Fawr. Gallai hyn fod drwy nodi cerbyd i'w ddefnyddio o dan drwydded gweithredwr neu drwy ddangos ar gais fod gen i (deiliad y drwydded) gerbyd ar gael, fel y gall cerbydau fod naill ai'n eiddo llwyr neu'n cael eu dal o dan drefniant hur-brynu, llogi / prydlesu neu fath arall o drefniant ffurfiol.</li>
+  <li>Mae gen i sefydliad ym Mhrydain Fawr (GB) gyda safle lle rwy'n cadw dogfennau busnes craidd. Mae'r rhain yn cynnwys (o leiaf) dogfennau cyfrifyddu a rheoli personél a data ar amser gyrru a gorffwys. Rwy'n deall nad yw defnyddio Blwch Post na chyfeiriad trydydd parti yn cael ei ganiatáu.</li>
+</ul>
+<p class="govuk-body">
+  Rwy'n deall, drwy lofnodi'r cais hwn, fy mod yn derbyn y bydd yr ymrwymiadau canlynol yn cael eu cofnodi ar y drwydded:
+</p>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li>Mae'r cyfreithiau sy'n ymwneud â gyrru a gweithredu cerbydau a threlars a ddefnyddir o dan y drwydded yn cael eu dilyn;</li>
+  <li>Mae'r rheolau ar oriau gyrwyr a thacograffau yn cael eu dilyn a chedwir cofnodion priodol am o leiaf 12 mis, a bod y rhain ar gael ar gais;</li>
+  <li>Nid yw cerbydau a threlars yn cael eu gorlwytho na'u gweithredu gyda llwyth anniogel;</li>
+  <li>Bydd cerbydau'n gweithredu o fewn terfynau cyflymder;</li>
+  <li>Mae cerbydau a threlars, gan gynnwys cerbydau a threlars wedi'u llogi, yn cael eu cadw mewn cyflwr addas a gwasanaethadwy;</li>
+  <li>Mae gyrwyr yn adrodd ar unwaith am unrhyw ddiffygion neu symptomau diffygion a allai atal gweithrediad diogel cerbydau a/neu drelars, a bod unrhyw ddiffygion yn cael eu cofnodi'n ysgrifenedig;</li>
+  <li>Cedwir cofnodion (am o leiaf 15 mis) o bob adroddiad diffyg gyrwyr, pob archwiliad diogelwch, cynnal a chadw arferol ac atgyweiriadau i gerbydau a threlars, a gwneir y rhain ar gael ar gais;</li>
+  <li>Ni ddefnyddir canolfan weithredu heb awdurdod mewn unrhyw ardal draffig;</li>
+</ul>
+
+<p class="govuk-body">Rwy'n deall, os rhoddir trwydded, y bydd yn ddarostyngedig i'r amodau canlynol:</p>
+<p class="govuk-body">a) Y bydd deiliad y drwydded, o fewn 28 diwrnod i'w digwyddiad, yn hysbysu'r comisiynydd traffig o unrhyw:</p>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li>Newidiadau yn y trefniadau cynnal a chadw ac archwilio diogelwch;</li>
+  <li>Newidiadau yn y gallu i sicrhau bod cerbydau awdurdodedig yn cael eu gweithredu'n ddiogel ac nad ydynt yn achosi perygl i'r cyhoedd;</li>
+  <li>Newidiadau ym mherchnogaeth y busnes gan gynnwys trefniadau partneriaeth. Newidiadau mewn cyfranddaliadau cwmni nid oes angen eu hysbysu oni bai eu bod yn achosi newid yn rheolaeth y Cwmni;</li>
+  <li>Digwyddiadau sy'n effeithio ar:
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Enw da deiliad y drwydded a'r rheolwr trafnidiaeth, yn benodol, euogfarnau perthnasol fel y'u diffinnir yn atodlen 3 i Ddeddf 1995 (mae hyn yn cynnwys cyhoeddi hysbysiad cosb sefydlog neu gynnig amodol o dan Ran 3 o Ddeddf Troseddwyr Traffig Ffyrdd 1988);
+      </li>
+      <li>Cymhwysedd proffesiynol deiliad y drwydded a/neu'r rheolwr trafnidiaeth;</li>
+      <li>Y gofyniad i ddeiliad y drwydded fod o sefyllfa ariannol briodol (gan gynnwys manylion unrhyw fethdaliad, diddymiad, atafaelu ystâd neu fynd i weinyddiaeth deiliad penodiad derbynnydd, rheolwr neu ymddiriedolwr);
+      </li>
+      <li>Y gofyniad i gael sefydliad effeithiol a sefydlog ym Mhrydain Fawr sef; unrhyw newid i'r cyfeiriad penodol y sefydliad, a'r gofyniad i gael mynediad bob amser i o leiaf un cerbyd nwyddau sydd wedi'i gofrestru neu mewn cylchrediad ym Mhrydain Fawr;
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p class="govuk-body">b) Mewn perthynas â phob canolfan weithredu benodedig, na fydd nifer y cerbydau modur awdurdodedig a nifer y trelars awdurdodedig a gedwir yno yn fwy na'r niferoedd uchaf a gofnodwyd yn erbyn y ganolfan weithredu ar y drwydded hon.
+</p>
+<p class="govuk-body">Gall unrhyw fethiant i gydymffurfio â'r datganiadau a wneir i gael trwydded, amodau neu ymrwymiadau a gofnodwyd ar y drwydded arwain at ddirymu, atal neu gwtogi'r drwydded; a bod methu â chydymffurfio â'r amodau yn drosedd.
+</p>
+%s

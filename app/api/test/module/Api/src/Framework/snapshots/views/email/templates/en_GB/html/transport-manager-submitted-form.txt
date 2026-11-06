@@ -1,0 +1,12 @@
+<p>Hello,</p>
+
+<p>
+    [tmFullName &lt;&amp;&gt;] has submitted their details for application
+    [licNo &lt;&amp;&gt;]/[applicationId &lt;&amp;&gt;].
+</p>
+<p>
+    To review them sign into your account.
+</p>
+<p>
+    <a href="[tmaUrl &lt;&amp;&gt;]">Review application</a>
+</p>

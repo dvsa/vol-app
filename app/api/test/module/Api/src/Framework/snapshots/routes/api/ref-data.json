@@ -1,0 +1,14 @@
+{
+  "api/ref-data/GET": {
+    "request": "GET /api/ref-data/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\RefData\\RefDataList"
+    },
+    "matches": "api/ref-data/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\RefData\\RefDataList"
+    },
+    "withoutTrailingSlash": "api/ref-data/GET"
+  }
+}

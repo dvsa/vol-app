@@ -1,0 +1,26 @@
+{
+  "api/address/details/GET": {
+    "request": "GET /api/address/details/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Address\\GetAddress"
+    },
+    "matches": "api/address/details/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Address\\GetAddress"
+    },
+    "withoutTrailingSlash": "api/address/details/GET"
+  },
+  "api/address/list/GET": {
+    "request": "GET /api/address/list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Address\\GetList"
+    },
+    "matches": "api/address/list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Address\\GetList"
+    },
+    "withoutTrailingSlash": "api/address/list/GET"
+  }
+}

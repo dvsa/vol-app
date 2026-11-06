@@ -1,0 +1,14 @@
+{
+  "api/country-select-list/GET": {
+    "request": "GET /api/country-select-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContactDetail\\CountrySelectList"
+    },
+    "matches": "api/country-select-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\ContactDetail\\CountrySelectList"
+    },
+    "withoutTrailingSlash": "api/country-select-list/GET"
+  }
+}

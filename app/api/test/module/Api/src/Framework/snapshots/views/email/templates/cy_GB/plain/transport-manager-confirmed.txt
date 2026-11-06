@@ -1,0 +1,5 @@
+Helô,
+
+Mae [operatorName <&>] wedi cymeradwyo'r manylion ichi eu cyflwyno ar gyfer Trwydded Gweithredwr Cerbydau [licNo <&>]/[applicationId <&>].
+
+Mewngofnodi i'ch cyfrif [tmaUrl <&>].

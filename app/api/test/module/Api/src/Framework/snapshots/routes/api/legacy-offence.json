@@ -1,0 +1,29 @@
+{
+  "api/legacy-offence/GET": {
+    "request": "GET /api/cases/101/legacy-offence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\LegacyOffenceList"
+    },
+    "matches": "api/legacy-offence/GET",
+    "params": {
+      "case": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\LegacyOffenceList"
+    },
+    "withoutTrailingSlash": "api/legacy-offence/GET"
+  },
+  "api/legacy-offence/single/GET": {
+    "request": "GET /api/cases/101/legacy-offence/102/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\LegacyOffence"
+    },
+    "matches": "api/legacy-offence/single/GET",
+    "params": {
+      "case": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\LegacyOffence",
+      "id": "102"
+    },
+    "withoutTrailingSlash": "api/legacy-offence/single/GET"
+  }
+}

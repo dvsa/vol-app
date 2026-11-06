@@ -1,0 +1,14 @@
+{
+  "api/irhp-permit-application/GET": {
+    "request": "GET /api/irhp-permit-application/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitApplication\\GetList"
+    },
+    "matches": "api/irhp-permit-application/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitApplication\\GetList"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-application/GET"
+  }
+}

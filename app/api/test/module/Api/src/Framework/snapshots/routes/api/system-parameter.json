@@ -1,0 +1,56 @@
+{
+  "api/system-parameter/single/GET": {
+    "request": "GET /api/system-parameter/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\SystemParameter\\SystemParameter"
+    },
+    "matches": "api/system-parameter/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\SystemParameter\\SystemParameter",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/system-parameter/single/GET"
+  },
+  "api/system-parameter/single/PUT": {
+    "request": "PUT /api/system-parameter/101/",
+    "matches": "api/system-parameter/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\SystemParameter\\UpdateSystemParameter",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/system-parameter/single/PUT"
+  },
+  "api/system-parameter/single/DELETE": {
+    "request": "DELETE /api/system-parameter/101/",
+    "matches": "api/system-parameter/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\SystemParameter\\DeleteSystemParameter",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/system-parameter/single/DELETE"
+  },
+  "api/system-parameter/GET": {
+    "request": "GET /api/system-parameter/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\SystemParameter\\SystemParameterList"
+    },
+    "matches": "api/system-parameter/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\SystemParameter\\SystemParameterList"
+    },
+    "withoutTrailingSlash": "api/system-parameter/GET"
+  },
+  "api/system-parameter/POST": {
+    "request": "POST /api/system-parameter/",
+    "matches": "api/system-parameter/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\SystemParameter\\CreateSystemParameter"
+    },
+    "withoutTrailingSlash": "api/system-parameter/POST"
+  }
+}

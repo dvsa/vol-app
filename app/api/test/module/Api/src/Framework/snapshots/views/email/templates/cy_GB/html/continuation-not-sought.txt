@@ -1,0 +1,14 @@
+<p>
+  Mae'r trwyddedau canlynol sydd â ffioedd yn ddyledus rhwng [startDate &lt;&amp;&gt;]  a [endDate &lt;&amp;&gt;] wedi'u gosod i CNS:
+</p>
+
+<table>
+      <tr>
+      <td width="125">OB1234567</td>
+      <td>North East of England &lt;&amp;&gt;</td>
+    </tr>
+      <tr>
+      <td width="125">PD7654321</td>
+      <td>Wales</td>
+    </tr>
+  </table>

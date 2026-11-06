@@ -1,0 +1,23 @@
+{
+  "api/irhp-permit-sector/GET": {
+    "request": "GET /api/irhp-permit-sector/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitSector\\GetList"
+    },
+    "matches": "api/irhp-permit-sector/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitSector\\GetList"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-sector/GET"
+  },
+  "api/irhp-permit-sector/PUT": {
+    "request": "PUT /api/irhp-permit-sector/",
+    "matches": "api/irhp-permit-sector/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermitSector\\Update"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-sector/PUT"
+  }
+}

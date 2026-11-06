@@ -1,0 +1,14 @@
+{
+  "client": {
+    "base_uri": "1",
+    "headers": [],
+    "proxy": "http://1"
+  },
+  "oauth2": {
+    "client_id": "1",
+    "client_secret": "1",
+    "token_url": "1",
+    "scope": "1",
+    "proxy": "http://1"
+  }
+}

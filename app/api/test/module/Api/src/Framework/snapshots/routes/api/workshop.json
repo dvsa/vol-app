@@ -1,0 +1,43 @@
+{
+  "api/workshop/DELETE": {
+    "request": "DELETE /api/workshop/",
+    "matches": "api/workshop/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Workshop\\DeleteWorkshop"
+    },
+    "withoutTrailingSlash": "api/workshop/DELETE"
+  },
+  "api/workshop/POST": {
+    "request": "POST /api/workshop/",
+    "matches": "api/workshop/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Workshop\\CreateWorkshop"
+    },
+    "withoutTrailingSlash": "api/workshop/POST"
+  },
+  "api/workshop/single/GET": {
+    "request": "GET /api/workshop/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Workshop\\Workshop"
+    },
+    "matches": "api/workshop/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Workshop\\Workshop",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/workshop/single/GET"
+  },
+  "api/workshop/single/PUT": {
+    "request": "PUT /api/workshop/101/",
+    "matches": "api/workshop/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Workshop\\UpdateWorkshop",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/workshop/single/PUT"
+  }
+}

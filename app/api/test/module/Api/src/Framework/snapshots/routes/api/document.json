@@ -1,0 +1,257 @@
+{
+  "api/document/generate-and-store/POST": {
+    "request": "POST /api/document/generate-and-store/",
+    "matches": "api/document/generate-and-store/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\GenerateAndStore"
+    },
+    "withoutTrailingSlash": "api/document/generate-and-store/POST"
+  },
+  "api/document/template/single/paragraphs/GET": {
+    "request": "GET /api/document/template/101/paragraphs/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\TemplateParagraphs"
+    },
+    "matches": "api/document/template/single/paragraphs/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\TemplateParagraphs",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/document/template/single/paragraphs/GET"
+  },
+  "api/document/letter/POST": {
+    "request": "POST /api/document/letter/",
+    "matches": "api/document/letter/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\CreateLetter"
+    },
+    "withoutTrailingSlash": "api/document/letter/POST"
+  },
+  "api/document/single/GET": {
+    "request": "GET /api/document/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\Document"
+    },
+    "matches": "api/document/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\Document",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/document/single/GET"
+  },
+  "api/document/single/DELETE": {
+    "request": "DELETE /api/document/101/",
+    "matches": "api/document/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\DeleteDocument",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/document/single/DELETE"
+  },
+  "api/document/single/letter/GET": {
+    "request": "GET /api/document/101/letter/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\Letter"
+    },
+    "matches": "api/document/single/letter/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\Letter",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/document/single/letter/GET"
+  },
+  "api/document/single/letter/print/POST": {
+    "request": "POST /api/document/101/letter/print/",
+    "matches": "api/document/single/letter/print/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\PrintLetter",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/document/single/letter/print/POST"
+  },
+  "api/document/single/letter/print/GET": {
+    "request": "GET /api/document/101/letter/print/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\PrintLetter"
+    },
+    "matches": "api/document/single/letter/print/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\PrintLetter",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/document/single/letter/print/GET"
+  },
+  "api/document/single/links/PUT": {
+    "request": "PUT /api/document/101/links/",
+    "matches": "api/document/single/links/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\UpdateDocumentLinks",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/document/single/links/PUT"
+  },
+  "api/document/analysis-list/GET": {
+    "request": "GET /api/document/analysis-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\DocumentAnalysisList"
+    },
+    "matches": "api/document/analysis-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\DocumentAnalysisList"
+    },
+    "withoutTrailingSlash": "api/document/analysis-list/GET"
+  },
+  "api/document/document_analysis/single/accept-review/PUT": {
+    "request": "PUT /api/document/document_analysis/101/accept-review/",
+    "matches": "api/document/document_analysis/single/accept-review/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\AcceptDocumentAnalysisReview",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/document/document_analysis/single/accept-review/PUT"
+  },
+  "api/document/document_analysis/single/assessment-status/PUT": {
+    "request": "PUT /api/document/document_analysis/101/assessment-status/",
+    "matches": "api/document/document_analysis/single/assessment-status/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\UpdateDocumentAnalysisAssessmentStatus",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/document/document_analysis/single/assessment-status/PUT"
+  },
+  "api/document/POST": {
+    "request": "POST /api/document/",
+    "matches": "api/document/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\CreateDocument"
+    },
+    "withoutTrailingSlash": "api/document/POST"
+  },
+  "api/document/DELETE": {
+    "request": "DELETE /api/document/",
+    "matches": "api/document/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\DeleteDocuments"
+    },
+    "withoutTrailingSlash": "api/document/DELETE"
+  },
+  "api/document/GET": {
+    "request": "GET /api/document/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\DocumentList"
+    },
+    "matches": "api/document/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\DocumentList"
+    },
+    "withoutTrailingSlash": "api/document/GET"
+  },
+  "api/document/copy/POST": {
+    "request": "POST /api/document/copy/",
+    "matches": "api/document/copy/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\CopyDocument"
+    },
+    "withoutTrailingSlash": "api/document/copy/POST"
+  },
+  "api/document/move/POST": {
+    "request": "POST /api/document/move/",
+    "matches": "api/document/move/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\MoveDocument"
+    },
+    "withoutTrailingSlash": "api/document/move/POST"
+  },
+  "api/document/download/GET": {
+    "request": "GET /api/document/download/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\Download"
+    },
+    "matches": "api/document/download/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\Download"
+    },
+    "withoutTrailingSlash": "api/document/download/GET"
+  },
+  "api/document/download-guide/GET": {
+    "request": "GET /api/document/download-guide/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\DownloadGuide"
+    },
+    "matches": "api/document/download-guide/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\DownloadGuide"
+    },
+    "withoutTrailingSlash": "api/document/download-guide/GET"
+  },
+  "api/document/bucket-browser/GET": {
+    "request": "GET /api/document/bucket-browser/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\BucketBrowserList"
+    },
+    "matches": "api/document/bucket-browser/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\BucketBrowserList"
+    },
+    "withoutTrailingSlash": "api/document/bucket-browser/GET"
+  },
+  "api/document/bucket-browser/download/GET": {
+    "request": "GET /api/document/bucket-browser/download/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\BucketBrowserDownload"
+    },
+    "matches": "api/document/bucket-browser/download/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Document\\BucketBrowserDownload"
+    },
+    "withoutTrailingSlash": "api/document/bucket-browser/download/GET"
+  },
+  "api/document/bucket-browser/overwrite/POST": {
+    "request": "POST /api/document/bucket-browser/overwrite/",
+    "matches": "api/document/bucket-browser/overwrite/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\BucketBrowserOverwrite"
+    },
+    "withoutTrailingSlash": "api/document/bucket-browser/overwrite/POST"
+  },
+  "api/document/upload/POST": {
+    "request": "POST /api/document/upload/",
+    "matches": "api/document/upload/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\Upload"
+    },
+    "withoutTrailingSlash": "api/document/upload/POST"
+  },
+  "api/document/overwrite-content/POST": {
+    "request": "POST /api/document/overwrite-content/",
+    "matches": "api/document/overwrite-content/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Document\\OverwriteContent"
+    },
+    "withoutTrailingSlash": "api/document/overwrite-content/POST"
+  }
+}

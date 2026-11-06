@@ -1,0 +1,83 @@
+{
+  "api/letter-type/single/GET": {
+    "request": "GET /api/letter-type/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterType\\Get"
+    },
+    "matches": "api/letter-type/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterType\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-type/single/GET"
+  },
+  "api/letter-type/single/PUT": {
+    "request": "PUT /api/letter-type/101/",
+    "matches": "api/letter-type/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-type/single/PUT"
+  },
+  "api/letter-type/single/DELETE": {
+    "request": "DELETE /api/letter-type/101/",
+    "matches": "api/letter-type/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-type/single/DELETE"
+  },
+  "api/letter-type/GET": {
+    "request": "GET /api/letter-type/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterType\\GetList"
+    },
+    "matches": "api/letter-type/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterType\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter-type/GET"
+  },
+  "api/letter-type/POST": {
+    "request": "POST /api/letter-type/",
+    "matches": "api/letter-type/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\Create"
+    },
+    "withoutTrailingSlash": "api/letter-type/POST"
+  },
+  "api/letter-type/suggest-preview-records/POST": {
+    "request": "POST /api/letter-type/suggest-preview-records",
+    "matches": "api/letter-type/suggest-preview-records/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\SuggestPreviewRecords"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter-type/preview-composition/POST": {
+    "request": "POST /api/letter-type/preview-composition",
+    "matches": "api/letter-type/preview-composition/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\PreviewComposition"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter-type/clone/POST": {
+    "request": "POST /api/letter-type/clone",
+    "matches": "api/letter-type/clone/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\Clone"
+    },
+    "withTrailingSlash": null
+  }
+}

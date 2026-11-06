@@ -1,0 +1,11 @@
+{
+  "search": {
+    "request": "any /search/101",
+    "matches": "search",
+    "params": {
+      "controller": "Search",
+      "index": "101"
+    },
+    "withTrailingSlash": null
+  }
+}

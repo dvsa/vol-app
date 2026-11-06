@@ -1,0 +1,12 @@
+<p>Helô,</p>
+
+<p>Mae un o ddefnyddwyr eich cyfrif Trwyddedu Gweithredwyr Cerbydau wedi anghofio eu henw defnyddiwr.</p>
+
+<p>Fel y gweinyddydd, bydd angen ichi roi'r wybodaeth hon iddynt eich hunan. Gallwch ei chanfod yn ardal rheoli 
+    defnyddwyr eich cyfrif.</p>
+
+<p>Eich enw defnyddiwr yw: <strong>[loginId &lt;&amp;&gt;]</strong></p>
+
+<p>
+    <a href="[url &lt;&amp;&gt;]">Mewngofnodi</a>
+</p>

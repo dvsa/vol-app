@@ -1,0 +1,120 @@
+{
+  "api/data-retention/GET": {
+    "request": "GET /api/data-retention/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\RuleList"
+    },
+    "matches": "api/data-retention/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\RuleList"
+    },
+    "withoutTrailingSlash": "api/data-retention/GET"
+  },
+  "api/data-retention/rule-list/single/GET": {
+    "request": "GET /api/data-retention/rule-list/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\GetRule"
+    },
+    "matches": "api/data-retention/rule-list/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\GetRule",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/data-retention/rule-list/single/GET"
+  },
+  "api/data-retention/rule-list/GET": {
+    "request": "GET /api/data-retention/rule-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\RuleList"
+    },
+    "matches": "api/data-retention/rule-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\RuleList"
+    },
+    "withoutTrailingSlash": "api/data-retention/rule-list/GET"
+  },
+  "api/data-retention/rule-admin/GET": {
+    "request": "GET /api/data-retention/rule-admin/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\RuleAdmin"
+    },
+    "matches": "api/data-retention/rule-admin/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\RuleAdmin"
+    },
+    "withoutTrailingSlash": "api/data-retention/rule-admin/GET"
+  },
+  "api/data-retention/update-rule/POST": {
+    "request": "POST /api/data-retention/update-rule/",
+    "matches": "api/data-retention/update-rule/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\DataRetention\\UpdateRule"
+    },
+    "withoutTrailingSlash": "api/data-retention/update-rule/POST"
+  },
+  "api/data-retention/records/GET": {
+    "request": "GET /api/data-retention/records/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\Records"
+    },
+    "matches": "api/data-retention/records/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\Records"
+    },
+    "withoutTrailingSlash": "api/data-retention/records/GET"
+  },
+  "api/data-retention/mark-for-delete/POST": {
+    "request": "POST /api/data-retention/mark-for-delete/",
+    "matches": "api/data-retention/mark-for-delete/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\DataRetention\\MarkForDelete"
+    },
+    "withoutTrailingSlash": "api/data-retention/mark-for-delete/POST"
+  },
+  "api/data-retention/mark-for-review/POST": {
+    "request": "POST /api/data-retention/mark-for-review/",
+    "matches": "api/data-retention/mark-for-review/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\DataRetention\\MarkForReview"
+    },
+    "withoutTrailingSlash": "api/data-retention/mark-for-review/POST"
+  },
+  "api/data-retention/delay-items/POST": {
+    "request": "POST /api/data-retention/delay-items/",
+    "matches": "api/data-retention/delay-items/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\DataRetention\\DelayItems"
+    },
+    "withoutTrailingSlash": "api/data-retention/delay-items/POST"
+  },
+  "api/data-retention/assign-items/POST": {
+    "request": "POST /api/data-retention/assign-items/",
+    "matches": "api/data-retention/assign-items/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\DataRetention\\AssignItems"
+    },
+    "withoutTrailingSlash": "api/data-retention/assign-items/POST"
+  },
+  "api/data-retention/processed-list/GET": {
+    "request": "GET /api/data-retention/processed-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\GetProcessedList"
+    },
+    "matches": "api/data-retention/processed-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataRetention\\GetProcessedList"
+    },
+    "withoutTrailingSlash": "api/data-retention/processed-list/GET"
+  }
+}

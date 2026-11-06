@@ -1,0 +1,263 @@
+{
+  "api/permits/report/GET": {
+    "request": "GET /api/permits/report/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReportList"
+    },
+    "matches": "api/permits/report/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReportList"
+    },
+    "withoutTrailingSlash": "api/permits/report/GET"
+  },
+  "api/permits/queue-report/POST": {
+    "request": "POST /api/permits/queue-report/",
+    "matches": "api/permits/queue-report/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Permits\\QueueReport"
+    },
+    "withoutTrailingSlash": "api/permits/queue-report/POST"
+  },
+  "api/permits/irhp-permits-accept/POST": {
+    "request": "POST /api/permits/irhp-permits-accept/",
+    "matches": "api/permits/irhp-permits-accept/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Permits\\AcceptIrhpPermits"
+    },
+    "withoutTrailingSlash": "api/permits/irhp-permits-accept/POST"
+  },
+  "api/permits/queue-run-scoring/POST": {
+    "request": "POST /api/permits/queue-run-scoring/",
+    "matches": "api/permits/queue-run-scoring/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Permits\\QueueRunScoring"
+    },
+    "withoutTrailingSlash": "api/permits/queue-run-scoring/POST"
+  },
+  "api/permits/queue-accept-scoring/POST": {
+    "request": "POST /api/permits/queue-accept-scoring/",
+    "matches": "api/permits/queue-accept-scoring/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Permits\\QueueAcceptScoring"
+    },
+    "withoutTrailingSlash": "api/permits/queue-accept-scoring/POST"
+  },
+  "api/permits/ecmt-permit-fees/GET": {
+    "request": "GET /api/permits/ecmt-permit-fees/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\EcmtPermitFees"
+    },
+    "matches": "api/permits/ecmt-permit-fees/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\EcmtPermitFees"
+    },
+    "withoutTrailingSlash": "api/permits/ecmt-permit-fees/GET"
+  },
+  "api/permits/available-types/GET": {
+    "request": "GET /api/permits/available-types/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\AvailableTypes"
+    },
+    "matches": "api/permits/available-types/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\AvailableTypes"
+    },
+    "withoutTrailingSlash": "api/permits/available-types/GET"
+  },
+  "api/permits/available-years/GET": {
+    "request": "GET /api/permits/available-years/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\AvailableYears"
+    },
+    "matches": "api/permits/available-years/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\AvailableYears"
+    },
+    "withoutTrailingSlash": "api/permits/available-years/GET"
+  },
+  "api/permits/available-stocks/GET": {
+    "request": "GET /api/permits/available-stocks/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\AvailableStocks"
+    },
+    "matches": "api/permits/available-stocks/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\AvailableStocks"
+    },
+    "withoutTrailingSlash": "api/permits/available-stocks/GET"
+  },
+  "api/permits/emissions-by-year/GET": {
+    "request": "GET /api/permits/emissions-by-year/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\EmissionsByYear"
+    },
+    "matches": "api/permits/emissions-by-year/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\EmissionsByYear"
+    },
+    "withoutTrailingSlash": "api/permits/emissions-by-year/GET"
+  },
+  "api/permits/open-windows/GET": {
+    "request": "GET /api/permits/open-windows/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\OpenWindows"
+    },
+    "matches": "api/permits/open-windows/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\OpenWindows"
+    },
+    "withoutTrailingSlash": "api/permits/open-windows/GET"
+  },
+  "api/permits/stock-operations-permitted/GET": {
+    "request": "GET /api/permits/stock-operations-permitted/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\StockOperationsPermitted"
+    },
+    "matches": "api/permits/stock-operations-permitted/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\StockOperationsPermitted"
+    },
+    "withoutTrailingSlash": "api/permits/stock-operations-permitted/GET"
+  },
+  "api/permits/stock-alignment-report/GET": {
+    "request": "GET /api/permits/stock-alignment-report/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\StockAlignmentReport"
+    },
+    "matches": "api/permits/stock-alignment-report/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\StockAlignmentReport"
+    },
+    "withoutTrailingSlash": "api/permits/stock-alignment-report/GET"
+  },
+  "api/permits/post-scoring-report/GET": {
+    "request": "GET /api/permits/post-scoring-report/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\PostScoringReport"
+    },
+    "matches": "api/permits/post-scoring-report/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\PostScoringReport"
+    },
+    "withoutTrailingSlash": "api/permits/post-scoring-report/GET"
+  },
+  "api/permits/ready-to-print-type/GET": {
+    "request": "GET /api/permits/ready-to-print-type/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrintType"
+    },
+    "matches": "api/permits/ready-to-print-type/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrintType"
+    },
+    "withoutTrailingSlash": "api/permits/ready-to-print-type/GET"
+  },
+  "api/permits/ready-to-print-country/GET": {
+    "request": "GET /api/permits/ready-to-print-country/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrintCountry"
+    },
+    "matches": "api/permits/ready-to-print-country/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrintCountry"
+    },
+    "withoutTrailingSlash": "api/permits/ready-to-print-country/GET"
+  },
+  "api/permits/ready-to-print-stock/GET": {
+    "request": "GET /api/permits/ready-to-print-stock/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrintStock"
+    },
+    "matches": "api/permits/ready-to-print-stock/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrintStock"
+    },
+    "withoutTrailingSlash": "api/permits/ready-to-print-stock/GET"
+  },
+  "api/permits/ready-to-print-range-type/GET": {
+    "request": "GET /api/permits/ready-to-print-range-type/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrintRangeType"
+    },
+    "matches": "api/permits/ready-to-print-range-type/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrintRangeType"
+    },
+    "withoutTrailingSlash": "api/permits/ready-to-print-range-type/GET"
+  },
+  "api/permits/ready-to-print/GET": {
+    "request": "GET /api/permits/ready-to-print/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrint"
+    },
+    "matches": "api/permits/ready-to-print/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrint"
+    },
+    "withoutTrailingSlash": "api/permits/ready-to-print/GET"
+  },
+  "api/permits/ready-to-print-confirm/GET": {
+    "request": "GET /api/permits/ready-to-print-confirm/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrintConfirm"
+    },
+    "matches": "api/permits/ready-to-print-confirm/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\ReadyToPrintConfirm"
+    },
+    "withoutTrailingSlash": "api/permits/ready-to-print-confirm/GET"
+  },
+  "api/permits/print/POST": {
+    "request": "POST /api/permits/print/",
+    "matches": "api/permits/print/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Permits\\PrintPermits"
+    },
+    "withoutTrailingSlash": "api/permits/print/POST"
+  },
+  "api/permits/max-permitted-reached-by-type-and-organisation/GET": {
+    "request": "GET /api/permits/max-permitted-reached-by-type-and-organisation/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\MaxPermittedReachedByTypeAndOrganisation"
+    },
+    "matches": "api/permits/max-permitted-reached-by-type-and-organisation/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\MaxPermittedReachedByTypeAndOrganisation"
+    },
+    "withoutTrailingSlash": "api/permits/max-permitted-reached-by-type-and-organisation/GET"
+  },
+  "api/permits/max-permitted-reached-by-stock-and-licence/GET": {
+    "request": "GET /api/permits/max-permitted-reached-by-stock-and-licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\MaxPermittedReachedByStockAndLicence"
+    },
+    "matches": "api/permits/max-permitted-reached-by-stock-and-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Permits\\MaxPermittedReachedByStockAndLicence"
+    },
+    "withoutTrailingSlash": "api/permits/max-permitted-reached-by-stock-and-licence/GET"
+  }
+}

@@ -1,0 +1,10 @@
+Helô,
+
+Mae [organisation <&>] wedi'ch enwi fel Rheolwr Trafnidiaeth ar y cais am Drwydded Gweithredwr Cerbydau [reference <&>].
+
+Cyn gallwn ystyried y cais, bydd angen ichi gyflwyno'ch manylion inni drwy ein gwasanaeth ar-lein.
+
+Eich enw defnyddiwr yw: [loginId <&>]
+Byddwch yn derbyn ail e-bost gyda chyfrinair dros dro yn y ddwy awr nesaf. Os na fydd yn cyrraedd e-bostiwch notifications@vehicle-operator-licensing.service.gov.uk.
+
+Mewngofnodi [url <&>].

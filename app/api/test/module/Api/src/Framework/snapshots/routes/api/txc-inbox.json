@@ -1,0 +1,23 @@
+{
+  "api/txc-inbox/GET": {
+    "request": "GET /api/txc-inbox/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\Ebsr\\TxcInboxList"
+    },
+    "matches": "api/txc-inbox/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Bus\\Ebsr\\TxcInboxList"
+    },
+    "withoutTrailingSlash": "api/txc-inbox/GET"
+  },
+  "api/txc-inbox/PUT": {
+    "request": "PUT /api/txc-inbox/",
+    "matches": "api/txc-inbox/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Bus\\Ebsr\\UpdateTxcInbox"
+    },
+    "withoutTrailingSlash": "api/txc-inbox/PUT"
+  }
+}

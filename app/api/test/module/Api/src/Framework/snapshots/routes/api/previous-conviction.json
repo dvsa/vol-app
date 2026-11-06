@@ -1,0 +1,64 @@
+{
+  "api/previous-conviction/single/GET": {
+    "request": "GET /api/previous-conviction/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\PreviousConviction\\PreviousConviction"
+    },
+    "matches": "api/previous-conviction/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\PreviousConviction\\PreviousConviction",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/previous-conviction/single/GET"
+  },
+  "api/previous-conviction/single/PUT": {
+    "request": "PUT /api/previous-conviction/101/",
+    "matches": "api/previous-conviction/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\PreviousConviction\\UpdatePreviousConviction",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/previous-conviction/single/PUT"
+  },
+  "api/previous-conviction/POST": {
+    "request": "POST /api/previous-conviction/",
+    "matches": "api/previous-conviction/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\PreviousConviction\\CreatePreviousConviction"
+    },
+    "withoutTrailingSlash": "api/previous-conviction/POST"
+  },
+  "api/previous-conviction/DELETE": {
+    "request": "DELETE /api/previous-conviction/",
+    "matches": "api/previous-conviction/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\PreviousConviction\\DeletePreviousConviction"
+    },
+    "withoutTrailingSlash": "api/previous-conviction/DELETE"
+  },
+  "api/previous-conviction/tma/POST": {
+    "request": "POST /api/previous-conviction/tma/",
+    "matches": "api/previous-conviction/tma/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\PreviousConviction\\CreateForTma"
+    },
+    "withoutTrailingSlash": "api/previous-conviction/tma/POST"
+  },
+  "api/previous-conviction/GET": {
+    "request": "GET /api/previous-conviction/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\PreviousConviction\\GetList"
+    },
+    "matches": "api/previous-conviction/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\PreviousConviction\\GetList"
+    },
+    "withoutTrailingSlash": "api/previous-conviction/GET"
+  }
+}

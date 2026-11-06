@@ -1,0 +1,14 @@
+{
+  "api/data-service/application/status/GET": {
+    "request": "GET /api/data-service/application/status/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataService\\ApplicationStatus"
+    },
+    "matches": "api/data-service/application/status/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\DataService\\ApplicationStatus"
+    },
+    "withoutTrailingSlash": "api/data-service/application/status/GET"
+  }
+}

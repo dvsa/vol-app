@@ -1,0 +1,26 @@
+{
+  "api/companies-house/insolvency-practitioner/GET": {
+    "request": "GET /api/companies-house/insolvency-practitioner/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\CompaniesHouse\\InsolvencyPractitioner"
+    },
+    "matches": "api/companies-house/insolvency-practitioner/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\CompaniesHouse\\InsolvencyPractitioner"
+    },
+    "withoutTrailingSlash": "api/companies-house/insolvency-practitioner/GET"
+  },
+  "api/companies-house/number/GET": {
+    "request": "GET /api/companies-house/number/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\CompaniesHouse\\ByNumber"
+    },
+    "matches": "api/companies-house/number/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\CompaniesHouse\\ByNumber"
+    },
+    "withoutTrailingSlash": "api/companies-house/number/GET"
+  }
+}

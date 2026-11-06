@@ -1,0 +1,68 @@
+{
+  "api/irhp-candidate-permits/POST": {
+    "request": "POST /api/irhp-candidate-permits/",
+    "matches": "api/irhp-candidate-permits/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpCandidatePermit\\Create"
+    },
+    "withoutTrailingSlash": "api/irhp-candidate-permits/POST"
+  },
+  "api/irhp-candidate-permits/single/GET": {
+    "request": "GET /api/irhp-candidate-permits/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpCandidatePermit\\ById"
+    },
+    "matches": "api/irhp-candidate-permits/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpCandidatePermit\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-candidate-permits/single/GET"
+  },
+  "api/irhp-candidate-permits/single/PUT": {
+    "request": "PUT /api/irhp-candidate-permits/101/",
+    "matches": "api/irhp-candidate-permits/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpCandidatePermit\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-candidate-permits/single/PUT"
+  },
+  "api/irhp-candidate-permits/single/DELETE": {
+    "request": "DELETE /api/irhp-candidate-permits/101/",
+    "matches": "api/irhp-candidate-permits/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpCandidatePermit\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irhp-candidate-permits/single/DELETE"
+  },
+  "api/irhp-candidate-permits/by-irhp-application/GET": {
+    "request": "GET /api/irhp-candidate-permits/by-irhp-application/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpCandidatePermit\\GetListByIrhpApplication"
+    },
+    "matches": "api/irhp-candidate-permits/by-irhp-application/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpCandidatePermit\\GetListByIrhpApplication"
+    },
+    "withoutTrailingSlash": "api/irhp-candidate-permits/by-irhp-application/GET"
+  },
+  "api/irhp-candidate-permits/by-irhp-application/unpaged/GET": {
+    "request": "GET /api/irhp-candidate-permits/by-irhp-application/unpaged/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpCandidatePermit\\GetListByIrhpApplicationUnpaged"
+    },
+    "matches": "api/irhp-candidate-permits/by-irhp-application/unpaged/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpCandidatePermit\\GetListByIrhpApplicationUnpaged"
+    },
+    "withoutTrailingSlash": "api/irhp-candidate-permits/by-irhp-application/unpaged/GET"
+  }
+}

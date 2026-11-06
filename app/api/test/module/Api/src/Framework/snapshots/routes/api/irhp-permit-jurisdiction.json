@@ -1,0 +1,23 @@
+{
+  "api/irhp-permit-jurisdiction/GET": {
+    "request": "GET /api/irhp-permit-jurisdiction/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitJurisdiction\\GetList"
+    },
+    "matches": "api/irhp-permit-jurisdiction/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\IrhpPermitJurisdiction\\GetList"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-jurisdiction/GET"
+  },
+  "api/irhp-permit-jurisdiction/PUT": {
+    "request": "PUT /api/irhp-permit-jurisdiction/",
+    "matches": "api/irhp-permit-jurisdiction/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\IrhpPermitJurisdiction\\Update"
+    },
+    "withoutTrailingSlash": "api/irhp-permit-jurisdiction/PUT"
+  }
+}

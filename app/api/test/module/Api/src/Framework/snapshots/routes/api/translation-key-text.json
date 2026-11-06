@@ -1,0 +1,12 @@
+{
+  "api/translation-key-text/single/DELETE": {
+    "request": "DELETE /api/translation-key-text/101/",
+    "matches": "api/translation-key-text/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TranslationKeyText\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/translation-key-text/single/DELETE"
+  }
+}

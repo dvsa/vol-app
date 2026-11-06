@@ -1,0 +1,56 @@
+{
+  "api/translation-key/single/GET": {
+    "request": "GET /api/translation-key/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TranslationKey\\ById"
+    },
+    "matches": "api/translation-key/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TranslationKey\\ById",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/translation-key/single/GET"
+  },
+  "api/translation-key/single/PUT": {
+    "request": "PUT /api/translation-key/101/",
+    "matches": "api/translation-key/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TranslationKey\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/translation-key/single/PUT"
+  },
+  "api/translation-key/single/DELETE": {
+    "request": "DELETE /api/translation-key/101/",
+    "matches": "api/translation-key/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TranslationKey\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/translation-key/single/DELETE"
+  },
+  "api/translation-key/GET": {
+    "request": "GET /api/translation-key/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TranslationKey\\GetList"
+    },
+    "matches": "api/translation-key/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TranslationKey\\GetList"
+    },
+    "withoutTrailingSlash": "api/translation-key/GET"
+  },
+  "api/translation-key/POST": {
+    "request": "POST /api/translation-key/",
+    "matches": "api/translation-key/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TranslationKey\\Create"
+    },
+    "withoutTrailingSlash": "api/translation-key/POST"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "api/continuation/create/POST": {
+    "request": "POST /api/continuation/create/",
+    "matches": "api/continuation/create/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Continuation\\Create"
+    },
+    "withoutTrailingSlash": "api/continuation/create/POST"
+  }
+}

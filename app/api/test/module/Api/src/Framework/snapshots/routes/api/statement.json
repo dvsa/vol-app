@@ -1,0 +1,56 @@
+{
+  "api/statement/GET": {
+    "request": "GET /api/statement/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Statement\\StatementList"
+    },
+    "matches": "api/statement/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Statement\\StatementList"
+    },
+    "withoutTrailingSlash": "api/statement/GET"
+  },
+  "api/statement/single/GET": {
+    "request": "GET /api/statement/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Statement\\Statement"
+    },
+    "matches": "api/statement/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Statement\\Statement",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/statement/single/GET"
+  },
+  "api/statement/single/PUT": {
+    "request": "PUT /api/statement/101/",
+    "matches": "api/statement/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Statement\\UpdateStatement",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/statement/single/PUT"
+  },
+  "api/statement/single/DELETE": {
+    "request": "DELETE /api/statement/101/",
+    "matches": "api/statement/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Statement\\DeleteStatement",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/statement/single/DELETE"
+  },
+  "api/statement/POST": {
+    "request": "POST /api/statement/",
+    "matches": "api/statement/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Statement\\CreateStatement"
+    },
+    "withoutTrailingSlash": "api/statement/POST"
+  }
+}

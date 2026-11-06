@@ -1,0 +1,11 @@
+<li>
+    I must be able to prove that I have a formal arrangement for access at all times to at least one vehicle registered
+    or in circulation in GB. This could be by specifying a vehicle for use under an operator’s licence or by
+    demonstrating on request that I (the licence holder) have a vehicle available, so that vehicles may be either wholly
+    owned or held under a hire-purchase, hire / leasing or other type of formal arrangement;
+</li>
+<li>
+    I have an establishment in Great Britain (GB) with premises in which I keep core business documents. These
+    include (as a minimum) accounting and personnel management documents and data on driving time and rest. I
+    understand that the use of a PO Box or third party address is not permitted.
+</li>

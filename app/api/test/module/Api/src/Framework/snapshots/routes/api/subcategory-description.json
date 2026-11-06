@@ -1,0 +1,14 @@
+{
+  "api/subcategory-description/GET": {
+    "request": "GET /api/subcategory-description/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\SubCategoryDescription\\GetList"
+    },
+    "matches": "api/subcategory-description/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\SubCategoryDescription\\GetList"
+    },
+    "withoutTrailingSlash": "api/subcategory-description/GET"
+  }
+}

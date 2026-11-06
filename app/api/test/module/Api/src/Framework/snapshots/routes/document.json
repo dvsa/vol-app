@@ -1,0 +1,10 @@
+{
+  "document": {
+    "request": "any /scanning/document",
+    "matches": "document",
+    "params": {
+      "controller": "Dvsa\\Olcs\\Scanning\\Controller\\DocumentController"
+    },
+    "withTrailingSlash": null
+  }
+}

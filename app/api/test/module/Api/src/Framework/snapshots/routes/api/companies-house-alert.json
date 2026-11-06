@@ -1,0 +1,23 @@
+{
+  "api/companies-house-alert/GET": {
+    "request": "GET /api/companies-house-alert/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\CompaniesHouse\\AlertList"
+    },
+    "matches": "api/companies-house-alert/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\CompaniesHouse\\AlertList"
+    },
+    "withoutTrailingSlash": "api/companies-house-alert/GET"
+  },
+  "api/companies-house-alert/close/POST": {
+    "request": "POST /api/companies-house-alert/close/",
+    "matches": "api/companies-house-alert/close/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\CompaniesHouse\\CloseAlerts"
+    },
+    "withoutTrailingSlash": "api/companies-house-alert/close/POST"
+  }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    
+    <meta charset="utf-8">
+    
+    <title>Annual ECMT  permit application - Vehicle Operator Licensing - GOV.UK</title><meta name="viewport" content="width&#x3D;device-width,&#x20;initial-scale&#x3D;1.0">
+<meta http-equiv="X-UA-Compatible" content="IE&#x3D;edge"><link href="&#x2F;styles&#x2F;print.css" media="screen,&#x20;print" rel="stylesheet" type="text&#x2F;css">    
+</head>
+    <body>
+        <div class="printable">
+            <div class="printable__header">
+    <h1>Annual ECMT &lt;&amp;&gt; permit application</h1>
+    <h2>Test Haulage &lt;&amp;&gt; Ltd OG1234567 / IRHP1001</h2>
+    <a class="hide-print" href="javascript:window.print()">Print this page</a>
+</div>
+<div class="printable__section">
+    <dl>
+    <dt>Licence &lt;&amp;&gt;</dt>
+    <dd>
+        OG1234567 &lt;&amp;&gt;    </dd>
+</dl>
+<dl>
+    <dt>Cabotage</dt>
+    <dd>
+        Yes    </dd>
+</dl>
+<dl>
+    <dt>Euro 6</dt>
+    <dd>
+        No    </dd>
+</dl>
+<dl>
+    <dt>Permits required</dt>
+    <dd>
+        12    </dd>
+</dl>
+<dl>
+    <dt>Countries</dt>
+    <dd>
+        Austria<br/>Belgium &lt;&amp;&gt;    </dd>
+</dl>
+<dl>
+    <dt>Unescaped</dt>
+    <dd>
+        <b>bold</b>    </dd>
+</dl>
+</div>
+<div class="printable__section">
+    <p>Declaration &lt;&amp;&gt;</p>
+    <ul class="govuk-list govuk-list--bullet">
+    <li>have read and agree to follow <a href="https://www.gov.uk/guidance/ecmt-international-road-haulage-permits" target="_blank">the rules on how to use Short-term ECMT permits<span class="govuk-visually-hidden">(link opens in a new window)</span></a></li>
+    <li>understand that this permit is for transiting through EU member states to non-EU countries who are ECMT members, including Switzerland</li>
+    <li>understand that this permit is for a third cross-trade trip within 7 days</li>
+    <li>understand that Short-term permits are not valid for Austria</li>
+    <li>will only use vehicles that comply with the Euro emissions standard for each permit</li>
+    <li>understand that a Certificate of Compliance and a Certificate of Roadworthiness is required for each vehicle and trailer you intend to use</li>
+    <li>understand that Short-term ECMT permits can only be used for 30 consecutive days during the calendar year they have been issued</li>
+    <li>will complete the permit start and end dates before starting your journey</li>
+    <li>must complete the corresponding logbook with full journey details before the start of a journey</li>
+    <li>understand the logbook must be returned to DVSA within 2 weeks after returning to the UK</li>
+</ul>
+<p class="govuk-body">Your driver must also carry the permit and corresponding logbook, and the certificates for the entire outbound and return journey and present it to any competent authority or inspectors.</p>
+    <p><strong>I confirm &lt;&amp;&gt;</strong></p>
+</div>
+<div class="signature-box">
+    <div class="signature-box__column">
+        <label for="" class="signature-box__label">Applicant's signature</label>
+        <input type="text" class="signature-box__input signature" disabled="disabled">
+        <label for="" class="signature-box__label">Full name in block capitals</label>
+        <input type="text" class="signature-box__input name" disabled="disabled">
+        <label for="" class="signature-box__label">Position in Company</label>
+        <input type="text" class="signature-box__input position" disabled="disabled">
+        <label for="" class="signature-box__label">Date</label>
+        <input type="text" class="signature-box__input date" disabled="disabled">
+    </div>
+</div>
+<div class="printable__address">
+    <p><b>Return to:</b></p>
+    <p>International Road Haulage Permit Office, Quarry House, Leeds, LS2 7UE</p>
+</div>
+        </div>
+    </body>
+</html>

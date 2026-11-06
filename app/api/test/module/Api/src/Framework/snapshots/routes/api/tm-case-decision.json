@@ -1,0 +1,81 @@
+{
+  "api/tm-case-decision/GET": {
+    "request": "GET /api/tm-case-decision/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmCaseDecision\\GetByCase"
+    },
+    "matches": "api/tm-case-decision/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TmCaseDecision\\GetByCase"
+    },
+    "withoutTrailingSlash": "api/tm-case-decision/GET"
+  },
+  "api/tm-case-decision/single/DELETE": {
+    "request": "DELETE /api/tm-case-decision/101/",
+    "matches": "api/tm-case-decision/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmCaseDecision\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-case-decision/single/DELETE"
+  },
+  "api/tm-case-decision/single/repute-not-lost/PUT": {
+    "request": "PUT /api/tm-case-decision/101/repute-not-lost/",
+    "matches": "api/tm-case-decision/single/repute-not-lost/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmCaseDecision\\UpdateReputeNotLost",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-case-decision/single/repute-not-lost/PUT"
+  },
+  "api/tm-case-decision/single/declare-unfit/PUT": {
+    "request": "PUT /api/tm-case-decision/101/declare-unfit/",
+    "matches": "api/tm-case-decision/single/declare-unfit/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmCaseDecision\\UpdateDeclareUnfit",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-case-decision/single/declare-unfit/PUT"
+  },
+  "api/tm-case-decision/single/no-further-action/PUT": {
+    "request": "PUT /api/tm-case-decision/101/no-further-action/",
+    "matches": "api/tm-case-decision/single/no-further-action/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmCaseDecision\\UpdateNoFurtherAction",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/tm-case-decision/single/no-further-action/PUT"
+  },
+  "api/tm-case-decision/repute-not-lost/POST": {
+    "request": "POST /api/tm-case-decision/repute-not-lost/",
+    "matches": "api/tm-case-decision/repute-not-lost/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmCaseDecision\\CreateReputeNotLost"
+    },
+    "withoutTrailingSlash": "api/tm-case-decision/repute-not-lost/POST"
+  },
+  "api/tm-case-decision/declare-unfit/POST": {
+    "request": "POST /api/tm-case-decision/declare-unfit/",
+    "matches": "api/tm-case-decision/declare-unfit/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmCaseDecision\\CreateDeclareUnfit"
+    },
+    "withoutTrailingSlash": "api/tm-case-decision/declare-unfit/POST"
+  },
+  "api/tm-case-decision/no-further-action/POST": {
+    "request": "POST /api/tm-case-decision/no-further-action/",
+    "matches": "api/tm-case-decision/no-further-action/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TmCaseDecision\\CreateNoFurtherAction"
+    },
+    "withoutTrailingSlash": "api/tm-case-decision/no-further-action/POST"
+  }
+}

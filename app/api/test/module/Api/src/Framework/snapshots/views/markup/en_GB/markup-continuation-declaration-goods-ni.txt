@@ -1,0 +1,37 @@
+<p>I understand that by signing this declaration:</p>
+<ul class="list--bullet">
+    <li>I am confirming that the details on my licence are correct.</li>
+    <li>I have submitted changes to update any licence details that are incorrect</li>
+    <li>I am accepting the conditions and undertakings recorded on my licence and have read these and confirm that they are correct.</li>
+</ul>
+<p>I am accepting that:</p>
+<ul class="list--bullet">
+    <li>The laws relating to the driving and operation of vehicles used under this licence are observed;</li>
+    <li>
+        The rules on drivers’ hours and tachographs are observed and proper records are kept, and that these are made available on request;
+    </li>
+    <li>Vehicles and trailers are not overloaded;</li>
+    <li>Vehicles operate within speed limits;</li>
+    <li>Vehicles and trailers, including hired vehicles and trailers, are kept in a fit and serviceable condition;</li>
+    <li>
+        Drivers report promptly any defects or symptoms of defects that could prevent the safe operation of vehicles
+        and/or trailers, and that any defects are recorded in writing;
+    </li>
+    <li>
+        Records are kept (for at least 15 months) of all driver reports that record defects, and all safety inspection, routine maintenance and vehicle repair reports, and that these are made available on request;
+    </li>
+    %s
+    <li>
+        Furthermore, I will notify the DfI of any penalties and unspent convictions against myself, or the company,
+        business partner(s), the company directors, nominated transport manager(s) named in this application, or
+        employees or agents of the applicant for this licence and, if the licence is issued, convictions against the
+        licence holder or employees or agents of the licence holder;
+    </li>
+    <li>
+        I will ensure that the Department is notified within 28 days of any other changes, for example a change to the
+        proposed maintenance arrangements; a change in the financial status of the licence holder (e.g. if placed in
+        liquidation or receivership), or a change to Limited Company status or partnership, including changes in the
+        named directors or partners that might affect the licence, if issued.
+    </li>
+    %s
+</ul>

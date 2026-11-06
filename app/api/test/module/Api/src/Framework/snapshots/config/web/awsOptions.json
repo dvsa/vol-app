@@ -1,0 +1,15 @@
+{
+  "region": "1",
+  "version": "1",
+  "proxy": "http://1",
+  "s3": {
+    "use_path_style_endpoint": false
+  },
+  "s3Options": {
+    "roleArn": "1",
+    "roleSessionName": "1"
+  },
+  "sts": {
+    "sts_regional_endpoints": "regional"
+  }
+}

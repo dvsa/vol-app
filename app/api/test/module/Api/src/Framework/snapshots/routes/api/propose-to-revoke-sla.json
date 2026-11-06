@@ -1,0 +1,12 @@
+{
+  "api/propose-to-revoke-sla/single/PUT": {
+    "request": "PUT /api/propose-to-revoke-sla/101/",
+    "matches": "api/propose-to-revoke-sla/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\ProposeToRevoke\\UpdateProposeToRevokeSla",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/propose-to-revoke-sla/single/PUT"
+  }
+}

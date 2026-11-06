@@ -1,0 +1,23 @@
+{
+  "types": {
+    "1": {
+      "restricted_country_ids": [
+        "AT",
+        "GR",
+        "HU",
+        "IT",
+        "RU"
+      ],
+      "restricted_countries_question_key": "qanda.ecmt-annual.restricted-countries.question"
+    },
+    "2": {
+      "restricted_country_ids": [
+        "GR",
+        "HU",
+        "IT",
+        "RU"
+      ],
+      "restricted_countries_question_key": "qanda.ecmt-short-term.restricted-countries.question"
+    }
+  }
+}

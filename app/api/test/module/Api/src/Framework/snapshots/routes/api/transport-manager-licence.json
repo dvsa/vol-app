@@ -1,0 +1,35 @@
+{
+  "api/transport-manager-licence/GET": {
+    "request": "GET /api/transport-manager-licence/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerLicence\\GetList"
+    },
+    "matches": "api/transport-manager-licence/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerLicence\\GetList"
+    },
+    "withoutTrailingSlash": "api/transport-manager-licence/GET"
+  },
+  "api/transport-manager-licence/DELETE": {
+    "request": "DELETE /api/transport-manager-licence/",
+    "matches": "api/transport-manager-licence/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerLicence\\Delete"
+    },
+    "withoutTrailingSlash": "api/transport-manager-licence/DELETE"
+  },
+  "api/transport-manager-licence/variation/GET": {
+    "request": "GET /api/transport-manager-licence/variation/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerLicence\\GetListByVariation"
+    },
+    "matches": "api/transport-manager-licence/variation/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerLicence\\GetListByVariation"
+    },
+    "withoutTrailingSlash": "api/transport-manager-licence/variation/GET"
+  }
+}

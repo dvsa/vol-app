@@ -1,0 +1,12 @@
+Please find below a negative acknowledgement receipt from ERRU.
+
+This requires identifying the correct recipient and forwarding to the appropriate mailbox.
+
+If GB, then identify the reason for negative acknowledgement, correct and re-submit MSI via the INR web portal.
+
+Business case id: [notificationNumber &lt;&amp;&gt;]Sent at: [sentAt &lt;&amp;&gt;]From MS: [memberState &lt;&amp;&gt;]Originating authority: [originatingAuthority &lt;&amp;&gt;]
+Error messages:
+
+*Business case not found <&>
+*Member state rejected
+(See attached file: [filename &lt;&amp;&gt;])

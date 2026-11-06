@@ -1,0 +1,56 @@
+{
+  "api/complaint/GET": {
+    "request": "GET /api/complaint/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Complaint\\ComplaintList"
+    },
+    "matches": "api/complaint/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Complaint\\ComplaintList"
+    },
+    "withoutTrailingSlash": "api/complaint/GET"
+  },
+  "api/complaint/single/GET": {
+    "request": "GET /api/complaint/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Complaint\\Complaint"
+    },
+    "matches": "api/complaint/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Complaint\\Complaint",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/complaint/single/GET"
+  },
+  "api/complaint/single/PUT": {
+    "request": "PUT /api/complaint/101/",
+    "matches": "api/complaint/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Complaint\\UpdateComplaint",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/complaint/single/PUT"
+  },
+  "api/complaint/single/DELETE": {
+    "request": "DELETE /api/complaint/101/",
+    "matches": "api/complaint/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Complaint\\DeleteComplaint",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/complaint/single/DELETE"
+  },
+  "api/complaint/POST": {
+    "request": "POST /api/complaint/",
+    "matches": "api/complaint/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Complaint\\CreateComplaint"
+    },
+    "withoutTrailingSlash": "api/complaint/POST"
+  }
+}

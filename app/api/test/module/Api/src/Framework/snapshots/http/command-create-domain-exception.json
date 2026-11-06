@@ -1,0 +1,109 @@
+{
+  "request": {
+    "method": "POST",
+    "uri": "/api/presiding-tc/",
+    "headers": {
+      "Host": "olcs-backend",
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "X-Correlation-Id": "framework-test-correlation-id"
+    },
+    "body": "{\"name\":\"Framework Test\",\"user\":3}"
+  },
+  "response": {
+    "status": 400,
+    "reason": "Bad Request",
+    "headers": {
+      "Content-Type": [
+        "application/json; charset=utf-8"
+      ]
+    },
+    "body": "{\"messages\":{\"name\":{\"ERR\":\"Taken\"}}}",
+    "json": {
+      "messages": {
+        "name": {
+          "ERR": "Taken"
+        }
+      }
+    }
+  },
+  "logs": [
+    {
+      "level": "DEBUG",
+      "message": "Request received",
+      "context": {
+        "data": {
+          "path": "http://olcs-backend/api/presiding-tc/",
+          "method": "POST",
+          "route_params": [],
+          "get": [],
+          "post": [],
+          "headers": {
+            "Host": "olcs-backend",
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Correlation-Id": "framework-test-correlation-id"
+          },
+          "content": "MAX_CONTENT_LENGTH_TO_LOG exceeded"
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request dispatched",
+      "context": {
+        "data": {
+          "controller": "Dvsa\\Olcs\\Api\\Controller\\GenericController",
+          "action": null
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "Request completed",
+      "context": {
+        "data": {
+          "request": "http://olcs-backend/api/presiding-tc/",
+          "code": 400,
+          "status": "Bad Request"
+        }
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    },
+    {
+      "level": "DEBUG",
+      "message": "API Response Sent",
+      "context": {
+        "status": 400,
+        "content": "{\"messages\":{\"name\":{\"ERR\":\"Taken\"}}}"
+      },
+      "extra": {
+        "correlationId": "framework-test-correlation-id",
+        "remoteIp": "10.0.0.1",
+        "requestId": "0f4ab260448a6b5bf64e885225222a42e41c56e2",
+        "sessionId": "(session id)",
+        "userId": "anon"
+      }
+    }
+  ]
+}

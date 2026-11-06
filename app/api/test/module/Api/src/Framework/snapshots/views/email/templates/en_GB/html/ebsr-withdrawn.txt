@@ -1,0 +1,6 @@
+<p>Thank you for your EBSR application received on [submissionDate &lt;&amp;&gt;] to withdraw
+    the following local bus service.</p>
+
+<p>[registrationNumber &lt;&amp;&gt;] - between
+    [origin &lt;&amp;&gt;] and [destination &lt;&amp;&gt;] with
+    service number [lineName &lt;&amp;&gt;] is withdrawn.</p>

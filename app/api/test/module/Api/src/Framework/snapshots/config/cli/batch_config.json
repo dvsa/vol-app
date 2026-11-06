@@ -1,0 +1,8 @@
+{
+  "remove-read-audit": {
+    "max-age": "1 year"
+  },
+  "clean-abandoned-variations": {
+    "older-than": "4 hours"
+  }
+}

@@ -1,0 +1,338 @@
+{
+  "api/irfo/single/GET": {
+    "request": "GET /api/irfo/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoDetails"
+    },
+    "matches": "api/irfo/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/single/GET"
+  },
+  "api/irfo/single/PUT": {
+    "request": "PUT /api/irfo/101/",
+    "matches": "api/irfo/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\UpdateIrfoDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/single/PUT"
+  },
+  "api/irfo/gv-permit/single/GET": {
+    "request": "GET /api/irfo/gv-permit/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoGvPermit"
+    },
+    "matches": "api/irfo/gv-permit/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoGvPermit",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/gv-permit/single/GET"
+  },
+  "api/irfo/gv-permit/single/PUT": {
+    "request": "PUT /api/irfo/gv-permit/101/",
+    "matches": "api/irfo/gv-permit/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\UpdateIrfoGvPermit",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/gv-permit/single/PUT"
+  },
+  "api/irfo/gv-permit/single/reset/PUT": {
+    "request": "PUT /api/irfo/gv-permit/101/reset/",
+    "matches": "api/irfo/gv-permit/single/reset/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\ResetIrfoGvPermit",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/gv-permit/single/reset/PUT"
+  },
+  "api/irfo/gv-permit/single/approve/PUT": {
+    "request": "PUT /api/irfo/gv-permit/101/approve/",
+    "matches": "api/irfo/gv-permit/single/approve/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\ApproveIrfoGvPermit",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/gv-permit/single/approve/PUT"
+  },
+  "api/irfo/gv-permit/single/generate/PUT": {
+    "request": "PUT /api/irfo/gv-permit/101/generate/",
+    "matches": "api/irfo/gv-permit/single/generate/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\GenerateIrfoGvPermit",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/gv-permit/single/generate/PUT"
+  },
+  "api/irfo/gv-permit/single/withdraw/PUT": {
+    "request": "PUT /api/irfo/gv-permit/101/withdraw/",
+    "matches": "api/irfo/gv-permit/single/withdraw/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\WithdrawIrfoGvPermit",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/gv-permit/single/withdraw/PUT"
+  },
+  "api/irfo/gv-permit/single/refuse/PUT": {
+    "request": "PUT /api/irfo/gv-permit/101/refuse/",
+    "matches": "api/irfo/gv-permit/single/refuse/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\RefuseIrfoGvPermit",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/gv-permit/single/refuse/PUT"
+  },
+  "api/irfo/gv-permit/type-list/GET": {
+    "request": "GET /api/irfo/gv-permit/type-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoGvPermitTypeList"
+    },
+    "matches": "api/irfo/gv-permit/type-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoGvPermitTypeList"
+    },
+    "withoutTrailingSlash": "api/irfo/gv-permit/type-list/GET"
+  },
+  "api/irfo/gv-permit/GET": {
+    "request": "GET /api/irfo/gv-permit/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoGvPermitList"
+    },
+    "matches": "api/irfo/gv-permit/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoGvPermitList"
+    },
+    "withoutTrailingSlash": "api/irfo/gv-permit/GET"
+  },
+  "api/irfo/gv-permit/POST": {
+    "request": "POST /api/irfo/gv-permit/",
+    "matches": "api/irfo/gv-permit/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\CreateIrfoGvPermit"
+    },
+    "withoutTrailingSlash": "api/irfo/gv-permit/POST"
+  },
+  "api/irfo/psv-auth/single/GET": {
+    "request": "GET /api/irfo/psv-auth/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoPsvAuth"
+    },
+    "matches": "api/irfo/psv-auth/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoPsvAuth",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/single/GET"
+  },
+  "api/irfo/psv-auth/single/PUT": {
+    "request": "PUT /api/irfo/psv-auth/101/",
+    "matches": "api/irfo/psv-auth/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\UpdateIrfoPsvAuth",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/single/PUT"
+  },
+  "api/irfo/psv-auth/single/generate/PUT": {
+    "request": "PUT /api/irfo/psv-auth/101/generate/",
+    "matches": "api/irfo/psv-auth/single/generate/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\GenerateIrfoPsvAuth",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/single/generate/PUT"
+  },
+  "api/irfo/psv-auth/single/grant/PUT": {
+    "request": "PUT /api/irfo/psv-auth/101/grant/",
+    "matches": "api/irfo/psv-auth/single/grant/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\GrantIrfoPsvAuth",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/single/grant/PUT"
+  },
+  "api/irfo/psv-auth/single/approve/PUT": {
+    "request": "PUT /api/irfo/psv-auth/101/approve/",
+    "matches": "api/irfo/psv-auth/single/approve/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\ApproveIrfoPsvAuth",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/single/approve/PUT"
+  },
+  "api/irfo/psv-auth/single/refuse/PUT": {
+    "request": "PUT /api/irfo/psv-auth/101/refuse/",
+    "matches": "api/irfo/psv-auth/single/refuse/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\RefuseIrfoPsvAuth",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/single/refuse/PUT"
+  },
+  "api/irfo/psv-auth/single/withdraw/PUT": {
+    "request": "PUT /api/irfo/psv-auth/101/withdraw/",
+    "matches": "api/irfo/psv-auth/single/withdraw/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\WithdrawIrfoPsvAuth",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/single/withdraw/PUT"
+  },
+  "api/irfo/psv-auth/single/cns/PUT": {
+    "request": "PUT /api/irfo/psv-auth/101/cns/",
+    "matches": "api/irfo/psv-auth/single/cns/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\CnsIrfoPsvAuth",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/single/cns/PUT"
+  },
+  "api/irfo/psv-auth/single/reset/PUT": {
+    "request": "PUT /api/irfo/psv-auth/101/reset/",
+    "matches": "api/irfo/psv-auth/single/reset/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\ResetIrfoPsvAuth",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/single/reset/PUT"
+  },
+  "api/irfo/psv-auth/type-list/GET": {
+    "request": "GET /api/irfo/psv-auth/type-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoPsvAuthTypeList"
+    },
+    "matches": "api/irfo/psv-auth/type-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoPsvAuthTypeList"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/type-list/GET"
+  },
+  "api/irfo/psv-auth/continuation/GET": {
+    "request": "GET /api/irfo/psv-auth/continuation/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoPsvAuthContinuationList"
+    },
+    "matches": "api/irfo/psv-auth/continuation/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoPsvAuthContinuationList"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/continuation/GET"
+  },
+  "api/irfo/psv-auth/checklist/print/PUT": {
+    "request": "PUT /api/irfo/psv-auth/checklist/print/",
+    "matches": "api/irfo/psv-auth/checklist/print/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\PrintIrfoPsvAuthChecklist"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/checklist/print/PUT"
+  },
+  "api/irfo/psv-auth/renew/PUT": {
+    "request": "PUT /api/irfo/psv-auth/renew/",
+    "matches": "api/irfo/psv-auth/renew/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\RenewIrfoPsvAuth"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/renew/PUT"
+  },
+  "api/irfo/psv-auth/GET": {
+    "request": "GET /api/irfo/psv-auth/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoPsvAuthList"
+    },
+    "matches": "api/irfo/psv-auth/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoPsvAuthList"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/GET"
+  },
+  "api/irfo/psv-auth/POST": {
+    "request": "POST /api/irfo/psv-auth/",
+    "matches": "api/irfo/psv-auth/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\CreateIrfoPsvAuth"
+    },
+    "withoutTrailingSlash": "api/irfo/psv-auth/POST"
+  },
+  "api/irfo/permit-stock/issued/PUT": {
+    "request": "PUT /api/irfo/permit-stock/issued/",
+    "matches": "api/irfo/permit-stock/issued/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\UpdateIrfoPermitStockIssued"
+    },
+    "withoutTrailingSlash": "api/irfo/permit-stock/issued/PUT"
+  },
+  "api/irfo/permit-stock/GET": {
+    "request": "GET /api/irfo/permit-stock/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoPermitStockList"
+    },
+    "matches": "api/irfo/permit-stock/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoPermitStockList"
+    },
+    "withoutTrailingSlash": "api/irfo/permit-stock/GET"
+  },
+  "api/irfo/permit-stock/POST": {
+    "request": "POST /api/irfo/permit-stock/",
+    "matches": "api/irfo/permit-stock/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\CreateIrfoPermitStock"
+    },
+    "withoutTrailingSlash": "api/irfo/permit-stock/POST"
+  },
+  "api/irfo/permit-stock/PUT": {
+    "request": "PUT /api/irfo/permit-stock/",
+    "matches": "api/irfo/permit-stock/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Irfo\\UpdateIrfoPermitStock"
+    },
+    "withoutTrailingSlash": "api/irfo/permit-stock/PUT"
+  },
+  "api/irfo/country-list/GET": {
+    "request": "GET /api/irfo/country-list/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoCountryList"
+    },
+    "matches": "api/irfo/country-list/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Irfo\\IrfoCountryList"
+    },
+    "withoutTrailingSlash": "api/irfo/country-list/GET"
+  }
+}

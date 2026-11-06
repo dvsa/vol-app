@@ -1,0 +1,14 @@
+{
+  "policies": {
+    "publication": {
+      "gate": "none",
+      "expiry": "P42D"
+    },
+    "publication-police": {
+      "gate": "otp",
+      "expiry": "P42D"
+    }
+  },
+  "session_secret": "1",
+  "presigned_ttl": 300
+}

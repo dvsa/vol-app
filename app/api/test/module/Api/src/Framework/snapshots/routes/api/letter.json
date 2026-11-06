@@ -1,0 +1,685 @@
+{
+  "api/letter/issue-type/GET": {
+    "request": "GET /api/letter/issue-type/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssueType\\GetList"
+    },
+    "matches": "api/letter/issue-type/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssueType\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter/issue-type/GET"
+  },
+  "api/letter/issue-type/POST": {
+    "request": "POST /api/letter/issue-type/",
+    "matches": "api/letter/issue-type/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterIssueType\\Create"
+    },
+    "withoutTrailingSlash": "api/letter/issue-type/POST"
+  },
+  "api/letter/issue-type/single/GET": {
+    "request": "GET /api/letter/issue-type/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssueType\\Get"
+    },
+    "matches": "api/letter/issue-type/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssueType\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/issue-type/single/GET"
+  },
+  "api/letter/issue-type/single/PUT": {
+    "request": "PUT /api/letter/issue-type/101/",
+    "matches": "api/letter/issue-type/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterIssueType\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/issue-type/single/PUT"
+  },
+  "api/letter/issue-type/single/DELETE": {
+    "request": "DELETE /api/letter/issue-type/101/",
+    "matches": "api/letter/issue-type/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterIssueType\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/issue-type/single/DELETE"
+  },
+  "api/letter/letter-appendix/single/GET": {
+    "request": "GET /api/letter/letter-appendix/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterAppendix\\Get"
+    },
+    "matches": "api/letter/letter-appendix/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterAppendix\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-appendix/single/GET"
+  },
+  "api/letter/letter-appendix/single/PUT": {
+    "request": "PUT /api/letter/letter-appendix/101/",
+    "matches": "api/letter/letter-appendix/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterAppendix\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-appendix/single/PUT"
+  },
+  "api/letter/letter-appendix/single/DELETE": {
+    "request": "DELETE /api/letter/letter-appendix/101/",
+    "matches": "api/letter/letter-appendix/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterAppendix\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-appendix/single/DELETE"
+  },
+  "api/letter/letter-appendix/GET": {
+    "request": "GET /api/letter/letter-appendix/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterAppendix\\GetList"
+    },
+    "matches": "api/letter/letter-appendix/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterAppendix\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter/letter-appendix/GET"
+  },
+  "api/letter/letter-appendix/POST": {
+    "request": "POST /api/letter/letter-appendix/",
+    "matches": "api/letter/letter-appendix/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterAppendix\\Create"
+    },
+    "withoutTrailingSlash": "api/letter/letter-appendix/POST"
+  },
+  "api/letter/letter-choice/single/GET": {
+    "request": "GET /api/letter/letter-choice/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterChoice\\Get"
+    },
+    "matches": "api/letter/letter-choice/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterChoice\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-choice/single/GET"
+  },
+  "api/letter/letter-choice/single/PUT": {
+    "request": "PUT /api/letter/letter-choice/101/",
+    "matches": "api/letter/letter-choice/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterChoice\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-choice/single/PUT"
+  },
+  "api/letter/letter-choice/single/DELETE": {
+    "request": "DELETE /api/letter/letter-choice/101/",
+    "matches": "api/letter/letter-choice/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterChoice\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-choice/single/DELETE"
+  },
+  "api/letter/letter-choice/GET": {
+    "request": "GET /api/letter/letter-choice/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterChoice\\GetList"
+    },
+    "matches": "api/letter/letter-choice/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterChoice\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter/letter-choice/GET"
+  },
+  "api/letter/letter-choice/POST": {
+    "request": "POST /api/letter/letter-choice/",
+    "matches": "api/letter/letter-choice/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterChoice\\Create"
+    },
+    "withoutTrailingSlash": "api/letter/letter-choice/POST"
+  },
+  "api/letter/letter-instance-appendix/single/PUT": {
+    "request": "PUT /api/letter/letter-instance-appendix/101/",
+    "matches": "api/letter/letter-instance-appendix/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstanceAppendix\\UpdateContent",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-instance-appendix/single/PUT"
+  },
+  "api/letter/letter-instance-issue/single/PUT": {
+    "request": "PUT /api/letter/letter-instance-issue/101/",
+    "matches": "api/letter/letter-instance-issue/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstanceIssue\\UpdateContent",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-instance-issue/single/PUT"
+  },
+  "api/letter/letter-instance-section/single/PUT": {
+    "request": "PUT /api/letter/letter-instance-section/101/",
+    "matches": "api/letter/letter-instance-section/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstanceSection\\UpdateContent",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-instance-section/single/PUT"
+  },
+  "api/letter/letter-instance-todo/single/PUT": {
+    "request": "PUT /api/letter/letter-instance-todo/101/",
+    "matches": "api/letter/letter-instance-todo/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstanceTodo\\UpdateContent",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-instance-todo/single/PUT"
+  },
+  "api/letter/letter-instance/single/GET": {
+    "request": "GET /api/letter/letter-instance/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\Get"
+    },
+    "matches": "api/letter/letter-instance/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-instance/single/GET"
+  },
+  "api/letter/letter-instance/GET": {
+    "request": "GET /api/letter/letter-instance/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\GetList"
+    },
+    "matches": "api/letter/letter-instance/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter/letter-instance/GET"
+  },
+  "api/letter/letter-instance/generate/POST": {
+    "request": "POST /api/letter/letter-instance/generate",
+    "matches": "api/letter/letter-instance/generate/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\Generate"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter/letter-instance/preview/GET": {
+    "request": "GET /api/letter/letter-instance/preview",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\Preview"
+    },
+    "matches": "api/letter/letter-instance/preview/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\Preview"
+    },
+    "withTrailingSlash": "api/letter/letter-instance/single/GET"
+  },
+  "api/letter/letter-instance/preview/POST": {
+    "request": "POST /api/letter/letter-instance/preview",
+    "matches": "api/letter/letter-instance/preview/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\Preview"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter/letter-instance/generation-context/GET": {
+    "request": "GET /api/letter/letter-instance/generation-context",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\GenerationContext"
+    },
+    "matches": "api/letter/letter-instance/generation-context/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterInstance\\GenerationContext"
+    },
+    "withTrailingSlash": "api/letter/letter-instance/single/GET"
+  },
+  "api/letter/letter-instance/prepare-to-send/POST": {
+    "request": "POST /api/letter/letter-instance/prepare-to-send",
+    "matches": "api/letter/letter-instance/prepare-to-send/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterInstance\\PrepareToSend"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter/letter-issue/single/GET": {
+    "request": "GET /api/letter/letter-issue/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssue\\Get"
+    },
+    "matches": "api/letter/letter-issue/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssue\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-issue/single/GET"
+  },
+  "api/letter/letter-issue/single/PUT": {
+    "request": "PUT /api/letter/letter-issue/101/",
+    "matches": "api/letter/letter-issue/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterIssue\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-issue/single/PUT"
+  },
+  "api/letter/letter-issue/single/DELETE": {
+    "request": "DELETE /api/letter/letter-issue/101/",
+    "matches": "api/letter/letter-issue/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterIssue\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-issue/single/DELETE"
+  },
+  "api/letter/letter-issue/GET": {
+    "request": "GET /api/letter/letter-issue/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssue\\GetList"
+    },
+    "matches": "api/letter/letter-issue/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterIssue\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter/letter-issue/GET"
+  },
+  "api/letter/letter-issue/POST": {
+    "request": "POST /api/letter/letter-issue/",
+    "matches": "api/letter/letter-issue/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterIssue\\Create"
+    },
+    "withoutTrailingSlash": "api/letter/letter-issue/POST"
+  },
+  "api/letter/letter-section-variant/single/GET": {
+    "request": "GET /api/letter/letter-section-variant/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterSectionVariant\\Get"
+    },
+    "matches": "api/letter/letter-section-variant/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterSectionVariant\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-section-variant/single/GET"
+  },
+  "api/letter/letter-section-variant/single/PUT": {
+    "request": "PUT /api/letter/letter-section-variant/101/",
+    "matches": "api/letter/letter-section-variant/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterSectionVariant\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-section-variant/single/PUT"
+  },
+  "api/letter/letter-section-variant/single/DELETE": {
+    "request": "DELETE /api/letter/letter-section-variant/101/",
+    "matches": "api/letter/letter-section-variant/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterSectionVariant\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-section-variant/single/DELETE"
+  },
+  "api/letter/letter-section-variant/POST": {
+    "request": "POST /api/letter/letter-section-variant/",
+    "matches": "api/letter/letter-section-variant/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterSectionVariant\\Create"
+    },
+    "withoutTrailingSlash": "api/letter/letter-section-variant/POST"
+  },
+  "api/letter/letter-section/single/GET": {
+    "request": "GET /api/letter/letter-section/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterSection\\Get"
+    },
+    "matches": "api/letter/letter-section/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterSection\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-section/single/GET"
+  },
+  "api/letter/letter-section/single/PUT": {
+    "request": "PUT /api/letter/letter-section/101/",
+    "matches": "api/letter/letter-section/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterSection\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-section/single/PUT"
+  },
+  "api/letter/letter-section/single/DELETE": {
+    "request": "DELETE /api/letter/letter-section/101/",
+    "matches": "api/letter/letter-section/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterSection\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-section/single/DELETE"
+  },
+  "api/letter/letter-section/GET": {
+    "request": "GET /api/letter/letter-section/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterSection\\GetList"
+    },
+    "matches": "api/letter/letter-section/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterSection\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter/letter-section/GET"
+  },
+  "api/letter/letter-section/POST": {
+    "request": "POST /api/letter/letter-section/",
+    "matches": "api/letter/letter-section/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterSection\\Create"
+    },
+    "withoutTrailingSlash": "api/letter/letter-section/POST"
+  },
+  "api/letter/letter-test-data/single/GET": {
+    "request": "GET /api/letter/letter-test-data/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTestData\\Get"
+    },
+    "matches": "api/letter/letter-test-data/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTestData\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-test-data/single/GET"
+  },
+  "api/letter/letter-test-data/single/PUT": {
+    "request": "PUT /api/letter/letter-test-data/101/",
+    "matches": "api/letter/letter-test-data/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterTestData\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-test-data/single/PUT"
+  },
+  "api/letter/letter-test-data/single/DELETE": {
+    "request": "DELETE /api/letter/letter-test-data/101/",
+    "matches": "api/letter/letter-test-data/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterTestData\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-test-data/single/DELETE"
+  },
+  "api/letter/letter-test-data/GET": {
+    "request": "GET /api/letter/letter-test-data/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTestData\\GetList"
+    },
+    "matches": "api/letter/letter-test-data/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTestData\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter/letter-test-data/GET"
+  },
+  "api/letter/letter-test-data/POST": {
+    "request": "POST /api/letter/letter-test-data/",
+    "matches": "api/letter/letter-test-data/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterTestData\\Create"
+    },
+    "withoutTrailingSlash": "api/letter/letter-test-data/POST"
+  },
+  "api/letter/letter-todo/single/GET": {
+    "request": "GET /api/letter/letter-todo/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTodo\\Get"
+    },
+    "matches": "api/letter/letter-todo/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTodo\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-todo/single/GET"
+  },
+  "api/letter/letter-todo/single/PUT": {
+    "request": "PUT /api/letter/letter-todo/101/",
+    "matches": "api/letter/letter-todo/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterTodo\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-todo/single/PUT"
+  },
+  "api/letter/letter-todo/single/DELETE": {
+    "request": "DELETE /api/letter/letter-todo/101/",
+    "matches": "api/letter/letter-todo/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterTodo\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-todo/single/DELETE"
+  },
+  "api/letter/letter-todo/GET": {
+    "request": "GET /api/letter/letter-todo/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTodo\\GetList"
+    },
+    "matches": "api/letter/letter-todo/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTodo\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter/letter-todo/GET"
+  },
+  "api/letter/letter-todo/POST": {
+    "request": "POST /api/letter/letter-todo/",
+    "matches": "api/letter/letter-todo/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterTodo\\Create"
+    },
+    "withoutTrailingSlash": "api/letter/letter-todo/POST"
+  },
+  "api/letter/letter-type/single/GET": {
+    "request": "GET /api/letter/letter-type/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterType\\Get"
+    },
+    "matches": "api/letter/letter-type/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterType\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-type/single/GET"
+  },
+  "api/letter/letter-type/single/PUT": {
+    "request": "PUT /api/letter/letter-type/101/",
+    "matches": "api/letter/letter-type/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-type/single/PUT"
+  },
+  "api/letter/letter-type/single/DELETE": {
+    "request": "DELETE /api/letter/letter-type/101/",
+    "matches": "api/letter/letter-type/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/letter-type/single/DELETE"
+  },
+  "api/letter/letter-type/GET": {
+    "request": "GET /api/letter/letter-type/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterType\\GetList"
+    },
+    "matches": "api/letter/letter-type/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterType\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter/letter-type/GET"
+  },
+  "api/letter/letter-type/POST": {
+    "request": "POST /api/letter/letter-type/",
+    "matches": "api/letter/letter-type/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\Create"
+    },
+    "withoutTrailingSlash": "api/letter/letter-type/POST"
+  },
+  "api/letter/letter-type/suggest-preview-records/POST": {
+    "request": "POST /api/letter/letter-type/suggest-preview-records",
+    "matches": "api/letter/letter-type/suggest-preview-records/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\SuggestPreviewRecords"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter/letter-type/preview-composition/POST": {
+    "request": "POST /api/letter/letter-type/preview-composition",
+    "matches": "api/letter/letter-type/preview-composition/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\PreviewComposition"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter/letter-type/clone/POST": {
+    "request": "POST /api/letter/letter-type/clone",
+    "matches": "api/letter/letter-type/clone/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterType\\Clone"
+    },
+    "withTrailingSlash": null
+  },
+  "api/letter/master-template/single/GET": {
+    "request": "GET /api/letter/master-template/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\MasterTemplate\\Get"
+    },
+    "matches": "api/letter/master-template/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\MasterTemplate\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/master-template/single/GET"
+  },
+  "api/letter/master-template/single/PUT": {
+    "request": "PUT /api/letter/master-template/101/",
+    "matches": "api/letter/master-template/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\MasterTemplate\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/master-template/single/PUT"
+  },
+  "api/letter/master-template/single/DELETE": {
+    "request": "DELETE /api/letter/master-template/101/",
+    "matches": "api/letter/master-template/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\MasterTemplate\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter/master-template/single/DELETE"
+  },
+  "api/letter/master-template/GET": {
+    "request": "GET /api/letter/master-template/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\MasterTemplate\\GetList"
+    },
+    "matches": "api/letter/master-template/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\MasterTemplate\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter/master-template/GET"
+  },
+  "api/letter/master-template/POST": {
+    "request": "POST /api/letter/master-template/",
+    "matches": "api/letter/master-template/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\MasterTemplate\\Create"
+    },
+    "withoutTrailingSlash": "api/letter/master-template/POST"
+  },
+  "api/letter/preview-record/lookup/GET": {
+    "request": "GET /api/letter/preview-record/lookup",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\PreviewRecord\\Lookup"
+    },
+    "matches": "api/letter/preview-record/lookup/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\PreviewRecord\\Lookup"
+    },
+    "withTrailingSlash": null
+  }
+}

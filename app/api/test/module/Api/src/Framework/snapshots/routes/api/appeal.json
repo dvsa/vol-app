@@ -1,0 +1,47 @@
+{
+  "api/appeal/case/named-single/GET": {
+    "request": "GET /api/appeal/case/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Hearing\\AppealByCase"
+    },
+    "matches": "api/appeal/case/named-single/GET",
+    "params": {
+      "case": "101",
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Hearing\\AppealByCase"
+    },
+    "withoutTrailingSlash": "api/appeal/case/named-single/GET"
+  },
+  "api/appeal/single/GET": {
+    "request": "GET /api/appeal/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Hearing\\Appeal"
+    },
+    "matches": "api/appeal/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Cases\\Hearing\\Appeal",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/appeal/single/GET"
+  },
+  "api/appeal/single/PUT": {
+    "request": "PUT /api/appeal/101/",
+    "matches": "api/appeal/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Hearing\\UpdateAppeal",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/appeal/single/PUT"
+  },
+  "api/appeal/POST": {
+    "request": "POST /api/appeal/",
+    "matches": "api/appeal/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Cases\\Hearing\\CreateAppeal"
+    },
+    "withoutTrailingSlash": "api/appeal/POST"
+  }
+}

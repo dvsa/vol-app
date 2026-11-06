@@ -1,0 +1,55 @@
+{
+  "api/financial-standing-rate/GET": {
+    "request": "GET /api/financial-standing-rate/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\FinancialStandingRateList"
+    },
+    "matches": "api/financial-standing-rate/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\FinancialStandingRateList"
+    },
+    "withoutTrailingSlash": "api/financial-standing-rate/GET"
+  },
+  "api/financial-standing-rate/POST": {
+    "request": "POST /api/financial-standing-rate/",
+    "matches": "api/financial-standing-rate/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\System\\CreateFinancialStandingRate"
+    },
+    "withoutTrailingSlash": "api/financial-standing-rate/POST"
+  },
+  "api/financial-standing-rate/DELETE": {
+    "request": "DELETE /api/financial-standing-rate/",
+    "matches": "api/financial-standing-rate/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\System\\DeleteFinancialStandingRateList"
+    },
+    "withoutTrailingSlash": "api/financial-standing-rate/DELETE"
+  },
+  "api/financial-standing-rate/single/GET": {
+    "request": "GET /api/financial-standing-rate/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\FinancialStandingRate"
+    },
+    "matches": "api/financial-standing-rate/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\System\\FinancialStandingRate",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/financial-standing-rate/single/GET"
+  },
+  "api/financial-standing-rate/single/PUT": {
+    "request": "PUT /api/financial-standing-rate/101/",
+    "matches": "api/financial-standing-rate/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\System\\UpdateFinancialStandingRate",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/financial-standing-rate/single/PUT"
+  }
+}

@@ -1,0 +1,21 @@
+<p>Isod gallwch weld derbyneb gydnabyddiaeth negyddol gan ERRU.</p>
+
+<p>Mae hyn yn galw am nodi'r derbynnydd cywir ac anfon ymlaen at y blwch post priodol.</p>
+
+<p>Os yn PF, yna nodwch y rheswm am gydnabyddiaeth negyddol, cywiro ac ail-gyflwyno MSI trwy borth gwe'r INR.</p>
+
+<p>
+    ID achos busnes: [notificationNumber &lt;&amp;&gt;]<br />
+    Wedi'i anfon am: [sentAt &lt;&amp;&gt;]<br />
+    Oddi wrth MS: [memberState &lt;&amp;&gt;]<br />
+    Awdurdod Gwreiddiol: [originatingAuthority &lt;&amp;&gt;]<br />
+</p>
+
+<p>Nesgeseuon gwall:
+<ul>
+            <li>Business case not found &lt;&amp;&gt;</li>
+            <li>Member state rejected</li>
+    </ul>
+</p>
+
+<p>(Gweler y ffeil gysylltiedig: [filename &lt;&amp;&gt;])</p>

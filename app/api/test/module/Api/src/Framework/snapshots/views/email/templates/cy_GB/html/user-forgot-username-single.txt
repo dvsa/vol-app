@@ -1,0 +1,9 @@
+<p>Helô,</p>
+
+<p>Fe wnaethoch ofyn am nodyn atgoffa o enw defnyddiwr eich cyfrif Trwyddedu Gweithredwyr Cerbydau.</p>
+
+<p>Mae'n: <strong>[loginId &lt;&amp;&gt;]</strong></p>
+
+<p>
+    <a href="[url &lt;&amp;&gt;]">Mewngofnodi</a>
+</p>

@@ -1,0 +1,118 @@
+{
+  "api/transport-manager-application/single/GET": {
+    "request": "GET /api/transport-manager-application/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerApplication\\GetDetails"
+    },
+    "matches": "api/transport-manager-application/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerApplication\\GetDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager-application/single/GET"
+  },
+  "api/transport-manager-application/single/update-status/PUT": {
+    "request": "PUT /api/transport-manager-application/101/update-status/",
+    "matches": "api/transport-manager-application/single/update-status/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\UpdateStatus",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager-application/single/update-status/PUT"
+  },
+  "api/transport-manager-application/single/update-details/PUT": {
+    "request": "PUT /api/transport-manager-application/101/update-details/",
+    "matches": "api/transport-manager-application/single/update-details/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\UpdateDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager-application/single/update-details/PUT"
+  },
+  "api/transport-manager-application/single/send-email/POST": {
+    "request": "POST /api/transport-manager-application/101/send-email/",
+    "matches": "api/transport-manager-application/single/send-email/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\SendTmApplication",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager-application/single/send-email/POST"
+  },
+  "api/transport-manager-application/single/send-amend-email/POST": {
+    "request": "POST /api/transport-manager-application/101/send-amend-email/",
+    "matches": "api/transport-manager-application/single/send-amend-email/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\SendAmendTmApplication",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager-application/single/send-amend-email/POST"
+  },
+  "api/transport-manager-application/single/review/GET": {
+    "request": "GET /api/transport-manager-application/101/review/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerApplication\\Review"
+    },
+    "matches": "api/transport-manager-application/single/review/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerApplication\\Review",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager-application/single/review/GET"
+  },
+  "api/transport-manager-application/single/submit/PUT": {
+    "request": "PUT /api/transport-manager-application/101/submit/",
+    "matches": "api/transport-manager-application/single/submit/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\Submit",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager-application/single/submit/PUT"
+  },
+  "api/transport-manager-application/single/operator-signed/PUT": {
+    "request": "PUT /api/transport-manager-application/101/operator-signed/",
+    "matches": "api/transport-manager-application/single/operator-signed/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\OperatorSigned",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/transport-manager-application/single/operator-signed/PUT"
+  },
+  "api/transport-manager-application/POST": {
+    "request": "POST /api/transport-manager-application/",
+    "matches": "api/transport-manager-application/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\Create"
+    },
+    "withoutTrailingSlash": "api/transport-manager-application/POST"
+  },
+  "api/transport-manager-application/DELETE": {
+    "request": "DELETE /api/transport-manager-application/",
+    "matches": "api/transport-manager-application/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\TransportManagerApplication\\Delete"
+    },
+    "withoutTrailingSlash": "api/transport-manager-application/DELETE"
+  },
+  "api/transport-manager-application/GET": {
+    "request": "GET /api/transport-manager-application/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerApplication\\GetList"
+    },
+    "matches": "api/transport-manager-application/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\TransportManagerApplication\\GetList"
+    },
+    "withoutTrailingSlash": "api/transport-manager-application/GET"
+  }
+}

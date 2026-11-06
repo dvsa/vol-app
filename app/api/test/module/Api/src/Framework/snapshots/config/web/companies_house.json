@@ -1,0 +1,18 @@
+{
+  "http": {
+    "sslcapath": "/etc/ssl/certs",
+    "sslverifypeer": true,
+    "adapter": "Laminas\\Http\\Client\\Adapter\\Curl",
+    "curloptions": {
+      "10004": "http://1",
+      "10005": "1:"
+    }
+  },
+  "auth": {
+    "username": "1",
+    "password": ""
+  },
+  "client": {
+    "baseuri": "1"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "factories": {
+    "form_control_checkbox": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\CheckboxFormControlStrategyFactory",
+    "form_control_text": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\TextFormControlStrategyFactory",
+    "form_control_radio": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\RadioFormControlStrategyFactory",
+    "form_control_ecmt_rem_no_permits": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\EcmtRemovalNoOfPermitsFormControlStrategyFactory",
+    "form_control_ecmt_rem_per_st_dat": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\EcmtRemovalPermitStartDateFormControlStrategyFactory",
+    "form_control_ecmt_no_permits_eit": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\EcmtNoOfPermitsEitherFormControlStrategyFactory",
+    "form_control_ecmt_no_permits_bot": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\EcmtNoOfPermitsBothFormControlStrategyFactory",
+    "form_control_ecmt_st_perm_usage": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\EcmtPermitUsageFormControlStrategyFactory",
+    "form_control_ecmt_st_int_journ": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\EcmtIntJourneysFormControlStrategyFactory",
+    "form_control_ecmt_st_rest_count": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\EcmtRestrictedCountriesFormControlStrategyFactory",
+    "form_control_ecmt_st_ann_trips": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\EcmtAnnualTripsAbroadFormControlStrategyFactory",
+    "form_control_ecmt_st_sectors": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\EcmtSectorsFormControlStrategyFactory",
+    "form_control_ecmt_check_needed": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\EcmtCheckEcmtNeededFormControlStrategyFactory",
+    "form_control_ecmt_st_ear_per_dat": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\EcmtShortTermEarliestPermitDateFormControlStrategyFactory",
+    "form_control_ecmt_an_2018_nop": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\TextFormControlStrategyFactory",
+    "form_control_cert_road_mot_exp": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\CertRoadworthinessMotExpiryDateFormControlStrategyFactory",
+    "form_control_common_certificates": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\CommonCertificatesFormControlStrategyFactory",
+    "form_control_bi_per_usage": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\BilateralPermitUsageFormControlStrategyFactory",
+    "form_control_bi_cab_only": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\BilateralCabotageOnlyFormControlStrategyFactory",
+    "form_control_bi_cab_std_and_cab": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\BilateralStandardAndCabotageFormControlStrategyFactory",
+    "form_control_bi_no_of_permits": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\BilateralNoOfPermitsFormControlStrategyFactory",
+    "form_control_bi_third_co": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\BilateralThirdCountryFormControlStrategyFactory",
+    "form_control_bi_emissions_std": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\BilateralEmissionsStandardsFormControlStrategyFactory",
+    "form_control_bi_no_of_permits_ma": "Dvsa\\Olcs\\Api\\Service\\Qa\\Strategy\\BilateralNoOfPermitsMoroccoFormControlStrategyFactory"
+  }
+}

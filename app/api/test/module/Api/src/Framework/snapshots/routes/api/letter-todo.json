@@ -1,0 +1,56 @@
+{
+  "api/letter-todo/single/GET": {
+    "request": "GET /api/letter-todo/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTodo\\Get"
+    },
+    "matches": "api/letter-todo/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTodo\\Get",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-todo/single/GET"
+  },
+  "api/letter-todo/single/PUT": {
+    "request": "PUT /api/letter-todo/101/",
+    "matches": "api/letter-todo/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterTodo\\Update",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-todo/single/PUT"
+  },
+  "api/letter-todo/single/DELETE": {
+    "request": "DELETE /api/letter-todo/101/",
+    "matches": "api/letter-todo/single/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterTodo\\Delete",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/letter-todo/single/DELETE"
+  },
+  "api/letter-todo/GET": {
+    "request": "GET /api/letter-todo/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTodo\\GetList"
+    },
+    "matches": "api/letter-todo/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Letter\\LetterTodo\\GetList"
+    },
+    "withoutTrailingSlash": "api/letter-todo/GET"
+  },
+  "api/letter-todo/POST": {
+    "request": "POST /api/letter-todo/",
+    "matches": "api/letter-todo/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Letter\\LetterTodo\\Create"
+    },
+    "withoutTrailingSlash": "api/letter-todo/POST"
+  }
+}

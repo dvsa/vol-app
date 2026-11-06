@@ -1,0 +1,75 @@
+{
+  "api/operator-unlicensed/single/GET": {
+    "request": "GET /api/operator-unlicensed/101/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Operator\\UnlicensedBusinessDetails"
+    },
+    "matches": "api/operator-unlicensed/single/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Operator\\UnlicensedBusinessDetails",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/operator-unlicensed/single/GET"
+  },
+  "api/operator-unlicensed/single/PUT": {
+    "request": "PUT /api/operator-unlicensed/101/",
+    "matches": "api/operator-unlicensed/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Operator\\UpdateUnlicensed",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/operator-unlicensed/single/PUT"
+  },
+  "api/operator-unlicensed/named-single/vehicles/GET": {
+    "request": "GET /api/operator-unlicensed/101/vehicles/",
+    "query": {
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Operator\\UnlicensedVehicles"
+    },
+    "matches": "api/operator-unlicensed/named-single/vehicles/GET",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Query\\Operator\\UnlicensedVehicles",
+      "organisation": "101"
+    },
+    "withoutTrailingSlash": "api/operator-unlicensed/named-single/vehicles/GET"
+  },
+  "api/operator-unlicensed/licence-vehicle/single/PUT": {
+    "request": "PUT /api/operator-unlicensed/licence-vehicle/101/",
+    "matches": "api/operator-unlicensed/licence-vehicle/single/PUT",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\LicenceVehicle\\UpdateUnlicensedOperatorLicenceVehicle",
+      "id": "101"
+    },
+    "withoutTrailingSlash": "api/operator-unlicensed/licence-vehicle/single/PUT"
+  },
+  "api/operator-unlicensed/licence-vehicle/DELETE": {
+    "request": "DELETE /api/operator-unlicensed/licence-vehicle/",
+    "matches": "api/operator-unlicensed/licence-vehicle/DELETE",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\LicenceVehicle\\DeleteUnlicensedOperatorLicenceVehicle"
+    },
+    "withoutTrailingSlash": "api/operator-unlicensed/licence-vehicle/DELETE"
+  },
+  "api/operator-unlicensed/licence-vehicle/POST": {
+    "request": "POST /api/operator-unlicensed/licence-vehicle/",
+    "matches": "api/operator-unlicensed/licence-vehicle/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\LicenceVehicle\\CreateUnlicensedOperatorLicenceVehicle"
+    },
+    "withoutTrailingSlash": "api/operator-unlicensed/licence-vehicle/POST"
+  },
+  "api/operator-unlicensed/POST": {
+    "request": "POST /api/operator-unlicensed/",
+    "matches": "api/operator-unlicensed/POST",
+    "params": {
+      "controller": "Api\\Generic",
+      "dto": "Dvsa\\Olcs\\Transfer\\Command\\Operator\\CreateUnlicensed"
+    },
+    "withoutTrailingSlash": "api/operator-unlicensed/POST"
+  }
+}
