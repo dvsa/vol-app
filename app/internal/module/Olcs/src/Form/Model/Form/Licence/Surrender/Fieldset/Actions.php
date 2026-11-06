@@ -4,6 +4,7 @@ namespace Olcs\Form\Model\Form\Licence\Surrender\Fieldset;
 
 use Laminas\Form\Annotation as Form;
 
+#[Form\Options(['wrapperElement' => 'div'])]
 class Actions
 {
     #[Form\Attributes(['data-module' => 'govuk-button', 'type' => 'submit', 'class' => 'govuk-button govuk-button--disabled js-approve-surrender'])]

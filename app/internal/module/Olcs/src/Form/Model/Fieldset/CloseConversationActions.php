@@ -12,6 +12,7 @@ use Laminas\Form\Annotation as Form;
  */
 #[Form\Name('main')]
 #[Form\Attributes(['class' => 'govuk-button-group'])]
+#[Form\Options(['wrapperElement' => 'div'])]
 class CloseConversationActions
 {
     #[Form\Attributes(['type' => 'submit', 'data-module' => 'govuk-button', 'class' => 'govuk-button govuk-button--warning', 'id' => 'close'])]
