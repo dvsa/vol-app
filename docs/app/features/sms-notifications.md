@@ -44,6 +44,11 @@ list and set an operator's SMS number to your own.
 Environments built from production data hold real operators' numbers, so give those a redirect
 number.
 
+`olcs_send_all_sms_to` is a key in each non-production environment's API secret
+(`*-BASE-SM-APPLICATION-API` in Secrets Manager), not a Terraform parameter, so phone numbers stay
+out of this public repo. Every non-production secret needs the key, even if it's just `" "`, or the
+API won't start.
+
 ## The letter text
 
 `Document\PrintLetter` and `Document\DispatchDocument` queue a text after a letter goes to an

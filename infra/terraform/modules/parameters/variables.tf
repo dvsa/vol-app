@@ -98,7 +98,6 @@ variable "application_parameters" {
     olcs_notify_test_dsn                         = string
     olcs_nysiis_version                          = string
     olcs_send_all_mail_to                        = string
-    olcs_send_all_sms_to                         = string
     olcs_ss_cookie                               = string
     olcs_ss_uri                                  = string
     olcs_txc_client_id                           = string

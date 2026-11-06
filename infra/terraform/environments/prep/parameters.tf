@@ -82,7 +82,6 @@ module "parameters" {
     olcs_notify_test_dsn                         = " "
     olcs_nysiis_version                          = "1.3"
     olcs_send_all_mail_to                        = "olcs-pre@dvsa.gov.uk"
-    olcs_send_all_sms_to                         = "null"
     olcs_ss_cookie                               = "preview.vehicle-operator-licensing.service.gov.uk"
     olcs_ss_uri                                  = "https://www.preview.vehicle-operator-licensing.service.gov.uk"
     olcs_txc_client_id                           = "f917e2d8-ca3a-444e-9328-bb6491447b80"

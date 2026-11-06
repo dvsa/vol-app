@@ -86,7 +86,6 @@ module "parameters" {
     olcs_notify_test_dsn                         = "govuknotify+mailpit://selenium-mail.olcs.dev-dvsacloud.uk:1025"
     olcs_nysiis_version                          = " "
     olcs_send_all_mail_to                        = "olcs-dev@dvsa.gov.uk"
-    olcs_send_all_sms_to                         = "null"
     olcs_ss_cookie                               = "ssweb.reg.olcs.dev-dvsacloud.uk"
     olcs_ss_uri                                  = "https://ssweb.reg.olcs.dev-dvsacloud.uk"
     olcs_txc_client_id                           = "5e5c84fc-2d21-452d-9b51-3a4e61cefedf"
