@@ -14,7 +14,7 @@ use Http\Adapter\Guzzle7\Client as GuzzleAdapter;
 class NotifyClientFactory
 {
     /**
-     * @param array{proxy?: string} $guzzleOptions
+     * @param array<string, mixed> $guzzleOptions extra Guzzle options, e.g. the proxy
      */
     public function __construct(private readonly array $guzzleOptions = [])
     {
@@ -24,7 +24,9 @@ class NotifyClientFactory
     {
         return new NotifyClient([
             'apiKey' => $apiKey,
-            'httpClient' => new GuzzleAdapter(new GuzzleClient($this->guzzleOptions)),
+            // Notify turns error responses into an ApiException with its own message. Left on,
+            // Guzzle throws first and the error recorded is Guzzle's text instead.
+            'httpClient' => new GuzzleAdapter(new GuzzleClient(['http_errors' => false] + $this->guzzleOptions)),
         ]);
     }
 
