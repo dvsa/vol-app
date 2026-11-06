@@ -11,9 +11,9 @@ class NotifyMessage extends AbstractRepository
     protected $entity = Entity::class;
 
     /**
-     * True if an SMS (not cancelled) was already requested for this recipient in [start, end).
+     * True if this kind of text (not cancelled) was already requested for this number in [start, end).
+     * Each kind of text has its own limit.
      */
-    /** Has this number had this kind of text in the period? Each kind has its own limit. */
     public function hasSmsForRecipientBetween(string $recipient, string $templateName, \DateTimeInterface $start, \DateTimeInterface $end): bool
     {
         // requested_on is written by Doctrine in PHP's default zone (UTC), so compare in UTC.

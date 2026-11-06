@@ -481,7 +481,16 @@ final class SendEmailTest extends AbstractCommandHandlerTestCase
         $this->mockedSmServices['EmailService']->shouldReceive('send')
             ->once()
             ->with(
-                m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
                 m::on(fn($payload): bool => $payload['context']['templateName'] === null
                     && !isset($payload['context']['redirectTo']))
             );
@@ -512,7 +521,16 @@ final class SendEmailTest extends AbstractCommandHandlerTestCase
         $this->mockedSmServices['EmailService']->shouldReceive('send')
             ->once()
             ->with(
-                m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(), m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
                 m::on(fn($payload): bool => $payload['context']['redirectTo'] === 'terry.valtech@gmail.com'
                     && $payload['context']['originalTo'] === ['foo@bar.com', 'cc@bar.com'])
             );

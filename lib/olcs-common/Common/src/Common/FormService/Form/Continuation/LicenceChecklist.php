@@ -37,8 +37,7 @@ class LicenceChecklist
         protected FormHelperService $formHelper,
         private UrlHelperService $urlHelper,
         private QuerySender $querySender
-    )
-    {
+    ) {
     }
 
     /**
