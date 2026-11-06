@@ -7,7 +7,7 @@ title: SMS Notifications
 
 VOL texts operators through GOV.UK Notify. Today there is one kind of text: a nudge when we send
 the operator a letter, asking them to check their account or post. Every SMS, and every email
-sent through Notify, is recorded in the `notify_message` table.
+sent through Notify apart from admin test sends, is recorded in the `notify_message` table.
 
 ## When SMS is switched on
 
@@ -94,7 +94,8 @@ checked again.
 With capture off, saving the page leaves any number already held as it is. Review pages show the
 SMS number only when there is one.
 
-Turn capture on only once VFT, the Playwright suite and the api-calls tests fill in the field.
+Turn capture on only once sending is live (the hint tells operators we'll text them), and once VFT,
+the Playwright suite and the api-calls tests fill in the field.
 
 ## Admin screen
 
