@@ -189,6 +189,42 @@ SELECT u.login_id, r.description, IF(u.team_id IS NULL, "Selfserve", "Internal")
 
 :::
 
+## Development settings
+
+The development images keep OPcache on and Xdebug off, they cache the merged Laminas configuration, and they don't start ClamAV, so pages stay quick even through the bind-mounted source. The settings below switch on the slower tools when you need them. Put them in a `.env` file in the repository root (Git ignores it, and Docker Compose reads it automatically), then run `docker compose up -d` to apply them.
+
+```bash
+# .env
+XDEBUG_MODE=debug
+VOL_DEVTOOLS=1
+```
+
+| Setting            | Default | What it does                                                                                                                                                                                                                                                           |
+| ------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `XDEBUG_MODE`      | `off`   | The [Xdebug mode](https://xdebug.org/docs/all_settings#mode), for example `debug` or `coverage`. With `debug`, every request connects to your IDE on port 9003. Xdebug slows every request down while it's on, even when the IDE isn't listening, so turn it back off. |
+| `VOL_DEVTOOLS`     | `0`     | Loads the Laminas developer toolbar and the session toolbar in selfserve and internal. It also adds over 500 KB to every page.                                                                                                                                         |
+| `VOL_CONFIG_CACHE` | `1`     | Caches the merged Laminas configuration in each app's `data/cache`. Merging it is the slowest part of a request, so turning the cache off roughly triples page times. Set it to `0` if you suspect the cache.                                                          |
+
+The configuration cache follows your changes. It is named after the configuration files it was built from (each app's `config` and `module/*/config`, the libraries' `config`, the `Module.php` classes, and the Composer packages), so editing or deleting one of those files, switching branch or running `composer install` rebuilds it on the next request. A brand-new configuration file, such as a new route file in a directory that is loaded with `glob()`, can take up to 2 seconds to be picked up. Command-line runs in the `cli` container don't use the cache.
+
+`VOL_DEVTOOLS` and `VOL_CONFIG_CACHE` are read by each app's `config/development.config.php`, your copy of `development.config.php.dist`. If your copy predates these settings, copy the dist file again with the "Copy the Laminas configuration dist files" step of `npm run refresh`; until you do, the toolbar stays on and the configuration isn't cached.
+
+To debug a single command without restarting anything, pass the mode to `docker compose exec`:
+
+```bash
+docker compose exec -e XDEBUG_MODE=debug cli vendor/bin/laminas <command>
+```
+
+### Virus scanning
+
+ClamAV is installed in the selfserve and internal images but not started, because `local.php.dist` switches virus scanning off and `clamd` holds about 1 GB of signatures in memory. To test scanning locally, remove the `antiVirus` override from that app's `config/autoload/local.php` and start the daemon, which takes a few seconds to load:
+
+```bash
+docker compose exec -d selfserve clamd    # or internal
+```
+
+Restarting the container stops it again.
+
 ## Troubleshooting
 
 ### Containers lose the in-tree lib mounts after `composer install`

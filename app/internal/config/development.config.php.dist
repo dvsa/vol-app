@@ -1,15 +1,27 @@
 <?php
 
+use Dvsa\Olcs\Utils\Development\ConfigCacheKey;
+
+// Development toggles come from environment variables that compose.yaml passes in from the root .env
+// file. See docs/app/local-setup.
+$isEnabled = static fn (string $name): bool => filter_var(getenv($name), FILTER_VALIDATE_BOOLEAN);
+
+// Merging the configuration is the slowest part of a request, so the result is cached. The cache
+// is named after the files the configuration is built from, so it's rebuilt when one changes.
+// Command-line runs don't cache: container-cli.php gives them fixed cache names.
+$cacheConfig = PHP_SAPI !== 'cli' && $isEnabled('VOL_CONFIG_CACHE');
+$cacheKey = $cacheConfig ? ConfigCacheKey::forApplication(dirname(__DIR__))->key() : 'development';
+
 return [
-  // Additional modules to include when in development mode
-  'modules' => [
-    'Laminas\DeveloperTools',
-    'SanSessionToolbar',
-  ],
+  // Additional modules to include when in development mode. The developer toolbar slows every
+  // request down, so it only loads when VOL_DEVTOOLS is set.
+  'modules' => $isEnabled('VOL_DEVTOOLS') ? ['Laminas\DeveloperTools', 'SanSessionToolbar'] : [],
   // Configuration overrides during development mode
   'module_listener_options' => [
     'config_glob_paths' => [realpath(__DIR__) . '/autoload/{,*.}{global,local}-development.php'],
-    'config_cache_enabled' => false,
-    'module_map_cache_enabled' => false,
+    'config_cache_enabled' => $cacheConfig,
+    'module_map_cache_enabled' => $cacheConfig,
+    'config_cache_key' => $cacheKey,
+    'module_map_cache_key' => $cacheKey,
   ],
 ];
