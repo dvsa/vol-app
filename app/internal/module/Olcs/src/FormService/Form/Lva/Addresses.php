@@ -3,6 +3,8 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Addresses as CommonAddresses;
+use Common\FormService\Form\Lva\SmsNumberRequiredTrait;
+use Common\Service\Cqrs\Query\QuerySender;
 use Common\Service\Helper\FormHelperService;
 
 /**
@@ -12,9 +14,11 @@ use Common\Service\Helper\FormHelperService;
  */
 class Addresses extends CommonAddresses
 {
+    use SmsNumberRequiredTrait;
+
     protected FormHelperService $formHelper;
 
-    public function __construct(FormHelperService $formHelper)
+    public function __construct(FormHelperService $formHelper, private readonly QuerySender $querySender)
     {
         parent::__construct($formHelper);
     }
@@ -34,10 +38,12 @@ class Addresses extends CommonAddresses
 
         parent::alterForm($form, $params);
 
-        // the SMS hint is written for operators
-        $contactFieldset = $form->get('contact');
-        if ($contactFieldset->has('phone_sms')) {
-            $contactFieldset->get('phone_sms')->setOption('hint', null);
+        // optional for caseworkers once capture is on, and the hint is written for operators
+        if ($this->keepSmsNumberOnlyWithCapture($form, $this->querySender)) {
+            $contactFieldset = $form->get('contact');
+            if ($contactFieldset->has('phone_sms')) {
+                $contactFieldset->get('phone_sms')->setOption('hint', null);
+            }
         }
 
         $contact = $form->getInputFilter()->get('contact');

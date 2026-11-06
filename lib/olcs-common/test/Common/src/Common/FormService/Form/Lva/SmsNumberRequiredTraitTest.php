@@ -8,6 +8,7 @@ use Common\FeatureToggle;
 use Common\Form\Elements\InputFilters\SmsPhone;
 use Common\FormService\Form\Lva\SmsNumberRequiredTrait;
 use Common\Service\Cqrs\Query\QuerySender;
+use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
 use PHPUnit\Framework\TestCase;
@@ -18,6 +19,8 @@ final class SmsNumberRequiredTraitTest extends TestCase
     {
         $contact = new Fieldset('contact');
         $contact->add(new SmsPhone('phone_sms'));
+        $contact->add(new \Laminas\Form\Element\Hidden('phone_sms_id'));
+        $contact->add(new \Laminas\Form\Element\Hidden('phone_sms_version'));
 
         $form = new Form('test');
         $form->add($contact);
@@ -33,8 +36,14 @@ final class SmsNumberRequiredTraitTest extends TestCase
             ->with([FeatureToggle::SMS_NUMBER_CAPTURE])
             ->willReturn($captureOn);
 
-        $sut = new class {
+        // removing fields needs none of the helper's dependencies
+        $formHelper = (new \ReflectionClass(FormHelperService::class))->newInstanceWithoutConstructor();
+        $sut = new class ($formHelper) {
             use SmsNumberRequiredTrait;
+
+            public function __construct(protected FormHelperService $formHelper)
+            {
+            }
 
             public function run(Form $form, QuerySender $querySender): void
             {
@@ -66,17 +75,14 @@ final class SmsNumberRequiredTraitTest extends TestCase
         $this->assertNotEmpty($form->getMessages()['contact']['phone_sms']);
     }
 
-    public function testSmsNumberStaysOptionalWhenCaptureOff(): void
+    public function testSmsNumberIsRemovedWhenCaptureOff(): void
     {
         $form = $this->buildForm();
-        $form->get('contact')->get('phone_sms')->init();
         $this->applyTrait($form, false);
 
-        $this->assertSame('contact-number-sms-optional', $form->get('contact')->get('phone_sms')->getLabel());
-
-        $this->assertFalse($form->getInputFilter()->get('contact')->get('phone_sms')->isRequired());
-
-        $form->setData(['contact' => ['phone_sms' => '']]);
-        $this->assertTrue($form->isValid());
+        $this->assertFalse($form->get('contact')->has('phone_sms'));
+        $this->assertFalse($form->get('contact')->has('phone_sms_id'));
+        $this->assertFalse($form->get('contact')->has('phone_sms_version'));
+        $this->assertFalse($form->getInputFilter()->get('contact')->has('phone_sms'));
     }
 }

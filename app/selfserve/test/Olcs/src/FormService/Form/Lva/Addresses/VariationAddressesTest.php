@@ -89,7 +89,10 @@ final class VariationAddressesTest extends MockeryTestCase
             ->andReturn($captureOn);
 
         if (!$captureOn) {
-            // field stays optional
+            // not asked for until capture is on
+            $this->fh->shouldReceive('removeFieldList')
+                ->once()
+                ->with($mockForm, 'contact', ['phone_sms', 'phone_sms_id', 'phone_sms_version']);
             $mockForm->shouldReceive('getInputFilter')->never();
             return;
         }
