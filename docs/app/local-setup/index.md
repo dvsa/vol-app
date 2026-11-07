@@ -191,7 +191,9 @@ SELECT u.login_id, r.description, IF(u.team_id IS NULL, "Selfserve", "Internal")
 
 ## Development settings
 
-The development images keep OPcache on and Xdebug off, they cache the merged Laminas configuration, and they don't start ClamAV, so pages stay quick even through the bind-mounted source. The settings below switch on the slower tools when you need them. Put them in a `.env` file in the repository root (Git ignores it, and Docker Compose reads it automatically), then run `docker compose up -d` to apply them.
+The development images keep OPcache on and Xdebug off, they cache the merged Laminas configuration, and they don't start ClamAV, so pages stay quick even through the bind-mounted source. The settings below switch on the slower tools when you need them.
+
+The "Change the development settings?" step of `npm run refresh` asks for each setting, writes your answers to the `.env` file in the repository root and recreates the PHP containers so they take effect. You can also edit `.env` yourself (Git ignores it, and Docker Compose reads it automatically), then run `docker compose up -d` to apply it.
 
 ```bash
 # .env
