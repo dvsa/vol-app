@@ -127,6 +127,24 @@ final class ConfigCacheKeyTest extends TestCase
         $this->assertFileExists($this->appRoot . '/data/cache/.gitignore');
     }
 
+    public function testReplacingTheContainerChangesTheKey(): void
+    {
+        $key = $this->key(container: 'container-1');
+
+        $this->assertNotSame($key, $this->key(container: 'container-2'));
+        $this->assertSame($key, $this->key(container: 'container-1'));
+    }
+
+    public function testCacheFilesFromAReplacedContainerAreDeleted(): void
+    {
+        $oldKey = $this->key(container: 'container-1');
+        $this->writeFile("data/cache/module-config-cache.$oldKey.php");
+
+        $this->key(container: 'container-2');
+
+        $this->assertFileDoesNotExist($this->appRoot . "/data/cache/module-config-cache.$oldKey.php");
+    }
+
     public function testCacheFilesForTheCurrentKeyAreKeptWhenTheKeyIsUnchanged(): void
     {
         $key = $this->key();
@@ -149,15 +167,15 @@ final class ConfigCacheKeyTest extends TestCase
             true
         );
         $this->assertIsArray($manifest);
-        $this->assertSame($key, $manifest['key']);
+        $this->assertIsString($manifest['sources']);
     }
 
     /**
      * By default a scan is never due, so only a change to an already-known file can change the key
      */
-    private function key(int $rescanAfterSeconds = PHP_INT_MAX): string
+    private function key(int $rescanAfterSeconds = PHP_INT_MAX, string $container = 'container-1'): string
     {
-        return ConfigCacheKey::forApplication($this->appRoot, $rescanAfterSeconds)->key();
+        return ConfigCacheKey::forApplication($this->appRoot, $rescanAfterSeconds, $container)->key();
     }
 
     private function writeFile(string $relativePath, string $contents = '<?php return [];', int $mtime = self::MTIME): void

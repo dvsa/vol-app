@@ -7,7 +7,8 @@ use Dvsa\Olcs\Utils\Development\ConfigCacheKey;
 $isEnabled = static fn (string $name): bool => filter_var(getenv($name), FILTER_VALIDATE_BOOLEAN);
 
 // Merging the configuration is the slowest part of a request, so the result is cached. The cache
-// is named after the files the configuration is built from, so it's rebuilt when one changes.
+// is named after the files the configuration is built from and the container, so it's rebuilt when
+// one of those files changes or the container is recreated, which is how a change to .env arrives.
 // Command-line runs don't cache: container-cli.php gives them fixed cache names.
 $cacheConfig = PHP_SAPI !== 'cli' && $isEnabled('VOL_CONFIG_CACHE');
 $cacheKey = $cacheConfig ? ConfigCacheKey::forApplication(dirname(__DIR__))->key() : 'development';
