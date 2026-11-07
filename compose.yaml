@@ -37,6 +37,12 @@ services:
       PHP_IDE_CONFIG: "serverName=vol.local.api"
       VIRTUAL_HOST: api.local.olcs.dev-dvsacloud.uk
       VIRTUAL_PORT: 8080
+      # Development toggles, set in the root .env file. See docs/app/local-setup.
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+      VOL_CONFIG_CACHE: ${VOL_CONFIG_CACHE:-1}
+    extra_hosts:
+      # Docker Desktop and OrbStack provide this name already; on Linux it has to be mapped.
+      - "host.docker.internal:host-gateway"
 
   cli:
     build:
@@ -57,6 +63,9 @@ services:
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY-}
       AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN-}
       PHP_IDE_CONFIG: "serverName=vol.local.api"
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   selfserve:
     build:
@@ -80,6 +89,11 @@ services:
       PHP_IDE_CONFIG: "serverName=vol.local.selfserve"
       VIRTUAL_HOST: ssweb.local.olcs.dev-dvsacloud.uk
       VIRTUAL_PORT: 8080
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+      VOL_CONFIG_CACHE: ${VOL_CONFIG_CACHE:-1}
+      VOL_DEVTOOLS: ${VOL_DEVTOOLS:-0}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   internal:
     build:
@@ -103,6 +117,11 @@ services:
       PHP_IDE_CONFIG: "serverName=vol.local.internal"
       VIRTUAL_HOST: iuweb.local.olcs.dev-dvsacloud.uk
       VIRTUAL_PORT: 8080
+      XDEBUG_MODE: ${XDEBUG_MODE:-off}
+      VOL_CONFIG_CACHE: ${VOL_CONFIG_CACHE:-1}
+      VOL_DEVTOOLS: ${VOL_DEVTOOLS:-0}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   cdn:
     image: node:20
