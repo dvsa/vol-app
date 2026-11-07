@@ -10,48 +10,61 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 
 /**
- * Names the Laminas configuration cache after the files the configuration is built from and the
- * container it runs in, so that local development can cache the merged configuration and still see
- * configuration changes.
+ * Names the Laminas configuration cache after everything the configuration is built from, so that
+ * local development can cache the merged configuration and still see configuration changes.
  *
- * Every call checks the files found by the last scan: editing or deleting one changes the key
- * straight away. Finding new files means listing directories, which is slow on a bind mount, so the
- * directories are scanned again only when the last scan is more than a couple of seconds old.
+ * The configuration is built from three kinds of source:
  *
- * Configuration also depends on environment variables, such as the one that loads the developer
- * toolbar. A container's environment can only change by replacing the container, so the key
- * includes the container's hostname, which changes when it's replaced. (getenv() can't be used: under
- * PHP-FPM it also returns the request's FastCGI parameters.)
+ * - Files in configuration directories. These are found by scanning the directories, which also
+ *   finds new files that a configuration file loads with glob().
+ * - PHP files loaded while the configuration is merged, such as classes whose constants or methods
+ *   the configuration uses. ConfigCacheModule records these each time the configuration is merged.
+ * - Environment variables, such as the one that loads the developer toolbar. A container's
+ *   environment can only change by replacing the container, so the key includes the container's
+ *   hostname, which changes when it's replaced. (getenv() can't be used: under PHP-FPM it also
+ *   returns the request's FastCGI parameters.)
  *
- * The first time a key is used, cache files written under any other key are deleted.
+ * Every call checks the files from the last scan and the last merge, so editing or deleting one
+ * changes the key straight away. Listing directories is slow on a bind mount, so they're scanned
+ * again only when the last scan is more than a couple of seconds old. The first time a key is used,
+ * cache files written under any other key are deleted.
  *
  * Not for production, where configuration doesn't change under a running app.
  */
 final class ConfigCacheKey
 {
+    public const string MODULE_NAME = 'Dvsa\Olcs\Utils\Development\ConfigCache';
+
     private const string KEY_PREFIX = 'development-';
     private const string MANIFEST_FILE = 'development-config-sources.json';
     private const int DEFAULT_RESCAN_AFTER_SECONDS = 2;
 
+    // Files kept in configuration directories that aren't configuration: view templates, the dist
+    // copies of local configuration, and documentation
+    private const array IGNORED_EXTENSIONS = ['phtml', 'dist', 'md'];
+
+    private readonly string $appRoot;
+    private readonly string $cacheDir;
+
+    /** @var string[]|null */
+    private ?array $libraryRoots = null;
+
     /**
-     * @param string   $cacheDir           Laminas module listener cache_dir
-     * @param string[] $directoryPatterns  glob patterns for directories whose PHP files, at any depth, build the configuration
-     * @param string[] $filePatterns       glob patterns for other files that build the configuration
-     * @param string   $container          identifies the container, whose environment can't change while it runs
-     * @param int      $rescanAfterSeconds how old the last scan can be before the directories are listed again
+     * @param string $appRoot            the application's root directory
+     * @param string $container          identifies the container, whose environment can't change while it runs
+     * @param int    $rescanAfterSeconds how old the last scan can be before the directories are listed again
      */
-    public function __construct(
-        private readonly string $cacheDir,
-        private readonly array $directoryPatterns,
-        private readonly array $filePatterns,
+    private function __construct(
+        string $appRoot,
         private readonly string $container,
-        private readonly int $rescanAfterSeconds = self::DEFAULT_RESCAN_AFTER_SECONDS,
+        private readonly int $rescanAfterSeconds,
     ) {
+        // get_included_files() reports real paths
+        $this->appRoot = realpath($appRoot) ?: $appRoot;
+        $this->cacheDir = $this->appRoot . '/data/cache';
     }
 
     /**
-     * The configuration sources of a VOL Laminas application
-     *
      * @param string|null $container defaults to this host's name
      */
     public static function forApplication(
@@ -59,38 +72,52 @@ final class ConfigCacheKey
         int $rescanAfterSeconds = self::DEFAULT_RESCAN_AFTER_SECONDS,
         ?string $container = null,
     ): self {
-        return new self(
-            $appRoot . '/data/cache',
-            [
-                $appRoot . '/config',
-                $appRoot . '/module/*/config',
-                $appRoot . '/vendor/olcs/*/config',
-                $appRoot . '/vendor/olcs/*/Common/config',
-            ],
-            [
-                $appRoot . '/module/*/Module.php',
-                $appRoot . '/module/*/src/Module.php',
-                $appRoot . '/vendor/olcs/*/Module.php',
-                $appRoot . '/vendor/olcs/*/src/Module.php',
-                $appRoot . '/vendor/olcs/*/Common/src/Module.php',
-                // Composer rewrites this on every install or update, so it stands in for the configuration of
-                // every third-party module
-                $appRoot . '/vendor/composer/installed.php',
-            ],
-            $container ?? (gethostname() ?: ''),
-            $rescanAfterSeconds,
-        );
+        return new self($appRoot, $container ?? (gethostname() ?: ''), $rescanAfterSeconds);
     }
 
     public function key(): string
     {
-        $key = self::KEY_PREFIX . substr(hash('xxh128', $this->sourcesHash() . "\0" . $this->container), 0, 16);
+        $key = $this->keyFor($this->sourcesHash());
 
         if (!is_file($this->cacheDir . '/module-config-cache.' . $key . '.php')) {
             $this->deleteCachesOtherThan($key);
         }
 
         return $key;
+    }
+
+    /**
+     * The module to load alongside the application's modules, so the files loaded while the
+     * configuration is merged are recorded
+     */
+    public function module(): ConfigCacheModule
+    {
+        return new ConfigCacheModule($this);
+    }
+
+    /**
+     * Records the application's files that were loaded while the configuration was merged, so that
+     * changing any of them changes the key, and returns the key that now applies
+     *
+     * @param string[] $includedFiles as returned by get_included_files()
+     */
+    public function recordLoadedFiles(array $includedFiles): string
+    {
+        clearstatcache();
+
+        $manifest = $this->readManifest();
+        $loaded = $this->signatures(array_filter($includedFiles, $this->isApplicationFile(...)));
+
+        if ($manifest === null) {
+            return $this->keyFor($this->saveManifest($this->scan(), $loaded, time()));
+        }
+
+        return $this->keyFor($this->saveManifest($manifest['files'], $loaded, $manifest['scannedAt']));
+    }
+
+    private function keyFor(string $sourcesHash): string
+    {
+        return self::KEY_PREFIX . substr(hash('xxh128', $sourcesHash . "\0" . $this->container), 0, 16);
     }
 
     /**
@@ -102,20 +129,43 @@ final class ConfigCacheKey
 
         $manifest = $this->readManifest();
 
-        if ($manifest !== null && !$this->isScanDue($manifest['scannedAt']) && $this->areUnchanged($manifest['files'])) {
+        if (
+            $manifest !== null
+            && !$this->isScanDue($manifest['scannedAt'])
+            && $this->areUnchanged($manifest['files'] + $manifest['loaded'])
+        ) {
             return $manifest['sources'];
         }
 
-        $files = $this->scan();
-        $sources = hash('xxh128', json_encode($files, JSON_THROW_ON_ERROR));
+        $loaded = $this->signatures(array_keys($manifest['loaded'] ?? []));
 
-        $this->writeManifest(['sources' => $sources, 'scannedAt' => time(), 'files' => $files]);
-
-        return $sources;
+        return $this->saveManifest($this->scan(), $loaded, time());
     }
 
     /**
-     * @return array{sources: string, scannedAt: int, files: array<string, string>}|null
+     * @param array<string, string> $files  path => signature of the files found by scanning
+     * @param array<string, string> $loaded path => signature of the files loaded by the last merge
+     *
+     * @return string a hash of every file's signature
+     */
+    private function saveManifest(array $files, array $loaded, int $scannedAt): string
+    {
+        $sources = array_merge($files, $loaded);
+        ksort($sources);
+        $sourcesHash = hash('xxh128', json_encode($sources, JSON_THROW_ON_ERROR));
+
+        $this->writeManifest([
+            'sources' => $sourcesHash,
+            'scannedAt' => $scannedAt,
+            'files' => $files,
+            'loaded' => $loaded,
+        ]);
+
+        return $sourcesHash;
+    }
+
+    /**
+     * @return array{sources: string, scannedAt: int, files: array<string, string>, loaded: array<string, string>}|null
      */
     private function readManifest(): ?array
     {
@@ -132,11 +182,12 @@ final class ConfigCacheKey
             || !is_string($manifest['sources'] ?? null)
             || !is_int($manifest['scannedAt'] ?? null)
             || !is_array($manifest['files'] ?? null)
+            || !is_array($manifest['loaded'] ?? null)
         ) {
             return null;
         }
 
-        /** @var array{sources: string, scannedAt: int, files: array<string, string>} $manifest */
+        /** @var array{sources: string, scannedAt: int, files: array<string, string>, loaded: array<string, string>} $manifest */
         return $manifest;
     }
 
@@ -146,7 +197,7 @@ final class ConfigCacheKey
     }
 
     /**
-     * @param array<string, string> $files path => signature, as recorded by the last scan
+     * @param array<string, string> $files path => signature, as recorded
      */
     private function areUnchanged(array $files): bool
     {
@@ -160,13 +211,13 @@ final class ConfigCacheKey
     }
 
     /**
-     * @return array<string, string> path => signature of every file that builds the configuration
+     * @return array<string, string> path => signature of every file found in the configuration's sources
      */
     private function scan(): array
     {
-        $files = [];
+        $paths = [];
 
-        foreach ($this->directoryPatterns as $pattern) {
+        foreach ($this->directoryPatterns() as $pattern) {
             foreach (glob($pattern, GLOB_ONLYDIR) ?: [] as $directory) {
                 $iterator = new RecursiveIteratorIterator(
                     new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS)
@@ -174,26 +225,123 @@ final class ConfigCacheKey
 
                 /** @var SplFileInfo $file */
                 foreach ($iterator as $file) {
-                    if ($file->isFile() && $file->getExtension() === 'php') {
-                        $files[$file->getPathname()] = $file->getMTime() . ':' . $file->getSize();
+                    if ($file->isFile() && $this->isConfigurationFile($file)) {
+                        $paths[] = $file->getPathname();
                     }
                 }
             }
         }
 
-        foreach ($this->filePatterns as $pattern) {
-            foreach (glob($pattern) ?: [] as $path) {
-                $signature = $this->signature($path);
+        foreach ($this->filePatterns() as $pattern) {
+            $paths = array_merge($paths, glob($pattern) ?: []);
+        }
 
-                if ($signature !== null) {
-                    $files[$path] = $signature;
-                }
+        // The libraries are linked into vendor/, so resolve the links: a file the merge loads is then
+        // recorded under the same path as when it's found by scanning
+        return $this->signatures(array_unique(array_map(static fn (string $path): string => realpath($path) ?: $path, $paths)));
+    }
+
+    /**
+     * Directories whose files, at any depth, build the configuration
+     *
+     * @return string[] glob patterns
+     */
+    private function directoryPatterns(): array
+    {
+        return [
+            $this->appRoot . '/config',
+            $this->appRoot . '/module/*/config',
+            $this->appRoot . '/vendor/olcs/*/config',
+            $this->appRoot . '/vendor/olcs/*/Common/config',
+        ];
+    }
+
+    /**
+     * Other files that build the configuration, so a module that is added is found by the next scan
+     *
+     * @return string[] glob patterns
+     */
+    private function filePatterns(): array
+    {
+        return [
+            $this->appRoot . '/module/*/Module.php',
+            $this->appRoot . '/module/*/src/Module.php',
+            $this->appRoot . '/vendor/olcs/*/Module.php',
+            $this->appRoot . '/vendor/olcs/*/src/Module.php',
+            $this->appRoot . '/vendor/olcs/*/Common/src/Module.php',
+            // Composer rewrites this on every install or update, so it stands in for the configuration of
+            // every third-party module
+            $this->appRoot . '/vendor/composer/installed.php',
+        ];
+    }
+
+    private function isConfigurationFile(SplFileInfo $file): bool
+    {
+        return !str_starts_with($file->getFilename(), '.')
+            && !in_array(strtolower($file->getExtension()), self::IGNORED_EXTENSIONS, true);
+    }
+
+    /**
+     * Whether a loaded file is part of the application or its in-repository libraries. Third-party
+     * packages only change with composer install, which installed.php covers, and data/ holds caches.
+     */
+    private function isApplicationFile(string $path): bool
+    {
+        foreach ($this->libraryRoots() as $libraryRoot) {
+            if (str_starts_with($path, $libraryRoot . '/')) {
+                return !str_starts_with($path, $libraryRoot . '/vendor/');
             }
         }
 
-        ksort($files);
+        $root = $this->appRoot . '/';
 
-        return $files;
+        if (!str_starts_with($path, $root)) {
+            return false;
+        }
+
+        $relativePath = substr($path, strlen($root));
+
+        if (str_starts_with($relativePath, 'data/')) {
+            return false;
+        }
+
+        return !str_starts_with($relativePath, 'vendor/') || str_starts_with($relativePath, 'vendor/olcs/');
+    }
+
+    /**
+     * Where the in-repository libraries really are. vendor/olcs/* links to them, and in a container
+     * they're mounted wherever those links point.
+     *
+     * @return string[]
+     */
+    private function libraryRoots(): array
+    {
+        return $this->libraryRoots ??= array_values(array_filter(array_map(
+            static fn (string $directory): string|false => realpath($directory),
+            glob($this->appRoot . '/vendor/olcs/*', GLOB_ONLYDIR) ?: []
+        )));
+    }
+
+    /**
+     * @param string[] $paths
+     *
+     * @return array<string, string> path => signature, leaving out files that don't exist
+     */
+    private function signatures(array $paths): array
+    {
+        $signatures = [];
+
+        foreach ($paths as $path) {
+            $signature = $this->signature($path);
+
+            if ($signature !== null) {
+                $signatures[$path] = $signature;
+            }
+        }
+
+        ksort($signatures);
+
+        return $signatures;
     }
 
     private function signature(string $path): ?string
@@ -204,7 +352,7 @@ final class ConfigCacheKey
     }
 
     /**
-     * @param array{sources: string, scannedAt: int, files: array<string, string>} $manifest
+     * @param array{sources: string, scannedAt: int, files: array<string, string>, loaded: array<string, string>} $manifest
      */
     private function writeManifest(array $manifest): void
     {
