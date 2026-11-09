@@ -30,6 +30,11 @@ passthrough template ids, and `test_dsn` for the admin "Send test via Notify" bu
 Older local configs that set these under `email.notify`, `email.notify_test` and `email.sms` still
 work. Run locally (no `ENVIRONMENT_NAME`), every setting in the block is optional.
 
+The local-refresh "Sync AWS secrets and parameters" step fills `notify.api_key` and the
+template ids from DEV or INT. It leaves `mail.dsn`, `notify.proxy` and `notify.email.test_dsn`
+alone, as the DEV and INT values point at hosts only reachable inside AWS. The key is only used
+once you set `mail.dsn` to `govuknotify://default`.
+
 The Notify template is a passthrough: its whole content is `((body))`. VOL renders the text itself
 and sends it as the `body` personalisation, so wording changes happen in VOL, not in Notify.
 
