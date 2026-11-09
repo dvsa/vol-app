@@ -84,9 +84,7 @@ class Get extends AbstractQueryByIdHandler
             $data['letterInstanceTodos'][$index]['requiringIssueCount'] = $counts[$key] ?? 1;
 
             // the issues the edit page can show this to-do under, preferred first (VOL-7737)
-            $ownerId = $todo['letterInstanceIssue']['id'] ?? null;
-            $data['letterInstanceTodos'][$index]['placementIssueIds'] = $placements[$key]
-                ?? ($ownerId !== null ? [(int) $ownerId] : []);
+            $data['letterInstanceTodos'][$index]['placementIssueIds'] = $placements[(int) ($todo['id'] ?? 0)] ?? [];
         }
 
         return $data;

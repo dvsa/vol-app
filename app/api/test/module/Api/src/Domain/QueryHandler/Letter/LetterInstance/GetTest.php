@@ -140,8 +140,8 @@ final class GetTest extends QueryHandlerTestCase
     }
 
     /**
-     * VOL-7737: the edit page puts each to-do under an issue, so it needs the issues that bring
-     * it, preferred first. A to-do no issue brings falls back to the issue it belongs to.
+     * VOL-7737: the edit page puts each to-do under an issue, so it needs the issues it can sit
+     * under, preferred first. The entity works that out per to-do id.
      */
     public function testEachTodoIsToldWhichIssuesItCanSitUnder(): void
     {
@@ -150,16 +150,15 @@ final class GetTest extends QueryHandlerTestCase
         $serialized = [
             'id' => 123,
             'letterInstanceTodos' => [
-                ['id' => 1, 'letterTodoVersion' => ['id' => 32, 'letterTodo' => ['id' => 5]], 'letterInstanceIssue' => ['id' => 10]],
-                ['id' => 2, 'letterTodoVersion' => ['id' => 33, 'letterTodo' => ['id' => 6]], 'letterInstanceIssue' => ['id' => 11]],
-                ['id' => 3, 'letterTodoVersion' => ['id' => 34, 'letterTodo' => ['id' => 7]]],
+                ['id' => 1, 'letterTodoVersion' => ['id' => 32, 'letterTodo' => ['id' => 5]]],
+                ['id' => 2, 'letterTodoVersion' => ['id' => 33, 'letterTodo' => ['id' => 6]]],
             ],
         ];
 
         $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->andReturn([]);
-        $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->once()->andReturn(['todo-5' => [10, 12]]);
+        $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->once()->andReturn([1 => [10, 12]]);
 
         $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')->with($query)->once()
             ->andReturn($mockLetterInstance);
@@ -167,7 +166,6 @@ final class GetTest extends QueryHandlerTestCase
         $result = $this->sut->handleQuery($query);
 
         $this->assertSame([10, 12], $result['letterInstanceTodos'][0]['placementIssueIds']);
-        $this->assertSame([11], $result['letterInstanceTodos'][1]['placementIssueIds']);
-        $this->assertSame([], $result['letterInstanceTodos'][2]['placementIssueIds']);
+        $this->assertSame([], $result['letterInstanceTodos'][1]['placementIssueIds']);
     }
 }

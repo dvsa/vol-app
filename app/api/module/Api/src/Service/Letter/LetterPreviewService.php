@@ -166,9 +166,9 @@ class LetterPreviewService
         $todoRenderer = null;
         $context = $this->buildVolGrabContext($letterInstance);
 
-        // Group issues by Issue Type, preserving display order via the order rows arrive in
+        // Group issues by Issue Type, in the order the letter prints them
         $issuesByType = [];
-        foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
+        foreach ($letterInstance->getIssuesInLetterOrder() as $issue) {
             $issueVersion = $issue->getLetterIssueVersion();
             $issueType = $issueVersion ? $issueVersion->getLetterIssueType() : null;
             $typeName = $issueType ? ($issueType->getDescription() ?: $issueType->getName()) : 'Other Issues';

@@ -107,6 +107,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
+        $mockLetterInstance->shouldReceive('getIssuesInLetterOrder')->andReturn([$mockIssue]);
         $mockLetterInstance->shouldReceive('getLicence')->andReturn(null);
         $mockLetterInstance->shouldReceive('getApplication')->andReturn(null);
         $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
@@ -154,6 +155,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
+        $mockLetterInstance->shouldReceive('getIssuesInLetterOrder')->andReturn([$mockIssue]);
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('VOL/LET/12345');
         $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
@@ -674,6 +676,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue1, $mockIssue2, $mockIssue3]));
+        $mockLetterInstance->shouldReceive('getIssuesInLetterOrder')->andReturn([$mockIssue1, $mockIssue2, $mockIssue3]);
         $mockLetterInstance->shouldReceive('getReference')
             ->andReturn('REF123');
         $mockLetterInstance->shouldReceive('getCreatedOn')->andReturn(null)->byDefault();
@@ -919,6 +922,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
+        $mockLetterInstance->shouldReceive('getIssuesInLetterOrder')->andReturn([$mockIssue]);
         $mockLetterInstance->shouldReceive('getLicence')
             ->andReturn($mockLicence);
         $mockLetterInstance->shouldReceive('getApplication')
@@ -1459,6 +1463,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance = $this->createMinimalLetterInstance();
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
+        $mockLetterInstance->shouldReceive('getIssuesInLetterOrder')->andReturn([$mockIssue]);
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')
             ->andReturn(new ArrayCollection([$mockTodo]));
         $mockLetterInstance->shouldReceive('getPlacementIssue')->with($mockTodo)->andReturn($mockIssue);

@@ -31,11 +31,14 @@ class LetterInstance extends AbstractLetterInstance
 
     /**
      * Memoised issues that bring each to-do, in letter order, keyed by LetterTodoVersion::getDedupeKey.
-     * Not mapped -- derived from the issues.
+     * Not mapped -- derived from the issues. Rebuilt whenever todoBringingIssuesFor no longer
+     * matches the issues' order and versions, so a reorder in the same request is never stale.
      *
      * @var array<string, list<LetterInstanceIssue>>|null
      */
     private ?array $todoBringingIssues = null;
+
+    private ?string $todoBringingIssuesFor = null;
 
     /**
      * Letter instance sections
@@ -203,20 +206,27 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
-     * The ids of the issues each to-do can be shown under, preferred first, keyed by
-     * LetterTodoVersion::getDedupeKey. The edit page uses the first one it is showing.
+     * The ids of the issues each of the letter's to-dos can be shown under, preferred first,
+     * keyed by LetterInstanceTodo id. The edit page uses the first one it is showing (VOL-7737).
      *
-     * @return array<string, list<int>>
+     * @return array<int, list<int>>
      */
     public function getTodoPlacementIssueIds(string $placement = self::SHARED_TODO_PLACEMENT): array
     {
-        return array_map(
-            static fn(array $issues): array => array_map(
+        $ids = [];
+        foreach ($this->getLetterInstanceTodos() as $todo) {
+            if ($todo->getId() === null) {
+                continue;
+            }
+
+            $issues = $this->placementIssues($todo, $placement);
+            $ids[(int) $todo->getId()] = array_map(
                 static fn(LetterInstanceIssue $issue): int => (int) $issue->getId(),
                 $issues
-            ),
-            $this->todoPlacementIssues($placement)
-        );
+            );
+        }
+
+        return $ids;
     }
 
     /**
@@ -227,22 +237,48 @@ class LetterInstance extends AbstractLetterInstance
         LetterInstanceTodo $todo,
         string $placement = self::SHARED_TODO_PLACEMENT
     ): ?LetterInstanceIssue {
-        $key = $todo->getLetterTodoVersion()?->getDedupeKey();
-        $issues = $key !== null ? ($this->todoPlacementIssues($placement)[$key] ?? []) : [];
-
-        return $issues[0] ?? $todo->getLetterInstanceIssue();
+        return $this->placementIssues($todo, $placement)[0] ?? null;
     }
 
     /**
-     * @return array<string, list<LetterInstanceIssue>>
+     * The issues in the order the letter prints them: grouped by issue type, types in the order
+     * their first issue appears, and by display order within a type. Ownership of shared to-dos,
+     * their placement and the rendered letter all use this one order.
+     *
+     * @return list<LetterInstanceIssue>
      */
-    private function todoPlacementIssues(string $placement): array
+    public function getIssuesInLetterOrder(): array
     {
-        $bringing = $this->todoBringingIssues();
+        $issues = array_values($this->getLetterInstanceIssues()->toArray());
+        usort(
+            $issues,
+            static fn(LetterInstanceIssue $a, LetterInstanceIssue $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder()
+        );
 
-        return $placement === self::SHARED_TODO_UNDER_LAST_ISSUE
-            ? array_map(array_reverse(...), $bringing)
-            : $bringing;
+        $byType = [];
+        foreach ($issues as $issue) {
+            $typeId = $issue->getLetterIssueVersion()?->getLetterIssueType()?->getId() ?? 0;
+            $byType[$typeId][] = $issue;
+        }
+
+        return $byType === [] ? [] : array_merge(...array_values($byType));
+    }
+
+    /**
+     * @return list<LetterInstanceIssue>
+     */
+    private function placementIssues(LetterInstanceTodo $todo, string $placement): array
+    {
+        $key = $todo->getLetterTodoVersion()?->getDedupeKey();
+        $issues = $key !== null ? ($this->todoBringingIssues()[$key] ?? []) : [];
+
+        if ($issues === []) {
+            $owner = $todo->getLetterInstanceIssue();
+
+            return $owner !== null ? [$owner] : [];
+        }
+
+        return $placement === self::SHARED_TODO_UNDER_LAST_ISSUE ? array_reverse($issues) : $issues;
     }
 
     /**
@@ -257,34 +293,31 @@ class LetterInstance extends AbstractLetterInstance
      */
     private function todoBringingIssues(): array
     {
-        if ($this->todoBringingIssues !== null) {
+        $issues = $this->getIssuesInLetterOrder();
+        $signature = implode(',', array_map(
+            static fn(LetterInstanceIssue $issue): string => spl_object_id($issue) . ':'
+                . spl_object_id($issue->getLetterIssueVersion() ?? $issue),
+            $issues
+        ));
+
+        if ($this->todoBringingIssues !== null && $this->todoBringingIssuesFor === $signature) {
             return $this->todoBringingIssues;
         }
-
-        $issues = array_values($this->getLetterInstanceIssues()->toArray());
-        usort(
-            $issues,
-            static fn(LetterInstanceIssue $a, LetterInstanceIssue $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder()
-        );
 
         $bringing = [];
         foreach ($issues as $instanceIssue) {
             foreach ($instanceIssue->getLetterIssueVersion()?->getLetterIssueTodos() ?? [] as $issueTodo) {
                 $todoVersion = $issueTodo->getLetterTodoVersion();
-                if ($todoVersion === null) {
-                    continue;
-                }
-
-                $key = $todoVersion->getDedupeKey();
-                if (!in_array($instanceIssue, $bringing[$key] ?? [], true)) {
-                    $bringing[$key][] = $instanceIssue;
+                if ($todoVersion !== null) {
+                    $bringing[$todoVersion->getDedupeKey()][spl_object_id($instanceIssue)] = $instanceIssue;
                 }
             }
         }
 
-        $this->todoBringingIssues = $bringing;
+        $this->todoBringingIssues = array_map(array_values(...), $bringing);
+        $this->todoBringingIssuesFor = $signature;
 
-        return $bringing;
+        return $this->todoBringingIssues;
     }
 
     /**
