@@ -26,6 +26,13 @@ final class UpdateContent extends AbstractCommandHandler
             json_decode($command->getEditedContent(), true)
         );
 
+        // only an Other issue has a caseworker-written heading; blank clears it (VOL-7735)
+        $heading = $command->getEditedHeading();
+        if ($heading !== null && $letterInstanceIssue->isOther()) {
+            $heading = trim($heading);
+            $letterInstanceIssue->setEditedHeading($heading === '' ? null : $heading);
+        }
+
         $this->getRepo()->save($letterInstanceIssue);
 
         $this->result->addId('letterInstanceIssue', $letterInstanceIssue->getId());

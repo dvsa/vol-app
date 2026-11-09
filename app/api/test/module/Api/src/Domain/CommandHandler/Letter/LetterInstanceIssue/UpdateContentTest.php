@@ -58,4 +58,56 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
         $this->assertSame($issueId, $result->getId('letterInstanceIssue'));
         $this->assertStringContainsString('updated successfully', (string) $result->getMessages()[0]);
     }
+
+    private function issueOn(bool $isOther): LetterInstanceIssueEntity
+    {
+        $version = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion();
+        $version->setHeading('Other issue');
+        $version->setIsOther($isOther);
+        $issue = new LetterInstanceIssueEntity();
+        $issue->setId(10);
+        $issue->setLetterIssueVersion($version);
+
+        return $issue;
+    }
+
+    private function save(LetterInstanceIssueEntity $issue, array $data): void
+    {
+        $command = Cmd::create(['id' => 10, 'editedContent' => '{"blocks":[]}', 'version' => 1] + $data);
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('fetchUsingId')->with($command)->andReturn($issue);
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('save')->with($issue)->once();
+
+        $this->sut->handleCommand($command);
+    }
+
+    /** VOL-7735 */
+    public function testHeadingIsSavedOnAnOtherIssue(): void
+    {
+        $issue = $this->issueOn(true);
+        $this->save($issue, ['editedHeading' => '  Vehicle storage ']);
+        $this->assertSame('Vehicle storage', $issue->getEditedHeading());
+    }
+
+    public function testABlankHeadingClearsIt(): void
+    {
+        $issue = $this->issueOn(true);
+        $issue->setEditedHeading('Vehicle storage');
+        $this->save($issue, ['editedHeading' => '']);
+        $this->assertNull($issue->getEditedHeading());
+    }
+
+    public function testHeadingIsIgnoredOnAStandardIssue(): void
+    {
+        $issue = $this->issueOn(false);
+        $this->save($issue, ['editedHeading' => 'Something else']);
+        $this->assertNull($issue->getEditedHeading());
+    }
+
+    public function testNoHeadingSentLeavesTheHeadingAlone(): void
+    {
+        $issue = $this->issueOn(true);
+        $issue->setEditedHeading('Vehicle storage');
+        $this->save($issue, []);
+        $this->assertSame('Vehicle storage', $issue->getEditedHeading());
+    }
 }

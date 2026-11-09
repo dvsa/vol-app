@@ -365,6 +365,14 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
+     * Whether caseworkers can still change what is on the letter: its issues and its own to-dos.
+     */
+    public function isOpenForChanges(): bool
+    {
+        return ($this->isDraft() || $this->isReady()) && !$this->isDeleted();
+    }
+
+    /**
      * Check if letter is draft
      *
      * @return bool

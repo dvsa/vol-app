@@ -53,7 +53,7 @@ final class UpdateIssues extends AbstractCommandHandler
         /** @var LetterInstanceEntity $letterInstance */
         $letterInstance = $this->getRepo()->fetchUsingId($command);
 
-        if (!($letterInstance->isDraft() || $letterInstance->isReady()) || $letterInstance->isDeleted()) {
+        if (!$letterInstance->isOpenForChanges()) {
             throw new ValidationException(['Issues can only be changed on a draft or ready letter']);
         }
 
