@@ -160,7 +160,6 @@ OLCS.ready(function () {
     var version = $btn.data("version");
     var $group = $btn.closest(".appendix-editor-group");
     var hiddenInput = $group.find("input[type='hidden']");
-    var $heading = $group.find(".other-issue-heading");
 
     withFlushedEditors(function () {
       var editedContent = hiddenInput.val();
@@ -213,7 +212,6 @@ OLCS.ready(function () {
     var version = $btn.data("version");
     var $group = $btn.closest(".section-editor-group");
     var hiddenInput = $group.find("input[type='hidden']");
-    var $heading = $group.find(".other-issue-heading");
 
     withFlushedEditors(function () {
       var editedContent = hiddenInput.val();
@@ -322,17 +320,27 @@ OLCS.ready(function () {
    * Adding or deleting a caseworker-written to-do reloads the page (editors only start up on
    * load), so say what unsaved work would be lost first. True when it's fine to go ahead.
    */
-  function okToLoseUnsaved() {
-    var unsaved = collectUnsavedSectionNames();
+  function okToLoseUnsaved(exceptKey) {
+    // the editor being deleted isn't "lost"; leave it out, and put it back if they cancel
+    var wasDirty = exceptKey ? dirtyMap[exceptKey] : undefined;
+    if (exceptKey) {
+      dirtyMap[exceptKey] = false;
+    }
 
-    return (
+    var unsaved = collectUnsavedSectionNames();
+    var ok =
       unsaved.length === 0 ||
       window.confirm(
         "This reloads the page. Unsaved changes in these sections will be lost:\n\n" +
           unsaved.join("\n") +
           "\n\nContinue?",
-      )
-    );
+      );
+
+    if (exceptKey && !ok) {
+      dirtyMap[exceptKey] = wasDirty;
+    }
+
+    return ok;
   }
 
   /**
@@ -345,6 +353,22 @@ OLCS.ready(function () {
     change(todos).forEach(function (id) {
       url.searchParams.append("todos[]", id);
     });
+
+    // nothing left to edit (the last ticked to-do was deleted): back to the preview
+    var stillEditing = [
+      "sections[]",
+      "appendices[]",
+      "letterSections[]",
+      "todos[]",
+    ].some(function (name) {
+      return url.searchParams.getAll(name).length > 0;
+    });
+    if (!stillEditing) {
+      window.location.href =
+        "/letter/preview?id=" + encodeURIComponent(url.searchParams.get("id"));
+      return;
+    }
+
     window.location.href = url.toString();
   }
 
@@ -403,8 +427,7 @@ OLCS.ready(function () {
     if (!window.confirm("Delete this to-do? This cannot be undone.")) {
       return;
     }
-    dirtyMap["todo-" + todoId] = false;
-    if (!okToLoseUnsaved()) {
+    if (!okToLoseUnsaved("todo-" + todoId)) {
       return;
     }
     postCustomTodo(

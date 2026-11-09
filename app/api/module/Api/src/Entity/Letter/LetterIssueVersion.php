@@ -151,14 +151,6 @@ class LetterIssueVersion extends AbstractLetterIssueVersion
     }
 
     /**
-     * Get default body content as array (for EditorJS)
-     *
-     * Handles both properly stored arrays and double-encoded JSON strings
-     * (legacy data where JSON was encoded before Doctrine's json type encoded it again)
-     *
-     * @return array
-     */
-    /**
      * An Other issue: the caseworker writes the heading and may add their own to-dos (VOL-7735)
      */
     public function isOther(): bool
@@ -166,6 +158,14 @@ class LetterIssueVersion extends AbstractLetterIssueVersion
         return (bool) $this->isOther;
     }
 
+    /**
+     * Get default body content as array (for EditorJS)
+     *
+     * Handles both properly stored arrays and double-encoded JSON strings
+     * (legacy data where JSON was encoded before Doctrine's json type encoded it again)
+     *
+     * @return array
+     */
     public function getDefaultBodyContentAsArray(): array
     {
         $content = $this->defaultBodyContent;
