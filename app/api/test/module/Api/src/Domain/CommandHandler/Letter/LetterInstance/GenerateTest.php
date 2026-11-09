@@ -1153,6 +1153,30 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertSame($anyVersion, $issues->first()->getLetterIssueVersion());
     }
 
+    public function testHandleCommandIgnoresAnIssuePostedTwice(): void
+    {
+        $command = Cmd::create([
+            'letterType' => 123,
+            'licence' => 456,
+            'selectedIssues' => [1, '1'],
+        ]);
+
+        $this->expectLetterTypeAndLicence(123, 456, 'lcat_psv');
+
+        $version = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $version->setGoodsOrPsv(null);
+        $issue = m::mock(LetterIssueEntity::class)->makePartial();
+        $issue->shouldReceive('getCurrentVersion')->andReturn($version);
+        $this->repoMap['LetterIssue']->shouldReceive('fetchById')->once()->andReturn($issue);
+
+        $letterInstance = null;
+        $this->captureSavedInstance($letterInstance);
+
+        $this->sut->handleCommand($command);
+
+        $this->assertCount(1, $letterInstance->getLetterInstanceIssues());
+    }
+
     public function testHandleCommandDropsChoicesForTheOtherLicenceType(): void
     {
         $command = Cmd::create([
