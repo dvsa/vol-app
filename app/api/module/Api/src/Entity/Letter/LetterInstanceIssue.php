@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Api\Entity\Letter;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Service\Letter\EditorJsText;
 
 /**
  * LetterInstanceIssue Entity
@@ -98,7 +99,43 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
      */
     public function hasBeenEdited()
     {
-        return !empty($this->editedContent);
+        return !empty($this->editedContent) || ($this->isOther() && $this->hasWrittenHeading());
+    }
+
+    /**
+     * An Other issue: the caseworker writes its heading and may add their own to-dos (VOL-7735)
+     */
+    public function isOther(): bool
+    {
+        return (bool) $this->letterIssueVersion?->isOther();
+    }
+
+    /**
+     * Whether this issue still needs the caseworker before the letter can be sent.
+     *
+     * A standard issue needs input while it is flagged and unedited. An Other issue needs a
+     * heading and a body that says something other than the placeholder: the edit page's Save
+     * posts the editor even when nothing changed, so "edited" alone isn't enough (VOL-7735).
+     */
+    public function isInputPending(): bool
+    {
+        if (!$this->isOther()) {
+            return $this->requiresInput() && !$this->hasBeenEdited();
+        }
+
+        if (!$this->hasWrittenHeading() || empty($this->editedContent)) {
+            return true;
+        }
+
+        $body = EditorJsText::plain($this->getEffectiveContent());
+        $placeholder = EditorJsText::plain($this->letterIssueVersion->getDefaultBodyContentAsArray());
+
+        return $body === '' || $body === $placeholder;
+    }
+
+    private function hasWrittenHeading(): bool
+    {
+        return trim((string) $this->editedHeading) !== '';
     }
 
     /**
@@ -141,6 +178,11 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
      */
     public function getHeading()
     {
+        // an Other issue prints the caseworker's heading once they've written one (VOL-7735)
+        if ($this->isOther() && $this->hasWrittenHeading()) {
+            return trim((string) $this->editedHeading);
+        }
+
         return $this->letterIssueVersion->getHeading();
     }
 

@@ -91,4 +91,61 @@ final class LetterInstanceTodoEntityTest extends EntityTester
 
         $this->assertFalse($entity->hasBeenEdited());
     }
+
+    public function testCustomTodoIsPendingUntilWritten(): void
+    {
+        $entity = new Entity();
+        $this->assertTrue($entity->isCustom());
+        $this->assertTrue($entity->isInputPending());
+
+        $entity->setEditedDescriptionFromArray(['blocks' => [['id' => 'x', 'type' => 'paragraph', 'data' => ['text' => '<p> </p>&nbsp;']]]]);
+        $this->assertTrue($entity->isInputPending(), 'blank paragraph');
+
+        $entity->setEditedDescriptionFromArray(['blocks' => [['id' => 'x', 'type' => 'paragraph', 'data' => ['text' => 'Send the lease']]]]);
+        $this->assertFalse($entity->isInputPending());
+    }
+
+    public function testLibraryTodoInputPendingIsUnchanged(): void
+    {
+        $version = new LetterTodoVersion();
+        $version->setRequiresInput(true);
+        $entity = new Entity();
+        $entity->setLetterTodoVersion($version);
+
+        $this->assertFalse($entity->isCustom());
+        $this->assertTrue($entity->isInputPending());
+
+        $entity->setEditedDescriptionFromArray(['blocks' => [['id' => 'x', 'type' => 'paragraph', 'data' => ['text' => 'Done']]]]);
+        $this->assertFalse($entity->isInputPending());
+
+        $version->setRequiresInput(false);
+        $this->assertFalse((new Entity())->setLetterTodoVersion($version)->isInputPending());
+    }
+
+    public function testCustomTodosAreNamedByTheirPlaceUnderTheirIssue(): void
+    {
+        $version = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion();
+        $version->setHeading('Other issue');
+        $version->setIsOther(true);
+        $issue = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue();
+        $issue->setLetterIssueVersion($version);
+        $issue->setEditedHeading('Vehicle storage');
+
+        $library = new Entity();
+        $library->setLetterTodoVersion(new LetterTodoVersion());
+        $library->setDisplayOrder(1);
+        $second = new Entity();
+        $second->setDisplayOrder(5);
+        $first = new Entity();
+        $first->setDisplayOrder(3);
+        $issue->addLetterInstanceTodo($library);
+        $issue->addLetterInstanceTodo($second);
+        $issue->addLetterInstanceTodo($first);
+
+        $this->assertSame(1, $first->getCustomIndex());
+        $this->assertSame(2, $second->getCustomIndex());
+        $this->assertSame('Vehicle storage: to-do 2', $second->getCustomLabel());
+        $this->assertNull($library->getCustomIndex());
+        $this->assertNull($library->getCustomLabel());
+    }
 }

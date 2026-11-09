@@ -158,6 +158,14 @@ class LetterIssueVersion extends AbstractLetterIssueVersion
      *
      * @return array
      */
+    /**
+     * An Other issue: the caseworker writes the heading and may add their own to-dos (VOL-7735)
+     */
+    public function isOther(): bool
+    {
+        return (bool) $this->isOther;
+    }
+
     public function getDefaultBodyContentAsArray(): array
     {
         $content = $this->defaultBodyContent;

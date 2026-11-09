@@ -180,6 +180,14 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     protected $requiresInput = 0;
 
     /**
+     * Other issue: the caseworker writes the heading and may add their own to-dos (VOL-7735)
+     *
+     * @var bool
+     */
+    #[ORM\Column(type: 'boolean', name: 'is_other', nullable: false, options: ['default' => 0])]
+    protected $isOther = 0;
+
+    /**
      * Applicable in NI
      *
      * @var bool
@@ -610,6 +618,30 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     public function getRequiresInput()
     {
         return $this->requiresInput;
+    }
+
+    /**
+     * Set the is other
+     *
+     * @param bool $isOther new value being set
+     *
+     * @return static
+     */
+    public function setIsOther($isOther)
+    {
+        $this->isOther = $isOther;
+
+        return $this;
+    }
+
+    /**
+     * Get the is other
+     *
+     * @return bool
+     */
+    public function getIsOther()
+    {
+        return $this->isOther;
     }
 
     /**
