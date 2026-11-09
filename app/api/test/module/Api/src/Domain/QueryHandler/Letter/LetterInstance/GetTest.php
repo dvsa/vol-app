@@ -69,6 +69,8 @@ final class GetTest extends QueryHandlerTestCase
                     ]
                 ]
             )->once()->andReturn(['id' => 123, 'reference' => 'LTR20251202ABC123'])->getMock();
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
 
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->andReturn([]);
         $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->andReturn([]);
@@ -97,6 +99,8 @@ final class GetTest extends QueryHandlerTestCase
         ];
 
         $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
         // counts are per to-do, so version 32 picks up issues that linked older versions of to-do 5
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->once()
@@ -127,6 +131,8 @@ final class GetTest extends QueryHandlerTestCase
         ];
 
         $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->once()->andReturn(['version-27' => 3]);
         $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->andReturn([]);
@@ -156,6 +162,8 @@ final class GetTest extends QueryHandlerTestCase
         ];
 
         $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->andReturn([]);
         $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->once()->andReturn([1 => [10, 12]]);
@@ -167,5 +175,61 @@ final class GetTest extends QueryHandlerTestCase
 
         $this->assertSame([10, 12], $result['letterInstanceTodos'][0]['placementIssueIds']);
         $this->assertSame([], $result['letterInstanceTodos'][1]['placementIssueIds']);
+    }
+
+    /**
+     * VOL-7735: the internal app reads the effective heading and the "Input required" and custom
+     * to-do flags from here rather than working them out from the versions itself.
+     */
+    public function testEachIssueAndTodoCarriesItsFlags(): void
+    {
+        $query = Qry::create(['id' => 123]);
+
+        $version = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion();
+        $version->setHeading('Other issue');
+        $version->setIsOther(true);
+        $other = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue();
+        $other->setId(10);
+        $other->setLetterIssueVersion($version);
+        $other->setEditedHeading('Vehicle storage');
+        $custom = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo();
+        $custom->setId(20);
+        $custom->setDisplayOrder(1);
+        $other->addLetterInstanceTodo($custom);
+        $library = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo();
+        $library->setId(21);
+        $library->setLetterTodoVersion(new \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion());
+
+        $serialized = [
+            'id' => 123,
+            'letterInstanceIssues' => [['id' => 10]],
+            'letterInstanceTodos' => [['id' => 20], ['id' => 21, 'letterTodoVersion' => ['id' => 5]]],
+        ];
+
+        $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
+        $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->andReturn([]);
+        $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->andReturn([]);
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection([$other]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection([$custom, $library]));
+
+        $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')->with($query)->once()->andReturn($mockLetterInstance);
+
+        $result = $this->sut->handleQuery($query);
+
+        $issue = $result['letterInstanceIssues'][0];
+        $this->assertSame('Vehicle storage', $issue['effectiveHeading']);
+        $this->assertTrue($issue['isOther']);
+        $this->assertTrue($issue['inputPending']);
+
+        [$customRow, $libraryRow] = $result['letterInstanceTodos'];
+        $this->assertTrue($customRow['isCustom']);
+        $this->assertSame(1, $customRow['customIndex']);
+        $this->assertTrue($customRow['inputPending']);
+        $this->assertFalse($libraryRow['isCustom']);
+        $this->assertNull($libraryRow['customIndex']);
+        $this->assertFalse($libraryRow['inputPending']);
     }
 }

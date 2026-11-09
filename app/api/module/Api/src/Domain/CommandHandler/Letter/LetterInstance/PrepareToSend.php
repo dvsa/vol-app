@@ -222,7 +222,8 @@ final class PrepareToSend extends AbstractCommandHandler implements
         $pending = [];
 
         foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
-            if ($issue->requiresInput() && !$issue->hasBeenEdited()) {
+            // an Other issue also needs its heading and real body text (VOL-7735)
+            if ($issue->isInputPending()) {
                 $pending[] = $issue->getHeading() ?: 'Issue';
             }
         }
@@ -234,7 +235,14 @@ final class PrepareToSend extends AbstractCommandHandler implements
         }
 
         foreach ($letterInstance->getLetterInstanceTodos() as $todo) {
-            if ($todo->requiresInput() && !$todo->hasBeenEdited()) {
+            if (!$todo->isInputPending()) {
+                continue;
+            }
+
+            if ($todo->isCustom()) {
+                // a caseworker-written to-do left empty (VOL-7735)
+                $pending[] = $todo->getCustomLabel() ?? 'To-do';
+            } else {
                 $todoVersion = $todo->getLetterTodoVersion();
                 $pending[] = $todoVersion?->getName() ?: $todoVersion?->getLetterTodo()?->getTodoKey() ?: 'To-do';
             }
