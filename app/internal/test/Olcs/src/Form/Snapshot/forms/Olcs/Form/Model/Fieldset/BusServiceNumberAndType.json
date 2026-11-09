@@ -268,7 +268,7 @@
                   "name": "serviceNo",
                   "attributes": {
                     "class": "",
-                    "id": "serviceNo"
+                    "id": ""
                   },
                   "type": "Text"
                 }

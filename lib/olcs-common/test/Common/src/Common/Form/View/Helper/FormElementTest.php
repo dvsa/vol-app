@@ -16,6 +16,7 @@ use Common\Form\Elements\Validators\Messages\FormElementMessageFormatter;
 use Common\Form\View\Helper\FormElement;
 use Common\Form\View\Helper\FormElementErrors;
 use Common\Form\View\Helper\FormPlainText;
+use Common\View\Helper\LinkNewWindow;
 use CommonTest\Common\Util\DummyTranslator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
@@ -171,11 +172,44 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->element->setValue('url');
         $this->element->setAttribute('target', '_blank');
 
+        $viewHelper = $this->prepareViewHelper(['link.opens-new-window' => '(opens in new tab)']);
+
+        echo $viewHelper($this->element, 'formCollection', '/');
+
+        $this->expectOutputString('<a href="url" class="class" target="_blank">Label (opens in new tab)</a>');
+    }
+
+    /**
+     * @outputBuffering disabled
+     */
+    public function testRenderForActionLinkElementWithTargetAndNoClass(): void
+    {
+        $this->prepareElement(ActionLink::class);
+        $this->element->setValue('url');
+        $this->element->setAttribute('class', null);
+        $this->element->setAttribute('target', '_blank');
+
+        $viewHelper = $this->prepareViewHelper(['link.opens-new-window' => '(opens in new tab)']);
+
+        echo $viewHelper($this->element, 'formCollection', '/');
+
+        $this->expectOutputString('<a href="url" class="govuk-link" target="_blank">Label (opens in new tab)</a>');
+    }
+
+    /**
+     * @outputBuffering disabled
+     */
+    public function testRenderForActionLinkElementWithOtherTarget(): void
+    {
+        $this->prepareElement(ActionLink::class);
+        $this->element->setValue('url');
+        $this->element->setAttribute('target', '_parent');
+
         $viewHelper = $this->prepareViewHelper();
 
         echo $viewHelper($this->element, 'formCollection', '/');
 
-        $this->expectOutputRegex('/^<a href="(.*)" class="(.*)" target="_blank">(.*)<\/a>$/');
+        $this->expectOutputString('<a href="url" class="class" target="_parent">Label</a>');
     }
 
     /**
@@ -597,6 +631,7 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         $helpers->setService('url', $urlHelper);
         $helpers->setService('form_element_errors', $formElementErrors);
         $helpers->setService('doctype', $docType);
+        $helpers->setService('linkNewWindow', (new LinkNewWindow())->setView($view));
 
         $view->setHelperPluginManager($helpers);
 

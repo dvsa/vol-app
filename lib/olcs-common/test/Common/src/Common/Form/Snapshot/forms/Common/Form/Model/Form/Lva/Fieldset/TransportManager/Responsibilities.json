@@ -91,8 +91,7 @@
         "type": "TextArea",
         "attributes": {
           "class": "long",
-          "label": "transport-manager.responsibilities.additional-information.title",
-          "autocomplete": "nope"
+          "label": "transport-manager.responsibilities.additional-information.title"
         },
         "options": {
           "label": "transport-manager.responsibilities.additional-information.label",
@@ -136,10 +135,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-mon",
-                      "label_attributes": {
-                        "aria-label": "Enter your working hours, Monday"
-                      }
+                      "label": "days-of-week-mon"
                     }
                   }
                 },
@@ -153,10 +149,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-tue",
-                      "label_attributes": {
-                        "aria-label": "Tuesday"
-                      }
+                      "label": "days-of-week-tue"
                     }
                   }
                 },
@@ -170,10 +163,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-wed",
-                      "label_attributes": {
-                        "aria-label": "Wednesday"
-                      }
+                      "label": "days-of-week-wed"
                     }
                   }
                 },
@@ -187,10 +177,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-thu",
-                      "label_attributes": {
-                        "aria-label": "Thursday"
-                      }
+                      "label": "days-of-week-thu"
                     }
                   }
                 },
@@ -204,10 +191,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-fri",
-                      "label_attributes": {
-                        "aria-label": "Friday"
-                      }
+                      "label": "days-of-week-fri"
                     }
                   }
                 },
@@ -221,10 +205,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-sat",
-                      "label_attributes": {
-                        "aria-label": "Saturday"
-                      }
+                      "label": "days-of-week-sat"
                     }
                   }
                 },
@@ -238,10 +219,7 @@
                       "data-container-class": "inline-text"
                     },
                     "options": {
-                      "label": "days-of-week-short-sun",
-                      "label_attributes": {
-                        "aria-label": "Sunday"
-                      }
+                      "label": "days-of-week-sun"
                     }
                   }
                 }

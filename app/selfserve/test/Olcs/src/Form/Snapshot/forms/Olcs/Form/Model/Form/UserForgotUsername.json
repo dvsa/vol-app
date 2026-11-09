@@ -21,10 +21,7 @@
               "name": "licenceNumber",
               "type": "Text",
               "options": {
-                "label": "user-forgot-username.field.licenceNumber.label",
-                "label_attributes": {
-                  "aria-label": "Enter your licence number"
-                }
+                "label": "user-forgot-username.field.licenceNumber.label"
               },
               "attributes": {
                 "class": "medium"
@@ -37,10 +34,7 @@
               "name": "emailAddress",
               "type": "Text",
               "options": {
-                "label": "user-forgot-username.field.emailAddress.label",
-                "label_attributes": {
-                  "aria-label": "Enter your email address"
-                }
+                "label": "user-forgot-username.field.emailAddress.label"
               },
               "attributes": {
                 "class": "long"

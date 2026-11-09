@@ -5,7 +5,6 @@ namespace Admin\Form\Model\Fieldset;
 use Common\RefData;
 use Laminas\Form\Annotation as Form;
 
-#[Form\Attributes(['id' => 'userType'])]
 #[Form\Type('Laminas\Form\Fieldset')]
 #[Form\Name('user-type')]
 class UserType

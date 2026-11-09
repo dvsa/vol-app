@@ -121,11 +121,13 @@ final class DocumentDescriptionTest extends MockeryTestCase
         ];
         $column = [];
 
-        $this->urlHelper->shouldReceive('fromRoute')
+        $this->urlHelper->expects('fromRoute')
             ->with('getfile', ['identifier' => 666])
             ->andReturn('URL');
 
-        $expected = '<a class="govuk-link" href="URL" target="_blank">Foo file</a>';
+        $this->translator->expects('translate')->with('link.opens-new-window')->andReturn('(opens in new tab)');
+
+        $expected = '<a class="govuk-link" href="URL" target="_blank">Foo file (opens in new tab)</a>';
         $this->assertEquals($expected, $this->sut->format($data, $column));
     }
 

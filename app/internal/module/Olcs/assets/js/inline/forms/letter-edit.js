@@ -300,8 +300,11 @@ OLCS.ready(function () {
     });
   });
 
-  // Back to preview handler with unsaved changes warning
-  $("#back-to-preview").on("click", function (e) {
+  /**
+   * Headings of the editors on this page with unsaved changes. Shared with the change issues
+   * modal (letter-change-issues.js), which warns before leaving the page the same way.
+   */
+  function collectUnsavedSectionNames() {
     var unsavedSections = [];
 
     $(".issue-editor-group").each(function () {
@@ -339,6 +342,15 @@ OLCS.ready(function () {
         unsavedSections.push(heading);
       }
     });
+
+    return unsavedSections;
+  }
+
+  OLCS.letterEdit = { unsavedSectionNames: collectUnsavedSectionNames };
+
+  // Back to preview handler with unsaved changes warning
+  $("#back-to-preview").on("click", function (e) {
+    var unsavedSections = collectUnsavedSectionNames();
 
     if (unsavedSections.length === 0) {
       return;

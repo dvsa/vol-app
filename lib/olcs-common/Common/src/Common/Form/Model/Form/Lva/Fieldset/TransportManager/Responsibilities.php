@@ -46,7 +46,7 @@ class Responsibilities
     public $otherLicencesFieldset;
 
     #[Form\Type('TextArea')]
-    #[Form\Attributes(['class' => 'long', 'label' => 'transport-manager.responsibilities.additional-information.title', 'autocomplete' => 'nope'])]
+    #[Form\Attributes(['class' => 'long', 'label' => 'transport-manager.responsibilities.additional-information.title'])]
     #[Form\Options(['label' => 'transport-manager.responsibilities.additional-information.label', 'label_options' => ['disable_html_escape' => 'true'], 'label_attributes' => ['id' => 'additionalInformation'], 'hint' => 'transport-manager.responsibilities.additional-information.hint'])]
     #[Form\Required(false)]
     #[Form\Filter('Laminas\Filter\StringTrim')]

@@ -10,7 +10,7 @@
         "name": "employerName",
         "attributes": {
           "class": "long",
-          "id": "position",
+          "id": "employerName",
           "required": "required"
         },
         "options": {

@@ -16,6 +16,9 @@ OLCS.editorjs = (function (document, $, undefined) {
   // demand rather than only when EditorJS gets round to announcing a change.
   var hiddenInputs = {};
 
+  // Each editor's holder, so closing a modal only cleans up the editors that were in it.
+  var holders = {};
+
   /**
    * Has the content actually changed, ignoring the timestamp EditorJS re-stamps on
    * every save?
@@ -248,6 +251,7 @@ OLCS.editorjs = (function (document, $, undefined) {
       // Store editor instance for cleanup, and its input so it can be flushed on demand
       editorInstances[inputName] = editor;
       hiddenInputs[inputName] = hiddenInput;
+      holders[inputName] = editorContainer;
     } catch (error) {
       if (typeof OLCS.logger !== "undefined") {
         OLCS.logger("EditorJS creation failed: " + error.message);
@@ -346,35 +350,36 @@ OLCS.editorjs = (function (document, $, undefined) {
     // Re-setup on render events (for modals and AJAX content)
     OLCS.eventEmitter.on("render", setup);
 
-    // Cleanup when modal closes
+    // Cleanup when a modal closes. The modal has removed its markup by now, so only the
+    // editors that went with it are torn down. The page's own editors, and any unsaved
+    // edits in them, are left alone.
     OLCS.eventEmitter.on("hide:modal", function () {
-      // Clean up EditorJS instances and observers
-      Object.keys(editorInstances).forEach(function (name) {
+      Object.keys(holders).forEach(function (name) {
+        if (document.body.contains(holders[name])) {
+          return;
+        }
+
         try {
-          // Clean up MutationObserver if it exists
-          if (name.endsWith("_observer")) {
-            var observer = editorInstances[name];
-            if (observer && typeof observer.disconnect === "function") {
-              observer.disconnect();
-            }
-          } else {
-            // Clean up EditorJS instance
-            var editor = editorInstances[name];
-            if (editor && typeof editor.destroy === "function") {
-              editor.destroy();
-            }
+          var observer = editorInstances[name + "_observer"];
+          if (observer && typeof observer.disconnect === "function") {
+            observer.disconnect();
+          }
+
+          var editor = editorInstances[name];
+          if (editor && typeof editor.destroy === "function") {
+            editor.destroy();
           }
         } catch (e) {
           if (typeof OLCS.logger !== "undefined") {
             OLCS.logger("Error destroying instance: " + name + " - " + e.message);
           }
         }
-      });
-      editorInstances = {};
-      hiddenInputs = {};
 
-      // Reset initialization flags
-      $(".editorjs-container").removeData("editorjs-initialized");
+        delete editorInstances[name + "_observer"];
+        delete editorInstances[name];
+        delete hiddenInputs[name];
+        delete holders[name];
+      });
     });
   };
 })(document, window.jQuery);
