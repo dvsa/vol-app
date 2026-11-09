@@ -232,7 +232,7 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
                 $attributes['data-group'] = $fieldsetName;
             }
 
-            if(!empty($hint)) {
+            if (!empty($hint)) {
                 $attributes['aria-describedby'] = $hintId;
             }
 

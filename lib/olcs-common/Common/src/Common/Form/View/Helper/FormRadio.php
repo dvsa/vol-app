@@ -107,7 +107,6 @@ class FormRadio extends \Laminas\Form\View\Helper\FormRadio
             $inputAttributes = $this->maybeAddInputId($inputAttributes);
             $labelAttributes['for'] = $inputAttributes['id'];
 
-
             if (isset($optionSpec['hint'])) {
                 $inputAttributes['aria-describedby'] = $inputAttributes['id'] . '-hint';
                 $optionSpec['hint_attributes']['id'] = $inputAttributes['id'] . '-hint';
