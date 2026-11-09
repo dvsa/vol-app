@@ -88,8 +88,11 @@ class FormElementErrors extends LaminasFormElementErrors
         }
 
         $markup = '';
+
+        $errorMessage = $this->translator->translate('Error');
+
         foreach ($messagesToPrint as $message) {
-            $markup .= sprintf('<p%s><span class="govuk-visually-hidden">Error:</span>%s</p>', $attributes, $message);
+            $markup .= sprintf('<p%s><span class="govuk-visually-hidden">%s:</span>%s</p>', $attributes, $errorMessage, $message);
         }
 
         return $markup;

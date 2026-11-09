@@ -24,7 +24,7 @@ class FormElementErrorsFactory implements FactoryInterface
     {
         return new FormElementErrors(
             $container->get(FormElementMessageFormatter::class),
-            $container->get(TranslatorInterface::class)
+            $container->get('translator')
         );
     }
 }
