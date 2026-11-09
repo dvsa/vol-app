@@ -99,6 +99,7 @@ OLCS.ready(function () {
     var version = $btn.data("version");
     var $group = $btn.closest(".issue-editor-group");
     var hiddenInput = $group.find("input[type='hidden']");
+    var $heading = $group.find(".other-issue-heading");
 
     withFlushedEditors(function () {
       var editedContent = hiddenInput.val();
@@ -113,10 +114,18 @@ OLCS.ready(function () {
           issueId: issueId,
           editedContent: editedContent,
           version: version,
+          // an Other issue's heading (VOL-7735); left out for standard issues
+          editedHeading: $heading.length ? $heading.val() : undefined,
         }),
         success: function (response) {
           if (response.success) {
             dirtyMap["issue-" + issueId] = false;
+            if ($heading.length && $.trim($heading.val()) !== "") {
+              $group
+                .find(".govuk-heading-s")
+                .first()
+                .text($.trim($heading.val()));
+            }
             $btn.data("version", response.version);
             $group.find(".save-indicator").show();
             $btn.prop("disabled", false).text("Save changes");
@@ -151,6 +160,7 @@ OLCS.ready(function () {
     var version = $btn.data("version");
     var $group = $btn.closest(".appendix-editor-group");
     var hiddenInput = $group.find("input[type='hidden']");
+    var $heading = $group.find(".other-issue-heading");
 
     withFlushedEditors(function () {
       var editedContent = hiddenInput.val();
@@ -203,6 +213,7 @@ OLCS.ready(function () {
     var version = $btn.data("version");
     var $group = $btn.closest(".section-editor-group");
     var hiddenInput = $group.find("input[type='hidden']");
+    var $heading = $group.find(".other-issue-heading");
 
     withFlushedEditors(function () {
       var editedContent = hiddenInput.val();
@@ -298,6 +309,116 @@ OLCS.ready(function () {
         },
       });
     });
+  });
+
+  // An Other issue's heading counts as an unsaved change until saved (VOL-7735)
+  $(".other-issue-heading").on("input", function () {
+    var $group = $(this).closest(".issue-editor-group");
+    dirtyMap["issue-" + $group.data("issue-id")] = true;
+    $group.find(".save-indicator").hide();
+  });
+
+  /**
+   * Adding or deleting a caseworker-written to-do reloads the page (editors only start up on
+   * load), so say what unsaved work would be lost first. True when it's fine to go ahead.
+   */
+  function okToLoseUnsaved() {
+    var unsaved = collectUnsavedSectionNames();
+
+    return (
+      unsaved.length === 0 ||
+      window.confirm(
+        "This reloads the page. Unsaved changes in these sections will be lost:\n\n" +
+          unsaved.join("\n") +
+          "\n\nContinue?",
+      )
+    );
+  }
+
+  /**
+   * Reload the edit page with its to-dos changed, e.g. a new one added.
+   */
+  function reloadWithTodos(change) {
+    var url = new URL(window.location.href);
+    var todos = url.searchParams.getAll("todos[]");
+    url.searchParams.delete("todos[]");
+    change(todos).forEach(function (id) {
+      url.searchParams.append("todos[]", id);
+    });
+    window.location.href = url.toString();
+  }
+
+  function postCustomTodo(path, body, $btn, done) {
+    $btn.prop("disabled", true);
+    $.ajax({
+      url: path,
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(body),
+      success: function (response) {
+        if (response.success) {
+          done(response);
+        } else {
+          showError(response.message || "Something went wrong");
+          $btn.prop("disabled", false);
+        }
+      },
+      error: function (xhr) {
+        var message = "Something went wrong";
+        try {
+          message = JSON.parse(xhr.responseText).message || message;
+        } catch (e) {
+          // Use default message
+        }
+        showError(message);
+        $btn.prop("disabled", false);
+      },
+    });
+  }
+
+  // Add a caseworker-written to-do under an Other issue (VOL-7735)
+  $(".add-custom-todo-btn").on("click", function (e) {
+    e.preventDefault();
+    var $btn = $(this);
+    if (!okToLoseUnsaved()) {
+      return;
+    }
+    postCustomTodo(
+      "/letter/add-custom-todo",
+      { issueId: $btn.data("issue-id") },
+      $btn,
+      function (response) {
+        reloadWithTodos(function (todos) {
+          return todos.concat([String(response.todoId)]);
+        });
+      },
+    );
+  });
+
+  // Delete a caseworker-written to-do (VOL-7735)
+  $(".delete-custom-todo-btn").on("click", function (e) {
+    e.preventDefault();
+    var $btn = $(this);
+    var todoId = String($btn.data("todo-id"));
+    if (!window.confirm("Delete this to-do? This cannot be undone.")) {
+      return;
+    }
+    dirtyMap["todo-" + todoId] = false;
+    if (!okToLoseUnsaved()) {
+      return;
+    }
+    postCustomTodo(
+      "/letter/delete-custom-todo",
+      { todoId: todoId },
+      $btn,
+      function () {
+        reloadWithTodos(function (todos) {
+          return todos.filter(function (id) {
+            return id !== todoId;
+          });
+        });
+      },
+    );
   });
 
   /**

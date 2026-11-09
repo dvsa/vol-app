@@ -9,6 +9,9 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\UpdateIssues;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent as UpdateIssueContent;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\CreateCustom;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\DeleteCustom;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\GenerationContext;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterIssue\GetList as LetterIssueList;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList as LetterIssueTypeList;
@@ -253,6 +256,8 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         return [
             'id' => 3,
             'editedDescription' => $editedDescription,
+            // the API works this out (LetterInstanceTodo::isInputPending, VOL-7735)
+            'inputPending' => $requiresInput && $editedDescription === null,
             'requiringIssueCount' => 2,
             'letterTodoVersion' => [
                 'name' => 'Upload bank statements',
@@ -309,6 +314,25 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         }
 
         return $issueIds;
+    }
+
+    /**
+     * VOL-7735: the Other option comes last in its group, whatever its key sorts as ("FI-OTHER"
+     * sorts before "FI01", since "-" comes before the digits).
+     */
+    public function testOtherIssueIsLastInItsGroup(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchActiveIssueTypes')->andReturn([['id' => 2, 'name' => 'Finance', 'isActive' => true]]);
+        $sut->shouldReceive('fetchActiveLetterIssues')->andReturn([
+            ['id' => 30, 'issueKey' => 'FI-OTHER', 'currentVersion' => ['letterIssueType' => ['id' => 2], 'isOther' => true]],
+            ['id' => 20, 'issueKey' => 'FI01', 'currentVersion' => ['letterIssueType' => ['id' => 2]]],
+            ['id' => 21, 'issueKey' => 'FI02', 'currentVersion' => ['letterIssueType' => ['id' => 2], 'isOther' => false]],
+        ]);
+
+        $accordion = (new \ReflectionMethod(Sut::class, 'buildAccordionData'))->invoke($sut, null);
+
+        $this->assertSame([20, 21, 30], array_column($accordion[0]['issues'], 'id'));
     }
 
     public function testPsvContextHidesGoodsOnlyIssuesAndLeavesTheirTypeEmpty(): void
@@ -709,5 +733,108 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $view = $this->runChangeIssues($sut, ['id' => '55']);
 
         $this->assertSame('abc123-token', $view->getVariable('csrfToken'));
+    }
+
+    /**
+     * VOL-7735: the sidebar names an Other issue by what the caseworker wrote, and takes
+     * "Input required" from the API rather than re-deriving it from the version.
+     */
+    public function testSidebarUsesTheWrittenHeadingAndFlags(): void
+    {
+        $issues = $this->invokeProtected('buildIssuesList', ['letterInstanceIssues' => [
+            ['id' => 10, 'effectiveHeading' => 'Vehicle storage', 'inputPending' => true, 'letterIssueVersion' => ['heading' => 'Other issue']],
+            ['id' => 11, 'letterIssueVersion' => ['heading' => 'Bank statements too old']],
+        ]]);
+
+        $this->assertSame(['Vehicle storage', 'Bank statements too old'], array_column($issues, 'name'));
+        $this->assertSame([true, false], array_column($issues, 'inputPending'));
+    }
+
+    public function testCustomTodosAreNamedByPosition(): void
+    {
+        $data = [
+            'letterInstanceIssues' => [['id' => 10, 'effectiveHeading' => 'Vehicle storage']],
+            'letterInstanceTodos' => [
+                ['id' => 20, 'isCustom' => true, 'customIndex' => 2, 'inputPending' => true, 'letterInstanceIssue' => ['id' => 10]],
+                ['id' => 21, 'isCustom' => false, 'letterTodoVersion' => ['name' => 'Send a lease', 'letterTodo' => ['todoKey' => 'FI02']]],
+            ],
+        ];
+
+        $todos = $this->invokeProtected('buildTodosList', $data);
+
+        $this->assertSame(['Vehicle storage: to-do 2', 'Send a lease (FI02)'], array_column($todos, 'name'));
+        $this->assertSame([true, false], array_column($todos, 'inputPending'));
+        $this->assertSame('To-do 2', $this->invokeProtected('todoEditorName', $data['letterInstanceTodos'][0]));
+        $this->assertSame('Send a lease (FI02)', $this->invokeProtected('todoEditorName', $data['letterInstanceTodos'][1]));
+    }
+
+    private function postJson(Sut $sut, string $action, array $body, string $method = 'POST'): array
+    {
+        $request = new Request();
+        $request->setMethod($method);
+        $request->setContent((string) json_encode($body));
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+
+        $response = $sut->{$action . 'Action'}();
+
+        return ['status' => $response->getStatusCode(), 'json' => json_decode($response->getContent(), true)];
+    }
+
+    public function testSaveIssueContentPassesTheHeading(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd instanceof UpdateIssueContent && $cmd->getEditedHeading() === 'Vehicle storage'))
+            ->once()
+            ->andReturn($this->okResponse(['messages' => ['Saved']]));
+
+        $result = $this->postJson($sut, 'saveIssueContent', [
+            'issueId' => 10, 'editedContent' => ['blocks' => []], 'version' => 1, 'editedHeading' => 'Vehicle storage',
+        ]);
+
+        $this->assertTrue($result['json']['success']);
+    }
+
+    public function testSaveIssueContentWithoutAHeadingLeavesItAlone(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd instanceof UpdateIssueContent && $cmd->getEditedHeading() === null))
+            ->once()
+            ->andReturn($this->okResponse(['messages' => ['Saved']]));
+
+        $this->postJson($sut, 'saveIssueContent', ['issueId' => 10, 'editedContent' => ['blocks' => []], 'version' => 1]);
+    }
+
+    public function testAddCustomTodoReturnsTheNewId(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd instanceof CreateCustom && (int) $cmd->getLetterInstanceIssue() === 10))
+            ->once()
+            ->andReturn($this->okResponse(['id' => ['letterInstanceTodo' => 99], 'messages' => []]));
+
+        $result = $this->postJson($sut, 'addCustomTodo', ['issueId' => 10]);
+
+        $this->assertTrue($result['json']['success']);
+        $this->assertSame(99, $result['json']['todoId']);
+    }
+
+    public function testDeleteCustomTodoSendsTheCommand(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd instanceof DeleteCustom && (int) $cmd->getId() === 99))
+            ->once()
+            ->andReturn($this->okResponse(['messages' => []]));
+
+        $this->assertTrue($this->postJson($sut, 'deleteCustomTodo', ['todoId' => 99])['json']['success']);
+    }
+
+    public function testCustomTodoActionsRejectGet(): void
+    {
+        $this->assertSame(405, $this->postJson($this->bareSut(), 'addCustomTodo', [], 'GET')['status']);
+        $this->assertSame(405, $this->postJson($this->bareSut(), 'deleteCustomTodo', [], 'GET')['status']);
     }
 }

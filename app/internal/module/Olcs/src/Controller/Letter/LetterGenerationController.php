@@ -273,18 +273,7 @@ class LetterGenerationController extends AbstractInternalController implements L
 
         // Build sections list for sidebar
         // NOTE: despite the name, $sectionsList contains ISSUES (kept for backwards compatibility).
-        $sectionsList = [];
-        foreach ($result['letterInstanceIssues'] ?? [] as $issue) {
-            $sectionsList[] = [
-                'id' => $issue['id'],
-                'name' => $issue['letterIssueVersion']['heading'] ?? 'Issue',
-                'type' => 'issue',
-                // VOL-7402: flagged content must be edited before the letter can be
-                // sent (enforced server-side in PrepareToSend) — highlight it here.
-                'inputPending' => !empty($issue['letterIssueVersion']['requiresInput'])
-                    && empty($issue['editedContent']),
-            ];
-        }
+        $sectionsList = $this->buildIssuesList($result);
 
         // Add editable appendices to sections list
         $appendicesList = [];
@@ -476,7 +465,10 @@ class LetterGenerationController extends AbstractInternalController implements L
 
             $groupedIssues[$typeId]['issues'][] = [
                 'id' => $issue['id'],
-                'heading' => $issueVersion['heading'] ?? 'Issue',
+                'heading' => $issue['effectiveHeading'] ?? $issueVersion['heading'] ?? 'Issue',
+                // an Other issue's heading is the caseworker's to write (VOL-7735)
+                'isOther' => !empty($issue['isOther']),
+                'editedHeading' => (string) ($issue['editedHeading'] ?? ''),
                 'content' => $effectiveContent,
                 'version' => $issue['version'] ?? 1,
             ];
@@ -559,7 +551,6 @@ class LetterGenerationController extends AbstractInternalController implements L
             }
 
             $todoVersion = $todo['letterTodoVersion'] ?? [];
-            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
 
             $effectiveContent = $this->editorContent(
                 $todo['editedDescription'] ?? null,
@@ -567,11 +558,10 @@ class LetterGenerationController extends AbstractInternalController implements L
                 $todoVersion['description'] ?? null
             );
 
-            $name = $todoVersion['name'] ?? null;
-
             $groupedTodos[] = [
                 'id' => $todo['id'],
-                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
+                'name' => $this->todoEditorName($todo),
+                'isCustom' => !empty($todo['isCustom']),
                 'content' => $effectiveContent,
                 'version' => $todo['version'] ?? 1,
                 'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
@@ -808,13 +798,19 @@ class LetterGenerationController extends AbstractInternalController implements L
             return $this->jsonError('Missing required fields: issueId, editedContent, version');
         }
 
-        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent::create([
+        $data = [
             'id' => (int) $body['issueId'],
             'editedContent' => is_string($body['editedContent'])
                 ? $body['editedContent']
                 : json_encode($body['editedContent']),
             'version' => (int) $body['version'],
-        ]);
+        ];
+        // an Other issue's heading travels with its body (VOL-7735)
+        if (array_key_exists('editedHeading', $body)) {
+            $data['editedHeading'] = (string) $body['editedHeading'];
+        }
+
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent::create($data);
 
         $response = $this->handleCommand($command);
 
@@ -884,6 +880,75 @@ class LetterGenerationController extends AbstractInternalController implements L
      *
      * @return Response
      */
+    /**
+     * Add an empty caseworker-written to-do to an Other issue - AJAX endpoint (VOL-7735)
+     *
+     * Accepts POST with JSON body: { issueId }; returns { todoId }
+     *
+     * @return Response
+     */
+    public function addCustomTodoAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $body = json_decode($this->getRequest()->getContent(), true);
+        if (empty($body['issueId'])) {
+            return $this->jsonError('Missing required field: issueId');
+        }
+
+        $response = $this->handleCommand(\Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\CreateCustom::create([
+            'letterInstanceIssue' => (int) $body['issueId'],
+        ]));
+
+        if (!$response->isOk()) {
+            return $this->jsonError('Failed to add the to-do: ' . $this->commandMessages($response));
+        }
+
+        return $this->jsonSuccess(['todoId' => (int) ($response->getResult()['id']['letterInstanceTodo'] ?? 0)]);
+    }
+
+    /**
+     * Delete a caseworker-written to-do - AJAX endpoint (VOL-7735)
+     *
+     * Accepts POST with JSON body: { todoId }
+     *
+     * @return Response
+     */
+    public function deleteCustomTodoAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $body = json_decode($this->getRequest()->getContent(), true);
+        if (empty($body['todoId'])) {
+            return $this->jsonError('Missing required field: todoId');
+        }
+
+        $response = $this->handleCommand(\Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\DeleteCustom::create([
+            'id' => (int) $body['todoId'],
+        ]));
+
+        if (!$response->isOk()) {
+            return $this->jsonError('Failed to delete the to-do: ' . $this->commandMessages($response));
+        }
+
+        return $this->jsonSuccess(['todoId' => (int) $body['todoId']]);
+    }
+
+    private function commandMessages(\Common\Service\Cqrs\Response $response): string
+    {
+        $messages = $response->getResult()['messages'] ?? [];
+        $flat = [];
+        array_walk_recursive($messages, static function ($message) use (&$flat): void {
+            $flat[] = (string) $message;
+        });
+
+        return implode(', ', $flat);
+    }
+
     /**
      * Save a caseworker's edit to one to-do's wording.
      *
@@ -1231,13 +1296,18 @@ class LetterGenerationController extends AbstractInternalController implements L
             }
         }
 
-        // Build final structure
+        // Build final structure. The Other option goes last in its group (VOL-7735): its key
+        // ("FI-OTHER") sorts before the numbered ones, as "-" comes before the digits.
         $accordionData = [];
         foreach ($issueTypes as $issueType) {
-            $typeId = $issueType['id'];
+            $issues = $issuesByType[$issueType['id']] ?? [];
+            $isOther = static fn(array $issue): bool => !empty($issue['currentVersion']['isOther']);
             $accordionData[] = [
                 'issueType' => $issueType,
-                'issues' => $issuesByType[$typeId] ?? [],
+                'issues' => array_merge(
+                    array_values(array_filter($issues, static fn(array $issue): bool => !$isOther($issue))),
+                    array_values(array_filter($issues, $isOther))
+                ),
             ];
         }
 
@@ -1488,25 +1558,68 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     protected function buildTodosList(array $letterInstanceData): array
     {
+        $issueHeadings = array_column($this->buildIssuesList($letterInstanceData), 'name', 'id');
+
         $todosList = [];
         foreach ($letterInstanceData['letterInstanceTodos'] ?? [] as $todo) {
-            $todoVersion = $todo['letterTodoVersion'] ?? [];
-            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
-            $name = $todoVersion['name'] ?? null;
+            $name = $this->todoEditorName($todo);
+            if (!empty($todo['isCustom'])) {
+                // away from its issue a custom to-do needs the issue's name too (VOL-7735)
+                $issueHeading = $issueHeadings[$todo['letterInstanceIssue']['id'] ?? null] ?? 'Other issue';
+                $name = $issueHeading . ': to-do ' . (int) ($todo['customIndex'] ?? 0);
+            }
 
             $todosList[] = [
                 'id' => $todo['id'] ?? null,
-                // Falls back to the key alone while the name backfill has not run.
-                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
+                'name' => $name,
                 'type' => 'todo',
                 'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
-                // flagged to-dos must be edited before the letter can be sent (PrepareToSend)
-                'inputPending' => !empty($todoVersion['requiresInput'])
-                    && empty($todo['editedDescription']),
+                // must be written before the letter can be sent (PrepareToSend); the API decides
+                'inputPending' => (bool) ($todo['inputPending'] ?? false),
             ];
         }
 
         return $todosList;
+    }
+
+    /**
+     * The issues for the preview sidebar, named as the letter prints them (an Other issue by the
+     * caseworker's heading, VOL-7735) and flagged when they still need input (VOL-7402).
+     *
+     * @param array $letterInstanceData Letter instance query result
+     * @return list<array{id: mixed, name: string, type: string, inputPending: bool}>
+     */
+    protected function buildIssuesList(array $letterInstanceData): array
+    {
+        $issuesList = [];
+        foreach ($letterInstanceData['letterInstanceIssues'] ?? [] as $issue) {
+            $issuesList[] = [
+                'id' => $issue['id'],
+                'name' => (string) ($issue['effectiveHeading'] ?? $issue['letterIssueVersion']['heading'] ?? 'Issue'),
+                'type' => 'issue',
+                'inputPending' => (bool) ($issue['inputPending'] ?? false),
+            ];
+        }
+
+        return $issuesList;
+    }
+
+    /**
+     * A to-do's name on the edit page: a library to-do by its name and key (two can share a
+     * name), a caseworker-written one by its place under its issue (VOL-7735).
+     */
+    protected function todoEditorName(array $todo): string
+    {
+        if (!empty($todo['isCustom'])) {
+            return 'To-do ' . (int) ($todo['customIndex'] ?? 0);
+        }
+
+        $todoVersion = $todo['letterTodoVersion'] ?? [];
+        $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
+        $name = $todoVersion['name'] ?? null;
+
+        // Falls back to the key alone while the name backfill has not run.
+        return $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')');
     }
 
     /**
