@@ -120,11 +120,14 @@ OLCS.ready(function () {
         success: function (response) {
           if (response.success) {
             dirtyMap["issue-" + issueId] = false;
-            if ($heading.length && $.trim($heading.val()) !== "") {
+            if ($heading.length) {
+              // a cleared heading falls back to the standing one, as the letter does
               $group
                 .find(".govuk-heading-s")
                 .first()
-                .text($.trim($heading.val()));
+                .text(
+                  $.trim($heading.val()) || $heading.data("default-heading"),
+                );
             }
             $btn.data("version", response.version);
             $group.find(".save-indicator").show();

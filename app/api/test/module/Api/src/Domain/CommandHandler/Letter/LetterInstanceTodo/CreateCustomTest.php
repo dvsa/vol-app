@@ -23,6 +23,9 @@ final class CreateCustomTest extends AbstractCommandHandlerTestCase
 
     public function setUp(): void
     {
+        $this->mockedSmServices = [
+            \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer::class => new \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer(),
+        ];
         $this->sut = new CommandHandler();
         $this->mockRepo('LetterInstanceTodo', LetterInstanceTodoRepo::class);
         $this->mockRepo('LetterInstanceIssue', LetterInstanceIssueRepo::class);
@@ -30,14 +33,33 @@ final class CreateCustomTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    /**
+     * A library to-do the given issue brings, already on the letter
+     */
+    private function libraryTodoOn(\Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue $issue, int $todoId, int $displayOrder): LetterInstanceTodo
+    {
+        $letterTodo = new \Dvsa\Olcs\Api\Entity\Letter\LetterTodo();
+        $letterTodo->setId($todoId);
+        $version = new LetterTodoVersion();
+        $version->setLetterTodo($letterTodo);
+        $letterTodo->setCurrentVersion($version);
+        $link = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueTodo();
+        $link->setLetterTodoVersion($version);
+        $issue->getLetterIssueVersion()->addLetterIssueTodo($link);
+
+        $todo = new LetterInstanceTodo();
+        $todo->setLetterTodoVersion($version);
+        $todo->setDisplayOrder($displayOrder);
+        $issue->addLetterInstanceTodo($todo);
+        $issue->getLetterInstance()->addLetterInstanceTodo($todo);
+
+        return $todo;
+    }
+
     public function testAddsAnEmptyCustomTodoAtTheEndOfTheOtherIssue(): void
     {
         $issue = $this->issueOnLetter(true);
-        $existing = new LetterInstanceTodo();
-        $existing->setLetterTodoVersion(new LetterTodoVersion());
-        $existing->setDisplayOrder(7);
-        $issue->addLetterInstanceTodo($existing);
-        $issue->getLetterInstance()->addLetterInstanceTodo($existing);
+        $existing = $this->libraryTodoOn($issue, 5, 7);
 
         $this->repoMap['LetterInstanceIssue']->shouldReceive('fetchById')->with(10)->once()->andReturn($issue);
         $saved = null;
@@ -54,7 +76,8 @@ final class CreateCustomTest extends AbstractCommandHandlerTestCase
         $this->assertTrue($saved->isCustom());
         $this->assertSame($issue, $saved->getLetterInstanceIssue());
         $this->assertTrue($issue->getLetterInstance()->getLetterInstanceTodos()->contains($saved));
-        $this->assertSame(8, $saved->getDisplayOrder());
+        $this->assertSame(1, $saved->getDisplayOrder(), 'after the issue\'s own to-do, numbered in letter order');
+        $this->assertSame(0, $existing->getDisplayOrder());
         $this->assertSame(99, $result->getId('letterInstanceTodo'));
     }
 
@@ -75,5 +98,33 @@ final class CreateCustomTest extends AbstractCommandHandlerTestCase
 
         $this->expectException(ValidationException::class);
         $this->sut->handleCommand(Cmd::create(['letterInstanceIssue' => 10]));
+    }
+
+    /**
+     * Review: a new to-do is numbered straight after its own issue's to-dos, not after the whole
+     * letter's, so lists show it in letter order straight away.
+     */
+    public function testANewTodoIsNumberedInLetterOrder(): void
+    {
+        $issue = $this->issueOnLetter(true);
+        $issue->setDisplayOrder(0);
+        $letter = $issue->getLetterInstance();
+        $later = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue();
+        $later->setLetterIssueVersion(new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion());
+        $later->setDisplayOrder(1);
+        $letter->addLetterInstanceIssue($later);
+        $laterTodo = $this->libraryTodoOn($later, 6, 0);
+
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('fetchById')->andReturn($issue);
+        $saved = null;
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('save')->once()->andReturnUsing(
+            function (LetterInstanceTodo $todo) use (&$saved): void {
+                $saved = $todo;
+            }
+        );
+
+        $this->sut->handleCommand(Cmd::create(['letterInstanceIssue' => 10]));
+
+        $this->assertLessThan($laterTodo->getDisplayOrder(), $saved->getDisplayOrder());
     }
 }

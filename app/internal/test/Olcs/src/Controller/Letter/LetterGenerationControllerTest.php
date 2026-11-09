@@ -755,7 +755,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $data = [
             'letterInstanceIssues' => [['id' => 10, 'effectiveHeading' => 'Vehicle storage']],
             'letterInstanceTodos' => [
-                ['id' => 20, 'isCustom' => true, 'customIndex' => 2, 'inputPending' => true, 'letterInstanceIssue' => ['id' => 10]],
+                ['id' => 20, 'isCustom' => true, 'customIndex' => 2, 'customLabel' => 'Vehicle storage: to-do 2', 'inputPending' => true, 'letterInstanceIssue' => ['id' => 10]],
                 ['id' => 21, 'isCustom' => false, 'letterTodoVersion' => ['name' => 'Send a lease', 'letterTodo' => ['todoKey' => 'FI02']]],
             ],
         ];

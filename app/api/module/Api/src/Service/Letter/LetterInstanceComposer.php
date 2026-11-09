@@ -196,7 +196,7 @@ class LetterInstanceComposer
 
             // the caseworker's own to-dos on an Other issue follow its library ones, in the
             // order they were written; reconcile never adds or removes them (VOL-7735)
-            foreach ($this->customTodosOf($instanceIssue) as $instanceTodo) {
+            foreach ($instanceIssue->getCustomTodos() as $instanceTodo) {
                 $instanceTodo->setDisplayOrder($displayOrder++);
             }
         }
@@ -212,20 +212,6 @@ class LetterInstanceComposer
         }
 
         return ['created' => $created, 'moved' => $moved];
-    }
-
-    /**
-     * @return list<LetterInstanceTodo> an issue's caseworker-written to-dos, in display order
-     */
-    private function customTodosOf(LetterInstanceIssue $instanceIssue): array
-    {
-        $custom = array_values(array_filter(
-            $instanceIssue->getLetterInstanceTodos()->toArray(),
-            static fn(LetterInstanceTodo $todo): bool => $todo->isCustom()
-        ));
-        usort($custom, static fn(LetterInstanceTodo $a, LetterInstanceTodo $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder());
-
-        return $custom;
     }
 
     /**

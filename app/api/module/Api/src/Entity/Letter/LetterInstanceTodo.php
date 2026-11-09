@@ -87,13 +87,7 @@ class LetterInstanceTodo extends AbstractLetterInstanceTodo
             return null;
         }
 
-        $custom = array_values(array_filter(
-            $this->letterInstanceIssue->getLetterInstanceTodos()->toArray(),
-            static fn(LetterInstanceTodo $todo): bool => $todo->isCustom()
-        ));
-        usort($custom, static fn(LetterInstanceTodo $a, LetterInstanceTodo $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder());
-
-        $index = array_search($this, $custom, true);
+        $index = array_search($this, $this->letterInstanceIssue->getCustomTodos(), true);
 
         return $index === false ? null : $index + 1;
     }

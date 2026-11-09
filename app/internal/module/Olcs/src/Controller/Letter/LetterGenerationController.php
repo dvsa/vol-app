@@ -469,6 +469,7 @@ class LetterGenerationController extends AbstractInternalController implements L
                 // an Other issue's heading is the caseworker's to write (VOL-7735)
                 'isOther' => !empty($issue['isOther']),
                 'editedHeading' => (string) ($issue['editedHeading'] ?? ''),
+                'defaultHeading' => (string) ($issueVersion['heading'] ?? 'Other issue'),
                 'content' => $effectiveContent,
                 'version' => $issue['version'] ?? 1,
             ];
@@ -1563,21 +1564,12 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     protected function buildTodosList(array $letterInstanceData): array
     {
-        $issueHeadings = array_column($this->buildIssuesList($letterInstanceData), 'name', 'id');
-
         $todosList = [];
         foreach ($letterInstanceData['letterInstanceTodos'] ?? [] as $todo) {
-            $name = $this->todoEditorName($todo);
-            if (!empty($todo['isCustom'])) {
-                // away from its issue a custom to-do needs the issue's name too (VOL-7735)
-                $name = $todo['customLabel']
-                    ?? ($issueHeadings[$todo['letterInstanceIssue']['id'] ?? null] ?? 'Other issue')
-                        . ': to-do ' . (int) ($todo['customIndex'] ?? 0);
-            }
-
             $todosList[] = [
                 'id' => $todo['id'] ?? null,
-                'name' => $name,
+                // away from its issue a custom to-do carries the issue's name; the API words it (VOL-7735)
+                'name' => (string) ($todo['customLabel'] ?? $this->todoEditorName($todo)),
                 'type' => 'todo',
                 'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
                 // must be written before the letter can be sent (PrepareToSend); the API decides

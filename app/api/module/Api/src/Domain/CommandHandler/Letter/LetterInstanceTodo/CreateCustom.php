@@ -9,17 +9,28 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
+use Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\CreateCustom as Cmd;
+use Psr\Container\ContainerInterface;
 
 /**
- * Add an empty caseworker-written to-do to an Other issue, after the letter's other to-dos (VOL-7735)
+ * Add an empty caseworker-written to-do to an Other issue, after its other to-dos (VOL-7735)
  */
 final class CreateCustom extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterInstanceTodo';
 
     protected $extraRepos = ['LetterInstanceIssue'];
+
+    private LetterInstanceComposer $letterInstanceComposer;
+
+    #[\Override]
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    {
+        $this->letterInstanceComposer = $container->get(LetterInstanceComposer::class);
+        return parent::__invoke($container, $requestedName, $options);
+    }
 
     #[\Override]
     public function handleCommand(CommandInterface $command): Result
@@ -46,6 +57,9 @@ final class CreateCustom extends AbstractCommandHandler
         $todo->setDisplayOrder($lastOrder + 1);
         $issue->addLetterInstanceTodo($todo);
         $letterInstance->addLetterInstanceTodo($todo);
+
+        // number it in letter order: straight after its issue's to-dos, not after the whole letter's
+        $this->letterInstanceComposer->reconcileTodos($letterInstance);
 
         $this->getRepo()->save($todo);
 

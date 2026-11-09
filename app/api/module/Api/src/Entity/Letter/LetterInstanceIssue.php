@@ -54,6 +54,22 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
     }
 
     /**
+     * The caseworker's own to-dos on this issue (an Other issue), in the order they were written
+     *
+     * @return list<LetterInstanceTodo>
+     */
+    public function getCustomTodos(): array
+    {
+        $custom = array_values(array_filter(
+            $this->letterInstanceTodos->toArray(),
+            static fn(LetterInstanceTodo $todo): bool => $todo->isCustom()
+        ));
+        usort($custom, static fn(LetterInstanceTodo $a, LetterInstanceTodo $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder());
+
+        return $custom;
+    }
+
+    /**
      * Remove a letter instance todo from this issue's collection
      */
     public function removeLetterInstanceTodo(LetterInstanceTodo $todo): void
