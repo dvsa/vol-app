@@ -224,7 +224,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
         foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
             // an Other issue also needs its heading and real body text (VOL-7735)
             if ($issue->isInputPending()) {
-                $pending[] = $issue->getHeading() ?: 'Issue';
+                $pending[] = $issue->getDisplayName() ?: 'Issue';
             }
         }
 

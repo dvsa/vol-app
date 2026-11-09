@@ -221,12 +221,15 @@ final class GetTest extends QueryHandlerTestCase
 
         $issue = $result['letterInstanceIssues'][0];
         $this->assertSame('Vehicle storage', $issue['effectiveHeading']);
+        $this->assertSame('Vehicle storage', $issue['displayName']);
         $this->assertTrue($issue['isOther']);
         $this->assertTrue($issue['inputPending']);
 
         [$customRow, $libraryRow] = $result['letterInstanceTodos'];
         $this->assertTrue($customRow['isCustom']);
         $this->assertSame(1, $customRow['customIndex']);
+        $this->assertSame('Vehicle storage: to-do 1', $customRow['customLabel']);
+        $this->assertNull($libraryRow['customLabel']);
         $this->assertTrue($customRow['inputPending']);
         $this->assertFalse($libraryRow['isCustom']);
         $this->assertNull($libraryRow['customIndex']);

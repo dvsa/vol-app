@@ -133,6 +133,26 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
         return $body === '' || $body === $placeholder;
     }
 
+    /**
+     * How the issue is named away from the letter (lists of what needs input, what will be lost).
+     * An Other issue with no heading yet adds its type, so two of them can be told apart.
+     */
+    public function getDisplayName(): string
+    {
+        $heading = (string) $this->getHeading();
+        if (!$this->isOther() || $this->hasWrittenHeading()) {
+            return $heading;
+        }
+
+        // the general Other issue sits in its own "Other issues" type, which says nothing extra
+        $type = $this->letterIssueVersion?->getLetterIssueType();
+        if ($type === null || $type->getCode() === LetterIssueType::CODE_OTHER || !$type->getName()) {
+            return $heading;
+        }
+
+        return $heading . ' (' . $type->getName() . ')';
+    }
+
     private function hasWrittenHeading(): bool
     {
         return trim((string) $this->editedHeading) !== '';

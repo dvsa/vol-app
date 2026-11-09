@@ -97,6 +97,7 @@ final class PrepareToSendTest extends MockeryTestCase
         $issue->shouldReceive('hasBeenEdited')->andReturn($edited);
         $issue->shouldReceive('isInputPending')->andReturn($requiresInput && !$edited);
         $issue->shouldReceive('getHeading')->andReturn($heading);
+        $issue->shouldReceive('getDisplayName')->andReturn($heading);
 
         return $issue;
     }

@@ -562,6 +562,7 @@ class LetterGenerationController extends AbstractInternalController implements L
                 'id' => $todo['id'],
                 'name' => $this->todoEditorName($todo),
                 'isCustom' => !empty($todo['isCustom']),
+                'customLabel' => $todo['customLabel'] ?? null,
                 'content' => $effectiveContent,
                 'version' => $todo['version'] ?? 1,
                 'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
@@ -874,13 +875,6 @@ class LetterGenerationController extends AbstractInternalController implements L
     }
 
     /**
-     * Save section content action - AJAX endpoint
-     *
-     * Accepts POST with JSON body: { sectionId, editedContent, version }
-     *
-     * @return Response
-     */
-    /**
      * Add an empty caseworker-written to-do to an Other issue - AJAX endpoint (VOL-7735)
      *
      * Accepts POST with JSON body: { issueId }; returns { todoId }
@@ -993,6 +987,13 @@ class LetterGenerationController extends AbstractInternalController implements L
         ]);
     }
 
+    /**
+     * Save section content action - AJAX endpoint
+     *
+     * Accepts POST with JSON body: { sectionId, editedContent, version }
+     *
+     * @return Response
+     */
     public function saveSectionContentAction()
     {
         if (!$this->getRequest()->isPost()) {
@@ -1137,6 +1138,10 @@ class LetterGenerationController extends AbstractInternalController implements L
             }
 
             if ($slot === null) {
+                // listed away from its issue, so a custom to-do keeps the issue's name (VOL-7735)
+                if (!empty($todo['isCustom']) && !empty($todo['customLabel'])) {
+                    $todo['name'] = $todo['customLabel'];
+                }
                 $unplaced[] = $todo;
                 continue;
             }
@@ -1565,8 +1570,9 @@ class LetterGenerationController extends AbstractInternalController implements L
             $name = $this->todoEditorName($todo);
             if (!empty($todo['isCustom'])) {
                 // away from its issue a custom to-do needs the issue's name too (VOL-7735)
-                $issueHeading = $issueHeadings[$todo['letterInstanceIssue']['id'] ?? null] ?? 'Other issue';
-                $name = $issueHeading . ': to-do ' . (int) ($todo['customIndex'] ?? 0);
+                $name = $todo['customLabel']
+                    ?? ($issueHeadings[$todo['letterInstanceIssue']['id'] ?? null] ?? 'Other issue')
+                        . ': to-do ' . (int) ($todo['customIndex'] ?? 0);
             }
 
             $todosList[] = [
@@ -1595,7 +1601,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         foreach ($letterInstanceData['letterInstanceIssues'] ?? [] as $issue) {
             $issuesList[] = [
                 'id' => $issue['id'],
-                'name' => (string) ($issue['effectiveHeading'] ?? $issue['letterIssueVersion']['heading'] ?? 'Issue'),
+                'name' => (string) ($issue['displayName'] ?? $issue['effectiveHeading'] ?? $issue['letterIssueVersion']['heading'] ?? 'Issue'),
                 'type' => 'issue',
                 'inputPending' => (bool) ($issue['inputPending'] ?? false),
             ];

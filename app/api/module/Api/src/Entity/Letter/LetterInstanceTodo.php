@@ -105,7 +105,7 @@ class LetterInstanceTodo extends AbstractLetterInstanceTodo
     {
         $index = $this->getCustomIndex();
 
-        return $index === null ? null : $this->letterInstanceIssue->getHeading() . ': to-do ' . $index;
+        return $index === null ? null : $this->letterInstanceIssue->getDisplayName() . ': to-do ' . $index;
     }
 
     public function clearEditedDescription(): self

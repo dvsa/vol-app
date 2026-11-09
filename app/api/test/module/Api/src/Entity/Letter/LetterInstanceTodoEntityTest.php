@@ -148,4 +148,20 @@ final class LetterInstanceTodoEntityTest extends EntityTester
         $this->assertNull($library->getCustomIndex());
         $this->assertNull($library->getCustomLabel());
     }
+
+    public function testACustomTodoUnderAnUnwrittenOtherIsNamedByItsType(): void
+    {
+        $type = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType();
+        $type->setName('Finances');
+        $version = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion();
+        $version->setHeading('Other issue');
+        $version->setIsOther(true);
+        $version->setLetterIssueType($type);
+        $issue = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue();
+        $issue->setLetterIssueVersion($version);
+        $todo = new Entity();
+        $issue->addLetterInstanceTodo($todo);
+
+        $this->assertSame('Other issue (Finances): to-do 1', $todo->getCustomLabel());
+    }
 }

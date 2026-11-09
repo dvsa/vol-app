@@ -38,7 +38,7 @@ final readonly class IssueChangePlan
 
         foreach ($this->removedIssues as $instanceIssue) {
             if ($instanceIssue->hasBeenEdited()) {
-                $names[] = (string) $instanceIssue->getHeading();
+                $names[] = $instanceIssue->getDisplayName();
             }
         }
 

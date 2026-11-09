@@ -837,4 +837,29 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertSame(405, $this->postJson($this->bareSut(), 'addCustomTodo', [], 'GET')['status']);
         $this->assertSame(405, $this->postJson($this->bareSut(), 'deleteCustomTodo', [], 'GET')['status']);
     }
+
+    /**
+     * Final review: an Other issue's to-do listed away from its issue keeps the issue's name.
+     */
+    public function testUnplacedCustomTodoIsNamedWithItsIssue(): void
+    {
+        $todos = [['id' => 3, 'isCustom' => true, 'name' => 'To-do 1', 'customLabel' => 'Vehicle storage: to-do 1', 'placementIssueIds' => [30]]];
+
+        [, $unplaced] = $this->invokeProtected('placeTodosUnderIssues', [], $todos);
+
+        $this->assertSame('Vehicle storage: to-do 1', $unplaced[0]['name']);
+    }
+
+    public function testSidebarPrefersTheIssuesDisplayName(): void
+    {
+        $issues = $this->invokeProtected('buildIssuesList', ['letterInstanceIssues' => [
+            ['id' => 10, 'effectiveHeading' => 'Other issue', 'displayName' => 'Other issue (Finances)'],
+        ]]);
+        $todos = $this->invokeProtected('buildTodosList', ['letterInstanceTodos' => [
+            ['id' => 20, 'isCustom' => true, 'customIndex' => 1, 'customLabel' => 'Other issue (Finances): to-do 1', 'letterInstanceIssue' => ['id' => 10]],
+        ]]);
+
+        $this->assertSame('Other issue (Finances)', $issues[0]['name']);
+        $this->assertSame('Other issue (Finances): to-do 1', $todos[0]['name']);
+    }
 }

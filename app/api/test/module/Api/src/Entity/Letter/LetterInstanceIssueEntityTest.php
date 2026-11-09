@@ -149,4 +149,39 @@ final class LetterInstanceIssueEntityTest extends EntityTester
         $version->setRequiresInput(false);
         $this->assertFalse((new Entity())->setLetterIssueVersion($version)->isInputPending());
     }
+
+    public function testAnUnwrittenOtherIssueIsNamedByItsType(): void
+    {
+        $type = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType();
+        $type->setName('Finances');
+        $entity = $this->otherIssue();
+        $entity->getLetterIssueVersion()->setLetterIssueType($type);
+
+        $this->assertSame('Other issue (Finances)', $entity->getDisplayName());
+        $this->assertSame('Other issue', $entity->getHeading(), 'the letter still prints the plain heading');
+
+        $entity->setEditedHeading('Vehicle storage');
+        $this->assertSame('Vehicle storage', $entity->getDisplayName());
+    }
+
+    public function testAStandardIssueIsNamedByItsHeading(): void
+    {
+        $version = new LetterIssueVersion();
+        $version->setHeading('Bank statements too old');
+        $entity = new Entity();
+        $entity->setLetterIssueVersion($version);
+
+        $this->assertSame('Bank statements too old', $entity->getDisplayName());
+    }
+
+    public function testTheGeneralOtherIssueIsNotNamedAfterItsOwnType(): void
+    {
+        $type = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType();
+        $type->setName('Other issues');
+        $type->setCode(\Dvsa\Olcs\Api\Entity\Letter\LetterIssueType::CODE_OTHER);
+        $entity = $this->otherIssue();
+        $entity->getLetterIssueVersion()->setLetterIssueType($type);
+
+        $this->assertSame('Other issue', $entity->getDisplayName());
+    }
 }

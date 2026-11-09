@@ -90,6 +90,7 @@ class Get extends AbstractQueryByIdHandler
         foreach ($data['letterInstanceIssues'] ?? [] as $index => $row) {
             $issue = $issuesById[(int) ($row['id'] ?? 0)] ?? null;
             $data['letterInstanceIssues'][$index]['effectiveHeading'] = $issue?->getHeading();
+            $data['letterInstanceIssues'][$index]['displayName'] = $issue?->getDisplayName();
             $data['letterInstanceIssues'][$index]['isOther'] = $issue?->isOther() ?? false;
             $data['letterInstanceIssues'][$index]['inputPending'] = $issue?->isInputPending() ?? false;
         }
@@ -98,6 +99,7 @@ class Get extends AbstractQueryByIdHandler
             $entity = $todosById[(int) ($todo['id'] ?? 0)] ?? null;
             $data['letterInstanceTodos'][$index]['isCustom'] = $entity?->isCustom() ?? false;
             $data['letterInstanceTodos'][$index]['customIndex'] = $entity?->getCustomIndex();
+            $data['letterInstanceTodos'][$index]['customLabel'] = $entity?->getCustomLabel();
             $data['letterInstanceTodos'][$index]['inputPending'] = $entity?->isInputPending() ?? false;
 
             // same key as LetterTodoVersion::getDedupeKey, built from the serialised row
