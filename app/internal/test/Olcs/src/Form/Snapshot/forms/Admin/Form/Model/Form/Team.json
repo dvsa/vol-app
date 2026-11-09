@@ -85,7 +85,7 @@
             "spec": {
               "name": "defaultPrinter",
               "attributes": {
-                "id": "team",
+                "id": "defaultPrinter",
                 "placeholder": "",
                 "class": "medium"
               },

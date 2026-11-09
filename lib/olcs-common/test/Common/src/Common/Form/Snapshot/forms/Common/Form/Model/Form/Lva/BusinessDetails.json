@@ -51,7 +51,6 @@
                 "label": "Nature of business",
                 "error-message": "businessDetails_natureOfBusiness-error",
                 "label_attributes": {
-                  "aria-label": "businessDetails_natureOfBusiness-error",
                   "class": "form-element__question"
                 }
               }
@@ -194,10 +193,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLines",
-                "label_attributes": {
-                  "aria-label": "Enter address manually. Business address line one"
-                },
+                "label": "lva.registered-address.address-line-1",
                 "error-message": "registeredAddress_addressLine1-error"
               },
               "type": "Text"
@@ -213,10 +209,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine2",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "lva.registered-address.address-line-2"
               },
               "type": "Text"
             }
@@ -231,10 +224,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine3",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "lva.registered-address.address-line-3"
               },
               "type": "Text"
             }
@@ -249,10 +239,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine4",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "lva.registered-address.address-line-4"
               },
               "type": "Text"
             }
@@ -266,11 +253,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_townCity",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden",
-                  "aria-label": "Business town or city"
-                }
+                "label": "lva.registered-address.town-city"
               },
               "type": "Text"
             }
@@ -283,10 +266,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_postcode",
-                "label_attributes": {
-                  "aria-label": "Business Postcode"
-                }
+                "label": "lva.registered-address.postcode"
               },
               "type": "Text"
             }

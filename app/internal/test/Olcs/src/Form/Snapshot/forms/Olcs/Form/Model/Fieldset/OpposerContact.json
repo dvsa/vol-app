@@ -39,7 +39,7 @@
       "spec": {
         "name": "phone_secondary",
         "attributes": {
-          "id": "phone",
+          "id": "phone_secondary",
           "placeholder": "",
           "class": "medium"
         },
