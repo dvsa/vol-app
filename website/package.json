@@ -37,15 +37,20 @@
     "launch-editor under webpack-dev-server) and brace-expansion 1.x (ReDoS/recursion, via",
     "minimatch 3 under serve-handler; scoped to ^1 so the 2.x+ lines are untouched) and tinypool",
     "(prototype-pollution RCE, held at 1.x by @docusaurus/core's SSG worker pool; 2.x only drops",
-    "Node 18). Forcing the fixed version is cheaper than carrying a scan exception. Drop an entry",
-    "once Docusaurus resolves it itself. Advisories with no fixed release anywhere cannot be",
-    "overridden away, so they are excluded in .snyk instead, which is reserved for exactly that case."
+    "Node 18) and open (PowerShell argument escaping, held at 8.x by @docusaurus/core and 10.x by",
+    "webpack-dev-server; 11 is ESM-only, which webpack-dev-server already imports and",
+    "@docusaurus/core's require() loads through Node's require(esm), hence Node >=20.19).",
+    "Forcing the fixed version is cheaper than carrying a scan exception. Drop an entry",
+    "once Docusaurus resolves it itself. Advisories with no fixed release anywhere, or whose fix",
+    "the dependant cannot load, cannot be overridden away, so they are excluded in .snyk instead,",
+    "which is reserved for exactly those cases."
   ],
   "overrides": {
     "brace-expansion@^1": "^1.1.21",
     "fast-uri": "^3.1.9",
     "follow-redirects": "^1.16.2",
     "launch-editor": "^2.14.2",
+    "open": "^11.0.0",
     "qs": "^6.16.2",
     "serialize-javascript": "^7.1.3",
     "shell-quote": "^1.11.0",
@@ -76,6 +81,6 @@
     ]
   },
   "engines": {
-    "node": ">=18.0"
+    "node": ">=20.19"
   }
 }
