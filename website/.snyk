@@ -1,9 +1,10 @@
 # Snyk policy file for the documentation site (scanned by the Documentation job in
 # .github/workflows/security-documentation.yaml).
 #
-# Only for advisories with no fixed release anywhere. Anything that can be resolved by moving
-# a version is resolved instead - by npm audit fix, by bumping Docusaurus, or by an entry in
-# the "overrides" block of package.json. An exclusion here is the last resort, not the first.
+# Only for advisories with no fixed release anywhere, or whose fixed release cannot be loaded
+# by the package that depends on it. Anything that can be resolved by moving a version is
+# resolved instead - by npm audit fix, by bumping Docusaurus, or by an entry in the
+# "overrides" block of package.json. An exclusion here is the last resort, not the first.
 #
 # Snyk applies this file to the project sharing its directory, so website/.snyk covers
 # website/package.json. If an ignore ever appears not to take effect, pass the documented
@@ -61,23 +62,26 @@ ignore:
           No fixed release exists. Build-time only - the glob patterns come from Docusaurus and
           this repo's config, and the worst outcome is a crashed build.
         expires: 2026-11-25T00:00:00.000Z
-  # picomatch, ReDoS on single-branch repeated extglobs such as +(*). No fixed release on any
-  # line (2.3.2 is the last 2.x). Reached through micromatch, anymatch and readdirp while
-  # Docusaurus globs and watches this repo's docs, and through jest-worker's file matching - the
-  # patterns are Docusaurus's and this repo's own, and the worst outcome is a slow build.
-  SNYK-JS-PICOMATCH-21248802:
+  # flat, unbounded sparse-array allocation in unflatten() on keys like a.4294967294. Every
+  # release is affected (6.0.1 is the latest). Reached only through webpack-merge (5.x under
+  # @docusaurus/types, 6.x under @docusaurus/core), which calls flatten() - never unflatten() -
+  # on webpack config objects written by Docusaurus and this repo.
+  SNYK-JS-FLAT-22148819:
     - "*":
         reason: >-
-          No fixed release exists. Build-time only - the glob patterns come from Docusaurus and
-          this repo's config, and the worst outcome is a slow or crashed build.
-        expires: 2026-11-25T00:00:00.000Z
-  # deepmerge, prototype pollution through a __proto__ key. 4.3.1 is the latest release and is
-  # affected. Reached only through @svgr/plugin-svgo merging its SVGO config while building
-  # the docs, and both sides of that merge are Docusaurus's and this repo's own config.
-  SNYK-JS-DEEPMERGE-19964053:
+          No fixed release exists. Build-time only, via webpack-merge, which never calls the
+          vulnerable unflatten() and only sees webpack config from Docusaurus and this repo.
+        expires: 2026-12-05T00:00:00.000Z
+  # minimatch, CPU/memory amplification in firstPhasePreProcess under optimizationLevel >= 2.
+  # The fix is in 11.0.1, but the only 3.x consumer, serve-handler 6.1.7 (latest), calls
+  # require('minimatch') as a function, which 9.x+ no longer exports - an override would break
+  # `docusaurus serve`. 3.1.5 also predates both firstPhasePreProcess and optimizationLevel, so
+  # the vulnerable code is not present; Snyk's <11.0.1 range is wider than the flaw. The patterns
+  # are serve-handler's rewrite/header config from Docusaurus, never request input.
+  SNYK-JS-MINIMATCH-22111072:
     - "*":
         reason: >-
-          No fixed release exists. Build-time only, via @svgr/plugin-svgo merging SVGO config
-          that comes from Docusaurus and this repo, not from any outside input.
-        expires: 2026-11-25T00:00:00.000Z
+          The fixed 11.x cannot be loaded by serve-handler, the only consumer, and 3.1.5 does not
+          contain the vulnerable firstPhasePreProcess/optimizationLevel code. Local preview only.
+        expires: 2026-12-05T00:00:00.000Z
 patch: {}
