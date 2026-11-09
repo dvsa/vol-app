@@ -90,17 +90,17 @@
 
                 <?php if (!empty($issue['todos'])): ?>
                     <?php // The heading the rendered letter uses for these, so the editor matches the output. ?>
-                    <h3 class="govuk-heading-s">What you need to do</h3>
+                    <h4 class="govuk-heading-s">What you need to do</h4>
                     <?php foreach ($issue['todos'] as $todo): ?>
-                        <?= $this->partial('pages/letter/partials/todo-editor', ['todo' => $todo]) ?>
+                        <?= $this->partial('pages/letter/partials/todo-editor', ['todo' => $todo, 'headingTag' => 'h5']) ?>
                     <?php endforeach; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
         <?php endforeach; ?>
 
         <?php if (!empty($groupedTodos)): ?>
-            <?php // To-dos whose issues aren't being edited. ?>
             <h2 class="govuk-heading-m">What you need to do</h2>
+            <p class="govuk-body">These to-dos belong to issues you are not editing.</p>
             <?php foreach ($groupedTodos as $todo): ?>
                 <?= $this->partial('pages/letter/partials/todo-editor', ['todo' => $todo]) ?>
             <?php endforeach; ?>

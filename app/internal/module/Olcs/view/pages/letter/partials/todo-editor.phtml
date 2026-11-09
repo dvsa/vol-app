@@ -3,15 +3,17 @@
  * One to-do editor on the letter edit page.
  *
  * @var array $todo id, name, content, version, requiringIssueCount
+ * @var string|null $headingTag h3 by default; h5 when nested under an issue
  */
+$headingTag = in_array($headingTag ?? 'h3', ['h3', 'h4', 'h5'], true) ? ($headingTag ?? 'h3') : 'h3';
 ?>
 <div class="govuk-form-group todo-editor-group"
      data-todo-id="<?= $this->escapeHtmlAttr($todo['id']) ?>"
      data-version="<?= $this->escapeHtmlAttr($todo['version']) ?>">
-    <h3 class="govuk-heading-s"><?= $this->escapeHtml($todo['name']) ?></h3>
+    <<?= $headingTag ?> class="govuk-heading-s"><?= $this->escapeHtml($todo['name']) ?></<?= $headingTag ?>>
 
-    <?php // A to-do is deduplicated, so one shared by several issues appears once, under
-          // whichever issue came first. Say so, or an edit here looks narrower than it is. ?>
+    <?php // A to-do is deduplicated, so one shared by several issues appears once in the letter
+          // (see LetterInstance::getPlacementIssue). Say so, or an edit here looks narrower than it is. ?>
     <?php if (($todo['requiringIssueCount'] ?? 1) > 1): ?>
         <p class="govuk-inset-text govuk-!-margin-top-0">
             This to-do is required by <?= $this->escapeHtml($todo['requiringIssueCount']) ?>
