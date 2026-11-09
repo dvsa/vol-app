@@ -96,4 +96,22 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
             'the shared letter_todo_version must never be written by an instance-scoped edit'
         );
     }
+
+    /**
+     * Final review: a sent letter's to-dos are what the operator received.
+     */
+    public function testCannotChangeASentLetter(): void
+    {
+        $letter = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstance();
+        $letter->setStatus(new \Dvsa\Olcs\Api\Entity\System\RefData(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_SENT));
+        $todo = new LetterInstanceTodoEntity();
+        $letter->addLetterInstanceTodo($todo);
+
+        $command = Cmd::create(['id' => 42, 'editedDescription' => '{"blocks":[]}', 'version' => 1]);
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('fetchUsingId')->andReturn($todo);
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('save')->never();
+
+        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
+        $this->sut->handleCommand($command);
+    }
 }

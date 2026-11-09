@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstanceTodo;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\UpdateContent as Cmd;
@@ -25,6 +26,12 @@ final class UpdateContent extends AbstractCommandHandler
 
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo $letterInstanceTodo */
         $letterInstanceTodo = $this->getRepo()->fetchUsingId($command);
+
+        // a sent letter's content is what the operator received; keep it as sent
+        $letterInstance = $letterInstanceTodo->getLetterInstance();
+        if ($letterInstance !== null && !$letterInstance->isOpenForChanges()) {
+            throw new ValidationException(['Only a draft or ready letter can be changed']);
+        }
 
         $letterInstanceTodo->setEditedDescriptionFromArray(
             json_decode($command->getEditedDescription(), true)

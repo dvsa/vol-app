@@ -110,4 +110,23 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
         $this->save($issue, []);
         $this->assertSame('Vehicle storage', $issue->getEditedHeading());
     }
+
+    /**
+     * Final review: a sent letter's content, an Other issue's heading included, is what the operator
+     * received, so it can't be changed afterwards.
+     */
+    public function testCannotChangeASentLetter(): void
+    {
+        $letter = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstance();
+        $letter->setStatus(new \Dvsa\Olcs\Api\Entity\System\RefData(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_SENT));
+        $issue = $this->issueOn(true);
+        $letter->addLetterInstanceIssue($issue);
+
+        $command = Cmd::create(['id' => 10, 'editedContent' => '{"blocks":[]}', 'version' => 1, 'editedHeading' => 'Changed']);
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('fetchUsingId')->andReturn($issue);
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('save')->never();
+
+        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
+        $this->sut->handleCommand($command);
+    }
 }
