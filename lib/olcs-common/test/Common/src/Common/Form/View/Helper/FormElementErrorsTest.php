@@ -123,7 +123,9 @@ final class FormElementErrorsTest extends MockeryTestCase
     #[\Override]
     protected function setUpDefaultServices(ServiceManager $serviceManager): ServiceManager
     {
-        $serviceManager->setService(TranslatorInterface::class, $this->setUpTranslator());
+        $translator = $this->setUpTranslator();
+        $serviceManager->setService(TranslatorInterface::class, $translator);
+        $serviceManager->setService('translator', $translator);
         $serviceManager->setService(HTMLPurifier::class, new HTMLPurifier());
         $serviceManager->setFactory(\Laminas\Form\View\Helper\FormLabel::class, new FormLabelFactory());
         $serviceManager->setFactory(FormElementMessageFormatter::class, new FormElementMessageFormatterFactory());

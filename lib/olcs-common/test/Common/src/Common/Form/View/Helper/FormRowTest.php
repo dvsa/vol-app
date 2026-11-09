@@ -626,6 +626,7 @@ final class FormRowTest extends MockeryTestCase
     {
         $serviceManager->setFactory(FormElementMessageFormatter::class, new FormElementMessageFormatterFactory());
         $serviceManager->setService(static::VALIDATOR_MANAGER, $this->setUpValidatorPluginManager());
+        $serviceManager->setService('translator', $this->translator());
         $this->phpRenderer();
         return $serviceManager;
     }
