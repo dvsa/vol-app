@@ -17,8 +17,10 @@ ENV FILEBROWSER_VERSION=v2.42.5
 WORKDIR /build
 RUN git clone --depth 1 --branch ${FILEBROWSER_VERSION} https://github.com/filebrowser/filebrowser.git .
 WORKDIR /build/frontend
-RUN npm install && \
-    npm run build
+# Install the versions in FileBrowser's pnpm lockfile. npm install ignores that lockfile and takes the
+# newest version of every dependency, which can fail FileBrowser's type check.
+RUN pnpm install --frozen-lockfile && \
+    pnpm run build
 WORKDIR /build
 RUN go build -ldflags "-s -w" -o filebrowser .
 
