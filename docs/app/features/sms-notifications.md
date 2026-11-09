@@ -72,6 +72,14 @@ operator (`Sms\QueueLetterSms`). It is skipped when:
 The same check runs again just before sending, by send time, so two letters queued at the same
 moment, or a retry that goes out the next morning, still give the number one text that day.
 
+Queueing runs inside the letter's transaction, and a failed text never stops the letter. The
+`notify_message` row and its queue item are written with plain DBAL inside a savepoint
+(`NotifyMessage::insertQueuedSms()`), not through the EntityManager, because a failed flush closes
+the EntityManager for the rest of the request (a batch of letters, say). If either write fails it
+rolls back to the savepoint, logs "Could not queue letter SMS", and the letter goes ahead without
+a text. A deadlock is the exception: MySQL has already rolled back the whole transaction, so the
+letter fails as it would without the text.
+
 Texts are only sent between 08:00 and 20:00 London time. Outside those hours the queue item
 waits until 08:00. A text that has to wait for the window more than 12 hours after it was
 requested is marked failed rather than sent. Sending (`Sms\SendSms`, queue type

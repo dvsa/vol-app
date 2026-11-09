@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Sms;
 
-use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\Sms\QueueLetterSms as Cmd;
 use Dvsa\Olcs\Api\Domain\Command\Sms\SendSms;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Sms\QueueLetterSms;
@@ -17,8 +16,11 @@ use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Notify\NotifyMessage;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
-use Dvsa\Olcs\Api\Entity\Queue\Queue;
+use Dvsa\Olcs\Api\Entity\User\User;
+use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\Olcs\Api\Service\Sms\SmsGate;
+use Dvsa\Olcs\Api\Service\Sms\SmsNotQueued;
+use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
@@ -30,6 +32,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
     private const int LIC_ID = 8001;
     private const int MESSAGE_ID = 555;
     private const string NUMBER = '+447700900123';
+    private const int USER_ID = 42;
 
     /** @var m\MockInterface */
     private $gate;
@@ -40,6 +43,8 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
     /** @var m\MockInterface */
     private $messageRepo;
     private \DateTimeImmutable $now;
+    /** @var m\MockInterface */
+    private $user;
 
     public function setUp(): void
     {
@@ -55,9 +60,25 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $this->gate = m::mock(SmsGate::class);
         $this->mockedSmServices[SmsGate::class] = $this->gate;
 
+        $this->user = m::mock(User::class)->makePartial();
+        $this->user->setId(self::USER_ID);
+        $this->user->shouldReceive('isAnonymous')->andReturn(false)->byDefault();
+        $auth = m::mock(AuthorizationService::class);
+        $auth->shouldReceive('getIdentity->getUser')->andReturn($this->user);
+        $this->mockedSmServices[AuthorizationService::class] = $auth;
+
         $this->refData = [NotifyMessage::CHANNEL_SMS, NotifyMessage::STATUS_QUEUED];
 
         parent::setUp();
+
+        $this->identityProvider->shouldReceive('getMasqueradedAsSystemUser')->andReturn(false)->byDefault();
+    }
+
+    private function readyToText(): void
+    {
+        $this->gate->shouldReceive('isEnabled')->andReturn(true);
+        $this->document($this->licence());
+        $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')->andReturn(false);
     }
 
     private function licence(?string $number = self::NUMBER): Licence
@@ -89,7 +110,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
     {
         $this->gate->shouldReceive('isEnabled')->andReturn(false);
         $this->docRepo->shouldNotReceive('fetchById');
-        $this->messageRepo->shouldNotReceive('save');
+        $this->messageRepo->shouldNotReceive('insertQueuedSms');
 
         $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
     }
@@ -102,7 +123,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $template = m::mock(DocTemplate::class)->makePartial();
         $template->setSuppressFromOp('Y');
         $this->templateRepo->shouldReceive('fetchById')->with(12)->andReturn($template);
-        $this->messageRepo->shouldNotReceive('save');
+        $this->messageRepo->shouldNotReceive('insertQueuedSms');
 
         $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
     }
@@ -111,7 +132,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
     {
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->document(null);
-        $this->messageRepo->shouldNotReceive('save');
+        $this->messageRepo->shouldNotReceive('insertQueuedSms');
 
         $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
     }
@@ -120,7 +141,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
     {
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->document($this->licence(null));
-        $this->messageRepo->shouldNotReceive('save');
+        $this->messageRepo->shouldNotReceive('insertQueuedSms');
 
         $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
     }
@@ -133,7 +154,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
             ->once()
             ->with(self::NUMBER, 'letter-issued-sms', m::type(\DateTimeInterface::class), m::type(\DateTimeInterface::class))
             ->andReturn(true);
-        $this->messageRepo->shouldNotReceive('save');
+        $this->messageRepo->shouldNotReceive('insertQueuedSms');
 
         $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
     }
@@ -146,12 +167,12 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $document->setApplication($application);
         $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')->andReturn(false);
 
-        $this->messageRepo->shouldReceive('save')->once()->andReturnUsing(
-            function (NotifyMessage $message): void {
+        $this->messageRepo->shouldReceive('insertQueuedSms')->once()->andReturnUsing(
+            function (NotifyMessage $message, string $sendCommand, ?\DateTimeInterface $processAfter, ?int $userId): int {
                 $this->assertSame($this->refData[NotifyMessage::CHANNEL_SMS], $message->getChannel());
                 $this->assertSame($this->refData[NotifyMessage::STATUS_QUEUED], $message->getStatus());
                 $this->assertSame(self::NUMBER, $message->getRecipient());
-                $this->assertEquals($this->now, $message->getRequestedOn());
+                $this->assertEquals($this->now, $message->getRequestedOn(true));
                 $this->assertSame(self::LIC_ID, $message->getLicence()->getId());
                 $this->assertNotNull($message->getOrganisation());
                 $this->assertSame(self::DOC_ID, $message->getDocument()->getId());
@@ -160,16 +181,13 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
                 $this->assertNotNull($message->getApplication());
                 $this->assertNull($message->getBusReg());
                 $this->assertNull($message->getCase());
-                $message->setId(self::MESSAGE_ID);
-            }
-        );
+                $this->assertSame(SendSms::class, $sendCommand);
+                // inside the window, so straight away
+                $this->assertNull($processAfter);
+                $this->assertSame(self::USER_ID, $userId);
 
-        $this->expectedQueueSideEffect(
-            self::MESSAGE_ID,
-            Queue::TYPE_SMS,
-            ['commandClass' => SendSms::class, 'commandData' => ['id' => self::MESSAGE_ID]],
-            new Result(),
-            null
+                return self::MESSAGE_ID;
+            }
         );
 
         $result = $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
@@ -183,16 +201,14 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->document($this->licence());
         $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')->andReturn(false);
-        $this->messageRepo->shouldReceive('save')->once()->andReturnUsing(
-            fn(NotifyMessage $message) => $message->setId(self::MESSAGE_ID)
-        );
+        $this->messageRepo->shouldReceive('insertQueuedSms')->once()->andReturnUsing(
+            function (NotifyMessage $message, string $sendCommand, ?\DateTimeInterface $processAfter): int {
+                $this->assertNotNull($processAfter);
+                $utc = \DateTimeImmutable::createFromInterface($processAfter)->setTimezone(new \DateTimeZone('UTC'));
+                $this->assertSame('2026-11-06 08:00:00', $utc->format('Y-m-d H:i:s'));
 
-        $this->expectedQueueSideEffect(
-            self::MESSAGE_ID,
-            Queue::TYPE_SMS,
-            ['commandClass' => SendSms::class, 'commandData' => ['id' => self::MESSAGE_ID]],
-            new Result(),
-            '2026-11-06 08:00:00'
+                return self::MESSAGE_ID;
+            }
         );
 
         $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
@@ -204,16 +220,14 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->document($this->licence());
         $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')->andReturn(false);
-        $this->messageRepo->shouldReceive('save')->once()->andReturnUsing(
-            fn(NotifyMessage $message) => $message->setId(self::MESSAGE_ID)
-        );
+        $this->messageRepo->shouldReceive('insertQueuedSms')->once()->andReturnUsing(
+            function (NotifyMessage $message, string $sendCommand, ?\DateTimeInterface $processAfter): int {
+                $this->assertNotNull($processAfter);
+                $utc = \DateTimeImmutable::createFromInterface($processAfter)->setTimezone(new \DateTimeZone('UTC'));
+                $this->assertSame('2026-07-02 07:00:00', $utc->format('Y-m-d H:i:s'));
 
-        $this->expectedQueueSideEffect(
-            self::MESSAGE_ID,
-            Queue::TYPE_SMS,
-            ['commandClass' => SendSms::class, 'commandData' => ['id' => self::MESSAGE_ID]],
-            new Result(),
-            '2026-07-02 07:00:00'
+                return self::MESSAGE_ID;
+            }
         );
 
         $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
@@ -238,7 +252,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
                     return true;
                 }
             );
-        $this->messageRepo->shouldNotReceive('save');
+        $this->messageRepo->shouldNotReceive('insertQueuedSms');
 
         $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
     }
@@ -277,13 +291,13 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
                 return false;
             }
         );
-        $this->messageRepo->shouldReceive('save')->andReturnUsing(
-            function (NotifyMessage $message) use (&$requested): void {
-                $requested[] = $message->getRequestedOn();
-                $message->setId(self::MESSAGE_ID + count($requested));
+        $this->messageRepo->shouldReceive('insertQueuedSms')->andReturnUsing(
+            function (NotifyMessage $message) use (&$requested): int {
+                $requested[] = $message->getRequestedOn(true);
+
+                return self::MESSAGE_ID + count($requested);
             }
         );
-        $this->commandHandler->shouldReceive('handleCommand')->andReturn(new Result());
 
         foreach ([$first, $second] as $at) {
             $this->now = new \DateTimeImmutable($at, new \DateTimeZone('Europe/London'));
@@ -307,7 +321,7 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->document($this->licence(), json_encode(['details' => ['documentTemplate' => 12]]));
         $this->templateRepo->shouldReceive('fetchById')->with(12)->andThrow(new NotFoundException('gone'));
-        $this->messageRepo->shouldNotReceive('save');
+        $this->messageRepo->shouldNotReceive('insertQueuedSms');
 
         $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
     }
@@ -317,10 +331,56 @@ final class QueueLetterSmsTest extends AbstractCommandHandlerTestCase
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
         $this->document($this->licence());
         $this->messageRepo->shouldReceive('hasSmsForRecipientBetween')->andThrow(new \RuntimeException('db down'));
-        $this->messageRepo->shouldNotReceive('save');
+        $this->messageRepo->shouldNotReceive('insertQueuedSms');
 
         $result = $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
 
         $this->assertSame([], $result->getIds());
+    }
+
+    /** The writes were rolled back to their savepoint, so the letter goes ahead without the text. */
+    public function testSmsNotQueuedIsLoggedAndTheLetterCarriesOn(): void
+    {
+        $this->readyToText();
+        $this->messageRepo->shouldReceive('insertQueuedSms')->once()
+            ->andThrow(SmsNotQueued::because(new \RuntimeException('insert failed')));
+
+        $result = $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
+
+        $this->assertSame([], $result->getIds());
+    }
+
+    /** Anything else, such as a deadlock, has already rolled the letter back too, so it must not be swallowed. */
+    public function testOtherWriteFailuresAreNotSwallowed(): void
+    {
+        $this->readyToText();
+        $failure = new \RuntimeException('transaction gone');
+        $this->messageRepo->shouldReceive('insertQueuedSms')->once()->andThrow($failure);
+
+        $this->expectExceptionObject($failure);
+
+        $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
+    }
+
+    public function testMasqueradingAsTheSystemUserIsWrittenAsTheSystemUser(): void
+    {
+        $this->readyToText();
+        $this->identityProvider->shouldReceive('getMasqueradedAsSystemUser')->andReturn(true);
+        $this->messageRepo->shouldReceive('insertQueuedSms')->once()
+            ->with(m::type(NotifyMessage::class), SendSms::class, null, IdentityProviderInterface::SYSTEM_USER)
+            ->andReturn(self::MESSAGE_ID);
+
+        $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
+    }
+
+    public function testAnonymousUserIsWrittenAsNoUser(): void
+    {
+        $this->readyToText();
+        $this->user->shouldReceive('isAnonymous')->andReturn(true);
+        $this->messageRepo->shouldReceive('insertQueuedSms')->once()
+            ->with(m::type(NotifyMessage::class), SendSms::class, null, null)
+            ->andReturn(self::MESSAGE_ID);
+
+        $this->sut->handleCommand(Cmd::create(['document' => self::DOC_ID]));
     }
 }

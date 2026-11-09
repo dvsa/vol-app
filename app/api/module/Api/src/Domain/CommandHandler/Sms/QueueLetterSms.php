@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Sms;
 
-use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\Sms\QueueLetterSms as Cmd;
 use Dvsa\Olcs\Api\Domain\Command\Sms\SendSms;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
-use Dvsa\Olcs\Api\Domain\QueueAwareTrait;
+use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
+use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Notify\NotifyMessage;
-use Dvsa\Olcs\Api\Entity\Queue\Queue;
+use Dvsa\Olcs\Api\Entity\User\User;
+use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\Olcs\Api\Service\Sms\SendingWindow;
 use Dvsa\Olcs\Api\Service\Sms\SmsGate;
+use Dvsa\Olcs\Api\Service\Sms\SmsNotQueued;
 use Dvsa\Olcs\Api\Service\Sms\SmsNumber;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Utils\Helper\ValueHelper;
@@ -24,10 +26,13 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Write a notify_message row and a queue item for the "letter issued" SMS. DB work only.
+ *
+ * This runs inside the letter's transaction. If the text can't be queued, it is logged and the letter carries on:
+ * see NotifyMessage::insertQueuedSms() for how the writes are kept apart from the letter's.
  */
-class QueueLetterSms extends AbstractCommandHandler
+class QueueLetterSms extends AbstractCommandHandler implements AuthAwareInterface
 {
-    use QueueAwareTrait;
+    use AuthAwareTrait;
 
     public const string TEMPLATE_NAME = 'letter-issued-sms';
 
@@ -35,6 +40,7 @@ class QueueLetterSms extends AbstractCommandHandler
     protected $extraRepos = ['DocTemplate', 'NotifyMessage'];
 
     private SmsGate $smsGate;
+    private IdentityProviderInterface $identityProvider;
 
     #[\Override]
     public function handleCommand(CommandInterface $command)
@@ -45,17 +51,7 @@ class QueueLetterSms extends AbstractCommandHandler
             $prepared = $this->prepare($command);
         } catch (\Throwable $e) {
             // The letter matters more than the text, so never let a read failure escape.
-            Logger::err(
-                'Could not queue letter SMS',
-                [
-                    'document_id' => $command->getDocument(),
-                    'exception' => [
-                        'class' => $e::class,
-                        'message' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString(),
-                    ],
-                ]
-            );
+            $this->logFailure($command, $e);
 
             return $this->result;
         }
@@ -87,21 +83,20 @@ class QueueLetterSms extends AbstractCommandHandler
             $message->setCase($document->getCase());
         }
 
-        $this->getRepo('NotifyMessage')->save($message);
-        $messageId = $message->getId();
+        try {
+            $messageId = $this->getRepo('NotifyMessage')->insertQueuedSms(
+                $message,
+                SendSms::class,
+                SendingWindow::nextAllowed($now),
+                $this->createdById()
+            );
+        } catch (SmsNotQueued $e) {
+            // nothing was written, so the letter goes ahead without its text
+            $this->logFailure($command, $e->getPrevious() ?? $e);
 
-        $processAfter = SendingWindow::nextAllowed($now);
+            return $this->result;
+        }
 
-        $this->result->merge(
-            $this->handleSideEffect(
-                $this->createQueue(
-                    $messageId,
-                    Queue::TYPE_SMS,
-                    ['commandClass' => SendSms::class, 'commandData' => ['id' => $messageId]],
-                    $processAfter?->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s')
-                )
-            )
-        );
         $this->result->addId('notifyMessage', $messageId);
 
         return $this->result;
@@ -145,6 +140,33 @@ class QueueLetterSms extends AbstractCommandHandler
         return [$document, $licence, $recipient, $now];
     }
 
+    private function logFailure(Cmd $command, \Throwable $e): void
+    {
+        Logger::err(
+            'Could not queue letter SMS',
+            [
+                'document_id' => $command->getDocument(),
+                'exception' => [
+                    'class' => $e::class,
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ],
+            ]
+        );
+    }
+
+    /** The user the blameable listener would write, as the rows don't go through Doctrine. */
+    private function createdById(): ?int
+    {
+        if ($this->identityProvider->getMasqueradedAsSystemUser()) {
+            return IdentityProviderInterface::SYSTEM_USER;
+        }
+
+        $user = $this->getCurrentUser();
+
+        return ($user instanceof User && !$user->isAnonymous()) ? $user->getId() : null;
+    }
+
     protected function now(): \DateTimeImmutable
     {
         return new \DateTimeImmutable();
@@ -172,6 +194,7 @@ class QueueLetterSms extends AbstractCommandHandler
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->smsGate = $container->get(SmsGate::class);
+        $this->identityProvider = $container->get(IdentityProviderInterface::class);
 
         return parent::__invoke($container, $requestedName, $options);
     }
