@@ -3,7 +3,10 @@ FROM alpine:3.24 AS builder
 # Set shell for proper pipe error handling
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-# Install build dependencies, and Corepack to run the pnpm version that FileBrowser's package.json names
+# Install build dependencies, and Corepack to run the pnpm version that FileBrowser's package.json names.
+# Packages aren't pinned: Alpine deletes a package's old versions when it updates it, so a pinned version
+# stops building. Instead, the Alpine release in the FROM line decides which versions are available.
+# hadolint ignore=DL3018
 RUN apk add --no-cache \
     go \
     git \
@@ -30,7 +33,7 @@ FROM alpine:3.24
 # Set shell for proper pipe error handling
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-# Install required packages
+# Install required packages, unpinned for the reason given in the builder stage
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
     cups \
@@ -80,10 +83,10 @@ RUN chmod +x /usr/local/bin/cleanup.sh /entrypoint.sh \
     && chmod 700 /usr/lib/cups/backend/cups-pdf \
     && chown root:root /usr/lib/cups/backend/cups-pdf
 
-# Environment variables
+# Environment variables. CUPS_ADMIN_PASSWORD defaults to admin in entrypoint.sh, which keeps it out of the
+# image's configuration.
 ENV CLEANUP_HOURS=6 \
     CUPS_ADMIN_USER=admin \
-    CUPS_ADMIN_PASSWORD=admin \
     TZ=Europe/London
 
 # Expose ports
@@ -91,6 +94,6 @@ EXPOSE 631 8631
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s \
-    CMD curl -f http://localhost:631/ || exit 1
+    CMD ["curl", "-f", "http://localhost:631/"]
 
 ENTRYPOINT ["/entrypoint.sh"]
