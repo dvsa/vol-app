@@ -35,7 +35,8 @@
         <div class="govuk-form-group section-editor-group"
              data-section-id="<?= $this->escapeHtmlAttr($section['id']) ?>"
              data-version="<?= $this->escapeHtmlAttr($section['version']) ?>">
-            <h3 class="govuk-heading-s"><?= $this->escapeHtml($section['name']) ?></h3>
+            <?php // h2: a section stands on its own in the letter, level with the issue-type headings ?>
+            <h2 class="govuk-heading-s"><?= $this->escapeHtml($section['name']) ?></h2>
 
             <div class="editorjs-container" data-element-name="section_<?= $this->escapeHtmlAttr($section['id']) ?>">
                 <div id="editor-section-<?= $this->escapeHtmlAttr($section['id']) ?>" class="editorjs-editor"></div>
