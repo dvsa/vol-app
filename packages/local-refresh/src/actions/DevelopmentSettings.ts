@@ -25,6 +25,27 @@ type Settings = Record<SettingName, string>;
 const settingNames = Object.keys(defaults) as SettingName[];
 const xdebugModes = ["off", "debug", "coverage", "debug,develop"];
 
+// A line that sets a variable in the .env file: an optional "export", the name, then the rest of the line
+const envLinePattern = /^(\s*(?:export\s+)?)([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/;
+
+/**
+ * Splits what follows the = the way Docker Compose reads it: a quoted value is taken as it is, and an
+ * unquoted one ends where " #" starts a comment
+ */
+const splitEnvValue = (text: string): { value: string; comment: string } => {
+  const quoted = text.match(/^(["'])(.*?)\1(.*)$/);
+
+  if (quoted) {
+    return { value: quoted[2], comment: quoted[3] };
+  }
+
+  const commentStart = text.indexOf(" #");
+
+  return commentStart === -1
+    ? { value: text, comment: "" }
+    : { value: text.slice(0, commentStart).trimEnd(), comment: text.slice(commentStart) };
+};
+
 const isOn = (value: string): boolean => ["1", "true", "yes", "on"].includes(value.toLowerCase());
 const onOff = (value: string): string => (isOn(value) ? "on" : "off");
 
@@ -129,10 +150,10 @@ export default class DevelopmentSettings implements ActionInterface {
     const settings: Partial<Settings> = {};
 
     for (const line of fs.readFileSync(this.envFile, "utf8").split(/\r?\n/)) {
-      const match = line.match(/^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/);
+      const match = line.match(envLinePattern);
 
-      if (match && (settingNames as string[]).includes(match[1])) {
-        settings[match[1] as SettingName] = match[2].replace(/^(["'])(.*)\1$/, "$2");
+      if (match && (settingNames as string[]).includes(match[2])) {
+        settings[match[2] as SettingName] = splitEnvValue(match[3]).value;
       }
     }
 
@@ -140,8 +161,8 @@ export default class DevelopmentSettings implements ActionInterface {
   }
 
   /**
-   * Replaces the development settings in the .env file, appending any it doesn't have yet, and
-   * leaves every other line as it was
+   * Replaces the development settings in the .env file, keeping any "export" or comment on their
+   * lines, appends any it doesn't have yet, and leaves every other line as it was
    */
   private writeSettings(): void {
     const contents = fs.existsSync(this.envFile) ? fs.readFileSync(this.envFile, "utf8") : "";
@@ -149,15 +170,16 @@ export default class DevelopmentSettings implements ActionInterface {
     const missing = new Set<SettingName>(settingNames);
 
     const updated = lines.map((line) => {
-      const name = line.match(/^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=/)?.[1];
+      const match = line.match(envLinePattern);
 
-      if (name === undefined || !(settingNames as string[]).includes(name)) {
+      if (!match || !(settingNames as string[]).includes(match[2])) {
         return line;
       }
 
+      const [, prefix, name, rest] = match;
       missing.delete(name as SettingName);
 
-      return `${name}=${this.settings[name as SettingName]}`;
+      return `${prefix}${name}=${this.settings[name as SettingName]}${splitEnvValue(rest).comment}`;
     });
 
     if (missing.size > 0) {
