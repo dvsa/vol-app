@@ -31,7 +31,9 @@ final class SendTestEmailTest extends AbstractCommandHandlerTestCase
                 'email' => [
                     'from_email' => 'no-reply@example.com',
                     'from_name' => 'OLCS',
-                    'notify' => [
+                ],
+                'notify' => [
+                    'email' => [
                         'passthrough_templates' => [
                             'en_GB' => 'uuid-en',
                             'cy_GB' => 'uuid-cy',

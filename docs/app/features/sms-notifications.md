@@ -13,15 +13,22 @@ sent through Notify apart from admin test sends, is recorded in the `notify_mess
 
 All of these must be true, checked by `SmsGate` when a text is queued and again when it is sent:
 
-| Setting                                              | Needs to be                                                  |
-| ---------------------------------------------------- | ------------------------------------------------------------ |
-| `mail.dsn` (`olcs_mail_dsn`)                         | a `govuknotify://` DSN (or `govuknotify+mailpit://` locally) |
-| `email.sms.template_id` (`olcs_notify_sms_template`) | the id of the Notify SMS template (see below)                |
-| `sms_notifications` toggle                           | on                                                           |
-| `email.sms.send_all_sms_to` (`olcs_send_all_sms_to`) | blank or a valid UK number (see below)                       |
+| Setting                                               | Needs to be                                                  |
+| ----------------------------------------------------- | ------------------------------------------------------------ |
+| `mail.dsn` (`olcs_mail_dsn`)                          | a `govuknotify://` DSN (or `govuknotify+mailpit://` locally) |
+| `notify.api_key` (`olcs_notify_api_key`)              | a Notify API key, unless the DSN carries one                 |
+| `notify.sms.template_id` (`olcs_notify_sms_template`) | the id of the Notify SMS template (see below)                |
+| `sms_notifications` toggle                            | on                                                           |
+| `notify.sms.send_all_sms_to` (`olcs_send_all_sms_to`) | blank or a valid UK number (see below)                       |
 
-The Notify API key comes from the mail DSN, so SMS can't go live before the Notify email cutover.
-SSM can't store an empty string, so `" "` or `"null"` mean unset.
+SMS uses the same Notify API key as email: one in the DSN (`govuknotify://KEY@default`) if it has
+one, otherwise `notify.api_key`. SMS only sends when `mail.dsn` is a `govuknotify` DSN, so it can't go
+live before the Notify email cutover. SSM can't store an empty string, so `" "` or `"null"` mean
+unset.
+
+All Notify settings live in the `notify` config block: `api_key` and `proxy`, then `email` (the
+passthrough template ids) and `sms`. Older local configs that set these under `email.notify` and
+`email.sms` still work. Run locally (no `ENVIRONMENT_NAME`), every setting in the block is optional.
 
 The Notify template is a passthrough: its whole content is `((body))`. VOL renders the text itself
 and sends it as the `body` personalisation, so wording changes happen in VOL, not in Notify.
@@ -48,6 +55,23 @@ number.
 (`*-BASE-SM-APPLICATION-API` in Secrets Manager), not a Terraform parameter, so phone numbers stay
 out of this public repo. Every non-production secret needs the key, even if it's just `" "`, or the
 API won't start.
+
+## Deploying
+
+The API reads these from each environment's API secret (Secrets Manager) at startup. A key missing
+from the secret stops the API starting, so add them before the release that needs them goes out:
+
+| Secret key             | Which secrets                                                            | Value                                                                                        |
+| ---------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| `olcs_notify_api_key`  | all five: `DEVAPPDEV`, `DEVAPPREG`, `DEVAPPQA` (int), `APPPP`, `APP`     | `" "` until that environment moves to Notify, then its key (team or test outside production) |
+| `olcs_send_all_sms_to` | non-production only: `DEVAPPDEV`, `DEVAPPREG`, `DEVAPPQA` (int), `APPPP` | `" "`, or a number to receive every text                                                     |
+
+Each secret is `<name>-BASE-SM-APPLICATION-API`. `olcs_notify_sms_template` is a Parameter Store
+value set by Terraform (`parameters.tf`), so it needs nothing by hand.
+
+To move an environment to Notify, put its key in `olcs_notify_api_key` first, then set `olcs_mail_dsn`
+to `govuknotify://default`. The key stays out of the DSN, which is a Terraform parameter in this
+public repo. A `govuknotify://` DSN with no key anywhere stops every email, not just texts.
 
 ## The letter text
 

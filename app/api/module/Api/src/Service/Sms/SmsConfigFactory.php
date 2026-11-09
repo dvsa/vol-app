@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Service\Sms;
 
+use Dvsa\Olcs\Email\Service\NotifyConfig;
 use Dvsa\Olcs\Email\Transport\GovUkNotifyTransportFactory;
 use Dvsa\Olcs\Email\Transport\MailDsn;
 use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
@@ -17,7 +18,7 @@ final class SmsConfigFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SmsConfig
     {
         $config = $container->get('config');
-        $sms = $config['email']['sms'] ?? [];
+        $sms = NotifyConfig::sms($config);
 
         $apiKey = null;
         $mailpit = false;
@@ -37,12 +38,12 @@ final class SmsConfigFactory implements FactoryInterface
                 $host = $dsn->getHost();
                 $port = $dsn->getPort(1025);
             } elseif ($dsn !== null && $dsn->getScheme() === GovUkNotifyTransportFactory::SCHEME_PRODUCTION) {
-                $key = $dsn->getPassword() ?? $dsn->getUser() ?? '';
-                $apiKey = $key !== '' ? $key : null;
+                // the same key email uses: the DSN's own, else notify.api_key
+                $apiKey = GovUkNotifyTransportFactory::keyFromDsn($dsn) ?? NotifyConfig::apiKey($config);
             }
         }
 
-        $redirect = self::setOrNull($sms['send_all_sms_to'] ?? null);
+        $redirect = self::setOrNull($sms['send_all_sms_to']);
         $redirectNumber = self::normalisedNumber($redirect);
 
         return new SmsConfig(
@@ -50,9 +51,9 @@ final class SmsConfigFactory implements FactoryInterface
             $mailpit,
             $host,
             $port,
-            self::setOrNull($sms['template_id'] ?? null),
+            self::setOrNull($sms['template_id']),
             $redirectNumber,
-            (bool) ($sms['is_production'] ?? false),
+            $sms['is_production'],
             self::environment(),
             $redirect !== null && $redirectNumber === null,
         );

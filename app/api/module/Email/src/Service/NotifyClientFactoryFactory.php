@@ -15,7 +15,7 @@ final class NotifyClientFactoryFactory implements FactoryInterface
         $config = $container->get('config');
 
         return new NotifyClientFactory(
-            NotifyClientFactory::resolveGuzzleOptions($config['email']['notify']['proxy'] ?? null)
+            NotifyClientFactory::resolveGuzzleOptions(NotifyConfig::proxy($config))
         );
     }
 }

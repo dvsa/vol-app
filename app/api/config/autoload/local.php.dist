@@ -136,23 +136,6 @@ return [
     'from_email' => 'mail.olcs.dev@dev-dvsacloud.uk',
     'selfserve_uri' => 'https://olcs-selfserve',
     'internal_uri' => 'https://olcs-internal',
-    // GOV.UK Notify passthrough templates. Leave blank locally and the transport will refuse
-    // to send to Notify; populate with trial-service template UUIDs to exercise the real API.
-    'notify' => [
-      'passthrough_templates' => [
-        'en_GB' => '',
-        'cy_GB' => '',
-      ],
-      // No forward proxy locally — the Notify client connects directly.
-      'proxy' => '',
-    ],
-    // VOL-7542: SMS via Notify. Uses mail.dsn for the API key (or mailpit). Outside production
-    // send_all_sms_to, if set, gets every text; leave it out to text the real number (use a team key).
-    // 'sms' => [
-    //   'template_id' => '00000000-0000-0000-0000-000000000000',
-    //   'send_all_sms_to' => '07700900000',
-    //   (is_production is derived from ENVIRONMENT_NAME, do not set it here)
-    // ],
     // VOL-7238: dedicated DSN for the admin "Send test via Notify" button (independent of
     // `mail.dsn`). Set to `govuknotify+mailpit://mailpit:1025` to wire the button through
     // the local Mailpit, or `govuknotify://<test-key>@notify.gov.uk` to hit a real Notify
@@ -177,6 +160,28 @@ return [
     's3Options' => [
       'roleArn' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
       'roleSessionName' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+    ],
+  ],
+  // GOV.UK Notify, used when mail.dsn is a govuknotify DSN. Everything here is optional locally.
+  'notify' => [
+    // A Notify API key (a test or team key, never live) for `govuknotify://default`. Leave null
+    // with `govuknotify+mailpit://`, which needs no key.
+    'api_key' => null,
+    // No forward proxy locally, the Notify client connects directly.
+    'proxy' => null,
+    'email' => [
+      // Passthrough template ids. Leave blank and the transport refuses to send to Notify;
+      // set trial-service template ids to exercise the real API.
+      'passthrough_templates' => [
+        'en_GB' => '',
+        'cy_GB' => '',
+      ],
+    ],
+    // VOL-7542: the SMS template id, and outside production an optional number that gets every
+    // text (leave it null to text the real number, with a team or test key).
+    'sms' => [
+      'template_id' => null,
+      'send_all_sms_to' => null,
     ],
   ],
   'mail' => [

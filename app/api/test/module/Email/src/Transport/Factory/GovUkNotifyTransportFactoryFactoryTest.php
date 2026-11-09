@@ -53,4 +53,19 @@ final class GovUkNotifyTransportFactoryFactoryTest extends TestCase
         $closure = (new \ReflectionProperty($factory, 'clientFactory'))->getValue($factory);
         $this->assertSame($client, $closure($key));
     }
+
+    public function testInvokeReadsTheNotifyBlock(): void
+    {
+        $sm = new ServiceManager();
+        $sm->setService('config', ['notify' => [
+            'api_key' => 'configured-key',
+            'email' => ['passthrough_templates' => ['en_GB' => 'tpl-en', 'cy_GB' => '%olcs_notify_template_cy_gb%']],
+        ]]);
+        $sm->setService(NotifyClientFactory::class, $this->createStub(NotifyClientFactory::class));
+
+        $factory = (new GovUkNotifyTransportFactoryFactory())($sm, GovUkNotifyTransportFactory::class);
+
+        $this->assertSame('configured-key', (new \ReflectionProperty($factory, 'apiKey'))->getValue($factory));
+        $this->assertSame(['en_GB' => 'tpl-en'], (new \ReflectionProperty($factory, 'passthroughTemplateIds'))->getValue($factory));
+    }
 }

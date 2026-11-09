@@ -26,7 +26,8 @@ final class NotifyTestMailerFactory implements FactoryInterface
         /** @var GovUkNotifyTransportFactory $govUkFactory */
         $govUkFactory = $container->get(GovUkNotifyTransportFactory::class);
 
-        // test sends are not real correspondence, so they write no notify_message rows
-        return NotifyTestMailer::fromDsn(is_string($dsn) ? $dsn : null, $govUkFactory->withoutRecorder());
+        // test sends are not real correspondence, so they write no notify_message rows, and they
+        // use the key in their own DSN, never notify.api_key
+        return NotifyTestMailer::fromDsn(is_string($dsn) ? $dsn : null, $govUkFactory->forTestSends());
     }
 }

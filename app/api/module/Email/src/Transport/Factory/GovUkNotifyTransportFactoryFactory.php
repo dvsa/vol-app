@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Email\Transport\Factory;
 
 use Alphagov\Notifications\Client as NotifyClient;
 use Dvsa\Olcs\Email\Service\NotifyClientFactory;
+use Dvsa\Olcs\Email\Service\NotifyConfig;
 use Dvsa\Olcs\Email\Transport\GovUkNotifyTransportFactory;
 use Dvsa\Olcs\Email\Transport\NotifyMessageRecorderInterface;
 use Dvsa\Olcs\Email\View\NotifyChrome;
@@ -15,9 +16,9 @@ use Psr\Container\ContainerInterface;
 /**
  * Laminas ServiceManager factory for {@see GovUkNotifyTransportFactory}.
  *
- * Reads Notify passthrough template UUIDs from application config
- * (`config['email']['notify']['passthrough_templates']`). The Notify client is constructed lazily
- * per DSN so the API key (which comes from the DSN) is not required at container-build time.
+ * Reads the Notify passthrough template UUIDs and API key from the `notify` config block (see
+ * {@see NotifyConfig}). The Notify client is constructed lazily per DSN, so no key is needed at
+ * container-build time. A key in the DSN wins over `notify.api_key`.
  */
 final class GovUkNotifyTransportFactoryFactory implements FactoryInterface
 {
@@ -25,17 +26,12 @@ final class GovUkNotifyTransportFactoryFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): GovUkNotifyTransportFactory
     {
         $config = $container->get('config');
-        $notifyConfig = $config['email']['notify'] ?? [];
 
-        /** @var array<string, string> $templates */
-        $templates = $notifyConfig['passthrough_templates'] ?? [];
-        // Strip unresolved `%placeholder%` values so the transport throws a meaningful error
-        // rather than calling Notify with a literal placeholder string.
-        $templates = array_filter($templates, static fn (string $v): bool => $v !== '' && !preg_match('/^%[^%]+%$/', $v));
+        // Blank and unresolved `%placeholder%` ids are left out, so the transport throws a meaningful
+        // error rather than calling Notify with a literal placeholder string.
+        $templates = NotifyConfig::passthroughTemplates($config);
 
-        $chromeTemplate = is_string($notifyConfig['dev_chrome_template'] ?? null)
-            ? $notifyConfig['dev_chrome_template']
-            : NotifyChrome::template();
+        $chromeTemplate = NotifyConfig::devChromeTemplate($config) ?? NotifyChrome::template();
 
         $markdownConverter = NotifyChrome::markdownConverter();
 
@@ -51,6 +47,7 @@ final class GovUkNotifyTransportFactoryFactory implements FactoryInterface
             $container->has(NotifyMessageRecorderInterface::class)
                 ? $container->get(NotifyMessageRecorderInterface::class)
                 : null,
+            NotifyConfig::apiKey($config),
         );
     }
 

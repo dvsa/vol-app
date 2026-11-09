@@ -8,6 +8,9 @@ $isProduction = strtoupper($environment) === 'APP';
 
 $isProductionAccount = in_array(strtoupper($environment), ['INT', 'PP', 'APP']);
 
+// Deployed environments set ENVIRONMENT_NAME and get parameter providers (config-parameters.global.php).
+$isDeployed = !empty($environment);
+
 $doctrine_connection_params = [
     // *Environment specific*
     'host' => 'olcsdb-rds.%domain%',
@@ -312,38 +315,47 @@ return [
         // it (SSM String params cannot be empty, so envs opt out with " " or "null"). NEVER in
         // production (APP): prod always sends to the real recipients regardless of the param.
         'send_all_mail_to' => $isProduction ? null : '%olcs_send_all_mail_to%',
-        // VOL-7542: SMS via GOV.UK Notify. Blank / "null" values mean unset. Outside production a
-        // send_all_sms_to number gets every text; unset, texts go to the real number and the env's
-        // team or test Notify key is what stops them reaching real people. Not a number: SMS is off.
-        // olcs_send_all_sms_to lives in each non-prod env's API secret (Secrets Manager), not the
-        // Terraform params, so the number stays out of the repo. Every non-prod secret needs the key.
-        'sms' => [
-            'template_id' => '%olcs_notify_sms_template%',
-            'send_all_sms_to' => $isProduction ? null : '%olcs_send_all_sms_to%',
-            'is_production' => $isProduction,
-        ],
         'from_name' => 'OLCS do not reply',
         'from_email' => '%olcs_from_email%',
         'selfserve_uri' => '%olcs_ss_uri%',
         'internal_uri' => '%olcs_iu_uri%',
-        // GOV.UK Notify transport config. Populated from Secrets Manager / Parameter Store in
-        // deployed environments; overridden in local.php for local dev.
-        'notify' => [
-            'passthrough_templates' => [
-                'en_GB' => '%olcs_notify_template_en_gb%',
-                'cy_GB' => '%olcs_notify_template_cy_gb%',
-            ],
-            // Outbound egress in deployed environments is only reachable via the shared forward
-            // proxy, so the Notify HTTP client is routed through it like every other external
-            // integration. Overridden to empty in local.php where egress is direct.
-            'proxy' => 'http://%shd_proxy%',
-        ],
         // VOL-7238: dedicated DSN for the admin "Send test via Notify" button. Populated only
         // in pre-cutover envs (dev/int) so admins can exercise the Notify path against a
         // Notify test-mode key while the main `mail.dsn` is still SMTP. Empty/unset hides the
         // admin button.
         'notify_test' => [
             'dsn' => '%olcs_notify_test_dsn%',
+        ],
+    ],
+    // GOV.UK Notify, for email (once mail.dsn is a govuknotify:// DSN) and SMS. Blank, " " and
+    // "null" mean unset. Deployed values come from Parameter Store and the API secret. Run locally
+    // (no ENVIRONMENT_NAME) there are no parameter providers, so these default to unset instead of
+    // placeholders, and local.php sets what it needs. Older local.php files that set these under
+    // email.notify / email.sms still work (see Dvsa\Olcs\Email\Service\NotifyConfig).
+    'notify' => [
+        // From the API secret (Secrets Manager), so the key stays out of this repo. Used whenever
+        // mail.dsn is govuknotify:// without a key of its own, e.g. govuknotify://default.
+        // Every environment's secret needs this key, even if it's just " ", or the API won't start.
+        'api_key' => $isDeployed ? '%olcs_notify_api_key%' : null,
+        // Outbound egress in deployed environments is only reachable via the shared forward proxy,
+        // so the Notify HTTP client is routed through it like every other external integration.
+        'proxy' => $isDeployed ? 'http://%shd_proxy%' : null,
+        'email' => [
+            // Passthrough templates, whose whole content is ((body)): VOL renders the email itself.
+            'passthrough_templates' => [
+                'en_GB' => $isDeployed ? '%olcs_notify_template_en_gb%' : null,
+                'cy_GB' => $isDeployed ? '%olcs_notify_template_cy_gb%' : null,
+            ],
+        ],
+        // VOL-7542. Outside production a send_all_sms_to number gets every text; unset, texts go to
+        // the real number and the env's team or test Notify key is what stops them reaching real
+        // people. Not a number: SMS is off. olcs_send_all_sms_to lives in each non-prod env's API
+        // secret, not the Terraform params, so the number stays out of this repo. Every non-prod
+        // secret needs the key, even if it's just " ".
+        'sms' => [
+            'template_id' => $isDeployed ? '%olcs_notify_sms_template%' : null,
+            'send_all_sms_to' => ($isDeployed && !$isProduction) ? '%olcs_send_all_sms_to%' : null,
+            'is_production' => $isProduction,
         ],
     ],
     'awsOptions' => array_filter([
@@ -365,10 +377,11 @@ return [
         ]
     ]),
     'mail' => [
-        // Optional explicit Symfony Mailer DSN. When set (e.g. `govuknotify://…` or
+        // Optional explicit Symfony Mailer DSN. When set (e.g. `govuknotify://default` or
         // `govuknotify+mailpit://mailpit:1025`), takes precedence over the legacy host/port
-        // SMTP composition below. Populated from Secrets Manager / Parameter Store once the
-        // Notify cutover has happened per-environment; overridden in local.php for dev.
+        // SMTP composition below. Populated from Parameter Store; overridden in local.php for dev.
+        // A govuknotify:// DSN without a key uses notify.api_key, which keeps the key out of
+        // Parameter Store and this repo.
         'dsn' => '%olcs_mail_dsn%',
         'type' => '\Laminas\Mail\Transport\Smtp',
         'options' => [

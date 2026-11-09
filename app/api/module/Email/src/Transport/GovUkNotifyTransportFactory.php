@@ -24,6 +24,7 @@ final class GovUkNotifyTransportFactory extends AbstractTransportFactory
     /**
      * @param array<string, string> $passthroughTemplateIds Map of locale => Notify template UUID
      * @param callable(string): NotifyClient $clientFactory Callable that returns a Notify client for a given API key
+     * @param ?string $apiKey The key (`notify.api_key`) for a `govuknotify://` DSN that doesn't carry its own
      */
     public function __construct(
         private readonly array $passthroughTemplateIds,
@@ -31,12 +32,16 @@ final class GovUkNotifyTransportFactory extends AbstractTransportFactory
         private readonly ConverterInterface $markdownConverter,
         private readonly string $chromeTemplate,
         private readonly ?NotifyMessageRecorderInterface $recorder = null,
+        private readonly ?string $apiKey = null,
     ) {
         parent::__construct();
     }
 
-    /** The same factory, but its transports record nothing in notify_message (admin test sends). */
-    public function withoutRecorder(): self
+    /**
+     * The same factory for admin test sends: they record nothing in notify_message, and their DSN
+     * must carry its own key, so a test send never falls back to the live key.
+     */
+    public function forTestSends(): self
     {
         return new self(
             $this->passthroughTemplateIds,
@@ -77,9 +82,9 @@ final class GovUkNotifyTransportFactory extends AbstractTransportFactory
             );
         }
 
-        $apiKey = $dsn->getPassword() ?? $dsn->getUser() ?? '';
+        $apiKey = self::keyFromDsn($dsn) ?? $this->apiKey ?? '';
         if ($apiKey === '') {
-            throw new \InvalidArgumentException('govuknotify DSN requires an API key in the password or user field');
+            throw new \InvalidArgumentException('govuknotify needs an API key: set notify.api_key, or put one in the DSN');
         }
 
         $client = ($this->clientFactory)($apiKey);
@@ -91,5 +96,17 @@ final class GovUkNotifyTransportFactory extends AbstractTransportFactory
             $this->logger,
             $this->recorder,
         );
+    }
+
+    /** The key in a DSN's password or user part (`govuknotify://KEY@default`), if it has one. */
+    public static function keyFromDsn(Dsn $dsn): ?string
+    {
+        foreach ([$dsn->getPassword(), $dsn->getUser()] as $part) {
+            if ($part !== null && trim($part) !== '') {
+                return $part;
+            }
+        }
+
+        return null;
     }
 }

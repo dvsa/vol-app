@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
+use Dvsa\Olcs\Email\Service\NotifyConfig;
 use Dvsa\Olcs\Email\Service\NotifyTestMailer;
 use Dvsa\Olcs\Email\Transport\GovUkNotifyTransport;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -133,10 +134,7 @@ final class SendTestEmail extends AbstractCommandHandler
         $this->testMailer = $container->get(NotifyTestMailer::class);
 
         $config = $container->get('config');
-        $this->passthroughUuids = $config['email']['notify']['passthrough_templates'] ?? [];
-        if (!is_array($this->passthroughUuids)) {
-            $this->passthroughUuids = [];
-        }
+        $this->passthroughUuids = NotifyConfig::passthroughTemplates($config);
         $this->fromEmail = (string) ($config['email']['from_email'] ?? '');
         $this->fromName = (string) ($config['email']['from_name'] ?? '');
 

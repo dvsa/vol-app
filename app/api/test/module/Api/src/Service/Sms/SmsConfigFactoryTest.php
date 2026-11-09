@@ -26,7 +26,7 @@ final class SmsConfigFactoryTest extends TestCase
     {
         $c = $this->build([
             'mail' => ['dsn' => 'govuknotify://KEY@default'],
-            'email' => ['sms' => ['template_id' => 'tpl', 'send_all_sms_to' => '07700900000', 'is_production' => false]],
+            'notify' => ['sms' => ['template_id' => 'tpl', 'send_all_sms_to' => '07700900000', 'is_production' => false]],
         ]);
 
         $this->assertSame('KEY', $c->apiKey);
@@ -34,6 +34,66 @@ final class SmsConfigFactoryTest extends TestCase
         $this->assertSame('tpl', $c->templateId);
         $this->assertSame('+447700900000', $c->sendAllSmsTo);
         $this->assertFalse($c->isProduction);
+    }
+
+    public function testKeylessDsnUsesTheNotifyApiKey(): void
+    {
+        $c = $this->build([
+            'mail' => ['dsn' => 'govuknotify://default'],
+            'notify' => ['api_key' => 'CONFIGURED'],
+        ]);
+
+        $this->assertSame('CONFIGURED', $c->apiKey);
+        $this->assertTrue($c->hasNotifyTransport());
+    }
+
+    public function testKeyInTheDsnWinsOverTheNotifyApiKey(): void
+    {
+        $c = $this->build([
+            'mail' => ['dsn' => 'govuknotify://IN-DSN@default'],
+            'notify' => ['api_key' => 'CONFIGURED'],
+        ]);
+
+        $this->assertSame('IN-DSN', $c->apiKey);
+    }
+
+    /** SMS still goes live with the email cutover: a key alone, with email on SMTP, sends nothing. */
+    public function testNotifyApiKeyAloneDoesNotTurnSmsOnWhileMailIsSmtp(): void
+    {
+        $c = $this->build([
+            'mail' => ['dsn' => 'smtp://mailpit:1025'],
+            'notify' => ['api_key' => 'CONFIGURED'],
+        ]);
+
+        $this->assertNull($c->apiKey);
+        $this->assertFalse($c->hasNotifyTransport());
+    }
+
+    #[DataProvider('blankValues')]
+    public function testBlankNotifyApiKeyIsNoKey(mixed $value): void
+    {
+        $c = $this->build(['mail' => ['dsn' => 'govuknotify://default'], 'notify' => ['api_key' => $value]]);
+
+        $this->assertNull($c->apiKey);
+        $this->assertFalse($c->hasNotifyTransport());
+    }
+
+    public static function blankValues(): array
+    {
+        return [[null], [''], [' '], ['null'], ['%olcs_notify_api_key%']];
+    }
+
+    /** Older local.php files set these under email.sms. */
+    public function testSettingsUnderEmailSmsStillWork(): void
+    {
+        $c = $this->build([
+            'mail' => ['dsn' => 'govuknotify://KEY@default'],
+            'email' => ['sms' => ['template_id' => 'old-tpl', 'send_all_sms_to' => '07700900000']],
+            'notify' => ['sms' => ['template_id' => null, 'send_all_sms_to' => null, 'is_production' => false]],
+        ]);
+
+        $this->assertSame('old-tpl', $c->templateId);
+        $this->assertSame('+447700900000', $c->sendAllSmsTo);
     }
 
     public function testPasswordTakesPrecedenceOverUser(): void
@@ -110,7 +170,7 @@ final class SmsConfigFactoryTest extends TestCase
     #[DataProvider('unsetValues')]
     public function testSentinelsBecomeNull(string $value): void
     {
-        $c = $this->build(['email' => ['sms' => ['template_id' => $value, 'send_all_sms_to' => $value, 'is_production' => true]]]);
+        $c = $this->build(['notify' => ['sms' => ['template_id' => $value, 'send_all_sms_to' => $value, 'is_production' => true]]]);
 
         $this->assertNull($c->templateId);
         $this->assertNull($c->sendAllSmsTo);
@@ -124,13 +184,13 @@ final class SmsConfigFactoryTest extends TestCase
 
     public function testProductionNullRedirect(): void
     {
-        $c = $this->build(['email' => ['sms' => ['template_id' => 't', 'send_all_sms_to' => null, 'is_production' => true]]]);
+        $c = $this->build(['notify' => ['sms' => ['template_id' => 't', 'send_all_sms_to' => null, 'is_production' => true]]]);
         $this->assertNull($c->sendAllSmsTo);
     }
 
     public function testRedirectNumberIsNormalised(): void
     {
-        $c = $this->build(['email' => ['sms' => ['send_all_sms_to' => '07700 900123']]]);
+        $c = $this->build(['notify' => ['sms' => ['send_all_sms_to' => '07700 900123']]]);
         $this->assertSame('+447700900123', $c->sendAllSmsTo);
     }
 
@@ -138,7 +198,7 @@ final class SmsConfigFactoryTest extends TestCase
     {
         $c = $this->build([
             'mail' => ['dsn' => 'govuknotify://KEY@default'],
-            'email' => ['sms' => ['template_id' => 'tpl', 'send_all_sms_to' => 'not-a-number', 'is_production' => false]],
+            'notify' => ['sms' => ['template_id' => 'tpl', 'send_all_sms_to' => 'not-a-number', 'is_production' => false]],
         ]);
 
         $this->assertNull($c->sendAllSmsTo);
