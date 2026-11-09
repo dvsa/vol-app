@@ -21,11 +21,21 @@ class LetterInstance extends AbstractLetterInstance
     public const STATUS_CANCELLED = 'ltr_sts_cancelled';
 
     /**
-     * Memoised result of getTodoRequiringIssueCounts(). Not mapped -- derived from the issues.
-     *
-     * @var array<int, int>|null
+     * Where a to-do shared by several issues appears in the letter: after the first of those
+     * issues, or after the last (VOL-7737). The stored owner stays the first issue either way
+     * (VOL-7280/7408), so this only changes where it is drawn and can be flipped at any time.
      */
-    private ?array $todoRequiringIssueCounts = null;
+    public const SHARED_TODO_UNDER_FIRST_ISSUE = 'first';
+    public const SHARED_TODO_UNDER_LAST_ISSUE = 'last';
+    public const SHARED_TODO_PLACEMENT = self::SHARED_TODO_UNDER_FIRST_ISSUE;
+
+    /**
+     * Memoised issues that bring each to-do, in letter order, keyed by LetterTodoVersion::getDedupeKey.
+     * Not mapped -- derived from the issues.
+     *
+     * @var array<string, list<LetterInstanceIssue>>|null
+     */
+    private ?array $todoBringingIssues = null;
 
     /**
      * Letter instance sections
@@ -129,6 +139,7 @@ class LetterInstance extends AbstractLetterInstance
         if (!$this->letterInstanceIssues->contains($issue)) {
             $issue->setLetterInstance($this);
             $this->letterInstanceIssues->add($issue);
+            $this->todoBringingIssues = null;
         }
         return $this;
     }
@@ -139,7 +150,7 @@ class LetterInstance extends AbstractLetterInstance
     public function removeLetterInstanceIssue(LetterInstanceIssue $issue): void
     {
         $this->letterInstanceIssues->removeElement($issue);
-        $this->todoRequiringIssueCounts = null;
+        $this->todoBringingIssues = null;
     }
 
     /**
@@ -173,7 +184,7 @@ class LetterInstance extends AbstractLetterInstance
     public function removeLetterInstanceTodo(LetterInstanceTodo $todo): void
     {
         $this->letterInstanceTodos->removeElement($todo);
-        $this->todoRequiringIssueCounts = null;
+        $this->todoBringingIssues = null;
     }
 
     /**
@@ -181,45 +192,99 @@ class LetterInstance extends AbstractLetterInstance
      * so that issues linking different versions of the same to-do count towards one total (VOL-7408).
      *
      * A to-do is deduplicated when it is composed, so it appears once no matter how many of the
-     * selected issues call for it -- and it is attached to whichever issue happened to come first.
-     * A caseworker editing it therefore has no way to see that it is standing in for several
-     * issues. This supplies that count.
-     *
-     * Built in ONE pass over the issues and memoised, deliberately. Asking each to-do to work its
-     * own count out would walk every issue again per to-do, and letterIssueTodos is a LAZY
-     * association, so that shape is an N+1. This way the lazy load happens once per issue for the
-     * whole letter.
+     * selected issues call for it. A caseworker editing it therefore has no way to see that it is
+     * standing in for several issues. This supplies that count.
      *
      * @return array<string, int>
      */
     public function getTodoRequiringIssueCounts(): array
     {
-        if ($this->todoRequiringIssueCounts !== null) {
-            return $this->todoRequiringIssueCounts;
+        return array_map(count(...), $this->todoBringingIssues());
+    }
+
+    /**
+     * The ids of the issues each to-do can be shown under, preferred first, keyed by
+     * LetterTodoVersion::getDedupeKey. The edit page uses the first one it is showing.
+     *
+     * @return array<string, list<int>>
+     */
+    public function getTodoPlacementIssueIds(string $placement = self::SHARED_TODO_PLACEMENT): array
+    {
+        return array_map(
+            static fn(array $issues): array => array_map(
+                static fn(LetterInstanceIssue $issue): int => (int) $issue->getId(),
+                $issues
+            ),
+            $this->todoPlacementIssues($placement)
+        );
+    }
+
+    /**
+     * The issue a to-do is drawn after in the letter (VOL-7737). A to-do none of the letter's
+     * issues brings any more stays with the issue it belongs to.
+     */
+    public function getPlacementIssue(
+        LetterInstanceTodo $todo,
+        string $placement = self::SHARED_TODO_PLACEMENT
+    ): ?LetterInstanceIssue {
+        $key = $todo->getLetterTodoVersion()?->getDedupeKey();
+        $issues = $key !== null ? ($this->todoPlacementIssues($placement)[$key] ?? []) : [];
+
+        return $issues[0] ?? $todo->getLetterInstanceIssue();
+    }
+
+    /**
+     * @return array<string, list<LetterInstanceIssue>>
+     */
+    private function todoPlacementIssues(string $placement): array
+    {
+        $bringing = $this->todoBringingIssues();
+
+        return $placement === self::SHARED_TODO_UNDER_LAST_ISSUE
+            ? array_map(array_reverse(...), $bringing)
+            : $bringing;
+    }
+
+    /**
+     * The issues that bring each to-do, in letter order.
+     *
+     * Built in ONE pass over the issues and memoised, deliberately. Asking each to-do to work its
+     * own answer out would walk every issue again per to-do, and letterIssueTodos is a LAZY
+     * association, so that shape is an N+1. This way the lazy load happens once per issue for the
+     * whole letter.
+     *
+     * @return array<string, list<LetterInstanceIssue>>
+     */
+    private function todoBringingIssues(): array
+    {
+        if ($this->todoBringingIssues !== null) {
+            return $this->todoBringingIssues;
         }
 
-        $counts = [];
+        $issues = array_values($this->getLetterInstanceIssues()->toArray());
+        usort(
+            $issues,
+            static fn(LetterInstanceIssue $a, LetterInstanceIssue $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder()
+        );
 
-        foreach ($this->getLetterInstanceIssues() as $instanceIssue) {
-            $issueVersion = $instanceIssue->getLetterIssueVersion();
-            if ($issueVersion === null) {
-                continue;
-            }
-
-            foreach ($issueVersion->getLetterIssueTodos() ?? [] as $issueTodo) {
+        $bringing = [];
+        foreach ($issues as $instanceIssue) {
+            foreach ($instanceIssue->getLetterIssueVersion()?->getLetterIssueTodos() ?? [] as $issueTodo) {
                 $todoVersion = $issueTodo->getLetterTodoVersion();
                 if ($todoVersion === null) {
                     continue;
                 }
 
                 $key = $todoVersion->getDedupeKey();
-                $counts[$key] = ($counts[$key] ?? 0) + 1;
+                if (!in_array($instanceIssue, $bringing[$key] ?? [], true)) {
+                    $bringing[$key][] = $instanceIssue;
+                }
             }
         }
 
-        $this->todoRequiringIssueCounts = $counts;
+        $this->todoBringingIssues = $bringing;
 
-        return $counts;
+        return $bringing;
     }
 
     /**
