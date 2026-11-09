@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Utils\Development;
 
+use Closure;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -29,7 +30,14 @@ use SplFileInfo;
  * again only when the last scan is more than a couple of seconds old. The first time a key is used,
  * cache files written under any other key are deleted.
  *
+ * A file is checked by its modification time and size. Modification times are only to the second,
+ * so a file changed in the last couple of seconds could change again without either changing: its
+ * contents are checked as well until it's older, and if only they change, the cache is deleted.
+ *
  * Not for production, where configuration doesn't change under a running app.
+ *
+ * @phpstan-type Manifest array{sources: string, scannedAt: int, files: array<string, string>, loaded: array<string, string>}
+ * @psalm-type Manifest = array{sources: string, scannedAt: int, files: array<string, string>, loaded: array<string, string>}
  */
 final class ConfigCacheKey
 {
@@ -39,6 +47,11 @@ final class ConfigCacheKey
     private const string MANIFEST_FILE = 'development-config-sources.json';
     private const int DEFAULT_RESCAN_AFTER_SECONDS = 2;
 
+    // A file modified up to this many seconds ago, by the container's clock, could be modified again
+    // within the same second. The margin allows for the host's clock, which sets the modification
+    // time, being behind the container's.
+    private const int RECENT_CHANGE_SECONDS = 2;
+
     // Files kept in configuration directories that aren't configuration: view templates, the dist
     // copies of local configuration, and documentation
     private const array IGNORED_EXTENSIONS = ['phtml', 'dist', 'md'];
@@ -46,41 +59,57 @@ final class ConfigCacheKey
     private readonly string $appRoot;
     private readonly string $cacheDir;
 
+    /** @var Closure(): int */
+    private readonly Closure $clock;
+
     /** @var string[]|null */
     private ?array $libraryRoots = null;
 
     /**
-     * @param string $appRoot            the application's root directory
-     * @param string $container          identifies the container, whose environment can't change while it runs
-     * @param int    $rescanAfterSeconds how old the last scan can be before the directories are listed again
+     * The manifest the key was last worked out from
+     *
+     * @var Manifest|null
+     */
+    private ?array $manifest = null;
+
+    /**
+     * @param string                $appRoot            the application's root directory
+     * @param string                $container          identifies the container, whose environment can't change while it runs
+     * @param int                   $rescanAfterSeconds how old the last scan can be before the directories are listed again
+     * @param (Closure(): int)|null $clock              the current Unix time, by default time()
      */
     private function __construct(
         string $appRoot,
         private readonly string $container,
         private readonly int $rescanAfterSeconds,
+        ?Closure $clock,
     ) {
         // get_included_files() reports real paths
         $this->appRoot = realpath($appRoot) ?: $appRoot;
         $this->cacheDir = $this->appRoot . '/data/cache';
+        $this->clock = $clock ?? time(...);
     }
 
     /**
-     * @param string|null $container defaults to this host's name
+     * @param string|null           $container defaults to this host's name
+     * @param (Closure(): int)|null $clock     the current Unix time, by default time()
      */
     public static function forApplication(
         string $appRoot,
         int $rescanAfterSeconds = self::DEFAULT_RESCAN_AFTER_SECONDS,
         ?string $container = null,
+        ?Closure $clock = null,
     ): self {
-        return new self($appRoot, $container ?? (gethostname() ?: ''), $rescanAfterSeconds);
+        return new self($appRoot, $container ?? (gethostname() ?: ''), $rescanAfterSeconds, $clock);
     }
 
     public function key(): string
     {
-        $key = $this->keyFor($this->sourcesHash());
+        $this->manifest = $this->currentManifest();
+        $key = $this->keyFor($this->manifest['sources']);
 
         if (!is_file($this->cacheDir . '/module-config-cache.' . $key . '.php')) {
-            $this->deleteCachesOtherThan($key);
+            $this->deleteCaches(except: $key);
         }
 
         return $key;
@@ -105,14 +134,19 @@ final class ConfigCacheKey
     {
         clearstatcache();
 
-        $manifest = $this->readManifest();
-        $loaded = $this->signatures(array_filter($includedFiles, $this->isApplicationFile(...)));
+        // The files found by scanning were checked when the key was worked out, before the merge read
+        // them, so they keep those signatures: one changed while the configuration was being merged
+        // then changes the key on the next request.
+        $manifest = $this->manifest ?? $this->readManifest();
+        $files = $manifest['files'] ?? $this->scan();
+        $loaded = array_diff_key(
+            $this->signatures(array_filter($includedFiles, $this->isApplicationFile(...))),
+            $files
+        );
 
-        if ($manifest === null) {
-            return $this->keyFor($this->saveManifest($this->scan(), $loaded, time()));
-        }
+        $this->manifest = $this->saveManifest($files, $loaded, $manifest['scannedAt'] ?? $this->now());
 
-        return $this->keyFor($this->saveManifest($manifest['files'], $loaded, $manifest['scannedAt']));
+        return $this->keyFor($this->manifest['sources']);
     }
 
     private function keyFor(string $sourcesHash): string
@@ -121,51 +155,67 @@ final class ConfigCacheKey
     }
 
     /**
-     * A hash of the files that build the configuration, from the last scan if it's still current
+     * The files that build the configuration, from the last scan if it's still current
+     *
+     * @return Manifest
      */
-    private function sourcesHash(): string
+    private function currentManifest(): array
     {
         clearstatcache();
 
         $manifest = $this->readManifest();
+        $isUnchanged = $manifest !== null && $this->areUnchanged($manifest['files'] + $manifest['loaded']);
 
-        if (
-            $manifest !== null
-            && !$this->isScanDue($manifest['scannedAt'])
-            && $this->areUnchanged($manifest['files'] + $manifest['loaded'])
-        ) {
-            return $manifest['sources'];
+        if ($isUnchanged && !$this->isScanDue($manifest['scannedAt'])) {
+            return $manifest;
         }
 
-        $loaded = $this->signatures(array_keys($manifest['loaded'] ?? []));
+        $rescanned = $this->saveManifest(
+            $this->scan(),
+            $this->signatures(array_keys($manifest['loaded'] ?? [])),
+            $this->now()
+        );
 
-        return $this->saveManifest($this->scan(), $loaded, time());
+        if (!$isUnchanged && $manifest !== null && $rescanned['sources'] === $manifest['sources']) {
+            // Only the contents of a recently changed file changed, which leaves the key as it was, so
+            // delete the cache to have it built again
+            $this->deleteCaches();
+        }
+
+        return $rescanned;
     }
 
     /**
      * @param array<string, string> $files  path => signature of the files found by scanning
-     * @param array<string, string> $loaded path => signature of the files loaded by the last merge
+     * @param array<string, string> $loaded path => signature of the other files loaded by the last merge
      *
-     * @return string a hash of every file's signature
+     * @return Manifest
      */
-    private function saveManifest(array $files, array $loaded, int $scannedAt): string
+    private function saveManifest(array $files, array $loaded, int $scannedAt): array
     {
-        $sources = array_merge($files, $loaded);
+        // The key comes from each file's modification time and size, without the hash of its contents
+        // that a recently changed file's signature also has, so the key doesn't change when the file
+        // is old enough to lose it
+        $sources = array_map(
+            static fn (string $signature): string => implode(':', array_slice(explode(':', $signature), 0, 2)),
+            $files + $loaded
+        );
         ksort($sources);
-        $sourcesHash = hash('xxh128', json_encode($sources, JSON_THROW_ON_ERROR));
 
-        $this->writeManifest([
-            'sources' => $sourcesHash,
+        $manifest = [
+            'sources' => hash('xxh128', json_encode($sources, JSON_THROW_ON_ERROR)),
             'scannedAt' => $scannedAt,
             'files' => $files,
             'loaded' => $loaded,
-        ]);
+        ];
 
-        return $sourcesHash;
+        $this->writeManifest($manifest);
+
+        return $manifest;
     }
 
     /**
-     * @return array{sources: string, scannedAt: int, files: array<string, string>, loaded: array<string, string>}|null
+     * @return Manifest|null
      */
     private function readManifest(): ?array
     {
@@ -187,13 +237,18 @@ final class ConfigCacheKey
             return null;
         }
 
-        /** @var array{sources: string, scannedAt: int, files: array<string, string>, loaded: array<string, string>} $manifest */
+        /** @var Manifest $manifest */
         return $manifest;
     }
 
     private function isScanDue(int $scannedAt): bool
     {
-        return time() - $scannedAt >= $this->rescanAfterSeconds;
+        return $this->now() - $scannedAt >= $this->rescanAfterSeconds;
+    }
+
+    private function now(): int
+    {
+        return ($this->clock)();
     }
 
     /**
@@ -202,12 +257,27 @@ final class ConfigCacheKey
     private function areUnchanged(array $files): bool
     {
         foreach ($files as $path => $signature) {
-            if ($this->signature($path) !== $signature) {
+            if (!$this->matches($path, $signature)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    private function matches(string $path, string $signature): bool
+    {
+        $stat = @stat($path);
+
+        if ($stat === false) {
+            return false;
+        }
+
+        $parts = explode(':', $signature, 3);
+
+        return $parts[0] === (string) $stat['mtime']
+            && ($parts[1] ?? null) === (string) $stat['size']
+            && (!isset($parts[2]) || @hash_file('xxh128', $path) === $parts[2]);
     }
 
     /**
@@ -330,9 +400,10 @@ final class ConfigCacheKey
     private function signatures(array $paths): array
     {
         $signatures = [];
+        $recentSince = $this->now() - self::RECENT_CHANGE_SECONDS;
 
         foreach ($paths as $path) {
-            $signature = $this->signature($path);
+            $signature = $this->signature($path, $recentSince);
 
             if ($signature !== null) {
                 $signatures[$path] = $signature;
@@ -344,15 +415,30 @@ final class ConfigCacheKey
         return $signatures;
     }
 
-    private function signature(string $path): ?string
+    /**
+     * The file's modification time and size, then a hash of its contents if it changed recently
+     */
+    private function signature(string $path, int $recentSince): ?string
     {
         $stat = @stat($path);
 
-        return $stat === false ? null : $stat['mtime'] . ':' . $stat['size'];
+        if ($stat === false) {
+            return null;
+        }
+
+        $signature = $stat['mtime'] . ':' . $stat['size'];
+
+        if ($stat['mtime'] < $recentSince) {
+            return $signature;
+        }
+
+        $contentsHash = @hash_file('xxh128', $path);
+
+        return $contentsHash === false ? $signature : $signature . ':' . $contentsHash;
     }
 
     /**
-     * @param array{sources: string, scannedAt: int, files: array<string, string>, loaded: array<string, string>} $manifest
+     * @param Manifest $manifest
      */
     private function writeManifest(array $manifest): void
     {
@@ -365,10 +451,10 @@ final class ConfigCacheKey
         }
     }
 
-    private function deleteCachesOtherThan(string $key): void
+    private function deleteCaches(?string $except = null): void
     {
         foreach (glob($this->cacheDir . '/module-*.' . self::KEY_PREFIX . '*.php') ?: [] as $cacheFile) {
-            if (!str_ends_with($cacheFile, '.' . $key . '.php')) {
+            if ($except === null || !str_ends_with($cacheFile, '.' . $except . '.php')) {
                 @unlink($cacheFile);
             }
         }

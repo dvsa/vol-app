@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Utils\Development;
 
+use Closure;
 use Dvsa\Olcs\Utils\Development\ConfigCacheKey;
 use FilesystemIterator;
 use PHPUnit\Framework\TestCase;
@@ -203,6 +204,83 @@ final class ConfigCacheKeyTest extends TestCase
         $this->assertSame($recordedKey, $this->key());
     }
 
+    public function testAConfigFileChangedWhileTheConfigurationIsMergedChangesTheKeyAfterwards(): void
+    {
+        $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1');
+        $cacheKey->key();
+
+        // The merge reads the file, which then changes before the merge records what it loaded
+        $this->writeFile('module/Olcs/config/module.config.php', mtime: self::MTIME + 1);
+        $recordedKey = $cacheKey->recordLoadedFiles([$this->appRoot . '/module/Olcs/config/module.config.php']);
+
+        $this->assertNotSame($recordedKey, $this->key(), 'The cache may hold the old contents, so it is rebuilt');
+    }
+
+    public function testAnotherRequestRescanningWhileTheConfigurationIsMergedDoesNotHideAChange(): void
+    {
+        $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1');
+        $cacheKey->key();
+
+        // The file changes after the merge has read it, and another request sees the change first
+        $this->writeFile('module/Olcs/config/module.config.php', mtime: self::MTIME + 1);
+        $this->key(rescanAfterSeconds: 0);
+        $recordedKey = $cacheKey->recordLoadedFiles([$this->appRoot . '/module/Olcs/config/module.config.php']);
+
+        $this->assertNotSame($recordedKey, $this->key());
+    }
+
+    public function testAnEditThatKeepsARecentlyChangedFilesSizeAndSecondDeletesTheCache(): void
+    {
+        // Saved in the current second, then saved again with a value of the same length
+        $now = self::MTIME + 100;
+        $this->writeFile('module/Olcs/config/routes/licence.php', '<?php return ["enabled" => 0];', $now);
+        $key = $this->key(clock: $now);
+        $this->writeFile("data/cache/module-config-cache.$key.php");
+
+        $this->writeFile('module/Olcs/config/routes/licence.php', '<?php return ["enabled" => 1];', $now);
+
+        $this->assertSame($key, $this->key(clock: $now));
+        $this->assertFileDoesNotExist($this->appRoot . "/data/cache/module-config-cache.$key.php");
+    }
+
+    public function testAnEditThatKeepsTheSizeAndSecondOfARecentlyChangedFileLoadedWhileMergingDeletesTheCache(): void
+    {
+        $now = self::MTIME + 100;
+        $this->writeFile(self::SECTION_CONFIG, '<?php const A = 0;', $now);
+        $key = $this->recordLoadedFiles([self::SECTION_CONFIG], clock: $now);
+        $this->writeFile("data/cache/module-config-cache.$key.php");
+
+        $this->writeFile(self::SECTION_CONFIG, '<?php const A = 1;', $now);
+
+        $this->assertSame($key, $this->key(clock: $now));
+        $this->assertFileDoesNotExist($this->appRoot . "/data/cache/module-config-cache.$key.php");
+    }
+
+    public function testARecentlyChangedFileKeepsItsKeyOnceItIsOlder(): void
+    {
+        $now = self::MTIME + 100;
+        $this->writeFile('module/Olcs/config/routes/licence.php', mtime: $now);
+        $key = $this->key(clock: $now);
+        $this->writeFile("data/cache/module-config-cache.$key.php");
+
+        $this->assertSame($key, $this->key(rescanAfterSeconds: 0, clock: $now + 60));
+        $this->assertFileExists($this->appRoot . "/data/cache/module-config-cache.$key.php");
+    }
+
+    public function testOnlyTheContentsOfRecentlyChangedFilesAreChecked(): void
+    {
+        // An older file can't change without its modification time changing, short of a tool setting it
+        // back, so reading it would be wasted
+        $this->writeFile('module/Olcs/config/routes/licence.php', '<?php return ["enabled" => 0];');
+        $key = $this->key(clock: self::MTIME + 100);
+        $this->writeFile("data/cache/module-config-cache.$key.php");
+
+        $this->writeFile('module/Olcs/config/routes/licence.php', '<?php return ["enabled" => 1];');
+
+        $this->assertSame($key, $this->key(rescanAfterSeconds: 0, clock: self::MTIME + 100));
+        $this->assertFileExists($this->appRoot . "/data/cache/module-config-cache.$key.php");
+    }
+
     public function testReplacingTheContainerChangesTheKey(): void
     {
         $key = $this->key(container: 'container-1');
@@ -266,22 +344,33 @@ final class ConfigCacheKeyTest extends TestCase
 
     /**
      * By default a scan is never due, so only a change to an already-known file can change the key
+     *
+     * @param int|null $clock the current Unix time, by default the real one
      */
-    private function key(int $rescanAfterSeconds = PHP_INT_MAX, string $container = 'container-1'): string
+    private function key(int $rescanAfterSeconds = PHP_INT_MAX, string $container = 'container-1', ?int $clock = null): string
     {
-        return ConfigCacheKey::forApplication($this->appRoot, $rescanAfterSeconds, $container)->key();
+        return ConfigCacheKey::forApplication($this->appRoot, $rescanAfterSeconds, $container, $this->clock($clock))->key();
     }
 
     /**
      * @param string[] $relativePaths within the application
      * @param string[] $absolutePaths anywhere
+     * @param int|null $clock         the current Unix time, by default the real one
      */
-    private function recordLoadedFiles(array $relativePaths, array $absolutePaths = []): string
+    private function recordLoadedFiles(array $relativePaths, array $absolutePaths = [], ?int $clock = null): string
     {
         $paths = array_map(fn (string $path): string => $this->appRoot . '/' . $path, $relativePaths);
 
-        return ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1')
+        return ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1', $this->clock($clock))
             ->recordLoadedFiles([...$paths, ...$absolutePaths]);
+    }
+
+    /**
+     * @return (Closure(): int)|null
+     */
+    private function clock(?int $time): ?Closure
+    {
+        return $time === null ? null : static fn (): int => $time;
     }
 
     private function writeFile(string $relativePath, string $contents = '<?php return [];', int $mtime = self::MTIME): void
