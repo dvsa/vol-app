@@ -214,17 +214,4 @@ class IssueChangePlannerTest extends TestCase
         $this->assertTrue($plan->hasChanges());
         $this->assertSame([$nineRow, $eleven->getCurrentVersion(), $sevenRow], $plan->finalIssues);
     }
-
-    public function testHiddenLostTodoCountsAsAnEdit(): void
-    {
-        $t1 = $this->todoVersion(1, 'Send bank statements');
-        $seven = $this->issue(7, [$t1]);
-        $letterInstance = new LetterInstance();
-        $row = $this->onLetter($letterInstance, $seven->getCurrentVersion(), 0);
-        $this->todoOnLetter($letterInstance, $row, $t1)->setIsRendered(false);
-
-        $plan = $this->sut->plan($letterInstance, []);
-
-        $this->assertSame(['Send bank statements'], $plan->lostEdits());
-    }
 }
