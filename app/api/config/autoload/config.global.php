@@ -319,13 +319,6 @@ return [
         'from_email' => '%olcs_from_email%',
         'selfserve_uri' => '%olcs_ss_uri%',
         'internal_uri' => '%olcs_iu_uri%',
-        // VOL-7238: dedicated DSN for the admin "Send test via Notify" button. Populated only
-        // in pre-cutover envs (dev/int) so admins can exercise the Notify path against a
-        // Notify test-mode key while the main `mail.dsn` is still SMTP. Empty/unset hides the
-        // admin button.
-        'notify_test' => [
-            'dsn' => '%olcs_notify_test_dsn%',
-        ],
     ],
     // GOV.UK Notify, for email (once mail.dsn is a govuknotify:// DSN) and SMS. Blank, " " and
     // "null" mean unset. Deployed values come from Parameter Store and the API secret. Run locally
@@ -346,6 +339,10 @@ return [
                 'en_GB' => $isDeployed ? '%olcs_notify_template_en_gb%' : null,
                 'cy_GB' => $isDeployed ? '%olcs_notify_template_cy_gb%' : null,
             ],
+            // VOL-7238: dedicated DSN for the admin "Send test via Notify" button, with its own
+            // key. Set in pre-cutover envs (dev/int/reg) so admins can try the Notify path with a
+            // test-mode key while mail.dsn is still SMTP. Blank hides the admin button.
+            'test_dsn' => $isDeployed ? '%olcs_notify_test_dsn%' : null,
         ],
         // VOL-7542. Texts go to the operator's own number in every environment. Outside production,
         // the env's team or test Notify key is what stops them reaching real people.

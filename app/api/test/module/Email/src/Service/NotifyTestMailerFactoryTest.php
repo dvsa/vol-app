@@ -37,7 +37,7 @@ final class NotifyTestMailerFactoryTest extends MockeryTestCase
 
         $container = m::mock(ContainerInterface::class);
         $container->shouldReceive('get')->with('config')
-            ->andReturn(['email' => ['notify_test' => ['dsn' => 'govuknotify://key:test-key@default']]]);
+            ->andReturn(['notify' => ['email' => ['test_dsn' => 'govuknotify://key:test-key@default']]]);
         $container->shouldReceive('get')->with(GovUkNotifyTransportFactory::class)->andReturn($govUkFactory);
 
         $mailer = (new NotifyTestMailerFactory())($container, 'NotifyTestMailer');
@@ -50,5 +50,22 @@ final class NotifyTestMailerFactoryTest extends MockeryTestCase
         $email->getHeaders()->addTextHeader(GovUkNotifyTransport::PAYLOAD_HEADER, json_encode(['markdownBody' => 'Hi']));
 
         $mailer->send($email);
+    }
+
+    /** Prep and prod set the DSN to " ", which SSM uses for unset: the mailer is off, not broken. */
+    public function testBlankDsnGivesADisabledMailer(): void
+    {
+        $govUkFactory = new GovUkNotifyTransportFactory(
+            ['en_GB' => 'tpl-en'],
+            static fn () => m::mock(NotifyClient::class),
+            m::mock(ConverterInterface::class),
+            '<html>{{subject}}{{body}}</html>',
+        );
+
+        $container = m::mock(ContainerInterface::class);
+        $container->shouldReceive('get')->with('config')->andReturn(['notify' => ['email' => ['test_dsn' => ' ']]]);
+        $container->shouldReceive('get')->with(GovUkNotifyTransportFactory::class)->andReturn($govUkFactory);
+
+        $this->assertFalse((new NotifyTestMailerFactory())($container, 'NotifyTestMailer')->isEnabled());
     }
 }

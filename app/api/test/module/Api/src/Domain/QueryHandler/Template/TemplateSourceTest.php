@@ -27,7 +27,7 @@ final class TemplateSourceTest extends AbstractQueryByIdHandlerTestCase
     public function setUp(): void
     {
         $this->mockedSmServices = [
-            'config' => ['email' => ['notify_test' => ['dsn' => null]]],
+            'config' => ['notify' => ['email' => ['test_dsn' => null]]],
         ];
         parent::setUp();
     }
@@ -67,7 +67,7 @@ final class TemplateSourceTest extends AbstractQueryByIdHandlerTestCase
     public function testNotifyTestEnabledWithMailpitDsnExposesMailpitHint(): void
     {
         $this->mockedSmServices = [
-            'config' => ['email' => ['notify_test' => ['dsn' => 'govuknotify+mailpit://mailpit:1025']]],
+            'config' => ['notify' => ['email' => ['test_dsn' => 'govuknotify+mailpit://mailpit:1025']]],
         ];
         parent::setUp();
 
@@ -92,7 +92,7 @@ final class TemplateSourceTest extends AbstractQueryByIdHandlerTestCase
     public function testNotifyTestEnabledWithRealNotifyDsnExposesSafelistHint(): void
     {
         $this->mockedSmServices = [
-            'config' => ['email' => ['notify_test' => ['dsn' => 'govuknotify://test-key@api.notifications.service.gov.uk']]],
+            'config' => ['notify' => ['email' => ['test_dsn' => 'govuknotify://test-key@api.notifications.service.gov.uk']]],
         ];
         parent::setUp();
 
@@ -112,5 +112,52 @@ final class TemplateSourceTest extends AbstractQueryByIdHandlerTestCase
 
         $this->assertTrue($result['notifyTestEnabled']);
         $this->assertStringContainsString('safelist', (string) $result['notifyTestHint']);
+    }
+
+    /** Prep and prod set the DSN to " ", which SSM uses for unset. */
+    #[\PHPUnit\Framework\Attributes\DataProvider('blankDsns')]
+    public function testBlankDsnHidesTheButton(?string $dsn): void
+    {
+        $this->mockedSmServices = [
+            'config' => ['notify' => ['email' => ['test_dsn' => $dsn]]],
+        ];
+        parent::setUp();
+
+        $entity = m::mock($this->entityClass);
+        $entity->shouldReceive('getName')->andReturn('some-template');
+        $entity->shouldReceive('getId')->andReturn(1);
+        $entity->shouldReceive('serialize')->andReturn(['id' => 1]);
+        $this->repoMap[$this->sutRepo]->shouldReceive('fetchUsingId')->andReturn($entity);
+        $this->repoMap[$this->sutRepo]->shouldReceive('fetchSiblings')->andReturn([]);
+
+        $result = $this->sut->handleQuery(QryClass::create(['id' => 1]))->serialize();
+
+        $this->assertFalse($result['notifyTestEnabled']);
+        $this->assertSame('', $result['notifyTestHint']);
+    }
+
+    public static function blankDsns(): array
+    {
+        return [[null], [''], [' '], ['null'], ['%olcs_notify_test_dsn%']];
+    }
+
+    /** Older local.php files set it under email.notify_test. */
+    public function testDsnUnderEmailNotifyTestStillWorks(): void
+    {
+        $this->mockedSmServices = [
+            'config' => ['email' => ['notify_test' => ['dsn' => 'govuknotify+mailpit://mailpit:1025']]],
+        ];
+        parent::setUp();
+
+        $entity = m::mock($this->entityClass);
+        $entity->shouldReceive('getName')->andReturn('some-template');
+        $entity->shouldReceive('getId')->andReturn(1);
+        $entity->shouldReceive('serialize')->andReturn(['id' => 1]);
+        $this->repoMap[$this->sutRepo]->shouldReceive('fetchUsingId')->andReturn($entity);
+        $this->repoMap[$this->sutRepo]->shouldReceive('fetchSiblings')->andReturn([]);
+
+        $result = $this->sut->handleQuery(QryClass::create(['id' => 1]))->serialize();
+
+        $this->assertTrue($result['notifyTestEnabled']);
     }
 }

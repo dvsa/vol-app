@@ -26,8 +26,9 @@ live before the Notify email cutover. SSM can't store an empty string, so `" "` 
 unset.
 
 All Notify settings live in the `notify` config block: `api_key` and `proxy`, then `email` (the
-passthrough template ids) and `sms`. Older local configs that set these under `email.notify` and
-`email.sms` still work. Run locally (no `ENVIRONMENT_NAME`), every setting in the block is optional.
+passthrough template ids, and `test_dsn` for the admin "Send test via Notify" button) and `sms`.
+Older local configs that set these under `email.notify`, `email.notify_test` and `email.sms` still
+work. Run locally (no `ENVIRONMENT_NAME`), every setting in the block is optional.
 
 The Notify template is a passthrough: its whole content is `((body))`. VOL renders the text itself
 and sends it as the `body` personalisation, so wording changes happen in VOL, not in Notify.

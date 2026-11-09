@@ -20,6 +20,7 @@ final class NotifyConfigTest extends TestCase
             'email' => [
                 'passthrough_templates' => ['en_GB' => 'tpl-en', 'cy_GB' => 'tpl-cy'],
                 'dev_chrome_template' => '<p>{{body}}</p>',
+                'test_dsn' => 'govuknotify+mailpit://mailpit:1025',
             ],
             'sms' => ['template_id' => 'tpl-sms'],
         ]];
@@ -29,6 +30,7 @@ final class NotifyConfigTest extends TestCase
         $this->assertSame(['en_GB' => 'tpl-en', 'cy_GB' => 'tpl-cy'], NotifyConfig::passthroughTemplates($config));
         $this->assertSame('<p>{{body}}</p>', NotifyConfig::devChromeTemplate($config));
         $this->assertSame('tpl-sms', NotifyConfig::smsTemplateId($config));
+        $this->assertSame('govuknotify+mailpit://mailpit:1025', NotifyConfig::testDsn($config));
     }
 
     public function testNothingConfigured(): void
@@ -38,6 +40,7 @@ final class NotifyConfigTest extends TestCase
         $this->assertSame([], NotifyConfig::passthroughTemplates([]));
         $this->assertNull(NotifyConfig::devChromeTemplate([]));
         $this->assertNull(NotifyConfig::smsTemplateId([]));
+        $this->assertNull(NotifyConfig::testDsn([]));
     }
 
     /** Older local.php files set these under email.notify and email.sms. */
@@ -50,13 +53,14 @@ final class NotifyConfigTest extends TestCase
                     'passthrough_templates' => ['en_GB' => 'old-en', 'cy_GB' => 'old-cy'],
                     'dev_chrome_template' => 'old-chrome',
                 ],
+                'notify_test' => ['dsn' => 'govuknotify+mailpit://old:1025'],
                 'sms' => ['template_id' => 'old-sms'],
             ],
             // what config.global.php gives a local run
             'notify' => [
                 'api_key' => null,
                 'proxy' => null,
-                'email' => ['passthrough_templates' => ['en_GB' => null, 'cy_GB' => null]],
+                'email' => ['passthrough_templates' => ['en_GB' => null, 'cy_GB' => null], 'test_dsn' => null],
                 'sms' => ['template_id' => null],
             ],
         ];
@@ -65,6 +69,7 @@ final class NotifyConfigTest extends TestCase
         $this->assertSame(['en_GB' => 'old-en', 'cy_GB' => 'old-cy'], NotifyConfig::passthroughTemplates($config));
         $this->assertSame('old-chrome', NotifyConfig::devChromeTemplate($config));
         $this->assertSame('old-sms', NotifyConfig::smsTemplateId($config));
+        $this->assertSame('govuknotify+mailpit://old:1025', NotifyConfig::testDsn($config));
     }
 
     public function testNewPlaceWinsWhenBothAreSet(): void
@@ -93,7 +98,7 @@ final class NotifyConfigTest extends TestCase
         $config = ['notify' => [
             'api_key' => $value,
             'proxy' => $value,
-            'email' => ['passthrough_templates' => ['en_GB' => $value]],
+            'email' => ['passthrough_templates' => ['en_GB' => $value], 'test_dsn' => $value],
             'sms' => ['template_id' => $value],
         ]];
 
@@ -101,6 +106,7 @@ final class NotifyConfigTest extends TestCase
         $this->assertNull(NotifyConfig::proxy($config));
         $this->assertSame([], NotifyConfig::passthroughTemplates($config));
         $this->assertNull(NotifyConfig::smsTemplateId($config));
+        $this->assertNull(NotifyConfig::testDsn($config));
     }
 
     public static function blankValues(): array

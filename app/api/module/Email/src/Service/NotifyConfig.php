@@ -7,7 +7,7 @@ namespace Dvsa\Olcs\Email\Service;
 /**
  * Reads the GOV.UK Notify settings from the `notify` config block.
  *
- * Older local.php files set these under `email.notify` and `email.sms`, so each setting falls back
+ * Older local.php files set these under `email.notify`, `email.notify_test` and `email.sms`, so each setting falls back
  * to its old place when the new one is blank. Blank means null, empty or whitespace, the "null"
  * sentinel (any case), or a `%placeholder%` that was never resolved.
  */
@@ -55,6 +55,12 @@ final class NotifyConfig
         $old = $config['email']['notify']['dev_chrome_template'] ?? null;
 
         return is_string($new) ? $new : (is_string($old) ? $old : null);
+    }
+
+    /** The DSN for admin "Send test via Notify" sends, which carries its own key, or null to hide the button. */
+    public static function testDsn(array $config): ?string
+    {
+        return self::first($config['notify']['email']['test_dsn'] ?? null, $config['email']['notify_test']['dsn'] ?? null);
     }
 
     /** The id of the Notify SMS template. */
