@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstanceIssue;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
-use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent as Cmd;
@@ -13,6 +13,8 @@ use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent as Cmd;
  */
 final class UpdateContent extends AbstractCommandHandler
 {
+    use LetterOpenForChangesTrait;
+
     protected $repoServiceName = 'LetterInstanceIssue';
 
     #[\Override]
@@ -23,11 +25,7 @@ final class UpdateContent extends AbstractCommandHandler
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue $letterInstanceIssue */
         $letterInstanceIssue = $this->getRepo()->fetchUsingId($command);
 
-        // a sent letter's content is what the operator received; keep it as sent
-        $letterInstance = $letterInstanceIssue->getLetterInstance();
-        if ($letterInstance !== null && !$letterInstance->isOpenForChanges()) {
-            throw new ValidationException(['Only a draft or ready letter can be changed']);
-        }
+        $this->assertLetterOpenForChanges($letterInstanceIssue->getLetterInstance());
 
         $letterInstanceIssue->setEditedContentFromArray(
             json_decode($command->getEditedContent(), true)

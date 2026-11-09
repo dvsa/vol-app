@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstanceAppendix;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -13,6 +14,8 @@ use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceAppendix\UpdateContent as Cm
  */
 final class UpdateContent extends AbstractCommandHandler
 {
+    use LetterOpenForChangesTrait;
+
     protected $repoServiceName = 'LetterInstanceAppendix';
 
     #[\Override]
@@ -22,6 +25,8 @@ final class UpdateContent extends AbstractCommandHandler
 
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix $letterInstanceAppendix */
         $letterInstanceAppendix = $this->getRepo()->fetchUsingId($command);
+
+        $this->assertLetterOpenForChanges($letterInstanceAppendix->getLetterInstance());
 
         if (!$letterInstanceAppendix->isEditable()) {
             throw new ValidationException(['This appendix is not editable']);
