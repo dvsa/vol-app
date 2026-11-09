@@ -213,13 +213,14 @@ class LetterInstance extends AbstractLetterInstance
      */
     public function getTodoPlacementIssueIds(string $placement = self::SHARED_TODO_PLACEMENT): array
     {
+        $bringing = $this->todoBringingIssues();
         $ids = [];
         foreach ($this->getLetterInstanceTodos() as $todo) {
             if ($todo->getId() === null) {
                 continue;
             }
 
-            $issues = $this->placementIssues($todo, $placement);
+            $issues = $this->placementIssues($todo, $placement, $bringing);
             $ids[(int) $todo->getId()] = array_map(
                 static fn(LetterInstanceIssue $issue): int => (int) $issue->getId(),
                 $issues
@@ -237,7 +238,24 @@ class LetterInstance extends AbstractLetterInstance
         LetterInstanceTodo $todo,
         string $placement = self::SHARED_TODO_PLACEMENT
     ): ?LetterInstanceIssue {
-        return $this->placementIssues($todo, $placement)[0] ?? null;
+        return $this->placementIssues($todo, $placement, $this->todoBringingIssues())[0] ?? null;
+    }
+
+    /**
+     * The issue each of the letter's to-dos is drawn after, keyed by spl_object_id of the to-do.
+     * Worked out in one pass so drawing the letter doesn't redo it per to-do.
+     *
+     * @return array<int, LetterInstanceIssue|null>
+     */
+    public function getPlacementIssuesByTodo(string $placement = self::SHARED_TODO_PLACEMENT): array
+    {
+        $bringing = $this->todoBringingIssues();
+        $placements = [];
+        foreach ($this->getLetterInstanceTodos() as $todo) {
+            $placements[spl_object_id($todo)] = $this->placementIssues($todo, $placement, $bringing)[0] ?? null;
+        }
+
+        return $placements;
     }
 
     /**
@@ -265,12 +283,13 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
+     * @param array<string, list<LetterInstanceIssue>> $bringing from todoBringingIssues()
      * @return list<LetterInstanceIssue>
      */
-    private function placementIssues(LetterInstanceTodo $todo, string $placement): array
+    private function placementIssues(LetterInstanceTodo $todo, string $placement, array $bringing): array
     {
         $key = $todo->getLetterTodoVersion()?->getDedupeKey();
-        $issues = $key !== null ? ($this->todoBringingIssues()[$key] ?? []) : [];
+        $issues = $key !== null ? ($bringing[$key] ?? []) : [];
 
         if ($issues === []) {
             $owner = $todo->getLetterInstanceIssue();

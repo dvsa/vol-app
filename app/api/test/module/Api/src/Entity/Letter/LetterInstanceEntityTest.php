@@ -224,4 +224,28 @@ final class LetterInstanceEntityTest extends EntityTester
         $this->assertSame([1 => [10, 20], 2 => [30]], $entity->getTodoPlacementIssueIds());
         $this->assertSame([1 => [20, 10], 2 => [30]], $entity->getTodoPlacementIssueIds(Entity::SHARED_TODO_UNDER_LAST_ISSUE));
     }
+
+    /**
+     * The letter is drawn in one pass, so the placement of every to-do is worked out at once.
+     */
+    public function testEveryTodosPlacementIsWorkedOutInOnePass(): void
+    {
+        $shared = $this->todoVersion(32);
+        $own = $this->todoVersion(33);
+        $a = $this->issueAt(10, 0, [$shared]);
+        $b = $this->issueAt(20, 1, [$shared, $own]);
+        $entity = new Entity();
+        $entity->addLetterInstanceIssue($a);
+        $entity->addLetterInstanceIssue($b);
+        $sharedTodo = $this->todoOwnedBy($a, $shared);
+        $entity->addLetterInstanceTodo($sharedTodo);
+        $ownTodo = $this->todoOwnedBy($b, $own);
+        $entity->addLetterInstanceTodo($ownTodo);
+
+        $placements = $entity->getPlacementIssuesByTodo();
+
+        $this->assertSame($a, $placements[spl_object_id($sharedTodo)]);
+        $this->assertSame($b, $placements[spl_object_id($ownTodo)]);
+        $this->assertSame($b, $entity->getPlacementIssuesByTodo(Entity::SHARED_TODO_UNDER_LAST_ISSUE)[spl_object_id($sharedTodo)]);
+    }
 }

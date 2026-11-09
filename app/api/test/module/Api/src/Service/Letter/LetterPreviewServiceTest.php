@@ -1466,7 +1466,7 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getIssuesInLetterOrder')->andReturn([$mockIssue]);
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')
             ->andReturn(new ArrayCollection([$mockTodo]));
-        $mockLetterInstance->shouldReceive('getPlacementIssue')->with($mockTodo)->andReturn($mockIssue);
+        $mockLetterInstance->shouldReceive('getPlacementIssuesByTodo')->andReturn([spl_object_id($mockTodo) => $mockIssue]);
 
         $result = $this->sut->renderPreview($mockLetterInstance, null);
 

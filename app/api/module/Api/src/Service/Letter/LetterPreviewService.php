@@ -184,9 +184,11 @@ class LetterPreviewService
         }
 
         // Each to-do goes after the issue it is placed under, in to-do display order
+        $todos = $letterInstance->getLetterInstanceTodos();
+        $placements = count($todos) > 0 ? $letterInstance->getPlacementIssuesByTodo() : [];
         $todosByIssue = [];
-        foreach ($letterInstance->getLetterInstanceTodos() as $todo) {
-            $placementIssue = $letterInstance->getPlacementIssue($todo);
+        foreach ($todos as $todo) {
+            $placementIssue = $placements[spl_object_id($todo)] ?? null;
             if ($placementIssue !== null) {
                 $todosByIssue[spl_object_id($placementIssue)][] = $todo;
             }
