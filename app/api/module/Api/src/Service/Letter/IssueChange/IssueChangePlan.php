@@ -43,6 +43,14 @@ final readonly class IssueChangePlan
         }
 
         foreach ($this->lostTodos as $instanceTodo) {
+            if ($instanceTodo->isCustom()) {
+                // listed once something is written in it (VOL-7735)
+                if (!$instanceTodo->isInputPending()) {
+                    $names[] = (string) $instanceTodo->getCustomLabel();
+                }
+                continue;
+            }
+
             if ($instanceTodo->hasBeenEdited()) {
                 $todoVersion = $instanceTodo->getLetterTodoVersion();
                 $name = trim((string) $todoVersion?->getName());

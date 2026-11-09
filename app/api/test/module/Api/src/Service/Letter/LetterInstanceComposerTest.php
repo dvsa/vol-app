@@ -479,4 +479,65 @@ class LetterInstanceComposerTest extends TestCase
             $appendices->toArray()
         ));
     }
+
+    /**
+     * An Other issue with its caseworker-written to-dos, in the given display orders (VOL-7735)
+     *
+     * @param list<int> $todoOrders
+     * @return array{0: LetterInstanceIssue, 1: list<LetterInstanceTodo>}
+     */
+    private function otherIssueWithCustomTodos(LetterInstance $letterInstance, int $displayOrder, array $todoOrders): array
+    {
+        $version = $this->issueVersionWithTodos([]);
+        $version->setIsOther(true);
+        $version->setHeading('Other issue');
+        $issue = new LetterInstanceIssue();
+        $issue->setLetterIssueVersion($version);
+        $issue->setDisplayOrder($displayOrder);
+        $letterInstance->addLetterInstanceIssue($issue);
+
+        $todos = [];
+        foreach ($todoOrders as $order) {
+            $todo = new LetterInstanceTodo();
+            $todo->setDisplayOrder($order);
+            $issue->addLetterInstanceTodo($todo);
+            $letterInstance->addLetterInstanceTodo($todo);
+            $todos[] = $todo;
+        }
+
+        return [$issue, $todos];
+    }
+
+    public function testReconcileLeavesCustomTodosAlone(): void
+    {
+        $letterInstance = new LetterInstance();
+        $a = $this->instanceIssue($letterInstance, 0, [$this->todoVersion(1)]);
+        [$other, [$first, $second]] = $this->otherIssueWithCustomTodos($letterInstance, 1, [5, 9]);
+        $first->setEditedDescription(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Send the lease']]]]);
+
+        $this->sut->reconcileTodos($letterInstance);
+
+        $this->assertTrue($letterInstance->getLetterInstanceTodos()->contains($first));
+        $this->assertTrue($letterInstance->getLetterInstanceTodos()->contains($second));
+        $this->assertSame($other, $first->getLetterInstanceIssue());
+        $this->assertNotNull($first->getEditedDescription());
+        $this->assertCount(3, $letterInstance->getLetterInstanceTodos(), "A's library to-do arrives too");
+        // numbered in letter order: A's to-do, then the Other issue's in the order written
+        $this->assertSame([1, 2], [$first->getDisplayOrder(), $second->getDisplayOrder()]);
+        $this->assertSame($a, $letterInstance->getLetterInstanceTodos()->filter(
+            static fn(LetterInstanceTodo $t): bool => !$t->isCustom()
+        )->first()->getLetterInstanceIssue());
+    }
+
+    public function testRemovingAnOtherIssueRemovesItsCustomTodos(): void
+    {
+        $letterInstance = new LetterInstance();
+        $keep = $this->instanceIssue($letterInstance, 0, []);
+        [$other, [$custom]] = $this->otherIssueWithCustomTodos($letterInstance, 1, [0]);
+
+        $this->sut->applyIssueChange($letterInstance, new IssueChangePlan([$keep], [$other], [$custom]));
+
+        $this->assertFalse($letterInstance->getLetterInstanceTodos()->contains($custom));
+        $this->assertFalse($letterInstance->getLetterInstanceIssues()->contains($other));
+    }
 }
