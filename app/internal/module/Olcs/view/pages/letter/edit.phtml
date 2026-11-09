@@ -166,6 +166,18 @@
 <?php endif; ?>
 
 <div style="margin-top: 30px;">
+    <?php if (in_array($letterInstance['status']['id'] ?? null, ['ltr_sts_draft', 'ltr_sts_ready'], true)): ?>
+    <button
+        type="button"
+        id="change-issues-btn"
+        class="govuk-button govuk-button--secondary"
+        data-letter-instance-id="<?= $this->escapeHtmlAttr($letterInstance['id'] ?? '') ?>"
+        data-from="edit"
+        style="margin-right: 10px;"
+    >
+        Change issues
+    </button>
+    <?php endif; ?>
     <a href="/letter/preview?id=<?= $this->escapeHtmlAttr($letterInstanceId) ?>"
        id="back-to-preview"
        class="govuk-button govuk-button--secondary">

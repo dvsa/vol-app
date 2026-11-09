@@ -1396,6 +1396,7 @@ return [
     TransferCommand\Letter\LetterInstance\Update::class => CommandHandler\Letter\LetterInstance\Update::class,
     TransferCommand\Letter\LetterInstance\Generate::class => CommandHandler\Letter\LetterInstance\Generate::class,
     TransferCommand\Letter\LetterInstance\PrepareToSend::class => CommandHandler\Letter\LetterInstance\PrepareToSend::class,
+    TransferCommand\Letter\LetterInstance\UpdateIssues::class => CommandHandler\Letter\LetterInstance\UpdateIssues::class,
     TransferCommand\Letter\LetterInstanceIssue\UpdateContent::class => CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceSection\UpdateContent::class => CommandHandler\Letter\LetterInstanceSection\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceTodo\UpdateContent::class => CommandHandler\Letter\LetterInstanceTodo\UpdateContent::class,
