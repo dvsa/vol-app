@@ -1,19 +1,20 @@
-FROM alpine:3.22 AS builder
+FROM alpine:3.24 AS builder
 
 # Set shell for proper pipe error handling
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-# Install build dependencies and pnpm
+# Install build dependencies, and Corepack to run the pnpm version that FileBrowser's package.json names
 RUN apk add --no-cache \
     go \
     git \
     nodejs \
     npm \
     make && \
-    npm install -g pnpm@10.15.1
+    npm install -g corepack@0.36.0 && \
+    corepack enable pnpm
 
 # Build FileBrowser from source
-ENV FILEBROWSER_VERSION=v2.42.5
+ENV FILEBROWSER_VERSION=v2.63.23
 WORKDIR /build
 RUN git clone --depth 1 --branch ${FILEBROWSER_VERSION} https://github.com/filebrowser/filebrowser.git .
 WORKDIR /build/frontend
@@ -24,18 +25,14 @@ RUN pnpm install --frozen-lockfile && \
 WORKDIR /build
 RUN go build -ldflags "-s -w" -o filebrowser .
 
-FROM alpine:3.22
+FROM alpine:3.24
 
 # Set shell for proper pipe error handling
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 # Install required packages
-# cups-pdf is in edge/testing repository (available for both x86_64 and aarch64)
 # hadolint ignore=DL3018
-RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
-    echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
-    echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
-    apk add --no-cache \
+RUN apk add --no-cache \
     cups \
     cups-pdf \
     cups-client \
