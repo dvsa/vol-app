@@ -21,11 +21,6 @@ class SmsGate
             return false;
         }
 
-        // A redirect that isn't a number is a typo. Don't fall back to texting real numbers.
-        if ($this->config->redirectInvalid) {
-            return false;
-        }
-
         return $this->toggleService->isEnabled(FeatureToggle::SMS_NOTIFICATIONS);
     }
 }

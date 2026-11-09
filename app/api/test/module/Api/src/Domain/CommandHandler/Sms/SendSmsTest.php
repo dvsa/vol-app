@@ -27,7 +27,6 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
 {
     private const int ID = 555;
     private const string NUMBER = '+447700900123';
-    private const string REDIRECT = '+447700900999';
     private const string TEMPLATE_ID = 'tmpl-uuid';
     private const string REFERENCE = 'dev-sms-555';
 
@@ -41,7 +40,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
     public function setUp(): void
     {
         $this->now = new \DateTimeImmutable('2026-11-05 10:30:00', new \DateTimeZone('Europe/London'));
-        $this->config = new SmsConfig('key', false, null, 1025, self::TEMPLATE_ID, str_contains($this->name(), 'NoRedirect') ? null : self::REDIRECT, str_starts_with($this->name(), 'testProd'), 'dev');
+        $this->config = new SmsConfig('key', false, null, 1025, self::TEMPLATE_ID, 'dev');
 
         $this->sut = m::mock(SendSms::class)->makePartial()->shouldAllowMockingProtectedMethods();
         $this->sut->shouldReceive('now')->andReturnUsing(fn() => $this->now);
@@ -131,7 +130,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
             ->andReturn('Hello Acme');
         $this->transport->shouldReceive('send')
             ->once()
-            ->with(self::REDIRECT, self::TEMPLATE_ID, 'Hello Acme', self::REFERENCE)
+            ->with(self::NUMBER, self::TEMPLATE_ID, 'Hello Acme', self::REFERENCE)
             ->andReturn('notify-1');
         $this->messageRepo->shouldReceive('save')->twice()->with($m);
 
@@ -164,7 +163,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->transport->shouldReceive('send')
             ->once()
             ->with(
-                self::REDIRECT,
+                self::NUMBER,
                 self::TEMPLATE_ID,
                 "Hey Smith & Sons' <Haulage>, I'm trying out Notify. Today is Thursday",
                 self::REFERENCE
@@ -199,21 +198,7 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
         $this->handle();
     }
 
-    public function testRedirectedNonProd(): void
-    {
-        $m = $this->message();
-        $this->gate->shouldReceive('isEnabled')->andReturn(true);
-        $this->twig->shouldReceive('render')->andReturn('x');
-        $this->transport->shouldReceive('send')->once()->with(self::REDIRECT, m::any(), 'x', m::any())->andReturn('n');
-        $this->messageRepo->shouldReceive('save')->twice();
-
-        $this->handle();
-
-        $this->assertSame(self::REDIRECT, $m->getRedirectedTo());
-        $this->assertSame(self::NUMBER, $m->getRecipient());
-    }
-
-    public function testProdSendsToRecipientIgnoringRedirect(): void
+    public function testSendsToTheOperatorsNumber(): void
     {
         $m = $this->message();
         $this->gate->shouldReceive('isEnabled')->andReturn(true);
@@ -554,19 +539,6 @@ final class SendSmsTest extends AbstractCommandHandlerTestCase
 
         $this->assertSame(NotifyMessage::STATUS_FAILED, $m->getStatus()->getId());
         $this->assertNotNull($m->getCompletedOn());
-    }
-
-    public function testNonProdWithNoRedirectSendsToRecipient(): void
-    {
-        $m = $this->message();
-        $this->gate->shouldReceive('isEnabled')->andReturn(true);
-        $this->twig->shouldReceive('render')->andReturn('x');
-        $this->transport->shouldReceive('send')->once()->with(self::NUMBER, m::any(), 'x', m::any())->andReturn('n');
-        $this->messageRepo->shouldReceive('save')->twice();
-
-        $this->handle();
-
-        $this->assertNull($m->getRedirectedTo());
     }
 
     public function testLetterTextCancelledWhenTheNumberHadOneSentThisSmsDay(): void

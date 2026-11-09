@@ -12,11 +12,7 @@ final readonly class SmsConfig
         public ?string $mailpitHost,
         public int $mailpitPort,
         public ?string $templateId,
-        public ?string $sendAllSmsTo,
-        public bool $isProduction,
         public string $environment = 'local',
-        // send_all_sms_to was set to something that is not a phone number
-        public bool $redirectInvalid = false,
     ) {
     }
 

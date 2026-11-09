@@ -347,15 +347,10 @@ return [
                 'cy_GB' => $isDeployed ? '%olcs_notify_template_cy_gb%' : null,
             ],
         ],
-        // VOL-7542. Outside production a send_all_sms_to number gets every text; unset, texts go to
-        // the real number and the env's team or test Notify key is what stops them reaching real
-        // people. Not a number: SMS is off. olcs_send_all_sms_to lives in each non-prod env's API
-        // secret, not the Terraform params, so the number stays out of this repo. Every non-prod
-        // secret needs the key, even if it's just " ".
+        // VOL-7542. Texts go to the operator's own number in every environment. Outside production,
+        // the env's team or test Notify key is what stops them reaching real people.
         'sms' => [
             'template_id' => $isDeployed ? '%olcs_notify_sms_template%' : null,
-            'send_all_sms_to' => ($isDeployed && !$isProduction) ? '%olcs_send_all_sms_to%' : null,
-            'is_production' => $isProduction,
         ],
     ],
     'awsOptions' => array_filter([

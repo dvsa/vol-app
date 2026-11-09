@@ -14,12 +14,12 @@ use PHPUnit\Framework\TestCase;
 final class SmsGateTest extends TestCase
 {
     #[DataProvider('cases')]
-    public function testIsEnabled(?string $apiKey, bool $mailpit, ?string $template, ?string $redirect, bool $prod, bool $toggle, bool $expected, bool $redirectInvalid = false): void
+    public function testIsEnabled(?string $apiKey, bool $mailpit, ?string $template, bool $toggle, bool $expected): void
     {
         $toggles = $this->createStub(ToggleService::class);
         $toggles->method('isEnabled')->willReturn($toggle);
 
-        $config = new SmsConfig($apiKey, $mailpit, $mailpit ? 'mailpit' : null, 1025, $template, $redirect, $prod, 'dev', $redirectInvalid);
+        $config = new SmsConfig($apiKey, $mailpit, $mailpit ? 'mailpit' : null, 1025, $template, 'dev');
 
         $this->assertSame($expected, (new SmsGate($config, $toggles))->isEnabled());
     }
@@ -27,16 +27,11 @@ final class SmsGateTest extends TestCase
     public static function cases(): array
     {
         return [
-            'smtp dsn' => [null, false, 'tpl', '07700900000', false, true, false],
-            'blank template' => ['KEY', false, null, '07700900000', false, true, false],
-            'toggle off' => ['KEY', false, 'tpl', '07700900000', false, false, false],
-            // relies on a team or test key to keep real numbers out
-            'non-prod without redirect' => ['KEY', false, 'tpl', null, false, true, true],
-            'non-prod with a redirect that is not a number' => ['KEY', false, 'tpl', null, false, true, false, true],
-            'non-prod with number' => ['KEY', false, 'tpl', '07700900000', false, true, true],
-            'non-prod mailpit with number' => [null, true, 'tpl', '07700900000', false, true, true],
-            'prod no redirect' => ['KEY', false, 'tpl', null, true, true, true],
-            'prod toggle off' => ['KEY', false, 'tpl', null, true, false, false],
+            'smtp dsn' => [null, false, 'tpl', true, false],
+            'blank template' => ['KEY', false, null, true, false],
+            'toggle off' => ['KEY', false, 'tpl', false, false],
+            'notify key, template and toggle' => ['KEY', false, 'tpl', true, true],
+            'mailpit, template and toggle' => [null, true, 'tpl', true, true],
         ];
     }
 }

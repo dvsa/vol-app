@@ -177,11 +177,9 @@ return [
         'cy_GB' => '',
       ],
     ],
-    // VOL-7542: the SMS template id, and outside production an optional number that gets every
-    // text (leave it null to text the real number, with a team or test key).
+    // VOL-7542: the SMS template id. Texts go to the operator's number, so use a team or test key.
     'sms' => [
       'template_id' => null,
-      'send_all_sms_to' => null,
     ],
   ],
   'mail' => [

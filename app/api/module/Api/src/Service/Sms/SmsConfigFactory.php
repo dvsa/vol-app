@@ -7,7 +7,6 @@ namespace Dvsa\Olcs\Api\Service\Sms;
 use Dvsa\Olcs\Email\Service\NotifyConfig;
 use Dvsa\Olcs\Email\Transport\GovUkNotifyTransportFactory;
 use Dvsa\Olcs\Email\Transport\MailDsn;
-use Dvsa\Olcs\Transfer\Validators\SmsPhoneNumber;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Mailer\Transport\Dsn;
@@ -18,7 +17,6 @@ final class SmsConfigFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SmsConfig
     {
         $config = $container->get('config');
-        $sms = NotifyConfig::sms($config);
 
         $apiKey = null;
         $mailpit = false;
@@ -43,19 +41,13 @@ final class SmsConfigFactory implements FactoryInterface
             }
         }
 
-        $redirect = self::setOrNull($sms['send_all_sms_to']);
-        $redirectNumber = self::normalisedNumber($redirect);
-
         return new SmsConfig(
             $apiKey,
             $mailpit,
             $host,
             $port,
-            self::setOrNull($sms['template_id']),
-            $redirectNumber,
-            $sms['is_production'],
+            NotifyConfig::smsTemplateId($config),
             self::environment(),
-            $redirect !== null && $redirectNumber === null,
         );
     }
 
@@ -66,26 +58,5 @@ final class SmsConfigFactory implements FactoryInterface
         $environment = is_string($environment) ? strtolower(trim($environment)) : '';
 
         return $environment !== '' ? $environment : 'local';
-    }
-
-    /** A UK mobile or landline in E.164, or null if it isn't one. */
-    private static function normalisedNumber(?string $value): ?string
-    {
-        return $value === null ? null : SmsPhoneNumber::normalise($value);
-    }
-
-    /** Blank, whitespace and the "null" sentinel (any case) mean unset. */
-    private static function setOrNull(mixed $value): ?string
-    {
-        if (!is_string($value)) {
-            return null;
-        }
-
-        $value = trim($value);
-        if ($value === '' || strcasecmp($value, 'null') === 0 || preg_match('/^%[^%]+%$/', $value)) {
-            return null;
-        }
-
-        return $value;
     }
 }

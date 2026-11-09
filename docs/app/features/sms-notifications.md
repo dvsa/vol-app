@@ -19,7 +19,6 @@ All of these must be true, checked by `SmsGate` when a text is queued and again 
 | `notify.api_key` (`olcs_notify_api_key`)              | a Notify API key, unless the DSN carries one                 |
 | `notify.sms.template_id` (`olcs_notify_sms_template`) | the id of the Notify SMS template (see below)                |
 | `sms_notifications` toggle                            | on                                                           |
-| `notify.sms.send_all_sms_to` (`olcs_send_all_sms_to`) | blank or a valid UK number (see below)                       |
 
 SMS uses the same Notify API key as email: one in the DSN (`govuknotify://KEY@default`) if it has
 one, otherwise `notify.api_key`. SMS only sends when `mail.dsn` is a `govuknotify` DSN, so it can't go
@@ -35,39 +34,25 @@ and sends it as the `body` personalisation, so wording changes happen in VOL, no
 
 ### Who gets the text
 
-| Environment | `send_all_sms_to` | Text goes to                                            |
-| ----------- | ----------------- | ------------------------------------------------------- |
-| Production  | ignored           | the operator's number                                   |
-| Non-prod    | a valid number    | that number (the row records it in `redirected_to`)     |
-| Non-prod    | unset             | the operator's number\*                                 |
-| Non-prod    | set, not a number | nobody, SMS stays off (a typo never texts real numbers) |
+Texts always go to the operator's own number. Outside production, the environment's Notify key is
+what keeps them away from real people:
 
-\* With it unset, the environment's Notify key is what keeps texts away from real people. A
-**test** key never delivers anything. A **team and guest list** key only delivers to the
-service's team members and guest list, and Notify refuses anyone else (the row is marked
-rejected). Don't put a live key outside production. To test, add yourself to the team or guest
-list and set an operator's SMS number to your own.
+- a **test** key never delivers anything
+- a **team and guest list** key only delivers to the service's team members and guest list, and
+  Notify refuses anyone else (the row is marked rejected)
 
-Environments built from production data hold real operators' numbers, so give those a redirect
-number.
-
-`olcs_send_all_sms_to` is a key in each non-production environment's API secret
-(`*-BASE-SM-APPLICATION-API` in Secrets Manager), not a Terraform parameter, so phone numbers stay
-out of this public repo. Every non-production secret needs the key, even if it's just `" "`, or the
-API won't start.
+Don't put a live key outside production. This matters most where environments are built from
+production data and hold real operators' numbers. To test, add yourself to the team or guest list and
+set an operator's SMS number to your own.
 
 ## Deploying
 
-The API reads these from each environment's API secret (Secrets Manager) at startup. A key missing
-from the secret stops the API starting, so add them before the release that needs them goes out:
-
-| Secret key             | Which secrets                                                            | Value                                                                                        |
-| ---------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| `olcs_notify_api_key`  | all five: `DEVAPPDEV`, `DEVAPPREG`, `DEVAPPQA` (int), `APPPP`, `APP`     | `" "` until that environment moves to Notify, then its key (team or test outside production) |
-| `olcs_send_all_sms_to` | non-production only: `DEVAPPDEV`, `DEVAPPREG`, `DEVAPPQA` (int), `APPPP` | `" "`, or a number to receive every text                                                     |
-
-Each secret is `<name>-BASE-SM-APPLICATION-API`. `olcs_notify_sms_template` is a Parameter Store
-value set by Terraform (`parameters.tf`), so it needs nothing by hand.
+The API reads `olcs_notify_api_key` from each environment's API secret (Secrets Manager) at startup.
+If the key is missing from the secret, the API won't start, so add it to all five before the
+release that needs it goes out: `DEVAPPDEV`, `DEVAPPREG`, `DEVAPPQA` (int), `APPPP` and `APP`, each
+`<name>-BASE-SM-APPLICATION-API`. Set it to `" "` until that environment moves to Notify, then to its
+key (a team or test key outside production). `olcs_notify_sms_template` is a Parameter Store value
+set by Terraform (`parameters.tf`), so it needs nothing by hand.
 
 To move an environment to Notify, put its key in `olcs_notify_api_key` first, then set `olcs_mail_dsn`
 to `govuknotify://default`. The key stays out of the DSN, which is a Terraform parameter in this

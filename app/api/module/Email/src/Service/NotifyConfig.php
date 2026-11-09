@@ -57,23 +57,10 @@ final class NotifyConfig
         return is_string($new) ? $new : (is_string($old) ? $old : null);
     }
 
-    /**
-     * The SMS settings, each still raw (SmsConfigFactory decides what a value means).
-     *
-     * @return array{template_id: mixed, send_all_sms_to: mixed, is_production: bool}
-     */
-    public static function sms(array $config): array
+    /** The id of the Notify SMS template. */
+    public static function smsTemplateId(array $config): ?string
     {
-        $new = $config['notify']['sms'] ?? [];
-        $old = $config['email']['sms'] ?? [];
-        $new = is_array($new) ? $new : [];
-        $old = is_array($old) ? $old : [];
-
-        return [
-            'template_id' => self::firstRaw($new['template_id'] ?? null, $old['template_id'] ?? null),
-            'send_all_sms_to' => self::firstRaw($new['send_all_sms_to'] ?? null, $old['send_all_sms_to'] ?? null),
-            'is_production' => (bool) ($new['is_production'] ?? $old['is_production'] ?? false),
-        ];
+        return self::first($config['notify']['sms']['template_id'] ?? null, $config['email']['sms']['template_id'] ?? null);
     }
 
     private static function first(mixed ...$values): ?string
@@ -81,18 +68,6 @@ final class NotifyConfig
         foreach ($values as $value) {
             $value = self::setOrNull($value);
             if ($value !== null) {
-                return $value;
-            }
-        }
-
-        return null;
-    }
-
-    /** The first value that isn't blank, as it was given, so a typo still reaches its validation. */
-    private static function firstRaw(mixed ...$values): mixed
-    {
-        foreach ($values as $value) {
-            if (self::setOrNull($value) !== null) {
                 return $value;
             }
         }

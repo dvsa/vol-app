@@ -6,8 +6,6 @@ namespace Dvsa\OlcsTest\Api\Service\Sms;
 
 use Dvsa\Olcs\Api\Service\Sms\SmsConfig;
 use Dvsa\Olcs\Api\Service\Sms\SmsConfigFactory;
-use Dvsa\Olcs\Api\Service\Sms\SmsGate;
-use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -26,14 +24,12 @@ final class SmsConfigFactoryTest extends TestCase
     {
         $c = $this->build([
             'mail' => ['dsn' => 'govuknotify://KEY@default'],
-            'notify' => ['sms' => ['template_id' => 'tpl', 'send_all_sms_to' => '07700900000', 'is_production' => false]],
+            'notify' => ['sms' => ['template_id' => 'tpl']],
         ]);
 
         $this->assertSame('KEY', $c->apiKey);
         $this->assertFalse($c->mailpit);
         $this->assertSame('tpl', $c->templateId);
-        $this->assertSame('+447700900000', $c->sendAllSmsTo);
-        $this->assertFalse($c->isProduction);
     }
 
     public function testKeylessDsnUsesTheNotifyApiKey(): void
@@ -88,12 +84,11 @@ final class SmsConfigFactoryTest extends TestCase
     {
         $c = $this->build([
             'mail' => ['dsn' => 'govuknotify://KEY@default'],
-            'email' => ['sms' => ['template_id' => 'old-tpl', 'send_all_sms_to' => '07700900000']],
-            'notify' => ['sms' => ['template_id' => null, 'send_all_sms_to' => null, 'is_production' => false]],
+            'email' => ['sms' => ['template_id' => 'old-tpl']],
+            'notify' => ['sms' => ['template_id' => null]],
         ]);
 
         $this->assertSame('old-tpl', $c->templateId);
-        $this->assertSame('+447700900000', $c->sendAllSmsTo);
     }
 
     public function testPasswordTakesPrecedenceOverUser(): void
@@ -170,42 +165,13 @@ final class SmsConfigFactoryTest extends TestCase
     #[DataProvider('unsetValues')]
     public function testSentinelsBecomeNull(string $value): void
     {
-        $c = $this->build(['notify' => ['sms' => ['template_id' => $value, 'send_all_sms_to' => $value, 'is_production' => true]]]);
+        $c = $this->build(['notify' => ['sms' => ['template_id' => $value]]]);
 
         $this->assertNull($c->templateId);
-        $this->assertNull($c->sendAllSmsTo);
-        $this->assertTrue($c->isProduction);
     }
 
     public static function unsetValues(): array
     {
         return [[' '], [''], ['null'], [' NULL '], ['%olcs_notify_sms_template%']];
-    }
-
-    public function testProductionNullRedirect(): void
-    {
-        $c = $this->build(['notify' => ['sms' => ['template_id' => 't', 'send_all_sms_to' => null, 'is_production' => true]]]);
-        $this->assertNull($c->sendAllSmsTo);
-    }
-
-    public function testRedirectNumberIsNormalised(): void
-    {
-        $c = $this->build(['notify' => ['sms' => ['send_all_sms_to' => '07700 900123']]]);
-        $this->assertSame('+447700900123', $c->sendAllSmsTo);
-    }
-
-    public function testBadRedirectTurnsSmsOff(): void
-    {
-        $c = $this->build([
-            'mail' => ['dsn' => 'govuknotify://KEY@default'],
-            'notify' => ['sms' => ['template_id' => 'tpl', 'send_all_sms_to' => 'not-a-number', 'is_production' => false]],
-        ]);
-
-        $this->assertNull($c->sendAllSmsTo);
-        $this->assertTrue($c->redirectInvalid);
-
-        $toggles = $this->createStub(ToggleService::class);
-        $toggles->method('isEnabled')->willReturn(true);
-        $this->assertFalse((new SmsGate($c, $toggles))->isEnabled());
     }
 }

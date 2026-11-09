@@ -80,13 +80,8 @@ class SendSms extends AbstractCommandHandler
             throw $e;
         }
 
-        // Outside production, texts go to the redirect number when one is set. Without one they
-        // go to the real number, and the env's team or test Notify key keeps them from real people.
+        // Outside production, the env's team or test Notify key keeps texts from real people.
         $to = $message->getRecipient();
-        if (!$this->config->isProduction && $this->config->sendAllSmsTo !== null) {
-            $to = $this->config->sendAllSmsTo;
-            $message->setRedirectedTo($to);
-        }
 
         try {
             $body = $this->render($message, $now);

@@ -30,13 +30,13 @@ final class SmsTransportFactoryTest extends TestCase
 
     public function testLiveKeyGivesNotifyTransport(): void
     {
-        $c = $this->container(new SmsConfig('key-' . self::UUID . '-' . self::UUID, false, null, 1025, 't', null, true));
+        $c = $this->container(new SmsConfig('key-' . self::UUID . '-' . self::UUID, false, null, 1025, 't'));
         $this->assertInstanceOf(NotifySmsTransport::class, (new SmsTransportFactory())($c, 'x'));
     }
 
     public function testMailpitGivesMailpitTransport(): void
     {
-        $c = $this->container(new SmsConfig(null, true, 'mailpit', 1025, 't', '+447700900999', false));
+        $c = $this->container(new SmsConfig(null, true, 'mailpit', 1025, 't'));
         $this->assertInstanceOf(MailpitSmsTransport::class, (new SmsTransportFactory())($c, 'x'));
     }
 }
