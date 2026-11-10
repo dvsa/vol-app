@@ -575,15 +575,20 @@ class LetterGenerationController extends AbstractInternalController implements L
                 'content' => $effectiveContent,
                 'version' => $todo['version'] ?? 1,
                 'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
+                'placementIssueIds' => $todo['placementIssueIds'] ?? [],
             ];
         }
+
+        // The page follows the letter (VOL-7737): sections around the issues block as they sit
+        // in the letter, each issue followed by its own to-dos.
+        [$groupedIssues, $groupedTodos] = $this->placeTodosUnderIssues($groupedIssues, $groupedTodos);
 
         $view = new ViewModel([
             'letterInstanceId' => $letterInstanceId,
             'letterInstance' => $letterInstance,
+            'layout' => $this->editLayout($letterInstance['letterInstanceSections'] ?? [], $groupedSections),
             'groupedIssues' => $groupedIssues,
             'groupedAppendices' => $groupedAppendices,
-            'groupedSections' => $groupedSections,
             'groupedTodos' => $groupedTodos,
         ]);
 
@@ -1035,6 +1040,84 @@ class LetterGenerationController extends AbstractInternalController implements L
         }
 
         return json_encode(['blocks' => [], 'version' => '2.28.2']);
+    }
+
+    /**
+     * Put each to-do under the first issue it can go under that is on the edit page
+     * (placementIssueIds comes from the API, preferred first). To-dos with none of their issues
+     * on the page are returned separately, to be listed after the issues.
+     *
+     * @param array<int|string, array{issues: list<array<string, mixed>>}> $groupedIssues
+     * @param list<array<string, mixed>> $todos
+     * @return array{0: array<int|string, array<string, mixed>>, 1: list<array<string, mixed>>}
+     */
+    protected function placeTodosUnderIssues(array $groupedIssues, array $todos): array
+    {
+        $issueSlots = [];
+        foreach ($groupedIssues as $typeId => $group) {
+            foreach ($group['issues'] as $index => $issue) {
+                $groupedIssues[$typeId]['issues'][$index]['todos'] = [];
+                $issueSlots[(int) $issue['id']] = [$typeId, $index];
+            }
+        }
+
+        $unplaced = [];
+        foreach ($todos as $todo) {
+            $slot = null;
+            foreach ($todo['placementIssueIds'] ?? [] as $issueId) {
+                if (isset($issueSlots[(int) $issueId])) {
+                    $slot = $issueSlots[(int) $issueId];
+                    break;
+                }
+            }
+
+            if ($slot === null) {
+                $unplaced[] = $todo;
+                continue;
+            }
+
+            [$typeId, $index] = $slot;
+            $groupedIssues[$typeId]['issues'][$index]['todos'][] = $todo;
+        }
+
+        return [$groupedIssues, $unplaced];
+    }
+
+    /**
+     * The order of the edit page, matching the letter: the chosen sections in letter order, with
+     * the issues block where the letter's __ISSUES__ section sits, or after the sections when the
+     * letter has none (as the letter itself does).
+     *
+     * @param list<array<string, mixed>> $instanceSections the letter's sections, in letter order
+     * @param list<array<string, mixed>> $editableSections the chosen sections, each with an id
+     * @return list<array{section: array<string, mixed>}|array{issues: true}>
+     */
+    protected function editLayout(array $instanceSections, array $editableSections): array
+    {
+        $byId = [];
+        foreach ($editableSections as $section) {
+            $byId[$section['id']] = $section;
+        }
+
+        $layout = [];
+        $issuesPlaced = false;
+        foreach ($instanceSections as $instanceSection) {
+            $sectionVersion = $instanceSection['letterSectionVersion'] ?? [];
+            $letterSection = $sectionVersion['letterSectionVariant']['letterSection'] ?? ($sectionVersion['letterSection'] ?? []);
+
+            if (($letterSection['sectionKey'] ?? null) === '__ISSUES__' && !$issuesPlaced) {
+                $layout[] = ['issues' => true];
+                $issuesPlaced = true;
+            } elseif (isset($byId[$instanceSection['id']])) {
+                $layout[] = ['section' => $byId[$instanceSection['id']]];
+            }
+        }
+
+        if (!$issuesPlaced) {
+            $layout[] = ['issues' => true];
+        }
+
+        return $layout;
     }
 
     /**
