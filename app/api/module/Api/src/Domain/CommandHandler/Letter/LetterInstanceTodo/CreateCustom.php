@@ -58,8 +58,9 @@ final class CreateCustom extends AbstractCommandHandler
         $issue->addLetterInstanceTodo($todo);
         $letterInstance->addLetterInstanceTodo($todo);
 
-        // number it in letter order: straight after its issue's to-dos, not after the whole letter's
-        $this->letterInstanceComposer->reconcileTodos($letterInstance);
+        // number it in letter order, straight after its issue's to-dos. Renumber only: a full
+        // reconcile could add or drop library to-dos on a draft that's out of step with the library
+        $this->letterInstanceComposer->renumberTodos($letterInstance);
 
         $this->getRepo()->save($todo);
 

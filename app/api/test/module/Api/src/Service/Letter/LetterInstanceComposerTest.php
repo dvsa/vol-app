@@ -540,4 +540,36 @@ class LetterInstanceComposerTest extends TestCase
         $this->assertFalse($letterInstance->getLetterInstanceTodos()->contains($custom));
         $this->assertFalse($letterInstance->getLetterInstanceIssues()->contains($other));
     }
+
+    /**
+     * Renumbering follows letter order (each issue's library to-dos, then its own) and leaves a
+     * to-do with no issue on the letter where it was relative to the rest, last (VOL-7735)
+     */
+    public function testRenumberFollowsLetterOrderWithoutAddingOrDropping(): void
+    {
+        $letterInstance = new LetterInstance();
+        $second = $this->instanceIssue($letterInstance, 1, []);
+        $first = $this->instanceIssue($letterInstance, 0, []);
+
+        $custom = new LetterInstanceTodo();
+        $custom->setDisplayOrder(0);
+        $first->addLetterInstanceTodo($custom);
+        $letterInstance->addLetterInstanceTodo($custom);
+        $library = $this->existingTodo($letterInstance, $first, $this->todoVersion(1));
+        $library->setDisplayOrder(5);
+        $later = $this->existingTodo($letterInstance, $second, $this->todoVersion(2));
+        $later->setDisplayOrder(1);
+        $loose = new LetterInstanceTodo();
+        $loose->setLetterTodoVersion($this->todoVersion(3));
+        $loose->setDisplayOrder(2);
+        $letterInstance->addLetterInstanceTodo($loose);
+
+        $this->sut->renumberTodos($letterInstance);
+
+        $this->assertCount(4, $letterInstance->getLetterInstanceTodos());
+        $this->assertSame(
+            [0, 1, 2, 3],
+            [$library->getDisplayOrder(), $custom->getDisplayOrder(), $later->getDisplayOrder(), $loose->getDisplayOrder()]
+        );
+    }
 }

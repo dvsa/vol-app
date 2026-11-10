@@ -127,4 +127,55 @@ final class CreateCustomTest extends AbstractCommandHandlerTestCase
 
         $this->assertLessThan($laterTodo->getDisplayOrder(), $saved->getDisplayOrder());
     }
+
+    /**
+     * PR review: an issue's to-dos can change in admin without a new version, so a draft can be out
+     * of step with the library. Adding a to-do only renumbers; it never adds or drops library to-dos
+     * (that's Change issues' job, with its warning and grab values).
+     */
+    public function testAddingATodoLeavesADriftedDraftsLibraryTodosAlone(): void
+    {
+        $issue = $this->issueOnLetter(true);
+        $letter = $issue->getLetterInstance();
+        $kept = $this->libraryTodoOn($issue, 5, 0);
+
+        // the issue now brings a to-do this draft never got
+        $newLetterTodo = new \Dvsa\Olcs\Api\Entity\Letter\LetterTodo();
+        $newLetterTodo->setId(6);
+        $newVersion = new LetterTodoVersion();
+        $newVersion->setLetterTodo($newLetterTodo);
+        $newLetterTodo->setCurrentVersion($newVersion);
+        $link = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueTodo();
+        $link->setLetterTodoVersion($newVersion);
+        $issue->getLetterIssueVersion()->addLetterIssueTodo($link);
+
+        // and no longer brings one the caseworker has already edited on this draft
+        $droppedLetterTodo = new \Dvsa\Olcs\Api\Entity\Letter\LetterTodo();
+        $droppedLetterTodo->setId(7);
+        $droppedVersion = new LetterTodoVersion();
+        $droppedVersion->setLetterTodo($droppedLetterTodo);
+        $edited = new LetterInstanceTodo();
+        $edited->setLetterTodoVersion($droppedVersion);
+        $edited->setEditedDescription(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Edited']]]]);
+        $edited->setDisplayOrder(1);
+        $issue->addLetterInstanceTodo($edited);
+        $letter->addLetterInstanceTodo($edited);
+
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('fetchById')->andReturn($issue);
+        $saved = null;
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('save')->once()->andReturnUsing(
+            function (LetterInstanceTodo $todo) use (&$saved): void {
+                $saved = $todo;
+            }
+        );
+
+        $this->sut->handleCommand(Cmd::create(['letterInstanceIssue' => 10]));
+
+        $todos = $letter->getLetterInstanceTodos();
+        $this->assertCount(3, $todos, 'the two library rows plus the new one, nothing added or dropped');
+        $this->assertTrue($todos->contains($kept));
+        $this->assertTrue($todos->contains($edited), 'the edited to-do is not dropped');
+        $this->assertTrue($issue->getLetterInstanceTodos()->contains($edited));
+        $this->assertSame([0, 1, 2], [$kept->getDisplayOrder(), $edited->getDisplayOrder(), $saved->getDisplayOrder()]);
+    }
 }
