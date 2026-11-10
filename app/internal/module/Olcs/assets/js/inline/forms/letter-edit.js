@@ -90,6 +90,18 @@ OLCS.ready(function () {
     setupDirtyTracking($group, todoKey);
   });
 
+  /**
+   * An editor's content without its timestamp, which EditorJS refreshes on its own (e.g. just after
+   * load) without anything having changed.
+   */
+  function editorBlocks(json) {
+    try {
+      return JSON.stringify(JSON.parse(json).blocks);
+    } catch (e) {
+      return json;
+    }
+  }
+
   // Save issue button handler
   $(".save-issue-btn").on("click", function (e) {
     e.preventDefault();
@@ -103,6 +115,7 @@ OLCS.ready(function () {
 
     withFlushedEditors(function () {
       var editedContent = hiddenInput.val();
+      var sentHeading = $heading.length ? $heading.val() : undefined;
 
       $btn.prop("disabled", true).text("Saving...");
 
@@ -115,22 +128,26 @@ OLCS.ready(function () {
           editedContent: editedContent,
           version: version,
           // an Other issue's heading (VOL-7735); left out for standard issues
-          editedHeading: $heading.length ? $heading.val() : undefined,
+          editedHeading: sentHeading,
         }),
         success: function (response) {
           if (response.success) {
-            dirtyMap["issue-" + issueId] = false;
+            // typed into while saving: what's on screen now isn't what was saved
+            var changedSince =
+              editorBlocks(hiddenInput.val()) !== editorBlocks(editedContent) ||
+              ($heading.length && $heading.val() !== sentHeading);
+            if (!changedSince) {
+              dirtyMap["issue-" + issueId] = false;
+              $group.find(".save-indicator").show();
+            }
             if ($heading.length) {
               // a cleared heading falls back to the standing one, as the letter does
               $group
                 .find(".govuk-heading-s")
                 .first()
-                .text(
-                  $.trim($heading.val()) || $heading.data("default-heading"),
-                );
+                .text($.trim(sentHeading) || $heading.data("default-heading"));
             }
             $btn.data("version", response.version);
-            $group.find(".save-indicator").show();
             $btn.prop("disabled", false).text("Save changes");
           } else {
             showError(response.message || "Failed to save changes");
@@ -324,13 +341,18 @@ OLCS.ready(function () {
    * load), so say what unsaved work would be lost first. True when it's fine to go ahead.
    */
   function okToLoseUnsaved(exceptKey) {
-    // the editor being deleted isn't "lost"; leave it out, and put it back if they cancel
+    // the editor being deleted isn't "lost", so leave it out of the list
     var wasDirty = exceptKey ? dirtyMap[exceptKey] : undefined;
     if (exceptKey) {
       dirtyMap[exceptKey] = false;
     }
 
     var unsaved = collectUnsavedSectionNames();
+    if (exceptKey) {
+      // put it back either way: if the delete then fails, its unsaved text is still guarded
+      dirtyMap[exceptKey] = wasDirty;
+    }
+
     var ok =
       unsaved.length === 0 ||
       window.confirm(
@@ -338,10 +360,6 @@ OLCS.ready(function () {
           unsaved.join("\n") +
           "\n\nContinue?",
       );
-
-    if (exceptKey && !ok) {
-      dirtyMap[exceptKey] = wasDirty;
-    }
 
     return ok;
   }
