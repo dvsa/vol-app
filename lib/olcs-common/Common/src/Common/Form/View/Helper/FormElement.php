@@ -246,6 +246,10 @@ class FormElement extends LaminasFormElement
         $elementErrorsHelper = $this->view->plugin('form_element_errors');
         assert($elementErrorsHelper instanceof FormElementErrors, 'Expected instance of ' . FormElementErrors::class);
 
+        if ($element->getMessages() !== []) {
+            $this->addDescriptionId($element, $elementErrorsHelper->getErrorId($element));
+        }
+
         $markup = parent::render($element);
         $markup = $elementErrorsHelper->render($element) . $markup;
         $markup = $this->attachHint($element, $markup);
@@ -308,14 +312,28 @@ class FormElement extends LaminasFormElement
      * Add the rendered hint IDs to the element's aria-describedby attribute.
      *
      * @param ElementInterface $element element
-     * @param string[]         $hintIds hint IDs
+     * @param string           $hintId hint ID
      */
     private function addHintDescription(ElementInterface $element, string $hintId): void
     {
-        if ($element->getAttribute('aria-describedby')) {
+        $this->addDescriptionId($element, $hintId);
+    }
+
+    /**
+     * Add an ID to the element's aria-describedby attribute.
+     */
+    private function addDescriptionId(ElementInterface $element, string $descriptionId): void
+    {
+        $describedBy = trim((string) $element->getAttribute('aria-describedby'));
+        $descriptionIds = $describedBy === ''
+            ? []
+            : (preg_split('/\s+/', $describedBy, -1, PREG_SPLIT_NO_EMPTY) ?: []);
+
+        if (in_array($descriptionId, $descriptionIds, true)) {
             return;
         }
 
-        $element->setAttribute('aria-describedby', $hintId);
+        $descriptionIds[] = $descriptionId;
+        $element->setAttribute('aria-describedby', implode(' ', $descriptionIds));
     }
 }

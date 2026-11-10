@@ -590,7 +590,7 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         $markup = $viewHelper($this->element, 'formCollection', '/');
 
         $this->assertSame(
-            '<p id="test-hint" class="hint govuk-hint">Hint</p><p class="govuk-error-message" id="test-error"><span class="govuk-visually-hidden">Error:</span>Message 1</p><input type="text" name="test" class="class&#x20;error__input" id="test" aria-describedby="test-hint" value="">',
+            '<p id="test-hint" class="hint govuk-hint">Hint</p><p class="govuk-error-message" id="test-error"><span class="govuk-visually-hidden">Error:</span>Message 1</p><input type="text" name="test" class="class&#x20;error__input" id="test" aria-describedby="test-hint&#x20;test-error" value="">',
             $markup
         );
     }

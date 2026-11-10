@@ -145,18 +145,29 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
         $hintText = $element->getOption('hint');
         $legend = '';
         $label = $element->getLabel();
-        $fieldsetAttributes = '';
+        $configuredFieldsetAttributes = $element->getOption('fieldset-attributes');
+        $describedBy = $element->getAttribute('aria-describedby')
+            ?: ($configuredFieldsetAttributes['aria-describedby'] ?? '');
 
         if (isset($hintText) && '' !== $hintText) {
             $hintId = ($element->getAttribute('id') ?: $element->getName()) . '-hint';
             $hint = sprintf($this->fieldsetHintFormat, $hintId, $this->getView()->translate($hintText));
-            $configuredFieldsetAttributes = $element->getOption('fieldset-attributes');
-            $describedBy = $element->getAttribute('aria-describedby')
-                ?: ($configuredFieldsetAttributes['aria-describedby'] ?? $hintId);
-            $fieldsetAttributes = ' ' . $this->createAttributesString(['aria-describedby' => $describedBy]);
+            $describedBy = $describedBy ?: $hintId;
         } else {
             $hint = '';
         }
+
+        if ($element->getMessages() !== []) {
+            $elementErrorsHelper = $this->getView()->plugin('form_element_errors');
+            assert($elementErrorsHelper instanceof FormElementErrors, 'Expected instance of ' . FormElementErrors::class);
+            $descriptionIds = preg_split('/\s+/', trim((string) $describedBy), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+            $descriptionIds[] = $elementErrorsHelper->getErrorId($element);
+            $describedBy = implode(' ', array_unique($descriptionIds));
+        }
+
+        $fieldsetAttributes = $describedBy
+            ? ' ' . $this->createAttributesString(['aria-describedby' => $describedBy])
+            : '';
 
         $element->setOption('hint', '');
         $element->setLabel('');

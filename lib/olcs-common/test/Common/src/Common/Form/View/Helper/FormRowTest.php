@@ -466,6 +466,55 @@ final class FormRowTest extends MockeryTestCase
         $this->assertEquals('<div class="field "><fieldset class="user"><legend>Foo</legend></fieldset></div>', $result);
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('dateFieldsetDescriptionsProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeDescribesDateFieldsetErrors(
+        ?string $hint,
+        ?string $existingDescription,
+        ?string $configuredDescription,
+        array $messages,
+        string $expectedDescription
+    ): void {
+        $this->setUpSut();
+        $this->viewHelperPluginManager()->get('form_element')->setView($this->phpRenderer());
+        $dateHelper = new CommonHelper\FormDateSelect();
+        $dateHelper->setView($this->phpRenderer());
+        $dateHelper->setTranslator($this->translator());
+        $this->viewHelperPluginManager()->setService('formdateselect', $dateHelper);
+        $this->viewHelperPluginManager()->setService('forminput', new LaminasHelper\FormInput());
+        $element = $this->setUpElement('DateSelect', [
+            'hint' => $hint,
+            'fieldset-attributes' => ['aria-describedby' => $configuredDescription],
+        ], ['id' => 'dob']);
+        $element->setAttribute('aria-describedby', $existingDescription);
+        $element->setMessages($messages);
+
+        $markup = $this->sut->__invoke($element);
+
+        $this->assertStringContainsString(
+            '<fieldset class="date" aria-describedby="' . $expectedDescription . '">',
+            html_entity_decode($markup, ENT_QUOTES, 'UTF-8')
+        );
+        if ($messages !== []) {
+            $this->assertSame(1, substr_count($markup, 'id="dob-error"'));
+        } else {
+            $this->assertStringNotContainsString('dob-error', $markup);
+        }
+    }
+
+    public static function dateFieldsetDescriptionsProvider(): array
+    {
+        return [
+            'hint only' => ['Hint', null, null, [], 'dob-hint'],
+            'hint and error' => ['Hint', null, null, ['Invalid date'], 'dob-hint dob-error'],
+            'multiple errors' => ['Hint', null, null, ['Invalid date', 'Required date'], 'dob-hint dob-error'],
+            'error without hint' => [null, null, null, ['Invalid date'], 'dob-error'],
+            'existing description' => ['Hint', 'existing-description', null, ['Invalid date'], 'existing-description dob-error'],
+            'configured description' => ['Hint', null, 'configured-description', ['Invalid date'], 'configured-description dob-error'],
+            'no duplicate error ID' => ['Hint', 'dob-hint dob-error', null, ['Invalid date'], 'dob-hint dob-error'],
+        ];
+    }
+
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
     #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersDateTimeSelectElement(): void

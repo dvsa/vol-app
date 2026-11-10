@@ -60,10 +60,8 @@ class FormElementErrors extends LaminasFormElementErrors
             );
         }
 
-        $errorId = ($element->getAttribute('id')  ?: $element->getName()) . '-error';
-
         // Prepare attributes for opening tag
-        $attributes = array_merge($this->attributes, ['id' => $errorId], $attributes);
+        $attributes = array_merge($this->attributes, ['id' => $this->getErrorId($element)], $attributes);
 
         $elementShouldEscape = $element->getOption('shouldEscapeMessages');
         $escaper = $this->getEscapeHtmlHelper();
@@ -83,7 +81,7 @@ class FormElementErrors extends LaminasFormElementErrors
         if ($messagesToPrint === []) {
             return '';
         }
-        
+
         $wrapperAttributes = '';
         if (count($messagesToPrint) > 1) {
             $wrapperAttributes = $this->createAttributesString(['id' => $attributes['id']]);
@@ -106,5 +104,13 @@ class FormElementErrors extends LaminasFormElementErrors
         return $wrapperAttributes !== ''
             ? sprintf('<div %s>%s</div>', $wrapperAttributes, $markup)
             : $markup;
+    }
+
+    /**
+     * Get the ID used for this element's rendered error message.
+     */
+    public function getErrorId(ElementInterface $element): string
+    {
+        return ($element->getAttribute('id') ?: $element->getName()) . '-error';
     }
 }
