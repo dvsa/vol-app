@@ -162,6 +162,20 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
             $attributes['class'] = '';
         }
 
+        if ($element instanceof PostcodeSearch && $messages !== [] && !$readOnly) {
+            $errorsHelper = $this->view->plugin('form_element_errors');
+            assert($errorsHelper instanceof FormElementErrors, 'Expected instance of ' . FormElementErrors::class);
+            $postcode = $element->get('postcode');
+            $descriptionIds = preg_split(
+                '/\s+/',
+                trim((string) $postcode->getAttribute('aria-describedby')),
+                -1,
+                PREG_SPLIT_NO_EMPTY
+            ) ?: [];
+            $descriptionIds[] = $errorsHelper->getErrorId($element);
+            $postcode->setAttribute('aria-describedby', implode(' ', array_unique($descriptionIds)));
+        }
+
         foreach ($element->getIterator() as $elementOrFieldset) {
             // Check if this element class has a bespoke view helper
             foreach ($this->classMap as $class => $helperName) {

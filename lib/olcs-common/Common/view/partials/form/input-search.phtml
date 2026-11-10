@@ -41,7 +41,7 @@ $legend = $fieldsetElement->getOption('legend');
             <p id="<?php echo $inputName; ?>-error" class="govuk-error-message"><span class="govuk-visually-hidden"><?php echo $this->translate('Error'); ?>:</span><?php echo $this->translate($error) ?></p>
         <?php endif; ?>
         <div class="field inline">
-            <input name="<?php echo $inputName; ?>" data-container-class="inline" id="<?php echo $inputName; ?>" aria-describedby="<?php echo $inputName; ?>-hint" type="text" value="<?php echo $this->escapeHtml($inputElement->getValue()); ?>">
+            <input name="<?php echo $inputName; ?>" data-container-class="inline" id="<?php echo $inputName; ?>" aria-describedby="<?php echo $inputName; ?>-hint<?php if (!empty($error)) echo ' ' . $inputName; ?>-error" type="text" value="<?php echo $this->escapeHtml($inputElement->getValue()); ?>">
         </div>
         <div class="field inline">
             <button type="submit" name="<?php echo $submitName; ?>" class="govuk-button" data-prevent-double-click="true" data-container-class="inline"
