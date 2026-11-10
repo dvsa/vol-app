@@ -95,6 +95,64 @@ final class FormElementErrorsTest extends MockeryTestCase
         $this->assertSame($expectedMarkup, $markup);
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('multipleMessagesProvider')]
+    public function testRenderMultipleMessages(array $messages, ?string $elementId, array $attributes, string $expectedId, string $expectedClass): void
+    {
+        $element = new Element('test');
+        if ($elementId !== null) {
+            $element->setAttribute('id', $elementId);
+        }
+        $element->setMessages($messages);
+
+        $viewHelper = $this->setUpSut($this->setUpServiceLocator());
+
+        $markup = $viewHelper->render($element, $attributes);
+
+        $expectedMarkup = sprintf(
+            '<div id="%s"><p class="%s"><span class="govuk-visually-hidden">Error:</span>First &lt;error&gt;</p>'
+            . '<p class="%s"><span class="govuk-visually-hidden">Error:</span>Second error</p></div>',
+            $expectedId,
+            $expectedClass,
+            $expectedClass
+        );
+        $this->assertSame($expectedMarkup, $markup);
+        $this->assertSame(1, substr_count($markup, ' id='));
+    }
+
+    public static function multipleMessagesProvider(): array
+    {
+        return [
+            'element name' => [
+                ['First <error>', 'Second error'], null, [], 'test-error', 'govuk-error-message',
+            ],
+            'element ID and nested messages' => [
+                ['group' => ['First <error>', 'Second error']], 'field', [], 'field-error', 'govuk-error-message',
+            ],
+            'custom attributes' => [
+                ['First <error>', 'Second error'], 'field',
+                ['id' => 'custom"error', 'class' => 'custom-error'], 'custom&quot;error', 'custom-error',
+            ],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('emptyMessagesProvider')]
+    public function testRenderEmptyMessages(array $messages): void
+    {
+        $element = new Element('test');
+        $element->setMessages($messages);
+        $viewHelper = $this->setUpSut($this->setUpServiceLocator());
+
+        $this->assertSame('', $viewHelper->render($element));
+    }
+
+    public static function emptyMessagesProvider(): array
+    {
+        return [
+            'no messages' => [[]],
+            'empty nested messages' => [['group' => []]],
+        ];
+    }
+
     protected function setUpElement(): Element
     {
         $element = new Element();

@@ -33,7 +33,8 @@ class FormElementErrors extends LaminasFormElementErrors
     /**
      * @psalm-suppress NoValue
      *
-     * Render validation errors for the provided $element
+     * Render validation errors for the provided $element.
+     * Multiple messages share a wrapper ID so aria-describedby can reference all errors.
      *
      * @param ElementInterface $element    Element to render errors for
      * @param array            $attributes HTML attributes to add to the render markup
@@ -63,10 +64,6 @@ class FormElementErrors extends LaminasFormElementErrors
 
         // Prepare attributes for opening tag
         $attributes = array_merge($this->attributes, ['id' => $errorId], $attributes);
-        $attributes = $this->createAttributesString($attributes);
-        if ($attributes !== '' && $attributes !== '0') {
-            $attributes = ' ' . $attributes;
-        }
 
         $elementShouldEscape = $element->getOption('shouldEscapeMessages');
         $escaper = $this->getEscapeHtmlHelper();
@@ -86,6 +83,17 @@ class FormElementErrors extends LaminasFormElementErrors
         if ($messagesToPrint === []) {
             return '';
         }
+        
+        $wrapperAttributes = '';
+        if (count($messagesToPrint) > 1) {
+            $wrapperAttributes = $this->createAttributesString(['id' => $attributes['id']]);
+            unset($attributes['id']);
+        }
+
+        $attributes = $this->createAttributesString($attributes);
+        if ($attributes !== '' && $attributes !== '0') {
+            $attributes = ' ' . $attributes;
+        }
 
         $markup = '';
 
@@ -95,6 +103,8 @@ class FormElementErrors extends LaminasFormElementErrors
             $markup .= sprintf('<p%s><span class="govuk-visually-hidden">%s:</span>%s</p>', $attributes, $errorMessage, $message);
         }
 
-        return $markup;
+        return $wrapperAttributes !== ''
+            ? sprintf('<div %s>%s</div>', $wrapperAttributes, $markup)
+            : $markup;
     }
 }
