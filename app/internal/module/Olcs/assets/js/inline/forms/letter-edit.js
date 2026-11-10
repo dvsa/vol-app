@@ -394,6 +394,14 @@ OLCS.ready(function () {
   }
 
   function postCustomTodo(path, body, $btn, done) {
+    // the page reloads once this is done, so nothing else can be changed while it's in flight:
+    // an edit made in the meantime would be lost
+    var page = document.getElementById("main") || document.body;
+    var unblock = function () {
+      page.removeAttribute("inert");
+      $btn.prop("disabled", false);
+    };
+    page.setAttribute("inert", "");
     $btn.prop("disabled", true);
     $.ajax({
       url: path,
@@ -404,8 +412,8 @@ OLCS.ready(function () {
         if (response.success) {
           done(response);
         } else {
+          unblock();
           showError(response.message || "Something went wrong");
-          $btn.prop("disabled", false);
         }
       },
       error: function (xhr) {
@@ -415,8 +423,8 @@ OLCS.ready(function () {
         } catch (e) {
           // Use default message
         }
+        unblock();
         showError(message);
-        $btn.prop("disabled", false);
       },
     });
   }
