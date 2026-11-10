@@ -606,6 +606,38 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertTrue($view->getVariable('locked'));
     }
 
+    /**
+     * A sent letter can't be changed (VOL-7735), so its edit page sends the caseworker back to the
+     * preview rather than offering editors whose saves would all be refused
+     */
+    public function testEditingASentLetterGoesBackToThePreview(): void
+    {
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->shouldReceive('addErrorMessage')->with('This letter has been sent, so it can no longer be changed')->once();
+        $sut = m::mock(Sut::class, [
+            m::mock(TranslationHelperService::class),
+            m::mock(FormHelperService::class),
+            $flash,
+            m::mock(Navigation::class),
+        ])->makePartial()->shouldAllowMockingProtectedMethods();
+
+        $params = m::mock(\Laminas\Mvc\Controller\Plugin\Params::class);
+        $params->shouldReceive('fromQuery')->with('id')->andReturn('55');
+        $params->shouldReceive('fromQuery')->with('sections', [])->andReturn(['10']);
+        $params->shouldReceive('fromQuery')->andReturn([]);
+        $sut->shouldReceive('params')->andReturn($params);
+        $sut->shouldReceive('fetchLetterInstanceById')->with(55)->andReturn(
+            $this->letterForChangeIssues(['status' => ['id' => 'ltr_sts_sent']])
+        );
+
+        $response = new \Laminas\Http\Response();
+        $redirect = m::mock(\Laminas\Mvc\Controller\Plugin\Redirect::class);
+        $redirect->shouldReceive('toUrl')->with('/letter/preview?id=55')->once()->andReturn($response);
+        $sut->shouldReceive('redirect')->andReturn($redirect);
+
+        $this->assertSame($response, $sut->editAction());
+    }
+
     public function testChangeIssuesForAMissingLetterIs404(): void
     {
         $sut = $this->bareSut();

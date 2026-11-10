@@ -24,7 +24,7 @@ class LetterGenerationController extends AbstractInternalController implements L
     protected ?ViewModel $leftView = null;
 
     /**
-     * Letter statuses whose issues can still be changed (VOL-7734), as UpdateIssues allows
+     * Letter statuses that can still be changed, as LetterInstance::isOpenForChanges allows (VOL-7734)
      */
     private const array ISSUE_CHANGE_STATUSES = ['ltr_sts_draft', 'ltr_sts_ready'];
 
@@ -437,6 +437,12 @@ class LetterGenerationController extends AbstractInternalController implements L
         if (!$letterInstance) {
             $this->flashMessengerHelperService->addErrorMessage('Letter not found');
             return $this->redirect()->toRoute('dashboard');
+        }
+
+        // every save would be refused once it's sent (VOL-7735), so don't offer the editors
+        if (!in_array($letterInstance['status']['id'] ?? null, self::ISSUE_CHANGE_STATUSES, true)) {
+            $this->flashMessengerHelperService->addErrorMessage('This letter has been sent, so it can no longer be changed');
+            return $this->redirect()->toUrl('/letter/preview?id=' . urlencode((string) $letterInstanceId));
         }
 
         $groupedIssues = [];
