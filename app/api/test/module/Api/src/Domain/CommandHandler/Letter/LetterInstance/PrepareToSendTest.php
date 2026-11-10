@@ -276,4 +276,16 @@ final class PrepareToSendTest extends MockeryTestCase
 
         $this->assertBlockedNaming($this->letterInstanceWithTodos([$todo]), 'Other issue: to-do 1');
     }
+
+    /**
+     * PR review: each prepared PDF records the letter it came from, so an older one can still be
+     * traced back to its letter and refused once it's out of date
+     */
+    public function testThePdfRecordsWhichLetterItCameFrom(): void
+    {
+        $method = new \ReflectionMethod(PrepareToSend::class, 'documentMetadata');
+        $metadata = json_decode($method->invoke(null, 12, 5), true);
+
+        $this->assertSame(['documentTemplate' => 12, 'letterInstance' => 5], $metadata['details']);
+    }
 }

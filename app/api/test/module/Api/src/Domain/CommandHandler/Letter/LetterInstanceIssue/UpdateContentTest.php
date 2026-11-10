@@ -21,6 +21,8 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
         $this->sut = new CommandHandler();
         $this->mockRepo('LetterInstanceIssue', LetterInstanceIssueRepo::class);
 
+        $this->refData = [\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_DRAFT];
+
         parent::setUp();
     }
 
@@ -128,5 +130,20 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
 
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $this->sut->handleCommand($command);
+    }
+
+    /**
+     * PR review: changing a prepared letter takes it back to draft
+     */
+    public function testChangingAPreparedLetterTakesItBackToDraft(): void
+    {
+        $letter = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstance();
+        $letter->setStatus(new \Dvsa\Olcs\Api\Entity\System\RefData(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_READY));
+        $issue = $this->issueOn(true);
+        $letter->addLetterInstanceIssue($issue);
+
+        $this->save($issue, ['editedHeading' => 'Vehicle storage']);
+
+        $this->assertTrue($letter->isDraft());
     }
 }

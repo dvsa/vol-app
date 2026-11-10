@@ -5,6 +5,8 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Document;
 use Dvsa\Olcs\Api\Domain\Command as DomainCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Api\Service;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -46,6 +48,12 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
             $this->createTranslationTask($document);
         }
 
+        // a PDF from the letter builder can only go out while it matches its letter
+        $letterInstance = $this->letterFor($document);
+        if ($letterInstance !== null) {
+            $this->assertUpToDate($letterInstance, $document);
+        }
+
         $method = $command->getMethod();
         $sent = false;
         if ($method === PrintLetterCmd::METHOD_EMAIL && $canEmail) {
@@ -57,8 +65,8 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
             $sent = true;
         }
 
-        if ($sent) {
-            $this->markLetterSent($document);
+        if ($sent && $letterInstance !== null) {
+            $this->markLetterSent($letterInstance);
         }
 
         return $this->result;
@@ -141,18 +149,58 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
     }
 
     /**
-     * A letter from the letter builder is sent once its document goes out, which locks it: what's
-     * on it stays what was sent. A resend keeps the date it was first sent.
+     * The letter a PDF was prepared from, if it came from the letter builder: from the PDF's own
+     * record of it, or for PDFs prepared before that was kept, the letter's link to its PDF
      */
-    private function markLetterSent(Entity\Doc\Document $document): void
+    private function letterFor(Entity\Doc\Document $document): ?Entity\Letter\LetterInstance
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\LetterInstance $repo */
         $repo = $this->getRepo('LetterInstance');
-        $letterInstance = $repo->fetchByDocument((int) $document->getId());
-        if ($letterInstance === null || $letterInstance->isSent()) {
+
+        $metadata = json_decode((string) $document->getMetadata(), true);
+        $letterInstanceId = is_array($metadata) ? ($metadata['details']['letterInstance'] ?? null) : null;
+        if (is_numeric($letterInstanceId)) {
+            try {
+                return $repo->fetchById((int) $letterInstanceId);
+            } catch (NotFoundException) {
+                return null;
+            }
+        }
+
+        return $repo->fetchByDocument((int) $document->getId());
+    }
+
+    /**
+     * Refuse a PDF that no longer matches its letter: a newer one has been prepared since, or the
+     * letter has changed since (which takes it back to draft)
+     *
+     * @throws ValidationException
+     */
+    private function assertUpToDate(Entity\Letter\LetterInstance $letterInstance, Entity\Doc\Document $document): void
+    {
+        if ($letterInstance->getDocument()?->getId() !== $document->getId()) {
+            throw new ValidationException(['A newer version of this letter has been prepared. Send that one instead.']);
+        }
+
+        if ($letterInstance->isDraft()) {
+            throw new ValidationException([
+                'This letter has changed since it was prepared. Prepare it to send again, then send the new one.',
+            ]);
+        }
+    }
+
+    /**
+     * A letter from the letter builder is sent once its PDF goes out, which locks it: what's on it
+     * stays what was sent. A resend keeps the date it was first sent.
+     */
+    private function markLetterSent(Entity\Letter\LetterInstance $letterInstance): void
+    {
+        if ($letterInstance->isSent()) {
             return;
         }
 
+        /** @var \Dvsa\Olcs\Api\Domain\Repository\LetterInstance $repo */
+        $repo = $this->getRepo('LetterInstance');
         $letterInstance->markAsSent($repo->getRefdataReference(Entity\Letter\LetterInstance::STATUS_SENT));
         $repo->save($letterInstance);
     }

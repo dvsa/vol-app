@@ -52,6 +52,8 @@ class UpdateIssuesTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('LetterInstance', LetterInstanceRepo::class);
         $this->mockRepo('LetterIssue', LetterIssueRepo::class);
 
+        $this->refData = [\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_DRAFT];
+
         parent::setUp();
 
         $this->repoMap['LetterIssue']->shouldReceive('fetchById')
@@ -257,6 +259,8 @@ class UpdateIssuesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand(Cmd::create(['id' => self::LETTER_ID, 'selectedIssues' => [2]]));
 
         $this->assertSame([2], $this->parentIds($letterInstance));
+        // PR review: its prepared PDF no longer matches, so it has to be prepared again
+        $this->assertTrue($letterInstance->isDraft());
     }
 
     public static function lockedStatuses(): array

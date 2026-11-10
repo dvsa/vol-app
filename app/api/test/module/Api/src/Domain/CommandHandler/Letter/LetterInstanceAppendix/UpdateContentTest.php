@@ -23,6 +23,8 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
         $this->sut = new CommandHandler();
         $this->mockRepo('LetterInstanceAppendix', Repo::class);
 
+        $this->refData = [\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_DRAFT];
+
         parent::setUp();
     }
 
@@ -41,5 +43,26 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
 
         $this->expectException(ValidationException::class);
         $this->sut->handleCommand(Cmd::create(['id' => 1, 'editedContent' => '{"blocks":[]}', 'version' => 1]));
+    }
+
+    /**
+     * PR review: changing a prepared letter takes it back to draft
+     */
+    public function testChangingAPreparedLetterTakesItBackToDraft(): void
+    {
+        $letter = new LetterInstance();
+        $letter->setStatus(new RefData(LetterInstance::STATUS_READY));
+        $version = new \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion();
+        $version->setAppendixType('editable');
+        $entity = new Entity();
+        $entity->setLetterInstance($letter);
+        $entity->setLetterAppendixVersion($version);
+
+        $this->repoMap['LetterInstanceAppendix']->shouldReceive('fetchUsingId')->andReturn($entity);
+        $this->repoMap['LetterInstanceAppendix']->shouldReceive('save')->once();
+
+        $this->sut->handleCommand(Cmd::create(['id' => 1, 'editedContent' => '{"blocks":[]}', 'version' => 1]));
+
+        $this->assertTrue($letter->isDraft());
     }
 }

@@ -28,7 +28,7 @@ final class UpdateContent extends AbstractCommandHandler
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection $letterInstanceSection */
         $letterInstanceSection = $this->getRepo()->fetchUsingId($command);
 
-        $this->assertLetterOpenForChanges($letterInstanceSection->getLetterInstance());
+        $this->changeLetter($letterInstanceSection->getLetterInstance());
 
         $letterInstanceSection->setEditedContentFromArray(
             json_decode($command->getEditedContent(), true)

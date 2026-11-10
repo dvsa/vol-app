@@ -30,6 +30,8 @@ final class CreateCustomTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('LetterInstanceTodo', LetterInstanceTodoRepo::class);
         $this->mockRepo('LetterInstanceIssue', LetterInstanceIssueRepo::class);
 
+        $this->refData = [\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_DRAFT];
+
         parent::setUp();
     }
 
@@ -177,5 +179,19 @@ final class CreateCustomTest extends AbstractCommandHandlerTestCase
         $this->assertTrue($todos->contains($edited), 'the edited to-do is not dropped');
         $this->assertTrue($issue->getLetterInstanceTodos()->contains($edited));
         $this->assertSame([0, 1, 2], [$kept->getDisplayOrder(), $edited->getDisplayOrder(), $saved->getDisplayOrder()]);
+    }
+
+    /**
+     * PR review: changing a prepared letter takes it back to draft
+     */
+    public function testAddingToAPreparedLetterTakesItBackToDraft(): void
+    {
+        $issue = $this->issueOnLetter(true, LetterInstance::STATUS_READY);
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('fetchById')->andReturn($issue);
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('save')->once();
+
+        $this->sut->handleCommand(Cmd::create(['letterInstanceIssue' => 10]));
+
+        $this->assertTrue($issue->getLetterInstance()->isDraft());
     }
 }

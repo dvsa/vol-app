@@ -145,12 +145,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
         // Upload PDF to content store
         $file = $this->getDocumentGenerator()->uploadGeneratedContent($pdfContent, $fileName);
 
-        // Build Document metadata with docTemplate reference for canEmail() check
-        $metadata = json_encode([
-            'details' => [
-                'documentTemplate' => $command->getDocTemplate(),
-            ],
-        ]);
+        $metadata = self::documentMetadata((int) $command->getDocTemplate(), (int) $letterInstance->getId());
 
         // Create Document entity via side effect
         $documentData = [
@@ -323,5 +318,19 @@ final class PrepareToSend extends AbstractCommandHandler implements
         $this->convertHtmlToPdf = $container->get('ConvertToPdf');
         $this->contentStore = $container->get('ContentStore');
         return parent::__invoke($container, $requestedName, $options);
+    }
+
+    /**
+     * The PDF's metadata: its docTemplate, for the canEmail() check, and the letter it came from, so
+     * sending an out-of-date PDF of the letter can be refused (VOL-7735)
+     */
+    private static function documentMetadata(int $docTemplate, int $letterInstanceId): string
+    {
+        return (string) json_encode([
+            'details' => [
+                'documentTemplate' => $docTemplate,
+                'letterInstance' => $letterInstanceId,
+            ],
+        ]);
     }
 }

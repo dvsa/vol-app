@@ -23,6 +23,8 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
         $this->sut = new CommandHandler();
         $this->mockRepo('LetterInstanceSection', Repo::class);
 
+        $this->refData = [\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_DRAFT];
+
         parent::setUp();
     }
 
@@ -38,5 +40,24 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
 
         $this->expectException(ValidationException::class);
         $this->sut->handleCommand(Cmd::create(['id' => 1, 'editedContent' => '{"blocks":[]}', 'version' => 1]));
+    }
+
+    /**
+     * PR review: changing a prepared letter takes it back to draft, so its PDF can't be sent until
+     * it's prepared again with the change in it
+     */
+    public function testChangingAPreparedLetterTakesItBackToDraft(): void
+    {
+        $letter = new LetterInstance();
+        $letter->setStatus(new RefData(LetterInstance::STATUS_READY));
+        $entity = new Entity();
+        $entity->setLetterInstance($letter);
+
+        $this->repoMap['LetterInstanceSection']->shouldReceive('fetchUsingId')->andReturn($entity);
+        $this->repoMap['LetterInstanceSection']->shouldReceive('save')->once();
+
+        $this->sut->handleCommand(Cmd::create(['id' => 1, 'editedContent' => '{"blocks":[]}', 'version' => 1]));
+
+        $this->assertTrue($letter->isDraft());
     }
 }

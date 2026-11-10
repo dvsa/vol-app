@@ -26,7 +26,7 @@ final class UpdateContent extends AbstractCommandHandler
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix $letterInstanceAppendix */
         $letterInstanceAppendix = $this->getRepo()->fetchUsingId($command);
 
-        $this->assertLetterOpenForChanges($letterInstanceAppendix->getLetterInstance());
+        $this->changeLetter($letterInstanceAppendix->getLetterInstance());
 
         if (!$letterInstanceAppendix->isEditable()) {
             throw new ValidationException(['This appendix is not editable']);

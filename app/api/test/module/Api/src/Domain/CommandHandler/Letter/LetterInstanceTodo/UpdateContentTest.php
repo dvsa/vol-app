@@ -27,6 +27,8 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
         $this->sut = new CommandHandler();
         $this->mockRepo('LetterInstanceTodo', LetterInstanceTodoRepo::class);
 
+        $this->refData = [\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_DRAFT];
+
         parent::setUp();
     }
 
@@ -113,5 +115,24 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
 
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $this->sut->handleCommand($command);
+    }
+
+    /**
+     * PR review: changing a prepared letter takes it back to draft
+     */
+    public function testChangingAPreparedLetterTakesItBackToDraft(): void
+    {
+        $letter = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstance();
+        $letter->setStatus(new \Dvsa\Olcs\Api\Entity\System\RefData(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_READY));
+        $todo = new LetterInstanceTodoEntity();
+        $letter->addLetterInstanceTodo($todo);
+
+        $command = Cmd::create(['id' => 42, 'editedDescription' => '{"blocks":[]}', 'version' => 1]);
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('fetchUsingId')->andReturn($todo);
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('save')->once();
+
+        $this->sut->handleCommand($command);
+
+        $this->assertTrue($letter->isDraft());
     }
 }

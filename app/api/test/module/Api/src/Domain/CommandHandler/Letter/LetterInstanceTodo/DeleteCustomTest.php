@@ -25,6 +25,8 @@ final class DeleteCustomTest extends AbstractCommandHandlerTestCase
         $this->sut = new CommandHandler();
         $this->mockRepo('LetterInstanceTodo', LetterInstanceTodoRepo::class);
 
+        $this->refData = [\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_DRAFT];
+
         parent::setUp();
     }
 
@@ -75,5 +77,20 @@ final class DeleteCustomTest extends AbstractCommandHandlerTestCase
 
         $this->expectException(ValidationException::class);
         $this->sut->handleCommand(Cmd::create(['id' => 99]));
+    }
+
+    /**
+     * PR review: changing a prepared letter takes it back to draft
+     */
+    public function testDeletingFromAPreparedLetterTakesItBackToDraft(): void
+    {
+        $todo = $this->todoOn(true, LetterInstance::STATUS_READY);
+        $letter = $todo->getLetterInstance();
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('fetchUsingId')->andReturn($todo);
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('delete')->once();
+
+        $this->sut->handleCommand(Cmd::create(['id' => 99]));
+
+        $this->assertTrue($letter->isDraft());
     }
 }

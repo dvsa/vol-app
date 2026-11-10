@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstance;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssue;
@@ -26,6 +27,8 @@ use Psr\Container\ContainerInterface;
  */
 final class UpdateIssues extends AbstractCommandHandler
 {
+    use LetterOpenForChangesTrait;
+
     use LetterContextTrait;
 
     protected $repoServiceName = 'LetterInstance';
@@ -72,6 +75,8 @@ final class UpdateIssues extends AbstractCommandHandler
             }
             return $this->result;
         }
+
+        $this->takeBackToDraft($letterInstance);
 
         $created = $this->letterInstanceComposer->applyIssueChange($letterInstance, $plan);
 

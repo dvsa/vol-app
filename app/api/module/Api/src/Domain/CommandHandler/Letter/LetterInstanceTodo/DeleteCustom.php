@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstanceTodo;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -15,6 +16,8 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  */
 final class DeleteCustom extends AbstractCommandHandler
 {
+    use LetterOpenForChangesTrait;
+
     protected $repoServiceName = 'LetterInstanceTodo';
 
     #[\Override]
@@ -30,6 +33,8 @@ final class DeleteCustom extends AbstractCommandHandler
         if (!$todo->isCustom()) {
             throw new ValidationException(['Only to-dos written on this letter can be deleted']);
         }
+
+        $this->takeBackToDraft($todo->getLetterInstance());
 
         $todo->getLetterInstanceIssue()?->removeLetterInstanceTodo($todo);
         $todo->getLetterInstance()->removeLetterInstanceTodo($todo);

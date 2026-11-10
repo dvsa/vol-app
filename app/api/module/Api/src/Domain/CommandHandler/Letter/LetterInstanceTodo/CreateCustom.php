@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstanceTodo;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
@@ -19,6 +20,8 @@ use Psr\Container\ContainerInterface;
  */
 final class CreateCustom extends AbstractCommandHandler
 {
+    use LetterOpenForChangesTrait;
+
     protected $repoServiceName = 'LetterInstanceTodo';
 
     protected $extraRepos = ['LetterInstanceIssue'];
@@ -47,6 +50,8 @@ final class CreateCustom extends AbstractCommandHandler
         if (!$issue->isOther()) {
             throw new ValidationException(['To-dos can only be added to an Other issue']);
         }
+
+        $this->takeBackToDraft($letterInstance);
 
         $lastOrder = 0;
         foreach ($letterInstance->getLetterInstanceTodos() as $existing) {
