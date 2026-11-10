@@ -20,6 +20,14 @@ $open = in_array($letterInstance['status']['id'] ?? null, ['ltr_sts_draft', 'ltr
     <p class="small-module__details">This letter has been sent, so it can no longer be changed.</p>
 </div>
 <?php else: ?>
+<?php if (!empty($sectionsList) || !empty($instanceSectionsList) || !empty($appendicesList) || !empty($todosList)): ?>
+<p class="govuk-body govuk-!-margin-bottom-2">
+    <?php // Ticks every section below in one go (VOL-7736); letter-preview.js flips the label. ?>
+    <button type="button" id="select-all-sections" class="govuk-link"
+            style="background: none; border: 0; padding: 0; cursor: pointer; font: inherit;">Select all</button>
+</p>
+<?php endif; ?>
+
 <div class="small-module">
     <h4 class="title">Edit Issue Sections:</h4>
     <?php if (!empty($sectionsList)): ?>
