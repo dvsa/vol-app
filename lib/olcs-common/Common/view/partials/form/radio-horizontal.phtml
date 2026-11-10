@@ -7,10 +7,26 @@ $radioElement = $element->get('yesNo');
 $errors = $this->formElementErrors()->render($radioElement);
 $hasValidationError = !empty($errors);
 $hintId = ($element->getAttribute('id') ?: $element->getName()) . '-hint';
+$descriptionIds = preg_split(
+    '/\s+/',
+    trim(($element->getAttribute('aria-describedby') ?? '') . ' ' . ($radioElement->getAttribute('aria-describedby') ?? '')),
+    -1,
+    PREG_SPLIT_NO_EMPTY
+) ?: [];
+if ($element->getOption('hint')) {
+    $descriptionIds[] = $hintId;
+}
+if ($hasValidationError) {
+    $descriptionIds[] = $this->formElementErrors()->getErrorId($radioElement);
+}
+$describedBy = implode(' ', array_unique($descriptionIds));
+if ($describedBy !== '') {
+    $radioElement->setAttribute('aria-describedby', $describedBy);
+}
 ?>
 
 <div class="<?php echo ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
-    <fieldset class="radio-button__fieldset radio-button__fieldset--horizontal"<?php if ($element->getOption('hint')) : ?> aria-describedby="<?php echo $this->escapeHtmlAttr($hintId); ?>"<?php endif; ?>>
+    <fieldset class="radio-button__fieldset radio-button__fieldset--horizontal"<?php if ($describedBy !== '') : ?> aria-describedby="<?php echo $this->escapeHtmlAttr($describedBy); ?>"<?php endif; ?>>
         <legend><?php echo $this->translate($element->getLabel()) ?></legend>
 
         <?php if ($element->getOption('hint')) : ?>

@@ -273,6 +273,16 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
 
             if ($type === 'multi_checkbox' || $type === 'radio') {
                 $fieldsetAttributes = $element->getOption('fieldset-attributes');
+                $descriptionIds = preg_split(
+                    '/\s+/',
+                    trim(($fieldsetAttributes['aria-describedby'] ?? '') . ' ' . ($element->getAttribute('aria-describedby') ?? '')),
+                    -1,
+                    PREG_SPLIT_NO_EMPTY
+                ) ?: [];
+                if ($descriptionIds !== []) {
+                    $fieldsetAttributes['aria-describedby'] = implode(' ', array_unique($descriptionIds));
+                }
+
                 $dataGroup = $element->getOption('fieldset-data-group');
 
                 if (!is_null($dataGroup)) {

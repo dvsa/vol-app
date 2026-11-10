@@ -213,6 +213,76 @@ final class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<fieldset><legend>(.*)<\/legend><\/fieldset>$/', $result);
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('choiceFieldsetDescriptionsProvider')]
+    public function testChoiceFieldsetPreservesDescriptions(
+        string $type,
+        ?string $hint,
+        array $messages,
+        string $configuredDescription,
+        string $expectedDescription
+    ): void {
+        $this->setUpSut();
+        $renderer = $this->phpRenderer();
+        $helpers = $this->viewHelperPluginManager();
+        $helpers->get(Doctype::class)->shouldReceive('isXhtml')->andReturn(false);
+        $helpers->get('form_element')->setView($renderer);
+        $choiceHelper = $type === 'Radio' ? new CommonHelper\FormRadio() : new LaminasHelper\FormMultiCheckbox();
+        $choiceHelper->setView($renderer);
+        $helpers->setService($type === 'Radio' ? 'formradio' : 'formmulticheckbox', $choiceHelper);
+        $element = $this->setUpElement($type, [
+            'hint' => $hint,
+            'fieldset-attributes' => [
+                'class' => 'choice-group',
+                'aria-describedby' => $configuredDescription,
+            ],
+            'value_options' => [
+                [
+                    'value' => 'A',
+                    'label' => 'First option',
+                    'hint' => 'Option hint',
+                    'attributes' => ['id' => 'first-option'],
+                ],
+                ['value' => 'B', 'label' => 'Second option', 'attributes' => ['id' => 'second-option']],
+            ],
+        ], ['id' => 'choice']);
+        $element->setMessages($messages);
+
+        $markup = $this->sut->__invoke($element);
+        $document = new \DOMDocument();
+        $document->loadHTML($markup);
+        $xpath = new \DOMXPath($document);
+
+        $this->assertSame(
+            $expectedDescription,
+            $xpath->evaluate('string(//fieldset/@aria-describedby)')
+        );
+        $this->assertSame('choice-group', $xpath->evaluate('string(//fieldset/@class)'));
+        if ($messages !== []) {
+            $this->assertSame(1, $xpath->query('//*[@id="choice-error"]')->length);
+            foreach ($xpath->query('//input[@type="radio" or @type="checkbox"]') as $input) {
+                $this->assertContains('choice-error', explode(' ', $input->getAttribute('aria-describedby')));
+            }
+        } else {
+            $this->assertStringNotContainsString('choice-error', $markup);
+        }
+    }
+
+    public static function choiceFieldsetDescriptionsProvider(): \Iterator
+    {
+        foreach (['Radio', 'MultiCheckbox'] as $type) {
+            yield $type . ' hint and error' => [$type, 'Hint', ['Required'], '', 'choice-hint choice-error'];
+            yield $type . ' error without hint' => [$type, null, ['Required'], '', 'choice-error'];
+            yield $type . ' configured description' => [
+                $type, 'Hint', ['Required'], 'custom-description', 'custom-description choice-hint choice-error',
+            ];
+            yield $type . ' no duplicate descriptions' => [
+                $type, 'Hint', ['Required'], 'choice-hint choice-error', 'choice-hint choice-error',
+            ];
+            yield $type . ' hint without error' => [$type, 'Hint', [], '', 'choice-hint'];
+            yield $type . ' no descriptions' => [$type, null, [], '', ''];
+        }
+    }
+
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
     #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersRadioLegendAttribute(): void
