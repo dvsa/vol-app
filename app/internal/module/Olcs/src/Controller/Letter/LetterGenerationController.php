@@ -790,11 +790,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function saveIssueContentAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
 
         if (empty($body['issueId']) || !isset($body['editedContent']) || empty($body['version'])) {
             return $this->jsonError('Missing required fields: issueId, editedContent, version');
@@ -840,11 +839,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function saveAppendixContentAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
 
         if (empty($body['appendixId']) || !isset($body['editedContent']) || empty($body['version'])) {
             return $this->jsonError('Missing required fields: appendixId, editedContent, version');
@@ -884,11 +882,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function addCustomTodoAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
         if (empty($body['issueId'])) {
             return $this->jsonError('Missing required field: issueId');
         }
@@ -913,11 +910,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function deleteCustomTodoAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
         if (empty($body['todoId'])) {
             return $this->jsonError('Missing required field: todoId');
         }
@@ -953,11 +949,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function saveTodoContentAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
 
         if (empty($body['todoId']) || !isset($body['editedDescription']) || empty($body['version'])) {
             return $this->jsonError('Missing required fields: todoId, editedDescription, version');
@@ -997,11 +992,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function saveSectionContentAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
 
         if (empty($body['sectionId']) || !isset($body['editedContent']) || empty($body['version'])) {
             return $this->jsonError('Missing required fields: sectionId, editedContent, version');
@@ -1042,11 +1036,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function prepareToSendAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
 
         if (empty($body['letterInstanceId']) || empty($body['docTemplate'])) {
             return $this->jsonError('Missing required fields: letterInstanceId, docTemplate');
@@ -1256,6 +1249,35 @@ class LetterGenerationController extends AbstractInternalController implements L
         ]));
         $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
         return $response;
+    }
+
+    /**
+     * The JSON body of an AJAX post, or the error response to send instead.
+     *
+     * These endpoints read the raw body, so Common\Module's CSRF check, which only looks at form
+     * posts, never applies to them. Insisting on a JSON content type closes that gap: another site
+     * can't send one without a CORS preflight, and this app doesn't allow cross-site requests.
+     *
+     * @return array<string, mixed>|Response
+     */
+    private function jsonPostBody(): array|Response
+    {
+        $request = $this->getRequest();
+        if (!$request->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $contentType = $request->getHeaders()->get('Content-Type');
+        $mediaType = $contentType instanceof \Laminas\Http\Header\HeaderInterface
+            ? strtolower(trim(explode(';', $contentType->getFieldValue())[0]))
+            : '';
+        if ($mediaType !== 'application/json') {
+            return $this->jsonError('Expected a JSON request', 415);
+        }
+
+        $body = json_decode($request->getContent(), true);
+
+        return is_array($body) ? $body : [];
     }
 
     /**

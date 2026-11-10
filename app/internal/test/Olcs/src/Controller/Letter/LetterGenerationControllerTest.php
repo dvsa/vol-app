@@ -768,10 +768,16 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertSame('Send a lease (FI02)', $this->invokeProtected('todoEditorName', $data['letterInstanceTodos'][1]));
     }
 
-    private function postJson(Sut $sut, string $action, array $body, string $method = 'POST'): array
-    {
+    private function postJson(
+        Sut $sut,
+        string $action,
+        array $body,
+        string $method = 'POST',
+        string $contentType = 'application/json; charset=UTF-8'
+    ): array {
         $request = new Request();
         $request->setMethod($method);
+        $request->getHeaders()->addHeaderLine('Content-Type', $contentType);
         $request->setContent((string) json_encode($body));
         $sut->shouldReceive('getRequest')->andReturn($request);
         $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
@@ -830,6 +836,35 @@ final class LetterGenerationControllerTest extends MockeryTestCase
             ->andReturn($this->okResponse(['messages' => []]));
 
         $this->assertTrue($this->postJson($sut, 'deleteCustomTodo', ['todoId' => 99])['json']['success']);
+    }
+
+    /**
+     * PR review: these endpoints read the raw body, which Common\Module's CSRF check never sees.
+     * Only a JSON request is accepted; another site can't send one without a CORS preflight.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('jsonActionProvider')]
+    public function testJsonActionsRejectANonJsonPost(string $action, array $body): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->never();
+
+        $result = $this->postJson($sut, $action, $body, 'POST', 'text/plain');
+
+        $this->assertSame(415, $result['status']);
+        $this->assertFalse($result['json']['success']);
+    }
+
+    public static function jsonActionProvider(): array
+    {
+        return [
+            'save issue' => ['saveIssueContent', ['issueId' => 10, 'editedContent' => [], 'version' => 1]],
+            'save appendix' => ['saveAppendixContent', ['appendixId' => 10, 'editedContent' => [], 'version' => 1]],
+            'save to-do' => ['saveTodoContent', ['todoId' => 10, 'editedDescription' => [], 'version' => 1]],
+            'save section' => ['saveSectionContent', ['sectionId' => 10, 'editedContent' => [], 'version' => 1]],
+            'add to-do' => ['addCustomTodo', ['issueId' => 10]],
+            'delete to-do' => ['deleteCustomTodo', ['todoId' => 10]],
+            'prepare to send' => ['prepareToSend', ['letterInstanceId' => 1, 'docTemplate' => 2]],
+        ];
     }
 
     public function testCustomTodoActionsRejectGet(): void
