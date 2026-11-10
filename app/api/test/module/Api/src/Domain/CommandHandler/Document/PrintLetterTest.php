@@ -32,6 +32,8 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
     private $mockDocE;
     /** @var  m\MockInterface */
     private $mockPrintSrv;
+    /** @var  m\MockInterface */
+    private $mockLetterInstanceRepo;
 
     public function setUp(): void
     {
@@ -46,12 +48,17 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
         $this->mockDocE->shouldReceive('getRelatedLicence')->andReturn($mockLicE);
 
         $this->mockDocRepo = $this->mockRepo('Document', Repository\Document::class);
+        $this->mockLetterInstanceRepo = $this->mockRepo('LetterInstance', Repository\LetterInstance::class);
+        // most documents weren't built in the letter builder
+        $this->mockLetterInstanceRepo->shouldReceive('fetchByDocument')->byDefault()->andReturnNull();
 
         $this->mockPrintSrv = m::mock(ApiSrv\Document\PrintLetter::class);
 
         $this->mockedSmServices[ApiSrv\Document\PrintLetter::class] = $this->mockPrintSrv;
 
         $this->sut = new PrintLetter();
+
+        $this->refData = [Entity\Letter\LetterInstance::STATUS_SENT];
 
         parent::setUp();
     }
@@ -229,5 +236,70 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
                 ]
             )
         );
+    }
+
+    /**
+     * A letter from the letter builder is sent once its document is printed or emailed, which locks it
+     * against further changes (VOL-7735 PR review: nothing ever marked a letter as sent)
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpDispatched')]
+    public function testDispatchingMarksTheLetterAsSent(string $method): void
+    {
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_READY);
+        $this->dispatch($method, ['email' => true, 'print' => true], $letter);
+
+        $this->assertTrue($letter->isSent());
+        $this->assertInstanceOf(\DateTime::class, $letter->getSentOn());
+    }
+
+    public static function dpDispatched(): array
+    {
+        return [
+            'email' => [TransferCmd\Document\PrintLetter::METHOD_EMAIL],
+            'print and post' => [TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST],
+        ];
+    }
+
+    public function testALetterThatIsNotDispatchedIsNotMarkedAsSent(): void
+    {
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_READY);
+        // can't print (Welsh translation needed), so it goes to a translation task instead
+        $this->dispatch(TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST, ['email' => true, 'print' => false], $letter, false);
+
+        $this->assertTrue($letter->isReady());
+        $this->assertNull($letter->getSentOn());
+    }
+
+    public function testResendingAnAlreadySentLetterKeepsWhenItWasFirstSent(): void
+    {
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_SENT);
+        $firstSent = new \DateTime('2026-01-01');
+        $letter->setSentOn($firstSent);
+        $this->dispatch(TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST, ['email' => true, 'print' => true], $letter, false);
+
+        $this->assertSame($firstSent, $letter->getSentOn());
+    }
+
+    private function letterInstance(string $status): Entity\Letter\LetterInstance
+    {
+        $letter = new Entity\Letter\LetterInstance();
+        $letter->setStatus(new Entity\System\RefData($status));
+
+        return $letter;
+    }
+
+    private function dispatch(string $method, array $canDo, Entity\Letter\LetterInstance $letter, bool $expectSave = true): void
+    {
+        $command = TransferCmd\Document\PrintLetter::create(['id' => self::DOC_ID, 'method' => $method]);
+        $this->mockDocRepo->shouldReceive('fetchUsingId')->andReturn($this->mockDocE);
+        $this->mockPrintSrv
+            ->shouldReceive('canPrint')->andReturn($canDo['print'])
+            ->shouldReceive('canEmail')->andReturn($canDo['email']);
+
+        $this->commandHandler->shouldReceive('handleCommand')->andReturn(new Result());
+        $this->mockLetterInstanceRepo->shouldReceive('fetchByDocument')->with(self::DOC_ID)->andReturn($letter);
+        $this->mockLetterInstanceRepo->shouldReceive('save')->with($letter)->times($expectSave ? 1 : 0);
+
+        $this->sut->handleCommand($command);
     }
 }

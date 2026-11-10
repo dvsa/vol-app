@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Api\Entity\Letter;
 
 use Doctrine\ORM\Mapping as ORM;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -423,12 +424,12 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
-     * Mark as sent
-     *
-     * @return self
+     * Mark as sent, once its document has been printed or emailed. A sent letter is no longer open
+     * for changes, so what's on it stays what was sent.
      */
-    public function markAsSent()
+    public function markAsSent(RefData $sentStatus): self
     {
+        $this->status = $sentStatus;
         $this->sentOn = new \DateTime();
         return $this;
     }

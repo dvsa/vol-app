@@ -20,6 +20,8 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
 {
     protected $repoServiceName = 'Document';
 
+    protected $extraRepos = ['LetterInstance'];
+
     /** @var Service\Document\PrintLetter */
     private $srvPrintLetter;
 
@@ -45,12 +47,18 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
         }
 
         $method = $command->getMethod();
+        $sent = false;
         if ($method === PrintLetterCmd::METHOD_EMAIL && $canEmail) {
-            $this->sendEmail($document);
+            $sent = $this->sendEmail($document);
         }
 
         if ($method === PrintLetterCmd::METHOD_PRINT_AND_POST && $canPrint) {
             $this->attemptPrint($document);
+            $sent = true;
+        }
+
+        if ($sent) {
+            $this->markLetterSent($document);
         }
 
         return $this->result;
@@ -108,13 +116,13 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
      *
      * @param Entity\Doc\Document $document Document
      *
-     * @return void
+     * @return bool whether it was sent
      */
-    private function sendEmail(Entity\Doc\Document $document)
+    private function sendEmail(Entity\Doc\Document $document): bool
     {
         $licence = $document->getRelatedLicence();
         if ($licence === null) {
-            return;
+            return false;
         }
 
         $cmd = DomainCmd\Email\CreateCorrespondenceRecord::create(
@@ -128,6 +136,25 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
         $this->result->merge(
             $this->handleSideEffect($cmd)
         );
+
+        return true;
+    }
+
+    /**
+     * A letter from the letter builder is sent once its document goes out, which locks it: what's
+     * on it stays what was sent. A resend keeps the date it was first sent.
+     */
+    private function markLetterSent(Entity\Doc\Document $document): void
+    {
+        /** @var \Dvsa\Olcs\Api\Domain\Repository\LetterInstance $repo */
+        $repo = $this->getRepo('LetterInstance');
+        $letterInstance = $repo->fetchByDocument((int) $document->getId());
+        if ($letterInstance === null || $letterInstance->isSent()) {
+            return;
+        }
+
+        $letterInstance->markAsSent($repo->getRefdataReference(Entity\Letter\LetterInstance::STATUS_SENT));
+        $repo->save($letterInstance);
     }
 
     #[\Override]
