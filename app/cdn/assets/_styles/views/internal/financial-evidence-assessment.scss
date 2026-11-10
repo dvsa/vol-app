@@ -1,0 +1,24 @@
+// Financial evidence assessment tabs.
+//
+// govuk-frontend switches tabs client-side by moving .govuk-tabs__list-item--selected, so the
+// server renders every header's selected and unselected state and these rules pick one:
+// - the selected tab drops its status tag, because its panel shows the status next to the filename;
+// - a tab with an unselected label (the latest) reads as that label once another tab is selected.
+
+.fea-tab--has-unselected-label .fea-tab__label--unselected {
+  display: none;
+}
+
+.fea-tab:not(.govuk-tabs__list-item--selected).fea-tab--has-unselected-label {
+  .fea-tab__label {
+    display: none;
+  }
+
+  .fea-tab__label--unselected {
+    display: inline;
+  }
+}
+
+.fea-tab.govuk-tabs__list-item--selected .fea-tab__status {
+  display: none;
+}
