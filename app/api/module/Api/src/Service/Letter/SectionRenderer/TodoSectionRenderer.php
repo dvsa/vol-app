@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
  *
  * Outputs a single block `<div>` containing the to-do description (EditorJS → HTML
  * with vol-grab replacement). The enclosing "What you need to do" heading + container
- * is rendered by LetterPreviewService::renderIssues() once per issue-type group.
+ * is rendered by LetterPreviewService::renderIssues() after each issue (VOL-7737).
  */
 class TodoSectionRenderer extends AbstractSectionRenderer
 {
