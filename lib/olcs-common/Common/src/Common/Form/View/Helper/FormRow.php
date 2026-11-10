@@ -7,6 +7,7 @@ use Common\Form\Elements\InputFilters\ActionLink;
 use Common\Form\Elements\InputFilters\NoRender;
 use Common\Form\Elements\InputFilters\SingleCheckbox;
 use Common\Form\Elements\Types\Table;
+use Common\Util\AriaDescribedBy;
 use Laminas\Form\Element\Button;
 use Laminas\Form\Element\DateSelect;
 use Laminas\Form\Element\Hidden;
@@ -160,9 +161,7 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
         if ($element->getMessages() !== []) {
             $elementErrorsHelper = $this->getView()->plugin('form_element_errors');
             assert($elementErrorsHelper instanceof FormElementErrors, 'Expected instance of ' . FormElementErrors::class);
-            $descriptionIds = preg_split('/\s+/', trim((string) $describedBy), -1, PREG_SPLIT_NO_EMPTY) ?: [];
-            $descriptionIds[] = $elementErrorsHelper->getErrorId($element);
-            $describedBy = implode(' ', array_unique($descriptionIds));
+            $describedBy = AriaDescribedBy::merge($describedBy, $elementErrorsHelper->getErrorId($element));
         }
 
         $fieldsetAttributes = $describedBy
@@ -273,14 +272,12 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
 
             if ($type === 'multi_checkbox' || $type === 'radio') {
                 $fieldsetAttributes = $element->getOption('fieldset-attributes');
-                $descriptionIds = preg_split(
-                    '/\s+/',
-                    trim(($fieldsetAttributes['aria-describedby'] ?? '') . ' ' . ($element->getAttribute('aria-describedby') ?? '')),
-                    -1,
-                    PREG_SPLIT_NO_EMPTY
-                ) ?: [];
-                if ($descriptionIds !== []) {
-                    $fieldsetAttributes['aria-describedby'] = implode(' ', array_unique($descriptionIds));
+                $describedBy = AriaDescribedBy::merge(
+                    $fieldsetAttributes['aria-describedby'] ?? null,
+                    $element->getAttribute('aria-describedby')
+                );
+                if ($describedBy !== '') {
+                    $fieldsetAttributes['aria-describedby'] = $describedBy;
                 }
 
                 $dataGroup = $element->getOption('fieldset-data-group');

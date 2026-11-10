@@ -19,6 +19,7 @@ use Common\Form\Elements\Types\PostcodeSearch;
 use Common\Form\Elements\Types\RadioHorizontal;
 use Common\Form\Elements\Types\RadioVertical;
 use Common\Form\View\Helper\Readonly\FormFieldset;
+use Common\Util\AriaDescribedBy;
 use Laminas\Form\Element\Collection as CollectionElement;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\FieldsetInterface;
@@ -166,14 +167,10 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
             $errorsHelper = $this->view->plugin('form_element_errors');
             assert($errorsHelper instanceof FormElementErrors, 'Expected instance of ' . FormElementErrors::class);
             $postcode = $element->get('postcode');
-            $descriptionIds = preg_split(
-                '/\s+/',
-                trim((string) $postcode->getAttribute('aria-describedby')),
-                -1,
-                PREG_SPLIT_NO_EMPTY
-            ) ?: [];
-            $descriptionIds[] = $errorsHelper->getErrorId($element);
-            $postcode->setAttribute('aria-describedby', implode(' ', array_unique($descriptionIds)));
+            $postcode->setAttribute('aria-describedby', AriaDescribedBy::merge(
+                $postcode->getAttribute('aria-describedby'),
+                $errorsHelper->getErrorId($element)
+            ));
         }
 
         foreach ($element->getIterator() as $elementOrFieldset) {

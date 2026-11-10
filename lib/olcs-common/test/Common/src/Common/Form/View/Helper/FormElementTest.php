@@ -595,6 +595,34 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         );
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('existingDescriptionsProvider')]
+    public function testHintAndErrorIdsAreMergedWithExistingDescriptions(?string $existingDescription): void
+    {
+        $this->prepareElement();
+        $this->element->setAttribute('aria-describedby', $existingDescription);
+        $this->element->setMessages(['Message 1']);
+        $viewHelper = $this->prepareViewHelper();
+
+        $viewHelper($this->element, 'formCollection', '/');
+        $markup = $viewHelper($this->element, 'formCollection', '/');
+
+        $expected = $existingDescription === null ? 'test-hint test-error' : 'existing test-hint test-error';
+        $this->assertSame($expected, $this->element->getAttribute('aria-describedby'));
+        $this->assertStringContainsString(
+            'aria-describedby="' . $expected . '"',
+            html_entity_decode($markup, ENT_QUOTES, 'UTF-8')
+        );
+    }
+
+    public static function existingDescriptionsProvider(): array
+    {
+        return [
+            'no existing descriptions' => [null],
+            'existing description' => ['existing'],
+            'whitespace and duplicates' => [" existing\t existing\n test-hint test-error "],
+        ];
+    }
+
     private function prepareViewHelper(array|null $translateMap = null): FormElement
     {
         $translator = new DummyTranslator();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Form\View\Helper;
 
+use Common\Util\AriaDescribedBy;
 use Common\View\Helper\UniqidGenerator;
 use Laminas\Form\Element\MultiCheckbox as MultiCheckboxElement;
 use Laminas\Form\LabelAwareInterface;
@@ -108,8 +109,9 @@ class FormRadio extends \Laminas\Form\View\Helper\FormRadio
             $labelAttributes['for'] = $inputAttributes['id'];
 
             if (isset($optionSpec['hint'])) {
-                $inputAttributes['aria-describedby'] = trim(
-                    ($inputAttributes['aria-describedby'] ?? '') . ' ' . $inputAttributes['id'] . '-hint'
+                $inputAttributes['aria-describedby'] = AriaDescribedBy::merge(
+                    $inputAttributes['aria-describedby'] ?? null,
+                    $inputAttributes['id'] . '-hint'
                 );
                 $optionSpec['hint_attributes']['id'] = $inputAttributes['id'] . '-hint';
                 $hintText = $optionSpec['hint'];

@@ -12,6 +12,7 @@ use Common\Form\Elements\Types\PlainText;
 use Common\Form\Elements\Types\Table;
 use Common\Form\Elements\Types\TermsBox;
 use Common\Form\Elements\Types\TrafficAreaSet;
+use Common\Util\AriaDescribedBy;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\ElementInterface as LaminasElementInterface;
 use Laminas\Form\View\Helper\FormElement as LaminasFormElement;
@@ -106,7 +107,7 @@ class FormElement extends LaminasFormElement
             $value = $element->getValue();
             $view = $this->getView();
             if ($element->getOption('hint')) {
-                $this->addHintDescription($element, $element->getAttribute('id') . '-hint');
+                $this->addDescriptionId($element, $element->getAttribute('id') . '-hint');
             }
 
             $describedBy = $element->getAttribute('aria-describedby');
@@ -203,7 +204,7 @@ class FormElement extends LaminasFormElement
 
         if ($element instanceof AttachFilesButton) {
             if ($element->getOption('hint')) {
-                $this->addHintDescription($element, $element->getAttribute('id') . '-hint');
+                $this->addDescriptionId($element, $element->getAttribute('id') . '-hint');
             }
 
             $attributes = $element->getAttributes();
@@ -240,7 +241,7 @@ class FormElement extends LaminasFormElement
             ? $element->getAttribute('id') . '-hint'
             : ($element->getOption('hint-below') ? $element->getAttribute('id') . '-hint-below' : null);
         if ($hintId !== null) {
-            $this->addHintDescription($element, $hintId);
+            $this->addDescriptionId($element, $hintId);
         }
 
         $elementErrorsHelper = $this->view->plugin('form_element_errors');
@@ -309,31 +310,13 @@ class FormElement extends LaminasFormElement
     }
 
     /**
-     * Add the rendered hint IDs to the element's aria-describedby attribute.
-     *
-     * @param ElementInterface $element element
-     * @param string           $hintId hint ID
-     */
-    private function addHintDescription(ElementInterface $element, string $hintId): void
-    {
-        $this->addDescriptionId($element, $hintId);
-    }
-
-    /**
      * Add an ID to the element's aria-describedby attribute.
      */
     private function addDescriptionId(ElementInterface $element, string $descriptionId): void
     {
-        $describedBy = trim((string) $element->getAttribute('aria-describedby'));
-        $descriptionIds = $describedBy === ''
-            ? []
-            : (preg_split('/\s+/', $describedBy, -1, PREG_SPLIT_NO_EMPTY) ?: []);
-
-        if (in_array($descriptionId, $descriptionIds, true)) {
-            return;
-        }
-
-        $descriptionIds[] = $descriptionId;
-        $element->setAttribute('aria-describedby', implode(' ', $descriptionIds));
+        $element->setAttribute('aria-describedby', AriaDescribedBy::merge(
+            $element->getAttribute('aria-describedby'),
+            $descriptionId
+        ));
     }
 }

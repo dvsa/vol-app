@@ -71,6 +71,32 @@ final class FormRadioTest extends MockeryTestCase
         ];
     }
 
+    public function testOptionHintIdIsNotDuplicated(): void
+    {
+        $sut = new FormRadioStub();
+        $renderer = new \Laminas\View\Renderer\PhpRenderer();
+        $renderer->getHelperPluginManager()->setService('form_label', new \Laminas\Form\View\Helper\FormLabel());
+        $sut->setView($renderer);
+
+        $output = $sut->renderOptions(new MultiCheckbox(), [
+            [
+                'value' => 'A',
+                'label' => 'First option',
+                'hint' => 'First hint',
+                'attributes' => ['id' => 'first-option'],
+            ],
+        ], [], ['aria-describedby' => " group-hint\tfirst-option-hint group-hint "]);
+
+        $document = new \DOMDocument();
+        $document->loadHTML($output);
+        $xpath = new \DOMXPath($document);
+
+        $this->assertSame(
+            'group-hint first-option-hint',
+            $xpath->evaluate('string(//input[@id="first-option"]/@aria-describedby)')
+        );
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('renderOptionsProvider')]
     public function testRenderOptions($options, $selectedOptions, $attributes, $globalAttributes, $labelPosition, $expected): void
     {
