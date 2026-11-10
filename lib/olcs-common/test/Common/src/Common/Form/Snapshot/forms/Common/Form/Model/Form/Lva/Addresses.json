@@ -38,10 +38,7 @@
                 "id": ""
               },
               "options": {
-                "label": "application_your-business_fao.label",
-                "label_attributes": {
-                  "aria-label": "application_your-business_fao.label"
-                }
+                "label": "application_your-business_fao.label"
               },
               "type": "Text"
             }
@@ -93,11 +90,8 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLines",
+                "label": "address_addressLine1",
                 "error-message": "address_addressLine1-error",
-                "label_attributes": {
-                  "aria-label": "Enter address manually. Address line one"
-                },
                 "short-label": "address_addressLine1"
               },
               "type": "Text"
@@ -113,10 +107,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine2",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine2"
               },
               "type": "Text"
             }
@@ -131,10 +122,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine3",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine3"
               },
               "type": "Text"
             }
@@ -148,10 +136,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_addressLine4",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine4"
               },
               "type": "Text"
             }
@@ -167,9 +152,6 @@
               "options": {
                 "label": "address_townCity",
                 "short-label": "address_townCity",
-                "label_attributes": {
-                  "aria-label": "address_townCity"
-                },
                 "error-message": "address_town-error"
               },
               "type": "Text"
@@ -201,9 +183,6 @@
               },
               "options": {
                 "label": "address_country",
-                "label_attributes": {
-                  "aria-label": "Choose country"
-                },
                 "error-message": "address_country-error",
                 "empty_option": "Please Select",
                 "disable_inarray_validator": false,
@@ -314,10 +293,7 @@
                 "id": "email"
               },
               "options": {
-                "label": "application_your-business_business-type.contact-details.email",
-                "label_attributes": {
-                  "aria-label": "Business email address"
-                },
+                "label": "lva.contact-details.business-email",
                 "error-message": "contact_email-error",
                 "hint": "application_your-business_business-type.contact-details.operator-email-hint"
               },
@@ -405,10 +381,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLines",
-                "label_attributes": {
-                  "aria-label": "Enter address manually. Establishment address line 1"
-                },
+                "label": "address_addressLine1",
                 "short-label": "address_addressLine1"
               },
               "type": "Text"
@@ -424,10 +397,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine2",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine2"
               },
               "type": "Text"
             }
@@ -442,10 +412,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine3",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine3"
               },
               "type": "Text"
             }
@@ -459,10 +426,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_addressLine4",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine4"
               },
               "type": "Text"
             }
@@ -476,10 +440,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_townCity",
-                "label_attributes": {
-                  "aria-label": "Establishment town/city"
-                }
+                "label": "address_townCity"
               },
               "type": "Text"
             }
@@ -489,10 +450,7 @@
             "spec": {
               "name": "postcode",
               "options": {
-                "label": "address_postcode",
-                "label_attributes": {
-                  "aria-label": "Establishment postcode"
-                }
+                "label": "address_postcode"
               },
               "type": "Text",
               "attributes": {
@@ -512,9 +470,6 @@
               },
               "options": {
                 "label": "address_country",
-                "label_attributes": {
-                  "aria-label": "Choose establishment country"
-                },
                 "empty_option": "Please select",
                 "disable_inarray_validator": false,
                 "service_name": "Common\\Service\\Data\\Country"
@@ -658,11 +613,8 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLines",
+                "label": "address_addressLine1",
                 "error-message": "address_addressLine1-error",
-                "label_attributes": {
-                  "aria-label": "Enter address manually. Address line one"
-                },
                 "short-label": "address_addressLine1"
               },
               "type": "Text"
@@ -678,10 +630,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine2",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine2"
               },
               "type": "Text"
             }
@@ -696,10 +645,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine3",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine3"
               },
               "type": "Text"
             }
@@ -713,10 +659,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_addressLine4",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine4"
               },
               "type": "Text"
             }
@@ -732,9 +675,6 @@
               "options": {
                 "label": "address_townCity",
                 "short-label": "address_townCity",
-                "label_attributes": {
-                  "aria-label": "address_townCity"
-                },
                 "error-message": "address_town-error"
               },
               "type": "Text"
@@ -766,9 +706,6 @@
               },
               "options": {
                 "label": "address_country",
-                "label_attributes": {
-                  "aria-label": "Choose country"
-                },
                 "error-message": "address_country-error",
                 "empty_option": "Please Select",
                 "disable_inarray_validator": false,

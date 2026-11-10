@@ -68,6 +68,18 @@ return [
                 'child_routes' => [
                     'POST' => CommandConfig::getPostConfig(Command\Letter\LetterInstance\PrepareToSend::class),
                 ]
+            ],
+            'update-issues' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => 'update-issues',
+                    'defaults' => [
+                        'controller' => 'Api\Generic'
+                    ]
+                ],
+                'child_routes' => [
+                    'POST' => CommandConfig::getPostConfig(Command\Letter\LetterInstance\UpdateIssues::class),
+                ]
             ]
         ]
     ],

@@ -537,7 +537,7 @@ module "service" {
       },
       {
         name     = "create-psv-licence-surrender-task",
-        commands = ["batch:create-psv-licence-surrender-task"],
+        commands = ["batch:create-psv-licence-surrender-tasks"],
         timeout  = 43200,
         schedule = ["cron(30 18 7 * ? *)"],
       },
@@ -669,10 +669,6 @@ module "service" {
         commands = ["batch:resolve-payments"],
         timeout  = 150,
         schedule = ["cron(0/5 6-20 * * ? *)"],
-      },
-      {
-        name     = "system-parameter",
-        commands = ["batch:system-parameter"],
       },
       {
         name     = "idp-sweep-stale-document-analysis",

@@ -47,7 +47,7 @@
               "name": "hasAnyPerson",
               "type": "\\Common\\Form\\Elements\\Types\\HtmlTranslated",
               "attributes": {
-                "value": "<h3 id=\"mainq\">%s</h3>"
+                "value": "<h2 id=\"mainq\" class=\"h3\">%s</h2>"
               },
               "options": {
                 "tokens": [

@@ -53,7 +53,7 @@ class LicenceHistoryLicenceData
     public $disqualificationLength;
 
     #[Form\Required(true)]
-    #[Form\Attributes(['id' => 'dob', 'required' => false])]
+    #[Form\Attributes(['id' => 'purchaseDate', 'required' => false])]
     #[Form\Options(['label' => 'selfserve-app-subSection-previous-history-licence-history-purchaseDate', 'create_empty_option' => true, 'render_delimiters' => false])]
     #[Form\Type('DateSelect')]
     #[Form\Filter('DateSelectNullifier')]

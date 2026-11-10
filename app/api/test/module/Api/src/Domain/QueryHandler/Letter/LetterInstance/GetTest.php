@@ -35,6 +35,7 @@ final class GetTest extends QueryHandlerTestCase
                         'category',
                         'subCategory'
                     ],
+                    'status',
                     'licence',
                     'application',
                     'case',
@@ -47,7 +48,8 @@ final class GetTest extends QueryHandlerTestCase
                     ],
                     'letterInstanceIssues' => [
                         'letterIssueVersion' => [
-                            'letterIssueType'
+                            'letterIssueType',
+                            'letterIssue',
                         ]
                     ],
                     'letterInstanceTodos' => [
