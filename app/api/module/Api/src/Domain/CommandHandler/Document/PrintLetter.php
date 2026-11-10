@@ -55,18 +55,21 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
         }
 
         $method = $command->getMethod();
-        $sent = false;
-        if ($method === PrintLetterCmd::METHOD_EMAIL && $canEmail) {
-            $sent = $this->sendEmail($document);
-        }
+        $email = $method === PrintLetterCmd::METHOD_EMAIL && $canEmail && $document->getRelatedLicence() !== null;
+        $print = $method === PrintLetterCmd::METHOD_PRINT_AND_POST && $canPrint;
 
-        if ($method === PrintLetterCmd::METHOD_PRINT_AND_POST && $canPrint) {
-            $this->attemptPrint($document);
-            $sent = true;
-        }
-
-        if ($sent && $letterInstance !== null) {
+        // locked first: an edit that landed since the check above fails this save (the letter's
+        // version has moved on) before anything is queued to go out
+        if (($email || $print) && $letterInstance !== null) {
             $this->markLetterSent($letterInstance);
+        }
+
+        if ($email) {
+            $this->sendEmail($document);
+        }
+
+        if ($print) {
+            $this->attemptPrint($document);
         }
 
         return $this->result;
@@ -124,13 +127,13 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
      *
      * @param Entity\Doc\Document $document Document
      *
-     * @return bool whether it was sent
+     * @return void
      */
-    private function sendEmail(Entity\Doc\Document $document): bool
+    private function sendEmail(Entity\Doc\Document $document)
     {
         $licence = $document->getRelatedLicence();
         if ($licence === null) {
-            return false;
+            return;
         }
 
         $cmd = DomainCmd\Email\CreateCorrespondenceRecord::create(
@@ -144,8 +147,6 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
         $this->result->merge(
             $this->handleSideEffect($cmd)
         );
-
-        return true;
     }
 
     /**

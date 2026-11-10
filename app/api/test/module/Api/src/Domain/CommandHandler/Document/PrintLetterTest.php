@@ -372,4 +372,46 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
             $this->assertStringContainsString($message, implode(' ', $e->getMessages()));
         }
     }
+
+    /**
+     * PR review: the letter is marked sent before anything goes out, so an edit that lands in
+     * between fails the send (the letter's version has moved on) before an email or print is queued
+     */
+    public function testTheLetterIsLockedBeforeAnythingGoesOut(): void
+    {
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_READY);
+        $letter->setDocument($this->mockDocE);
+        $this->mockDocRepo->shouldReceive('fetchUsingId')->andReturn($this->mockDocE);
+        $this->mockPrintSrv->shouldReceive('canPrint')->andReturn(true)->shouldReceive('canEmail')->andReturn(true);
+        $this->mockLetterInstanceRepo->shouldReceive('fetchByDocument')->with(self::DOC_ID)->andReturn($letter);
+        $this->mockLetterInstanceRepo->shouldReceive('save')->with($letter)->once()
+            ->andThrow(new \Doctrine\ORM\OptimisticLockException('edited meanwhile', $letter));
+        $this->commandHandler->shouldReceive('handleCommand')->never();
+
+        $this->expectException(\Doctrine\ORM\OptimisticLockException::class);
+        $this->sut->handleCommand(TransferCmd\Document\PrintLetter::create([
+            'id' => self::DOC_ID,
+            'method' => TransferCmd\Document\PrintLetter::METHOD_EMAIL,
+        ]));
+    }
+
+    public function testAnEmailThatCannotGoOutDoesNotMarkTheLetterSent(): void
+    {
+        $doc = m::mock(Entity\Doc\Document::class)->makePartial();
+        $doc->setId(self::DOC_ID);
+        $doc->shouldReceive('getRelatedLicence')->andReturnNull();
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_READY);
+        $letter->setDocument($doc);
+        $this->mockDocRepo->shouldReceive('fetchUsingId')->andReturn($doc);
+        $this->mockPrintSrv->shouldReceive('canPrint')->andReturn(true)->shouldReceive('canEmail')->andReturn(true);
+        $this->mockLetterInstanceRepo->shouldReceive('fetchByDocument')->with(self::DOC_ID)->andReturn($letter);
+        $this->mockLetterInstanceRepo->shouldReceive('save')->never();
+
+        $this->sut->handleCommand(TransferCmd\Document\PrintLetter::create([
+            'id' => self::DOC_ID,
+            'method' => TransferCmd\Document\PrintLetter::METHOD_EMAIL,
+        ]));
+
+        $this->assertTrue($letter->isReady());
+    }
 }
