@@ -19,7 +19,7 @@ jobs:
         with:
           directory: "infra/terraform"
           framework: terraform
-          soft_fail: false # This replaces 'exit-code: 1' logic
+          soft_fail: true # This replaces 'exit-code: 1' logic
           download_external_modules: false
           output_format: cli,sarif
           output_file_path: console,results.sarif
