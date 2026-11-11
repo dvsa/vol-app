@@ -12,6 +12,7 @@ use Common\Form\Elements\Types\PlainText;
 use Common\Form\Elements\Types\Table;
 use Common\Form\Elements\Types\TermsBox;
 use Common\Form\Elements\Types\TrafficAreaSet;
+use Common\Util\AriaDescribedBy;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\ElementInterface as LaminasElementInterface;
 use Laminas\Form\View\Helper\FormElement as LaminasFormElement;
@@ -26,23 +27,23 @@ class FormElement extends LaminasFormElement
     protected const TERMS_BOX_WRAPPER = '<div %s>%s</div>';
 
     protected const FILE_CHOOSE_WRAPPER
-        = '<ul class="%s"><li class="%s"><label class="%s">%s %s</label><p class="%s">%s</p></li></ul>';
+        = '<ul class="%s"><li class="%s"><label class="%s">%s %s</label><p id="%s" class="%s">%s</p></li></ul>';
 
     /**
      * The form row output format.
      *
      * @var string
      */
-    private static $format = '%s<div class="%s">%s</div>';
+    private static $format = '%s<div id="%s" class="%s">%s</div>';
 
     /**
      * The form row output format.
      *
      * @var string
      */
-    private static $topFormat = '<p class="%s">%s</p>%s';
+    private static $topFormat = '<p id="%s" class="%s">%s</p>%s';
 
-    private $hintClass = 'hint';
+    private $hintClass = 'hint govuk-hint';
 
     /**
      * Render an element
@@ -105,9 +106,17 @@ class FormElement extends LaminasFormElement
         if ($element instanceof TrafficAreaSet) {
             $value = $element->getValue();
             $view = $this->getView();
+            if ($element->getOption('hint')) {
+                $this->addDescriptionId($element, $element->getAttribute('id') . '-hint');
+            }
 
+            $describedBy = $element->getAttribute('aria-describedby');
+            $attributes = $describedBy
+                ? ' ' . $renderer->form()->createAttributesString(['aria-describedby' => $describedBy])
+                : '';
             $markup = sprintf(
-                '<div class="label">%s</div>',
+                '<div class="label"%s>%s</div>',
+                $attributes,
                 htmlspecialchars($view->translate($value), ENT_QUOTES, 'utf-8')
             );
 
@@ -194,6 +203,10 @@ class FormElement extends LaminasFormElement
         }
 
         if ($element instanceof AttachFilesButton) {
+            if ($element->getOption('hint')) {
+                $this->addDescriptionId($element, $element->getAttribute('id') . '-hint');
+            }
+
             $attributes = $element->getAttributes();
             if (!isset($attributes['class'])) {
                 $attributes['class'] = '';
@@ -213,6 +226,7 @@ class FormElement extends LaminasFormElement
                 'attach-action__label',
                 $label,
                 parent::render($element),
+                $element->getAttribute('id') . '-hint',
                 'attach-action__hint',
                 $hint
             );
@@ -223,8 +237,19 @@ class FormElement extends LaminasFormElement
             $element->setAttribute('class', $element->getAttribute('class') . ' error__input');
         }
 
+        $hintId = $element->getOption('hint')
+            ? $element->getAttribute('id') . '-hint'
+            : ($element->getOption('hint-below') ? $element->getAttribute('id') . '-hint-below' : null);
+        if ($hintId !== null) {
+            $this->addDescriptionId($element, $hintId);
+        }
+
         $elementErrorsHelper = $this->view->plugin('form_element_errors');
         assert($elementErrorsHelper instanceof FormElementErrors, 'Expected instance of ' . FormElementErrors::class);
+
+        if ($element->getMessages() !== []) {
+            $this->addDescriptionId($element, $elementErrorsHelper->getErrorId($element));
+        }
 
         $markup = parent::render($element);
         $markup = $elementErrorsHelper->render($element) . $markup;
@@ -250,13 +275,14 @@ class FormElement extends LaminasFormElement
         $hint = $this->getView()->translate($element->getOption('hint'));
         $position = $element->getOption('hint-position');
         $customClass = $element->getOption('hint-class');
+        $id = $element->getAttribute('id') . '-hint';
         $class = $customClass ?? $this->hintClass;
 
         if ($position === 'below') {
-            return sprintf(self::$format, $markup, $class, $hint);
+            return sprintf(self::$format, $markup, $id, $class, $hint);
         }
 
-        return sprintf(self::$topFormat, $class, $hint, $markup);
+        return sprintf(self::$topFormat, $id, $class, $hint, $markup);
     }
 
     /**
@@ -278,6 +304,19 @@ class FormElement extends LaminasFormElement
         $hint = $this->getView()->translate($element->getOption('hint-below'));
         $customClass = $element->getOption('hint-below-class') ?? $element->getOption('hint-class');
         $class = $customClass ?? $this->hintClass;
-        return sprintf(self::$format, $markup, $class, $hint);
+        $id = $element->getAttribute('id') . '-hint-below';
+
+        return sprintf(self::$format, $markup, $id, $class, $hint);
+    }
+
+    /**
+     * Add an ID to the element's aria-describedby attribute.
+     */
+    private function addDescriptionId(ElementInterface $element, string $descriptionId): void
+    {
+        $element->setAttribute('aria-describedby', AriaDescribedBy::merge(
+            $element->getAttribute('aria-describedby'),
+            $descriptionId
+        ));
     }
 }

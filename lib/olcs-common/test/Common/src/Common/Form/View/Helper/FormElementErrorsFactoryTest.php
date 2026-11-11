@@ -23,7 +23,7 @@ final class FormElementErrorsFactoryTest extends MockeryTestCase
         $formElementMessageFormatter = m::mock(FormElementMessageFormatter::class);
 
         $container = m::mock(ContainerInterface::class);
-        $container->expects('get')->with(TranslatorInterface::class)->andReturn($translator);
+        $container->expects('get')->with('translator')->andReturn($translator);
         $container->expects('get')->with(FormElementMessageFormatter::class)->andReturn($formElementMessageFormatter);
 
         $sut = new FormElementErrorsFactory();

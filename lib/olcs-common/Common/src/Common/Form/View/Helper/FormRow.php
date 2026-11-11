@@ -7,6 +7,7 @@ use Common\Form\Elements\InputFilters\ActionLink;
 use Common\Form\Elements\InputFilters\NoRender;
 use Common\Form\Elements\InputFilters\SingleCheckbox;
 use Common\Form\Elements\Types\Table;
+use Common\Util\AriaDescribedBy;
 use Laminas\Form\Element\Button;
 use Laminas\Form\Element\DateSelect;
 use Laminas\Form\Element\Hidden;
@@ -37,7 +38,7 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
 
     protected $fieldsetLabelWrapper = '<legend>%s</legend>';
 
-    protected $fieldsetHintFormat = '<p class="hint">%s</p>';
+    protected $fieldsetHintFormat = '<p id="%s" class="hint govuk-hint">%s</p>';
 
     public function __construct()
     {
@@ -145,12 +146,27 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
         $hintText = $element->getOption('hint');
         $legend = '';
         $label = $element->getLabel();
+        $configuredFieldsetAttributes = $element->getOption('fieldset-attributes');
+        $describedBy = $element->getAttribute('aria-describedby')
+            ?: ($configuredFieldsetAttributes['aria-describedby'] ?? '');
 
         if (isset($hintText) && '' !== $hintText) {
-            $hint = sprintf($this->fieldsetHintFormat, $this->getView()->translate($hintText));
+            $hintId = ($element->getAttribute('id') ?: $element->getName()) . '-hint';
+            $hint = sprintf($this->fieldsetHintFormat, $hintId, $this->getView()->translate($hintText));
+            $describedBy = $describedBy ?: $hintId;
         } else {
             $hint = '';
         }
+
+        if ($element->getMessages() !== []) {
+            $elementErrorsHelper = $this->getView()->plugin('form_element_errors');
+            assert($elementErrorsHelper instanceof FormElementErrors, 'Expected instance of ' . FormElementErrors::class);
+            $describedBy = AriaDescribedBy::merge($describedBy, $elementErrorsHelper->getErrorId($element));
+        }
+
+        $fieldsetAttributes = $describedBy
+            ? ' ' . $this->createAttributesString(['aria-describedby' => $describedBy])
+            : '';
 
         $element->setOption('hint', '');
         $element->setLabel('');
@@ -198,7 +214,7 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
             $markup,
             $legend,
             '',
-            isset($fieldsetClass) ? ' class="' . $fieldsetClass . '"' : ''
+            (isset($fieldsetClass) ? ' class="' . $fieldsetClass . '"' : '') . $fieldsetAttributes
         );
     }
 
@@ -256,6 +272,14 @@ class FormRow extends \Laminas\Form\View\Helper\FormRow
 
             if ($type === 'multi_checkbox' || $type === 'radio') {
                 $fieldsetAttributes = $element->getOption('fieldset-attributes');
+                $describedBy = AriaDescribedBy::merge(
+                    $fieldsetAttributes['aria-describedby'] ?? null,
+                    $element->getAttribute('aria-describedby')
+                );
+                if ($describedBy !== '') {
+                    $fieldsetAttributes['aria-describedby'] = $describedBy;
+                }
+
                 $dataGroup = $element->getOption('fieldset-data-group');
 
                 if (!is_null($dataGroup)) {

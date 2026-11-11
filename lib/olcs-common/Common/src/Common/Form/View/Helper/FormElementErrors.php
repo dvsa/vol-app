@@ -33,7 +33,8 @@ class FormElementErrors extends LaminasFormElementErrors
     /**
      * @psalm-suppress NoValue
      *
-     * Render validation errors for the provided $element
+     * Render validation errors for the provided $element.
+     * Multiple messages share a wrapper ID so aria-describedby can reference all errors.
      *
      * @param ElementInterface $element    Element to render errors for
      * @param array            $attributes HTML attributes to add to the render markup
@@ -60,11 +61,7 @@ class FormElementErrors extends LaminasFormElementErrors
         }
 
         // Prepare attributes for opening tag
-        $attributes = array_merge($this->attributes, $attributes);
-        $attributes = $this->createAttributesString($attributes);
-        if ($attributes !== '' && $attributes !== '0') {
-            $attributes = ' ' . $attributes;
-        }
+        $attributes = array_merge($this->attributes, ['id' => $this->getErrorId($element)], $attributes);
 
         $elementShouldEscape = $element->getOption('shouldEscapeMessages');
         $escaper = $this->getEscapeHtmlHelper();
@@ -85,11 +82,35 @@ class FormElementErrors extends LaminasFormElementErrors
             return '';
         }
 
-        $markup = '';
-        foreach ($messagesToPrint as $message) {
-            $markup .= sprintf('<p%s><span class="govuk-visually-hidden">Error:</span>%s</p>', $attributes, $message);
+        $wrapperAttributes = '';
+        if (count($messagesToPrint) > 1) {
+            $wrapperAttributes = $this->createAttributesString(['id' => $attributes['id']]);
+            unset($attributes['id']);
         }
 
-        return $markup;
+        $attributes = $this->createAttributesString($attributes);
+        if ($attributes !== '' && $attributes !== '0') {
+            $attributes = ' ' . $attributes;
+        }
+
+        $markup = '';
+
+        $errorMessage = $this->translator->translate('Error');
+
+        foreach ($messagesToPrint as $message) {
+            $markup .= sprintf('<p%s><span class="govuk-visually-hidden">%s:</span>%s</p>', $attributes, $errorMessage, $message);
+        }
+
+        return $wrapperAttributes !== ''
+            ? sprintf('<div %s>%s</div>', $wrapperAttributes, $markup)
+            : $markup;
+    }
+
+    /**
+     * Get the ID used for this element's rendered error message.
+     */
+    public function getErrorId(ElementInterface $element): string
+    {
+        return ($element->getAttribute('id') ?: $element->getName()) . '-error';
     }
 }

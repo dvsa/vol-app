@@ -93,7 +93,7 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         echo $viewHelper($this->element, 'formCollection', '/');
 
         $this->expectOutputRegex(
-            '/^<p class="hint">(.*)<\/p><input type="text" name="(.*)" class="(.*)" id="(.*)" value="(.*)">$/'
+            '/^<p id="test-hint" class="hint govuk-hint">(.*)<\/p><input type="text" name="(.*)" class="(.*)" id="(.*)" aria-describedby="test-hint" value="(.*)">$/'
         );
     }
 
@@ -366,7 +366,7 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         $markup = $viewHelper($this->element, 'formCollection', '/');
 
         $this->assertSame(
-            '<div class="label">&lt;ABC&gt;</div><div class="hint">Hint</div>',
+            '<div class="label" aria-describedby="test-hint">&lt;ABC&gt;</div><div id="test-hint" class="hint govuk-hint">Hint</div>',
             $markup
         );
     }
@@ -400,7 +400,7 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         $markup = $viewHelper($this->element, 'formCollection', '/');
 
         $this->assertSame(
-            '<p class="hint">Hint</p><div class="label">ABC</div>',
+            '<p id="test-hint" class="hint govuk-hint">Hint</p><div class="label" aria-describedby="test-hint">ABC</div>',
             $markup
         );
     }
@@ -486,9 +486,9 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         $markup = $viewHelper($this->element, 'formCollection', '/');
 
         $expected = '<ul class="attach-action__list"><li class="attach-action"><label class="attach-action__label"> '
-            . '<input type="file" name="test" class="class&#x20;attach-action__input" id="test">'
+            . '<input type="file" name="test" class="class&#x20;attach-action__input" id="test" aria-describedby="test-hint">'
             . '</label>'
-            . '<p class="attach-action__hint">Hint</p></li></ul>';
+            . '<p id="test-hint" class="attach-action__hint">Hint</p></li></ul>';
 
         $this->assertSame(
             $expected,
@@ -508,9 +508,9 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         $markup = $viewHelper($this->element, 'formCollection', '/');
 
         $expected = '<ul class="attach-action__list"><li class="attach-action"><label class="attach-action__label"> '
-            . '<input type="file" name="test" class="&#x20;attach-action__input" id="test">'
+            . '<input type="file" name="test" class="&#x20;attach-action__input" id="test" aria-describedby="test-hint">'
             . '</label>'
-            . '<p class="attach-action__hint">Hint</p></li></ul>';
+            . '<p id="test-hint" class="attach-action__hint">Hint</p></li></ul>';
 
         $this->assertSame(
             $expected,
@@ -527,8 +527,8 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         $output = $viewHelper($this->element, 'formCollection', '/');
 
         $this->assertSame(
-            '<p class="hint">Hint</p><input type="text" name="test" class="class" id="test" value="">'
-            . '<div class="hint">HINT BELOW</div>',
+            '<p id="test-hint" class="hint govuk-hint">Hint</p><input type="text" name="test" class="class" id="test" aria-describedby="test-hint" value="">'
+            . '<div id="test-hint-below" class="hint govuk-hint">HINT BELOW</div>',
             $output
         );
     }
@@ -549,7 +549,7 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         // Assert
         $this->assertSame(
             sprintf(
-                '<p class="A_CSS_CLASS">Hint</p><input type="text" name="test" class="class" id="test" value=""><div class="%s">%s</div>',
+                '<p id="test-hint" class="A_CSS_CLASS">Hint</p><input type="text" name="test" class="class" id="test" aria-describedby="test-hint" value=""><div id="test-hint-below" class="%s">%s</div>',
                 static::A_CUSTOM_CSS_CLASS,
                 static::A_HINT
             ),
@@ -573,7 +573,7 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         // Assert
         $this->assertSame(
             sprintf(
-                '<p class="hint">Hint</p><input type="text" name="test" class="class" id="test" value=""><div class="%s">%s</div>',
+                '<p id="test-hint" class="hint govuk-hint">Hint</p><input type="text" name="test" class="class" id="test" aria-describedby="test-hint" value=""><div id="test-hint-below" class="%s">%s</div>',
                 static::A_CUSTOM_CSS_CLASS,
                 static::A_HINT
             ),
@@ -590,9 +590,37 @@ final class FormElementTest extends m\Adapter\Phpunit\MockeryTestCase
         $markup = $viewHelper($this->element, 'formCollection', '/');
 
         $this->assertSame(
-            '<p class="hint">Hint</p><p class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span>Message 1</p><input type="text" name="test" class="class&#x20;error__input" id="test" value="">',
+            '<p id="test-hint" class="hint govuk-hint">Hint</p><p class="govuk-error-message" id="test-error"><span class="govuk-visually-hidden">Error:</span>Message 1</p><input type="text" name="test" class="class&#x20;error__input" id="test" aria-describedby="test-hint&#x20;test-error" value="">',
             $markup
         );
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('existingDescriptionsProvider')]
+    public function testHintAndErrorIdsAreMergedWithExistingDescriptions(?string $existingDescription): void
+    {
+        $this->prepareElement();
+        $this->element->setAttribute('aria-describedby', $existingDescription);
+        $this->element->setMessages(['Message 1']);
+        $viewHelper = $this->prepareViewHelper();
+
+        $viewHelper($this->element, 'formCollection', '/');
+        $markup = $viewHelper($this->element, 'formCollection', '/');
+
+        $expected = $existingDescription === null ? 'test-hint test-error' : 'existing test-hint test-error';
+        $this->assertSame($expected, $this->element->getAttribute('aria-describedby'));
+        $this->assertStringContainsString(
+            'aria-describedby="' . $expected . '"',
+            html_entity_decode($markup, ENT_QUOTES, 'UTF-8')
+        );
+    }
+
+    public static function existingDescriptionsProvider(): array
+    {
+        return [
+            'no existing descriptions' => [null],
+            'existing description' => ['existing'],
+            'whitespace and duplicates' => [" existing\t existing\n test-hint test-error "],
+        ];
     }
 
     private function prepareViewHelper(array|null $translateMap = null): FormElement

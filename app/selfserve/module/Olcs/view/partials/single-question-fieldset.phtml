@@ -9,7 +9,7 @@ if (isset($data['bulletList']) && !isset($data['bulletList']['type'])) {
 }
 
 ?>
-<fieldset class="govuk-fieldset">
+<fieldset <?php if (isset($data['hint'])) { echo 'aria-describedby="hint"'; } ?> class="govuk-fieldset">
     <?php echo $this->render('partials/single-question-fieldset-h1-' . $data['headingType']); ?>
     <?php if (isset($data['warning'])) {
         echo $this->partial('partials/warning-component', ['translationKey' => $data['warning']]);

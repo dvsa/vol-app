@@ -19,6 +19,7 @@ use Common\Form\Elements\Types\PostcodeSearch;
 use Common\Form\Elements\Types\RadioHorizontal;
 use Common\Form\Elements\Types\RadioVertical;
 use Common\Form\View\Helper\Readonly\FormFieldset;
+use Common\Util\AriaDescribedBy;
 use Laminas\Form\Element\Collection as CollectionElement;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\FieldsetInterface;
@@ -56,9 +57,9 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
      *
      * @var string
      */
-    private static $hintFormat = '<p class="%s">%s</p>';
+    private static $hintFormat = '<p id="%s" class="%s">%s</p>';
 
-    private static $hintClass = 'hint';
+    private static $hintClass = 'hint govuk-hint';
 
     /**
      * Set Is Form in Read only status
@@ -120,9 +121,10 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
 
         $hint = $element->getOption('hint');
         $hintClass = $element->getOption('hintClass') ?: self::$hintClass;
+        $hintId = ($element->getAttribute('id') ?? $element->getName()) . '-hint';
         if (!empty($hint)) {
             $view = $this->getView();
-            $hint = sprintf(self::$hintFormat, $hintClass, $view->translate($hint));
+            $hint = sprintf(self::$hintFormat, $hintId, $hintClass, $view->translate($hint));
         }
 
         $attributes       = $element->getAttributes();
@@ -159,6 +161,16 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
 
         if ($element instanceof CompanyNumber && $messages !== []) {
             $attributes['class'] = '';
+        }
+
+        if ($element instanceof PostcodeSearch && $messages !== [] && !$readOnly) {
+            $errorsHelper = $this->view->plugin('form_element_errors');
+            assert($errorsHelper instanceof FormElementErrors, 'Expected instance of ' . FormElementErrors::class);
+            $postcode = $element->get('postcode');
+            $postcode->setAttribute('aria-describedby', AriaDescribedBy::merge(
+                $postcode->getAttribute('aria-describedby'),
+                $errorsHelper->getErrorId($element)
+            ));
         }
 
         foreach ($element->getIterator() as $elementOrFieldset) {
@@ -229,6 +241,10 @@ class FormCollection extends \Laminas\Form\View\Helper\FormCollection
             // explicitally rather than sniffing around in the DOM
             if (($fieldsetName = $element->getName()) !== null) {
                 $attributes['data-group'] = $fieldsetName;
+            }
+
+            if (!empty($hint)) {
+                $attributes['aria-describedby'] = $hintId;
             }
 
             $attributesString = $this->createAttributesString($attributes);

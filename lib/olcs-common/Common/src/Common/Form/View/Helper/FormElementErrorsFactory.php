@@ -6,7 +6,6 @@ namespace Common\Form\View\Helper;
 
 use Common\Form\Elements\Validators\Messages\FormElementMessageFormatter;
 use Psr\Container\ContainerInterface;
-use Laminas\I18n\Translator\TranslatorInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
@@ -24,7 +23,8 @@ class FormElementErrorsFactory implements FactoryInterface
     {
         return new FormElementErrors(
             $container->get(FormElementMessageFormatter::class),
-            $container->get(TranslatorInterface::class)
+            // Uses 'translator' to ensure same instance as LanguageListener so that locale is correct for translation
+            $container->get('translator')
         );
     }
 }

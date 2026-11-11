@@ -213,6 +213,76 @@ final class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<fieldset><legend>(.*)<\/legend><\/fieldset>$/', $result);
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('choiceFieldsetDescriptionsProvider')]
+    public function testChoiceFieldsetPreservesDescriptions(
+        string $type,
+        ?string $hint,
+        array $messages,
+        string $configuredDescription,
+        string $expectedDescription
+    ): void {
+        $this->setUpSut();
+        $renderer = $this->phpRenderer();
+        $helpers = $this->viewHelperPluginManager();
+        $helpers->get(Doctype::class)->shouldReceive('isXhtml')->andReturn(false);
+        $helpers->get('form_element')->setView($renderer);
+        $choiceHelper = $type === 'Radio' ? new CommonHelper\FormRadio() : new LaminasHelper\FormMultiCheckbox();
+        $choiceHelper->setView($renderer);
+        $helpers->setService($type === 'Radio' ? 'formradio' : 'formmulticheckbox', $choiceHelper);
+        $element = $this->setUpElement($type, [
+            'hint' => $hint,
+            'fieldset-attributes' => [
+                'class' => 'choice-group',
+                'aria-describedby' => $configuredDescription,
+            ],
+            'value_options' => [
+                [
+                    'value' => 'A',
+                    'label' => 'First option',
+                    'hint' => 'Option hint',
+                    'attributes' => ['id' => 'first-option'],
+                ],
+                ['value' => 'B', 'label' => 'Second option', 'attributes' => ['id' => 'second-option']],
+            ],
+        ], ['id' => 'choice']);
+        $element->setMessages($messages);
+
+        $markup = $this->sut->__invoke($element);
+        $document = new \DOMDocument();
+        $document->loadHTML($markup);
+        $xpath = new \DOMXPath($document);
+
+        $this->assertSame(
+            $expectedDescription,
+            $xpath->evaluate('string(//fieldset/@aria-describedby)')
+        );
+        $this->assertSame('choice-group', $xpath->evaluate('string(//fieldset/@class)'));
+        if ($messages !== []) {
+            $this->assertSame(1, $xpath->query('//*[@id="choice-error"]')->length);
+            foreach ($xpath->query('//input[@type="radio" or @type="checkbox"]') as $input) {
+                $this->assertContains('choice-error', explode(' ', $input->getAttribute('aria-describedby')));
+            }
+        } else {
+            $this->assertStringNotContainsString('choice-error', $markup);
+        }
+    }
+
+    public static function choiceFieldsetDescriptionsProvider(): \Iterator
+    {
+        foreach (['Radio', 'MultiCheckbox'] as $type) {
+            yield $type . ' hint and error' => [$type, 'Hint', ['Required'], '', 'choice-hint choice-error'];
+            yield $type . ' error without hint' => [$type, null, ['Required'], '', 'choice-error'];
+            yield $type . ' configured description' => [
+                $type, 'Hint', ['Required'], 'custom-description', 'custom-description choice-hint choice-error',
+            ];
+            yield $type . ' no duplicate descriptions' => [
+                $type, 'Hint', ['Required'], 'choice-hint choice-error', 'choice-hint choice-error',
+            ];
+            yield $type . ' hint without error' => [$type, 'Hint', [], '', 'choice-hint'];
+            yield $type . ' no descriptions' => [$type, null, [], '', ''];
+        }
+    }
+
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
     #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersRadioLegendAttribute(): void
@@ -371,7 +441,25 @@ final class FormRowTest extends MockeryTestCase
         $markup = $this->sut->__invoke($element);
 
         // Assert
-        $this->assertEquals('<fieldset class="fieldset--primary"><legend>Label</legend><p class="hint">Hint</p></fieldset>', $markup);
+        $this->assertEquals(
+            '<fieldset class="fieldset--primary" aria-describedby="test-hint"><legend>Label</legend>'
+            . '<p id="test-hint" class="hint govuk-hint">Hint</p></fieldset>',
+            $markup
+        );
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokePreservesExistingDescribedByForFieldsetHint(): void
+    {
+        $this->setUpSut();
+        $element = $this->setUpElement();
+        $element->setAttribute('aria-describedby', 'existing-description');
+        $element->setOption('render_as_fieldset', true);
+
+        $markup = $this->sut->__invoke($element);
+
+        $this->assertStringContainsString('aria-describedby="existing-description"', $markup);
+        $this->assertStringContainsString('<p id="test-hint" class="hint govuk-hint">Hint</p>', $markup);
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
@@ -417,7 +505,11 @@ final class FormRowTest extends MockeryTestCase
         $result = $this->sut->__invoke($element);
 
         // Assert
-        $this->assertEquals('<div class="field "><fieldset class="date"><legend>Foo unit_LabelSfx</legend><p class="hint">Hint</p></fieldset></div>', $result);
+        $this->assertEquals(
+            '<div class="field "><fieldset class="date" aria-describedby="test-hint"><legend>Foo unit_LabelSfx</legend>'
+            . '<p id="test-hint" class="hint govuk-hint">Hint</p></fieldset></div>',
+            $result
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
@@ -444,6 +536,55 @@ final class FormRowTest extends MockeryTestCase
         $this->assertEquals('<div class="field "><fieldset class="user"><legend>Foo</legend></fieldset></div>', $result);
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('dateFieldsetDescriptionsProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeDescribesDateFieldsetErrors(
+        ?string $hint,
+        ?string $existingDescription,
+        ?string $configuredDescription,
+        array $messages,
+        string $expectedDescription
+    ): void {
+        $this->setUpSut();
+        $this->viewHelperPluginManager()->get('form_element')->setView($this->phpRenderer());
+        $dateHelper = new CommonHelper\FormDateSelect();
+        $dateHelper->setView($this->phpRenderer());
+        $dateHelper->setTranslator($this->translator());
+        $this->viewHelperPluginManager()->setService('formdateselect', $dateHelper);
+        $this->viewHelperPluginManager()->setService('forminput', new LaminasHelper\FormInput());
+        $element = $this->setUpElement('DateSelect', [
+            'hint' => $hint,
+            'fieldset-attributes' => ['aria-describedby' => $configuredDescription],
+        ], ['id' => 'dob']);
+        $element->setAttribute('aria-describedby', $existingDescription);
+        $element->setMessages($messages);
+
+        $markup = $this->sut->__invoke($element);
+
+        $this->assertStringContainsString(
+            '<fieldset class="date" aria-describedby="' . $expectedDescription . '">',
+            html_entity_decode($markup, ENT_QUOTES, 'UTF-8')
+        );
+        if ($messages !== []) {
+            $this->assertSame(1, substr_count($markup, 'id="dob-error"'));
+        } else {
+            $this->assertStringNotContainsString('dob-error', $markup);
+        }
+    }
+
+    public static function dateFieldsetDescriptionsProvider(): array
+    {
+        return [
+            'hint only' => ['Hint', null, null, [], 'dob-hint'],
+            'hint and error' => ['Hint', null, null, ['Invalid date'], 'dob-hint dob-error'],
+            'multiple errors' => ['Hint', null, null, ['Invalid date', 'Required date'], 'dob-hint dob-error'],
+            'error without hint' => [null, null, null, ['Invalid date'], 'dob-error'],
+            'existing description' => ['Hint', 'existing-description', null, ['Invalid date'], 'existing-description dob-error'],
+            'configured description' => ['Hint', null, 'configured-description', ['Invalid date'], 'configured-description dob-error'],
+            'no duplicate error ID' => ['Hint', 'dob-hint dob-error', null, ['Invalid date'], 'dob-hint dob-error'],
+        ];
+    }
+
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
     #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersDateTimeSelectElement(): void
@@ -463,7 +604,11 @@ final class FormRowTest extends MockeryTestCase
         $result = $this->sut->__invoke($element);
 
         // Assert
-        $this->assertEquals('<div class="field "><fieldset class="date"><legend>Foo</legend><p class="hint">Hint</p></fieldset></div>', $result);
+        $this->assertEquals(
+            '<div class="field "><fieldset class="date" aria-describedby="test-hint"><legend>Foo</legend>'
+            . '<p id="test-hint" class="hint govuk-hint">Hint</p></fieldset></div>',
+            $result
+        );
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
@@ -600,6 +745,7 @@ final class FormRowTest extends MockeryTestCase
     {
         $serviceManager->setFactory(FormElementMessageFormatter::class, new FormElementMessageFormatterFactory());
         $serviceManager->setService(static::VALIDATOR_MANAGER, $this->setUpValidatorPluginManager());
+        $serviceManager->setService('translator', $this->translator());
         $this->phpRenderer();
         return $serviceManager;
     }

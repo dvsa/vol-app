@@ -107,7 +107,7 @@ class PostcodeSearch extends Fieldset
 
         $manualLink = new HtmlTranslated('manual-link');
         $manualLink->setValue(
-            '<p class="govuk-visually-hidden hint postcode-connectionLost">%s</p><p class="hint"><a class="govuk-link" href=#>%s</a></p>'
+            '<p class="govuk-visually-hidden hint govuk-hint postcode-connectionLost">%s</p><p class="hint govuk-hint"><a class="govuk-link" href=#>%s</a></p>'
         );
         $manualLink->setTokens(['postcode.error.not-available', 'postcode.address.manual_entry']);
         $manualLink->setAttributes(

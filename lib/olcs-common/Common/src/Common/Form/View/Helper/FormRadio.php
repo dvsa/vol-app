@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Form\View\Helper;
 
+use Common\Util\AriaDescribedBy;
 use Common\View\Helper\UniqidGenerator;
 use Laminas\Form\Element\MultiCheckbox as MultiCheckboxElement;
 use Laminas\Form\LabelAwareInterface;
@@ -74,23 +75,6 @@ class FormRadio extends \Laminas\Form\View\Helper\FormRadio
                 $label = $optionSpec['label'];
             }
 
-            if (isset($optionSpec['hint_attributes'])) {
-                $hintAttributes = $this->createAttributesString($optionSpec['hint_attributes']);
-            }
-
-            if (isset($optionSpec['hint'])) {
-                $hintText = $optionSpec['hint'];
-
-                if (null !== $translator) {
-                    $hintText = $translator->translate(
-                        $hintText,
-                        $this->getTranslatorTextDomain()
-                    );
-                }
-
-                $hint = $this->wrapWithTag($hintText, $hintAttributes);
-            }
-
             if (isset($optionSpec['selected'])) {
                 $selected = $optionSpec['selected'];
             }
@@ -123,6 +107,28 @@ class FormRadio extends \Laminas\Form\View\Helper\FormRadio
 
             $inputAttributes = $this->maybeAddInputId($inputAttributes);
             $labelAttributes['for'] = $inputAttributes['id'];
+
+            if (isset($optionSpec['hint'])) {
+                $inputAttributes['aria-describedby'] = AriaDescribedBy::merge(
+                    $inputAttributes['aria-describedby'] ?? null,
+                    $inputAttributes['id'] . '-hint'
+                );
+                $optionSpec['hint_attributes']['id'] = $inputAttributes['id'] . '-hint';
+                $hintText = $optionSpec['hint'];
+
+                if (null !== $translator) {
+                    $hintText = $translator->translate(
+                        $hintText,
+                        $this->getTranslatorTextDomain()
+                    );
+                }
+
+                if (isset($optionSpec['hint_attributes'])) {
+                    $hintAttributes = $this->createAttributesString($optionSpec['hint_attributes']);
+                }
+
+                $hint = $this->wrapWithTag($hintText, $hintAttributes);
+            }
 
             $input = sprintf(
                 '<input %s%s',

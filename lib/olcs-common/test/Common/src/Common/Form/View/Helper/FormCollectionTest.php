@@ -12,6 +12,8 @@ use Common\Form\Elements\Types\RadioHorizontal;
 use Common\Form\Elements\Types\RadioVertical;
 use Common\Form\View\Helper\FormCollection as FormCollectionViewHelper;
 use Common\Form\View\Helper\FormCollection;
+use Common\Form\View\Helper\FormElementErrors;
+use Common\Form\Elements\Validators\Messages\FormElementMessageFormatter;
 use Common\Form\View\Helper\Readonly\FormFieldset;
 use Laminas\View\Helper\Doctype;
 use Mockery as m;
@@ -84,8 +86,8 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend>'
-            . '<span data-template="(.*)"><\/span><p class="hint">(.*)<\/p><\/fieldset>$/'
+            '/^<fieldset class="class" data-group="test" aria-describedby="test-hint"><legend>(.*)<\/legend>'
+            . '<span data-template="(.*)"><\/span><p id="test-hint" class="hint govuk-hint">(.*)<\/p><\/fieldset>$/'
         );
     }
 
@@ -101,7 +103,7 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend><p class="hint">(.*)<\/p>'
+            '/^<fieldset class="class" data-group="test" aria-describedby="test-hint"><legend>(.*)<\/legend><p id="test-hint" class="hint govuk-hint">(.*)<\/p>'
             . '<span data-template="(.*)"><\/span><\/fieldset>$/'
         );
     }
@@ -118,7 +120,7 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend><p class="hint">(.*)<\/p>'
+            '/^<fieldset class="class" data-group="test" aria-describedby="test-hint"><legend>(.*)<\/legend><p id="test-hint" class="hint govuk-hint">(.*)<\/p>'
             . '<fieldset data-group="(.*)"><\/fieldset><span data-template="(.*)"><\/span><\/fieldset>/'
         );
     }
@@ -142,25 +144,55 @@ final class FormCollectionTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @outputBuffering disabled
-     */
     public function testRenderForPostCodeElementWithMessages(): void
     {
         $this->element = new PostcodeSearch('postcode');
         $this->element->setMessages(['Message']);
 
-        $viewHelper = $this->prepareViewHelper();
+        $viewHelper = $this->prepareViewHelper(true);
 
-        echo $viewHelper($this->element, true);
+        $markup = $viewHelper($this->element, true);
 
-        $this->expectOutputRegex(
-            '/^<div class="validation-wrapper"><ul><li>(.*)<\/li><\/ul>'
-            . '<fieldset data-group="postcode">'
-            . '<label class=\"govuk-visually-hidden\" for=\"postcodeInput([0-9]+)\">Postcode search<\/label>'
-            . '<label for=\"selectAddress([0-9]+)\">postcode.select_address.label<\/label>'
-            . '<\/fieldset><\/div>$/'
+        $this->assertStringStartsWith('<div class="validation-wrapper">', $markup);
+        $this->assertStringContainsString('id="postcode-error"', $markup);
+        $this->assertStringContainsString('aria-describedby="postcode-error"', $markup);
+    }
+
+    public function testPostcodeInputDescribesFieldsetErrors(): void
+    {
+        $element = new PostcodeSearch('lookup');
+        $element->setAttribute('id', 'address-lookup');
+        $element->setMessages(['First error', 'Second error']);
+        $postcode = $element->get('postcode');
+        $postcode->setAttribute('type', 'text');
+        $postcode->setAttribute('aria-describedby', 'existing-hint');
+        $viewHelper = $this->prepareViewHelper(true);
+
+        $viewHelper($element, true);
+        $markup = $viewHelper($element, true);
+
+        $this->assertSame('existing-hint address-lookup-error', $postcode->getAttribute('aria-describedby'));
+        $this->assertStringContainsString(
+            'aria-describedby="existing-hint address-lookup-error"',
+            html_entity_decode($markup, ENT_QUOTES, 'UTF-8')
         );
+        $this->assertStringContainsString('<div id="address-lookup-error">', $markup);
+        $this->assertSame(1, substr_count($markup, 'id="address-lookup-error"'));
+    }
+
+    public function testPostcodeInputWithoutErrorsPreservesDescriptions(): void
+    {
+        $element = new PostcodeSearch('lookup');
+        $postcode = $element->get('postcode');
+        $postcode->setAttribute('type', 'text');
+        $postcode->setAttribute('aria-describedby', 'existing-hint');
+        $viewHelper = $this->prepareViewHelper(true);
+
+        $markup = $viewHelper($element, true);
+
+        $this->assertSame('existing-hint', $postcode->getAttribute('aria-describedby'));
+        $this->assertStringContainsString('aria-describedby="existing-hint"', $markup);
+        $this->assertStringNotContainsString('lookup-error', $markup);
     }
 
     /**
@@ -168,23 +200,36 @@ final class FormCollectionTest extends MockeryTestCase
      *
      * @return FormCollectionViewHelper
      */
-    private function prepareViewHelper()
+    private function prepareViewHelper(bool $useCommonErrors = false)
     {
         $translator = new Translator();
         $translateHelper = new Translate();
         $translateHelper->setTranslator($translator);
 
-        $doctype = m::mock(Doctype::class);
+        $doctype = $useCommonErrors ? new Doctype() : m::mock(Doctype::class);
 
         $container = m::mock(ContainerInterface::class);
         $helpers = new HelperPluginManager($container);
         $helpers->setService('formrow', new Helper\FormRow());
-        $helpers->setService('form_element_errors', new Helper\FormElementErrors());
+        $helpers->setService(
+            'form_element_errors',
+            $useCommonErrors
+                ? new FormElementErrors(new FormElementMessageFormatter($translator), $translator)
+                : new Helper\FormElementErrors()
+        );
         $helpers->setService('translate', $translateHelper);
         $helpers->setService('doctype', $doctype);
-
         $view = new PhpRenderer();
         $view->setHelperPluginManager($helpers);
+
+        if ($useCommonErrors) {
+            $helpers->setService('form_element', (new \Common\Form\View\Helper\FormElement())->setView($view));
+            $helpers->setService('formtext', (new Helper\FormText())->setView($view));
+            $helpers->setService('form_label', (new Helper\FormLabel())->setView($view));
+            $helpers->setService('formbutton', (new Helper\FormButton())->setView($view));
+            $helpers->setService('formselect', (new Helper\FormSelect())->setView($view));
+            $helpers->get('formrow')->setView($view);
+        }
 
         $viewHelper = new FormCollectionViewHelper();
         $viewHelper->setView($view);
@@ -210,6 +255,7 @@ final class FormCollectionTest extends MockeryTestCase
         $mockFieldset = m::mock(\Laminas\Form\FieldsetInterface::class);
         $mockFieldset->shouldReceive('getMessages')->andReturn([]);
         $mockFieldset->shouldReceive('getAttribute')->with('class')->andReturn('unit_CssClass');
+        $mockFieldset->shouldReceive('getAttribute')->with('id')->andReturn('unit-test');
         $mockFieldset->shouldReceive('getAttributes')->andReturn([]);
         $mockFieldset->shouldReceive('getIterator')->andReturn($iterator);
         $mockFieldset->shouldReceive('getOption')->with('readonly')->andReturn(true);
@@ -269,8 +315,8 @@ final class FormCollectionTest extends MockeryTestCase
 
         $this->assertEquals('<div class="help__text">' .
         '<h3 class="file__heading">_TRANSL_common.file-upload.table.col.FileName</h3>' .
-        '<ul title="unit_attr1" data-group="files">' .
-        '<p class="hint">_TRANSL_@unit_hint@</p>' .
+        '<ul title="unit_attr1" data-group="files" aria-describedby="files-hint">' .
+        '<p id="files-hint" class="hint govuk-hint">_TRANSL_@unit_hint@</p>' .
         '<li data-group="file1"></li>' .
         '</ul>' .
         '</div>', $actual);
@@ -378,8 +424,8 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend>'
-            . '<span data-template="(.*)"><\/span><p class="form-hint">(.*)<\/p><\/fieldset>$/'
+            '/^<fieldset class="class" data-group="test" aria-describedby="test-hint"><legend>(.*)<\/legend>'
+            . '<span data-template="(.*)"><\/span><p id="test-hint" class="form-hint">(.*)<\/p><\/fieldset>$/'
         );
     }
 }

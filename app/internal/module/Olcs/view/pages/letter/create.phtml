@@ -56,7 +56,7 @@
                     <h3 class="letter-group__title govuk-heading-s"><?= $this->escapeHtml($groupLabel) ?></h3>
                 </div>
                 <div class="letter-group__content">
-                <p class="govuk-hint govuk-!-margin-bottom-1">Select one</p>
+                <p id="letter-choice-group-<?= $groupIndex ?>-hint" class="govuk-hint govuk-!-margin-bottom-1">Select one</p>
                 <p class="govuk-error-message letter-choice-group-error" style="display: none;">
                     <span class="govuk-visually-hidden">Error:</span> Select <?= $this->escapeHtml($groupLabel) ?>
                 </p>
@@ -66,6 +66,7 @@
                             <input class="govuk-radios__input" name="letterChoiceGroup[<?= $groupIndex ?>]"
                                    type="radio"
                                    value="<?= $choice['id'] ?>"
+                                   aria-describedby="letter-choice-group-<?= $groupIndex ?>-hint"
                                    id="letter-choice-<?= $choice['id'] ?>">
                             <label class="govuk-label govuk-radios__label" for="letter-choice-<?= $choice['id'] ?>">
                                 <?= $this->escapeHtml($choice['label']) ?>

@@ -15,6 +15,88 @@ use Laminas\I18n\Translator\TranslatorInterface;
 
 final class FormRadioTest extends MockeryTestCase
 {
+    #[\PHPUnit\Framework\Attributes\DataProvider('optionHintDescriptionsProvider')]
+    public function testOptionHintsPreserveExistingDescriptions(array $attributes, string $expectedPrefix): void
+    {
+        $sut = new FormRadioStub();
+        $renderer = new \Laminas\View\Renderer\PhpRenderer();
+        $renderer->getHelperPluginManager()->setService('form_label', new \Laminas\Form\View\Helper\FormLabel());
+        $sut->setView($renderer);
+        $options = [
+            [
+                'value' => 'A',
+                'label' => 'First option',
+                'hint' => 'First hint',
+                'attributes' => ['id' => 'first-option'],
+            ],
+            [
+                'value' => 'B',
+                'label' => 'Second option',
+                'hint' => 'Second hint',
+                'attributes' => ['id' => 'second-option'],
+            ],
+            [
+                'value' => 'C',
+                'label' => 'Option without hint',
+                'attributes' => ['id' => 'third-option'],
+            ],
+        ];
+
+        $output = $sut->renderOptions(new MultiCheckbox(), $options, [], $attributes);
+        $document = new \DOMDocument();
+        $document->loadHTML($output);
+        $xpath = new \DOMXPath($document);
+
+        foreach (['first-option', 'second-option'] as $id) {
+            $this->assertSame(
+                $expectedPrefix . $id . '-hint',
+                $xpath->evaluate('string(//input[@id="' . $id . '"]/@aria-describedby)')
+            );
+            $this->assertSame(1, $xpath->query('//div[@id="' . $id . '-hint"]')->length);
+        }
+
+        $this->assertSame(
+            $attributes['aria-describedby'] ?? '',
+            $xpath->evaluate('string(//input[@id="third-option"]/@aria-describedby)')
+        );
+    }
+
+    public static function optionHintDescriptionsProvider(): \Iterator
+    {
+        yield 'no existing descriptions' => [[], ''];
+        yield 'empty descriptions' => [['aria-describedby' => ''], ''];
+        yield 'group hint and error' => [
+            ['aria-describedby' => 'group-hint group-error'],
+            'group-hint group-error ',
+        ];
+    }
+
+    public function testOptionHintIdIsNotDuplicated(): void
+    {
+        $sut = new FormRadioStub();
+        $renderer = new \Laminas\View\Renderer\PhpRenderer();
+        $renderer->getHelperPluginManager()->setService('form_label', new \Laminas\Form\View\Helper\FormLabel());
+        $sut->setView($renderer);
+
+        $output = $sut->renderOptions(new MultiCheckbox(), [
+            [
+                'value' => 'A',
+                'label' => 'First option',
+                'hint' => 'First hint',
+                'attributes' => ['id' => 'first-option'],
+            ],
+        ], [], ['aria-describedby' => " group-hint\tfirst-option-hint group-hint "]);
+
+        $document = new \DOMDocument();
+        $document->loadHTML($output);
+        $xpath = new \DOMXPath($document);
+
+        $this->assertSame(
+            'group-hint first-option-hint',
+            $xpath->evaluate('string(//input[@id="first-option"]/@aria-describedby)')
+        );
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('renderOptionsProvider')]
     public function testRenderOptions($options, $selectedOptions, $attributes, $globalAttributes, $labelPosition, $expected): void
     {
@@ -142,7 +224,7 @@ final class FormRadioTest extends MockeryTestCase
             ],
             'globalAttributes' => [],
             'labelPosition' => null,
-            'expected' => '<div class="govuk-radios"><div class="govuk-radios__item"><input class="input_class govuk-radios__input" value="B" checked="checked" id="generated_id"><label class="label_class govuk-label govuk-radios__label" for="generated_id">default-translated-bbb</label><div class="hint_class govuk-hint govuk-radios__hint">default-translated-hint_text</div></div></div>'
+            'expected' => '<div class="govuk-radios"><div class="govuk-radios__item"><input class="input_class govuk-radios__input" value="B" checked="checked" id="generated_id" aria-describedby="generated_id-hint"><label class="label_class govuk-label govuk-radios__label" for="generated_id">default-translated-bbb</label><div class="hint_class govuk-hint govuk-radios__hint" id="generated_id-hint">default-translated-hint_text</div></div></div>'
         ];
     }
 }

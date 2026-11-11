@@ -85,6 +85,96 @@ final class FormRadioVerticalTest extends MockeryTestCase
      */
     protected $sut;
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('fieldsetDescriptionsProvider')]
+    public function testRenderedFieldsetDescribesHintsAndErrors(
+        bool $vertical,
+        bool $hasHint,
+        bool $hasErrors,
+        string $existingDescription,
+        string $expectedDescription
+    ): void {
+        $renderer = new PhpRenderer();
+        $renderer->setResolver(new \Laminas\View\Resolver\TemplatePathStack([
+            'script_paths' => [__DIR__ . '/../../../../../../../Common/view'],
+        ]));
+        $helpers = $renderer->getHelperPluginManager();
+        $formatter = \Mockery::mock(\Common\Form\Elements\Validators\Messages\FormElementMessageFormatter::class);
+        $formatter->shouldReceive('formatElementMessage')->andReturn('Required');
+        $errorsHelper = new \Common\Form\View\Helper\FormElementErrors(
+            $formatter,
+            new \Laminas\I18n\Translator\Translator()
+        );
+        $errorsHelper->setView($renderer);
+        $helpers->setService('formElementErrors', $errorsHelper);
+        $optionHelper = new \Common\Form\View\Helper\FormRadioOption();
+        $optionHelper->setView($renderer);
+        $helpers->setService('formRadioOption', $optionHelper);
+        $helpers->setService('form_label', new \Laminas\Form\View\Helper\FormLabel());
+        $translate = new \Laminas\I18n\View\Helper\Translate();
+        $translate->setTranslator(new \Laminas\I18n\Translator\Translator());
+        $helpers->setService('translate', $translate);
+        $partial = \Mockery::mock(\Laminas\View\Helper\Partial::class);
+        $partial->shouldReceive('__invoke')->andReturn('');
+        $helpers->setService('partial', $partial);
+
+        $fieldset = new Fieldset('licence-type');
+        $fieldset->setLabel('Type of licence');
+        $fieldset->setOption('hint', $hasHint ? 'Group hint' : null);
+        $fieldset->setAttribute('aria-describedby', $existingDescription);
+        $radio = new Element\Radio($vertical ? 'licence-type' : 'yesNo');
+        $radio->setAttribute('id', '');
+        $radio->setAttribute('aria-describedby', $existingDescription);
+        $radio->setValueOptions([
+            'Y' => [
+                'value' => 'Y',
+                'label' => 'First option',
+                'hint' => 'Option hint',
+                'attributes' => ['id' => 'first-option'],
+            ],
+            'N' => ['value' => 'N', 'label' => 'Second option', 'attributes' => ['id' => 'second-option']],
+        ]);
+        if ($hasErrors) {
+            $radio->setMessages(['Required']);
+        }
+        $fieldset->add($radio);
+        $fieldset->setOption('radio-element', $radio->getName());
+        $helper = $vertical ? new FormRadioVertical() : new \Common\Form\View\Helper\FormRadioHorizontal();
+        $helper->setView($renderer);
+
+        $markup = $helper->render($fieldset);
+        $document = new \DOMDocument();
+        $document->loadHTML($markup);
+        $xpath = new \DOMXPath($document);
+        $errorId = $radio->getName() . '-error';
+        $expectedDescription = str_replace('radio-error', $errorId, $expectedDescription);
+        $this->assertSame($expectedDescription, $xpath->evaluate('string(//fieldset/@aria-describedby)'));
+        $this->assertSame($hasErrors ? 1 : 0, $xpath->query('//*[@id="' . $errorId . '"]')->length);
+        $this->assertSame(
+            trim($expectedDescription . ' first-option-hint'),
+            $xpath->evaluate('string(//input[@id="first-option"]/@aria-describedby)')
+        );
+        $this->assertSame(
+            $expectedDescription,
+            $xpath->evaluate('string(//input[@id="second-option"]/@aria-describedby)')
+        );
+    }
+
+    public static function fieldsetDescriptionsProvider(): \Iterator
+    {
+        foreach (['vertical' => true, 'horizontal' => false] as $layout => $vertical) {
+            yield $layout . ' error without hint' => [$vertical, false, true, '', 'radio-error'];
+            yield $layout . ' hint and error' => [$vertical, true, true, '', 'licence-type-hint radio-error'];
+            yield $layout . ' existing description' => [
+                $vertical, true, true, 'custom-description', 'custom-description licence-type-hint radio-error',
+            ];
+            yield $layout . ' hint only' => [$vertical, true, false, '', 'licence-type-hint'];
+            yield $layout . ' no descriptions' => [$vertical, false, false, '', ''];
+            yield $layout . ' no duplicate hint' => [
+                $vertical, true, true, 'licence-type-hint', 'licence-type-hint radio-error',
+            ];
+        }
+    }
+
     #[\PHPUnit\Framework\Attributes\Test]
     public function renderIsCallable(): void
     {
