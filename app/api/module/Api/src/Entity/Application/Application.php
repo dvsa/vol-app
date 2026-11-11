@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Api\Entity\Application;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Domain\CommandHandler\ApplicationCompletion\AbstractUpdateStatus;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -2324,7 +2325,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         }
 
         $criteria = Criteria::create()
-            ->orderBy(['invoicedDate' => Criteria::DESC]);
+            ->orderBy(['invoicedDate' => Order::Descending]);
 
         /** @var Entity\Fee\Fee $fee */
         foreach ($this->getFees()->matching($criteria) as $fee) {
@@ -2347,7 +2348,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
     public function getLatestOutstandingInterimFee()
     {
         $criteria = Criteria::create()
-            ->orderBy(['invoicedDate' => Criteria::DESC]);
+            ->orderBy(['invoicedDate' => Order::Descending]);
 
         /** @var Entity\Fee\Fee $fee */
         foreach ($this->getFees()->matching($criteria) as $fee) {

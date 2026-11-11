@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
+use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -47,16 +48,19 @@ final class GenerateAndStoreWithMultipleAddresses extends AbstractCommandHandler
 
         $addresses = $this->retrieveAddresses($command, $licence);
 
+        // A fresh result rather than $this->result: handler instances are shared, so a queue worker calls this same
+        // object for every licence it processes, and 'documents' would otherwise keep every earlier licence's letters
+        $result = new Result();
+
         foreach ($addresses as $addressName => $addressValue) {
             $data['description'] = "$description ($addressName)";
             $data = $this->addAddressToKnownValues($bookmarkBundle, $addressValue, $data, $addressBookmark);
             $data = $this->addAddressToMetadata($data, $addressName);
-            $result = $this->handleSideEffect(GenerateAndStore::create($data));
-            $documentId = $result->getId('document');
-            $this->result->addId('documents', $documentId, true);
-            $this->result->addId($addressName, $documentId);
+            $documentId = $this->handleSideEffect(GenerateAndStore::create($data))->getId('document');
+            $result->addId('documents', $documentId, true);
+            $result->addId($addressName, $documentId);
         }
-        return $this->result;
+        return $result;
     }
 
     /**

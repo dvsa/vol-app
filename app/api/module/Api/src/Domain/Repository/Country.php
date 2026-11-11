@@ -38,19 +38,19 @@ class Country extends AbstractRepository
         if (method_exists($query, 'getIsEcmtState') && !empty($query->getIsEcmtState())) {
             $qb->andWhere($qb->expr()->in($this->alias . '.isEcmtState', ':isEcmtState'))
               ->setParameter('isEcmtState', $query->getIsEcmtState());
-            $qb->addOrderBy($this->alias . '.countryDesc', 'ASC');
+            $qb->addOrderBy($this->alias . '.countryDesc', \SortDirection::Ascending);
         }
 
         if (method_exists($query, 'getIsEeaState') && !empty($query->getIsEeaState())) {
             $qb->andWhere($qb->expr()->in($this->alias . '.isEeaState', ':isEeaState'))
                 ->setParameter('isEeaState', $query->getIsEeaState());
-            $qb->addOrderBy($this->alias . '.countryDesc', 'ASC');
+            $qb->addOrderBy($this->alias . '.countryDesc', \SortDirection::Ascending);
         }
 
         if (method_exists($query, 'hasEcmtConstraints') && $query->hasEcmtConstraints()) {
             $this->getQueryBuilder()->modifyQuery($qb)->with('constraints', 'c');
             $qb->andWhere($qb->expr()->isNotNull('c.id'));
-            $qb->addOrderBy($this->alias . '.countryDesc', 'ASC');
+            $qb->addOrderBy($this->alias . '.countryDesc', \SortDirection::Ascending);
         }
     }
 
@@ -91,7 +91,7 @@ class Country extends AbstractRepository
             ->andWhere($qb->expr()->gt('ipw.endDate', ':now'))
             ->setParameter('now', $now)
             ->setParameter('type', $type)
-            ->orderBy($this->alias . '.countryDesc', 'ASC');
+            ->orderBy($this->alias . '.countryDesc', \SortDirection::Ascending);
 
         return $qb->getQuery()->getResult();
     }
@@ -117,7 +117,7 @@ class Country extends AbstractRepository
             ->andWhere('ips.irhpPermitType = :irhpPermitTypeId')
             ->setParameter('statuses', IrhpPermitEntity::$readyToPrintStatuses)
             ->setParameter('irhpPermitTypeId', $irhpPermitTypeId)
-            ->orderBy($this->alias . '.countryDesc', 'ASC');
+            ->orderBy($this->alias . '.countryDesc', \SortDirection::Ascending);
 
         return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }

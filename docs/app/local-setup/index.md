@@ -111,6 +111,12 @@ If you have [nvm](https://github.com/nvm-sh/nvm) installed, use `nvm use` to aut
 
     :::
 
+    :::info Updating test snapshots
+
+    The last two steps regenerate the API request validation (DTO) snapshots and the form specification snapshots, after you have deliberately changed a DTO or a form. They are off by default; leave them off for a normal refresh. They use the packages already installed on your machine, and the Composer step above does not install the libraries, so run `composer update` in `lib/olcs-transfer`, `lib/olcs-auth` and `lib/olcs-common` first or you may write snapshots that fail in CI. See [API request validation snapshot](../testing.md#api-request-validation-snapshot) and [Form specification snapshot](../testing.md#form-specification-snapshot).
+
+    :::
+
 :::success
 
 All done!

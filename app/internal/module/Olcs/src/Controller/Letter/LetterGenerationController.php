@@ -24,12 +24,17 @@ class LetterGenerationController extends AbstractInternalController implements L
     protected ?ViewModel $leftView = null;
 
     /**
+     * Letter statuses whose issues can still be changed (VOL-7734), as UpdateIssues allows
+     */
+    private const array ISSUE_CHANGE_STATUSES = ['ltr_sts_draft', 'ltr_sts_ready'];
+
+    /**
      * Inline scripts for form handling
      */
     protected $inlineScripts = [
         'createAction' => ['forms/letter-generation'],
-        'previewAction' => ['forms/letter-preview'],
-        'editAction' => ['forms/letter-edit'],
+        'previewAction' => ['forms/letter-preview', 'forms/letter-change-issues'],
+        'editAction' => ['forms/letter-edit', 'forms/letter-change-issues'],
     ];
 
     /**
@@ -44,7 +49,8 @@ class LetterGenerationController extends AbstractInternalController implements L
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelperService,
         FlashMessengerHelperService $flashMessengerHelperService,
-        Navigation $navigation
+        Navigation $navigation,
+        private readonly int $csrfTimeout = 5400
     ) {
         parent::__construct(
             $translationHelperService,
@@ -242,7 +248,7 @@ class LetterGenerationController extends AbstractInternalController implements L
     public function previewAction()
     {
         // Clear any stale flash messages from previous session
-        $this->flashMessenger()->clearCurrentMessagesFromContainer();
+        $this->flashMessengerHelperService->clearCurrentMessagesFromContainer();
 
         $letterInstanceId = $this->params()->fromQuery('id');
 
@@ -569,15 +575,20 @@ class LetterGenerationController extends AbstractInternalController implements L
                 'content' => $effectiveContent,
                 'version' => $todo['version'] ?? 1,
                 'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
+                'placementIssueIds' => $todo['placementIssueIds'] ?? [],
             ];
         }
+
+        // The page follows the letter (VOL-7737): sections around the issues block as they sit
+        // in the letter, each issue followed by its own to-dos.
+        [$groupedIssues, $groupedTodos] = $this->placeTodosUnderIssues($groupedIssues, $groupedTodos);
 
         $view = new ViewModel([
             'letterInstanceId' => $letterInstanceId,
             'letterInstance' => $letterInstance,
+            'layout' => $this->editLayout($letterInstance['letterInstanceSections'] ?? [], $groupedSections),
             'groupedIssues' => $groupedIssues,
             'groupedAppendices' => $groupedAppendices,
-            'groupedSections' => $groupedSections,
             'groupedTodos' => $groupedTodos,
         ]);
 
@@ -590,6 +601,192 @@ class LetterGenerationController extends AbstractInternalController implements L
         $this->placeholder()->setPlaceholder('pageTitle', 'Edit letter sections');
 
         return $this->viewBuilder()->buildView($view);
+    }
+
+    /**
+     * Change issues action - the issue picker for a letter that has already been generated (VOL-7734)
+     *
+     * Rendered on its own for a modal on the preview and edit pages. Offers the same issues as
+     * creating the letter, with those already on it ticked. An issue on the letter that is no longer
+     * offered (switched off since) is still listed and ticked, so saving doesn't quietly drop it.
+     *
+     * Query parameters: id (letter instance), from ('preview' or 'edit')
+     *
+     * @return ViewModel|Response
+     */
+    public function changeIssuesAction()
+    {
+        $letterInstanceId = (int) $this->params()->fromQuery('id');
+        $letterInstance = $letterInstanceId > 0 ? $this->fetchLetterInstanceById($letterInstanceId) : null;
+
+        if ($letterInstance === null) {
+            $response = $this->getResponse();
+            $response->setStatusCode(404);
+            $response->setContent('<p class="govuk-body">Letter not found</p>');
+            return $response;
+        }
+
+        $status = $letterInstance['status']['id'] ?? null;
+        $locked = !in_array($status, self::ISSUE_CHANGE_STATUSES, true);
+
+        $selectedIssueIds = [];
+        $accordionData = [];
+        if (!$locked) {
+            $goodsOrPsv = $this->fetchLetterContext($this->entityContextOf($letterInstance))['goodsOrPsv'] ?? null;
+            $accordionData = $this->buildAccordionData($goodsOrPsv);
+            [$accordionData, $selectedIssueIds] = $this->withIssuesOnLetter($accordionData, $letterInstance);
+        }
+
+        $view = new ViewModel([
+            'letterInstanceId' => $letterInstanceId,
+            'from' => $this->params()->fromQuery('from') === 'edit' ? 'edit' : 'preview',
+            'locked' => $locked,
+            'hasAppendices' => !empty($letterInstance['letterInstanceAppendices']),
+            'accordionData' => $accordionData,
+            'selectedIssueIds' => $selectedIssueIds,
+            'csrfToken' => $locked ? '' : $this->csrfToken(),
+        ]);
+        $view->setTemplate('pages/letter/change-issues');
+        $view->setTerminal(true);
+
+        return $view;
+    }
+
+    /**
+     * Update issues action - saves the issues picked in the change issues modal (VOL-7734)
+     *
+     * Posts the full list of ticked issues. When that would throw away the caseworker's edits the
+     * API changes nothing and names them; the modal asks, then posts again with confirmLoss.
+     *
+     * POST: letterInstanceId, letterIssues[] (in the order shown), confirmLoss ('1')
+     *
+     * @return Response JSON
+     */
+    public function updateIssuesAction()
+    {
+        $request = $this->getRequest();
+        if (!$request->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $letterInstanceId = (int) $request->getPost('letterInstanceId');
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\UpdateIssues::create([
+            'id' => $letterInstanceId,
+            'selectedIssues' => array_map('intval', array_values((array) $request->getPost('letterIssues', []))),
+            'confirmLoss' => $request->getPost('confirmLoss') === '1',
+        ]);
+
+        $response = $this->handleCommand($command);
+        $result = $response->getResult();
+
+        if (!$response->isOk()) {
+            $messages = [];
+            $raw = (array) ($result['messages'] ?? []);
+            array_walk_recursive($raw, static function ($message) use (&$messages): void {
+                if (is_string($message)) {
+                    $messages[] = $message;
+                }
+            });
+            return $this->jsonError($messages === [] ? 'Failed to change issues' : implode(' ', $messages));
+        }
+
+        if (!empty($result['flags']['confirmationRequired'])) {
+            return $this->jsonSuccess([
+                'confirmationRequired' => true,
+                'lostEdits' => array_values($result['messages'] ?? []),
+            ]);
+        }
+
+        $letterInstance = $this->fetchLetterInstanceById($letterInstanceId) ?? [];
+
+        return $this->jsonSuccess([
+            'addedIssueIds' => array_values($result['flags']['addedIssueIds'] ?? []),
+            'issueIds' => array_column($letterInstance['letterInstanceIssues'] ?? [], 'id'),
+            'todoIds' => array_column($letterInstance['letterInstanceTodos'] ?? [], 'id'),
+            // old to-do id => new, for to-dos carried over to another issue as a new row
+            'movedTodoIds' => (object) ($result['flags']['movedTodoIds'] ?? []),
+        ]);
+    }
+
+    /**
+     * A "security" token for a hand-built form. Common\Module turns form posts without a valid one
+     * into GETs; the timeout matches the forms the app builds itself, not the validator's 5 minutes.
+     */
+    protected function csrfToken(): string
+    {
+        $element = new \Laminas\Form\Element\Csrf('security', [
+            'csrf_options' => ['timeout' => $this->csrfTimeout],
+        ]);
+
+        return (string) $element->getValue();
+    }
+
+    /**
+     * The entity Goods/PSV is worked out from, the same way Generate does: application, then licence
+     *
+     * @return array{type?: string, id?: int}
+     */
+    protected function entityContextOf(array $letterInstance): array
+    {
+        foreach (['application', 'licence'] as $type) {
+            if (!empty($letterInstance[$type]['id'])) {
+                return ['type' => $type, 'id' => (int) $letterInstance[$type]['id']];
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * Tick the issues already on the letter, adding any the picker no longer offers to their type
+     * (or a group of their own at the end, if the type has gone too)
+     *
+     * @return array{0: array, 1: list<int>} accordion data, selected LetterIssue ids
+     */
+    protected function withIssuesOnLetter(array $accordionData, array $letterInstance): array
+    {
+        $offered = [];
+        foreach ($accordionData as $section) {
+            foreach ($section['issues'] as $issue) {
+                $offered[(int) $issue['id']] = true;
+            }
+        }
+
+        $selected = [];
+        foreach ($letterInstance['letterInstanceIssues'] ?? [] as $instanceIssue) {
+            $version = $instanceIssue['letterIssueVersion'] ?? [];
+            $issueId = (int) ($version['letterIssue']['id'] ?? 0);
+            if ($issueId === 0 || in_array($issueId, $selected, true)) {
+                continue;
+            }
+            $selected[] = $issueId;
+
+            if (isset($offered[$issueId])) {
+                continue;
+            }
+
+            $missing = [
+                'id' => $issueId,
+                'issueKey' => '',
+                'currentVersion' => ['heading' => $version['heading'] ?? 'Issue'],
+            ];
+            $type = $version['letterIssueType'] ?? ['id' => 0, 'name' => 'Other issues'];
+
+            $placed = false;
+            foreach ($accordionData as $index => $section) {
+                if ((int) ($section['issueType']['id'] ?? -1) === (int) ($type['id'] ?? 0)) {
+                    $accordionData[$index]['issues'][] = $missing;
+                    $placed = true;
+                    break;
+                }
+            }
+            if (!$placed) {
+                $accordionData[] = ['issueType' => $type, 'issues' => [$missing]];
+            }
+            $offered[$issueId] = true;
+        }
+
+        return [$accordionData, $selected];
     }
 
     /**
@@ -843,6 +1040,84 @@ class LetterGenerationController extends AbstractInternalController implements L
         }
 
         return json_encode(['blocks' => [], 'version' => '2.28.2']);
+    }
+
+    /**
+     * Put each to-do under the first issue it can go under that is on the edit page
+     * (placementIssueIds comes from the API, preferred first). To-dos with none of their issues
+     * on the page are returned separately, to be listed after the issues.
+     *
+     * @param array<int|string, array{issues: list<array<string, mixed>>}> $groupedIssues
+     * @param list<array<string, mixed>> $todos
+     * @return array{0: array<int|string, array<string, mixed>>, 1: list<array<string, mixed>>}
+     */
+    protected function placeTodosUnderIssues(array $groupedIssues, array $todos): array
+    {
+        $issueSlots = [];
+        foreach ($groupedIssues as $typeId => $group) {
+            foreach ($group['issues'] as $index => $issue) {
+                $groupedIssues[$typeId]['issues'][$index]['todos'] = [];
+                $issueSlots[(int) $issue['id']] = [$typeId, $index];
+            }
+        }
+
+        $unplaced = [];
+        foreach ($todos as $todo) {
+            $slot = null;
+            foreach ($todo['placementIssueIds'] ?? [] as $issueId) {
+                if (isset($issueSlots[(int) $issueId])) {
+                    $slot = $issueSlots[(int) $issueId];
+                    break;
+                }
+            }
+
+            if ($slot === null) {
+                $unplaced[] = $todo;
+                continue;
+            }
+
+            [$typeId, $index] = $slot;
+            $groupedIssues[$typeId]['issues'][$index]['todos'][] = $todo;
+        }
+
+        return [$groupedIssues, $unplaced];
+    }
+
+    /**
+     * The order of the edit page, matching the letter: the chosen sections in letter order, with
+     * the issues block where the letter's __ISSUES__ section sits, or after the sections when the
+     * letter has none (as the letter itself does).
+     *
+     * @param list<array<string, mixed>> $instanceSections the letter's sections, in letter order
+     * @param list<array<string, mixed>> $editableSections the chosen sections, each with an id
+     * @return list<array{section: array<string, mixed>}|array{issues: true}>
+     */
+    protected function editLayout(array $instanceSections, array $editableSections): array
+    {
+        $byId = [];
+        foreach ($editableSections as $section) {
+            $byId[$section['id']] = $section;
+        }
+
+        $layout = [];
+        $issuesPlaced = false;
+        foreach ($instanceSections as $instanceSection) {
+            $sectionVersion = $instanceSection['letterSectionVersion'] ?? [];
+            $letterSection = $sectionVersion['letterSectionVariant']['letterSection'] ?? ($sectionVersion['letterSection'] ?? []);
+
+            if (($letterSection['sectionKey'] ?? null) === '__ISSUES__' && !$issuesPlaced) {
+                $layout[] = ['issues' => true];
+                $issuesPlaced = true;
+            } elseif (isset($byId[$instanceSection['id']])) {
+                $layout[] = ['section' => $byId[$instanceSection['id']]];
+            }
+        }
+
+        if (!$issuesPlaced) {
+            $layout[] = ['issues' => true];
+        }
+
+        return $layout;
     }
 
     /**

@@ -67,6 +67,20 @@ final class FinancialEvidenceAssessmentTabTest extends TestCase
         );
     }
 
+    /**
+     * createFromFormat() rolls an impossible date like 2026-02-30 over into a different, valid
+     * one rather than failing, so the round trip must be checked rather than trusting a non-false
+     * return: a malformed API payload must show as not assessed, never as the wrong date.
+     */
+    public function testAnImpossibleDateIsShownAsADashRatherThanRolledOver(): void
+    {
+        $tab = FinancialEvidenceAssessmentTab::mapFromAnalysis($this->givenAnalysis([
+            'statementDate' => ['flag' => 'fail', 'remark' => null, 'value' => '2026-02-30', 'checks' => []],
+        ]));
+
+        $this->assertSame('-', $this->row($tab, 'Statement date')['value']);
+    }
+
     #[DataProvider('currencyProvider')]
     public function testFormatsAverageFundsAsSterling(float|int $amount, string $expected): void
     {

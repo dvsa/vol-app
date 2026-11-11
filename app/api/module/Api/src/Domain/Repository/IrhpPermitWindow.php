@@ -104,7 +104,7 @@ class IrhpPermitWindow extends AbstractRepository
                 $query->expr()->between('?1', 'ipw.startDate', 'ipw.endDate'),
                 $query->expr()->eq('ipw.irhpPermitStock', '?2')
             ))
-            ->orderBy('ipw.id', 'DESC')
+            ->orderBy('ipw.id', \SortDirection::Descending)
             ->setParameter(1, $date)
             ->setParameter(2, $irhpPermitStockId)
             ->getQuery()
@@ -143,7 +143,7 @@ class IrhpPermitWindow extends AbstractRepository
             ->andWhere($qb->expr()->gt($this->alias . '.endDate', ':now'))
             ->setParameter('irhpPermitTypeId', $irhpPermitTypeId)
             ->setParameter('now', $now)
-            ->orderBy($this->alias . '.endDate', 'DESC')
+            ->orderBy($this->alias . '.endDate', \SortDirection::Descending)
             ->setMaxResults(1);
 
         if ($year) {

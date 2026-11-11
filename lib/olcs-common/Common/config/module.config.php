@@ -116,7 +116,8 @@ return [
             \Common\Controller\Plugin\HandleCommand::class => \Common\Controller\Plugin\HandleCommandFactory::class,
             'featuresEnabled' => \Common\Controller\Plugin\FeaturesEnabledFactory::class,
             'featuresEnabledForMethod' => \Common\Controller\Plugin\FeaturesEnabledForMethodFactory::class,
-        ]
+            'commonFlashMessenger' => \Common\Controller\Plugin\CommonFlashMessengerPluginFactory::class,
+        ],
     ],
     'console' => [
         'router' => [
@@ -294,6 +295,7 @@ return [
             DataService\TrafficArea::class => DataService\AbstractDataServiceFactory::class,
 
             HelperService\FileUploadHelperService::class => HelperService\FileUploadHelperServiceFactory::class,
+            \Common\Service\FlashMessenger\LaminasSessionFlashMessenger::class => \Common\Service\FlashMessenger\LaminasSessionFlashMessengerFactory::class,
             HelperService\FlashMessengerHelperService::class => HelperService\FlashMessengerHelperServiceFactory::class,
             HelperService\FormHelperService::class => HelperService\FormHelperServiceFactory::class,
             HelperService\GuidanceHelperService::class => HelperService\GuidanceHelperServiceFactory::class,
@@ -545,7 +547,8 @@ return [
             'licenceChecklist' => \Common\View\Helper\LicenceChecklistFactory::class,
             \Common\View\Helper\Date::class => \Common\View\Helper\DateFactory::class,
             \Common\Form\View\Helper\FormRow::class => \Common\Form\View\Helper\FormRowFactory::class,
-            \Common\View\Helper\LanguageLink::class => \Common\View\Helper\LanguageLinkFactory::class,
+            \Common\View\Helper\LanguageNavigation::class => \Common\View\Helper\LanguageNavigationFactory::class,
+            \Common\View\Helper\ImportantPrefix::class => \Common\View\Helper\ImportantPrefixFactory::class,
             'currentUser' => \Common\View\Helper\CurrentUserFactory::class,
             'systemInfoMessages' => \Common\View\Factory\Helper\SystemInfoMessagesFactory::class,
             'linkBack' => Common\View\Helper\LinkBackFactory::class,
@@ -614,8 +617,10 @@ return [
             'pagetitle' => \Common\View\Helper\PageTitleFactory::class,
             'licencechecklist' => \Common\View\Helper\LicenceChecklistFactory::class,
             'date' => \Common\View\Helper\Date::class,
-            'languageLink' => \Common\View\Helper\LanguageLink::class,
-            'languagelink' => \Common\View\Helper\LanguageLink::class,
+            'languageNavigation' => \Common\View\Helper\LanguageNavigation::class,
+            'languagenavigation' => \Common\View\Helper\LanguageNavigation::class,
+            'importantPrefix' => \Common\View\Helper\ImportantPrefix::class,
+            'importantprefix' => \Common\View\Helper\ImportantPrefix::class,
             'currentuser' => 'currentUser',
             'systeminfomessages' => 'systemInfoMessages',
             'linkback' => 'linkBack',

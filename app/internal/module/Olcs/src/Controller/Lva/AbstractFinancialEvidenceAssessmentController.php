@@ -246,6 +246,8 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
      */
     protected function getTabsFromAnalyses(array $analyses): array
     {
+        // Temporary caseworker stamp until stamping is implemented; independent of processing status.
+        $caseworkerStamp = 'APPROVED';
         $tabs = [];
 
         foreach ($analyses as $analysis) {
@@ -253,17 +255,20 @@ abstract class AbstractFinancialEvidenceAssessmentController extends AbstractCon
                 ? (new \DateTime($analysis['documentDate']))->format('d/m/Y')
                 : null;
             $isLatest = $tabs === [];
+            $dateLabel = $date ?? 'Unknown date';
 
             // Null when the analysis has not been reviewed (or holds a value this app does not know).
             $assessmentStatus = AssessmentStatus::tryFrom((string)($analysis['assessmentStatus'] ?? ''));
 
             $tab = [
-                'id'         => $isLatest ? 'latest' : 'analysis-' . $analysis['id'],
-                'analysisId' => $analysis['id'],
-                'label'      => $isLatest ? 'Latest' : ($date ?? 'Unknown date'),
-                'date'       => $date,
-                'status'     => $this->mapStatus($assessmentStatus),
-                'statusTag'  => $this->mapStatusTagClass($assessmentStatus),
+                'id'              => $isLatest ? 'latest' : 'analysis-' . $analysis['id'],
+                'analysisId'      => $analysis['id'],
+                'label'           => $isLatest ? 'Latest' : $dateLabel,
+                // Optional: only set when the tab should read differently once deselected.
+                'unselectedLabel' => $isLatest ? $dateLabel : null,
+                'date'            => $date,
+                'status'          => $this->mapStatus($assessmentStatus),
+                'statusTag'       => $this->mapStatusTagClass($assessmentStatus),
             ] + FinancialEvidenceAssessmentTab::mapFromAnalysis($analysis);
 
             // A decided review cannot change (its flags cannot), and without an assessment there is

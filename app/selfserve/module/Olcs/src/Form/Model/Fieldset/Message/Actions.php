@@ -10,26 +10,12 @@ use Laminas\Form\Annotation as Form;
 
 class Actions
 {
-    /**
-     * @Form\Attributes({
-     *     "value": "markup-messaging-new-conversation-timeframe",
-     *     "id": "guidance"
-     * })
-     * @Form\Type(GuidanceTranslated::class)
-     */
+    #[Form\Attributes(['value' => 'markup-messaging-new-conversation-timeframe', 'id' => 'guidance'])]
+    #[Form\Type(GuidanceTranslated::class)]
     public ?GuidanceTranslated $guidance = null;
 
-    /**
-     * @Form\Attributes({
-     *     "type": "submit",
-     *     "data-module": "govuk-button",
-     *     "class": "govuk-button govuk-button--default",
-     *     "id": "send"
-     * })
-     * @Form\Options({
-     *     "label": "Send message"
-     * })
-     * @Form\Type(ActionButton::class)
-     */
+    #[Form\Attributes(['type' => 'submit', 'data-module' => 'govuk-button', 'class' => 'govuk-button govuk-button--default', 'id' => 'send'])]
+    #[Form\Options(['label' => 'Send message'])]
+    #[Form\Type(ActionButton::class)]
     public ?ActionButton $send = null;
 }

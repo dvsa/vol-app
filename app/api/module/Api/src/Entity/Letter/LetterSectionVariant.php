@@ -20,7 +20,7 @@ class LetterSectionVariant extends AbstractLetterSectionVariant
      * @var \Doctrine\Common\Collections\Collection<int, LetterSectionVersion>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion::class, mappedBy: 'letterSectionVariant', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\OrderBy(['versionNumber' => 'DESC'])]
+    #[ORM\OrderBy(['versionNumber' => \SortDirection::Descending])]
     protected $versions;
 
     /**

@@ -27,7 +27,7 @@ class RetrievalOtp extends AbstractRepository
             ->andWhere('ro.consumedAt IS NULL')
             ->andWhere('ro.invalidatedAt IS NULL')
             ->andWhere('ro.expiresAt > :now')->setParameter('now', $now)
-            ->orderBy('ro.id', 'DESC')
+            ->orderBy('ro.id', \SortDirection::Descending)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();

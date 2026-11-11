@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Entity\Organisation;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Domain\LicenceStatusAwareTrait;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
@@ -560,7 +561,7 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
         $expr = Criteria::expr();
         $criteria = Criteria::create()
             ->andWhere($expr->isNull('deletedDate'))
-            ->orderBy(['createdOn' => Criteria::DESC])
+            ->orderBy(['createdOn' => Order::Descending])
             ->setMaxResults(1);
         $matches = $this->tradingNames->matching($criteria);
         if (!empty($matches)) {

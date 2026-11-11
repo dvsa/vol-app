@@ -243,6 +243,9 @@ return [
             // Letter instance assembly shared by letter generation and builder preview
             \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer::class =>
                 \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposerFactory::class,
+            // Works out what changing a generated letter's issues would do (VOL-7734)
+            \Dvsa\Olcs\Api\Service\Letter\IssueChange\IssueChangePlanner::class =>
+                \Laminas\ServiceManager\Factory\InvokableFactory::class,
 
             // Resolves grabs into the instance at generation time
             \Dvsa\Olcs\Api\Service\Letter\LetterInstanceGrabSnapshotter::class =>

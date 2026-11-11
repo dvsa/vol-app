@@ -99,6 +99,40 @@ final class AnalysisResultNormaliserTest extends TestCase
         ];
     }
 
+    /** A failing mapper must not take the read down: the payload is dropped, like any unplaceable one. */
+    public function testAMapperThatThrowsDropsThePayload(): void
+    {
+        $from = NormalisedResult::VERSION - 1;
+        $sut = new AnalysisResultNormaliser(new ReportMapper(), [
+            $this->customMapper($from, static function (array $payload): array {
+                throw new \RuntimeException('boom');
+            }),
+        ]);
+
+        $this->assertNull($sut->fromStored(['version' => $from, 'rows' => []]));
+    }
+
+    /** A mapper that forgets to bump (or mis-bumps) the version would corrupt the rest of the chain. */
+    #[DataProvider('badlyVersionedUpgradeProvider')]
+    public function testAMapperThatDoesNotProduceTheNextVersionDropsThePayload(array $upgraded): void
+    {
+        $from = NormalisedResult::VERSION - 1;
+        $sut = new AnalysisResultNormaliser(new ReportMapper(), [
+            $this->customMapper($from, static fn(array $payload): array => $upgraded),
+        ]);
+
+        $this->assertNull($sut->fromStored(['version' => $from, 'rows' => []]));
+    }
+
+    public static function badlyVersionedUpgradeProvider(): array
+    {
+        return [
+            'version not bumped' => [['version' => NormalisedResult::VERSION - 1, 'rows' => []]],
+            'version skipped ahead' => [['version' => NormalisedResult::VERSION + 1, 'rows' => []]],
+            'version missing' => [['rows' => []]],
+        ];
+    }
+
     public function testRefusesTwoMappersForTheSameVersion(): void
     {
         $this->expectException(\LogicException::class);
@@ -137,6 +171,26 @@ final class AnalysisResultNormaliserTest extends TestCase
                 $payload['rows'][$this->name] = ['flag' => null, 'remark' => null, 'value' => $this->name, 'checks' => []];
 
                 return $payload;
+            }
+        };
+    }
+
+    /** A fake mapper with arbitrary upgrade behaviour. */
+    private function customMapper(int $version, \Closure $upgrade): VersionMapperInterface
+    {
+        return new class ($version, $upgrade) implements VersionMapperInterface {
+            public function __construct(private readonly int $version, private readonly \Closure $upgrade)
+            {
+            }
+
+            public function fromVersion(): int
+            {
+                return $this->version;
+            }
+
+            public function upgrade(array $payload): array
+            {
+                return ($this->upgrade)($payload);
             }
         };
     }

@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Api\Entity\Licence;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection as CollectionInterface;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\LicenceStatusAwareTrait;
@@ -214,7 +215,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
     ) {
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('regNo', $regNo))
-            ->orderBy(['variationNo' => Criteria::DESC]);
+            ->orderBy(['variationNo' => Order::Descending]);
 
         $matchedBusReg = $this->getBusRegs()->matching($criteria);
 
@@ -240,7 +241,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
     {
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('licence', $this))
-            ->orderBy(['routeNo' => Criteria::DESC])
+            ->orderBy(['routeNo' => Order::Descending])
             ->setMaxResults(1);
 
         return !empty($this->getBusRegs()->matching($criteria)->current())

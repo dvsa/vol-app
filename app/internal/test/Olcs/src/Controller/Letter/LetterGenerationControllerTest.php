@@ -8,6 +8,7 @@ use Common\Service\Cqrs\Response;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\UpdateIssues;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\GenerationContext;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterIssue\GetList as LetterIssueList;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList as LetterIssueTypeList;
@@ -145,6 +146,69 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertSame(
             json_encode(['blocks' => [], 'version' => '2.28.2']),
             $this->editorContent(null, null, null)
+        );
+    }
+
+    private function invokeProtected(string $method, mixed ...$args): mixed
+    {
+        return (new \ReflectionMethod(Sut::class, $method))->invoke($this->makeSut([]), ...$args);
+    }
+
+    /**
+     * VOL-7737: on the edit page each to-do sits under the first issue it can go under that is
+     * on screen; one with none of its issues on screen is listed after them.
+     */
+    public function testEditPageTodosSitUnderTheFirstOfTheirIssuesOnScreen(): void
+    {
+        $groupedIssues = [
+            1 => ['typeName' => 'Finances', 'issues' => [['id' => 10], ['id' => 20]]],
+        ];
+        $todos = [
+            ['id' => 1, 'placementIssueIds' => [10, 20]],
+            ['id' => 2, 'placementIssueIds' => [30, 20]],
+            ['id' => 3, 'placementIssueIds' => [30]],
+            ['id' => 4],
+        ];
+
+        [$placed, $unplaced] = $this->invokeProtected('placeTodosUnderIssues', $groupedIssues, $todos);
+
+        $this->assertSame([1], array_column($placed[1]['issues'][0]['todos'], 'id'));
+        $this->assertSame([2], array_column($placed[1]['issues'][1]['todos'], 'id'));
+        $this->assertSame([3, 4], array_column($unplaced, 'id'));
+    }
+
+    private function instanceSection(int $id, string $key): array
+    {
+        return ['id' => $id, 'letterSectionVersion' => ['letterSectionVariant' => ['letterSection' => ['sectionKey' => $key]]]];
+    }
+
+    public function testEditPageFollowsTheLetterOrder(): void
+    {
+        $instanceSections = [
+            $this->instanceSection(1, 'intro'),
+            $this->instanceSection(2, '__ISSUES__'),
+            $this->instanceSection(3, 'closing'),
+        ];
+        $intro = ['id' => 1, 'name' => 'Intro'];
+        $closing = ['id' => 3, 'name' => 'Closing'];
+
+        $this->assertSame(
+            [['section' => $intro], ['issues' => true], ['section' => $closing]],
+            $this->invokeProtected('editLayout', $instanceSections, [$closing, $intro])
+        );
+        $this->assertSame(
+            [['issues' => true], ['section' => $closing]],
+            $this->invokeProtected('editLayout', $instanceSections, [$closing])
+        );
+    }
+
+    public function testEditPageShowsIssuesAfterTheSectionsWhenTheLetterHasNoIssuesSection(): void
+    {
+        $intro = ['id' => 1, 'name' => 'Intro'];
+
+        $this->assertSame(
+            [['section' => $intro], ['issues' => true]],
+            $this->invokeProtected('editLayout', [$this->instanceSection(1, 'intro')], [$intro])
         );
     }
 
@@ -400,5 +464,250 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $response = $sut->generateAction();
 
         $this->assertStringContainsString('Failed to generate letter', $response->getContent());
+    }
+
+    private function letterForChangeIssues(array $overrides = []): array
+    {
+        return $overrides + [
+            'id' => 55,
+            'status' => ['id' => 'ltr_sts_draft'],
+            'licence' => ['id' => 7],
+            'application' => null,
+            'letterInstanceAppendices' => [],
+            'letterInstanceIssues' => [
+                [
+                    'id' => 501,
+                    'letterIssueVersion' => [
+                        'heading' => 'Bank statements',
+                        'letterIssue' => ['id' => 20],
+                        'letterIssueType' => ['id' => 2, 'name' => 'Finance'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    private function runChangeIssues(Sut $sut, array $query): mixed
+    {
+        $request = new Request();
+        $request->getQuery()->fromArray($query);
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+        $sut->shouldReceive('csrfToken')->andReturn('csrf-hash')->byDefault();
+
+        return $sut->changeIssuesAction();
+    }
+
+    private function financeAccordion(): array
+    {
+        return [
+            ['issueType' => ['id' => 1, 'name' => 'Adverts'], 'issues' => [['id' => 10, 'issueKey' => 'AD1', 'currentVersion' => ['heading' => 'Advert']]]],
+            ['issueType' => ['id' => 2, 'name' => 'Finance'], 'issues' => [
+                ['id' => 20, 'issueKey' => 'FI1', 'currentVersion' => ['heading' => 'Bank statements']],
+                ['id' => 21, 'issueKey' => 'FI2', 'currentVersion' => ['heading' => 'Overdraft']],
+            ]],
+        ];
+    }
+
+    public function testChangeIssuesPreTicksIssuesOnTheLetter(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->with(55)->andReturn($this->letterForChangeIssues());
+        $sut->shouldReceive('fetchLetterContext')->andReturn(['goodsOrPsv' => 'lcat_psv']);
+        $sut->shouldReceive('buildAccordionData')->andReturn($this->financeAccordion());
+
+        $view = $this->runChangeIssues($sut, ['id' => '55', 'from' => 'edit']);
+
+        $this->assertInstanceOf(ViewModel::class, $view);
+        $this->assertTrue($view->terminate());
+        $this->assertSame('pages/letter/change-issues', $view->getTemplate());
+        $this->assertSame([20], $view->getVariable('selectedIssueIds'));
+        $this->assertSame('edit', $view->getVariable('from'));
+        $this->assertSame(55, $view->getVariable('letterInstanceId'));
+        $this->assertFalse($view->getVariable('hasAppendices'));
+        $this->assertFalse($view->getVariable('locked'));
+    }
+
+    public function testChangeIssuesShowsAnIssueNoLongerOffered(): void
+    {
+        $letter = $this->letterForChangeIssues();
+        $letter['letterInstanceIssues'][] = ['id' => 502, 'letterIssueVersion' => [
+            'heading' => 'Retired wording',
+            'letterIssue' => ['id' => 99],
+            'letterIssueType' => ['id' => 2, 'name' => 'Finance'],
+        ]];
+        $letter['letterInstanceIssues'][] = ['id' => 503, 'letterIssueVersion' => [
+            'heading' => 'Orphaned',
+            'letterIssue' => ['id' => 77],
+            'letterIssueType' => ['id' => 5, 'name' => 'Gone type'],
+        ]];
+
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn($letter);
+        $sut->shouldReceive('fetchLetterContext')->andReturn([]);
+        $sut->shouldReceive('buildAccordionData')->andReturn($this->financeAccordion());
+
+        $accordion = $this->runChangeIssues($sut, ['id' => '55'])->getVariable('accordionData');
+
+        $finance = $accordion[1];
+        $this->assertSame([20, 21, 99], array_column($finance['issues'], 'id'));
+        $this->assertSame('Retired wording', $finance['issues'][2]['currentVersion']['heading']);
+        $this->assertSame('Gone type', $accordion[2]['issueType']['name']);
+        $this->assertSame([77], array_column($accordion[2]['issues'], 'id'));
+    }
+
+    public function testChangeIssuesUsesTheApplicationThenLicenceForGoodsOrPsv(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn(
+            $this->letterForChangeIssues(['application' => ['id' => 3]])
+        );
+        $sut->shouldReceive('fetchLetterContext')->with(['type' => 'application', 'id' => 3])->once()
+            ->andReturn(['goodsOrPsv' => 'lcat_gv']);
+        $sut->shouldReceive('buildAccordionData')->with('lcat_gv')->once()->andReturn([]);
+
+        $this->runChangeIssues($sut, ['id' => '55']);
+    }
+
+    public function testChangeIssuesOnASentLetterIsLocked(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn(
+            $this->letterForChangeIssues(['status' => ['id' => 'ltr_sts_sent']])
+        );
+        $sut->shouldReceive('buildAccordionData')->never();
+
+        $view = $this->runChangeIssues($sut, ['id' => '55']);
+
+        $this->assertTrue($view->getVariable('locked'));
+    }
+
+    public function testChangeIssuesForAMissingLetterIs404(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn(null);
+
+        $this->assertSame(404, $this->runChangeIssues($sut, ['id' => '55'])->getStatusCode());
+        $this->assertSame(404, $this->runChangeIssues($this->bareSut(), [])->getStatusCode());
+    }
+
+    private function postUpdateIssues(Sut $sut, array $post): array
+    {
+        $request = new Request();
+        $request->setMethod('POST');
+        $request->getPost()->fromArray($post);
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+
+        $response = $sut->updateIssuesAction();
+
+        return ['status' => $response->getStatusCode(), 'json' => json_decode($response->getContent(), true)];
+    }
+
+    public function testUpdateIssuesPostsTheSelection(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd instanceof UpdateIssues
+                && $cmd->getId() === 55
+                && $cmd->getSelectedIssues() === [21, 20]
+                && $cmd->getConfirmLoss() === true))
+            ->once()
+            ->andReturn($this->okResponse(['flags' => ['addedIssueIds' => []], 'messages' => []]));
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn(['letterInstanceIssues' => [], 'letterInstanceTodos' => []]);
+
+        $result = $this->postUpdateIssues($sut, ['letterInstanceId' => '55', 'letterIssues' => ['21', '20'], 'confirmLoss' => '1']);
+
+        $this->assertTrue($result['json']['success']);
+    }
+
+    public function testUpdateIssuesWithNothingTickedSendsAnEmptySelection(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd->getSelectedIssues() === [] && !$cmd->getConfirmLoss()))
+            ->once()
+            ->andReturn($this->okResponse(['flags' => [], 'messages' => []]));
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn([]);
+
+        $this->assertTrue($this->postUpdateIssues($sut, ['letterInstanceId' => '55'])['json']['success']);
+    }
+
+    public function testUpdateIssuesAsksForConfirmation(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->andReturn($this->okResponse([
+            'flags' => ['confirmationRequired' => true],
+            'messages' => ['Bank statements', 'Send a lease'],
+        ]));
+        $sut->shouldReceive('fetchLetterInstanceById')->never();
+
+        $json = $this->postUpdateIssues($sut, ['letterInstanceId' => '55', 'letterIssues' => []])['json'];
+
+        $this->assertTrue($json['confirmationRequired']);
+        $this->assertSame(['Bank statements', 'Send a lease'], $json['lostEdits']);
+    }
+
+    public function testUpdateIssuesReturnsRemainingIds(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->andReturn($this->okResponse([
+            'flags' => ['addedIssueIds' => [903], 'movedTodoIds' => [61 => 904]],
+            'messages' => ['Issues updated: 1 added, 0 removed'],
+        ]));
+        $sut->shouldReceive('fetchLetterInstanceById')->with(55)->andReturn([
+            'letterInstanceIssues' => [['id' => 501], ['id' => 903]],
+            'letterInstanceTodos' => [['id' => 61]],
+        ]);
+
+        $json = $this->postUpdateIssues($sut, ['letterInstanceId' => '55', 'letterIssues' => ['20', '30']])['json'];
+
+        $this->assertSame([903], $json['addedIssueIds']);
+        $this->assertSame([501, 903], $json['issueIds']);
+        $this->assertSame([61], $json['todoIds']);
+        $this->assertSame([61 => 904], $json['movedTodoIds']);
+    }
+
+    public function testUpdateIssuesShowsTheValidationMessage(): void
+    {
+        $failed = m::mock(Response::class);
+        $failed->shouldReceive('isOk')->andReturn(false);
+        $failed->shouldReceive('getResult')->andReturn([
+            'messages' => [['Issues can only be changed on a draft or ready letter']],
+        ]);
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->andReturn($failed);
+
+        $result = $this->postUpdateIssues($sut, ['letterInstanceId' => '55']);
+
+        $this->assertSame(400, $result['status']);
+        $this->assertSame('Issues can only be changed on a draft or ready letter', $result['json']['message']);
+    }
+
+    public function testUpdateIssuesRejectsGet(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('getRequest')->andReturn(new Request());
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+        $sut->shouldReceive('handleCommand')->never();
+
+        $this->assertSame(405, $sut->updateIssuesAction()->getStatusCode());
+    }
+
+    /**
+     * Form posts without a valid "security" token are turned into GETs by Common\Module, so the
+     * modal has to carry one or saving can never work.
+     */
+    public function testChangeIssuesCarriesACsrfToken(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn($this->letterForChangeIssues());
+        $sut->shouldReceive('fetchLetterContext')->andReturn([]);
+        $sut->shouldReceive('buildAccordionData')->andReturn([]);
+        $sut->shouldReceive('csrfToken')->once()->andReturn('abc123-token');
+
+        $view = $this->runChangeIssues($sut, ['id' => '55']);
+
+        $this->assertSame('abc123-token', $view->getVariable('csrfToken'));
     }
 }

@@ -290,6 +290,25 @@ final class ReportMapperTest extends TestCase
         );
     }
 
+    /**
+     * FI10 evaluates the statement's closing date, not the issue date printed on it (which may
+     * not be present at all), so the Statement Date row must reflect the period end even when
+     * the two differ or the issue date is missing.
+     */
+    public function testStatementDateIsTakenFromThePeriodEndNotTheIssueDate(): void
+    {
+        $normalised = $this->normalise($this->givenResult(
+            $this->typicalChecks(),
+            [
+                'statement_issue_date' => null,
+                'statement_period_start' => '2026-08-01',
+                'statement_period_end' => '2026-08-31',
+            ]
+        ));
+
+        $this->assertSame('2026-08-31', $normalised['rows']['statementDate']['value']);
+    }
+
     /** The model is asked for typed values, but the stored JSON is not validated, so each is checked. */
     #[DataProvider('unusableValueProvider')]
     public function testDiscardsValuesOfTheWrongShape(array $details, string $row): void
@@ -304,8 +323,8 @@ final class ReportMapperTest extends TestCase
         return [
             'blank bank name' => [['bank_name' => '  '], 'bank'],
             'non-string bank address' => [['bank_address' => ['line one']], 'bankAddress'],
-            'date in display format' => [['statement_issue_date' => '31/08/2026'], 'statementDate'],
-            'impossible date' => [['statement_issue_date' => '2026-02-30'], 'statementDate'],
+            'date in display format' => [['statement_period_end' => '31/08/2026'], 'statementDate'],
+            'impossible date' => [['statement_period_end' => '2026-02-30'], 'statementDate'],
             'period missing its end' => [['statement_period_start' => '2026-08-01'], 'statementPeriod'],
             'period with an unreadable start' => [
                 ['statement_period_start' => 'August', 'statement_period_end' => '2026-08-31'],

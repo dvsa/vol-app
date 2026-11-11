@@ -23,11 +23,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @source OLCS-Entity-Generator-v2
  */
 #[ORM\Table(name: 'retrieval_link_document')]
-#[ORM\Index(name: 'ix_retrieval_link_document_retrieval_link_id', columns: ['retrieval_link_id'])]
-#[ORM\Index(name: 'ix_retrieval_link_document_document_id', columns: ['document_id'])]
 #[ORM\Index(name: 'ix_retrieval_link_document_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_retrieval_link_document_document_id', columns: ['document_id'])]
 #[ORM\Index(name: 'ix_retrieval_link_document_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'uk_retrieval_link_document_member_ref', columns: ['member_ref'])]
+#[ORM\Index(name: 'ix_retrieval_link_document_retrieval_link_id', columns: ['retrieval_link_id'])]
 #[ORM\UniqueConstraint(name: 'uk_retrieval_link_document_member_ref', columns: ['member_ref'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -50,20 +49,16 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
     protected $id;
 
     /**
-     * Foreign Key to retrieval_link
+     * RetrievalLink
      *
      * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
      */
     #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(
-        targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class,
-        inversedBy: 'documents',
-        fetch: 'LAZY'
-    )]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $retrievalLink;
 
     /**
-     * Foreign Key to document
+     * Real document id — server-side only, never exposed
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
@@ -72,7 +67,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
     protected $document;
 
     /**
-     * Member ref
+     * Opaque, unguessable per-member id used in the download url
      *
      * @var string
      */
@@ -80,7 +75,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
     protected $memberRef = '';
 
     /**
-     * Display filename
+     * Filename shown to the recipient and used for Content-Disposition
      *
      * @var string
      */
@@ -145,7 +140,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return RetrievalLinkDocument
+     * @return static
      */
     public function setId($id)
     {
@@ -169,7 +164,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink $retrievalLink new value being set
      *
-     * @return RetrievalLinkDocument
+     * @return static
      */
     public function setRetrievalLink($retrievalLink)
     {
@@ -193,7 +188,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
      *
-     * @return RetrievalLinkDocument
+     * @return static
      */
     public function setDocument($document)
     {
@@ -217,7 +212,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
      *
      * @param string $memberRef new value being set
      *
-     * @return RetrievalLinkDocument
+     * @return static
      */
     public function setMemberRef($memberRef)
     {
@@ -241,7 +236,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
      *
      * @param string $displayFilename new value being set
      *
-     * @return RetrievalLinkDocument
+     * @return static
      */
     public function setDisplayFilename($displayFilename)
     {
@@ -265,7 +260,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
      *
      * @param int $displayOrder new value being set
      *
-     * @return RetrievalLinkDocument
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -289,7 +284,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return RetrievalLinkDocument
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -313,7 +308,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return RetrievalLinkDocument
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -337,7 +332,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return RetrievalLinkDocument
+     * @return static
      */
     public function setVersion($version)
     {

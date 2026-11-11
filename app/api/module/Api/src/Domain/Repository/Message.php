@@ -70,7 +70,7 @@ class Message extends AbstractRepository
     {
         $qb = $this->createQueryBuilder();
         $qb = $this->filterByConversationId($qb, $conversationId);
-        $qb->orderBy($this->alias . '.id', 'desc');
+        $qb->orderBy($this->alias . '.id', \SortDirection::Descending);
         $qb->setMaxResults(1);
         return $qb->getQuery()->getSingleResult(Query::HYDRATE_ARRAY);
     }
@@ -139,7 +139,7 @@ class Message extends AbstractRepository
 
         return $qb->where($qb->expr()->eq($this->alias . '.messagingConversation', ':conversationId'))
             ->setParameter('conversationId', $conversationId)
-            ->orderBy($this->alias . '.createdOn', 'DESC')
+            ->orderBy($this->alias . '.createdOn', \SortDirection::Descending)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();

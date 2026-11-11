@@ -2,7 +2,7 @@
 
 namespace Common\Service;
 
-use Laminas\Form\Annotation\AnnotationBuilder;
+use Laminas\Form\Annotation\AttributeBuilder;
 use Psr\Container\ContainerInterface;
 use Laminas\Form\Factory;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -10,7 +10,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class FormAnnotationBuilderFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AnnotationBuilder
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AttributeBuilder
     {
         // set up a form factory which can use custom form elements
         $formElementManager = $container->get('FormElementManager');
@@ -26,7 +26,7 @@ class FormAnnotationBuilderFactory implements FactoryInterface
             ->setPluginManager($container->get('FilterManager'));
 
         // create service and set custom form factory
-        $annotationBuilder = new AnnotationBuilder();
+        $annotationBuilder = new AttributeBuilder();
         $annotationBuilder->setFormFactory($formFactory);
 
         return $annotationBuilder;

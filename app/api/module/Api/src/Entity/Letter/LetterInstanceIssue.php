@@ -20,7 +20,7 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
      * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceTodo>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo::class, mappedBy: 'letterInstanceIssue', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $letterInstanceTodos;
 
     /**
@@ -39,6 +39,25 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
     public function getLetterInstanceTodos()
     {
         return $this->letterInstanceTodos;
+    }
+
+    /**
+     * Add a letter instance todo, keeping both sides of the association in step
+     */
+    public function addLetterInstanceTodo(LetterInstanceTodo $todo): void
+    {
+        if (!$this->letterInstanceTodos->contains($todo)) {
+            $todo->setLetterInstanceIssue($this);
+            $this->letterInstanceTodos->add($todo);
+        }
+    }
+
+    /**
+     * Remove a letter instance todo from this issue's collection
+     */
+    public function removeLetterInstanceTodo(LetterInstanceTodo $todo): void
+    {
+        $this->letterInstanceTodos->removeElement($todo);
     }
 
     /**

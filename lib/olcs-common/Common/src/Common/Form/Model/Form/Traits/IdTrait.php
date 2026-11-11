@@ -8,6 +8,8 @@
 
 namespace Common\Form\Model\Form\Traits;
 
+use Laminas\Form\Annotation as Form;
+
 /**
  * Id Trait
  *
@@ -15,9 +17,7 @@ namespace Common\Form\Model\Form\Traits;
  */
 trait IdTrait
 {
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type('Hidden')]
     public $id;
 }

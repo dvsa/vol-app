@@ -7,10 +7,10 @@
  *
  * @var string $letterInstanceId Letter instance ID
  * @var array $letterInstance Letter instance data
- * @var array $groupedIssues Issues grouped by type: [typeId => ['typeName' => ..., 'issues' => [...]]]
+ * @var array $layout Letter order: [['section' => ...] | ['issues' => true], ...]
+ * @var array $groupedIssues Issues grouped by type, each with the to-dos placed under it
  * @var array $groupedAppendices Editable appendices to render
- * @var array $groupedSections Editable letter instance sections to render
- * @var array $groupedTodos Editable to-dos to render
+ * @var array $groupedTodos Editable to-dos whose issues are not being edited
  */
 ?>
 
@@ -27,45 +27,16 @@
     You can format text using bold, italics, underline and bullets.
 </p>
 
-<?php foreach ($groupedIssues as $typeId => $group): ?>
-    <h2 class="govuk-heading-m"><?= $this->escapeHtml($group['typeName']) ?> section</h2>
-
-    <?php foreach ($group['issues'] as $issue): ?>
-        <div class="govuk-form-group issue-editor-group" data-issue-id="<?= $this->escapeHtmlAttr($issue['id']) ?>">
-            <h3 class="govuk-heading-s"><?= $this->escapeHtml($issue['heading']) ?></h3>
-
-            <div class="editorjs-container" data-element-name="issue-<?= $this->escapeHtmlAttr($issue['id']) ?>">
-                <div id="editor-<?= $this->escapeHtmlAttr($issue['id']) ?>" class="editorjs-editor"></div>
-                <input type="hidden"
-                       name="issue-<?= $this->escapeHtmlAttr($issue['id']) ?>"
-                       value="<?= $this->escapeHtmlAttr($issue['content']) ?>">
-            </div>
-
-            <div style="margin-top: 10px;">
-                <button type="button"
-                        class="govuk-button save-issue-btn"
-                        data-issue-id="<?= $this->escapeHtmlAttr($issue['id']) ?>"
-                        data-version="<?= $this->escapeHtmlAttr($issue['version']) ?>">
-                    Save changes
-                </button>
-                <span class="save-indicator govuk-tag govuk-tag--green" style="display: none; margin-left: 10px;">
-                    Saved
-                </span>
-            </div>
-        </div>
-
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-    <?php endforeach; ?>
-<?php endforeach; ?>
-
-<?php if (!empty($groupedSections)): ?>
-    <h2 class="govuk-heading-m">Sections</h2>
-
-    <?php foreach ($groupedSections as $section): ?>
+<?php // The page follows the letter (VOL-7737): sections in letter order around the issues,
+      // each issue followed by its own to-dos. ?>
+<?php foreach ($layout as $block): ?>
+    <?php if (isset($block['section'])): ?>
+        <?php $section = $block['section']; ?>
         <div class="govuk-form-group section-editor-group"
              data-section-id="<?= $this->escapeHtmlAttr($section['id']) ?>"
              data-version="<?= $this->escapeHtmlAttr($section['version']) ?>">
-            <h3 class="govuk-heading-s"><?= $this->escapeHtml($section['name']) ?></h3>
+            <?php // h2: a section stands on its own in the letter, level with the issue-type headings ?>
+            <h2 class="govuk-heading-s"><?= $this->escapeHtml($section['name']) ?></h2>
 
             <div class="editorjs-container" data-element-name="section_<?= $this->escapeHtmlAttr($section['id']) ?>">
                 <div id="editor-section-<?= $this->escapeHtmlAttr($section['id']) ?>" class="editorjs-editor"></div>
@@ -88,51 +59,55 @@
         </div>
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-    <?php endforeach; ?>
-<?php endif; ?>
+    <?php else: ?>
+        <?php foreach ($groupedIssues as $typeId => $group): ?>
+            <h2 class="govuk-heading-m"><?= $this->escapeHtml($group['typeName']) ?> section</h2>
 
-<?php if (!empty($groupedTodos)): ?>
-    <?php // The heading the rendered letter uses for these, so the editor matches the output. ?>
-    <h2 class="govuk-heading-m">What you need to do</h2>
+            <?php foreach ($group['issues'] as $issue): ?>
+                <div class="govuk-form-group issue-editor-group" data-issue-id="<?= $this->escapeHtmlAttr($issue['id']) ?>">
+                    <h3 class="govuk-heading-s"><?= $this->escapeHtml($issue['heading']) ?></h3>
 
-    <?php foreach ($groupedTodos as $todo): ?>
-        <div class="govuk-form-group todo-editor-group"
-             data-todo-id="<?= $this->escapeHtmlAttr($todo['id']) ?>"
-             data-version="<?= $this->escapeHtmlAttr($todo['version']) ?>">
-            <h3 class="govuk-heading-s"><?= $this->escapeHtml($todo['name']) ?></h3>
+                    <div class="editorjs-container" data-element-name="issue-<?= $this->escapeHtmlAttr($issue['id']) ?>">
+                        <div id="editor-<?= $this->escapeHtmlAttr($issue['id']) ?>" class="editorjs-editor"></div>
+                        <input type="hidden"
+                               name="issue-<?= $this->escapeHtmlAttr($issue['id']) ?>"
+                               value="<?= $this->escapeHtmlAttr($issue['content']) ?>">
+                    </div>
 
-            <?php // A to-do is deduplicated, so one shared by several issues appears once, under
-                  // whichever issue came first. Say so, or an edit here looks narrower than it is. ?>
-            <?php if (($todo['requiringIssueCount'] ?? 1) > 1): ?>
-                <p class="govuk-inset-text govuk-!-margin-top-0">
-                    This to-do is required by <?= $this->escapeHtml($todo['requiringIssueCount']) ?>
-                    issues in this letter. Editing it here changes it once, wherever it appears.
-                </p>
-            <?php endif; ?>
+                    <div style="margin-top: 10px;">
+                        <button type="button"
+                                class="govuk-button save-issue-btn"
+                                data-issue-id="<?= $this->escapeHtmlAttr($issue['id']) ?>"
+                                data-version="<?= $this->escapeHtmlAttr($issue['version']) ?>">
+                            Save changes
+                        </button>
+                        <span class="save-indicator govuk-tag govuk-tag--green" style="display: none; margin-left: 10px;">
+                            Saved
+                        </span>
+                    </div>
+                </div>
 
-            <div class="editorjs-container" data-element-name="todo_<?= $this->escapeHtmlAttr($todo['id']) ?>">
-                <div id="editor-todo-<?= $this->escapeHtmlAttr($todo['id']) ?>" class="editorjs-editor"></div>
-                <input type="hidden"
-                       name="todo_<?= $this->escapeHtmlAttr($todo['id']) ?>"
-                       value="<?= $this->escapeHtmlAttr($todo['content']) ?>">
-            </div>
+                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-            <div style="margin-top: 10px;">
-                <button type="button"
-                        class="govuk-button save-todo-btn"
-                        data-todo-id="<?= $this->escapeHtmlAttr($todo['id']) ?>"
-                        data-version="<?= $this->escapeHtmlAttr($todo['version']) ?>">
-                    Save changes
-                </button>
-                <span class="save-indicator govuk-tag govuk-tag--green" style="display: none; margin-left: 10px;">
-                    Saved
-                </span>
-            </div>
-        </div>
+                <?php if (!empty($issue['todos'])): ?>
+                    <?php // The heading the rendered letter uses for these, so the editor matches the output. ?>
+                    <h4 class="govuk-heading-s">What you need to do</h4>
+                    <?php foreach ($issue['todos'] as $todo): ?>
+                        <?= $this->partial('pages/letter/partials/todo-editor', ['todo' => $todo, 'headingTag' => 'h5']) ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
 
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-    <?php endforeach; ?>
-<?php endif; ?>
+        <?php if (!empty($groupedTodos)): ?>
+            <h2 class="govuk-heading-m">What you need to do</h2>
+            <p class="govuk-body">These to-dos belong to issues you are not editing.</p>
+            <?php foreach ($groupedTodos as $todo): ?>
+                <?= $this->partial('pages/letter/partials/todo-editor', ['todo' => $todo]) ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endforeach; ?>
 
 <?php if (!empty($groupedAppendices)): ?>
     <h2 class="govuk-heading-m">Appendices</h2>
@@ -166,6 +141,18 @@
 <?php endif; ?>
 
 <div style="margin-top: 30px;">
+    <?php if (in_array($letterInstance['status']['id'] ?? null, ['ltr_sts_draft', 'ltr_sts_ready'], true)): ?>
+    <button
+        type="button"
+        id="change-issues-btn"
+        class="govuk-button govuk-button--secondary"
+        data-letter-instance-id="<?= $this->escapeHtmlAttr($letterInstance['id'] ?? '') ?>"
+        data-from="edit"
+        style="margin-right: 10px;"
+    >
+        Change issues
+    </button>
+    <?php endif; ?>
     <a href="/letter/preview?id=<?= $this->escapeHtmlAttr($letterInstanceId) ?>"
        id="back-to-preview"
        class="govuk-button govuk-button--secondary">

@@ -12,26 +12,16 @@ class ReplacementDetails
 {
     use IdTrait;
 
-    /**
-     * @Form\Type("Text")
-     * @Form\Name("placeholder")
-     * @Form\Attributes({"id":"placeholder","class":"medium"})
-     * @Form\Options({
-     *     "label": "Placeholder",
-     *     "required": true
-     * })
-     */
+    #[Form\Type('Text')]
+    #[Form\Name('placeholder')]
+    #[Form\Attributes(['id' => 'placeholder', 'class' => 'medium'])]
+    #[Form\Options(['label' => 'Placeholder', 'required' => true])]
     public $placeholder = null;
 
-    /**
-     * @Form\Type("Text")
-     * @Form\Name("replacementText")
-     * @Form\Attributes({"id":"replacementText","class":"medium"})
-     * @Form\Options({
-     *     "label": "Replacement Text",
-     *     "required": true
-     * })
-     * @Form\Required(false)
-     */
+    #[Form\Type('Text')]
+    #[Form\Name('replacementText')]
+    #[Form\Attributes(['id' => 'replacementText', 'class' => 'medium'])]
+    #[Form\Options(['label' => 'Replacement Text', 'required' => true])]
+    #[Form\Required(false)]
     public $replacementText = null;
 }

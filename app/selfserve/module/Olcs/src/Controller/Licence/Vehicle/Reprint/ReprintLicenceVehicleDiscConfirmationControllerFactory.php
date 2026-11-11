@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Olcs\Controller\Licence\Vehicle\Reprint;
 
+use Common\Service\FlashMessenger\LaminasSessionFlashMessenger;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
@@ -27,7 +28,7 @@ class ReprintLicenceVehicleDiscConfirmationControllerFactory implements FactoryI
         $formHelper = $container->get(FormHelperService::class);
         $tableBuilder = $container->get(TableFactory::class);
         $mapperManager = $container->get(MapperManager::class);
-        $flashMessengerHelper = $container->get('ControllerPluginManager')->get('FlashMessenger');
+        $flashMessengerHelper = $container->get(LaminasSessionFlashMessenger::class);
         return new ReprintLicenceVehicleDiscConfirmationController($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 }

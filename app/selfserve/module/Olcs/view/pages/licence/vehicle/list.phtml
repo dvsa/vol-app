@@ -24,13 +24,13 @@
 
                 <?php if (isset($this->ocrsForm)) { ?>
                 <div id="share-vehicle-details" class="govuk-!-margin-bottom-4">
-                    <h3 class="govuk-heading-m"><?php echo $this->translate('licence.vehicle.list.form.orcs.checkbox.heading'); ?></h3>
+                    <h2 class="govuk-heading-m"><?php echo $this->translate('licence.vehicle.list.form.orcs.checkbox.heading'); ?></h2>
                     <?php echo $this->form($this->ocrsForm); ?>
                 </div>
                 <?php } ?>
 
                 <div id="export" class="govuk-!-margin-bottom-4">
-                    <h3 class="govuk-heading-m"><?php echo $this->translate('licence.vehicle.list.section.export.header'); ?></h3>
+                    <h2 class="govuk-heading-m"><?php echo $this->translate('licence.vehicle.list.section.export.header'); ?></h2>
                     <p class="govuk-body"><?php echo $this->translate('licence.vehicle.list.section.export.description'); ?></p>
                     <ul class="govuk-list">
                         <li>
@@ -61,7 +61,7 @@
                         <div id="<?= \Olcs\Controller\Licence\Vehicle\ListVehicleController::REMOVE_TABLE_WRAPPER_ID ?>" class="govuk-!-margin-bottom-4">
                             <div class="govuk-table">
                                 <div class="govuk-clearfix">
-                                    <h3 class="govuk-heading-m"><?php echo $this->removedVehicleTableTitle; ?></h3>
+                                    <h2 class="govuk-heading-m"><?php echo $this->removedVehicleTableTitle; ?></h2>
                                     <?php echo $this->removedVehiclesTable; ?>
                                 </div>
                             </div>

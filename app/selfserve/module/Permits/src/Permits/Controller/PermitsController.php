@@ -4,10 +4,10 @@ namespace Permits\Controller;
 
 use Common\Controller\Traits\GenericReceipt;
 use Common\RefData;
+use Common\Service\FlashMessenger\FlashMessengerInterface;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
-use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\SelfserveApplicationsSummary;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\SelfserveIssuedPermitsSummary;
 use Laminas\Http\Header\Referer as HttpReferer;
@@ -23,7 +23,6 @@ class PermitsController extends AbstractSelfserveController
 {
     use ExternalControllerTrait;
     use GenericReceipt;
-    use FlashMessengerTrait;
 
     protected $applicationsTableName = 'dashboard-permit-application';
     protected $issuedTableName = 'dashboard-permits-issued';
@@ -47,7 +46,8 @@ class PermitsController extends AbstractSelfserveController
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
-        MapperManager $mapperManager
+        MapperManager $mapperManager,
+        protected FlashMessengerInterface $flashMessenger
     ) {
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
@@ -150,7 +150,7 @@ class PermitsController extends AbstractSelfserveController
     {
         foreach ($this->currentMessages as $namespace => $messages) {
             foreach ($messages as $message) {
-                $this->addMessage($message, $namespace);
+                $this->flashMessenger->addMessage($message, $namespace);
             }
         }
     }

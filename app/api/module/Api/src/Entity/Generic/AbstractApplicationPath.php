@@ -116,7 +116,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep::class, mappedBy: 'applicationPath')]
-    #[ORM\OrderBy(['weight' => 'ASC'])]
+    #[ORM\OrderBy(['weight' => \SortDirection::Ascending])]
     protected $applicationSteps;
 
     /**

@@ -77,6 +77,7 @@ class AnalysisResultNormaliser
             return null;
         }
 
+        $storedVersion = $version;
         $payload = $stored;
 
         while ($version < NormalisedResult::VERSION) {
@@ -91,7 +92,32 @@ class AnalysisResultNormaliser
                 return null;
             }
 
-            $payload = $mapper->upgrade($payload);
+            try {
+                $payload = $mapper->upgrade($payload);
+            } catch (\Throwable $e) {
+                Logger::err('IDP analysis result: version mapper failed', [
+                    'mapper' => $mapper::class,
+                    'step_version' => $version,
+                    'stored_version' => $storedVersion,
+                    'exception' => $e::class,
+                    'message' => $e->getMessage(),
+                ]);
+
+                return null;
+            }
+
+            // Each mapper must hand on exactly the next version, or the chain is silently wrong.
+            if (($payload['version'] ?? null) !== $version + 1) {
+                Logger::err('IDP analysis result: version mapper did not produce the next version', [
+                    'mapper' => $mapper::class,
+                    'step_version' => $version,
+                    'stored_version' => $storedVersion,
+                    'produced_version' => $payload['version'] ?? null,
+                ]);
+
+                return null;
+            }
+
             $version++;
         }
 
@@ -105,6 +131,28 @@ class AnalysisResultNormaliser
             return null;
         }
 
-        return NormalisedResult::fromArray($payload);
+        // Keys only, never values: the payload may hold applicant data.
+        try {
+            $result = NormalisedResult::fromArray($payload);
+        } catch (\Throwable $e) {
+            Logger::err('IDP analysis result: upgraded payload is not a valid result', [
+                'stored_version' => $storedVersion,
+                'current_version' => NormalisedResult::VERSION,
+                'payload_keys' => array_keys($payload),
+                'exception' => $e::class,
+                'message' => $e->getMessage(),
+            ]);
+
+            return null;
+        }
+
+        if ($storedVersion !== $version) {
+            Logger::debug('IDP analysis result: upgraded stored payload', [
+                'stored_version' => $storedVersion,
+                'current_version' => $version,
+            ]);
+        }
+
+        return $result;
     }
 }

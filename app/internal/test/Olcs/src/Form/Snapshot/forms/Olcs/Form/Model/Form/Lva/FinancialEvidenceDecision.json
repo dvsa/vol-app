@@ -28,7 +28,7 @@
         "options": {
           "label": "Select your decision",
           "fieldset-attributes": {
-            "class": "govuk-fieldset govuk-! "
+            "class": "govuk-fieldset"
           },
           "legend-attributes": {
             "class": "govuk-fieldset__legend govuk-fieldset__legend--l"

@@ -50,7 +50,7 @@ class MasterTemplate extends AbstractRepository
             ))
             ->setParameter('isDefault', true)
             ->setParameter('locale', Entity::LOCALE_EN_GB)
-            ->orderBy($this->alias . '.locale', 'DESC')
+            ->orderBy($this->alias . '.locale', \SortDirection::Descending)
             ->setMaxResults(1);
 
         $result = $qb->getQuery()->getResult();

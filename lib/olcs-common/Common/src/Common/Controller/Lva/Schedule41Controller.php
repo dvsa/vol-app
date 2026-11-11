@@ -108,7 +108,7 @@ class Schedule41Controller extends AbstractController
             }
 
             if (!isset($postData['table']['id'])) {
-                $this->flashMessenger()
+                $this->flashMessengerHelper
                     ->addErrorMessage('application.schedule41.no-rows-selected');
 
                 return $this->redirect()->toRoute(
@@ -132,7 +132,7 @@ class Schedule41Controller extends AbstractController
             $response = $this->handleCommand($command);
 
             if ($response->isOk()) {
-                $this->flashMessenger()
+                $this->flashMessengerHelper
                     ->addSuccessMessage('lva.section.title.schedule41.success');
 
                 return $this->redirect()->toRouteAjax(
@@ -199,7 +199,7 @@ class Schedule41Controller extends AbstractController
                 $response = $this->handleCommand($command);
 
                 if ($response->isOk()) {
-                    $this->flashMessenger()
+                    $this->flashMessengerHelper
                         ->addSuccessMessage('lva.section.title.schedule41.approve.success');
 
                     return $this->redirect()->toRouteAjax(
@@ -263,7 +263,7 @@ class Schedule41Controller extends AbstractController
                 $response = $this->handleCommand($command);
 
                 if ($response->isOk()) {
-                    $this->flashMessenger()
+                    $this->flashMessengerHelper
                         ->addSuccessMessage('lva.section.title.schedule41.reset.success');
 
                     return $this->redirect()->toRouteAjax(
@@ -309,7 +309,7 @@ class Schedule41Controller extends AbstractController
                 $response = $this->handleCommand($command);
 
                 if ($response->isOk()) {
-                    $this->flashMessenger()
+                    $this->flashMessengerHelper
                         ->addSuccessMessage('lva.section.title.schedule41.refuse.success');
 
                     return $this->redirect()->toRouteAjax(
@@ -383,7 +383,7 @@ class Schedule41Controller extends AbstractController
      */
     protected function redirectWithError($message)
     {
-        $this->flashMessenger()
+        $this->flashMessengerHelper
             ->addErrorMessage($message);
 
         return $this->redirect()->toRoute(

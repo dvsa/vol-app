@@ -63,8 +63,8 @@ final class CategoryTest extends RepositoryTestCase
                 'isOnlyWithItems' => 'Y',
             ],
             'SELECT DISTINCT m' . $from
-            . ' INNER JOIN ' . Entity\Doc\DocTemplate::class . ' dct WITH dct.category = m.id'
-            . ' INNER JOIN ' . Entity\Doc\Document::class . ' dc WITH dc.id = dct.document'
+            . ' INNER JOIN ' . Entity\Doc\DocTemplate::class . ' dct ON dct.category = m.id'
+            . ' INNER JOIN ' . Entity\Doc\Document::class . ' dc ON dc.id = dct.document'
             . $allThree,
         ];
     }

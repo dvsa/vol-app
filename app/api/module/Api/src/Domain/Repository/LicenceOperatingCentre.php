@@ -72,7 +72,7 @@ class LicenceOperatingCentre extends AbstractRepository
             );
             $this->buildDefaultListQuery($qb, $query, ['adr']);
         } else {
-            $qb->orderBy('oca.id', 'ASC');
+            $qb->orderBy('oca.id', \SortDirection::Ascending);
         }
         return $this->maybeRemoveAdrColumn($qb->getQuery()->getArrayResult());
     }

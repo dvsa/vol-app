@@ -1,0 +1,54 @@
+<?php
+/**
+ * Issue type accordion with an issue checkbox each, shared by creating a letter and changing the
+ * issues on one already generated (VOL-7734).
+ *
+ * @var array $accordionData issue types with their issues, see LetterGenerationController::buildAccordionData
+ * @var array $selectedIssueIds LetterIssue ids to tick; their groups start open
+ */
+$selectedIssueIds = $selectedIssueIds ?? [];
+?>
+<p class="govuk-body">
+    <a href="#" class="govuk-link" id="toggle-all-sections">Show All Sections</a>
+</p>
+
+<div class="letter-sections">
+    <?php foreach ($accordionData as $section): ?>
+        <?php if (empty($section['issues'])): continue; endif; ?>
+        <?php $expanded = array_intersect(array_column($section['issues'], 'id'), $selectedIssueIds) !== []; ?>
+        <div class="letter-section">
+            <div class="letter-section__header">
+                <h3 class="letter-section__title govuk-heading-s">
+                    <?= $this->escapeHtml($section['issueType']['name']) ?>
+                </h3>
+                <span class="letter-section__toggle govuk-link">
+                    <span class="letter-section__show-hide"><?= $expanded ? 'Hide' : 'Show' ?></span>
+                    <span class="letter-section__icon"></span>
+                </span>
+            </div>
+            <div class="letter-section__content"<?= $expanded ? '' : ' style="display: none;"' ?>>
+                <?php if (!empty($section['issues'])): ?>
+                    <div class="govuk-checkboxes govuk-checkboxes--small">
+                        <?php foreach ($section['issues'] as $issue): ?>
+                            <div class="govuk-checkboxes__item">
+                                <input
+                                    class="govuk-checkboxes__input"
+                                    id="letter-issue-<?= $issue['id'] ?>"
+                                    name="letterIssues[]"
+                                    type="checkbox"
+                                    value="<?= $issue['id'] ?>"
+                                    <?= in_array($issue['id'], $selectedIssueIds) ? 'checked' : '' ?>
+                                >
+                                <label class="govuk-label govuk-checkboxes__label govuk-label--s" for="letter-issue-<?= $issue['id'] ?>">
+                                    <?= $this->escapeHtml(($issue['currentVersion']['modalLabel'] ?? null) ?: ($issue['currentVersion']['heading'] ?? $issue['issueKey'])) ?>
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="govuk-body-s">No issues available for this category.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>

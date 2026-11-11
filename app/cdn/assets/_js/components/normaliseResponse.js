@@ -8,15 +8,13 @@ var OLCS = OLCS || {};
  * normalised response...
  */
 
-OLCS.normaliseResponse = (function(window, $, undefined) {
-
+OLCS.normaliseResponse = (function (window, $, undefined) {
   "use strict";
 
   return function init(options) {
-
     if (!$.isPlainObject(options)) {
       options = {
-        callback: options
+        callback: options,
       };
     }
 
@@ -24,18 +22,20 @@ OLCS.normaliseResponse = (function(window, $, undefined) {
       throw new Error("OLCS.normaliseResponse requires at least a callback argument");
     }
 
-    var preloader      = options.preloader || false;
-    var titleSelector  = options.title     || ".js-title";
-    var bodySelector   = options.body      || ".js-body,.js-body__main";
-    var scriptSelector = options.script    || ".js-script";
-    var rootSelector   = options.root      || ".js-response";
-    var keepModalOpen  = options.keepModalOpen || false;
+    var preloader = options.preloader || false;
+    var titleSelector = options.title || ".js-title";
+    var bodySelector = options.body || ".js-body,.js-body__main";
+    var scriptSelector = options.script || ".js-script";
+    var rootSelector = options.root || ".js-response";
+    var keepModalOpen = options.keepModalOpen || false;
 
     var callback = options.callback;
     var followRedirects = options.followRedirects !== undefined ? options.followRedirects : true;
 
     // preloader value needs to be a type {string}, not a truthy
-    if (preloader === true) { preloader = "modal"; }
+    if (preloader === true) {
+      preloader = "modal";
+    }
 
     function findTitle(body) {
       var title;
@@ -60,17 +60,16 @@ OLCS.normaliseResponse = (function(window, $, undefined) {
       return text;
     }
 
-
     function parse(responseString) {
-      var title  = "";
-      var body   = "";
+      var title = "";
+      var body = "";
       var script = "";
       var response;
 
       // this can throw if the response we get back can't be parsed (i.e. var dumped data during debug)
       try {
-        title  = $(responseString).find(titleSelector);
-        body   = $(responseString).find(bodySelector);
+        title = $(responseString).find(titleSelector);
+        body = $(responseString).find(bodySelector);
         script = $(responseString).find(scriptSelector);
       } catch (e) {
         OLCS.logger.debug("Caught error parsing response", "normaliseResponse");
@@ -85,18 +84,21 @@ OLCS.normaliseResponse = (function(window, $, undefined) {
         //errors: [],
         hasErrors: false,
         hasWarnings: false,
-        hasValidationErrors: false
+        hasValidationErrors: false,
       };
 
       if (title.length) {
         OLCS.logger.debug("found response title matching " + titleSelector, "normaliseResponse");
         response.title = title.last().text();
-        if ($.trim(response.title) === "") {
+        if (response.title.trim() === "") {
           OLCS.logger.debug("title selector contents is empty, falling back to searching body");
           response.title = findTitle(body);
         }
       } else {
-        OLCS.logger.debug("no matching response title for " + titleSelector + ", searching headings...", "normaliseResponse");
+        OLCS.logger.debug(
+          "no matching response title for " + titleSelector + ", searching headings...",
+          "normaliseResponse",
+        );
         response.title = findTitle(body);
       }
 
@@ -106,7 +108,7 @@ OLCS.normaliseResponse = (function(window, $, undefined) {
 
         // we sometimes find multiple .js-body tags and sometimes even have a
         // .js-body within a .js-body__main
-        $.each(body, function(_, v) {
+        $.each(body, function (_, v) {
           var dist = $(v).parentsUntil(rootSelector).length;
           if (dist > depth) {
             depth = dist;
@@ -114,13 +116,15 @@ OLCS.normaliseResponse = (function(window, $, undefined) {
           }
         });
 
-        OLCS.logger.debug("got response body matching ." + deepest.attr("class") + " at depth " + depth, "normaliseResponse");
+        OLCS.logger.debug(
+          "got response body matching ." + deepest.attr("class") + " at depth " + depth,
+          "normaliseResponse",
+        );
 
         // js-script will often live within js-body; we want to lift it
         // out as it'll be appended afterwards
         deepest.find(scriptSelector).remove();
         response.body = deepest.html();
-
       } else {
         OLCS.logger.debug("no matching response body for " + bodySelector, "normaliseResponse");
       }
@@ -134,7 +138,7 @@ OLCS.normaliseResponse = (function(window, $, undefined) {
       }
 
       //check for validation errors
-      response.hasValidationErrors = (function(){
+      response.hasValidationErrors = (function () {
         return $(responseString).find(".validation-summary").length > 0;
       })();
 
@@ -143,24 +147,22 @@ OLCS.normaliseResponse = (function(window, $, undefined) {
 
     // ... the inner function will be invoked, we suppose, by an AJAX request or similar
     return function onResponse(response) {
-
       // expose the redirect location to the DOM
       // so that inline JS can make use of it
-      $("body").data("target",response.location);
+      $("body").data("target", response.location);
 
       if (typeof response === "string") {
         OLCS.logger.debug("converting response string to object", "normaliseResponse");
         response = parse(response);
-        if(response.hasValidationErrors){
+        if (response.hasValidationErrors) {
           $(".modal__wrapper").scrollTop(0);
         }
       }
 
       // we won't invoke the callback if the status is a straightforward redirect
       if (response.status === 302 && followRedirects) {
-
         // Fake the modal.hide functionality to avoid reloading the parent
-        if(keepModalOpen){
+        if (keepModalOpen) {
           $(".modal__wrapper, .overlay").remove();
         }
 
@@ -179,17 +181,16 @@ OLCS.normaliseResponse = (function(window, $, undefined) {
           try {
             // try to find one in the .table__form's action and append this
             // to the reponse location
-            queryString = $(".table__form").attr("action").match(/\?(.*)/);
+            queryString = $(".table__form")
+              .attr("action")
+              .match(/\?(.*)/);
             url = response.location + queryString[0];
-          } catch(e) {
+          } catch (e) {
             OLCS.logger.debug("couldn't find a query string on the .table__form element");
           }
         }
 
-        OLCS.logger.debug(
-          "caught 302 redirect; followRedirects=true; redirecting to " + url,
-          "normaliseResponse"
-        );
+        OLCS.logger.debug("caught 302 redirect; followRedirects=true; redirecting to " + url, "normaliseResponse");
 
         return OLCS.url.load(url);
       }
@@ -200,17 +201,11 @@ OLCS.normaliseResponse = (function(window, $, undefined) {
         response.hasWarnings = OLCS.formHelper.containsWarnings(response.body);
 
         if (response.hasErrors) {
-          OLCS.logger.debug(
-            "normalised response contains errors",
-            "normaliseResponse"
-          );
+          OLCS.logger.debug("normalised response contains errors", "normaliseResponse");
         }
 
         if (response.hasWarnings) {
-          OLCS.logger.debug(
-            "normalised response contains warnings",
-            "normaliseResponse"
-          );
+          OLCS.logger.debug("normalised response contains warnings", "normaliseResponse");
         }
       }
 
@@ -219,5 +214,4 @@ OLCS.normaliseResponse = (function(window, $, undefined) {
       return callback(response);
     };
   };
-
-}(window, window.jQuery));
+})(window, window.jQuery);

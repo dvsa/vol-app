@@ -248,4 +248,32 @@ final class DocumentSearchTraitTest extends MockeryTestCase
 
         $this->assertSame('N', $filters['isExternal']);
     }
+
+    public function testHideUnsubmittedApplicationDocsTrue(): void
+    {
+        $query = [];
+        $overrides = ['hideUnsubmittedApplicationDocs' => 'hidden'];
+
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
+        $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn($query);
+        $this->sut->shouldReceive('getRequest')->once()->andReturn($mockRequest);
+
+        $filters = $this->sut->traitMapDocumentFilters($overrides);
+
+        $this->assertSame('Y', $filters['hideUnsubmittedApplicationDocs']);
+    }
+
+    public function testHideUnsubmittedApplicationDocsFalse(): void
+    {
+        $query = [];
+        $overrides = ['hideUnsubmittedApplicationDocs' => false];
+
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
+        $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn($query);
+        $this->sut->shouldReceive('getRequest')->once()->andReturn($mockRequest);
+
+        $filters = $this->sut->traitMapDocumentFilters($overrides);
+
+        $this->assertArrayNotHasKey('hideUnsubmittedApplicationDocs', $filters);
+    }
 }

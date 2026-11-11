@@ -119,7 +119,32 @@ class FinancialEvidenceAssessmentControllerTest extends MockeryTestCase
         $this->assertTrue($view->getVariable('hasDocuments'));
         $this->assertSame(['latest', 'analysis-1', 'analysis-3'], array_column($tabs, 'id'));
         $this->assertSame(['Latest', '02/01/2026', 'Unknown date'], array_column($tabs, 'label'));
+        // Only the latest tab swaps its label: it reads as its date like the others once deselected.
+        $this->assertSame(['02/02/2026', null, null], array_column($tabs, 'unselectedLabel'));
         $this->assertSame('02/02/2026', $tabs[0]['date']);
+    }
+
+    /**
+     * A latest analysis with no document date still needs something to show once deselected,
+     * and it should match what an older tab without a date shows.
+     */
+    public function testLatestTabWithoutADateFallsBackToUnknownDateWhenUnselected(): void
+    {
+        $sut = $this->createSut(LicenceController::class);
+        $sut->allows('getIdentifier')->andReturn(42);
+
+        $sut->expects('handleQuery')
+            ->once()
+            ->andReturn($this->okResponse([
+                ['id' => 2, 'documentId' => 12, 'documentDate' => null, 'completedAt' => '2026-02-03 00:00:00'],
+            ]));
+
+        $sut->expects('render')->andReturnUsing(static fn(ViewModel $view) => $view);
+
+        $tabs = $sut->indexAction()->getVariable('tabs');
+
+        $this->assertSame('Latest', $tabs[0]['label']);
+        $this->assertSame('Unknown date', $tabs[0]['unselectedLabel']);
     }
 
     /**

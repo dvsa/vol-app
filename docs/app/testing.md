@@ -908,6 +908,18 @@ UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --filter DtoSnapshotTest
 git diff --stat test/Snapshot/dto   # then read the diff itself
 ```
 
+`npm run refresh` from the repo root does the same: answer yes to "Update the
+DTO test snapshots". It runs that command on your machine (not in Docker) and
+then lists the snapshot files it changed, created or deleted.
+
+Either way, the snapshots are built with the packages already in
+`lib/olcs-transfer/vendor`. olcs-transfer commits no `composer.lock`, so CI
+installs the newest compatible Laminas releases, and a `vendor` folder that has
+not been updated for a while can write snapshots that match an older release
+and fail in CI. Refresh's Composer step does not install the libraries, so run
+`composer update` in `lib/olcs-transfer` first. The refresh step reminds you of
+this and asks before it goes ahead.
+
 That rewrites every snapshot from the current code, creates one for any new
 DTO and deletes any whose DTO no longer exists. Commit the snapshot changes
 in the same PR as the DTO change that caused them, so the reviewer sees the
@@ -1017,6 +1029,22 @@ it, so regenerate those too:
 UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --filter FormSpecificationSnapshotTest
 git status --short .   # new snapshots show as untracked; then read the diff itself
 ```
+
+To do all four packages in one go, run `npm run refresh` from the repo root and
+answer yes to "Update the form test snapshots". It runs that command in
+olcs-auth, olcs-common, internal and selfserve on your machine (not in Docker),
+then lists every snapshot file it changed, created or deleted. Running it in
+every package is the safe default: a package whose forms did not change keeps
+its snapshots as they are.
+
+Either way, the snapshots are built with the packages already in each
+package's `vendor` folder. internal and selfserve commit their `composer.lock`,
+so `composer install` there matches CI. olcs-auth and olcs-common do not, so CI
+installs the newest compatible Laminas releases, and a `vendor` folder that has
+not been updated for a while can write snapshots that match an older release
+and fail in CI. Refresh's Composer step does not install the libraries, so run
+`composer update` in `lib/olcs-auth` and `lib/olcs-common` first. The refresh
+step reminds you of this and asks before it goes ahead.
 
 That rewrites every snapshot in the package, creates one for any new form or
 fieldset and deletes any whose class no longer exists. Commit the snapshot

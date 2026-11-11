@@ -76,10 +76,7 @@
           "id": "email"
         },
         "options": {
-          "label": "application_your-business_business-type.contact-details.email",
-          "label_attributes": {
-            "aria-label": "Business email address"
-          },
+          "label": "lva.contact-details.business-email",
           "error-message": "contact_email-error",
           "hint": "application_your-business_business-type.contact-details.operator-email-hint"
         },

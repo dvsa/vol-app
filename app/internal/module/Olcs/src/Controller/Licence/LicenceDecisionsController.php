@@ -198,7 +198,7 @@ class LicenceDecisionsController extends AbstractController implements
                 );
 
                 if ($response->isOk()) {
-                    $this->flashMessenger()->addSuccessMessage('licence-status.curtailment.message.save.success');
+                    $this->flashMessengerHelper->addSuccessMessage('licence-status.curtailment.message.save.success');
                     return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
@@ -271,7 +271,7 @@ class LicenceDecisionsController extends AbstractController implements
                 );
 
                 if ($response->isOk()) {
-                    $this->flashMessenger()->addSuccessMessage('licence-status.revocation.message.save.success');
+                    $this->flashMessengerHelper->addSuccessMessage('licence-status.revocation.message.save.success');
                     return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
@@ -345,7 +345,7 @@ class LicenceDecisionsController extends AbstractController implements
                 );
 
                 if ($response->isOk()) {
-                    $this->flashMessenger()->addSuccessMessage('licence-status.suspension.message.save.success');
+                    $this->flashMessengerHelper->addSuccessMessage('licence-status.suspension.message.save.success');
                     return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
@@ -387,7 +387,7 @@ class LicenceDecisionsController extends AbstractController implements
                 );
 
                 if ($response->isOk()) {
-                    $this->flashMessenger()->addSuccessMessage('licence-status.reset.message.save.success');
+                    $this->flashMessengerHelper->addSuccessMessage('licence-status.reset.message.save.success');
                     return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
@@ -432,7 +432,7 @@ class LicenceDecisionsController extends AbstractController implements
 
                 $response = $this->handleCommand($this->undoCommand);
                 if ($response->isOk()) {
-                    $this->flashMessenger()->addSuccessMessage('The licence surrender has been undone');
+                    $this->flashMessengerHelper->addSuccessMessage('The licence surrender has been undone');
                     return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
@@ -473,7 +473,7 @@ class LicenceDecisionsController extends AbstractController implements
                 $response = $this->handleCommand($command);
 
                 if ($response->isOk()) {
-                    $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.save.success');
+                    $this->flashMessengerHelper->addSuccessMessage('licence-status.surrender.message.save.success');
                     return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
@@ -515,7 +515,7 @@ class LicenceDecisionsController extends AbstractController implements
                 $response = $this->handleCommand($command);
 
                 if ($response->isOk()) {
-                    $this->flashMessenger()->addSuccessMessage('licence-status.terminate.message.save.success');
+                    $this->flashMessengerHelper->addSuccessMessage('licence-status.terminate.message.save.success');
                     return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
@@ -550,7 +550,7 @@ class LicenceDecisionsController extends AbstractController implements
         $response = $this->handleCommand($command);
 
         if ($response->isOk()) {
-            $this->flashMessenger()->addSuccessMessage($message);
+            $this->flashMessengerHelper->addSuccessMessage($message);
 
             return $this->redirectToRouteAjax(
                 'licence',
@@ -707,7 +707,7 @@ class LicenceDecisionsController extends AbstractController implements
 
         $response = $this->handleCommand($command);
         if ($response->isOk()) {
-            $this->flashMessenger()->addSuccessMessage($message);
+            $this->flashMessengerHelper->addSuccessMessage($message);
 
             return $this->redirectToRouteAjax(
                 'licence',

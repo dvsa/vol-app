@@ -1014,6 +1014,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         $form = $this->formHelper->createForm('Lva\TransportManagerDetails');
 
+        /** @var \Common\Form\Elements\Types\Address $workAddress */
+        $workAddress = $form->get('workAddress');
+        $workAddress->useNamesAsIds();
+
         $this->transportManagerHelper->removeTmTypeBothOption($form->get('responsibilities')->get('tmType'));
         $this->transportManagerHelper->populateOtherLicencesTable(
             $form->get('responsibilities')->get('otherLicencesFieldset')->get('otherLicences'),
@@ -1375,7 +1379,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $translationHelper = $this->translationHelper;
         $params['content'] = $translationHelper->translateReplace($template, [$this->getViewTmUrl()]);
 
-        $this->flashMessenger()->addSuccessMessage('operator-approve-message');
+        $this->flashMessengerHelper->addSuccessMessage('operator-approve-message');
         return $this->renderTmAction('transport-manager-application.print-sign', null, $tma, $params);
     }
 

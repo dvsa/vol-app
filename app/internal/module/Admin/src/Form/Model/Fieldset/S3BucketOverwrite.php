@@ -4,15 +4,11 @@ namespace Admin\Form\Model\Fieldset;
 
 use Laminas\Form\Annotation as Form;
 
-/**
- * @Form\Name("fields")
- */
+#[Form\Name('fields')]
 class S3BucketOverwrite
 {
-    /**
-     * @Form\Options({"label":"Replacement file"})
-     * @Form\Type("\Laminas\Form\Element\File")
-     * @Form\Required(true)
-     */
+    #[Form\Options(['label' => 'Replacement file'])]
+    #[Form\Type('\Laminas\Form\Element\File')]
+    #[Form\Required(true)]
     public $file = null;
 }

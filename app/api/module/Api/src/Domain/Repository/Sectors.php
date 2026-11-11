@@ -6,6 +6,7 @@
 
 namespace Dvsa\Olcs\Api\Domain\Repository;
 
+use Dvsa\Olcs\Api\Domain\Util\QueryHelper;
 use Dvsa\Olcs\Api\Entity\Permits\Sectors as Entity;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
@@ -24,7 +25,8 @@ class Sectors extends AbstractRepository
     #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
-        $qb->addOrderBy($this->alias . '.' . $query->getSort(), $query->getOrder());
+        $order = QueryHelper::toSortDirection($query->getOrder());
+        $qb->addOrderBy($this->alias . '.' . $query->getSort(), $order);
     }
 
     /**
@@ -37,7 +39,7 @@ class Sectors extends AbstractRepository
         return $this->getEntityManager()->createQueryBuilder()
             ->select('s.id as value, s.nameKey as label, s.descriptionKey as hint')
             ->from(Entity::class, 's')
-            ->orderBy('s.displayOrder', 'ASC')
+            ->orderBy('s.displayOrder', \SortDirection::Ascending)
             ->getQuery()
             ->getScalarResult();
     }
