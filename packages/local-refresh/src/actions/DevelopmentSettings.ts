@@ -140,7 +140,8 @@ export default class DevelopmentSettings implements ActionInterface {
   }
 
   /**
-   * The development settings in the .env file; other lines are ignored
+   * The development settings in the .env file; other lines are ignored. An empty value is left out,
+   * because compose.yaml uses its default for an empty value as well as a missing one.
    */
   private readSettings(): Partial<Settings> {
     if (!fs.existsSync(this.envFile)) {
@@ -152,8 +153,18 @@ export default class DevelopmentSettings implements ActionInterface {
     for (const line of fs.readFileSync(this.envFile, "utf8").split(/\r?\n/)) {
       const match = line.match(envLinePattern);
 
-      if (match && (settingNames as string[]).includes(match[2])) {
-        settings[match[2] as SettingName] = splitEnvValue(match[3]).value;
+      if (!match || !(settingNames as string[]).includes(match[2])) {
+        continue;
+      }
+
+      const name = match[2] as SettingName;
+      const { value } = splitEnvValue(match[3]);
+
+      // The last line that sets a variable wins, as it does for Compose
+      if (value === "") {
+        delete settings[name];
+      } else {
+        settings[name] = value;
       }
     }
 
@@ -179,7 +190,12 @@ export default class DevelopmentSettings implements ActionInterface {
       const [, prefix, name, rest] = match;
       missing.delete(name as SettingName);
 
-      return `${prefix}${name}=${this.settings[name as SettingName]}${splitEnvValue(rest).comment}`;
+      // The value is written unquoted, and after an unquoted value only " #" starts a comment, so a
+      // comment that followed a closing quote straight away needs a space before it
+      const { comment } = splitEnvValue(rest);
+      const separator = comment === "" || /^\s/.test(comment) ? "" : " ";
+
+      return `${prefix}${name}=${this.settings[name as SettingName]}${separator}${comment}`;
     });
 
     if (missing.size > 0) {
