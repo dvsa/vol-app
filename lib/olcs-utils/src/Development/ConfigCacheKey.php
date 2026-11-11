@@ -199,16 +199,22 @@ final class ConfigCacheKey
         clearstatcache();
 
         // The files found by scanning, and those an earlier merge loaded, were checked when the key was
-        // worked out, before this merge read them, so they keep those signatures: one changed while the
-        // configuration was being merged then changes the key on the next request. A file no earlier
-        // merge loaded can only be checked now.
+        // worked out, before this merge read them, so they keep those signatures: one changed or
+        // deleted while the configuration was being merged then changes the key on the next request.
+        // A file no earlier merge loaded can only be checked now.
         $manifest = $this->manifest ?? $this->readManifest();
         $files = $manifest['files'] ?? $this->scan();
+        $included = array_filter($includedFiles, $this->isApplicationFile(...));
         $loaded = array_diff_key(
-            $this->signatures(array_filter($includedFiles, $this->isApplicationFile(...))),
+            array_replace(
+                $this->signatures($included),
+                // Including a file that has been deleted since this merge loaded it, which has no
+                // signature now
+                array_intersect_key($manifest['loaded'] ?? [], array_flip($included))
+            ),
             $files
         );
-        $loaded = array_replace($loaded, array_intersect_key($manifest['loaded'] ?? [], $loaded));
+        ksort($loaded);
 
         $this->manifest = $this->saveManifest($files, $loaded, $manifest['scannedAt'] ?? $this->now());
 

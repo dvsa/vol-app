@@ -238,6 +238,36 @@ final class ConfigCacheKeyTest extends TestCase
         $this->assertNotSame($recordedKey, $this->key(), 'The cache may hold the old contents, so it is rebuilt');
     }
 
+    public function testAFileAnEarlierMergeLoadedDeletedWhileTheConfigurationIsMergedChangesTheKeyAfterwards(): void
+    {
+        $this->recordLoadedFiles([self::SECTION_CONFIG]);
+
+        $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1');
+        $cacheKey->key();
+
+        // The merge reads the file, which is then deleted before the merge records what it loaded
+        unlink($this->appRoot . '/' . self::SECTION_CONFIG);
+        $recordedKey = $cacheKey->recordLoadedFiles([$this->appRoot . '/' . self::SECTION_CONFIG]);
+
+        $nextKey = $this->key();
+        $this->assertNotSame($recordedKey, $nextKey, 'The cache holds what the deleted file built, so it is rebuilt');
+        $this->assertSame($nextKey, $this->key(rescanAfterSeconds: 0), 'The key then stays the same');
+    }
+
+    public function testAFileDeletedBeforeTheConfigurationIsMergedIsNoLongerWatched(): void
+    {
+        $this->recordLoadedFiles([self::SECTION_CONFIG]);
+        unlink($this->appRoot . '/' . self::SECTION_CONFIG);
+
+        // The merge can't load the file, so it isn't among the files the merge records
+        $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1');
+        $cacheKey->key();
+        $recordedKey = $cacheKey->recordLoadedFiles([]);
+
+        $this->assertSame($recordedKey, $this->key(), 'The next request works out the key the merge recorded');
+        $this->assertSame($recordedKey, $this->key(rescanAfterSeconds: 0));
+    }
+
     public function testAFileAnEarlierMergeLoadedRewrittenAtTheSameSizeAndSecondWhileMergingChangesTheKey(): void
     {
         $now = self::MTIME + 100;
