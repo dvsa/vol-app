@@ -18,6 +18,8 @@ use Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList as LetterIssueTypeLi
 use Laminas\Http\Request;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
+use Laminas\View\Renderer\PhpRenderer;
+use Laminas\View\Resolver\TemplatePathStack;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Letter\LetterGenerationController as Sut;
@@ -350,7 +352,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertSame(['Adverts' => [10], 'Finance' => [20, 21]], $this->accordionFor(null));
     }
 
-    private function runCreateAction(Sut $sut, array $query): void
+    private function runCreateAction(Sut $sut, array $query): mixed
     {
         $request = new Request();
         $request->getQuery()->fromArray($query);
@@ -366,8 +368,9 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $sut->shouldReceive('placeholder')->andReturn($placeholder);
         $sut->shouldReceive('viewBuilder')->andReturn($viewBuilder);
         $sut->shouldReceive('fetchAppendicesForLetterType')->andReturn([]);
+        $sut->shouldReceive('csrfToken')->andReturn('csrf-hash')->byDefault();
 
-        $sut->createAction();
+        return $sut->createAction();
     }
 
     public function testCreateActionFiltersIssuesByTheLicenceGoodsOrPsv(): void
@@ -393,6 +396,50 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $sut->shouldReceive('fetchLetterChoicesForLetterType')->with(5, null)->once()->andReturn([]);
 
         $this->runCreateAction($sut, ['template' => '5']);
+    }
+
+    /**
+     * Form posts without a valid "security" token are turned into GETs by Common\Module, so the
+     * create form has to carry one. Without it every new letter failed that check.
+     */
+    public function testCreateLetterFormCarriesACsrfToken(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('buildAccordionData')->andReturn([]);
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->andReturn([]);
+        $sut->shouldReceive('csrfToken')->once()->andReturn('abc123-token');
+
+        $view = $this->runCreateAction($sut, ['template' => '5']);
+
+        $this->assertSame('abc123-token', $view->getVariable('csrfToken'));
+    }
+
+    /**
+     * The form is written by hand, so nothing puts the token on it for us: it has to be in the
+     * form that the dialog posts
+     */
+    public function testCreateLetterFormPostsTheCsrfToken(): void
+    {
+        $renderer = new PhpRenderer();
+        $renderer->setResolver(new TemplatePathStack([
+            'script_paths' => [__DIR__ . '/../../../../../module/Olcs/view'],
+        ]));
+
+        $html = $renderer->render('pages/letter/create', [
+            'templateId' => 5,
+            'queryParams' => ['template' => 5],
+            'accordionData' => [],
+            'appendicesData' => [],
+            'letterChoicesData' => [],
+            'csrfToken' => 'abc123-token',
+        ]);
+
+        $page = new \DOMDocument();
+        $page->loadHTML($html, LIBXML_NOERROR);
+        $tokens = (new \DOMXPath($page))->query('//form[@id="letter-create-form"]//input[@name="security"]');
+
+        $this->assertSame(1, $tokens->length);
+        $this->assertSame('abc123-token', $tokens->item(0)->getAttribute('value'));
     }
 
     /**
@@ -468,6 +515,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $sut = $this->bareSut();
 
         $request = new Request();
+        $request->setMethod('POST');
         $request->getPost()->fromArray(['letterType' => '5']);
         $request->getQuery()->fromArray(['licence' => '7']);
         $sut->shouldReceive('getRequest')->andReturn($request);
@@ -488,6 +536,94 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $response = $sut->generateAction();
 
         $this->assertStringContainsString('Failed to generate letter', $response->getContent());
+    }
+
+    /**
+     * The dialog shows the caseworker why a letter couldn't be created, so the reasons have to be
+     * words. They used to be sent as JSON, brackets and all.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('refusedLetters')]
+    public function testARefusedLetterSaysWhyInWords(array $messages, string $expected): void
+    {
+        $sut = $this->bareSut();
+
+        $request = new Request();
+        $request->setMethod('POST');
+        $request->getPost()->fromArray(['letterType' => '5', 'letterIssues' => ['20']]);
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+        $sut->shouldReceive('extractRouteParams')->andReturn([]);
+        $sut->shouldReceive('fetchTemplateById')->andReturn(['letterType' => ['id' => 3]]);
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->andReturn([]);
+
+        $refused = m::mock(Response::class);
+        $refused->shouldReceive('isOk')->andReturn(false);
+        $refused->shouldReceive('getResult')->andReturn(['messages' => $messages]);
+        $sut->shouldReceive('handleCommand')->once()->andReturn($refused);
+
+        $response = $sut->generateAction();
+
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame($expected, json_decode($response->getContent(), true)['message']);
+    }
+
+    public static function refusedLetters(): array
+    {
+        return [
+            'one reason' => [['Choose an issue'], 'Failed to generate letter: Choose an issue'],
+            'reasons nested by field' => [
+                ['selectedIssues' => ['Choose an issue'], 'licence' => ['Not found']],
+                'Failed to generate letter: Choose an issue, Not found',
+            ],
+            'no reason given' => [[], 'Failed to generate letter'],
+        ];
+    }
+
+    /**
+     * What Common\Module leaves behind when a form post fails the "security" check: the request is
+     * now a GET, its fields are still on it, and the response is marked
+     */
+    private function failedSecurityCheck(Sut $sut, array $post): void
+    {
+        $request = new Request();
+        $request->getPost()->fromArray($post);
+        $response = new \Laminas\Http\Response();
+        $response->getHeaders()->addHeaderLine(\Common\Module::CSRF_ERROR_HEADER, '1');
+
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn($response);
+    }
+
+    /**
+     * The fields left on a post that failed the check used to be enough to create the letter
+     */
+    public function testGenerateRefusesAPostThatFailedTheSecurityCheck(): void
+    {
+        $sut = $this->bareSut();
+        $this->failedSecurityCheck($sut, ['letterType' => '5', 'letterIssues' => ['20']]);
+        $sut->shouldReceive('fetchTemplateById')->never();
+        $sut->shouldReceive('handleCommand')->never();
+
+        $response = $sut->generateAction();
+
+        $this->assertSame(403, $response->getStatusCode());
+        $this->assertSame(
+            'This form has expired. Close it and open it again.',
+            json_decode($response->getContent(), true)['message']
+        );
+    }
+
+    public function testGenerateRejectsGet(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('getRequest')->andReturn(new Request());
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+        $sut->shouldReceive('handleCommand')->never();
+
+        $response = $sut->generateAction();
+
+        $this->assertSame(405, $response->getStatusCode());
+        $this->assertSame('Method not allowed', json_decode($response->getContent(), true)['message']);
     }
 
     private function letterForChangeIssues(array $overrides = []): array
@@ -788,6 +924,25 @@ final class LetterGenerationControllerTest extends MockeryTestCase
     }
 
     /**
+     * The change issues modal carries a token too, but one that has been open longer than the
+     * token lasts fails the check. The caseworker is told what to do about it.
+     */
+    public function testUpdateIssuesSaysWhenThePageHasExpired(): void
+    {
+        $sut = $this->bareSut();
+        $this->failedSecurityCheck($sut, ['letterInstanceId' => '55', 'letterIssues' => ['20']]);
+        $sut->shouldReceive('handleCommand')->never();
+
+        $response = $sut->updateIssuesAction();
+
+        $this->assertSame(403, $response->getStatusCode());
+        $this->assertSame(
+            'This form has expired. Close it and open it again.',
+            json_decode($response->getContent(), true)['message']
+        );
+    }
+
+    /**
      * Form posts without a valid "security" token are turned into GETs by Common\Module, so the
      * modal has to carry one or saving can never work.
      */
@@ -926,6 +1081,21 @@ final class LetterGenerationControllerTest extends MockeryTestCase
 
         $this->assertFalse($result['json']['success']);
         $this->assertSame('Failed to save: The heading is too long', $result['json']['message']);
+    }
+
+    /**
+     * With no reason from the API there is nothing to put after the colon, so it isn't shown
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('saveActionProvider')]
+    public function testARefusedSaveWithNoReasonGivenStillReadsProperly(string $action, array $body): void
+    {
+        $refused = m::mock(Response::class);
+        $refused->shouldReceive('isOk')->andReturn(false);
+        $refused->shouldReceive('getResult')->andReturn(['messages' => []]);
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->once()->andReturn($refused);
+
+        $this->assertSame('Failed to save', $this->postJson($sut, $action, $body)['json']['message']);
     }
 
     public static function saveActionProvider(): array
