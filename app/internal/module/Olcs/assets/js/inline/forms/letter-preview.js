@@ -1,19 +1,41 @@
 OLCS.ready(function () {
   "use strict";
 
-  // Enable/disable "Continue to editor" based on checkbox selection
-  $(
-    "input[name='sections[]'], input[name='appendices[]'], input[name='letterSections[]'], input[name='todos[]']",
-  ).on("change", function () {
-    var anyChecked =
-      $("input[name='sections[]']:checked").length > 0 ||
-      $("input[name='appendices[]']:checked").length > 0 ||
-      $("input[name='letterSections[]']:checked").length > 0 ||
-      $("input[name='todos[]']:checked").length > 0;
+  var sectionBoxes =
+    "input[name='sections[]'], input[name='appendices[]'], input[name='letterSections[]'], input[name='todos[]']";
+  var $selectAll = $("#select-all-sections");
+
+  // Enable/disable "Continue to editor" based on checkbox selection, and keep the
+  // "Select all" / "Deselect all" label in step with what is ticked (VOL-7736)
+  function refreshSelection() {
+    var $boxes = $(sectionBoxes);
+    var checkedCount = $boxes.filter(":checked").length;
+    var anyChecked = checkedCount > 0;
+
     $("#continue-to-editor").prop("disabled", !anyChecked);
     if (anyChecked) {
       $("#sections-error-summary").remove();
     }
+
+    $selectAll.text(
+      $boxes.length > 0 && checkedCount === $boxes.length
+        ? "Deselect all"
+        : "Select all",
+    );
+  }
+
+  $(sectionBoxes).on("change", refreshSelection);
+
+  // "Select all" ticks every section; once everything is ticked it reads "Deselect all".
+  // "Input required" is not bypassed: ticking only chooses what to edit, and
+  // "Save letter and exit" still checks for unfilled placeholders.
+  $selectAll.on("click", function (e) {
+    e.preventDefault();
+
+    var $boxes = $(sectionBoxes);
+    var allChecked = $boxes.filter(":checked").length === $boxes.length;
+    $boxes.prop("checked", !allChecked);
+    refreshSelection();
   });
 
   // Handle "Continue to editor" button click

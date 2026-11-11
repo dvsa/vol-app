@@ -18,6 +18,7 @@ class Get extends AbstractQueryByIdHandler
             'category',
             'subCategory'
         ],
+        'status',
         'licence',
         'application',
         'case',
@@ -30,7 +31,9 @@ class Get extends AbstractQueryByIdHandler
         ],
         'letterInstanceIssues' => [
             'letterIssueVersion' => [
-                'letterIssueType'
+                'letterIssueType',
+                // parent issue id, so changing issues can pre-tick what's on the letter (VOL-7734)
+                'letterIssue',
             ]
         ],
         'letterInstanceTodos' => [
@@ -54,7 +57,8 @@ class Get extends AbstractQueryByIdHandler
     ];
 
     /**
-     * Adds requiringIssueCount to each to-do: how many of this letter's issues call for it.
+     * Adds requiringIssueCount to each to-do: how many of this letter's issues call for it, and
+     * placementIssueIds: the issues it can be shown under, preferred first (VOL-7737).
      *
      * Computed here rather than exposed as an entity method, because entity methods are not
      * serialised — the caseworker screen could never read it. The count comes from a single pass
@@ -70,6 +74,7 @@ class Get extends AbstractQueryByIdHandler
         $result = $this->result($letterInstance, $this->bundle, $this->values);
 
         $counts = $letterInstance->getTodoRequiringIssueCounts();
+        $placements = $letterInstance->getTodoPlacementIssueIds();
         $data = $result->serialize();
 
         foreach ($data['letterInstanceTodos'] ?? [] as $index => $todo) {
@@ -77,6 +82,9 @@ class Get extends AbstractQueryByIdHandler
             $todoId = $todo['letterTodoVersion']['letterTodo']['id'] ?? null;
             $key = $todoId !== null ? 'todo-' . $todoId : 'version-' . ($todo['letterTodoVersion']['id'] ?? '');
             $data['letterInstanceTodos'][$index]['requiringIssueCount'] = $counts[$key] ?? 1;
+
+            // the issues the edit page can show this to-do under, preferred first (VOL-7737)
+            $data['letterInstanceTodos'][$index]['placementIssueIds'] = $placements[(int) ($todo['id'] ?? 0)] ?? [];
         }
 
         return $data;

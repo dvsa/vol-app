@@ -35,6 +35,7 @@ final class GetTest extends QueryHandlerTestCase
                         'category',
                         'subCategory'
                     ],
+                    'status',
                     'licence',
                     'application',
                     'case',
@@ -47,7 +48,8 @@ final class GetTest extends QueryHandlerTestCase
                     ],
                     'letterInstanceIssues' => [
                         'letterIssueVersion' => [
-                            'letterIssueType'
+                            'letterIssueType',
+                            'letterIssue',
                         ]
                     ],
                     'letterInstanceTodos' => [
@@ -69,6 +71,7 @@ final class GetTest extends QueryHandlerTestCase
             )->once()->andReturn(['id' => 123, 'reference' => 'LTR20251202ABC123'])->getMock();
 
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->andReturn([]);
+        $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->andReturn([]);
 
         $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')->with($query)->once()
             ->andReturn($mockLetterInstance);
@@ -98,6 +101,7 @@ final class GetTest extends QueryHandlerTestCase
         // counts are per to-do, so version 32 picks up issues that linked older versions of to-do 5
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->once()
             ->andReturn(['todo-5' => 4, 'todo-6' => 1]);
+        $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->andReturn([]);
 
         $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')->with($query)->once()
             ->andReturn($mockLetterInstance);
@@ -125,6 +129,7 @@ final class GetTest extends QueryHandlerTestCase
         $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->once()->andReturn(['version-27' => 3]);
+        $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->andReturn([]);
 
         $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')->with($query)->once()
             ->andReturn($mockLetterInstance);
@@ -132,5 +137,35 @@ final class GetTest extends QueryHandlerTestCase
         $result = $this->sut->handleQuery($query);
 
         $this->assertSame(3, $result['letterInstanceTodos'][0]['requiringIssueCount']);
+    }
+
+    /**
+     * VOL-7737: the edit page puts each to-do under an issue, so it needs the issues it can sit
+     * under, preferred first. The entity works that out per to-do id.
+     */
+    public function testEachTodoIsToldWhichIssuesItCanSitUnder(): void
+    {
+        $query = Qry::create(['id' => 123]);
+
+        $serialized = [
+            'id' => 123,
+            'letterInstanceTodos' => [
+                ['id' => 1, 'letterTodoVersion' => ['id' => 32, 'letterTodo' => ['id' => 5]]],
+                ['id' => 2, 'letterTodoVersion' => ['id' => 33, 'letterTodo' => ['id' => 6]]],
+            ],
+        ];
+
+        $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
+        $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
+        $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->andReturn([]);
+        $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->once()->andReturn([1 => [10, 12]]);
+
+        $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')->with($query)->once()
+            ->andReturn($mockLetterInstance);
+
+        $result = $this->sut->handleQuery($query);
+
+        $this->assertSame([10, 12], $result['letterInstanceTodos'][0]['placementIssueIds']);
+        $this->assertSame([], $result['letterInstanceTodos'][1]['placementIssueIds']);
     }
 }

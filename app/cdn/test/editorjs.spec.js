@@ -118,3 +118,47 @@ test("the hidden input tracks typing without waiting for EditorJS's debounce", a
 
   expect(await hiddenInputText(page, "sectionContent")).toContain("Tracked.");
 });
+
+test("closing a modal leaves the page's own editors working", async ({ page }) => {
+  // Any OLCS modal closing emits hide:modal. The letter edit page opens modals over its
+  // editors, and closing one must not take those editors (or unsaved edits) with it.
+  await typeIntoEditor(page, "editor-section", " Not saved yet.");
+  await page.evaluate(() => window.OLCS.eventEmitter.trigger("hide:modal"));
+
+  await expect(page.locator("#editor-section .ce-paragraph")).toContainText("Not saved yet.");
+  await typeIntoEditor(page, "editor-section", " Still editable.");
+  await page.evaluate(() => window.OLCS.editorjsFlush());
+
+  expect(await hiddenInputText(page, "sectionContent")).toContain("Still editable.");
+});
+
+test("closing a modal cleans up the editors that were inside it", async ({ page }) => {
+  await page.evaluate(() => {
+    const modal = document.createElement("div");
+    modal.id = "modal";
+    modal.innerHTML =
+      '<div class="editorjs-container" data-element-name="modalContent">' +
+      '<div id="editor-modal" class="editorjs-editor"></div>' +
+      '<input type="hidden" name="modalContent" value=\'{"blocks":[{"type":"paragraph","data":{"text":"In the modal."}}]}\' />' +
+      "</div>";
+    document.body.appendChild(modal);
+    window.OLCS.eventEmitter.trigger("render");
+  });
+  await expect(page.locator("#editor-modal .ce-paragraph")).toHaveAttribute("contenteditable", "true");
+
+  // The modal removes its markup before announcing hide:modal.
+  const flushed = await page.evaluate(async () => {
+    const modalInput = document.querySelector("input[name='modalContent']");
+    document.getElementById("modal").remove();
+    window.OLCS.eventEmitter.trigger("hide:modal");
+    modalInput.value = "untouched";
+    await window.OLCS.editorjsFlush();
+    return modalInput.value;
+  });
+
+  // The removed editor is no longer flushed, and the page editors still are.
+  expect(flushed).toBe("untouched");
+  await typeIntoEditor(page, "editor-variant", " After the modal.");
+  await page.evaluate(() => window.OLCS.editorjsFlush());
+  expect(await hiddenInputText(page, "variantContent")).toContain("After the modal.");
+});

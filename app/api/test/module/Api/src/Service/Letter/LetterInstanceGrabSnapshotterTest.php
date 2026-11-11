@@ -157,4 +157,40 @@ class LetterInstanceGrabSnapshotterTest extends MockeryTestCase
 
         $this->sut->snapshot($instance);
     }
+
+    /**
+     * Changing a letter's issues (VOL-7734) must not re-resolve what was frozen at generation: a
+     * date grab would quietly move under wording the caseworker has already read.
+     */
+    public function testSnapshotRowsOnlyTouchesTheGivenRows(): void
+    {
+        $this->grabServiceResolves('OP_NAME_ONLY', 'NEW NAME');
+
+        $oldVersion = new LetterIssueVersion();
+        $oldVersion->setDefaultBodyContent(self::paragraph('Issue for [[OP_NAME_ONLY]]'));
+        $existing = new LetterInstanceIssue();
+        $existing->setLetterIssueVersion($oldVersion);
+        $existing->setGeneratedContent(self::paragraph('Issue for OLD NAME'));
+
+        $newVersion = new LetterIssueVersion();
+        $newVersion->setDefaultBodyContent(self::paragraph('Added for [[OP_NAME_ONLY]]'));
+        $added = new LetterInstanceIssue();
+        $added->setLetterIssueVersion($newVersion);
+
+        $todoVersion = new LetterTodoVersion();
+        $todoVersion->setDescription(self::paragraph('Todo for [[OP_NAME_ONLY]]'));
+        $addedTodo = new LetterInstanceTodo();
+        $addedTodo->setLetterTodoVersion($todoVersion);
+
+        $instance = new LetterInstance();
+        $instance->addLetterInstanceIssue($existing);
+        $instance->addLetterInstanceIssue($added);
+        $instance->addLetterInstanceTodo($addedTodo);
+
+        $this->sut->snapshotRows($instance, [$added], [$addedTodo]);
+
+        $this->assertSame(self::paragraph('Issue for OLD NAME'), $existing->getGeneratedContent());
+        $this->assertSame(self::paragraph('Added for NEW NAME'), $added->getGeneratedContent());
+        $this->assertSame(self::paragraph('Todo for NEW NAME'), $addedTodo->getGeneratedDescription());
+    }
 }
