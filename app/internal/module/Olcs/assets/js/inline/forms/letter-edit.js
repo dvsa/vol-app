@@ -171,27 +171,31 @@ OLCS.ready(function () {
           contentType: "application/json",
           data: JSON.stringify(request(content, heading, $btn.data("version"))),
         })
-          .done(function (response) {
-            if (!response.success) {
-              showError(response.message || "Failed to save changes");
-              return;
-            }
-            var changedSince =
-              editorBlocks(hiddenInput.val()) !== editorBlocks(content) ||
-              ($heading.length && $heading.val() !== heading);
-            savedBlocks[key] = editorBlocks(content);
-            if (!changedSince) {
-              dirtyMap[key] = false;
-              $group.find(".save-indicator").show();
-            }
-            $btn.data("version", response.version);
-            if (saved) {
-              saved(heading);
-            }
-          })
-          .fail(function (xhr) {
-            showError(failureMessage(xhr, "Failed to save changes"));
-          })
+          // .then() rather than .done()/.fail(): if a handler throws, .always() below still
+          // runs, so the button comes back and the next request in the queue still goes
+          .then(
+            function (response) {
+              if (!response.success) {
+                showError(response.message || "Failed to save changes");
+                return;
+              }
+              var changedSince =
+                editorBlocks(hiddenInput.val()) !== editorBlocks(content) ||
+                ($heading.length && $heading.val() !== heading);
+              savedBlocks[key] = editorBlocks(content);
+              if (!changedSince) {
+                dirtyMap[key] = false;
+                $group.find(".save-indicator").show();
+              }
+              $btn.data("version", response.version);
+              if (saved) {
+                saved(heading);
+              }
+            },
+            function (xhr) {
+              showError(failureMessage(xhr, "Failed to save changes"));
+            },
+          )
           .always(function () {
             $btn.prop("disabled", false).text("Save changes");
             done();
@@ -226,7 +230,7 @@ OLCS.ready(function () {
           $group
             .find(".govuk-heading-s")
             .first()
-            .text($.trim(heading) || $heading.data("default-heading"));
+            .text(heading.trim() || $heading.data("default-heading"));
         }
       },
     );
@@ -351,7 +355,7 @@ OLCS.ready(function () {
     window.location.href = url.toString();
   }
 
-  function postCustomTodo(path, body, $btn, done) {
+  function postCustomTodo(path, body, $btn, exceptKey, done) {
     // the page reloads once this is done, so nothing else can be changed while it's in flight:
     // an edit made in the meantime would be lost
     var page = document.getElementById("main") || document.body;
@@ -362,26 +366,36 @@ OLCS.ready(function () {
     page.setAttribute("inert", "");
     $btn.prop("disabled", true);
 
-    // after any save still in flight
+    // Runs after any save that's already on its way. The unsaved check is done here, not on
+    // the click, so a save that was in flight has finished and isn't listed as unsaved.
     oneAtATime(function (finished) {
+      if (!okToLoseUnsaved(exceptKey)) {
+        unblock();
+        finished();
+        return;
+      }
+
       $.ajax({
         url: path,
         method: "POST",
         contentType: "application/json",
         data: JSON.stringify(body),
       })
-        .done(function (response) {
-          if (response.success) {
-            done(response);
-          } else {
+        // .then() so the queue carries on even if a handler throws (see saveEditor)
+        .then(
+          function (response) {
+            if (response.success) {
+              done(response);
+            } else {
+              unblock();
+              showError(response.message || "Something went wrong");
+            }
+          },
+          function (xhr) {
             unblock();
-            showError(response.message || "Something went wrong");
-          }
-        })
-        .fail(function (xhr) {
-          unblock();
-          showError(failureMessage(xhr, "Something went wrong"));
-        })
+            showError(failureMessage(xhr, "Something went wrong"));
+          },
+        )
         .always(finished);
     });
   }
@@ -390,13 +404,11 @@ OLCS.ready(function () {
   $(".add-custom-todo-btn").on("click", function (e) {
     e.preventDefault();
     var $btn = $(this);
-    if (!okToLoseUnsaved()) {
-      return;
-    }
     postCustomTodo(
       "/letter/add-custom-todo",
       { issueId: $btn.data("issue-id") },
       $btn,
+      undefined,
       function (response) {
         reloadWithTodos(function (todos) {
           return todos.concat([String(response.todoId)]);
@@ -413,13 +425,12 @@ OLCS.ready(function () {
     if (!window.confirm("Delete this to-do? This cannot be undone.")) {
       return;
     }
-    if (!okToLoseUnsaved("todo-" + todoId)) {
-      return;
-    }
     postCustomTodo(
       "/letter/delete-custom-todo",
       { todoId: todoId },
       $btn,
+      // the to-do being deleted doesn't count as unsaved work
+      "todo-" + todoId,
       function () {
         reloadWithTodos(function (todos) {
           return todos.filter(function (id) {

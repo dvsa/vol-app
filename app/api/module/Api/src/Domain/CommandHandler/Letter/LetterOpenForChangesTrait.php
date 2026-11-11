@@ -53,6 +53,8 @@ trait LetterOpenForChangesTrait
     /**
      * Save a change to a letter. One that clashes with another change to the same letter made at
      * the same moment (from another tab, or preparing or sending it) changes nothing and says so.
+     * The message says to try again, not to reload the page: a retry works, and a reload would
+     * lose any other unsaved edits on the page.
      *
      * @param callable(): mixed $save
      * @throws ValidationException
@@ -63,8 +65,7 @@ trait LetterOpenForChangesTrait
             $save();
         } catch (OptimisticLockException) {
             throw new ValidationException([
-                'This letter was changed somewhere else at the same time, so this didn\'t go through. '
-                . 'Reload the page and try again.',
+                'This letter was changed somewhere else at the same time, so this didn\'t go through. Try again.',
             ]);
         }
     }

@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Integration\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\OptimisticLockException;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
+use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
 use Dvsa\OlcsTest\Integration\IntegrationTestCase;
@@ -13,7 +14,8 @@ use Dvsa\OlcsTest\Integration\IntegrationTestCase;
 /**
  * Every change to a letter writes the letter's own versioned row, even when only one of its parts
  * changed (VOL-7735), so a change can't land on top of preparing or sending it: whichever comes
- * second fails and changes nothing. Checked through the real mapping and real flushes.
+ * second fails and changes nothing. Checked with the rule the command handlers use
+ * (LetterOpenForChangesTrait), through the real mapping and real flushes.
  */
 final class LetterChangeClashTest extends IntegrationTestCase
 {
@@ -54,15 +56,44 @@ final class LetterChangeClashTest extends IntegrationTestCase
     }
 
     /**
-     * What one request does to change a to-do on a letter: the to-do changes, and the letter is
-     * marked changed (LetterOpenForChangesTrait::recordLetterChange)
+     * The same trait the command handlers use, so these tests run the real rule
+     */
+    private function letterChanges(): object
+    {
+        return new class ($this->repo('LetterInstance')) {
+            use LetterOpenForChangesTrait;
+
+            public function __construct(private readonly object $repo)
+            {
+            }
+
+            protected function getRepo(): object
+            {
+                return $this->repo;
+            }
+
+            public function record(LetterInstance $letterInstance): void
+            {
+                $this->recordLetterChange($letterInstance);
+            }
+
+            public function save(callable $save): void
+            {
+                $this->saveLetterChange($save);
+            }
+        };
+    }
+
+    /**
+     * What one request does to change a to-do on a letter: the to-do changes, and the change is
+     * recorded on the letter
      */
     private function changeTheTodo(EntityManager $em, int $todoId): void
     {
         $todo = $em->find(LetterInstanceTodo::class, $todoId);
         $this->assertInstanceOf(LetterInstanceTodo::class, $todo);
         $todo->setEditedDescriptionFromArray(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Changed']]]]);
-        $todo->getLetterInstance()->setLastModifiedOn(new \DateTime());
+        $this->letterChanges()->record($todo->getLetterInstance());
     }
 
     public function testChangingAPartOfADraftWritesTheLettersVersionedRow(): void
@@ -97,10 +128,10 @@ final class LetterChangeClashTest extends IntegrationTestCase
         );
 
         try {
-            $request->flush();
+            $this->letterChanges()->save(fn () => $request->flush());
             $this->fail('Expected the clashing change to fail');
-        } catch (OptimisticLockException) {
-            // expected
+        } catch (ValidationException $e) {
+            $this->assertStringContainsString('changed somewhere else at the same time', implode(' ', $e->getMessages()));
         }
 
         $this->assertNull(

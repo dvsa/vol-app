@@ -635,22 +635,22 @@ final class LetterGenerationControllerTest extends MockeryTestCase
 
     public static function closedLetters(): \Iterator
     {
-        yield 'sent' => [['status' => ['id' => 'ltr_sts_sent'], 'isOpenForChanges' => false, 'isSent' => true], 'This letter has been sent, so it can no longer be changed'];
-        // review: the API's rule, not a copy of it (a deleted draft can't change either), and only
-        // a sent letter is said to have been sent
-        yield 'cancelled' => [['status' => ['id' => 'ltr_sts_cancelled'], 'isOpenForChanges' => false, 'isSent' => false], 'This letter can no longer be changed'];
-        yield 'deleted draft' => [['status' => ['id' => 'ltr_sts_draft'], 'isOpenForChanges' => false, 'isSent' => false], 'This letter can no longer be changed'];
+        yield 'sent' => [['status' => ['id' => 'ltr_sts_sent'], 'isOpenForChanges' => false, 'isSent' => true]];
+        // review: the API's rule, not a copy of it (a deleted draft can't change either)
+        yield 'cancelled' => [['status' => ['id' => 'ltr_sts_cancelled'], 'isOpenForChanges' => false, 'isSent' => false]];
+        yield 'deleted draft' => [['status' => ['id' => 'ltr_sts_draft'], 'isOpenForChanges' => false, 'isSent' => false]];
     }
 
     /**
      * A sent letter can't be changed (VOL-7735), so its edit page sends the caseworker back to the
-     * preview rather than offering editors whose saves would all be refused
+     * preview rather than offering editors whose saves would all be refused. No flash message is
+     * set: the preview clears them, and its sidebar already says why.
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('closedLetters')]
-    public function testEditingALetterThatCanNoLongerChangeGoesBackToThePreview(array $letter, string $message): void
+    public function testEditingALetterThatCanNoLongerChangeGoesBackToThePreview(array $letter): void
     {
         $flash = m::mock(FlashMessengerHelperService::class);
-        $flash->shouldReceive('addErrorMessage')->with($message)->once();
+        $flash->shouldNotReceive('addErrorMessage');
         $sut = m::mock(Sut::class, [
             m::mock(TranslationHelperService::class),
             m::mock(FormHelperService::class),
@@ -905,6 +905,37 @@ final class LetterGenerationControllerTest extends MockeryTestCase
             ->andReturn($this->okResponse(['messages' => []]));
 
         $this->assertTrue($this->postJson($sut, 'deleteCustomTodo', ['todoId' => 99])['json']['success']);
+    }
+
+    /**
+     * Validation messages come back nested by field. A plain implode turned them into
+     * "Failed to save: Array".
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('saveActionProvider')]
+    public function testARefusedSaveSaysWhyEvenWhenTheMessagesAreNested(string $action, array $body): void
+    {
+        $refused = m::mock(Response::class);
+        $refused->shouldReceive('isOk')->andReturn(false);
+        $refused->shouldReceive('getResult')->andReturn([
+            'messages' => ['editedHeading' => ['stringLengthTooLong' => 'The heading is too long']],
+        ]);
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->once()->andReturn($refused);
+
+        $result = $this->postJson($sut, $action, $body);
+
+        $this->assertFalse($result['json']['success']);
+        $this->assertSame('Failed to save: The heading is too long', $result['json']['message']);
+    }
+
+    public static function saveActionProvider(): array
+    {
+        return [
+            'issue' => ['saveIssueContent', ['issueId' => 10, 'editedContent' => ['blocks' => []], 'version' => 1]],
+            'appendix' => ['saveAppendixContent', ['appendixId' => 10, 'editedContent' => ['blocks' => []], 'version' => 1]],
+            'to-do' => ['saveTodoContent', ['todoId' => 10, 'editedDescription' => ['blocks' => []], 'version' => 1]],
+            'section' => ['saveSectionContent', ['sectionId' => 10, 'editedContent' => ['blocks' => []], 'version' => 1]],
+        ];
     }
 
     /**

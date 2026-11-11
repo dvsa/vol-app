@@ -434,13 +434,9 @@ class LetterGenerationController extends AbstractInternalController implements L
             return $this->redirect()->toRoute('dashboard');
         }
 
-        // every save would be refused once it's sent (VOL-7735), so don't offer the editors
+        // every save would be refused once it's sent (VOL-7735), so don't offer the editors.
+        // No flash message: the preview clears them, and its sidebar already says why.
         if (empty($letterInstance['isOpenForChanges'])) {
-            $this->flashMessengerHelperService->addErrorMessage(
-                empty($letterInstance['isSent'])
-                    ? 'This letter can no longer be changed'
-                    : 'This letter has been sent, so it can no longer be changed'
-            );
             return $this->redirect()->toUrl('/letter/preview?id=' . urlencode((string) $letterInstanceId));
         }
 
@@ -832,9 +828,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
-            return $this->jsonError('Failed to save: ' . $errorMessage);
+            return $this->jsonError('Failed to save: ' . $this->commandMessages($response));
         }
 
         $result = $response->getResult();
@@ -875,9 +869,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
-            return $this->jsonError('Failed to save: ' . $errorMessage);
+            return $this->jsonError('Failed to save: ' . $this->commandMessages($response));
         }
 
         $result = $response->getResult();
@@ -945,9 +937,13 @@ class LetterGenerationController extends AbstractInternalController implements L
         return $this->jsonSuccess(['todoId' => (int) $body['todoId']]);
     }
 
+    /**
+     * The reasons a command was refused, joined into one line. Validation messages can be nested
+     * by field, so they are flattened first.
+     */
     private function commandMessages(\Common\Service\Cqrs\Response $response): string
     {
-        $messages = $response->getResult()['messages'] ?? [];
+        $messages = (array) ($response->getResult()['messages'] ?? []);
         $flat = [];
         array_walk_recursive($messages, static function ($message) use (&$flat): void {
             $flat[] = (string) $message;
@@ -985,9 +981,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
-            return $this->jsonError('Failed to save: ' . $errorMessage);
+            return $this->jsonError('Failed to save: ' . $this->commandMessages($response));
         }
 
         $result = $response->getResult();
@@ -1028,9 +1022,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
-            return $this->jsonError('Failed to save: ' . $errorMessage);
+            return $this->jsonError('Failed to save: ' . $this->commandMessages($response));
         }
 
         $result = $response->getResult();
