@@ -81,10 +81,8 @@ RUN apk update && \
   && docker-php-ext-install ldap \
   && docker-php-ext-enable ldap
 
-# Development PHP settings (OPcache, Xdebug). Named to load after zzzz-php.ini so they take precedence.
-COPY php-development.ini ${PHP_INI_DIR}/conf.d/zzzzz-development.ini
-
-# Xdebug is installed but off unless XDEBUG_MODE is set (compose.yaml passes it through).
-ENV XDEBUG_MODE=off
+# The development PHP settings (OPcache on, Xdebug off until it is asked for) are in
+# infra/docker/php-development.d, which compose.yaml mounts into the container so that the four PHP
+# images share one copy.
 
 USER www-data

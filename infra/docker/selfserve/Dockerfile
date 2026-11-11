@@ -61,11 +61,9 @@ RUN apk add --no-cache linux-headers $PHPIZE_DEPS \
   && docker-php-ext-enable xdebug \
   && apk del linux-headers $PHPIZE_DEPS
 
-# Development PHP settings (OPcache, Xdebug). Named to load after zzzz-php.ini so they take precedence.
-COPY php-development.ini ${PHP_INI_DIR}/conf.d/zzzzz-development.ini
-
-# Xdebug is installed but off unless XDEBUG_MODE is set (compose.yaml passes it through).
-ENV XDEBUG_MODE=off
+# The development PHP settings (OPcache on, Xdebug off until it is asked for) are in
+# infra/docker/php-development.d, which compose.yaml mounts into the container so that the four PHP
+# images share one copy.
 
 # Local config switches virus scanning off (local.php.dist), so don't start clamd: it holds about
 # 1 GB of signatures in memory and takes a CPU core for the first minute after every start.
