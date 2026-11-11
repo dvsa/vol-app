@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import chalk from "chalk";
 import createDebug from "debug";
+import shell from "shelljs";
 import { GenericBar } from "cli-progress";
 import ActionInterface from "./ActionInterface";
 import exec from "../exec";
@@ -12,42 +13,106 @@ const debug = createDebug("refresh:actions:DevelopmentSettings");
 const repositoryRoot = path.resolve(__dirname, "../../../../");
 const phpAppDirectoryNames = ["api", "selfserve", "internal"];
 
-// The defaults compose.yaml uses when the root .env file doesn't set a value
-const defaults = {
+// What each setting is when neither the root .env file nor the shell sets it
+export const defaults = {
   XDEBUG_MODE: "off",
   VOL_CONFIG_CACHE: "1",
   VOL_DEVTOOLS: "0",
 };
 
-type SettingName = keyof typeof defaults;
-type Settings = Record<SettingName, string>;
+export type SettingName = keyof typeof defaults;
+export type Settings = Record<SettingName, string>;
 
 const settingNames = Object.keys(defaults) as SettingName[];
 const xdebugModes = ["off", "debug", "coverage", "debug,develop"];
 
+// A service that compose.yaml passes all of the settings to
+const serviceWithEverySetting = "selfserve";
+
 // A line that sets a variable in the .env file: an optional "export", the name, then the rest of the line
 const envLinePattern = /^(\s*(?:export\s+)?)([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/;
 
+const isOn = (value: string): boolean => ["1", "true", "yes", "on"].includes(value.toLowerCase());
+const onOff = (value: string): string => (isOn(value) ? "on" : "off");
+
 /**
- * Splits what follows the = the way Docker Compose reads it: a quoted value is taken as it is, and an
- * unquoted one ends where " #" starts a comment
+ * The settings the containers are started with, leaving out any that are empty. Docker Compose is asked
+ * for them, because it works them out from compose.yaml, the .env file and the shell, and reading the
+ * .env file here would have to match the way Compose reads it.
  */
-const splitEnvValue = (text: string): { value: string; comment: string } => {
-  const quoted = text.match(/^(["'])(.*?)\1(.*)$/);
+export const settingsFromCompose = (projectDirectory: string): Partial<Settings> => {
+  // Not logged, because the output includes every container's environment
+  const result = shell.exec("docker compose config --format json", { silent: true, cwd: projectDirectory });
+
+  if (result.code !== 0) {
+    throw new Error(`docker compose config failed: ${result.stderr}`);
+  }
+
+  const environment = JSON.parse(result.stdout).services?.[serviceWithEverySetting]?.environment ?? {};
+  const settings: Partial<Settings> = {};
+
+  for (const name of settingNames) {
+    if (typeof environment[name] === "string" && environment[name] !== "") {
+      settings[name] = environment[name];
+    }
+  }
+
+  return settings;
+};
+
+/**
+ * What follows the value on a line of the .env file, which is a comment if anything. A quoted value ends
+ * at its closing quote, and an unquoted one where " #" starts a comment.
+ */
+const afterValue = (text: string): string => {
+  const quoted = text.match(/^(["']).*?\1(.*)$/);
 
   if (quoted) {
-    return { value: quoted[2], comment: quoted[3] };
+    return quoted[2];
   }
 
   const commentStart = text.indexOf(" #");
 
-  return commentStart === -1
-    ? { value: text, comment: "" }
-    : { value: text.slice(0, commentStart).trimEnd(), comment: text.slice(commentStart) };
+  return commentStart === -1 ? "" : text.slice(commentStart);
 };
 
-const isOn = (value: string): boolean => ["1", "true", "yes", "on"].includes(value.toLowerCase());
-const onOff = (value: string): string => (isOn(value) ? "on" : "off");
+/**
+ * The contents of the .env file with the settings replaced, keeping any "export" or comment on their
+ * lines. Settings it doesn't have yet are added at the end, and every other line is left as it was.
+ */
+export const withSettings = (contents: string, settings: Settings): string => {
+  const lines = contents === "" ? [] : contents.replace(/\r?\n$/, "").split(/\r?\n/);
+  const missing = new Set<SettingName>(settingNames);
+
+  const updated = lines.map((line) => {
+    const match = line.match(envLinePattern);
+
+    if (!match || !(settingNames as string[]).includes(match[2])) {
+      return line;
+    }
+
+    const [, prefix, name, rest] = match;
+    missing.delete(name as SettingName);
+
+    // The value is written unquoted, and after an unquoted value only " #" starts a comment, so a
+    // comment that followed a closing quote straight away needs a space before it
+    const comment = afterValue(rest);
+    const separator = comment === "" || /^\s/.test(comment) ? "" : " ";
+
+    return `${prefix}${name}=${settings[name as SettingName]}${separator}${comment}`;
+  });
+
+  if (missing.size > 0) {
+    if (updated.length > 0 && updated[updated.length - 1] !== "") {
+      updated.push("");
+    }
+
+    updated.push("# Development settings, see docs/app/local-setup");
+    missing.forEach((name) => updated.push(`${name}=${settings[name]}`));
+  }
+
+  return updated.join("\n") + "\n";
+};
 
 /**
  * Sets the development toggles (Xdebug, configuration cache, developer toolbar) in the root .env
@@ -56,16 +121,27 @@ const onOff = (value: string): string => (isOn(value) ? "on" : "off");
 export default class DevelopmentSettings implements ActionInterface {
   private settings: Settings = { ...defaults };
   private recreateContainers = false;
+  private readonly envFile: string;
 
-  constructor(private readonly envFile: string = path.join(repositoryRoot, ".env")) {}
+  /**
+   * @param projectDirectory where compose.yaml and the .env file are
+   */
+  constructor(private readonly projectDirectory: string = repositoryRoot) {
+    this.envFile = path.join(projectDirectory, ".env");
+  }
 
   async prompt(): Promise<boolean> {
-    const current: Settings = { ...defaults, ...this.readSettings() };
+    const current = this.currentSettings();
+    const summary = [
+      `Xdebug ${current.XDEBUG_MODE}`,
+      `config cache ${onOff(current.VOL_CONFIG_CACHE)}`,
+      `developer toolbar ${onOff(current.VOL_DEVTOOLS)}`,
+    ].join(", ");
 
     const { shouldChange } = await prompts({
       type: "confirm",
       name: "shouldChange",
-      message: `Change the development settings? (Xdebug ${current.XDEBUG_MODE}, config cache ${onOff(current.VOL_CONFIG_CACHE)}, developer toolbar ${onOff(current.VOL_DEVTOOLS)})`,
+      message: `Change the development settings? (${summary})`,
       initial: false,
     });
 
@@ -127,12 +203,13 @@ export default class DevelopmentSettings implements ActionInterface {
     progress.start(this.recreateContainers ? 2 : 1, 0);
 
     debug(chalk.blue(`Writing ${JSON.stringify(this.settings)} to ${this.envFile}`));
-    this.writeSettings();
+    const contents = fs.existsSync(this.envFile) ? fs.readFileSync(this.envFile, "utf8") : "";
+    fs.writeFileSync(this.envFile, withSettings(contents, this.settings));
     progress.increment();
 
     if (this.recreateContainers) {
       // Compose recreates only the containers whose configuration has changed
-      exec("docker compose up -d api cli selfserve internal", debug, { cwd: repositoryRoot });
+      exec("docker compose up -d api cli selfserve internal", debug, { cwd: this.projectDirectory });
       progress.increment();
     }
 
@@ -140,74 +217,19 @@ export default class DevelopmentSettings implements ActionInterface {
   }
 
   /**
-   * The development settings in the .env file; other lines are ignored. An empty value is left out,
-   * because compose.yaml uses its default for an empty value as well as a missing one.
+   * The settings as they are now, to start the questions from
    */
-  private readSettings(): Partial<Settings> {
-    if (!fs.existsSync(this.envFile)) {
-      return {};
+  private currentSettings(): Settings {
+    try {
+      return { ...defaults, ...settingsFromCompose(this.projectDirectory) };
+    } catch (error) {
+      debug(chalk.red(String(error)));
+      console.warn(
+        chalk.yellow("Docker Compose couldn't be asked for the development settings, so their defaults are shown."),
+      );
+
+      return { ...defaults };
     }
-
-    const settings: Partial<Settings> = {};
-
-    for (const line of fs.readFileSync(this.envFile, "utf8").split(/\r?\n/)) {
-      const match = line.match(envLinePattern);
-
-      if (!match || !(settingNames as string[]).includes(match[2])) {
-        continue;
-      }
-
-      const name = match[2] as SettingName;
-      const { value } = splitEnvValue(match[3]);
-
-      // The last line that sets a variable wins, as it does for Compose
-      if (value === "") {
-        delete settings[name];
-      } else {
-        settings[name] = value;
-      }
-    }
-
-    return settings;
-  }
-
-  /**
-   * Replaces the development settings in the .env file, keeping any "export" or comment on their
-   * lines, appends any it doesn't have yet, and leaves every other line as it was
-   */
-  private writeSettings(): void {
-    const contents = fs.existsSync(this.envFile) ? fs.readFileSync(this.envFile, "utf8") : "";
-    const lines = contents === "" ? [] : contents.replace(/\r?\n$/, "").split(/\r?\n/);
-    const missing = new Set<SettingName>(settingNames);
-
-    const updated = lines.map((line) => {
-      const match = line.match(envLinePattern);
-
-      if (!match || !(settingNames as string[]).includes(match[2])) {
-        return line;
-      }
-
-      const [, prefix, name, rest] = match;
-      missing.delete(name as SettingName);
-
-      // The value is written unquoted, and after an unquoted value only " #" starts a comment, so a
-      // comment that followed a closing quote straight away needs a space before it
-      const { comment } = splitEnvValue(rest);
-      const separator = comment === "" || /^\s/.test(comment) ? "" : " ";
-
-      return `${prefix}${name}=${this.settings[name as SettingName]}${separator}${comment}`;
-    });
-
-    if (missing.size > 0) {
-      if (updated.length > 0 && updated[updated.length - 1] !== "") {
-        updated.push("");
-      }
-
-      updated.push("# Development settings, see docs/app/local-setup");
-      missing.forEach((name) => updated.push(`${name}=${this.settings[name]}`));
-    }
-
-    fs.writeFileSync(this.envFile, updated.join("\n") + "\n");
   }
 
   private warnAboutIgnoredSettings(): void {
@@ -219,18 +241,18 @@ export default class DevelopmentSettings implements ActionInterface {
 
     // The configuration cache and toolbar settings are read by each app's development.config.php
     for (const app of phpAppDirectoryNames) {
-      const developmentConfig = path.join(repositoryRoot, "app", app, "config", "development.config.php");
+      const developmentConfig = path.join(this.projectDirectory, "app", app, "config", "development.config.php");
+      const name = `app/${app}/config/development.config.php`;
 
       if (!fs.existsSync(developmentConfig)) {
         console.warn(
-          chalk.yellow(
-            `app/${app} has no config/development.config.php, so the config cache and toolbar settings don't apply to it.`,
-          ),
+          chalk.yellow(`${name} doesn't exist, so the config cache and toolbar settings don't apply to ${app}.`),
         );
-      } else if (!fs.readFileSync(developmentConfig, "utf8").includes("VOL_CONFIG_CACHE")) {
+      } else if (!fs.readFileSync(developmentConfig, "utf8").includes("DevelopmentConfig")) {
         console.warn(
           chalk.yellow(
-            `app/${app}/config/development.config.php predates these settings, so they don't apply to it. Copy its dist file with the "Copy the Laminas configuration dist files" step.`,
+            `${name} is an older copy of its dist file, so these settings may not apply to ${app}. ` +
+              `Copy it again with the "Copy the Laminas configuration dist files" step.`,
           ),
         );
       }
