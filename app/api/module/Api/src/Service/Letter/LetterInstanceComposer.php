@@ -66,9 +66,9 @@ class LetterInstanceComposer
      * Two issues frequently link the same to-do; without this the operator is told to do the same
      * thing twice (VOL-7280). Issues can also link different versions of the same to-do, so this
      * de-dupes per to-do rather than per version and always renders the to-do's current version
-     * (VOL-7408). Each unique to-do attaches to the FIRST issue in display order that brought it,
-     * which gives the renderer "appears under the first issue type it relates to" without the
-     * renderer needing to know anything about it.
+     * (VOL-7408). Each unique to-do attaches to the FIRST issue in letter order that brought it
+     * (LetterInstance::getIssuesInLetterOrder). Where it is drawn is decided at render time by
+     * LetterInstance::getPlacementIssue (VOL-7737).
      */
     public function composeTodos(LetterInstance $letterInstance): void
     {
@@ -150,7 +150,7 @@ class LetterInstanceComposer
         $moved = [];
         $displayOrder = 0;
 
-        foreach ($this->issuesInDisplayOrder($letterInstance) as $instanceIssue) {
+        foreach ($letterInstance->getIssuesInLetterOrder() as $instanceIssue) {
             foreach ($instanceIssue->getLetterIssueVersion()?->getLetterIssueTodos() ?? [] as $issueTodo) {
                 $todoVersion = $issueTodo->getLetterTodoVersion();
                 if ($todoVersion === null) {
@@ -199,23 +199,6 @@ class LetterInstanceComposer
         }
 
         return ['created' => $created, 'moved' => $moved];
-    }
-
-    /**
-     * The letter's issues sorted by display order. The collection keeps the order rows were loaded
-     * or added in, which stops being display order as soon as issues are added or renumbered.
-     *
-     * @return LetterInstanceIssue[]
-     */
-    private function issuesInDisplayOrder(LetterInstance $letterInstance): array
-    {
-        $issues = $letterInstance->getLetterInstanceIssues()->toArray();
-        usort(
-            $issues,
-            static fn(LetterInstanceIssue $a, LetterInstanceIssue $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder()
-        );
-
-        return $issues;
     }
 
     /**

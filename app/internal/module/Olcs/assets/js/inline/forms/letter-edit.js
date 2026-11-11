@@ -311,7 +311,7 @@ OLCS.ready(function () {
       var $group = $(this);
       var issueId = "issue-" + $group.data("issue-id");
       if (dirtyMap[issueId]) {
-        var heading = $group.find("h3").text().trim();
+        var heading = $group.find(".govuk-heading-s").first().text().trim();
         unsavedSections.push(heading);
       }
     });
@@ -320,7 +320,7 @@ OLCS.ready(function () {
       var $group = $(this);
       var appendixId = "appendix-" + $group.data("appendix-id");
       if (dirtyMap[appendixId]) {
-        var heading = $group.find("h3").text().trim();
+        var heading = $group.find(".govuk-heading-s").first().text().trim();
         unsavedSections.push(heading);
       }
     });
@@ -329,7 +329,7 @@ OLCS.ready(function () {
       var $group = $(this);
       var sectionKey = "section-" + $group.data("section-id");
       if (dirtyMap[sectionKey]) {
-        var heading = $group.find("h3").text().trim();
+        var heading = $group.find(".govuk-heading-s").first().text().trim();
         unsavedSections.push(heading);
       }
     });
@@ -338,7 +338,7 @@ OLCS.ready(function () {
       var $group = $(this);
       var todoKey = "todo-" + $group.data("todo-id");
       if (dirtyMap[todoKey]) {
-        var heading = $group.find("h3").text().trim();
+        var heading = $group.find(".govuk-heading-s").first().text().trim();
         unsavedSections.push(heading);
       }
     });

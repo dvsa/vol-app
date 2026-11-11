@@ -26,7 +26,7 @@ class IssueChangePlanner
     public function plan(LetterInstance $letterInstance, array $selectedIssues): IssueChangePlan
     {
         $onLetter = [];
-        foreach ($this->issuesInDisplayOrder($letterInstance) as $instanceIssue) {
+        foreach ($letterInstance->getIssuesInLetterOrder() as $instanceIssue) {
             $parentId = $instanceIssue->getLetterIssueVersion()?->getLetterIssue()?->getId();
             if ($parentId !== null && !isset($onLetter[$parentId])) {
                 $onLetter[$parentId] = $instanceIssue;
@@ -50,7 +50,7 @@ class IssueChangePlanner
         }
 
         $removedIssues = [];
-        foreach ($this->issuesInDisplayOrder($letterInstance) as $instanceIssue) {
+        foreach ($letterInstance->getIssuesInLetterOrder() as $instanceIssue) {
             if (!in_array($instanceIssue, $keptIssues, true)) {
                 $removedIssues[] = $instanceIssue;
             }
@@ -60,7 +60,7 @@ class IssueChangePlanner
         // (an issue since switched off, a type changed or reordered), and a save that changes
         // nothing shouldn't renumber the letter.
         if ($removedIssues === [] && count($keptIssues) === count($finalIssues)) {
-            $finalIssues = $this->issuesInDisplayOrder($letterInstance);
+            $finalIssues = $letterInstance->getIssuesInLetterOrder();
         }
 
         return new IssueChangePlan(
@@ -96,19 +96,5 @@ class IssueChangePlanner
         }
 
         return $lost;
-    }
-
-    /**
-     * @return list<LetterInstanceIssue>
-     */
-    private function issuesInDisplayOrder(LetterInstance $letterInstance): array
-    {
-        $issues = array_values($letterInstance->getLetterInstanceIssues()->toArray());
-        usort(
-            $issues,
-            static fn(LetterInstanceIssue $a, LetterInstanceIssue $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder()
-        );
-
-        return $issues;
     }
 }

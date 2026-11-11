@@ -149,6 +149,69 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         );
     }
 
+    private function invokeProtected(string $method, mixed ...$args): mixed
+    {
+        return (new \ReflectionMethod(Sut::class, $method))->invoke($this->makeSut([]), ...$args);
+    }
+
+    /**
+     * VOL-7737: on the edit page each to-do sits under the first issue it can go under that is
+     * on screen; one with none of its issues on screen is listed after them.
+     */
+    public function testEditPageTodosSitUnderTheFirstOfTheirIssuesOnScreen(): void
+    {
+        $groupedIssues = [
+            1 => ['typeName' => 'Finances', 'issues' => [['id' => 10], ['id' => 20]]],
+        ];
+        $todos = [
+            ['id' => 1, 'placementIssueIds' => [10, 20]],
+            ['id' => 2, 'placementIssueIds' => [30, 20]],
+            ['id' => 3, 'placementIssueIds' => [30]],
+            ['id' => 4],
+        ];
+
+        [$placed, $unplaced] = $this->invokeProtected('placeTodosUnderIssues', $groupedIssues, $todos);
+
+        $this->assertSame([1], array_column($placed[1]['issues'][0]['todos'], 'id'));
+        $this->assertSame([2], array_column($placed[1]['issues'][1]['todos'], 'id'));
+        $this->assertSame([3, 4], array_column($unplaced, 'id'));
+    }
+
+    private function instanceSection(int $id, string $key): array
+    {
+        return ['id' => $id, 'letterSectionVersion' => ['letterSectionVariant' => ['letterSection' => ['sectionKey' => $key]]]];
+    }
+
+    public function testEditPageFollowsTheLetterOrder(): void
+    {
+        $instanceSections = [
+            $this->instanceSection(1, 'intro'),
+            $this->instanceSection(2, '__ISSUES__'),
+            $this->instanceSection(3, 'closing'),
+        ];
+        $intro = ['id' => 1, 'name' => 'Intro'];
+        $closing = ['id' => 3, 'name' => 'Closing'];
+
+        $this->assertSame(
+            [['section' => $intro], ['issues' => true], ['section' => $closing]],
+            $this->invokeProtected('editLayout', $instanceSections, [$closing, $intro])
+        );
+        $this->assertSame(
+            [['issues' => true], ['section' => $closing]],
+            $this->invokeProtected('editLayout', $instanceSections, [$closing])
+        );
+    }
+
+    public function testEditPageShowsIssuesAfterTheSectionsWhenTheLetterHasNoIssuesSection(): void
+    {
+        $intro = ['id' => 1, 'name' => 'Intro'];
+
+        $this->assertSame(
+            [['section' => $intro], ['issues' => true]],
+            $this->invokeProtected('editLayout', [$this->instanceSection(1, 'intro')], [$intro])
+        );
+    }
+
     public function testFetchLetterChoicesSortsByDisplayOrder(): void
     {
         // VOL-7282: admin sets First request = 1, Final request = 2, but the modal
