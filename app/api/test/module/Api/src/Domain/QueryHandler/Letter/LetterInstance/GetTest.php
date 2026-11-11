@@ -74,13 +74,18 @@ final class GetTest extends QueryHandlerTestCase
 
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->andReturn([]);
         $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->andReturn([]);
+        $mockLetterInstance->shouldReceive('isOpenForChanges')->andReturn(true);
+        $mockLetterInstance->shouldReceive('isSent')->andReturn(false);
 
         $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')->with($query)->once()
             ->andReturn($mockLetterInstance);
 
         $result = $this->sut->handleQuery($query);
 
-        $this->assertEquals(['id' => 123, 'reference' => 'LTR20251202ABC123'], $result);
+        $this->assertEquals(
+            ['id' => 123, 'reference' => 'LTR20251202ABC123', 'isOpenForChanges' => true, 'isSent' => false],
+            $result
+        );
     }
 
     public function testEachTodoIsToldHowManyIssuesRequireIt(): void
@@ -102,6 +107,8 @@ final class GetTest extends QueryHandlerTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
+        $mockLetterInstance->shouldReceive('isOpenForChanges')->andReturn(true)->byDefault();
+        $mockLetterInstance->shouldReceive('isSent')->andReturn(false)->byDefault();
         // counts are per to-do, so version 32 picks up issues that linked older versions of to-do 5
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->once()
             ->andReturn(['todo-5' => 4, 'todo-6' => 1]);
@@ -134,6 +141,8 @@ final class GetTest extends QueryHandlerTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
+        $mockLetterInstance->shouldReceive('isOpenForChanges')->andReturn(true)->byDefault();
+        $mockLetterInstance->shouldReceive('isSent')->andReturn(false)->byDefault();
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->once()->andReturn(['version-27' => 3]);
         $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->andReturn([]);
 
@@ -165,6 +174,8 @@ final class GetTest extends QueryHandlerTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
+        $mockLetterInstance->shouldReceive('isOpenForChanges')->andReturn(true)->byDefault();
+        $mockLetterInstance->shouldReceive('isSent')->andReturn(false)->byDefault();
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->andReturn([]);
         $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->once()->andReturn([1 => [10, 12]]);
 
@@ -210,14 +221,22 @@ final class GetTest extends QueryHandlerTestCase
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
+        $mockLetterInstance->shouldReceive('isOpenForChanges')->andReturn(true)->byDefault();
+        $mockLetterInstance->shouldReceive('isSent')->andReturn(false)->byDefault();
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->andReturn([]);
         $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->andReturn([]);
+        $mockLetterInstance->shouldReceive('isOpenForChanges')->andReturn(false);
+        $mockLetterInstance->shouldReceive('isSent')->andReturn(true);
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection([$other]));
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection([$custom, $library]));
 
         $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')->with($query)->once()->andReturn($mockLetterInstance);
 
         $result = $this->sut->handleQuery($query);
+
+        // the letter's own rule for whether it can still change, so pages don't keep a copy of it
+        $this->assertFalse($result['isOpenForChanges']);
+        $this->assertTrue($result['isSent']);
 
         $issue = $result['letterInstanceIssues'][0];
         $this->assertSame('Vehicle storage', $issue['effectiveHeading']);

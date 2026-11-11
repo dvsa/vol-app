@@ -126,6 +126,27 @@ final class LetterInstanceIssueEntityTest extends EntityTester
         $this->assertTrue($entity->isInputPending(), 'body only');
     }
 
+    /**
+     * Review: the editor opens on the placeholder with its grabs filled in at generation, so that
+     * saved unchanged is still the placeholder
+     */
+    public function testOtherIssuePlaceholderWithItsGrabsFilledInIsStillThePlaceholder(): void
+    {
+        $entity = $this->otherIssue();
+        $entity->getLetterIssueVersion()->setDefaultBodyContent(json_encode(['blocks' => [
+            ['type' => 'paragraph', 'data' => ['text' => 'Describe the issue with licence [[LICENCE_NUMBER]] here.']],
+        ]]));
+        $filledIn = ['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Describe the issue with licence OB1234567 here.']]]];
+        $entity->setGeneratedContent($filledIn);
+        $entity->setEditedHeading('Vehicle storage');
+
+        $entity->setEditedContentFromArray(['time' => 3] + $filledIn);
+        $this->assertTrue($entity->isInputPending());
+
+        $entity->setEditedContentFromArray(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Lorry parked on verge']]]]);
+        $this->assertFalse($entity->isInputPending());
+    }
+
     public function testOtherIssueWithOnlyAHeadingCountsAsEdited(): void
     {
         $entity = $this->otherIssue();

@@ -12,12 +12,16 @@
  */
 
 // a sent letter can't be changed (VOL-7735), so it has nothing to pick for editing
-$open = in_array($letterInstance['status']['id'] ?? null, ['ltr_sts_draft', 'ltr_sts_ready'], true);
+$open = !empty($letterInstance['isOpenForChanges']);
 ?>
 
 <?php if (!$open): ?>
 <div class="small-module">
-    <p class="small-module__details">This letter has been sent, so it can no longer be changed.</p>
+    <p class="small-module__details">
+        <?= empty($letterInstance['isSent'])
+            ? 'This letter can no longer be changed.'
+            : 'This letter has been sent, so it can no longer be changed.' ?>
+    </p>
 </div>
 <?php else: ?>
 <?php if (!empty($sectionsList) || !empty($instanceSectionsList) || !empty($appendicesList) || !empty($todosList)): ?>

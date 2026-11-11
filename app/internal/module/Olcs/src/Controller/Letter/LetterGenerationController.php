@@ -24,11 +24,6 @@ class LetterGenerationController extends AbstractInternalController implements L
     protected ?ViewModel $leftView = null;
 
     /**
-     * Letter statuses that can still be changed, as LetterInstance::isOpenForChanges allows (VOL-7734)
-     */
-    private const array ISSUE_CHANGE_STATUSES = ['ltr_sts_draft', 'ltr_sts_ready'];
-
-    /**
      * Inline scripts for form handling
      */
     protected $inlineScripts = [
@@ -440,8 +435,12 @@ class LetterGenerationController extends AbstractInternalController implements L
         }
 
         // every save would be refused once it's sent (VOL-7735), so don't offer the editors
-        if (!in_array($letterInstance['status']['id'] ?? null, self::ISSUE_CHANGE_STATUSES, true)) {
-            $this->flashMessengerHelperService->addErrorMessage('This letter has been sent, so it can no longer be changed');
+        if (empty($letterInstance['isOpenForChanges'])) {
+            $this->flashMessengerHelperService->addErrorMessage(
+                empty($letterInstance['isSent'])
+                    ? 'This letter can no longer be changed'
+                    : 'This letter has been sent, so it can no longer be changed'
+            );
             return $this->redirect()->toUrl('/letter/preview?id=' . urlencode((string) $letterInstanceId));
         }
 
@@ -624,8 +623,8 @@ class LetterGenerationController extends AbstractInternalController implements L
             return $response;
         }
 
-        $status = $letterInstance['status']['id'] ?? null;
-        $locked = !in_array($status, self::ISSUE_CHANGE_STATUSES, true);
+        // the letter's own rule, worked out by the API (LetterInstance::isOpenForChanges)
+        $locked = empty($letterInstance['isOpenForChanges']);
 
         $selectedIssueIds = [];
         $accordionData = [];
@@ -766,14 +765,25 @@ class LetterGenerationController extends AbstractInternalController implements L
             $missing = [
                 'id' => $issueId,
                 'issueKey' => '',
-                'currentVersion' => ['heading' => $version['heading'] ?? 'Issue'],
+                'currentVersion' => ['heading' => $version['heading'] ?? 'Issue', 'isOther' => !empty($version['isOther'])],
             ];
             $type = $version['letterIssueType'] ?? ['id' => 0, 'name' => 'Other issues'];
 
             $placed = false;
             foreach ($accordionData as $index => $section) {
                 if ((int) ($section['issueType']['id'] ?? -1) === (int) ($type['id'] ?? 0)) {
-                    $accordionData[$index]['issues'][] = $missing;
+                    // before the type's Other issue, which stays last (VOL-7735): the letter is
+                    // numbered in the order shown
+                    $at = count($section['issues']);
+                    if (!$missing['currentVersion']['isOther']) {
+                        foreach ($section['issues'] as $position => $offeredIssue) {
+                            if (!empty($offeredIssue['currentVersion']['isOther'])) {
+                                $at = $position;
+                                break;
+                            }
+                        }
+                    }
+                    array_splice($accordionData[$index]['issues'], $at, 0, [$missing]);
                     $placed = true;
                     break;
                 }

@@ -143,10 +143,15 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
             return true;
         }
 
-        $body = EditorJsText::plain($this->getEffectiveContent());
-        $placeholder = EditorJsText::plain($this->letterIssueVersion->getDefaultBodyContentAsArray());
+        // the placeholder as written, or as the editor opened on it, with its grabs filled in
+        $placeholders = [EditorJsText::plain($this->letterIssueVersion->getDefaultBodyContentAsArray())];
+        if (is_array($this->generatedContent) && $this->generatedContent !== []) {
+            $placeholders[] = EditorJsText::plain($this->generatedContent);
+        }
 
-        return $body === '' || $body === $placeholder;
+        $body = EditorJsText::plain($this->getEffectiveContent());
+
+        return $body === '' || in_array($body, $placeholders, true);
     }
 
     /**

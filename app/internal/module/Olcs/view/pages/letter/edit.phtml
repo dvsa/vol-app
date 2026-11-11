@@ -159,7 +159,7 @@
 <?php endif; ?>
 
 <div style="margin-top: 30px;">
-    <?php if (in_array($letterInstance['status']['id'] ?? null, ['ltr_sts_draft', 'ltr_sts_ready'], true)): ?>
+    <?php if (!empty($letterInstance['isOpenForChanges'])): ?>
     <button
         type="button"
         id="change-issues-btn"

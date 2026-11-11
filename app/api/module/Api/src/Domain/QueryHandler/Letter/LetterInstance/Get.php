@@ -86,6 +86,10 @@ class Get extends AbstractQueryByIdHandler
         $placements = $letterInstance->getTodoPlacementIssueIds();
         $data = $result->serialize();
 
+        // the letter's own rule for whether it can still change (VOL-7735), so pages don't copy it
+        $data['isOpenForChanges'] = $letterInstance->isOpenForChanges();
+        $data['isSent'] = (bool) $letterInstance->isSent();
+
         // the effective heading and "Input required", worked out by the entities (VOL-7735)
         foreach ($data['letterInstanceIssues'] ?? [] as $index => $row) {
             $issue = $issuesById[(int) ($row['id'] ?? 0)] ?? null;

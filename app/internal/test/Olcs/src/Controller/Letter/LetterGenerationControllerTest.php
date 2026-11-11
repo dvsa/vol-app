@@ -495,6 +495,8 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         return $overrides + [
             'id' => 55,
             'status' => ['id' => 'ltr_sts_draft'],
+            'isOpenForChanges' => true,
+            'isSent' => false,
             'licence' => ['id' => 7],
             'application' => null,
             'letterInstanceAppendices' => [],
@@ -580,6 +582,31 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertSame([77], array_column($accordion[2]['issues'], 'id'));
     }
 
+    /**
+     * Review: an issue no longer offered still goes before its type's Other issue, which is last
+     * (VOL-7735); Change issues numbers the letter in the order the modal shows
+     */
+    public function testAnIssueNoLongerOfferedGoesBeforeTheOtherIssue(): void
+    {
+        $letter = $this->letterForChangeIssues();
+        $letter['letterInstanceIssues'][] = ['id' => 502, 'letterIssueVersion' => [
+            'heading' => 'Retired wording',
+            'letterIssue' => ['id' => 99],
+            'letterIssueType' => ['id' => 2, 'name' => 'Finance'],
+        ]];
+        $accordion = $this->financeAccordion();
+        $accordion[1]['issues'][] = ['id' => 29, 'issueKey' => 'FI-OTHER', 'currentVersion' => ['heading' => 'Other issue', 'isOther' => true]];
+
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn($letter);
+        $sut->shouldReceive('fetchLetterContext')->andReturn([]);
+        $sut->shouldReceive('buildAccordionData')->andReturn($accordion);
+
+        $finance = $this->runChangeIssues($sut, ['id' => '55'])->getVariable('accordionData')[1];
+
+        $this->assertSame([20, 21, 99, 29], array_column($finance['issues'], 'id'));
+    }
+
     public function testChangeIssuesUsesTheApplicationThenLicenceForGoodsOrPsv(): void
     {
         $sut = $this->bareSut();
@@ -593,11 +620,11 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->runChangeIssues($sut, ['id' => '55']);
     }
 
-    public function testChangeIssuesOnASentLetterIsLocked(): void
+    public function testChangeIssuesOnALetterThatCanNoLongerChangeIsLocked(): void
     {
         $sut = $this->bareSut();
         $sut->shouldReceive('fetchLetterInstanceById')->andReturn(
-            $this->letterForChangeIssues(['status' => ['id' => 'ltr_sts_sent']])
+            $this->letterForChangeIssues(['status' => ['id' => 'ltr_sts_sent'], 'isOpenForChanges' => false, 'isSent' => true])
         );
         $sut->shouldReceive('buildAccordionData')->never();
 
@@ -606,14 +633,24 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertTrue($view->getVariable('locked'));
     }
 
+    public static function closedLetters(): \Iterator
+    {
+        yield 'sent' => [['status' => ['id' => 'ltr_sts_sent'], 'isOpenForChanges' => false, 'isSent' => true], 'This letter has been sent, so it can no longer be changed'];
+        // review: the API's rule, not a copy of it (a deleted draft can't change either), and only
+        // a sent letter is said to have been sent
+        yield 'cancelled' => [['status' => ['id' => 'ltr_sts_cancelled'], 'isOpenForChanges' => false, 'isSent' => false], 'This letter can no longer be changed'];
+        yield 'deleted draft' => [['status' => ['id' => 'ltr_sts_draft'], 'isOpenForChanges' => false, 'isSent' => false], 'This letter can no longer be changed'];
+    }
+
     /**
      * A sent letter can't be changed (VOL-7735), so its edit page sends the caseworker back to the
      * preview rather than offering editors whose saves would all be refused
      */
-    public function testEditingASentLetterGoesBackToThePreview(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('closedLetters')]
+    public function testEditingALetterThatCanNoLongerChangeGoesBackToThePreview(array $letter, string $message): void
     {
         $flash = m::mock(FlashMessengerHelperService::class);
-        $flash->shouldReceive('addErrorMessage')->with('This letter has been sent, so it can no longer be changed')->once();
+        $flash->shouldReceive('addErrorMessage')->with($message)->once();
         $sut = m::mock(Sut::class, [
             m::mock(TranslationHelperService::class),
             m::mock(FormHelperService::class),
@@ -627,7 +664,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $params->shouldReceive('fromQuery')->andReturn([]);
         $sut->shouldReceive('params')->andReturn($params);
         $sut->shouldReceive('fetchLetterInstanceById')->with(55)->andReturn(
-            $this->letterForChangeIssues(['status' => ['id' => 'ltr_sts_sent']])
+            $this->letterForChangeIssues($letter)
         );
 
         $response = new \Laminas\Http\Response();
