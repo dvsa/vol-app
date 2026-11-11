@@ -1,30 +1,8 @@
 <?php
 
-use Dvsa\Olcs\Utils\Development\ConfigCacheKey;
+use Dvsa\Olcs\Utils\Development\DevelopmentConfig;
 
-// Development toggles come from environment variables that compose.yaml passes in from the root .env
-// file. See docs/app/local-setup.
-$isEnabled = static fn (string $name): bool => filter_var(getenv($name), FILTER_VALIDATE_BOOLEAN);
-
-// Merging the configuration is the slowest part of a request, so the result is cached. The cache is
-// named after what the configuration is built from (its files, the classes it loads while it's
-// merged, and the container), so it's rebuilt when any of them changes; see ConfigCacheKey.
-// Command-line runs don't cache: container-cli.php gives them fixed cache names.
-$configCache = PHP_SAPI !== 'cli' && $isEnabled('VOL_CONFIG_CACHE')
-  ? ConfigCacheKey::forApplication(dirname(__DIR__))
-  : null;
-$cacheKey = $configCache?->key() ?? 'development';
-
-return [
-  // Additional modules to include when in development mode. The config cache module records the
-  // files loaded while the configuration is merged.
-  'modules' => $configCache === null ? [] : [ConfigCacheKey::MODULE_NAME => $configCache->module()],
-  // Configuration overrides during development mode
-  'module_listener_options' => [
-    'config_glob_paths' => [realpath(__DIR__) . '/autoload/{,*.}{global,local}-development.php'],
-    'config_cache_enabled' => $configCache !== null,
-    'module_map_cache_enabled' => $configCache !== null,
-    'config_cache_key' => $cacheKey,
-    'module_map_cache_key' => $cacheKey,
-  ],
-];
+// What the application does differently in development, such as caching the merged configuration,
+// is built in one place so that a change to it reaches this copy too. The settings it reads come
+// from the root .env file. See docs/app/local-setup.
+return DevelopmentConfig::forApplication(dirname(__DIR__));
