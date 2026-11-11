@@ -173,16 +173,24 @@ final class ConfigCacheKeyTest extends TestCase
         symlink($library, $this->appRoot . '/vendor/olcs/olcs-auth');
 
         $this->key(rescanAfterSeconds: 0);
-        $recordedKey = $this->recordLoadedFiles([], [$library . '/src/Thing.php', $library . '/vendor/laminas/Other.php']);
+        $recordedKey = $this->recordLoadedFiles(
+            [],
+            [$library . '/src/Thing.php', $library . '/vendor/laminas/Other.php']
+        );
 
         touch($library . '/vendor/laminas/Other.php', self::MTIME + 1);
         $this->assertSame($recordedKey, $this->key(), "The library's own vendor directory isn't watched");
 
         touch($library . '/src/Thing.php', self::MTIME + 1);
-        $this->assertNotSame($recordedKey, $keyAfterClassChange = $this->key(), 'A library class the merge loaded is watched');
+        $keyAfterClassChange = $this->key();
+        $this->assertNotSame($recordedKey, $keyAfterClassChange, 'A library class the merge loaded is watched');
 
         touch($library . '/config/module.config.php', self::MTIME + 1);
-        $this->assertNotSame($keyAfterClassChange, $this->key(), "The library's config, found through the link, is watched");
+        $this->assertNotSame(
+            $keyAfterClassChange,
+            $this->key(),
+            "The library's config, found through the link, is watched"
+        );
     }
 
     public function testOnlyTheApplicationsOwnLoadedFilesAreRecorded(): void
@@ -230,13 +238,13 @@ final class ConfigCacheKeyTest extends TestCase
         $this->assertNotSame($recordedKey, $this->key(), 'The cache may hold the old contents, so it is rebuilt');
     }
 
-    public function testAFileAnEarlierMergeLoadedRewrittenAtTheSameSizeAndSecondWhileTheConfigurationIsMergedChangesTheKeyAfterwards(): void
+    public function testAFileAnEarlierMergeLoadedRewrittenAtTheSameSizeAndSecondWhileMergingChangesTheKey(): void
     {
         $now = self::MTIME + 100;
         $this->writeFile(self::SECTION_CONFIG, '<?php const A = 0;', $now);
         $this->recordLoadedFiles([self::SECTION_CONFIG], clock: $now);
 
-        $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1', static fn (): int => $now);
+        $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1', $this->clock($now));
         $cacheKey->key();
 
         // The merge reads the file, which is then saved again with a value of the same length before
@@ -244,7 +252,11 @@ final class ConfigCacheKeyTest extends TestCase
         $this->writeFile(self::SECTION_CONFIG, '<?php const A = 1;', $now);
         $recordedKey = $cacheKey->recordLoadedFiles([$this->appRoot . '/' . self::SECTION_CONFIG]);
 
-        $this->assertNotSame($recordedKey, $this->key(clock: $now), 'The cache may hold the old contents, so it is rebuilt');
+        $this->assertNotSame(
+            $recordedKey,
+            $this->key(clock: $now),
+            'The cache may hold the old contents, so it is rebuilt'
+        );
     }
 
     public function testAnotherRequestRescanningWhileTheConfigurationIsMergedDoesNotHideAChange(): void
@@ -283,7 +295,7 @@ final class ConfigCacheKeyTest extends TestCase
         $this->assertNotSame($key, $this->key(clock: $now));
     }
 
-    public function testAnOlderMergeThatFinishesLastCannotReplaceTheCacheOfANewerOneAfterAnEditThatKeepsTheSizeAndSecond(): void
+    public function testAnOlderMergeThatFinishesLastCannotReplaceANewerCacheAfterAnEditThatKeepsTheSizeAndSecond(): void
     {
         $now = self::MTIME + 100;
         $clock = static fn (): int => $now;
@@ -317,7 +329,11 @@ final class ConfigCacheKeyTest extends TestCase
         $this->writeFile('module/Olcs/config/routes/licence.php', mtime: $now);
         $key = $this->key(clock: $now);
 
-        $this->assertSame($key, $this->key(rescanAfterSeconds: 0, clock: $now), 'The key is stable while the file is recent');
+        $this->assertSame(
+            $key,
+            $this->key(rescanAfterSeconds: 0, clock: $now),
+            'The key is stable while the file is recent'
+        );
 
         $olderKey = $this->key(rescanAfterSeconds: 0, clock: $now + 60);
 
@@ -385,6 +401,135 @@ final class ConfigCacheKeyTest extends TestCase
         $this->assertFileExists($this->appRoot . "/data/cache/module-config-cache.$key.php");
     }
 
+    public function testADirectoryThatCannotBeReadIsLeftOutOfTheScan(): void
+    {
+        $this->writeFile('module/Olcs/config/private/routes.php');
+        $unreadable = $this->appRoot . '/module/Olcs/config/private';
+        chmod($unreadable, 0000);
+
+        try {
+            // As root the directory can still be read, and the scan must work then too
+            $key = $this->key(rescanAfterSeconds: 0);
+
+            $this->writeFile('module/Olcs/config/routes/licence.php', mtime: self::MTIME + 1);
+
+            $this->assertNotSame(
+                $key,
+                $this->key(rescanAfterSeconds: 0),
+                'The files that can be read are still watched'
+            );
+        } finally {
+            chmod($unreadable, 0755);
+        }
+    }
+
+    public function testAConfigDirectoryThatCannotBeReadIsLeftOutOfTheScan(): void
+    {
+        $unreadable = $this->appRoot . '/vendor/olcs/olcs-transfer/config';
+        chmod($unreadable, 0000);
+
+        try {
+            $key = $this->key(rescanAfterSeconds: 0);
+
+            $this->writeFile('config/autoload/global.php', mtime: self::MTIME + 1);
+
+            $this->assertNotSame(
+                $key,
+                $this->key(rescanAfterSeconds: 0),
+                'The files that can be read are still watched'
+            );
+        } finally {
+            chmod($unreadable, 0755);
+        }
+    }
+
+    public function testTheCachesCanBeWrittenToACacheDirectoryThatCanBeWrittenTo(): void
+    {
+        $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1');
+
+        $this->assertTrue($cacheKey->canWriteCachesFor($cacheKey->key()));
+        $this->assertSame(
+            ['.gitignore', 'development-config-sources.json'],
+            array_values(array_diff(scandir($this->appRoot . '/data/cache') ?: [], ['.', '..'])),
+            'Trying the directory leaves nothing behind'
+        );
+    }
+
+    public function testTheCachesCannotBeWrittenWhenThereIsNoCacheDirectory(): void
+    {
+        unlink($this->appRoot . '/data/cache/.gitignore');
+        rmdir($this->appRoot . '/data/cache');
+        $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1');
+
+        $this->assertFalse($cacheKey->canWriteCachesFor($cacheKey->key()));
+    }
+
+    public function testTheCachesCannotBeWrittenToACacheDirectoryThatCannotBeWrittenTo(): void
+    {
+        $cacheDirectory = $this->appRoot . '/data/cache';
+        $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1');
+        $key = $cacheKey->key();
+        chmod($cacheDirectory, 0555);
+
+        try {
+            // Root can write to it whatever its permissions
+            $this->assertSame(is_writable($cacheDirectory), $cacheKey->canWriteCachesFor($key));
+        } finally {
+            chmod($cacheDirectory, 0755);
+        }
+    }
+
+    public function testADeletedCacheFileIsDroppedFromOpcache(): void
+    {
+        // OPcache is off for the command line, so a child process includes a cache file with it on,
+        // then works out a key the file isn't named after, which deletes the file
+        $cacheFile = $this->appRoot . '/data/cache/module-config-cache.development-0000000000000000.php';
+        $this->writeFile('data/cache/module-config-cache.development-0000000000000000.php');
+
+        $script = <<<'PHP'
+            require $argv[1];
+            $hasOpcache = function_exists('opcache_get_status') && is_array(opcache_get_status(false));
+            $isCached = static fn (): ?bool => $hasOpcache ? opcache_is_script_cached($argv[3]) : null;
+            include $argv[3];
+            $before = $isCached();
+            Dvsa\Olcs\Utils\Development\ConfigCacheKey::forApplication($argv[2], PHP_INT_MAX, 'container-1')->key();
+            echo json_encode(['before' => $before, 'after' => $isCached(), 'exists' => file_exists($argv[3])]);
+            PHP;
+
+        $process = proc_open(
+            [
+                PHP_BINARY,
+                '-d', 'opcache.enable=1',
+                '-d', 'opcache.enable_cli=1',
+                // Without this, a file that no longer exists counts as not cached whether or not
+                // OPcache was told to drop it
+                '-d', 'opcache.validate_timestamps=0',
+                '-d', 'opcache.file_update_protection=0',
+                '-r', $script,
+                '--',
+                dirname(__DIR__, 2) . '/vendor/autoload.php',
+                $this->appRoot,
+                $cacheFile,
+            ],
+            [1 => ['pipe', 'w'], 2 => ['pipe', 'w']],
+            $pipes
+        );
+        $this->assertIsResource($process);
+        $output = stream_get_contents($pipes[1]);
+        $errors = stream_get_contents($pipes[2]);
+        proc_close($process);
+
+        $result = json_decode((string) $output, true);
+        $this->assertIsArray($result, "The child process printed: $output $errors");
+        $this->assertFalse($result['exists'], 'The cache file is deleted');
+
+        // Where PHP has no OPcache there's nothing to drop the file from
+        if ($result['before'] !== null) {
+            $this->assertTrue($result['before'], 'OPcache held the cache file once it was included');
+            $this->assertFalse($result['after'], 'OPcache still holds the deleted cache file');
+        }
+    }
+
     public function testAnUnreadableManifestIsRebuilt(): void
     {
         $key = $this->key();
@@ -405,9 +550,13 @@ final class ConfigCacheKeyTest extends TestCase
      *
      * @param int|null $clock the current Unix time, by default the real one
      */
-    private function key(int $rescanAfterSeconds = PHP_INT_MAX, string $container = 'container-1', ?int $clock = null): string
-    {
-        return ConfigCacheKey::forApplication($this->appRoot, $rescanAfterSeconds, $container, $this->clock($clock))->key();
+    private function key(
+        int $rescanAfterSeconds = PHP_INT_MAX,
+        string $container = 'container-1',
+        ?int $clock = null,
+    ): string {
+        return ConfigCacheKey::forApplication($this->appRoot, $rescanAfterSeconds, $container, $this->clock($clock))
+            ->key();
     }
 
     /**
@@ -431,8 +580,11 @@ final class ConfigCacheKeyTest extends TestCase
         return $time === null ? null : static fn (): int => $time;
     }
 
-    private function writeFile(string $relativePath, string $contents = '<?php return [];', int $mtime = self::MTIME): void
-    {
+    private function writeFile(
+        string $relativePath,
+        string $contents = '<?php return [];',
+        int $mtime = self::MTIME,
+    ): void {
         $path = $this->appRoot . '/' . $relativePath;
 
         if (!is_dir(dirname($path))) {

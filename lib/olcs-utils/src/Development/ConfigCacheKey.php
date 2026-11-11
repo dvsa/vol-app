@@ -8,6 +8,7 @@ use Closure;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use RuntimeException;
 use SplFileInfo;
 
 /**
@@ -39,12 +40,29 @@ use SplFileInfo;
  *
  * Not for production, where configuration doesn't change under a running app.
  *
- * @phpstan-type Manifest array{sources: string, scannedAt: int, files: array<string, string>, loaded: array<string, string>}
- * @psalm-type Manifest = array{sources: string, scannedAt: int, files: array<string, string>, loaded: array<string, string>}
+ * @phpstan-type Manifest array{
+ *     sources: string,
+ *     scannedAt: int,
+ *     files: array<string, string>,
+ *     loaded: array<string, string>,
+ * }
+ * @psalm-type Manifest = array{
+ *     sources: string,
+ *     scannedAt: int,
+ *     files: array<string, string>,
+ *     loaded: array<string, string>,
+ * }
  */
 final class ConfigCacheKey
 {
     public const string MODULE_NAME = 'Dvsa\Olcs\Utils\Development\ConfigCache';
+
+    // Where Laminas writes the configuration cache, within the application
+    public const string CACHE_DIRECTORY = 'data/cache';
+
+    // The names Laminas gives its caches of the merged configuration and of where the modules are
+    private const string CONFIG_CACHE = 'module-config-cache';
+    private const string MODULE_MAP_CACHE = 'module-classmap-cache';
 
     private const string KEY_PREFIX = 'development-';
     private const string MANIFEST_FILE = 'development-config-sources.json';
@@ -77,8 +95,10 @@ final class ConfigCacheKey
 
     /**
      * @param string                $appRoot            the application's root directory
-     * @param string                $container          identifies the container, whose environment can't change while it runs
-     * @param int                   $rescanAfterSeconds how old the last scan can be before the directories are listed again
+     * @param string                $container          identifies the container, whose environment can't change
+     *                                                  while it runs
+     * @param int                   $rescanAfterSeconds how old the last scan can be before the directories are
+     *                                                  listed again
      * @param (Closure(): int)|null $clock              the current Unix time, by default time()
      */
     private function __construct(
@@ -89,7 +109,7 @@ final class ConfigCacheKey
     ) {
         // get_included_files() reports real paths
         $this->appRoot = realpath($appRoot) ?: $appRoot;
-        $this->cacheDir = $this->appRoot . '/data/cache';
+        $this->cacheDir = $this->appRoot . '/' . self::CACHE_DIRECTORY;
         $this->clock = $clock ?? time(...);
     }
 
@@ -111,11 +131,52 @@ final class ConfigCacheKey
         $this->manifest = $this->currentManifest();
         $key = $this->keyFor($this->manifest['sources']);
 
-        if (!is_file($this->cacheDir . '/module-config-cache.' . $key . '.php')) {
+        if (!is_file($this->cacheFile(self::CONFIG_CACHE, $key))) {
             $this->deleteCaches(except: $key);
         }
 
         return $key;
+    }
+
+    /**
+     * Whether Laminas will be able to write the caches named after the key. It fails the request when
+     * it can't, which happens when the bind-mounted cache directory belongs to another user.
+     *
+     * @param string $key as returned by key()
+     */
+    public function canWriteCachesFor(string $key): bool
+    {
+        if (!is_dir($this->cacheDir) || !is_writable($this->cacheDir)) {
+            return false;
+        }
+
+        // Laminas only writes the caches that aren't there yet
+        if (
+            is_file($this->cacheFile(self::CONFIG_CACHE, $key))
+            && is_file($this->cacheFile(self::MODULE_MAP_CACHE, $key))
+        ) {
+            return true;
+        }
+
+        // is_writable() isn't enough before a write: through Docker Desktop's file sharing it reports a
+        // directory as writable that the host then refuses to write to
+        $probe = $this->manifestPath() . '.' . getmypid() . '.probe';
+
+        if (@file_put_contents($probe, '') === false) {
+            return false;
+        }
+
+        @unlink($probe);
+
+        return true;
+    }
+
+    /**
+     * Where Laminas keeps one of its caches for the key
+     */
+    private function cacheFile(string $cache, string $key): string
+    {
+        return $this->cacheDir . '/' . $cache . '.' . $key . '.php';
     }
 
     /**
@@ -283,16 +344,7 @@ final class ConfigCacheKey
 
         foreach ($this->directoryPatterns() as $pattern) {
             foreach (glob($pattern, GLOB_ONLYDIR) ?: [] as $directory) {
-                $iterator = new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS)
-                );
-
-                /** @var SplFileInfo $file */
-                foreach ($iterator as $file) {
-                    if ($file->isFile() && $this->isConfigurationFile($file)) {
-                        $paths[] = $file->getPathname();
-                    }
-                }
+                $paths = array_merge($paths, $this->configurationFilesIn($directory));
             }
         }
 
@@ -302,7 +354,40 @@ final class ConfigCacheKey
 
         // The libraries are linked into vendor/, so resolve the links: a file the merge loads is then
         // recorded under the same path as when it's found by scanning
-        return $this->signatures(array_unique(array_map(static fn (string $path): string => realpath($path) ?: $path, $paths)));
+        $realPaths = array_map(static fn (string $path): string => realpath($path) ?: $path, $paths);
+
+        return $this->signatures(array_unique($realPaths));
+    }
+
+    /**
+     * The configuration files in a directory, at any depth. A directory that can't be read, or that
+     * git checkout or composer install removes while it's being listed, is left out rather than
+     * failing the request: the next scan finds whatever is there by then.
+     *
+     * @return string[]
+     */
+    private function configurationFilesIn(string $directory): array
+    {
+        $paths = [];
+
+        try {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::LEAVES_ONLY,
+                RecursiveIteratorIterator::CATCH_GET_CHILD
+            );
+
+            /** @var SplFileInfo $file */
+            foreach ($iterator as $file) {
+                if ($file->isFile() && $this->isConfigurationFile($file)) {
+                    $paths[] = $file->getPathname();
+                }
+            }
+        } catch (RuntimeException) {
+            // Keep the files found so far
+        }
+
+        return $paths;
     }
 
     /**
@@ -448,9 +533,18 @@ final class ConfigCacheKey
     private function deleteCaches(string $except): void
     {
         foreach (glob($this->cacheDir . '/module-*.' . self::KEY_PREFIX . '*.php') ?: [] as $cacheFile) {
-            if (!str_ends_with($cacheFile, '.' . $except . '.php')) {
-                @unlink($cacheFile);
+            if (str_ends_with($cacheFile, '.' . $except . '.php')) {
+                continue;
             }
+
+            // OPcache keeps the compiled copy of a deleted file, which is a few megabytes for a
+            // configuration cache, and never counts it as wasted. Every change to the configuration
+            // leaves one behind, so they would fill OPcache's memory, which then stops caching.
+            if (function_exists('opcache_invalidate')) {
+                @opcache_invalidate($cacheFile, true);
+            }
+
+            @unlink($cacheFile);
         }
     }
 
