@@ -216,6 +216,39 @@ final class ConfigCacheKeyTest extends TestCase
         $this->assertNotSame($recordedKey, $this->key(), 'The cache may hold the old contents, so it is rebuilt');
     }
 
+    public function testAFileAnEarlierMergeLoadedChangedWhileTheConfigurationIsMergedChangesTheKeyAfterwards(): void
+    {
+        $this->recordLoadedFiles([self::SECTION_CONFIG]);
+
+        $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1');
+        $cacheKey->key();
+
+        // The merge reads the file, which then changes before the merge records what it loaded
+        $this->writeFile(self::SECTION_CONFIG, mtime: self::MTIME + 1);
+        $recordedKey = $cacheKey->recordLoadedFiles([$this->appRoot . '/' . self::SECTION_CONFIG]);
+
+        $this->assertNotSame($recordedKey, $this->key(), 'The cache may hold the old contents, so it is rebuilt');
+    }
+
+    public function testAFileAnEarlierMergeLoadedRewrittenAtTheSameSizeAndSecondWhileTheConfigurationIsMergedDeletesTheCache(): void
+    {
+        $now = self::MTIME + 100;
+        $this->writeFile(self::SECTION_CONFIG, '<?php const A = 0;', $now);
+        $this->recordLoadedFiles([self::SECTION_CONFIG], clock: $now);
+
+        $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1', static fn (): int => $now);
+        $cacheKey->key();
+
+        // The merge reads the file, which is then saved again with a value of the same length before
+        // the merge records what it loaded, and the merge writes its cache
+        $this->writeFile(self::SECTION_CONFIG, '<?php const A = 1;', $now);
+        $recordedKey = $cacheKey->recordLoadedFiles([$this->appRoot . '/' . self::SECTION_CONFIG]);
+        $this->writeFile("data/cache/module-config-cache.$recordedKey.php");
+
+        $this->assertSame($recordedKey, $this->key(clock: $now));
+        $this->assertFileDoesNotExist($this->appRoot . "/data/cache/module-config-cache.$recordedKey.php");
+    }
+
     public function testAnotherRequestRescanningWhileTheConfigurationIsMergedDoesNotHideAChange(): void
     {
         $cacheKey = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1');
