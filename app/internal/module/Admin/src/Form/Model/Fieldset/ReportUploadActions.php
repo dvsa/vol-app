@@ -6,6 +6,7 @@ use Laminas\Form\Annotation as Form;
 
 #[Form\Attributes(['class' => 'govuk-button-group'])]
 #[Form\Name('reportUploadActions')]
+#[Form\Options(['wrapperElement' => 'div'])]
 class ReportUploadActions
 {
     #[Form\Attributes(['data-module' => 'govuk-button', 'type' => 'submit', 'class' => 'govuk-button', 'id' => 'upload'])]

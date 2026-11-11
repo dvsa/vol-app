@@ -9,6 +9,7 @@ use Laminas\Form\Annotation as Form;
  */
 #[Form\Name('SubmitAccept')]
 #[Form\Attributes(['class' => 'govuk-button-group'])]
+#[Form\Options(['wrapperElement' => 'div'])]
 class DeclineAccept
 {
     #[Form\Name('SubmitButton')]

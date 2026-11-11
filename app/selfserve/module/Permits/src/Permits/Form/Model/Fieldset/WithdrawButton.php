@@ -9,6 +9,7 @@ use Laminas\Form\Annotation as Form;
  */
 #[Form\Name('WithdrawButton')]
 #[Form\Attributes(['class' => 'govuk-button-group'])]
+#[Form\Options(['wrapperElement' => 'div'])]
 class WithdrawButton
 {
     #[Form\Name('SubmitButton')]

@@ -84,7 +84,7 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset name="test" class="class" data-group="test"><legend>(.*)<\/legend>'
+            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend>'
             . '<span data-template="(.*)"><\/span><p class="hint">(.*)<\/p><\/fieldset>$/'
         );
     }
@@ -101,7 +101,7 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset name="test" class="class" data-group="test"><legend>(.*)<\/legend><p class="hint">(.*)<\/p>'
+            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend><p class="hint">(.*)<\/p>'
             . '<span data-template="(.*)"><\/span><\/fieldset>$/'
         );
     }
@@ -118,8 +118,8 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset name="test" class="class" data-group="test"><legend>(.*)<\/legend><p class="hint">(.*)<\/p>'
-            . '<fieldset name="(.*)" data-group="(.*)"><\/fieldset><span data-template="(.*)"><\/span><\/fieldset>/'
+            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend><p class="hint">(.*)<\/p>'
+            . '<fieldset data-group="(.*)"><\/fieldset><span data-template="(.*)"><\/span><\/fieldset>/'
         );
     }
 
@@ -135,7 +135,7 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset name="postcode" data-group="postcode">'
+            '/^<fieldset data-group="postcode">'
             . '<label class=\"govuk-visually-hidden\" for=\"postcodeInput([0-9]+)\">Postcode search<\/label>'
             . '<label for=\"selectAddress([0-9]+)\">postcode.select_address.label<\/label>'
             . '<\/fieldset>$/'
@@ -156,7 +156,7 @@ final class FormCollectionTest extends MockeryTestCase
 
         $this->expectOutputRegex(
             '/^<div class="validation-wrapper"><ul><li>(.*)<\/li><\/ul>'
-            . '<fieldset name="postcode" data-group="postcode">'
+            . '<fieldset data-group="postcode">'
             . '<label class=\"govuk-visually-hidden\" for=\"postcodeInput([0-9]+)\">Postcode search<\/label>'
             . '<label for=\"selectAddress([0-9]+)\">postcode.select_address.label<\/label>'
             . '<\/fieldset><\/div>$/'
@@ -269,9 +269,9 @@ final class FormCollectionTest extends MockeryTestCase
 
         $this->assertEquals('<div class="help__text">' .
         '<h3 class="file__heading">_TRANSL_common.file-upload.table.col.FileName</h3>' .
-        '<ul name="files" title="unit_attr1" data-group="files">' .
+        '<ul title="unit_attr1" data-group="files">' .
         '<p class="hint">_TRANSL_@unit_hint@</p>' .
-        '<li name="file1" data-group="file1"></li>' .
+        '<li data-group="file1"></li>' .
         '</ul>' .
         '</div>', $actual);
     }
@@ -287,7 +287,7 @@ final class FormCollectionTest extends MockeryTestCase
 
         echo $viewHelper($this->element, true);
 
-        $this->expectOutputRegex('/^<li name="files" data-group="files"><\/li>$/');
+        $this->expectOutputRegex('/^<li data-group="files"><\/li>$/');
     }
 
     /**
@@ -312,7 +312,7 @@ final class FormCollectionTest extends MockeryTestCase
 
         $this->expectOutputRegex(
             '/^<div class="validation-wrapper"><ul><li>(.*)<\/li><\/ul>'
-            . '<fieldset name="hpw" data-group="hpw"><\/fieldset><\/div>$/'
+            . '<fieldset data-group="hpw"><\/fieldset><\/div>$/'
         );
     }
 
@@ -378,7 +378,7 @@ final class FormCollectionTest extends MockeryTestCase
         echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
-            '/^<fieldset name="test" class="class" data-group="test"><legend>(.*)<\/legend>'
+            '/^<fieldset class="class" data-group="test"><legend>(.*)<\/legend>'
             . '<span data-template="(.*)"><\/span><p class="form-hint">(.*)<\/p><\/fieldset>$/'
         );
     }

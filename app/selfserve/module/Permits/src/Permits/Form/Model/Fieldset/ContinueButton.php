@@ -9,6 +9,7 @@ use Laminas\Form\Annotation as Form;
  */
 #[Form\Name('ContinueButton')]
 #[Form\Attributes(['class' => 'govuk-button-group'])]
+#[Form\Options(['wrapperElement' => 'div'])]
 class ContinueButton
 {
     #[Form\Name('SubmitButton')]

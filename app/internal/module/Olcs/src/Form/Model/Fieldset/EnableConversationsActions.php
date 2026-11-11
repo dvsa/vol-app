@@ -11,6 +11,7 @@ use Laminas\Form\Annotation as Form;
  * @codeCoverageIgnore No methods
  */
 #[Form\Attributes(['class' => 'govuk-button-group'])]
+#[Form\Options(['wrapperElement' => 'div'])]
 class EnableConversationsActions
 {
     #[Form\Attributes(['type' => 'submit', 'data-module' => 'govuk-button', 'class' => 'govuk-button govuk-button--success', 'id' => 'close'])]
