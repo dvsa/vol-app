@@ -95,7 +95,9 @@ final class PrepareToSendTest extends MockeryTestCase
         $issue = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue::class);
         $issue->shouldReceive('requiresInput')->andReturn($requiresInput);
         $issue->shouldReceive('hasBeenEdited')->andReturn($edited);
+        $issue->shouldReceive('isInputPending')->andReturn($requiresInput && !$edited);
         $issue->shouldReceive('getHeading')->andReturn($heading);
+        $issue->shouldReceive('getDisplayName')->andReturn($heading);
 
         return $issue;
     }
@@ -172,6 +174,8 @@ final class PrepareToSendTest extends MockeryTestCase
         $todo = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo::class);
         $todo->shouldReceive('requiresInput')->andReturn($requiresInput);
         $todo->shouldReceive('hasBeenEdited')->andReturn($edited);
+        $todo->shouldReceive('isInputPending')->andReturn($requiresInput && !$edited);
+        $todo->shouldReceive('isCustom')->andReturn(false);
         $todo->shouldReceive('getLetterTodoVersion')->andReturn($todoVersion);
 
         return $todo;
@@ -229,5 +233,59 @@ final class PrepareToSendTest extends MockeryTestCase
 
         $this->assertRequiredInput($letterInstance);
         $this->expectNotToPerformAssertions();
+    }
+
+    private function otherIssue(): \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue
+    {
+        $version = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion();
+        $version->setHeading('Other issue');
+        $version->setIsOther(true);
+        $version->setRequiresInput(true);
+        $issue = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue();
+        $issue->setLetterIssueVersion($version);
+
+        return $issue;
+    }
+
+    private function assertBlockedNaming(LetterInstance|m\MockInterface $letterInstance, string $expected): void
+    {
+        try {
+            $this->assertRequiredInput($letterInstance);
+            $this->fail('expected sending to be blocked');
+        } catch (\Dvsa\Olcs\Api\Domain\Exception\ValidationException $e) {
+            $this->assertStringContainsString($expected, (string) json_encode($e->getMessages()));
+        }
+    }
+
+    public function testAnOtherIssueWithOnlyAHeadingBlocksSending(): void
+    {
+        $issue = $this->otherIssue();
+        $issue->setEditedHeading('Vehicle storage');
+        $letterInstance = m::mock(LetterInstance::class);
+        $letterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new ArrayCollection([$issue]));
+        $letterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new ArrayCollection());
+        $letterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
+
+        $this->assertBlockedNaming($letterInstance, 'Vehicle storage');
+    }
+
+    public function testAnEmptyCustomTodoBlocksSending(): void
+    {
+        $todo = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo();
+        $this->otherIssue()->addLetterInstanceTodo($todo);
+
+        $this->assertBlockedNaming($this->letterInstanceWithTodos([$todo]), 'Other issue: to-do 1');
+    }
+
+    /**
+     * PR review: each prepared PDF records the letter it came from, so an older one can still be
+     * traced back to its letter and refused once it's out of date
+     */
+    public function testThePdfRecordsWhichLetterItCameFrom(): void
+    {
+        $method = new \ReflectionMethod(PrepareToSend::class, 'documentMetadata');
+        $metadata = json_decode($method->invoke(null, 12, 5), true);
+
+        $this->assertSame(['documentTemplate' => 12, 'letterInstance' => 5], $metadata['details']);
     }
 }

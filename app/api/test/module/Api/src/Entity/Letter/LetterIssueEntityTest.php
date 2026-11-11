@@ -118,4 +118,32 @@ final class LetterIssueEntityTest extends EntityTester
 
         $this->assertNull($issue->{'get' . $field}());
     }
+
+    /**
+     * VOL-7735: re-versioning an Other issue through admin must keep it an Other issue.
+     */
+    public function testNewVersionKeepsIsOther(): void
+    {
+        $issue = new Entity();
+        $currentVersion = new LetterIssueVersion();
+        $currentVersion->setVersionNumber(1);
+        $currentVersion->setIsOther(true);
+        $currentVersion->setLetterIssue($issue);
+        $issue->addVersion($currentVersion);
+        $issue->setCurrentVersion($currentVersion);
+
+        $this->assertTrue($issue->getIsOther(), 'reads through to the current version');
+        $this->assertTrue($issue->createNewVersion()->isOther());
+
+        $issue->setIsOther(false);
+        $this->assertFalse($issue->getIsOther(), 'admin can still change it');
+    }
+
+    public function testIsOtherIsAVersionedField(): void
+    {
+        $repo = (new \ReflectionClass(\Dvsa\Olcs\Api\Domain\Repository\LetterIssue::class))->newInstanceWithoutConstructor();
+        $fields = (new \ReflectionMethod($repo, 'getVersionedFields'))->invoke($repo);
+
+        $this->assertContains('isOther', $fields);
+    }
 }
