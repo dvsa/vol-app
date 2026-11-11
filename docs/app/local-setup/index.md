@@ -211,11 +211,16 @@ The configuration cache follows your changes. It is named after everything it wa
 
 `VOL_DEVTOOLS` and `VOL_CONFIG_CACHE` are read by each app's `config/development.config.php`, your copy of `development.config.php.dist`. If your copy predates these settings, copy the dist file again with the "Copy the Laminas configuration dist files" step of `npm run refresh`; until you do, the toolbar stays on and the configuration isn't cached.
 
-To debug a single command without restarting anything, pass the mode to `docker compose exec`:
+If PHP can't write to an app's `data/cache`, the app runs without the configuration cache and says so in its container's log (`docker compose logs api`). This can happen on Linux, where the bind-mounted directory belongs to your user rather than the container's.
+
+To use Xdebug for a single command without restarting anything, pass the mode to `docker compose exec` or to `php`:
 
 ```bash
 docker compose exec -e XDEBUG_MODE=debug cli vendor/bin/laminas <command>
+docker compose exec api php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-text
 ```
+
+The PHP settings behind all of this are in `infra/docker/php-development.d/development.ini`, which `compose.yaml` mounts into the four PHP containers. After changing it, run `docker compose restart api cli selfserve internal`. OPcache is only on for web requests: on the command line every process would compile into a cache of its own, so tests and Composer run without it.
 
 ### Virus scanning
 
