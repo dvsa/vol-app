@@ -31,8 +31,11 @@ use SplFileInfo;
  * cache files written under any other key are deleted.
  *
  * A file is checked by its modification time and size. Modification times are only to the second,
- * so a file changed in the last couple of seconds could change again without either changing: its
- * contents are checked as well until it's older, and if only they change, the cache is deleted.
+ * so a file changed in the last couple of seconds could change again without either changing: until
+ * it's older, a hash of its contents is part of the key as well. Each version of the file then has a
+ * cache of its own, which a request still merging an earlier version can't overwrite. Once the file
+ * is older, the key changes once more, so the configuration is merged again a few seconds after it
+ * last changed.
  *
  * Not for production, where configuration doesn't change under a running app.
  *
@@ -166,25 +169,20 @@ final class ConfigCacheKey
         clearstatcache();
 
         $manifest = $this->readManifest();
-        $isUnchanged = $manifest !== null && $this->areUnchanged($manifest['files'] + $manifest['loaded']);
 
-        if ($isUnchanged && !$this->isScanDue($manifest['scannedAt'])) {
+        if (
+            $manifest !== null
+            && !$this->isScanDue($manifest['scannedAt'])
+            && $this->areUnchanged($manifest['files'] + $manifest['loaded'])
+        ) {
             return $manifest;
         }
 
-        $rescanned = $this->saveManifest(
+        return $this->saveManifest(
             $this->scan(),
             $this->signatures(array_keys($manifest['loaded'] ?? [])),
             $this->now()
         );
-
-        if (!$isUnchanged && $manifest !== null && $rescanned['sources'] === $manifest['sources']) {
-            // Only the contents of a recently changed file changed, which leaves the key as it was, so
-            // delete the cache to have it built again
-            $this->deleteCaches();
-        }
-
-        return $rescanned;
     }
 
     /**
@@ -195,13 +193,7 @@ final class ConfigCacheKey
      */
     private function saveManifest(array $files, array $loaded, int $scannedAt): array
     {
-        // The key comes from each file's modification time and size, without the hash of its contents
-        // that a recently changed file's signature also has, so the key doesn't change when the file
-        // is old enough to lose it
-        $sources = array_map(
-            static fn (string $signature): string => implode(':', array_slice(explode(':', $signature), 0, 2)),
-            $files + $loaded
-        );
+        $sources = $files + $loaded;
         ksort($sources);
 
         $manifest = [
@@ -453,10 +445,10 @@ final class ConfigCacheKey
         }
     }
 
-    private function deleteCaches(?string $except = null): void
+    private function deleteCaches(string $except): void
     {
         foreach (glob($this->cacheDir . '/module-*.' . self::KEY_PREFIX . '*.php') ?: [] as $cacheFile) {
-            if ($except === null || !str_ends_with($cacheFile, '.' . $except . '.php')) {
+            if (!str_ends_with($cacheFile, '.' . $except . '.php')) {
                 @unlink($cacheFile);
             }
         }

@@ -230,7 +230,7 @@ final class ConfigCacheKeyTest extends TestCase
         $this->assertNotSame($recordedKey, $this->key(), 'The cache may hold the old contents, so it is rebuilt');
     }
 
-    public function testAFileAnEarlierMergeLoadedRewrittenAtTheSameSizeAndSecondWhileTheConfigurationIsMergedDeletesTheCache(): void
+    public function testAFileAnEarlierMergeLoadedRewrittenAtTheSameSizeAndSecondWhileTheConfigurationIsMergedChangesTheKeyAfterwards(): void
     {
         $now = self::MTIME + 100;
         $this->writeFile(self::SECTION_CONFIG, '<?php const A = 0;', $now);
@@ -240,13 +240,11 @@ final class ConfigCacheKeyTest extends TestCase
         $cacheKey->key();
 
         // The merge reads the file, which is then saved again with a value of the same length before
-        // the merge records what it loaded, and the merge writes its cache
+        // the merge records what it loaded
         $this->writeFile(self::SECTION_CONFIG, '<?php const A = 1;', $now);
         $recordedKey = $cacheKey->recordLoadedFiles([$this->appRoot . '/' . self::SECTION_CONFIG]);
-        $this->writeFile("data/cache/module-config-cache.$recordedKey.php");
 
-        $this->assertSame($recordedKey, $this->key(clock: $now));
-        $this->assertFileDoesNotExist($this->appRoot . "/data/cache/module-config-cache.$recordedKey.php");
+        $this->assertNotSame($recordedKey, $this->key(clock: $now), 'The cache may hold the old contents, so it is rebuilt');
     }
 
     public function testAnotherRequestRescanningWhileTheConfigurationIsMergedDoesNotHideAChange(): void
@@ -262,42 +260,69 @@ final class ConfigCacheKeyTest extends TestCase
         $this->assertNotSame($recordedKey, $this->key());
     }
 
-    public function testAnEditThatKeepsARecentlyChangedFilesSizeAndSecondDeletesTheCache(): void
+    public function testAnEditThatKeepsARecentlyChangedFilesSizeAndSecondChangesTheKey(): void
     {
         // Saved in the current second, then saved again with a value of the same length
         $now = self::MTIME + 100;
         $this->writeFile('module/Olcs/config/routes/licence.php', '<?php return ["enabled" => 0];', $now);
         $key = $this->key(clock: $now);
-        $this->writeFile("data/cache/module-config-cache.$key.php");
 
         $this->writeFile('module/Olcs/config/routes/licence.php', '<?php return ["enabled" => 1];', $now);
 
-        $this->assertSame($key, $this->key(clock: $now));
-        $this->assertFileDoesNotExist($this->appRoot . "/data/cache/module-config-cache.$key.php");
+        $this->assertNotSame($key, $this->key(clock: $now));
     }
 
-    public function testAnEditThatKeepsTheSizeAndSecondOfARecentlyChangedFileLoadedWhileMergingDeletesTheCache(): void
+    public function testAnEditThatKeepsTheSizeAndSecondOfARecentlyChangedFileLoadedWhileMergingChangesTheKey(): void
     {
         $now = self::MTIME + 100;
         $this->writeFile(self::SECTION_CONFIG, '<?php const A = 0;', $now);
         $key = $this->recordLoadedFiles([self::SECTION_CONFIG], clock: $now);
-        $this->writeFile("data/cache/module-config-cache.$key.php");
 
         $this->writeFile(self::SECTION_CONFIG, '<?php const A = 1;', $now);
 
-        $this->assertSame($key, $this->key(clock: $now));
-        $this->assertFileDoesNotExist($this->appRoot . "/data/cache/module-config-cache.$key.php");
+        $this->assertNotSame($key, $this->key(clock: $now));
     }
 
-    public function testARecentlyChangedFileKeepsItsKeyOnceItIsOlder(): void
+    public function testAnOlderMergeThatFinishesLastCannotReplaceTheCacheOfANewerOneAfterAnEditThatKeepsTheSizeAndSecond(): void
+    {
+        $now = self::MTIME + 100;
+        $clock = static fn (): int => $now;
+        $this->writeFile('module/Olcs/config/routes/licence.php', '<?php return ["enabled" => 0];', $now);
+
+        // Request A works out the key and starts merging
+        $requestA = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1', $clock);
+        $requestA->key();
+
+        // The file is saved again with a value of the same length, and request B starts merging
+        $this->writeFile('module/Olcs/config/routes/licence.php', '<?php return ["enabled" => 1];', $now);
+        $requestB = ConfigCacheKey::forApplication($this->appRoot, PHP_INT_MAX, 'container-1', $clock);
+        $requestB->key();
+
+        // Both record what they loaded, then B writes its cache, and A, which merged the old contents,
+        // writes its cache last
+        $keyA = $requestA->recordLoadedFiles([]);
+        $keyB = $requestB->recordLoadedFiles([]);
+        $this->writeFile("data/cache/module-config-cache.$keyB.php", 'new contents');
+        $this->writeFile("data/cache/module-config-cache.$keyA.php", 'old contents');
+
+        $nextKey = $this->key(clock: $now);
+
+        $this->assertSame($keyB, $nextKey);
+        $this->assertStringEqualsFile($this->appRoot . "/data/cache/module-config-cache.$nextKey.php", 'new contents');
+    }
+
+    public function testOnceARecentlyChangedFileIsOlderTheKeyChangesOnceMoreThenStaysTheSame(): void
     {
         $now = self::MTIME + 100;
         $this->writeFile('module/Olcs/config/routes/licence.php', mtime: $now);
         $key = $this->key(clock: $now);
-        $this->writeFile("data/cache/module-config-cache.$key.php");
 
-        $this->assertSame($key, $this->key(rescanAfterSeconds: 0, clock: $now + 60));
-        $this->assertFileExists($this->appRoot . "/data/cache/module-config-cache.$key.php");
+        $this->assertSame($key, $this->key(rescanAfterSeconds: 0, clock: $now), 'The key is stable while the file is recent');
+
+        $olderKey = $this->key(rescanAfterSeconds: 0, clock: $now + 60);
+
+        $this->assertNotSame($key, $olderKey, "The contents' hash leaves the key once the file is older");
+        $this->assertSame($olderKey, $this->key(rescanAfterSeconds: 0, clock: $now + 120));
     }
 
     public function testOnlyTheContentsOfRecentlyChangedFilesAreChecked(): void
