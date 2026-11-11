@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstanceAppendix;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
+use Dvsa\Olcs\Api\Service\Letter\EditorJsText;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -26,7 +27,8 @@ final class UpdateContent extends AbstractCommandHandler
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix $letterInstanceAppendix */
         $letterInstanceAppendix = $this->getRepo()->fetchUsingId($command);
 
-        $this->changeLetter($letterInstanceAppendix->getLetterInstance());
+        $letterInstance = $letterInstanceAppendix->getLetterInstance();
+        $this->assertLetterOpenForChanges($letterInstance);
 
         if (!$letterInstanceAppendix->isEditable()) {
             throw new ValidationException(['This appendix is not editable']);
@@ -38,9 +40,14 @@ final class UpdateContent extends AbstractCommandHandler
             throw new ValidationException(['editedContent must be valid JSON']);
         }
 
+        $before = $letterInstanceAppendix->getEffectiveContent();
         $letterInstanceAppendix->setEditedContentFromArray($decoded);
 
-        $this->getRepo()->save($letterInstanceAppendix);
+        $this->recordLetterChange(
+            $letterInstance,
+            !EditorJsText::sameContent($before, $letterInstanceAppendix->getEffectiveContent())
+        );
+        $this->saveLetterChange(fn () => $this->getRepo()->save($letterInstanceAppendix));
 
         $this->result->addId('letterInstanceAppendix', $letterInstanceAppendix->getId());
         $this->result->addMessage('Appendix content updated successfully');

@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo as LetterInstanceTodoEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\UpdateContent as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use Dvsa\OlcsTest\Api\Domain\CommandHandler\Letter\LetterChangeTestTrait;
 use Mockery as m;
 
 /**
@@ -17,6 +18,8 @@ use Mockery as m;
  */
 final class UpdateContentTest extends AbstractCommandHandlerTestCase
 {
+    use LetterChangeTestTrait;
+
     /** The standing wording, shared by every letter that pulls this to-do in. */
     private const STANDING = [
         'blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Standing wording']]],
@@ -117,22 +120,51 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
+    private function todoOn(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance $letter): LetterInstanceTodoEntity
+    {
+        $version = new LetterTodoVersion();
+        $version->setDescription(self::STANDING);
+        $todo = new LetterInstanceTodoEntity();
+        $todo->setLetterTodoVersion($version);
+        $letter->addLetterInstanceTodo($todo);
+
+        return $todo;
+    }
+
     /**
      * PR review: changing a prepared letter takes it back to draft
      */
     public function testChangingAPreparedLetterTakesItBackToDraft(): void
     {
-        $letter = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstance();
-        $letter->setStatus(new \Dvsa\Olcs\Api\Entity\System\RefData(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_READY));
-        $todo = new LetterInstanceTodoEntity();
-        $letter->addLetterInstanceTodo($todo);
-
-        $command = Cmd::create(['id' => 42, 'editedDescription' => '{"blocks":[]}', 'version' => 1]);
-        $this->repoMap['LetterInstanceTodo']->shouldReceive('fetchUsingId')->andReturn($todo);
+        $letter = $this->letterWithStatus(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_READY);
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('fetchUsingId')->andReturn($this->todoOn($letter));
         $this->repoMap['LetterInstanceTodo']->shouldReceive('save')->once();
 
-        $this->sut->handleCommand($command);
+        $this->sut->handleCommand(Cmd::create(['id' => 42, 'editedDescription' => self::editorJson('New wording'), 'version' => 1]));
 
         $this->assertTrue($letter->isDraft());
+        $this->assertLetterRowWritten($letter);
+    }
+
+    public function testSavingWithNothingChangedLeavesAPreparedLetterPrepared(): void
+    {
+        $letter = $this->letterWithStatus(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_READY);
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('fetchUsingId')->andReturn($this->todoOn($letter));
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('save')->once();
+
+        $this->sut->handleCommand(Cmd::create(['id' => 42, 'editedDescription' => self::editorJson('Standing wording', 7), 'version' => 1]));
+
+        $this->assertTrue($letter->isReady());
+        $this->assertLetterRowWritten($letter);
+    }
+
+    public function testAClashWithAnotherChangeToTheLetterSaysSo(): void
+    {
+        $letter = $this->letterWithStatus(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_DRAFT);
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('fetchUsingId')->andReturn($this->todoOn($letter));
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('save')->once()->andThrow(self::clash());
+
+        $this->expectClashMessage();
+        $this->sut->handleCommand(Cmd::create(['id' => 42, 'editedDescription' => self::editorJson('New wording'), 'version' => 1]));
     }
 }

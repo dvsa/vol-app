@@ -51,7 +51,7 @@ final class CreateCustom extends AbstractCommandHandler
             throw new ValidationException(['To-dos can only be added to an Other issue']);
         }
 
-        $this->takeBackToDraft($letterInstance);
+        $this->recordLetterChange($letterInstance);
 
         $lastOrder = 0;
         foreach ($letterInstance->getLetterInstanceTodos() as $existing) {
@@ -67,7 +67,7 @@ final class CreateCustom extends AbstractCommandHandler
         // reconcile could add or drop library to-dos on a draft that's out of step with the library
         $this->letterInstanceComposer->renumberTodos($letterInstance);
 
-        $this->getRepo()->save($todo);
+        $this->saveLetterChange(fn () => $this->getRepo()->save($todo));
 
         $this->result->addId('letterInstanceTodo', $todo->getId());
         $this->result->addMessage('To-do added');

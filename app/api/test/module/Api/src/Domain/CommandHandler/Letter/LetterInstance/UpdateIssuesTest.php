@@ -22,6 +22,7 @@ use Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer;
 use Dvsa\Olcs\Api\Service\Letter\LetterInstanceGrabSnapshotter;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\UpdateIssues as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use Dvsa\OlcsTest\Api\Domain\CommandHandler\Letter\LetterChangeTestTrait;
 use Mockery as m;
 
 /**
@@ -29,6 +30,8 @@ use Mockery as m;
  */
 class UpdateIssuesTest extends AbstractCommandHandlerTestCase
 {
+    use LetterChangeTestTrait;
+
     private const LETTER_ID = 55;
 
     private m\MockInterface $mockSnapshotter;
@@ -261,6 +264,29 @@ class UpdateIssuesTest extends AbstractCommandHandlerTestCase
         $this->assertSame([2], $this->parentIds($letterInstance));
         // PR review: its prepared PDF no longer matches, so it has to be prepared again
         $this->assertTrue($letterInstance->isDraft());
+    }
+
+    public function testChangingTheIssuesOnADraftWritesTheLetterRow(): void
+    {
+        $letterInstance = $this->letter();
+        $this->issue(2);
+        $this->mockSnapshotter->shouldReceive('snapshotRows')->once();
+        $this->expectSaveAssigningIds();
+
+        $this->sut->handleCommand(Cmd::create(['id' => self::LETTER_ID, 'selectedIssues' => [2]]));
+
+        $this->assertLetterRowWritten($letterInstance);
+    }
+
+    public function testAClashWithAnotherChangeToTheLetterSaysSo(): void
+    {
+        $this->letter();
+        $this->issue(2);
+        $this->mockSnapshotter->shouldReceive('snapshotRows')->once();
+        $this->repoMap['LetterInstance']->shouldReceive('save')->once()->andThrow(self::clash());
+
+        $this->expectClashMessage();
+        $this->sut->handleCommand(Cmd::create(['id' => self::LETTER_ID, 'selectedIssues' => [2]]));
     }
 
     public static function lockedStatuses(): array

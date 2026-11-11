@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\DeleteCustom as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use Dvsa\OlcsTest\Api\Domain\CommandHandler\Letter\LetterChangeTestTrait;
 
 /**
  * Deleting a caseworker-written to-do (VOL-7735)
@@ -19,6 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 final class DeleteCustomTest extends AbstractCommandHandlerTestCase
 {
     use CustomTodoTestTrait;
+    use LetterChangeTestTrait;
 
     public function setUp(): void
     {
@@ -92,5 +94,26 @@ final class DeleteCustomTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand(Cmd::create(['id' => 99]));
 
         $this->assertTrue($letter->isDraft());
+    }
+
+    public function testDeletingFromADraftWritesTheLetterRowToo(): void
+    {
+        $todo = $this->todoOn(true);
+        $letter = $todo->getLetterInstance();
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('fetchUsingId')->andReturn($todo);
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('delete')->once();
+
+        $this->sut->handleCommand(Cmd::create(['id' => 99]));
+
+        $this->assertLetterRowWritten($letter);
+    }
+
+    public function testAClashWithAnotherChangeToTheLetterSaysSo(): void
+    {
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('fetchUsingId')->andReturn($this->todoOn(true));
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('delete')->once()->andThrow(self::clash());
+
+        $this->expectClashMessage();
+        $this->sut->handleCommand(Cmd::create(['id' => 99]));
     }
 }

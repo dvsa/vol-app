@@ -4,6 +4,9 @@ OLCS.ready(function () {
   // Track dirty state per issue and appendix
   var dirtyMap = {};
 
+  var EDITOR_GROUPS =
+    ".issue-editor-group, .appendix-editor-group, .section-editor-group, .todo-editor-group";
+
   /**
    * Run a save once the editors' hidden inputs are guaranteed current.
    *
@@ -21,8 +24,12 @@ OLCS.ready(function () {
       return;
     }
 
+    // never rejects: a failed flush is logged and the input left as it was
     OLCS.editorjsFlush().then(save);
   }
+
+  // What each editor last held that's saved: what it opened on, then what was last saved from it
+  var savedBlocks = {};
 
   // Helper to set up dirty tracking on a hidden input
   function setupDirtyTracking($group, entityId) {
@@ -30,16 +37,29 @@ OLCS.ready(function () {
 
     var hiddenInput = $group.find("input[type='hidden']")[0];
     if (hiddenInput) {
+      // The editor writes what it opened on once it's ready (twice, with a new timestamp):
+      // that isn't a change, it's the starting point. Treating every write as a change marked
+      // every editor unsaved as soon as the page loaded.
+      var noteWrite = function (val) {
+        if (!(entityId in savedBlocks)) {
+          savedBlocks[entityId] = editorBlocks(val);
+          return;
+        }
+        if (editorBlocks(val) !== savedBlocks[entityId]) {
+          dirtyMap[entityId] = true;
+          $group.find(".save-indicator").hide();
+        }
+      };
+
+      // a hidden input's value is its attribute, so this also sees every write to .value
       var observer = new MutationObserver(function () {
-        dirtyMap[entityId] = true;
-        $group.find(".save-indicator").hide();
+        noteWrite(hiddenInput.getAttribute("value"));
       });
       observer.observe(hiddenInput, {
         attributes: true,
         attributeFilter: ["value"],
       });
 
-      var originalValue = hiddenInput.value;
       var descriptor = Object.getOwnPropertyDescriptor(
         HTMLInputElement.prototype,
         "value",
@@ -49,10 +69,7 @@ OLCS.ready(function () {
         Object.defineProperty(hiddenInput, "value", {
           set: function (val) {
             originalSetter.call(this, val);
-            if (val !== originalValue) {
-              dirtyMap[entityId] = true;
-              $group.find(".save-indicator").hide();
-            }
+            noteWrite(val);
           },
           get: function () {
             return descriptor.get.call(this);
@@ -102,231 +119,172 @@ OLCS.ready(function () {
     }
   }
 
-  // Save issue button handler
-  $(".save-issue-btn").on("click", function (e) {
-    e.preventDefault();
+  /**
+   * The server's reason for a failed request, or the fallback.
+   */
+  function failureMessage(xhr, fallback) {
+    try {
+      return JSON.parse(xhr.responseText).message || fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
 
-    var $btn = $(this);
-    var issueId = $btn.data("issue-id");
-    var version = $btn.data("version");
-    var $group = $btn.closest(".issue-editor-group");
+  /**
+   * Saves (and to-do adds and deletes) go to the server one at a time: each writes the letter's
+   * own row, so two at once on the same letter would clash and the second would be refused.
+   */
+  var lastRequest = $.Deferred().resolve().promise();
+
+  function oneAtATime(send) {
+    var previous = lastRequest;
+    var finished = $.Deferred();
+    lastRequest = finished.promise();
+    previous.always(function () {
+      send(function () {
+        finished.resolve();
+      });
+    });
+  }
+
+  /**
+   * Save one editor group. If it's typed into while the save is in flight, what's on screen isn't
+   * what was saved, so it stays unsaved (and guarded) until it's saved again.
+   *
+   * request(content, heading, version) builds the body; saved(heading) runs after a save.
+   */
+  function saveEditor($btn, key, url, request, saved) {
+    var $group = $btn.closest(EDITOR_GROUPS);
     var hiddenInput = $group.find("input[type='hidden']");
     var $heading = $group.find(".other-issue-heading");
 
-    withFlushedEditors(function () {
-      var editedContent = hiddenInput.val();
-      var sentHeading = $heading.length ? $heading.val() : undefined;
+    $btn.prop("disabled", true).text("Saving...");
 
-      $btn.prop("disabled", true).text("Saving...");
+    oneAtATime(function (done) {
+      withFlushedEditors(function () {
+        var content = hiddenInput.val();
+        var heading = $heading.length ? $heading.val() : undefined;
 
-      $.ajax({
-        url: "/letter/save-issue-content",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-          issueId: issueId,
-          editedContent: editedContent,
-          version: version,
-          // an Other issue's heading (VOL-7735); left out for standard issues
-          editedHeading: sentHeading,
-        }),
-        success: function (response) {
-          if (response.success) {
-            // typed into while saving: what's on screen now isn't what was saved
+        $.ajax({
+          url: url,
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(request(content, heading, $btn.data("version"))),
+        })
+          .done(function (response) {
+            if (!response.success) {
+              showError(response.message || "Failed to save changes");
+              return;
+            }
             var changedSince =
-              editorBlocks(hiddenInput.val()) !== editorBlocks(editedContent) ||
-              ($heading.length && $heading.val() !== sentHeading);
+              editorBlocks(hiddenInput.val()) !== editorBlocks(content) ||
+              ($heading.length && $heading.val() !== heading);
+            savedBlocks[key] = editorBlocks(content);
             if (!changedSince) {
-              dirtyMap["issue-" + issueId] = false;
+              dirtyMap[key] = false;
               $group.find(".save-indicator").show();
             }
-            if ($heading.length) {
-              // a cleared heading falls back to the standing one, as the letter does
-              $group
-                .find(".govuk-heading-s")
-                .first()
-                .text($.trim(sentHeading) || $heading.data("default-heading"));
-            }
             $btn.data("version", response.version);
-            $btn.prop("disabled", false).text("Save changes");
-          } else {
-            showError(response.message || "Failed to save changes");
-            $btn.prop("disabled", false).text("Save changes");
-          }
-        },
-        error: function (xhr) {
-          var message = "Failed to save changes";
-          try {
-            var resp = JSON.parse(xhr.responseText);
-            if (resp.message) {
-              message = resp.message;
+            if (saved) {
+              saved(heading);
             }
-          } catch (e) {
-            // Use default message
-          }
-          showError(message);
-          $btn.prop("disabled", false).text("Save changes");
-        },
+          })
+          .fail(function (xhr) {
+            showError(failureMessage(xhr, "Failed to save changes"));
+          })
+          .always(function () {
+            $btn.prop("disabled", false).text("Save changes");
+            done();
+          });
       });
     });
+  }
+
+  $(".save-issue-btn").on("click", function (e) {
+    e.preventDefault();
+    var $btn = $(this);
+    var issueId = $btn.data("issue-id");
+    var $group = $btn.closest(EDITOR_GROUPS);
+
+    saveEditor(
+      $btn,
+      "issue-" + issueId,
+      "/letter/save-issue-content",
+      function (content, heading, version) {
+        return {
+          issueId: issueId,
+          editedContent: content,
+          version: version,
+          // an Other issue's heading (VOL-7735); left out for standard issues
+          editedHeading: heading,
+        };
+      },
+      function (heading) {
+        var $heading = $group.find(".other-issue-heading");
+        if ($heading.length) {
+          // a cleared heading falls back to the standing one, as the letter does
+          $group
+            .find(".govuk-heading-s")
+            .first()
+            .text($.trim(heading) || $heading.data("default-heading"));
+        }
+      },
+    );
   });
 
-  // Save appendix button handler
   $(".save-appendix-btn").on("click", function (e) {
     e.preventDefault();
-
     var $btn = $(this);
     var appendixId = $btn.data("appendix-id");
-    var version = $btn.data("version");
-    var $group = $btn.closest(".appendix-editor-group");
-    var hiddenInput = $group.find("input[type='hidden']");
 
-    withFlushedEditors(function () {
-      var editedContent = hiddenInput.val();
-
-      $btn.prop("disabled", true).text("Saving...");
-
-      $.ajax({
-        url: "/letter/save-appendix-content",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
+    saveEditor(
+      $btn,
+      "appendix-" + appendixId,
+      "/letter/save-appendix-content",
+      function (content, heading, version) {
+        return {
           appendixId: appendixId,
-          editedContent: editedContent,
+          editedContent: content,
           version: version,
-        }),
-        success: function (response) {
-          if (response.success) {
-            dirtyMap["appendix-" + appendixId] = false;
-            $btn.data("version", response.version);
-            $group.find(".save-indicator").show();
-            $btn.prop("disabled", false).text("Save changes");
-          } else {
-            showError(response.message || "Failed to save changes");
-            $btn.prop("disabled", false).text("Save changes");
-          }
-        },
-        error: function (xhr) {
-          var message = "Failed to save changes";
-          try {
-            var resp = JSON.parse(xhr.responseText);
-            if (resp.message) {
-              message = resp.message;
-            }
-          } catch (e) {
-            // Use default message
-          }
-          showError(message);
-          $btn.prop("disabled", false).text("Save changes");
-        },
-      });
-    });
+        };
+      },
+    );
   });
 
-  // Save section button handler
   $(".save-section-btn").on("click", function (e) {
     e.preventDefault();
-
     var $btn = $(this);
     var sectionId = $btn.data("section-id");
-    var version = $btn.data("version");
-    var $group = $btn.closest(".section-editor-group");
-    var hiddenInput = $group.find("input[type='hidden']");
 
-    withFlushedEditors(function () {
-      var editedContent = hiddenInput.val();
-
-      $btn.prop("disabled", true).text("Saving...");
-
-      $.ajax({
-        url: "/letter/save-section-content",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
+    saveEditor(
+      $btn,
+      "section-" + sectionId,
+      "/letter/save-section-content",
+      function (content, heading, version) {
+        return {
           sectionId: sectionId,
-          editedContent: editedContent,
+          editedContent: content,
           version: version,
-        }),
-        success: function (response) {
-          if (response.success) {
-            dirtyMap["section-" + sectionId] = false;
-            $btn.data("version", response.version);
-            $group.find(".save-indicator").show();
-            $btn.prop("disabled", false).text("Save changes");
-          } else {
-            showError(response.message || "Failed to save changes");
-            $btn.prop("disabled", false).text("Save changes");
-          }
-        },
-        error: function (xhr) {
-          var message = "Failed to save changes";
-          try {
-            var resp = JSON.parse(xhr.responseText);
-            if (resp.message) {
-              message = resp.message;
-            }
-          } catch (e) {
-            // Use default message
-          }
-          showError(message);
-          $btn.prop("disabled", false).text("Save changes");
-        },
-      });
-    });
+        };
+      },
+    );
   });
 
-  // Save to-do button handler
   $(".save-todo-btn").on("click", function (e) {
     e.preventDefault();
-
     var $btn = $(this);
     var todoId = $btn.data("todo-id");
-    var version = $btn.data("version");
-    var $group = $btn.closest(".todo-editor-group");
-    var hiddenInput = $group.find("input[type='hidden']");
 
-    withFlushedEditors(function () {
-      var editedDescription = hiddenInput.val();
-
-      $btn.prop("disabled", true).text("Saving...");
-
-      $.ajax({
-        url: "/letter/save-todo-content",
-        method: "POST",
-        contentType: "application/json",
+    saveEditor(
+      $btn,
+      "todo-" + todoId,
+      "/letter/save-todo-content",
+      function (content, heading, version) {
         // editedDescription, not editedContent: a to-do's wording is called
         // description throughout its own code path, and the DTO matches.
-        data: JSON.stringify({
-          todoId: todoId,
-          editedDescription: editedDescription,
-          version: version,
-        }),
-        success: function (response) {
-          if (response.success) {
-            dirtyMap["todo-" + todoId] = false;
-            $btn.data("version", response.version);
-            $group.find(".save-indicator").show();
-            $btn.prop("disabled", false).text("Save changes");
-          } else {
-            showError(response.message || "Failed to save changes");
-            $btn.prop("disabled", false).text("Save changes");
-          }
-        },
-        error: function (xhr) {
-          var message = "Failed to save changes";
-          try {
-            var resp = JSON.parse(xhr.responseText);
-            if (resp.message) {
-              message = resp.message;
-            }
-          } catch (e) {
-            // Use default message
-          }
-          showError(message);
-          $btn.prop("disabled", false).text("Save changes");
-        },
-      });
-    });
+        return { todoId: todoId, editedDescription: content, version: version };
+      },
+    );
   });
 
   // An Other issue's heading counts as an unsaved change until saved (VOL-7735)
@@ -403,29 +361,28 @@ OLCS.ready(function () {
     };
     page.setAttribute("inert", "");
     $btn.prop("disabled", true);
-    $.ajax({
-      url: path,
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify(body),
-      success: function (response) {
-        if (response.success) {
-          done(response);
-        } else {
+
+    // after any save still in flight
+    oneAtATime(function (finished) {
+      $.ajax({
+        url: path,
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(body),
+      })
+        .done(function (response) {
+          if (response.success) {
+            done(response);
+          } else {
+            unblock();
+            showError(response.message || "Something went wrong");
+          }
+        })
+        .fail(function (xhr) {
           unblock();
-          showError(response.message || "Something went wrong");
-        }
-      },
-      error: function (xhr) {
-        var message = "Something went wrong";
-        try {
-          message = JSON.parse(xhr.responseText).message || message;
-        } catch (e) {
-          // Use default message
-        }
-        unblock();
-        showError(message);
-      },
+          showError(failureMessage(xhr, "Something went wrong"));
+        })
+        .always(finished);
     });
   }
 

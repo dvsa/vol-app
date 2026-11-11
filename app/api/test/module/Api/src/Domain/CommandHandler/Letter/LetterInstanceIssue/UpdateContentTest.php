@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\Repository\LetterInstanceIssue as LetterInstanceIssueRe
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue as LetterInstanceIssueEntity;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use Dvsa\OlcsTest\Api\Domain\CommandHandler\Letter\LetterChangeTestTrait;
 use Mockery as m;
 
 /**
@@ -16,6 +17,8 @@ use Mockery as m;
  */
 final class UpdateContentTest extends AbstractCommandHandlerTestCase
 {
+    use LetterChangeTestTrait;
+
     public function setUp(): void
     {
         $this->sut = new CommandHandler();
@@ -40,6 +43,8 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
 
         $entity = m::mock(LetterInstanceIssueEntity::class)->makePartial();
         $entity->setId($issueId);
+        $entity->shouldReceive('getEffectiveContent')->andReturn([]);
+        $entity->shouldReceive('getHeading')->andReturn('Issue');
 
         $entity->shouldReceive('setEditedContentFromArray')
             ->with($expectedArray)
@@ -145,5 +150,58 @@ final class UpdateContentTest extends AbstractCommandHandlerTestCase
         $this->save($issue, ['editedHeading' => 'Vehicle storage']);
 
         $this->assertTrue($letter->isDraft());
+    }
+
+    /**
+     * Review: Save posts the editor and heading even when nothing changed; that mustn't throw away
+     * a prepared PDF that still matches the letter
+     */
+    public function testSavingWithNothingChangedLeavesAPreparedLetterPrepared(): void
+    {
+        $letter = $this->letterWithStatus(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_READY);
+        $issue = $this->issueOn(true);
+        $issue->setEditedHeading('Vehicle storage');
+        $issue->setEditedContentFromArray(self::editorContent('Lorry parked on verge'));
+        $letter->addLetterInstanceIssue($issue);
+
+        $command = Cmd::create([
+            'id' => 10,
+            'editedContent' => self::editorJson('Lorry parked on verge', 8),
+            'editedHeading' => 'Vehicle storage',
+            'version' => 1,
+        ]);
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('fetchUsingId')->andReturn($issue);
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('save')->once();
+
+        $this->sut->handleCommand($command);
+
+        $this->assertTrue($letter->isReady());
+        $this->assertLetterRowWritten($letter);
+    }
+
+    public function testChangingTheBodyOfAPreparedLetterTakesItBackToDraft(): void
+    {
+        $letter = $this->letterWithStatus(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_READY);
+        $issue = $this->issueOn(false);
+        $letter->addLetterInstanceIssue($issue);
+
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('fetchUsingId')->andReturn($issue);
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('save')->once();
+
+        $this->sut->handleCommand(Cmd::create(['id' => 10, 'editedContent' => self::editorJson('New wording'), 'version' => 1]));
+
+        $this->assertTrue($letter->isDraft());
+    }
+
+    public function testAClashWithAnotherChangeToTheLetterSaysSo(): void
+    {
+        $letter = $this->letterWithStatus(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::STATUS_DRAFT);
+        $issue = $this->issueOn(true);
+        $letter->addLetterInstanceIssue($issue);
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('fetchUsingId')->andReturn($issue);
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('save')->once()->andThrow(self::clash());
+
+        $this->expectClashMessage();
+        $this->sut->handleCommand(Cmd::create(['id' => 10, 'editedContent' => self::editorJson('New wording'), 'version' => 1]));
     }
 }

@@ -33,4 +33,38 @@ final class EditorJsText
 
         return trim((string) preg_replace('/[\s\x{00A0}]+/u', ' ', $text));
     }
+
+    /**
+     * Whether two EditorJS documents print the same: the same blocks, in order, with the same
+     * content, formatting and settings. The editor's own bookkeeping (the time it stamps on every
+     * save, its version, block ids) isn't part of what's printed.
+     *
+     * @param array<string, mixed> $a EditorJS document
+     * @param array<string, mixed> $b EditorJS document
+     */
+    public static function sameContent(array $a, array $b): bool
+    {
+        $printed = static fn (array $content): array => self::keysInOrder(array_map(
+            static fn (mixed $block): mixed => is_array($block) ? array_diff_key($block, ['id' => true]) : $block,
+            array_values(is_array($content['blocks'] ?? null) ? $content['blocks'] : [])
+        ));
+
+        return $printed($a) === $printed($b);
+    }
+
+    /**
+     * The same keys in the same order, so a strict comparison doesn't depend on the order they
+     * were written in (== would, but also counts "1" and "01" as the same)
+     */
+    private static function keysInOrder(mixed $value): mixed
+    {
+        if (!is_array($value)) {
+            return $value;
+        }
+        if (!array_is_list($value)) {
+            ksort($value);
+        }
+
+        return array_map(self::keysInOrder(...), $value);
+    }
 }

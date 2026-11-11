@@ -34,12 +34,12 @@ final class DeleteCustom extends AbstractCommandHandler
             throw new ValidationException(['Only to-dos written on this letter can be deleted']);
         }
 
-        $this->takeBackToDraft($todo->getLetterInstance());
+        $this->recordLetterChange($todo->getLetterInstance());
 
         $todo->getLetterInstanceIssue()?->removeLetterInstanceTodo($todo);
         $todo->getLetterInstance()->removeLetterInstanceTodo($todo);
 
-        $this->getRepo()->delete($todo);
+        $this->saveLetterChange(fn () => $this->getRepo()->delete($todo));
 
         $this->result->addMessage('To-do deleted');
 

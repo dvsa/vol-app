@@ -76,7 +76,7 @@ final class UpdateIssues extends AbstractCommandHandler
             return $this->result;
         }
 
-        $this->takeBackToDraft($letterInstance);
+        $this->recordLetterChange($letterInstance);
 
         $created = $this->letterInstanceComposer->applyIssueChange($letterInstance, $plan);
 
@@ -86,7 +86,7 @@ final class UpdateIssues extends AbstractCommandHandler
         // read before saving: Doctrine clears the id of a row it deletes
         $movedFrom = array_map(static fn(array $pair) => $pair[0]->getId(), $created['movedTodos']);
 
-        $this->getRepo()->save($letterInstance);
+        $this->saveLetterChange(fn () => $this->getRepo()->save($letterInstance));
 
         // a flag rather than addId: Result collapses a single id to a scalar, callers want a list
         $this->result->setFlag('addedIssueIds', array_map(

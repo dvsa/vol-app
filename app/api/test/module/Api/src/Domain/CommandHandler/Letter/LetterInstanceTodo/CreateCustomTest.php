@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\CreateCustom as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use Dvsa\OlcsTest\Api\Domain\CommandHandler\Letter\LetterChangeTestTrait;
 
 /**
  * Adding a caseworker-written to-do to an Other issue (VOL-7735)
@@ -20,6 +21,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 final class CreateCustomTest extends AbstractCommandHandlerTestCase
 {
     use CustomTodoTestTrait;
+    use LetterChangeTestTrait;
 
     public function setUp(): void
     {
@@ -193,5 +195,25 @@ final class CreateCustomTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand(Cmd::create(['letterInstanceIssue' => 10]));
 
         $this->assertTrue($issue->getLetterInstance()->isDraft());
+    }
+
+    public function testAddingToADraftWritesTheLetterRowToo(): void
+    {
+        $issue = $this->issueOnLetter(true);
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('fetchById')->andReturn($issue);
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('save')->once();
+
+        $this->sut->handleCommand(Cmd::create(['letterInstanceIssue' => 10]));
+
+        $this->assertLetterRowWritten($issue->getLetterInstance());
+    }
+
+    public function testAClashWithAnotherChangeToTheLetterSaysSo(): void
+    {
+        $this->repoMap['LetterInstanceIssue']->shouldReceive('fetchById')->andReturn($this->issueOnLetter(true));
+        $this->repoMap['LetterInstanceTodo']->shouldReceive('save')->once()->andThrow(self::clash());
+
+        $this->expectClashMessage();
+        $this->sut->handleCommand(Cmd::create(['letterInstanceIssue' => 10]));
     }
 }

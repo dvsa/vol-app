@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\Command\Document\CreateDocument as CreateDocumentCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\DocumentGeneratorAwareInterface;
 use Dvsa\Olcs\Api\Domain\DocumentGeneratorAwareTrait;
@@ -32,6 +33,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
     AuthAwareInterface,
     NamingServiceAwareInterface
 {
+    use LetterOpenForChangesTrait;
     use DocumentGeneratorAwareTrait;
     use AuthAwareTrait;
 
@@ -197,7 +199,8 @@ final class PrepareToSend extends AbstractCommandHandler implements
             $letterInstance->setStatus($readyStatus);
         }
 
-        $this->getRepo()->save($letterInstance);
+        // fails if the letter changed while its PDF was being made: the PDF wouldn't have the change
+        $this->saveLetterChange(fn () => $this->getRepo()->save($letterInstance));
 
         $this->result->addId('document', $documentId);
         $this->result->addMessage('Letter prepared for sending');

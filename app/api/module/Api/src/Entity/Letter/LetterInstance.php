@@ -403,6 +403,11 @@ class LetterInstance extends AbstractLetterInstance
         return $this->status && $this->status->getId() === self::STATUS_SENT;
     }
 
+    public function isCancelled(): bool
+    {
+        return $this->status?->getId() === self::STATUS_CANCELLED;
+    }
+
     /**
      * Check if letter can be edited
      *

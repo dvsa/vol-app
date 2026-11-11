@@ -388,30 +388,23 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
             ->andThrow(new \Doctrine\ORM\OptimisticLockException('edited meanwhile', $letter));
         $this->commandHandler->shouldReceive('handleCommand')->never();
 
-        $this->expectException(\Doctrine\ORM\OptimisticLockException::class);
+        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
+        $this->expectExceptionMessage('This letter was changed somewhere else at the same time');
         $this->sut->handleCommand(TransferCmd\Document\PrintLetter::create([
             'id' => self::DOC_ID,
             'method' => TransferCmd\Document\PrintLetter::METHOD_EMAIL,
         ]));
     }
 
-    public function testAnEmailThatCannotGoOutDoesNotMarkTheLetterSent(): void
+    /**
+     * Review: only a prepared (or already sent) letter goes out; a cancelled one isn't marked sent
+     */
+    public function testACancelledLetterIsNotSent(): void
     {
-        $doc = m::mock(Entity\Doc\Document::class)->makePartial();
-        $doc->setId(self::DOC_ID);
-        $doc->shouldReceive('getRelatedLicence')->andReturnNull();
-        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_READY);
-        $letter->setDocument($doc);
-        $this->mockDocRepo->shouldReceive('fetchUsingId')->andReturn($doc);
-        $this->mockPrintSrv->shouldReceive('canPrint')->andReturn(true)->shouldReceive('canEmail')->andReturn(true);
-        $this->mockLetterInstanceRepo->shouldReceive('fetchByDocument')->with(self::DOC_ID)->andReturn($letter);
-        $this->mockLetterInstanceRepo->shouldReceive('save')->never();
+        $this->mockDocE->setMetadata(json_encode(['details' => ['documentTemplate' => 3, 'letterInstance' => 5]]));
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_CANCELLED);
+        $letter->setDocument($this->mockDocE);
 
-        $this->sut->handleCommand(TransferCmd\Document\PrintLetter::create([
-            'id' => self::DOC_ID,
-            'method' => TransferCmd\Document\PrintLetter::METHOD_EMAIL,
-        ]));
-
-        $this->assertTrue($letter->isReady());
+        $this->expectRefused($letter, 'This letter has been cancelled');
     }
 }

@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\Command as DomainCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -20,6 +21,8 @@ use Psr\Container\ContainerInterface;
  */
 final class PrintLetter extends AbstractCommandHandler implements TransactionedInterface
 {
+    use LetterOpenForChangesTrait;
+
     protected $repoServiceName = 'Document';
 
     protected $extraRepos = ['LetterInstance'];
@@ -55,7 +58,7 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
         }
 
         $method = $command->getMethod();
-        $email = $method === PrintLetterCmd::METHOD_EMAIL && $canEmail && $document->getRelatedLicence() !== null;
+        $email = $method === PrintLetterCmd::METHOD_EMAIL && $canEmail;
         $print = $method === PrintLetterCmd::METHOD_PRINT_AND_POST && $canPrint;
 
         // locked first: an edit that landed since the check above fails this save (the letter's
@@ -172,8 +175,8 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
     }
 
     /**
-     * Refuse a PDF that no longer matches its letter: a newer one has been prepared since, or the
-     * letter has changed since (which takes it back to draft)
+     * Refuse a PDF that no longer matches its letter (a newer one has been prepared since, or the
+     * letter has changed since, which takes it back to draft) or whose letter was cancelled
      *
      * @throws ValidationException
      */
@@ -187,6 +190,10 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
             throw new ValidationException([
                 'This letter has changed since it was prepared. Prepare it to send again, then send the new one.',
             ]);
+        }
+
+        if ($letterInstance->isCancelled()) {
+            throw new ValidationException(['This letter has been cancelled, so it can\'t be sent.']);
         }
     }
 
@@ -203,7 +210,7 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
         /** @var \Dvsa\Olcs\Api\Domain\Repository\LetterInstance $repo */
         $repo = $this->getRepo('LetterInstance');
         $letterInstance->markAsSent($repo->getRefdataReference(Entity\Letter\LetterInstance::STATUS_SENT));
-        $repo->save($letterInstance);
+        $this->saveLetterChange(fn () => $repo->save($letterInstance));
     }
 
     #[\Override]
