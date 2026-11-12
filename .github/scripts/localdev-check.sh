@@ -18,8 +18,9 @@ TIMEOUT="${TIMEOUT:-}"
 # The host names that nginx-proxy routes, from the services' VIRTUAL_HOST settings.
 DOMAIN="local.olcs.dev-dvsacloud.uk"
 
-# A print job title of this run's own, so a PDF left by an earlier run can't pass the check.
-PRINT_TITLE="localdev-check-$$"
+# A print job title of this run's own, so a PDF left by an earlier run can't pass the check. The
+# process ID alone could repeat on a stack that has been running for a while.
+PRINT_TITLE="localdev-check-$$-$RANDOM"
 
 in_service() {
   docker compose exec -T "$@"
@@ -121,13 +122,17 @@ php_has_extensions() {
 }
 
 # Without npm run refresh the apps have no vendor directory or config, so PHP answers with an
-# error (500), and any answer from PHP counts. A stopped container gets 503 from nginx-proxy,
-# and a container whose PHP-FPM has died gets 502 from its own nginx.
+# error (500), and any answer from PHP counts. An error page that nginx makes itself doesn't, and
+# each of those carries nginx's signature: 503 from nginx-proxy for a stopped container, 502 from
+# the app's own nginx when PHP-FPM has died, and 404 or 403 from it when index.php isn't where its
+# config looks, because its try_files answers 404 without asking PHP-FPM. The status is 000 when
+# nothing answers at all.
 app_answers_through_proxy() {
-  local status
-  status="$(status_through_proxy "$1" /)"
+  local response status
+  response="$(curl -s -w '\n%{http_code}' -H "Host: $1.$DOMAIN" http://localhost/)"
+  status="${response##*$'\n'}"
   echo "$1.$DOMAIN answered $status"
-  [[ "$status" != 000 && "$status" != 502 && "$status" != 503 && "$status" != 504 ]]
+  [[ "$status" != 000 && "$response" != *'<center>nginx'* ]]
 }
 
 check="${1:-}"
