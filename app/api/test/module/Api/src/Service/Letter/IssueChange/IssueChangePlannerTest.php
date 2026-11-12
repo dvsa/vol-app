@@ -215,16 +215,30 @@ class IssueChangePlannerTest extends TestCase
         $this->assertSame([$nineRow, $eleven->getCurrentVersion(), $sevenRow], $plan->finalIssues);
     }
 
-    public function testHiddenLostTodoCountsAsAnEdit(): void
+    public function testLostEditsListTheOtherHeadingAndWrittenCustomTodos(): void
     {
-        $t1 = $this->todoVersion(1, 'Send bank statements');
-        $seven = $this->issue(7, [$t1]);
+        $keep = $this->issue(9);
+        $otherParent = $this->issue(30);
+        $otherParent->getCurrentVersion()->setIsOther(true);
         $letterInstance = new LetterInstance();
-        $row = $this->onLetter($letterInstance, $seven->getCurrentVersion(), 0);
-        $this->todoOnLetter($letterInstance, $row, $t1)->setIsRendered(false);
+        $other = $this->onLetter($letterInstance, $otherParent->getCurrentVersion(), 0);
+        $other->setEditedHeading('Vehicle storage');
+        $this->onLetter($letterInstance, $keep->getCurrentVersion(), 1);
 
-        $plan = $this->sut->plan($letterInstance, []);
+        $written = new LetterInstanceTodo();
+        $written->setDisplayOrder(1);
+        $written->setEditedDescription(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Send the lease']]]]);
+        $empty = new LetterInstanceTodo();
+        $empty->setDisplayOrder(2);
+        foreach ([$written, $empty] as $todo) {
+            $other->addLetterInstanceTodo($todo);
+            $letterInstance->addLetterInstanceTodo($todo);
+        }
 
-        $this->assertSame(['Send bank statements'], $plan->lostEdits());
+        $plan = $this->sut->plan($letterInstance, [$keep]);
+
+        $this->assertSame([$other], $plan->removedIssues);
+        $this->assertSame([$written, $empty], $plan->lostTodos);
+        $this->assertSame(['Vehicle storage', 'Vehicle storage: to-do 1'], $plan->lostEdits());
     }
 }

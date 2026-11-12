@@ -313,6 +313,28 @@ $routes = [
                 ],
                 'may_terminate' => true,
             ],
+            'add-custom-todo' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/add-custom-todo',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'addCustomTodo',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'delete-custom-todo' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/delete-custom-todo',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'deleteCustomTodo',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
     'template_lists' => [

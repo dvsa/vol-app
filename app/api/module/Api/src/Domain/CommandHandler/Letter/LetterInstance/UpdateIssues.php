@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstance;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssue;
@@ -26,6 +27,8 @@ use Psr\Container\ContainerInterface;
  */
 final class UpdateIssues extends AbstractCommandHandler
 {
+    use LetterOpenForChangesTrait;
+
     use LetterContextTrait;
 
     protected $repoServiceName = 'LetterInstance';
@@ -53,7 +56,7 @@ final class UpdateIssues extends AbstractCommandHandler
         /** @var LetterInstanceEntity $letterInstance */
         $letterInstance = $this->getRepo()->fetchUsingId($command);
 
-        if (!($letterInstance->isDraft() || $letterInstance->isReady()) || $letterInstance->isDeleted()) {
+        if (!$letterInstance->isOpenForChanges()) {
             throw new ValidationException(['Issues can only be changed on a draft or ready letter']);
         }
 
@@ -73,6 +76,8 @@ final class UpdateIssues extends AbstractCommandHandler
             return $this->result;
         }
 
+        $this->recordLetterChange($letterInstance);
+
         $created = $this->letterInstanceComposer->applyIssueChange($letterInstance, $plan);
 
         // grabs on the new rows resolve now; what was frozen at generation stays as it was
@@ -81,7 +86,7 @@ final class UpdateIssues extends AbstractCommandHandler
         // read before saving: Doctrine clears the id of a row it deletes
         $movedFrom = array_map(static fn(array $pair) => $pair[0]->getId(), $created['movedTodos']);
 
-        $this->getRepo()->save($letterInstance);
+        $this->saveLetterChange(fn () => $this->getRepo()->save($letterInstance));
 
         // a flag rather than addId: Result collapses a single id to a scalar, callers want a list
         $this->result->setFlag('addedIssueIds', array_map(

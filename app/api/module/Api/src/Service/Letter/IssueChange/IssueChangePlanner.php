@@ -26,7 +26,7 @@ class IssueChangePlanner
     public function plan(LetterInstance $letterInstance, array $selectedIssues): IssueChangePlan
     {
         $onLetter = [];
-        foreach ($this->issuesInDisplayOrder($letterInstance) as $instanceIssue) {
+        foreach ($letterInstance->getIssuesInLetterOrder() as $instanceIssue) {
             $parentId = $instanceIssue->getLetterIssueVersion()?->getLetterIssue()?->getId();
             if ($parentId !== null && !isset($onLetter[$parentId])) {
                 $onLetter[$parentId] = $instanceIssue;
@@ -50,7 +50,7 @@ class IssueChangePlanner
         }
 
         $removedIssues = [];
-        foreach ($this->issuesInDisplayOrder($letterInstance) as $instanceIssue) {
+        foreach ($letterInstance->getIssuesInLetterOrder() as $instanceIssue) {
             if (!in_array($instanceIssue, $keptIssues, true)) {
                 $removedIssues[] = $instanceIssue;
             }
@@ -60,21 +60,22 @@ class IssueChangePlanner
         // (an issue since switched off, a type changed or reordered), and a save that changes
         // nothing shouldn't renumber the letter.
         if ($removedIssues === [] && count($keptIssues) === count($finalIssues)) {
-            $finalIssues = $this->issuesInDisplayOrder($letterInstance);
+            $finalIssues = $letterInstance->getIssuesInLetterOrder();
         }
 
         return new IssueChangePlan(
             $finalIssues,
             $removedIssues,
-            $this->lostTodos($letterInstance, $finalIssues),
+            $this->lostTodos($letterInstance, $finalIssues, $removedIssues),
         );
     }
 
     /**
      * @param list<LetterInstanceIssue|LetterIssueVersion> $finalIssues
+     * @param list<LetterInstanceIssue> $removedIssues
      * @return list<\Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo>
      */
-    private function lostTodos(LetterInstance $letterInstance, array $finalIssues): array
+    private function lostTodos(LetterInstance $letterInstance, array $finalIssues, array $removedIssues): array
     {
         $brought = [];
         foreach ($finalIssues as $finalIssue) {
@@ -89,6 +90,14 @@ class IssueChangePlanner
 
         $lost = [];
         foreach ($letterInstance->getLetterInstanceTodos() as $instanceTodo) {
+            if ($instanceTodo->isCustom()) {
+                // a caseworker-written to-do goes with its Other issue (VOL-7735)
+                if (in_array($instanceTodo->getLetterInstanceIssue(), $removedIssues, true)) {
+                    $lost[] = $instanceTodo;
+                }
+                continue;
+            }
+
             $key = $instanceTodo->getLetterTodoVersion()?->getDedupeKey();
             if ($key !== null && !isset($brought[$key])) {
                 $lost[] = $instanceTodo;
@@ -96,19 +105,5 @@ class IssueChangePlanner
         }
 
         return $lost;
-    }
-
-    /**
-     * @return list<LetterInstanceIssue>
-     */
-    private function issuesInDisplayOrder(LetterInstance $letterInstance): array
-    {
-        $issues = array_values($letterInstance->getLetterInstanceIssues()->toArray());
-        usort(
-            $issues,
-            static fn(LetterInstanceIssue $a, LetterInstanceIssue $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder()
-        );
-
-        return $issues;
     }
 }
