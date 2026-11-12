@@ -3,7 +3,8 @@
     echo $this->render(
       '/partials/page-header.phtml',
       array(
-        'pageTitle' => $this->translate('ebsr-upload-title')
+        'pageTitle' => $this->translate('ebsr-upload-title'),
+        'formErrors' => '<div class="row"><div class="two-thirds">' . $this->formErrors($this->form, true) . '</div></div>',
       )
     );
   ?>
@@ -21,7 +22,6 @@
       </div>
       <?php echo $this->flashMessengerAll(); ?>
       <?php
-        echo $this->formErrors($this->form, true);
         $this->form->prepare();
         echo $this->form()->render($this->form);
         echo $this->link($this->url('bus-registration'), 'back-to-ebsr-uploads');

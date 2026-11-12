@@ -3,6 +3,7 @@ echo $this->partial(
   'partials/page-header-simple',
   [
     'pageTitle' => $this->translate('dashboard.messages.new.title'),
+    'formErrors' => '<div class="row"><div class="two-thirds">' . $this->formErrors($this->form) . '</div></div>',
   ],
 );
 ?>
@@ -30,7 +31,6 @@ echo $this->partial(
 
     <div>
       <?php
-        echo $this->formErrors($this->form);
         echo $this->form($this->form);
       ?>
     </div>

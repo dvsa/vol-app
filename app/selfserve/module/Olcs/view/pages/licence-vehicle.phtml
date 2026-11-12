@@ -1,3 +1,17 @@
+<?php
+$formErrors = '';
+if (isset($this->form)) {
+    $this->form->prepare();
+    $formErrors .= $this->formErrors($this->form);
+}
+if (isset($this->searchForm)) {
+    $this->searchForm->prepare();
+    $formErrors .= $this->formErrors($this->searchForm);
+}
+if ($formErrors !== '') {
+    $formErrors = '<div class="govuk-grid-row"><div class="govuk-grid-column-full">' . $formErrors . '</div></div>';
+}
+?>
 <div class="govuk-width-container">
     <div class="js-body">
         <?php
@@ -10,20 +24,12 @@
                 'backUrl' => [
                     'url' => $this->backLink,
                 ],
+                'formErrors' => $formErrors,
             ]
         );
         ?>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                <?php if (isset($this->form)) {
-                    $this->form->prepare();
-                    echo $this->formErrors($this->form);
-                }
-                if (isset($this->searchForm)) {
-                    $this->searchForm->prepare();
-                    echo $this->formErrors($this->searchForm);
-                }
-                ?>
                 <?php if (!empty($this->content)): ?>
                     <p class="govuk-body"><?php echo $this->translate($this->content); ?></p>
                 <?php endif; ?>
