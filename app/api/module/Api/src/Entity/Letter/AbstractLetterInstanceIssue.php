@@ -94,6 +94,14 @@ abstract class AbstractLetterInstanceIssue implements BundleSerializableInterfac
     protected $editedContent;
 
     /**
+     * Caseworker-written heading for an Other issue (VOL-7735)
+     *
+     * @var string|null
+     */
+    #[ORM\Column(type: 'string', name: 'edited_heading', length: 255, nullable: true)]
+    protected $editedHeading;
+
+    /**
      * Default content with grabs resolved at generation
      *
      * @var array|null
@@ -300,6 +308,30 @@ abstract class AbstractLetterInstanceIssue implements BundleSerializableInterfac
     public function getGeneratedContent()
     {
         return $this->generatedContent;
+    }
+
+    /**
+     * Set the edited heading
+     *
+     * @param string|null $editedHeading new value being set
+     *
+     * @return static
+     */
+    public function setEditedHeading($editedHeading)
+    {
+        $this->editedHeading = $editedHeading;
+
+        return $this;
+    }
+
+    /**
+     * Get the edited heading
+     *
+     * @return string|null
+     */
+    public function getEditedHeading()
+    {
+        return $this->editedHeading;
     }
 
     /**

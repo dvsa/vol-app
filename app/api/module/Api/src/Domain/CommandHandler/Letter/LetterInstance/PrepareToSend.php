@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\Command\Document\CreateDocument as CreateDocumentCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\DocumentGeneratorAwareInterface;
 use Dvsa\Olcs\Api\Domain\DocumentGeneratorAwareTrait;
@@ -32,6 +33,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
     AuthAwareInterface,
     NamingServiceAwareInterface
 {
+    use LetterOpenForChangesTrait;
     use DocumentGeneratorAwareTrait;
     use AuthAwareTrait;
 
@@ -145,12 +147,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
         // Upload PDF to content store
         $file = $this->getDocumentGenerator()->uploadGeneratedContent($pdfContent, $fileName);
 
-        // Build Document metadata with docTemplate reference for canEmail() check
-        $metadata = json_encode([
-            'details' => [
-                'documentTemplate' => $command->getDocTemplate(),
-            ],
-        ]);
+        $metadata = self::documentMetadata((int) $command->getDocTemplate(), (int) $letterInstance->getId());
 
         // Create Document entity via side effect
         $documentData = [
@@ -202,7 +199,8 @@ final class PrepareToSend extends AbstractCommandHandler implements
             $letterInstance->setStatus($readyStatus);
         }
 
-        $this->getRepo()->save($letterInstance);
+        // fails if the letter changed while its PDF was being made: the PDF wouldn't have the change
+        $this->saveLetterChange(fn () => $this->getRepo()->save($letterInstance));
 
         $this->result->addId('document', $documentId);
         $this->result->addMessage('Letter prepared for sending');
@@ -222,8 +220,9 @@ final class PrepareToSend extends AbstractCommandHandler implements
         $pending = [];
 
         foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
-            if ($issue->requiresInput() && !$issue->hasBeenEdited()) {
-                $pending[] = $issue->getHeading() ?: 'Issue';
+            // an Other issue also needs its heading and real body text (VOL-7735)
+            if ($issue->isInputPending()) {
+                $pending[] = $issue->getDisplayName() ?: 'Issue';
             }
         }
 
@@ -234,7 +233,14 @@ final class PrepareToSend extends AbstractCommandHandler implements
         }
 
         foreach ($letterInstance->getLetterInstanceTodos() as $todo) {
-            if ($todo->requiresInput() && !$todo->hasBeenEdited()) {
+            if (!$todo->isInputPending()) {
+                continue;
+            }
+
+            if ($todo->isCustom()) {
+                // a caseworker-written to-do left empty (VOL-7735)
+                $pending[] = $todo->getCustomLabel() ?? 'To-do';
+            } else {
                 $todoVersion = $todo->getLetterTodoVersion();
                 $pending[] = $todoVersion?->getName() ?: $todoVersion?->getLetterTodo()?->getTodoKey() ?: 'To-do';
             }
@@ -315,5 +321,19 @@ final class PrepareToSend extends AbstractCommandHandler implements
         $this->convertHtmlToPdf = $container->get('ConvertToPdf');
         $this->contentStore = $container->get('ContentStore');
         return parent::__invoke($container, $requestedName, $options);
+    }
+
+    /**
+     * The PDF's metadata: its docTemplate, for the canEmail() check, and the letter it came from, so
+     * sending an out-of-date PDF of the letter can be refused (VOL-7735)
+     */
+    private static function documentMetadata(int $docTemplate, int $letterInstanceId): string
+    {
+        return (string) json_encode([
+            'details' => [
+                'documentTemplate' => $docTemplate,
+                'letterInstance' => $letterInstanceId,
+            ],
+        ]);
     }
 }

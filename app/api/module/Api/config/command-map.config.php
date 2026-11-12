@@ -1400,6 +1400,8 @@ return [
     TransferCommand\Letter\LetterInstanceIssue\UpdateContent::class => CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceSection\UpdateContent::class => CommandHandler\Letter\LetterInstanceSection\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceTodo\UpdateContent::class => CommandHandler\Letter\LetterInstanceTodo\UpdateContent::class,
+    TransferCommand\Letter\LetterInstanceTodo\CreateCustom::class => CommandHandler\Letter\LetterInstanceTodo\CreateCustom::class,
+    TransferCommand\Letter\LetterInstanceTodo\DeleteCustom::class => CommandHandler\Letter\LetterInstanceTodo\DeleteCustom::class,
     TransferCommand\Letter\LetterInstanceAppendix\UpdateContent::class => CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class,
     TransferCommand\Letter\MasterTemplate\Create::class => CommandHandler\Letter\MasterTemplate\Create::class,
     TransferCommand\Letter\MasterTemplate\Update::class => CommandHandler\Letter\MasterTemplate\Update::class,
