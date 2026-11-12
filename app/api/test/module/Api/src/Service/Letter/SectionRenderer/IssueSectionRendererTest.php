@@ -228,4 +228,22 @@ final class IssueSectionRendererTest extends MockeryTestCase
 
         $this->assertSame($expected, $result);
     }
+
+    public function testAnOtherIssuesWrittenHeadingIsEscaped(): void
+    {
+        $version = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion();
+        $version->setHeading('Other issue');
+        $version->setIsOther(true);
+        $issue = new LetterInstanceIssue();
+        $issue->setLetterIssueVersion($version);
+        $issue->setEditedHeading('<b>x</b> & y');
+        $issue->setEditedContentFromArray(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Body']]]]);
+        $this->mockVolGrabService->shouldReceive('replaceGrabs')->andReturnUsing(fn(string $json): string => $json);
+        $this->mockConverterService->shouldReceive('convertJsonToHtml')->andReturn('<p>Body</p>');
+
+        $result = $this->sut->render($issue);
+
+        $this->assertStringContainsString('&lt;b&gt;x&lt;/b&gt; &amp; y', $result);
+        $this->assertStringNotContainsString('<b>x</b>', $result);
+    }
 }

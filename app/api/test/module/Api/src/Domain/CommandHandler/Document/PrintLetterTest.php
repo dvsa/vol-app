@@ -32,6 +32,8 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
     private $mockDocE;
     /** @var  m\MockInterface */
     private $mockPrintSrv;
+    /** @var  m\MockInterface */
+    private $mockLetterInstanceRepo;
 
     public function setUp(): void
     {
@@ -46,12 +48,17 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
         $this->mockDocE->shouldReceive('getRelatedLicence')->andReturn($mockLicE);
 
         $this->mockDocRepo = $this->mockRepo('Document', Repository\Document::class);
+        $this->mockLetterInstanceRepo = $this->mockRepo('LetterInstance', Repository\LetterInstance::class);
+        // most documents weren't built in the letter builder
+        $this->mockLetterInstanceRepo->shouldReceive('fetchByDocument')->byDefault()->andReturnNull();
 
         $this->mockPrintSrv = m::mock(ApiSrv\Document\PrintLetter::class);
 
         $this->mockedSmServices[ApiSrv\Document\PrintLetter::class] = $this->mockPrintSrv;
 
         $this->sut = new PrintLetter();
+
+        $this->refData = [Entity\Letter\LetterInstance::STATUS_SENT];
 
         parent::setUp();
     }
@@ -229,5 +236,175 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
                 ]
             )
         );
+    }
+
+    /**
+     * A letter from the letter builder is sent once its document is printed or emailed, which locks it
+     * against further changes (VOL-7735 PR review: nothing ever marked a letter as sent)
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpDispatched')]
+    public function testDispatchingMarksTheLetterAsSent(string $method): void
+    {
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_READY);
+        $letter->setDocument($this->mockDocE);
+        $this->dispatch($method, ['email' => true, 'print' => true], $letter);
+
+        $this->assertTrue($letter->isSent());
+        $this->assertInstanceOf(\DateTime::class, $letter->getSentOn());
+    }
+
+    public static function dpDispatched(): array
+    {
+        return [
+            'email' => [TransferCmd\Document\PrintLetter::METHOD_EMAIL],
+            'print and post' => [TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST],
+        ];
+    }
+
+    public function testALetterThatIsNotDispatchedIsNotMarkedAsSent(): void
+    {
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_READY);
+        $letter->setDocument($this->mockDocE);
+        // can't print (Welsh translation needed), so it goes to a translation task instead
+        $this->dispatch(TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST, ['email' => true, 'print' => false], $letter, false);
+
+        $this->assertTrue($letter->isReady());
+        $this->assertNull($letter->getSentOn());
+    }
+
+    public function testResendingAnAlreadySentLetterKeepsWhenItWasFirstSent(): void
+    {
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_SENT);
+        $letter->setDocument($this->mockDocE);
+        $firstSent = new \DateTime('2026-01-01');
+        $letter->setSentOn($firstSent);
+        $this->dispatch(TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST, ['email' => true, 'print' => true], $letter, false);
+
+        $this->assertSame($firstSent, $letter->getSentOn());
+    }
+
+    private function letterInstance(string $status): Entity\Letter\LetterInstance
+    {
+        $letter = new Entity\Letter\LetterInstance();
+        $letter->setStatus(new Entity\System\RefData($status));
+
+        return $letter;
+    }
+
+    private function dispatch(string $method, array $canDo, Entity\Letter\LetterInstance $letter, bool $expectSave = true): void
+    {
+        $command = TransferCmd\Document\PrintLetter::create(['id' => self::DOC_ID, 'method' => $method]);
+        $this->mockDocRepo->shouldReceive('fetchUsingId')->andReturn($this->mockDocE);
+        $this->mockPrintSrv
+            ->shouldReceive('canPrint')->andReturn($canDo['print'])
+            ->shouldReceive('canEmail')->andReturn($canDo['email']);
+
+        $this->commandHandler->shouldReceive('handleCommand')->andReturn(new Result());
+        $this->mockLetterInstanceRepo->shouldReceive('fetchByDocument')->with(self::DOC_ID)->andReturn($letter);
+        $this->mockLetterInstanceRepo->shouldReceive('save')->with($letter)->times($expectSave ? 1 : 0);
+
+        $this->sut->handleCommand($command);
+    }
+
+    /**
+     * PR review: preparing a letter again makes a new PDF; the older one is out of date and can't be
+     * sent, or it would go out without locking the letter
+     */
+    public function testAnOlderPreparedPdfOfALetterIsRefused(): void
+    {
+        $this->mockDocE->setMetadata(json_encode(['details' => ['documentTemplate' => 3, 'letterInstance' => 5]]));
+        $newer = m::mock(Entity\Doc\Document::class)->makePartial();
+        $newer->setId(self::DOC_ID + 1);
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_READY);
+        $letter->setDocument($newer);
+
+        $this->expectRefused($letter, 'A newer version of this letter has been prepared');
+    }
+
+    /**
+     * PR review: a letter changed after it was prepared goes back to draft; its PDF no longer
+     * matches, so it can't be sent until it's prepared again
+     */
+    public function testAPdfOfALetterChangedSinceItWasPreparedIsRefused(): void
+    {
+        $this->mockDocE->setMetadata(json_encode(['details' => ['documentTemplate' => 3, 'letterInstance' => 5]]));
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_DRAFT);
+        $letter->setDocument($this->mockDocE);
+
+        $this->expectRefused($letter, 'This letter has changed since it was prepared');
+    }
+
+    public function testTheLetterIsFoundFromThePdfsOwnRecordOfIt(): void
+    {
+        $this->mockDocE->setMetadata(json_encode(['details' => ['documentTemplate' => 3, 'letterInstance' => 5]]));
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_READY);
+        $letter->setDocument($this->mockDocE);
+        // only the PDF's own record can find it: the by-document lookup finds nothing
+        $this->mockLetterInstanceRepo->shouldReceive('fetchById')->with(5)->andReturn($letter);
+        $this->mockDocRepo->shouldReceive('fetchUsingId')->andReturn($this->mockDocE);
+        $this->mockPrintSrv->shouldReceive('canPrint')->andReturn(true)->shouldReceive('canEmail')->andReturn(true);
+        $this->commandHandler->shouldReceive('handleCommand')->andReturn(new Result());
+        $this->mockLetterInstanceRepo->shouldReceive('save')->with($letter)->once();
+
+        $this->sut->handleCommand(TransferCmd\Document\PrintLetter::create([
+            'id' => self::DOC_ID,
+            'method' => TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST,
+        ]));
+
+        $this->assertTrue($letter->isSent());
+    }
+
+    private function expectRefused(Entity\Letter\LetterInstance $letter, string $message): void
+    {
+        $this->mockDocRepo->shouldReceive('fetchUsingId')->andReturn($this->mockDocE);
+        $this->mockPrintSrv->shouldReceive('canPrint')->andReturn(true)->shouldReceive('canEmail')->andReturn(true);
+        $this->mockLetterInstanceRepo->shouldReceive('fetchById')->with(5)->andReturn($letter);
+        $this->mockLetterInstanceRepo->shouldReceive('save')->never();
+        $this->commandHandler->shouldReceive('handleCommand')->never();
+
+        try {
+            $this->sut->handleCommand(TransferCmd\Document\PrintLetter::create([
+                'id' => self::DOC_ID,
+                'method' => TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST,
+            ]));
+            $this->fail('Expected the send to be refused');
+        } catch (\Dvsa\Olcs\Api\Domain\Exception\ValidationException $e) {
+            $this->assertStringContainsString($message, implode(' ', $e->getMessages()));
+        }
+    }
+
+    /**
+     * PR review: the letter is marked sent before anything goes out, so an edit that lands in
+     * between fails the send (the letter's version has moved on) before an email or print is queued
+     */
+    public function testTheLetterIsLockedBeforeAnythingGoesOut(): void
+    {
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_READY);
+        $letter->setDocument($this->mockDocE);
+        $this->mockDocRepo->shouldReceive('fetchUsingId')->andReturn($this->mockDocE);
+        $this->mockPrintSrv->shouldReceive('canPrint')->andReturn(true)->shouldReceive('canEmail')->andReturn(true);
+        $this->mockLetterInstanceRepo->shouldReceive('fetchByDocument')->with(self::DOC_ID)->andReturn($letter);
+        $this->mockLetterInstanceRepo->shouldReceive('save')->with($letter)->once()
+            ->andThrow(new \Doctrine\ORM\OptimisticLockException('edited meanwhile', $letter));
+        $this->commandHandler->shouldReceive('handleCommand')->never();
+
+        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
+        $this->expectExceptionMessage('This letter was changed somewhere else at the same time');
+        $this->sut->handleCommand(TransferCmd\Document\PrintLetter::create([
+            'id' => self::DOC_ID,
+            'method' => TransferCmd\Document\PrintLetter::METHOD_EMAIL,
+        ]));
+    }
+
+    /**
+     * Review: only a prepared (or already sent) letter goes out; a cancelled one isn't marked sent
+     */
+    public function testACancelledLetterIsNotSent(): void
+    {
+        $this->mockDocE->setMetadata(json_encode(['details' => ['documentTemplate' => 3, 'letterInstance' => 5]]));
+        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_CANCELLED);
+        $letter->setDocument($this->mockDocE);
+
+        $this->expectRefused($letter, 'This letter has been cancelled');
     }
 }

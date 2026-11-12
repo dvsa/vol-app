@@ -45,6 +45,7 @@ class LetterIssue implements MapperInterface
                 'defaultBodyContent' => $currentVersion['defaultBodyContent'] ?? $data['defaultBodyContent'] ?? null,
                 'isNi' => $currentVersion['isNi'] ?? $data['isNi'] ?? false,
                 'requiresInput' => $currentVersion['requiresInput'] ?? $data['requiresInput'] ?? false,
+                'isOther' => $currentVersion['isOther'] ?? $data['isOther'] ?? false,
                 'minLength' => $currentVersion['minLength'] ?? $data['minLength'] ?? null,
                 'maxLength' => $currentVersion['maxLength'] ?? $data['maxLength'] ?? null,
                 'helpText' => $currentVersion['helpText'] ?? $data['helpText'] ?? null,
@@ -85,6 +86,10 @@ class LetterIssue implements MapperInterface
 
         if (isset($commandData['requiresInput'])) {
             $commandData['requiresInput'] = (bool) $commandData['requiresInput'];
+        }
+
+        if (isset($commandData['isOther'])) {
+            $commandData['isOther'] = (bool) $commandData['isOther'];
         }
 
         // Handle empty selections

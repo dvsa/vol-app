@@ -82,6 +82,11 @@ class LetterIssue
     #[Form\Attributes(['class' => '', 'id' => 'requiresInput'])]
     public $requiresInput = null;
 
+    #[Form\Options(['label' => 'Other issue (caseworker writes the heading)', 'checked_value' => '1', 'unchecked_value' => '0'])]
+    #[Form\Type('OlcsCheckbox')]
+    #[Form\Attributes(['class' => '', 'id' => 'isOther'])]
+    public $isOther = null;
+
     #[Form\Options(['label' => 'Minimum Length'])]
     #[Form\Required(false)]
     #[Form\Type('Number')]

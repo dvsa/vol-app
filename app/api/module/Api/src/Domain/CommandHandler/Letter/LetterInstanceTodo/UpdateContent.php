@@ -3,6 +3,8 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterInstanceTodo;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
+use Dvsa\Olcs\Api\Service\Letter\EditorJsText;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\UpdateContent as Cmd;
@@ -16,6 +18,8 @@ use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\UpdateContent as Cmd;
  */
 final class UpdateContent extends AbstractCommandHandler
 {
+    use LetterOpenForChangesTrait;
+
     protected $repoServiceName = 'LetterInstanceTodo';
 
     #[\Override]
@@ -26,11 +30,19 @@ final class UpdateContent extends AbstractCommandHandler
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo $letterInstanceTodo */
         $letterInstanceTodo = $this->getRepo()->fetchUsingId($command);
 
+        $letterInstance = $letterInstanceTodo->getLetterInstance();
+        $this->assertLetterOpenForChanges($letterInstance);
+        $before = $letterInstanceTodo->getEffectiveDescription();
+
         $letterInstanceTodo->setEditedDescriptionFromArray(
             json_decode($command->getEditedDescription(), true)
         );
 
-        $this->getRepo()->save($letterInstanceTodo);
+        $this->recordLetterChange(
+            $letterInstance,
+            !EditorJsText::sameContent($before, $letterInstanceTodo->getEffectiveDescription())
+        );
+        $this->saveLetterChange(fn () => $this->getRepo()->save($letterInstanceTodo));
 
         $this->result->addId('letterInstanceTodo', $letterInstanceTodo->getId());
         $this->result->addMessage('To-do wording updated successfully');

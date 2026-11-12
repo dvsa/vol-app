@@ -1,39 +1,41 @@
-FROM alpine:3.22 AS builder
+FROM alpine:3.24 AS builder
 
 # Set shell for proper pipe error handling
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-# Install build dependencies and pnpm
+# Install build dependencies, and Corepack to run the pnpm version that FileBrowser's package.json names.
+# Packages aren't pinned: Alpine deletes a package's old versions when it updates it, so a pinned version
+# stops building. Instead, the Alpine release in the FROM line decides which versions are available.
+# hadolint ignore=DL3018
 RUN apk add --no-cache \
     go \
     git \
     nodejs \
     npm \
     make && \
-    npm install -g pnpm@10.15.1
+    npm install -g corepack@0.36.0 && \
+    corepack enable pnpm
 
 # Build FileBrowser from source
-ENV FILEBROWSER_VERSION=v2.42.5
+ENV FILEBROWSER_VERSION=v2.63.23
 WORKDIR /build
 RUN git clone --depth 1 --branch ${FILEBROWSER_VERSION} https://github.com/filebrowser/filebrowser.git .
 WORKDIR /build/frontend
-RUN npm install && \
-    npm run build
+# Install the versions in FileBrowser's pnpm lockfile. npm install ignores that lockfile and takes the
+# newest version of every dependency, which can fail FileBrowser's type check.
+RUN pnpm install --frozen-lockfile && \
+    pnpm run build
 WORKDIR /build
 RUN go build -ldflags "-s -w" -o filebrowser .
 
-FROM alpine:3.22
+FROM alpine:3.24
 
 # Set shell for proper pipe error handling
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-# Install required packages
-# cups-pdf is in edge/testing repository (available for both x86_64 and aarch64)
+# Install required packages, unpinned for the reason given in the builder stage
 # hadolint ignore=DL3018
-RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
-    echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
-    echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
-    apk add --no-cache \
+RUN apk add --no-cache \
     cups \
     cups-pdf \
     cups-client \
@@ -81,10 +83,10 @@ RUN chmod +x /usr/local/bin/cleanup.sh /entrypoint.sh \
     && chmod 700 /usr/lib/cups/backend/cups-pdf \
     && chown root:root /usr/lib/cups/backend/cups-pdf
 
-# Environment variables
+# Environment variables. CUPS_ADMIN_PASSWORD defaults to admin in entrypoint.sh, which keeps it out of the
+# image's configuration.
 ENV CLEANUP_HOURS=6 \
     CUPS_ADMIN_USER=admin \
-    CUPS_ADMIN_PASSWORD=admin \
     TZ=Europe/London
 
 # Expose ports
@@ -92,6 +94,6 @@ EXPOSE 631 8631
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s \
-    CMD curl -f http://localhost:631/ || exit 1
+    CMD ["curl", "-f", "http://localhost:631/"]
 
 ENTRYPOINT ["/entrypoint.sh"]

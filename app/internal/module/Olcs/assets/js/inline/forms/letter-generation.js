@@ -248,11 +248,66 @@ OLCS.ready(function () {
     window.location.reload();
   });
 
+  /**
+   * "Prepare to send" is only on this step, and the send form replaces it in the modal. If the
+   * letter is changed after that, it has to be prepared again before it can be sent (VOL-7735).
+   * So we keep a copy of this step and add a link back to it on the send form.
+   */
+  var prepareStep = null;
+
+  function offerPrepareAgain() {
+    if (!prepareStep) {
+      return;
+    }
+
+    var printUrl = prepareStep.printUrl;
+    var $content = $(".modal__content");
+    var $sendForm = $content.find("form").filter(function () {
+      return ($(this).attr("action") || "").indexOf(printUrl) !== -1;
+    });
+    if (!$sendForm.length || $content.find("#prepare-again").length) {
+      return;
+    }
+
+    $content.append(
+      '<p class="govuk-body">If you change the letter after this, ' +
+        '<a href="#" id="prepare-again" class="govuk-link">prepare it again</a> ' +
+        "before you send it.</p>",
+    );
+  }
+
+  // the send form is redrawn each time it's submitted, so add the link again on every render
+  if (typeof OLCS !== "undefined" && OLCS.eventEmitter) {
+    OLCS.eventEmitter.on("render", offerPrepareAgain);
+    OLCS.eventEmitter.on("hide:modal", function () {
+      prepareStep = null;
+    });
+  }
+
+  $("body").on("click", "#prepare-again", function (e) {
+    e.preventDefault();
+    if (!prepareStep) {
+      return;
+    }
+
+    var step = prepareStep;
+    prepareStep = null;
+    OLCS.modal.updateBody(step.body);
+    $(".modal__title").text(step.title);
+  });
+
   // Prepare to send button - converts letter to PDF and loads send modal
   $("body").on("click", "#prepare-to-send-btn", function (e) {
     e.preventDefault();
     var $btn = $(this);
     $("#prepare-to-send-error").hide().text("");
+
+    // copy this step before the button changes, so we can come back to it
+    var $step = $btn.closest(".modal__content");
+    var step = $step.length
+      ? { body: $step.html(), title: $(".modal__title").text() }
+      : null;
+
     $btn.prop("disabled", true).text("Preparing...");
 
     // Get letterInstanceId from the preview link (set during generateAction success)
@@ -292,6 +347,10 @@ OLCS.ready(function () {
               OLCS.modal &&
               OLCS.modal.updateBody
             ) {
+              if (step) {
+                step.printUrl = response.printUrl;
+                prepareStep = step;
+              }
               OLCS.modal.updateBody(html);
               $(".modal__title").text("Send letter");
             }
