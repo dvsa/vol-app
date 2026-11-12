@@ -66,9 +66,9 @@ class LetterInstanceComposer
      * Two issues frequently link the same to-do; without this the operator is told to do the same
      * thing twice (VOL-7280). Issues can also link different versions of the same to-do, so this
      * de-dupes per to-do rather than per version and always renders the to-do's current version
-     * (VOL-7408). Each unique to-do attaches to the FIRST issue in display order that brought it,
-     * which gives the renderer "appears under the first issue type it relates to" without the
-     * renderer needing to know anything about it.
+     * (VOL-7408). Each unique to-do attaches to the FIRST issue in letter order that brought it
+     * (LetterInstance::getIssuesInLetterOrder). Where it is drawn is decided at render time by
+     * LetterInstance::getPlacementIssue (VOL-7737).
      */
     public function composeTodos(LetterInstance $letterInstance): void
     {
@@ -90,6 +90,13 @@ class LetterInstanceComposer
     public function applyIssueChange(LetterInstance $letterInstance, IssueChangePlan $plan): array
     {
         foreach ($plan->removedIssues as $removedIssue) {
+            // an Other issue's own to-dos go with it (VOL-7735)
+            foreach ($removedIssue->getLetterInstanceTodos()->toArray() as $instanceTodo) {
+                if ($instanceTodo->isCustom()) {
+                    $removedIssue->removeLetterInstanceTodo($instanceTodo);
+                    $letterInstance->removeLetterInstanceTodo($instanceTodo);
+                }
+            }
             $letterInstance->removeLetterInstanceIssue($removedIssue);
         }
 
@@ -150,7 +157,7 @@ class LetterInstanceComposer
         $moved = [];
         $displayOrder = 0;
 
-        foreach ($this->issuesInDisplayOrder($letterInstance) as $instanceIssue) {
+        foreach ($letterInstance->getIssuesInLetterOrder() as $instanceIssue) {
             foreach ($instanceIssue->getLetterIssueVersion()?->getLetterIssueTodos() ?? [] as $issueTodo) {
                 $todoVersion = $issueTodo->getLetterTodoVersion();
                 if ($todoVersion === null) {
@@ -186,6 +193,12 @@ class LetterInstanceComposer
 
                 $created[] = $instanceTodo;
             }
+
+            // the caseworker's own to-dos on an Other issue follow its library ones, in the
+            // order they were written; reconcile never adds or removes them (VOL-7735)
+            foreach ($instanceIssue->getCustomTodos() as $instanceTodo) {
+                $instanceTodo->setDisplayOrder($displayOrder++);
+            }
         }
 
         foreach ($existingByKey as $key => $instanceTodos) {
@@ -202,20 +215,38 @@ class LetterInstanceComposer
     }
 
     /**
-     * The letter's issues sorted by display order. The collection keeps the order rows were loaded
-     * or added in, which stops being display order as soon as issues are added or renumbered.
+     * Number the letter's to-dos in letter order without adding, dropping or moving any: each
+     * issue's own to-dos in turn, library ones before the caseworker's (VOL-7735).
      *
-     * @return LetterInstanceIssue[]
+     * Unlike reconcileTodos this leaves a draft that is out of step with the library as it is (an
+     * issue's to-dos can change in admin without a new version). Bringing it back into line drops
+     * edits and needs grab values, which is Change issues' job, with its warning.
      */
-    private function issuesInDisplayOrder(LetterInstance $letterInstance): array
+    public function renumberTodos(LetterInstance $letterInstance): void
     {
-        $issues = $letterInstance->getLetterInstanceIssues()->toArray();
-        usort(
-            $issues,
-            static fn(LetterInstanceIssue $a, LetterInstanceIssue $b): int => $a->getDisplayOrder() <=> $b->getDisplayOrder()
-        );
+        $byOrder = static fn (LetterInstanceTodo $a, LetterInstanceTodo $b): int =>
+            [$a->isCustom(), (int) $a->getDisplayOrder()] <=> [$b->isCustom(), (int) $b->getDisplayOrder()];
 
-        return $issues;
+        $displayOrder = 0;
+        $numbered = [];
+        foreach ($letterInstance->getIssuesInLetterOrder() as $instanceIssue) {
+            $instanceTodos = $instanceIssue->getLetterInstanceTodos()->toArray();
+            usort($instanceTodos, $byOrder);
+            foreach ($instanceTodos as $instanceTodo) {
+                $instanceTodo->setDisplayOrder($displayOrder++);
+                $numbered[spl_object_id($instanceTodo)] = true;
+            }
+        }
+
+        // anything not owned by an issue on the letter keeps its place relative to the others, last
+        $rest = array_filter(
+            $letterInstance->getLetterInstanceTodos()->toArray(),
+            static fn (LetterInstanceTodo $instanceTodo): bool => !isset($numbered[spl_object_id($instanceTodo)])
+        );
+        usort($rest, $byOrder);
+        foreach ($rest as $instanceTodo) {
+            $instanceTodo->setDisplayOrder($displayOrder++);
+        }
     }
 
     /**

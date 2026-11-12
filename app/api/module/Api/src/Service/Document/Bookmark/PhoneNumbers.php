@@ -58,6 +58,9 @@ class PhoneNumbers extends DynamicBookmark
         $numbers = [];
         if (isset($this->data['correspondenceCd']['phoneContacts'])) {
             foreach ($this->data['correspondenceCd']['phoneContacts'] as $phoneContact) {
+                if ($phoneContact['phoneContactType']['id'] === PhoneContact::TYPE_SMS) {
+                    continue;
+                }
                 $numbers[] = [
                     'BOOKMARK1' => $phoneContact['phoneContactType']['description'],
                     'BOOKMARK2' => $phoneContact['phoneNumber'],

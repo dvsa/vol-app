@@ -10,7 +10,27 @@
  * @var array $instanceSectionsList List of actual letter instance sections
  * @var array $todosList List of editable to-dos
  */
+
+// a sent letter can't be changed (VOL-7735), so it has nothing to pick for editing
+$open = !empty($letterInstance['isOpenForChanges']);
 ?>
+
+<?php if (!$open): ?>
+<div class="small-module">
+    <p class="small-module__details">
+        <?= empty($letterInstance['isSent'])
+            ? 'This letter can no longer be changed.'
+            : 'This letter has been sent, so it can no longer be changed.' ?>
+    </p>
+</div>
+<?php else: ?>
+<?php if (!empty($sectionsList) || !empty($instanceSectionsList) || !empty($appendicesList) || !empty($todosList)): ?>
+<p class="govuk-body govuk-!-margin-bottom-2">
+    <?php // Ticks every section below in one go (VOL-7736); letter-preview.js flips the label. ?>
+    <button type="button" id="select-all-sections" class="govuk-link"
+            style="background: none; border: 0; padding: 0; cursor: pointer; font: inherit;">Select all</button>
+</p>
+<?php endif; ?>
 
 <div class="small-module">
     <h4 class="title">Edit Issue Sections:</h4>
@@ -105,11 +125,12 @@
     </div>
 </div>
 <?php endif; ?>
+<?php endif; ?>
 
 <div class="small-module">
     <h4 class="title">Actions</h4>
     <p class="small-module__details">
-        <?php if (in_array($letterInstance['status']['id'] ?? null, ['ltr_sts_draft', 'ltr_sts_ready'], true)): ?>
+        <?php if ($open): ?>
         <button
             type="button"
             id="change-issues-btn"
@@ -120,7 +141,6 @@
         >
             Change issues
         </button>
-        <?php endif; ?>
         <button
             type="button"
             id="continue-to-editor"
@@ -131,6 +151,7 @@
         >
             Continue to editor
         </button>
+        <?php endif; ?>
         <button
             type="button"
             id="save-letter-exit"

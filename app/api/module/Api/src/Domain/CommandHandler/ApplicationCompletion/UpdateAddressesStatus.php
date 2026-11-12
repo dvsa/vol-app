@@ -3,11 +3,14 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\ApplicationCompletion;
 
 use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
+use Psr\Container\ContainerInterface;
 
 /**
  * Update Addresses Status
@@ -22,6 +25,8 @@ final class UpdateAddressesStatus extends AbstractUpdateStatus implements AuthAw
 
     protected $section = 'Addresses';
 
+    private SmsNumberCapture $smsNumberCapture;
+
     #[\Override]
     protected function isSectionValid(Application $application)
     {
@@ -34,9 +39,16 @@ final class UpdateAddressesStatus extends AbstractUpdateStatus implements AuthAw
             return false;
         }
 
-        // Must have at least 1 phone contact
-        $phoneContacts = $corAdd->getPhoneContacts();
+        // Must have at least 1 phone contact, and the SMS number does not count as one
+        $phoneContacts = $corAdd->getPhoneContacts()->filter(
+            static fn (PhoneContact $pc): bool => $pc->getPhoneContactType()?->getId() !== PhoneContact::TYPE_SMS
+        );
         if ($phoneContacts->count() < 1 && $this->isExternalUser()) {
+            return false;
+        }
+
+        // Selfserve users must give an SMS number once capture is switched on
+        if ($this->smsNumberCapture->isMissing($licence, $this->isExternalUser())) {
             return false;
         }
 
@@ -55,5 +67,13 @@ final class UpdateAddressesStatus extends AbstractUpdateStatus implements AuthAw
         }
 
         return true;
+    }
+
+    #[\Override]
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    {
+        $this->smsNumberCapture = $container->get(SmsNumberCapture::class);
+
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

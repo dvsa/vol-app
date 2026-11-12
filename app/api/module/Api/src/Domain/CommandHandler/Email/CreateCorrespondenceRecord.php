@@ -66,6 +66,14 @@ final class CreateCorrespondenceRecord extends AbstractCommandHandler implements
                 'email.licensing-information.' . $command->getType()  . '.subject'
             );
             $message->setTranslateToWelsh($user->getTranslateToWelsh());
+            $message->setNotifyContext([
+                'organisation' => $licence->getOrganisation()->getId(),
+                'licence' => $licence->getId(),
+                'document' => $command->getDocument(),
+                'correspondenceInbox' => $record->getId(),
+                'user' => $user->getId(),
+                'templateName' => 'licensing-information-' . $command->getType(),
+            ]);
 
             $this->sendEmailTemplate(
                 $message,

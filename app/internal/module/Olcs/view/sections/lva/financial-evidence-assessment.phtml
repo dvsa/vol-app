@@ -19,15 +19,27 @@ $warningText = $hasDocuments
 
 <div class="govuk-tabs" data-module="govuk-tabs">
   <ul class="govuk-tabs__list">
+    <?php
+    // govuk-frontend switches tabs in the browser by moving the --selected class, so every header
+    // renders both its selected and unselected state; the internal theme's
+    // views/internal/financial-evidence-assessment styles show the right one.
+    ?>
     <?php foreach ($tabs as $index => $tab) : ?>
-      <li class="govuk-tabs__list-item<?php echo $index === 0 ? ' govuk-tabs__list-item--selected' : ''; ?>">
+      <?php
+      $itemClasses = 'govuk-tabs__list-item fea-tab';
+      $itemClasses .= $index === 0 ? ' govuk-tabs__list-item--selected' : '';
+      $itemClasses .= $tab['unselectedLabel'] !== null ? ' fea-tab--has-unselected-label' : '';
+      ?>
+      <li class="<?php echo $this->escapeHtmlAttr($itemClasses); ?>">
         <a class="govuk-tabs__tab" href="#<?php echo $this->escapeHtmlAttr($tab['id']); ?>">
-          <?php echo $this->escapeHtml($tab['label']); ?>
-          <?php if ($index > 0) : ?>
-            <strong class="govuk-tag govuk-!-margin-left-2 <?php echo $this->escapeHtmlAttr($tab['statusTag']); ?>">
-              <?php echo $this->escapeHtml($tab['status']); ?>
-            </strong>
+          <span class="fea-tab__label"><?php echo $this->escapeHtml($tab['label']); ?></span>
+          <?php if ($tab['unselectedLabel'] !== null) : ?>
+            <span class="fea-tab__label--unselected"><?php echo $this->escapeHtml($tab['unselectedLabel']); ?></span>
           <?php endif; ?>
+          <?php // Hidden on the selected tab: its panel already shows the status next to the filename. ?>
+          <strong class="govuk-tag govuk-!-margin-left-2 fea-tab__status <?php echo $this->escapeHtmlAttr($tab['statusTag']); ?>">
+            <?php echo $this->escapeHtml($tab['status']); ?>
+          </strong>
         </a>
       </li>
     <?php endforeach; ?>

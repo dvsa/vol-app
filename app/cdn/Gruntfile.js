@@ -37,8 +37,7 @@ var sass = require("sass");
     var scriptPaths = function (theme) {
       var files = [
         "node_modules/jquery/dist/jquery.min.js",
-        "node_modules/chosen-npm/public/chosen.jquery.min.js",
-        "assets/_js/vendor/jquery.details.min.js",
+        "assets/_js/vendor/chosen.jquery.js",
         "assets/_js/vendor/URI.min.js",
         "node_modules/@editorjs/editorjs/dist/editorjs.umd.js",
         "node_modules/@editorjs/header/dist/header.umd.js",

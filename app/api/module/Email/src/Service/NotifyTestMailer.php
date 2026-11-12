@@ -16,7 +16,7 @@ use Symfony\Component\Mime\Email as SymfonyEmail;
  * A dedicated Symfony Mailer instance, separate from the global Email service mailer, used
  * exclusively by the admin "Send test via Notify" action (VOL-7238).
  *
- * Wired from `config['email']['notify_test']['dsn']`. When that DSN is empty or unset (e.g.
+ * Wired from `notify.email.test_dsn`. When that DSN is empty or unset (e.g.
  * production after cutover, or any env that doesn't want the admin test button), the service
  * is "disabled": `isEnabled()` returns false and `send()` throws. The admin UI consults
  * `isEnabled()` to decide whether to render the button.
@@ -64,7 +64,7 @@ class NotifyTestMailer
     {
         if ($this->mailer === null) {
             throw new \RuntimeException(
-                'NotifyTestMailer is not configured. Set config[email][notify_test][dsn] to enable test sends.'
+                'NotifyTestMailer is not configured. Set notify.email.test_dsn to enable test sends.'
             );
         }
 

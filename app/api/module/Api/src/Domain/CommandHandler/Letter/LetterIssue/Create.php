@@ -41,6 +41,7 @@ final class Create extends AbstractCommandHandler
         $letterIssue->setMinLength($command->getMinLength());
         $letterIssue->setMaxLength($command->getMaxLength());
         $letterIssue->setRequiresInput($command->getRequiresInput());
+        $letterIssue->setIsOther($command->getIsOther());
         $letterIssue->setIsNi($command->getIsNi());
 
         // Set goodsOrPsv only if provided

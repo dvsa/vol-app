@@ -7,6 +7,7 @@ echo "Starting PrintPit virtual print server..."
 addgroup -S lpadmin 2>/dev/null || true
 
 # Create admin user if specified
+CUPS_ADMIN_PASSWORD="${CUPS_ADMIN_PASSWORD-admin}"
 if [ -n "$CUPS_ADMIN_USER" ] && [ -n "$CUPS_ADMIN_PASSWORD" ]; then
     echo "Creating CUPS admin user: $CUPS_ADMIN_USER"
     adduser -S -G lpadmin -h /var/spool/cups -s /bin/false "$CUPS_ADMIN_USER" 2>/dev/null || true

@@ -63,6 +63,12 @@ trait EmailAwareTrait
     public function sendEmailTemplate(Message $message, $template, array $variables = [], $layout = 'default')
     {
         $this->getTemplateRendererService()->renderBody($message, $template, $variables, $layout);
+
+        $name = is_array($template) ? ($template[0] ?? null) : $template;
+        $context = $message->getNotifyContext();
+        if (is_string($name) && !isset($context['templateName'])) {
+            $message->setNotifyContext($context + ['templateName' => $name]);
+        }
         return $this->sendEmail($message);
     }
 

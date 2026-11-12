@@ -4,7 +4,7 @@
 # something which was not a row value got escaped. Regenerate deliberately, never to
 # make a red build green.
 #
-# 150 rendered, 0 could not be rendered by the probe.
+# 151 rendered, 0 could not be rendered by the probe.
 #
 c697a638a08d93bf6f818dceac9a6869da87559bea9a599c0a6ff8360715a135  Bus/conditions.table.php
 e94fbf874af15d408aebf9c9b66dea031419c32e89a227f746151bcc79ef26d9  Bus/registration-history.table.php
@@ -77,6 +77,7 @@ d4f596396d584be323374cd9d87ff8633ce0d074aeb36af7bb8ade6035093e91  admin-printers
 7a73096aa51aadc1e03b2d64514783a827c8513ea21ba7d7a000394bc75a2134  admin-publication.table.php
 c40f263a922b26cfe990279e89594d44e00f024d1a08c0f56f87f14af2d042e1  admin-published-publication.table.php
 d9e833b6497c877abaec47d11f79bca8ad18416c3868006541eab40edd125a6e  admin-replacements.table.php
+afce1237f4e443fdf4895f824271f420e8f235ced465abbb2331febd5f77291a  admin-sms-templates.table.php
 de5972053ffc9b4727aa38f99e13ce1f30263875f296824797054d62d6ecf516  admin-system-info-message.table.php
 a31b1af62e84eca91b88b13ca30b215fef024ab27627ced96f155059e44bad2f  admin-system-parameters.table.php
 29c268732d52c8e16520059d5011f68e36e7ef47a2f08cc5663b2efbf921584a  admin-teams.table.php

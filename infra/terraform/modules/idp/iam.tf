@@ -16,6 +16,7 @@ resource "aws_iam_role" "classify_document_lambda" {
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 }
 
+#checkov:skip=CKV_AWS_111: This Lambda policy requires broad Bedrock and S3 permissions to process document inputs and write pipeline results; the access scope is intentionally limited to the IDP workflow and not unrestricted human IAM access.
 data "aws_iam_policy_document" "classify_document_lambda" {
   statement {
     sid = "CloudWatchLogs"
@@ -184,6 +185,7 @@ resource "aws_iam_role" "extraction_sm" {
   assume_role_policy = data.aws_iam_policy_document.sfn_assume_role.json
 }
 
+#checkov:skip=CKV_AWS_111: This Step Functions policy needs broad Bedrock, S3, and log permissions to orchestrate the asynchronous document-processing flow across the AI pipeline.
 data "aws_iam_policy_document" "extraction_sm" {
   # BDA async invocation + status polling.
   # Scoped to * to cover the cross-region inference profile.
@@ -310,6 +312,7 @@ resource "aws_iam_role" "ai_analysis_sm" {
   assume_role_policy = data.aws_iam_policy_document.sfn_assume_role.json
 }
 
+#checkov:skip=CKV_AWS_111: This Step Functions policy needs broad Bedrock, S3, and event access to perform the AI analysis workflow end-to-end for document processing.
 data "aws_iam_policy_document" "ai_analysis_sm" {
   # Invoke the extract-s3-json-field Lambda.
   statement {
@@ -420,6 +423,7 @@ resource "aws_iam_role" "analyse_financial_document_sm" {
   assume_role_policy = data.aws_iam_policy_document.sfn_assume_role.json
 }
 
+#checkov:skip=CKV_AWS_111: This orchestrator policy needs broad Step Functions, log, and EventBridge permissions to manage the end-to-end document-processing workflow across sub-executions.
 data "aws_iam_policy_document" "analyse_financial_document_sm" {
   # Start sub-SM executions synchronously (.sync:2 requires StartExecution +
   # DescribeExecution + StopExecution on the sub-SM).

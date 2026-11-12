@@ -14,6 +14,7 @@ use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension;
 use League\CommonMark\MarkdownConverter;
 use Psr\Container\ContainerInterface;
+use Throwable;
 
 /**
  * Update template source
@@ -28,6 +29,9 @@ class UpdateTemplateSource extends AbstractCommandHandler
 
     /** @var TwigRenderer */
     private $twigRenderer;
+
+    /** md goes to Notify without HTML escaping, so it is checked that way */
+    private TwigRenderer $plainTextTwigRenderer;
 
     private ?MarkdownConverter $markdownValidator = null;
 
@@ -46,12 +50,22 @@ class UpdateTemplateSource extends AbstractCommandHandler
         $source = $command->getSource();
 
         $isMarkdown = $template->getFormat() === self::FORMAT_MARKDOWN;
+        $renderer = $isMarkdown ? $this->plainTextTwigRenderer : $this->twigRenderer;
 
         $testDatasets = $template->getDecodedTestData();
+        if (!is_array($testDatasets)) {
+            throw new ValidationException(['Template test data is not valid JSON']);
+        }
         foreach ($testDatasets as $datasetName => $datasetValues) {
+            // Test data must be {"<set name>": {<variables>}}, not a flat list of variables.
+            if (!is_array($datasetValues)) {
+                throw new ValidationException(
+                    [sprintf('Template test data set %s is not a set of variables', $datasetName)]
+                );
+            }
             try {
-                $rendered = $this->twigRenderer->renderString($source, $datasetValues);
-            } catch (Exception $e) {
+                $rendered = $renderer->renderString($source, $datasetValues);
+            } catch (Throwable $e) {
                 throw new ValidationException(
                     [sprintf(
                         'Unable to render template content with dataset %s: %s',
@@ -79,6 +93,7 @@ class UpdateTemplateSource extends AbstractCommandHandler
         $fullContainer = $container;
 
         $this->twigRenderer = $container->get('TemplateTwigRenderer');
+        $this->plainTextTwigRenderer = $container->get('TemplatePlainTextTwigRenderer');
         return parent::__invoke($fullContainer, $requestedName, $options);
     }
 

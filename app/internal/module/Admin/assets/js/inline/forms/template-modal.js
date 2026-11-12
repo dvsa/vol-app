@@ -31,7 +31,20 @@ $(function () {
 
   function populatePreview() {
     var previewContent = previewData[$("#dataSetSelect").val()];
-    if ($("#format").val() === "plain") {
+    if (previewContent && typeof previewContent === "object") {
+      // SMS preview: plain text plus how many texts it will use (VOL-7542).
+      var texts = previewContent.fragments === 1 ? " text" : " texts";
+      previewContent =
+        '<pre class="wordwrap">' +
+        $("<div>").text(previewContent.text).html() +
+        "</pre>" +
+        '<p class="govuk-body">' +
+        previewContent.characters +
+        " characters, " +
+        previewContent.fragments +
+        texts +
+        "</p>";
+    } else if ($("#format").val() === "plain") {
       previewContent = '<pre class="wordwrap">' + previewContent + "</pre>";
     }
 

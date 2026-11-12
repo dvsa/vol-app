@@ -18,12 +18,29 @@ use Dvsa\Olcs\Api\Entity\System\RefData as RefDataEntity;
 use Dvsa\Olcs\Transfer\Query\Application\Declaration as Qry;
 use Dvsa\Olcs\Api\Service\FeesHelperService;
 use Dvsa\Olcs\Api\Service\Lva\SectionAccessService;
+use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
+use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
+use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
+use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
+use Dvsa\Olcs\Api\Entity\User\Permission;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
+use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
+use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
 final class DeclarationTest extends QueryHandlerTestCase
 {
+    private m\MockInterface $toggleService;
+
+    private bool $isExternal = false;
+
     public function setUp(): void
     {
+        $this->toggleService = m::mock(ToggleService::class);
+        $this->toggleService->shouldReceive('isEnabled')->andReturn(false)->byDefault();
+
         $this->sut = new Declaration();
         $this->mockRepo('Application', ApplicationRepo::class);
         $this->mockRepo('SystemParameter', SystemParameterRepo::class);
@@ -33,7 +50,11 @@ final class DeclarationTest extends QueryHandlerTestCase
             'FeesHelperService' => m::mock(FeesHelperService::class),
             'SectionAccessService' => m::mock(SectionAccessService::class),
             'Review\ApplicationUndertakings' => m::mock(ApplicationUndertakingsReviewService::class),
+            SmsNumberCapture::class => new SmsNumberCapture($this->toggleService),
+            AuthorizationService::class => m::mock(AuthorizationService::class),
         ];
+        $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
+            ->andReturnUsing(fn ($permission) => $permission === Permission::SELFSERVE_USER && $this->isExternal);
 
         parent::setUp();
     }
@@ -563,5 +584,43 @@ final class DeclarationTest extends QueryHandlerTestCase
         ];
 
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
+    }
+
+    public function testStaleAddressesCompletionShownIncompleteSoSubmitIsNotOffered(): void
+    {
+        // Addresses completed before sms_number_capture went on, no SMS number yet
+        $this->isExternal = true;
+        $this->toggleService->shouldReceive('isEnabled')->with(FeatureToggle::SMS_NUMBER_CAPTURE)->andReturn(true);
+
+        $query = Qry::create(['id' => 7]);
+
+        $correspondenceCd = m::mock(ContactDetails::class);
+        $correspondenceCd->shouldReceive('getPhoneContacts')->andReturn(new \Doctrine\Common\Collections\ArrayCollection());
+        $licence = m::mock(Licence::class);
+        $licence->shouldReceive('getCorrespondenceCd')->andReturn($correspondenceCd);
+        $completion = m::mock(ApplicationCompletion::class);
+        $completion->shouldReceive('getAddressesStatus')->andReturn(ApplicationCompletion::STATUS_COMPLETE);
+
+        $application = m::mock(ApplicationEntity::class)->shouldIgnoreMissing();
+        $application->shouldReceive('isVariation')->andReturn(false);
+        $application->shouldReceive('getStatus')
+            ->andReturn(new RefDataEntity(ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED));
+        $application->shouldReceive('getApplicationCompletion')->andReturn($completion);
+        $application->shouldReceive('getLicence')->andReturn($licence);
+        $application->shouldReceive('canHaveInterimLicence')->andReturn(false);
+        $application->shouldReceive('serialize')->andReturn([
+            'applicationCompletion' => ['addressesStatus' => ApplicationCompletion::STATUS_COMPLETE, 'peopleStatus' => 2],
+        ]);
+
+        $this->repoMap['Application']->shouldReceive('fetchUsingId')->with($query)->andReturn($application);
+        $this->repoMap['SystemParameter']->shouldReceive('fetchValue')->andReturn(false);
+        $this->mockedSmServices['FeesHelperService']->shouldReceive('getTotalOutstandingFeeAmountForApplication')->andReturn(0);
+        $this->mockedSmServices['SectionAccessService']->shouldReceive('getAccessibleSections')->andReturn([]);
+        $this->mockedSmServices['Review\ApplicationUndertakings']->shouldReceive('getMarkup')->andReturn('markup');
+
+        $data = $this->sut->handleQuery($query)->serialize();
+
+        $this->assertSame(ApplicationCompletion::STATUS_INCOMPLETE, $data['applicationCompletion']['addressesStatus']);
+        $this->assertSame(2, $data['applicationCompletion']['peopleStatus']);
     }
 }

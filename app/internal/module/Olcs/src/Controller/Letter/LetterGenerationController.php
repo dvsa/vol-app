@@ -24,11 +24,6 @@ class LetterGenerationController extends AbstractInternalController implements L
     protected ?ViewModel $leftView = null;
 
     /**
-     * Letter statuses whose issues can still be changed (VOL-7734), as UpdateIssues allows
-     */
-    private const array ISSUE_CHANGE_STATUSES = ['ltr_sts_draft', 'ltr_sts_ready'];
-
-    /**
      * Inline scripts for form handling
      */
     protected $inlineScripts = [
@@ -128,6 +123,7 @@ class LetterGenerationController extends AbstractInternalController implements L
             'appendicesData' => $appendicesData,
             'letterChoicesData' => $letterChoicesData,
             'queryParams' => $queryParams,
+            'csrfToken' => $this->csrfToken(),
         ]);
 
         $view->setTemplate('pages/letter/create');
@@ -145,12 +141,13 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function generateAction()
     {
-        $postData = $this->getRequest()->getPost()->toArray();
-        if (empty($postData)) {
-            return $this->jsonError('Method not allowed', 405);
+        $request = $this->getRequest();
+        if (!$request->isPost()) {
+            return $this->formPostRefusal();
         }
 
-        $queryParams = $this->getRequest()->getQuery()->toArray();
+        $postData = $request->getPost()->toArray();
+        $queryParams = $request->getQuery()->toArray();
 
         // Get route parameters and merge with query params (route params take precedence)
         $routeParams = $this->extractRouteParams();
@@ -203,9 +200,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? json_encode($messages) : $messages;
-            return $this->jsonError('Failed to generate letter: ' . $errorMessage);
+            return $this->jsonError($this->refusal('Failed to generate letter', $response));
         }
 
         $result = $response->getResult();
@@ -273,18 +268,7 @@ class LetterGenerationController extends AbstractInternalController implements L
 
         // Build sections list for sidebar
         // NOTE: despite the name, $sectionsList contains ISSUES (kept for backwards compatibility).
-        $sectionsList = [];
-        foreach ($result['letterInstanceIssues'] ?? [] as $issue) {
-            $sectionsList[] = [
-                'id' => $issue['id'],
-                'name' => $issue['letterIssueVersion']['heading'] ?? 'Issue',
-                'type' => 'issue',
-                // VOL-7402: flagged content must be edited before the letter can be
-                // sent (enforced server-side in PrepareToSend) — highlight it here.
-                'inputPending' => !empty($issue['letterIssueVersion']['requiresInput'])
-                    && empty($issue['editedContent']),
-            ];
-        }
+        $sectionsList = $this->buildIssuesList($result);
 
         // Add editable appendices to sections list
         $appendicesList = [];
@@ -450,6 +434,12 @@ class LetterGenerationController extends AbstractInternalController implements L
             return $this->redirect()->toRoute('dashboard');
         }
 
+        // every save would be refused once it's sent (VOL-7735), so don't offer the editors.
+        // No flash message: the preview clears them, and its sidebar already says why.
+        if (empty($letterInstance['isOpenForChanges'])) {
+            return $this->redirect()->toUrl('/letter/preview?id=' . urlencode((string) $letterInstanceId));
+        }
+
         $groupedIssues = [];
         foreach ($letterInstance['letterInstanceIssues'] ?? [] as $issue) {
             if (!in_array($issue['id'], $selectedSections)) {
@@ -476,7 +466,11 @@ class LetterGenerationController extends AbstractInternalController implements L
 
             $groupedIssues[$typeId]['issues'][] = [
                 'id' => $issue['id'],
-                'heading' => $issueVersion['heading'] ?? 'Issue',
+                'heading' => $issue['effectiveHeading'] ?? $issueVersion['heading'] ?? 'Issue',
+                // an Other issue's heading is the caseworker's to write (VOL-7735)
+                'isOther' => !empty($issue['isOther']),
+                'editedHeading' => (string) ($issue['editedHeading'] ?? ''),
+                'defaultHeading' => (string) ($issueVersion['heading'] ?? 'Other issue'),
                 'content' => $effectiveContent,
                 'version' => $issue['version'] ?? 1,
             ];
@@ -559,7 +553,6 @@ class LetterGenerationController extends AbstractInternalController implements L
             }
 
             $todoVersion = $todo['letterTodoVersion'] ?? [];
-            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
 
             $effectiveContent = $this->editorContent(
                 $todo['editedDescription'] ?? null,
@@ -567,23 +560,28 @@ class LetterGenerationController extends AbstractInternalController implements L
                 $todoVersion['description'] ?? null
             );
 
-            $name = $todoVersion['name'] ?? null;
-
             $groupedTodos[] = [
                 'id' => $todo['id'],
-                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
+                'name' => $this->todoEditorName($todo),
+                'isCustom' => !empty($todo['isCustom']),
+                'customLabel' => $todo['customLabel'] ?? null,
                 'content' => $effectiveContent,
                 'version' => $todo['version'] ?? 1,
                 'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
+                'placementIssueIds' => $todo['placementIssueIds'] ?? [],
             ];
         }
+
+        // The page follows the letter (VOL-7737): sections around the issues block as they sit
+        // in the letter, each issue followed by its own to-dos.
+        [$groupedIssues, $groupedTodos] = $this->placeTodosUnderIssues($groupedIssues, $groupedTodos);
 
         $view = new ViewModel([
             'letterInstanceId' => $letterInstanceId,
             'letterInstance' => $letterInstance,
+            'layout' => $this->editLayout($letterInstance['letterInstanceSections'] ?? [], $groupedSections),
             'groupedIssues' => $groupedIssues,
             'groupedAppendices' => $groupedAppendices,
-            'groupedSections' => $groupedSections,
             'groupedTodos' => $groupedTodos,
         ]);
 
@@ -621,8 +619,8 @@ class LetterGenerationController extends AbstractInternalController implements L
             return $response;
         }
 
-        $status = $letterInstance['status']['id'] ?? null;
-        $locked = !in_array($status, self::ISSUE_CHANGE_STATUSES, true);
+        // the letter's own rule, worked out by the API (LetterInstance::isOpenForChanges)
+        $locked = empty($letterInstance['isOpenForChanges']);
 
         $selectedIssueIds = [];
         $accordionData = [];
@@ -661,7 +659,7 @@ class LetterGenerationController extends AbstractInternalController implements L
     {
         $request = $this->getRequest();
         if (!$request->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+            return $this->formPostRefusal();
         }
 
         $letterInstanceId = (int) $request->getPost('letterInstanceId');
@@ -701,6 +699,23 @@ class LetterGenerationController extends AbstractInternalController implements L
             // old to-do id => new, for to-dos carried over to another issue as a new row
             'movedTodoIds' => (object) ($result['flags']['movedTodoIds'] ?? []),
         ]);
+    }
+
+    /**
+     * The answer to a request that should have been a form post and isn't one.
+     *
+     * Common\Module turns a post without a valid "security" token into a GET and marks the
+     * response. The usual cause is a form left open longer than its token lasts. Each form gets a
+     * new token when it's opened, so the caseworker is told to open it again. Anything that isn't
+     * marked was never a form post.
+     */
+    private function formPostRefusal(): Response
+    {
+        if ($this->getResponse()->getHeaders()->has(\Common\Module::CSRF_ERROR_HEADER)) {
+            return $this->jsonError('This form has expired. Close it and open it again.', 403);
+        }
+
+        return $this->jsonError('Method not allowed', 405);
     }
 
     /**
@@ -763,14 +778,25 @@ class LetterGenerationController extends AbstractInternalController implements L
             $missing = [
                 'id' => $issueId,
                 'issueKey' => '',
-                'currentVersion' => ['heading' => $version['heading'] ?? 'Issue'],
+                'currentVersion' => ['heading' => $version['heading'] ?? 'Issue', 'isOther' => !empty($version['isOther'])],
             ];
             $type = $version['letterIssueType'] ?? ['id' => 0, 'name' => 'Other issues'];
 
             $placed = false;
             foreach ($accordionData as $index => $section) {
                 if ((int) ($section['issueType']['id'] ?? -1) === (int) ($type['id'] ?? 0)) {
-                    $accordionData[$index]['issues'][] = $missing;
+                    // before the type's Other issue, which stays last (VOL-7735): the letter is
+                    // numbered in the order shown
+                    $at = count($section['issues']);
+                    if (!$missing['currentVersion']['isOther']) {
+                        foreach ($section['issues'] as $position => $offeredIssue) {
+                            if (!empty($offeredIssue['currentVersion']['isOther'])) {
+                                $at = $position;
+                                break;
+                            }
+                        }
+                    }
+                    array_splice($accordionData[$index]['issues'], $at, 0, [$missing]);
                     $placed = true;
                     break;
                 }
@@ -793,30 +819,33 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function saveIssueContentAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
 
         if (empty($body['issueId']) || !isset($body['editedContent']) || empty($body['version'])) {
             return $this->jsonError('Missing required fields: issueId, editedContent, version');
         }
 
-        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent::create([
+        $data = [
             'id' => (int) $body['issueId'],
             'editedContent' => is_string($body['editedContent'])
                 ? $body['editedContent']
                 : json_encode($body['editedContent']),
             'version' => (int) $body['version'],
-        ]);
+        ];
+        // an Other issue's heading travels with its body (VOL-7735)
+        if (array_key_exists('editedHeading', $body)) {
+            $data['editedHeading'] = (string) $body['editedHeading'];
+        }
+
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent::create($data);
 
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
-            return $this->jsonError('Failed to save: ' . $errorMessage);
+            return $this->jsonError($this->refusal('Failed to save', $response));
         }
 
         $result = $response->getResult();
@@ -837,11 +866,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function saveAppendixContentAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
 
         if (empty($body['appendixId']) || !isset($body['editedContent']) || empty($body['version'])) {
             return $this->jsonError('Missing required fields: appendixId, editedContent, version');
@@ -858,9 +886,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
-            return $this->jsonError('Failed to save: ' . $errorMessage);
+            return $this->jsonError($this->refusal('Failed to save', $response));
         }
 
         $result = $response->getResult();
@@ -873,12 +899,76 @@ class LetterGenerationController extends AbstractInternalController implements L
     }
 
     /**
-     * Save section content action - AJAX endpoint
+     * Add an empty caseworker-written to-do to an Other issue - AJAX endpoint (VOL-7735)
      *
-     * Accepts POST with JSON body: { sectionId, editedContent, version }
+     * Accepts POST with JSON body: { issueId }; returns { todoId }
      *
      * @return Response
      */
+    public function addCustomTodoAction()
+    {
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
+        }
+        if (empty($body['issueId'])) {
+            return $this->jsonError('Missing required field: issueId');
+        }
+
+        $response = $this->handleCommand(\Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\CreateCustom::create([
+            'letterInstanceIssue' => (int) $body['issueId'],
+        ]));
+
+        if (!$response->isOk()) {
+            return $this->jsonError($this->refusal('Failed to add the to-do', $response));
+        }
+
+        return $this->jsonSuccess(['todoId' => (int) ($response->getResult()['id']['letterInstanceTodo'] ?? 0)]);
+    }
+
+    /**
+     * Delete a caseworker-written to-do - AJAX endpoint (VOL-7735)
+     *
+     * Accepts POST with JSON body: { todoId }
+     *
+     * @return Response
+     */
+    public function deleteCustomTodoAction()
+    {
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
+        }
+        if (empty($body['todoId'])) {
+            return $this->jsonError('Missing required field: todoId');
+        }
+
+        $response = $this->handleCommand(\Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\DeleteCustom::create([
+            'id' => (int) $body['todoId'],
+        ]));
+
+        if (!$response->isOk()) {
+            return $this->jsonError($this->refusal('Failed to delete the to-do', $response));
+        }
+
+        return $this->jsonSuccess(['todoId' => (int) $body['todoId']]);
+    }
+
+    /**
+     * What to tell the caseworker when a command is refused: what failed, then the reasons if any
+     * came back. Validation messages can be nested by field, so they are flattened first.
+     */
+    private function refusal(string $whatFailed, \Common\Service\Cqrs\Response $response): string
+    {
+        $messages = (array) ($response->getResult()['messages'] ?? []);
+        $reasons = [];
+        array_walk_recursive($messages, static function ($message) use (&$reasons): void {
+            $reasons[] = (string) $message;
+        });
+
+        return $reasons === [] ? $whatFailed : $whatFailed . ': ' . implode(', ', $reasons);
+    }
+
     /**
      * Save a caseworker's edit to one to-do's wording.
      *
@@ -888,11 +978,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function saveTodoContentAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
 
         if (empty($body['todoId']) || !isset($body['editedDescription']) || empty($body['version'])) {
             return $this->jsonError('Missing required fields: todoId, editedDescription, version');
@@ -909,9 +998,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
-            return $this->jsonError('Failed to save: ' . $errorMessage);
+            return $this->jsonError($this->refusal('Failed to save', $response));
         }
 
         $result = $response->getResult();
@@ -923,13 +1010,19 @@ class LetterGenerationController extends AbstractInternalController implements L
         ]);
     }
 
+    /**
+     * Save section content action - AJAX endpoint
+     *
+     * Accepts POST with JSON body: { sectionId, editedContent, version }
+     *
+     * @return Response
+     */
     public function saveSectionContentAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
 
         if (empty($body['sectionId']) || !isset($body['editedContent']) || empty($body['version'])) {
             return $this->jsonError('Missing required fields: sectionId, editedContent, version');
@@ -946,9 +1039,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
-            return $this->jsonError('Failed to save: ' . $errorMessage);
+            return $this->jsonError($this->refusal('Failed to save', $response));
         }
 
         $result = $response->getResult();
@@ -970,11 +1061,10 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function prepareToSendAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+        $body = $this->jsonPostBody();
+        if ($body instanceof Response) {
+            return $body;
         }
-
-        $body = json_decode($this->getRequest()->getContent(), true);
 
         if (empty($body['letterInstanceId']) || empty($body['docTemplate'])) {
             return $this->jsonError('Missing required fields: letterInstanceId, docTemplate');
@@ -1035,6 +1125,88 @@ class LetterGenerationController extends AbstractInternalController implements L
         }
 
         return json_encode(['blocks' => [], 'version' => '2.28.2']);
+    }
+
+    /**
+     * Put each to-do under the first issue it can go under that is on the edit page
+     * (placementIssueIds comes from the API, preferred first). To-dos with none of their issues
+     * on the page are returned separately, to be listed after the issues.
+     *
+     * @param array<int|string, array{issues: list<array<string, mixed>>}> $groupedIssues
+     * @param list<array<string, mixed>> $todos
+     * @return array{0: array<int|string, array<string, mixed>>, 1: list<array<string, mixed>>}
+     */
+    protected function placeTodosUnderIssues(array $groupedIssues, array $todos): array
+    {
+        $issueSlots = [];
+        foreach ($groupedIssues as $typeId => $group) {
+            foreach ($group['issues'] as $index => $issue) {
+                $groupedIssues[$typeId]['issues'][$index]['todos'] = [];
+                $issueSlots[(int) $issue['id']] = [$typeId, $index];
+            }
+        }
+
+        $unplaced = [];
+        foreach ($todos as $todo) {
+            $slot = null;
+            foreach ($todo['placementIssueIds'] ?? [] as $issueId) {
+                if (isset($issueSlots[(int) $issueId])) {
+                    $slot = $issueSlots[(int) $issueId];
+                    break;
+                }
+            }
+
+            if ($slot === null) {
+                // listed away from its issue, so a custom to-do keeps the issue's name (VOL-7735)
+                if (!empty($todo['isCustom']) && !empty($todo['customLabel'])) {
+                    $todo['name'] = $todo['customLabel'];
+                }
+                $unplaced[] = $todo;
+                continue;
+            }
+
+            [$typeId, $index] = $slot;
+            $groupedIssues[$typeId]['issues'][$index]['todos'][] = $todo;
+        }
+
+        return [$groupedIssues, $unplaced];
+    }
+
+    /**
+     * The order of the edit page, matching the letter: the chosen sections in letter order, with
+     * the issues block where the letter's __ISSUES__ section sits, or after the sections when the
+     * letter has none (as the letter itself does).
+     *
+     * @param list<array<string, mixed>> $instanceSections the letter's sections, in letter order
+     * @param list<array<string, mixed>> $editableSections the chosen sections, each with an id
+     * @return list<array{section: array<string, mixed>}|array{issues: true}>
+     */
+    protected function editLayout(array $instanceSections, array $editableSections): array
+    {
+        $byId = [];
+        foreach ($editableSections as $section) {
+            $byId[$section['id']] = $section;
+        }
+
+        $layout = [];
+        $issuesPlaced = false;
+        foreach ($instanceSections as $instanceSection) {
+            $sectionVersion = $instanceSection['letterSectionVersion'] ?? [];
+            $letterSection = $sectionVersion['letterSectionVariant']['letterSection'] ?? ($sectionVersion['letterSection'] ?? []);
+
+            if (($letterSection['sectionKey'] ?? null) === '__ISSUES__' && !$issuesPlaced) {
+                $layout[] = ['issues' => true];
+                $issuesPlaced = true;
+            } elseif (isset($byId[$instanceSection['id']])) {
+                $layout[] = ['section' => $byId[$instanceSection['id']]];
+            }
+        }
+
+        if (!$issuesPlaced) {
+            $layout[] = ['issues' => true];
+        }
+
+        return $layout;
     }
 
     /**
@@ -1105,6 +1277,35 @@ class LetterGenerationController extends AbstractInternalController implements L
     }
 
     /**
+     * The JSON body of an AJAX post, or the error response to send instead.
+     *
+     * These endpoints read the raw body, so Common\Module's CSRF check, which only looks at form
+     * posts, never applies to them. Insisting on a JSON content type closes that gap: another site
+     * can't send one without a CORS preflight, and this app doesn't allow cross-site requests.
+     *
+     * @return array<string, mixed>|Response
+     */
+    private function jsonPostBody(): array|Response
+    {
+        $request = $this->getRequest();
+        if (!$request->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $contentType = $request->getHeaders()->get('Content-Type');
+        $mediaType = $contentType instanceof \Laminas\Http\Header\HeaderInterface
+            ? strtolower(trim(explode(';', $contentType->getFieldValue())[0]))
+            : '';
+        if ($mediaType !== 'application/json') {
+            return $this->jsonError('Expected a JSON request', 415);
+        }
+
+        $body = json_decode($request->getContent(), true);
+
+        return is_array($body) ? $body : [];
+    }
+
+    /**
      * Return JSON success response
      *
      * @param array $data Response data
@@ -1148,13 +1349,18 @@ class LetterGenerationController extends AbstractInternalController implements L
             }
         }
 
-        // Build final structure
+        // Build final structure. The Other option goes last in its group (VOL-7735): its key
+        // ("FI-OTHER") sorts before the numbered ones, as "-" comes before the digits.
         $accordionData = [];
         foreach ($issueTypes as $issueType) {
-            $typeId = $issueType['id'];
+            $issues = $issuesByType[$issueType['id']] ?? [];
+            $isOther = static fn(array $issue): bool => !empty($issue['currentVersion']['isOther']);
             $accordionData[] = [
                 'issueType' => $issueType,
-                'issues' => $issuesByType[$typeId] ?? [],
+                'issues' => array_merge(
+                    array_values(array_filter($issues, static fn(array $issue): bool => !$isOther($issue))),
+                    array_values(array_filter($issues, $isOther))
+                ),
             ];
         }
 
@@ -1407,23 +1613,58 @@ class LetterGenerationController extends AbstractInternalController implements L
     {
         $todosList = [];
         foreach ($letterInstanceData['letterInstanceTodos'] ?? [] as $todo) {
-            $todoVersion = $todo['letterTodoVersion'] ?? [];
-            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
-            $name = $todoVersion['name'] ?? null;
-
             $todosList[] = [
                 'id' => $todo['id'] ?? null,
-                // Falls back to the key alone while the name backfill has not run.
-                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
+                // away from its issue a custom to-do carries the issue's name; the API words it (VOL-7735)
+                'name' => (string) ($todo['customLabel'] ?? $this->todoEditorName($todo)),
                 'type' => 'todo',
                 'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
-                // flagged to-dos must be edited before the letter can be sent (PrepareToSend)
-                'inputPending' => !empty($todoVersion['requiresInput'])
-                    && empty($todo['editedDescription']),
+                // must be written before the letter can be sent (PrepareToSend); the API decides
+                'inputPending' => (bool) ($todo['inputPending'] ?? false),
             ];
         }
 
         return $todosList;
+    }
+
+    /**
+     * The issues for the preview sidebar, named as the letter prints them (an Other issue by the
+     * caseworker's heading, VOL-7735) and flagged when they still need input (VOL-7402).
+     *
+     * @param array $letterInstanceData Letter instance query result
+     * @return list<array{id: mixed, name: string, type: string, inputPending: bool}>
+     */
+    protected function buildIssuesList(array $letterInstanceData): array
+    {
+        $issuesList = [];
+        foreach ($letterInstanceData['letterInstanceIssues'] ?? [] as $issue) {
+            $issuesList[] = [
+                'id' => $issue['id'],
+                'name' => (string) ($issue['displayName'] ?? $issue['effectiveHeading'] ?? $issue['letterIssueVersion']['heading'] ?? 'Issue'),
+                'type' => 'issue',
+                'inputPending' => (bool) ($issue['inputPending'] ?? false),
+            ];
+        }
+
+        return $issuesList;
+    }
+
+    /**
+     * A to-do's name on the edit page: a library to-do by its name and key (two can share a
+     * name), a caseworker-written one by its place under its issue (VOL-7735).
+     */
+    protected function todoEditorName(array $todo): string
+    {
+        if (!empty($todo['isCustom'])) {
+            return 'To-do ' . (int) ($todo['customIndex'] ?? 0);
+        }
+
+        $todoVersion = $todo['letterTodoVersion'] ?? [];
+        $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
+        $name = $todoVersion['name'] ?? null;
+
+        // Falls back to the key alone while the name backfill has not run.
+        return $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')');
     }
 
     /**

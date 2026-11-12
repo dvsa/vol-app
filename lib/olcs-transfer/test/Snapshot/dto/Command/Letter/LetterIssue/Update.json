@@ -191,6 +191,24 @@
         },
         "name": "isNi"
       },
+      "isOther": {
+        "class": "Laminas\\InputFilter\\Input",
+        "allowEmpty": true,
+        "filterChain": {
+          "class": "Laminas\\Filter\\FilterChain",
+          "filters": [
+            {
+              "class": "Laminas\\Filter\\StripTags"
+            }
+          ]
+        },
+        "required": false,
+        "validatorChain": {
+          "class": "Laminas\\Validator\\ValidatorChain",
+          "validators": []
+        },
+        "name": "isOther"
+      },
       "issueKey": {
         "class": "Laminas\\InputFilter\\Input",
         "filterChain": {

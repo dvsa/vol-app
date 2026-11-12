@@ -65,6 +65,7 @@ class Queue extends AbstractQueue
     public const TYPE_POST_SCORING_EMAIL = 'que_typ_post_scoring_email';
     public const TYPE_REFUND_INTERIM_FEES = 'que_typ_refund_interim_fees';
     public const TYPE_CREATE_TASK = 'que_typ_create_task';
+    public const TYPE_SMS = 'que_typ_sms';
 
     protected $types = [
         self::TYPE_COMPANIES_HOUSE_COMPARE,
@@ -101,6 +102,7 @@ class Queue extends AbstractQueue
         self::TYPE_REFUND_INTERIM_FEES,
         self::TYPE_PERMITS_POST_SUBMIT,
         self::TYPE_CREATE_TASK,
+        self::TYPE_SMS,
     ];
 
     // Errors

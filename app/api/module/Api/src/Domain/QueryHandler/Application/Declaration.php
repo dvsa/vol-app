@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Entity\System\SystemParameter;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
 use Dvsa\Olcs\Api\Entity\Fee\FeeType;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -34,6 +35,8 @@ class Declaration extends AbstractQueryHandler
     private $feesHelper;
 
     private ApplicationUndertakingsReviewService $reviewService;
+
+    private SmsNumberCapture $smsNumberCapture;
 
     /**
      * Handle query
@@ -62,7 +65,7 @@ class Declaration extends AbstractQueryHandler
         $canHaveInterimLicence = $application->canHaveInterimLicence();
         $interimFeeAmount = $canHaveInterimLicence ? $this->getInterimFeeAmount($application) : null;
 
-        return $this->result(
+        $result = $this->result(
             $application,
             [
                 'licence' => [
@@ -88,6 +91,9 @@ class Declaration extends AbstractQueryHandler
                 'showPeriodOfGraceQuestion' => $application->showPeriodOfGraceQuestion(),
             ]
         );
+
+        // Addresses done before sms_number_capture went on is shown as not done, so Submit is not offered.
+        return $this->smsNumberCapture->markStaleAddressesIncomplete($result, $application, $this->isExternalUser(...));
     }
 
     /**
@@ -165,6 +171,7 @@ class Declaration extends AbstractQueryHandler
         $this->sectionAccessService = $container->get('SectionAccessService');
         $this->feesHelper = $container->get('FeesHelperService');
         $this->reviewService = $container->get('Review\ApplicationUndertakings');
+        $this->smsNumberCapture = $container->get(SmsNumberCapture::class);
         return parent::__invoke($fullContainer, $requestedName, $options);
     }
 }

@@ -28,7 +28,7 @@ final readonly class IssueChangePlan
 
     /**
      * Names of the caseworker's edits that applying this plan would throw away: the headings of
-     * edited issues being removed, then the names of edited or hidden to-dos that go with them.
+     * edited issues being removed, then the names of edited to-dos that go with them.
      *
      * @return list<string>
      */
@@ -38,13 +38,20 @@ final readonly class IssueChangePlan
 
         foreach ($this->removedIssues as $instanceIssue) {
             if ($instanceIssue->hasBeenEdited()) {
-                $names[] = (string) $instanceIssue->getHeading();
+                $names[] = $instanceIssue->getDisplayName();
             }
         }
 
         foreach ($this->lostTodos as $instanceTodo) {
-            $hidden = !(bool) ($instanceTodo->getIsRendered() ?? true);
-            if ($instanceTodo->hasBeenEdited() || $hidden) {
+            if ($instanceTodo->isCustom()) {
+                // listed once something is written in it (VOL-7735)
+                if (!$instanceTodo->isInputPending()) {
+                    $names[] = (string) $instanceTodo->getCustomLabel();
+                }
+                continue;
+            }
+
+            if ($instanceTodo->hasBeenEdited()) {
                 $todoVersion = $instanceTodo->getLetterTodoVersion();
                 $name = trim((string) $todoVersion?->getName());
                 $names[] = $name !== '' ? $name : (string) $todoVersion?->getLetterTodo()?->getTodoKey();

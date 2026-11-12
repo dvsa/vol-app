@@ -23,6 +23,7 @@ locals {
 }
 
 
+#checkov:skip=CKV_AWS_378: Internal service traffic intentionally uses HTTP between private application load balancers and ECS tasks; this is a current design standard and will be revisited as part of a future HTTPS migration.
 resource "aws_lb_target_group" "this" {
   for_each = var.services
 
@@ -44,6 +45,7 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
+#checkov:skip=CKV_AWS_378: Internal service traffic intentionally uses HTTP between private application load balancers and ECS tasks; this is a current design standard and will be revisited as part of a future HTTPS migration.
 resource "aws_lb_target_group" "internal-pub" {
   count = contains(["prep", "prod"], var.environment) ? 1 : 0
 
@@ -193,6 +195,7 @@ module "ecs_cluster" {
   ]
 }
 
+#checkov:skip=CKV_AWS_97: No EFS volumes are configured for these ECS tasks; the check is a known false positive for this upstream ECS service module and should be reviewed if EFS is introduced.
 module "ecs_service" {
   for_each = var.services
 
