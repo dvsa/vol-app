@@ -2,12 +2,14 @@
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Document;
 
+use Doctrine\ORM\EntityNotFoundException;
 use Dvsa\Olcs\Api\Domain\Command as DomainCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterOpenForChangesTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
+use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Api\Service;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -62,9 +64,11 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
         $print = $method === PrintLetterCmd::METHOD_PRINT_AND_POST && $canPrint;
 
         // locked first: an edit that landed since the check above fails this save (the letter's
-        // version has moved on) before anything is queued to go out
-        if (($email || $print) && $letterInstance !== null) {
+        // version has moved on) before anything is queued to go out. Only the first time it goes
+        // out: a resend keeps the date it was first sent and doesn't get a second task.
+        if (($email || $print) && $letterInstance !== null && !$letterInstance->isSent()) {
             $this->markLetterSent($letterInstance);
+            $this->createResponseTask($letterInstance);
         }
 
         if ($email) {
@@ -199,18 +203,77 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
 
     /**
      * A letter from the letter builder is sent once its PDF goes out, which locks it: what's on it
-     * stays what was sent. A resend keeps the date it was first sent.
+     * stays what was sent.
      */
     private function markLetterSent(Entity\Letter\LetterInstance $letterInstance): void
     {
-        if ($letterInstance->isSent()) {
-            return;
-        }
-
         /** @var \Dvsa\Olcs\Api\Domain\Repository\LetterInstance $repo */
         $repo = $this->getRepo('LetterInstance');
         $letterInstance->markAsSent($repo->getRefdataReference(Entity\Letter\LetterInstance::STATUS_SENT));
         $this->saveLetterChange(fn () => $repo->save($letterInstance));
+    }
+
+    /**
+     * A first or final request letter is chased up: the caseworker who wrote it gets a task to
+     * check for the response 14 days after it's sent (VOL-7714). The older template letters get
+     * the same task in CreateLetter, and like theirs it isn't marked urgent.
+     *
+     * The task belongs to an application, so a letter that isn't on one gets none.
+     */
+    private function createResponseTask(Entity\Letter\LetterInstance $letterInstance): void
+    {
+        $application = $letterInstance->getApplication();
+        if ($application === null) {
+            return;
+        }
+
+        $choices = $letterInstance->getSelectedChoiceKeys();
+        if (in_array(Entity\Letter\LetterChoice::KEY_FIRST_REQUEST, $choices, true)) {
+            $subCategory = Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_RESPONSE_TO_FIRST_REQUEST;
+            $description = 'Check response to first letters';
+        } elseif (in_array(Entity\Letter\LetterChoice::KEY_FINAL_REQUEST, $choices, true)) {
+            $subCategory = Entity\System\Category::TASK_SUB_CATEGORY_APPLICATION_RESPONSE_TO_FINAL_REQUEST;
+            $description = 'Check response to final letters';
+        } else {
+            return;
+        }
+
+        // with no writer to give it to, the task is still made and task allocation decides who gets it
+        $writerId = $this->writerIdOf($letterInstance);
+
+        $this->result->merge($this->handleSideEffect(DomainCmd\Task\CreateTask::create([
+            'category' => Entity\System\Category::CATEGORY_APPLICATION,
+            'subCategory' => $subCategory,
+            'description' => $description,
+            'actionDate' => (new DateTime())->add(new \DateInterval('P14D'))->format('Y-m-d'),
+            'assignedToUser' => $writerId,
+            'assignedByUser' => $writerId,
+            'urgent' => 'N',
+            'application' => $application->getId(),
+            'licence' => $application->getLicence()->getId(),
+        ])));
+    }
+
+    /**
+     * The id of the caseworker who wrote the letter, if they can be given a task. Null when there's
+     * no record of them, or their account has been deleted since they wrote it.
+     */
+    private function writerIdOf(Entity\Letter\LetterInstance $letterInstance): ?int
+    {
+        $writer = $letterInstance->getCreatedBy();
+        if ($writer === null) {
+            return null;
+        }
+
+        try {
+            // the task goes to the writer's team as well. Reading the team loads the user, and a
+            // deleted user can't be loaded: all that's left of them here is the id
+            $writer->getTeam();
+        } catch (EntityNotFoundException) {
+            return null;
+        }
+
+        return $writer->getId();
     }
 
     #[\Override]

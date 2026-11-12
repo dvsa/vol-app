@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Domain\Command as DomainCmd;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Document\PrintLetter;
 use Dvsa\Olcs\Api\Domain\Repository;
+use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Api\Service as ApiSrv;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
@@ -34,6 +35,8 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
     private $mockPrintSrv;
     /** @var  m\MockInterface */
     private $mockLetterInstanceRepo;
+    /** @var list<class-string> the commands a send set off, other than those a test expects by name */
+    private array $setOff = [];
 
     public function setUp(): void
     {
@@ -283,6 +286,175 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
         $this->assertSame($firstSent, $letter->getSentOn());
     }
 
+    /**
+     * A first or final request letter gets chased: when it's sent, the caseworker who wrote it gets
+     * a task to check for the response in 14 days (VOL-7714), as the older template letters do
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRequestLetters')]
+    public function testSendingAFirstOrFinalRequestLetterCreatesATaskToCheckForTheResponse(
+        string $choiceKey,
+        string $method,
+        int $subCategory,
+        string $description
+    ): void {
+        $letter = $this->requestLetter($choiceKey);
+
+        $this->expectedSideEffect(
+            DomainCmd\Task\CreateTask::class,
+            [
+                'category' => 9,
+                'subCategory' => $subCategory,
+                'description' => $description,
+                'actionDate' => (new DateTime())->add(new \DateInterval('P14D'))->format('Y-m-d'),
+                'assignedToUser' => 291,
+                'assignedByUser' => 291,
+                'urgent' => 'N',
+                'application' => 55,
+                'licence' => 66,
+            ],
+            new Result()
+        );
+
+        $this->dispatch($method, ['email' => true, 'print' => true], $letter);
+
+        // one task and no more: a second would not match the expectation above and land here
+        $this->assertNotContains(DomainCmd\Task\CreateTask::class, $this->setOff);
+    }
+
+    public static function dpRequestLetters(): array
+    {
+        $email = TransferCmd\Document\PrintLetter::METHOD_EMAIL;
+        $post = TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST;
+
+        return [
+            'first request, emailed' => ['first', $email, 22, 'Check response to first letters'],
+            'first request, posted' => ['first', $post, 22, 'Check response to first letters'],
+            'final request, emailed' => ['final', $email, 23, 'Check response to final letters'],
+            'final request, posted' => ['final', $post, 23, 'Check response to final letters'],
+        ];
+    }
+
+    public function testALetterThatIsNotAFirstOrFinalRequestCreatesNoTask(): void
+    {
+        $letter = $this->requestLetter('time-limited-interims');
+
+        $this->dispatch(TransferCmd\Document\PrintLetter::METHOD_EMAIL, ['email' => true, 'print' => true], $letter);
+
+        $this->assertNotContains(DomainCmd\Task\CreateTask::class, $this->setOff);
+    }
+
+    /**
+     * The task is for chasing an application. A letter written from a licence, with no application,
+     * has nothing to put it on (the older template letters refuse to be made without one)
+     */
+    public function testARequestLetterThatIsNotOnAnApplicationCreatesNoTask(): void
+    {
+        $letter = $this->requestLetter('first');
+        $letter->setApplication(null);
+
+        $this->dispatch(TransferCmd\Document\PrintLetter::METHOD_EMAIL, ['email' => true, 'print' => true], $letter);
+
+        $this->assertNotContains(DomainCmd\Task\CreateTask::class, $this->setOff);
+    }
+
+    /**
+     * Sending must never fail for want of a writer: the task is still made, and task allocation
+     * decides who gets it
+     */
+    public function testARequestLetterWithNoRecordedWriterStillGetsItsTask(): void
+    {
+        $letter = $this->requestLetter('final');
+        $letter->setCreatedBy(null);
+
+        $this->expectedSideEffect(
+            DomainCmd\Task\CreateTask::class,
+            ['subCategory' => 23, 'application' => 55, 'assignedToUser' => null, 'assignedByUser' => null],
+            new Result()
+        );
+
+        $this->dispatch(TransferCmd\Document\PrintLetter::METHOD_EMAIL, ['email' => true, 'print' => true], $letter);
+
+        $this->assertNotContains(DomainCmd\Task\CreateTask::class, $this->setOff);
+    }
+
+    /**
+     * The writer's account can be deleted after they write the letter and before someone else
+     * sends it. Only the id of a deleted user can be read, and giving them the task made the send
+     * fail every time. Their letter is treated like one with no writer on record.
+     *
+     * The stand-in fails on the team, which is the read that broke the send: creating a task
+     * looks up the team of the user it's for.
+     */
+    public function testARequestLetterWhoseWriterHasBeenDeletedStillGetsItsTask(): void
+    {
+        $writer = m::mock(Entity\User\User::class);
+        $writer->shouldReceive('getId')->andReturn(291);
+        $writer->shouldReceive('getTeam')->andThrow(
+            \Doctrine\ORM\EntityNotFoundException::fromClassNameAndIdentifier(Entity\User\User::class, ['id' => '291'])
+        );
+        $letter = $this->requestLetter('first');
+        $letter->setCreatedBy($writer);
+
+        $this->expectedSideEffect(
+            DomainCmd\Task\CreateTask::class,
+            ['subCategory' => 22, 'application' => 55, 'assignedToUser' => null, 'assignedByUser' => null],
+            new Result()
+        );
+
+        $this->dispatch(TransferCmd\Document\PrintLetter::METHOD_EMAIL, ['email' => true, 'print' => true], $letter);
+
+        $this->assertNotContains(DomainCmd\Task\CreateTask::class, $this->setOff);
+    }
+
+    public function testResendingARequestLetterDoesNotCreateAnotherTask(): void
+    {
+        $letter = $this->requestLetter('first', Entity\Letter\LetterInstance::STATUS_SENT);
+        $letter->setSentOn(new \DateTime('2026-01-01'));
+
+        $this->dispatch(TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST, ['email' => true, 'print' => true], $letter, false);
+
+        $this->assertNotContains(DomainCmd\Task\CreateTask::class, $this->setOff);
+    }
+
+    public function testARequestLetterThatDoesNotGoOutCreatesNoTask(): void
+    {
+        $letter = $this->requestLetter('first');
+
+        // can't print (Welsh translation needed), so it goes to a translation task instead
+        $this->dispatch(TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST, ['email' => true, 'print' => false], $letter, false);
+
+        $this->assertNotContains(DomainCmd\Task\CreateTask::class, $this->setOff);
+    }
+
+    /**
+     * A prepared letter on application 55 (licence 66), written by user 291, with one choice made
+     */
+    private function requestLetter(
+        string $choiceKey,
+        string $status = Entity\Letter\LetterInstance::STATUS_READY
+    ): Entity\Letter\LetterInstance {
+        $licence = m::mock(Entity\Licence\Licence::class);
+        $licence->shouldReceive('getId')->andReturn(66);
+        $application = m::mock(Entity\Application\Application::class);
+        $application->shouldReceive('getId')->andReturn(55);
+        $application->shouldReceive('getLicence')->andReturn($licence);
+        $writer = new Entity\User\User('pid', Entity\User\User::USER_TYPE_INTERNAL);
+        $writer->setId(291);
+
+        $choice = new Entity\Letter\LetterChoice();
+        $choice->setChoiceKey($choiceKey);
+        $instanceChoice = new Entity\Letter\LetterInstanceChoice();
+        $instanceChoice->setLetterChoice($choice);
+
+        $letter = $this->letterInstance($status);
+        $letter->setDocument($this->mockDocE);
+        $letter->setApplication($application);
+        $letter->setCreatedBy($writer);
+        $letter->addLetterInstanceChoice($instanceChoice);
+
+        return $letter;
+    }
+
     private function letterInstance(string $status): Entity\Letter\LetterInstance
     {
         $letter = new Entity\Letter\LetterInstance();
@@ -299,7 +471,13 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('canPrint')->andReturn($canDo['print'])
             ->shouldReceive('canEmail')->andReturn($canDo['email']);
 
-        $this->commandHandler->shouldReceive('handleCommand')->andReturn(new Result());
+        $this->commandHandler->shouldReceive('handleCommand')->andReturnUsing(
+            function ($sideEffect): Result {
+                $this->setOff[] = $sideEffect::class;
+
+                return new Result();
+            }
+        );
         $this->mockLetterInstanceRepo->shouldReceive('fetchByDocument')->with(self::DOC_ID)->andReturn($letter);
         $this->mockLetterInstanceRepo->shouldReceive('save')->with($letter)->times($expectSave ? 1 : 0);
 
@@ -375,12 +553,13 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
 
     /**
      * PR review: the letter is marked sent before anything goes out, so an edit that lands in
-     * between fails the send (the letter's version has moved on) before an email or print is queued
+     * between fails the send (the letter's version has moved on) before an email or print is
+     * queued or a task is made
      */
     public function testTheLetterIsLockedBeforeAnythingGoesOut(): void
     {
-        $letter = $this->letterInstance(Entity\Letter\LetterInstance::STATUS_READY);
-        $letter->setDocument($this->mockDocE);
+        // a first request letter, so its task counts as something going out too
+        $letter = $this->requestLetter('first');
         $this->mockDocRepo->shouldReceive('fetchUsingId')->andReturn($this->mockDocE);
         $this->mockPrintSrv->shouldReceive('canPrint')->andReturn(true)->shouldReceive('canEmail')->andReturn(true);
         $this->mockLetterInstanceRepo->shouldReceive('fetchByDocument')->with(self::DOC_ID)->andReturn($letter);
