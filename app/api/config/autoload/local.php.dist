@@ -160,6 +160,9 @@ return [
     // A Notify API key (a test or team key, never live) for `govuknotify://default`. Leave null
     // with `govuknotify+mailpit://`, which needs no key.
     'api_key' => null,
+    // Bearer token for GOV.UK Notify delivery status callbacks. Unset means every callback is rejected.
+    // Set it to try the callback locally.
+    'callback_token' => null,
     // No forward proxy locally, the Notify client connects directly.
     'proxy' => null,
     'email' => [

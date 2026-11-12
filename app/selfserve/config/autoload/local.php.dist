@@ -162,10 +162,4 @@ return [
         // browser and the otp-gated download could not be tested. Real environments keep it true.
         'grant_cookie_secure' => false,
     ],
-
-    // Bearer token for GOV.UK Notify delivery status callbacks (POST /notify/callback). Unset means
-    // every callback gets a 401. Set it to try the callback locally.
-    'notify' => [
-        'callback_token' => null,
-    ],
 ];

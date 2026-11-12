@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\HandlerInterface;
 use Dvsa\Olcs\Api\Domain\ValidationHandlerManager;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Transfer\Command\LoggerOmitContentInterface;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -36,6 +37,13 @@ final class CommandHandlerManagerTest extends MockeryTestCase
         $this->sut = new CommandHandlerManager($container, []);
 
         Logger::setLogger(new \Psr\Log\NullLogger());
+    }
+
+    #[\Override]
+    public function tearDown(): void
+    {
+        Logger::setLogger(new \Psr\Log\NullLogger());
+        parent::tearDown();
     }
 
     public function testHandleCommand(): void
@@ -90,6 +98,34 @@ final class CommandHandlerManagerTest extends MockeryTestCase
 
         $mockValidator = m::mock(HandlerInterface::class);
         $mockValidator->shouldReceive('isValid')->with($command)->andReturn(false);
+        $this->vhm->setService($mockService::class, $mockValidator);
+
+        $this->sut->setService($command::class, $mockService);
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testHandleCommandFailedValidatorOmitsContentFromLog(): void
+    {
+        $this->expectException(ForbiddenException::class);
+
+        $logger = m::mock(\Psr\Log\LoggerInterface::class);
+        $logger->shouldReceive('debug')->once()->with(m::pattern('/^Command Received/'), m::type('array'));
+        $logger->shouldReceive('debug')->once()->with(
+            'DTO Failed validation',
+            m::on(fn($context) => !str_contains(json_encode($context), 'secret') && str_contains(json_encode($context), 'OMITTED'))
+        );
+        Logger::setLogger($logger);
+
+        $command = m::mock(CommandInterface::class . ', ' . LoggerOmitContentInterface::class)->makePartial();
+        $command->shouldReceive('getArrayCopy')->never();
+
+        $mockService = m::mock(CommandHandlerInterface::class);
+        $mockService->shouldReceive('handleCommand')->never();
+        $mockService->shouldReceive('checkEnabled')->once()->andReturn(true);
+
+        $mockValidator = m::mock(HandlerInterface::class);
+        $mockValidator->shouldReceive('isValid')->with($command)->once()->andReturn(false);
         $this->vhm->setService($mockService::class, $mockValidator);
 
         $this->sut->setService($command::class, $mockService);

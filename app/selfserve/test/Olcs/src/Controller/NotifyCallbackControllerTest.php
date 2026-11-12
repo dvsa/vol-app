@@ -44,7 +44,7 @@ final class NotifyCallbackControllerTest extends MockeryTestCase
         parent::tearDown();
     }
 
-    private function dispatch(string $configuredToken, ?string $authorization, string $body = self::BODY): Response
+    private function dispatch(?string $authorization, string $body = self::BODY): Response
     {
         $request = new Request();
         $request->setMethod('POST');
@@ -57,7 +57,7 @@ final class NotifyCallbackControllerTest extends MockeryTestCase
         $event = new MvcEvent();
         $event->setRouteMatch(new RouteMatch(['action' => 'index']));
 
-        $sut = new NotifyCallbackController($configuredToken, $this->commandSender);
+        $sut = new NotifyCallbackController($this->commandSender);
         $sut->setEvent($event);
 
         return $sut->dispatch($request, new Response());
@@ -68,6 +68,7 @@ final class NotifyCallbackControllerTest extends MockeryTestCase
         return $this->commandSender->shouldReceive('send')
             ->once()
             ->with(m::on(fn($command) => $command instanceof UpdateDeliveryStatus
+                && $command->getToken() === self::TOKEN
                 && $command->getId() === '740e5834-3a29-46b4-9a6f-16142fde533a'
                 && $command->getStatus() === 'delivered'
                 && $command->getCompletedAt() === '2026-11-11T12:00:00.000000Z'
@@ -87,14 +88,7 @@ final class NotifyCallbackControllerTest extends MockeryTestCase
     {
         $this->expectSend()->andReturn($this->apiResponse(true));
 
-        $this->assertSame(200, $this->dispatch(self::TOKEN, 'Bearer ' . self::TOKEN)->getStatusCode());
-    }
-
-    public function testTokenWithTrailingNewlineIsTrimmed(): void
-    {
-        $this->expectSend()->andReturn($this->apiResponse(true));
-
-        $this->assertSame(200, $this->dispatch(self::TOKEN . "\n", 'Bearer ' . self::TOKEN)->getStatusCode());
+        $this->assertSame(200, $this->dispatch('Bearer ' . self::TOKEN)->getStatusCode());
     }
 
     #[DataProvider('apiExceptionProvider')]
@@ -103,7 +97,7 @@ final class NotifyCallbackControllerTest extends MockeryTestCase
         $this->expectSend()->andThrow($exception);
         $this->logger->shouldReceive('warning')->once()->with(m::type('string'), m::type('array'));
 
-        $this->assertSame(500, $this->dispatch(self::TOKEN, 'Bearer ' . self::TOKEN)->getStatusCode());
+        $this->assertSame(500, $this->dispatch('Bearer ' . self::TOKEN)->getStatusCode());
     }
 
     public static function apiExceptionProvider(): array
@@ -111,36 +105,40 @@ final class NotifyCallbackControllerTest extends MockeryTestCase
         return [
             'api error' => [new CqrsException('boom')],
             'not found' => [new CqrsNotFoundException('404')],
-            'access denied' => [new AccessDeniedException('403')],
             'conflict' => [new ResourceConflictException('409')],
         ];
+    }
+
+    public function testApiRejectingTheTokenIs401(): void
+    {
+        $this->expectSend()->andThrow(new AccessDeniedException('403'));
+        $this->logger->shouldReceive('warning')->once()->with(m::type('string'), m::type('array'));
+
+        $this->assertSame(401, $this->dispatch('Bearer ' . self::TOKEN)->getStatusCode());
     }
 
     public function testApiClientErrorIs400(): void
     {
         $this->expectSend()->andReturn($this->apiResponse(false));
 
-        $this->assertSame(400, $this->dispatch(self::TOKEN, 'Bearer ' . self::TOKEN)->getStatusCode());
+        $this->assertSame(400, $this->dispatch('Bearer ' . self::TOKEN)->getStatusCode());
     }
 
     #[DataProvider('unauthorisedProvider')]
-    public function testUnauthorised(string $configuredToken, ?string $authorization): void
+    public function testMissingBearerHeaderIs401(?string $authorization): void
     {
         $this->commandSender->shouldReceive('send')->never();
         $this->logger->shouldReceive('warning')->once()->with(m::type('string'), m::type('array'));
 
-        $this->assertSame(401, $this->dispatch($configuredToken, $authorization)->getStatusCode());
+        $this->assertSame(401, $this->dispatch($authorization)->getStatusCode());
     }
 
     public static function unauthorisedProvider(): array
     {
         return [
-            'no header' => [self::TOKEN, null],
-            'wrong token' => [self::TOKEN, 'Bearer wrong'],
-            'not a bearer header' => [self::TOKEN, self::TOKEN],
-            'blank config' => ['', 'Bearer '],
-            'space config' => [' ', 'Bearer  '],
-            'null config' => ['null', 'Bearer null'],
+            'no header' => [null],
+            'not a bearer header' => [self::TOKEN],
+            'empty bearer' => ['Bearer '],
         ];
     }
 
@@ -148,6 +146,6 @@ final class NotifyCallbackControllerTest extends MockeryTestCase
     {
         $this->commandSender->shouldReceive('send')->never();
 
-        $this->assertSame(400, $this->dispatch(self::TOKEN, 'Bearer ' . self::TOKEN, 'not json')->getStatusCode());
+        $this->assertSame(400, $this->dispatch('Bearer ' . self::TOKEN, 'not json')->getStatusCode());
     }
 }

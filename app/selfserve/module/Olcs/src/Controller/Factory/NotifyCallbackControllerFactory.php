@@ -11,11 +11,6 @@ class NotifyCallbackControllerFactory implements FactoryInterface
     #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): NotifyCallbackController
     {
-        $config = $container->get('config');
-
-        return new NotifyCallbackController(
-            (string) ($config['notify']['callback_token'] ?? ''),
-            $container->get('CommandSender')
-        );
+        return new NotifyCallbackController($container->get('CommandSender'));
     }
 }

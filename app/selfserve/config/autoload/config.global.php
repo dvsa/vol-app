@@ -5,7 +5,6 @@ $environment = getenv('ENVIRONMENT_NAME');
 // All this logic to do with environments should be part of parameter store instead.
 // But for now, it's not. So we have to do it here.
 $isProduction = strtoupper($environment) === 'APP';
-$isDeployed = !empty($environment);
 
 // ECS will now set the version via. environment variables.
 // Once fully migrated, the `../version` file can be removed, and this can be simplified.
@@ -232,14 +231,6 @@ return [
         'redirect-path' => '/govuk-account/process',
         // HTTP_REFERER hostname will be checked to end with the following string.
         'referrer_ends_with' => '.gov.uk'
-    ],
-
-    // Bearer token GOV.UK Notify sends with delivery status callbacks, from the selfserve secret
-    // (Secrets Manager). Every environment's secret needs this key, even if it's just " ", or
-    // selfserve won't start. Blank, " " and "null" mean unset and every callback gets a 401.
-    // Run locally (no ENVIRONMENT_NAME) there is no secret to read, so it defaults to unset.
-    'notify' => [
-        'callback_token' => $isDeployed ? '%olcs_notify_callback_token%' : null,
     ],
 
     // Retrieve-via-link: server-side fetch of S3 presigned download URLs. On the S3 document store

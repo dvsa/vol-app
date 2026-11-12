@@ -67,10 +67,11 @@ public repo. A `govuknotify://` DSN with no key anywhere stops every email, not 
 ## Delivery callbacks
 
 Notify posts a delivery status back for every message (email too, same URL). Selfserve receives it at
-`POST /notify/callback`, checks the `Authorization: Bearer <token>` header against
-`olcs_notify_callback_token` and passes it to the API (`Notify\UpdateDeliveryStatus`), which sets the
-row's status and completed time from the message's `notify_id`. It has to go through selfserve as the
-API is on a private load balancer and only accepts JWTs. A wrong token, or an unset one, gets a 401.
+`POST /notify/callback`, which only checks there is an `Authorization: Bearer <token>` header and a JSON
+body, then passes the token and status to the API (`Notify\UpdateDeliveryStatus`). The API checks the token
+against `olcs_notify_callback_token` in its own secret, and sets the row's status and completed time from the
+message's `notify_id`. It has to go through selfserve as the API is on a private load balancer and only
+accepts JWTs. A wrong token, or an unset one, is refused by the API and selfserve returns a 401.
 Callbacks for an id or status we don't know are logged and ignored so Notify doesn't keep retrying.
 If a send timed out, the row may not hold Notify's id yet, so the handler falls back on the callback's
 `reference` (`<env>-sms-<rowId>`, this environment's only) and saves the id on that row. An API error
@@ -79,8 +80,12 @@ for it.
 
 A Notify service has one callback URL and token. Production has its own service, but the non-prod
 environments share one, so only the environment the URL points at gets statuses. Callbacks for the
-other environments' messages are ignored, as their ids and references don't match any row here. All
-five secrets still need the key.
+other environments' messages are ignored, as their ids and references don't match any row here.
+
+The token lives in the API secret (`<name>-BASE-SM-APPLICATION-API`), not selfserve's. All five
+environments' secrets need the `olcs_notify_callback_token` key, or the API won't start. Put `" "` in it until
+the environment is on Notify (blank, `" "` and `"null"` all mean unset and reject every callback). Once it is,
+use a token of letters and numbers only.
 
 ## The letter text
 
