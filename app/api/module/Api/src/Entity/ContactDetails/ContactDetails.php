@@ -380,7 +380,7 @@ class ContactDetails extends AbstractContactDetails
      *
      * @param string $type type
      *
-     * @return null
+     * @return string|null
      */
     public function getPhoneContactNumber($type)
     {

@@ -342,6 +342,7 @@ export class LaminasConfig {
         }
         return result;
       case "null":
+      case "nullkeyword": // php-parser's kind for a bare `null`
         return null;
       default:
         debug(`Unknown AST node kind: ${node.kind}`);
@@ -466,11 +467,16 @@ export class LaminasConfig {
         };
 
       case "null":
+      case "nullkeyword": // php-parser's kind for a bare `null`
         if (newValue === null) {
           return existingNode; // Keep as-is
         }
-        // Converting from null to something else - create appropriate node
-        return this.valueToAstNode(newValue);
+        // Converting from null to something else. Keep the position, or the change is never written.
+        return {
+          ...this.valueToAstNode(newValue),
+          ...(typeof newValue === "string" ? { isDoubleQuote: false } : {}),
+          loc: existingNode.loc,
+        };
 
       case "array":
         // If updating an array, we need to decide: replace or merge?

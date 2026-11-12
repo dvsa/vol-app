@@ -30,11 +30,14 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
 use Dvsa\Olcs\Api\Entity\System\Category;
+use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Service\CpmsHelperInterface as CpmsHelper;
 use Dvsa\Olcs\Api\Service\Exception as ServiceException;
 use Dvsa\Olcs\Api\Service\FeesHelperService as FeesHelper;
+use Dvsa\Olcs\Api\Service\Sms\SmsNumberCapture;
+use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -57,6 +60,8 @@ final class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
 
     private $cardResponse;
 
+    private m\MockInterface $toggleService;
+
     public function setUp(): void
     {
         $this->cardResponse = [
@@ -67,7 +72,13 @@ final class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->mockCpmsService = m::mock(CpmsHelper::class);
 
         $this->mockFeesHelperService = m::mock(FeesHelper::class);
+        $this->toggleService = m::mock(ToggleService::class);
+        $this->toggleService->shouldReceive('isEnabled')
+            ->with(FeatureToggle::SMS_NUMBER_CAPTURE)
+            ->andReturn(true)
+            ->byDefault();
         $this->mockedSmServices = [
+            SmsNumberCapture::class => new SmsNumberCapture($this->toggleService),
             'CpmsHelperService' => $this->mockCpmsService,
             'FeesHelperService' => $this->mockFeesHelperService,
             AuthorizationService::class => m::mock(AuthorizationService::class)->makePartial(),
@@ -501,6 +512,11 @@ final class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
 
         $command = Cmd::create($data);
 
+        if ($applicationType === 'applicationId') {
+            $this->expectApplication($applicationId, false, true);
+            $this->setupIsExternalUser(true);
+        }
+
         $extraParams = [
             'customer_name' => $customerName,
             'customer_reference' => $customerReference,
@@ -565,6 +581,90 @@ final class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertEquals(PaymentEntity::STATUS_OUTSTANDING, $savedPayment->getStatus()->getId());
+    }
+
+    private function expectApplication(int $applicationId, bool $isVariation, bool $hasSms): ApplicationEntity
+    {
+        $phones = new ArrayCollection();
+        if ($hasSms) {
+            $sms = new \Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact(
+                new RefData(\Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact::TYPE_SMS)
+            );
+            $sms->setPhoneNumber('+447700900123');
+            $phones->add($sms);
+        }
+        $cd = new \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails(new RefData());
+        $cd->setPhoneContacts($phones);
+
+        $licence = m::mock(LicenceEntity::class)->makePartial();
+        $licence->setCorrespondenceCd($cd);
+
+        $application = m::mock(ApplicationEntity::class)->makePartial();
+        $application->setLicence($licence);
+        $application->setIsVariation($isVariation);
+
+        $this->repoMap['Application']->shouldReceive('fetchById')->with($applicationId)->andReturn($application);
+
+        return $application;
+    }
+
+    private function applicationCardCommand(int $applicationId): Cmd
+    {
+        return Cmd::create(
+            [
+                'applicationId' => $applicationId,
+                'cpmsRedirectUrl' => 'https://olcs-selfserve/foo',
+                'paymentMethod' => FeeEntity::METHOD_CARD_ONLINE,
+            ]
+        );
+    }
+
+    public function testApplicationWithoutSmsIsRefusedBeforeCpms(): void
+    {
+        $this->repoMap['SystemParameter']->shouldReceive('getDisableSelfServeCardPayments')->andReturn(false);
+        $this->expectApplication(69, false, false);
+        $this->setupIsExternalUser(true);
+
+        // no fee lookup, no payment resolution, no CPMS call, no transaction
+        $this->mockFeesHelperService->shouldReceive('getOutstandingFeesForApplication')->never();
+        $this->mockCpmsService->shouldNotReceive();
+        $this->repoMap['Transaction']->shouldReceive('save')->never();
+
+        try {
+            $this->sut->handleCommand($this->applicationCardCommand(69));
+            $this->fail('Expected ValidationException');
+        } catch (ValidationException $e) {
+            $this->assertSame(['application.submit.sms-number-required'], $e->getMessages());
+        }
+    }
+
+    /**
+     * Each case gets past the guard and so reaches the fee lookup.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpApplicationGuardPasses')]
+    public function testApplicationGuardPasses(bool $toggle, bool $external, bool $variation): void
+    {
+        $this->toggleService->shouldReceive('isEnabled')->with(FeatureToggle::SMS_NUMBER_CAPTURE)->andReturn($toggle);
+        $this->repoMap['SystemParameter']->shouldReceive('getDisableSelfServeCardPayments')->andReturn(false);
+        $this->expectApplication(69, $variation, false);
+        if (!$variation) {
+            $this->setupIsExternalUser($external);
+        }
+
+        $this->mockFeesHelperService->shouldReceive('getOutstandingFeesForApplication')
+            ->once()
+            ->with(69)
+            ->andThrow(new \RuntimeException('after-guard'));
+
+        $this->expectExceptionMessage('after-guard');
+        $this->sut->handleCommand($this->applicationCardCommand(69));
+    }
+
+    public static function dpApplicationGuardPasses(): \Iterator
+    {
+        yield 'capture toggle off' => [false, true, false];
+        yield 'internal user' => [true, false, false];
+        yield 'variation' => [true, true, true];
     }
 
     public static function dpHandleForApplication(): \Iterator

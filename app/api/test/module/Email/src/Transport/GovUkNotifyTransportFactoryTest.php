@@ -41,6 +41,42 @@ final class GovUkNotifyTransportFactoryTest extends MockeryTestCase
         $factory->create(new Dsn('govuknotify', 'default'));
     }
 
+    public function testKeylessDsnUsesTheConfiguredKey(): void
+    {
+        $keys = [];
+        $factory = $this->buildFactory(function (string $key) use (&$keys) {
+            $keys[] = $key;
+            return m::mock(NotifyClient::class);
+        }, 'configured-key');
+
+        $this->assertInstanceOf(GovUkNotifyTransport::class, $factory->create(new Dsn('govuknotify', 'default')));
+        $this->assertSame(['configured-key'], $keys);
+    }
+
+    public function testKeyInTheDsnWinsOverTheConfiguredKey(): void
+    {
+        $keys = [];
+        $factory = $this->buildFactory(function (string $key) use (&$keys) {
+            $keys[] = $key;
+            return m::mock(NotifyClient::class);
+        }, 'configured-key');
+
+        $factory->create(new Dsn('govuknotify', 'default', 'user', 'dsn-key'));
+        $factory->create(new Dsn('govuknotify', 'default', 'user-key'));
+        $factory->create(new Dsn('govuknotify', 'default', ' ', ''));
+
+        $this->assertSame(['dsn-key', 'user-key', 'configured-key'], $keys);
+    }
+
+    /** Test sends must name their own key, so one can never go out on the live key. */
+    public function testTestSendsNeverUseTheConfiguredKey(): void
+    {
+        $factory = $this->buildFactory(null, 'configured-key')->forTestSends();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $factory->create(new Dsn('govuknotify', 'default'));
+    }
+
     public function testCreatesDevTransport(): void
     {
         $factory = $this->buildFactory();
@@ -48,13 +84,15 @@ final class GovUkNotifyTransportFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(DevNotifyTransport::class, $transport);
     }
 
-    private function buildFactory(?\Closure $clientFactory = null): GovUkNotifyTransportFactory
+    private function buildFactory(?\Closure $clientFactory = null, ?string $apiKey = null): GovUkNotifyTransportFactory
     {
         return new GovUkNotifyTransportFactory(
             ['en_GB' => 'tpl-en', 'cy_GB' => 'tpl-cy'],
             $clientFactory ?? static fn () => m::mock(NotifyClient::class),
             m::mock(ConverterInterface::class),
             '<html>{{subject}}{{body}}</html>',
+            null,
+            $apiKey,
         );
     }
 }

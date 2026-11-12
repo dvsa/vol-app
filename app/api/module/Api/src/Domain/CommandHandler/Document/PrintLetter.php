@@ -72,11 +72,14 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
         }
 
         if ($email) {
-            $this->sendEmail($document);
+            if ($this->sendEmail($document)) {
+                $this->queueSms($document);
+            }
         }
 
         if ($print) {
             $this->attemptPrint($document);
+            $this->queueSms($document);
         }
 
         return $this->result;
@@ -100,6 +103,20 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
 
         $this->result->merge(
             $this->handleSideEffect($cmd)
+        );
+    }
+
+    /**
+     * Queue the "letter issued" SMS
+     *
+     * @param Entity\Doc\Document $document Document
+     *
+     * @return void
+     */
+    private function queueSms(Entity\Doc\Document $document)
+    {
+        $this->result->merge(
+            $this->handleSideEffect(DomainCmd\Sms\QueueLetterSms::create(['document' => $document->getId()]))
         );
     }
 
@@ -134,13 +151,13 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
      *
      * @param Entity\Doc\Document $document Document
      *
-     * @return void
+     * @return bool True if the correspondence record was created
      */
-    private function sendEmail(Entity\Doc\Document $document)
+    private function sendEmail(Entity\Doc\Document $document): bool
     {
         $licence = $document->getRelatedLicence();
         if ($licence === null) {
-            return;
+            return false;
         }
 
         $cmd = DomainCmd\Email\CreateCorrespondenceRecord::create(
@@ -154,6 +171,8 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
         $this->result->merge(
             $this->handleSideEffect($cmd)
         );
+
+        return true;
     }
 
     /**

@@ -29,6 +29,8 @@ use Symfony\Component\Mime\Header\UnstructuredHeader;
  */
 final class GovUkNotifyTransport extends AbstractTransport
 {
+    use RecordsNotifyEmails;
+
     public const PAYLOAD_HEADER = 'X-Olcs-Notify-Payload';
 
     public const LOCALE_EN_GB = 'en_GB';
@@ -41,6 +43,7 @@ final class GovUkNotifyTransport extends AbstractTransport
         private readonly array $passthroughTemplateIds,
         ?EventDispatcherInterface $dispatcher = null,
         ?LoggerInterface $logger = null,
+        private readonly ?NotifyMessageRecorderInterface $recorder = null,
     ) {
         parent::__construct($dispatcher, $logger);
     }
@@ -63,6 +66,7 @@ final class GovUkNotifyTransport extends AbstractTransport
         $recipients = $this->resolveRecipients($message->getEnvelope(), $original);
         $templateId = $this->resolveTemplateId($payload['locale'] ?? self::LOCALE_EN_GB);
         $personalisation = $this->buildPersonalisation($original, $payload);
+        $context = $this->recordingContext($payload, $templateId);
 
         // Notify has no To/Cc/Bcc and takes one address per call, so we deliver an individual copy
         // to every recipient (SMTP delivered to all of them). Once Notify accepts a send (201) it
@@ -84,8 +88,9 @@ final class GovUkNotifyTransport extends AbstractTransport
                 $sent++;
                 $notifyId = is_array($response) ? ($response['id'] ?? null) : null;
                 Logger::info('notify email sent', ['notify_id' => $notifyId, 'locale' => $payload['locale'] ?? null]);
+                $this->recordEmail($this->recorder, $recipient, $context, is_string($notifyId) ? $notifyId : null, null, null);
             } catch (NotifyException $e) {
-                if ($this->isTransient($e)) {
+                if (NotifyErrors::isTransient($e)) {
                     // Transient (429/5xx): the queue will retry the whole message.
                     $transient = $e;
                     Logger::info('notify send transient failure, message will be retried', ['code' => (int) $e->getCode()]);
@@ -96,8 +101,9 @@ final class GovUkNotifyTransport extends AbstractTransport
                     $permanentlyFailed++;
                     Logger::err('notify send permanently failed, recipient skipped', [
                         'code' => (int) $e->getCode(),
-                        'error' => $e->getMessage(),
+                        'error' => NotifyErrors::message($e),
                     ]);
+                    $this->recordEmail($this->recorder, $recipient, $context, null, (string) (int) $e->getCode(), NotifyErrors::message($e));
                 }
             }
         }
@@ -106,7 +112,7 @@ final class GovUkNotifyTransport extends AbstractTransport
         // recipients, but a duplicate beats a drop, and transient Notify errors are rare).
         if ($transient !== null) {
             throw new EmailNotSentException(
-                sprintf('Notify send failed (HTTP %d): %s', (int) $transient->getCode(), $transient->getMessage()),
+                sprintf('Notify send failed (HTTP %d): %s', (int) $transient->getCode(), NotifyErrors::message($transient)),
                 0,
                 $transient,
             );
@@ -127,7 +133,8 @@ final class GovUkNotifyTransport extends AbstractTransport
      *     markdownBody?: string,
      *     attachments?: array<int, array{fileName: string, content: string}>,
      *     reference?: string,
-     *     emailReplyToId?: string
+     *     emailReplyToId?: string,
+     *     context?: array<string, mixed>
      * }
      */
     private function extractPayload(SymfonyEmail $email): array
@@ -186,18 +193,6 @@ final class GovUkNotifyTransport extends AbstractTransport
         }
 
         return $unique;
-    }
-
-    private function isTransient(NotifyException $e): bool
-    {
-        $code = (int) $e->getCode();
-
-        // 429 (rate limit) and 5xx are transient and must be retried. A code of 0 means the Notify
-        // SDK never received an HTTP response at all — a connection/DNS/timeout/proxy failure
-        // (php-http NetworkException, which is always code 0) — which is the most common transient
-        // class and must NOT be misread as permanent and dropped. Only genuine 4xx client errors
-        // (e.g. a malformed recipient address) are permanent.
-        return $code === 429 || $code < 400 || $code >= 500;
     }
 
     private function resolveTemplateId(string $locale): string

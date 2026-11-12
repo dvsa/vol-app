@@ -101,6 +101,35 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expect['result'], $actual->getMessages());
     }
 
+    public function testQueuesSmsAfterEmail(): void
+    {
+        $this->assertSendEmail();
+        $this->runHandler(TransferCmd\Document\PrintLetter::METHOD_EMAIL, true, true);
+    }
+
+    public function testQueuesSmsAfterPrint(): void
+    {
+        $this->assertAttemptPrint();
+        $this->runHandler(TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST, true, true);
+    }
+
+    public function testNoSmsWhenOnlyTranslationTask(): void
+    {
+        $this->assertCreateTranslationTask();
+        $this->runHandler(TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST, false, true);
+    }
+
+    private function runHandler(string $method, bool $canPrint, bool $canEmail): void
+    {
+        $command = TransferCmd\Document\PrintLetter::create(['id' => self::DOC_ID, 'method' => $method]);
+        $this->mockDocRepo->shouldReceive('fetchUsingId')->with($command)->andReturn($this->mockDocE);
+        $this->mockPrintSrv
+            ->shouldReceive('canPrint')->andReturn($canPrint)
+            ->shouldReceive('canEmail')->andReturn($canEmail);
+
+        $this->sut->handleCommand($command);
+    }
+
     public static function dpTestHandleCommand(): \Iterator
     {
         yield 'method:Email;canEmail&Print;' => [
@@ -183,6 +212,12 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
         $result->addMessage('AttemptPrint');
 
         $this->expectedSideEffect(DomainCmd\PrintScheduler\Enqueue::class, $data, $result);
+        $this->assertQueueSms();
+    }
+
+    private function assertQueueSms(): void
+    {
+        $this->expectedSideEffect(DomainCmd\Sms\QueueLetterSms::class, ['document' => self::DOC_ID], new Result());
     }
 
     private function assertSendEmail(): void
@@ -197,6 +232,7 @@ final class PrintLetterTest extends AbstractCommandHandlerTestCase
         $result->addMessage('SendEmail');
 
         $this->expectedSideEffect(DomainCmd\Email\CreateCorrespondenceRecord::class, $data, $result);
+        $this->assertQueueSms();
     }
 
     private function assertCreateTranslationTask(): void

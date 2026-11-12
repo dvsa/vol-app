@@ -294,6 +294,27 @@
             "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
             "type": "secret",
             "secretKey": "dvsa_reports_api_key"
+          },
+          {
+            "configPath": ["notify", "api_key"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_notify_api_key"
+          },
+          {
+            "configPath": ["notify", "email", "passthrough_templates", "en_GB"],
+            "awsPath": "/applicationparams/{env}/olcs_notify_template_en_gb",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["notify", "email", "passthrough_templates", "cy_GB"],
+            "awsPath": "/applicationparams/{env}/olcs_notify_template_cy_gb",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["notify", "sms", "template_id"],
+            "awsPath": "/applicationparams/{env}/olcs_notify_sms_template",
+            "type": "parameter"
           }
         ]
       }
