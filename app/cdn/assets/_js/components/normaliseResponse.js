@@ -139,7 +139,7 @@ OLCS.normaliseResponse = (function (window, $, undefined) {
 
       //check for validation errors
       response.hasValidationErrors = (function () {
-        return $(responseString).find(".validation-summary").length > 0;
+        return $(responseString).find(".govuk-error-summary, .validation-summary").length > 0;
       })();
 
       return response;

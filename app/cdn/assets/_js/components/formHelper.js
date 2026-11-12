@@ -11,7 +11,8 @@ OLCS.formHelper = (function (document, $, undefined) {
   // which button was clicked when submitting a form
   var formClickAction = "form__action";
 
-  var errorSelectors = [".validation-summary", ".validation-wrapper"];
+  var errorSummarySelector = ".govuk-error-summary, .validation-summary";
+  var errorSelectors = [errorSummarySelector, ".validation-wrapper"];
 
   var warningSelector = ".notice--warning";
 
@@ -96,7 +97,7 @@ OLCS.formHelper = (function (document, $, undefined) {
 
   exports.clearErrors = function (context) {
     // context can be null, hence why we don't use $(context).find()
-    $(".validation-summary", context).remove();
+    $(errorSummarySelector, context).remove();
     $(".validation-wrapper ul:first-child", context).remove();
     $(".validation-wrapper", context).removeClass("validation-wrapper");
   };
