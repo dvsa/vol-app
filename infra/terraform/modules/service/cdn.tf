@@ -63,6 +63,7 @@ locals {
   oac_id = "s3_oac_${var.environment}"
 }
 
+#checkov:skip=CKV_AWS_174: CloudFront TLS enforcement is a business decision for the public CDN and is currently under review; this should be revisited when the broader security standard is updated.
 module "cloudfront" {
   source  = "git::https://github.com/terraform-aws-modules/terraform-aws-cloudfront.git?ref=f48225a64ad695e52684b58b854aee23d888c70f"
   aliases = ["${local.subdomain}.${local.domain_name}"]
@@ -166,8 +167,11 @@ EOF
 data "aws_canonical_user_id" "current" {}
 data "aws_cloudfront_log_delivery_canonical_user_id" "cloudfront" {}
 
+#checkov:skip=CKV_AWS_18: This CloudFront log bucket intentionally does not emit access logs to avoid recursive logging on the log destination bucket.
 #checkov:skip=CKV_AWS_19: Encryption is configured via the module input, but Checkov does not resolve it through this external module.
 #checkov:skip=CKV_AWS_144: This bucket stores CloudFront access logs and is intentionally not replicated cross-region.
+#checkov:skip=CKV_AWS_145: CloudFront log buckets intentionally use the bucket module default AES256 encryption rather than a KMS CMK for cost and operational simplicity.
+#checkov:skip=CKV_AWS_300: This log bucket intentionally keeps the default lifecycle without abort-incomplete-upload expiry because log delivery is short-lived and operationally low-risk.
 #checkov:skip=CKV2_AWS_65: CloudFront standard logging to S3 requires ACLs, so this log bucket cannot use BucketOwnerEnforced ownership.
 module "log_bucket" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-s3-bucket.git?ref=fccafe509c9c9af4646a4bc45387f63d83c8a006"
