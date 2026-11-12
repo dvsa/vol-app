@@ -32,7 +32,12 @@ $pageLang = $this->plugin('languageNavigation')->currentLanguage();
 
   <!-- Title -->
   <?php
-  echo $this->headTitle(strip_tags($this->pageTitle()))
+  $pageTitle = strip_tags($this->pageTitle());
+  if ($this->placeholder('formHasErrors')->getValue()) {
+    $pageTitle = $this->translate('Error') . ': ' . $pageTitle;
+  }
+
+  echo $this->headTitle($pageTitle)
     ->append('header-vehicle-operator-licensing')
     ->append('header-gov.uk')
     ->setSeparator(' - ');
