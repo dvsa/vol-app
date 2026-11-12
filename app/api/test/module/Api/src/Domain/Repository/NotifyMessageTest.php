@@ -7,6 +7,7 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\AbstractException as DriverException;
 use Doctrine\DBAL\Exception\DeadlockException;
+use Doctrine\ORM\EntityRepository;
 use Dvsa\Olcs\Api\Domain\Command\Sms\SendSms;
 use Dvsa\Olcs\Api\Domain\Repository\NotifyMessage as Repo;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
@@ -109,6 +110,17 @@ final class NotifyMessageTest extends RepositoryTestCase
         $this->assertFalse(
             $this->sut->hasOtherSmsSentToRecipientBetween(42, '+447700900123', 'letter-issued-sms', new \DateTime('2026-11-04 20:00:00'), new \DateTime('2026-11-05 20:00:00'))
         );
+    }
+
+    public function testFetchByNotifyId(): void
+    {
+        $message = $this->message();
+
+        $repo = m::mock(EntityRepository::class);
+        $repo->shouldReceive('findOneBy')->once()->with(['notifyId' => '740e5834-3a29-46b4-9a6f-16142fde533a'])->andReturn($message);
+        $this->em->shouldReceive('getRepository')->once()->with(Entity::class)->andReturn($repo);
+
+        $this->assertSame($message, $this->sut->fetchByNotifyId('740e5834-3a29-46b4-9a6f-16142fde533a'));
     }
 
     private function message(): Entity
