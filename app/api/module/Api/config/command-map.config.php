@@ -240,6 +240,9 @@ return [
     Command\Sms\QueueLetterSms::class => CommandHandler\Sms\QueueLetterSms::class,
     Command\Sms\SendSms::class => CommandHandler\Sms\SendSms::class,
 
+    // Transfer - Notify
+    TransferCommand\Notify\UpdateDeliveryStatus::class => CommandHandler\Notify\UpdateDeliveryStatus::class,
+
     // Transfer - Licence
     TransferCommand\Licence\UpdateAddresses::class => CommandHandler\Licence\UpdateAddresses::class,
     TransferCommand\Licence\UpdateSmsNumber::class => CommandHandler\Licence\UpdateSmsNumber::class,

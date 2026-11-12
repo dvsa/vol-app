@@ -64,6 +64,29 @@ To move an environment to Notify, put its key in `olcs_notify_api_key` first, th
 to `govuknotify://default`. The key stays out of the DSN, which is a Terraform parameter in this
 public repo. A `govuknotify://` DSN with no key anywhere stops every email, not just texts.
 
+## Delivery callbacks
+
+Notify posts a delivery status back for every message (email too, same URL). Selfserve receives it at
+`POST /notify/callback`, which only checks there is an `Authorization: Bearer <token>` header and a JSON
+body, then passes the token and status to the API (`Notify\UpdateDeliveryStatus`). The API checks the token
+against `olcs_notify_callback_token` in its own secret, and sets the row's status and completed time from the
+message's `notify_id`. It has to go through selfserve as the API is on a private load balancer and only
+accepts JWTs. A wrong token, or an unset one, is refused by the API and selfserve returns a 401.
+Callbacks for an id or status we don't know are logged and ignored so Notify doesn't keep retrying.
+If a send timed out, the row may not hold Notify's id yet, so the handler falls back on the callback's
+`reference` (`<env>-sms-<rowId>`, this environment's only) and saves the id on that row. An API error
+comes back as a 500 so Notify retries it. The status is only recorded on the row, there is no screen
+for it.
+
+A Notify service has one callback URL and token. Production has its own service, but the non-prod
+environments share one, so only the environment the URL points at gets statuses. Callbacks for the
+other environments' messages are ignored, as their ids and references don't match any row here.
+
+The token lives in the API secret (`<name>-BASE-SM-APPLICATION-API`), not selfserve's. All five
+environments' secrets need the `olcs_notify_callback_token` key, or the API won't start. Put `" "` in it until
+the environment is on Notify (blank, `" "` and `"null"` all mean unset and reject every callback). Once it is,
+use a token of letters and numbers only.
+
 ## The letter text
 
 `Document\PrintLetter` and `Document\DispatchDocument` queue a text after a letter goes to an
@@ -134,8 +157,7 @@ take, after Notify's own character swaps.
 
 One row per message sent through Notify, with the channel (`nmc_sms`, `nmc_email`; letters later),
 status (`nms_*`), recipient, Notify id, template, timings and errors, plus the licence,
-organisation, application, case, bus reg or document it relates to. That context is there so
-internal users can be shown delivery status later (VOL-7721). Email rows are written by the Notify
+organisation, application, case, bus reg or document it relates to. Email rows are written by the Notify
 email transport and don't affect sending if the write fails. Admin "send test" emails aren't
 recorded. Rows aren't removed by data retention yet.
 

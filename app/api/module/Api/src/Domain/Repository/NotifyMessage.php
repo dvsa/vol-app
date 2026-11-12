@@ -14,6 +14,13 @@ class NotifyMessage extends AbstractRepository
 {
     protected $entity = Entity::class;
 
+    public function fetchByNotifyId(string $notifyId): ?Entity
+    {
+        return $this->getEntityManager()
+            ->getRepository($this->entity)
+            ->findOneBy(['notifyId' => $notifyId]);
+    }
+
     /**
      * True if this kind of text (not cancelled) was requested or sent for this number in [start, end).
      * Each kind of text has its own limit.
