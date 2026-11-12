@@ -3,16 +3,17 @@
 namespace Dvsa\Olcs\Api\Domain\QueryHandler\Template;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
+use Dvsa\Olcs\Api\Service\Sms\SmsLength;
 use Dvsa\Olcs\Api\Service\Template\StrategySelectingViewRenderer;
 use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
 use Dvsa\Olcs\Email\View\NotifyChrome;
 use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource as PreviewTemplateSourceQry;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Exception;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Throwable;
 
 /**
  * Preview template source
@@ -22,11 +23,15 @@ use Psr\Container\NotFoundExceptionInterface;
 class PreviewTemplateSource extends AbstractQueryHandler
 {
     public const FORMAT_MARKDOWN = 'md';
+    public const FORMAT_SMS = 'sms';
 
     protected $repoServiceName = 'Template';
 
     /** @var TwigRenderer */
     private $twigRenderer;
+
+    /** SMS and Notify markdown are rendered without HTML escaping */
+    private TwigRenderer $plainTextTwigRenderer;
 
     /** @var StrategySelectingViewRenderer */
     private $strategySelectingViewRenderer;
@@ -51,19 +56,40 @@ class PreviewTemplateSource extends AbstractQueryHandler
         $format = $template->getFormat();
         $description = (string) $template->getDescription();
 
+        if (!is_array($datasets)) {
+            return ['error' => true, 'Test data' => 'Test data is not valid JSON'];
+        }
+
         $result = [];
         foreach ($datasets as $datasetName => $datasetValues) {
+            // Test data must be {"<set name>": {<variables>}}, not a flat list of variables.
+            if (!is_array($datasetValues)) {
+                return [
+                    'error' => true,
+                    $datasetName => sprintf('Test data set "%s" is not a set of variables', $datasetName),
+                ];
+            }
             try {
+                if ($format === self::FORMAT_SMS) {
+                    // Plain text as sent, plus how many texts it will use.
+                    $rendered = $this->plainTextTwigRenderer->renderString($source, $datasetValues);
+                    $result[$datasetName] = ['text' => $rendered] + SmsLength::estimate($rendered);
+                    continue;
+                }
+                if ($format === self::FORMAT_MARKDOWN) {
+                    // Rendered as sent to Notify, which escapes HTML itself.
+                    $rendered = $this->plainTextTwigRenderer->renderString($source, $datasetValues);
+                    $result[$datasetName] = $this->renderMarkdownPreview($rendered, $description);
+                    continue;
+                }
                 $rendered = $this->twigRenderer->renderString($source, $datasetValues);
-                $result[$datasetName] = $format === self::FORMAT_MARKDOWN
-                    ? $this->renderMarkdownPreview($rendered, $description)
-                    : $this->strategySelectingViewRenderer->render(
-                        $locale,
-                        $format,
-                        'default',
-                        ['content' => $rendered]
-                    );
-            } catch (Exception $e) {
+                $result[$datasetName] = $this->strategySelectingViewRenderer->render(
+                    $locale,
+                    $format,
+                    'default',
+                    ['content' => $rendered]
+                );
+            } catch (Throwable $e) {
                 $result['error'] = true;
                 $result[$datasetName] = $e->getMessage();
                 break;
@@ -75,7 +101,7 @@ class PreviewTemplateSource extends AbstractQueryHandler
 
     private function renderMarkdownPreview(string $markdown, string $subject): string
     {
-        $this->markdownConverter ??= new GithubFlavoredMarkdownConverter();
+        $this->markdownConverter ??= NotifyChrome::markdownConverter();
 
         // Shared Notify-style rendering + chrome with DevNotifyTransport, so the admin preview
         // matches both Mailpit and what GOV.UK Notify actually delivers.
@@ -99,6 +125,7 @@ class PreviewTemplateSource extends AbstractQueryHandler
         $fullContainer = $container;
 
         $this->twigRenderer = $container->get('TemplateTwigRenderer');
+        $this->plainTextTwigRenderer = $container->get('TemplatePlainTextTwigRenderer');
         $this->strategySelectingViewRenderer = $container->get('TemplateStrategySelectingViewRenderer');
         return parent::__invoke($fullContainer, $requestedName, $options);
     }

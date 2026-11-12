@@ -3,6 +3,8 @@
 namespace Olcs\FormService\Form\Lva\Addresses;
 
 use Common\FormService\Form\Lva\Addresses as CommonAddress;
+use Common\FormService\Form\Lva\SmsNumberRequiredTrait;
+use Common\Service\Cqrs\Query\QuerySender;
 use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
@@ -15,10 +17,11 @@ use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 class ApplicationAddresses extends CommonAddress
 {
     use ButtonsAlterations;
+    use SmsNumberRequiredTrait;
 
     protected FormHelperService $formHelper;
 
-    public function __construct(FormHelperService $formHelper)
+    public function __construct(FormHelperService $formHelper, private readonly QuerySender $querySender)
     {
         parent::__construct($formHelper);
     }
@@ -35,6 +38,7 @@ class ApplicationAddresses extends CommonAddress
     protected function alterForm(Form $form, array $params)
     {
         parent::alterForm($form, $params);
+        $this->requireSmsNumber($form, $this->querySender);
         $this->alterButtons($form);
     }
 }

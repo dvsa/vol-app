@@ -69,6 +69,7 @@ return [
     CommandHandler\Email\SendEbsrWithdrawn::class => IsSystemUser::class,
     CommandHandler\Email\SendEbsrRefused::class => IsSystemUser::class,
     CommandHandler\Email\SendEbsrRefusedBySn::class => IsSystemUser::class,
+    CommandHandler\Sms\SendSms::class => IsSystemUser::class,
     CommandHandler\Email\SendEbsrRegistered::class => IsSystemUser::class,
     CommandHandler\Email\SendEbsrCancelled::class => IsSystemUser::class,
     CommandHandler\Email\SendEbsrReceived::class => IsSystemUser::class,

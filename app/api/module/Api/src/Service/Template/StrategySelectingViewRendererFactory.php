@@ -28,7 +28,8 @@ class StrategySelectingViewRendererFactory implements FactoryInterface
         return new StrategySelectingViewRenderer(
             $container->get('ViewRenderer'),
             $container->get('TemplateTwigRenderer'),
-            $container->get('TemplateDatabaseTwigLoader')
+            $container->get('TemplateDatabaseTwigLoader'),
+            $container->get('TemplatePlainTextTwigRenderer')
         );
     }
 }

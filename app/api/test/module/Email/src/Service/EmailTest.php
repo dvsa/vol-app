@@ -81,6 +81,65 @@ final class EmailTest extends MockeryTestCase
         $this->assertInstanceOf(MailerInterface::class, $mailer);
     }
 
+    private function invokeWithDsn(string $dsn): void
+    {
+        $sm = m::mock(ContainerInterface::class);
+        $sm->shouldReceive('get')->with('config')->andReturn(['mail' => ['dsn' => $dsn]]);
+        $sm->shouldReceive('get')
+            ->with(GovUkNotifyTransportFactory::class)
+            ->andReturn(new GovUkNotifyTransportFactory(
+                [],
+                static fn(string $apiKey) => m::mock(\Alphagov\Notifications\Client::class),
+                m::mock(\League\CommonMark\ConverterInterface::class),
+                '<html></html>',
+            ));
+
+        $this->sut->__invoke($sm, Email::class);
+    }
+
+    /**
+     * The Notify payload header carries recipient data, so it only goes to a Notify transport.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNotifyPayloadHeader')]
+    public function testNotifyPayloadHeaderOnlyForNotifyTransports(string $dsn, bool $expectHeader): void
+    {
+        $this->invokeWithDsn($dsn);
+
+        $mailer = m::mock(MailerInterface::class);
+        $mailer->shouldReceive('send')
+            ->once()
+            ->andReturnUsing(
+                function (SymfonyEmail $email) use ($expectHeader): void {
+                    $this->assertSame(
+                        $expectHeader,
+                        $email->getHeaders()->has(\Dvsa\Olcs\Email\Transport\GovUkNotifyTransport::PAYLOAD_HEADER)
+                    );
+                }
+            );
+        $this->sut->setMailer($mailer);
+
+        $this->sut->send(
+            'from@example.com',
+            'From',
+            'to@example.com',
+            'Subject',
+            'Body',
+            null,
+            [],
+            [],
+            [],
+            false,
+            ['templateId' => 'tpl', 'personalisation' => ['name' => 'Bob']]
+        );
+    }
+
+    public static function dpNotifyPayloadHeader(): \Iterator
+    {
+        yield 'smtp' => ['smtp://localhost:25', false];
+        yield 'govuknotify' => ['govuknotify://KEY@default', true];
+        yield 'govuknotify+mailpit' => ['govuknotify+mailpit://mailpit:1025', true];
+    }
+
     /**
      * Tests sending plain text email
      */

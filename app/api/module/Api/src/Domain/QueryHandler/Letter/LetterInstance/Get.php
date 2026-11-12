@@ -73,11 +73,39 @@ class Get extends AbstractQueryByIdHandler
 
         $result = $this->result($letterInstance, $this->bundle, $this->values);
 
+        $issuesById = [];
+        foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
+            $issuesById[(int) $issue->getId()] = $issue;
+        }
+        $todosById = [];
+        foreach ($letterInstance->getLetterInstanceTodos() as $todo) {
+            $todosById[(int) $todo->getId()] = $todo;
+        }
+
         $counts = $letterInstance->getTodoRequiringIssueCounts();
         $placements = $letterInstance->getTodoPlacementIssueIds();
         $data = $result->serialize();
 
+        // the letter's own rule for whether it can still change (VOL-7735), so pages don't copy it
+        $data['isOpenForChanges'] = $letterInstance->isOpenForChanges();
+        $data['isSent'] = (bool) $letterInstance->isSent();
+
+        // the effective heading and "Input required", worked out by the entities (VOL-7735)
+        foreach ($data['letterInstanceIssues'] ?? [] as $index => $row) {
+            $issue = $issuesById[(int) ($row['id'] ?? 0)] ?? null;
+            $data['letterInstanceIssues'][$index]['effectiveHeading'] = $issue?->getHeading();
+            $data['letterInstanceIssues'][$index]['displayName'] = $issue?->getDisplayName();
+            $data['letterInstanceIssues'][$index]['isOther'] = $issue?->isOther() ?? false;
+            $data['letterInstanceIssues'][$index]['inputPending'] = $issue?->isInputPending() ?? false;
+        }
+
         foreach ($data['letterInstanceTodos'] ?? [] as $index => $todo) {
+            $entity = $todosById[(int) ($todo['id'] ?? 0)] ?? null;
+            $data['letterInstanceTodos'][$index]['isCustom'] = $entity?->isCustom() ?? false;
+            $data['letterInstanceTodos'][$index]['customIndex'] = $entity?->getCustomIndex();
+            $data['letterInstanceTodos'][$index]['customLabel'] = $entity?->getCustomLabel();
+            $data['letterInstanceTodos'][$index]['inputPending'] = $entity?->isInputPending() ?? false;
+
             // same key as LetterTodoVersion::getDedupeKey, built from the serialised row
             $todoId = $todo['letterTodoVersion']['letterTodo']['id'] ?? null;
             $key = $todoId !== null ? 'todo-' . $todoId : 'version-' . ($todo['letterTodoVersion']['id'] ?? '');

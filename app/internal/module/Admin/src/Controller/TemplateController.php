@@ -37,6 +37,9 @@ class TemplateController extends AbstractInternalController implements LeftViewP
 
     protected $navigationId = 'admin-dashboard/content-management';
 
+    /** Route used for the preview and sibling links; SMS Management overrides it. */
+    protected string $templateRoute = 'admin-dashboard/admin-email-templates';
+
     protected $filterForm = TemplateFilter::class;
     protected $formClass = TemplateEdit::class;
     protected $mapperClass = Mapper::class;
@@ -93,6 +96,7 @@ class TemplateController extends AbstractInternalController implements LeftViewP
             'md' => 'Markdown',
             'html' => 'HTML',
             'plain' => 'Plain text',
+            'sms' => 'SMS',
             default => $format !== '' ? ucfirst($format) : 'Template',
         };
 
@@ -158,7 +162,7 @@ class TemplateController extends AbstractInternalController implements LeftViewP
         $form->get('jsonUrl')
             ->setValue(
                 $this->url()->fromRoute(
-                    'admin-dashboard/admin-email-templates',
+                    $this->templateRoute,
                     [
                         'action' => 'previewTemplate'
                     ]
@@ -231,7 +235,7 @@ class TemplateController extends AbstractInternalController implements LeftViewP
                 );
             } else {
                 $url = $this->url()->fromRoute(
-                    'admin-dashboard/admin-email-templates',
+                    $this->templateRoute,
                     ['action' => 'edit', 'id' => (int) ($v['id'] ?? 0)]
                 );
                 $pills .= sprintf(

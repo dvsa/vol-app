@@ -208,9 +208,11 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
         // Treat a blank/whitespace-only value or the literal "null" sentinel as "disabled": SSM String
         // params cannot be empty, so non-prod envs opt out with " " or "null" rather than an empty
         // string — without trimming, those truthy values would become the redirect recipient (VOL-7240).
+        $redirectTo = null;
         $sendAllMailTo = trim((string)$this->getSendAllMailTo());
         if ($sendAllMailTo !== '' && strcasecmp($sendAllMailTo, 'null') !== 0) {
             $to = $sendAllMailTo;
+            $redirectTo = $sendAllMailTo;
             /**
              * IMPORTANT CC gets emptied when we have configured emails to be sent to 1 email address
              */
@@ -257,7 +259,7 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
             ];
         }
 
-        $notifyPayload = $this->buildNotifyPayload($command, $downloadedDocs);
+        $notifyPayload = $this->buildNotifyPayload($command, $downloadedDocs, $subject, $redirectTo);
 
         $this->send(
             $to,
@@ -284,7 +286,7 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
      * @param array<int, array{fileName: string, content: string}> $attachments
      * @return array<string, mixed>|null
      */
-    protected function buildNotifyPayload(CommandInterface $command, array $attachments): ?array
+    protected function buildNotifyPayload(CommandInterface $command, array $attachments, string $subject = '', ?string $redirectTo = null): ?array
     {
         if (!$command instanceof SendEmailCmd || $command->getTemplateKey() === null) {
             return null;
@@ -298,7 +300,30 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
                 ? $this->replaceUris($command->getMarkdownBody())
                 : null,
             'attachments' => $attachments,
+            'context' => $this->buildRecordContext($command, $subject, $redirectTo),
         ];
+    }
+
+    /**
+     * What the transport needs to write the notify_message row. originalTo is the intended To list,
+     * taken from the command so it survives the send_all_mail_to redirect (set only when active).
+     *
+     * @return array<string, mixed>
+     */
+    private function buildRecordContext(SendEmailCmd $command, string $subject, ?string $redirectTo): array
+    {
+        $context = $command->getNotifyContext();
+        $context['templateName'] = $context['templateName'] ?? null;
+        $context['description'] = $subject;
+        if ($redirectTo !== null) {
+            $context['redirectTo'] = $redirectTo;
+            $context['originalTo'] = array_values(array_filter(
+                array_merge((array) $command->getTo(), (array) $command->getCc(), (array) $command->getBcc()),
+                'is_string'
+            ));
+        }
+
+        return $context;
     }
 
     /**

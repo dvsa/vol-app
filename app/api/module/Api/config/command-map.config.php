@@ -236,8 +236,16 @@ return [
     Command\Bus\Ebsr\DeleteSubmission::class => CommandHandler\Bus\Ebsr\DeleteSubmission::class,
     TransferCommand\Bus\PrintLetter::class => CommandHandler\Bus\PrintLetter::class,
 
+    // SMS
+    Command\Sms\QueueLetterSms::class => CommandHandler\Sms\QueueLetterSms::class,
+    Command\Sms\SendSms::class => CommandHandler\Sms\SendSms::class,
+
+    // Transfer - Notify
+    TransferCommand\Notify\UpdateDeliveryStatus::class => CommandHandler\Notify\UpdateDeliveryStatus::class,
+
     // Transfer - Licence
     TransferCommand\Licence\UpdateAddresses::class => CommandHandler\Licence\UpdateAddresses::class,
+    TransferCommand\Licence\UpdateSmsNumber::class => CommandHandler\Licence\UpdateSmsNumber::class,
     TransferCommand\Licence\UpdateBusinessDetails::class => CommandHandler\Licence\UpdateBusinessDetails::class,
     TransferCommand\Licence\UpdateCompanySubsidiary::class => CommandHandler\Licence\UpdateCompanySubsidiary::class,
     TransferCommand\Licence\CreateCompanySubsidiary::class => CommandHandler\Licence\CreateCompanySubsidiary::class,
@@ -1400,6 +1408,8 @@ return [
     TransferCommand\Letter\LetterInstanceIssue\UpdateContent::class => CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceSection\UpdateContent::class => CommandHandler\Letter\LetterInstanceSection\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceTodo\UpdateContent::class => CommandHandler\Letter\LetterInstanceTodo\UpdateContent::class,
+    TransferCommand\Letter\LetterInstanceTodo\CreateCustom::class => CommandHandler\Letter\LetterInstanceTodo\CreateCustom::class,
+    TransferCommand\Letter\LetterInstanceTodo\DeleteCustom::class => CommandHandler\Letter\LetterInstanceTodo\DeleteCustom::class,
     TransferCommand\Letter\LetterInstanceAppendix\UpdateContent::class => CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class,
     TransferCommand\Letter\MasterTemplate\Create::class => CommandHandler\Letter\MasterTemplate\Create::class,
     TransferCommand\Letter\MasterTemplate\Update::class => CommandHandler\Letter\MasterTemplate\Update::class,

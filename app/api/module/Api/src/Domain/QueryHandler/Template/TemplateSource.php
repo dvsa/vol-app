@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Template;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryByIdHandler;
 use Dvsa\Olcs\Api\Domain\Repository\Template as TemplateRepo;
+use Dvsa\Olcs\Email\Service\NotifyConfig;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Psr\Container\ContainerInterface;
 
@@ -48,11 +49,11 @@ final class TemplateSource extends AbstractQueryByIdHandler
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
-        $dsn = $config['email']['notify_test']['dsn'] ?? null;
-        $isValid = is_string($dsn) && $dsn !== '' && !preg_match('/^%[^%]+%$/', $dsn);
+        // blank, " " and unresolved placeholders hide the button (prep and prod set " ")
+        $dsn = NotifyConfig::testDsn($config);
 
-        $this->notifyTestEnabled = $isValid;
-        $this->notifyTestHint = $this->buildNotifyTestHint(is_string($dsn) ? $dsn : '');
+        $this->notifyTestEnabled = $dsn !== null;
+        $this->notifyTestHint = $this->buildNotifyTestHint($dsn ?? '');
 
         return parent::__invoke($container, $requestedName, $options);
     }

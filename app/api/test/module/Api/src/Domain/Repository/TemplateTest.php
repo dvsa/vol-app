@@ -143,6 +143,36 @@ final class TemplateTest extends RepositoryTestCase
         );
     }
 
+    /** The Email Templates list (no format chosen) must never show SMS rows. */
+    public function testAllFormatsExcludesSms(): void
+    {
+        $query = \Dvsa\Olcs\Transfer\Query\Template\AvailableTemplateGroups::create([]);
+
+        $qb = $this->newRealQb();
+        $qb->select('m')->from(Entity::class, 'm');
+        $this->callPrivate('applyListFilters', [$qb, $query]);
+        $this->assertStringContainsString('m.format <> :smsFormat', $qb->getDQL());
+        $this->assertSame('sms', $qb->getParameter('smsFormat')->getValue());
+
+        $qb = $this->newRealQb();
+        $qb->select('m')->from(Entity::class, 'm');
+        $this->callPrivate('applyTemplateGroupFilters', [$qb, $query]);
+        $this->assertStringContainsString('m.format <> :smsFormat', $qb->getDQL());
+        $this->assertSame('sms', $qb->getParameter('smsFormat')->getValue());
+    }
+
+    public function testSmsFormatIsStillSelectable(): void
+    {
+        $query = \Dvsa\Olcs\Transfer\Query\Template\AvailableTemplateGroups::create(['format' => 'sms']);
+
+        $qb = $this->newRealQb();
+        $qb->select('m')->from(Entity::class, 'm');
+        $this->callPrivate('applyListFilters', [$qb, $query]);
+
+        $this->assertStringNotContainsString('smsFormat', $qb->getDQL());
+        $this->assertSame('sms', $qb->getParameter('format')->getValue());
+    }
+
     private function expectEntityManagerQb(): TestQueryBuilder
     {
         $qb = $this->newRealQb();

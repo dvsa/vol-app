@@ -97,4 +97,54 @@ final class StrategySelectingViewRendererTest extends MockeryTestCase
             $sut->render($locale, $format, $template, $variables)
         );
     }
+
+    public function testMarkdownUsesThePlainTextRenderer(): void
+    {
+        $twigRenderer = m::mock(TwigRenderer::class);
+        $twigRenderer->shouldNotReceive('render');
+        $plainRenderer = m::mock(TwigRenderer::class);
+        $plainRenderer->shouldReceive('render')->once()
+            ->with('en_GB/md/my-email', ['name' => 'x'])
+            ->andReturn('Hi x');
+
+        $twigLoader = m::mock(TwigLoader::class);
+        $twigLoader->shouldReceive('exists')->with('en_GB/md/my-email')->andReturn(true);
+
+        $sut = new StrategySelectingViewRenderer(
+            m::mock(RendererInterface::class),
+            $twigRenderer,
+            $twigLoader,
+            $plainRenderer
+        );
+
+        $this->assertSame('Hi x', $sut->render('en_GB', 'md', 'my-email', ['name' => 'x']));
+    }
+
+    public function testNotifyMarkdownIsNotHtmlEscapedButHtmlStillIs(): void
+    {
+        $loader = new \Twig\Loader\ArrayLoader([
+            'en_GB/md/my-email' => 'Hi {{ name }}',
+            'en_GB/html/my-email' => '<p>Hi {{ name }}</p>',
+        ]);
+        $container = m::mock(\Psr\Container\ContainerInterface::class);
+        $container->shouldReceive('get')->with('TemplateDatabaseTwigLoader')->andReturn($loader);
+        $plainRenderer = (new \Dvsa\Olcs\Api\Service\Template\PlainTextTwigRendererFactory())($container, 'x');
+        $twigRenderer = new TwigRenderer(new \Twig\Environment($loader, ['strict_variables' => true]));
+
+        $sut = new StrategySelectingViewRenderer(m::mock(RendererInterface::class), $twigRenderer, $loader, $plainRenderer);
+        $vars = ['name' => 'Smith & Sons <b>'];
+
+        $markdown = $sut->render('en_GB', 'md', 'my-email', $vars);
+        // Notify escapes HTML itself, so the markdown it gets must carry the raw text.
+        $this->assertSame('Hi Smith & Sons <b>', $markdown);
+        $this->assertSame('<p>Hi Smith &amp; Sons &lt;b&gt;</p>', $sut->render('en_GB', 'html', 'my-email', $vars));
+
+        // The local preview of that markdown escapes it rather than letting the tag through.
+        $html = \Dvsa\Olcs\Email\View\NotifyChrome::renderMarkdownBody(
+            $markdown,
+            \Dvsa\Olcs\Email\View\NotifyChrome::markdownConverter()
+        );
+        $this->assertStringContainsString('Hi Smith &amp; Sons &lt;b&gt;', $html);
+        $this->assertStringNotContainsString('<b>', $html);
+    }
 }

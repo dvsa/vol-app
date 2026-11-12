@@ -6,6 +6,7 @@ use Common\Data\Mapper\Continuation\LicenceChecklist as LicenceChecklistMapper;
 use Common\FormService\FormServiceManager;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Command\Licence\UpdateSmsNumber;
 use Dvsa\Olcs\Transfer\Query\ContinuationDetail\LicenceChecklist as LicenceChecklistQuery;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
@@ -56,7 +57,23 @@ class ChecklistController extends AbstractContinuationController
         if ($request->isPost()) {
             $form->setData((array) $request->getPost());
             if ($form->isValid()) {
-                $this->redirect()->toRoute($this->getNextStepRoute($data), [], [], true);
+                // The field is only on the form once sms_number_capture is on
+                if (!$form->has('smsNumber')) {
+                    return $this->redirect()->toRoute($this->getNextStepRoute($data), [], [], true);
+                }
+
+                $response = $this->handleCommand(
+                    UpdateSmsNumber::create([
+                        'id' => $licenceData['id'],
+                        'smsNumber' => $form->get('smsNumber')->get('smsNumber')->getValue(),
+                    ])
+                );
+
+                if ($response->isOk()) {
+                    return $this->redirect()->toRoute($this->getNextStepRoute($data), [], [], true);
+                }
+
+                $this->addErrorMessage('unknown-error');
             }
         }
 

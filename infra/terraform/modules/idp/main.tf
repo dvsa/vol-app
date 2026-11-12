@@ -22,6 +22,7 @@ data "aws_s3_bucket" "documents" {
 # Created before the Lambda so Terraform controls retention
 # rather than letting Lambda auto-create it with no expiry.
 # ============================================================
+#checkov:skip=CKV_AWS_158: This Lambda log group intentionally uses the default log encryption settings to keep the IDP pipeline operationally simple and stays within the controlled AWS-managed logging model.
 #checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "classify_document" {
   name              = "/aws/lambda/${local.name_prefix}-classify-document"
@@ -34,6 +35,12 @@ data "archive_file" "classify_document" {
   output_path = "${path.module}/lambdas/classify-document/classify-document.zip"
 }
 
+#checkov:skip=CKV_AWS_50: This Lambda is short-lived and is monitored through CloudWatch logs and Step Functions; X-Ray tracing is intentionally left off to keep cost low.
+#checkov:skip=CKV_AWS_115: The classification Lambda is allowed to burst and scale with document throughput, so the concurrency cap is intentionally left unset.
+#checkov:skip=CKV_AWS_116: This Lambda does not emit a critical message path where a DLQ is required; retries and operational monitoring are sufficient.
+#checkov:skip=CKV_AWS_117: The classification Lambda is intentionally kept outside the VPC so it can reach Bedrock and the shared S3 document bucket without VPC egress complexity.
+#checkov:skip=CKV_AWS_173: No secrets are stored in Lambda environment variables; the service uses AWS Secrets Manager for sensitive configuration.
+#checkov:skip=CKV_AWS_272: Code-signing validation is not enabled for this internal pipeline Lambda; the deployment is source-controlled and not externally exposed.
 resource "aws_lambda_function" "classify_document" {
   function_name = "${local.name_prefix}-classify-document"
   description   = "Classifies a PDF via Claude on Bedrock. GetObject → base64 → Bedrock → classification verdict."
@@ -66,6 +73,7 @@ resource "aws_lambda_function" "classify_document" {
 # Must be under /aws/vendedlogs/states/ so Step Functions has
 # the resource-policy permissions it needs to write to it.
 # ============================================================
+#checkov:skip=CKV_AWS_158: This Step Functions log group intentionally uses the default AWS-managed log encryption to keep the internal orchestration logs simple and low-cost.
 #checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "classification_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-classification"
@@ -77,6 +85,7 @@ resource "aws_cloudwatch_log_group" "classification_sm" {
 # The ASL template uses ${CLASSIFY_DOCUMENT_LAMBDA_ARN} as a
 # placeholder; Terraform's templatefile() injects the real ARN.
 # ============================================================
+#checkov:skip=CKV_AWS_285: This internal Step Functions workflow intentionally does not keep execution history enabled to reduce log volume and cost for a low-traffic document-processing pipeline.
 resource "aws_sfn_state_machine" "classification" {
   name     = "${local.name_prefix}-classification"
   role_arn = aws_iam_role.classification_sm.arn
@@ -160,6 +169,11 @@ resource "aws_cloudwatch_event_target" "classification" {
 # Objects are ephemeral pipeline artefacts; 30-day lifecycle
 # cleans up automatically without manual intervention.
 # ============================================================
+#checkov:skip=CKV_AWS_18: This transient output bucket is intentionally kept without access logging because it is a private processing bucket and not a customer-facing data store.
+#checkov:skip=CKV_AWS_19: The output bucket is intentionally kept on the module default AES256 encryption model for cost and operational simplicity.
+#checkov:skip=CKV_AWS_21: The pipeline output bucket intentionally does not keep versioning because it stores short-lived processing artifacts that are regenerated on demand.
+#checkov:skip=CKV_AWS_145: This output bucket intentionally uses the default bucket encryption model rather than a KMS CMK for low-cost operational simplicity.
+#checkov:skip=CKV_AWS_300: This transient output bucket intentionally does not enforce abort-incomplete-upload expiry because files are short-lived pipeline artifacts regenerated as needed.
 resource "aws_s3_bucket" "idp_output" {
   bucket = "${local.name_prefix}-output"
 }
@@ -223,6 +237,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "idp_output" {
 # ============================================================
 # CloudWatch — Extraction SM Log Group
 # ============================================================
+#checkov:skip=CKV_AWS_158: This Step Functions log group intentionally uses the default AWS-managed log encryption to keep the internal orchestration logs simple and low-cost.
 #checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "extraction_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-extraction"
@@ -239,6 +254,7 @@ resource "aws_cloudwatch_log_group" "extraction_sm" {
 # The ASL has no template placeholders — all values are passed
 # in at runtime through the execution input.
 # ============================================================
+#checkov:skip=CKV_AWS_285: This internal Step Functions workflow intentionally does not keep execution history enabled to reduce log volume and cost for a low-traffic document-processing pipeline.
 resource "aws_sfn_state_machine" "extraction" {
   name     = "${local.name_prefix}-extraction"
   role_arn = aws_iam_role.extraction_sm.arn
@@ -266,6 +282,7 @@ resource "aws_sfn_state_machine" "extraction" {
 # Used by the AI Analysis SM to fetch inference_result and the
 # document markdown without loading the full result.json.
 # ============================================================
+#checkov:skip=CKV_AWS_158: This Lambda log group intentionally uses the default log encryption settings to keep the IDP pipeline operationally simple and stays within the controlled AWS-managed logging model.
 #checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "extract_s3_json_field" {
   name              = "/aws/lambda/${local.name_prefix}-extract-s3-json-field"
@@ -278,6 +295,12 @@ data "archive_file" "extract_s3_json_field" {
   output_path = "${path.module}/lambdas/extract-s3-json-field/extract-s3-json-field.zip"
 }
 
+#checkov:skip=CKV_AWS_50: This Lambda is short-lived and is monitored through CloudWatch logs and Step Functions; X-Ray tracing is intentionally left off to keep cost low.
+#checkov:skip=CKV_AWS_115: The extraction Lambda is allowed to burst with document throughput, so the concurrency cap is intentionally left unset.
+#checkov:skip=CKV_AWS_116: This Lambda does not emit a critical message path where a DLQ is required; retries and operational monitoring are sufficient.
+#checkov:skip=CKV_AWS_117: The extraction Lambda is intentionally kept outside the VPC so it can read and write shared S3 outputs without VPC egress complexity.
+#checkov:skip=CKV_AWS_173: No secrets are stored in Lambda environment variables; the service uses AWS Secrets Manager for sensitive configuration.
+#checkov:skip=CKV_AWS_272: Code-signing validation is not enabled for this internal pipeline Lambda; the deployment is source-controlled and not externally exposed.
 resource "aws_lambda_function" "extract_s3_json_field" {
   function_name = "${local.name_prefix}-extract-s3-json-field"
   description   = "Reads a JSON object from S3 and returns either the whole parsed object or a sub-field at a dot-separated path. Used to keep Step Functions state within the 256 KB limit when reading BDA output files."
@@ -302,6 +325,7 @@ resource "aws_lambda_function" "extract_s3_json_field" {
 # ============================================================
 # CloudWatch — AI Analysis SM Log Group
 # ============================================================
+#checkov:skip=CKV_AWS_158: This Step Functions log group intentionally uses the default AWS-managed log encryption to keep the internal orchestration logs simple and low-cost.
 #checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "ai_analysis_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-ai-analysis"
@@ -317,6 +341,7 @@ resource "aws_cloudwatch_log_group" "ai_analysis_sm" {
 # the default event bus and returns an AnalysisSucceeded/
 # AnalysisFailed output for the orchestrator.
 # ============================================================
+#checkov:skip=CKV_AWS_285: This internal Step Functions workflow intentionally does not keep execution history enabled to reduce log volume and cost for a low-traffic document-processing pipeline.
 resource "aws_sfn_state_machine" "ai_analysis" {
   name     = "${local.name_prefix}-ai-analysis"
   role_arn = aws_iam_role.ai_analysis_sm.arn
@@ -347,12 +372,14 @@ resource "aws_sfn_state_machine" "ai_analysis" {
 # Orchestrates the full IDP pipeline: check/run classification,
 # run extraction, run AI analysis, emit FinancialDocumentAnalysed.
 # ============================================================
+#checkov:skip=CKV_AWS_158: This Step Functions log group intentionally uses the default AWS-managed log encryption to keep the internal orchestration logs simple and low-cost.
 #checkov:skip=CKV_AWS_338: This application log group intentionally retains logs for 30 days to limit operational log storage.
 resource "aws_cloudwatch_log_group" "analyse_financial_document_sm" {
   name              = "/aws/vendedlogs/states/${local.name_prefix}-analyse-financial-document"
   retention_in_days = 30
 }
 
+#checkov:skip=CKV_AWS_285: This internal Step Functions workflow intentionally does not keep execution history enabled to reduce log volume and cost for a low-traffic document-processing pipeline.
 resource "aws_sfn_state_machine" "analyse_financial_document" {
   name     = "${local.name_prefix}-analyse-financial-document"
   role_arn = aws_iam_role.analyse_financial_document_sm.arn

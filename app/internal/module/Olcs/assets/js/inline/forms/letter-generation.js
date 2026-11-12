@@ -55,6 +55,19 @@ OLCS.ready(function () {
     }
   }
 
+  // Show a message above the create form. Only the words change: the "Error:" before them is
+  // read out by screen readers and stays as it is.
+  function showCreateError(message) {
+    var $error = $("#validation-error");
+    if (!$error.length) {
+      return;
+    }
+
+    $("#validation-error-text").text(message);
+    $error.show();
+    $error[0].scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
   // Clear a radio group's error once the caseworker picks an option
   $("body").on(
     "change",
@@ -80,8 +93,7 @@ OLCS.ready(function () {
 
     // Validate at least one issue or appendix is selected
     if ($issueCheckboxes.length === 0 && $appendixCheckboxes.length === 0) {
-      $errorDiv.show();
-      $errorDiv[0].scrollIntoView({ behavior: "smooth", block: "nearest" });
+      showCreateError("Please choose at least one issue or appendix");
       return false;
     }
 
@@ -183,11 +195,7 @@ OLCS.ready(function () {
             $previewModal.show();
           }
         } else {
-          // Show error message
-          $errorDiv
-            .find("span:last")
-            .text(response.message || "Failed to create letter");
-          $errorDiv.show();
+          showCreateError(response.message || "Failed to create letter");
           $button.prop("disabled", false).text("Create letter");
         }
       },
@@ -203,8 +211,7 @@ OLCS.ready(function () {
           // Use default error message
         }
 
-        $errorDiv.find("span:last").text(errorMessage);
-        $errorDiv.show();
+        showCreateError(errorMessage);
         $button.prop("disabled", false).text("Create letter");
       },
     });
@@ -248,11 +255,140 @@ OLCS.ready(function () {
     window.location.reload();
   });
 
+  /**
+   * "Prepare to send" is only on this step, and the send form replaces it in the modal. If the
+   * letter is changed after that, it has to be prepared again before it can be sent (VOL-7735).
+   * So we keep a copy of this step and add a link back to it on the send form.
+   */
+  var prepareStep = null;
+
+  // the letter being prepared, and then its send form on the way into the modal
+  var pendingSend = null;
+
+  /**
+   * Whether the modal a step was copied from is still the one on the page. Closing a modal takes
+   * it off the page, and the next one opened is a new element.
+   *
+   * This is checked instead of listening for "hide:modal", because that listener can be skipped:
+   * the event emitter loses its place when an earlier listener removes itself as it runs, and
+   * modalForm's does.
+   */
+  function modalIsStillOpen(step) {
+    return !step || step.modal.isConnected;
+  }
+
+  // Whether an answer should still be acted on: it's for the send in hand, and the modal that
+  // send was started in hasn't been closed since. A late answer is dropped, instead of landing
+  // in whatever is open by then.
+  function isStillWanted(send) {
+    return pendingSend === send && modalIsStillOpen(send.step);
+  }
+
+  function offerPrepareAgain() {
+    if (!prepareStep) {
+      return;
+    }
+    if (!modalIsStillOpen(prepareStep)) {
+      prepareStep = null;
+      return;
+    }
+
+    var printUrl = prepareStep.printUrl;
+    var $content = $(".modal__content");
+    var $sendForm = $content.find("form").filter(function () {
+      return ($(this).attr("action") || "").indexOf(printUrl) !== -1;
+    });
+    if (!$sendForm.length || $content.find("#prepare-again").length) {
+      return;
+    }
+
+    $content.append(
+      '<p class="govuk-body">If you change the letter after this, ' +
+        '<a href="#" id="prepare-again" class="govuk-link">prepare it again</a> ' +
+        "before you send it.</p>",
+    );
+  }
+
+  // the send form is redrawn each time it's submitted, so add the link again on every render
+  if (typeof OLCS !== "undefined" && OLCS.eventEmitter) {
+    OLCS.eventEmitter.on("render", offerPrepareAgain);
+  }
+
+  $("body").on("click", "#prepare-again", function (e) {
+    e.preventDefault();
+    if (!prepareStep) {
+      return;
+    }
+
+    var step = prepareStep;
+    prepareStep = null;
+    OLCS.modal.updateBody(step.body);
+    $(".modal__title").text(step.title);
+  });
+
+  /**
+   * Once the letter is prepared the send form goes in the modal. If it doesn't load, the modal
+   * says so and offers to try again, instead of staying on "Loading..." with nothing to press.
+   * Only the load is tried again: the PDF is already made, and preparing the letter again would
+   * leave a second one on the record.
+   */
+  function loadSendForm() {
+    var loading = pendingSend;
+    if (!loading || !loading.printUrl) {
+      return;
+    }
+
+    OLCS.modal.updateBody("<p>Loading...</p>");
+
+    $.get(loading.printUrl)
+      .done(function (html) {
+        if (!isStillWanted(loading)) {
+          return;
+        }
+        pendingSend = null;
+
+        if (loading.step) {
+          loading.step.printUrl = loading.printUrl;
+          prepareStep = loading.step;
+        }
+        OLCS.modal.updateBody(html);
+        $(".modal__title").text("Send letter");
+      })
+      .fail(function () {
+        if (!isStillWanted(loading)) {
+          return;
+        }
+
+        OLCS.modal.updateBody(
+          '<p class="govuk-error-message" role="alert">The letter was prepared, but the send options didn\'t load.</p>' +
+            '<p class="govuk-body"><a href="#" id="load-send-form-again" class="govuk-link">Try again</a></p>',
+        );
+        // the button that was pressed has gone, so put the keyboard on the way forward
+        $("#load-send-form-again").trigger("focus");
+      });
+  }
+
+  $("body").on("click", "#load-send-form-again", function (e) {
+    e.preventDefault();
+    loadSendForm();
+  });
+
   // Prepare to send button - converts letter to PDF and loads send modal
   $("body").on("click", "#prepare-to-send-btn", function (e) {
     e.preventDefault();
     var $btn = $(this);
     $("#prepare-to-send-error").hide().text("");
+
+    // copy this step before the button changes, so we can come back to it
+    var $step = $btn.closest(".modal__content");
+    var step = $step.length
+      ? {
+          body: $step.html(),
+          title: $(".modal__title").text(),
+          modal: $step[0],
+        }
+      : null;
+
     $btn.prop("disabled", true).text("Preparing...");
 
     // Get letterInstanceId from the preview link (set during generateAction success)
@@ -268,6 +404,9 @@ OLCS.ready(function () {
       return;
     }
 
+    var preparing = { step: step };
+    pendingSend = preparing;
+
     $.ajax({
       url: "/letter/prepare-to-send",
       type: "POST",
@@ -277,30 +416,24 @@ OLCS.ready(function () {
         docTemplate: docTemplateId,
       }),
       success: function (response) {
+        if (!isStillWanted(preparing)) {
+          return;
+        }
+
         if (response.success && response.printUrl) {
-          // Load the existing printAction into the modal
-          if (
-            typeof OLCS !== "undefined" &&
-            OLCS.modal &&
-            OLCS.modal.updateBody
-          ) {
-            OLCS.modal.updateBody("<p>Loading...</p>");
-          }
-          $.get(response.printUrl, function (html) {
-            if (
-              typeof OLCS !== "undefined" &&
-              OLCS.modal &&
-              OLCS.modal.updateBody
-            ) {
-              OLCS.modal.updateBody(html);
-              $(".modal__title").text("Send letter");
-            }
-          });
+          preparing.printUrl = response.printUrl;
+          loadSendForm();
         } else {
+          pendingSend = null;
           $btn.prop("disabled", false).text("Prepare to send");
         }
       },
       error: function (xhr) {
+        if (!isStillWanted(preparing)) {
+          return;
+        }
+        pendingSend = null;
+
         // Surface the server's reason (e.g. VOL-7402 "requires input" block)
         // instead of silently resetting the button.
         var message = "Something went wrong preparing the letter. Try again.";

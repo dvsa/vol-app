@@ -368,6 +368,7 @@ final class LicenceChecklistTest extends MockeryTestCase
                     'establishmentAddress' => 'establishment address',
                     'primaryNumber' => '123',
                     'secondaryNumber' => '456',
+                    'smsNumber' => '+447700900123',
                     'correspondenceEmail' => 'test@example.com',
                     'showEstablishmentAddress' => true,
                 ]
@@ -394,6 +395,10 @@ final class LicenceChecklistTest extends MockeryTestCase
                 [
                     ['value' => 'continuations.addresses.secondary-number.table.name_translated', 'header' => true],
                     ['value' => '456']
+                ],
+                [
+                    ['value' => 'continuations.addresses.sms-number.table.name_translated', 'header' => true],
+                    ['value' => '+447700900123']
                 ],
                 [
                     [

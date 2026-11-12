@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Email\Transport;
 
 use Dvsa\Olcs\Email\Transport\DevNotifyTransport;
 use Dvsa\Olcs\Email\Transport\GovUkNotifyTransport;
+use Dvsa\Olcs\Email\Transport\NotifyMessageRecorderInterface;
 use League\CommonMark\ConverterInterface;
 use League\CommonMark\Output\RenderedContent;
 use Mockery as m;
@@ -74,5 +75,43 @@ final class DevNotifyTransportTest extends MockeryTestCase
         $this->inner->shouldReceive('send')->once()->andReturn(null);
 
         $this->sut->send($email);
+    }
+
+    public function testRecordsWithNullNotifyId(): void
+    {
+        $recorder = m::mock(NotifyMessageRecorderInterface::class);
+        $sut = new DevNotifyTransport(
+            $this->inner,
+            $this->converter,
+            '<html>{{subject}}<div>{{body}}</div></html>',
+            null,
+            null,
+            $recorder,
+        );
+
+        $email = new SymfonyEmail()
+            ->from(new Address('from@example.com'))
+            ->to(new Address('user@example.com'))
+            ->subject('Hello')
+            ->text('plain');
+        $email->getHeaders()->addTextHeader(
+            GovUkNotifyTransport::PAYLOAD_HEADER,
+            json_encode(['markdownBody' => 'Hi', 'context' => ['licence' => 3]], JSON_THROW_ON_ERROR),
+        );
+
+        $this->converter->shouldReceive('convert')->andReturn(
+            new RenderedContent(new \League\CommonMark\Node\Block\Document(), '<p>Hi</p>')
+        );
+        $this->inner->shouldReceive('send')->once();
+
+        $recorder->shouldReceive('recordEmail')->once()->with(
+            'user@example.com',
+            m::on(fn($c) => $c['licence'] === 3),
+            null,
+            null,
+            null
+        );
+
+        $sut->send($email);
     }
 }

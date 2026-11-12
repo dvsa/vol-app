@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\InspectionRequest;
 
+use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\System\SystemParameter;
@@ -159,7 +160,10 @@ final class SendInspectionRequest extends AbstractCommandHandler implements Emai
             'operatorName' => $inspectionRequest['licence']['organisation']['name'],
             'operatorEmail' => $inspectionRequest['licence']['correspondenceCd']['emailAddress'],
             'operatorAddress' => $inspectionRequest['licence']['correspondenceCd']['address'],
-            'contactPhoneNumbers' => $inspectionRequest['licence']['correspondenceCd']['phoneContacts'],
+            'contactPhoneNumbers' => array_values(array_filter(
+                $inspectionRequest['licence']['correspondenceCd']['phoneContacts'],
+                static fn($contact) => ($contact['phoneContactType']['id'] ?? null) !== PhoneContact::TYPE_SMS
+            )),
             'transportManagers' => $this->getTransportManagers($inspectionRequest),
             'tradingNames' => $this->getTradingNames($inspectionRequest),
             'workshopIsExternal' => (isset($workshop['isExternal']) && $workshop['isExternal'] === 'Y'),

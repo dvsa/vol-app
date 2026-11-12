@@ -9,12 +9,17 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\UpdateIssues;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent as UpdateIssueContent;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\CreateCustom;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\DeleteCustom;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\GenerationContext;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterIssue\GetList as LetterIssueList;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList as LetterIssueTypeList;
 use Laminas\Http\Request;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
+use Laminas\View\Renderer\PhpRenderer;
+use Laminas\View\Resolver\TemplatePathStack;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Letter\LetterGenerationController as Sut;
@@ -253,6 +258,8 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         return [
             'id' => 3,
             'editedDescription' => $editedDescription,
+            // the API works this out (LetterInstanceTodo::isInputPending, VOL-7735)
+            'inputPending' => $requiresInput && $editedDescription === null,
             'requiringIssueCount' => 2,
             'letterTodoVersion' => [
                 'name' => 'Upload bank statements',
@@ -311,6 +318,25 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         return $issueIds;
     }
 
+    /**
+     * VOL-7735: the Other option comes last in its group, whatever its key sorts as ("FI-OTHER"
+     * sorts before "FI01", since "-" comes before the digits).
+     */
+    public function testOtherIssueIsLastInItsGroup(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchActiveIssueTypes')->andReturn([['id' => 2, 'name' => 'Finance', 'isActive' => true]]);
+        $sut->shouldReceive('fetchActiveLetterIssues')->andReturn([
+            ['id' => 30, 'issueKey' => 'FI-OTHER', 'currentVersion' => ['letterIssueType' => ['id' => 2], 'isOther' => true]],
+            ['id' => 20, 'issueKey' => 'FI01', 'currentVersion' => ['letterIssueType' => ['id' => 2]]],
+            ['id' => 21, 'issueKey' => 'FI02', 'currentVersion' => ['letterIssueType' => ['id' => 2], 'isOther' => false]],
+        ]);
+
+        $accordion = (new \ReflectionMethod(Sut::class, 'buildAccordionData'))->invoke($sut, null);
+
+        $this->assertSame([20, 21, 30], array_column($accordion[0]['issues'], 'id'));
+    }
+
     public function testPsvContextHidesGoodsOnlyIssuesAndLeavesTheirTypeEmpty(): void
     {
         $this->assertSame(['Adverts' => [], 'Finance' => [20, 21]], $this->accordionFor('lcat_psv'));
@@ -326,7 +352,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertSame(['Adverts' => [10], 'Finance' => [20, 21]], $this->accordionFor(null));
     }
 
-    private function runCreateAction(Sut $sut, array $query): void
+    private function runCreateAction(Sut $sut, array $query): mixed
     {
         $request = new Request();
         $request->getQuery()->fromArray($query);
@@ -342,8 +368,9 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $sut->shouldReceive('placeholder')->andReturn($placeholder);
         $sut->shouldReceive('viewBuilder')->andReturn($viewBuilder);
         $sut->shouldReceive('fetchAppendicesForLetterType')->andReturn([]);
+        $sut->shouldReceive('csrfToken')->andReturn('csrf-hash')->byDefault();
 
-        $sut->createAction();
+        return $sut->createAction();
     }
 
     public function testCreateActionFiltersIssuesByTheLicenceGoodsOrPsv(): void
@@ -369,6 +396,50 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $sut->shouldReceive('fetchLetterChoicesForLetterType')->with(5, null)->once()->andReturn([]);
 
         $this->runCreateAction($sut, ['template' => '5']);
+    }
+
+    /**
+     * Form posts without a valid "security" token are turned into GETs by Common\Module, so the
+     * create form has to carry one. Without it every new letter failed that check.
+     */
+    public function testCreateLetterFormCarriesACsrfToken(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('buildAccordionData')->andReturn([]);
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->andReturn([]);
+        $sut->shouldReceive('csrfToken')->once()->andReturn('abc123-token');
+
+        $view = $this->runCreateAction($sut, ['template' => '5']);
+
+        $this->assertSame('abc123-token', $view->getVariable('csrfToken'));
+    }
+
+    /**
+     * The form is written by hand, so nothing puts the token on it for us: it has to be in the
+     * form that the dialog posts
+     */
+    public function testCreateLetterFormPostsTheCsrfToken(): void
+    {
+        $renderer = new PhpRenderer();
+        $renderer->setResolver(new TemplatePathStack([
+            'script_paths' => [__DIR__ . '/../../../../../module/Olcs/view'],
+        ]));
+
+        $html = $renderer->render('pages/letter/create', [
+            'templateId' => 5,
+            'queryParams' => ['template' => 5],
+            'accordionData' => [],
+            'appendicesData' => [],
+            'letterChoicesData' => [],
+            'csrfToken' => 'abc123-token',
+        ]);
+
+        $page = new \DOMDocument();
+        $page->loadHTML($html, LIBXML_NOERROR);
+        $tokens = (new \DOMXPath($page))->query('//form[@id="letter-create-form"]//input[@name="security"]');
+
+        $this->assertSame(1, $tokens->length);
+        $this->assertSame('abc123-token', $tokens->item(0)->getAttribute('value'));
     }
 
     /**
@@ -444,6 +515,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $sut = $this->bareSut();
 
         $request = new Request();
+        $request->setMethod('POST');
         $request->getPost()->fromArray(['letterType' => '5']);
         $request->getQuery()->fromArray(['licence' => '7']);
         $sut->shouldReceive('getRequest')->andReturn($request);
@@ -466,11 +538,101 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertStringContainsString('Failed to generate letter', $response->getContent());
     }
 
+    /**
+     * The dialog shows the caseworker why a letter couldn't be created, so the reasons have to be
+     * words. They used to be sent as JSON, brackets and all.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('refusedLetters')]
+    public function testARefusedLetterSaysWhyInWords(array $messages, string $expected): void
+    {
+        $sut = $this->bareSut();
+
+        $request = new Request();
+        $request->setMethod('POST');
+        $request->getPost()->fromArray(['letterType' => '5', 'letterIssues' => ['20']]);
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+        $sut->shouldReceive('extractRouteParams')->andReturn([]);
+        $sut->shouldReceive('fetchTemplateById')->andReturn(['letterType' => ['id' => 3]]);
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->andReturn([]);
+
+        $refused = m::mock(Response::class);
+        $refused->shouldReceive('isOk')->andReturn(false);
+        $refused->shouldReceive('getResult')->andReturn(['messages' => $messages]);
+        $sut->shouldReceive('handleCommand')->once()->andReturn($refused);
+
+        $response = $sut->generateAction();
+
+        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame($expected, json_decode($response->getContent(), true)['message']);
+    }
+
+    public static function refusedLetters(): array
+    {
+        return [
+            'one reason' => [['Choose an issue'], 'Failed to generate letter: Choose an issue'],
+            'reasons nested by field' => [
+                ['selectedIssues' => ['Choose an issue'], 'licence' => ['Not found']],
+                'Failed to generate letter: Choose an issue, Not found',
+            ],
+            'no reason given' => [[], 'Failed to generate letter'],
+        ];
+    }
+
+    /**
+     * What Common\Module leaves behind when a form post fails the "security" check: the request is
+     * now a GET, its fields are still on it, and the response is marked
+     */
+    private function failedSecurityCheck(Sut $sut, array $post): void
+    {
+        $request = new Request();
+        $request->getPost()->fromArray($post);
+        $response = new \Laminas\Http\Response();
+        $response->getHeaders()->addHeaderLine(\Common\Module::CSRF_ERROR_HEADER, '1');
+
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn($response);
+    }
+
+    /**
+     * The fields left on a post that failed the check used to be enough to create the letter
+     */
+    public function testGenerateRefusesAPostThatFailedTheSecurityCheck(): void
+    {
+        $sut = $this->bareSut();
+        $this->failedSecurityCheck($sut, ['letterType' => '5', 'letterIssues' => ['20']]);
+        $sut->shouldReceive('fetchTemplateById')->never();
+        $sut->shouldReceive('handleCommand')->never();
+
+        $response = $sut->generateAction();
+
+        $this->assertSame(403, $response->getStatusCode());
+        $this->assertSame(
+            'This form has expired. Close it and open it again.',
+            json_decode($response->getContent(), true)['message']
+        );
+    }
+
+    public function testGenerateRejectsGet(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('getRequest')->andReturn(new Request());
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+        $sut->shouldReceive('handleCommand')->never();
+
+        $response = $sut->generateAction();
+
+        $this->assertSame(405, $response->getStatusCode());
+        $this->assertSame('Method not allowed', json_decode($response->getContent(), true)['message']);
+    }
+
     private function letterForChangeIssues(array $overrides = []): array
     {
         return $overrides + [
             'id' => 55,
             'status' => ['id' => 'ltr_sts_draft'],
+            'isOpenForChanges' => true,
+            'isSent' => false,
             'licence' => ['id' => 7],
             'application' => null,
             'letterInstanceAppendices' => [],
@@ -556,6 +718,31 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertSame([77], array_column($accordion[2]['issues'], 'id'));
     }
 
+    /**
+     * Review: an issue no longer offered still goes before its type's Other issue, which is last
+     * (VOL-7735); Change issues numbers the letter in the order the modal shows
+     */
+    public function testAnIssueNoLongerOfferedGoesBeforeTheOtherIssue(): void
+    {
+        $letter = $this->letterForChangeIssues();
+        $letter['letterInstanceIssues'][] = ['id' => 502, 'letterIssueVersion' => [
+            'heading' => 'Retired wording',
+            'letterIssue' => ['id' => 99],
+            'letterIssueType' => ['id' => 2, 'name' => 'Finance'],
+        ]];
+        $accordion = $this->financeAccordion();
+        $accordion[1]['issues'][] = ['id' => 29, 'issueKey' => 'FI-OTHER', 'currentVersion' => ['heading' => 'Other issue', 'isOther' => true]];
+
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn($letter);
+        $sut->shouldReceive('fetchLetterContext')->andReturn([]);
+        $sut->shouldReceive('buildAccordionData')->andReturn($accordion);
+
+        $finance = $this->runChangeIssues($sut, ['id' => '55'])->getVariable('accordionData')[1];
+
+        $this->assertSame([20, 21, 99, 29], array_column($finance['issues'], 'id'));
+    }
+
     public function testChangeIssuesUsesTheApplicationThenLicenceForGoodsOrPsv(): void
     {
         $sut = $this->bareSut();
@@ -569,17 +756,59 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->runChangeIssues($sut, ['id' => '55']);
     }
 
-    public function testChangeIssuesOnASentLetterIsLocked(): void
+    public function testChangeIssuesOnALetterThatCanNoLongerChangeIsLocked(): void
     {
         $sut = $this->bareSut();
         $sut->shouldReceive('fetchLetterInstanceById')->andReturn(
-            $this->letterForChangeIssues(['status' => ['id' => 'ltr_sts_sent']])
+            $this->letterForChangeIssues(['status' => ['id' => 'ltr_sts_sent'], 'isOpenForChanges' => false, 'isSent' => true])
         );
         $sut->shouldReceive('buildAccordionData')->never();
 
         $view = $this->runChangeIssues($sut, ['id' => '55']);
 
         $this->assertTrue($view->getVariable('locked'));
+    }
+
+    public static function closedLetters(): \Iterator
+    {
+        yield 'sent' => [['status' => ['id' => 'ltr_sts_sent'], 'isOpenForChanges' => false, 'isSent' => true]];
+        // review: the API's rule, not a copy of it (a deleted draft can't change either)
+        yield 'cancelled' => [['status' => ['id' => 'ltr_sts_cancelled'], 'isOpenForChanges' => false, 'isSent' => false]];
+        yield 'deleted draft' => [['status' => ['id' => 'ltr_sts_draft'], 'isOpenForChanges' => false, 'isSent' => false]];
+    }
+
+    /**
+     * A sent letter can't be changed (VOL-7735), so its edit page sends the caseworker back to the
+     * preview rather than offering editors whose saves would all be refused. No flash message is
+     * set: the preview clears them, and its sidebar already says why.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('closedLetters')]
+    public function testEditingALetterThatCanNoLongerChangeGoesBackToThePreview(array $letter): void
+    {
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->shouldNotReceive('addErrorMessage');
+        $sut = m::mock(Sut::class, [
+            m::mock(TranslationHelperService::class),
+            m::mock(FormHelperService::class),
+            $flash,
+            m::mock(Navigation::class),
+        ])->makePartial()->shouldAllowMockingProtectedMethods();
+
+        $params = m::mock(\Laminas\Mvc\Controller\Plugin\Params::class);
+        $params->shouldReceive('fromQuery')->with('id')->andReturn('55');
+        $params->shouldReceive('fromQuery')->with('sections', [])->andReturn(['10']);
+        $params->shouldReceive('fromQuery')->andReturn([]);
+        $sut->shouldReceive('params')->andReturn($params);
+        $sut->shouldReceive('fetchLetterInstanceById')->with(55)->andReturn(
+            $this->letterForChangeIssues($letter)
+        );
+
+        $response = new \Laminas\Http\Response();
+        $redirect = m::mock(\Laminas\Mvc\Controller\Plugin\Redirect::class);
+        $redirect->shouldReceive('toUrl')->with('/letter/preview?id=55')->once()->andReturn($response);
+        $sut->shouldReceive('redirect')->andReturn($redirect);
+
+        $this->assertSame($response, $sut->editAction());
     }
 
     public function testChangeIssuesForAMissingLetterIs404(): void
@@ -695,6 +924,25 @@ final class LetterGenerationControllerTest extends MockeryTestCase
     }
 
     /**
+     * The change issues modal carries a token too, but one that has been open longer than the
+     * token lasts fails the check. The caseworker is told what to do about it.
+     */
+    public function testUpdateIssuesSaysWhenThePageHasExpired(): void
+    {
+        $sut = $this->bareSut();
+        $this->failedSecurityCheck($sut, ['letterInstanceId' => '55', 'letterIssues' => ['20']]);
+        $sut->shouldReceive('handleCommand')->never();
+
+        $response = $sut->updateIssuesAction();
+
+        $this->assertSame(403, $response->getStatusCode());
+        $this->assertSame(
+            'This form has expired. Close it and open it again.',
+            json_decode($response->getContent(), true)['message']
+        );
+    }
+
+    /**
      * Form posts without a valid "security" token are turned into GETs by Common\Module, so the
      * modal has to carry one or saving can never work.
      */
@@ -709,5 +957,214 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $view = $this->runChangeIssues($sut, ['id' => '55']);
 
         $this->assertSame('abc123-token', $view->getVariable('csrfToken'));
+    }
+
+    /**
+     * VOL-7735: the sidebar names an Other issue by what the caseworker wrote, and takes
+     * "Input required" from the API rather than re-deriving it from the version.
+     */
+    public function testSidebarUsesTheWrittenHeadingAndFlags(): void
+    {
+        $issues = $this->invokeProtected('buildIssuesList', ['letterInstanceIssues' => [
+            ['id' => 10, 'effectiveHeading' => 'Vehicle storage', 'inputPending' => true, 'letterIssueVersion' => ['heading' => 'Other issue']],
+            ['id' => 11, 'letterIssueVersion' => ['heading' => 'Bank statements too old']],
+        ]]);
+
+        $this->assertSame(['Vehicle storage', 'Bank statements too old'], array_column($issues, 'name'));
+        $this->assertSame([true, false], array_column($issues, 'inputPending'));
+    }
+
+    public function testCustomTodosAreNamedByPosition(): void
+    {
+        $data = [
+            'letterInstanceIssues' => [['id' => 10, 'effectiveHeading' => 'Vehicle storage']],
+            'letterInstanceTodos' => [
+                ['id' => 20, 'isCustom' => true, 'customIndex' => 2, 'customLabel' => 'Vehicle storage: to-do 2', 'inputPending' => true, 'letterInstanceIssue' => ['id' => 10]],
+                ['id' => 21, 'isCustom' => false, 'letterTodoVersion' => ['name' => 'Send a lease', 'letterTodo' => ['todoKey' => 'FI02']]],
+            ],
+        ];
+
+        $todos = $this->invokeProtected('buildTodosList', $data);
+
+        $this->assertSame(['Vehicle storage: to-do 2', 'Send a lease (FI02)'], array_column($todos, 'name'));
+        $this->assertSame([true, false], array_column($todos, 'inputPending'));
+        $this->assertSame('To-do 2', $this->invokeProtected('todoEditorName', $data['letterInstanceTodos'][0]));
+        $this->assertSame('Send a lease (FI02)', $this->invokeProtected('todoEditorName', $data['letterInstanceTodos'][1]));
+    }
+
+    private function postJson(
+        Sut $sut,
+        string $action,
+        array $body,
+        string $method = 'POST',
+        string $contentType = 'application/json; charset=UTF-8'
+    ): array {
+        $request = new Request();
+        $request->setMethod($method);
+        $request->getHeaders()->addHeaderLine('Content-Type', $contentType);
+        $request->setContent((string) json_encode($body));
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+
+        $response = $sut->{$action . 'Action'}();
+
+        return ['status' => $response->getStatusCode(), 'json' => json_decode($response->getContent(), true)];
+    }
+
+    public function testSaveIssueContentPassesTheHeading(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd instanceof UpdateIssueContent && $cmd->getEditedHeading() === 'Vehicle storage'))
+            ->once()
+            ->andReturn($this->okResponse(['messages' => ['Saved']]));
+
+        $result = $this->postJson($sut, 'saveIssueContent', [
+            'issueId' => 10, 'editedContent' => ['blocks' => []], 'version' => 1, 'editedHeading' => 'Vehicle storage',
+        ]);
+
+        $this->assertTrue($result['json']['success']);
+    }
+
+    public function testSaveIssueContentWithoutAHeadingLeavesItAlone(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd instanceof UpdateIssueContent && $cmd->getEditedHeading() === null))
+            ->once()
+            ->andReturn($this->okResponse(['messages' => ['Saved']]));
+
+        $this->postJson($sut, 'saveIssueContent', ['issueId' => 10, 'editedContent' => ['blocks' => []], 'version' => 1]);
+    }
+
+    public function testAddCustomTodoReturnsTheNewId(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd instanceof CreateCustom && (int) $cmd->getLetterInstanceIssue() === 10))
+            ->once()
+            ->andReturn($this->okResponse(['id' => ['letterInstanceTodo' => 99], 'messages' => []]));
+
+        $result = $this->postJson($sut, 'addCustomTodo', ['issueId' => 10]);
+
+        $this->assertTrue($result['json']['success']);
+        $this->assertSame(99, $result['json']['todoId']);
+    }
+
+    public function testDeleteCustomTodoSendsTheCommand(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')
+            ->with(m::on(fn($cmd) => $cmd instanceof DeleteCustom && (int) $cmd->getId() === 99))
+            ->once()
+            ->andReturn($this->okResponse(['messages' => []]));
+
+        $this->assertTrue($this->postJson($sut, 'deleteCustomTodo', ['todoId' => 99])['json']['success']);
+    }
+
+    /**
+     * Validation messages come back nested by field. A plain implode turned them into
+     * "Failed to save: Array".
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('saveActionProvider')]
+    public function testARefusedSaveSaysWhyEvenWhenTheMessagesAreNested(string $action, array $body): void
+    {
+        $refused = m::mock(Response::class);
+        $refused->shouldReceive('isOk')->andReturn(false);
+        $refused->shouldReceive('getResult')->andReturn([
+            'messages' => ['editedHeading' => ['stringLengthTooLong' => 'The heading is too long']],
+        ]);
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->once()->andReturn($refused);
+
+        $result = $this->postJson($sut, $action, $body);
+
+        $this->assertFalse($result['json']['success']);
+        $this->assertSame('Failed to save: The heading is too long', $result['json']['message']);
+    }
+
+    /**
+     * With no reason from the API there is nothing to put after the colon, so it isn't shown
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('saveActionProvider')]
+    public function testARefusedSaveWithNoReasonGivenStillReadsProperly(string $action, array $body): void
+    {
+        $refused = m::mock(Response::class);
+        $refused->shouldReceive('isOk')->andReturn(false);
+        $refused->shouldReceive('getResult')->andReturn(['messages' => []]);
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->once()->andReturn($refused);
+
+        $this->assertSame('Failed to save', $this->postJson($sut, $action, $body)['json']['message']);
+    }
+
+    public static function saveActionProvider(): array
+    {
+        return [
+            'issue' => ['saveIssueContent', ['issueId' => 10, 'editedContent' => ['blocks' => []], 'version' => 1]],
+            'appendix' => ['saveAppendixContent', ['appendixId' => 10, 'editedContent' => ['blocks' => []], 'version' => 1]],
+            'to-do' => ['saveTodoContent', ['todoId' => 10, 'editedDescription' => ['blocks' => []], 'version' => 1]],
+            'section' => ['saveSectionContent', ['sectionId' => 10, 'editedContent' => ['blocks' => []], 'version' => 1]],
+        ];
+    }
+
+    /**
+     * PR review: these endpoints read the raw body, which Common\Module's CSRF check never sees.
+     * Only a JSON request is accepted; another site can't send one without a CORS preflight.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('jsonActionProvider')]
+    public function testJsonActionsRejectANonJsonPost(string $action, array $body): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleCommand')->never();
+
+        $result = $this->postJson($sut, $action, $body, 'POST', 'text/plain');
+
+        $this->assertSame(415, $result['status']);
+        $this->assertFalse($result['json']['success']);
+    }
+
+    public static function jsonActionProvider(): array
+    {
+        return [
+            'save issue' => ['saveIssueContent', ['issueId' => 10, 'editedContent' => [], 'version' => 1]],
+            'save appendix' => ['saveAppendixContent', ['appendixId' => 10, 'editedContent' => [], 'version' => 1]],
+            'save to-do' => ['saveTodoContent', ['todoId' => 10, 'editedDescription' => [], 'version' => 1]],
+            'save section' => ['saveSectionContent', ['sectionId' => 10, 'editedContent' => [], 'version' => 1]],
+            'add to-do' => ['addCustomTodo', ['issueId' => 10]],
+            'delete to-do' => ['deleteCustomTodo', ['todoId' => 10]],
+            'prepare to send' => ['prepareToSend', ['letterInstanceId' => 1, 'docTemplate' => 2]],
+        ];
+    }
+
+    public function testCustomTodoActionsRejectGet(): void
+    {
+        $this->assertSame(405, $this->postJson($this->bareSut(), 'addCustomTodo', [], 'GET')['status']);
+        $this->assertSame(405, $this->postJson($this->bareSut(), 'deleteCustomTodo', [], 'GET')['status']);
+    }
+
+    /**
+     * Final review: an Other issue's to-do listed away from its issue keeps the issue's name.
+     */
+    public function testUnplacedCustomTodoIsNamedWithItsIssue(): void
+    {
+        $todos = [['id' => 3, 'isCustom' => true, 'name' => 'To-do 1', 'customLabel' => 'Vehicle storage: to-do 1', 'placementIssueIds' => [30]]];
+
+        [, $unplaced] = $this->invokeProtected('placeTodosUnderIssues', [], $todos);
+
+        $this->assertSame('Vehicle storage: to-do 1', $unplaced[0]['name']);
+    }
+
+    public function testSidebarPrefersTheIssuesDisplayName(): void
+    {
+        $issues = $this->invokeProtected('buildIssuesList', ['letterInstanceIssues' => [
+            ['id' => 10, 'effectiveHeading' => 'Other issue', 'displayName' => 'Other issue (Finances)'],
+        ]]);
+        $todos = $this->invokeProtected('buildTodosList', ['letterInstanceTodos' => [
+            ['id' => 20, 'isCustom' => true, 'customIndex' => 1, 'customLabel' => 'Other issue (Finances): to-do 1', 'letterInstanceIssue' => ['id' => 10]],
+        ]]);
+
+        $this->assertSame('Other issue (Finances)', $issues[0]['name']);
+        $this->assertSame('Other issue (Finances): to-do 1', $todos[0]['name']);
     }
 }
