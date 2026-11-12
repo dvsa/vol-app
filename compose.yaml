@@ -105,7 +105,7 @@ services:
       VIRTUAL_PORT: 8080
 
   cdn:
-    image: node:20
+    image: node:26
     volumes:
       - ./app/cdn:/var/www/html
     working_dir: /var/www/html
@@ -150,7 +150,7 @@ services:
       - "openldap-data:/bitnami/openldap"
 
   mailpit:
-    image: axllent/mailpit:latest
+    image: axllent/mailpit:v1.33.1
     container_name: mailpit
     ports:
       - "1025:1025"

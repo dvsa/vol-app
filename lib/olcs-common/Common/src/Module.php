@@ -24,6 +24,11 @@ use Laminas\ModuleManager\Feature\ServiceProviderInterface;
  */
 class Module implements ConfigProviderInterface, ServiceProviderInterface
 {
+    /**
+     * Set on the response when a form post fails the CSRF check, see validateCsrfToken
+     */
+    public const CSRF_ERROR_HEADER = 'X-CSRF-error';
+
     public static string $dateFormat = 'd/m/Y';
 
     public static string $dateTimeFormat = 'd/m/Y H:i';
@@ -220,7 +225,7 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
 
         /** @var \Laminas\Http\Response $resp */
         $resp = $e->getResponse();
-        $resp->getHeaders()->addHeaderLine('X-CSRF-error', '1');
+        $resp->getHeaders()->addHeaderLine(self::CSRF_ERROR_HEADER, '1');
 
         $request->setMethod(Request::METHOD_GET);
     }
