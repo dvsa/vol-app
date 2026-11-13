@@ -84,6 +84,46 @@ test("normaliseResponse falls back to the body heading when the title is blank",
   expect(title).toBe("Real title");
 });
 
+test("normaliseResponse detects the GOV.UK error summary in an AJAX response", async ({ page }) => {
+  await load(page, "<div class='modal__wrapper'></div>", ["normaliseResponse"]);
+
+  const hasValidationErrors = await page.evaluate(() => {
+    let result = false;
+    OLCS.normaliseResponse((response) => {
+      result = response.hasValidationErrors;
+    })("<div class='govuk-error-summary'><h2>Error</h2></div>");
+    return result;
+  });
+
+  expect(hasValidationErrors).toBe(true);
+});
+
+test("formHelper detects and clears the GOV.UK error summary", async ({ page }) => {
+  await load(
+    page,
+    "<main><div class='govuk-error-summary'></div><div class='validation-wrapper'><ul><li>Error</li></ul></div></main>",
+    ["formHelper"],
+  );
+
+  const result = await page.evaluate(() => {
+    const containsErrors = OLCS.formHelper.containsErrors($("main"));
+    OLCS.formHelper.clearErrors($("main"));
+    return {
+      containsErrors,
+      summaryCount: $("main .govuk-error-summary").length,
+      wrapperClass: $("main .validation-wrapper").length,
+      wrapperErrorListCount: $("main .validation-wrapper ul").length,
+    };
+  });
+
+  expect(result).toEqual({
+    containsErrors: true,
+    summaryCount: 0,
+    wrapperClass: 0,
+    wrapperErrorListCount: 0,
+  });
+});
+
 test("tableRows stops the context menu while ctrl is held", async ({ page }) => {
   await load(page, "<table><tbody><tr><td><input type='checkbox'></td></tr></tbody></table>", ["tableRows"]);
 

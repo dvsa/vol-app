@@ -32,7 +32,8 @@
 
   <?php echo $this->partial('partials/body-end'); ?>
     <script type="module">
-      import { initAll } from '<?php echo $this->assetPath('js/govuk-frontend.min.js'); ?>'
+      import { initAll, ErrorSummary } from '<?php echo $this->assetPath('js/govuk-frontend.min.js'); ?>'
+      OLCS.errorSummary(ErrorSummary)
       initAll()
     </script>
   </body>

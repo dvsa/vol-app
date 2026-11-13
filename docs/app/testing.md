@@ -21,6 +21,19 @@ that guard how API requests are validated and how forms are declared.
 
 ## Running the tests
 
+### Error-summary scrolling
+
+From `app/cdn`, run `npm test -- test/error-summary.spec.js` to check error-link
+focus and visibility at desktop and mobile widths using the real GOV.UK component.
+The shared `OLCS.errorSummary` compatibility adapter is applied before `initAll`
+in the selfserve and internal layouts. It rejects a nested fieldset's legend when
+GOV.UK selects it for an unrelated input, falling back to that input's label.
+Recheck these tests when upgrading GOV.UK Frontend, as the adapter wraps its
+`getAssociatedLegendOrLabel` method. Normal question legends and GOV.UK's focus
+handling are unchanged.
+
+### PHP tests
+
 Each app (`app/api`, `app/selfserve`, `app/internal`) has two commands, run
 from its own directory:
 

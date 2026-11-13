@@ -408,7 +408,8 @@ $pageLang = $this->plugin('languageNavigation')->currentLanguage();
       var cookieConfig = <?php echo $this->cookieManager();?>;
   </script>
   <script type="module">
-    import { initAll } from '<?php echo $this->assetPath('js/govuk-frontend.min.js'); ?>'
+    import { initAll, ErrorSummary } from '<?php echo $this->assetPath('js/govuk-frontend.min.js'); ?>'
+    OLCS.errorSummary(ErrorSummary)
     initAll()
   </script>
 </body>
