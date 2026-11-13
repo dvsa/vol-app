@@ -52,21 +52,54 @@ OLCS.editorjs = (function (document, $, undefined) {
   }
 
   /**
-   * Did editor.save() hand back the editor's content?
+   * Tell the page that an editor could not be read.
    *
-   * When EditorJS can't read an editor (a block tool throws while saving, say) it logs
-   * that itself and resolves with nothing. Writing that to the hidden input would replace
-   * the last content that could be read with the word "undefined".
+   * Its hidden input keeps the last content that could be read, so nothing there shows
+   * that the editor may now hold something else. A page that tracks unsaved edits by
+   * watching the input (letter-edit.js) listens for this event on the input instead.
    *
-   * @param {object|undefined} outputData what editor.save() resolved with
-   * @returns {boolean}
+   * @param {HTMLInputElement} hiddenInput the editor's hidden input
    */
-  function isContent(outputData) {
-    return Boolean(outputData) && Array.isArray(outputData.blocks);
+  function signalUnread(hiddenInput) {
+    hiddenInput.dispatchEvent(new CustomEvent("editorjs:unread", { bubbles: true }));
   }
 
   /**
-   * Bring every editor's hidden input up to date with what is currently on screen.
+   * Read an editor's content and hand it to `keep`, which puts it in the hidden input.
+   *
+   * When EditorJS can't read an editor (a block tool throws while saving, say) it logs
+   * that itself and resolves with nothing. Writing that to the hidden input would replace
+   * the last content that could be read with the word "undefined". So the input is left
+   * alone, and the page is told instead.
+   *
+   * @param {object}           editor      the EditorJS instance
+   * @param {HTMLInputElement} hiddenInput its hidden input
+   * @param {function(object)} keep        given the content, when there is some
+   * @returns {Promise<boolean>} whether the editor could be read; never rejects
+   */
+  function readEditor(editor, hiddenInput, keep) {
+    return editor
+      .save()
+      .then(function (outputData) {
+        if (!outputData || !Array.isArray(outputData.blocks)) {
+          throw new Error("nothing came back");
+        }
+
+        keep(outputData);
+
+        return true;
+      })
+      .catch(function (error) {
+        log("EditorJS could not read " + hiddenInput.name + ": " + error.message);
+        signalUnread(hiddenInput);
+
+        return false;
+      });
+  }
+
+  /**
+   * Bring every editor's hidden input up to date with what is currently on screen, or
+   * just one editor's when its input name is given.
    *
    * The onChange handler below is the normal path, but it is debounced by EditorJS and
    * completes asynchronously. Anything that reads the hidden input in direct response to
@@ -79,46 +112,40 @@ OLCS.editorjs = (function (document, $, undefined) {
    * are left as they were, so they may be missing what was typed last: a caller that is
    * about to save should not send those, or report them as saved.
    *
+   * @param {string} [only] the input name of the one editor to bring up to date. A save
+   *                        of one editor has no need to read all the others first.
    * @returns {Promise<string[]>} resolved once every editor's hidden input has been
    *                              refreshed, with the names of those that could not be
    */
-  function flushEditors() {
+  function flushEditors(only) {
     var pending = Object.keys(editorInstances)
       .filter(function (name) {
-        return !name.endsWith("_observer") && hiddenInputs[name];
+        return !name.endsWith("_observer") && hiddenInputs[name] && (typeof only !== "string" || name === only);
       })
       .map(function (name) {
         var editor = editorInstances[name];
+        var hiddenInput = hiddenInputs[name];
 
         if (!editor || typeof editor.save !== "function") {
           return null;
         }
 
-        return editor
-          .save()
-          .then(function (outputData) {
-            if (!isContent(outputData)) {
-              throw new Error("the editor could not be read");
-            }
-
-            // Only write on a real change. Callers flush speculatively — before a
-            // click that may not be a save at all — and letter-edit.js watches this
-            // input to decide whether there are unsaved edits. A needless write marks
-            // clean content dirty, which raises "Unsaved changes" over content the
-            // caseworker has just saved.
-            //
-            // Compare the blocks rather than the whole payload: EditorJS stamps a fresh
-            // `time` on every save(), so the serialised output never matches itself and
-            // a plain string comparison would think everything had changed.
-            if (blocksChanged(hiddenInputs[name].value, outputData)) {
-              hiddenInputs[name].value = JSON.stringify(outputData);
-            }
-          })
-          .catch(function (error) {
-            log("EditorJS flush failed for " + name + ": " + error.message);
-
-            return name;
-          });
+        return readEditor(editor, hiddenInput, function (outputData) {
+          // Only write on a real change. Callers flush speculatively — before a
+          // click that may not be a save at all — and letter-edit.js watches this
+          // input to decide whether there are unsaved edits. A needless write marks
+          // clean content dirty, which raises "Unsaved changes" over content the
+          // caseworker has just saved.
+          //
+          // Compare the blocks rather than the whole payload: EditorJS stamps a fresh
+          // `time` on every save(), so the serialised output never matches itself and
+          // a plain string comparison would think everything had changed.
+          if (blocksChanged(hiddenInput.value, outputData)) {
+            hiddenInput.value = JSON.stringify(outputData);
+          }
+        }).then(function (wasRead) {
+          return wasRead ? null : name;
+        });
       })
       .filter(Boolean);
 
@@ -206,6 +233,10 @@ OLCS.editorjs = (function (document, $, undefined) {
       }
     }
 
+    var writeToInput = function (outputData) {
+      hiddenInput.value = JSON.stringify(outputData);
+    };
+
     try {
       // Initialize EditorJS
       var editor = new EditorJS({
@@ -216,16 +247,7 @@ OLCS.editorjs = (function (document, $, undefined) {
         data: initialData,
         onChange: function () {
           // Save editor content to hidden input on change
-          editor
-            .save()
-            .then(function (outputData) {
-              if (isContent(outputData)) {
-                hiddenInput.value = JSON.stringify(outputData);
-              }
-            })
-            .catch(function (error) {
-              log("EditorJS save failed: " + error.message);
-            });
+          readEditor(editor, hiddenInput, writeToInput);
         },
       });
 
@@ -233,11 +255,7 @@ OLCS.editorjs = (function (document, $, undefined) {
       editor.isReady
         .then(function () {
           // Save initial state to hidden input
-          editor.save().then(function (outputData) {
-            if (isContent(outputData)) {
-              hiddenInput.value = JSON.stringify(outputData);
-            }
-          });
+          readEditor(editor, hiddenInput, writeToInput);
 
           // Enable spellcheck on all contenteditable elements
           var editableElements = editorContainer.querySelectorAll("[contenteditable=true]");

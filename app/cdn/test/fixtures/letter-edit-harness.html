@@ -67,6 +67,8 @@
       // Editors the component can't read just now, by hidden input name. A flush leaves their
       // inputs as they were and hands back their names.
       window.unreadable = [];
+      // what each flush was asked to bring up to date: "all", or one hidden input's name
+      window.flushes = [];
       window.requests = [];
       window.failures = {};
       // how long the stand-in server takes to answer, in milliseconds
@@ -76,15 +78,31 @@
         ready: function (fn) {
           $(fn);
         },
-        editorjsFlush: function () {
-          Object.keys(window.pendingTyping).forEach(function (inputName) {
-            if (window.unreadable.indexOf(inputName) === -1) {
-              window.editorWrites(inputName, window.pendingTyping[inputName]);
-              delete window.pendingTyping[inputName];
-            }
+        // every editor, or just the one named
+        editorjsFlush: function (only) {
+          var asked = function (inputName) {
+            return !only || inputName === only;
+          };
+          window.flushes.push(only || "all");
+
+          Object.keys(window.pendingTyping)
+            .filter(asked)
+            .forEach(function (inputName) {
+              if (window.unreadable.indexOf(inputName) === -1) {
+                window.editorWrites(inputName, window.pendingTyping[inputName]);
+                delete window.pendingTyping[inputName];
+              }
+            });
+
+          // the component says so on the input of each editor it couldn't read
+          var unread = window.unreadable.filter(asked);
+          unread.forEach(function (inputName) {
+            document
+              .querySelector("input[name='" + inputName + "']")
+              .dispatchEvent(new CustomEvent("editorjs:unread", { bubbles: true }));
           });
 
-          return Promise.resolve(window.unreadable.slice());
+          return Promise.resolve(unread);
         },
         modal: { show: function () {} },
       };

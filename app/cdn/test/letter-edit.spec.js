@@ -216,6 +216,60 @@ test("an editor that could not be read is not passed over as having nothing to s
   expect(await savedUrls(page)).toEqual(["/letter/save-issue-content"]);
 });
 
+test("an editor the component could not read counts as unsaved before anything is saved", async ({ page }) => {
+  await page.locator("#save-all-btn").click();
+  await expect(page.locator("#save-all-indicator")).toBeVisible();
+
+  // What the component does when a change can't be read: the input is left as it was, so no
+  // write arrives to show the editor now holds something else.
+  await page.evaluate(() => {
+    document.querySelector("input[name='issue-10']").dispatchEvent(new CustomEvent("editorjs:unread"));
+  });
+
+  // so going back to the preview, or changing the issues, warns about it
+  expect(await page.evaluate(() => window.OLCS.letterEdit.unsavedSectionNames())).toEqual(["Bank statements"]);
+  await expect(page.locator("#save-all-indicator")).toBeHidden();
+});
+
+test("an editor that turns unreadable while its save is on its way is not shown as saved", async ({ page }) => {
+  await page.evaluate(() => {
+    window.serverDelay = 500;
+    window.editorWrites("issue-10", "Your bank statements are in the wrong name.");
+  });
+
+  await page.locator(".save-issue-btn").click();
+  await expect(page.locator(".save-issue-btn")).toBeDisabled();
+  // more is typed and can't be read, so the input still holds exactly what was sent
+  await page.evaluate(() => {
+    document.querySelector("input[name='issue-10']").dispatchEvent(new CustomEvent("editorjs:unread"));
+  });
+  await expect(page.locator(".save-issue-btn")).toBeEnabled();
+
+  expect(await savedUrls(page)).toEqual(["/letter/save-issue-content"]);
+  await expect(page.locator(".issue-editor-group .save-indicator")).toBeHidden();
+  expect(await page.evaluate(() => window.OLCS.letterEdit.unsavedSectionNames())).toEqual(["Bank statements"]);
+});
+
+test("each save brings its own editor up to date, not every editor on the page", async ({ page }) => {
+  await page.evaluate(() => {
+    window.editorWrites("section_1", "Dear Mr Smith");
+    window.editorWrites("todo_100", "Upload six months of statements.");
+    window.pendingTyping["appendix-7"] = "Evidence we no longer accept.";
+    window.flushes = [];
+  });
+
+  await page.locator("#save-all-btn").click();
+
+  await expect(page.locator("#save-all-indicator")).toBeVisible();
+  // once round all of them to find what's unsaved, then one each
+  expect(await page.evaluate(() => window.flushes)).toEqual(["all", "section_1", "todo_100", "appendix-7"]);
+  expect(await savedUrls(page)).toEqual([
+    "/letter/save-section-content",
+    "/letter/save-todo-content",
+    "/letter/save-appendix-content",
+  ]);
+});
+
 test("an editor with its own save already queued is left to that save", async ({ page }) => {
   await page.evaluate(() => {
     window.serverDelay = 500;

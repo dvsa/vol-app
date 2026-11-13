@@ -25,15 +25,17 @@ OLCS.ready(function () {
    * on any page that has no editors.
    *
    * save(unread) is given the hidden input names of any editors that couldn't be read.
+   * only: the hidden input name of the one editor that has to be current, for a save of
+   * that editor. Left out, every editor on the page is brought up to date.
    */
-  function withFlushedEditors(save) {
+  function withFlushedEditors(save, only) {
     if (typeof OLCS.editorjsFlush !== "function") {
       save([]);
       return;
     }
 
     // never rejects: an editor that can't be read has its input left as it was, and is named
-    OLCS.editorjsFlush().then(function (unread) {
+    OLCS.editorjsFlush(only).then(function (unread) {
       save(Array.isArray(unread) ? unread : []);
     });
   }
@@ -41,6 +43,15 @@ OLCS.ready(function () {
   var UNREAD =
     "The latest changes in this section could not be read, so they have not been saved. " +
     "Try again, or copy your text and reload the page.";
+
+  /**
+   * An editor has changes that aren't saved, so nothing may go on saying it's saved.
+   */
+  function markUnsaved($group) {
+    dirtyMap[$group.data("editorKey")] = true;
+    $group.find(".save-indicator").hide();
+    $("#save-all-indicator").hide();
+  }
 
   /**
    * True if the flush couldn't read this editor, having said so on the page. Its hidden input
@@ -52,9 +63,7 @@ OLCS.ready(function () {
       return false;
     }
 
-    dirtyMap[$group.data("editorKey")] = true;
-    $group.find(".save-indicator").hide();
-    $("#save-all-indicator").hide();
+    markUnsaved($group);
     showSaveError($group, UNREAD);
 
     return true;
@@ -80,11 +89,18 @@ OLCS.ready(function () {
           return;
         }
         if (editorBlocks(val) !== savedBlocks[entityId]) {
-          dirtyMap[entityId] = true;
-          $group.find(".save-indicator").hide();
-          $("#save-all-indicator").hide();
+          markUnsaved($group);
         }
       };
+
+      // An editor the component can't read keeps its last readable content in the input, so
+      // no write comes. It may hold changes all the same, and counts as unsaved: leaving the
+      // page has to warn about it.
+      hiddenInput.addEventListener("editorjs:unread", function () {
+        markUnsaved($group);
+        // a save that's on its way can't tell from the input: see saveEditor
+        $group.data("unreadSince", true);
+      });
 
       // a hidden input's value is its attribute, so this also sees every write to .value
       var observer = new MutationObserver(function () {
@@ -208,6 +224,8 @@ OLCS.ready(function () {
 
       // onlyIfUnsaved: the second look "Save all changes" asks for, at the end of this function
       var send = function (onlyIfUnsaved) {
+        // only this editor has to be current: reading every editor on the page before each
+        // save adds up when "Save all changes" presses a lot of them
         withFlushedEditors(function (unread) {
           if (leftUnread($group, unread) || (onlyIfUnsaved && !dirtyMap[key])) {
             finish();
@@ -217,6 +235,8 @@ OLCS.ready(function () {
           var content = hiddenInput.val();
           var heading = $heading.length ? $heading.val() : undefined;
           var wasSaved = false;
+          // read just now, so anything unread from here on came after what's being sent
+          $group.removeData("unreadSince");
 
           $.ajax({
             url: url,
@@ -237,7 +257,9 @@ OLCS.ready(function () {
                 wasSaved = true;
                 var changedSince =
                   editorBlocks(hiddenInput.val()) !== editorBlocks(content) ||
-                  ($heading.length && $heading.val() !== heading);
+                  ($heading.length && $heading.val() !== heading) ||
+                  // changed, but the component couldn't read it into the input
+                  Boolean($group.data("unreadSince"));
                 savedBlocks[key] = editorBlocks(content);
                 if (!changedSince) {
                   dirtyMap[key] = false;
@@ -265,7 +287,7 @@ OLCS.ready(function () {
               }
               finish();
             });
-        });
+        }, hiddenInput.attr("name"));
       };
 
       send(false);
@@ -420,10 +442,7 @@ OLCS.ready(function () {
 
   // An Other issue's heading counts as an unsaved change until saved (VOL-7735)
   $(".other-issue-heading").on("input", function () {
-    var $group = $(this).closest(".issue-editor-group");
-    dirtyMap["issue-" + $group.data("issue-id")] = true;
-    $group.find(".save-indicator").hide();
-    $("#save-all-indicator").hide();
+    markUnsaved($(this).closest(".issue-editor-group"));
   });
 
   /**
