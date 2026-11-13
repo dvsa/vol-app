@@ -1,5 +1,72 @@
 # Changelog
 
+## [9.6.0](https://github.com/dvsa/vol-app/compare/v9.5.4...v9.6.0) (2026-11-13)
+
+
+### Features
+
+* add ability to specify nullable generated type ([3fdd1fe](https://github.com/dvsa/vol-app/commit/3fdd1fe7a357837058683b4011e20723efcdd1e0))
+* add db refresh ([#1884](https://github.com/dvsa/vol-app/issues/1884)) ([f211a85](https://github.com/dvsa/vol-app/commit/f211a853f877408afb94f44c9673476670677be2))
+* add enums to inexpressible on schema drift ([b5ca6aa](https://github.com/dvsa/vol-app/commit/b5ca6aa880babc7f726d4dfe38ff9094bea96cde))
+* change issues on a generated letter VOL-7734 ([#1888](https://github.com/dvsa/vol-app/issues/1888)) ([b94310b](https://github.com/dvsa/vol-app/commit/b94310be1d5642025d9b141005463df3fe6e7afe))
+* create a task to check for a response when a first or final letter is sent VOL-7714 ([43ef292](https://github.com/dvsa/vol-app/commit/43ef29282bb62a3d721a2734dab9a378f0a377bc))
+* create a task to check for a response when a first or final letter is sent VOL-7714 ([e84156b](https://github.com/dvsa/vol-app/commit/e84156b141d7b6f8dc00f875b60b099ced852694))
+* edit page follows the letter order, to-dos under their issue VOL-7737 ([3e25935](https://github.com/dvsa/vol-app/commit/3e2593507dbff10839e32bf25732fde78f4e4d36))
+* **internal:** hide selected tab status and show latest tab date when deselected ([#1903](https://github.com/dvsa/vol-app/issues/1903)) ([c234c68](https://github.com/dvsa/vol-app/commit/c234c68116ccfc1681be50077aa50e1b9d73edb3))
+* other issues and custom to-dos on letters VOL-7735 ([#1907](https://github.com/dvsa/vol-app/issues/1907)) ([ecb1d5e](https://github.com/dvsa/vol-app/commit/ecb1d5e70426a34176c351c139a18e07d959f99c))
+* record Notify delivery status callbacks on notify_message VOL-7721 ([#1910](https://github.com/dvsa/vol-app/issues/1910)) ([7c880ef](https://github.com/dvsa/vol-app/commit/7c880ef5ead0637668c04ae15bf0b287d66fe72f))
+* reduce the default ticked bus registration VOL-7250 ([#1857](https://github.com/dvsa/vol-app/issues/1857)) ([8ac0ace](https://github.com/dvsa/vol-app/commit/8ac0ace316163b4fe2e36a1fe4fbc8918c905946))
+* select all sections on the letter preview page VOL-7736 ([2eade34](https://github.com/dvsa/vol-app/commit/2eade3463f53fe51ab9efd8d5902279045e94639))
+* select all sections on the letter preview page VOL-7736 ([1d48c64](https://github.com/dvsa/vol-app/commit/1d48c64ff92397b2895d36727f58a3ef9383536f))
+* selfserve accessibility fixes, with the GOV.UK Frontend 6 language navigation and feedback components VOL-7191 ([#1855](https://github.com/dvsa/vol-app/issues/1855)) ([f43d7f7](https://github.com/dvsa/vol-app/commit/f43d7f74ec814c2fa54a00e0a974bfdde5c5387b))
+* show each issue's to-dos straight after it in the letter VOL-7737 ([dba2f97](https://github.com/dvsa/vol-app/commit/dba2f974ff650b9eee3dc049cff2bd54942b6b2b))
+* show each issue's to-dos straight after it VOL-7737 ([cfb28d6](https://github.com/dvsa/vol-app/commit/cfb28d646b50c9dbebfffbf263417cbc1ac00920))
+* show the licence number in the shared emails VOL-7557 ([#1870](https://github.com/dvsa/vol-app/issues/1870)) ([95781ac](https://github.com/dvsa/vol-app/commit/95781ac3949ddc60efcb1ee9660a699f4cf1cee3))
+* speed up the local Docker environment by around 15x VOL-7763 ([#1897](https://github.com/dvsa/vol-app/issues/1897)) ([cf2f511](https://github.com/dvsa/vol-app/commit/cf2f5116ca5b0dcc72126994c641065ac6ea6c1f))
+* text operators when we send them a letter, via GOV.UK Notify VOL-7542 ([#1895](https://github.com/dvsa/vol-app/issues/1895)) ([15c803b](https://github.com/dvsa/vol-app/commit/15c803bda80f2905de7732f47721168f30f36caa))
+* update data gov uk export schedule to weekly ([#1911](https://github.com/dvsa/vol-app/issues/1911)) ([54496ef](https://github.com/dvsa/vol-app/commit/54496ef3a9faf68ef55fd485555dc418dc7d3202))
+* vol 7321 financial evidence assessment tab content ([#1858](https://github.com/dvsa/vol-app/issues/1858)) ([7a8725c](https://github.com/dvsa/vol-app/commit/7a8725c875bd4b433f00486b7b0fb9c1613271d2))
+
+
+### Bug Fixes
+
+* add missing override ([a0f0460](https://github.com/dvsa/vol-app/commit/a0f04601a780e0de30ca6d0c018f8cce2e01894a))
+* add missing override ([f5b42e4](https://github.com/dvsa/vol-app/commit/f5b42e487ff6d2f2367503b29e4ba7d67f1b6703))
+* add required method to interface ([a5e3873](https://github.com/dvsa/vol-app/commit/a5e3873b55d9755958c302309ebb4ced85f20cfe))
+* allow external users to delete post submission docs ([c451ae0](https://github.com/dvsa/vol-app/commit/c451ae0e887fac1dc88ee83d557bd07848643c18))
+* allow external users to delete post submission docs ([7554bd1](https://github.com/dvsa/vol-app/commit/7554bd1072bdfff87451d32a2efa9e23533baa29))
+* CI fixes - remaining silences ([#1904](https://github.com/dvsa/vol-app/issues/1904)) ([0644df3](https://github.com/dvsa/vol-app/commit/0644df3b7f66d5077e9d8a0005d9da9892d4081a))
+* **docker:** make printpit build from scratch again, and upgrade it to the latest FileBrowser and Alpine - VOL-7765 ([#1899](https://github.com/dvsa/vol-app/issues/1899)) ([f9bed29](https://github.com/dvsa/vol-app/commit/f9bed295ff6152ab049d93aad838755839d70798))
+* docs snyk vulnerabilities ([#1868](https://github.com/dvsa/vol-app/issues/1868)) ([36fca87](https://github.com/dvsa/vol-app/commit/36fca87f3c5c214b7c25174325d2f26d073c8aff))
+* docs snyk vulnerabilities in open, flat and minimatch ([#1892](https://github.com/dvsa/vol-app/issues/1892)) ([f976858](https://github.com/dvsa/vol-app/commit/f97685860bc4f5d1ba795f985a908586ebc3ec7c))
+* edit page section names are top-level headings VOL-7737 ([f334cb7](https://github.com/dvsa/vol-app/commit/f334cb7b79457f05d06c69873d82cddcac471fd6))
+* fix logic and update snapshot ([3168db5](https://github.com/dvsa/vol-app/commit/3168db5a86e5dde80d73efaf266c151e12ea5b41))
+* fix phpcs error ([fd06c72](https://github.com/dvsa/vol-app/commit/fd06c729a835e5684339d92e80177958ec1b9a8a))
+* fix typo in comment about string mapping ([677ca57](https://github.com/dvsa/vol-app/commit/677ca5714b9ac1f170371e8f53641b24ab1843ea))
+* fixed rendering of table using govuk styling ([#1848](https://github.com/dvsa/vol-app/issues/1848)) ([ed41a92](https://github.com/dvsa/vol-app/commit/ed41a92f04644c4c062526023d8facd0dec2f8ad))
+* hide docs for unsubmitted applications on licence docs tab vol-5856 ([2eaa3ea](https://github.com/dvsa/vol-app/commit/2eaa3eae4157a040fb2b47b4ab12be1971a2097c))
+* hide the financial evidence video on internal ([#1872](https://github.com/dvsa/vol-app/issues/1872)) ([678977b](https://github.com/dvsa/vol-app/commit/678977b40d7f226de7bb7d966a55cdab20340cef))
+* hide unsubmitted application docs on licence docs tab ([01f916f](https://github.com/dvsa/vol-app/commit/01f916fa9f3d292de60ff654d5f377ffab4f367c))
+* log a fingerprint of the session, and never start one to log it ([#1891](https://github.com/dvsa/vol-app/issues/1891)) ([331c9a8](https://github.com/dvsa/vol-app/commit/331c9a8fc2db54a41717c28e6cf12241d186f5e9))
+* nest edit page to-do headings under their issue VOL-7737 ([c817ada](https://github.com/dvsa/vol-app/commit/c817adaba0d3c927eac795216d62e409eb5a6773))
+* new letter dialog security token, error messages and send form loading VOL-7714 ([5f75bc3](https://github.com/dvsa/vol-app/commit/5f75bc32993c7c28499079c1dfebda2d9569c5f3))
+* place to-dos by the order the letter prints its issues VOL-7737 ([82c8b76](https://github.com/dvsa/vol-app/commit/82c8b76541e9de42ba87ada4a90639ee7df58a53))
+* re-implement getAnalysis method in Document class ([a192afc](https://github.com/dvsa/vol-app/commit/a192afc9abf850c6e904fb57e2d7d8baa5b3eb9a))
+* regenerate drifted entities ([f365c57](https://github.com/dvsa/vol-app/commit/f365c576ea5653e1ecac34bf4d6a29619fc604b8))
+* remove duplicate relationship and methods ([ffae22b](https://github.com/dvsa/vol-app/commit/ffae22b08830e0b3ae70629d5ffe8b2c5de56650))
+* stop the shared query helper joining the same relation twice ([#1890](https://github.com/dvsa/vol-app/issues/1890)) ([e5eefb6](https://github.com/dvsa/vol-app/commit/e5eefb6806b16913ad02d8cfe0621ab133bfd1bc))
+* **terraform:** name the psv surrender batch command in full and drop the dead system-parameter job ([#1893](https://github.com/dvsa/vol-app/issues/1893)) ([75db755](https://github.com/dvsa/vol-app/commit/75db755eb39e6475dcc10f832592f9720377ebf3))
+* update composer hashes ([6d71ac4](https://github.com/dvsa/vol-app/commit/6d71ac47f073c609b63c8daac5ee8783d75bdcb9))
+* update document analysis entity config ([8f9c5b8](https://github.com/dvsa/vol-app/commit/8f9c5b861a2c4a20388e0c6833ab9b4c4065f306))
+* update qs package ([9429f8c](https://github.com/dvsa/vol-app/commit/9429f8c857cbd056e4e4ebb0603599529e3337b2))
+* update qs package ([6cc7fe8](https://github.com/dvsa/vol-app/commit/6cc7fe8927b41252d1b259d583d3306a362567f9))
+* upgrade @editorjs/editorjs from 2.31.0 to 2.31.7 ([#1912](https://github.com/dvsa/vol-app/issues/1912)) ([5c54344](https://github.com/dvsa/vol-app/commit/5c543445c779de0bca3fcebf25cb194169293722))
+
+
+### Performance Improvements
+
+* work out to-do placement once per letter VOL-7737 ([c53f9fd](https://github.com/dvsa/vol-app/commit/c53f9fd32d347ad682bc514b0b1976dd176ae1d3))
+
 ## [9.5.4](https://github.com/dvsa/vol-app/compare/v9.5.3...v9.5.4) (2026-10-21)
 
 
