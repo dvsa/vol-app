@@ -1,9 +1,13 @@
-<?php echo $this->flashMessengerAll(); ?>
+<?php
+$formErrors = $this->formErrors($form);
+$this->placeholder('pageHasErrors')->set($formErrors !== '' || !empty($failed));
+echo $this->flashMessengerAll();
+?>
 <?php echo $this->form()->openTag($form); ?>
     <fieldset>
         <legend><?php echo $this->escapeHtml($this->translate('auth.login.title')); ?></legend>
         <?php
-        echo $this->formErrors($form);
+        echo $formErrors;
         if (isset($failed) && $failed) {
             ?>
             <div class="govuk-error-summary" data-module="govuk-error-summary">

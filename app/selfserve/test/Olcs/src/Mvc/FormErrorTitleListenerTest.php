@@ -64,4 +64,26 @@ final class FormErrorTitleListenerTest extends MockeryTestCase
 
         $this->assertSame([], $placeholder->getContainer('formHasErrors')->getValue());
     }
+
+    public function testSetsPlaceholderForPageLevelErrorsWithoutFormErrors(): void
+    {
+        $placeholder = new Placeholder();
+        $event = new MvcEvent();
+        $event->setResult(new ViewModel(['pageHasErrors' => true]));
+
+        (new FormErrorTitleListener($placeholder))->onRender($event);
+
+        $this->assertTrue($placeholder->getContainer('formHasErrors')->getValue());
+    }
+
+    public function testDoesNotSetPlaceholderWhenPageHasNoErrors(): void
+    {
+        $placeholder = new Placeholder();
+        $event = new MvcEvent();
+        $event->setResult(new ViewModel(['pageHasErrors' => false]));
+
+        (new FormErrorTitleListener($placeholder))->onRender($event);
+
+        $this->assertSame([], $placeholder->getContainer('formHasErrors')->getValue());
+    }
 }

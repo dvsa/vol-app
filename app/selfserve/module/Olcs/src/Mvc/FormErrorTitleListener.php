@@ -17,6 +17,8 @@ class FormErrorTitleListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
 
+    private const PAGE_ERRORS_VARIABLE = 'pageHasErrors';
+
     public function __construct(private Placeholder $placeholder)
     {
     }
@@ -30,19 +32,23 @@ class FormErrorTitleListener implements ListenerAggregateInterface
     public function onRender(MvcEvent $e): void
     {
         $model = $e->getResult();
-        if ($model instanceof ModelInterface && $this->hasFormErrorsInModel($model)) {
+        if ($model instanceof ModelInterface && $this->hasErrorsInModel($model)) {
             $this->placeholder->__invoke('formHasErrors')->set(true);
         }
     }
 
-    private function hasFormErrorsInModel(ModelInterface $model): bool
+    private function hasErrorsInModel(ModelInterface $model): bool
     {
+        if (($model->getVariables()[self::PAGE_ERRORS_VARIABLE] ?? false) === true) {
+            return true;
+        }
+
         if ($this->hasFormErrorsInValue($model->getVariables())) {
             return true;
         }
 
         foreach ($model->getChildren() as $child) {
-            if ($this->hasFormErrorsInModel($child)) {
+            if ($this->hasErrorsInModel($child)) {
                 return true;
             }
         }
@@ -58,7 +64,7 @@ class FormErrorTitleListener implements ListenerAggregateInterface
         }
 
         if ($value instanceof ModelInterface) {
-            return $this->hasFormErrorsInModel($value);
+            return $this->hasErrorsInModel($value);
         }
 
         if (is_iterable($value)) {

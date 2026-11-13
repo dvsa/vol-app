@@ -6,7 +6,12 @@
 ?>
 <html lang="en">
   <head>
-    <?php echo $this->partial('partials/head', ['title' => $this->pageTitle()]); ?>
+    <?php
+    if ($this->placeholder('pageHasErrors')->getValue()) {
+        $this->headTitle()->setPrefix($this->translate('Error') . ': ');
+    }
+    echo $this->partial('partials/head', ['title' => $this->pageTitle()]);
+    ?>
   </head>
   <body class="internal sign-in govuk-frontend-supported" id="<?php echo $this->pageId(); ?>">
     <?php echo $this->version(); ?>
