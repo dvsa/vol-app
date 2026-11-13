@@ -3,7 +3,6 @@
  */
 
 .sign-in {
-
   background: $grey-4;
 
   legend {
@@ -54,8 +53,8 @@
     margin: 0;
   }
 
-  .validation-summary {
+  .validation-summary,
+  .govuk-error-summary {
     margin-top: 0;
   }
-
 }

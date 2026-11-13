@@ -17,10 +17,47 @@
 $title = $this->translate('retrieve-document.page.title');
 $this->placeholder('pageTitle')->set($title);
 
+// Wrong / expired code. GOV.UK error summary: alerts, takes focus (data-module) and links
+// to the input. A submitted-but-invalid form (empty / non-numeric) is a separate path that
+// renders its own summary + inline message via the form helper.
+ob_start();
+if (!empty($otpError)) : ?>
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+        <div role="alert">
+            <h2 class="govuk-error-summary__title">
+                <?php echo $this->translate('retrieve-document.otp.error.title'); ?>
+            </h2>
+            <div class="govuk-error-summary__body">
+                <ul class="govuk-list govuk-error-summary__error-list">
+                    <li>
+                        <a href="#code">
+                            <?php echo $this->translate('retrieve-document.otp.error.incorrect'); ?>
+                            <?php if ($attemptsRemaining !== null) : ?>
+                                <?php echo $this->translateReplace(
+                                    'retrieve-document.otp.error.attempts-remaining',
+                                    [(int) $attemptsRemaining]
+                                ); ?>
+                            <?php endif; ?>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<?php endif;
+if ($gateMode === 'otp' && empty($unlocked) && !empty($otpRequested) && $form !== null) {
+    echo $this->formErrors($form);
+}
+$formErrors = trim(ob_get_clean());
+if ($formErrors !== '') {
+    $formErrors = '<div class="govuk-grid-row"><div class="govuk-grid-column-two-thirds">' . $formErrors . '</div></div>';
+}
+
 echo $this->partial(
     'partials/page-header-simple',
     [
         'pageTitle' => $title,
+        'formErrors' => $formErrors,
     ]
 );
 ?>
@@ -29,36 +66,6 @@ echo $this->partial(
     <div class="govuk-grid-column-two-thirds">
 
         <?php echo $this->flashMessengerAll(); ?>
-
-        <?php
-        // Wrong / expired code. GOV.UK error summary: alerts, takes focus (data-module) and links
-        // to the input. A submitted-but-invalid form (empty / non-numeric) is a separate path that
-        // renders its own summary + inline message via the form helper below.
-        ?>
-        <?php if (!empty($otpError)) : ?>
-            <div class="govuk-error-summary" data-module="govuk-error-summary">
-                <div role="alert">
-                    <h2 class="govuk-error-summary__title">
-                        <?php echo $this->translate('retrieve-document.otp.error.title'); ?>
-                    </h2>
-                    <div class="govuk-error-summary__body">
-                        <ul class="govuk-list govuk-error-summary__error-list">
-                            <li>
-                                <a href="#code">
-                                    <?php echo $this->translate('retrieve-document.otp.error.incorrect'); ?>
-                                    <?php if ($attemptsRemaining !== null) : ?>
-                                        <?php echo $this->translateReplace(
-                                            'retrieve-document.otp.error.attempts-remaining',
-                                            [(int) $attemptsRemaining]
-                                        ); ?>
-                                    <?php endif; ?>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
 
         <?php if (empty($documents)) : ?>
 
@@ -138,7 +145,6 @@ echo $this->partial(
 
                 <?php if ($form !== null) : ?>
                     <?php
-                    echo $this->formErrors($form);
                     echo $this->form($form);
                     ?>
                 <?php endif; ?>

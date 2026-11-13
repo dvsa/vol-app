@@ -4,6 +4,11 @@ use Common\Util\Escape;
 
 <div class="js-body">
     <?php
+    $formErrors = '';
+    if (isset($form)) {
+        $form->prepare();
+        $formErrors = '<div class="row"><div class="two-thirds">' . $this->formErrors($form) . '</div></div>';
+    }
     echo $this->partial(
         'partials/page-header-simple',
         [
@@ -12,6 +17,7 @@ use Common\Util\Escape;
             'backUrl' => [
                 'url' => $this->navigationParentPage() ? $this->navigationParentPage()->getHref() : $this->backLink,
             ],
+            'formErrors' => $formErrors,
         ]
     );
     ?>
@@ -45,7 +51,6 @@ use Common\Util\Escape;
           <?php if (isset($form)): ?>
             <?php
             $form->prepare();
-            echo $this->formErrors($form);
             echo $this->form($form);
             ?>
           <?php endif; ?>

@@ -9,10 +9,10 @@
         <?php echo $this->partial('partials/page-header-simple', [
             'pageTitle' => $this->translate($this->title),
             'pageSubTitle' => $this->subTitle,
+            'formErrors' => $this->formErrors($this->form),
         ]); ?>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                <?php echo $this->formErrors($this->form); ?>
                 <?php echo $this->form($this->form); ?>
                 <p>
                     <?php echo $this->partial(new \Olcs\View\Model\Licence\Vehicle\ViewAndAmendYourLicenceViewModel()); ?>

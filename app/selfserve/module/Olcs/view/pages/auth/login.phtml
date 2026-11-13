@@ -1,5 +1,22 @@
 
-<?php echo $this->partial('partials/page-header-simple', ['pageTitle' => $this->pageTitle()]); ?>
+<?php
+$formErrors = $this->formErrors($form);
+
+if (isset($failed) && $failed) {
+    $formErrors .= sprintf(
+        '<div class="govuk-error-summary" data-module="govuk-error-summary">'
+        . '<div role="alert"><h2 class="govuk-error-summary__title">%s</h2>'
+        . '<div class="govuk-error-summary__body"><p>%s</p></div></div></div>',
+        $this->escapeHtml($this->translate('auth.login.failed.title')),
+        $this->escapeHtml($this->translate('auth.login.failed.reason.' . $failureReason))
+    );
+}
+
+echo $this->partial('partials/page-header-simple', [
+    'pageTitle' => $this->pageTitle(),
+    'formErrors' => $formErrors,
+]);
+?>
 
 <div class="row">
     <div class="two-thirds">
@@ -8,18 +25,8 @@
             <p><?php echo sprintf($this->translate('auth.login.termsAgreed'), $this->url('terms-and-conditions')); ?></p>
             <hr aria-hidden="true">
         </div>
-        <?php
-        echo $this->flashMessengerAll();
-        echo $this->formErrors($form);
-        if (isset($failed) && $failed) {
-            ?>
-            <div class="validation-summary">
-                <h2><?php echo $this->escapeHtml($this->translate('auth.login.failed.title')); ?></h2>
-                <p><?php echo $this->escapeHtml($this->translate('auth.login.failed.reason.' . $failureReason)); ?></p>
-            </div>
-            <?php
-        }
 
+        <?php
         $username = $form->get('username');
         $username->setAttribute('class', $username->getAttribute('class') . ' long');
 

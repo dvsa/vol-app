@@ -32,7 +32,12 @@ $pageLang = $this->plugin('languageNavigation')->currentLanguage();
 
   <!-- Title -->
   <?php
-  echo $this->headTitle(strip_tags($this->pageTitle()))
+  $pageTitle = strip_tags($this->pageTitle());
+  if ($this->placeholder('formHasErrors')->getValue()) {
+    $pageTitle = $this->translate('Error') . ': ' . $pageTitle;
+  }
+
+  echo $this->headTitle($pageTitle)
     ->append('header-vehicle-operator-licensing')
     ->append('header-gov.uk')
     ->setSeparator(' - ');
@@ -403,7 +408,8 @@ $pageLang = $this->plugin('languageNavigation')->currentLanguage();
       var cookieConfig = <?php echo $this->cookieManager();?>;
   </script>
   <script type="module">
-    import { initAll } from '<?php echo $this->assetPath('js/govuk-frontend.min.js'); ?>'
+    import { initAll, ErrorSummary } from '<?php echo $this->assetPath('js/govuk-frontend.min.js'); ?>'
+    OLCS.errorSummary(ErrorSummary)
     initAll()
   </script>
 </body>

@@ -6,6 +6,7 @@
             'backUrl' => [
                 'url' => $this->url('manage-user'),
             ],
+            'formErrors' => '<div class="row"><div class="two-thirds">' . $this->formErrors($this->form) . '</div></div>',
         ]
     );
 ?>
@@ -24,7 +25,6 @@
         }
 
       echo $this->flashMessengerAll();
-      echo $this->formErrors($this->form);
       echo $this->form($this->form);
     ?>
   </div>

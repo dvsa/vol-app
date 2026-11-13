@@ -1,4 +1,14 @@
+<div class="js-body">
 <?php
+$formErrors = '';
+if (isset($searchForm)) {
+    $searchForm->prepare();
+    $formErrors .= $this->formErrors($searchForm);
+}
+if (isset($form)) {
+    $form->prepare();
+    $formErrors .= $this->formErrors($form);
+}
 $subTitle = '';
 
 if ($this->lva === 'licence') {
@@ -26,6 +36,8 @@ echo $this->partial(
         'pageTitle' => $this->translate($this->title),
         'pageHeaderText' => $this->translate($this->headerText),
         'pageSubTitle' => $subTitle,
+        'formErrors' => $formErrors,
+        'formErrorsWidth' => $this->mainWrapperCssClass ?: 'three-quarters',
         'backUrl' => $this->vars()->offsetExists('backUrlOverride')
             ? $this->backUrlOverride
             : ['url' => ($backPage !== null ? $backPage->getHref() : null)],
@@ -68,7 +80,6 @@ echo $this->partial(
   <?php endif; ?>
 
   <div class="<?php echo $this->mainWrapperCssClass ?: 'three-quarters' ?> lva-details">
-    <div class="js-body">
 
         <?php if (isset($warningText)): ?>
           <p class="important"><?php echo $this->importantPrefix(); ?>
@@ -107,8 +118,6 @@ echo $this->partial(
         echo $this->flashMessengerAll();
 
         if (isset($searchForm)) {
-            $searchForm->prepare();
-            echo $this->formErrors($searchForm);
             echo $this->form($searchForm);
         }
 
@@ -117,13 +126,11 @@ echo $this->partial(
         }
 
         if (isset($form)) {
-          $form->prepare();
-          echo $this->formErrors($form);
           echo $this->form($form);
         }
       ?>
 
-      </div> <!-- /js-body -->
     </div>
 
 </div>
+</div> <!-- /js-body -->

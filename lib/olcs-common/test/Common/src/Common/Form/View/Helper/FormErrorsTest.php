@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\Elements\Types\PostcodeSearch;
+use Common\Form\Elements\Types\Radio;
 use Common\Form\Elements\Validators\Messages\FormElementMessageFormatter;
 use Common\Form\Elements\Validators\Messages\FormElementMessageFormatterFactory;
 use Common\Form\View\Helper\FormErrorsFactory;
@@ -105,13 +106,16 @@ final class FormErrorsTest extends MockeryTestCase
                 'cake'
             ]
         ];
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?Bar-translated(\s+)?<\/li>(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?Cake-translated(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?Bar-translated(\s+)?<\/li>(\s+)?'
+            . '<li>(\s+)?Cake-translated(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -158,13 +162,16 @@ final class FormErrorsTest extends MockeryTestCase
                 'cake'
             ]
         ];
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -213,13 +220,16 @@ final class FormErrorsTest extends MockeryTestCase
                 'cake'
             ]
         ];
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -267,13 +277,16 @@ final class FormErrorsTest extends MockeryTestCase
                 'cake'
             ]
         ];
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -320,12 +333,15 @@ final class FormErrorsTest extends MockeryTestCase
                 'bar',
             ]
         ];
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#PC_ID">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?<a href="#PC_ID">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -360,12 +376,15 @@ final class FormErrorsTest extends MockeryTestCase
                 'bar',
             ]
         ];
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#DS_ID_day">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?<a href="#DS_ID_day">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -383,6 +402,126 @@ final class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeRenderWithMessagesWithAnchorToFirstRadioInput(): void
+    {
+        $idGenerator = m::mock(\Common\View\Helper\UniqidGenerator::class);
+        $idGenerator->shouldReceive('generateId')->twice()->andReturn('generated_id');
+
+        $radio = new Radio('existingOperatorLicence', [], $idGenerator);
+        $radio->setValueOptions([
+            'NoLicence' => ['label' => 'No', 'value' => 'N'],
+            'licence' => ['label' => 'Yes', 'value' => 'Y'],
+        ]);
+
+        $licenceFieldset = new \Laminas\Form\Fieldset('existing-operator-licence');
+        $licenceFieldset->add($radio);
+        $fields = new \Laminas\Form\Fieldset('fields');
+        $fields->add($licenceFieldset);
+
+        $form = new Form();
+        $form->add($fields);
+        $form->setMessages([
+            'fields' => [
+                'existing-operator-licence' => [
+                    'existingOperatorLicence' => ['isEmpty' => 'required'],
+                ],
+            ],
+        ]);
+
+        $result = $this->sut->__invoke($form);
+
+        $this->assertStringContainsString('href="#generated_id_N"', $result);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('nestedAnchorProvider')]
+    public function testNestedAnchorMatchesRenderedInput(bool $prepareFirst, ?string $explicitId): void
+    {
+        $reply = new \Laminas\Form\Element\Textarea('reply');
+        if ($explicitId !== null) {
+            $reply->setAttribute('id', $explicitId);
+        }
+        $inputs = new \Laminas\Form\Fieldset('inputs');
+        $inputs->add($reply);
+        $actions = new \Laminas\Form\Fieldset('form-actions');
+        $actions->add($inputs);
+        $form = new Form();
+        $form->add($actions);
+        $form->setMessages([
+            'form-actions' => ['inputs' => ['reply' => ['isEmpty' => 'Enter a reply']]],
+        ]);
+        if ($prepareFirst) {
+            $form->prepare();
+        }
+        $originalName = $reply->getName();
+        $summary = $this->sut->__invoke($form);
+
+        $this->assertSame($originalName, $reply->getName());
+        $this->assertSame($explicitId, $reply->getAttribute('id'));
+
+        $form->prepare();
+        $translator = new \CommonTest\Common\Util\DummyTranslator();
+        $helpers = new \Laminas\View\HelperPluginManager(new \Laminas\ServiceManager\ServiceManager());
+        $view = new \Laminas\View\Renderer\PhpRenderer();
+        $view->setHelperPluginManager($helpers);
+        $helpers->setService('formtextarea', new \Laminas\Form\View\Helper\FormTextarea());
+        $helpers->setService(
+            'form_element_errors',
+            new \Common\Form\View\Helper\FormElementErrors(new FormElementMessageFormatter($translator), $translator)
+        );
+        $renderer = new \Common\Form\View\Helper\FormElement();
+        $renderer->setView($view);
+        $markup = html_entity_decode($renderer->render($reply), ENT_QUOTES);
+        $id = $explicitId ?? 'form-actions[inputs][reply]';
+
+        $this->assertStringContainsString('href="#' . $id . '"', $summary);
+        $this->assertStringContainsString('id="' . $id . '"', $markup);
+        $this->assertSame($summary, $this->sut->__invoke($form));
+    }
+
+    public static function nestedAnchorProvider(): array
+    {
+        return [
+            'before preparation' => [false, null],
+            'after preparation' => [true, null],
+            'explicit ID before preparation' => [false, 'reply-input'],
+            'explicit ID after preparation' => [true, 'reply-input'],
+        ];
+    }
+
+    public function testNestedCollectionAnchorExcludesValidatorKeys(): void
+    {
+        $row = new \Laminas\Form\Fieldset('0');
+        $row->add(new Element('name'));
+        $rows = new \Laminas\Form\Fieldset('rows');
+        $rows->add($row);
+        $form = new Form();
+        $form->add($rows);
+        $form->setMessages(['rows' => [0 => ['name' => ['validation' => ['isEmpty' => 'Enter a name']]]]]);
+
+        $this->assertStringContainsString('href="#rows[0][name]"', $this->sut->__invoke($form));
+    }
+
+    public function testNestedDateWithoutIdLinksToDay(): void
+    {
+        $fields = new \Laminas\Form\Fieldset('fields');
+        $fields->add(new DateSelect('date'));
+        $form = new Form();
+        $form->add($fields);
+        $form->setMessages(['fields' => ['date' => ['invalid' => 'Enter a date']]]);
+
+        $this->assertStringContainsString('href="#fields[date]_day"', $this->sut->__invoke($form));
+    }
+
+    public function testTopLevelAnchorStillUsesElementName(): void
+    {
+        $form = new Form();
+        $form->add(new Element('reply'));
+        $form->setMessages(['reply' => ['isEmpty' => 'Enter a reply']]);
+
+        $this->assertStringContainsString('href="#reply"', $this->sut->__invoke($form));
+    }
+
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
     #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessagesWithAnchorUsingName(): void
@@ -392,12 +531,15 @@ final class FormErrorsTest extends MockeryTestCase
                 'bar',
             ]
         ];
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#NAME">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?<a href="#NAME">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -424,12 +566,15 @@ final class FormErrorsTest extends MockeryTestCase
                 'foo-error'
             ]
         ];
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?Foo-error-translated(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?Foo-error-translated(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -480,17 +625,20 @@ final class FormErrorsTest extends MockeryTestCase
                 'cake'
             ]
         ];
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?'
             . '<a href="#foo-id">Foo-label-translated\: bar-translated-translated<\/a>(\s+)?'
             . '<\/li>(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?'
+            . '<li>(\s+)?'
             . '<a href="#foo-id">Foo-label-translated\: cake-translated-translated<\/a>(\s+)?'
             . '<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -539,15 +687,18 @@ final class FormErrorsTest extends MockeryTestCase
                 'cake'
             ]
         ];
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?Foo-label-translated\: bar-translated-translated(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?Foo-label-translated\: bar-translated-translated(\s+)?'
             . '<\/li>(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?Foo-label-translated\: cake-translated-translated(\s+)?'
+            . '<li>(\s+)?Foo-label-translated\: cake-translated-translated(\s+)?'
             . '<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -595,13 +746,16 @@ final class FormErrorsTest extends MockeryTestCase
                 'cake'
             ]
         ];
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?Bar-translated(\s+)?<\/li>(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?Cake-translated(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?Bar-translated(\s+)?<\/li>(\s+)?'
+            . '<li>(\s+)?Cake-translated(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -649,13 +803,16 @@ final class FormErrorsTest extends MockeryTestCase
         ];
 
         $title = 'error-title';
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">error-title-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">error-title-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p><\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -705,13 +862,16 @@ final class FormErrorsTest extends MockeryTestCase
 
         $title = 'error-title';
         $paragraph = 'error-paragraph';
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">error-title-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">error-title-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p>error-paragraph-translated<\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;
@@ -760,13 +920,16 @@ final class FormErrorsTest extends MockeryTestCase
         ];
 
         $paragraph = 'error-paragraph';
-        $expected = '/(\s+)?<div class="validation-summary" role="alert" id="validationSummary">(\s+)?'
-            . '<h2 class="govuk-heading-m">form-errors-translated<\/h2>(\s+)?'
+        $expected = '/(\s+)?<div class="govuk-error-summary" data-module="govuk-error-summary">(\s+)?<div role="alert">(\s+)?'
+            . '<h2 class="govuk-error-summary__title">form-errors-translated<\/h2>(\s+)?'
+            . '<div class="govuk-error-summary__body">(\s+)?'
             . '<p>error-paragraph-translated<\/p>(\s+)?'
-            . '<ol class="validation-summary__list">(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<li class="validation-summary__item">(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
-            . '<\/ol>(\s+)?'
+            . '<ul class="govuk-list govuk-error-summary__list">(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Bar-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<li>(\s+)?<a href="#foo-id">Cake-translated<\/a>(\s+)?<\/li>(\s+)?'
+            . '<\/ul>(\s+)?'
+            . '<\/div>(\s+)?'
+            . '<\/div>(\s+)?'
             . '<\/div>/';
 
         $sut = $this->sut;

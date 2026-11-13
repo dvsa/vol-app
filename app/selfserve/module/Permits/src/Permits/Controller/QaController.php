@@ -105,8 +105,6 @@ class QaController extends AbstractOlcsController
             }
         }
 
-        $showErrorInBrowserTitle = false;
-
         if ($this->request->isPost()) {
             $postParams = $this->params()->fromPost();
             if (isset($postParams['Submit']['CancelButton'])) {
@@ -176,8 +174,6 @@ class QaController extends AbstractOlcsController
                 );
             }
 
-            $showErrorInBrowserTitle = true;
-
             // transfer data normalised by input filter back into form, don't touch anything apart from the
             // Q&A fieldset content to avoid unwanted form breakage
             $normalisedData = $form->getData();
@@ -195,12 +191,6 @@ class QaController extends AbstractOlcsController
 
         $pageTitle = $this->translationHelperService->translate($result['title']);
         $this->placeholder()->setPlaceholder('pageTitle', $pageTitle);
-        if ($showErrorInBrowserTitle) {
-            $this->placeholder()->setPlaceholder(
-                'pageTitle',
-                $this->translationHelperService->translate('permits.application.browser.title.error') . ': ' . $pageTitle
-            );
-        }
 
         $view = new ViewModel();
         $view->setVariable('data', $templateVars);
