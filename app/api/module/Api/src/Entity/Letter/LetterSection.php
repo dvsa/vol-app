@@ -328,6 +328,21 @@ class LetterSection extends AbstractLetterSection
     }
 
     /**
+     * Whether the wording depends on the letter: as well as its catch-all, the section has
+     * wording kept for a particular licence type, kind of application or letter choice
+     */
+    public function hasConditionalWording(): bool
+    {
+        foreach ($this->variants as $variant) {
+            if (!$variant->isDeleted() && !$variant->isDefault()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Find the best matching variant for the given context.
      *
      * Of the non-deleted, non-default variants whose conditions all match the context, the most

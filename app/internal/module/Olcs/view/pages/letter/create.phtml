@@ -9,6 +9,27 @@
     <span class="govuk-visually-hidden">Error:</span> <span id="validation-error-text"></span>
 </div>
 
+<?php if (!empty($previousLetters)): ?>
+<?php // Picking a letter ticks the issues it covered (letter-generation.js). It only chooses
+      // ticks, so it has no name and isn't posted. ?>
+<div class="govuk-form-group">
+    <label class="govuk-label govuk-label--s" for="previous-letter">Start from a letter already sent</label>
+    <div class="govuk-hint" id="previous-letter-hint">
+        This ticks the issues that letter covered. You can change them before you create the letter.
+    </div>
+    <select class="govuk-select" id="previous-letter" aria-describedby="previous-letter-hint">
+        <option value="">Select a letter</option>
+        <?php foreach ($previousLetters as $previousLetter): ?>
+        <option value="<?= $this->escapeHtmlAttr($previousLetter['id']) ?>"
+                data-issue-ids="<?= $this->escapeHtmlAttr(implode(',', $previousLetter['issueIds'])) ?>">
+            <?= $this->escapeHtml($previousLetter['label']) ?>
+        </option>
+        <?php endforeach; ?>
+    </select>
+    <p class="govuk-body-s" id="previous-letter-note" role="status" style="display: none; margin: 10px 0 0;"></p>
+</div>
+<?php endif; ?>
+
 <?= $this->partial('pages/letter/partials/issue-accordion', ['accordionData' => $accordionData, 'selectedIssueIds' => []]) ?>
 
 <?php if (!empty($appendicesData)): ?>
