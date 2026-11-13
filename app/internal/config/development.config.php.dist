@@ -1,15 +1,10 @@
 <?php
 
-return [
-  // Additional modules to include when in development mode
-  'modules' => [
-    'Laminas\DeveloperTools',
-    'SanSessionToolbar',
-  ],
-  // Configuration overrides during development mode
-  'module_listener_options' => [
-    'config_glob_paths' => [realpath(__DIR__) . '/autoload/{,*.}{global,local}-development.php'],
-    'config_cache_enabled' => false,
-    'module_map_cache_enabled' => false,
-  ],
-];
+use Dvsa\Olcs\Utils\Development\DevelopmentConfig;
+
+// What the application does differently in development, such as caching the merged configuration,
+// is built in one place so that a change to it reaches this copy too. The settings it reads come
+// from the root .env file. See docs/app/local-setup.
+//
+// The developer toolbar slows every request down, so its modules only load when VOL_DEVTOOLS is on.
+return DevelopmentConfig::forApplication(dirname(__DIR__), ['Laminas\DeveloperTools', 'SanSessionToolbar']);

@@ -80,15 +80,8 @@ RUN apk update && \
   && docker-php-ext-install ldap \
   && docker-php-ext-enable ldap
 
-RUN \
-  # Disable OPCache in development.
-  echo "opcache.enable=0" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  # Setup Xdebug.
-  && echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.remote_log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.mode=debug" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.client_host=host.docker.internal" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
-  && echo "xdebug.start_with_request=yes" >> ${PHP_INI_DIR}/conf.d/1000-php.ini
+# The development PHP settings (OPcache on, Xdebug off until it is asked for) are in
+# infra/docker/php-development.d, which compose.yaml mounts into the container so that the four PHP
+# images share one copy.
 
 USER www-data

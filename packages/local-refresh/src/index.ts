@@ -22,6 +22,7 @@ const actionOrder = [
   "CopyAppDistFiles",
   "SyncAwsSecretsAndParameters",
   "CopyDockerComposeDist",
+  "DevelopmentSettings",
   "FlushRedis",
   "ResetDatabase",
   "ResetLdap",
