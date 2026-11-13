@@ -94,8 +94,8 @@ final class LicenceTest extends RepositoryTestCase
     }
 
     /**
-     * The widest query in the repository: 37 selected aliases over 32 joins, four of them
-     * duplicated (see the migration findings).
+     * The widest query in the repository: 31 selected aliases over 30 joins, each phone
+     * contacts collection joined once.
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('addressQueryProvider')]
     public function testFetchWithAddressesUsingId(mixed $argument): void
@@ -106,9 +106,9 @@ final class LicenceTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchWithAddressesUsingId($argument));
 
         $this->assertStringStartsWith(
-            'SELECT m, w0, w1, w2, w3, w4, c, c_a, c_a_cc, c_pc, w5, w6, c_p, c_p_pct, w7,'
-            . ' o, o_cd, o_cd_a, o_cd_a_cc, o_cd_pc, w8, w9, e, e_a, e_a_cc, e_pc, w10, w11,'
-            . ' t, t_a, t_a_cc, t_pc, w12, w13, t_p, t_p_pct, w14',
+            'SELECT m, w0, w1, w2, w3, w4, c, c_a, c_a_cc, c_pc, w5, w6,'
+            . ' o, o_cd, o_cd_a, o_cd_a_cc, o_cd_pc, w7, w8, e, e_a, e_a_cc, e_pc, w9, w10,'
+            . ' t, t_a, t_a_cc, t_pc, w11, w12 FROM',
             $qb->getDQL(),
         );
         $this->assertStringEndsWith(' WHERE m.id = :byId', $qb->getDQL());
