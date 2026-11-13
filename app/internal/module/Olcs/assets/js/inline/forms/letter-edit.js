@@ -7,6 +7,12 @@ OLCS.ready(function () {
   var EDITOR_GROUPS =
     ".issue-editor-group, .appendix-editor-group, .section-editor-group, .todo-editor-group";
 
+  var SAVE_BUTTONS =
+    ".save-issue-btn, .save-appendix-btn, .save-section-btn, .save-todo-btn";
+
+  // True while "Save all changes" is running: see showError
+  var savingAll = false;
+
   /**
    * Run a save once the editors' hidden inputs are guaranteed current.
    *
@@ -34,6 +40,8 @@ OLCS.ready(function () {
   // Helper to set up dirty tracking on a hidden input
   function setupDirtyTracking($group, entityId) {
     dirtyMap[entityId] = false;
+    // kept on the group so "Save all changes" can tell which editors have something to save
+    $group.data("editorKey", entityId);
 
     var hiddenInput = $group.find("input[type='hidden']")[0];
     if (hiddenInput) {
@@ -48,6 +56,7 @@ OLCS.ready(function () {
         if (editorBlocks(val) !== savedBlocks[entityId]) {
           dirtyMap[entityId] = true;
           $group.find(".save-indicator").hide();
+          $("#save-all-indicator").hide();
         }
       };
 
@@ -158,6 +167,17 @@ OLCS.ready(function () {
     var hiddenInput = $group.find("input[type='hidden']");
     var $heading = $group.find(".other-issue-heading");
 
+    // Saving everything at once, a failure has to say which section it was
+    var failed = function (message) {
+      showError(
+        savingAll
+          ? $group.find(".govuk-heading-s").first().text().trim() +
+              ": " +
+              message
+          : message,
+      );
+    };
+
     $btn.prop("disabled", true).text("Saving...");
 
     oneAtATime(function (done) {
@@ -176,7 +196,7 @@ OLCS.ready(function () {
           .then(
             function (response) {
               if (!response.success) {
-                showError(response.message || "Failed to save changes");
+                failed(response.message || "Failed to save changes");
                 return;
               }
               var changedSince =
@@ -193,7 +213,7 @@ OLCS.ready(function () {
               }
             },
             function (xhr) {
-              showError(failureMessage(xhr, "Failed to save changes"));
+              failed(failureMessage(xhr, "Failed to save changes"));
             },
           )
           .always(function () {
@@ -291,11 +311,58 @@ OLCS.ready(function () {
     );
   });
 
+  // Save every editor that has unsaved changes, top to bottom, by pressing its own Save changes
+  // button. Editors nobody has touched are left alone: saving one marks it as edited, which
+  // would clear "Input required" on wording that still hasn't been written.
+  $("#save-all-btn").on("click", function (e) {
+    e.preventDefault();
+    var $btn = $(this);
+
+    $btn.prop("disabled", true).text("Saving...");
+    $("#save-all-indicator").hide();
+    $("#edit-error-summary").hide();
+    $("#edit-error-list").empty();
+
+    // what was typed last only counts as unsaved once the editors have written it out
+    withFlushedEditors(function () {
+      var saving = 0;
+      savingAll = true;
+
+      $(EDITOR_GROUPS).each(function () {
+        var $group = $(this);
+        var $save = $group.find(SAVE_BUTTONS);
+        if (!dirtyMap[$group.data("editorKey")]) {
+          return;
+        }
+
+        saving++;
+        // A disabled button means that editor's own save is already on its way. It's left to
+        // finish, not sent again: the last step below waits for it either way.
+        if (!$save.prop("disabled")) {
+          $save.trigger("click");
+        }
+      });
+
+      // queued behind those saves, so this runs when the last of them has finished
+      oneAtATime(function (done) {
+        savingAll = false;
+        $btn.prop("disabled", false).text("Save all changes");
+        // "saved" only if something was: with nothing to send, saying so would hide an edit
+        // that had gone unnoticed
+        $("#save-all-indicator")
+          .text(saving ? "All changes saved" : "No changes to save")
+          .toggle(collectUnsavedSectionNames().length === 0);
+        done();
+      });
+    });
+  });
+
   // An Other issue's heading counts as an unsaved change until saved (VOL-7735)
   $(".other-issue-heading").on("input", function () {
     var $group = $(this).closest(".issue-editor-group");
     dirtyMap["issue-" + $group.data("issue-id")] = true;
     $group.find(".save-indicator").hide();
+    $("#save-all-indicator").hide();
   });
 
   /**
@@ -525,12 +592,18 @@ OLCS.ready(function () {
   });
 
   /**
-   * Show error in the error summary
+   * Show error in the error summary. Saving everything at once can fail in more than one
+   * section, so those are listed together; otherwise the latest error replaces the last.
    */
   function showError(message) {
     var $errorSummary = $("#edit-error-summary");
     var $errorList = $("#edit-error-list");
-    $errorList.html("<li>" + $("<span>").text(message).html() + "</li>");
+    var item = "<li>" + $("<span>").text(message).html() + "</li>";
+    if (savingAll) {
+      $errorList.append(item);
+    } else {
+      $errorList.html(item);
+    }
     $errorSummary.show().focus();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>New letter dialog harness</title>
+  </head>
+  <body>
+    <!--
+      The internal app's New letter dialog script (letter-generation.js), run against the form
+      the dialog shows: the picker of letters already sent, and two groups of issues that start
+      closed. Each option carries the issues its letter covered, as the form's own issue ids.
+    -->
+    <form id="letter-create-form" data-generate-url="/letter/generate?template=5&application=8">
+      <div id="validation-error" style="display: none"><span id="validation-error-text"></span></div>
+
+      <select id="previous-letter">
+        <option value="">Select a letter</option>
+        <option value="392" data-issue-ids="1,15">11/11/2026 16:24 - First request - 2 issues</option>
+        <option value="388" data-issue-ids="5">10/11/2026 09:05 - Final request - 1 issue</option>
+        <!-- 99 and 98 have been switched off since, so the form doesn't list them -->
+        <option value="385" data-issue-ids="16,99,98">09/11/2026 12:00 - First request - 3 issues</option>
+        <option value="380" data-issue-ids="1,99">08/11/2026 12:00 - First request - 2 issues</option>
+      </select>
+      <p id="previous-letter-note" style="display: none"></p>
+
+      <a href="#" id="toggle-all-sections">Show All Sections</a>
+
+      <div class="letter-sections">
+        <div class="letter-section" id="adverts">
+          <div class="letter-section__header">
+            <h3 class="letter-section__title">Adverts</h3>
+            <span class="letter-section__toggle"><span class="letter-section__show-hide">Show</span></span>
+          </div>
+          <div class="letter-section__content" style="display: none">
+            <input type="checkbox" name="letterIssues[]" id="letter-issue-1" value="1" />
+            <label for="letter-issue-1">Publication newspaper is unclear</label>
+            <input type="checkbox" name="letterIssues[]" id="letter-issue-5" value="5" />
+            <label for="letter-issue-5">Advert evidence is missing</label>
+          </div>
+        </div>
+
+        <div class="letter-section" id="finances">
+          <div class="letter-section__header">
+            <h3 class="letter-section__title">Finances</h3>
+            <span class="letter-section__toggle"><span class="letter-section__show-hide">Show</span></span>
+          </div>
+          <div class="letter-section__content" style="display: none">
+            <input type="checkbox" name="letterIssues[]" id="letter-issue-15" value="15" />
+            <label for="letter-issue-15">No financial evidence</label>
+            <input type="checkbox" name="letterIssues[]" id="letter-issue-16" value="16" />
+            <label for="letter-issue-16">Funds only shown as a balance</label>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" id="create-letter-btn" disabled>Create letter</button>
+    </form>
+
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script>
+      window.OLCS = {
+        ready: function (fn) {
+          $(fn);
+        },
+        modal: { show: function () {}, updateBody: function () {} },
+      };
+    </script>
+    <script src="../../../internal/module/Olcs/assets/js/inline/forms/letter-generation.js"></script>
+  </body>
+</html>

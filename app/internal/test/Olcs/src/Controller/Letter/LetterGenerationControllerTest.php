@@ -13,6 +13,7 @@ use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent as Updat
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\CreateCustom;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\DeleteCustom;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\GenerationContext;
+use Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\PreviouslySent;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterIssue\GetList as LetterIssueList;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList as LetterIssueTypeList;
 use Laminas\Http\Request;
@@ -368,6 +369,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $sut->shouldReceive('placeholder')->andReturn($placeholder);
         $sut->shouldReceive('viewBuilder')->andReturn($viewBuilder);
         $sut->shouldReceive('fetchAppendicesForLetterType')->andReturn([]);
+        $sut->shouldReceive('fetchPreviousLetters')->andReturn([])->byDefault();
         $sut->shouldReceive('csrfToken')->andReturn('csrf-hash')->byDefault();
 
         return $sut->createAction();
@@ -440,6 +442,162 @@ final class LetterGenerationControllerTest extends MockeryTestCase
 
         $this->assertSame(1, $tokens->length);
         $this->assertSame('abc123-token', $tokens->item(0)->getAttribute('value'));
+    }
+
+    /**
+     * The New letter form needs its template for the appendices, the choices and the letters
+     * already sent. It's asked for once, not once for each.
+     */
+    public function testTheTemplateIsOnlyFetchedOnceForARequest(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('handleQuery')
+            ->with(m::type(\Dvsa\Olcs\Transfer\Query\DocTemplate\ById::class))
+            ->once()
+            ->andReturn($this->okResponse(['id' => 5, 'letterType' => ['id' => 7]]));
+
+        $this->assertSame(7, $this->invokeProtectedOn($sut, 'fetchTemplateById', 5)['letterType']['id']);
+        $this->assertSame(7, $this->invokeProtectedOn($sut, 'fetchTemplateById', 5)['letterType']['id']);
+    }
+
+    /**
+     * Starting a letter offers the letters of that type already sent for the same application or
+     * licence, so a final request can start from the issues its first request covered
+     */
+    public function testCreateActionOffersLettersAlreadySent(): void
+    {
+        $sent = [['id' => 392, 'label' => '11/11/2026 16:24 - First request - 2 issues', 'issueIds' => [15, 1]]];
+
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchLetterContext')->andReturn([]);
+        $sut->shouldReceive('buildAccordionData')->andReturn([]);
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->andReturn([]);
+        $sut->shouldReceive('fetchPreviousLetters')->with(5, ['type' => 'application', 'id' => 8])->once()->andReturn($sent);
+
+        $view = $this->runCreateAction($sut, ['template' => '5', 'application' => '8']);
+
+        $this->assertSame($sent, $view->getVariable('previousLetters'));
+    }
+
+    private function sentLetter(array $overrides = []): array
+    {
+        return $overrides + [
+            'id' => 392,
+            'sentOn' => '2026-11-11T16:24:18+0000',
+            'choices' => ['First request', 'Interim'],
+            'issueIds' => [15, 1],
+        ];
+    }
+
+    public function testPreviousLettersAreLookedUpByLetterTypeAndWhatTheLetterIsRaisedOn(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchTemplateById')->with(5)->andReturn(['letterType' => ['id' => 7]]);
+        $sut->shouldReceive('handleQuery')
+            ->with(m::on(
+                static fn($query): bool => $query instanceof PreviouslySent
+                    && $query->getLetterType() === 7
+                    && $query->getApplication() === 8
+                    && $query->getLicence() === null
+            ))
+            ->once()
+            // the API hands a list back as "results", whatever the handler called it
+            ->andReturn($this->okResponse(['count' => 3, 'results' => [
+                $this->sentLetter(),
+                $this->sentLetter(['id' => 388, 'sentOn' => '2026-11-10T09:05:00+0000', 'choices' => ['Final request'], 'issueIds' => [5]]),
+                $this->sentLetter(['id' => 385, 'sentOn' => '2026-11-09T12:00:00+0000', 'choices' => [], 'issueIds' => []]),
+            ]]));
+
+        $this->assertSame(
+            [
+                ['id' => 392, 'label' => '11/11/2026 16:24 - First request, Interim - 2 issues', 'issueIds' => [15, 1]],
+                ['id' => 388, 'label' => '10/11/2026 09:05 - Final request - 1 issue', 'issueIds' => [5]],
+                // sent with appendices only
+                ['id' => 385, 'label' => '09/11/2026 12:00 - 0 issues', 'issueIds' => []],
+            ],
+            $this->invokeProtectedOn($sut, 'fetchPreviousLetters', 5, ['type' => 'application', 'id' => 8])
+        );
+    }
+
+    /**
+     * The picker is a convenience. If its lookup fails (an API a release behind doesn't know the
+     * query yet, and answers 404) the New letter form still has to open, just without it.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('failedLookups')]
+    public function testAFailedLookupOfPreviousLettersDoesNotStopTheForm(\Throwable $failure): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchTemplateById')->andReturn(['letterType' => ['id' => 7]]);
+        $sut->shouldReceive('handleQuery')->with(m::type(PreviouslySent::class))->once()->andThrow($failure);
+
+        $this->assertSame([], $this->invokeProtectedOn($sut, 'fetchPreviousLetters', 5, ['type' => 'application', 'id' => 8]));
+    }
+
+    public static function failedLookups(): \Iterator
+    {
+        yield 'not found' => [new \Common\Service\Cqrs\Exception\NotFoundException('API responded with a 404 Not Found')];
+        yield 'not allowed' => [new \Common\Service\Cqrs\Exception\AccessDeniedException('Forbidden')];
+        yield 'server error' => [new \Common\Service\Cqrs\Exception('Internal Server Error')];
+    }
+
+    /**
+     * Not every letter is raised on something (the route can be opened bare), and not every
+     * template is a letter builder one. Either way there are no earlier letters to offer.
+     */
+    public function testNoPreviousLettersWithoutAnEntityOrALetterType(): void
+    {
+        $sut = $this->bareSut();
+        $sut->shouldReceive('fetchTemplateById')->andReturn(['letterType' => null]);
+        $sut->shouldNotReceive('handleQuery');
+
+        $this->assertSame([], $this->invokeProtectedOn($sut, 'fetchPreviousLetters', 5, []));
+        $this->assertSame([], $this->invokeProtectedOn($sut, 'fetchPreviousLetters', 5, ['type' => 'licence', 'id' => 7]));
+    }
+
+    private function renderCreateForm(array $previousLetters): \DOMXPath
+    {
+        $renderer = new PhpRenderer();
+        $renderer->setResolver(new TemplatePathStack([
+            'script_paths' => [__DIR__ . '/../../../../../module/Olcs/view'],
+        ]));
+
+        $page = new \DOMDocument();
+        $page->loadHTML($renderer->render('pages/letter/create', [
+            'templateId' => 5,
+            'queryParams' => ['template' => 5],
+            'accordionData' => [],
+            'appendicesData' => [],
+            'letterChoicesData' => [],
+            'csrfToken' => 'abc123-token',
+            'previousLetters' => $previousLetters,
+        ]), LIBXML_NOERROR);
+
+        return new \DOMXPath($page);
+    }
+
+    /**
+     * Each letter already sent is an option carrying the issues to tick (letter-generation.js
+     * does the ticking). The picker only chooses ticks, so it isn't posted with the form.
+     */
+    public function testCreateLetterFormListsLettersAlreadySent(): void
+    {
+        $form = $this->renderCreateForm([
+            ['id' => 392, 'label' => '11/11/2026 16:24 - First request - 2 issues', 'issueIds' => [15, 1]],
+            ['id' => 388, 'label' => '10/11/2026 09:05 - Final request - 1 issue', 'issueIds' => [5]],
+        ]);
+
+        $options = $form->query('//form[@id="letter-create-form"]//select[@id="previous-letter"]/option');
+        $this->assertSame(3, $options->length);
+        $this->assertSame('', $options->item(0)->getAttribute('value'));
+        $this->assertSame('15,1', $options->item(1)->getAttribute('data-issue-ids'));
+        $this->assertSame('11/11/2026 16:24 - First request - 2 issues', trim($options->item(1)->textContent));
+        $this->assertSame('5', $options->item(2)->getAttribute('data-issue-ids'));
+        $this->assertSame(0, $form->query('//select[@id="previous-letter"][@name]')->length);
+    }
+
+    public function testCreateLetterFormHasNoPickerWhenNothingHasBeenSent(): void
+    {
+        $this->assertSame(0, $this->renderCreateForm([])->query('//select[@id="previous-letter"]')->length);
     }
 
     /**
@@ -1166,5 +1324,294 @@ final class LetterGenerationControllerTest extends MockeryTestCase
 
         $this->assertSame('Other issue (Finances)', $issues[0]['name']);
         $this->assertSame('Other issue (Finances): to-do 1', $todos[0]['name']);
+    }
+
+    /**
+     * Intro, issues, closing and interim sections, in letter order. Interim wasn't ticked, so the
+     * API marks its section as having nothing to edit. The issues come back Finance, Adverts,
+     * Finance; one to-do has none of its issues on the letter.
+     */
+    private function letterWithSectionsIssuesAndTodos(): array
+    {
+        $section = static fn (int $id, string $key, string $name, array $extra = []): array => $extra + [
+            'id' => $id,
+            'version' => 1,
+            'letterSectionVersion' => ['name' => $name, 'letterSectionVariant' => ['letterSection' => ['sectionKey' => $key]]],
+        ];
+        $issue = static fn (int $id, int $typeId, string $typeName, string $heading): array => [
+            'id' => $id,
+            'version' => 1,
+            'effectiveHeading' => $heading,
+            'letterIssueVersion' => ['heading' => $heading, 'letterIssueType' => ['id' => $typeId, 'name' => $typeName]],
+        ];
+        $todo = static fn (int $id, string $key, array $placementIssueIds): array => [
+            'id' => $id,
+            'version' => 1,
+            'placementIssueIds' => $placementIssueIds,
+            'letterTodoVersion' => ['name' => 'Send it to us', 'letterTodo' => ['todoKey' => $key]],
+        ];
+
+        return [
+            'id' => 55,
+            'isOpenForChanges' => true,
+            'isSent' => false,
+            'letterInstanceSections' => [
+                $section(1, '001', 'Introductory wording'),
+                $section(2, '__ISSUES__', 'Issues (Auto-generated)'),
+                $section(3, '002', 'Closing wording'),
+                $section(4, '003', 'Interim wording', ['nothingToEdit' => true]),
+            ],
+            'letterInstanceIssues' => [
+                $issue(10, 2, 'Finance', 'Bank statements'),
+                $issue(20, 1, 'Adverts', 'Advert wording'),
+                $issue(11, 2, 'Finance', 'Overdraft'),
+            ],
+            'letterInstanceTodos' => [
+                $todo(102, 'AD01', [20]),
+                $todo(100, 'FI01', [11, 10]),
+                $todo(101, 'FI02', []),
+            ],
+            'letterInstanceAppendices' => [
+                ['id' => 7, 'version' => 1, 'letterAppendixVersion' => ['name' => 'Financial evidence', 'appendixType' => 'editable']],
+                ['id' => 8, 'version' => 1, 'letterAppendixVersion' => ['name' => 'Application form', 'appendixType' => 'pdf']],
+            ],
+        ];
+    }
+
+    /**
+     * A controller that can run the preview and edit pages for $letter, given the query string
+     */
+    private function sutShowing(array $letter, array $query): Sut
+    {
+        $flash = m::mock(FlashMessengerHelperService::class);
+        $flash->shouldReceive('clearCurrentMessagesFromContainer');
+        $navigationPage = m::mock();
+        $navigationPage->shouldReceive('setActive');
+        $navigation = m::mock(Navigation::class);
+        $navigation->shouldReceive('findOneBy')->andReturn($navigationPage);
+
+        $sut = m::mock(Sut::class, [
+            m::mock(TranslationHelperService::class),
+            m::mock(FormHelperService::class),
+            $flash,
+            $navigation,
+        ])->makePartial()->shouldAllowMockingProtectedMethods();
+
+        $params = m::mock(\Laminas\Mvc\Controller\Plugin\Params::class);
+        $params->shouldReceive('fromQuery')
+            ->andReturnUsing(static fn (string $name, mixed $default = null): mixed => $query[$name] ?? $default);
+        $placeholder = m::mock(Placeholder::class);
+        $placeholder->shouldReceive('setPlaceholder');
+        $viewBuilder = m::mock(ViewBuilder::class);
+        $viewBuilder->shouldReceive('buildView')->andReturnUsing(static fn (ViewModel $view): ViewModel => $view);
+
+        $sut->shouldReceive('params')->andReturn($params);
+        $sut->shouldReceive('placeholder')->andReturn($placeholder);
+        $sut->shouldReceive('viewBuilder')->andReturn($viewBuilder);
+        $sut->shouldReceive('handleQuery')->andReturn($this->okResponse($letter));
+        $sut->shouldReceive('fetchLetterInstanceById')->andReturn($letter);
+        $sut->shouldReceive('checkRequiredSections')->andReturn([]);
+
+        return $sut;
+    }
+
+    private function renderLetterTemplate(string $template, ViewModel $view): \DOMXPath
+    {
+        $renderer = new PhpRenderer();
+        $renderer->setResolver(new TemplatePathStack([
+            'script_paths' => [__DIR__ . '/../../../../../module/Olcs/view'],
+        ]));
+
+        $page = new \DOMDocument();
+        $page->loadHTML($renderer->render($template, $view->getVariables()), LIBXML_NOERROR);
+
+        return new \DOMXPath($page);
+    }
+
+    /**
+     * The preview sidebar's tick boxes, top to bottom, as "kind id"
+     *
+     * @return list<string>
+     */
+    private function sidebarOrder(array $letter): array
+    {
+        $sut = $this->sutShowing($letter, ['id' => '55']);
+        $sut->previewAction();
+        $sidebar = $this->renderLetterTemplate('pages/letter/preview-sidebar', $sut->getLeftView());
+
+        $kinds = ['letterSections[]' => 'section', 'sections[]' => 'issue', 'todos[]' => 'todo', 'appendices[]' => 'appendix'];
+        $order = [];
+        foreach ($sidebar->query('//input[@type="checkbox"]') as $box) {
+            $order[] = $kinds[$box->getAttribute('name')] . ' ' . $box->getAttribute('value');
+        }
+
+        return $order;
+    }
+
+    /**
+     * The edit page's editors, top to bottom, as "kind id", with everything in $ticked chosen
+     *
+     * @param list<string> $ticked "kind id", as sidebarOrder() gives them
+     * @return list<string>
+     */
+    private function editorOrder(array $letter, array $ticked): array
+    {
+        $idsOf = static fn (string $kind): array => array_values(array_filter(array_map(
+            static fn (string $item): ?string => str_starts_with($item, $kind . ' ') ? substr($item, strlen($kind) + 1) : null,
+            $ticked
+        )));
+
+        $view = $this->sutShowing($letter, [
+            'id' => '55',
+            'letterSections' => $idsOf('section'),
+            'sections' => $idsOf('issue'),
+            'todos' => $idsOf('todo'),
+            'appendices' => $idsOf('appendix'),
+        ])->editAction();
+        $editPage = $this->renderLetterTemplate('pages/letter/edit', $view);
+
+        $order = [];
+        foreach ($editPage->query('//div[contains(@class, "-editor-group")]') as $editor) {
+            foreach (['section', 'issue', 'todo', 'appendix'] as $kind) {
+                if ($editor->hasAttribute('data-' . $kind . '-id')) {
+                    $order[] = $kind . ' ' . $editor->getAttribute('data-' . $kind . '-id');
+                }
+            }
+        }
+
+        return $order;
+    }
+
+    /**
+     * The sidebar lists what can be edited in the order the edit page shows its editors: sections
+     * where they sit in the letter, issues kept together by type, each to-do under its issue,
+     * then the appendices.
+     */
+    public function testPreviewSidebarIsInTheOrderOfTheEditPage(): void
+    {
+        $letter = $this->letterWithSectionsIssuesAndTodos();
+
+        $sidebar = $this->sidebarOrder($letter);
+
+        $this->assertSame(
+            ['section 1', 'issue 10', 'issue 11', 'todo 100', 'issue 20', 'todo 102', 'todo 101', 'section 3', 'appendix 7'],
+            $sidebar
+        );
+        $this->assertSame($sidebar, $this->editorOrder($letter, $sidebar));
+    }
+
+    /**
+     * The interim paragraph is only in the letter when Interim was ticked. Without it the letter
+     * still carries the section, with no wording, and the sidebar shouldn't offer it for editing.
+     */
+    public function testPreviewSidebarLeavesOutASectionWithNothingToEdit(): void
+    {
+        $letter = $this->letterWithSectionsIssuesAndTodos();
+
+        $this->assertNotContains('section 4', $this->sidebarOrder($letter));
+
+        $letter['letterInstanceSections'][3]['nothingToEdit'] = false;
+        $this->assertContains('section 4', $this->sidebarOrder($letter));
+    }
+
+    /**
+     * The preview sidebar and the edit page name a section the same way, and neither treats the
+     * issues placeholder as a section to edit
+     */
+    public function testASectionIsNamedTheSameOnThePreviewAndEditPages(): void
+    {
+        $named = fn (array $version): ?string => $this->invokeProtected('instanceSectionName', ['id' => 9, 'letterSectionVersion' => $version]);
+
+        $this->assertSame('Closing wording', $named(['name' => 'Closing wording', 'letterSectionVariant' => ['letterSection' => ['sectionKey' => '002']]]));
+        $this->assertSame('Closing', $named(['letterSectionVariant' => ['letterSection' => ['name' => 'Closing', 'sectionKey' => '002']]]));
+        $this->assertSame('002', $named(['letterSection' => ['sectionKey' => '002']]));
+        $this->assertSame('Section #9', $named([]));
+        $this->assertNull($named(['name' => 'Issues (Auto-generated)', 'letterSectionVariant' => ['letterSection' => ['sectionKey' => '__ISSUES__']]]));
+    }
+
+    public function testPreviewSidebarStillFlagsASectionThatNeedsInput(): void
+    {
+        $sections = $this->invokeProtected('buildInstanceSectionsList', ['letterInstanceSections' => [
+            ['id' => 5, 'letterSectionVersion' => ['name' => 'Your reasons', 'requiresInput' => true]],
+            ['id' => 6, 'editedContent' => ['blocks' => []], 'letterSectionVersion' => ['name' => 'Your reasons', 'requiresInput' => true]],
+            $this->instanceSection(7, '__ISSUES__'),
+        ]]);
+
+        $this->assertSame([5, 6], array_column($sections, 'id'));
+        $this->assertSame(['Your reasons', 'Your reasons'], array_column($sections, 'name'));
+        $this->assertSame([true, false], array_column($sections, 'inputPending'));
+    }
+
+    /**
+     * The edit page has one button that saves every editor with unsaved changes, and somewhere
+     * to say they're all saved (letter-edit.js drives both)
+     */
+    public function testEditPageOffersToSaveEverythingAtOnce(): void
+    {
+        $letter = $this->letterWithSectionsIssuesAndTodos();
+
+        $view = $this->sutShowing($letter, ['id' => '55', 'sections' => ['10'], 'letterSections' => ['1']])->editAction();
+        $editPage = $this->renderLetterTemplate('pages/letter/edit', $view);
+
+        $this->assertSame(1, $editPage->query('//button[@id="save-all-btn"]')->length);
+        $this->assertSame(1, $editPage->query('//*[@id="save-all-indicator"]')->length);
+    }
+
+    /**
+     * After a letter is sent the caseworker goes back to the documents of whatever the send form
+     * was opened on. A letter raised on an application also carries the licence, so the form has
+     * to open on the application, not the licence. Nothing else moves: a letter raised on a case
+     * is still sent from the licence, because the send form can't yet propose to revoke from a
+     * case's own documents.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('sendFormRoutes')]
+    public function testSendFormOpensWhereTheLetterWasRaised(array $letter, string $route, array $routeParams): void
+    {
+        // every route asked for is recorded: the controller moves on to the next one if a route
+        // can't be built, so a mock that only accepted the right route would hide a wrong first try
+        $asked = [];
+        $url = m::mock(\Laminas\Mvc\Controller\Plugin\Url::class);
+        $url->shouldReceive('fromRoute')->andReturnUsing(
+            static function (string $route, array $params) use (&$asked): string {
+                $asked[] = [$route, $params];
+
+                return '/the-send-form';
+            }
+        );
+        $sut = $this->bareSut();
+        $sut->shouldReceive('url')->andReturn($url);
+
+        $this->assertSame('/the-send-form', $this->invokeProtectedOn($sut, 'buildPrintActionUrl', $letter, 99));
+        $this->assertSame([[$route, $routeParams + ['doc' => 99, 'action' => 'print']]], $asked);
+    }
+
+    public static function sendFormRoutes(): \Iterator
+    {
+        yield 'raised on an application' => [
+            ['licence' => ['id' => 7], 'application' => ['id' => 8], 'case' => null],
+            'lva-application/documents/finalise',
+            ['application' => 8],
+        ];
+        yield 'raised on a licence' => [
+            ['licence' => ['id' => 7], 'application' => null, 'case' => null],
+            'licence/documents/finalise',
+            ['licence' => 7],
+        ];
+        yield 'raised on a case' => [
+            ['licence' => ['id' => 7], 'application' => null, 'case' => ['id' => 24]],
+            'licence/documents/finalise',
+            ['licence' => 7],
+        ];
+        // a case with no licence of its own gives the letter its application as well
+        yield 'raised on a case that is on an application' => [
+            ['licence' => ['id' => 7], 'application' => ['id' => 8], 'case' => ['id' => 24]],
+            'licence/documents/finalise',
+            ['licence' => 7],
+        ];
+    }
+
+    private function invokeProtectedOn(Sut $sut, string $method, mixed ...$args): mixed
+    {
+        return (new \ReflectionMethod(Sut::class, $method))->invoke($sut, ...$args);
     }
 }

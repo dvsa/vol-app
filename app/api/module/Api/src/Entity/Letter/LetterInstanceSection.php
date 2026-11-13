@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Api\Entity\Letter;
 
 use Doctrine\ORM\Mapping as ORM;
+use Dvsa\Olcs\Api\Service\Letter\EditorJsText;
 
 /**
  * LetterInstanceSection Entity
@@ -85,6 +86,38 @@ class LetterInstanceSection extends AbstractLetterInstanceSection
     public function requiresInput()
     {
         return $this->letterSectionVersion->getRequiresInput();
+    }
+
+    /**
+     * Whether there's nothing here for a caseworker to edit. That's a section whose wording
+     * depends on the letter (the interim paragraph is only there when Interim is ticked), where
+     * none of it applied and the letter got the section's empty catch-all instead.
+     *
+     * A section with just the one wording, left empty, is different: it's there to be written
+     * in, so it stays editable. So does a section that asks for input, and one the caseworker
+     * has already saved, even if they cleared it, so they can get back to what they wrote.
+     *
+     * This goes by the section as it's set up now, not as it was when the letter was generated:
+     * that isn't recorded. Adding or removing conditional wording later can change the answer
+     * for a draft whose section is still empty and untouched.
+     */
+    public function hasNothingToEdit(): bool
+    {
+        if ($this->requiresInput() || $this->hasBeenEdited()) {
+            return false;
+        }
+
+        // The wording first: it's already in hand, and most sections have some. Only an empty
+        // one needs its section's other wording looked up.
+        if (EditorJsText::plain($this->getEffectiveContent()) !== '') {
+            return false;
+        }
+
+        $wording = $this->letterSectionVersion->getLetterSectionVariant();
+
+        return $wording !== null
+            && $wording->isDefault()
+            && (bool) $wording->getLetterSection()?->hasConditionalWording();
     }
 
     /**

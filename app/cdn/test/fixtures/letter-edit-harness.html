@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Letter edit page harness</title>
+  </head>
+  <body>
+    <!--
+      The internal app's "Edit letter sections" page script (letter-edit.js), run against the
+      markup the page gives it: one editor group of each kind, each with its own Save changes
+      button, and the Save all changes button.
+
+      The editors themselves are left out. What the script works from is each group's hidden
+      input, which the EditorJS component keeps up to date, so the tests write to those inputs
+      the way the component does. $.ajax is replaced by a stand-in for the server.
+    -->
+    <div id="edit-error-summary" tabindex="-1" style="display: none">
+      <ul id="edit-error-list"></ul>
+    </div>
+
+    <div class="section-editor-group" data-section-id="1" data-version="1">
+      <h2 class="govuk-heading-s">Introductory wording</h2>
+      <input type="hidden" name="section_1" value="" />
+      <button type="button" class="save-section-btn" data-section-id="1" data-version="1">Save changes</button>
+      <span class="save-indicator" style="display: none">Saved</span>
+    </div>
+
+    <div class="issue-editor-group" data-issue-id="10">
+      <h3 class="govuk-heading-s">Bank statements</h3>
+      <input type="hidden" name="issue-10" value="" />
+      <button type="button" class="save-issue-btn" data-issue-id="10" data-version="1">Save changes</button>
+      <span class="save-indicator" style="display: none">Saved</span>
+    </div>
+
+    <div class="todo-editor-group" data-todo-id="100" data-version="1">
+      <h5 class="govuk-heading-s">Upload bank statements (FI01)</h5>
+      <input type="hidden" name="todo_100" value="" />
+      <button type="button" class="save-todo-btn" data-todo-id="100" data-version="1">Save changes</button>
+      <span class="save-indicator" style="display: none">Saved</span>
+    </div>
+
+    <div class="appendix-editor-group" data-appendix-id="7">
+      <h3 class="govuk-heading-s">Financial evidence</h3>
+      <input type="hidden" name="appendix-7" value="" />
+      <button type="button" class="save-appendix-btn" data-appendix-id="7" data-version="1">Save changes</button>
+      <span class="save-indicator" style="display: none">Saved</span>
+    </div>
+
+    <button type="button" id="save-all-btn">Save all changes</button>
+    <span id="save-all-indicator" style="display: none">All changes saved</span>
+    <a href="/letter/preview?id=55" id="back-to-preview">Back to letter preview</a>
+
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script>
+      function editorContent(text) {
+        return JSON.stringify({ time: Date.now(), blocks: [{ type: "paragraph", data: { text: text } }] });
+      }
+
+      // What the EditorJS component does when the caseworker has typed and its debounce has
+      // run: writes the editor's content to the group's hidden input.
+      window.editorWrites = function (inputName, text) {
+        document.querySelector("input[name='" + inputName + "']").value = editorContent(text);
+      };
+
+      // Typing the component hasn't written to the hidden input yet. A flush writes it.
+      window.pendingTyping = {};
+      window.requests = [];
+      window.failures = {};
+      // how long the stand-in server takes to answer, in milliseconds
+      window.serverDelay = 20;
+
+      window.OLCS = {
+        ready: function (fn) {
+          $(fn);
+        },
+        editorjsFlush: function () {
+          Object.keys(window.pendingTyping).forEach(function (inputName) {
+            window.editorWrites(inputName, window.pendingTyping[inputName]);
+          });
+          window.pendingTyping = {};
+
+          return Promise.resolve();
+        },
+        modal: { show: function () {} },
+      };
+
+      // Stands in for the server: notes each request, then answers a moment later. A URL
+      // listed in window.failures is refused with that message.
+      $.ajax = function (options) {
+        var body = JSON.parse(options.data);
+        var answer = $.Deferred();
+        window.requests.push({ url: options.url, body: body });
+
+        setTimeout(function () {
+          if (window.failures[options.url]) {
+            answer.reject({ responseText: JSON.stringify({ message: window.failures[options.url] }) });
+          } else {
+            answer.resolve({ success: true, version: body.version + 1 });
+          }
+        }, window.serverDelay);
+
+        return answer.promise();
+      };
+    </script>
+    <script src="../../../internal/module/Olcs/assets/js/inline/forms/letter-edit.js"></script>
+    <script>
+      // each editor writes what it opened on once it's ready
+      $(function () {
+        window.editorWrites("section_1", "Dear operator");
+        window.editorWrites("issue-10", "Your bank statements are too old.");
+        window.editorWrites("todo_100", "Upload three months of statements.");
+        window.editorWrites("appendix-7", "Evidence we accept.");
+      });
+    </script>
+  </body>
+</html>

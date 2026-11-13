@@ -245,16 +245,24 @@ body[id="pg:letter/preview:preview"] {
   .sidebar--left {
     width: 300px;
   }
+
+  // A to-do is listed straight after its issue, as on the edit page. Set it in a
+  // little so it reads as belonging to the issue above it.
+  .letter-sidebar__todo {
+    margin-left: 20px;
+  }
 }
 
 // Radios carry the identical rule and so the identical bug. Nothing trips it
 // today because the only choices are "First request" and "Final request", but
 // those labels are admin-editable, so a longer one would.
 //
-// Applies to both places letters list sections against a control: the Create
-// Letter modal, and the sidebar on Preview and edit letter. The sidebar shows it
+// Applies to every place letters list sections against a control: the Create
+// Letter modal, the Change issues modal (the same list of issues, so it needs the
+// same fix), and the sidebar on Preview and edit letter. The sidebar shows it
 // worst -- the column is narrow, so almost every label is long enough to trip it.
 #letter-create-form,
+#change-issues-form,
 body[id="pg:letter/preview:preview"] .sidebar--left {
   .govuk-checkboxes__label,
   .govuk-radios__label {
@@ -280,7 +288,10 @@ body[id="pg:letter/preview:preview"] .sidebar--left {
 //
 // The letter choices deliberately do NOT get the accordion behaviour: picking First or
 // Final is mandatory, and a required choice must not be hidden behind a Show/Hide.
-#letter-create-form {
+//
+// The Change issues modal shows the same issue groups, so it takes the same styles.
+#letter-create-form,
+#change-issues-form {
   .letter-section__header,
   .letter-group__header {
     border-bottom: 1px solid $govuk-border-colour;

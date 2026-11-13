@@ -82,6 +82,11 @@ class Get extends AbstractQueryByIdHandler
             $todosById[(int) $todo->getId()] = $todo;
         }
 
+        $sectionsById = [];
+        foreach ($letterInstance->getLetterInstanceSections() as $section) {
+            $sectionsById[(int) $section->getId()] = $section;
+        }
+
         $counts = $letterInstance->getTodoRequiringIssueCounts();
         $placements = $letterInstance->getTodoPlacementIssueIds();
         $data = $result->serialize();
@@ -89,6 +94,13 @@ class Get extends AbstractQueryByIdHandler
         // the letter's own rule for whether it can still change (VOL-7735), so pages don't copy it
         $data['isOpenForChanges'] = $letterInstance->isOpenForChanges();
         $data['isSent'] = (bool) $letterInstance->isSent();
+
+        // a section with no wording that asks for none isn't offered for editing, like the interim
+        // paragraph when Interim isn't ticked
+        foreach ($data['letterInstanceSections'] ?? [] as $index => $row) {
+            $section = $sectionsById[(int) ($row['id'] ?? 0)] ?? null;
+            $data['letterInstanceSections'][$index]['nothingToEdit'] = $section?->hasNothingToEdit() ?? false;
+        }
 
         // the effective heading and "Input required", worked out by the entities (VOL-7735)
         foreach ($data['letterInstanceIssues'] ?? [] as $index => $row) {

@@ -71,6 +71,7 @@ final class GetTest extends QueryHandlerTestCase
             )->once()->andReturn(['id' => 123, 'reference' => 'LTR20251202ABC123'])->getMock();
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
 
         $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->andReturn([]);
         $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->andReturn([]);
@@ -106,6 +107,7 @@ final class GetTest extends QueryHandlerTestCase
         $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
         $mockLetterInstance->shouldReceive('isOpenForChanges')->andReturn(true)->byDefault();
         $mockLetterInstance->shouldReceive('isSent')->andReturn(false)->byDefault();
@@ -140,6 +142,7 @@ final class GetTest extends QueryHandlerTestCase
         $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
         $mockLetterInstance->shouldReceive('isOpenForChanges')->andReturn(true)->byDefault();
         $mockLetterInstance->shouldReceive('isSent')->andReturn(false)->byDefault();
@@ -173,6 +176,7 @@ final class GetTest extends QueryHandlerTestCase
         $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
         $mockLetterInstance->shouldReceive('isOpenForChanges')->andReturn(true)->byDefault();
         $mockLetterInstance->shouldReceive('isSent')->andReturn(false)->byDefault();
@@ -220,6 +224,7 @@ final class GetTest extends QueryHandlerTestCase
         $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new \Doctrine\Common\Collections\ArrayCollection())->byDefault();
         $mockLetterInstance->shouldReceive('serialize')->once()->andReturn($serialized);
         $mockLetterInstance->shouldReceive('isOpenForChanges')->andReturn(true)->byDefault();
         $mockLetterInstance->shouldReceive('isSent')->andReturn(false)->byDefault();
@@ -253,5 +258,53 @@ final class GetTest extends QueryHandlerTestCase
         $this->assertFalse($libraryRow['isCustom']);
         $this->assertNull($libraryRow['customIndex']);
         $this->assertFalse($libraryRow['inputPending']);
+    }
+
+    /**
+     * A section that got the empty catch-all of wording that didn't apply (the interim paragraph
+     * when Interim isn't ticked) is marked, so the preview doesn't offer it for editing.
+     */
+    public function testEachSectionSaysWhetherItHasAnythingToEdit(): void
+    {
+        $query = Qry::create(['id' => 123]);
+
+        $closingVersion = new \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion();
+        $closingVersion->setDefaultContent(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Yours sincerely']]]]);
+        $closing = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection();
+        $closing->setId(30);
+        $closing->setLetterSectionVersion($closingVersion);
+
+        // interim wording: a catch-all with nothing in it, and wording for when Interim is ticked
+        $catchAll = new \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant();
+        $whenTicked = new \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant();
+        $whenTicked->setLetterChoice(new \Dvsa\Olcs\Api\Entity\Letter\LetterChoice());
+        $interimSection = new \Dvsa\Olcs\Api\Entity\Letter\LetterSection();
+        $interimSection->addVariant($catchAll);
+        $interimSection->addVariant($whenTicked);
+        $interimVersion = new \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion();
+        $interimVersion->setDefaultContent(['blocks' => []]);
+        $interimVersion->setLetterSectionVariant($catchAll);
+        $interim = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection();
+        $interim->setId(31);
+        $interim->setLetterSectionVersion($interimVersion);
+
+        $mockLetterInstance = m::mock(\Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')->andReturn(new \Doctrine\Common\Collections\ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new \Doctrine\Common\Collections\ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')->andReturn(new \Doctrine\Common\Collections\ArrayCollection([$closing, $interim]));
+        $mockLetterInstance->shouldReceive('serialize')->once()->andReturn([
+            'id' => 123,
+            'letterInstanceSections' => [['id' => 30], ['id' => 31]],
+        ]);
+        $mockLetterInstance->shouldReceive('isOpenForChanges')->andReturn(true);
+        $mockLetterInstance->shouldReceive('isSent')->andReturn(false);
+        $mockLetterInstance->shouldReceive('getTodoRequiringIssueCounts')->andReturn([]);
+        $mockLetterInstance->shouldReceive('getTodoPlacementIssueIds')->andReturn([]);
+
+        $this->repoMap['LetterInstance']->shouldReceive('fetchUsingId')->with($query)->once()->andReturn($mockLetterInstance);
+
+        $result = $this->sut->handleQuery($query);
+
+        $this->assertSame([false, true], array_column($result['letterInstanceSections'], 'nothingToEdit'));
     }
 }
