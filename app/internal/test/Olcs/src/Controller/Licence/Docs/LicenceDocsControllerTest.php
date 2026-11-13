@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace OlcsTest\Controller\Licence\Docs;
 
-use Common\RefData;
-use Common\Service\Data\PluginManager as DataServiceManager;
 use Common\Service\Helper\ComplaintsHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
@@ -14,12 +12,10 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
-use Laminas\Http\Request;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\Controller\Application\Docs\ApplicationDocsController;
 use Olcs\Controller\Licence\Docs\LicenceDocsController;
 use Olcs\Service\Data\DocumentSubCategory;
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OlcsTest\Controller\Application\Docs;
 
-use Common\RefData;
 use Common\Service\Data\PluginManager as DataServiceManager;
 use Common\Service\Helper\ComplaintsHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -57,14 +56,13 @@ final class ApplicationDocsControllerTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
     }
 
-    public function testExternalDocumentsAreNotListedForUnsubmittedApplications(): void
+    public function testDocumentsActionFilters(): void
     {
         $controller = $this->sut;
 
         $controller->shouldReceive('getFromRoute')->with('application')->twice()->andReturn(123);
         $controller->shouldReceive('getApplication')->with(123)->once()->andReturn([
             'licence' => ['id' => 456],
-            'status' => ['id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED],
         ]);
 
         $expectedFilters = [
@@ -75,38 +73,7 @@ final class ApplicationDocsControllerTest extends MockeryTestCase
             'licence' => 456,
             'application' => 123,
             'showDocs' => FilterOptions::EXCLUDE_IRHP,
-            'isExternal' => 'N',
-        ];
-
-        $table = new \stdClass();
-        $view = new ViewModel();
-
-        $controller->shouldReceive('getDocumentsTable')->with($expectedFilters)->once()->andReturn($table);
-        $controller->shouldReceive('getViewWithApplication')->with(['table' => $table])->once()->andReturn($view);
-        $controller->shouldReceive('loadScripts')->with(['documents', 'table-actions'])->once();
-        $controller->shouldReceive('renderView')->with($view)->once()->andReturn('RENDERED');
-
-        self::assertSame('RENDERED', $controller->documentsAction());
-    }
-
-    public function testExternalDocumentsAreListedForSubmittedApplications(): void
-    {
-        $controller = $this->sut;
-
-        $controller->shouldReceive('getFromRoute')->with('application')->twice()->andReturn(123);
-        $controller->shouldReceive('getApplication')->with(123)->once()->andReturn([
-            'licence' => ['id' => 456],
-            'status' => ['id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION],
-        ]);
-
-        $expectedFilters = [
-            'sort' => 'issuedDate',
-            'order' => 'DESC',
-            'page' => 1,
-            'limit' => 10,
-            'licence' => 456,
-            'application' => 123,
-            'showDocs' => FilterOptions::EXCLUDE_IRHP,
+            'hideUnsubmittedApplicationDocs' => 'Y',
         ];
 
         $table = new \stdClass();
