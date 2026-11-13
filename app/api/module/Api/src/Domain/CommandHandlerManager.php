@@ -101,11 +101,13 @@ class CommandHandlerManager extends AbstractPluginManager
         $validationHandler = $this->validationHandlerManager->get($queryHandlerFqcl);
 
         if (!$validationHandler->isValid($dto)) {
+            $data = $dto instanceof LoggerOmitContentInterface ? ['*** OMITTED ***'] : $dto->getArrayCopy();
+
             Logger::debug(
                 'DTO Failed validation',
                 [
                     'handler' => $queryHandlerFqcl,
-                    'data' => $dto->getArrayCopy(),
+                    'data' => $data,
                 ]
             );
             throw new ForbiddenException('You do not have access to this resource');

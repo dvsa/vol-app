@@ -330,6 +330,10 @@ return [
         // mail.dsn is govuknotify:// without a key of its own, e.g. govuknotify://default.
         // Every environment's secret needs this key, even if it's just " ", or the API won't start.
         'api_key' => $isDeployed ? '%olcs_notify_api_key%' : null,
+        // Bearer token GOV.UK Notify sends with delivery status callbacks, from the API secret too.
+        // Every environment's secret needs this key, even if it's just " ", or the API won't start.
+        // Blank, " " and "null" mean unset and every callback is rejected.
+        'callback_token' => $isDeployed ? '%olcs_notify_callback_token%' : null,
         // Outbound egress in deployed environments is only reachable via the shared forward proxy,
         // so the Notify HTTP client is routed through it like every other external integration.
         'proxy' => $isDeployed ? 'http://%shd_proxy%' : null,
