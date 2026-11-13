@@ -140,5 +140,212 @@ test("an editor that is already being saved is not sent a second time", async ({
   await page.locator("#save-all-btn").click();
 
   await expect(page.locator("#save-all-indicator")).toBeVisible();
+  // the save that was on its way counts: something was saved
+  await expect(page.locator("#save-all-indicator")).toHaveText("All changes saved");
   expect(await savedUrls(page)).toEqual(["/letter/save-section-content"]);
+});
+
+test("an editor typed into while its own save is on its way is saved again with the newer text", async ({ page }) => {
+  await page.evaluate(() => {
+    window.serverDelay = 1000;
+    window.editorWrites("section_1", "Dear Mr Smith");
+  });
+
+  await page.locator(".save-section-btn").click();
+  await expect(page.locator(".save-section-btn")).toBeDisabled();
+  // the first save has already gone with the text above
+  await page.evaluate(() => window.editorWrites("section_1", "Dear Mr Smith and Mrs Smith"));
+  await page.locator("#save-all-btn").click();
+
+  await expect(page.locator("#save-all-indicator")).toBeVisible();
+  await expect(page.locator("#save-all-indicator")).toHaveText("All changes saved");
+  const requests = await page.evaluate(() => window.requests);
+  expect(requests.map((request) => JSON.parse(request.body.editedContent).blocks[0].data.text)).toEqual([
+    "Dear Mr Smith",
+    "Dear Mr Smith and Mrs Smith",
+  ]);
+  // the second goes with the version the first save came back with, or it would be refused
+  expect(requests.map((request) => request.body.version)).toEqual([1, 2]);
+  expect(await page.evaluate(() => window.OLCS.letterEdit.unsavedSectionNames())).toEqual([]);
+});
+
+const UNREAD =
+  "The latest changes in this section could not be read, so they have not been saved. " +
+  "Try again, or copy your text and reload the page.";
+
+test("an editor that could not be read is named and not sent, and the others are still saved", async ({ page }) => {
+  await page.evaluate(() => {
+    window.unreadable = ["issue-10"];
+    window.pendingTyping["issue-10"] = "Your bank statements are in the wrong name.";
+    window.editorWrites("section_1", "Dear Mr Smith");
+  });
+
+  await page.locator("#save-all-btn").click();
+
+  await expect(page.locator("#edit-error-list li")).toHaveText(["Bank statements: " + UNREAD]);
+  await expect(page.locator(".section-editor-group .save-indicator")).toBeVisible();
+  expect(await savedUrls(page)).toEqual(["/letter/save-section-content"]);
+  await expect(page.locator("#save-all-btn")).toBeEnabled();
+  // what was typed there is still only on screen, so nothing may say it's saved
+  await expect(page.locator("#save-all-indicator")).toBeHidden();
+  expect(await page.evaluate(() => window.OLCS.letterEdit.unsavedSectionNames())).toEqual(["Bank statements"]);
+});
+
+test("an editor that could not be read is not passed over as having nothing to save", async ({ page }) => {
+  await page.evaluate(() => {
+    window.unreadable = ["issue-10"];
+    window.pendingTyping["issue-10"] = "Your bank statements are in the wrong name.";
+  });
+
+  await page.locator("#save-all-btn").click();
+
+  await expect(page.locator("#edit-error-list li")).toHaveText(["Bank statements: " + UNREAD]);
+  await expect(page.locator("#save-all-btn")).toBeEnabled();
+  await expect(page.locator("#save-all-indicator")).toBeHidden();
+  expect(await savedUrls(page)).toEqual([]);
+
+  // once it can be read again, saving picks up what was typed
+  await page.evaluate(() => {
+    window.unreadable = [];
+  });
+  await page.locator("#save-all-btn").click();
+
+  await expect(page.locator("#save-all-indicator")).toBeVisible();
+  await expect(page.locator("#save-all-indicator")).toHaveText("All changes saved");
+  await expect(page.locator("#edit-error-summary")).toBeHidden();
+  expect(await savedUrls(page)).toEqual(["/letter/save-issue-content"]);
+});
+
+test("an editor with its own save already queued is left to that save", async ({ page }) => {
+  await page.evaluate(() => {
+    window.serverDelay = 500;
+    window.unreadable = ["issue-10"];
+    window.editorWrites("section_1", "Dear Mr Smith");
+    window.editorWrites("todo_100", "Upload six months of statements.");
+  });
+
+  // the issue's save is waiting its turn behind the section's when Save all is pressed
+  await page.locator(".save-section-btn").click();
+  await page.locator(".save-issue-btn").click();
+  await page.locator("#save-all-btn").click();
+
+  await expect(page.locator("#save-all-btn")).toBeEnabled();
+  expect(await savedUrls(page)).toEqual(["/letter/save-section-content", "/letter/save-todo-content"]);
+  // said once, by the issue's own save
+  await expect(page.locator("#edit-error-list li")).toHaveText(["Bank statements: " + UNREAD]);
+  await expect(page.locator("#save-all-indicator")).toBeHidden();
+});
+
+test("Save all's second look at an editor does not carry over to its next Save changes", async ({ page }) => {
+  await page.evaluate(() => {
+    window.serverDelay = 500;
+    window.unreadable = ["issue-10"];
+    window.editorWrites("section_1", "Dear Mr Smith");
+  });
+  // the issue's save is waiting when Save all is pressed, and then can't be read
+  await page.locator(".save-section-btn").click();
+  await page.locator(".save-issue-btn").click();
+  await page.locator("#save-all-btn").click();
+  await expect(page.locator("#save-all-btn")).toBeEnabled();
+
+  await page.evaluate(() => {
+    window.unreadable = [];
+    window.editorWrites("issue-10", "Your bank statements are too old.");
+  });
+  await page.locator(".save-issue-btn").click();
+  await expect(page.locator(".save-issue-btn")).toBeDisabled();
+  await page.evaluate(() => window.editorWrites("issue-10", "Your bank statements are in the wrong name."));
+  await expect(page.locator(".save-issue-btn")).toBeEnabled();
+
+  // on its own, Save changes sends once: what's typed while it's away waits for the next press
+  expect(await savedUrls(page)).toEqual(["/letter/save-section-content", "/letter/save-issue-content"]);
+  expect(await page.evaluate(() => window.OLCS.letterEdit.unsavedSectionNames())).toEqual(["Bank statements"]);
+});
+
+test("a save refused while Save all is running is reported, and not sent again", async ({ page }) => {
+  await page.evaluate(() => {
+    window.serverDelay = 1000;
+    window.failures["/letter/save-section-content"] = "This letter was changed by someone else";
+    window.editorWrites("section_1", "Dear Mr Smith");
+  });
+
+  await page.locator(".save-section-btn").click();
+  await expect(page.locator(".save-section-btn")).toBeDisabled();
+  await page.locator("#save-all-btn").click();
+
+  await expect(page.locator("#save-all-btn")).toBeEnabled();
+  await expect(page.locator("#edit-error-list li")).toHaveText([
+    "Introductory wording: This letter was changed by someone else",
+  ]);
+  await expect(page.locator("#save-all-indicator")).toBeHidden();
+  expect(await savedUrls(page)).toEqual(["/letter/save-section-content"]);
+  expect(await page.evaluate(() => window.OLCS.letterEdit.unsavedSectionNames())).toEqual(["Introductory wording"]);
+});
+
+test("nothing says saved when a save of an untouched editor is refused meanwhile", async ({ page }) => {
+  await page.evaluate(() => {
+    window.serverDelay = 1000;
+    window.failures["/letter/save-section-content"] = "This letter can no longer be changed";
+  });
+
+  // nothing was typed, so the section never counts as unsaved: only the error can say it failed
+  await page.locator(".save-section-btn").click();
+  await expect(page.locator(".save-section-btn")).toBeDisabled();
+  await page.locator("#save-all-btn").click();
+
+  await expect(page.locator("#save-all-btn")).toBeEnabled();
+  await expect(page.locator("#edit-error-list li")).toHaveText([
+    "Introductory wording: This letter can no longer be changed",
+  ]);
+  await expect(page.locator("#save-all-indicator")).toBeHidden();
+  expect(await savedUrls(page)).toEqual(["/letter/save-section-content"]);
+});
+
+test("saves pressed by Save all go before a to-do added while it waits", async ({ page }) => {
+  await page.evaluate(() => {
+    window.serverDelay = 500;
+    window.editorWrites("section_1", "Dear Mr Smith");
+    window.editorWrites("issue-10", "Your bank statements are in the wrong name.");
+    window.editorWrites("appendix-7", "Evidence we no longer accept.");
+    // what "Add a to-do" does: its request waits its turn behind the saves
+    $("<button type='button' id='add-todo'>Add a to-do</button>")
+      .appendTo(document.body)
+      .on("click", function () {
+        $(".save-todo-btn").trigger("click");
+      });
+  });
+
+  await page.locator(".save-section-btn").click();
+  await expect(page.locator(".save-section-btn")).toBeDisabled();
+  await page.locator("#save-all-btn").click();
+  await page.locator("#add-todo").click();
+
+  await expect(page.locator("#save-all-btn")).toBeEnabled();
+  await expect(page.locator(".save-todo-btn")).toBeEnabled();
+  expect(await savedUrls(page)).toEqual([
+    "/letter/save-section-content",
+    "/letter/save-issue-content",
+    "/letter/save-appendix-content",
+    "/letter/save-todo-content",
+  ]);
+});
+
+test("Save changes on an editor that could not be read sends nothing and says so", async ({ page }) => {
+  await page.locator("#save-all-btn").click();
+  await expect(page.locator("#save-all-indicator")).toBeVisible();
+  await page.evaluate(() => {
+    window.unreadable = ["issue-10"];
+    window.pendingTyping["issue-10"] = "Your bank statements are in the wrong name.";
+  });
+
+  await page.locator(".save-issue-btn").click();
+
+  await expect(page.locator("#edit-error-list li")).toHaveText([UNREAD]);
+  // the message from the earlier Save all no longer holds
+  await expect(page.locator("#save-all-indicator")).toBeHidden();
+  await expect(page.locator(".save-issue-btn")).toBeEnabled();
+  await expect(page.locator(".save-issue-btn")).toHaveText("Save changes");
+  await expect(page.locator(".issue-editor-group .save-indicator")).toBeHidden();
+  expect(await savedUrls(page)).toEqual([]);
+  expect(await page.evaluate(() => window.OLCS.letterEdit.unsavedSectionNames())).toEqual(["Bank statements"]);
 });

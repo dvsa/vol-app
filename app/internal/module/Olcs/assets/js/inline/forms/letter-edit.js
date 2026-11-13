@@ -23,15 +23,41 @@ OLCS.ready(function () {
    *
    * Falls through untouched if the component is not present, so this file keeps working
    * on any page that has no editors.
+   *
+   * save(unread) is given the hidden input names of any editors that couldn't be read.
    */
   function withFlushedEditors(save) {
     if (typeof OLCS.editorjsFlush !== "function") {
-      save();
+      save([]);
       return;
     }
 
-    // never rejects: a failed flush is logged and the input left as it was
-    OLCS.editorjsFlush().then(save);
+    // never rejects: an editor that can't be read has its input left as it was, and is named
+    OLCS.editorjsFlush().then(function (unread) {
+      save(Array.isArray(unread) ? unread : []);
+    });
+  }
+
+  var UNREAD =
+    "The latest changes in this section could not be read, so they have not been saved. " +
+    "Try again, or copy your text and reload the page.";
+
+  /**
+   * True if the flush couldn't read this editor, having said so on the page. Its hidden input
+   * may be missing what was typed last, so it isn't sent, and it counts as unsaved from here.
+   */
+  function leftUnread($group, unread) {
+    var name = $group.find("input[type='hidden']").attr("name");
+    if (unread.indexOf(name) === -1) {
+      return false;
+    }
+
+    dirtyMap[$group.data("editorKey")] = true;
+    $group.find(".save-indicator").hide();
+    $("#save-all-indicator").hide();
+    showSaveError($group, UNREAD);
+
+    return true;
   }
 
   // What each editor last held that's saved: what it opened on, then what was last saved from it
@@ -167,60 +193,82 @@ OLCS.ready(function () {
     var hiddenInput = $group.find("input[type='hidden']");
     var $heading = $group.find(".other-issue-heading");
 
-    // Saving everything at once, a failure has to say which section it was
     var failed = function (message) {
-      showError(
-        savingAll
-          ? $group.find(".govuk-heading-s").first().text().trim() +
-              ": " +
-              message
-          : message,
-      );
+      showSaveError($group, message);
     };
 
     $btn.prop("disabled", true).text("Saving...");
 
     oneAtATime(function (done) {
-      withFlushedEditors(function () {
-        var content = hiddenInput.val();
-        var heading = $heading.length ? $heading.val() : undefined;
+      var finish = function () {
+        $group.removeData("saveAgain");
+        $btn.prop("disabled", false).text("Save changes");
+        done();
+      };
 
-        $.ajax({
-          url: url,
-          method: "POST",
-          contentType: "application/json",
-          data: JSON.stringify(request(content, heading, $btn.data("version"))),
-        })
-          // .then() rather than .done()/.fail(): if a handler throws, .always() below still
-          // runs, so the button comes back and the next request in the queue still goes
-          .then(
-            function (response) {
-              if (!response.success) {
-                failed(response.message || "Failed to save changes");
+      // onlyIfUnsaved: the second look "Save all changes" asks for, at the end of this function
+      var send = function (onlyIfUnsaved) {
+        withFlushedEditors(function (unread) {
+          if (leftUnread($group, unread) || (onlyIfUnsaved && !dirtyMap[key])) {
+            finish();
+            return;
+          }
+
+          var content = hiddenInput.val();
+          var heading = $heading.length ? $heading.val() : undefined;
+          var wasSaved = false;
+
+          $.ajax({
+            url: url,
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(
+              request(content, heading, $btn.data("version")),
+            ),
+          })
+            // .then() rather than .done()/.fail(): if a handler throws, .always() below still
+            // runs, so the button comes back and the next request in the queue still goes
+            .then(
+              function (response) {
+                if (!response.success) {
+                  failed(response.message || "Failed to save changes");
+                  return;
+                }
+                wasSaved = true;
+                var changedSince =
+                  editorBlocks(hiddenInput.val()) !== editorBlocks(content) ||
+                  ($heading.length && $heading.val() !== heading);
+                savedBlocks[key] = editorBlocks(content);
+                if (!changedSince) {
+                  dirtyMap[key] = false;
+                  $group.find(".save-indicator").show();
+                }
+                $btn.data("version", response.version);
+                if (saved) {
+                  saved(heading);
+                }
+              },
+              function (xhr) {
+                failed(failureMessage(xhr, "Failed to save changes"));
+              },
+            )
+            .always(function () {
+              // "Save all changes" was pressed while this save was waiting or on its way, and
+              // left this editor to it. Anything typed after this save went is sent now, in
+              // this editor's turn, with the version the save came back with. A save that
+              // failed has been reported and isn't tried again.
+              var again = wasSaved && $group.data("saveAgain");
+              $group.removeData("saveAgain");
+              if (again) {
+                send(true);
                 return;
               }
-              var changedSince =
-                editorBlocks(hiddenInput.val()) !== editorBlocks(content) ||
-                ($heading.length && $heading.val() !== heading);
-              savedBlocks[key] = editorBlocks(content);
-              if (!changedSince) {
-                dirtyMap[key] = false;
-                $group.find(".save-indicator").show();
-              }
-              $btn.data("version", response.version);
-              if (saved) {
-                saved(heading);
-              }
-            },
-            function (xhr) {
-              failed(failureMessage(xhr, "Failed to save changes"));
-            },
-          )
-          .always(function () {
-            $btn.prop("disabled", false).text("Save changes");
-            done();
-          });
-      });
+              finish();
+            });
+        });
+      };
+
+      send(false);
     });
   }
 
@@ -324,23 +372,32 @@ OLCS.ready(function () {
     $("#edit-error-list").empty();
 
     // what was typed last only counts as unsaved once the editors have written it out
-    withFlushedEditors(function () {
+    withFlushedEditors(function (unread) {
       var saving = 0;
       savingAll = true;
 
       $(EDITOR_GROUPS).each(function () {
         var $group = $(this);
         var $save = $group.find(SAVE_BUTTONS);
-        if (!dirtyMap[$group.data("editorKey")]) {
+        var unsaved = dirtyMap[$group.data("editorKey")];
+
+        // A disabled button means that editor's own save is waiting or already on its way.
+        // It isn't pressed again. That save is asked to look again once it's back, in case
+        // the editor was typed into after it went (see saveEditor).
+        if ($save.prop("disabled")) {
+          $group.data("saveAgain", true);
+          if (unsaved) {
+            saving++;
+          }
+          return;
+        }
+
+        if (leftUnread($group, unread) || !unsaved) {
           return;
         }
 
         saving++;
-        // A disabled button means that editor's own save is already on its way. It's left to
-        // finish, not sent again: the last step below waits for it either way.
-        if (!$save.prop("disabled")) {
-          $save.trigger("click");
-        }
+        $save.trigger("click");
       });
 
       // queued behind those saves, so this runs when the last of them has finished
@@ -348,10 +405,14 @@ OLCS.ready(function () {
         savingAll = false;
         $btn.prop("disabled", false).text("Save all changes");
         // "saved" only if something was: with nothing to send, saying so would hide an edit
-        // that had gone unnoticed
+        // that had gone unnoticed. And not beside an error: a save that was refused can leave
+        // nothing unsaved behind it, if its editor hadn't been changed.
         $("#save-all-indicator")
           .text(saving ? "All changes saved" : "No changes to save")
-          .toggle(collectUnsavedSectionNames().length === 0);
+          .toggle(
+            collectUnsavedSectionNames().length === 0 &&
+              $("#edit-error-list li").length === 0,
+          );
         done();
       });
     });
@@ -606,5 +667,16 @@ OLCS.ready(function () {
     }
     $errorSummary.show().focus();
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /**
+   * Show why an editor wasn't saved. Saving everything at once, it has to say which section.
+   */
+  function showSaveError($group, message) {
+    showError(
+      savingAll
+        ? $group.find(".govuk-heading-s").first().text().trim() + ": " + message
+        : message,
+    );
   }
 });

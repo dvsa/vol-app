@@ -97,6 +97,67 @@ test("flushing without an edit leaves the hidden input untouched", async ({ page
   expect(writes).toBe(0);
 });
 
+/**
+ * Make the editor holding the given wording impossible to read, as a block tool that throws
+ * while saving does. EditorJS logs that itself and hands back nothing.
+ */
+async function breakEditorHolding(page, wording) {
+  await page.evaluate((text) => {
+    const save = window.Paragraph.prototype.save;
+    window.Paragraph.prototype.save = function (content) {
+      if (content.innerHTML.includes(text)) {
+        throw new Error("cannot be read");
+      }
+      return save.call(this, content);
+    };
+  }, wording);
+}
+
+test("flushEditors names an editor it could not read and leaves its input alone", async ({ page }) => {
+  await page.evaluate(() => window.OLCS.editorjsFlush());
+  const before = await page.evaluate(() => document.querySelector("input[name='variantContent']").value);
+  await breakEditorHolding(page, "Variant wording");
+  await typeIntoEditor(page, "editor-section", " Still readable.");
+
+  // A caller that saves on the strength of a flush has to know which inputs to distrust.
+  const unread = await page.evaluate(() => window.OLCS.editorjsFlush());
+
+  expect(unread).toEqual(["variantContent"]);
+  expect(await page.evaluate(() => document.querySelector("input[name='variantContent']").value)).toBe(before);
+  expect(await hiddenInputText(page, "sectionContent")).toContain("Still readable.");
+});
+
+test("typing into an editor that cannot be read keeps the last content that could", async ({ page }) => {
+  await page.evaluate(() => window.OLCS.editorjsFlush());
+  await breakEditorHolding(page, "Variant wording");
+
+  await typeIntoEditor(page, "editor-variant", " More.");
+  // long enough for EditorJS's own debounced change to have come through as well
+  await page.waitForTimeout(1000);
+
+  // not the word "undefined", which is what writing an empty result puts in the input
+  expect(await hiddenInputText(page, "variantContent")).toBe("Variant wording.");
+});
+
+test("an editor that cannot be read as it starts up keeps the content it was given", async ({ page }) => {
+  await breakEditorHolding(page, "Late wording");
+  await page.evaluate(() => {
+    const holder = document.createElement("div");
+    holder.innerHTML =
+      '<div class="editorjs-container" data-element-name="lateContent">' +
+      '<div id="editor-late" class="editorjs-editor"></div>' +
+      '<input type="hidden" name="lateContent" value=\'{"blocks":[{"type":"paragraph","data":{"text":"Late wording."}}]}\' />' +
+      "</div>";
+    document.body.appendChild(holder);
+    window.OLCS.eventEmitter.trigger("render");
+  });
+  await expect(page.locator("#editor-late .ce-paragraph")).toHaveAttribute("contenteditable", "true");
+  // the editor writes what it opened on once it's ready
+  await page.waitForTimeout(500);
+
+  expect(await hiddenInputText(page, "lateContent")).toBe("Late wording.");
+});
+
 test("a form post carries the typed content without any deliberate pause", async ({ page }) => {
   await typeIntoEditor(page, "editor-variant", " Added by the admin.");
 

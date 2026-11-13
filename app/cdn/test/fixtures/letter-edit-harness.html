@@ -64,6 +64,9 @@
 
       // Typing the component hasn't written to the hidden input yet. A flush writes it.
       window.pendingTyping = {};
+      // Editors the component can't read just now, by hidden input name. A flush leaves their
+      // inputs as they were and hands back their names.
+      window.unreadable = [];
       window.requests = [];
       window.failures = {};
       // how long the stand-in server takes to answer, in milliseconds
@@ -75,11 +78,13 @@
         },
         editorjsFlush: function () {
           Object.keys(window.pendingTyping).forEach(function (inputName) {
-            window.editorWrites(inputName, window.pendingTyping[inputName]);
+            if (window.unreadable.indexOf(inputName) === -1) {
+              window.editorWrites(inputName, window.pendingTyping[inputName]);
+              delete window.pendingTyping[inputName];
+            }
           });
-          window.pendingTyping = {};
 
-          return Promise.resolve();
+          return Promise.resolve(window.unreadable.slice());
         },
         modal: { show: function () {} },
       };
