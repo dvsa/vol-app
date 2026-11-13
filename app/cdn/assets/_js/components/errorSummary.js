@@ -18,4 +18,14 @@ OLCS.errorSummary = function (ErrorSummary) {
 
     return label;
   };
+
+  OLCS.eventEmitter.on("render", function (context) {
+    if (!context) {
+      return;
+    }
+
+    context.find('[data-module="govuk-error-summary"]:not([data-govuk-error-summary-init])').each(function () {
+      return new ErrorSummary(this);
+    });
+  });
 };

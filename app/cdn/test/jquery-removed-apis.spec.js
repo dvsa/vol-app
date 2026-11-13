@@ -1,8 +1,66 @@
 // @ts-check
 const { test, expect } = require("@playwright/test");
 const path = require("node:path");
+const fs = require("node:fs");
 
 const root = path.join(__dirname, "..");
+
+for (const template of ["messages-new", "messages-view"]) {
+  test(`${template} clears stale summary and inline errors after removing an attachment`, async ({ page }) => {
+    const source = fs.readFileSync(path.join(root, `../selfserve/module/Olcs/view/${template}.phtml`), "utf8");
+    function render(errors, message) {
+      // Substitute server-rendered content while preserving the real template's AJAX boundaries.
+      return source.replace(/<\?php[\s\S]*?\?>/g, (block) => {
+        if (block.includes("'partials/page-header-simple'")) {
+          return `<div class="page-header">
+            ${errors ? '<div class="govuk-error-summary"><h2>There is a problem</h2><p>Enter a message</p></div>' : ""}
+            <h1 class="js-title">Messages</h1>
+          </div>`;
+        }
+        if (block.includes("$this->form($this->form)")) {
+          return `<form>
+            <div class="${errors ? "validation-wrapper" : ""}">
+              ${errors ? "<ul><li>Enter a message</li></ul>" : ""}
+              <label for="message">Message</label><textarea id="message">${message}</textarea>
+            </div>
+            <button class="file__remove" name="file[remove]" value="1">Remove</button>
+          </form>`;
+        }
+        return "";
+      });
+    }
+
+    await load(page, render(true, ""), ["formHelper", "normaliseResponse", "fileUpload"]);
+    await page.evaluate(() => {
+      OLCS.modal = { isVisible: () => false };
+      OLCS.fileUpload({ multiple: true });
+    });
+    await expect(page.locator(".govuk-error-summary")).toHaveCount(1);
+    await page.locator("#message").fill("Corrected test message");
+    await page.evaluate(
+      (html) => {
+        OLCS.submitForm = (options) => options.success(`<div class="js-response">${html}</div>`);
+      },
+      render(false, "Corrected test message"),
+    );
+    await page.getByRole("button", { name: "Remove" }).click();
+
+    await expect(page.locator(".validation-wrapper")).toHaveCount(0);
+    await expect(page.locator(".govuk-error-summary")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Messages", exact: true })).toHaveCount(1);
+    await expect(page.locator("#message")).toHaveValue("Corrected test message");
+
+    await page.evaluate(
+      (html) => {
+        OLCS.submitForm = (options) => options.success(`<div class="js-response">${html}</div>`);
+      },
+      render(true, ""),
+    );
+    await page.getByRole("button", { name: "Remove" }).click();
+    await expect(page.locator(".govuk-error-summary")).toHaveCount(1);
+    await expect(page.locator(".validation-wrapper")).toHaveCount(1);
+  });
+}
 
 async function load(page, html, components) {
   await page.setContent(html);

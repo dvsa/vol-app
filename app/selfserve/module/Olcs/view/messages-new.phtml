@@ -1,3 +1,4 @@
+<div class="js-body">
 <?php
 echo $this->partial(
   'partials/page-header-simple',
@@ -9,7 +10,7 @@ echo $this->partial(
 ?>
 
 <div class="row">
-  <div class="dashboard two-thirds js-body">
+  <div class="dashboard two-thirds">
     <?php
     echo $this->flashMessengerAll();
 
@@ -38,4 +39,5 @@ echo $this->partial(
   </div>
 
   <?php echo $this->partial('partials/conversations-right-column'); ?>
+</div>
 </div>

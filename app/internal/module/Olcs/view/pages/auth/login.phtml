@@ -6,9 +6,13 @@
         echo $this->formErrors($form);
         if (isset($failed) && $failed) {
             ?>
-            <div class="validation-summary">
-                <h2><?php echo $this->escapeHtml($this->translate('auth.login.failed.title')); ?></h2>
-                <p><?php echo $this->escapeHtml($this->translate('auth.login.failed.reason.' . $failureReason)); ?></p>
+            <div class="govuk-error-summary" data-module="govuk-error-summary">
+                <div role="alert">
+                    <h2 class="govuk-error-summary__title"><?php echo $this->escapeHtml($this->translate('auth.login.failed.title')); ?></h2>
+                    <div class="govuk-error-summary__body">
+                        <p><?php echo $this->escapeHtml($this->translate('auth.login.failed.reason.' . $failureReason)); ?></p>
+                    </div>
+                </div>
             </div>
             <?php
         }

@@ -109,7 +109,7 @@ OLCS.formHelper = (function (document, $, undefined) {
     $(container).html(body);
     $(window).scrollTop(scrollTop);
 
-    OLCS.eventEmitter.emit("render");
+    OLCS.eventEmitter.emit("render", [$(container)]);
   };
 
   exports.renderModalTitle = function (title) {
