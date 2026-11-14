@@ -1,0 +1,109 @@
+name: Local development environment
+
+# Checks that the local Docker environment (compose.yaml) builds from scratch and starts.
+#
+# It pushes and deploys nothing, and no other job waits for it: a failure shows red on the PR,
+# or on the scheduled run, without holding anything up. The images it builds from
+# infra/docker/{api,cli,selfserve,internal} are the development targets of the production
+# Dockerfiles, so a change there is checked here as well as by ci.yaml's Docker job.
+#
+# The weekly run catches breakage that nothing in this repository causes, such as an upstream
+# image tag disappearing or a dependency moving under an unpinned build. GitHub emails a
+# scheduled run's failure only to whoever last changed the cron line.
+
+on:
+  pull_request:
+    paths:
+      - compose.yaml
+      - infra/docker/**
+      - "!infra/docker/liquibase/**"
+      - .github/workflows/localdev.yaml
+      - .github/scripts/localdev-check.sh
+  schedule:
+    - cron: "0 6 * * 1" # Mondays at 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # These images deploy through their own manual workflows, which ci.yaml leaves out.
+        # ci.yaml's Docker job lints api, cli, selfserve and internal.
+        image: [gotenberg, printpit]
+    steps:
+      - uses: actions/checkout@v6
+
+      # The same settings as the image's deploy workflow, so that workflow doesn't fail at lint.
+      - uses: hadolint/hadolint-action@v3.3.0
+        with:
+          dockerfile: infra/docker/${{ matrix.image }}/Dockerfile
+          failure-threshold: warning
+
+  start:
+    name: Build and start
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Pull the upstream images
+        run: docker compose pull --ignore-buildable
+
+      - name: Build our images from scratch
+        run: docker compose build --pull --no-cache
+
+      - name: Start every service
+        run: docker compose up --detach --wait --wait-timeout 300
+
+      - name: Check MySQL
+        run: .github/scripts/localdev-check.sh db
+
+      - name: Check Valkey
+        run: .github/scripts/localdev-check.sh redis
+
+      - name: Check OpenLDAP
+        run: .github/scripts/localdev-check.sh openldap
+
+      - name: Check Mailpit
+        run: .github/scripts/localdev-check.sh mailpit
+
+      - name: Check the PDF converter
+        run: .github/scripts/localdev-check.sh pdf-converter
+
+      - name: Check printpit
+        run: .github/scripts/localdev-check.sh printpit
+
+      - name: Check the CDN
+        run: .github/scripts/localdev-check.sh cdn
+
+      - name: Check api
+        run: .github/scripts/localdev-check.sh api
+
+      - name: Check selfserve
+        run: .github/scripts/localdev-check.sh selfserve
+
+      - name: Check internal
+        run: .github/scripts/localdev-check.sh internal
+
+      - name: Check cli
+        run: .github/scripts/localdev-check.sh cli
+
+      - name: Show the services and their logs
+        if: failure()
+        run: |
+          docker compose ps --all
+          docker compose logs --no-color --timestamps
+
+      - name: Stop
+        if: always()
+        run: docker compose down --volumes
