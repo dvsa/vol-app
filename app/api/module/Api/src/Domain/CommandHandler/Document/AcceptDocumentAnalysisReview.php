@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as DocumentAnalysisEntity;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisAnnotationOverlay;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisResultNormaliser\AnalysisResultNormaliser;
 use Dvsa\Olcs\Api\Service\Idp\AnalysisReviewOutcome;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -25,12 +26,10 @@ use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
  * The outcome goes back in the result's "assessmentStatus" flag so the caller can report it.
  *
  * An analysis that does not exist is a 404 (fetchUsingId throws NotFoundException). One that
- * exists but cannot be reviewed - not successful, already decided, or with nothing to decide on
- * - is a 400 (BadRequestException), as GrantBusReg does for a registration that is not
- * grantable: the record is there, the action does not apply to it in its current state.
+ * exists but cannot be reviewed - not successful, or with nothing to decide on - is a 400
+ * (BadRequestException), as GrantBusReg does for a registration that is not grantable: the
+ * record is there, the action does not apply to it in its current state.
  *
- * A caseworker choosing a status deliberately, including changing a decision already made here,
- * is UpdateDocumentAnalysisAssessmentStatus.
  */
 final class AcceptDocumentAnalysisReview extends AbstractCommandHandler implements AuthAwareInterface
 {
@@ -43,6 +42,7 @@ final class AcceptDocumentAnalysisReview extends AbstractCommandHandler implemen
     public function __construct(
         private readonly AnalysisResultNormaliser $normaliser,
         private readonly AnalysisReviewOutcome $outcome,
+        private readonly AnalysisAnnotationOverlay $overlay,
     ) {
     }
 
@@ -83,7 +83,10 @@ final class AcceptDocumentAnalysisReview extends AbstractCommandHandler implemen
         }
 
         $normalised = $this->normaliser->fromStored($analysis->getResultNormalised());
-        $status = $normalised === null ? null : $this->outcome->decide($normalised);
+        // Decided on the result as the caseworker left it: changed checks count as passes.
+        $status = $normalised === null
+            ? null
+            : $this->outcome->decide($this->overlay->apply($normalised, $analysis->getAnnotations()));
 
         if ($status === null) {
             throw new BadRequestException(

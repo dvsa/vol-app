@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Transfer\Command\Document;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
+use Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 use Dvsa\Olcs\Transfer\Util\Attribute as Transfer;
 
@@ -24,10 +25,7 @@ final class UpdateDocumentAnalysisAssessmentStatus extends AbstractCommand
      *
      * @var string
      */
-    #[Transfer\Validator(
-        'Laminas\Validator\InArray',
-        options: ['haystack' => \Dvsa\Olcs\Transfer\Enum\Document\AssessmentStatus::VALUES, 'strict' => true]
-    )]
+    #[Transfer\Validator('Laminas\Validator\InArray', options: ['haystack' => AssessmentStatus::VALUES, 'strict' => true])]
     protected $status;
 
     /**

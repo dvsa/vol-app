@@ -89,6 +89,22 @@ return [
                                     ),
                                 ]
                             ),
+                            'override-flag' => RouteConfig::getRouteConfig(
+                                'override-flag',
+                                [
+                                    'PUT' => CommandConfig::getPutConfig(
+                                        Command\Document\OverrideDocumentAnalysisFlag::class
+                                    ),
+                                ]
+                            ),
+                            'override-pass-flag' => RouteConfig::getRouteConfig(
+                                'override-pass-flag',
+                                [
+                                    'PUT' => CommandConfig::getPutConfig(
+                                        Command\Document\OverridePassedDocumentAnalysisFlag::class
+                                    ),
+                                ]
+                            ),
                         ]
                     ),
                 ]
