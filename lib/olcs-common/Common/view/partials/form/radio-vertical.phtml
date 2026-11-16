@@ -36,7 +36,7 @@ if ($describedBy !== '') {
 
 <div class="<?= ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
     <fieldset class="radio-button__fieldset radio-button__fieldset--vertical" <?= $dataGroupAttribute; ?><?php if ($describedBy !== '') { ?> aria-describedby="<?= $this->escapeHtmlAttr($describedBy) ?>"<?php } ?>>
-        <legend class="<?= $this->labelAttributes['class'] ?? ''; ?>">
+        <legend class="<?= $this->label_attributes['class'] ?? ''; ?>">
             <?= $this->translate($this->label); ?>
         </legend>
 

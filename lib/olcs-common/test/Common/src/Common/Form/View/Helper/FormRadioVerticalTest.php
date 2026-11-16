@@ -119,6 +119,7 @@ final class FormRadioVerticalTest extends MockeryTestCase
 
         $fieldset = new Fieldset('licence-type');
         $fieldset->setLabel('Type of licence');
+        $fieldset->setLabelAttributes(['class' => 'form-control form-control--radio']);
         $fieldset->setOption('hint', $hasHint ? 'Group hint' : null);
         $fieldset->setAttribute('aria-describedby', $existingDescription);
         $radio = new Element\Radio($vertical ? 'licence-type' : 'yesNo');
@@ -149,6 +150,10 @@ final class FormRadioVerticalTest extends MockeryTestCase
         $expectedDescription = str_replace('radio-error', $errorId, $expectedDescription);
         $this->assertSame($expectedDescription, $xpath->evaluate('string(//fieldset/@aria-describedby)'));
         $this->assertSame($hasErrors ? 1 : 0, $xpath->query('//*[@id="' . $errorId . '"]')->length);
+        $this->assertSame(
+            $vertical ? 'form-control form-control--radio' : '',
+            $xpath->evaluate('string(//legend/@class)')
+        );
         $this->assertSame(
             trim($expectedDescription . ' first-option-hint'),
             $xpath->evaluate('string(//input[@id="first-option"]/@aria-describedby)')
