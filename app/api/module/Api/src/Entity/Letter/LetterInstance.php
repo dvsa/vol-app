@@ -268,6 +268,24 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
+     * What the letter was raised on: the name of its link to it (one of RAISED_ON) and its id.
+     * Null for a letter with none of those links, whatever else it is linked to.
+     *
+     * @return array{0: string, 1: int}|null
+     */
+    public function getRaisedOn(): ?array
+    {
+        foreach (self::RAISED_ON as $raisedOn) {
+            $linked = $this->{'get' . ucfirst($raisedOn)}();
+            if ($linked !== null) {
+                return [$raisedOn, (int) $linked->getId()];
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * The issues in the order the letter prints them: grouped by issue type, types in the order
      * their first issue appears, and by display order within a type. Ownership of shared to-dos,
      * their placement and the rendered letter all use this one order.

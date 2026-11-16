@@ -577,7 +577,8 @@ final class LetterGenerationControllerTest extends MockeryTestCase
 
     /**
      * Each letter already sent is an option carrying the issues to tick (letter-generation.js
-     * does the ticking). The picker only chooses ticks, so it isn't posted with the form.
+     * does the ticking). The letter picked is posted with the form, so the wording changed on
+     * it can be brought over to the new letter.
      */
     public function testCreateLetterFormListsLettersAlreadySent(): void
     {
@@ -592,7 +593,7 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $this->assertSame('15,1', $options->item(1)->getAttribute('data-issue-ids'));
         $this->assertSame('11/11/2026 16:24 - First request - 2 issues', trim($options->item(1)->textContent));
         $this->assertSame('5', $options->item(2)->getAttribute('data-issue-ids'));
-        $this->assertSame(0, $form->query('//select[@id="previous-letter"][@name]')->length);
+        $this->assertSame(1, $form->query('//select[@id="previous-letter"][@name="startFromLetter"]')->length);
     }
 
     public function testCreateLetterFormHasNoPickerWhenNothingHasBeenSent(): void
@@ -694,6 +695,105 @@ final class LetterGenerationControllerTest extends MockeryTestCase
         $response = $sut->generateAction();
 
         $this->assertStringContainsString('Failed to generate letter', $response->getContent());
+    }
+
+    /**
+     * The command a posted New letter form ends up as. The API's answer is a refusal, which is
+     * as far as these tests need to go.
+     */
+    private function generateCommandFor(array $post): \Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate
+    {
+        $sut = $this->bareSut();
+
+        $request = new Request();
+        $request->setMethod('POST');
+        $request->getPost()->fromArray(['letterType' => '5', 'letterIssues' => ['20']] + $post);
+        $request->getQuery()->fromArray(['licence' => '7']);
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+        $sut->shouldReceive('extractRouteParams')->andReturn([]);
+        $sut->shouldReceive('fetchTemplateById')->andReturn(['letterType' => ['id' => 3]]);
+        $sut->shouldReceive('fetchLetterContext')->andReturn(['goodsOrPsv' => null, 'isNi' => false]);
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->andReturn([]);
+
+        $refused = m::mock(Response::class);
+        $refused->shouldReceive('isOk')->andReturn(false);
+        $refused->shouldReceive('getResult')->andReturn(['messages' => ['stop here']]);
+
+        $command = null;
+        $sut->shouldReceive('handleCommand')->once()->andReturnUsing(
+            function ($sent) use (&$command, $refused) {
+                $command = $sent;
+
+                return $refused;
+            }
+        );
+
+        $sut->generateAction();
+
+        $this->assertNotNull($command, 'No command was sent to the API');
+
+        return $command;
+    }
+
+    /**
+     * Picking a letter already sent ticks its issues in the browser. The letter itself has to
+     * reach the API as well, or the new letter has the same issues but none of the wording
+     * that was changed on them.
+     */
+    public function testGenerateSendsTheLetterPickedToStartFrom(): void
+    {
+        $command = $this->generateCommandFor(['startFromLetter' => '392']);
+
+        $this->assertSame(392, $command->getStartFromLetter());
+        $this->assertSame(['20'], $command->getSelectedIssues());
+    }
+
+    public function testGenerateWithNoLetterPickedSendsNone(): void
+    {
+        // "Select a letter" posts an empty value, and a form with no picker posts nothing
+        $this->assertNull($this->generateCommandFor(['startFromLetter' => ''])->getStartFromLetter());
+        $this->assertNull($this->generateCommandFor([])->getStartFromLetter());
+    }
+
+    /**
+     * What the dialog is told once a letter has been created
+     */
+    private function generatedAnswer(array $flags): array
+    {
+        $sut = $this->bareSut();
+
+        $request = new Request();
+        $request->setMethod('POST');
+        $request->getPost()->fromArray(['letterType' => '5', 'letterIssues' => ['20'], 'startFromLetter' => '392']);
+        $sut->shouldReceive('getRequest')->andReturn($request);
+        $sut->shouldReceive('getResponse')->andReturn(new \Laminas\Http\Response());
+        $sut->shouldReceive('extractRouteParams')->andReturn([]);
+        $sut->shouldReceive('fetchTemplateById')->andReturn(['letterType' => ['id' => 3]]);
+        $sut->shouldReceive('fetchLetterChoicesForLetterType')->andReturn([]);
+        $sut->shouldReceive('handleCommand')->once()->andReturn($this->okResponse(
+            ['id' => ['letterInstance' => 401], 'messages' => ['Letter generated']] + ($flags === [] ? [] : ['flags' => $flags])
+        ));
+        $sut->shouldReceive('fetchLetterInstanceById')->with(401)->andReturn(['id' => 401]);
+
+        return json_decode($sut->generateAction()->getContent(), true);
+    }
+
+    /**
+     * Wording copied from a sent letter comes over as it was sent, dates and all, so the dialog
+     * is told which issues to ask the caseworker to check
+     */
+    public function testGenerateTellsTheDialogWhichIssuesHadWordingCopied(): void
+    {
+        $answer = $this->generatedAnswer(['wordingCopiedTo' => ['No financial evidence', 'Missing lease']]);
+
+        $this->assertTrue($answer['success']);
+        $this->assertSame(['No financial evidence', 'Missing lease'], $answer['wordingCopiedTo']);
+    }
+
+    public function testGenerateWithNoWordingCopiedSaysSo(): void
+    {
+        $this->assertSame([], $this->generatedAnswer([])['wordingCopiedTo']);
     }
 
     /**

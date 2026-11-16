@@ -48,7 +48,8 @@ OLCS.ready(function () {
 
   // Start from a letter already sent: tick the issues it covered, in place of whatever is
   // ticked now, and open the groups they are in so the caseworker can see what was picked.
-  // Going back to no letter leaves the ticks as they are.
+  // Going back to no letter leaves the ticks as they are. The letter picked is posted with
+  // the form, and the wording changed on it is brought over when the new letter is created.
   $("body").on("change", "#previous-letter", function () {
     var $picker = $(this);
     var $letter = $picker.find("option:selected");
@@ -240,6 +241,23 @@ OLCS.ready(function () {
           $("#preview-subcategory").text(subCategory.subCategoryName || "-");
           $("#preview-template").text(letterType.name || "Letter Template");
 
+          // Wording copied from the letter this one was started from comes over as it was
+          // sent, with that letter's dates and details in it. Name the issues it reached, so
+          // the caseworker checks them. (Added before the warnings, which go above it.)
+          if (response.wordingCopiedTo && response.wordingCopiedTo.length > 0) {
+            var copiedHtml =
+              '<div class="govuk-inset-text letter-wording-copied">' +
+              "Wording from the letter you picked was copied to these issues or their to-dos:" +
+              '<ul class="govuk-list govuk-list--bullet" style="margin-top: 0.5rem;">';
+            response.wordingCopiedTo.forEach(function (name) {
+              copiedHtml += "<li>" + $("<span>").text(name).html() + "</li>";
+            });
+            copiedHtml +=
+              "</ul>It is copied as it was sent. Check it is still right for this letter, " +
+              "including any dates.</div>";
+            $("#letter-preview-modal").prepend(copiedHtml);
+          }
+
           // Show warnings for missing required sections
           if (response.warnings && response.warnings.length > 0) {
             var warningHtml =
@@ -268,6 +286,11 @@ OLCS.ready(function () {
             OLCS.modal.updateBody
           ) {
             OLCS.modal.updateBody(newContent);
+
+            // This is a new step, so show it from its top. updateBody keeps the dialog scrolled
+            // to where Create letter was, at the foot of the form, which can leave a warning
+            // or the note about copied wording off the top of the screen.
+            $(".modal__wrapper").scrollTop(0);
 
             // Update modal title
             $(".modal__title").text("Preview or edit letter");

@@ -18,6 +18,7 @@ const ticked = (page) =>
 
 test.beforeEach(async ({ page }) => {
   await page.goto(FIXTURE);
+  await expect(page.locator(".modal__content #letter-create-form")).toBeVisible();
 });
 
 test("picking a letter ticks the issues it covered and opens their groups", async ({ page }) => {
@@ -138,4 +139,107 @@ test("ticks the picker made itself are replaced without asking", async ({ page }
   expect(asked).toHaveLength(1);
   expect(await ticked(page)).toEqual(["1", "5"]);
   await expect(page.locator("#previous-letter")).toHaveValue("388");
+});
+
+// What the form sent when Create letter was pressed, by field
+const posted = async (page) => {
+  await page.locator("#create-letter-btn").click();
+  await expect.poll(() => page.evaluate(() => window.posted.length), "the form was posted").toBe(1);
+  return new URLSearchParams(await page.evaluate(() => window.posted[0]));
+};
+
+test("the letter picked is posted with the form, so the wording changed on it can be copied", async ({ page }) => {
+  await page.locator("#previous-letter").selectOption("392");
+
+  const form = await posted(page);
+  expect(form.get("startFromLetter")).toBe("392");
+  expect(form.getAll("letterIssues[]")).toEqual(["1", "15"]);
+});
+
+test("going back to no letter posts no letter, so nothing is copied", async ({ page }) => {
+  await page.locator("#previous-letter").selectOption("392");
+  await page.locator("#previous-letter").selectOption("");
+
+  const form = await posted(page);
+  expect(form.get("startFromLetter")).toBe("");
+  expect(form.getAll("letterIssues[]")).toEqual(["1", "15"]);
+});
+
+test("a letter the caseworker decided against is not posted", async ({ page }) => {
+  page.on("dialog", (dialog) => dialog.dismiss());
+
+  await page.locator("#adverts .letter-section__header").click();
+  await page.locator("#letter-issue-5").check();
+  await page.locator("#previous-letter").selectOption("392");
+
+  const form = await posted(page);
+  expect(form.get("startFromLetter")).toBe("");
+  expect(form.getAll("letterIssues[]")).toEqual(["5"]);
+});
+
+test("names the issues that had wording copied, for the caseworker to check", async ({ page }) => {
+  await page.evaluate(() => {
+    window.serverAnswer = {
+      success: true,
+      letterInstanceId: 401,
+      // a heading is the caseworker's own words on an Other issue, so it is shown as text
+      wordingCopiedTo: ["No financial evidence", "Lease <b>missing</b>"],
+    };
+  });
+  await page.locator("#previous-letter").selectOption("392");
+  await page.locator("#create-letter-btn").click();
+
+  const note = page.locator(".modal__content .letter-wording-copied");
+  await expect(note).toBeVisible();
+  await expect(note.locator("li")).toHaveText(["No financial evidence", "Lease <b>missing</b>"]);
+  await expect(note).toContainText("Check");
+  await expect(note.locator("b")).toHaveCount(0);
+  // once: the step shown replaces the form and the copy of the step that sat beside it
+  await expect(page.locator(".letter-wording-copied")).toHaveCount(1);
+});
+
+test("the note is in view when the dialog moves on, however far down Create letter was", async ({ page }) => {
+  // a short screen: neither the form nor the step after it fits, and Create letter is at the
+  // form's foot
+  await page.setViewportSize({ width: 1366, height: 420 });
+  await page.evaluate(() => {
+    window.serverAnswer = {
+      success: true,
+      letterInstanceId: 401,
+      warnings: ['Required section "Signature" could not be included'],
+      wordingCopiedTo: ["No financial evidence", "Funds only shown as a balance", "Missing lease"],
+    };
+  });
+  await page.locator("#previous-letter").selectOption("392");
+  await page.locator("#create-letter-btn").scrollIntoViewIfNeeded();
+  expect(await page.evaluate(() => document.querySelector(".modal__wrapper").scrollTop)).toBeGreaterThan(0);
+  await page.locator("#create-letter-btn").click();
+  // the step has replaced the form (a hidden copy of the step was beside the form all along,
+  // so waiting for something in the step would not wait)
+  await expect(page.locator("#letter-create-form")).toHaveCount(0);
+
+  // the step is taller than the dialog, so where the dialog is scrolled to decides what shows
+  const dialog = await page.evaluate(() => {
+    const wrapper = document.querySelector(".modal__wrapper");
+    return { fits: wrapper.scrollHeight <= wrapper.clientHeight, scrolledTo: wrapper.scrollTop };
+  });
+  expect(dialog.fits, "the step should not fit, or this proves nothing").toBe(false);
+  expect(dialog.scrolledTo, "the step is shown from its top").toBe(0);
+
+  // so the warning about sections, which goes first, and the note under it start in view
+  const warning = page.locator(".modal__content .govuk-warning-text");
+  const note = page.locator(".modal__content .letter-wording-copied");
+  await expect(warning).toBeInViewport({ ratio: 1 });
+  await expect(note).toBeInViewport();
+  const [warningBox, noteBox] = [await warning.boundingBox(), await note.boundingBox()];
+  expect(warningBox.y).toBeLessThan(noteBox.y);
+});
+
+test("says nothing about copied wording when none was copied", async ({ page }) => {
+  await page.locator("#previous-letter").selectOption("392");
+  await page.locator("#create-letter-btn").click();
+
+  await expect(page.locator("#letter-create-form")).toHaveCount(0);
+  await expect(page.locator(".modal__content h3")).toHaveText("Check and edit your letter");
+  await expect(page.locator(".letter-wording-copied")).toHaveCount(0);
 });

@@ -68,6 +68,18 @@ final class Generate extends AbstractCommand
     #[Transfer\Optional]
     protected $additionalData;
 
+    /**
+     * A letter already sent that this one starts from. The wording changed on its issues and
+     * their to-dos is brought over to the new letter.
+     *
+     * @var int
+     */
+    #[Transfer\Optional]
+    #[Transfer\Filter('Laminas\Filter\Digits')]
+    #[Transfer\Validator('Laminas\Validator\Digits')]
+    #[Transfer\Validator('Laminas\Validator\GreaterThan', options: ['min' => 0])]
+    protected $startFromLetter;
+
     // Getter removed temporarily - will be added back in future tickets
     // /**
     //  * @return array
@@ -116,5 +128,13 @@ final class Generate extends AbstractCommand
     public function getAdditionalData()
     {
         return $this->additionalData;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getStartFromLetter()
+    {
+        return $this->startFromLetter;
     }
 }

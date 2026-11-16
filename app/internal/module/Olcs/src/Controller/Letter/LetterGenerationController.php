@@ -129,7 +129,8 @@ class LetterGenerationController extends AbstractInternalController implements L
             'accordionData' => $accordionData,
             'appendicesData' => $appendicesData,
             'letterChoicesData' => $letterChoicesData,
-            // letters of this type already sent, to start this one from the issues one covered
+            // letters of this type already sent, to start this one from: the issues one
+            // covered, and the wording that was changed on them
             'previousLetters' => $this->fetchPreviousLetters($templateId, $entityContext),
             'queryParams' => $queryParams,
             'csrfToken' => $this->csrfToken(),
@@ -204,6 +205,12 @@ class LetterGenerationController extends AbstractInternalController implements L
             $commandData[$entityContext['type']] = $entityContext['id'];
         }
 
+        // A letter already sent that was picked to start this one from. The API brings over the
+        // wording changed on it. "Select a letter" posts an empty value.
+        if (!empty($postData['startFromLetter'])) {
+            $commandData['startFromLetter'] = (int) $postData['startFromLetter'];
+        }
+
         $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate::create($commandData);
 
         $response = $this->handleCommand($command);
@@ -238,6 +245,9 @@ class LetterGenerationController extends AbstractInternalController implements L
             'redirectUrl' => '#',
             'letterInstance' => $letterInstanceData,
             'warnings' => $warnings,
+            // issues whose wording was copied from the letter picked to start from. It comes
+            // over as it was sent, so the dialog asks the caseworker to check them.
+            'wordingCopiedTo' => array_values((array) ($result['flags']['wordingCopiedTo'] ?? [])),
         ]);
     }
 
@@ -1393,8 +1403,9 @@ class LetterGenerationController extends AbstractInternalController implements L
 
     /**
      * The letters of this type already sent for the same licence, application or whatever else
-     * the new letter is being raised on, newest first. The New letter form offers them, and
-     * picking one ticks the issues it covered.
+     * the new letter is being raised on, newest first. The New letter form offers them.
+     * Picking one ticks the issues it covered, and the letter is posted with the form so the
+     * wording changed on it can be copied to the new letter.
      *
      * @param int $templateId Doc template the letter is being created from
      * @param array $entityContext What the letter is being raised on: type and id
