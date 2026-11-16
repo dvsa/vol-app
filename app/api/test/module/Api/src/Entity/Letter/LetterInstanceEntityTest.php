@@ -13,6 +13,10 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTodo;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
+use Dvsa\Olcs\Api\Entity\Application\Application;
+use Dvsa\Olcs\Api\Entity\Cases\Cases;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Mockery as m;
 
 /**
  * LetterInstance Entity Unit Tests
@@ -247,5 +251,41 @@ final class LetterInstanceEntityTest extends EntityTester
         $this->assertSame($a, $placements[spl_object_id($sharedTodo)]);
         $this->assertSame($b, $placements[spl_object_id($ownTodo)]);
         $this->assertSame($b, $entity->getPlacementIssuesByTodo(Entity::SHARED_TODO_UNDER_LAST_ISSUE)[spl_object_id($sharedTodo)]);
+    }
+
+    private function linked(string $class, int $id): object
+    {
+        $linked = m::mock($class)->makePartial();
+        $linked->setId($id);
+
+        return $linked;
+    }
+
+    /**
+     * A letter raised on a case is given the case's application and licence too, so it was
+     * raised on the first of its links in Entity::RAISED_ON
+     */
+    public function testALetterWasRaisedOnTheMostSpecificThingItIsLinkedTo(): void
+    {
+        $onCase = new Entity();
+        $onCase->setLicence($this->linked(Licence::class, 7));
+        $onCase->setApplication($this->linked(Application::class, 21));
+        $onCase->setCase($this->linked(Cases::class, 3));
+
+        $onApplication = new Entity();
+        $onApplication->setLicence($this->linked(Licence::class, 7));
+        $onApplication->setApplication($this->linked(Application::class, 21));
+
+        $onLicence = new Entity();
+        $onLicence->setLicence($this->linked(Licence::class, 7));
+
+        $this->assertSame(['case', 3], $onCase->getRaisedOn());
+        $this->assertSame(['application', 21], $onApplication->getRaisedOn());
+        $this->assertSame(['licence', 7], $onLicence->getRaisedOn());
+    }
+
+    public function testALetterLinkedToNothingWasRaisedOnNothing(): void
+    {
+        $this->assertNull((new Entity())->getRaisedOn());
     }
 }

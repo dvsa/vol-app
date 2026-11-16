@@ -205,4 +205,91 @@ final class LetterInstanceIssueEntityTest extends EntityTester
 
         $this->assertSame('Other issue', $entity->getDisplayName());
     }
+
+    private function paragraph(string $text): array
+    {
+        return ['blocks' => [['type' => 'paragraph', 'data' => ['text' => $text]]]];
+    }
+
+    /**
+     * Saving an editor stores its text whether or not anything was typed, so an issue can hold
+     * edited content that says just what it started with
+     */
+    public function testAnIssueSavedAsItStartedHasNotChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Dear [[OP_NAME_ONLY]]'));
+        $entity->setGeneratedContent($this->paragraph('Dear Smith & Sons'));
+        // as an editor hands it back: its own ids and time, and the "&" written as markup
+        $entity->setEditedContentFromArray([
+            'time' => 1763100000000,
+            'blocks' => [['id' => 'a1B2', 'type' => 'paragraph', 'data' => ['text' => 'Dear Smith &amp; Sons']]],
+            'version' => '2.30.8',
+        ]);
+
+        $this->assertTrue($entity->hasBeenEdited());
+        $this->assertFalse($entity->hasChangedWording());
+    }
+
+    public function testAnIssueWhoseWordsWereEditedHasChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Dear [[OP_NAME_ONLY]]'));
+        $entity->setGeneratedContent($this->paragraph('Dear Smith & Sons'));
+        $entity->setEditedContentFromArray($this->paragraph('Dear Mr Smith'));
+
+        $this->assertTrue($entity->hasChangedWording());
+    }
+
+    public function testAnIssueNeverSavedHasNotChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Dear [[OP_NAME_ONLY]]'));
+        $entity->setGeneratedContent($this->paragraph('Dear Smith & Sons'));
+
+        $this->assertFalse($entity->hasChangedWording());
+    }
+
+    /**
+     * A letter made before grabs were filled in at generation has nothing generated. Its editor
+     * opened on the library wording, tokens and all.
+     */
+    public function testWithNothingGeneratedTheWordingIsComparedWithTheLibrary(): void
+    {
+        $same = $this->entityWithDefault($this->paragraph('Dear [[OP_NAME_ONLY]]'));
+        $same->setEditedContentFromArray($this->paragraph('Dear [[OP_NAME_ONLY]]'));
+
+        $changed = $this->entityWithDefault($this->paragraph('Dear [[OP_NAME_ONLY]]'));
+        $changed->setEditedContentFromArray($this->paragraph('Dear [[OP_NAME_ONLY]], thank you for your call'));
+
+        $this->assertFalse($same->hasChangedWording());
+        $this->assertTrue($changed->hasChangedWording());
+    }
+
+    /**
+     * It is the words that count. The same words laid out another way (in bold, or as the list
+     * an editor rewrites in its own shape) are not a change.
+     */
+    public function testTheSameWordsLaidOutAnotherWayAreNotChangedWording(): void
+    {
+        $entity = $this->entityWithDefault(['blocks' => []]);
+        $entity->setGeneratedContent(['blocks' => [
+            ['type' => 'paragraph', 'data' => ['text' => 'Send us:']],
+            ['type' => 'list', 'data' => ['style' => 'unordered', 'items' => ['the lease', 'the bank statement']]],
+        ]]);
+        $entity->setEditedContentFromArray(['blocks' => [
+            ['type' => 'paragraph', 'data' => ['text' => '<b>Send us:</b>']],
+            ['type' => 'list', 'data' => ['style' => 'unordered', 'meta' => [], 'items' => [
+                ['content' => 'the lease', 'meta' => [], 'items' => []],
+                ['content' => 'the bank statement', 'meta' => [], 'items' => []],
+            ]]],
+        ]]);
+
+        $this->assertFalse($entity->hasChangedWording());
+    }
+
+    public function testEditedContentThatCannotBeReadIsNotChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Dear [[OP_NAME_ONLY]]'));
+        $entity->setEditedContent('{not json');
+
+        $this->assertFalse($entity->hasChangedWording());
+    }
 }

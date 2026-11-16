@@ -158,7 +158,15 @@
     <?php endforeach; ?>
 <?php endif; ?>
 
+<?php // Saves every editor above that has unsaved changes, in one go (letter-edit.js) ?>
 <div style="margin-top: 30px;">
+    <button type="button" id="save-all-btn" class="govuk-button">Save all changes</button>
+    <span id="save-all-indicator" class="govuk-tag govuk-tag--green" style="display: none; margin-left: 10px;">
+        All changes saved
+    </span>
+</div>
+
+<div>
     <?php if (!empty($letterInstance['isOpenForChanges'])): ?>
     <button
         type="button"

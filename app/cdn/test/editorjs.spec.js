@@ -41,6 +41,17 @@ test.beforeEach(async ({ page }) => {
   // Both editors are initialised before any test types into them.
   await expect(page.locator("#editor-section .ce-paragraph")).toHaveAttribute("contenteditable", "true");
   await expect(page.locator("#editor-variant .ce-paragraph")).toHaveAttribute("contenteditable", "true");
+  // And each is ready, which is when it writes what it opened on to its input. Until then a
+  // flush passes it over.
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        ["sectionContent", "variantContent"].every((name) =>
+          document.querySelector(`input[name='${name}']`).value.includes('"time"'),
+        ),
+      ),
+    )
+    .toBe(true);
 });
 
 test("flushEditors makes the typed content readable immediately", async ({ page }) => {
@@ -95,6 +106,117 @@ test("flushing without an edit leaves the hidden input untouched", async ({ page
   });
 
   expect(writes).toBe(0);
+});
+
+/**
+ * Make the editor holding the given wording impossible to read, as a block tool that throws
+ * while saving does. EditorJS logs that itself and hands back nothing.
+ */
+async function breakEditorHolding(page, wording) {
+  await page.evaluate((text) => {
+    const save = window.Paragraph.prototype.save;
+    window.Paragraph.prototype.save = function (content) {
+      if (content.innerHTML.includes(text)) {
+        throw new Error("cannot be read");
+      }
+      return save.call(this, content);
+    };
+  }, wording);
+}
+
+test("flushEditors names an editor it could not read and leaves its input alone", async ({ page }) => {
+  await breakEditorHolding(page, "Variant wording");
+  await typeIntoEditor(page, "editor-section", " Still readable.");
+
+  // A caller that saves on the strength of a flush has to know which inputs to distrust.
+  const unread = await page.evaluate(() => window.OLCS.editorjsFlush());
+
+  expect(unread).toEqual(["variantContent"]);
+  // still the last content that could be read, not the word "undefined"
+  expect(await hiddenInputText(page, "variantContent")).toBe("Variant wording.");
+  expect(await hiddenInputText(page, "sectionContent")).toContain("Still readable.");
+});
+
+test("typing into an editor that cannot be read keeps the last content that could", async ({ page }) => {
+  await page.evaluate(() => window.OLCS.editorjsFlush());
+  await breakEditorHolding(page, "Variant wording");
+
+  await typeIntoEditor(page, "editor-variant", " More.");
+  // long enough for EditorJS's own debounced change to have come through as well
+  await page.waitForTimeout(1000);
+
+  // not the word "undefined", which is what writing an empty result puts in the input
+  expect(await hiddenInputText(page, "variantContent")).toBe("Variant wording.");
+});
+
+/**
+ * Note each time the component says an editor could not be read, by its input's name. A page
+ * that tracks unsaved edits by watching the hidden input has nothing else to go on: the input
+ * is left as it was.
+ */
+async function listenForUnread(page) {
+  await page.evaluate(() => {
+    window.__unread = [];
+    document.addEventListener("editorjs:unread", (event) => window.__unread.push(event.target.name));
+  });
+}
+
+const unreadSignals = (page) => page.evaluate(() => [...new Set(window.__unread)]);
+
+test("a flush says which editor it could not read, on that editor's input", async ({ page }) => {
+  await page.evaluate(() => window.OLCS.editorjsFlush());
+  await breakEditorHolding(page, "Variant wording");
+  await listenForUnread(page);
+
+  await page.evaluate(() => window.OLCS.editorjsFlush());
+
+  expect(await unreadSignals(page)).toEqual(["variantContent"]);
+});
+
+test("a change to an editor that cannot be read is signalled without a flush", async ({ page }) => {
+  await page.evaluate(() => window.OLCS.editorjsFlush());
+  await breakEditorHolding(page, "Variant wording");
+  await listenForUnread(page);
+
+  // Changed without a keystroke or a button press (as the editor's own toolbar does), so no
+  // flush runs: only EditorJS's change callback knows.
+  await page.evaluate(() => {
+    document.querySelector("#editor-variant .ce-paragraph").append(" More.");
+  });
+
+  await expect.poll(() => unreadSignals(page)).toEqual(["variantContent"]);
+  expect(await hiddenInputText(page, "variantContent")).toBe("Variant wording.");
+});
+
+test("flushing one editor by name leaves the others alone", async ({ page }) => {
+  await breakEditorHolding(page, "Variant wording");
+
+  // A save of one editor has no need to read every other editor on the page first. Had this
+  // read the other editor too, it would be named here.
+  expect(await page.evaluate(() => window.OLCS.editorjsFlush("sectionContent"))).toEqual([]);
+
+  expect(await page.evaluate(() => window.OLCS.editorjsFlush("variantContent"))).toEqual(["variantContent"]);
+});
+
+test("an editor that cannot be read as it starts up keeps the content it was given", async ({ page }) => {
+  await listenForUnread(page);
+  await breakEditorHolding(page, "Late wording");
+  await page.evaluate(() => {
+    const holder = document.createElement("div");
+    holder.innerHTML =
+      '<div class="editorjs-container" data-element-name="lateContent">' +
+      '<div id="editor-late" class="editorjs-editor"></div>' +
+      '<input type="hidden" name="lateContent" value=\'{"blocks":[{"type":"paragraph","data":{"text":"Late wording."}}]}\' />' +
+      "</div>";
+    document.body.appendChild(holder);
+    window.OLCS.eventEmitter.trigger("render");
+  });
+  await expect(page.locator("#editor-late .ce-paragraph")).toHaveAttribute("contenteditable", "true");
+  // the editor writes what it opened on once it's ready
+  await page.waitForTimeout(500);
+
+  expect(await hiddenInputText(page, "lateContent")).toBe("Late wording.");
+  expect(await unreadSignals(page)).toEqual(["lateContent"]);
 });
 
 test("a form post carries the typed content without any deliberate pause", async ({ page }) => {

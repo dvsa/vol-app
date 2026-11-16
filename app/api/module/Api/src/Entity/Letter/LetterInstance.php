@@ -22,6 +22,14 @@ class LetterInstance extends AbstractLetterInstance
     public const STATUS_CANCELLED = 'ltr_sts_cancelled';
 
     /**
+     * What a letter can be raised on, by the name of its link to each, the most specific first.
+     * A letter raised on a case, an application or a bus registration is given the licence as
+     * well, and a case can give it its application, so a letter was raised on the first of
+     * these that it has.
+     */
+    public const array RAISED_ON = ['case', 'application', 'busReg', 'transportManager', 'irfoOrganisation', 'licence'];
+
+    /**
      * Where a to-do shared by several issues appears in the letter: after the first of those
      * issues, or after the last (VOL-7737). The stored owner stays the first issue either way
      * (VOL-7280/7408), so this only changes where it is drawn and can be flipped at any time.
@@ -257,6 +265,24 @@ class LetterInstance extends AbstractLetterInstance
         }
 
         return $placements;
+    }
+
+    /**
+     * What the letter was raised on: the name of its link to it (one of RAISED_ON) and its id.
+     * Null for a letter with none of those links, whatever else it is linked to.
+     *
+     * @return array{0: string, 1: int}|null
+     */
+    public function getRaisedOn(): ?array
+    {
+        foreach (self::RAISED_ON as $raisedOn) {
+            $linked = $this->{'get' . ucfirst($raisedOn)}();
+            if ($linked !== null) {
+                return [$raisedOn, (int) $linked->getId()];
+            }
+        }
+
+        return null;
     }
 
     /**

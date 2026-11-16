@@ -274,6 +274,158 @@ class LetterInstanceComposer
     }
 
     /**
+     * Start a new letter from one already sent: bring over the wording a caseworker changed on
+     * the issues both letters have, and on the to-dos those issues bring.
+     *
+     * Only wording that was changed comes over. An issue or to-do nobody reworded stays as
+     * generated, so it follows the library as it is now and has today's details in it. One that
+     * was reworded comes over as it was sent, with the sent letter's details (a date, a name)
+     * still in it, which is why the issues it reached are handed back: the caseworker is asked
+     * to check them. An Other issue is all the caseworker's own, so its heading and the to-dos
+     * they wrote come too.
+     *
+     * The sent letter is only read. Its to-dos are copied, never moved: a row taken out of the
+     * sent letter would be deleted from it. Call this once the new letter has its issues and
+     * to-dos.
+     *
+     * @return list<LetterInstanceIssue> the new letter's issues that wording was brought over
+     *     to, or to a to-do under them, in letter order
+     */
+    public function bringOverWording(LetterInstance $letterInstance, LetterInstance $sentLetter): array
+    {
+        $sentIssues = [];
+        foreach ($sentLetter->getIssuesInLetterOrder() as $sentIssue) {
+            $issueId = $sentIssue->getLetterIssueVersion()?->getLetterIssue()?->getId();
+            if ($issueId !== null) {
+                $sentIssues[$issueId] ??= $sentIssue;
+            }
+        }
+
+        // the sent letter's library to-do rows, by to-do
+        $sentTodos = [];
+        foreach ($sentLetter->getLetterInstanceTodos() as $sentTodo) {
+            $key = $sentTodo->getLetterTodoVersion()?->getDedupeKey();
+            if ($key !== null) {
+                $sentTodos[$key][] = $sentTodo;
+            }
+        }
+
+        $broughtOver = [];
+        $todoWording = [];
+
+        foreach ($letterInstance->getIssuesInLetterOrder() as $instanceIssue) {
+            $issueId = $instanceIssue->getLetterIssueVersion()?->getLetterIssue()?->getId();
+            $sentIssue = $issueId === null ? null : ($sentIssues[$issueId] ?? null);
+            if ($sentIssue === null) {
+                continue;
+            }
+
+            // A to-do's wording was written for the issues it came with, so it comes over where
+            // this issue brought the to-do on the sent letter and brings it again now
+            $cameWithIssue = $this->todosBroughtBy($sentIssue);
+            foreach (array_keys($this->todosBroughtBy($instanceIssue)) as $key) {
+                if (!isset($cameWithIssue[$key]) || isset($todoWording[$key])) {
+                    continue;
+                }
+
+                // A to-do is on a letter once, under the first issue that brought it. Letters
+                // made before VOL-7408 have a row for each issue instead, and then the row that
+                // sat under this issue is the one that speaks for it.
+                $rows = $sentTodos[$key] ?? [];
+                $ownRows = array_filter(
+                    $rows,
+                    static fn (LetterInstanceTodo $row): bool => $row->getLetterInstanceIssue() === $sentIssue
+                );
+                foreach ($ownRows ?: $rows as $row) {
+                    if ($row->hasChangedWording()) {
+                        $todoWording[$key] = $row;
+                        break;
+                    }
+                }
+            }
+
+            if ($sentIssue->hasChangedWording()) {
+                $instanceIssue->setEditedContentFromArray($sentIssue->getEffectiveContent());
+                $broughtOver[spl_object_id($instanceIssue)] = true;
+            }
+
+            if (!$instanceIssue->isOther()) {
+                continue;
+            }
+
+            $heading = trim((string) $sentIssue->getEditedHeading());
+            if ($heading !== '') {
+                $instanceIssue->setEditedHeading($heading);
+                $broughtOver[spl_object_id($instanceIssue)] = true;
+            }
+
+            foreach ($sentIssue->getCustomTodos() as $sentTodo) {
+                // one with nothing written in it would only have to be deleted again
+                if (!$sentTodo->hasChangedWording()) {
+                    continue;
+                }
+                $instanceTodo = new LetterInstanceTodo();
+                $instanceTodo->setEditedDescriptionFromArray($sentTodo->getEffectiveDescription());
+                $instanceIssue->addLetterInstanceTodo($instanceTodo);
+                $letterInstance->addLetterInstanceTodo($instanceTodo);
+                $broughtOver[spl_object_id($instanceIssue)] = true;
+            }
+        }
+
+        foreach ($letterInstance->getLetterInstanceTodos() as $instanceTodo) {
+            $key = $instanceTodo->getLetterTodoVersion()?->getDedupeKey();
+            if ($key === null || !isset($todoWording[$key])) {
+                continue;
+            }
+            $instanceTodo->setEditedDescriptionFromArray($todoWording[$key]->getEffectiveDescription());
+
+            // it sits under the first issue that brings it, which is the one to point to
+            $owner = $instanceTodo->getLetterInstanceIssue();
+            if ($owner !== null) {
+                $broughtOver[spl_object_id($owner)] = true;
+            }
+        }
+
+        // the caseworker's own to-dos go after their issue's library ones
+        $this->renumberTodos($letterInstance);
+
+        return array_values(array_filter(
+            $letterInstance->getIssuesInLetterOrder(),
+            static fn (LetterInstanceIssue $issue): bool => isset($broughtOver[spl_object_id($issue)])
+        ));
+    }
+
+    /**
+     * The library to-dos an issue on a letter brings, by to-do: the ones its issue links, and
+     * any it has a row for.
+     *
+     * The links are the library's as they are now, which is also how a letter decides where a
+     * shared to-do is drawn. An issue's to-dos can be changed in admin without a new version, and
+     * a letter keeps no record of which of its issues shared a to-do, so for a sent letter this
+     * can differ from how things stood when it was sent.
+     *
+     * @return array<string, true>
+     */
+    private function todosBroughtBy(LetterInstanceIssue $instanceIssue): array
+    {
+        $keys = [];
+        foreach ($instanceIssue->getLetterIssueVersion()?->getLetterIssueTodos() ?? [] as $issueTodo) {
+            $key = $issueTodo->getLetterTodoVersion()?->getDedupeKey();
+            if ($key !== null) {
+                $keys[$key] = true;
+            }
+        }
+        foreach ($instanceIssue->getLetterInstanceTodos() as $instanceTodo) {
+            $key = $instanceTodo->getLetterTodoVersion()?->getDedupeKey();
+            if ($key !== null) {
+                $keys[$key] = true;
+            }
+        }
+
+        return $keys;
+    }
+
+    /**
      * Attach the chosen appendices in the order given.
      *
      * @param LetterAppendixVersion[] $appendixVersions

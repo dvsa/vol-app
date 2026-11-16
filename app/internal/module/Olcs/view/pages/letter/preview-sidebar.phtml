@@ -2,13 +2,14 @@
 /**
  * Letter Preview Sidebar
  *
- * Left sidebar for the letter preview page showing Issue Types
- * as checkboxes under "Edit Sections" and action buttons
+ * Left sidebar for the letter preview page: a tick box for each thing that can be edited, in
+ * the order the edit page shows them, and the action buttons
  *
  * @var array $letterInstance Letter instance data
- * @var array $sectionsList List of Issues (despite the name - kept for backwards compatibility)
- * @var array $instanceSectionsList List of actual letter instance sections
- * @var array $todosList List of editable to-dos
+ * @var array $layout Letter order: [['section' => ...] | ['issues' => true], ...]
+ * @var array $groupedIssues Issues grouped by type, each with the to-dos listed under it
+ * @var array $unplacedTodos To-dos with none of their issues on the letter
+ * @var array $appendicesList Editable appendices
  */
 
 // a sent letter can't be changed (VOL-7735), so it has nothing to pick for editing
@@ -24,7 +25,12 @@ $open = !empty($letterInstance['isOpenForChanges']);
     </p>
 </div>
 <?php else: ?>
-<?php if (!empty($sectionsList) || !empty($instanceSectionsList) || !empty($appendicesList) || !empty($todosList)): ?>
+<?php
+$hasSections = array_filter($layout, static fn (array $block): bool => isset($block['section'])) !== [];
+$hasIssues = array_filter($groupedIssues, static fn (array $group): bool => !empty($group['issues'])) !== [];
+$hasEditable = $hasSections || $hasIssues || !empty($unplacedTodos);
+?>
+<?php if ($hasEditable || !empty($appendicesList)): ?>
 <p class="govuk-body govuk-!-margin-bottom-2">
     <?php // Ticks every section below in one go (VOL-7736); letter-preview.js flips the label. ?>
     <button type="button" id="select-all-sections" class="govuk-link"
@@ -33,24 +39,35 @@ $open = !empty($letterInstance['isOpenForChanges']);
 <?php endif; ?>
 
 <div class="small-module">
-    <h4 class="title">Edit Issue Sections:</h4>
-    <?php if (!empty($sectionsList)): ?>
+    <h4 class="title">Edit sections:</h4>
+    <?php if ($hasEditable): ?>
+    <?php // Same order as the edit page: sections where they sit in the letter, each issue
+          // followed by its own to-dos, then any to-dos left over. ?>
     <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
-        <?php foreach ($sectionsList as $section): ?>
-        <div class="govuk-checkboxes__item"
-             <?= !empty($section['inputPending']) ? 'data-input-pending="1" data-section-name="' . $this->escapeHtmlAttr($section['name']) . '"' : '' ?>>
-            <input class="govuk-checkboxes__input" type="checkbox"
-                   id="section-<?= $this->escapeHtmlAttr($section['id']) ?>"
-                   name="sections[]"
-                   value="<?= $this->escapeHtmlAttr($section['id']) ?>">
-            <label class="govuk-label govuk-checkboxes__label"
-                   for="section-<?= $this->escapeHtmlAttr($section['id']) ?>">
-                <?= $this->escapeHtml($section['name']) ?>
-                <?php if (!empty($section['inputPending'])): ?>
-                <strong class="govuk-tag govuk-tag--red">Input required</strong>
-                <?php endif; ?>
-            </label>
-        </div>
+        <?php foreach ($layout as $block): ?>
+            <?php if (isset($block['section'])): ?>
+                <?= $this->partial('pages/letter/partials/sidebar-checkbox', [
+                    'field' => 'letterSections', 'idPrefix' => 'letter-section', 'item' => $block['section'],
+                ]) ?>
+            <?php else: ?>
+                <?php foreach ($groupedIssues as $group): ?>
+                    <?php foreach ($group['issues'] as $issue): ?>
+                        <?= $this->partial('pages/letter/partials/sidebar-checkbox', [
+                            'field' => 'sections', 'idPrefix' => 'section', 'item' => $issue,
+                        ]) ?>
+                        <?php foreach ($issue['todos'] ?? [] as $todo): ?>
+                            <?= $this->partial('pages/letter/partials/sidebar-checkbox', [
+                                'field' => 'todos', 'idPrefix' => 'todo', 'item' => $todo, 'underIssue' => true,
+                            ]) ?>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+                <?php foreach ($unplacedTodos as $todo): ?>
+                    <?= $this->partial('pages/letter/partials/sidebar-checkbox', [
+                        'field' => 'todos', 'idPrefix' => 'todo', 'item' => $todo,
+                    ]) ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
         <?php endforeach; ?>
     </div>
     <?php else: ?>
@@ -58,69 +75,14 @@ $open = !empty($letterInstance['isOpenForChanges']);
     <?php endif; ?>
 </div>
 
-<?php if (!empty($instanceSectionsList)): ?>
-<div class="small-module">
-    <h4 class="title">Edit Instance Sections:</h4>
-    <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
-        <?php foreach ($instanceSectionsList as $instanceSection): ?>
-        <div class="govuk-checkboxes__item"
-             <?= !empty($instanceSection['inputPending']) ? 'data-input-pending="1" data-section-name="' . $this->escapeHtmlAttr($instanceSection['name']) . '"' : '' ?>>
-            <input class="govuk-checkboxes__input" type="checkbox"
-                   id="letter-section-<?= $this->escapeHtmlAttr($instanceSection['id']) ?>"
-                   name="letterSections[]"
-                   value="<?= $this->escapeHtmlAttr($instanceSection['id']) ?>">
-            <label class="govuk-label govuk-checkboxes__label"
-                   for="letter-section-<?= $this->escapeHtmlAttr($instanceSection['id']) ?>">
-                <?= $this->escapeHtml($instanceSection['name']) ?>
-                <?php if (!empty($instanceSection['inputPending'])): ?>
-                <strong class="govuk-tag govuk-tag--red">Input required</strong>
-                <?php endif; ?>
-            </label>
-        </div>
-        <?php endforeach; ?>
-    </div>
-</div>
-<?php endif; ?>
-
 <?php if (!empty($appendicesList)): ?>
 <div class="small-module">
     <h4 class="title">Editable Appendices:</h4>
     <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
         <?php foreach ($appendicesList as $appendix): ?>
-        <div class="govuk-checkboxes__item">
-            <input class="govuk-checkboxes__input" type="checkbox"
-                   id="appendix-<?= $this->escapeHtmlAttr($appendix['id']) ?>"
-                   name="appendices[]"
-                   value="<?= $this->escapeHtmlAttr($appendix['id']) ?>">
-            <label class="govuk-label govuk-checkboxes__label"
-                   for="appendix-<?= $this->escapeHtmlAttr($appendix['id']) ?>">
-                <?= $this->escapeHtml($appendix['name']) ?>
-            </label>
-        </div>
-        <?php endforeach; ?>
-    </div>
-</div>
-<?php endif; ?>
-
-<?php if (!empty($todosList)): ?>
-<div class="small-module">
-    <h4 class="title">Editable to-dos:</h4>
-    <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
-        <?php foreach ($todosList as $todo): ?>
-        <div class="govuk-checkboxes__item"
-             <?= !empty($todo['inputPending']) ? 'data-input-pending="1" data-section-name="' . $this->escapeHtmlAttr($todo['name']) . '"' : '' ?>>
-            <input class="govuk-checkboxes__input" type="checkbox"
-                   id="todo-<?= $this->escapeHtmlAttr($todo['id']) ?>"
-                   name="todos[]"
-                   value="<?= $this->escapeHtmlAttr($todo['id']) ?>">
-            <label class="govuk-label govuk-checkboxes__label"
-                   for="todo-<?= $this->escapeHtmlAttr($todo['id']) ?>">
-                <?= $this->escapeHtml($todo['name']) ?>
-                <?php if (!empty($todo['inputPending'])): ?>
-                <strong class="govuk-tag govuk-tag--red">Input required</strong>
-                <?php endif; ?>
-            </label>
-        </div>
+            <?= $this->partial('pages/letter/partials/sidebar-checkbox', [
+                'field' => 'appendices', 'idPrefix' => 'appendix', 'item' => $appendix,
+            ]) ?>
         <?php endforeach; ?>
     </div>
 </div>

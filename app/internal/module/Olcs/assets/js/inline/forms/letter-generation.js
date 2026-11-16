@@ -1,24 +1,118 @@
 OLCS.ready(function () {
   "use strict";
 
+  // Open or close one group of issues
+  function setSectionOpen($section, open) {
+    $section.find(".letter-section__content").toggle(open);
+    // Only the words change: writing to the whole toggle would replace the arrow
+    // beside them, which never came back.
+    $section.find(".letter-section__show-hide").text(open ? "Hide" : "Show");
+    $section.toggleClass("letter-section--expanded", open);
+  }
+
+  // The link above the groups opens them all, or closes them all once every one is open. Its
+  // words follow what is open, however the groups got that way.
+  function updateToggleAllLabel() {
+    var $allContent = $(".letter-section__content");
+    var allOpen =
+      $allContent.length > 0 &&
+      $allContent.filter(":visible").length === $allContent.length;
+
+    $("#toggle-all-sections").text(
+      allOpen ? "Hide All Sections" : "Show All Sections",
+    );
+  }
+
   // Handle individual section toggles
   $("body").on("click", ".letter-section__header", function (e) {
     e.preventDefault();
     var $section = $(this).closest(".letter-section");
-    var $content = $section.find(".letter-section__content");
-    // Only the words change: writing to the whole toggle would replace the arrow
-    // beside them, which never came back.
-    var $button = $(this).find(".letter-section__show-hide");
 
-    if ($content.is(":visible")) {
-      $content.hide();
-      $button.text("Show");
-      $section.removeClass("letter-section--expanded");
-    } else {
-      $content.show();
-      $button.text("Hide");
-      $section.addClass("letter-section--expanded");
+    setSectionOpen(
+      $section,
+      !$section.find(".letter-section__content").is(":visible"),
+    );
+    updateToggleAllLabel();
+  });
+
+  // The issues ticked in the form, as one string to compare
+  function tickedIssues($form) {
+    return $form
+      .find('input[name="letterIssues[]"]:checked')
+      .map(function () {
+        return this.value;
+      })
+      .get()
+      .join(",");
+  }
+
+  // Start from a letter already sent: tick the issues it covered, in place of whatever is
+  // ticked now, and open the groups they are in so the caseworker can see what was picked.
+  // Going back to no letter leaves the ticks as they are. The letter picked is posted with
+  // the form, and the wording changed on it is brought over when the new letter is created.
+  $("body").on("change", "#previous-letter", function () {
+    var $picker = $(this);
+    var $letter = $picker.find("option:selected");
+    var $note = $("#previous-letter-note");
+    var $form = $("#letter-create-form");
+
+    if (!$letter.val()) {
+      $picker.data("picked", "");
+      $note.hide();
+      return;
     }
+
+    // Ticks made by hand would be lost, so ask first. The picker's own ticks from an earlier
+    // pick are just replaced. Both are kept on the picker, so a form shown afresh starts clean.
+    var ticked = tickedIssues($form);
+    if (
+      ticked !== "" &&
+      ticked !== $picker.data("ticked") &&
+      !window.confirm(
+        "This replaces the issues you have ticked with the ones on that letter. Continue?",
+      )
+    ) {
+      $picker.val($picker.data("picked") || "");
+      return;
+    }
+    $note.hide();
+
+    // attr, not data: jQuery would turn a lone id into a number
+    var issueIds = String($letter.attr("data-issue-ids") || "")
+      .split(",")
+      .filter(Boolean);
+    var $issues = $form.find('input[name="letterIssues[]"]');
+
+    $issues.each(function () {
+      this.checked = issueIds.indexOf(this.value) !== -1;
+    });
+    $form.find(".letter-section").each(function () {
+      var $section = $(this);
+      setSectionOpen(
+        $section,
+        $section.find('input[name="letterIssues[]"]:checked').length > 0,
+      );
+    });
+    updateToggleAllLabel();
+
+    // An issue switched off since that letter was sent isn't in the form to tick. Say so,
+    // or the new letter would quietly cover less than the one it started from.
+    var missing = issueIds.length - $issues.filter(":checked").length;
+    if (missing > 0) {
+      $note
+        .text(
+          missing === 1
+            ? "1 issue on that letter is no longer offered, so it is not ticked."
+            : missing +
+                " issues on that letter are no longer offered, so they are not ticked.",
+        )
+        .show();
+    }
+
+    $picker.data("ticked", tickedIssues($form)).data("picked", $letter.val());
+
+    // the ticks changed without a click, so do what a click on one would have done
+    $issues.first().trigger("change");
   });
 
   // Handle "Show All Sections" / "Hide All Sections" toggle
@@ -147,6 +241,23 @@ OLCS.ready(function () {
           $("#preview-subcategory").text(subCategory.subCategoryName || "-");
           $("#preview-template").text(letterType.name || "Letter Template");
 
+          // Wording copied from the letter this one was started from comes over as it was
+          // sent, with that letter's dates and details in it. Name the issues it reached, so
+          // the caseworker checks them. (Added before the warnings, which go above it.)
+          if (response.wordingCopiedTo && response.wordingCopiedTo.length > 0) {
+            var copiedHtml =
+              '<div class="govuk-inset-text letter-wording-copied">' +
+              "Wording from the letter you picked was copied to these issues or their to-dos:" +
+              '<ul class="govuk-list govuk-list--bullet" style="margin-top: 0.5rem;">';
+            response.wordingCopiedTo.forEach(function (name) {
+              copiedHtml += "<li>" + $("<span>").text(name).html() + "</li>";
+            });
+            copiedHtml +=
+              "</ul>It is copied as it was sent. Check it is still right for this letter, " +
+              "including any dates.</div>";
+            $("#letter-preview-modal").prepend(copiedHtml);
+          }
+
           // Show warnings for missing required sections
           if (response.warnings && response.warnings.length > 0) {
             var warningHtml =
@@ -175,6 +286,11 @@ OLCS.ready(function () {
             OLCS.modal.updateBody
           ) {
             OLCS.modal.updateBody(newContent);
+
+            // This is a new step, so show it from its top. updateBody keeps the dialog scrolled
+            // to where Create letter was, at the foot of the form, which can leave a warning
+            // or the note about copied wording off the top of the screen.
+            $(".modal__wrapper").scrollTop(0);
 
             // Update modal title
             $(".modal__title").text("Preview or edit letter");
