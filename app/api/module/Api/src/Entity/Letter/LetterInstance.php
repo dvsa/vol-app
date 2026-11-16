@@ -30,13 +30,17 @@ class LetterInstance extends AbstractLetterInstance
     public const array RAISED_ON = ['case', 'application', 'busReg', 'transportManager', 'irfoOrganisation', 'licence'];
 
     /**
-     * Where a to-do shared by several issues appears in the letter: after the first of those
-     * issues, or after the last (VOL-7737). The stored owner stays the first issue either way
-     * (VOL-7280/7408), so this only changes where it is drawn and can be flipped at any time.
+     * Which of the issues that share a to-do it goes with: the first of them, or the last
+     * (VOL-7737). The stored owner stays the first issue either way (VOL-7280/7408), so this only
+     * changes where it is shown and can be flipped at any time.
+     *
+     * It goes with the last: the business asked for a to-do to come after every issue it is
+     * for. The edit page shows it after the last of its issues, and the letter lists it with
+     * that issue's group (LetterPreviewService::renderIssues), so the two match.
      */
     public const SHARED_TODO_UNDER_FIRST_ISSUE = 'first';
     public const SHARED_TODO_UNDER_LAST_ISSUE = 'last';
-    public const SHARED_TODO_PLACEMENT = self::SHARED_TODO_UNDER_FIRST_ISSUE;
+    public const SHARED_TODO_PLACEMENT = self::SHARED_TODO_UNDER_LAST_ISSUE;
 
     /**
      * Memoised issues that bring each to-do, in letter order, keyed by LetterTodoVersion::getDedupeKey.
@@ -240,8 +244,8 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
-     * The issue a to-do is drawn after in the letter (VOL-7737). A to-do none of the letter's
-     * issues brings any more stays with the issue it belongs to.
+     * The issue a to-do goes with (VOL-7737). A to-do none of the letter's issues brings any
+     * more stays with the issue it belongs to.
      */
     public function getPlacementIssue(
         LetterInstanceTodo $todo,
@@ -251,7 +255,7 @@ class LetterInstance extends AbstractLetterInstance
     }
 
     /**
-     * The issue each of the letter's to-dos is drawn after, keyed by spl_object_id of the to-do.
+     * The issue each of the letter's to-dos goes with, keyed by spl_object_id of the to-do.
      * Worked out in one pass so drawing the letter doesn't redo it per to-do.
      *
      * @return array<int, LetterInstanceIssue|null>

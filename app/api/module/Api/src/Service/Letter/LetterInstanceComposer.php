@@ -67,8 +67,9 @@ class LetterInstanceComposer
      * thing twice (VOL-7280). Issues can also link different versions of the same to-do, so this
      * de-dupes per to-do rather than per version and always renders the to-do's current version
      * (VOL-7408). Each unique to-do attaches to the FIRST issue in letter order that brought it
-     * (LetterInstance::getIssuesInLetterOrder). Where it is drawn is decided at render time by
-     * LetterInstance::getPlacementIssue (VOL-7737).
+     * (LetterInstance::getIssuesInLetterOrder). Which issue it is shown with on the edit page,
+     * and which group's to-dos it is listed with in the letter, is worked out when they are
+     * drawn (LetterInstance::getPlacementIssue, VOL-7737).
      */
     public function composeTodos(LetterInstance $letterInstance): void
     {
@@ -289,7 +290,7 @@ class LetterInstanceComposer
      * to-dos.
      *
      * @return list<LetterInstanceIssue> the new letter's issues that wording was brought over
-     *     to, or to a to-do under them, in letter order
+     *     to, or to a to-do shown after them, in letter order
      */
     public function bringOverWording(LetterInstance $letterInstance, LetterInstance $sentLetter): array
     {
@@ -328,9 +329,9 @@ class LetterInstanceComposer
                     continue;
                 }
 
-                // A to-do is on a letter once, under the first issue that brought it. Letters
-                // made before VOL-7408 have a row for each issue instead, and then the row that
-                // sat under this issue is the one that speaks for it.
+                // A to-do is on a letter once, and its row belongs to the first issue that
+                // brought it. Letters made before VOL-7408 have a row for each issue instead,
+                // and then the row that belongs to this issue is the one that speaks for it.
                 $rows = $sentTodos[$key] ?? [];
                 $ownRows = array_filter(
                     $rows,
@@ -372,6 +373,7 @@ class LetterInstanceComposer
             }
         }
 
+        $goesWith = $todoWording === [] ? [] : $letterInstance->getPlacementIssuesByTodo();
         foreach ($letterInstance->getLetterInstanceTodos() as $instanceTodo) {
             $key = $instanceTodo->getLetterTodoVersion()?->getDedupeKey();
             if ($key === null || !isset($todoWording[$key])) {
@@ -379,10 +381,11 @@ class LetterInstanceComposer
             }
             $instanceTodo->setEditedDescriptionFromArray($todoWording[$key]->getEffectiveDescription());
 
-            // it sits under the first issue that brings it, which is the one to point to
-            $owner = $instanceTodo->getLetterInstanceIssue();
-            if ($owner !== null) {
-                $broughtOver[spl_object_id($owner)] = true;
+            // point to the issue the edit page shows it after, which is where the caseworker
+            // will find it
+            $issue = $goesWith[spl_object_id($instanceTodo)] ?? null;
+            if ($issue !== null) {
+                $broughtOver[spl_object_id($issue)] = true;
             }
         }
 
