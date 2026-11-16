@@ -1,14 +1,16 @@
+<div class="js-body">
 <?php
 echo $this->partial(
   'partials/page-header-simple',
   [
     'pageTitle' => $this->translate('dashboard.messages.new.title'),
+    'formErrors' => '<div class="row"><div class="two-thirds">' . $this->formErrors($this->form) . '</div></div>',
   ],
 );
 ?>
 
 <div class="row">
-  <div class="dashboard two-thirds js-body">
+  <div class="dashboard two-thirds">
     <?php
     echo $this->flashMessengerAll();
 
@@ -30,7 +32,6 @@ echo $this->partial(
 
     <div>
       <?php
-        echo $this->formErrors($this->form);
         echo $this->form($this->form);
       ?>
     </div>
@@ -38,4 +39,5 @@ echo $this->partial(
   </div>
 
   <?php echo $this->partial('partials/conversations-right-column'); ?>
+</div>
 </div>

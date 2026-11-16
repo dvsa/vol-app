@@ -11,6 +11,11 @@
       margin: $gutter 0;
     }
 
+    // The wrapper already has a top margin, so drop the summary's own bottom margin
+    .govuk-error-summary {
+      margin-bottom: 0;
+    }
+
     h1 {
       max-width: 650px;
     }

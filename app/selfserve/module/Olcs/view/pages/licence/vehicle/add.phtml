@@ -1,3 +1,10 @@
+<?php
+$formErrors = '';
+if (isset($this->form)) {
+    $this->form->prepare();
+    $formErrors = $this->formErrors($this->form);
+}
+?>
 <div class="govuk-width-container">
     <div class="js-body">
         <?php
@@ -9,6 +16,7 @@
                 'backUrl' => [
                     'url' => $this->backLink,
                 ],
+                'formErrors' => $formErrors,
             ]
         );
         ?>
@@ -22,8 +30,6 @@
                 <?php endif; ?>
                 <?php if (isset($this->form)): ?>
                     <?php
-                    $this->form->prepare();
-                    echo $this->formErrors($this->form);
                     echo $this->form($this->form);
                     ?>
                 <?php endif; ?>

@@ -86,6 +86,7 @@ class LoginController
         if ($this->flashMessenger->hasMessages(static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR)) {
             $view->setVariables([
                 'failed' => true,
+                'pageHasErrors' => true,
                 'failureReason' => $this->flashMessenger->getMessagesFromNamespace(static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR)[0]
             ]);
         }

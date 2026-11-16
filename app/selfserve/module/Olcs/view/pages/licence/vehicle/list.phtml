@@ -5,12 +5,12 @@
             'pageSubTitle' => $this->licence['licNo'],
             'panel' => $this->panel,
             'backUrl' => ['url' => $this->backLink],
+            'formErrors' => isset($this->searchForm) ? $this->formErrors($this->searchForm) : '',
         ]); ?>
 
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 <?php if (isset($this->searchForm)) { ?>
-                    <?php echo $this->formErrors($this->searchForm); ?>
                     <?php echo $this->form($this->searchForm); ?>
                     <p><?php echo $this->link($this->clearUrl, 'Clear search'); ?></p>
                     <div class="govuk-phase-banner govuk-!-margin-bottom-8 govuk-!-margin-top-0"></div>

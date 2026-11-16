@@ -3,6 +3,7 @@
 namespace Common\Form\View\Helper;
 
 use Common\Form\Elements\Types\PostcodeSearch;
+use Common\Form\Elements\Types\Radio;
 use Common\Form\Elements\Validators\Messages\FormElementMessageFormatter;
 use Laminas\Form\Element\DateSelect;
 use Laminas\Form\ElementInterface;
@@ -70,17 +71,21 @@ class FormErrors extends AbstractHelper
         }
 
         $messagesOpenFormat = '
-<div class="validation-summary" role="alert" id="validationSummary">
-    <h2 class="govuk-heading-m">%s</h2>
-    <p>%s</p>
-    <ol class="validation-summary__list">
-        <li class="validation-summary__item">';
-            $messageSeparatorString = '
-        </li>
-        <li class="validation-summary__item">';
-            $messageCloseString = '
-        </li>
-    </ol>
+<div class="govuk-error-summary" data-module="govuk-error-summary">
+    <div role="alert">
+        <h2 class="govuk-error-summary__title">%s</h2>
+        <div class="govuk-error-summary__body">
+            <p>%s</p>
+            <ul class="govuk-list govuk-error-summary__list">
+                <li>';
+                    $messageSeparatorString = '
+                </li>
+                <li>';
+                    $messageCloseString = '
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>';
 
         $messagesTitle = $form->getOption('formErrorsTitle') ?
@@ -103,13 +108,15 @@ class FormErrors extends AbstractHelper
      *
      * @return array
      */
-    protected function getFlatMessages($messages, $fieldset)
+    protected function getFlatMessages($messages, $fieldset, ?string $elementPath = null)
     {
         $flatMessages = [];
 
         foreach ($messages as $field => $message) {
-            if ($fieldset instanceof Fieldset) {
-                $element = $fieldset->has($field) ? $fieldset->get($field) : $fieldset;
+            $path = $elementPath;
+            if ($fieldset instanceof Fieldset && $fieldset->has($field)) {
+                    $element = $fieldset->get($field);
+                    $path = $elementPath === null ? (string) $field : $elementPath . '[' . $field . ']';
             } else {
                 $element = $fieldset;
             }
@@ -117,10 +124,10 @@ class FormErrors extends AbstractHelper
             if (is_array($message)) {
                 $flatMessages = array_merge(
                     $flatMessages,
-                    $this->getFlatMessages($message, $element)
+                    $this->getFlatMessages($message, $element, $path)
                 );
             } else {
-                $flatMessages[] = $this->formatMessage($element, $message, $field);
+                $flatMessages[] = $this->formatMessage($element, $message, $field, $path);
             }
         }
 
@@ -135,8 +142,12 @@ class FormErrors extends AbstractHelper
      *
      * @psalm-param array-key $messageKey
      */
-    protected function formatMessage(ElementInterface $element, $message, mixed $messageKey): string
-    {
+    protected function formatMessage(
+        ElementInterface $element,
+        $message,
+        mixed $messageKey,
+        ?string $elementPath = null
+    ): string {
         $elementShouldEscape = $element->getOption('shouldEscapeMessages');
         $shouldEscape = true;
         $message = $this->messageFormatter->formatElementMessage($element, $message, $messageKey);
@@ -145,7 +156,7 @@ class FormErrors extends AbstractHelper
         }
 
         // Try and find an element to link to
-        $anchor = $this->getNamedAnchor($element);
+        $anchor = $this->getNamedAnchor($element, $elementPath);
 
         // If we have an ID
         if (!empty($anchor)) {
@@ -162,8 +173,12 @@ class FormErrors extends AbstractHelper
      *
      * @return string
      */
-    protected function getNamedAnchor($element)
+    protected function getNamedAnchor($element, ?string $elementPath = null)
     {
+        $fallbackName = $elementPath !== null && str_contains($elementPath, '[')
+            ? $elementPath
+            : null;
+
         // For PostcodeSearch we want to use the id of the text input, as this is the element we want to receive focus
         if (
             $element instanceof PostcodeSearch
@@ -175,7 +190,16 @@ class FormErrors extends AbstractHelper
         // For DateSelect element we want to focus on the day element
         if ($element instanceof DateSelect) {
             // id is automatically generated on day element when it is rendered using this pattern
-            return $element->getAttribute('id') . '_day';
+            return ($element->getAttribute('id') ?: ($fallbackName ?? $element->getName())) . '_day';
+        }
+
+        if ($element instanceof Radio) {
+            $valueOptions = $element->getValueOptions();
+            $firstOption = reset($valueOptions);
+            $radioId = is_array($firstOption) ? ($firstOption['attributes']['id'] ?? null) : null;
+            if (!empty($radioId)) {
+                return $radioId;
+            }
         }
 
         $fieldsetAttributes = $element->getOption('fieldset-attributes');
@@ -195,8 +219,8 @@ class FormErrors extends AbstractHelper
             return $id;
         }
 
-        // Last resort, If can't find an ID then use the name as that is often copied to ID when rendered
-        return $element->getName();
+        // The input renderer uses the prepared, bracketed name when no ID is configured.
+        return $fallbackName ?? $element->getName();
     }
 
     /**

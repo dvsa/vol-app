@@ -3,12 +3,24 @@
     <?php echo $this->flashMessengerAll(); ?>
 
     <?php
+    $backLink = '';
     if ($this->backUrl === true) {
-        echo $this->linkBack();
+        $backLink = $this->linkBack();
     } elseif (is_array($this->backUrl) && count($this->backUrl) > 0) {
-        echo $this->linkBack($this->backUrl);
+        $backLink = $this->linkBack($this->backUrl);
     }
+    echo $backLink;
     ?>
+
+    <?php if (!empty($this->formErrors)): ?>
+        <?php if ($backLink === ''): ?>
+            <div class="govuk-!-margin-top-4">
+        <?php endif; ?>
+        <?php echo $this->formErrors; ?>
+        <?php if ($backLink === ''): ?>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
 
     <div class="page-header__wrapper">
         <?php if (isset($this->stepHeader)) : ?>
