@@ -782,10 +782,10 @@ class LetterInstanceComposerTest extends TestCase
     }
 
     /**
-     * A shared to-do sits under the first issue that brings it, which need not be the issue the
-     * two letters have in common
+     * A shared to-do belongs to the first issue that brings it, which need not be the issue the
+     * two letters have in common. It is reported as the issue the edit page shows it after.
      */
-    public function testAToDoSharedWithAnIssueOnBothLettersBringsItsWordingWhicheverIssueItSitsUnder(): void
+    public function testAToDoSharedWithAnIssueOnBothLettersBringsItsWordingWhicheverIssueItBelongsTo(): void
     {
         $todo = $this->todoWithCurrentVersion(3, 31);
 
@@ -800,8 +800,8 @@ class LetterInstanceComposerTest extends TestCase
         $this->issueFromLibrary($letterInstance, 7, 1, [$todo->getCurrentVersion()]);
         $this->sut->composeTodos($letterInstance);
 
-        // the to-do sits under issue 8, the first to bring it
-        $this->assertSame([8], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
+        // the row belongs to issue 8, the first to bring it; the edit page shows it after issue 7
+        $this->assertSame([7], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
         $this->assertSame(
             $this->paragraph('Send the signed lease by Friday'),
             $letterInstance->getLetterInstanceTodos()->first()->getEditedDescription()
@@ -903,7 +903,7 @@ class LetterInstanceComposerTest extends TestCase
 
     /**
      * With a row for each issue on the sent letter and one row on the new one, the wording is
-     * the first issue's: the issue the new letter puts the to-do under
+     * the first issue's, the one the new letter's row belongs to
      */
     public function testWhereSeveralIssuesHadTheirOwnRowTheFirstIssuesWordingIsUsed(): void
     {
@@ -918,7 +918,8 @@ class LetterInstanceComposerTest extends TestCase
         $this->issueFromLibrary($letterInstance, 8, 1, [$version]);
         $this->sut->composeTodos($letterInstance);
 
-        $this->assertSame([7], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
+        // reported as issue 8, which the edit page shows it after
+        $this->assertSame([8], $this->libraryIssueIds($this->sut->bringOverWording($letterInstance, $sentLetter)));
         $this->assertCount(1, $letterInstance->getLetterInstanceTodos());
         $this->assertSame(
             $this->paragraph('Reworded under 7'),

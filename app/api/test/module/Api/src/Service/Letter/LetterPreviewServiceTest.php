@@ -1550,11 +1550,13 @@ final class LetterPreviewServiceTest extends MockeryTestCase
     }
 
     /**
-     * VOL-7737: each issue is followed by its own "What you need to do", and a to-do shared by
-     * several issues shows once, under the first of them. An issue with nothing left to show
-     * gets no heading.
+     * The letter lists a group's issues and then what the operator needs to do about them, in
+     * one "What you need to do" block for the group. (VOL-7737 put each issue's to-dos straight
+     * after it; that was only wanted on the edit page, and the letter went back to this.)
+     * A to-do shared by several issues shows once, after all of them. A group with nothing to
+     * do gets no heading.
      */
-    public function testEachIssueIsFollowedByItsOwnTodos(): void
+    public function testEachGroupOfIssuesIsFollowedByItsTodos(): void
     {
         $this->stubIssueAndTodoRenderers();
 
@@ -1566,8 +1568,8 @@ final class LetterPreviewServiceTest extends MockeryTestCase
 
         $letter = new LetterInstance();
         $a = $this->realIssue($letter, $finances, 'A', 0, [$statements, $shared]);
-        $b = $this->realIssue($letter, $finances, 'B', 1, [$lease, $shared]);
-        $this->realIssue($letter, $centre, 'C', 2, [$shared]);
+        $b = $this->realIssue($letter, $finances, 'B', 1, [$shared, $lease]);
+        $this->realIssue($letter, $centre, 'C', 2, []);
         $this->realTodo($letter, $a, $statements, 0);
         $this->realTodo($letter, $a, $shared, 1);
         $this->realTodo($letter, $b, $lease, 2);
@@ -1576,9 +1578,39 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $plain = preg_replace('/<[^>]+>/', '', $result);
 
         $this->assertSame(
-            'Finances[issue:A]What you need to do[todo:Statements][todo:Shared]'
-            . '[issue:B]What you need to do[todo:Lease]'
+            'Finances[issue:A][issue:B]What you need to do[todo:Statements][todo:Shared][todo:Lease]'
             . 'Operating centre[issue:C]',
+            $plain
+        );
+    }
+
+    /**
+     * A to-do shared by issues in different groups goes with the last of them, so it still
+     * comes after every issue it is for
+     */
+    public function testATodoSharedAcrossGroupsIsListedWithTheLastOfItsIssues(): void
+    {
+        $this->stubIssueAndTodoRenderers();
+
+        $finances = $this->realIssueType(1, 'Finances');
+        $centre = $this->realIssueType(2, 'Operating centre');
+        $statements = $this->realTodoVersion(1, 'Statements');
+        $shared = $this->realTodoVersion(2, 'Shared');
+        $lease = $this->realTodoVersion(3, 'Lease');
+
+        $letter = new LetterInstance();
+        $a = $this->realIssue($letter, $finances, 'A', 0, [$statements, $shared]);
+        $b = $this->realIssue($letter, $centre, 'B', 1, [$lease, $shared]);
+        $this->realTodo($letter, $a, $statements, 0);
+        $this->realTodo($letter, $a, $shared, 1);
+        $this->realTodo($letter, $b, $lease, 2);
+
+        $result = $this->sut->renderPreview($letter, null);
+        $plain = preg_replace('/<[^>]+>/', '', $result);
+
+        $this->assertSame(
+            'Finances[issue:A]What you need to do[todo:Statements]'
+            . 'Operating centre[issue:B]What you need to do[todo:Shared][todo:Lease]',
             $plain
         );
     }

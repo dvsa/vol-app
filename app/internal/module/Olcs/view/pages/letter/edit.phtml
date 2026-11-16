@@ -27,8 +27,8 @@
     You can format text using bold, italics, underline and bullets.
 </p>
 
-<?php // The page follows the letter (VOL-7737): sections in letter order around the issues,
-      // each issue followed by its own to-dos. ?>
+<?php // Sections in letter order around the issues, each issue followed by its own to-dos
+      // (VOL-7737). The letter itself lists a group's issues and then the to-dos. ?>
 <?php foreach ($layout as $block): ?>
     <?php if (isset($block['section'])): ?>
         <?php $section = $block['section']; ?>
