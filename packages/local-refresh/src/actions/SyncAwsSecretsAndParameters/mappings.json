@@ -315,6 +315,12 @@
             "configPath": ["notify", "sms", "template_id"],
             "awsPath": "/applicationparams/{env}/olcs_notify_sms_template",
             "type": "parameter"
+          },
+          {
+            "configPath": ["olcs-doctrine", "encryption_key"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_doctrine_encryption_key"
           }
         ]
       }
