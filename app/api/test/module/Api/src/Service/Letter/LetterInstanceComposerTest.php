@@ -190,8 +190,8 @@ class LetterInstanceComposerTest extends TestCase
     }
 
     /**
-     * A deduplicated to-do hangs off the first issue that brought it, which is what gives the
-     * renderer "appears under the first issue type it relates to" without the renderer knowing.
+     * A deduplicated to-do's row belongs to the first issue that brought it. Where it is shown is
+     * worked out separately (LetterInstance::getPlacementIssue).
      */
     public function testADeduplicatedTodoAttachesToTheFirstIssueThatBroughtIt(): void
     {

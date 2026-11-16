@@ -1493,14 +1493,16 @@ final class LetterPreviewServiceTest extends MockeryTestCase
      */
     private function realIssue(
         LetterInstance $letter,
-        LetterIssueType $type,
+        ?LetterIssueType $type,
         string $heading,
         int $displayOrder,
         array $todoVersions
     ): LetterInstanceIssue {
         $issueVersion = new LetterIssueVersion();
         $issueVersion->setHeading($heading);
-        $issueVersion->setLetterIssueType($type);
+        if ($type !== null) {
+            $issueVersion->setLetterIssueType($type);
+        }
         foreach ($todoVersions as $todoVersion) {
             $issueTodo = new LetterIssueTodo();
             $issueTodo->setLetterTodoVersion($todoVersion);
@@ -1542,7 +1544,8 @@ final class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturnUsing(fn(LetterInstanceIssue $issue) => '[issue:' . $issue->getLetterIssueVersion()->getHeading() . ']');
         $todoRenderer = m::mock(SectionRendererInterface::class);
         $todoRenderer->shouldReceive('render')
-            ->andReturnUsing(fn(LetterInstanceTodo $todo) => '[todo:' . $todo->getLetterTodoVersion()->getName() . ']');
+            // a to-do the caseworker wrote has no library to-do behind it
+            ->andReturnUsing(fn(LetterInstanceTodo $todo) => '[todo:' . ($todo->getLetterTodoVersion()?->getName() ?? 'own') . ']');
 
         $this->mockRendererManager->shouldReceive('get')->with('issue')->andReturn($issueRenderer);
         $this->mockRendererManager->shouldReceive('get')->with('todo')->andReturn($todoRenderer);
@@ -1611,6 +1614,40 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $this->assertSame(
             'Finances[issue:A]What you need to do[todo:Statements]'
             . 'Operating centre[issue:B]What you need to do[todo:Shared][todo:Lease]',
+            $plain
+        );
+    }
+
+    /**
+     * A to-do the caseworker wrote on an Other issue is listed with its own issue's group, after
+     * the group's library to-dos. An issue with no type goes under "Other Issues", and its
+     * to-dos with it.
+     */
+    public function testACaseworkersOwnTodoAndAnUntypedIssuesTodosAreListedWithTheirGroup(): void
+    {
+        $this->stubIssueAndTodoRenderers();
+
+        $finances = $this->realIssueType(1, 'Finances');
+        $statements = $this->realTodoVersion(1, 'Statements');
+        $evidence = $this->realTodoVersion(2, 'Evidence');
+
+        $letter = new LetterInstance();
+        $a = $this->realIssue($letter, $finances, 'A', 0, [$statements]);
+        $other = $this->realIssue($letter, $finances, 'Other', 1, []);
+        $untyped = $this->realIssue($letter, null, 'U', 2, [$evidence]);
+        $this->realTodo($letter, $a, $statements, 0);
+        $own = new LetterInstanceTodo();
+        $own->setDisplayOrder(1);
+        $other->addLetterInstanceTodo($own);
+        $letter->addLetterInstanceTodo($own);
+        $this->realTodo($letter, $untyped, $evidence, 2);
+
+        $result = $this->sut->renderPreview($letter, null);
+        $plain = preg_replace('/<[^>]+>/', '', $result);
+
+        $this->assertSame(
+            'Finances[issue:A][issue:Other]What you need to do[todo:Statements][todo:own]'
+            . 'Other Issues[issue:U]What you need to do[todo:Evidence]',
             $plain
         );
     }

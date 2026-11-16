@@ -329,9 +329,9 @@ class LetterInstanceComposer
                     continue;
                 }
 
-                // A to-do is on a letter once, under the first issue that brought it. Letters
-                // made before VOL-7408 have a row for each issue instead, and then the row that
-                // sat under this issue is the one that speaks for it.
+                // A to-do is on a letter once, and its row belongs to the first issue that
+                // brought it. Letters made before VOL-7408 have a row for each issue instead,
+                // and then the row that belongs to this issue is the one that speaks for it.
                 $rows = $sentTodos[$key] ?? [];
                 $ownRows = array_filter(
                     $rows,
