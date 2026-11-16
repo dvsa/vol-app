@@ -47,10 +47,11 @@ if ($describedBy !== '') {
         <?php if ($hasValidationError) : ?>
             <?= $errors ?>
         <?php endif; ?>
-        <?php foreach ($this->valueOptions as $key => $valueOption) { ?>
-            <?= $this->formRadioOption($this->radioElement, $key); ?>
-            <?= $this->partial(new \Common\Form\View\Model\FormRadioContentViewModel($valueOption)); ?>
-        <?php } ?>
+        <?php
+        $radioElement = clone $this->radioElement;
+        $radioElement->setValueOptions($this->valueOptions);
+        echo $this->formRadio($radioElement);
+        ?>
     </fieldset>
 </div>
 

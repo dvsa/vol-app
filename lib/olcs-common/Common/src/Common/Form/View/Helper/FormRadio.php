@@ -6,6 +6,7 @@ namespace Common\Form\View\Helper;
 
 use Common\Util\AriaDescribedBy;
 use Common\View\Helper\UniqidGenerator;
+use Common\Form\View\Model\FormRadioContentViewModel;
 use Laminas\Form\Element\MultiCheckbox as MultiCheckboxElement;
 use Laminas\Form\LabelAwareInterface;
 
@@ -32,6 +33,7 @@ class FormRadio extends \Laminas\Form\View\Helper\FormRadio
         $labelPosition = $this->getLabelPosition();
         $closingBracket = $this->getInlineClosingBracket();
         $radiosWrapperAttributes = $this->makeRadiosWrapperAttributes($attributes);
+        $inline = in_array('govuk-radios--inline', explode(' ', $radiosWrapperAttributes['class']), true);
 
         $globalLabelAttributes = $element->getLabelAttributes();
 
@@ -40,6 +42,7 @@ class FormRadio extends \Laminas\Form\View\Helper\FormRadio
         }
 
         $combinedMarkup = [];
+        $conditionalMarkup = '';
         $count = 0;
 
         foreach ($options as $key => $optionSpec) {
@@ -65,6 +68,7 @@ class FormRadio extends \Laminas\Form\View\Helper\FormRadio
                 ];
             }
 
+            $conditionalOption = $optionSpec;
             $optionSpec = $this->addGovUkRadioStyles($optionSpec);
 
             if (isset($optionSpec['value'])) {
@@ -107,6 +111,14 @@ class FormRadio extends \Laminas\Form\View\Helper\FormRadio
 
             $inputAttributes = $this->maybeAddInputId($inputAttributes);
             $labelAttributes['for'] = $inputAttributes['id'];
+
+            if (!empty($conditionalOption['conditional_content'])) {
+                $conditionalOption['attributes']['id'] = $inputAttributes['id'];
+                $contentId = $inputAttributes['id'] . '_content';
+                // Laminas IDs can contain brackets, so use a quoted attribute selector.
+                $inputAttributes['data-show-element'] = '[id="' . addcslashes($contentId, "\\\"") . '"]';
+                $inputAttributes['data-aria-controls'] = $contentId;
+            }
 
             if (isset($optionSpec['hint'])) {
                 $inputAttributes['aria-describedby'] = AriaDescribedBy::merge(
@@ -167,10 +179,19 @@ class FormRadio extends \Laminas\Form\View\Helper\FormRadio
                 $markup = $optionSpec['markup_before'] . $markup;
             }
 
+            if (!empty($conditionalOption['conditional_content'])) {
+                $contentMarkup = $this->getView()->partial(new FormRadioContentViewModel($conditionalOption));
+                if ($inline) {
+                    $conditionalMarkup .= $contentMarkup;
+                } else {
+                    $markup .= $contentMarkup;
+                }
+            }
+
             $combinedMarkup[] = $markup;
         }
 
-        $outputMarkup = implode($this->getSeparator(), $combinedMarkup);
+        $outputMarkup = implode($this->getSeparator(), $combinedMarkup) . $conditionalMarkup;
 
         if ($outputMarkup !== '') {
             return $this->wrapWithTag(
@@ -211,7 +232,7 @@ class FormRadio extends \Laminas\Form\View\Helper\FormRadio
 
     protected function maybeAddInputId(array $inputAttributes): array
     {
-        if (!isset($inputAttributes['id'])) {
+        if (!isset($inputAttributes['id']) || $inputAttributes['id'] === '') {
             $inputAttributes['id'] = $this->idGenerator->generateId();
         }
 

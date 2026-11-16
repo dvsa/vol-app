@@ -106,9 +106,9 @@ final class FormRadioVerticalTest extends MockeryTestCase
         );
         $errorsHelper->setView($renderer);
         $helpers->setService('formElementErrors', $errorsHelper);
-        $optionHelper = new \Common\Form\View\Helper\FormRadioOption();
-        $optionHelper->setView($renderer);
-        $helpers->setService('formRadioOption', $optionHelper);
+        $radioHelper = new \Common\Form\View\Helper\FormRadio();
+        $radioHelper->setView($renderer);
+        $helpers->setService('formRadio', $radioHelper);
         $helpers->setService('form_label', new \Laminas\Form\View\Helper\FormLabel());
         $translate = new \Laminas\I18n\View\Helper\Translate();
         $translate->setTranslator(new \Laminas\I18n\Translator\Translator());
