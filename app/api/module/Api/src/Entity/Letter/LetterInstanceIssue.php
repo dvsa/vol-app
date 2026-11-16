@@ -119,6 +119,32 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
     }
 
     /**
+     * Whether a caseworker changed what the issue says.
+     *
+     * Saving an editor stores its text whether or not anything was typed, and an editor writes
+     * the same text back in its own shape, so this compares the words with the ones the issue
+     * started with. The same words laid out another way are not a change.
+     */
+    public function hasChangedWording(): bool
+    {
+        if (empty($this->editedContent)) {
+            return false;
+        }
+
+        // edited content that can't be read comes back empty
+        $content = $this->getEffectiveContent();
+        if ($content === []) {
+            return false;
+        }
+
+        $startedWith = !empty($this->generatedContent) && is_array($this->generatedContent)
+            ? $this->generatedContent
+            : ($this->letterIssueVersion?->getDefaultBodyContentAsArray() ?: []);
+
+        return EditorJsText::plain($content) !== EditorJsText::plain($startedWith);
+    }
+
+    /**
      * An Other issue: the caseworker writes its heading and may add their own to-dos (VOL-7735)
      */
     public function isOther(): bool

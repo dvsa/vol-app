@@ -1,0 +1,25 @@
+<?php
+/**
+ * One tick box in the letter preview sidebar.
+ *
+ * @var string $field what it posts as: sections (issues), letterSections, todos or appendices
+ * @var string $idPrefix keeps the ids of the different kinds apart
+ * @var array $item id and name, and inputPending when it still needs writing
+ * @var bool|null $underIssue a to-do listed under its issue, so set in from it
+ */
+$inputId = $idPrefix . '-' . $item['id'];
+?>
+<div class="govuk-checkboxes__item<?= empty($underIssue) ? '' : ' letter-sidebar__todo' ?>"
+     <?= !empty($item['inputPending']) ? 'data-input-pending="1" data-section-name="' . $this->escapeHtmlAttr($item['name']) . '"' : '' ?>>
+    <input class="govuk-checkboxes__input" type="checkbox"
+           id="<?= $this->escapeHtmlAttr($inputId) ?>"
+           name="<?= $this->escapeHtmlAttr($field) ?>[]"
+           value="<?= $this->escapeHtmlAttr($item['id']) ?>">
+    <label class="govuk-label govuk-checkboxes__label"
+           for="<?= $this->escapeHtmlAttr($inputId) ?>">
+        <?= $this->escapeHtml($item['name']) ?>
+        <?php if (!empty($item['inputPending'])): ?>
+        <strong class="govuk-tag govuk-tag--red">Input required</strong>
+        <?php endif; ?>
+    </label>
+</div>
