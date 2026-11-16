@@ -131,7 +131,7 @@ final class Generate extends AbstractCommand
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getStartFromLetter()
     {
