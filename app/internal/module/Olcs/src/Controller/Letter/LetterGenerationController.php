@@ -123,6 +123,7 @@ class LetterGenerationController extends AbstractInternalController implements L
             'appendicesData' => $appendicesData,
             'letterChoicesData' => $letterChoicesData,
             'queryParams' => $queryParams,
+            'csrfToken' => $this->csrfToken(),
         ]);
 
         $view->setTemplate('pages/letter/create');
@@ -140,12 +141,13 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     public function generateAction()
     {
-        $postData = $this->getRequest()->getPost()->toArray();
-        if (empty($postData)) {
-            return $this->jsonError('Method not allowed', 405);
+        $request = $this->getRequest();
+        if (!$request->isPost()) {
+            return $this->formPostRefusal();
         }
 
-        $queryParams = $this->getRequest()->getQuery()->toArray();
+        $postData = $request->getPost()->toArray();
+        $queryParams = $request->getQuery()->toArray();
 
         // Get route parameters and merge with query params (route params take precedence)
         $routeParams = $this->extractRouteParams();
@@ -198,9 +200,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? json_encode($messages) : $messages;
-            return $this->jsonError('Failed to generate letter: ' . $errorMessage);
+            return $this->jsonError($this->refusal('Failed to generate letter', $response));
         }
 
         $result = $response->getResult();
@@ -659,7 +659,7 @@ class LetterGenerationController extends AbstractInternalController implements L
     {
         $request = $this->getRequest();
         if (!$request->isPost()) {
-            return $this->jsonError('Method not allowed', 405);
+            return $this->formPostRefusal();
         }
 
         $letterInstanceId = (int) $request->getPost('letterInstanceId');
@@ -699,6 +699,23 @@ class LetterGenerationController extends AbstractInternalController implements L
             // old to-do id => new, for to-dos carried over to another issue as a new row
             'movedTodoIds' => (object) ($result['flags']['movedTodoIds'] ?? []),
         ]);
+    }
+
+    /**
+     * The answer to a request that should have been a form post and isn't one.
+     *
+     * Common\Module turns a post without a valid "security" token into a GET and marks the
+     * response. The usual cause is a form left open longer than its token lasts. Each form gets a
+     * new token when it's opened, so the caseworker is told to open it again. Anything that isn't
+     * marked was never a form post.
+     */
+    private function formPostRefusal(): Response
+    {
+        if ($this->getResponse()->getHeaders()->has(\Common\Module::CSRF_ERROR_HEADER)) {
+            return $this->jsonError('This form has expired. Close it and open it again.', 403);
+        }
+
+        return $this->jsonError('Method not allowed', 405);
     }
 
     /**
@@ -828,7 +845,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            return $this->jsonError('Failed to save: ' . $this->commandMessages($response));
+            return $this->jsonError($this->refusal('Failed to save', $response));
         }
 
         $result = $response->getResult();
@@ -869,7 +886,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            return $this->jsonError('Failed to save: ' . $this->commandMessages($response));
+            return $this->jsonError($this->refusal('Failed to save', $response));
         }
 
         $result = $response->getResult();
@@ -903,7 +920,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         ]));
 
         if (!$response->isOk()) {
-            return $this->jsonError('Failed to add the to-do: ' . $this->commandMessages($response));
+            return $this->jsonError($this->refusal('Failed to add the to-do', $response));
         }
 
         return $this->jsonSuccess(['todoId' => (int) ($response->getResult()['id']['letterInstanceTodo'] ?? 0)]);
@@ -931,25 +948,25 @@ class LetterGenerationController extends AbstractInternalController implements L
         ]));
 
         if (!$response->isOk()) {
-            return $this->jsonError('Failed to delete the to-do: ' . $this->commandMessages($response));
+            return $this->jsonError($this->refusal('Failed to delete the to-do', $response));
         }
 
         return $this->jsonSuccess(['todoId' => (int) $body['todoId']]);
     }
 
     /**
-     * The reasons a command was refused, joined into one line. Validation messages can be nested
-     * by field, so they are flattened first.
+     * What to tell the caseworker when a command is refused: what failed, then the reasons if any
+     * came back. Validation messages can be nested by field, so they are flattened first.
      */
-    private function commandMessages(\Common\Service\Cqrs\Response $response): string
+    private function refusal(string $whatFailed, \Common\Service\Cqrs\Response $response): string
     {
         $messages = (array) ($response->getResult()['messages'] ?? []);
-        $flat = [];
-        array_walk_recursive($messages, static function ($message) use (&$flat): void {
-            $flat[] = (string) $message;
+        $reasons = [];
+        array_walk_recursive($messages, static function ($message) use (&$reasons): void {
+            $reasons[] = (string) $message;
         });
 
-        return implode(', ', $flat);
+        return $reasons === [] ? $whatFailed : $whatFailed . ': ' . implode(', ', $reasons);
     }
 
     /**
@@ -981,7 +998,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            return $this->jsonError('Failed to save: ' . $this->commandMessages($response));
+            return $this->jsonError($this->refusal('Failed to save', $response));
         }
 
         $result = $response->getResult();
@@ -1022,7 +1039,7 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            return $this->jsonError('Failed to save: ' . $this->commandMessages($response));
+            return $this->jsonError($this->refusal('Failed to save', $response));
         }
 
         $result = $response->getResult();

@@ -287,6 +287,37 @@
           {
             "flags": [],
             "spec": {
+              "name": "phone_sms",
+              "attributes": {
+                "class": "medium",
+                "id": "phone_sms"
+              },
+              "type": "\\Common\\Form\\Elements\\InputFilters\\SmsPhone"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_sms_id",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
+              "name": "phone_sms_version",
+              "attributes": {
+                "value": ""
+              },
+              "type": "Hidden"
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
               "name": "email",
               "attributes": {
                 "class": "long",

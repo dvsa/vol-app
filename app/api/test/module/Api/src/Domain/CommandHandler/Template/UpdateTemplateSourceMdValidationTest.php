@@ -26,6 +26,8 @@ final class UpdateTemplateSourceMdValidationTest extends AbstractCommandHandlerT
 
         $this->mockedSmServices = [
             'TemplateTwigRenderer' => m::mock(TwigRenderer::class),
+            // md is checked as it is sent to Notify, without HTML escaping
+            'TemplatePlainTextTwigRenderer' => m::mock(TwigRenderer::class),
         ];
 
         parent::setUp();
@@ -37,7 +39,7 @@ final class UpdateTemplateSourceMdValidationTest extends AbstractCommandHandlerT
         $command = Cmd::create(['id' => 1, 'source' => $source]);
         $dataset = ['name' => 'world'];
 
-        $this->mockedSmServices['TemplateTwigRenderer']->shouldReceive('renderString')
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer']->shouldReceive('renderString')
             ->with($source, $dataset)
             ->andReturn("# Hello world\n\nThis is **safe** Markdown.");
 
@@ -60,7 +62,7 @@ final class UpdateTemplateSourceMdValidationTest extends AbstractCommandHandlerT
         $command = Cmd::create(['id' => 1, 'source' => $source]);
         $dataset = [];
 
-        $this->mockedSmServices['TemplateTwigRenderer']->shouldReceive('renderString')
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer']->shouldReceive('renderString')
             ->with($source, $dataset)
             ->andReturn("Hello\x00world");
 
@@ -84,9 +86,11 @@ final class UpdateTemplateSourceMdValidationTest extends AbstractCommandHandlerT
         $command = Cmd::create(['id' => 1, 'source' => $source]);
         $dataset = [];
 
+        // html stays on the escaping renderer
         $this->mockedSmServices['TemplateTwigRenderer']->shouldReceive('renderString')
             ->with($source, $dataset)
             ->andReturn('<script>alert(1)</script>');
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer']->shouldNotReceive('renderString');
 
         $template = m::mock(Template::class);
         $template->shouldReceive('getDecodedTestData')->andReturn(['Default' => $dataset]);
@@ -99,5 +103,35 @@ final class UpdateTemplateSourceMdValidationTest extends AbstractCommandHandlerT
         $result = $this->sut->handleCommand($command);
 
         $this->assertSame(['Template source updated'], $result->getMessages());
+    }
+
+    public function testMarkdownIsCheckedWithoutHtmlEscaping(): void
+    {
+        $source = 'Hello {{ name }}';
+        $command = Cmd::create(['id' => 1, 'source' => $source]);
+        $dataset = ['name' => 'Smith & Sons'];
+
+        $container = m::mock(\Psr\Container\ContainerInterface::class);
+        $container->shouldReceive('get')->with('TemplateDatabaseTwigLoader')->andReturn(new \Twig\Loader\ArrayLoader([]));
+        $real = (new \Dvsa\Olcs\Api\Service\Template\PlainTextTwigRendererFactory())($container, 'x');
+        $rendered = null;
+        $this->mockedSmServices['TemplatePlainTextTwigRenderer']->shouldReceive('renderString')
+            ->once()
+            ->andReturnUsing(function ($src, $vars) use ($real, &$rendered) {
+                return $rendered = $real->renderString($src, $vars);
+            });
+        $this->mockedSmServices['TemplateTwigRenderer']->shouldNotReceive('renderString');
+
+        $template = m::mock(Template::class);
+        $template->shouldReceive('getDecodedTestData')->andReturn(['Default' => $dataset]);
+        $template->shouldReceive('getFormat')->andReturn('md');
+        $template->shouldReceive('setSource')->once()->with($source);
+
+        $this->repoMap['Template']->shouldReceive('fetchUsingId')->andReturn($template);
+        $this->repoMap['Template']->shouldReceive('save')->once();
+
+        $this->sut->handleCommand($command);
+
+        $this->assertSame('Hello Smith & Sons', $rendered);
     }
 }

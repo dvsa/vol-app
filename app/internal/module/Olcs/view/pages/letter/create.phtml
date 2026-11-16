@@ -1,10 +1,12 @@
 <form method="post" id="letter-create-form" data-generate-url="/letter/generate?<?= http_build_query($queryParams) ?>">
 <input type="hidden" name="letterType" value="<?= $this->escapeHtmlAttr($templateId) ?>">
+<?php // posted back as "security", see Common\Module::validateCsrfToken ?>
+<input type="hidden" name="security" value="<?= $this->escapeHtmlAttr($csrfToken) ?>">
 <h2 class="govuk-heading-m">Select content options</h2>
 <p class="govuk-body">Use the checkboxes in the sections below to choose what to include in your letter. You can also add attachments.</p>
 
 <div id="validation-error" class="govuk-error-message" style="display: none; margin-bottom: 1rem;">
-    <span class="govuk-visually-hidden">Error:</span> Please choose at least one issue or appendix
+    <span class="govuk-visually-hidden">Error:</span> <span id="validation-error-text"></span>
 </div>
 
 <?= $this->partial('pages/letter/partials/issue-accordion', ['accordionData' => $accordionData, 'selectedIssueIds' => []]) ?>

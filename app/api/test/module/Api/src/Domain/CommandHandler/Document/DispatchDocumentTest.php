@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\Document\DispatchDocument as Cmd;
 use Dvsa\Olcs\Api\Domain\Command\Email\CreateCorrespondenceRecord;
 use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue;
 use Dvsa\Olcs\Api\Domain\Command\Result;
+use Dvsa\Olcs\Api\Domain\Command\Sms\QueueLetterSms;
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTranslateToWelshTask;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Document\DispatchDocument as CommandHandler;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
@@ -131,6 +132,7 @@ final class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         $result2 = new Result();
         $result2->addId('correspondenceInbox', 321);
         $this->expectedSideEffect(CreateCorrespondenceRecord::class, $data, $result2);
+        $this->expectQueueSms();
 
         $result = $this->sut->handleCommand($command);
 
@@ -180,6 +182,7 @@ final class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         $result2 = new Result();
         $result2->addMessage('Printed');
         $this->expectedSideEffect(Enqueue::class, $data, $result2);
+        $this->expectQueueSms();
 
         $result = $this->sut->handleCommand($command);
 
@@ -237,6 +240,7 @@ final class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         $result2 = new Result();
         $result2->addId('correspondenceInbox', 321);
         $this->expectedSideEffect(CreateCorrespondenceRecord::class, $data, $result2);
+        $this->expectQueueSms();
 
         $result = $this->sut->handleCommand($command);
 
@@ -285,6 +289,7 @@ final class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         $result2 = new Result();
         $result2->addMessage('Printed');
         $this->expectedSideEffect(Enqueue::class, $data, $result2);
+        $this->expectQueueSms();
 
         $result = $this->sut->handleCommand($command);
 
@@ -332,6 +337,7 @@ final class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         $result2 = new Result();
         $result2->addMessage('Printed');
         $this->expectedSideEffect(Enqueue::class, $data, $result2);
+        $this->expectQueueSms();
 
         $data = [
             'description' => 'foo',
@@ -354,5 +360,11 @@ final class DispatchDocumentTest extends AbstractCommandHandlerTestCase
         ];
 
         $this->assertEquals($expected, $result->toArray());
+    }
+
+    private function expectQueueSms(): void
+    {
+        // once per dispatch, however many channels were used
+        $this->expectedSideEffect(QueueLetterSms::class, ['document' => self::DOC_ID], new Result());
     }
 }
