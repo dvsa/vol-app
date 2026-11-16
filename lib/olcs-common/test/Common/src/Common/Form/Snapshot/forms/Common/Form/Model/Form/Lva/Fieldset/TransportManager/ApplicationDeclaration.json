@@ -7,10 +7,10 @@
       "spec": {
         "name": "isDigitallySigned",
         "attributes": {
+          "required": "required",
           "id": "",
           "placeholder": "",
-          "class": "form",
-          "value": "Y"
+          "class": "form"
         },
         "options": {
           "label": "application.signature.options.label",
@@ -51,5 +51,20 @@
     }
   ],
   "fieldsets": [],
-  "input_filter": []
+  "input_filter": {
+    "isDigitallySigned": {
+      "name": "isDigitallySigned",
+      "required": true,
+      "validators": [
+        {
+          "name": "Laminas\\Validator\\NotEmpty",
+          "options": {
+            "messages": {
+              "isEmpty": "Value is required and can't be empty"
+            }
+          }
+        }
+      ]
+    }
+  }
 }

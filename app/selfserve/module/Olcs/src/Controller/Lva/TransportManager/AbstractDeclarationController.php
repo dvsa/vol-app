@@ -56,14 +56,26 @@ abstract class AbstractDeclarationController extends AbstractController
     #[\Override]
     public function indexAction(): LaminasViewModel
     {
+        $form = null;
         if ($this->getRequest()->isPost()) {
+            if (!$this->tma['disableSignatures']) {
+                $form = $this->formHelper->createForm('TransportManagerApplicationDeclaration');
+                $this->formHelper->setFormActionFromRequest($form, $this->getRequest());
+                $this->alterDeclarationForm($form);
+                $form->setData((array) $this->getRequest()->getPost());
+
+                if (!$form->isValid()) {
+                    return $this->renderDeclarationPage($form);
+                }
+            }
+
             if ($this->params()->fromPost('content')['isDigitallySigned'] === 'Y') {
                 $this->digitalSignatureAction();
             } else {
                 $this->physicalSignatureAction();
             }
         }
-        return $this->renderDeclarationPage();
+        return $this->renderDeclarationPage($form);
     }
 
     /**
@@ -71,7 +83,7 @@ abstract class AbstractDeclarationController extends AbstractController
      *
      * @return LaminasViewModel
      */
-    private function renderDeclarationPage(): LaminasViewModel
+    private function renderDeclarationPage(?Form $form = null): LaminasViewModel
     {
         $translationHelper = $this->translationHelper;
 
@@ -86,11 +98,11 @@ abstract class AbstractDeclarationController extends AbstractController
         ];
 
         $formHelper = $this->formHelper;
-        $form = $formHelper->createForm('TransportManagerApplicationDeclaration');
-        /* @var $form \Common\Form\Form */
-        $formHelper->setFormActionFromRequest($form, $this->getRequest());
-
-        $this->alterDeclarationForm($form);
+        if ($form === null) {
+            $form = $formHelper->createForm('TransportManagerApplicationDeclaration');
+            $formHelper->setFormActionFromRequest($form, $this->getRequest());
+            $this->alterDeclarationForm($form);
+        }
 
         $this->scriptFactory->loadFiles(['tm-lva-declaration']);
 
