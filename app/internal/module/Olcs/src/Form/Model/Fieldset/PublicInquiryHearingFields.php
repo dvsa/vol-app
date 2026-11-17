@@ -20,15 +20,15 @@ class PublicInquiryHearingFields extends Base
     #[Form\Attributes(['class' => 'medium', 'id' => 'venueOther', 'required' => false])]
     #[Form\Options(['label' => 'Other venue'])]
     #[Form\Validator('NotEmpty', options: ['null'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'venue', 'context_values' => ['other'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'venue', 'context_values' => ['other'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]]]])]
     public $venueOther;
 
     #[Form\Required(true)]
     #[Form\Type('DateTimeSelect')]
     #[Form\Attributes(['id' => 'hearingDate'])]
     #[Form\Options(['label' => 'Date of PI', 'create_empty_option' => true, 'render_delimiters' => true, 'category' => 'pi_hearing', 'field' => 'hearingDate'])]
-    #[Form\Filter(['name' => 'DateTimeSelect', 'options' => ['null_on_empty' => true]])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Filter('DateTimeSelect', options: ['null_on_empty' => true])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d H:i:s'])]
     public $hearingDate;
 
@@ -56,9 +56,9 @@ class PublicInquiryHearingFields extends Base
     #[Form\Type('Text')]
     #[Form\Attributes(['id' => '', 'placeholder' => '', 'class' => 'medium'])]
     #[Form\Options(['label' => 'Number of drivers', 'error-message' => 'digits.validation.zero-to-ninety-nine'])]
-    #[Form\Validator(['name' => 'Digits', 'options' => ['messages' => ['notDigits' => 'digits.validation.zero-to-ninety-nine', 'digitsStringEmpty' => 'digits.validation.zero-to-ninety-nine', 'digitsInvalid' => 'digits.validation.zero-to-ninety-nine'], 'break_chain_on_failure' => true]])]
-    #[Form\Validator(['name' => 'NotEmpty', 'options' => ['messages' => ['isEmpty' => 'digits.validation.zero-to-ninety-nine'], 'break_chain_on_failure' => true]])]
-    #[Form\Validator(['name' => 'Laminas\Validator\Between', 'options' => ['min' => 0, 'max' => 99, 'inclusive' => true, 'messages' => ['notBetween' => 'digits.validation.zero-to-ninety-nine']]])]
+    #[Form\Validator('Digits', options: ['messages' => ['notDigits' => 'digits.validation.zero-to-ninety-nine', 'digitsStringEmpty' => 'digits.validation.zero-to-ninety-nine', 'digitsInvalid' => 'digits.validation.zero-to-ninety-nine'], 'break_chain_on_failure' => true])]
+    #[Form\Validator('NotEmpty', options: ['messages' => ['isEmpty' => 'digits.validation.zero-to-ninety-nine'], 'break_chain_on_failure' => true])]
+    #[Form\Validator('Laminas\Validator\Between', options: ['min' => 0, 'max' => 99, 'inclusive' => true, 'messages' => ['notBetween' => 'digits.validation.zero-to-ninety-nine']])]
     public $drivers;
 
     #[Form\Type('OlcsCheckbox')]
@@ -69,9 +69,9 @@ class PublicInquiryHearingFields extends Base
     #[Form\Type('DateSelect')]
     #[Form\Attributes(['id' => 'cancelledDate', 'required' => false])]
     #[Form\Options(['label' => 'Cancelled date', 'create_empty_option' => true])]
-    #[Form\Filter(['name' => 'DateSelect', 'options' => ['null_on_empty' => true]])]
+    #[Form\Filter('DateSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('NotEmpty', options: ['array'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'isCancelled', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'isCancelled', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']]]])]
     public $cancelledDate;
 
     #[Form\Required(true)]
@@ -80,7 +80,7 @@ class PublicInquiryHearingFields extends Base
     #[Form\Options(['label' => 'Cancelled reason'])]
     #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('NotEmpty', options: ['null'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'isCancelled', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 1000]]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'isCancelled', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 1000]]]])]
     public $cancelledReason;
 
     #[Form\Options(['checked_value' => 'Y', 'unchecked_value' => 'N', 'label' => 'Adjourned'])]
@@ -91,9 +91,9 @@ class PublicInquiryHearingFields extends Base
     #[Form\Type('DateTimeSelect')]
     #[Form\Attributes(['id' => 'adjournedDate'])]
     #[Form\Options(['label' => 'Date adjournment agreed', 'create_empty_option' => true, 'render_delimiters' => true, 'field' => 'adjournedDate'])]
-    #[Form\Filter(['name' => 'DateTimeSelect', 'options' => ['null_on_empty' => true]])]
+    #[Form\Filter('DateTimeSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('NotEmpty', options: ['array'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'isAdjourned', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d H:i:s']]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'isAdjourned', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d H:i:s']]]])]
     public $adjournedDate;
 
     #[Form\Required(true)]
@@ -101,7 +101,7 @@ class PublicInquiryHearingFields extends Base
     #[Form\Attributes(['class' => 'extra-long', 'id' => '', 'required' => false])]
     #[Form\Options(['label' => 'Adjourned reason'])]
     #[Form\Validator('NotEmpty', options: ['null'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'isAdjourned', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 1000]]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'isAdjourned', 'context_values' => ['Y'], 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 1000]]]])]
     public $adjournedReason = null;
 
     #[Form\Required(false)]
@@ -115,7 +115,7 @@ class PublicInquiryHearingFields extends Base
     #[Form\Type('TextArea')]
     #[Form\Attributes(['class' => 'extra-long    js-definition-target', 'id' => ''])]
     #[Form\Options(['label' => 'Details to be published'])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 5, 'max' => 4000])]
     public $details = null;
 

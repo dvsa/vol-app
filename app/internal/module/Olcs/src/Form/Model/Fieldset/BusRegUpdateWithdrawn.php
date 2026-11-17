@@ -16,6 +16,6 @@ class BusRegUpdateWithdrawn extends Base
 
     #[Form\Options(['label' => 'Reason', 'category' => 'withdrawn_reason'])]
     #[Form\Type('DynamicRadio')]
-    #[Form\Validator(['name' => 'Laminas\Validator\NotEmpty'])]
+    #[Form\Validator('Laminas\Validator\NotEmpty')]
     public $reason = null;
 }

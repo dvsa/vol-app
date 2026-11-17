@@ -11,9 +11,9 @@ class CreateVariation
 {
     #[Form\Type('DateSelect')]
     #[Form\Options(['label' => 'create-variation-application-received-date'])]
-    #[Form\Validator(['name' => '\Common\Validator\Date'])]
+    #[Form\Validator('\Common\Validator\Date')]
     #[Form\Validator('Date', options: ['format' => 'Y-m-d'])]
-    #[Form\Filter(['name' => 'DateSelectNullifier'])]
+    #[Form\Filter('DateSelectNullifier')]
     public $receivedDate;
 
     #[Form\Type('Radio')]

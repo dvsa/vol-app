@@ -19,15 +19,15 @@ class TeamDetails
     #[Form\Attributes(['placeholder' => '', 'class' => 'medium'])]
     #[Form\Options(['label' => 'Name'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 70]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 70])]
     public $name = null;
 
     #[Form\Attributes(['placeholder' => '', 'class' => 'medium'])]
     #[Form\Options(['label' => 'Description'])]
     #[Form\Type('Text')]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['max' => 255]])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['max' => 255])]
     public $description = null;
 
     #[Form\Attributes(['id' => 'team', 'placeholder' => '', 'class' => 'medium'])]

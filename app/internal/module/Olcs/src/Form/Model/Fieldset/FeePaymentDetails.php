@@ -52,7 +52,7 @@ class FeePaymentDetails
     #[Form\Options(['short-label' => 'fees.payer', 'label' => 'fees.payer', 'label_attributes' => ['id' => 'label-payer']])]
     #[Form\Attributes(['required' => false])]
     #[Form\Validator('Laminas\Validator\NotEmpty', options: ['null'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'paymentType', 'context_values' => ['fpm_card_offline'], 'context_truth' => false, 'allow_empty' => false, 'validators' => [['name' => 'Laminas\Validator\NotEmpty']]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'paymentType', 'context_values' => ['fpm_card_offline'], 'context_truth' => false, 'allow_empty' => false, 'validators' => [['name' => 'Laminas\Validator\NotEmpty']]])]
     public $payer = null;
 
     /**
@@ -63,7 +63,7 @@ class FeePaymentDetails
     #[Form\Validator('Laminas\Validator\NotEmpty', options: ['null'])]
     #[Form\Attributes(['required' => false])]
     #[Form\Type('Text')]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'paymentType', 'context_values' => ['fpm_card_offline'], 'context_truth' => false, 'allow_empty' => false, 'validators' => [['name' => 'Digits', 'options' => ['messages' => ['digitsStringEmpty' => 'value is required']]]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'paymentType', 'context_values' => ['fpm_card_offline'], 'context_truth' => false, 'allow_empty' => false, 'validators' => [['name' => 'Digits', 'options' => ['messages' => ['digitsStringEmpty' => 'value is required']]]]])]
     public $slipNo = null;
 
     /**
@@ -74,7 +74,7 @@ class FeePaymentDetails
     #[Form\Attributes(['required' => false])]
     #[Form\Type('Text')]
     #[Form\Validator('Laminas\Validator\NotEmpty', options: ['null'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'paymentType', 'context_values' => ['fpm_cheque'], 'allow_empty' => false, 'validators' => [['name' => 'Laminas\Validator\NotEmpty']]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'paymentType', 'context_values' => ['fpm_cheque'], 'allow_empty' => false, 'validators' => [['name' => 'Laminas\Validator\NotEmpty']]])]
     public $chequeNo = null;
 
     /**
@@ -85,9 +85,9 @@ class FeePaymentDetails
     #[Form\Options(['short-label' => 'fees.cheque_date', 'label' => 'fees.cheque_date', 'label_attributes' => ['id' => 'label-chequeDate'], 'render_delimiters' => false, 'create_empty_option' => true, 'required' => true, 'max_year_delta' => '+1', 'min_year_delta' => '-1'])]
     #[Form\Attributes(['required' => false])]
     #[Form\Type('DateSelect')]
-    #[Form\Filter(['name' => 'DateSelect', 'options' => ['null_on_empty' => true]])]
+    #[Form\Filter('DateSelect', options: ['null_on_empty' => true])]
     #[Form\Validator('Laminas\Validator\NotEmpty', options: ['array'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'paymentType', 'context_values' => ['fpm_cheque'], 'context_truth' => true, 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\ChequeDate'], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture', 'options' => ['messageTemplates' => ['inFuture' => 'Cheque date cannot be in the future']]]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'paymentType', 'context_values' => ['fpm_cheque'], 'context_truth' => true, 'allow_empty' => false, 'validators' => [['name' => 'NotEmpty'], ['name' => '\Common\Validator\Date'], ['name' => 'Date', 'options' => ['format' => 'Y-m-d']], ['name' => '\Common\Form\Elements\Validators\ChequeDate'], ['name' => '\Common\Form\Elements\Validators\DateNotInFuture', 'options' => ['messageTemplates' => ['inFuture' => 'Cheque date cannot be in the future']]]]])]
     public $chequeDate = null;
 
     /**
@@ -98,7 +98,7 @@ class FeePaymentDetails
     #[Form\Attributes(['required' => false])]
     #[Form\Type('Text')]
     #[Form\Validator('Laminas\Validator\NotEmpty', options: ['null'])]
-    #[Form\Validator(['name' => 'ValidateIf', 'options' => ['context_field' => 'paymentType', 'context_values' => ['fpm_po'], 'allow_empty' => false, 'validators' => [['name' => 'Digits', 'options' => ['messages' => ['digitsStringEmpty' => 'value is required']]]]]])]
+    #[Form\Validator('ValidateIf', options: ['context_field' => 'paymentType', 'context_values' => ['fpm_po'], 'allow_empty' => false, 'validators' => [['name' => 'Digits', 'options' => ['messages' => ['digitsStringEmpty' => 'value is required']]]]])]
     public $poNo = null;
 
     /**

@@ -13,7 +13,7 @@ class Bottom extends \Olcs\Form\Model\Fieldset\Base
     #[Form\Required(false)]
     #[Form\Attributes(['maxlength' => '12'])]
     #[Form\Options(['label' => 'permits.form.cor-certificate-number.label'])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Type('Text')]
     public $corCertificateNumber = null;
 

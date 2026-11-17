@@ -10,21 +10,21 @@ class ChangePasswordForm
 {
     #[Form\Options(['label' => 'auth.change-password.old-password', 'short-label' => 'auth.change-password.old-password', 'error-message' => 'auth.change-password.old-password.error'])]
     #[Form\Attributes(['id' => 'auth.change-password.old-password'])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Type('Password')]
     public $oldPassword;
 
     #[Form\Options(['label' => 'auth.change-password.new-password', 'short-label' => 'auth.change-password.new-password'])]
     #[Form\Attributes(['id' => 'auth.change-password.new-password'])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
-    #[Form\Validator(['name' => 'Laminas\Validator\StringLength', 'options' => ['min' => 12, 'max' => 160]])]
-    #[Form\Validator(['name' => 'Common\Form\Elements\Validators\PasswordConfirm', 'options' => ['token' => 'confirmPassword']])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
+    #[Form\Validator('Laminas\Validator\StringLength', options: ['min' => 12, 'max' => 160])]
+    #[Form\Validator('Common\Form\Elements\Validators\PasswordConfirm', options: ['token' => 'confirmPassword'])]
     #[Form\Type('Password')]
     public $newPassword;
 
     #[Form\Options(['label' => 'auth.change-password.confirm-password', 'short-label' => 'auth.change-password.confirm-password', 'error-message' => 'auth.change-password.confirm-password.error'])]
     #[Form\Attributes(['id' => 'auth.change-password.confirm-password'])]
-    #[Form\Filter(['name' => 'Laminas\Filter\StringTrim'])]
+    #[Form\Filter('Laminas\Filter\StringTrim')]
     #[Form\Type('Password')]
     public $confirmPassword;
 
