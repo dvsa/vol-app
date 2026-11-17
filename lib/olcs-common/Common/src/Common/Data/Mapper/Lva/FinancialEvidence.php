@@ -27,21 +27,15 @@ class FinancialEvidence implements MapperInterface
     {
         $uploadNow = null;
         $uploadLater = null;
-        $sendByPost = null;
 
         // switch / case do not distinguishes 0 and null so need to use this trick
         switch (true) {
             case $data['financialEvidenceUploaded'] === RefData::AD_UPLOAD_NOW:
                 $uploadNow = RefData::AD_UPLOAD_NOW;
                 break;
-            case $data['financialEvidenceUploaded'] === RefData::AD_POST:
-                $sendByPost = RefData::AD_POST;
-                break;
             case $data['financialEvidenceUploaded'] === RefData::AD_UPLOAD_LATER:
                 $uploadLater = RefData::AD_UPLOAD_LATER;
                 break;
-            default:
-                $uploadNow = RefData::AD_UPLOAD_NOW;
         }
 
         $evidenceFieldset = [

@@ -113,6 +113,9 @@ final class ApplicationFinancialEvidenceTest extends MockeryTestCase
                             ->shouldReceive('setName')
                             ->with('uploadNow')
                             ->once()
+                            ->shouldReceive('setAttribute')
+                            ->with('required', true)
+                            ->once()
                             ->getMock()
                     )
                     ->once()
@@ -140,18 +143,30 @@ final class ApplicationFinancialEvidenceTest extends MockeryTestCase
         $mockEvidenceInputFilter = m::mock(InputFilterInterface::class);
         $mockUploadedFileCountInput = m::mock(ElementInterface::class);
         $mockValidatorChain = m::mock(ValidatorChain::class);
+        $mockUploadNowInput = m::mock(\Laminas\InputFilter\Input::class);
+        $mockUploadLaterInput = m::mock(\Laminas\InputFilter\Input::class);
 
         $mockForm->shouldReceive('getInputFilter')->andReturn($mockInputFilter);
         $mockInputFilter->shouldReceive('get')->with('evidence')->andReturn($mockEvidenceInputFilter);
 
-        $mockEvidenceInputFilter->shouldReceive('get')->with('uploadNowRadio')->andReturn(m::mock(ElementInterface::class)->shouldReceive('setRequired')->with(false)->getMock());
-        $mockEvidenceInputFilter->shouldReceive('get')->with('uploadLaterRadio')->andReturn(m::mock(ElementInterface::class)->shouldReceive('setRequired')->with(false)->getMock());
+        $mockEvidenceInputFilter->shouldReceive('get')->with('uploadNowRadio')->andReturn($mockUploadNowInput);
+        $mockUploadNowInput->shouldReceive('setRequired')->with(false)->once();
+        $mockUploadNowInput->shouldReceive('setContinueIfEmpty')->with(true)->once();
+        $mockUploadNowInput->shouldReceive('getValidatorChain')->andReturn($mockValidatorChain);
+        $mockEvidenceInputFilter->shouldReceive('get')->with('uploadLaterRadio')->andReturn($mockUploadLaterInput);
+        $mockUploadLaterInput->shouldReceive('setRequired')->with(false)->once();
 
         $mockEvidenceInputFilter->shouldReceive('get')->with('uploadedFileCount')->andReturn($mockUploadedFileCountInput);
         $mockUploadedFileCountInput->shouldReceive('getValidatorChain')->andReturn($mockValidatorChain);
 
         $mockValidateIfValidator = m::mock(ValidateIf::class);
-        $this->vpm->shouldReceive('get')->with(ValidateIf::class)->andReturn($mockValidateIfValidator);
+        $mockRequiredChoiceValidator = m::mock(ValidateIf::class);
+        $this->vpm->shouldReceive('get')
+            ->with(ValidateIf::class)
+            ->andReturn($mockRequiredChoiceValidator, $mockValidateIfValidator)
+            ->twice();
+        $mockRequiredChoiceValidator->shouldReceive('setOptions')->once();
+        $mockValidatorChain->shouldReceive('attach')->with($mockRequiredChoiceValidator)->once();
         $mockValidateIfValidator->shouldReceive('setOptions')->once();
         $mockValidatorChain->shouldReceive('attach')->with($mockValidateIfValidator)->once();
 

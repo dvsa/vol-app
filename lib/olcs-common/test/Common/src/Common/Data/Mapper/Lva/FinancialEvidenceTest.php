@@ -23,7 +23,7 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return \Iterator<(int | string), array<array<(array<(int | null)> | int | null)>>>
      *
-     * @psalm-return list{list{array{financialEvidenceUploaded: 1, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: 1, uploadLaterRadio: null, sendByPostRadio: null}}}, list{array{financialEvidenceUploaded: 2, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: null, uploadLaterRadio: 2, sendByPostRadio: null}}}, list{array{financialEvidenceUploaded: 0, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: null, uploadLaterRadio: null, sendByPostRadio: 0}}}, list{array{financialEvidenceUploaded: null, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: 1, uploadLaterRadio: null, sendByPostRadio: null}}}}
+     * @psalm-return list{list{array{financialEvidenceUploaded: 1, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: 1, uploadLaterRadio: null}}}, list{array{financialEvidenceUploaded: 2, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: null, uploadLaterRadio: 2}}}, list{array{financialEvidenceUploaded: 0, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: null, uploadLaterRadio: null}}}, list{array{financialEvidenceUploaded: null, id: 1, version: 2}, array{id: 1, version: 2, evidence: array{uploadNowRadio: null, uploadLaterRadio: null}}}}
      */
     public static function mapFromResultProvider(): \Iterator
     {
@@ -59,6 +59,21 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
         ];
         yield [
             [
+                'financialEvidenceUploaded' => RefData::AD_POST,
+                'id' => 1,
+                'version' => 2
+            ],
+            [
+                'id'       => 1,
+                'version'  => 2,
+                'evidence' => [
+                    'uploadNowRadio' => null,
+                    'uploadLaterRadio' => null,
+                ]
+            ]
+        ];
+        yield [
+            [
                 'financialEvidenceUploaded' => null,
                 'id' => 1,
                 'version' => 2
@@ -67,7 +82,7 @@ final class FinancialEvidenceTest extends \PHPUnit\Framework\TestCase
                 'id'       => 1,
                 'version'  => 2,
                 'evidence' => [
-                    'uploadNowRadio' => RefData::AD_UPLOAD_NOW,
+                    'uploadNowRadio' => null,
                     'uploadLaterRadio' => null,
                 ]
             ]

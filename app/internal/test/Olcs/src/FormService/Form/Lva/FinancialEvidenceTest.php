@@ -39,7 +39,10 @@ final class FinancialEvidenceTest extends MockeryTestCase
         $this->urlHelper = m::mock(UrlHelperService::class);
         $this->translator = m::mock(TranslationHelperService::class);
         $validatorPluginManager = m::mock(ValidatorPluginManager::class);
-        $validatorPluginManager->shouldReceive('get')->with(ValidateIf::class)->andReturn($this->createMock(ValidateIf::class));
+        $validatorPluginManager->shouldReceive('get')
+            ->with(ValidateIf::class)
+            ->andReturn($this->createMock(ValidateIf::class), $this->createMock(ValidateIf::class))
+            ->twice();
 
         $serviceManager = $this->createMock(ServiceLocatorInterface::class);
         $serviceManager->method('get')->willReturnMap([
@@ -79,13 +82,23 @@ final class FinancialEvidenceTest extends MockeryTestCase
         $mockForm = m::mock(Form::class);
 
         $validatorChain = m::mock(ValidatorChain::class);
-        $validatorChain->shouldReceive('attach');
+        $validatorChain->shouldReceive('attach')->twice();
         $validatorChain->shouldReceive('getValidators')->andReturn([]);
 
         $inputFilter = m::mock(InputFilter::class);
-        $inputFilter->shouldReceive('get')->andReturnSelf();
-        $inputFilter->shouldReceive('setRequired');
-        $inputFilter->shouldReceive('getValidatorChain')->andReturn($validatorChain);
+        $evidenceInputFilter = m::mock(InputFilter::class);
+        $inputFilter->shouldReceive('get')->with('evidence')->andReturn($evidenceInputFilter);
+        $uploadNowInput = m::mock(\Laminas\InputFilter\Input::class);
+        $uploadNowInput->shouldReceive('setRequired')->with(false);
+        $uploadNowInput->shouldReceive('setContinueIfEmpty')->with(true);
+        $uploadNowInput->shouldReceive('getValidatorChain')->andReturn($validatorChain);
+        $uploadLaterInput = m::mock(\Laminas\InputFilter\Input::class);
+        $uploadLaterInput->shouldReceive('setRequired')->with(false);
+        $uploadedFileCountInput = m::mock(\Laminas\InputFilter\Input::class);
+        $uploadedFileCountInput->shouldReceive('getValidatorChain')->andReturn($validatorChain);
+        $evidenceInputFilter->shouldReceive('get')->with('uploadNowRadio')->andReturn($uploadNowInput);
+        $evidenceInputFilter->shouldReceive('get')->with('uploadLaterRadio')->andReturn($uploadLaterInput);
+        $evidenceInputFilter->shouldReceive('get')->with('uploadedFileCount')->andReturn($uploadedFileCountInput);
 
         $mockForm->shouldReceive('getInputFilter')->andReturn($inputFilter);
 
@@ -103,6 +116,9 @@ final class FinancialEvidenceTest extends MockeryTestCase
                         m::mock(ElementInterface::class)
                         ->shouldReceive('setName')
                         ->with('uploadNow')
+                        ->once()
+                        ->shouldReceive('setAttribute')
+                        ->with('required', true)
                         ->once()
                         ->getMock()
                     )
