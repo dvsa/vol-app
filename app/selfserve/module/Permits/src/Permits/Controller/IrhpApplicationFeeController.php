@@ -234,6 +234,14 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
     }
 
     /**
+     * The shared render() calls this before it draws a page. This controller keeps no messages
+     * of its own to add, its errors go straight to the flash messenger
+     */
+    protected function attachCurrentMessages(): void
+    {
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @return void
