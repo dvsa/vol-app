@@ -86,6 +86,19 @@ final class ApplicationAddressesReviewServiceTest extends MockeryTestCase
                                 [
                                     'phoneContactType' => ['id' => PhoneContact::TYPE_SECONDARY],
                                     'phoneNumber' => '0765465465'
+                                ],
+                                [
+                                    // an older duplicate SMS row loses to the newest one
+                                    'id' => 1,
+                                    'phoneContactType' => ['id' => PhoneContact::TYPE_SMS],
+                                    'phoneNumber' => '+447700900999',
+                                    'lastModifiedOn' => '2026-01-01T09:00:00+0000'
+                                ],
+                                [
+                                    'id' => 2,
+                                    'phoneContactType' => ['id' => PhoneContact::TYPE_SMS],
+                                    'phoneNumber' => '+447700900123',
+                                    'lastModifiedOn' => '2026-06-01T09:00:00+0000'
                                 ]
                             ]
                         ],
@@ -128,6 +141,10 @@ final class ApplicationAddressesReviewServiceTest extends MockeryTestCase
                                             [
                                                 'label' => 'application-review-addresses-correspondence-secondary',
                                                 'value' => '0765465465'
+                                            ],
+                                            [
+                                                'label' => 'application-review-addresses-sms-number',
+                                                'value' => '07700 900123'
                                             ],
                                             [
                                                 'label' => 'application-review-addresses-correspondence-email',

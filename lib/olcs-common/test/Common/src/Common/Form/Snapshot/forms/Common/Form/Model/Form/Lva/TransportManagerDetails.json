@@ -1,8 +1,7 @@
 {
   "name": "lva-transport-manager-details",
   "attributes": {
-    "method": "post",
-    "autocomplete": "off"
+    "method": "post"
   },
   "elements": [],
   "fieldsets": [
@@ -79,10 +78,7 @@
               },
               "options": {
                 "label": "lva-tm-details-details-birthPlace",
-                "short-label": "lva-tm-details-details-birthPlace",
-                "label_attributes": {
-                  "aria-label": "Enter their place of birth"
-                }
+                "short-label": "lva-tm-details-details-birthPlace"
               },
               "type": "Text"
             }
@@ -232,8 +228,7 @@
                 "hint": "markup-professional-competence-certificates-obtained-abroad.phtml",
                 "hint-position": "above",
                 "label_attributes": {
-                  "class": "legend",
-                  "aria-label": "Certificate of professional competence, attach file(s) for upload"
+                  "class": "legend"
                 }
               }
             }
@@ -283,11 +278,8 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLines",
+                "label": "address_addressLine1",
                 "error-message": "address_addressLine1-error",
-                "label_attributes": {
-                  "aria-label": "Enter address manually. Address line one"
-                },
                 "short-label": "address_addressLine1"
               },
               "type": "Text"
@@ -303,10 +295,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine2",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine2"
               },
               "type": "Text"
             }
@@ -321,10 +310,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine3",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine3"
               },
               "type": "Text"
             }
@@ -338,10 +324,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_addressLine4",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine4"
               },
               "type": "Text"
             }
@@ -357,9 +340,6 @@
               "options": {
                 "label": "address_townCity",
                 "short-label": "address_townCity",
-                "label_attributes": {
-                  "aria-label": "address_townCity"
-                },
                 "error-message": "address_town-error"
               },
               "type": "Text"
@@ -391,9 +371,6 @@
               },
               "options": {
                 "label": "address_country",
-                "label_attributes": {
-                  "aria-label": "Choose country"
-                },
                 "error-message": "address_country-error",
                 "empty_option": "Please Select",
                 "disable_inarray_validator": false,
@@ -424,7 +401,6 @@
         "options": {
           "label": "lva-tm-details-details-homeAddress",
           "label_attributes": {
-            "aria-label": "Postcode search, enter home postcode",
             "id": "homeAddress"
           }
         }
@@ -470,11 +446,8 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLines",
+                "label": "address_addressLine1",
                 "error-message": "address_addressLine1-error",
-                "label_attributes": {
-                  "aria-label": "Enter address manually. Address line one"
-                },
                 "short-label": "address_addressLine1"
               },
               "type": "Text"
@@ -490,10 +463,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine2",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine2"
               },
               "type": "Text"
             }
@@ -508,10 +478,7 @@
                 "data-container-class": "compound"
               },
               "options": {
-                "label": "address_addressLine3",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine3"
               },
               "type": "Text"
             }
@@ -525,10 +492,7 @@
                 "id": ""
               },
               "options": {
-                "label": "address_addressLine4",
-                "label_attributes": {
-                  "class": "govuk-visually-hidden"
-                }
+                "label": "address_addressLine4"
               },
               "type": "Text"
             }
@@ -544,9 +508,6 @@
               "options": {
                 "label": "address_townCity",
                 "short-label": "address_townCity",
-                "label_attributes": {
-                  "aria-label": "address_townCity"
-                },
                 "error-message": "address_town-error"
               },
               "type": "Text"
@@ -578,9 +539,6 @@
               },
               "options": {
                 "label": "address_country",
-                "label_attributes": {
-                  "aria-label": "Choose country"
-                },
                 "error-message": "address_country-error",
                 "empty_option": "Please Select",
                 "disable_inarray_validator": false,
@@ -710,8 +668,7 @@
               "type": "TextArea",
               "attributes": {
                 "class": "long",
-                "label": "transport-manager.responsibilities.additional-information.title",
-                "autocomplete": "nope"
+                "label": "transport-manager.responsibilities.additional-information.title"
               },
               "options": {
                 "label": "transport-manager.responsibilities.additional-information",
@@ -754,10 +711,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-mon",
-                            "label_attributes": {
-                              "aria-label": "Enter your working hours, Monday"
-                            }
+                            "label": "days-of-week-mon"
                           }
                         }
                       },
@@ -771,10 +725,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-tue",
-                            "label_attributes": {
-                              "aria-label": "Tuesday"
-                            }
+                            "label": "days-of-week-tue"
                           }
                         }
                       },
@@ -788,10 +739,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-wed",
-                            "label_attributes": {
-                              "aria-label": "Wednesday"
-                            }
+                            "label": "days-of-week-wed"
                           }
                         }
                       },
@@ -805,10 +753,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-thu",
-                            "label_attributes": {
-                              "aria-label": "Thursday"
-                            }
+                            "label": "days-of-week-thu"
                           }
                         }
                       },
@@ -822,10 +767,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-fri",
-                            "label_attributes": {
-                              "aria-label": "Friday"
-                            }
+                            "label": "days-of-week-fri"
                           }
                         }
                       },
@@ -839,10 +781,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-sat",
-                            "label_attributes": {
-                              "aria-label": "Saturday"
-                            }
+                            "label": "days-of-week-sat"
                           }
                         }
                       },
@@ -856,10 +795,7 @@
                             "data-container-class": "inline-text"
                           },
                           "options": {
-                            "label": "days-of-week-short-sun",
-                            "label_attributes": {
-                              "aria-label": "Sunday"
-                            }
+                            "label": "days-of-week-sun"
                           }
                         }
                       }

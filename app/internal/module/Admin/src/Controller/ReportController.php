@@ -8,6 +8,7 @@ use Common\Controller\Traits\GenericMethods;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Controller\Traits\ViewHelperManagerAware;
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
@@ -33,7 +34,8 @@ class ReportController extends LaminasAbstractActionController implements LeftVi
         ScriptFactory $scriptFactory,
         TableFactory $tableFactory,
         protected FormHelperService $formHelper,
-        protected Placeholder $placeholder
+        protected Placeholder $placeholder,
+        protected FlashMessengerHelperService $flashMessengerHelper
     ) {
         $this->scriptFactory = $scriptFactory;
         $this->tableFactory = $tableFactory;
@@ -84,7 +86,7 @@ class ReportController extends LaminasAbstractActionController implements LeftVi
                     ]
                 );
 
-                $flashMessenger = $this->flashMessenger();
+                $flashMessenger = $this->flashMessengerHelper;
                 $response = $this->handleCommand($command);
                 if ($response->isOk()) {
                     $flashMessenger->addSuccessMessage('Mass Export Queued.');

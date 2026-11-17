@@ -62,7 +62,6 @@ $app: internal;
 @import "../components/preloader";
 @import "../components/void";
 @import "../components/verify";
-@import "../components/system-messages";
 @import "../components/more-actions";
 @import "../components/chosen";
 @import "../components/checkbox";
@@ -76,5 +75,6 @@ $app: internal;
 @import "../views/internal/sign-in";
 @import "../views/internal/submission";
 @import "../views/internal/translation-key-search";
+@import "../views/internal/financial-evidence-assessment";
 
 /*# sourceMappingURL=internal.css.map */

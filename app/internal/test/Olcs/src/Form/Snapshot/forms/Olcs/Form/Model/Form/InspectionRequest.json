@@ -185,7 +185,7 @@
             "spec": {
               "name": "toDate",
               "attributes": {
-                "id": "fromDate"
+                "id": "toDate"
               },
               "options": {
                 "label": "Investigation to",

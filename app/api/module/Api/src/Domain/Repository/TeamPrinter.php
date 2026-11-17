@@ -44,9 +44,9 @@ class TeamPrinter extends AbstractRepository
 
         $qb->addSelect('CONCAT(ucdp.forename, ucdp.familyName) as HIDDEN userSort');
         $qb->addSelect('CONCAT(scc.description, sc.subCategoryName) as HIDDEN catSort');
-        $qb->addOrderBy('t.name', 'ASC');
-        $qb->addOrderBy('userSort', 'ASC');
-        $qb->addOrderBy('catSort', 'ASC');
+        $qb->addOrderBy('t.name', \SortDirection::Ascending);
+        $qb->addOrderBy('userSort', \SortDirection::Ascending);
+        $qb->addOrderBy('catSort', \SortDirection::Ascending);
     }
 
     /**

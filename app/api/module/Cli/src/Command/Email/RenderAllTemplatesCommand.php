@@ -119,9 +119,9 @@ class RenderAllTemplatesCommand extends AbstractOlcsCommand
         $qb = $this->entityManager->createQueryBuilder()
             ->select('t')
             ->from(Template::class, 't')
-            ->orderBy('t.name', 'ASC')
-            ->addOrderBy('t.locale', 'ASC')
-            ->addOrderBy('t.format', 'ASC');
+            ->orderBy('t.name', \SortDirection::Ascending)
+            ->addOrderBy('t.locale', \SortDirection::Ascending)
+            ->addOrderBy('t.format', \SortDirection::Ascending);
 
         if ($locale !== null) {
             $qb->andWhere('t.locale = :locale')->setParameter('locale', $locale);

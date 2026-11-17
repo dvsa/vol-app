@@ -6,7 +6,6 @@ $config = [
         'Olcs\Logging',
         'Olcs\Logging\Mvc',
         'Laminas\I18n',
-        'Laminas\Mvc\Plugin\FlashMessenger',
         'Laminas\Filter',
         'Laminas\Validator',
         'Laminas\Navigation',

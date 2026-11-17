@@ -91,4 +91,136 @@ final class LetterInstanceTodoEntityTest extends EntityTester
 
         $this->assertFalse($entity->hasBeenEdited());
     }
+
+    public function testCustomTodoIsPendingUntilWritten(): void
+    {
+        $entity = new Entity();
+        $this->assertTrue($entity->isCustom());
+        $this->assertTrue($entity->isInputPending());
+
+        $entity->setEditedDescriptionFromArray(['blocks' => [['id' => 'x', 'type' => 'paragraph', 'data' => ['text' => '<p> </p>&nbsp;']]]]);
+        $this->assertTrue($entity->isInputPending(), 'blank paragraph');
+
+        $entity->setEditedDescriptionFromArray(['blocks' => [['id' => 'x', 'type' => 'paragraph', 'data' => ['text' => 'Send the lease']]]]);
+        $this->assertFalse($entity->isInputPending());
+    }
+
+    public function testLibraryTodoInputPendingIsUnchanged(): void
+    {
+        $version = new LetterTodoVersion();
+        $version->setRequiresInput(true);
+        $entity = new Entity();
+        $entity->setLetterTodoVersion($version);
+
+        $this->assertFalse($entity->isCustom());
+        $this->assertTrue($entity->isInputPending());
+
+        $entity->setEditedDescriptionFromArray(['blocks' => [['id' => 'x', 'type' => 'paragraph', 'data' => ['text' => 'Done']]]]);
+        $this->assertFalse($entity->isInputPending());
+
+        $version->setRequiresInput(false);
+        $this->assertFalse((new Entity())->setLetterTodoVersion($version)->isInputPending());
+    }
+
+    public function testCustomTodosAreNamedByTheirPlaceUnderTheirIssue(): void
+    {
+        $version = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion();
+        $version->setHeading('Other issue');
+        $version->setIsOther(true);
+        $issue = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue();
+        $issue->setLetterIssueVersion($version);
+        $issue->setEditedHeading('Vehicle storage');
+
+        $library = new Entity();
+        $library->setLetterTodoVersion(new LetterTodoVersion());
+        $library->setDisplayOrder(1);
+        $second = new Entity();
+        $second->setDisplayOrder(5);
+        $first = new Entity();
+        $first->setDisplayOrder(3);
+        $issue->addLetterInstanceTodo($library);
+        $issue->addLetterInstanceTodo($second);
+        $issue->addLetterInstanceTodo($first);
+
+        $this->assertSame(1, $first->getCustomIndex());
+        $this->assertSame(2, $second->getCustomIndex());
+        $this->assertSame('Vehicle storage: to-do 2', $second->getCustomLabel());
+        $this->assertNull($library->getCustomIndex());
+        $this->assertNull($library->getCustomLabel());
+    }
+
+    public function testACustomTodoUnderAnUnwrittenOtherIsNamedByItsType(): void
+    {
+        $type = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType();
+        $type->setName('Finances');
+        $version = new \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion();
+        $version->setHeading('Other issue');
+        $version->setIsOther(true);
+        $version->setLetterIssueType($type);
+        $issue = new \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue();
+        $issue->setLetterIssueVersion($version);
+        $todo = new Entity();
+        $issue->addLetterInstanceTodo($todo);
+
+        $this->assertSame('Other issue (Finances): to-do 1', $todo->getCustomLabel());
+    }
+
+    private function paragraph(string $text): array
+    {
+        return ['blocks' => [['type' => 'paragraph', 'data' => ['text' => $text]]]];
+    }
+
+    /**
+     * Saving an editor stores its text whether or not anything was typed
+     */
+    public function testATodoSavedAsItStartedHasNotChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Send the lease for [[OP_NAME_ONLY]]'));
+        $entity->setGeneratedDescription($this->paragraph('Send the lease for Smith & Sons'));
+        // as an editor hands it back: its own ids and time, and the "&" written as markup
+        $entity->setEditedDescriptionFromArray([
+            'time' => 1763100000000,
+            'blocks' => [['id' => 'a1B2', 'type' => 'paragraph', 'data' => ['text' => 'Send the lease for Smith &amp; Sons']]],
+        ]);
+
+        $this->assertTrue($entity->hasBeenEdited());
+        $this->assertFalse($entity->hasChangedWording());
+    }
+
+    public function testATodoWhoseWordsWereEditedHasChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Send the lease for [[LICENCE_NUMBER]]'));
+        $entity->setGeneratedDescription($this->paragraph('Send the lease for OB1234567'));
+        $entity->setEditedDescriptionFromArray($this->paragraph('Send the signed lease by Friday'));
+
+        $this->assertTrue($entity->hasChangedWording());
+    }
+
+    public function testATodoNeverSavedHasNotChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Send the lease'));
+
+        $this->assertFalse($entity->hasChangedWording());
+    }
+
+    /**
+     * A to-do the caseworker wrote has no library wording to compare with: anything written is theirs
+     */
+    public function testACustomTodoHasChangedWordingOnceSomethingIsWritten(): void
+    {
+        $empty = new Entity();
+        $written = new Entity();
+        $written->setEditedDescriptionFromArray($this->paragraph('Send the lease'));
+
+        $this->assertFalse($empty->hasChangedWording());
+        $this->assertTrue($written->hasChangedWording());
+    }
+
+    public function testAnEditedDescriptionThatCannotBeReadIsNotChangedWording(): void
+    {
+        $entity = $this->entityWithDefault($this->paragraph('Send the lease'));
+        $entity->setEditedDescription('{not json');
+
+        $this->assertFalse($entity->hasChangedWording());
+    }
 }

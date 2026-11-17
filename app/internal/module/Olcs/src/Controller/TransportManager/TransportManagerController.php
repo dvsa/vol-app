@@ -386,7 +386,7 @@ class TransportManagerController extends AbstractController implements Transport
 
             $response = $this->handleCommand($command);
             if ($response->isOk()) {
-                $this->flashMessenger()->addSuccessMessage('transport-manager-removed');
+                $this->flashMessengerHelper->addSuccessMessage('transport-manager-removed');
                 return $this->redirectToRouteAjax(
                     'transport-manager/details',
                     [
@@ -428,7 +428,7 @@ class TransportManagerController extends AbstractController implements Transport
 
             $response = $this->handleCommand($command);
             if ($response->isOk()) {
-                $this->flashMessenger()->addSuccessMessage('transport-manager-disqualification-removed');
+                $this->flashMessengerHelper->addSuccessMessage('transport-manager-disqualification-removed');
                 return $this->redirectToRouteAjax(
                     'transport-manager/details',
                     [

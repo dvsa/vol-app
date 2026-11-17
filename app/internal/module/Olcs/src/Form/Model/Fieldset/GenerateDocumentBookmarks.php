@@ -4,12 +4,8 @@ namespace Olcs\Form\Model\Fieldset;
 
 use Laminas\Form\Annotation as Form;
 
-/**
- * @Form\Options({
- *     "label": "documents.bookmarks",
- * })
- * @Form\Name("bookmarks")
- */
+#[Form\Options(['label' => 'documents.bookmarks'])]
+#[Form\Name('bookmarks')]
 class GenerateDocumentBookmarks
 {
     /**

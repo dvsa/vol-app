@@ -34,7 +34,7 @@ final class AccessedCorrespondenceTest extends MockeryTestCase
     public function testFormat($data, $isNew, $expected): void
     {
 
-        $this->urlHelper->shouldReceive('fromRoute')
+        $this->urlHelper->expects('fromRoute')
             ->with(
                 'correspondence/access',
                 [
@@ -44,8 +44,12 @@ final class AccessedCorrespondenceTest extends MockeryTestCase
             ->andReturn('LICENCE_URL');
 
         if ($isNew) {
-            $this->translator->shouldReceive('translate')->once()->andReturn('unit_New');
+            $this->translator->expects('translate')
+                ->with('dashboard-correspondence.table.status.new')
+                ->andReturn('unit_New');
         }
+
+        $this->translator->expects('translate')->with('link.opens-new-window')->andReturn('(opens in new tab)');
 
         $sut = new AccessedCorrespondence($this->urlHelper, $this->translator);
         $this->assertEquals($expected, $sut->format($data, []));
@@ -71,7 +75,8 @@ final class AccessedCorrespondenceTest extends MockeryTestCase
                 ],
             ],
             'isNew' => true,
-            'expected' => '<a class="govuk-link" href="LICENCE_URL" target="_blank"><b>Description (doc)</b></a>' .
+            'expected' => '<a class="govuk-link" href="LICENCE_URL" target="_blank">' .
+                '<b>Description (doc)</b> (opens in new tab)</a>' .
                 '<span class="status green">unit_New</span> ',
         ];
         yield [
@@ -86,7 +91,8 @@ final class AccessedCorrespondenceTest extends MockeryTestCase
                 ],
             ],
             'isNew' => false,
-            'expected' => '<a class="govuk-link" href="LICENCE_URL" target="_blank"><b>Description (doc)</b></a>',
+            'expected' => '<a class="govuk-link" href="LICENCE_URL" target="_blank">' .
+                '<b>Description (doc)</b> (opens in new tab)</a>',
         ];
         yield [
             'data' => [
@@ -100,7 +106,8 @@ final class AccessedCorrespondenceTest extends MockeryTestCase
                 ],
             ],
             'isNew' => false,
-            'expected' => '<a class="govuk-link" href="LICENCE_URL" target="_blank"><b>Description</b></a>',
+            'expected' => '<a class="govuk-link" href="LICENCE_URL" target="_blank">' .
+                '<b>Description</b> (opens in new tab)</a>',
         ];
     }
 }

@@ -172,6 +172,7 @@ final class MessageTest extends MockeryTestCase
         $this->sut->setPlainBody('plain body');
         $this->sut->setHtmlBody('html body');
         $this->sut->setHighPriority();
+        $this->sut->setNotifyContext(['licence' => 4]);
 
         $result = $this->sut->buildCommand();
 
@@ -193,6 +194,7 @@ final class MessageTest extends MockeryTestCase
                 'templateKey' => null,
                 'personalisation' => [],
                 'markdownBody' => null,
+                'notifyContext' => ['licence' => 4],
             ],
             $result->getArrayCopy()
         );

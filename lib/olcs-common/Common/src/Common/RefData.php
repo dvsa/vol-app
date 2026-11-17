@@ -511,6 +511,8 @@ class RefData
 
     public const PHONE_TYPE_SECONDARY = 'phone_t_secondary';
 
+    public const PHONE_TYPE_SMS = 'phone_t_SMS';
+
     public const CONTINUATIONS_DISPLAY_PERSON_COUNT = 10;
 
     public const CONTINUATIONS_DISPLAY_VEHICLES_COUNT = 10;

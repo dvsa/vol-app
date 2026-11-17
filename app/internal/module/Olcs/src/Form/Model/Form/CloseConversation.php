@@ -11,28 +11,22 @@ use Olcs\Form\Model\Fieldset\CloseConversationText;
 
 /**
  * @codeCoverageIgnore No methods
- * @Form\Name("close_conversation")
- * @Form\Attributes({"method": "post"})
- * @Form\Type(\Common\Form\Form::class)
- * @Form\Options({"prefer_form_input_filter": true})
  */
+#[Form\Name('close_conversation')]
+#[Form\Attributes(['method' => 'post'])]
+#[Form\Type(\Common\Form\Form::class)]
+#[Form\Options(['prefer_form_input_filter' => true])]
 class CloseConversation
 {
-    /**
-     * @Form\Attributes({"value": ""})
-     * @Form\Type("Hidden")
-     */
+    #[Form\Attributes(['value' => ''])]
+    #[Form\Type('Hidden')]
     public ?Hidden $id = null;
 
-    /**
-     * @Form\Name("form-text")
-     * @Form\ComposedObject(CloseConversationText::class)
-     */
+    #[Form\Name('form-text')]
+    #[Form\ComposedObject(CloseConversationText::class)]
     public ?CloseConversationText $text = null;
 
-    /**
-     * @Form\Name("form-actions")
-     * @Form\ComposedObject(CloseConversationActions::class)
-     */
+    #[Form\Name('form-actions')]
+    #[Form\ComposedObject(CloseConversationActions::class)]
     public ?CloseConversationActions $formActions = null;
 }

@@ -11,13 +11,13 @@ if ($this->backUrl === true) {
 ?>
 
 <?php if ($this->pageSubTitle !== '') : ?>
-    <h3 class="page-header__subtitle page-header__text"><?php
+    <p class="page-header__subtitle page-header__text h3"><?php
         echo (
             $this->pageSubTitleEscape === false
             ? $this->pageSubTitle
             : $this->escapeHtml($this->pageSubTitle)
         )
-    ?></h3>
+    ?></p>
 <?php endif; ?>
 
 </div>

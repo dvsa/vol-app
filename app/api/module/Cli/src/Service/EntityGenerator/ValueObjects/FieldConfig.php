@@ -20,7 +20,8 @@ readonly class FieldConfig
         public bool $translatable = false,
         public string|null $indexBy = null,
         public bool $orphanRemoval = false,
-        public array $orderBy = []
+        public array $orderBy = [],
+        public bool $nullable = false
     ) {
     }
 
@@ -38,7 +39,8 @@ readonly class FieldConfig
             translatable: $config['translatable'] ?? false,
             indexBy: $config['indexBy'] ?? null,
             orphanRemoval: $config['orphanRemoval'] ?? false,
-            orderBy: $config['orderBy'] ?? []
+            orderBy: $config['orderBy'] ?? [],
+            nullable: $config['nullable'] ?? false
         );
     }
 
@@ -55,7 +57,8 @@ readonly class FieldConfig
             || $this->translatable
             || $this->indexBy !== null
             || $this->orphanRemoval
-            || !empty($this->orderBy);
+            || !empty($this->orderBy)
+            || $this->nullable;
     }
 
     /**

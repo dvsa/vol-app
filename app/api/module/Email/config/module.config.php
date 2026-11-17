@@ -15,6 +15,7 @@ return [
         'factories' => [
             Service\TemplateRenderer::class => Service\TemplateRendererFactory::class,
             Service\NotifyTestMailer::class => Service\NotifyTestMailerFactory::class,
+            Service\NotifyClientFactory::class => Service\NotifyClientFactoryFactory::class,
             'EmailService' => Service\Email::class,
             'ImapService' => Service\Imap::class,
             \Dvsa\Olcs\Email\Transport\GovUkNotifyTransportFactory::class

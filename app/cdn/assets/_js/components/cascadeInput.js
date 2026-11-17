@@ -8,12 +8,10 @@ var OLCS = OLCS || {};
  * to the destination input.
  */
 
-OLCS.cascadeInput = (function(document, $, undefined) {
-
+OLCS.cascadeInput = (function (document, $, undefined) {
   "use strict";
 
   return function init(options) {
-
     var trap = options.trap === undefined ? true : options.trap;
     var disableDestination = options.disableDestination === undefined ? true : options.disableDestination;
     var loadingText = options.loadingText || "Loading...";
@@ -27,32 +25,30 @@ OLCS.cascadeInput = (function(document, $, undefined) {
     // allow a quick shortcut; if the user passed in `url`, then
     // assume they want process to be a simple async GET
     if (options.url) {
-      process = function(value, callback) {
-
+      process = function (value, callback) {
         // If the component asks to clear the select values when the empty
         // value is chosen we short-circuit the AJAX request and invoke the
         // callback with one empty value instead
         if (value === "" && clearWhenEmpty) {
-          return callback([{value: ""}]);
+          return callback([{ value: "" }]);
         }
 
-        if(disableSubmit) {
+        if (disableSubmit) {
           document.getElementById(disableSubmit).disabled = true;
         }
 
         OLCS.ajax({
           url: options.url + "/" + value,
-          success: callback
+          success: callback,
         });
       };
     }
 
-    if (!$.isFunction(process)) {
+    if (typeof process !== "function") {
       throw new Error("Please provide a 'process' function or 'url' string");
     }
 
-    $(document).on("change", options.source, function(e) {
-
+    $(document).on("change", options.source, function (e) {
       e.preventDefault();
       var destination = $(options.dest) || "";
 
@@ -64,10 +60,9 @@ OLCS.cascadeInput = (function(document, $, undefined) {
       }
 
       function done(result) {
-
         var content = result;
 
-        if(disableSubmit) {
+        if (disableSubmit) {
           document.getElementById(disableSubmit).disabled = false;
         }
 
@@ -82,14 +77,14 @@ OLCS.cascadeInput = (function(document, $, undefined) {
 
         if (destination.is("select")) {
           var str = "";
-          $.each(result, function(i, r) {
-            if(typeof(r) === "object"){
+          $.each(result, function (i, r) {
+            if (typeof r === "object") {
               if (r.value === "" && emptyLabel) {
                 r.label = emptyLabel;
               }
               str += "<option value='" + r.value + "'>" + r.label + "</option>";
             }
-            });
+          });
 
           destination.html(str);
         }
@@ -116,9 +111,7 @@ OLCS.cascadeInput = (function(document, $, undefined) {
         destination.attr("disabled", true);
       }
 
-
       process.call(this, $(this).val(), done);
     });
   };
-
-}(document, window.jQuery));
+})(document, window.jQuery);

@@ -36,7 +36,7 @@ foreach ($moduleConfig['doctrine']['types'] as $name => $class) {
     Type::hasType($name) ? Type::overrideType($name, $class) : Type::addType($name, $class);
 }
 
-$config = ORMSetup::createAttributeMetadataConfiguration(
+$config = ORMSetup::createAttributeMetadataConfig(
     paths: $moduleConfig['doctrine']['driver']['EntityDriver']['paths'],
     isDevMode: true,
 );

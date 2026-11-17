@@ -411,4 +411,130 @@ final class SendEmailTest extends AbstractCommandHandlerTestCase
 
         $this->sut->handleCommand($command);
     }
+
+    public function testContextFlowsIntoPayload(): void
+    {
+        $command = Cmd::create([
+            'to' => ['foo@bar.com'],
+            'cc' => [],
+            'bcc' => [],
+            'docs' => [],
+            'subject' => 'Some subject',
+            'plainBody' => null,
+            'htmlBody' => null,
+            'markdownBody' => 'Body',
+            'templateKey' => 'notify-template-uuid',
+            'locale' => 'en_GB',
+            'personalisation' => [],
+            'highPriority' => false,
+            'subjectVariables' => [],
+            'notifyContext' => ['licence' => 9, 'templateName' => 'my-template'],
+        ]);
+
+        $this->sut->setSendAllMailTo(null);
+        $this->repoMap['Document']->shouldReceive('fetchByIds')->with([])->andReturn([]);
+
+        $this->mockedSmServices['EmailService']->shouldReceive('send')
+            ->once()
+            ->with(
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::on(fn($payload): bool => $payload['context'] === [
+                    'licence' => 9,
+                    'templateName' => 'my-template',
+                    'description' => 'translated-Some subject',
+                ])
+            );
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testContextHasNullTemplateNameWhenUnknown(): void
+    {
+        $command = Cmd::create([
+            'to' => 'foo@bar.com',
+            'cc' => [],
+            'bcc' => [],
+            'docs' => [],
+            'subject' => 'Some subject',
+            'plainBody' => null,
+            'htmlBody' => null,
+            'markdownBody' => 'Body',
+            'templateKey' => 'notify-template-uuid',
+            'locale' => 'en_GB',
+            'personalisation' => [],
+            'highPriority' => false,
+            'subjectVariables' => [],
+        ]);
+
+        $this->sut->setSendAllMailTo(null);
+        $this->repoMap['Document']->shouldReceive('fetchByIds')->with([])->andReturn([]);
+
+        $this->mockedSmServices['EmailService']->shouldReceive('send')
+            ->once()
+            ->with(
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::on(fn($payload): bool => $payload['context']['templateName'] === null
+                    && !isset($payload['context']['redirectTo']))
+            );
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testRedirectIsStatedInContext(): void
+    {
+        $command = Cmd::create([
+            'to' => ['foo@bar.com'],
+            'cc' => ['cc@bar.com'],
+            'bcc' => [],
+            'docs' => [],
+            'subject' => 'Some subject',
+            'plainBody' => null,
+            'htmlBody' => null,
+            'markdownBody' => 'Body',
+            'templateKey' => 'notify-template-uuid',
+            'locale' => 'en_GB',
+            'personalisation' => [],
+            'highPriority' => false,
+            'subjectVariables' => [],
+        ]);
+
+        $this->repoMap['Document']->shouldReceive('fetchByIds')->with([])->andReturn([]);
+
+        $this->mockedSmServices['EmailService']->shouldReceive('send')
+            ->once()
+            ->with(
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::any(),
+                m::on(fn($payload): bool => $payload['context']['redirectTo'] === 'terry.valtech@gmail.com'
+                    && $payload['context']['originalTo'] === ['foo@bar.com', 'cc@bar.com'])
+            );
+
+        $this->sut->handleCommand($command);
+    }
 }

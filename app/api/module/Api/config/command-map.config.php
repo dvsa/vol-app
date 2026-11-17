@@ -236,8 +236,16 @@ return [
     Command\Bus\Ebsr\DeleteSubmission::class => CommandHandler\Bus\Ebsr\DeleteSubmission::class,
     TransferCommand\Bus\PrintLetter::class => CommandHandler\Bus\PrintLetter::class,
 
+    // SMS
+    Command\Sms\QueueLetterSms::class => CommandHandler\Sms\QueueLetterSms::class,
+    Command\Sms\SendSms::class => CommandHandler\Sms\SendSms::class,
+
+    // Transfer - Notify
+    TransferCommand\Notify\UpdateDeliveryStatus::class => CommandHandler\Notify\UpdateDeliveryStatus::class,
+
     // Transfer - Licence
     TransferCommand\Licence\UpdateAddresses::class => CommandHandler\Licence\UpdateAddresses::class,
+    TransferCommand\Licence\UpdateSmsNumber::class => CommandHandler\Licence\UpdateSmsNumber::class,
     TransferCommand\Licence\UpdateBusinessDetails::class => CommandHandler\Licence\UpdateBusinessDetails::class,
     TransferCommand\Licence\UpdateCompanySubsidiary::class => CommandHandler\Licence\UpdateCompanySubsidiary::class,
     TransferCommand\Licence\CreateCompanySubsidiary::class => CommandHandler\Licence\CreateCompanySubsidiary::class,
@@ -507,6 +515,10 @@ return [
         => CommandHandler\Document\SweepStaleDocumentAnalysis::class,
     Command\Document\StoreDocumentAnalysisResult::class
         => CommandHandler\Document\StoreDocumentAnalysisResultFactory::class,
+    TransferCommand\Document\AcceptDocumentAnalysisReview::class
+        => CommandHandler\Document\AcceptDocumentAnalysisReviewFactory::class,
+    TransferCommand\Document\UpdateDocumentAnalysisAssessmentStatus::class
+        => CommandHandler\Document\UpdateDocumentAnalysisAssessmentStatus::class,
 
     // Transfer - DocumentTemplate
     TransferCommand\DocTemplate\Create::class => CommandHandler\DocTemplate\Create::class,
@@ -1392,9 +1404,12 @@ return [
     TransferCommand\Letter\LetterInstance\Update::class => CommandHandler\Letter\LetterInstance\Update::class,
     TransferCommand\Letter\LetterInstance\Generate::class => CommandHandler\Letter\LetterInstance\Generate::class,
     TransferCommand\Letter\LetterInstance\PrepareToSend::class => CommandHandler\Letter\LetterInstance\PrepareToSend::class,
+    TransferCommand\Letter\LetterInstance\UpdateIssues::class => CommandHandler\Letter\LetterInstance\UpdateIssues::class,
     TransferCommand\Letter\LetterInstanceIssue\UpdateContent::class => CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceSection\UpdateContent::class => CommandHandler\Letter\LetterInstanceSection\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceTodo\UpdateContent::class => CommandHandler\Letter\LetterInstanceTodo\UpdateContent::class,
+    TransferCommand\Letter\LetterInstanceTodo\CreateCustom::class => CommandHandler\Letter\LetterInstanceTodo\CreateCustom::class,
+    TransferCommand\Letter\LetterInstanceTodo\DeleteCustom::class => CommandHandler\Letter\LetterInstanceTodo\DeleteCustom::class,
     TransferCommand\Letter\LetterInstanceAppendix\UpdateContent::class => CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class,
     TransferCommand\Letter\MasterTemplate\Create::class => CommandHandler\Letter\MasterTemplate\Create::class,
     TransferCommand\Letter\MasterTemplate\Update::class => CommandHandler\Letter\MasterTemplate\Update::class,

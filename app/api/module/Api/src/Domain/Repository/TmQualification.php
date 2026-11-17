@@ -49,6 +49,6 @@ class TmQualification extends AbstractRepository
             ->with('countryCode', 'cc')
             ->with('qualificationType', 'qt');
 
-        $qb->orderBy('qt.displayOrder', 'ASC');
+        $qb->orderBy('qt.displayOrder', \SortDirection::Ascending);
     }
 }

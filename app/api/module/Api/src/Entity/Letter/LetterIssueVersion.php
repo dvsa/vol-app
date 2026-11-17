@@ -20,7 +20,7 @@ class LetterIssueVersion extends AbstractLetterIssueVersion
      * @var \Doctrine\Common\Collections\Collection<int, LetterIssueTodo>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueTodo::class, mappedBy: 'letterIssueVersion', cascade: ['persist'], orphanRemoval: true)]
-    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
+    #[ORM\OrderBy(['displayOrder' => \SortDirection::Ascending])]
     protected $letterIssueTodos;
 
     /**
@@ -148,6 +148,14 @@ class LetterIssueVersion extends AbstractLetterIssueVersion
         }
 
         return true;
+    }
+
+    /**
+     * An Other issue: the caseworker writes the heading and may add their own to-dos (VOL-7735)
+     */
+    public function isOther(): bool
+    {
+        return (bool) $this->isOther;
     }
 
     /**

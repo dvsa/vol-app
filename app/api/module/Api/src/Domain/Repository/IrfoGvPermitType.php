@@ -30,7 +30,7 @@ class IrfoGvPermitType extends AbstractRepository
     #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
-        $qb->orderBy($this->alias . '.description', 'ASC');
+        $qb->orderBy($this->alias . '.description', \SortDirection::Ascending);
     }
 
     public function fetchActiveRecords()
@@ -43,7 +43,7 @@ class IrfoGvPermitType extends AbstractRepository
         ))
             ->setParameter('today', new \DateTime(), \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE);
 
-        $doctrineQb->orderBy($this->alias . '.description', 'ASC');
+        $doctrineQb->orderBy($this->alias . '.description', \SortDirection::Ascending);
 
         return $doctrineQb->getQuery()->getResult();
     }

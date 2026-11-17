@@ -769,7 +769,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         if ($response->isOk()) {
             $result = $response->getResult();
             if ($showMessage) {
-                $this->flashMessenger()->addSuccessMessage($message);
+                $this->flashMessengerHelper->addSuccessMessage($message);
             }
             return $this->redirectToIndex();
         }

@@ -24,6 +24,7 @@ class PaymentProcessingFeesController extends LaminasAbstractActionController im
     use GenericReceipt;
     use GenericRenderView;
     use GenericMethods;
+    // the fees code shared with the licence and application pages reports back through this
     use FlashMessengerTrait;
 
     protected ScriptFactory $scriptFactory;

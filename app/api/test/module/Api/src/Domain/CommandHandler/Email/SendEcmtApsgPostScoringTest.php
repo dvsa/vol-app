@@ -56,7 +56,7 @@ final class SendEcmtApsgPostScoringTest extends AbstractPermitTestCase
         $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')->once()->with(
             m::type(Message::class),
             $this->template,
-            $templateVars,
+            $templateVars + ['licNo' => $this->licNo], // licNo added by AbstractEmailHandler
             'default'
         );
 
@@ -164,7 +164,7 @@ final class SendEcmtApsgPostScoringTest extends AbstractPermitTestCase
         $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')->once()->with(
             m::type(Message::class),
             $this->template,
-            $templateVars,
+            $templateVars + ['licNo' => $this->licNo], // licNo added by AbstractEmailHandler
             'default'
         );
 

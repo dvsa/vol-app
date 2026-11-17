@@ -203,6 +203,22 @@
           {
             "flags": [],
             "spec": {
+              "name": "isOther",
+              "options": {
+                "label": "Other issue (caseworker writes the heading)",
+                "checked_value": "1",
+                "unchecked_value": "0"
+              },
+              "type": "OlcsCheckbox",
+              "attributes": {
+                "class": "",
+                "id": "isOther"
+              }
+            }
+          },
+          {
+            "flags": [],
+            "spec": {
               "name": "minLength",
               "options": {
                 "label": "Minimum Length"

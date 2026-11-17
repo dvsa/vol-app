@@ -152,11 +152,14 @@ class LetterPreviewService
     }
 
     /**
-     * Render issue sections grouped by Issue Type. After each type's issues, render
-     * the "What you need to do" block listing the type's to-dos — deduplication is
-     * done at generate-time (one LetterInstanceTodo per unique to-do per letter,
-     * attached to the FIRST issue that brought it), so the to-do naturally appears
-     * under whichever issue-type that first issue belongs to (VOL-7280).
+     * Render issue sections grouped by Issue Type: a group's issues, then one "What you need to
+     * do" block for the group.
+     *
+     * VOL-7737 put each issue's to-dos straight after it. That was only wanted on the edit page,
+     * which still does it (LetterInstance::getTodoPlacementIssueIds); in the letter the business
+     * wants the issues read first and then what to do about them. Either way a to-do comes after
+     * every issue it is for. Deduplication is done at generate-time (one LetterInstanceTodo per unique
+     * to-do per letter, VOL-7280/7408).
      *
      * @param LetterInstance $letterInstance
      * @return string HTML for all issues grouped by type with headings
@@ -167,9 +170,9 @@ class LetterPreviewService
         $todoRenderer = null;
         $context = $this->buildVolGrabContext($letterInstance);
 
-        // Group issues by Issue Type, preserving display order via the order rows arrive in
+        // Group issues by Issue Type, in the order the letter prints them
         $issuesByType = [];
-        foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
+        foreach ($letterInstance->getIssuesInLetterOrder() as $issue) {
             $issueVersion = $issue->getLetterIssueVersion();
             $issueType = $issueVersion ? $issueVersion->getLetterIssueType() : null;
             $typeName = $issueType ? ($issueType->getDescription() ?: $issueType->getName()) : 'Other Issues';
@@ -184,19 +187,21 @@ class LetterPreviewService
             $issuesByType[$typeId]['issues'][] = $issue;
         }
 
-        // Bucket each LetterInstanceTodo into its first-issue's type group (one bucket per type)
+        // Each to-do goes in the block of one group, in to-do display order: the group of the
+        // issue it goes with (LetterInstance::SHARED_TODO_PLACEMENT, the last of the issues that
+        // share it). So one shared by issues in different groups still comes after every issue
+        // it is for.
+        $todos = $letterInstance->getLetterInstanceTodos();
+        $goesWith = count($todos) > 0 ? $letterInstance->getPlacementIssuesByTodo() : [];
         $todosByType = [];
-        foreach ($letterInstance->getLetterInstanceTodos() as $todo) {
-            $instanceIssue = $todo->getLetterInstanceIssue();
-            if ($instanceIssue === null) {
-                continue;
+        foreach ($todos as $todo) {
+            $issue = $goesWith[spl_object_id($todo)] ?? null;
+            if ($issue !== null) {
+                $typeId = $issue->getLetterIssueVersion()?->getLetterIssueType()?->getId() ?? 0;
+                $todosByType[$typeId][] = $todo;
             }
-            $issueType = $instanceIssue->getLetterIssueVersion()?->getLetterIssueType();
-            $typeId = $issueType ? $issueType->getId() : 0;
-            $todosByType[$typeId][] = $todo;
         }
 
-        // Render grouped issues, then the type's to-do block (if any)
         $html = '';
         foreach ($issuesByType as $typeId => $typeData) {
             $html .= '<div class="issue-type-group">';
@@ -207,9 +212,7 @@ class LetterPreviewService
             }
 
             if (!empty($todosByType[$typeId])) {
-                if ($todoRenderer === null) {
-                    $todoRenderer = $this->rendererManager->get('todo');
-                }
+                $todoRenderer ??= $this->rendererManager->get('todo');
                 $items = '';
                 foreach ($todosByType[$typeId] as $todo) {
                     $items .= $todoRenderer->render($todo, $context);

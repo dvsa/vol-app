@@ -95,6 +95,7 @@ return [
     'Trailer' => 'Licence',
     'Workshop' => 'Licence',
     'Note' => 'Note',
+    'NotifyMessage' => 'Notify',
     'OperatingCentre' => 'OperatingCentre',
     'Opposer' => 'Opposition',
     'Opposition' => 'Opposition',

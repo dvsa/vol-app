@@ -43,7 +43,7 @@ final class TemplateRendererFactoryTest extends MockeryTestCase
         $mockViewRenderer = m::mock(StrategySelectingViewRenderer::class);
         $config = [
             'mail' => ['dsn' => 'govuknotify+mailpit://mailpit:1025'],
-            'email' => ['notify' => ['passthrough_templates' => ['en_GB' => 'uuid-en', 'cy_GB' => 'uuid-cy']]],
+            'notify' => ['email' => ['passthrough_templates' => ['en_GB' => 'uuid-en', 'cy_GB' => 'uuid-cy']]],
         ];
 
         $sl = m::mock(ContainerInterface::class);
